@@ -32,7 +32,7 @@ u16 map[5 * 5 * 2] = {
 
 Map *m_map = new Map{width, depth, height, map};
 
-Biome::Biome(float x, float y, float z, GLuint texture) {
+Biome::Biome(int x, int y, int z, GLuint texture) {
 	m_x = x;
 	m_y = y;
 	m_z = z;
@@ -59,7 +59,13 @@ Biome::~Biome() {
 }
 
 void Biome::draw() {
+	glPushMatrix();
+	
+	glTranslatef(m_x, m_y, m_z);
+	
 	for(std::vector<Cube*>::iterator it = m_cubes.begin() ; it != m_cubes.end() ; it++) {
-		(*it)->draw(m_x, m_y, m_z);
+		(*it)->draw();
 	}
+	
+	glPopMatrix();
 }

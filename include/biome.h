@@ -3,15 +3,15 @@
 
 class Biome {
 	public:
-		Biome(float x, float y, float z, GLuint texture);
+		Biome(int x, int y, int z, GLuint texture);
 		~Biome();
 		
 		void draw();
 		
 	private:
-		float m_x;
-		float m_y;
-		float m_z;
+		int m_x;
+		int m_y;
+		int m_z;
 		
 		std::vector<Cube*> m_cubes;
 };

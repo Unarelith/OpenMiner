@@ -3,15 +3,15 @@
 
 class Cube {
 	public:
-		Cube(float x, float y, float z, GLuint texture, Map *map);
+		Cube(int x, int y, int z, GLuint texture, Map *map);
 		~Cube() {}
 		
-		void draw(float x, float y, float z);
+		void draw();
 		
 	private:
-		float m_x;
-		float m_y;
-		float m_z;
+		int m_x;
+		int m_y;
+		int m_z;
 		
 		GLuint m_texture;
 		

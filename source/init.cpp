@@ -20,7 +20,7 @@ void initSDL() {
 }
 
 void initOpenGL() {
-	glEnable(GL_CULL_FACE); // Turn on hidden face tagging
+	glEnable(GL_DEPTH_TEST); // Turn on hidden face tagging
 	glCullFace(GL_BACK); // Hidden faces = back faces
 	glFrontFace(GL_CCW); // Front face = Trigo way
 	
