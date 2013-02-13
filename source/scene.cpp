@@ -141,7 +141,6 @@ void Scene::draw() {
 	// Put camera
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	//gluLookAt(3, 4, 2, 0, 0, 0, 0, 0, 1);
 	m_player->watch();
 	
 	// Drawing field
