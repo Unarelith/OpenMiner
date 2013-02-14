@@ -26,15 +26,19 @@ void Cube::draw() {
 	
 	glBegin(GL_QUADS);
 	
-	if(m_map->map[MAP_POS(m_x, m_y + 1, m_z)] == 0) {
+	if((m_y < m_map->depth) && (m_map->map[MAP_POS(m_x, m_y + 1, m_z)] == 0)) {
 		glColor3ub(255, 255, 255); // Front Right
 			glTexCoord2d(1, 0); glVertex3d(m_x + 1, m_y + 1, m_z + 1);
 			glTexCoord2d(0, 0); glVertex3d(m_x + 1, m_y + 1, m_z);
 			glTexCoord2d(0, 1); glVertex3d(m_x, m_y + 1, m_z);
 			glTexCoord2d(1, 1); glVertex3d(m_x, m_y + 1, m_z + 1);
+	} else {
+		if(m_map->map[MAP_POS(m_x, m_y + 1, m_z)] == 0) {
+			cout << "y: " << m_y << endl;
+		}
 	}
 	
-	if(m_map->map[MAP_POS(m_x + 1, m_y, m_z)] == 0) {
+	if((m_x < m_map->width) && (m_map->map[MAP_POS(m_x + 1, m_y, m_z)] == 0)) {
 		glColor3ub(255, 255, 255); // Front left
 			glTexCoord2d(1, 0); glVertex3d(m_x + 1, m_y, m_z + 1);
 			glTexCoord2d(0, 0); glVertex3d(m_x + 1, m_y, m_z);
@@ -42,7 +46,7 @@ void Cube::draw() {
 			glTexCoord2d(1, 1); glVertex3d(m_x + 1, m_y + 1, m_z + 1);
 	}
 	
-	if(m_map->map[MAP_POS(m_x, m_y - 1, m_z)] == 0) {
+	if((m_y >= 0) && (m_map->map[MAP_POS(m_x, m_y - 1, m_z)] == 0)) {
 		glColor3ub(255, 255, 255); // Back left
 			glTexCoord2d(1, 0); glVertex3d(m_x, m_y, m_z + 1);
 			glTexCoord2d(0, 0); glVertex3d(m_x, m_y, m_z);
@@ -50,7 +54,7 @@ void Cube::draw() {
 			glTexCoord2d(1, 1); glVertex3d(m_x + 1, m_y, m_z + 1);
 	}
 	
-	if(m_map->map[MAP_POS(m_x - 1, m_y, m_z)] == 0) {
+	if((m_x >= 0) && (m_map->map[MAP_POS(m_x - 1, m_y, m_z)] == 0)) {
 		glColor3ub(255, 255, 255); // Back right
 			glTexCoord2d(1, 0); glVertex3d(m_x, m_y + 1, m_z + 1);
 			glTexCoord2d(0, 0); glVertex3d(m_x, m_y + 1, m_z);
@@ -58,7 +62,7 @@ void Cube::draw() {
 			glTexCoord2d(1, 1); glVertex3d(m_x, m_y, m_z + 1);
 	}
 	
-	if(m_map->map[MAP_POS(m_x, m_y, m_z - 1)] == 0) {
+	if((m_z >= 0) && (m_map->map[MAP_POS(m_x, m_y, m_z - 1)] == 0)) {
 		glColor3ub(255, 255, 255); // Bottom
 			glTexCoord2d(1, 0); glVertex3d(m_x + 1, m_y + 1, m_z);
 			glTexCoord2d(0, 0); glVertex3d(m_x + 1, m_y, m_z);
@@ -66,7 +70,7 @@ void Cube::draw() {
 			glTexCoord2d(1, 1); glVertex3d(m_x, m_y + 1, m_z);
 	}
 	
-	if(m_map->map[MAP_POS(m_x, m_y, m_z + 1)] == 0) {
+	if((m_z < m_map->height) && (m_map->map[MAP_POS(m_x, m_y, m_z + 1)] == 0)) {
 		glColor3ub(255, 255, 255); // Top
 			glTexCoord2d(0, 1); glVertex3d(m_x, m_y, m_z + 1);
 			glTexCoord2d(0, 0); glVertex3d(m_x + 1, m_y, m_z + 1);
