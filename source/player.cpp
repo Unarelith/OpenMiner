@@ -39,11 +39,11 @@ void Player::turnH(float angle) {
 void Player::turnV(float angle) {
 	m_angleV += angle;
 	
-	if(45.0f < m_angleV) {
-		m_angleV = 45.0f;
+	if(90.0f < m_angleV) {
+		m_angleV = 90.0f;
 	}
-	else if(-45.0f > m_angleV) {
-		m_angleV = -45.0f;
+	else if(-90.0f > m_angleV) {
+		m_angleV = -90.0f;
 	}
 }
 
