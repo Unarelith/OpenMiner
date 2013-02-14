@@ -26,7 +26,7 @@ void Cube::draw() {
 	
 	glBegin(GL_QUADS);
 	
-	if(m_x < m_map->width && m_map->map[MAP_POS(m_x, m_y + 1, m_z)] == 0) {
+	if(m_map->map[MAP_POS(m_x, m_y + 1, m_z)] == 0) {
 		glColor3ub(255, 255, 255); // Front Right
 			glTexCoord2d(1, 0); glVertex3d(m_x + 1, m_y + 1, m_z + 1);
 			glTexCoord2d(0, 0); glVertex3d(m_x + 1, m_y + 1, m_z);

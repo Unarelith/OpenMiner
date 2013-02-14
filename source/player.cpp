@@ -5,6 +5,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include "init.h"
 #include "types.h"
 #include "player.h"
 

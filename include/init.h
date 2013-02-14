@@ -4,4 +4,6 @@
 void initSDL();
 void initOpenGL();
 
+extern SDL_Surface *screen;
+
 #endif // INIT_H

@@ -8,6 +8,7 @@
 
 #include "sdlglutils.h"
 
+#include "init.h"
 #include "config.h"
 #include "types.h"
 #include "player.h"
@@ -135,6 +136,7 @@ void Scene::animate() {
 }
 
 void Scene::draw() {
+
 	// Clean screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
@@ -170,10 +172,10 @@ void Scene::drawField() {
 	glBegin(GL_QUADS);
 	
 	glColor3ub(255, 255, 255);
-		glTexCoord2d(0, 1); glVertex3d(0, 0, 0);
-		glTexCoord2d(0, 0); glVertex3d(50, 0, 0);
-		glTexCoord2d(1, 0); glVertex3d(50, 50, 0);
-		glTexCoord2d(1, 1); glVertex3d(0, 50, 0);
+		glTexCoord2d(0, 1); glVertex3d(0, 0, -0.1);
+		glTexCoord2d(0, 0); glVertex3d(50, 0, -0.1);
+		glTexCoord2d(1, 0); glVertex3d(50, 50, -0.1);
+		glTexCoord2d(1, 1); glVertex3d(0, 50, -0.1);
 	
 	glEnd();
 	

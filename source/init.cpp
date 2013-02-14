@@ -5,6 +5,8 @@
 #include "init.h"
 #include "config.h"
 
+SDL_Surface *screen = NULL;
+
 void initSDL() {
 	// Start SDL with video module
 	if(SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -13,7 +15,12 @@ void initSDL() {
 	}
 	
 	// Creation of the window initialized to work with OpenGL
-	SDL_SetVideoMode(WIN_WIDTH, WIN_HEIGHT, 32, SDL_OPENGL);
+	screen = SDL_SetVideoMode(WIN_WIDTH, WIN_HEIGHT, 32, SDL_OPENGL);
+	if(screen == 0) {
+		fprintf(stderr, "Error while initializing display: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
+	
 	
 	// Label of application
 	SDL_WM_SetCaption(APP_LABEL, NULL);
