@@ -57,6 +57,8 @@ void Scene::testCubes(std::vector<Cube*> cubes) {
 	directionVector.y = Scene::player->pointTargetedy() - Scene::player->y();
 	directionVector.z = Scene::player->pointTargetedz() - Scene::player->z();
 	
+	float distance = FAR;
+	Cube *cube = cubes[0];
 	for(std::vector<Cube*>::iterator it = cubes.begin() ; it != cubes.end() ; it++) {
 		vect3D center;
 		
@@ -65,11 +67,18 @@ void Scene::testCubes(std::vector<Cube*> cubes) {
 		center.z = (*it)->z() + radius;
 		
 		if(intersectionSphereLine(center, radius, linePoint, directionVector)) {
-			(*it)->setSelected(true);
-		} else {
-			(*it)->setSelected(false);
+			float d = sqrt(pow(linePoint.x - center.x, 2) + pow(linePoint.y - center.y, 2) + pow(linePoint.z - center.z, 2));
+			
+			if(d < distance) {
+				distance = d;
+				cube = (*it);
+			}
 		}
+		
+		(*it)->setSelected(false);
 	}
+	
+	cube->setSelected(true);
 }
 
 Scene::Scene() {
