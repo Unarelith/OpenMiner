@@ -17,17 +17,17 @@ Player::Player(float x, float y, float z, float angle) {
 	m_x = x;
 	m_y = y;
 	
+	m_eyeheight = 0.8 + z;
+	
 	m_angleH = angle;
 	m_angleV = 0.0f;
-	
-	m_eyeheight = 0.8 + z;
 }
 
 void Player::move(float distance, float direction) {
 	direction += m_angleH;
 	
-	m_y -= distance * sin(direction * M_PI / 180.0);
-	m_x -= distance * cos(direction * M_PI / 180.0);
+	m_y += distance * sin(direction * M_PI / 180.0);
+	m_x += distance * cos(direction * M_PI / 180.0);
 }
 
 void Player::turnH(float angle) {
@@ -66,9 +66,9 @@ void Player::watch() {
 			m_x, m_y, m_eyeheight,
 			
 			// Point targeted
-			m_x - cos(-m_angleH * RADIANS_PER_DEGREES),
-			m_y + sin(-m_angleH * RADIANS_PER_DEGREES),
-			m_eyeheight + tan(m_angleV * RADIANS_PER_DEGREES),
+			pointTargetedx(),
+			pointTargetedy(),
+			pointTargetedz(),
 			
 			// z is the vertical
 			0, 0, 1);
