@@ -31,7 +31,7 @@ void Cube::draw() {
 	
 	// Front right
 	if((m_y >= m_map->depth - 1) || (m_map->map[MAP_POS(m_x, m_y + 1, m_z)] == 0)) {
-		if(m_selected) glColor3ub(255, 255, 255);
+		if(!m_selected) glColor3ub(255, 255, 255);
 		else glColor3ub(255, 0, 0);
 			glTexCoord2d(1, 0); glVertex3d(m_x + 1, m_y + 1, m_z + 1);
 			glTexCoord2d(0, 0); glVertex3d(m_x + 1, m_y + 1, m_z);
@@ -41,7 +41,7 @@ void Cube::draw() {
 	
 	// Front left
 	if((m_x >= m_map->width - 1) || (m_map->map[MAP_POS(m_x + 1, m_y, m_z)] == 0)) {
-		if(m_selected) glColor3ub(255, 255, 255);
+		if(!m_selected) glColor3ub(255, 255, 255);
 		else glColor3ub(255, 0, 0);
 			glTexCoord2d(1, 0); glVertex3d(m_x + 1, m_y, m_z + 1);
 			glTexCoord2d(0, 0); glVertex3d(m_x + 1, m_y, m_z);
@@ -51,7 +51,7 @@ void Cube::draw() {
 	
 	// Back left
 	if((m_y <= 0) || (m_map->map[MAP_POS(m_x, m_y - 1, m_z)] == 0)) {
-		if(m_selected) glColor3ub(255, 255, 255);
+		if(!m_selected) glColor3ub(255, 255, 255);
 		else glColor3ub(255, 0, 0);
 			glTexCoord2d(1, 0); glVertex3d(m_x, m_y, m_z + 1);
 			glTexCoord2d(0, 0); glVertex3d(m_x, m_y, m_z);
@@ -61,7 +61,7 @@ void Cube::draw() {
 	
 	// Back right
 	if((m_x <= 0) || (m_map->map[MAP_POS(m_x - 1, m_y, m_z)] == 0)) {
-		if(m_selected) glColor3ub(255, 255, 255);
+		if(!m_selected) glColor3ub(255, 255, 255);
 		else glColor3ub(255, 0, 0);
 			glTexCoord2d(1, 0); glVertex3d(m_x, m_y + 1, m_z + 1);
 			glTexCoord2d(0, 0); glVertex3d(m_x, m_y + 1, m_z);
@@ -71,7 +71,7 @@ void Cube::draw() {
 	
 	// Bottom
 	if((m_z <= 0) || (m_map->map[MAP_POS(m_x, m_y, m_z - 1)] == 0)) {
-		if(m_selected) glColor3ub(255, 255, 255);
+		if(!m_selected) glColor3ub(255, 255, 255);
 		else glColor3ub(255, 0, 0);
 			glTexCoord2d(1, 0); glVertex3d(m_x + 1, m_y + 1, m_z);
 			glTexCoord2d(0, 0); glVertex3d(m_x + 1, m_y, m_z);
@@ -81,7 +81,7 @@ void Cube::draw() {
 	
 	// Top
 	if((m_z >= m_map->height - 1) || (m_map->map[MAP_POS(m_x, m_y, m_z + 1)] == 0)) {
-		if(m_selected) glColor3ub(255, 255, 255);
+		if(!m_selected) glColor3ub(255, 255, 255);
 		else glColor3ub(255, 0, 0);
 			glTexCoord2d(0, 1); glVertex3d(m_x, m_y, m_z + 1);
 			glTexCoord2d(0, 0); glVertex3d(m_x + 1, m_y, m_z + 1);

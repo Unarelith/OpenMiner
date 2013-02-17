@@ -20,7 +20,7 @@
 
 Player *Scene::player;
 
-bool intersectionSphereLine(vect3D center, float radius, vect3D linePoint, vect3D directionVector) {
+bool Scene::intersectionSphereLine(vect3D center, float radius, vect3D linePoint, vect3D directionVector) {
 	vect3D u;
 	
 	u.x = center.x - linePoint.x;
@@ -42,7 +42,7 @@ bool intersectionSphereLine(vect3D center, float radius, vect3D linePoint, vect3
 	}
 }
 
-void testCubes(std::vector<Cube*> cubes) {
+void Scene::testCubes(std::vector<Cube*> cubes) {
 	float radius = sqrt(3) / 2;
 	
 	vect3D linePoint;
