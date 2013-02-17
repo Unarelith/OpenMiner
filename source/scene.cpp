@@ -17,12 +17,15 @@
 #include "biome.h"
 #include "scene.h"
 
+Player *Scene::player;
+
 Scene::Scene() {
-	m_player = new Player(2, 2, 0, -130);
+	//player = new Player(7, 7, 5, 90);
+	player = new Player(4, 4, 2, 90);
 	
 	loadTextures();
 	
-	m_biome = new Biome(0, 0, 0, m_textures["brick"]);
+	m_biome = new Biome(0, 0, 0, m_textures["stone"]);
 }
 
 Scene::~Scene() {
@@ -37,7 +40,7 @@ Scene::~Scene() {
 }
 
 void Scene::exec() {
-	lockMouse();
+	//lockMouse();
 	
 	m_cont = true;
 	
@@ -48,7 +51,7 @@ void Scene::exec() {
 		display();
 	}
 	
-	unlockMouse();
+	//unlockMouse();
 }
 
 void Scene::manageEvents() {
@@ -156,9 +159,12 @@ void Scene::display() {
 }
 
 void Scene::loadTextures() {
-	// Load ground textures
+	// Load textures
 	m_textures["ground"] = loadTexture("textures/ground.bmp");
-	m_textures["brick"] = loadTexture("textures/brick.bmp");
+	m_textures["dirt"] = loadTexture("textures/dirt.bmp");
+	m_textures["grass"] = loadTexture("textures/grass.bmp");
+	m_textures["cobble"] = loadTexture("textures/cobble.bmp");
+	m_textures["stone"] = loadTexture("textures/stone.bmp");
 }
 
 void Scene::drawField() {
@@ -180,6 +186,35 @@ void Scene::drawField() {
 	glEnd();
 	
 	m_biome->draw();
+	
+	glPushMatrix();
+	glLoadIdentity();
+	
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	
+	gluOrtho2D(-400.0, 400.0, -300.0, 300.0);
+	
+	glMatrixMode(GL_MODELVIEW);
+	
+	glBindTexture(GL_TEXTURE_2D, m_textures["dirt"]);
+	
+	glBegin(GL_LINES);
+	
+	glColor3f(1.0f, 1.0f, 1.0f);
+		glVertex2i(-10, 0);
+		glVertex2i(10, 0);
+		glVertex2i(0, -10);
+		glVertex2i(0, 10);
+	
+	glEnd();
+	
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();	
 }
 
 void Scene::lockMouse() {

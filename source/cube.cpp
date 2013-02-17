@@ -22,6 +22,9 @@ Cube::Cube(int x, int y, int z, GLuint texture, Map *map) {
 }
 
 void Cube::draw() {
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 	
 	glBegin(GL_QUADS);

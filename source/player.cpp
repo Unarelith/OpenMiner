@@ -1,5 +1,7 @@
+#include <iostream>
 #include <string>
 #include <cmath>
+#include <cstring>
 
 #include <SDL/SDL.h>
 #include <GL/gl.h>
@@ -9,13 +11,16 @@
 #include "types.h"
 #include "player.h"
 
+using namespace std;
+
 Player::Player(float x, float y, float z, float angle) {
 	m_x = x;
 	m_y = y;
-	m_z = z;
+	
 	m_angleH = angle;
 	m_angleV = 0.0f;
-	m_eyeheight = 0.8;
+	
+	m_eyeheight = 0.8 + z;
 }
 
 void Player::move(float distance, float direction) {
@@ -69,5 +74,8 @@ void Player::watch() {
 			
 			// z is the vertical
 			0, 0, 1);
+	
+	cout << "Eyepos: (" << int(m_x) << " ; " << int(m_y) << " ; " << int(m_eyeheight) << ")" << endl;
+	cout << "Pt targeted: (" << int(m_x - cos(-m_angleH * RADIANS_PER_DEGREES)) << " ; " << int(m_y + sin(-m_angleH * RADIANS_PER_DEGREES)) << " ; " << int(m_eyeheight + tan(m_angleV * RADIANS_PER_DEGREES)) << ")" << endl;
 }
 

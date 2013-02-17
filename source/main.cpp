@@ -16,7 +16,7 @@
 #include "player.h"
 #include "scene.h"
 
-int main() {
+int main(int argc, char *argv[]) {
 	// Init SDL and OpenGL
 	initSDL();
 	initOpenGL();

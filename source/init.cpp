@@ -37,6 +37,8 @@ void initOpenGL() {
 	// Window definition
 	glViewport(0, 0, WIN_WIDTH, WIN_HEIGHT);
 	
+	glRasterPos2f(0, 0);
+	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	

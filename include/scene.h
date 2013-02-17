@@ -19,6 +19,8 @@ class Scene {
 		void lockMouse();
 		void unlockMouse();
 		
+		static Player *player;
+		
 	private:
 		typedef std::map<std::string, GLuint> Textures;
 		
