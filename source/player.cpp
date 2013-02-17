@@ -61,8 +61,6 @@ void Player::land() {
 }
 
 void Player::watch() {
-	#define RADIANS_PER_DEGREES 0.0174532925199
-	
 	gluLookAt(
 			// Eye position
 			m_x, m_y, m_eyeheight,

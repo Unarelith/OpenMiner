@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <cmath>
 
 #include <SDL/SDL.h>
 #include <GL/gl.h>
@@ -102,14 +103,6 @@ void Biome::draw() {
 	for(std::vector<Cube*>::iterator it = m_cubes.begin() ; it != m_cubes.end() ; it++) {
 		(*it)->draw();
 	}
-	
-	/*for(s32 z = 0 ; z < m_map->height ; z++) {
-		for(s32 y = 0 ; y < m_map->depth ; y++) {
-			for(s32 x = 0 ; x < m_map->width ; x++) {
-				
-			}
-		}
-	}*/
 	
 	glPopMatrix();
 }

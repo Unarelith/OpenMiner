@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <cmath>
 
 #include <SDL/SDL.h>
 #include <GL/gl.h>
@@ -19,6 +20,58 @@
 
 Player *Scene::player;
 
+bool intersectionSphereLine(vect3D center, float radius, vect3D linePoint, vect3D directionVector) {
+	vect3D u;
+	
+	u.x = center.x - linePoint.x;
+	u.y = center.y - linePoint.y;
+	u.z = center.z - linePoint.z;
+	
+	float k = u.x * directionVector.x + u.y * directionVector.y + u.z * directionVector.z;
+	
+	vect3D h;
+	
+	h.x = linePoint.x + k * directionVector.x;
+	h.y = linePoint.y + k * directionVector.y;
+	h.z = linePoint.z + k * directionVector.z;
+	
+	if(sqrt(pow(h.x - center.x, 2) + pow(h.y - center.y, 2) + pow(h.z - center.z, 2)) < radius) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+void testCubes(std::vector<Cube*> cubes) {
+	float radius = sqrt(3) / 2;
+	
+	vect3D linePoint;
+	
+	linePoint.x = Scene::player->x();
+	linePoint.y = Scene::player->y();
+	linePoint.z = Scene::player->z();
+	
+	vect3D directionVector;
+	
+	directionVector.x = Scene::player->pointTargetedx() - Scene::player->x();
+	directionVector.y = Scene::player->pointTargetedy() - Scene::player->y();
+	directionVector.z = Scene::player->pointTargetedz() - Scene::player->z();
+	
+	for(std::vector<Cube*>::iterator it = cubes.begin() ; it != cubes.end() ; it++) {
+		vect3D center;
+		
+		center.x = (*it)->x() + radius;
+		center.y = (*it)->y() + radius;
+		center.z = (*it)->z() + radius;
+		
+		if(intersectionSphereLine(center, radius, linePoint, directionVector)) {
+			(*it)->setSelected(true);
+		} else {
+			(*it)->setSelected(false);
+		}
+	}
+}
+
 Scene::Scene() {
 	//player = new Player(7, 7, 5, 90);
 	player = new Player(4, 4, 2, 90);
@@ -36,11 +89,11 @@ Scene::~Scene() {
 	}
 	
 	delete m_biome;
-	delete m_player;
+	delete player;
 }
 
 void Scene::exec() {
-	//lockMouse();
+	lockMouse();
 	
 	m_cont = true;
 	
@@ -51,7 +104,7 @@ void Scene::exec() {
 		display();
 	}
 	
-	//unlockMouse();
+	unlockMouse();
 }
 
 void Scene::manageEvents() {
@@ -65,8 +118,8 @@ void Scene::manageEvents() {
 				
 			case SDL_MOUSEMOTION:
 				if((WIN_WIDTH / 2) != event.motion.x || (WIN_HEIGHT / 2) != event.motion.y) {
-					m_player->turnH(-event.motion.xrel * 0.06);
-					m_player->turnV(-event.motion.yrel * 0.06);
+					player->turnH(-event.motion.xrel * 0.06);
+					player->turnV(-event.motion.yrel * 0.06);
 					
 					SDL_WarpMouse((WIN_WIDTH / 2), (WIN_HEIGHT / 2));
 				}
@@ -123,10 +176,10 @@ void Scene::animate() {
 	}
 	
 	if(keys[SDLK_SPACE]) {
-		m_player->fly();
+		player->fly();
 	}
 	else if(keys[SDLK_LSHIFT]) {
-		m_player->land();
+		player->land();
 	}
 	
 	if(movement) {
@@ -134,19 +187,18 @@ void Scene::animate() {
 		
 		float distance = 20 * MOVEMENT_SPEED / 1000.0f;
 		
-		m_player->move(distance, direction);
+		player->move(distance, direction);
 	}
 }
 
 void Scene::draw() {
-
 	// Clean screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	// Put camera
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	m_player->watch();
+	player->watch();
 	
 	// Drawing field
 	drawField();

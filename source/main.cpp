@@ -1,6 +1,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <cmath>
 
 #include <SDL/SDL.h>
 #include <GL/gl.h>

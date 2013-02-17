@@ -8,6 +8,12 @@ class Cube {
 		
 		void draw();
 		
+		void setSelected(bool selected) { m_selected = selected; };
+		
+		int x() const { return m_x; }
+		int y() const { return m_y; }
+		int z() const { return m_z; }
+		
 	private:
 		int m_x;
 		int m_y;
@@ -16,6 +22,8 @@ class Cube {
 		GLuint m_texture;
 		
 		Map *m_map;
+		
+		bool m_selected;
 };
 
 #endif // CUBE_H

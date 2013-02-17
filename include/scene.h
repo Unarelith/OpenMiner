@@ -1,6 +1,12 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+typedef struct {
+	float x;
+	float y;
+	float z;
+} vect3D;
+
 class Scene {
 	public:
 		Scene();
@@ -26,8 +32,6 @@ class Scene {
 		
 		bool m_cont;
 		Textures m_textures;
-		
-		Player *m_player;
 		
 		Biome *m_biome;
 };
