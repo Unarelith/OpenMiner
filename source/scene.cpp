@@ -20,7 +20,7 @@
 
 Player *Scene::player;
 
-bool Scene::intersectionSphereLine(vect3D center, float radius, vect3D linePoint, vect3D directionVector) {
+bool Scene::intersectionLineSphere(vect3D center, float radius, vect3D linePoint, vect3D directionVector) {
 	vect3D u;
 	
 	u.x = center.x - linePoint.x;
@@ -40,6 +40,28 @@ bool Scene::intersectionSphereLine(vect3D center, float radius, vect3D linePoint
 	} else {
 		return false;
 	}
+}
+
+bool intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector) {
+	float p1 = directionVector.x * normal.x + directionVector.y * normal.y + directionVector.z * normal.z; // First point to be tested
+	
+	if(p1 == 0) return false; // Degenerate case
+	
+	vect3D u; // planePoint - lineOrigPoint
+	
+	u.x = planePoint.x - lineOrigPoint.x;
+	u.y = planePoint.y - lineOrigPoint.y;
+	u.z = planePoint.z - lineOrigPoint.z;
+	
+	float p2 = u.x * normal.x + u.y * normal.y + u.z * normal.z; // Second point to be tested
+	
+	float k = p1 / p2;
+	
+	vect3D i; // Intersection point
+	
+	i.x = lineOrigPoint.x + k * directionVector.x;
+	i.y = lineOrigPoint.y + k * directionVector.y;
+	i.z = lineOrigPoint.z + k * directionVector.z;
 }
 
 void Scene::testCubes(std::vector<Cube*> cubes) {
@@ -66,7 +88,7 @@ void Scene::testCubes(std::vector<Cube*> cubes) {
 		center.y = (*it)->y() + radius;
 		center.z = (*it)->z() + radius;
 		
-		if(intersectionSphereLine(center, radius, linePoint, directionVector)) {
+		if(intersectionLineSphere(center, radius, linePoint, directionVector)) {
 			float d = sqrt(pow(linePoint.x - center.x, 2) + pow(linePoint.y - center.y, 2) + pow(linePoint.z - center.z, 2));
 			
 			if(d < distance) {
