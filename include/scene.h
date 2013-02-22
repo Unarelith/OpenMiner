@@ -25,7 +25,8 @@ class Scene {
 		void lockMouse();
 		void unlockMouse();
 		
-		static bool intersectionLinesSphere(vect3D center, float radius, vect3D linePoint, vect3D directionVector);
+		static bool intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector);
+		static bool intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector);
 		static void testCubes(std::vector<Cube*> cubes);
 		
 		static Player *player;

@@ -20,29 +20,7 @@
 
 Player *Scene::player;
 
-bool Scene::intersectionLineSphere(vect3D center, float radius, vect3D linePoint, vect3D directionVector) {
-	vect3D u;
-	
-	u.x = center.x - linePoint.x;
-	u.y = center.y - linePoint.y;
-	u.z = center.z - linePoint.z;
-	
-	float k = u.x * directionVector.x + u.y * directionVector.y + u.z * directionVector.z;
-	
-	vect3D h;
-	
-	h.x = linePoint.x + k * directionVector.x;
-	h.y = linePoint.y + k * directionVector.y;
-	h.z = linePoint.z + k * directionVector.z;
-	
-	if(sqrt(pow(h.x - center.x, 2) + pow(h.y - center.y, 2) + pow(h.z - center.z, 2)) < radius) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-bool intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector) {
+bool Scene::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector) {
 	float p1 = directionVector.x * normal.x + directionVector.y * normal.y + directionVector.z * normal.z; // First point to be tested
 	
 	if(p1 == 0) return false; // Degenerate case
@@ -62,11 +40,108 @@ bool intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoin
 	i.x = lineOrigPoint.x + k * directionVector.x;
 	i.y = lineOrigPoint.y + k * directionVector.y;
 	i.z = lineOrigPoint.z + k * directionVector.z;
+	
+	vect3D v;
+	
+	v.x = i.x - planePoint.x;
+	v.y = i.y - planePoint.y;
+	v.z = i.z - planePoint.z;
+	
+	float size = 0.5;
+	
+	if(v.x >= -size && v.x <= size && v.y >= -size && v.y <= size && v.z >= -size && v.z <= size) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector) {
+	vect3D planePoint;
+	vect3D normal;
+	
+	// Front right	
+	planePoint.x = cubeX + 0.5;
+	planePoint.y = cubeY;
+	planePoint.z = cubeZ + 0.5;
+	
+	normal.x = 0;
+	normal.y = 1;
+	normal.z = 0;
+	
+	if(intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector)) {
+		return true;
+	}
+	
+	// Front left
+	planePoint.x = cubeX;
+	planePoint.y = cubeY + 0.5;
+	planePoint.z = cubeZ + 0.5;
+	
+	normal.x = 1;
+	normal.y = 0;
+	normal.z = 0;
+	
+	if(intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector)) {
+		return true;
+	}
+	
+	// Back left
+	planePoint.x = cubeX + 0.5;
+	planePoint.y = cubeY;
+	planePoint.z = cubeZ + 0.5;
+	
+	normal.x = 0;
+	normal.y = -1;
+	normal.z = 0;
+	
+	if(intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector)) {
+		return true;
+	}
+	
+	// Back right
+	planePoint.x = cubeX;
+	planePoint.y = cubeY + 0.5;
+	planePoint.z = cubeZ + 0.5;
+	
+	normal.x = -1;
+	normal.y = 0;
+	normal.z = 0;
+	
+	if(intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector)) {
+		return true;
+	}
+	
+	// Bottom
+	planePoint.x = cubeX + 0.5;
+	planePoint.y = cubeY + 0.5;
+	planePoint.z = cubeZ;
+	
+	normal.x = 0;
+	normal.y = 0;
+	normal.z = -1;
+	
+	if(intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector)) {
+		return true;
+	}
+	
+	// Top
+	planePoint.x = cubeX + 0.5;
+	planePoint.y = cubeY + 0.5;
+	planePoint.z = cubeZ;
+	
+	normal.x = 0;
+	normal.y = 0;
+	normal.z = 1;
+	
+	if(intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector)) {
+		return true;
+	}
+	
+	return false;
 }
 
 void Scene::testCubes(std::vector<Cube*> cubes) {
-	float radius = sqrt(3) / 2;
-	
 	vect3D linePoint;
 	
 	linePoint.x = Scene::player->x();
@@ -79,22 +154,10 @@ void Scene::testCubes(std::vector<Cube*> cubes) {
 	directionVector.y = Scene::player->pointTargetedy() - Scene::player->y();
 	directionVector.z = Scene::player->pointTargetedz() - Scene::player->z();
 	
-	float distance = FAR;
 	Cube *cube = cubes[0];
 	for(std::vector<Cube*>::iterator it = cubes.begin() ; it != cubes.end() ; it++) {
-		vect3D center;
-		
-		center.x = (*it)->x() + radius;
-		center.y = (*it)->y() + radius;
-		center.z = (*it)->z() + radius;
-		
-		if(intersectionLineSphere(center, radius, linePoint, directionVector)) {
-			float d = sqrt(pow(linePoint.x - center.x, 2) + pow(linePoint.y - center.y, 2) + pow(linePoint.z - center.z, 2));
-			
-			if(d < distance) {
-				distance = d;
-				cube = (*it);
-			}
+		if(intersectionLineCube((*it)->x(), (*it)->y(), (*it)->z(), linePoint, directionVector)) {
+			cube = (*it);
 		}
 		
 		(*it)->setSelected(false);
