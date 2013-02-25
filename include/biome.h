@@ -28,6 +28,7 @@ class Biome {
 		void draw();
 		
 		void deleteCube(Cube *cube);
+		void addCube(Cube *selectedCube);
 		
 		int x() const { return m_x; }
 		int y() const { return m_y; }
@@ -37,6 +38,8 @@ class Biome {
 		int m_x;
 		int m_y;
 		int m_z;
+		
+		GLuint m_texture;
 		
 		std::vector<Cube*> m_cubes;
 };

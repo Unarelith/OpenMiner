@@ -301,6 +301,9 @@ void Scene::manageEvents() {
 					biome->deleteCube(selectedCube);
 					selectedCube = new Cube(-1, -1, -1, 0, NULL);
 				}
+				if(event.button.button == SDL_BUTTON_RIGHT) {
+					biome->addCube(selectedCube);
+				}
 				break;
 		}
 	}

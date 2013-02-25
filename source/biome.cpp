@@ -93,11 +93,13 @@ Biome::Biome(int x, int y, int z, GLuint texture) {
 	m_y = y;
 	m_z = z;
 	
+	m_texture = texture;
+	
 	for(s32 z = 0 ; z < m_map->height ; z++) {
 		for(s32 y = 0 ; y < m_map->depth ; y++) {
 			for(s32 x = 0 ; x < m_map->width ; x++) {
 				if(m_map->map[MAP_POS(x, y, z)] == 1) {
-					m_cubes.push_back(new Cube(x, y, z, texture, m_map));
+					m_cubes.push_back(new Cube(x, y, z, m_texture, m_map));
 				}
 			}
 		}
@@ -138,6 +140,27 @@ void Biome::deleteCube(Cube *cube) {
 				break;
 			}
 		}
+	}
+}
+
+void Biome::addCube(Cube *selectedCube) {
+	if(selectedCube->selectedFace() == 0) {
+		m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y() + 1, selectedCube->z(), m_texture, m_map));
+	}
+	else if(selectedCube->selectedFace() == 1) {
+		m_cubes.push_back(new Cube(selectedCube->x() + 1, selectedCube->y(), selectedCube->z(), m_texture, m_map));
+	}
+	else if(selectedCube->selectedFace() == 2) {
+		m_cubes.push_back(new Cube(selectedCube->x() - 1, selectedCube->y(), selectedCube->z(), m_texture, m_map));
+	}
+	else if(selectedCube->selectedFace() == 3) {
+		m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y() - 1, selectedCube->z(), m_texture, m_map));
+	}
+	else if(selectedCube->selectedFace() == 4) {
+		m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y(), selectedCube->z() + 1, m_texture, m_map));
+	}
+	else if(selectedCube->selectedFace() == 5) {
+		m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y(), selectedCube->z() - 1, m_texture, m_map));
 	}
 }
 
