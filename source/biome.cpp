@@ -131,6 +131,7 @@ void Biome::draw() {
 void Biome::deleteCube(Cube *cube) {
 	for(std::vector<Cube*>::iterator it = m_cubes.begin(); it != m_cubes.end() ; it++) {
 		if((*it)->x() == cube->x() && (*it)->y() == cube->y() && (*it)->z() == cube->z()) {
+			m_map->map[MAP_POS(cube->x(), cube->y(), cube->z())] = 0;
 			delete (*it);
 			m_cubes.erase(it);
 			break;
