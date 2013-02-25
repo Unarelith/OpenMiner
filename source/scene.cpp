@@ -1,3 +1,22 @@
+/*---------------------------------------------------------------------------------
+	
+	KubKraft
+	Copyright (C) 2012 Quent42340 <quent42340@gmail.com>
+	
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	
+---------------------------------------------------------------------------------*/
 #include <iostream>
 #include <string>
 #include <vector>
@@ -57,7 +76,13 @@ float Scene::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D line
 	}
 }
 
+int face = -1;
+// Front right = 0 | Front left = 1
+// Back right = 2 | Back left = 3
+// Top = 4 | Bottom = 5
 float Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector) {
+	face = -1;
+	
 	vect3D planePoint;
 	vect3D normal;
 	
@@ -66,7 +91,7 @@ float Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOr
 	
 	// Front right	
 	planePoint.x = cubeX + 0.5;
-	planePoint.y = cubeY;
+	planePoint.y = cubeY + 1;
 	planePoint.z = cubeZ + 0.5;
 	
 	normal.x = 0;
@@ -74,14 +99,13 @@ float Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOr
 	normal.z = 0;
 	
 	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
-	if(k > -0.0) {
-		if((smallestK < -0.0) || (smallestK > k)) {
-			smallestK = k;
-		}
+	if(k >= 0.0 && ((smallestK <= 0.0) || (smallestK > k))) {
+		smallestK = k;
+		face = 0;
 	}
 	
 	// Front left
-	planePoint.x = cubeX;
+	planePoint.x = cubeX + 1;
 	planePoint.y = cubeY + 0.5;
 	planePoint.z = cubeZ + 0.5;
 	
@@ -90,10 +114,9 @@ float Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOr
 	normal.z = 0;
 	
 	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
-	if(k > -0.0) {
-		if((smallestK < -0.0) || (smallestK > k)) {
-			smallestK = k;
-		}
+	if(k >= 0.0 && ((smallestK <= 0.0) || (smallestK > k))) {
+		smallestK = k;
+		face = 1;
 	}
 	
 	// Back left
@@ -102,14 +125,13 @@ float Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOr
 	planePoint.z = cubeZ + 0.5;
 	
 	normal.x = 0;
-	normal.y = 1;
+	normal.y = -1;
 	normal.z = 0;
 	
 	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
-	if(k > -0.0) {
-		if((smallestK < -0.0) || (smallestK > k)) {
-			smallestK = k;
-		}
+	if(k >= 0.0 && ((smallestK <= 0.0) || (smallestK > k))) {
+		smallestK = k;
+		face = 3;
 	}
 	
 	// Back right
@@ -117,15 +139,14 @@ float Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOr
 	planePoint.y = cubeY + 0.5;
 	planePoint.z = cubeZ + 0.5;
 	
-	normal.x = 1;
+	normal.x = -1;
 	normal.y = 0;
 	normal.z = 0;
 	
 	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
-	if(k > -0.0) {
-		if((smallestK < -0.0) || (smallestK > k)) {
-			smallestK = k;
-		}
+	if(k >= 0.0 && ((smallestK <= 0.0) || (smallestK > k))) {
+		smallestK = k;
+		face = 2;
 	}
 	
 	// Bottom
@@ -135,29 +156,27 @@ float Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOr
 	
 	normal.x = 0;
 	normal.y = 0;
-	normal.z = 1;
+	normal.z = -1;
 	
 	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
-	if(k > -0.0) {
-		if((smallestK < -0.0) || (smallestK > k)) {
-			smallestK = k;
-		}
+	if(k >= 0.0 && ((smallestK <= 0.0) || (smallestK > k))) {
+		smallestK = k;
+		face = 5;
 	}
 	
 	// Top
 	planePoint.x = cubeX + 0.5;
 	planePoint.y = cubeY + 0.5;
-	planePoint.z = cubeZ;
+	planePoint.z = cubeZ + 1;
 	
 	normal.x = 0;
 	normal.y = 0;
 	normal.z = 1;
 	
 	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
-	if(k > -0.0) {
-		if((smallestK < -0.0) || (smallestK > k)) {
-			smallestK = k;
-		}
+	if(k >= 0.0 && ((smallestK <= 0.0) || (smallestK > k))) {
+		smallestK = k;
+		face = 4;
 	}
 	
 	return smallestK;
@@ -177,32 +196,29 @@ void Scene::testCubes(std::vector<Cube*> cubes) {
 	directionVector.z = Scene::player->pointTargetedz() - Scene::player->z();
 	
 	float distance = FAR;
-	Cube *cube = cubes[0];
+	Cube *cube = NULL;
 	for(std::vector<Cube*>::iterator it = cubes.begin() ; it != cubes.end() ; it++) {
-		vect3D center;
-		
-		center.x = (*it)->x() + biome->x() + 0.5;
-		center.y = (*it)->y() + biome->y() + 0.5;
-		center.z = (*it)->z() + biome->z() + 0.5;
+		(*it)->setSelected(false, 2);
 		
 		float d = intersectionLineCube((*it)->x() + biome->x(), (*it)->y() + biome->y(), (*it)->z() + biome->z(), linePoint, directionVector);
-		if(d > -0.0) {
-			float d = sqrt(pow(linePoint.x - center.x, 2) + pow(linePoint.y - center.y, 2) + pow(linePoint.z - center.z, 2));
-			
-			if(d < distance) {
-				distance = d;
-				cube = (*it);
-			}
+		
+		if(d >= 0.0 && d < distance) {
+			distance = d;
+			cube = (*it);
 		}
-	
-		(*it)->setSelected(false);
 	}
 	
-	cube->setSelected(true);
+	if(cube != NULL) {
+		selectedCube = cube;
+		cube->setSelected(true, face);
+	} else {
+	//	selectedCube->setSelected(false, 2);
+	}
 }
 
 Player *Scene::player;
 Biome *Scene::biome;
+Cube *Scene::selectedCube;
 
 Scene::Scene() {
 	//player = new Player(7, 7, 5, 90);
@@ -211,6 +227,8 @@ Scene::Scene() {
 	loadTextures();
 	
 	biome = new Biome(4, 4, 0, m_textures["stone"]);
+	
+	selectedCube = new Cube(-1, -1, -1, m_textures["dirt"], NULL);
 }
 
 Scene::~Scene() {
@@ -222,6 +240,7 @@ Scene::~Scene() {
 	
 	delete biome;
 	delete player;
+	delete selectedCube;
 }
 
 void Scene::exec() {
@@ -234,6 +253,7 @@ void Scene::exec() {
 		animate();
 		draw();
 		display();
+		cout << "Selected: (" << selectedCube->x() << ";" << selectedCube->y() << ";" << selectedCube->z() << ") face: " << (int)selectedCube->selectedFace() << endl;
 	}
 	
 	unlockMouse();
@@ -260,6 +280,14 @@ void Scene::manageEvents() {
 			case SDL_KEYDOWN:
 				if(event.key.keysym.sym == SDLK_ESCAPE) {
 					m_cont = false;
+				}
+				break;
+			
+			case SDL_MOUSEBUTTONDOWN:
+				if(event.button.button == SDL_BUTTON_LEFT) {
+					// To fix for multiples biomes
+					biome->deleteCube(selectedCube);
+					selectedCube = new Cube(-1, -1, -1, 0, NULL);
 				}
 				break;
 		}

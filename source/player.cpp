@@ -1,3 +1,22 @@
+/*---------------------------------------------------------------------------------
+	
+	KubKraft
+	Copyright (C) 2012 Quent42340 <quent42340@gmail.com>
+	
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	
+---------------------------------------------------------------------------------*/
 #include <iostream>
 #include <string>
 #include <cmath>
@@ -26,8 +45,8 @@ Player::Player(float x, float y, float z, float angle) {
 void Player::move(float distance, float direction) {
 	direction += m_angleH;
 	
-	m_y -= distance * sin(direction * M_PI / 180.0);
-	m_x -= distance * cos(direction * M_PI / 180.0);
+	m_y += distance * sin(direction * M_PI / 180.0);
+	m_x += distance * cos(direction * M_PI / 180.0);
 }
 
 void Player::turnH(float angle) {
@@ -44,11 +63,11 @@ void Player::turnH(float angle) {
 void Player::turnV(float angle) {
 	m_angleV += angle;
 	
-	if(90.0f < m_angleV) {
-		m_angleV = 90.0f;
+	if(89.9f < m_angleV) {
+		m_angleV = 89.9f;
 	}
-	else if(-90.0f > m_angleV) {
-		m_angleV = -90.0f;
+	else if(-89.9f > m_angleV) {
+		m_angleV = -89.9f;
 	}
 }
 
@@ -73,7 +92,7 @@ void Player::watch() {
 			// z is the vertical
 			0, 0, 1);
 	
-	cout << "Eyepos: (" << int(m_x) << " ; " << int(m_y) << " ; " << int(m_eyeheight) << ")" << endl;
-	cout << "Pt targeted: (" << int(m_x - cos(-m_angleH * RADIANS_PER_DEGREES)) << " ; " << int(m_y + sin(-m_angleH * RADIANS_PER_DEGREES)) << " ; " << int(m_eyeheight + tan(m_angleV * RADIANS_PER_DEGREES)) << ")" << endl;
+	//cout << "Eyepos: (" << int(m_x) << " ; " << int(m_y) << " ; " << int(m_eyeheight) << ")" << endl;
+	//cout << "Pt targeted: (" << pointTargetedx() << " ; " << pointTargetedy() << " ; " << pointTargetedz() << ")" << endl;
 }
 
