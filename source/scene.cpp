@@ -21,12 +21,10 @@
 
 using namespace std;
 
-Player *Scene::player;
-
-bool Scene::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector) {
+float Scene::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector) {
 	float p1 = directionVector.x * normal.x + directionVector.y * normal.y + directionVector.z * normal.z; // First point to be tested
 	
-	if(p1 == 0) return false; // Degenerate case
+	if(p1 == 0) return -1; // Degenerate case
 	
 	vect3D u; // planePoint - lineOrigPoint
 	
@@ -53,15 +51,18 @@ bool Scene::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineO
 	float size = 0.5;
 	
 	if(v.x >= -size && v.x <= size && v.y >= -size && v.y <= size && v.z >= -size && v.z <= size) {
-		return true;
+		return k;
 	} else {
-		return false;
+		return -1;
 	}
 }
 
-bool Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector) {
+float Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector) {
 	vect3D planePoint;
 	vect3D normal;
+	
+	float k = 0;
+	float smallestK = -1;
 	
 	// Front right	
 	planePoint.x = cubeX + 0.5;
@@ -72,8 +73,11 @@ bool Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOri
 	normal.y = 1;
 	normal.z = 0;
 	
-	if(intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector)) {
-		return true;
+	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
+	if(k > -0.0) {
+		if((smallestK < -0.0) || (smallestK > k)) {
+			smallestK = k;
+		}
 	}
 	
 	// Front left
@@ -85,8 +89,11 @@ bool Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOri
 	normal.y = 0;
 	normal.z = 0;
 	
-	if(intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector)) {
-		return true;
+	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
+	if(k > -0.0) {
+		if((smallestK < -0.0) || (smallestK > k)) {
+			smallestK = k;
+		}
 	}
 	
 	// Back left
@@ -95,11 +102,14 @@ bool Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOri
 	planePoint.z = cubeZ + 0.5;
 	
 	normal.x = 0;
-	normal.y = -1;
+	normal.y = 1;
 	normal.z = 0;
 	
-	if(intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector)) {
-		return true;
+	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
+	if(k > -0.0) {
+		if((smallestK < -0.0) || (smallestK > k)) {
+			smallestK = k;
+		}
 	}
 	
 	// Back right
@@ -107,12 +117,15 @@ bool Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOri
 	planePoint.y = cubeY + 0.5;
 	planePoint.z = cubeZ + 0.5;
 	
-	normal.x = -1;
+	normal.x = 1;
 	normal.y = 0;
 	normal.z = 0;
 	
-	if(intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector)) {
-		return true;
+	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
+	if(k > -0.0) {
+		if((smallestK < -0.0) || (smallestK > k)) {
+			smallestK = k;
+		}
 	}
 	
 	// Bottom
@@ -122,10 +135,13 @@ bool Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOri
 	
 	normal.x = 0;
 	normal.y = 0;
-	normal.z = -1;
+	normal.z = 1;
 	
-	if(intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector)) {
-		return true;
+	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
+	if(k > -0.0) {
+		if((smallestK < -0.0) || (smallestK > k)) {
+			smallestK = k;
+		}
 	}
 	
 	// Top
@@ -137,11 +153,14 @@ bool Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOri
 	normal.y = 0;
 	normal.z = 1;
 	
-	if(intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector)) {
-		return true;
+	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
+	if(k > -0.0) {
+		if((smallestK < -0.0) || (smallestK > k)) {
+			smallestK = k;
+		}
 	}
 	
-	return false;
+	return smallestK;
 }
 
 void Scene::testCubes(std::vector<Cube*> cubes) {
@@ -162,24 +181,28 @@ void Scene::testCubes(std::vector<Cube*> cubes) {
 	for(std::vector<Cube*>::iterator it = cubes.begin() ; it != cubes.end() ; it++) {
 		vect3D center;
 		
-		center.x = (*it)->x() + sqrt(3) / 2;
-		center.y = (*it)->y() + sqrt(3) / 2;
-		center.z = (*it)->z() + sqrt(3) / 2;
+		center.x = (*it)->x() + biome->x() + 0.5;
+		center.y = (*it)->y() + biome->y() + 0.5;
+		center.z = (*it)->z() + biome->z() + 0.5;
 		
-		if(intersectionLineCube((*it)->x(), (*it)->y(), (*it)->z(), linePoint, directionVector)) {
+		float d = intersectionLineCube((*it)->x() + biome->x(), (*it)->y() + biome->y(), (*it)->z() + biome->z(), linePoint, directionVector);
+		if(d > -0.0) {
 			float d = sqrt(pow(linePoint.x - center.x, 2) + pow(linePoint.y - center.y, 2) + pow(linePoint.z - center.z, 2));
-
+			
 			if(d < distance) {
 				distance = d;
 				cube = (*it);
 			}
 		}
-		
+	
 		(*it)->setSelected(false);
 	}
 	
 	cube->setSelected(true);
 }
+
+Player *Scene::player;
+Biome *Scene::biome;
 
 Scene::Scene() {
 	//player = new Player(7, 7, 5, 90);
@@ -187,7 +210,7 @@ Scene::Scene() {
 	
 	loadTextures();
 	
-	m_biome = new Biome(0, 0, 0, m_textures["stone"]);
+	biome = new Biome(4, 4, 0, m_textures["stone"]);
 }
 
 Scene::~Scene() {
@@ -197,7 +220,7 @@ Scene::~Scene() {
 		element->second = 0;
 	}
 	
-	delete m_biome;
+	delete biome;
 	delete player;
 }
 
@@ -346,7 +369,7 @@ void Scene::drawField() {
 	
 	glEnd();
 	
-	m_biome->draw();
+	biome->draw();
 	
 	glPushMatrix();
 	glLoadIdentity();

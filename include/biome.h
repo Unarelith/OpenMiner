@@ -8,6 +8,10 @@ class Biome {
 		
 		void draw();
 		
+		int x() const { return m_x; }
+		int y() const { return m_y; }
+		int z() const { return m_z; }
+		
 	private:
 		int m_x;
 		int m_y;
