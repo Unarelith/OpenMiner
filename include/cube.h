@@ -33,6 +33,7 @@ class Cube {
 		int y() const { return m_y; }
 		int z() const { return m_z; }
 		
+		bool selected() const { return m_selected; }
 		s8 selectedFace() const { return m_selectedFace; }
 		
 	private:

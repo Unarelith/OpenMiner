@@ -40,10 +40,10 @@
 
 using namespace std;
 
-float Scene::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector) {
+bool Scene::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector, float *distance) {
 	float p1 = directionVector.x * normal.x + directionVector.y * normal.y + directionVector.z * normal.z; // First point to be tested
 	
-	if(p1 == 0) return -1; // Degenerate case
+	if(p1 == 0) return false; // Degenerate case
 	
 	vect3D u; // planePoint - lineOrigPoint
 	
@@ -70,22 +70,24 @@ float Scene::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D line
 	float size = 0.5;
 	
 	if(v.x >= -size && v.x <= size && v.y >= -size && v.y <= size && v.z >= -size && v.z <= size) {
-		return k;
+		if(distance != NULL) *distance = k;
+		return true;
 	} else {
-		return -1;
+		return false;
 	}
 }
 
-int face = -1;
 // Front right = 0 | Front left = 1
 // Back right = 2 | Back left = 3
 // Top = 4 | Bottom = 5
-float Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector) {
+bool Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector, float *distance, s8 *face) {
 	vect3D planePoint;
 	vect3D normal;
 	
 	float k = 0;
-	float smallestK = -1;
+	float smallestK = FAR;
+	s8 nearestFace = -1;
+	bool result = false;
 	
 	// Front right	
 	planePoint.x = cubeX + 0.5;
@@ -96,10 +98,10 @@ float Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOr
 	normal.y = 1;
 	normal.z = 0;
 	
-	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
-	if(k >= 0.0 && ((smallestK <= 0.0) || (smallestK > k))) {
+	result = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector, &k);
+	if(result && (smallestK > k)) {
 		smallestK = k;
-		face = 0;
+		nearestFace = 0;
 	}
 	
 	// Front left
@@ -111,10 +113,10 @@ float Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOr
 	normal.y = 0;
 	normal.z = 0;
 	
-	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
-	if(k >= 0.0 && ((smallestK <= 0.0) || (smallestK > k))) {
+	result = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector, &k);
+	if(result && (smallestK > k)) {
 		smallestK = k;
-		face = 1;
+		nearestFace = 1;
 	}
 	
 	// Back left
@@ -126,10 +128,10 @@ float Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOr
 	normal.y = -1;
 	normal.z = 0;
 	
-	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
-	if(k >= 0.0 && ((smallestK <= 0.0) || (smallestK > k))) {
+	result = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector, &k);
+	if(result && (smallestK > k)) {
 		smallestK = k;
-		face = 3;
+		nearestFace = 3;
 	}
 	
 	// Back right
@@ -141,10 +143,10 @@ float Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOr
 	normal.y = 0;
 	normal.z = 0;
 	
-	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
-	if(k >= 0.0 && ((smallestK <= 0.0) || (smallestK > k))) {
+	result = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector, &k);
+	if(result && (smallestK > k)) {
 		smallestK = k;
-		face = 2;
+		nearestFace = 2;
 	}
 	
 	// Bottom
@@ -156,10 +158,10 @@ float Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOr
 	normal.y = 0;
 	normal.z = -1;
 	
-	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
-	if(k >= 0.0 && ((smallestK <= 0.0) || (smallestK > k))) {
+	result = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector, &k);
+	if(result && (smallestK > k)) {
 		smallestK = k;
-		face = 5;
+		nearestFace = 5;
 	}
 	
 	// Top
@@ -171,13 +173,19 @@ float Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOr
 	normal.y = 0;
 	normal.z = 1;
 	
-	k = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector);
-	if(k >= 0.0 && ((smallestK <= 0.0) || (smallestK > k))) {
+	result = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector, &k);
+	if(result && (smallestK > k)) {
 		smallestK = k;
-		face = 4;
+		nearestFace = 4;
 	}
 	
-	return smallestK;
+	if(nearestFace < 0) {
+		return false;
+	} else {
+		if(distance != NULL) *distance = smallestK;
+		if(face != NULL) *face = nearestFace;
+		return true;
+	}
 }
 
 void Scene::testCubes(std::vector<Cube*> cubes) {
@@ -195,14 +203,19 @@ void Scene::testCubes(std::vector<Cube*> cubes) {
 	
 	float distance = FAR;
 	Cube *cube = NULL;
+	int face = -1;
 	for(std::vector<Cube*>::iterator it = cubes.begin() ; it != cubes.end() ; it++) {
 		(*it)->setSelected(false, -1);
 		
-		float d = intersectionLineCube((*it)->x() + biome->x(), (*it)->y() + biome->y(), (*it)->z() + biome->z(), linePoint, directionVector);
+		float d = -1;
+		s8 f = -1;
 		
-		if(d >= 0.0 && d < distance) {
+		bool result = intersectionLineCube((*it)->x() + biome->x(), (*it)->y() + biome->y(), (*it)->z() + biome->z(), linePoint, directionVector, &d, &f);
+		
+		if(result && (d < distance) && (d < 5)) {
 			distance = d;
 			cube = (*it);
+			face = f;
 		}
 	}
 	
