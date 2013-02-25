@@ -81,8 +81,6 @@ int face = -1;
 // Back right = 2 | Back left = 3
 // Top = 4 | Bottom = 5
 float Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector) {
-	face = -1;
-	
 	vect3D planePoint;
 	vect3D normal;
 	
@@ -198,7 +196,7 @@ void Scene::testCubes(std::vector<Cube*> cubes) {
 	float distance = FAR;
 	Cube *cube = NULL;
 	for(std::vector<Cube*>::iterator it = cubes.begin() ; it != cubes.end() ; it++) {
-		(*it)->setSelected(false, 2);
+		(*it)->setSelected(false, -1);
 		
 		float d = intersectionLineCube((*it)->x() + biome->x(), (*it)->y() + biome->y(), (*it)->z() + biome->z(), linePoint, directionVector);
 		
@@ -211,8 +209,9 @@ void Scene::testCubes(std::vector<Cube*> cubes) {
 	if(cube != NULL) {
 		selectedCube = cube;
 		cube->setSelected(true, face);
+		face = -1;
 	} else {
-	//	selectedCube->setSelected(false, 2);
+		selectedCube->setSelected(false, -1);
 	}
 }
 
