@@ -36,7 +36,7 @@ bool Scene::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineO
 	
 	float p2 = u.x * normal.x + u.y * normal.y + u.z * normal.z; // Second point to be tested
 	
-	float k = p1 / p2;
+	float k = p2 / p1;
 	
 	vect3D i; // Intersection point
 	
@@ -49,9 +49,6 @@ bool Scene::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineO
 	v.x = i.x - planePoint.x;
 	v.y = i.y - planePoint.y;
 	v.z = i.z - planePoint.z;
-	
-	//if(normal.z == 1)
-	//	cout << "p1(" << p1 << ")" << " | u(" << u.x << ";" << u.y << ";" << u.z << ") | p2(" << p2 << ") | i(" << i.x << ";" << i.y << ";" << i.z << ") | v(" << v.x << ";" << v.y << ";" << v.z << ") | ";
 	
 	float size = 0.5;
 	
@@ -163,29 +160,25 @@ void Scene::testCubes(std::vector<Cube*> cubes) {
 	float distance = FAR;
 	Cube *cube = cubes[0];
 	for(std::vector<Cube*>::iterator it = cubes.begin() ; it != cubes.end() ; it++) {
-		/*vect3D center;
+		vect3D center;
 		
 		center.x = (*it)->x() + sqrt(3) / 2;
 		center.y = (*it)->y() + sqrt(3) / 2;
-		center.z = (*it)->z() + sqrt(3) / 2;*/
+		center.z = (*it)->z() + sqrt(3) / 2;
 		
 		if(intersectionLineCube((*it)->x(), (*it)->y(), (*it)->z(), linePoint, directionVector)) {
-			/*float d = sqrt(pow(linePoint.x - center.x, 2) + pow(linePoint.y - center.y, 2) + pow(linePoint.z - center.z, 2));
+			float d = sqrt(pow(linePoint.x - center.x, 2) + pow(linePoint.y - center.y, 2) + pow(linePoint.z - center.z, 2));
 
 			if(d < distance) {
 				distance = d;
 				cube = (*it);
-			}*/
-			
-			(*it)->setSelected(true);
-		} else {
-			(*it)->setSelected(false);
+			}
 		}
 		
-		//(*it)->setSelected(false);
+		(*it)->setSelected(false);
 	}
 	
-	//cube->setSelected(true);
+	cube->setSelected(true);
 }
 
 Scene::Scene() {
