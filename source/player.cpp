@@ -26,8 +26,8 @@ Player::Player(float x, float y, float z, float angle) {
 void Player::move(float distance, float direction) {
 	direction += m_angleH;
 	
-	m_y += distance * sin(direction * M_PI / 180.0);
-	m_x += distance * cos(direction * M_PI / 180.0);
+	m_y -= distance * sin(direction * M_PI / 180.0);
+	m_x -= distance * cos(direction * M_PI / 180.0);
 }
 
 void Player::turnH(float angle) {
@@ -57,7 +57,7 @@ void Player::fly() {
 }
 
 void Player::land() {
-	if(m_eyeheight > 0.8) m_eyeheight -= 0.05;
+	/*if(m_eyeheight > 0.8)*/ m_eyeheight -= 0.05;
 }
 
 void Player::watch() {

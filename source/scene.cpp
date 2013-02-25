@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 #include <vector>
 #include <map>
@@ -17,6 +18,8 @@
 #include "cube.h"
 #include "biome.h"
 #include "scene.h"
+
+using namespace std;
 
 Player *Scene::player;
 
@@ -46,6 +49,9 @@ bool Scene::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineO
 	v.x = i.x - planePoint.x;
 	v.y = i.y - planePoint.y;
 	v.z = i.z - planePoint.z;
+	
+	//if(normal.z == 1)
+	//	cout << "p1(" << p1 << ")" << " | u(" << u.x << ";" << u.y << ";" << u.z << ") | p2(" << p2 << ") | i(" << i.x << ";" << i.y << ";" << i.z << ") | v(" << v.x << ";" << v.y << ";" << v.z << ") | ";
 	
 	float size = 0.5;
 	
@@ -154,16 +160,32 @@ void Scene::testCubes(std::vector<Cube*> cubes) {
 	directionVector.y = Scene::player->pointTargetedy() - Scene::player->y();
 	directionVector.z = Scene::player->pointTargetedz() - Scene::player->z();
 	
+	float distance = FAR;
 	Cube *cube = cubes[0];
 	for(std::vector<Cube*>::iterator it = cubes.begin() ; it != cubes.end() ; it++) {
+		/*vect3D center;
+		
+		center.x = (*it)->x() + sqrt(3) / 2;
+		center.y = (*it)->y() + sqrt(3) / 2;
+		center.z = (*it)->z() + sqrt(3) / 2;*/
+		
 		if(intersectionLineCube((*it)->x(), (*it)->y(), (*it)->z(), linePoint, directionVector)) {
-			cube = (*it);
+			/*float d = sqrt(pow(linePoint.x - center.x, 2) + pow(linePoint.y - center.y, 2) + pow(linePoint.z - center.z, 2));
+
+			if(d < distance) {
+				distance = d;
+				cube = (*it);
+			}*/
+			
+			(*it)->setSelected(true);
+		} else {
+			(*it)->setSelected(false);
 		}
 		
-		(*it)->setSelected(false);
+		//(*it)->setSelected(false);
 	}
 	
-	cube->setSelected(true);
+	//cube->setSelected(true);
 }
 
 Scene::Scene() {
