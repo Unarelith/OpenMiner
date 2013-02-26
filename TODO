@@ -1,4 +1,9 @@
 - Big map && map generation
+- unordered_map for maps
+- Pause menu
+- Main menu
+- PNG textures
+- Lightning
 - Improve vect3D
 - Improve cursor
 - Move cube tests in another file
