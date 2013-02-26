@@ -55,6 +55,8 @@ bool Scene::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineO
 	
 	float k = p2 / p1;
 	
+	if(k < 0) return false;
+	
 	vect3D i; // Intersection point
 	
 	i.x = lineOrigPoint.x + k * directionVector.x;
@@ -238,7 +240,7 @@ Scene::Scene() {
 	
 	loadTextures();
 	
-	biome = new Biome(4, 4, 0, m_textures["stone"]);
+	biome = new Biome(4, 4, 0, m_textures);
 	
 	selectedCube = new Cube(-1, -1, -1, m_textures["dirt"], NULL);
 }
@@ -392,6 +394,7 @@ void Scene::loadTextures() {
 	m_textures["grass"] = loadTexture("textures/grass.bmp");
 	m_textures["cobble"] = loadTexture("textures/cobble.bmp");
 	m_textures["stone"] = loadTexture("textures/stone.bmp");
+	m_textures["bedrock"] = loadTexture("textures/bedrock.bmp");
 }
 
 void Scene::drawField() {

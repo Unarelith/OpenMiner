@@ -20,6 +20,8 @@
 #ifndef CUBE_H
 #define CUBE_H
 
+typedef std::map<std::string, GLuint> Textures;
+
 class Cube {
 	public:
 		Cube(int x, int y, int z, GLuint texture, Map *map);

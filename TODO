@@ -1,1 +1,8 @@
+- Big map && map generation
 - Improve vect3D
+- Improve cursor
+- Move cube tests in another file
+- Multi-biome
+- Fix multi-biome problem in manageEvents
+- Save and load map
+- Autofire

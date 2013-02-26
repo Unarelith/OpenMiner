@@ -22,7 +22,7 @@
 
 class Biome {
 	public:
-		Biome(int x, int y, int z, GLuint texture);
+		Biome(int x, int y, int z, Textures textures);
 		~Biome();
 		
 		void draw();

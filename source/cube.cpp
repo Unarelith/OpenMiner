@@ -19,6 +19,7 @@
 ---------------------------------------------------------------------------------*/
 #include <iostream>
 #include <string>
+#include <map>
 
 #include <SDL/SDL.h>
 #include <GL/gl.h>

@@ -53,8 +53,6 @@ class Scene {
 		static Cube *selectedCube;
 		
 	private:
-		typedef std::map<std::string, GLuint> Textures;
-		
 		bool m_cont;
 		Textures m_textures;
 };
