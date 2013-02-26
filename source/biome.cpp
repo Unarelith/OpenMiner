@@ -74,7 +74,7 @@ u16 map[5 * 5 * 5] = {
 
 u16 _width = 16;
 u16 _depth = 16;
-u16 _height = 8;
+u16 _height = 16;
 
 u16 *_map = (u16*)malloc(_width * _depth * _height * sizeof(u16));
 
@@ -131,6 +131,7 @@ Biome::~Biome() {
 	m_cubes.clear();
 	
 	delete m_map;
+	free(_map);
 }
 
 void Biome::draw() {

@@ -44,6 +44,8 @@ class Scene {
 		void lockMouse();
 		void unlockMouse();
 		
+		Biome *findNearestBiome(float x, float y, float z);
+		
 		static bool intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector, float *distance);
 		static bool intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector, float *distance, s8 *face);
 		static void testCubes(std::vector<Cube*> cubes);
@@ -54,7 +56,10 @@ class Scene {
 		
 	private:
 		bool m_cont;
+		
 		Textures m_textures;
+		
+		std::vector<Biome*> m_biomes;
 };
 
 #endif // SCENE_H

@@ -240,7 +240,12 @@ Scene::Scene() {
 	
 	loadTextures();
 	
-	biome = new Biome(4, 4, 0, m_textures);
+	m_biomes.push_back(new Biome(0, 0, 0, m_textures));
+	m_biomes.push_back(new Biome(16, 0, 0, m_textures));
+	m_biomes.push_back(new Biome(0, 16, 0, m_textures));
+	m_biomes.push_back(new Biome(16, 16, 0, m_textures));
+	
+	biome = findNearestBiome(player->x(), player->y(), player->z());
 	
 	selectedCube = new Cube(-1, -1, -1, m_textures["dirt"], NULL);
 }
@@ -377,7 +382,6 @@ void Scene::draw() {
 	glLoadIdentity();
 	player->watch();
 	
-	// Drawing field
 	drawField();
 }
 
@@ -401,21 +405,9 @@ void Scene::drawField() {
 	// Turn on textures
 	glEnable(GL_TEXTURE_2D);
 	
-	// Select texture
-	glBindTexture(GL_TEXTURE_2D, m_textures["ground"]);
-	
-	// Add texture to scene
-	glBegin(GL_QUADS);
-	
-	glColor3ub(255, 255, 255);
-		glTexCoord2d(0, 1); glVertex3d(0, 0, -0.1);
-		glTexCoord2d(0, 0); glVertex3d(50, 0, -0.1);
-		glTexCoord2d(1, 0); glVertex3d(50, 50, -0.1);
-		glTexCoord2d(1, 1); glVertex3d(0, 50, -0.1);
-	
-	glEnd();
-	
+	biome = findNearestBiome(player->x(), player->y(), player->z());
 	biome->draw();
+	//findNearestBiome(player->x(), player->y(), player->z())->draw();
 	
 	glPushMatrix();
 	glLoadIdentity();
@@ -459,5 +451,27 @@ void Scene::unlockMouse() {
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	
 	SDL_ShowCursor(true);
+}
+
+Biome *Scene::findNearestBiome(float x, float y, float z) {
+	float distance = FAR;
+	Biome *biome = NULL;
+	
+	for(vector<Biome*>::iterator it = m_biomes.begin() ; it != m_biomes.end() ; it++) {
+		vect3D center;
+		
+		center.x = (*it)->x() + 8;
+		center.y = (*it)->y() + 8;
+		center.z = (*it)->z() + 8;
+		
+		float d = sqrt(pow(center.x - x, 2) + pow(center.y - y, 2) + pow(center.z - z, 2));
+		
+		if(d < distance) {
+			distance = d;
+			biome = (*it);
+		}
+	}
+	
+	return biome;
 }
 
