@@ -39,6 +39,7 @@ class Scene {
 		void display();
 		
 		void loadTextures();
+		void drawBiomes();
 		void drawField();
 		
 		void lockMouse();

@@ -1,5 +1,6 @@
 - Multi-biome: Working on
 	- Improve multi-biome display
+	- Bugs with biomes at (1;0) and (0;1)
 	- Fix cube selected from a biome to another one bug
 	- Fix problem in manageEvents
 - Big map && map generation

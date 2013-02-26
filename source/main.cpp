@@ -23,8 +23,7 @@
 #include <cmath>
 
 #include <SDL/SDL.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <GL/glfw.h>
 
 #include "sdlglutils.h"
 
@@ -37,6 +36,8 @@
 #include "scene.h"
 
 int main(int argc, char *argv[]) {
+	glfwInit();
+	
 	// Init SDL and OpenGL
 	initSDL();
 	initOpenGL();
@@ -47,6 +48,8 @@ int main(int argc, char *argv[]) {
 	
 	// Stop SDL
 	SDL_Quit();
+	
+	glfwTerminate();
 	
 	return 0;
 }

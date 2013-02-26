@@ -24,8 +24,7 @@
 #include <cmath>
 
 #include <SDL/SDL.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <GL/glfw.h>
 
 #include "sdlglutils.h"
 
@@ -55,7 +54,7 @@ bool Scene::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineO
 	
 	float k = p2 / p1;
 	
-	if(k < 0) return false;
+	if((k < 0) || (k > 5)) return false;
 	
 	vect3D i; // Intersection point
 	
@@ -267,12 +266,24 @@ void Scene::exec() {
 	
 	m_cont = true;
 	
+	double lastTime = glfwGetTime();
+	int nbFrames = 0;
+	
 	while(m_cont) {
+		// Measure speed
+		double currentTime = glfwGetTime();
+		nbFrames++;
+		if(currentTime - lastTime >= 1.0) {
+			cout << 1000.0/double(nbFrames) << " ms/frame" << endl;
+			nbFrames = 0;
+			lastTime += 1.0;
+		}
+		
 		manageEvents();
 		animate();
 		draw();
 		display();
-		cout << "Selected: (" << selectedCube->x() << ";" << selectedCube->y() << ";" << selectedCube->z() << ") face: " << (int)selectedCube->selectedFace() << endl;
+		//cout << "Current biome: (" << biome->x() << ";" << biome->y() << ";" << biome->z() << ")" << endl;
 	}
 	
 	unlockMouse();
@@ -401,10 +412,7 @@ void Scene::loadTextures() {
 	m_textures["bedrock"] = loadTexture("textures/bedrock.bmp");
 }
 
-void Scene::drawField() {
-	// Turn on textures
-	glEnable(GL_TEXTURE_2D);
-	
+void Scene::drawBiomes() {
 	biome = findNearestBiome(player->x(), player->y(), player->z());
 	biome->draw();
 	testCubes(biome->cubes());
@@ -412,6 +420,19 @@ void Scene::drawField() {
 	findNearestBiome(player->x() + 16, player->y(), player->z())->draw();
 	findNearestBiome(player->x(), player->y() + 16, player->z())->draw();
 	findNearestBiome(player->x() + 16, player->y() + 16, player->z())->draw();
+	findNearestBiome(player->x() - 16, player->y() + 16, player->z())->draw();
+	
+	findNearestBiome(player->x() - 16, player->y(), player->z())->draw();
+	findNearestBiome(player->x(), player->y() - 16, player->z())->draw();
+	findNearestBiome(player->x() - 16, player->y() - 16, player->z())->draw();
+	findNearestBiome(player->x() + 16, player->y() - 16, player->z())->draw();
+}
+
+void Scene::drawField() {
+	drawBiomes();
+	
+	// Turn on textures
+	glEnable(GL_TEXTURE_2D);
 	
 	glPushMatrix();
 	glLoadIdentity();
