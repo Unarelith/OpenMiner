@@ -407,7 +407,11 @@ void Scene::drawField() {
 	
 	biome = findNearestBiome(player->x(), player->y(), player->z());
 	biome->draw();
-	//findNearestBiome(player->x(), player->y(), player->z())->draw();
+	testCubes(biome->cubes());
+	
+	findNearestBiome(player->x() + 16, player->y(), player->z())->draw();
+	findNearestBiome(player->x(), player->y() + 16, player->z())->draw();
+	findNearestBiome(player->x() + 16, player->y() + 16, player->z())->draw();
 	
 	glPushMatrix();
 	glLoadIdentity();

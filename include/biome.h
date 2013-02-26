@@ -34,6 +34,8 @@ class Biome {
 		int y() const { return m_y; }
 		int z() const { return m_z; }
 		
+		std::vector<Cube*> cubes() const { return m_cubes; }
+		
 	private:
 		int m_x;
 		int m_y;

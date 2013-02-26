@@ -135,8 +135,6 @@ Biome::~Biome() {
 }
 
 void Biome::draw() {
-	Scene::testCubes(m_cubes);
-	
 	glPushMatrix();
 	
 	glTranslatef(m_x, m_y, m_z);
