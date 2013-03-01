@@ -26,24 +26,27 @@ class Biome {
 		~Biome();
 		
 		void draw();
-		
-		void deleteCube(Cube *cube);
-		void addCube(Cube *selectedCube);
+		void updateChunks();
 		
 		int x() const { return m_x; }
 		int y() const { return m_y; }
 		int z() const { return m_z; }
 		
-		std::vector<Cube*> cubes() const { return m_cubes; }
+		void deleteCube(Cube *cube) { currentChunk->deleteCube(cube); }
+		void addCube(Cube *selectedCube) { currentChunk->addCube(selectedCube); }
+		
+		Chunk *findNearestChunk(float x, float y, float z);
+		
+		static Chunk *currentChunk;
 		
 	private:
 		int m_x;
 		int m_y;
 		int m_z;
 		
-		GLuint m_texture;
+		Textures m_textures;
 		
-		std::vector<Cube*> m_cubes;
+		std::vector<Chunk*> m_chunks;
 };
 
 #endif // BIOME_H

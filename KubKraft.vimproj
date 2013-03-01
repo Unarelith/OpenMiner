@@ -2,6 +2,7 @@ KubKraft=/home/quentin/Bureau/KubKraft CD=. filter=".gitignore *.c *.h *.diff *.
  Makefile
  include=include {
   biome.h
+  chunk.h
   config.h
   cube.h
   init.h
@@ -12,6 +13,7 @@ KubKraft=/home/quentin/Bureau/KubKraft CD=. filter=".gitignore *.c *.h *.diff *.
  }
  source=source {
   biome.cpp
+  chunk.cpp
   cube.cpp
   init.cpp
   main.cpp

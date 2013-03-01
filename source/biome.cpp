@@ -26,169 +26,68 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include "config.h"
 #include "types.h"
 #include "player.h"
 #include "map.h"
 #include "cube.h"
+#include "chunk.h"
 #include "biome.h"
 #include "scene.h"
 
-using namespace std;
-
-/*u16 width = 5;
-u16 depth = 5;
-u16 height = 5;
-
-// Map is displayed from bottom
-u16 map[5 * 5 * 5] = {
-	1, 0, 1, 1, 1,
-	1, 1, 1, 1, 1,
-	1, 1, 1, 0, 1,
-	0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0,
-	
-	0, 0, 1, 0, 0,
-	0, 0, 0, 0, 0,
-	1, 0, 1, 0, 1,
-	0, 0, 0, 0, 0,
-	0, 0, 1, 0, 0,
-	
-	0, 1, 1, 1, 1,
-	1, 1, 0, 1, 0,
-	1, 1, 1, 1, 1,
-	1, 0, 1, 0, 1,
-	1, 1, 0, 1, 1,
-	
-	0, 0, 0, 0, 0,
-	0, 1, 0, 1, 0,
-	0, 0, 0, 0, 0,
-	0, 1, 0, 1, 0,
-	0, 0, 0, 0, 0,
-	
-	1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1,
-	0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0,
-};*/
-
-u16 _width = 16;
-u16 _depth = 16;
-u16 _height = 16;
-
-u16 *_map = (u16*)malloc(_width * _depth * _height * sizeof(u16));
-
-Map *m_map = new Map{_width, _depth, _height, _map};
+Chunk *Biome::currentChunk = NULL;
 
 Biome::Biome(int x, int y, int z, Textures textures) {
-	srand(time(NULL));
-	
 	m_x = x;
 	m_y = y;
 	m_z = z;
 	
-	m_texture = textures["stone"];
+	m_textures = textures;
 	
-	for(s32 z = 0 ; z < m_map->height ; z++) {
-		for(s32 y = 0 ; y < m_map->depth ; y++) {
-			for(s32 x = 0 ; x < m_map->width ; x++) {
-				if(z == 0) {
-					m_map->map[MAP_POS(x, y, z)] = 3;
-				}
-				else if(z < m_map->height - 2) {
-					if(rand()%3 >= 2) m_map->map[MAP_POS(x, y, z)] = 2;
-				} else {
-					if(rand()%3 >= 2) m_map->map[MAP_POS(x, y, z)] = 1;
-				}
-			}
-		}
-	}
+	m_chunks.push_back(new Chunk(m_x, m_y, m_z, m_textures));
+	m_chunks.push_back(new Chunk(m_x + 16, m_y, m_z, m_textures));
+	m_chunks.push_back(new Chunk(m_x, m_y + 16, m_z, m_textures));
+	m_chunks.push_back(new Chunk(m_x + 16, m_y + 16, m_z, m_textures));
 	
-	for(s32 z = 0 ; z < m_map->height ; z++) {
-		for(s32 y = 0 ; y < m_map->depth ; y++) {
-			for(s32 x = 0 ; x < m_map->width ; x++) {
-				switch(m_map->map[MAP_POS(x, y, z)]) {
-					case 1:
-						m_cubes.push_back(new Cube(x, y, z, textures["grass"], m_map));
-						break;
-					case 2:
-						m_cubes.push_back(new Cube(x, y, z, textures["stone"], m_map));
-						break;
-					case 3:
-						m_cubes.push_back(new Cube(x, y, z, textures["bedrock"], m_map));
-						break;
-				}
-			}
-		}
-	}
+	currentChunk = findNearestChunk(Scene::player->x(), Scene::player->y(), Scene::player->z());
 }
 
 Biome::~Biome() {
-	for(std::vector<Cube*>::iterator it = m_cubes.begin() ; it != m_cubes.end() ; it++) {
-		delete (*it);
-	}
+	m_chunks.clear();
 	
-	m_cubes.clear();
-	
-	delete m_map;
-	free(_map);
+	delete currentChunk;
 }
 
 void Biome::draw() {
-	glPushMatrix();
-	
-	glTranslatef(m_x, m_y, m_z);
-	
-	for(std::vector<Cube*>::iterator it = m_cubes.begin() ; it != m_cubes.end() ; it++) {
+	for(std::vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
 		(*it)->draw();
 	}
-	
-	glPopMatrix();
 }
 
-void Biome::deleteCube(Cube *cube) {
-	for(std::vector<Cube*>::iterator it = m_cubes.begin(); it != m_cubes.end() ; it++) {
-		if((*it)->x() == cube->x() && (*it)->y() == cube->y() && (*it)->z() == cube->z()) {
-			if(cube->selected()) {
-				m_map->map[MAP_POS(cube->x(), cube->y(), cube->z())] = 0;
-				delete (*it);
-				m_cubes.erase(it);
-				break;
-			}
+void Biome::updateChunks() {
+	currentChunk = findNearestChunk(Scene::player->x(), Scene::player->y(), Scene::player->z());
+}
+
+Chunk *Biome::findNearestChunk(float x, float y, float z) {
+	float distance = FAR;
+	Chunk *chunk = NULL;
+	
+	for(std::vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
+		vect3D center;
+		
+		// 8 here is 16, so chunk size, divided by 2
+		center.x = (*it)->x() + 8;
+		center.y = (*it)->y() + 8;
+		center.z = (*it)->z() + 8;
+		
+		float d = sqrt(pow(center.x - x, 2) + pow(center.y - y, 2) + pow(center.z - z, 2));
+		
+		if(d < distance) {
+			distance = d;
+			chunk = (*it);
 		}
 	}
-}
-
-void Biome::addCube(Cube *selectedCube) {
-	if(selectedCube->selectedFace() == 0) {
-		if((MAP_POS(selectedCube->x(), selectedCube->y() + 1, selectedCube->z()) >= 0) && (MAP_POS(selectedCube->x(), selectedCube->y() + 1, selectedCube->z()) < m_map->width * m_map->depth * m_map->height))
-			m_map->map[MAP_POS(selectedCube->x(), selectedCube->y() + 1, selectedCube->z())] = 1;
-		m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y() + 1, selectedCube->z(), m_texture, m_map));
-	}
-	else if(selectedCube->selectedFace() == 1) {
-		if((MAP_POS(selectedCube->x() + 1, selectedCube->y(), selectedCube->z()) >= 0) && (MAP_POS(selectedCube->x() + 1, selectedCube->y(), selectedCube->z()) < m_map->width * m_map->depth * m_map->height))
-			m_map->map[MAP_POS(selectedCube->x() + 1, selectedCube->y(), selectedCube->z())] = 1;
-		m_cubes.push_back(new Cube(selectedCube->x() + 1, selectedCube->y(), selectedCube->z(), m_texture, m_map));
-	}
-	else if(selectedCube->selectedFace() == 2) {
-		if((MAP_POS(selectedCube->x() - 1, selectedCube->y(), selectedCube->z()) >= 0) && (MAP_POS(selectedCube->x() - 1, selectedCube->y(), selectedCube->z()) < m_map->width * m_map->depth * m_map->height))
-			m_map->map[MAP_POS(selectedCube->x() - 1, selectedCube->y(), selectedCube->z())] = 1;
-		m_cubes.push_back(new Cube(selectedCube->x() - 1, selectedCube->y(), selectedCube->z(), m_texture, m_map));
-	}
-	else if(selectedCube->selectedFace() == 3) {
-		if((MAP_POS(selectedCube->x(), selectedCube->y() - 1, selectedCube->z()) >= 0) && (MAP_POS(selectedCube->x(), selectedCube->y() - 1, selectedCube->z()) < m_map->width * m_map->depth * m_map->height))
-			m_map->map[MAP_POS(selectedCube->x(), selectedCube->y() - 1, selectedCube->z())] = 1;
-		m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y() - 1, selectedCube->z(), m_texture, m_map));
-	}
-	else if(selectedCube->selectedFace() == 4) {
-		if((MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() + 1) >= 0) && (MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() + 1) < m_map->width * m_map->depth * m_map->height))
-			m_map->map[MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() + 1)] = 1;
-		m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y(), selectedCube->z() + 1, m_texture, m_map));
-	}
-	else if(selectedCube->selectedFace() == 5) {
-		if((MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() - 1) >= 0) && (MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() - 1) < m_map->width * m_map->depth * m_map->height))
-			m_map->map[MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() - 1)] = 1;
-		if(selectedCube->z() - 1 >= 0) m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y(), selectedCube->z() - 1, m_texture, m_map));
-	}
+	
+	return chunk;
 }
 

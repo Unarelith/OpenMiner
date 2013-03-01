@@ -34,6 +34,7 @@
 #include "player.h"
 #include "map.h"
 #include "cube.h"
+#include "chunk.h"
 #include "biome.h"
 #include "scene.h"
 
@@ -240,9 +241,6 @@ Scene::Scene() {
 	loadTextures();
 	
 	m_biomes.push_back(new Biome(0, 0, 0, m_textures));
-	m_biomes.push_back(new Biome(16, 0, 0, m_textures));
-	m_biomes.push_back(new Biome(0, 16, 0, m_textures));
-	m_biomes.push_back(new Biome(16, 16, 0, m_textures));
 	
 	biome = findNearestBiome(player->x(), player->y(), player->z());
 	
@@ -283,7 +281,6 @@ void Scene::exec() {
 		animate();
 		draw();
 		display();
-		//cout << "Current biome: (" << biome->x() << ";" << biome->y() << ";" << biome->z() << ")" << endl;
 	}
 	
 	unlockMouse();
@@ -404,10 +401,9 @@ void Scene::display() {
 
 void Scene::loadTextures() {
 	// Load textures
-	m_textures["ground"] = loadTexture("textures/ground.bmp");
 	m_textures["dirt"] = loadTexture("textures/dirt.bmp");
 	m_textures["grass"] = loadTexture("textures/grass.bmp");
-	m_textures["cobble"] = loadTexture("textures/cobble.bmp");
+	m_textures["cobblestone"] = loadTexture("textures/cobblestone.bmp");
 	m_textures["stone"] = loadTexture("textures/stone.bmp");
 	m_textures["bedrock"] = loadTexture("textures/bedrock.bmp");
 }
@@ -415,17 +411,10 @@ void Scene::loadTextures() {
 void Scene::drawBiomes() {
 	biome = findNearestBiome(player->x(), player->y(), player->z());
 	biome->draw();
-	testCubes(biome->cubes());
-	
-	findNearestBiome(player->x() + 16, player->y(), player->z())->draw();
-	findNearestBiome(player->x(), player->y() + 16, player->z())->draw();
-	findNearestBiome(player->x() + 16, player->y() + 16, player->z())->draw();
-	findNearestBiome(player->x() - 16, player->y() + 16, player->z())->draw();
-	
-	findNearestBiome(player->x() - 16, player->y(), player->z())->draw();
-	findNearestBiome(player->x(), player->y() - 16, player->z())->draw();
-	findNearestBiome(player->x() - 16, player->y() - 16, player->z())->draw();
-	findNearestBiome(player->x() + 16, player->y() - 16, player->z())->draw();
+	cout << "Previous chunk: (" << Biome::currentChunk->x() << ";" << Biome::currentChunk->y() << ";" << Biome::currentChunk->z() << ")";
+	biome->updateChunks();
+	testCubes(Biome::currentChunk->cubes());
+	cout << "| New chunk: (" << Biome::currentChunk->x() << ";" << Biome::currentChunk->y() << ";" << Biome::currentChunk->z() << ")" << endl;
 }
 
 void Scene::drawField() {

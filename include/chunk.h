@@ -17,41 +17,33 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
 ---------------------------------------------------------------------------------*/
-#include <string>
-#include <map>
-#include <vector>
-#include <cmath>
+#ifndef CHUNK_H
+#define CHUNK_H
 
-#include <SDL/SDL.h>
-#include <GL/glfw.h>
+class Chunk {
+	public:
+		Chunk(int x, int y, int z, Textures textures);
+		~Chunk();
+		
+		void draw();
+		
+		void deleteCube(Cube *cube);
+		void addCube(Cube *selectedCube);
+		
+		int x() const { return m_x; }
+		int y() const { return m_y; }
+		int z() const { return m_z; }
+		
+		std::vector<Cube*> cubes() const { return m_cubes; }
+		
+	private:
+		int m_x;
+		int m_y;
+		int m_z;
+		
+		GLuint m_texture;
+		
+		std::vector<Cube*> m_cubes;
+};
 
-#include "sdlglutils.h"
-
-#include "types.h"
-#include "init.h"
-#include "map.h"
-#include "cube.h"
-#include "chunk.h"
-#include "player.h"
-#include "biome.h"
-#include "scene.h"
-
-int main(int argc, char *argv[]) {
-	glfwInit();
-	
-	// Init SDL and OpenGL
-	initSDL();
-	initOpenGL();
-	
-	// Scene execution
-	Scene scene;
-	scene.exec();
-	
-	// Stop SDL
-	SDL_Quit();
-	
-	glfwTerminate();
-	
-	return 0;
-}
-
+#endif // CHUNK_H
