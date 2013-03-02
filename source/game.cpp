@@ -47,7 +47,7 @@ Game::Game() {
 	
 	loadTextures();
 	
-	map = new Map(48, 48, 16, m_textures); // No size implemented for the moment
+	map = new Map(32, 32, 16, m_textures); // No size implemented for the moment
 }
 
 Game::~Game() {

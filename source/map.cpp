@@ -65,18 +65,6 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 		}
 	}
 	
-	/*
-	m_chunks.push_back(new Chunk(0, 0, 0, m_textures));
-	m_chunks.push_back(new Chunk(16, 0, 0, m_textures));
-	m_chunks.push_back(new Chunk(0, 16, 0, m_textures));
-	m_chunks.push_back(new Chunk(16, 16, 0, m_textures));
-	m_chunks.push_back(new Chunk(0, 32, 0, m_textures));
-	m_chunks.push_back(new Chunk(32, 0, 0, m_textures));
-	m_chunks.push_back(new Chunk(32, 16, 0, m_textures));
-	m_chunks.push_back(new Chunk(16, 32, 0, m_textures));
-	m_chunks.push_back(new Chunk(32, 32, 0, m_textures));
-	*/
-	
 	for(u16 z = 0 ; z < m_height >> 4 ; z++) {
 		for(u16 y = 0 ; y < m_depth >> 4 ; y++) {
 			for(u16 x = 0 ; x < m_width >> 4 ; x++) {
@@ -85,29 +73,29 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 		}
 	}
 	
-	currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
-	
-	selectedCube = new Cube(-1, -1, -1, m_textures["dirt"]);
-	
 	for(vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
 		for(s32 z = (*it)->z() ; z < (*it)->z() + CHUNK_HEIGHT ; z++) {
 			for(s32 y = (*it)->y() ; y < (*it)->y() + CHUNK_DEPTH ; y++) {
 				for(s32 x = (*it)->x() ; x < (*it)->x() + CHUNK_WIDTH ; x++) {
 					switch(m_map[_MAP_POS(x, y, z)]) {
 						case 1:
-							(*it)->addCube(new Cube(x, y, z, textures["grass"]));
+							(*it)->addCube(new Cube(x, y, z, m_textures["grass"]));
 							break;
 						case 2:
-							(*it)->addCube(new Cube(x, y, z, textures["stone"]));
+							(*it)->addCube(new Cube(x, y, z, m_textures["stone"]));
 							break;
 						case 3:
-							(*it)->addCube(new Cube(x, y, z, textures["bedrock"]));
+							(*it)->addCube(new Cube(x, y, z, m_textures["bedrock"]));
 							break;
 					}
 				}
 			}
 		}
 	}
+	
+	currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
+	
+	selectedCube = new Cube(-1, -1, -1, m_textures["dirt"]);
 }
 
 Map::~Map() {
@@ -323,7 +311,7 @@ void Map::testCubes(std::vector<Cube*> cubes) {
 		float d = -1;
 		s8 f = -1;
 		
-		bool result = intersectionLineCube((*it)->x() + currentChunk->x(), (*it)->y() + currentChunk->y(), (*it)->z() + currentChunk->z(), linePoint, directionVector, &d, &f);
+		bool result = intersectionLineCube((*it)->x(), (*it)->y(), (*it)->z(), linePoint, directionVector, &d, &f);
 		
 		if(result && (d < distance) && (d < 5)) {
 			distance = d;

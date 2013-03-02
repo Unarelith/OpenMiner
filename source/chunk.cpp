@@ -55,15 +55,9 @@ Chunk::~Chunk() {
 }
 
 void Chunk::draw() {
-	//glPushMatrix();
-	
-	//glTranslatef(m_x, m_y, m_z);
-	
 	for(std::vector<Cube*>::iterator it = m_cubes.begin() ; it != m_cubes.end() ; it++) {
 		(*it)->draw();
 	}
-	
-	//glPopMatrix();
 }
 
 void Chunk::deleteCube(Cube *cube) {
@@ -81,7 +75,7 @@ void Chunk::deleteCube(Cube *cube) {
 
 void Chunk::addCube(Cube *selectedCube) {
 	if(selectedCube->selectedFace() == -1) {
-		m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y() + 1, selectedCube->z(), selectedCube->texture()));
+		m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y(), selectedCube->z(), selectedCube->texture()));
 	}
 	else if(selectedCube->selectedFace() == 0) {
 		if((MAP_POS(selectedCube->x(), selectedCube->y() + 1, selectedCube->z()) >= 0) && (MAP_POS(selectedCube->x(), selectedCube->y() + 1, selectedCube->z()) < Game::map->width() * Game::map->depth() * Game::map->height()))
