@@ -72,7 +72,7 @@ void Player::turnV(float angle) {
 }
 
 void Player::fly() {
-	if(m_eyeheight < 20) m_eyeheight += 0.05;
+	if(m_eyeheight < 256) m_eyeheight += 0.05;
 }
 
 void Player::land() {

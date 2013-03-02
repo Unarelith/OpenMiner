@@ -235,7 +235,7 @@ Cube *Scene::selectedCube;
 
 Scene::Scene() {
 	//player = new Player(7, 7, 5, 90);
-	player = new Player(4, 4, 2, 90);
+	player = new Player(4, 4, 18, 90);
 	
 	loadTextures();
 	
@@ -243,6 +243,11 @@ Scene::Scene() {
 	m_chunks.push_back(new Chunk(16, 0, 0, m_textures));
 	m_chunks.push_back(new Chunk(0, 16, 0, m_textures));
 	m_chunks.push_back(new Chunk(16, 16, 0, m_textures));
+	m_chunks.push_back(new Chunk(0, 32, 0, m_textures));
+	m_chunks.push_back(new Chunk(32, 0, 0, m_textures));
+	m_chunks.push_back(new Chunk(32, 16, 0, m_textures));
+	m_chunks.push_back(new Chunk(16, 32, 0, m_textures));
+	m_chunks.push_back(new Chunk(32, 32, 0, m_textures));
 	
 	currentChunk = findNearestChunk(player->x(), player->y(), player->z());
 	

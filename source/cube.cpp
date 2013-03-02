@@ -22,8 +22,7 @@
 #include <map>
 
 #include <SDL/SDL.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <GL/glew.h>
 
 #include "types.h"
 #include "map.h"
