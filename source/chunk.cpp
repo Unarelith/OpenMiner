@@ -31,7 +31,7 @@
 #include "map.h"
 #include "cube.h"
 #include "chunk.h"
-#include "scene.h"
+#include "game.h"
 
 using namespace std;
 

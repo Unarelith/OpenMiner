@@ -26,10 +26,10 @@ typedef struct {
 	float z;
 } vect3D;
 
-class Scene {
+class Game {
 	public:
-		Scene();
-		~Scene();
+		Game();
+		~Game();
 		
 		void exec();
 		

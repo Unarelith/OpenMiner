@@ -4,19 +4,19 @@ KubKraft=/home/quentin/Bureau/KubKraft CD=. filter=".gitignore *.c *.h *.diff *.
   chunk.h
   config.h
   cube.h
+  game.h
   init.h
   map.h
   player.h
-  scene.h
   types.h
  }
  source=source {
   chunk.cpp
   cube.cpp
+  game.cpp
   init.cpp
   main.cpp
   map.cpp
   player.cpp
-  scene.cpp
  }
 }

@@ -35,11 +35,11 @@
 #include "map.h"
 #include "cube.h"
 #include "chunk.h"
-#include "scene.h"
+#include "game.h"
 
 using namespace std;
 
-bool Scene::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector, float *distance) {
+bool Game::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector, float *distance) {
 	float p1 = directionVector.x * normal.x + directionVector.y * normal.y + directionVector.z * normal.z; // First point to be tested
 	
 	if(p1 == 0) return false; // Degenerate case
@@ -81,7 +81,7 @@ bool Scene::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineO
 // Front right = 0 | Front left = 1
 // Back right = 2 | Back left = 3
 // Top = 4 | Bottom = 5
-bool Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector, float *distance, s8 *face) {
+bool Game::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector, float *distance, s8 *face) {
 	vect3D planePoint;
 	vect3D normal;
 	
@@ -189,18 +189,18 @@ bool Scene::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOri
 	}
 }
 
-void Scene::testCubes(std::vector<Cube*> cubes) {
+void Game::testCubes(std::vector<Cube*> cubes) {
 	vect3D linePoint;
 	
-	linePoint.x = Scene::player->x();
-	linePoint.y = Scene::player->y();
-	linePoint.z = Scene::player->z();
+	linePoint.x = Game::player->x();
+	linePoint.y = Game::player->y();
+	linePoint.z = Game::player->z();
 	
 	vect3D directionVector;
 	
-	directionVector.x = Scene::player->pointTargetedx() - Scene::player->x();
-	directionVector.y = Scene::player->pointTargetedy() - Scene::player->y();
-	directionVector.z = Scene::player->pointTargetedz() - Scene::player->z();
+	directionVector.x = Game::player->pointTargetedx() - Game::player->x();
+	directionVector.y = Game::player->pointTargetedy() - Game::player->y();
+	directionVector.z = Game::player->pointTargetedz() - Game::player->z();
 	
 	float distance = FAR;
 	Cube *cube = NULL;
@@ -229,12 +229,11 @@ void Scene::testCubes(std::vector<Cube*> cubes) {
 	}
 }
 
-Player *Scene::player;
-Chunk *Scene::currentChunk;
-Cube *Scene::selectedCube;
+Player *Game::player;
+Chunk *Game::currentChunk;
+Cube *Game::selectedCube;
 
-Scene::Scene() {
-	//player = new Player(7, 7, 5, 90);
+Game::Game() {
 	player = new Player(4, 4, 18, 90);
 	
 	loadTextures();
@@ -254,7 +253,7 @@ Scene::Scene() {
 	selectedCube = new Cube(-1, -1, -1, m_textures["dirt"], NULL);
 }
 
-Scene::~Scene() {
+Game::~Game() {
 	// Deleting loaded textures
 	for(Textures::iterator element = m_textures.begin() ; element != m_textures.end() ; element++) {
 		glDeleteTextures(1, &element->second);
@@ -266,7 +265,7 @@ Scene::~Scene() {
 	delete selectedCube;
 }
 
-void Scene::exec() {
+void Game::exec() {
 	lockMouse();
 	
 	m_cont = true;
@@ -293,7 +292,7 @@ void Scene::exec() {
 	unlockMouse();
 }
 
-void Scene::manageEvents() {
+void Game::manageEvents() {
 	SDL_Event event;
 	
 	while(SDL_PollEvent(&event)) {
@@ -331,7 +330,7 @@ void Scene::manageEvents() {
 	}
 }
 
-void Scene::animate() {
+void Game::animate() {
 	// Read keys state
 	u8 *keys = SDL_GetKeyState(NULL);
 	
@@ -388,7 +387,7 @@ void Scene::animate() {
 	}
 }
 
-void Scene::draw() {
+void Game::draw() {
 	// Clean screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
@@ -400,13 +399,13 @@ void Scene::draw() {
 	drawField();
 }
 
-void Scene::display() {
+void Game::display() {
 	glFlush();
 	
 	SDL_GL_SwapBuffers();
 }
 
-void Scene::loadTextures() {
+void Game::loadTextures() {
 	// Load textures
 	m_textures["dirt"] = loadTexture("textures/dirt.bmp");
 	m_textures["grass"] = loadTexture("textures/grass.bmp");
@@ -415,7 +414,7 @@ void Scene::loadTextures() {
 	m_textures["bedrock"] = loadTexture("textures/bedrock.bmp");
 }
 
-void Scene::drawChunks() {
+void Game::drawChunks() {
 	currentChunk = findNearestChunk(player->x(), player->y(), player->z());
 	
 	for(vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
@@ -425,7 +424,7 @@ void Scene::drawChunks() {
 	testCubes(currentChunk->cubes());
 }
 
-void Scene::drawField() {
+void Game::drawField() {
 	drawChunks();
 	
 	// Turn on textures
@@ -461,7 +460,7 @@ void Scene::drawField() {
 	glPopMatrix();	
 }
 
-void Scene::lockMouse() {
+void Game::lockMouse() {
 	SDL_WM_GrabInput(SDL_GRAB_ON);
 	
 	SDL_WarpMouse((WIN_WIDTH / 2), (WIN_HEIGHT / 2));
@@ -469,13 +468,13 @@ void Scene::lockMouse() {
 	SDL_ShowCursor(false);
 }
 
-void Scene::unlockMouse() {
+void Game::unlockMouse() {
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	
 	SDL_ShowCursor(true);
 }
 
-Chunk *Scene::findNearestChunk(float x, float y, float z) {
+Chunk *Game::findNearestChunk(float x, float y, float z) {
 	float distance = FAR;
 	Chunk *chunk = NULL;
 	

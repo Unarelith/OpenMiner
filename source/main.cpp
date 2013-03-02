@@ -17,6 +17,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
 ---------------------------------------------------------------------------------*/
+#include <iostream>
 #include <string>
 #include <map>
 #include <vector>
@@ -33,7 +34,9 @@
 #include "cube.h"
 #include "chunk.h"
 #include "player.h"
-#include "scene.h"
+#include "game.h"
+
+using namespace std;
 
 int main(int argc, char *argv[]) {
 	glfwInit();
@@ -42,9 +45,9 @@ int main(int argc, char *argv[]) {
 	initSDL();
 	initOpenGL();
 	
-	// Scene execution
-	Scene scene;
-	scene.exec();
+	// Game execution
+	Game game;
+	game.exec();
 	
 	// Stop SDL
 	SDL_Quit();
