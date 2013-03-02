@@ -1,7 +1,6 @@
 KubKraft=/home/quentin/Bureau/KubKraft CD=. filter=".gitignore *.c *.h *.diff *.vim AUTHORS ChangeLog COPYING Makefile Notes TODO *.textile *.cpp" {
  Makefile
  include=include {
-  biome.h
   chunk.h
   config.h
   cube.h
@@ -12,7 +11,6 @@ KubKraft=/home/quentin/Bureau/KubKraft CD=. filter=".gitignore *.c *.h *.diff *.
   types.h
  }
  source=source {
-  biome.cpp
   chunk.cpp
   cube.cpp
   init.cpp

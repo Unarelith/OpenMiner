@@ -35,7 +35,6 @@
 #include "map.h"
 #include "cube.h"
 #include "chunk.h"
-#include "biome.h"
 #include "scene.h"
 
 using namespace std;
@@ -212,7 +211,7 @@ void Scene::testCubes(std::vector<Cube*> cubes) {
 		float d = -1;
 		s8 f = -1;
 		
-		bool result = intersectionLineCube((*it)->x() + biome->x(), (*it)->y() + biome->y(), (*it)->z() + biome->z(), linePoint, directionVector, &d, &f);
+		bool result = intersectionLineCube((*it)->x() + currentChunk->x(), (*it)->y() + currentChunk->y(), (*it)->z() + currentChunk->z(), linePoint, directionVector, &d, &f);
 		
 		if(result && (d < distance) && (d < 5)) {
 			distance = d;
@@ -231,7 +230,7 @@ void Scene::testCubes(std::vector<Cube*> cubes) {
 }
 
 Player *Scene::player;
-Biome *Scene::biome;
+Chunk *Scene::currentChunk;
 Cube *Scene::selectedCube;
 
 Scene::Scene() {
@@ -240,9 +239,12 @@ Scene::Scene() {
 	
 	loadTextures();
 	
-	m_biomes.push_back(new Biome(0, 0, 0, m_textures));
+	m_chunks.push_back(new Chunk(0, 0, 0, m_textures));
+	m_chunks.push_back(new Chunk(16, 0, 0, m_textures));
+	m_chunks.push_back(new Chunk(0, 16, 0, m_textures));
+	m_chunks.push_back(new Chunk(16, 16, 0, m_textures));
 	
-	biome = findNearestBiome(player->x(), player->y(), player->z());
+	currentChunk = findNearestChunk(player->x(), player->y(), player->z());
 	
 	selectedCube = new Cube(-1, -1, -1, m_textures["dirt"], NULL);
 }
@@ -254,7 +256,7 @@ Scene::~Scene() {
 		element->second = 0;
 	}
 	
-	delete biome;
+	delete currentChunk;
 	delete player;
 	delete selectedCube;
 }
@@ -312,12 +314,12 @@ void Scene::manageEvents() {
 			
 			case SDL_MOUSEBUTTONDOWN:
 				if(event.button.button == SDL_BUTTON_LEFT) {
-					// To fix for multiples biomes
-					biome->deleteCube(selectedCube);
+					// To fix for multiples currentChunks
+					currentChunk->deleteCube(selectedCube);
 					selectedCube = new Cube(-1, -1, -1, 0, NULL);
 				}
 				if(event.button.button == SDL_BUTTON_RIGHT) {
-					biome->addCube(selectedCube);
+					currentChunk->addCube(selectedCube);
 				}
 				break;
 		}
@@ -408,17 +410,18 @@ void Scene::loadTextures() {
 	m_textures["bedrock"] = loadTexture("textures/bedrock.bmp");
 }
 
-void Scene::drawBiomes() {
-	biome = findNearestBiome(player->x(), player->y(), player->z());
-	biome->draw();
-	cout << "Previous chunk: (" << Biome::currentChunk->x() << ";" << Biome::currentChunk->y() << ";" << Biome::currentChunk->z() << ")";
-	biome->updateChunks();
-	testCubes(Biome::currentChunk->cubes());
-	cout << "| New chunk: (" << Biome::currentChunk->x() << ";" << Biome::currentChunk->y() << ";" << Biome::currentChunk->z() << ")" << endl;
+void Scene::drawChunks() {
+	currentChunk = findNearestChunk(player->x(), player->y(), player->z());
+	
+	for(vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
+		(*it)->draw();
+	}
+	
+	testCubes(currentChunk->cubes());
 }
 
 void Scene::drawField() {
-	drawBiomes();
+	drawChunks();
 	
 	// Turn on textures
 	glEnable(GL_TEXTURE_2D);
@@ -467,11 +470,11 @@ void Scene::unlockMouse() {
 	SDL_ShowCursor(true);
 }
 
-Biome *Scene::findNearestBiome(float x, float y, float z) {
+Chunk *Scene::findNearestChunk(float x, float y, float z) {
 	float distance = FAR;
-	Biome *biome = NULL;
+	Chunk *chunk = NULL;
 	
-	for(vector<Biome*>::iterator it = m_biomes.begin() ; it != m_biomes.end() ; it++) {
+	for(vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
 		vect3D center;
 		
 		center.x = (*it)->x() + 8;
@@ -482,10 +485,10 @@ Biome *Scene::findNearestBiome(float x, float y, float z) {
 		
 		if(d < distance) {
 			distance = d;
-			biome = (*it);
+			chunk = (*it);
 		}
 	}
 	
-	return biome;
+	return chunk;
 }
 

@@ -31,7 +31,6 @@
 #include "map.h"
 #include "cube.h"
 #include "chunk.h"
-#include "biome.h"
 #include "scene.h"
 
 using namespace std;

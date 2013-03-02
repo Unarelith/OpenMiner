@@ -33,7 +33,6 @@
 #include "cube.h"
 #include "chunk.h"
 #include "player.h"
-#include "biome.h"
 #include "scene.h"
 
 int main(int argc, char *argv[]) {
