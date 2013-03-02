@@ -24,7 +24,7 @@ typedef std::map<std::string, GLuint> Textures;
 
 class Cube {
 	public:
-		Cube(int x, int y, int z, GLuint texture, Map *map);
+		Cube(int x, int y, int z, GLuint texture);
 		~Cube() {}
 		
 		void draw();
@@ -44,8 +44,6 @@ class Cube {
 		int m_z;
 		
 		GLuint m_texture;
-		
-		Map *m_map;
 		
 		bool m_selected;
 		s8 m_selectedFace;

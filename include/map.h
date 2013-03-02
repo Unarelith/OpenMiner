@@ -20,13 +20,51 @@
 #ifndef MAP_H
 #define MAP_H
 
-#define MAP_POS(x, y, z) ((x) + ((y) * m_map->width) + ((z) * m_map->width * m_map->depth))
+#define MAP_POS(x, y, z) ((x) + ((y) * Game::map->width()) + ((z) * Game::map->width() * Game::map->depth()))
+#define _MAP_POS(x, y, z) ((x) + ((y) * m_width) + ((z) * m_width * m_depth))
 
 typedef struct {
-	u16 width;
-	u16 depth;
-	u16 height;
-	u16 *map;
-} Map;
+	float x;
+	float y;
+	float z;
+} vect3D;
+
+class Map {
+	public:
+		Map(u16 width, u16 depth, u16 height, Textures textures);
+		~Map();
+		
+		void initChunks();
+		void draw();
+		
+		Chunk *findNearestChunk(float x, float y, float z);
+		//std::vector<Cube*> *nearChunksCubes();
+		
+		bool intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector, float *distance);
+		bool intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector, float *distance, s8 *face);
+		void testCubes(std::vector<Cube*> cubes);
+		
+		u16 width() const { return m_width; }
+		u16 height() const { return m_height; }
+		u16 depth() const { return m_depth; }
+		
+		u16 *map() const { return m_map; }
+		
+		std::vector<Chunk*> chunks() const { return m_chunks; }
+		
+		static Chunk *currentChunk;
+		static Cube *selectedCube;
+		
+	private:
+		u16 m_width;
+		u16 m_height;
+		u16 m_depth;
+		
+		Textures m_textures;
+		
+		u16 *m_map;
+		
+		std::vector<Chunk*> m_chunks;
+};
 
 #endif // MAP_H

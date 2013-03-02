@@ -19,25 +19,29 @@
 ---------------------------------------------------------------------------------*/
 #include <iostream>
 #include <string>
+#include <vector>
 #include <map>
+#include <cmath>
 
 #include <SDL/SDL.h>
 #include <GL/glew.h>
 
+#include "config.h"
 #include "types.h"
-#include "map.h"
 #include "cube.h"
+#include "chunk.h"
+#include "map.h"
+#include "player.h"
+#include "game.h"
 
 using namespace std;
 
-Cube::Cube(int x, int y, int z, GLuint texture, Map *map) {
+Cube::Cube(int x, int y, int z, GLuint texture) {
 	m_x = x;
 	m_y = y;
 	m_z = z;
 	
 	m_texture = texture;
-	
-	m_map = map;
 	
 	m_selected = false;
 	m_selectedFace = -1;
@@ -52,7 +56,7 @@ void Cube::draw() {
 	glBegin(GL_QUADS);
 	
 	// Front right
-	if((m_y >= m_map->depth - 1) || (m_map->map[MAP_POS(m_x, m_y + 1, m_z)] == 0)) {
+	if((m_y >= Game::map->depth() - 1) || (Game::map->map()[MAP_POS(m_x, m_y + 1, m_z)] == 0)) {
 		if(!m_selected) glColor3ub(255, 255, 255);
 		else if(m_selectedFace == 0) glColor3ub(255, 0, 255);
 		else glColor3ub(255, 0, 0);
@@ -63,7 +67,7 @@ void Cube::draw() {
 	}
 	
 	// Front left
-	if((m_x >= m_map->width - 1) || (m_map->map[MAP_POS(m_x + 1, m_y, m_z)] == 0)) {
+	if((m_x >= Game::map->width() - 1) || (Game::map->map()[MAP_POS(m_x + 1, m_y, m_z)] == 0)) {
 		if(!m_selected) glColor3ub(255, 255, 255);
 		else if(m_selectedFace == 1) glColor3ub(255, 0, 255);
 		else glColor3ub(255, 0, 0);
@@ -74,7 +78,7 @@ void Cube::draw() {
 	}
 	
 	// Back left
-	if((m_y <= 0) || (m_map->map[MAP_POS(m_x, m_y - 1, m_z)] == 0)) {
+	if((m_y <= 0) || (Game::map->map()[MAP_POS(m_x, m_y - 1, m_z)] == 0)) {
 		if(!m_selected) glColor3ub(255, 255, 255);
 		else if(m_selectedFace == 3) glColor3ub(255, 0, 255);
 		else glColor3ub(255, 0, 0);
@@ -85,7 +89,7 @@ void Cube::draw() {
 	}
 	
 	// Back right
-	if((m_x <= 0) || (m_map->map[MAP_POS(m_x - 1, m_y, m_z)] == 0)) {
+	if((m_x <= 0) || (Game::map->map()[MAP_POS(m_x - 1, m_y, m_z)] == 0)) {
 		if(!m_selected) glColor3ub(255, 255, 255);
 		else if(m_selectedFace == 2) glColor3ub(255, 0, 255);
 		else glColor3ub(255, 0, 0);
@@ -96,7 +100,7 @@ void Cube::draw() {
 	}
 	
 	// Bottom
-	if((m_z <= 0) || (m_map->map[MAP_POS(m_x, m_y, m_z - 1)] == 0)) {
+	if((m_z <= 0) || (Game::map->map()[MAP_POS(m_x, m_y, m_z - 1)] == 0)) {
 		if(!m_selected) glColor3ub(255, 255, 255);
 		else if(m_selectedFace == 5) glColor3ub(255, 0, 255);
 		else glColor3ub(255, 0, 0);
@@ -107,7 +111,7 @@ void Cube::draw() {
 	}
 	
 	// Top
-	if((m_z >= m_map->height - 1) || (m_map->map[MAP_POS(m_x, m_y, m_z + 1)] == 0)) {
+	if((m_z >= Game::map->height() - 1) || (Game::map->map()[MAP_POS(m_x, m_y, m_z + 1)] == 0)) {
 		if(!m_selected) glColor3ub(255, 255, 255);
 		else if(m_selectedFace == 4) glColor3ub(255, 0, 255);
 		else glColor3ub(255, 0, 0);

@@ -30,10 +30,10 @@
 
 #include "types.h"
 #include "init.h"
-#include "map.h"
 #include "cube.h"
 #include "chunk.h"
 #include "player.h"
+#include "map.h"
 #include "game.h"
 
 using namespace std;

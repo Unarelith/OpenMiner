@@ -20,12 +20,6 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-typedef struct {
-	float x;
-	float y;
-	float z;
-} vect3D;
-
 class Game {
 	public:
 		Game();
@@ -39,28 +33,18 @@ class Game {
 		void display();
 		
 		void loadTextures();
-		void drawChunks();
 		void drawField();
 		
 		void lockMouse();
 		void unlockMouse();
 		
-		Chunk *findNearestChunk(float x, float y, float z);
-		
-		static bool intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector, float *distance);
-		static bool intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector, float *distance, s8 *face);
-		static void testCubes(std::vector<Cube*> cubes);
-		
 		static Player *player;
-		static Chunk *currentChunk;
-		static Cube *selectedCube;
+		static Map *map;
 		
 	private:
 		bool m_cont;
 		
 		Textures m_textures;
-		
-		std::vector<Chunk*> m_chunks;
 };
 
 #endif // SCENE_H

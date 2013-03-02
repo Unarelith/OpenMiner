@@ -30,4 +30,8 @@
 
 #define VISION_ANGLE 70.0
 
+#define CHUNK_WIDTH 16
+#define CHUNK_DEPTH 16
+#define CHUNK_HEIGHT 16
+
 #endif // CONFIG_H
