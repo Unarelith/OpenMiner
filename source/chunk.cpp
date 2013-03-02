@@ -44,24 +44,6 @@ Chunk::Chunk(int x, int y, int z, Textures textures) {
 	m_z = z;
 	
 	m_texture = textures["stone"];
-	
-	for(s32 z = 0 ; z < CHUNK_HEIGHT ; z++) {
-		for(s32 y = 0 ; y < CHUNK_DEPTH ; y++) {
-			for(s32 x = 0 ; x < CHUNK_WIDTH ; x++) {
-				switch(Game::map->map()[MAP_POS(x, y, z)]) {
-					case 1:
-						m_cubes.push_back(new Cube(x, y, z, textures["grass"]));
-						break;
-					case 2:
-						m_cubes.push_back(new Cube(x, y, z, textures["stone"]));
-						break;
-					case 3:
-						m_cubes.push_back(new Cube(x, y, z, textures["bedrock"]));
-						break;
-				}
-			}
-		}
-	}
 }
 
 Chunk::~Chunk() {
@@ -73,15 +55,15 @@ Chunk::~Chunk() {
 }
 
 void Chunk::draw() {
-	glPushMatrix();
+	//glPushMatrix();
 	
-	glTranslatef(m_x, m_y, m_z);
+	//glTranslatef(m_x, m_y, m_z);
 	
 	for(std::vector<Cube*>::iterator it = m_cubes.begin() ; it != m_cubes.end() ; it++) {
 		(*it)->draw();
 	}
 	
-	glPopMatrix();
+	//glPopMatrix();
 }
 
 void Chunk::deleteCube(Cube *cube) {
@@ -98,7 +80,10 @@ void Chunk::deleteCube(Cube *cube) {
 }
 
 void Chunk::addCube(Cube *selectedCube) {
-	if(selectedCube->selectedFace() == 0) {
+	if(selectedCube->selectedFace() == -1) {
+		m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y() + 1, selectedCube->z(), selectedCube->texture()));
+	}
+	else if(selectedCube->selectedFace() == 0) {
 		if((MAP_POS(selectedCube->x(), selectedCube->y() + 1, selectedCube->z()) >= 0) && (MAP_POS(selectedCube->x(), selectedCube->y() + 1, selectedCube->z()) < Game::map->width() * Game::map->depth() * Game::map->height()))
 			Game::map->map()[MAP_POS(selectedCube->x(), selectedCube->y() + 1, selectedCube->z())] = 1;
 		m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y() + 1, selectedCube->z(), m_texture));

@@ -52,6 +52,7 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 	for(s32 z = 0 ; z < m_height ; z++) {
 		for(s32 y = 0 ; y < m_depth ; y++) {
 			for(s32 x = 0 ; x < m_width ; x++) {
+				m_map[_MAP_POS(x, y, z)] = 0;
 				if(z == 0) {
 					m_map[_MAP_POS(x, y, z)] = 3;
 				}
@@ -63,16 +64,8 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 			}
 		}
 	}
-}
-
-Map::~Map() {
-	m_chunks.clear();
 	
-	delete currentChunk;
-	delete selectedCube;
-}
-
-void Map::initChunks() {
+	/*
 	m_chunks.push_back(new Chunk(0, 0, 0, m_textures));
 	m_chunks.push_back(new Chunk(16, 0, 0, m_textures));
 	m_chunks.push_back(new Chunk(0, 16, 0, m_textures));
@@ -82,10 +75,48 @@ void Map::initChunks() {
 	m_chunks.push_back(new Chunk(32, 16, 0, m_textures));
 	m_chunks.push_back(new Chunk(16, 32, 0, m_textures));
 	m_chunks.push_back(new Chunk(32, 32, 0, m_textures));
+	*/
+	
+	for(u16 z = 0 ; z < m_height >> 4 ; z++) {
+		for(u16 y = 0 ; y < m_depth >> 4 ; y++) {
+			for(u16 x = 0 ; x < m_width >> 4 ; x++) {
+				m_chunks.push_back(new Chunk(x << 4, y << 4, z << 4, m_textures));
+			}
+		}
+	}
 	
 	currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
 	
 	selectedCube = new Cube(-1, -1, -1, m_textures["dirt"]);
+	
+	for(vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
+		for(s32 z = (*it)->z() ; z < (*it)->z() + CHUNK_HEIGHT ; z++) {
+			for(s32 y = (*it)->y() ; y < (*it)->y() + CHUNK_DEPTH ; y++) {
+				for(s32 x = (*it)->x() ; x < (*it)->x() + CHUNK_WIDTH ; x++) {
+					switch(m_map[_MAP_POS(x, y, z)]) {
+						case 1:
+							(*it)->addCube(new Cube(x, y, z, textures["grass"]));
+							break;
+						case 2:
+							(*it)->addCube(new Cube(x, y, z, textures["stone"]));
+							break;
+						case 3:
+							(*it)->addCube(new Cube(x, y, z, textures["bedrock"]));
+							break;
+					}
+				}
+			}
+		}
+	}
+}
+
+Map::~Map() {
+	free(m_map);
+	
+	m_chunks.clear();
+	
+	delete currentChunk;
+	delete selectedCube;
 }
 
 void Map::draw() {
@@ -105,9 +136,9 @@ Chunk *Map::findNearestChunk(float x, float y, float z) {
 	for(vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
 		vect3D center;
 		
-		center.x = (*it)->x() + 8;
-		center.y = (*it)->y() + 8;
-		center.z = (*it)->z() + 8;
+		center.x = (*it)->x() + CHUNK_WIDTH / 2;
+		center.y = (*it)->y() + CHUNK_DEPTH / 2;
+		center.z = (*it)->z() + CHUNK_HEIGHT / 2;
 		
 		float d = sqrt(pow(center.x - x, 2) + pow(center.y - y, 2) + pow(center.z - z, 2));
 		

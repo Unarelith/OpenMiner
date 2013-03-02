@@ -34,7 +34,6 @@ class Map {
 		Map(u16 width, u16 depth, u16 height, Textures textures);
 		~Map();
 		
-		void initChunks();
 		void draw();
 		
 		Chunk *findNearestChunk(float x, float y, float z);
