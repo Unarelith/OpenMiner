@@ -36,12 +36,14 @@
 
 using namespace std;
 
-Cube::Cube(int x, int y, int z, GLuint texture) {
+Cube::Cube(int x, int y, int z, GLuint texture, unsigned int type) {
 	m_x = x;
 	m_y = y;
 	m_z = z;
 	
 	m_texture = texture;
+	
+	m_type = type;
 	
 	m_selected = false;
 	m_selectedFace = -1;

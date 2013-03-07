@@ -26,6 +26,7 @@ class Chunk {
 		~Chunk();
 		
 		void draw();
+		void render();
 		
 		void deleteCube(Cube *cube);
 		void addCube(Cube *selectedCube);
@@ -44,6 +45,16 @@ class Chunk {
 		GLuint m_texture;
 		
 		std::vector<Cube*> m_cubes;
+		Cube *getCube(int x, int y, int z);
+		
+		Chunk **m_surroundingChunks;
+		
+		GLuint m_vboVertices;
+		GLuint m_vboTexCoords;
+		GLuint m_vboColors;
+		int m_vboVertexCount;
+		
+		void refreshVBO();
 };
 
 #endif // CHUNK_H

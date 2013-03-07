@@ -79,13 +79,13 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 				for(s32 x = (*it)->x() ; x < (*it)->x() + CHUNK_WIDTH ; x++) {
 					switch(m_map[_MAP_POS(x, y, z)]) {
 						case 1:
-							(*it)->addCube(new Cube(x, y, z, m_textures["grass"]));
+							(*it)->addCube(new Cube(x, y, z, m_textures["grass"], 1));
 							break;
 						case 2:
-							(*it)->addCube(new Cube(x, y, z, m_textures["stone"]));
+							(*it)->addCube(new Cube(x, y, z, m_textures["stone"], 2));
 							break;
 						case 3:
-							(*it)->addCube(new Cube(x, y, z, m_textures["bedrock"]));
+							(*it)->addCube(new Cube(x, y, z, m_textures["bedrock"], 3));
 							break;
 					}
 				}
@@ -95,7 +95,7 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 	
 	currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
 	
-	selectedCube = new Cube(-1, -1, -1, m_textures["dirt"]);
+	selectedCube = new Cube(-1, -1, -1, m_textures["dirt"], 0);
 }
 
 Map::~Map() {
@@ -111,7 +111,8 @@ void Map::draw() {
 	currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
 	
 	for(vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
-		(*it)->draw();
+		// (*it)->draw();
+		(*it)->render();
 	}
 	
 	testCubes(currentChunk->cubes());

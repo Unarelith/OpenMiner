@@ -24,6 +24,7 @@
 #include <cmath>
 
 #include <SDL/SDL.h>
+#include <GL/glew.h>
 #include <GL/glfw.h>
 
 #include "sdlglutils.h"
@@ -44,6 +45,12 @@ int main(int argc, char *argv[]) {
 	// Init SDL and OpenGL
 	initSDL();
 	initOpenGL();
+	
+	GLenum err = glewInit();
+	if(err != GLEW_OK) {
+		cerr << "Error: " << glewGetErrorString(err) << endl;
+		return 1;
+	}
 	
 	// Game execution
 	Game game;

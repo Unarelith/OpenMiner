@@ -109,13 +109,16 @@ void Game::manageEvents() {
 				if(event.key.keysym.sym == SDLK_ESCAPE) {
 					m_cont = false;
 				}
+				if(event.key.keysym.sym == SDLK_BACKSPACE) {
+					unlockMouse();
+				}
 				break;
 			
 			case SDL_MOUSEBUTTONDOWN:
 				if(event.button.button == SDL_BUTTON_LEFT) {
 					// To fix for multiples chunks
 					Map::currentChunk->deleteCube(Map::selectedCube);
-					Map::selectedCube = new Cube(-1, -1, -1, 0);
+					Map::selectedCube = new Cube(-1, -1, -1, 0, 0);
 				}
 				if(event.button.button == SDL_BUTTON_RIGHT) {
 					Map::currentChunk->addCube(Map::selectedCube);

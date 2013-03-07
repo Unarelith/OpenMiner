@@ -24,7 +24,7 @@ typedef std::map<std::string, GLuint> Textures;
 
 class Cube {
 	public:
-		Cube(int x, int y, int z, GLuint texture);
+		Cube(int x, int y, int z, GLuint texture, unsigned int type);
 		~Cube() {}
 		
 		void draw();
@@ -37,6 +37,8 @@ class Cube {
 		
 		GLuint texture() const { return m_texture; }
 		
+		unsigned int type() const { return m_type; }
+		
 		bool selected() const { return m_selected; }
 		s8 selectedFace() const { return m_selectedFace; }
 		
@@ -46,6 +48,8 @@ class Cube {
 		int m_z;
 		
 		GLuint m_texture;
+		
+		unsigned int m_type;
 		
 		bool m_selected;
 		s8 m_selectedFace;
