@@ -146,6 +146,42 @@ void Map::draw() {
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
+	
+	if ((currentChunk != NULL) && (selectedCube->x() != -1) && (selectedCube->selectedFace() >= 0) && (selectedCube->selectedFace() < 6)) {
+		float cubeCoords[6 * 12] = {
+			1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, // FR | 0
+			1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, // FL | 1
+			0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, // BR | 2
+			0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, // BL | 3
+			0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, // T  | 4
+			1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0  // B  | 5
+		};
+		
+		//int xx = selectedCube->x() + (currentChunk->x() * CHUNK_WIDTH);
+		//int yy = selectedCube->y() + (currentChunk->y() * CHUNK_DEPTH);
+		//int zz = selectedCube->z() + (currentChunk->z() * CHUNK_HEIGHT);
+		
+		int xx = selectedCube->x();
+		int yy = selectedCube->y();
+		int zz = selectedCube->z();
+		
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glColor4ub(255, 255, 255, 64);
+		glDisable(GL_ALPHA_TEST);
+		glEnable(GL_POLYGON_OFFSET_FILL);
+		glPolygonOffset(-1.0, -1.0);
+		
+		glBegin(GL_QUADS);
+		glVertex3f(xx + cubeCoords[(selectedCube->selectedFace() * 12) + 0], yy + cubeCoords[(selectedCube->selectedFace() * 12) + 1], zz + cubeCoords[(selectedCube->selectedFace() * 12) + 2]);
+		glVertex3f(xx + cubeCoords[(selectedCube->selectedFace() * 12) + 3], yy + cubeCoords[(selectedCube->selectedFace() * 12) + 4], zz + cubeCoords[(selectedCube->selectedFace() * 12) + 5]);
+		glVertex3f(xx + cubeCoords[(selectedCube->selectedFace() * 12) + 6], yy + cubeCoords[(selectedCube->selectedFace() * 12) + 7], zz + cubeCoords[(selectedCube->selectedFace() * 12) + 8]);
+		glVertex3f(xx + cubeCoords[(selectedCube->selectedFace() * 12) + 9], yy + cubeCoords[(selectedCube->selectedFace() * 12) + 10], zz + cubeCoords[(selectedCube->selectedFace() * 12) + 11]);
+		glEnd();
+		
+		glDisable(GL_POLYGON_OFFSET_FILL);
+		glEnable(GL_ALPHA_TEST);
+		glColor4ub(255, 255, 255, 255);
+	}
 }
 
 Chunk *Map::findNearestChunk(float x, float y, float z) {
