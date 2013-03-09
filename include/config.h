@@ -23,7 +23,7 @@
 #define WIN_WIDTH 640
 #define WIN_HEIGHT 480
 
-#define APP_LABEL "Test OpenGL app"
+#define APP_LABEL "KubKraft"
 
 #define NEAR 0.1
 #define FAR 1000.0

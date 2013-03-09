@@ -25,11 +25,15 @@ class Chunk {
 		Chunk(int x, int y, int z, Textures textures);
 		~Chunk();
 		
+		void setSurroundingChunk(unsigned char face, Chunk* chunk);
+		
 		void draw();
 		void render();
 		
 		void deleteCube(Cube *cube);
 		void addCube(Cube *selectedCube);
+		
+		void refreshVBO();
 		
 		int x() const { return m_x; }
 		int y() const { return m_y; }
@@ -53,8 +57,6 @@ class Chunk {
 		GLuint m_vboTexCoords;
 		GLuint m_vboColors;
 		int m_vboVertexCount;
-		
-		void refreshVBO();
 };
 
 #endif // CHUNK_H

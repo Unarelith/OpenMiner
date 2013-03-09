@@ -67,6 +67,12 @@ Chunk::~Chunk() {
 	delete[] m_surroundingChunks;
 }
 
+void Chunk::setSurroundingChunk(unsigned char face, Chunk* chunk) {
+	if ((face >= 0) && (face < 6)) {
+		m_surroundingChunks[face] = chunk;
+	}
+}
+
 void Chunk::draw() {
 	for(std::vector<Cube*>::iterator it = m_cubes.begin() ; it != m_cubes.end() ; it++) {
 		(*it)->draw();
@@ -130,16 +136,8 @@ Cube* Chunk::getCube(int x, int y, int z) {
 		return NULL;
 	}
 	
-	/*Coordinates c = Coordinates(x, y, z);
-	t_cube* cube = m_cubes[c];
-	if (cube == NULL) {
-		m_cubes.erase(c);
-		return NULL;
-	}
-	else return cube;*/
-	
 	for(std::vector<Cube*>::iterator it = m_cubes.begin() ; it != m_cubes.end() ; it++) {
-		if(((*it)->x() == x) && ((*it)->y() == y) && ((*it)->z() == z)) {
+		if(((*it)->x() == x + m_x) && ((*it)->y() == y + m_y) && ((*it)->z() == z + m_z)) {
 			return (*it);
 		}
 	}
@@ -157,6 +155,7 @@ float getTexOffsetV(int type) {
 
 void Chunk::refreshVBO() {
 	m_vboVertexCount = 0;
+	
 	if (m_cubes.size() == 0) return;
 	
 	float cubeCoords[6 * 12] = {
@@ -166,6 +165,15 @@ void Chunk::refreshVBO() {
 		1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1,
 		0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1,
 		1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0
+	};
+	
+	float texCoordsArray[6 * 8] {
+		1, 0, 0, 0, 0, 1, 1, 1,
+		1, 0, 0, 0, 0, 1, 1, 1,
+		1, 0, 0, 0, 0, 1, 1, 1,
+		1, 0, 0, 0, 0, 1, 1, 1,
+		1, 0, 0, 0, 0, 1, 1, 1,
+		1, 0, 0, 0, 0, 1, 1, 1
 	};
 	
 	unsigned char grey[6] = {159, 191, 127, 223, 255, 95};
@@ -214,13 +222,16 @@ void Chunk::refreshVBO() {
 			else if ((coords[i*3 + 2] < 0) && (m_surroundingChunks[5] != NULL)) {
 				cube = m_surroundingChunks[5]->getCube(coords[i*3], coords[i*3 + 1], coords[i*3 + 2] + CHUNK_HEIGHT);
 			}
+			
 			if ((cube == NULL) || (cube->type() == 0)) {
 				for (int j = 0; j < 4; j++) {
 					vertices.push_back(x + cubeCoords[(i * 12) + (j * 3)]);
 					vertices.push_back(y + cubeCoords[(i * 12) + (j * 3) + 1]);
 					vertices.push_back(z + cubeCoords[(i * 12) + (j * 3) + 2]);
-					texCoords.push_back(getTexOffsetU(qe->type()) + (cubeCoords[48 + (j * 3)] * 0.125));
-					texCoords.push_back(getTexOffsetV(qe->type()) + (cubeCoords[48 + (j * 3) + 1] * 0.125));
+					//texCoords.push_back(getTexOffsetU(qe->type()) + (cubeCoords[48 + (j * 3)] * 0.125));
+					//texCoords.push_back(getTexOffsetV(qe->type()) + (cubeCoords[48 + (j * 3) + 1] * 0.125));
+					texCoords.push_back(texCoordsArray[(i * 8) + (j * 3)]);
+					texCoords.push_back(texCoordsArray[(i * 8) + (j * 3) + 1]);
 					colors.push_back(grey[i]);
 					colors.push_back(grey[i]);
 					colors.push_back(grey[i]);
