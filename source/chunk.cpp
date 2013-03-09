@@ -84,6 +84,7 @@ void Chunk::deleteCube(Cube *cube) {
 			}
 		}
 	}
+	refreshVBO();
 }
 
 void Chunk::addCube(Cube *selectedCube) {
@@ -121,6 +122,7 @@ void Chunk::addCube(Cube *selectedCube) {
 			Game::map->map()[MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() - 1)] = 1;
 		if(selectedCube->z() - 1 >= 0) m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y(), selectedCube->z() - 1, m_texture, type));
 	}
+	refreshVBO();
 }
 
 Cube* Chunk::getCube(int x, int y, int z) {
@@ -244,8 +246,6 @@ void Chunk::refreshVBO() {
 }
 
 void Chunk::render() {
-	refreshVBO();
-	
 	if(m_vboVertexCount == 0) return;
 	
 	glBindBuffer(GL_ARRAY_BUFFER, m_vboVertices);

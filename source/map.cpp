@@ -65,10 +65,10 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 		}
 	}
 	
-	for(u16 z = 0 ; z < m_height >> 4 ; z++) {
-		for(u16 y = 0 ; y < m_depth >> 4 ; y++) {
-			for(u16 x = 0 ; x < m_width >> 4 ; x++) {
-				m_chunks.push_back(new Chunk(x << 4, y << 4, z << 4, m_textures));
+	for(u16 z = 0 ; z < m_height >> 3 ; z++) {
+		for(u16 y = 0 ; y < m_depth >> 3 ; y++) {
+			for(u16 x = 0 ; x < m_width >> 3 ; x++) {
+				m_chunks.push_back(new Chunk(x << 3, y << 3, z << 3, m_textures));
 			}
 		}
 	}
@@ -108,14 +108,39 @@ Map::~Map() {
 }
 
 void Map::draw() {
-	currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
+	/*currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
 	
 	for(vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
 		// (*it)->draw();
 		(*it)->render();
 	}
 	
-	testCubes(currentChunk->cubes());
+	testCubes(currentChunk->cubes());*/
+	
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	uint32_t time = SDL_GetTicks();
+
+	// chunks.render() here
+	for (int i = 0; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++)
+	{
+		int x = i % m_width;
+		int y = (i / m_width) % m_depth;
+		int z = (i / m_width) / m_depth;
+		glPushMatrix();
+		glTranslatef(float(x << 3), float(y << 3), float(z << 3));
+		m_chunks[i]->render();
+		glPopMatrix();
+	}
+
+	time = SDL_GetTicks() - time;
+//	std::cout << "Render time: " << time << " ms" << std::endl;
+
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 Chunk *Map::findNearestChunk(float x, float y, float z) {
