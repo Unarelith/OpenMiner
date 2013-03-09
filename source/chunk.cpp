@@ -91,44 +91,63 @@ void Chunk::deleteCube(Cube *cube) {
 		}
 	}
 	refreshVBO();
+	if((cube->x() - 1 < m_x) && (m_surroundingChunks[0] != NULL)) m_surroundingChunks[0]->refreshVBO();
+	if((cube->x() + 1 >= m_x + CHUNK_WIDTH) && (m_surroundingChunks[1] != NULL)) m_surroundingChunks[1]->refreshVBO();
+	if((cube->y() - 1 < m_y) && (m_surroundingChunks[2] != NULL)) m_surroundingChunks[2]->refreshVBO();
+	if((cube->y() + 1 >= m_y + CHUNK_DEPTH) && (m_surroundingChunks[3] != NULL)) m_surroundingChunks[3]->refreshVBO();
+	if((cube->z() + 1 >= m_z + CHUNK_HEIGHT) && (m_surroundingChunks[4] != NULL)) m_surroundingChunks[4]->refreshVBO();
+	if((cube->z() - 1 < m_z) && (m_surroundingChunks[5] != NULL)) m_surroundingChunks[5]->refreshVBO();
 }
 
 void Chunk::addCube(Cube *selectedCube) {
 	unsigned int type = 2;
 	if(selectedCube->selectedFace() == -1) {
 		m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y(), selectedCube->z(), selectedCube->texture(), type));
+		return;
 	}
 	else if(selectedCube->selectedFace() == 0) {
-		if((MAP_POS(selectedCube->x(), selectedCube->y() + 1, selectedCube->z()) >= 0) && (MAP_POS(selectedCube->x(), selectedCube->y() + 1, selectedCube->z()) < Game::map->width() * Game::map->depth() * Game::map->height()))
+		if((MAP_POS(selectedCube->x(), selectedCube->y() + 1, selectedCube->z()) >= 0) && (MAP_POS(selectedCube->x(), selectedCube->y() + 1, selectedCube->z()) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(selectedCube->x(), selectedCube->y() + 1, selectedCube->z())] = 1;
-		m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y() + 1, selectedCube->z(), m_texture, type));
+			m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y() + 1, selectedCube->z(), m_texture, type));
+		}
 	}
 	else if(selectedCube->selectedFace() == 1) {
-		if((MAP_POS(selectedCube->x() + 1, selectedCube->y(), selectedCube->z()) >= 0) && (MAP_POS(selectedCube->x() + 1, selectedCube->y(), selectedCube->z()) < Game::map->width() * Game::map->depth() * Game::map->height()))
+		if((MAP_POS(selectedCube->x() + 1, selectedCube->y(), selectedCube->z()) >= 0) && (MAP_POS(selectedCube->x() + 1, selectedCube->y(), selectedCube->z()) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(selectedCube->x() + 1, selectedCube->y(), selectedCube->z())] = 1;
-		m_cubes.push_back(new Cube(selectedCube->x() + 1, selectedCube->y(), selectedCube->z(), m_texture, type));
+			m_cubes.push_back(new Cube(selectedCube->x() + 1, selectedCube->y(), selectedCube->z(), m_texture, type));
+		}
 	}
 	else if(selectedCube->selectedFace() == 2) {
-		if((MAP_POS(selectedCube->x() - 1, selectedCube->y(), selectedCube->z()) >= 0) && (MAP_POS(selectedCube->x() - 1, selectedCube->y(), selectedCube->z()) < Game::map->width() * Game::map->depth() * Game::map->height()))
+		if((MAP_POS(selectedCube->x() - 1, selectedCube->y(), selectedCube->z()) >= 0) && (MAP_POS(selectedCube->x() - 1, selectedCube->y(), selectedCube->z()) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(selectedCube->x() - 1, selectedCube->y(), selectedCube->z())] = 1;
-		m_cubes.push_back(new Cube(selectedCube->x() - 1, selectedCube->y(), selectedCube->z(), m_texture, type));
+			m_cubes.push_back(new Cube(selectedCube->x() - 1, selectedCube->y(), selectedCube->z(), m_texture, type));
+		}
 	}
 	else if(selectedCube->selectedFace() == 3) {
-		if((MAP_POS(selectedCube->x(), selectedCube->y() - 1, selectedCube->z()) >= 0) && (MAP_POS(selectedCube->x(), selectedCube->y() - 1, selectedCube->z()) < Game::map->width() * Game::map->depth() * Game::map->height()))
+		if((MAP_POS(selectedCube->x(), selectedCube->y() - 1, selectedCube->z()) >= 0) && (MAP_POS(selectedCube->x(), selectedCube->y() - 1, selectedCube->z()) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(selectedCube->x(), selectedCube->y() - 1, selectedCube->z())] = 1;
-		m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y() - 1, selectedCube->z(), m_texture, type));
+			m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y() - 1, selectedCube->z(), m_texture, type));
+		}
 	}
 	else if(selectedCube->selectedFace() == 4) {
-		if((MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() + 1) >= 0) && (MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() + 1) < Game::map->width() * Game::map->depth() * Game::map->height()))
+		if((MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() + 1) >= 0) && (MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() + 1) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() + 1)] = 1;
-		m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y(), selectedCube->z() + 1, m_texture, type));
+			m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y(), selectedCube->z() + 1, m_texture, type));
+		}
 	}
 	else if(selectedCube->selectedFace() == 5) {
-		if((MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() - 1) >= 0) && (MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() - 1) < Game::map->width() * Game::map->depth() * Game::map->height()))
+		if((MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() - 1) >= 0) && (MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() - 1) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(selectedCube->x(), selectedCube->y(), selectedCube->z() - 1)] = 1;
-		if(selectedCube->z() - 1 >= 0) m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y(), selectedCube->z() - 1, m_texture, type));
+			m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y(), selectedCube->z() - 1, m_texture, type));
+		}
 	}
 	refreshVBO();
+	if((selectedCube->x() - 1 < m_x) && (m_surroundingChunks[0] != NULL)) m_surroundingChunks[0]->refreshVBO();
+	if((selectedCube->x() + 1 >= m_x + CHUNK_WIDTH) && (m_surroundingChunks[1] != NULL)) m_surroundingChunks[1]->refreshVBO();
+	if((selectedCube->y() - 1 < m_y) && (m_surroundingChunks[2] != NULL)) m_surroundingChunks[2]->refreshVBO();
+	if((selectedCube->y() + 1 >= m_y + CHUNK_DEPTH) && (m_surroundingChunks[3] != NULL)) m_surroundingChunks[3]->refreshVBO();
+	if((selectedCube->z() + 1 >= m_z + CHUNK_HEIGHT) && (m_surroundingChunks[4] != NULL)) m_surroundingChunks[4]->refreshVBO();
+	if((selectedCube->z() - 1 < m_z) && (m_surroundingChunks[5] != NULL)) m_surroundingChunks[5]->refreshVBO();
 }
 
 Cube* Chunk::getCube(int x, int y, int z) {

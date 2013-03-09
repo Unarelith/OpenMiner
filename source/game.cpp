@@ -115,13 +115,12 @@ void Game::manageEvents() {
 				break;
 			
 			case SDL_MOUSEBUTTONDOWN:
-				if(event.button.button == SDL_BUTTON_LEFT) {
-					// To fix for multiples chunks
-					Map::currentChunk->deleteCube(Map::selectedCube);
+				if((event.button.button == SDL_BUTTON_LEFT) && (Map::selectedChunk != NULL)) {
+					Map::selectedChunk->deleteCube(Map::selectedCube);
 					Map::selectedCube = new Cube(-1, -1, -1, 0, 0);
 				}
-				if(event.button.button == SDL_BUTTON_RIGHT) {
-					Map::currentChunk->addCube(Map::selectedCube);
+				if((event.button.button == SDL_BUTTON_RIGHT) && (Map::selectedChunk != NULL)) {
+					Map::selectedChunk->addCube(Map::selectedCube);
 				}
 				break;
 		}

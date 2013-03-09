@@ -41,6 +41,8 @@ class Chunk {
 		
 		std::vector<Cube*> cubes() const { return m_cubes; }
 		
+		Chunk **surroundingChunks() const { return m_surroundingChunks; }
+		
 	private:
 		int m_x;
 		int m_y;

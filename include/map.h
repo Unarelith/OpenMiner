@@ -41,7 +41,7 @@ class Map {
 		
 		bool intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector, float *distance);
 		bool intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector, float *distance, s8 *face);
-		void testCubes(std::vector<Cube*> cubes);
+		void testCubes();
 		
 		u16 width() const { return m_width; }
 		u16 height() const { return m_height; }
@@ -52,6 +52,7 @@ class Map {
 		std::vector<Chunk*> chunks() const { return m_chunks; }
 		
 		static Chunk *currentChunk;
+		static Chunk *selectedChunk;
 		static Cube *selectedCube;
 		
 	private:

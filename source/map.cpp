@@ -37,8 +37,9 @@
 
 using namespace std;
 
-Chunk *Map::currentChunk;
-Cube *Map::selectedCube;
+Chunk *Map::currentChunk = NULL;
+Chunk *Map::selectedChunk = NULL;
+Cube *Map::selectedCube = NULL;
 
 Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 	m_width = width;
@@ -77,12 +78,12 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 		for (int yy = 0 ; yy < m_depth >> 3 ; yy++) {
 			for (int xx = 0 ; xx < m_width >> 3 ; xx++) {
 				int chunkIndex = xx + (yy * (m_width >> 3)) + (zz * (m_width >> 3) * (m_depth >> 3));
-				if (xx - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(0, m_chunks[chunkIndex - 1]);
-				if (xx + 1 < m_width >> 3) m_chunks[chunkIndex]->setSurroundingChunk(1, m_chunks[chunkIndex + 1]);
-				if (yy - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(2, m_chunks[chunkIndex - (m_width >> 3)]);
-				if (yy + 1 < m_depth >> 3) m_chunks[chunkIndex]->setSurroundingChunk(3, m_chunks[chunkIndex + (m_width >> 3)]);
-				if (zz + 1 < m_height >> 3) m_chunks[chunkIndex]->setSurroundingChunk(4, m_chunks[chunkIndex + ((m_width >> 3) * (m_depth >> 3))]);
-				if (zz - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(5, m_chunks[chunkIndex - ((m_width >> 3) * (m_depth >> 3))]);
+				if(xx - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(0, m_chunks[chunkIndex - 1]);
+				if(xx + 1 < m_width >> 3) m_chunks[chunkIndex]->setSurroundingChunk(1, m_chunks[chunkIndex + 1]);
+				if(yy - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(2, m_chunks[chunkIndex - (m_width >> 3)]);
+				if(yy + 1 < m_depth >> 3) m_chunks[chunkIndex]->setSurroundingChunk(3, m_chunks[chunkIndex + (m_width >> 3)]);
+				if(zz + 1 < m_height >> 3) m_chunks[chunkIndex]->setSurroundingChunk(4, m_chunks[chunkIndex + ((m_width >> 3) * (m_depth >> 3))]);
+				if(zz - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(5, m_chunks[chunkIndex - ((m_width >> 3) * (m_depth >> 3))]);
 			}
 		}
 	}
@@ -105,6 +106,7 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 				}
 			}
 		}
+		(*it)->refreshVBO();
 	}
 	
 	currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
@@ -141,7 +143,7 @@ void Map::draw() {
 		glPopMatrix();
 	}
 	
-	testCubes(currentChunk->cubes());
+	testCubes();
 	
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -356,7 +358,7 @@ bool Map::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigP
 	}
 }
 
-void Map::testCubes(std::vector<Cube*> cubes) {
+void Map::testCubes() {
 	vect3D linePoint;
 	
 	linePoint.x = Game::player->x();
@@ -372,18 +374,30 @@ void Map::testCubes(std::vector<Cube*> cubes) {
 	float distance = FAR;
 	Cube *cube = NULL;
 	int face = -1;
-	for(std::vector<Cube*>::iterator it = cubes.begin() ; it != cubes.end() ; it++) {
-		(*it)->setSelected(false, -1);
+	Chunk *chunk = NULL;
+	vector<Cube*> cubes;
+	for(unsigned short i = 0 ; i < 7 ; i++) {
+		if(i == 6) cubes = currentChunk->cubes();
+		else {
+			if(currentChunk->surroundingChunks()[i] == NULL) continue;
+			cubes = currentChunk->surroundingChunks()[i]->cubes();
+		}
 		
-		float d = -1;
-		s8 f = -1;
-		
-		bool result = intersectionLineCube((*it)->x(), (*it)->y(), (*it)->z(), linePoint, directionVector, &d, &f);
-		
-		if(result && (d < distance) && (d < 5)) {
-			distance = d;
-			cube = (*it);
-			face = f;
+		for(std::vector<Cube*>::iterator it = cubes.begin() ; it != cubes.end() ; it++) {
+			(*it)->setSelected(false, -1);
+			
+			float d = -1;
+			s8 f = -1;
+			
+			bool result = intersectionLineCube((*it)->x(), (*it)->y(), (*it)->z(), linePoint, directionVector, &d, &f);
+			
+			if(result && (d < distance) && (d < 5)) {
+				distance = d;
+				cube = (*it);
+				face = f;
+				if(i == 6) chunk = currentChunk;
+				else chunk = currentChunk->surroundingChunks()[i];
+			}
 		}
 	}
 	
@@ -393,6 +407,12 @@ void Map::testCubes(std::vector<Cube*> cubes) {
 		face = -1;
 	} else {
 		selectedCube->setSelected(false, -1);
+	}
+	
+	if(chunk != NULL) {
+		selectedChunk = chunk;
+	} else {
+		selectedChunk = NULL;
 	}
 }
 
