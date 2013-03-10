@@ -25,7 +25,6 @@
 
 #include <SDL/SDL.h>
 #include <GL/glew.h>
-#include <GL/glfw.h>
 
 #include "sdlglutils.h"
 
@@ -40,8 +39,6 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-	glfwInit();
-	
 	// Init SDL and OpenGL
 	initSDL();
 	initOpenGL();
@@ -58,8 +55,6 @@ int main(int argc, char *argv[]) {
 	
 	// Stop SDL
 	SDL_Quit();
-	
-	glfwTerminate();
 	
 	return 0;
 }

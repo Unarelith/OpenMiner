@@ -24,7 +24,8 @@
 #include <cmath>
 
 #include <SDL/SDL.h>
-#include <GL/glfw.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 #include "sdlglutils.h"
 
@@ -64,24 +65,25 @@ void Game::exec() {
 	lockMouse();
 	
 	m_cont = true;
+	m_paused = false;
 	
-	double lastTime = glfwGetTime();
+	uint32_t lastTime = SDL_GetTicks();
 	int nbFrames = 0;
 	
 	while(m_cont) {
-		// Measure speed
-		double currentTime = glfwGetTime();
+		uint32_t currentTime = SDL_GetTicks();
 		nbFrames++;
-		if(currentTime - lastTime >= 1.0) {
-			cout << 1000.0/double(nbFrames) << " ms/frame" << endl;
+		if(currentTime - lastTime >= 1000) {
+			cout << 1000/double(nbFrames) << " ms/frame" << endl;
 			nbFrames = 0;
-			lastTime += 1.0;
+			lastTime += 1000;
 		}
 		
 		manageEvents();
-		animate();
-		draw();
-		display();
+		if(!m_paused) {
+			animate();
+			draw();
+		}
 	}
 	
 	unlockMouse();
@@ -97,7 +99,7 @@ void Game::manageEvents() {
 				break;
 				
 			case SDL_MOUSEMOTION:
-				if((WIN_WIDTH / 2) != event.motion.x || (WIN_HEIGHT / 2) != event.motion.y) {
+				if(!m_paused && ((WIN_WIDTH / 2) != event.motion.x || (WIN_HEIGHT / 2) != event.motion.y)) {
 					player->turnH(-event.motion.xrel * 0.06);
 					player->turnV(-event.motion.yrel * 0.06);
 					
@@ -110,17 +112,23 @@ void Game::manageEvents() {
 					m_cont = false;
 				}
 				if(event.key.keysym.sym == SDLK_BACKSPACE) {
+					m_paused = true;
 					unlockMouse();
 				}
 				break;
 			
 			case SDL_MOUSEBUTTONDOWN:
-				if((event.button.button == SDL_BUTTON_LEFT) && (Map::selectedChunk != NULL)) {
-					Map::selectedChunk->deleteCube(Map::selectedCube);
-					Map::selectedCube = new Cube(-1, -1, -1, 0, 0);
-				}
-				if((event.button.button == SDL_BUTTON_RIGHT) && (Map::selectedChunk != NULL)) {
-					Map::selectedChunk->addCube(Map::selectedCube);
+				if(m_paused && (event.button.button == SDL_BUTTON_LEFT)) {
+					m_paused = false;
+					lockMouse();
+				} else {
+					if((event.button.button == SDL_BUTTON_LEFT) && (Map::selectedChunk != NULL)) {
+						Map::selectedChunk->deleteCube(Map::selectedCube);
+						Map::selectedCube = new Cube(-1, -1, -1, 0, 0);
+					}
+					if((event.button.button == SDL_BUTTON_RIGHT) && (Map::selectedChunk != NULL)) {
+						Map::selectedChunk->addCube(Map::selectedCube);
+					}
 				}
 				break;
 		}
@@ -187,18 +195,42 @@ void Game::animate() {
 void Game::draw() {
 	// Clean screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
 	
 	// Put camera
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
 	player->watch();
 	
-	drawField();
-}
-
-void Game::display() {
-	glFlush();
+	// Draw the map
+	map->draw();
 	
+	glPushMatrix();
+	glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	
+	float ratio = floor(float(WIN_WIDTH) / float(WIN_HEIGHT));
+	gluOrtho2D(-ratio * 40, ratio * 40, -30.0, 30.0);
+	
+	glMatrixMode(GL_MODELVIEW);
+	
+	glBindTexture(GL_TEXTURE_2D, 0);
+	
+	glColor3ub(255, 255, 255);
+	glBegin(GL_LINES);
+		glVertex2i(-1, 0);
+		glVertex2i(1, 0);
+		glVertex2i(0, -1);
+		glVertex2i(0, 1);
+	
+	glEnd();
+	
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();	
+	
+	glFlush();
 	SDL_GL_SwapBuffers();
 }
 
@@ -209,43 +241,6 @@ void Game::loadTextures() {
 	m_textures["cobblestone"] = loadTexture("textures/cobblestone.bmp");
 	m_textures["stone"] = loadTexture("textures/stone.bmp");
 	m_textures["bedrock"] = loadTexture("textures/bedrock.bmp");
-}
-
-void Game::drawField() {
-	// Draw the map
-	map->draw();
-	
-	// Turn on textures
-	glEnable(GL_TEXTURE_2D);
-	
-	glPushMatrix();
-	glLoadIdentity();
-	
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	
-	gluOrtho2D(-400.0, 400.0, -300.0, 300.0);
-	
-	glMatrixMode(GL_MODELVIEW);
-	
-	glBindTexture(GL_TEXTURE_2D, m_textures["dirt"]);
-	
-	glBegin(GL_LINES);
-	
-	glColor3f(1.0f, 1.0f, 1.0f);
-		glVertex2i(-10, 0);
-		glVertex2i(10, 0);
-		glVertex2i(0, -10);
-		glVertex2i(0, 10);
-	
-	glEnd();
-	
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();	
 }
 
 void Game::lockMouse() {

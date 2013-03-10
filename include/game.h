@@ -30,10 +30,8 @@ class Game {
 		void manageEvents();
 		void animate();
 		void draw();
-		void display();
 		
 		void loadTextures();
-		void drawField();
 		
 		void lockMouse();
 		void unlockMouse();
@@ -43,6 +41,7 @@ class Game {
 		
 	private:
 		bool m_cont;
+		bool m_paused;
 		
 		Textures m_textures;
 };

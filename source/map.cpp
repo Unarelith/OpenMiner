@@ -117,9 +117,11 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 Map::~Map() {
 	free(m_map);
 	
+	for(vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
+		delete (*it);
+	}
 	m_chunks.clear();
 	
-	delete currentChunk;
 	delete selectedCube;
 }
 
@@ -136,7 +138,6 @@ void Map::draw() {
 	currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
 	
 	for(vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
-		//(*it)->draw();
 		glPushMatrix();
 		glTranslatef(float((*it)->x()), float((*it)->y()), float((*it)->z()));
 		(*it)->render();
@@ -149,6 +150,8 @@ void Map::draw() {
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
+	glBindTexture(GL_TEXTURE_2D, 0);
+	
 	if ((currentChunk != NULL) && (selectedCube->x() != -1) && (selectedCube->selectedFace() >= 0) && (selectedCube->selectedFace() < 6)) {
 		float cubeCoords[6 * 12] = {
 			1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, // FR | 0
@@ -158,10 +161,6 @@ void Map::draw() {
 			0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, // T  | 4
 			1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0  // B  | 5
 		};
-		
-		//int xx = selectedCube->x() + (currentChunk->x() * CHUNK_WIDTH);
-		//int yy = selectedCube->y() + (currentChunk->y() * CHUNK_DEPTH);
-		//int zz = selectedCube->z() + (currentChunk->z() * CHUNK_HEIGHT);
 		
 		int xx = selectedCube->x();
 		int yy = selectedCube->y();

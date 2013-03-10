@@ -27,7 +27,6 @@ class Chunk {
 		
 		void setSurroundingChunk(unsigned char face, Chunk* chunk);
 		
-		void draw();
 		void render();
 		
 		void deleteCube(Cube *cube);

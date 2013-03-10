@@ -17,6 +17,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
 ---------------------------------------------------------------------------------*/
+#include <iostream>
+
 #include <SDL/SDL.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -46,16 +48,19 @@ void initSDL() {
 }
 
 void initOpenGL() {
-	glEnable(GL_DEPTH_TEST); // Turn on hidden face tagging
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE); // Turn on hidden face tagging
 	glCullFace(GL_BACK); // Hidden faces = back faces
 	glFrontFace(GL_CCW); // Front face = Trigo way
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glAlphaFunc(GL_GREATER, 0.9);
+	glEnable(GL_ALPHA_TEST);
 	
 	// Clean screen RGBa color
 	glClearColor(0.5, 0.5, 1.0, 0);
 	
 	// Window definition
 	glViewport(0, 0, WIN_WIDTH, WIN_HEIGHT);
-	
 	glRasterPos2f(0, 0);
 	
 	glMatrixMode(GL_PROJECTION);
@@ -63,5 +68,11 @@ void initOpenGL() {
 	
 	// Visible area definition
 	gluPerspective(VISION_ANGLE, (GLdouble)WIN_WIDTH / (GLdouble)WIN_HEIGHT, NEAR, FAR);
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glEnable(GL_TEXTURE_2D);
+
+	std::cout << glGetString(GL_VERSION) << std::endl;
 }
 

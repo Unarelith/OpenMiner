@@ -73,30 +73,24 @@ void Chunk::setSurroundingChunk(unsigned char face, Chunk* chunk) {
 	}
 }
 
-void Chunk::draw() {
-	for(std::vector<Cube*>::iterator it = m_cubes.begin() ; it != m_cubes.end() ; it++) {
-		(*it)->draw();
-	}
-}
-
 void Chunk::deleteCube(Cube *cube) {
 	for(std::vector<Cube*>::iterator it = m_cubes.begin(); it != m_cubes.end() ; it++) {
 		if((*it)->x() == cube->x() && (*it)->y() == cube->y() && (*it)->z() == cube->z()) {
 			if(cube->selected()) {
 				Game::map->map()[MAP_POS(cube->x(), cube->y(), cube->z())] = 0;
-				delete (*it);
 				m_cubes.erase(it);
+				refreshVBO();
+				if((cube->x() - 1 <= m_x) && (m_surroundingChunks[0] != NULL)) m_surroundingChunks[0]->refreshVBO();
+				if((cube->x() + 1 >= m_x + CHUNK_WIDTH - 1) && (m_surroundingChunks[1] != NULL)) m_surroundingChunks[1]->refreshVBO();
+				if((cube->y() - 1 <= m_y) && (m_surroundingChunks[2] != NULL)) m_surroundingChunks[2]->refreshVBO();
+				if((cube->y() + 1 >= m_y + CHUNK_DEPTH - 1) && (m_surroundingChunks[3] != NULL)) m_surroundingChunks[3]->refreshVBO();
+				if((cube->z() + 1 >= m_z + CHUNK_HEIGHT - 1) && (m_surroundingChunks[4] != NULL)) m_surroundingChunks[4]->refreshVBO();
+				if((cube->z() - 1 <= m_z) && (m_surroundingChunks[5] != NULL)) m_surroundingChunks[5]->refreshVBO();
+				delete cube;
 				break;
 			}
 		}
 	}
-	refreshVBO();
-	if((cube->x() - 1 < m_x) && (m_surroundingChunks[0] != NULL)) m_surroundingChunks[0]->refreshVBO();
-	if((cube->x() + 1 >= m_x + CHUNK_WIDTH) && (m_surroundingChunks[1] != NULL)) m_surroundingChunks[1]->refreshVBO();
-	if((cube->y() - 1 < m_y) && (m_surroundingChunks[2] != NULL)) m_surroundingChunks[2]->refreshVBO();
-	if((cube->y() + 1 >= m_y + CHUNK_DEPTH) && (m_surroundingChunks[3] != NULL)) m_surroundingChunks[3]->refreshVBO();
-	if((cube->z() + 1 >= m_z + CHUNK_HEIGHT) && (m_surroundingChunks[4] != NULL)) m_surroundingChunks[4]->refreshVBO();
-	if((cube->z() - 1 < m_z) && (m_surroundingChunks[5] != NULL)) m_surroundingChunks[5]->refreshVBO();
 }
 
 void Chunk::addCube(Cube *selectedCube) {
@@ -142,12 +136,12 @@ void Chunk::addCube(Cube *selectedCube) {
 		}
 	}
 	refreshVBO();
-	if((selectedCube->x() - 1 < m_x) && (m_surroundingChunks[0] != NULL)) m_surroundingChunks[0]->refreshVBO();
-	if((selectedCube->x() + 1 >= m_x + CHUNK_WIDTH) && (m_surroundingChunks[1] != NULL)) m_surroundingChunks[1]->refreshVBO();
-	if((selectedCube->y() - 1 < m_y) && (m_surroundingChunks[2] != NULL)) m_surroundingChunks[2]->refreshVBO();
-	if((selectedCube->y() + 1 >= m_y + CHUNK_DEPTH) && (m_surroundingChunks[3] != NULL)) m_surroundingChunks[3]->refreshVBO();
-	if((selectedCube->z() + 1 >= m_z + CHUNK_HEIGHT) && (m_surroundingChunks[4] != NULL)) m_surroundingChunks[4]->refreshVBO();
-	if((selectedCube->z() - 1 < m_z) && (m_surroundingChunks[5] != NULL)) m_surroundingChunks[5]->refreshVBO();
+	if((selectedCube->x() - 1 <= m_x) && (m_surroundingChunks[0] != NULL)) m_surroundingChunks[0]->refreshVBO();
+	if((selectedCube->x() + 1 >= m_x + CHUNK_WIDTH - 1) && (m_surroundingChunks[1] != NULL)) m_surroundingChunks[1]->refreshVBO();
+	if((selectedCube->y() - 1 <= m_y) && (m_surroundingChunks[2] != NULL)) m_surroundingChunks[2]->refreshVBO();
+	if((selectedCube->y() + 1 >= m_y + CHUNK_DEPTH - 1) && (m_surroundingChunks[3] != NULL)) m_surroundingChunks[3]->refreshVBO();
+	if((selectedCube->z() + 1 >= m_z + CHUNK_HEIGHT - 1) && (m_surroundingChunks[4] != NULL)) m_surroundingChunks[4]->refreshVBO();
+	if((selectedCube->z() - 1 <= m_z) && (m_surroundingChunks[5] != NULL)) m_surroundingChunks[5]->refreshVBO();
 }
 
 Cube* Chunk::getCube(int x, int y, int z) {
@@ -184,15 +178,6 @@ void Chunk::refreshVBO() {
 		1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1,
 		0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1,
 		1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0
-	};
-	
-	float texCoordsArray[6 * 8] {
-		1, 0, 0, 0, 0, 1, 1, 1,
-		1, 0, 0, 0, 0, 1, 1, 1,
-		1, 0, 0, 0, 0, 1, 1, 1,
-		1, 0, 0, 0, 0, 1, 1, 1,
-		1, 0, 0, 0, 0, 1, 1, 1,
-		1, 0, 0, 0, 0, 1, 1, 1
 	};
 	
 	unsigned char grey[6] = {159, 191, 127, 223, 255, 95};
@@ -247,10 +232,8 @@ void Chunk::refreshVBO() {
 					vertices.push_back(x + cubeCoords[(i * 12) + (j * 3)]);
 					vertices.push_back(y + cubeCoords[(i * 12) + (j * 3) + 1]);
 					vertices.push_back(z + cubeCoords[(i * 12) + (j * 3) + 2]);
-					//texCoords.push_back(getTexOffsetU(qe->type()) + (cubeCoords[48 + (j * 3)] * 0.125));
-					//texCoords.push_back(getTexOffsetV(qe->type()) + (cubeCoords[48 + (j * 3) + 1] * 0.125));
-					texCoords.push_back(texCoordsArray[(i * 8) + (j * 3)]);
-					texCoords.push_back(texCoordsArray[(i * 8) + (j * 3) + 1]);
+					texCoords.push_back(getTexOffsetU(qe->type()) + (cubeCoords[48 + (j * 3)] * 0.125));
+					texCoords.push_back(getTexOffsetV(qe->type()) + (cubeCoords[48 + (j * 3) + 1] * 0.125));
 					colors.push_back(grey[i]);
 					colors.push_back(grey[i]);
 					colors.push_back(grey[i]);

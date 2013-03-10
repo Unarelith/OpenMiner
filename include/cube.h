@@ -25,9 +25,7 @@ typedef std::map<std::string, GLuint> Textures;
 class Cube {
 	public:
 		Cube(int x, int y, int z, GLuint texture, unsigned int type);
-		~Cube() {}
-		
-		void draw();
+		~Cube();
 		
 		void setSelected(bool selected, s8 face) { m_selected = selected; m_selectedFace = face; };
 		
