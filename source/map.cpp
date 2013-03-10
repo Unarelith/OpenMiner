@@ -74,16 +74,16 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 		}
 	}
 	
-	for (int zz = 0 ; zz < m_height >> 3 ; zz++) {
-		for (int yy = 0 ; yy < m_depth >> 3 ; yy++) {
-			for (int xx = 0 ; xx < m_width >> 3 ; xx++) {
-				int chunkIndex = xx + (yy * (m_width >> 3)) + (zz * (m_width >> 3) * (m_depth >> 3));
-				if(xx - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(0, m_chunks[chunkIndex - 1]);
-				if(xx + 1 < m_width >> 3) m_chunks[chunkIndex]->setSurroundingChunk(1, m_chunks[chunkIndex + 1]);
-				if(yy - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(2, m_chunks[chunkIndex - (m_width >> 3)]);
-				if(yy + 1 < m_depth >> 3) m_chunks[chunkIndex]->setSurroundingChunk(3, m_chunks[chunkIndex + (m_width >> 3)]);
-				if(zz + 1 < m_height >> 3) m_chunks[chunkIndex]->setSurroundingChunk(4, m_chunks[chunkIndex + ((m_width >> 3) * (m_depth >> 3))]);
-				if(zz - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(5, m_chunks[chunkIndex - ((m_width >> 3) * (m_depth >> 3))]);
+	for(u16 z = 0 ; z < m_height >> 3 ; z++) {
+		for(u16 y = 0 ; y < m_depth >> 3 ; y++) {
+			for(u16 x = 0 ; x < m_width >> 3 ; x++) {
+				int chunkIndex = x + (y * (m_width >> 3)) + (z * (m_width >> 3) * (m_depth >> 3));
+				if(x - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(0, m_chunks[chunkIndex - 1]);
+				if(x + 1 < m_width >> 3) m_chunks[chunkIndex]->setSurroundingChunk(1, m_chunks[chunkIndex + 1]);
+				if(y - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(2, m_chunks[chunkIndex - (m_width >> 3)]);
+				if(y + 1 < m_depth >> 3) m_chunks[chunkIndex]->setSurroundingChunk(3, m_chunks[chunkIndex + (m_width >> 3)]);
+				if(z + 1 < m_height >> 3) m_chunks[chunkIndex]->setSurroundingChunk(4, m_chunks[chunkIndex + ((m_width >> 3) * (m_depth >> 3))]);
+				if(z - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(5, m_chunks[chunkIndex - ((m_width >> 3) * (m_depth >> 3))]);
 			}
 		}
 	}
@@ -126,6 +126,15 @@ Map::~Map() {
 }
 
 void Map::draw() {
+	glColor3ub(0, 0, 0);
+	glBegin(GL_QUADS);
+		glVertex3f(0, 0, -0.01);
+		glVertex3f(m_width, 0, -0.01);
+		glVertex3f(m_width, m_depth, -0.01);
+		glVertex3f(0, m_depth, -0.01);
+	glEnd();
+	glColor3ub(255, 255, 255);
+	
 	glBindTexture(GL_TEXTURE_2D, m_textures["stone"]);
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -137,12 +146,17 @@ void Map::draw() {
 	
 	currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
 	
+	uint32_t time = SDL_GetTicks();
+	
 	for(vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
 		glPushMatrix();
 		glTranslatef(float((*it)->x()), float((*it)->y()), float((*it)->z()));
 		(*it)->render();
 		glPopMatrix();
 	}
+	
+	time = SDL_GetTicks() - time;
+	cout << "Chunks loading: " << time << " ms" << endl;
 	
 	testCubes();
 	
