@@ -157,7 +157,8 @@ Cube* Chunk::getCube(int x, int y, int z) {
 	
 	int coords = x + (y * CHUNK_WIDTH) + (z * CHUNK_WIDTH * CHUNK_DEPTH);
 	Cube *cube = m_cubes[coords];
-	if((cube == NULL) || (cube->type() == 0)) {
+	
+	if(cube == NULL) {
 		m_cubes.erase(coords);
 		return NULL;
 	}
@@ -175,7 +176,7 @@ float getTexOffsetV(int type) {
 void Chunk::refreshVBO() {
 	m_vboVertexCount = 0;
 	
-	if (m_cubes.size() == 0) return;
+	if(m_cubes.size() == 0) return;
 	
 	float cubeCoords[6 * 12] = {
 		0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1,
@@ -192,13 +193,13 @@ void Chunk::refreshVBO() {
 	std::vector<float> texCoords = std::vector<float>();
 	std::vector<unsigned char> colors = std::vector<unsigned char>();
 	
-	for (int qc = 0 ; qc < CHUNK_WIDTH * CHUNK_DEPTH * CHUNK_HEIGHT ; qc++) {
+	for(int qc = 0 ; qc < CHUNK_WIDTH * CHUNK_DEPTH * CHUNK_HEIGHT ; qc++) {
 		int x = qc % CHUNK_WIDTH;
 		int y = (qc / CHUNK_WIDTH) % CHUNK_DEPTH;
 		int z = (qc / CHUNK_WIDTH) / CHUNK_DEPTH;
-		Cube* qe = getCube(x, y, z);
+		Cube *qe = getCube(x, y, z);
 		if (qe == NULL) continue;
-		Cube* cube = NULL;
+		Cube *cube = NULL;
 		
 		int coords[6 * 3] = {
 			x-1, y, z,
@@ -209,7 +210,7 @@ void Chunk::refreshVBO() {
 			x, y, z-1
 		};
 		
-		for (int i = 0 ; i < 6 ; i++) {
+		for(int i = 0 ; i < 6 ; i++) {
 			cube = getCube(coords[i*3], coords[i*3 + 1], coords[i*3 + 2]);
 			
 			if ((coords[i*3] < 0) && (m_surroundingChunks[0] != NULL)) {

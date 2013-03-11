@@ -91,6 +91,8 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 		}
 	}
 	
+	int cubeCount = 0;
+	
 	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
 		for(s32 z = m_chunks[i]->z() ; z < m_chunks[i]->z() + CHUNK_HEIGHT ; z++) {
 			for(s32 y = m_chunks[i]->y() ; y < m_chunks[i]->y() + CHUNK_DEPTH ; y++) {
@@ -98,12 +100,15 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 					switch(m_map[_MAP_POS(x, y, z)]) {
 						case 1:
 							m_chunks[i]->addCube(new Cube(x, y, z, m_textures["grass"], 1));
+							cubeCount++;
 							break;
 						case 2:
 							m_chunks[i]->addCube(new Cube(x, y, z, m_textures["stone"], 2));
+							cubeCount++;
 							break;
 						case 3:
 							m_chunks[i]->addCube(new Cube(x, y, z, m_textures["bedrock"], 3));
+							cubeCount++;
 							break;
 						default:
 							break;
@@ -113,10 +118,14 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 		}
 	}
 	
+	uint32_t time = SDL_GetTicks();
+	
 	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
 		m_chunks[i]->refreshVBO();
 		cout << "Chunks loaded: " << i+1 << "/" << ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)) << endl;
 	}
+	
+	cout << "Chunks loading time: " << (SDL_GetTicks() - time) << " ms for " << cubeCount << " cubes" << endl;
 	
 	currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
 	
@@ -127,7 +136,7 @@ Map::~Map() {
 	free(m_map);
 	
 	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
-		delete m_chunks[i];
+		if(m_chunks[i] != NULL) delete m_chunks[i];
 	}
 	
 	delete[] m_chunks;
@@ -166,7 +175,7 @@ void Map::draw() {
 	}
 	
 	time = SDL_GetTicks() - time;
-	cout << "Render time: " << time << " ms" << endl;
+	//cout << "Render time: " << time << " ms" << endl;
 	
 	testCubes();
 	

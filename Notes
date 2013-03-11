@@ -1,2 +1,2 @@
-Bug when adding cubes.
+Bug when adding cubes from a chunk to the border of another one.
 Selection cursor hasn't alpha.

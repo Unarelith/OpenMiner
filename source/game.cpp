@@ -64,6 +64,7 @@ Game::~Game() {
 		element->second = 0;
 	}
 	
+	delete map;
 	delete player;
 }
 
