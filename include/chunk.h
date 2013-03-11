@@ -47,8 +47,6 @@ class Chunk {
 		int m_y;
 		int m_z;
 		
-		GLuint m_texture;
-		
 		std::unordered_map<int, Cube*> m_cubes;
 		Cube *getCube(int x, int y, int z);
 		

@@ -49,8 +49,7 @@ unsigned int Game::mapDepth = 16 << 3;
 unsigned int Game::mapHeight = 8 << 3;
 
 Game::Game() {
-	//player = new Player(4, 4, 18, 90);
-	player = new Player(4, 4, 70, 90);
+	player = new Player(2, 2, 48, 90);
 	
 	loadTextures();
 	
@@ -131,7 +130,7 @@ void Game::manageEvents() {
 				} else {
 					if((event.button.button == SDL_BUTTON_LEFT) && (Map::selectedChunk != NULL)) {
 						Map::selectedChunk->deleteCube(Map::selectedCube);
-						Map::selectedCube = new Cube(-1, -1, -1, 0, 0);
+						Map::selectedCube = new Cube(-1, -1, -1, 0);
 					}
 					if((event.button.button == SDL_BUTTON_RIGHT) && (Map::selectedChunk != NULL)) {
 						Map::selectedChunk->addCube(Map::selectedCube);

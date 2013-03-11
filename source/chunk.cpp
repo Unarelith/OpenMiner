@@ -43,8 +43,6 @@ Chunk::Chunk(int x, int y, int z, Textures textures) {
 	m_y = y;
 	m_z = z;
 	
-	m_texture = textures["stone"];
-	
 	m_surroundingChunks = new Chunk*[6];
 	for (int i = 0; i < 6; i++) m_surroundingChunks[i] = NULL;
 
@@ -107,37 +105,37 @@ void Chunk::addCube(Cube *selectedCube, int type) {
 	else if(selectedCube->selectedFace() == 0) {
 		if((MAP_POS(x, y + 1, z) >= 0) && (MAP_POS(x, y + 1, z) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(x, y + 1, z)] = type;
-			m_cubes[CUBE_POS(x, y + 1, z)] = new Cube(x, y + 1, z, m_texture, type);
+			m_cubes[CUBE_POS(x, y + 1, z)] = new Cube(x, y + 1, z, type);
 		}
 	}
 	else if(selectedCube->selectedFace() == 1) {
 		if((MAP_POS(x + 1, y, z) >= 0) && (MAP_POS(x + 1, y, z) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(x + 1, y, z)] = type;
-			m_cubes[CUBE_POS(x + 1, y, z)] = new Cube(x + 1, y, z, m_texture, type);
+			m_cubes[CUBE_POS(x + 1, y, z)] = new Cube(x + 1, y, z, type);
 		}
 	}
 	else if(selectedCube->selectedFace() == 2) {
 		if((MAP_POS(x - 1, y, z) >= 0) && (MAP_POS(x - 1, y, z) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(x - 1, y, z)] = type;
-			m_cubes[CUBE_POS(x - 1, y, z)] = new Cube(x - 1, y, z, m_texture, type);
+			m_cubes[CUBE_POS(x - 1, y, z)] = new Cube(x - 1, y, z, type);
 		}
 	}
 	else if(selectedCube->selectedFace() == 3) {
 		if((MAP_POS(x, y - 1, z) >= 0) && (MAP_POS(x, y - 1, z) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(x, y - 1, z)] = type;
-			m_cubes[CUBE_POS(x, y - 1, z)] = new Cube(x, y - 1, z, m_texture, type);
+			m_cubes[CUBE_POS(x, y - 1, z)] = new Cube(x, y - 1, z, type);
 		}
 	}
 	else if(selectedCube->selectedFace() == 4) {
 		if((MAP_POS(x, y, z + 1) >= 0) && (MAP_POS(x, y, z + 1) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(x, y, z + 1)] = type;
-			m_cubes[CUBE_POS(x, y, z + 1)] = new Cube(x, y, z + 1, m_texture, type);
+			m_cubes[CUBE_POS(x, y, z + 1)] = new Cube(x, y, z + 1, type);
 		}
 	}
 	else if(selectedCube->selectedFace() == 5) {
 		if((MAP_POS(x, y, z - 1) >= 0) && (MAP_POS(x, y, z - 1) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(x, y, z - 1)] = type;
-			m_cubes[CUBE_POS(x, y, z - 1)] = new Cube(x, y, z - 1, m_texture, type);
+			m_cubes[CUBE_POS(x, y, z - 1)] = new Cube(x, y, z - 1, type);
 		}
 	}
 	

@@ -1,2 +1,3 @@
 Bug when adding cubes from a chunk to the border of another one.
 Selection cursor hasn't alpha.
+Chunks in diagonal will not be tested for cube selection.

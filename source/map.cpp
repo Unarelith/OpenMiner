@@ -36,6 +36,8 @@
 #include "player.h"
 #include "game.h"
 
+#include "genutils.h"
+
 using namespace std;
 
 Chunk *Map::currentChunk = NULL;
@@ -55,13 +57,28 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 		for(s32 y = 0 ; y < m_depth ; y++) {
 			for(s32 x = 0 ; x < m_width ; x++) {
 				m_map[_MAP_POS(x, y, z)] = 0;
-				if(z == 0) {
-					m_map[_MAP_POS(x, y, z)] = 3;
-				}
-				else if(z < m_height - 2) {
-					if(rand()%3 >= 2) m_map[_MAP_POS(x, y, z)] = 2;
-				} else {
-					if(rand()%3 >= 2) m_map[_MAP_POS(x, y, z)] = 1;
+			}
+		}
+	}
+	
+	for (int yy = 0; yy < m_depth >> 3; yy++) {
+		for (int xx = 0; xx < m_width >> 3; xx++) {
+			for (int yC = 0; yC < CHUNK_DEPTH; yC++) {
+				for (int xC = 0; xC < CHUNK_WIDTH; xC++) {
+					int x = xx * CHUNK_WIDTH + xC;
+					int y = yy * CHUNK_DEPTH + yC;
+					float perlin = get2DPerlinNoiseValue(x, y, 64) * 3
+								 + get2DPerlinNoiseValue(x, y, 32) * 0
+								 + get2DPerlinNoiseValue(x, y, 16) * 0.5
+								 + get2DPerlinNoiseValue(x, y, 8) * 0.1;
+					int heightValue = int((perlin * float(CHUNK_HEIGHT)) + float(m_height / 2));
+					
+					if (heightValue < 0) heightValue = 0;
+					else if (heightValue >= m_height) heightValue = m_height - 1;
+					
+					for(int zz = 0 ; zz < heightValue ; zz++) {
+						m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 1;
+					}
 				}
 			}
 		}
@@ -97,22 +114,8 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 		for(s32 z = m_chunks[i]->z() ; z < m_chunks[i]->z() + CHUNK_HEIGHT ; z++) {
 			for(s32 y = m_chunks[i]->y() ; y < m_chunks[i]->y() + CHUNK_DEPTH ; y++) {
 				for(s32 x = m_chunks[i]->x() ; x < m_chunks[i]->x() + CHUNK_WIDTH ; x++) {
-					switch(m_map[_MAP_POS(x, y, z)]) {
-						case 1:
-							m_chunks[i]->addCube(new Cube(x, y, z, m_textures["grass"], 1));
-							cubeCount++;
-							break;
-						case 2:
-							m_chunks[i]->addCube(new Cube(x, y, z, m_textures["stone"], 2));
-							cubeCount++;
-							break;
-						case 3:
-							m_chunks[i]->addCube(new Cube(x, y, z, m_textures["bedrock"], 3));
-							cubeCount++;
-							break;
-						default:
-							break;
-					}
+					if(m_map[_MAP_POS(x, y, z)] != 0) m_chunks[i]->addCube(new Cube(x, y, z, m_map[_MAP_POS(x, y, z)]));
+					cubeCount++;
 				}
 			}
 		}
@@ -129,7 +132,7 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 	
 	currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
 	
-	selectedCube = new Cube(-1, -1, -1, m_textures["dirt"], 0);
+	selectedCube = new Cube(-1, -1, -1, 0);
 }
 
 Map::~Map() {
