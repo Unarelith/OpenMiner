@@ -75,6 +75,7 @@ void Chunk::setSurroundingChunk(unsigned char face, Chunk* chunk) {
 
 void Chunk::deleteCube(Cube *cube) {
 	for(std::vector<Cube*>::iterator it = m_cubes.begin(); it != m_cubes.end() ; it++) {
+		if((*it) == NULL) continue;
 		if((*it)->x() == cube->x() && (*it)->y() == cube->y() && (*it)->z() == cube->z()) {
 			if(cube->selected()) {
 				Game::map->map()[MAP_POS(cube->x(), cube->y(), cube->z())] = 0;
@@ -95,7 +96,11 @@ void Chunk::deleteCube(Cube *cube) {
 
 void Chunk::addCube(Cube *selectedCube) {
 	int type = 2;
-	if(selectedCube->selectedFace() == -1) {
+	if(selectedCube == NULL) {
+		m_cubes.push_back(NULL);
+		return;
+	}
+	else if(selectedCube->selectedFace() == -1) {
 		m_cubes.push_back(selectedCube);
 		return;
 	}
@@ -151,12 +156,10 @@ Cube* Chunk::getCube(int x, int y, int z) {
 	}
 	
 	Cube *cube = m_cubes[(x + (y * CHUNK_WIDTH) + (z * CHUNK_WIDTH * CHUNK_DEPTH))];
-	if(cube->type() != 0) {
-		return cube;
-	}
-	else {
+	if((cube == NULL) || (cube->type() == 0)) {
 		return NULL;
 	}
+	else return cube;
 }
 
 float getTexOffsetU(int type) {

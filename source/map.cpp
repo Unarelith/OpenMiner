@@ -105,7 +105,7 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 							m_chunks[i]->addCube(new Cube(x, y, z, m_textures["bedrock"], 3));
 							break;
 						default:
-							m_chunks[i]->addCube(new Cube(-1, -1, -1, 0, 0));
+							m_chunks[i]->addCube(NULL);
 							break;
 					}
 				}
@@ -407,6 +407,8 @@ void Map::testCubes() {
 		}
 		
 		for(std::vector<Cube*>::iterator it = cubes.begin() ; it != cubes.end() ; it++) {
+			if((*it) == NULL) continue;
+			
 			(*it)->setSelected(false, -1);
 			
 			float d = -1;
