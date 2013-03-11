@@ -30,7 +30,7 @@ class Chunk {
 		void render();
 		
 		void deleteCube(Cube *cube);
-		void addCube(Cube *selectedCube);
+		void addCube(Cube *selectedCube, int type = 2);
 		
 		void refreshVBO();
 		
@@ -38,7 +38,7 @@ class Chunk {
 		int y() const { return m_y; }
 		int z() const { return m_z; }
 		
-		std::vector<Cube*> cubes() const { return m_cubes; }
+		std::unordered_map<int, Cube*> cubes() const { return m_cubes; }
 		
 		Chunk **surroundingChunks() const { return m_surroundingChunks; }
 		
@@ -49,7 +49,7 @@ class Chunk {
 		
 		GLuint m_texture;
 		
-		std::vector<Cube*> m_cubes;
+		std::unordered_map<int, Cube*> m_cubes;
 		Cube *getCube(int x, int y, int z);
 		
 		Chunk **m_surroundingChunks;

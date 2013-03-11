@@ -20,6 +20,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include <map>
 #include <cmath>
 
@@ -43,14 +44,17 @@ using namespace std;
 Player *Game::player;
 Map *Game::map;
 
+unsigned int Game::mapWidth = 16 << 3;
+unsigned int Game::mapDepth = 16 << 3;
+unsigned int Game::mapHeight = 8 << 3;
+
 Game::Game() {
 	//player = new Player(4, 4, 18, 90);
 	player = new Player(4, 4, 70, 90);
 	
 	loadTextures();
 	
-	//map = new Map(4 << 3, 4 << 3, 2 << 3, m_textures);
-	map = new Map(16 << 3, 16 << 3, 8 << 3, m_textures);
+	map = new Map(mapWidth, mapDepth, mapHeight, m_textures);
 }
 
 Game::~Game() {
@@ -64,7 +68,7 @@ Game::~Game() {
 }
 
 void Game::exec() {
-	//lockMouse();
+	lockMouse();
 	
 	m_cont = true;
 	m_paused = false;

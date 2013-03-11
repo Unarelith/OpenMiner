@@ -39,6 +39,10 @@ class Game {
 		static Player *player;
 		static Map *map;
 		
+		static unsigned int mapWidth;
+		static unsigned int mapDepth;
+		static unsigned int mapHeight;
+		
 	private:
 		bool m_cont;
 		bool m_paused;

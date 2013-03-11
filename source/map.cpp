@@ -20,6 +20,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include <map>
 #include <cmath>
 
@@ -105,7 +106,6 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 							m_chunks[i]->addCube(new Cube(x, y, z, m_textures["bedrock"], 3));
 							break;
 						default:
-							m_chunks[i]->addCube(NULL);
 							break;
 					}
 				}
@@ -398,7 +398,7 @@ void Map::testCubes() {
 	Cube *cube = NULL;
 	int face = -1;
 	Chunk *chunk = NULL;
-	vector<Cube*> cubes;
+	unordered_map<int, Cube*> cubes;
 	for(unsigned short i = 0 ; i < 7 ; i++) {
 		if(i == 6) cubes = currentChunk->cubes();
 		else {
@@ -406,19 +406,19 @@ void Map::testCubes() {
 			cubes = currentChunk->surroundingChunks()[i]->cubes();
 		}
 		
-		for(std::vector<Cube*>::iterator it = cubes.begin() ; it != cubes.end() ; it++) {
-			if((*it) == NULL) continue;
+		for(std::unordered_map<int, Cube*>::iterator it = cubes.begin() ; it != cubes.end() ; it++) {
+			if(it->second == NULL) continue;
 			
-			(*it)->setSelected(false, -1);
+			it->second->setSelected(false, -1);
 			
 			float d = -1;
 			s8 f = -1;
 			
-			bool result = intersectionLineCube((*it)->x(), (*it)->y(), (*it)->z(), linePoint, directionVector, &d, &f);
+			bool result = intersectionLineCube(it->second->x(), it->second->y(), it->second->z(), linePoint, directionVector, &d, &f);
 			
 			if(result && (d < distance) && (d < 5)) {
 				distance = d;
-				cube = (*it);
+				cube = it->second;
 				face = f;
 				if(i == 6) chunk = currentChunk;
 				else chunk = currentChunk->surroundingChunks()[i];
