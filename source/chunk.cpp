@@ -94,9 +94,9 @@ void Chunk::deleteCube(Cube *cube) {
 }
 
 void Chunk::addCube(Cube *selectedCube) {
-	unsigned int type = 2;
+	int type = 2;
 	if(selectedCube->selectedFace() == -1) {
-		m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y(), selectedCube->z(), selectedCube->texture(), type));
+		m_cubes.push_back(selectedCube);
 		return;
 	}
 	else if(selectedCube->selectedFace() == 0) {
@@ -135,13 +135,14 @@ void Chunk::addCube(Cube *selectedCube) {
 			m_cubes.push_back(new Cube(selectedCube->x(), selectedCube->y(), selectedCube->z() - 1, m_texture, type));
 		}
 	}
+	
 	refreshVBO();
-	if((selectedCube->x() - 1 <= m_x) && (m_surroundingChunks[0] != NULL)) m_surroundingChunks[0]->refreshVBO();
-	if((selectedCube->x() + 1 >= m_x + CHUNK_WIDTH - 1) && (m_surroundingChunks[1] != NULL)) m_surroundingChunks[1]->refreshVBO();
-	if((selectedCube->y() - 1 <= m_y) && (m_surroundingChunks[2] != NULL)) m_surroundingChunks[2]->refreshVBO();
-	if((selectedCube->y() + 1 >= m_y + CHUNK_DEPTH - 1) && (m_surroundingChunks[3] != NULL)) m_surroundingChunks[3]->refreshVBO();
-	if((selectedCube->z() + 1 >= m_z + CHUNK_HEIGHT - 1) && (m_surroundingChunks[4] != NULL)) m_surroundingChunks[4]->refreshVBO();
-	if((selectedCube->z() - 1 <= m_z) && (m_surroundingChunks[5] != NULL)) m_surroundingChunks[5]->refreshVBO();
+	if((selectedCube->x() == m_x) && (m_surroundingChunks[0] != NULL)) m_surroundingChunks[0]->refreshVBO();
+	if((selectedCube->x() == m_x + CHUNK_WIDTH - 1) && (m_surroundingChunks[1] != NULL)) m_surroundingChunks[1]->refreshVBO();
+	if((selectedCube->y() == m_y) && (m_surroundingChunks[2] != NULL)) m_surroundingChunks[2]->refreshVBO();
+	if((selectedCube->y() == m_y + CHUNK_DEPTH - 1) && (m_surroundingChunks[3] != NULL)) m_surroundingChunks[3]->refreshVBO();
+	if((selectedCube->z() == m_z + CHUNK_HEIGHT - 1) && (m_surroundingChunks[4] != NULL)) m_surroundingChunks[4]->refreshVBO();
+	if((selectedCube->z() == m_z) && (m_surroundingChunks[5] != NULL)) m_surroundingChunks[5]->refreshVBO();
 }
 
 Cube* Chunk::getCube(int x, int y, int z) {
@@ -149,13 +150,13 @@ Cube* Chunk::getCube(int x, int y, int z) {
 		return NULL;
 	}
 	
-	for(std::vector<Cube*>::iterator it = m_cubes.begin() ; it != m_cubes.end() ; it++) {
-		if(((*it)->x() == x + m_x) && ((*it)->y() == y + m_y) && ((*it)->z() == z + m_z)) {
-			return (*it);
-		}
+	Cube *cube = m_cubes[(x + (y * CHUNK_WIDTH) + (z * CHUNK_WIDTH * CHUNK_DEPTH))];
+	if(cube->type() != 0) {
+		return cube;
 	}
-	
-	return NULL;
+	else {
+		return NULL;
+	}
 }
 
 float getTexOffsetU(int type) {
@@ -205,14 +206,14 @@ void Chunk::refreshVBO() {
 		
 		for (int i = 0 ; i < 6 ; i++) {
 			cube = getCube(coords[i*3], coords[i*3 + 1], coords[i*3 + 2]);
-
+			
 			if ((coords[i*3] < 0) && (m_surroundingChunks[0] != NULL)) {
 				cube = m_surroundingChunks[0]->getCube(coords[i*3] + CHUNK_WIDTH, coords[i*3 + 1], coords[i*3 + 2]);
 			}
 			else if ((coords[i*3] >= CHUNK_WIDTH) && (m_surroundingChunks[1] != NULL)) {
 				cube = m_surroundingChunks[1]->getCube(coords[i*3] - CHUNK_WIDTH, coords[i*3 + 1], coords[i*3 + 2]);
 			}
-
+			
 			if ((coords[i*3 + 1] < 0) && (m_surroundingChunks[2] != NULL)) {
 				cube = m_surroundingChunks[2]->getCube(coords[i*3], coords[i*3 + 1] + CHUNK_DEPTH, coords[i*3 + 2]);
 			}
@@ -228,7 +229,7 @@ void Chunk::refreshVBO() {
 			}
 			
 			if ((cube == NULL) || (cube->type() == 0)) {
-				for (int j = 0; j < 4; j++) {
+				for(int j = 0 ; j < 4 ; j++) {
 					vertices.push_back(x + cubeCoords[(i * 12) + (j * 3)]);
 					vertices.push_back(y + cubeCoords[(i * 12) + (j * 3) + 1]);
 					vertices.push_back(z + cubeCoords[(i * 12) + (j * 3) + 2]);

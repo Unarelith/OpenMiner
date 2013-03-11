@@ -44,11 +44,13 @@ Player *Game::player;
 Map *Game::map;
 
 Game::Game() {
-	player = new Player(4, 4, 18, 90);
+	//player = new Player(4, 4, 18, 90);
+	player = new Player(4, 4, 70, 90);
 	
 	loadTextures();
 	
-	map = new Map(16 << 3, 16 << 3, 8 << 3, m_textures); // No size implemented for the moment
+	//map = new Map(4 << 3, 4 << 3, 2 << 3, m_textures);
+	map = new Map(16 << 3, 16 << 3, 8 << 3, m_textures);
 }
 
 Game::~Game() {

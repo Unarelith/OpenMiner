@@ -22,6 +22,7 @@
 
 #define MAP_POS(x, y, z) ((x) + ((y) * Game::map->width()) + ((z) * Game::map->width() * Game::map->depth()))
 #define _MAP_POS(x, y, z) ((x) + ((y) * m_width) + ((z) * m_width * m_depth))
+#define CHUNK_POS(x, y, z) ((x) + ((y) * (m_width >> 3)) + ((z) * (m_width >> 3) * (m_depth >> 3)))
 
 typedef struct {
 	float x;
@@ -37,7 +38,6 @@ class Map {
 		void draw();
 		
 		Chunk *findNearestChunk(float x, float y, float z);
-		//std::vector<Cube*> *nearChunksCubes();
 		
 		bool intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector, float *distance);
 		bool intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector, float *distance, s8 *face);
@@ -49,7 +49,7 @@ class Map {
 		
 		u16 *map() const { return m_map; }
 		
-		std::vector<Chunk*> chunks() const { return m_chunks; }
+		Chunk** chunks() const { return m_chunks; }
 		
 		static Chunk *currentChunk;
 		static Chunk *selectedChunk;
@@ -64,7 +64,7 @@ class Map {
 		
 		u16 *m_map;
 		
-		std::vector<Chunk*> m_chunks;
+		Chunk** m_chunks;
 };
 
 #endif // MAP_H

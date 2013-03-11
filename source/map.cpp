@@ -66,14 +66,16 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 		}
 	}
 	
+	m_chunks = new Chunk*[(m_width >> 3) * (m_height >> 3) * (m_depth >> 3)];
+	
 	for(u16 z = 0 ; z < m_height >> 3 ; z++) {
 		for(u16 y = 0 ; y < m_depth >> 3 ; y++) {
 			for(u16 x = 0 ; x < m_width >> 3 ; x++) {
-				m_chunks.push_back(new Chunk(x << 3, y << 3, z << 3, m_textures));
+				m_chunks[CHUNK_POS(x, y, z)] = new Chunk(x << 3, y << 3, z << 3, m_textures);
 			}
 		}
 	}
-	
+				
 	for(u16 z = 0 ; z < m_height >> 3 ; z++) {
 		for(u16 y = 0 ; y < m_depth >> 3 ; y++) {
 			for(u16 x = 0 ; x < m_width >> 3 ; x++) {
@@ -88,25 +90,32 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 		}
 	}
 	
-	for(vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
-		for(s32 z = (*it)->z() ; z < (*it)->z() + CHUNK_HEIGHT ; z++) {
-			for(s32 y = (*it)->y() ; y < (*it)->y() + CHUNK_DEPTH ; y++) {
-				for(s32 x = (*it)->x() ; x < (*it)->x() + CHUNK_WIDTH ; x++) {
+	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
+		for(s32 z = m_chunks[i]->z() ; z < m_chunks[i]->z() + CHUNK_HEIGHT ; z++) {
+			for(s32 y = m_chunks[i]->y() ; y < m_chunks[i]->y() + CHUNK_DEPTH ; y++) {
+				for(s32 x = m_chunks[i]->x() ; x < m_chunks[i]->x() + CHUNK_WIDTH ; x++) {
 					switch(m_map[_MAP_POS(x, y, z)]) {
 						case 1:
-							(*it)->addCube(new Cube(x, y, z, m_textures["grass"], 1));
+							m_chunks[i]->addCube(new Cube(x, y, z, m_textures["grass"], 1));
 							break;
 						case 2:
-							(*it)->addCube(new Cube(x, y, z, m_textures["stone"], 2));
+							m_chunks[i]->addCube(new Cube(x, y, z, m_textures["stone"], 2));
 							break;
 						case 3:
-							(*it)->addCube(new Cube(x, y, z, m_textures["bedrock"], 3));
+							m_chunks[i]->addCube(new Cube(x, y, z, m_textures["bedrock"], 3));
+							break;
+						default:
+							m_chunks[i]->addCube(new Cube(-1, -1, -1, 0, 0));
 							break;
 					}
 				}
 			}
 		}
-		(*it)->refreshVBO();
+	}
+	
+	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
+		m_chunks[i]->refreshVBO();
+		cout << "Chunks loaded: " << i+1 << "/" << ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)) << endl;
 	}
 	
 	currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
@@ -117,10 +126,11 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 Map::~Map() {
 	free(m_map);
 	
-	for(vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
-		delete (*it);
+	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
+		delete m_chunks[i];
 	}
-	m_chunks.clear();
+	
+	delete[] m_chunks;
 	
 	delete selectedCube;
 }
@@ -148,15 +158,15 @@ void Map::draw() {
 	
 	uint32_t time = SDL_GetTicks();
 	
-	for(vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
+	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
 		glPushMatrix();
-		glTranslatef(float((*it)->x()), float((*it)->y()), float((*it)->z()));
-		(*it)->render();
+		glTranslatef(float(m_chunks[i]->x()), float(m_chunks[i]->y()), float(m_chunks[i]->z()));
+		m_chunks[i]->render();
 		glPopMatrix();
 	}
 	
 	time = SDL_GetTicks() - time;
-	cout << "Chunks loading: " << time << " ms" << endl;
+	cout << "Render time: " << time << " ms" << endl;
 	
 	testCubes();
 	
@@ -203,18 +213,18 @@ Chunk *Map::findNearestChunk(float x, float y, float z) {
 	float distance = FAR;
 	Chunk *chunk = NULL;
 	
-	for(vector<Chunk*>::iterator it = m_chunks.begin() ; it != m_chunks.end() ; it++) {
+	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
 		vect3D center;
 		
-		center.x = (*it)->x() + CHUNK_WIDTH / 2;
-		center.y = (*it)->y() + CHUNK_DEPTH / 2;
-		center.z = (*it)->z() + CHUNK_HEIGHT / 2;
+		center.x = m_chunks[i]->x() + CHUNK_WIDTH / 2;
+		center.y = m_chunks[i]->y() + CHUNK_DEPTH / 2;
+		center.z = m_chunks[i]->z() + CHUNK_HEIGHT / 2;
 		
 		float d = sqrt(pow(center.x - x, 2) + pow(center.y - y, 2) + pow(center.z - z, 2));
 		
 		if(d < distance) {
 			distance = d;
-			chunk = (*it);
+			chunk = m_chunks[i];
 		}
 	}
 	
