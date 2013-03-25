@@ -169,7 +169,7 @@ float getTexOffsetU(int type) {
 
 float getTexOffsetV(int type) {
 	if(type > 8) {
-		type <<= 3; // Here 8 is the image width in texs
+		type <<= 3; // Here 8 ( remember x * 8 == x << 3 ) is the texture image width
 		return 1 - type * 0.125;
 	}
 	return 0.875;

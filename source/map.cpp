@@ -79,7 +79,7 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 					for(int zz = 0 ; zz < heightValue ; zz++) {
 						int dirtHeight = (1.0 - rand()%10 / 100 - 0.20) * heightValue;
 						if(zz < dirtHeight) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 1;
-						else if(zz > dirtHeight && zz < dirtHeight + 2) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = rand()%2 + 1;
+						else if(zz > dirtHeight && zz < dirtHeight + 3) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = rand()%2 + 1;
 						else m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 2;
 					}
 				}
