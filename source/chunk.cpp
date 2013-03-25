@@ -164,10 +164,14 @@ Cube* Chunk::getCube(int x, int y, int z) {
 }
 
 float getTexOffsetU(int type) {
-	return 0;
+	return (type - 1) * 0.125;
 }
 
 float getTexOffsetV(int type) {
+	if(type > 8) {
+		type <<= 3; // Here 8 is the image width in texs
+		return 1 - type * 0.125;
+	}
 	return 0.875;
 }
 

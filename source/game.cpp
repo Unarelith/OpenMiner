@@ -247,6 +247,7 @@ void Game::loadTextures() {
 	m_textures["cobblestone"] = loadTexture("textures/cobblestone.bmp");
 	m_textures["stone"] = loadTexture("textures/stone.bmp");
 	m_textures["bedrock"] = loadTexture("textures/bedrock.bmp");
+	m_textures["textures"] = loadTexture("textures/textures.bmp");
 }
 
 void Game::lockMouse() {

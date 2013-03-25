@@ -77,7 +77,10 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 					else if (heightValue >= m_height) heightValue = m_height - 1;
 					
 					for(int zz = 0 ; zz < heightValue ; zz++) {
-						m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 1;
+						int dirtHeight = (1.0 - rand()%10 / 100 - 0.20) * heightValue;
+						if(zz < dirtHeight) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 1;
+						else if(zz > dirtHeight && zz < dirtHeight + 2) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = rand()%2 + 1;
+						else m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 2;
 					}
 				}
 			}
@@ -143,8 +146,6 @@ Map::~Map() {
 	}
 	
 	delete[] m_chunks;
-	
-	delete selectedCube;
 }
 
 void Map::draw() {
@@ -157,7 +158,7 @@ void Map::draw() {
 	glEnd();
 	glColor3ub(255, 255, 255);
 	
-	glBindTexture(GL_TEXTURE_2D, m_textures["stone"]);
+	glBindTexture(GL_TEXTURE_2D, m_textures["textures"]);
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
