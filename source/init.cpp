@@ -49,6 +49,7 @@ void initOpenGL() {
 	glEnable(GL_CULL_FACE); // Turn on hidden face tagging
 	glCullFace(GL_BACK); // Hidden faces = back faces
 	glFrontFace(GL_CCW); // Front face = Trigo way
+	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glAlphaFunc(GL_GREATER, 0.9);
 	glEnable(GL_ALPHA_TEST);

@@ -67,10 +67,10 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 				for (int xC = 0; xC < CHUNK_WIDTH; xC++) {
 					int x = xx * CHUNK_WIDTH + xC;
 					int y = yy * CHUNK_DEPTH + yC;
-					float perlin = get2DPerlinNoiseValue(x, y, 64) * 3
-								 + get2DPerlinNoiseValue(x, y, 32) * 0
-								 + get2DPerlinNoiseValue(x, y, 16) * 0.5
-								 + get2DPerlinNoiseValue(x, y, 8) * 0.1;
+					float perlin = get2DPerlinNoiseValue(x, y, 64) * 0 // 3
+								 + get2DPerlinNoiseValue(x, y, 32) * 4 // 0
+								 + get2DPerlinNoiseValue(x, y, 16) * 3 // 0.5
+								 + get2DPerlinNoiseValue(x, y, 8) * 2; // 0.1
 					int heightValue = int((perlin * float(CHUNK_HEIGHT)) + float(m_height / 2));
 					
 					if (heightValue < 0) heightValue = 0;
@@ -210,10 +210,10 @@ void Map::draw() {
 		glPolygonOffset(-1.0, -1.0);
 		
 		glBegin(GL_QUADS);
-		glVertex3f(xx + cubeCoords[(selectedCube->selectedFace() * 12) + 0], yy + cubeCoords[(selectedCube->selectedFace() * 12) + 1], zz + cubeCoords[(selectedCube->selectedFace() * 12) + 2]);
-		glVertex3f(xx + cubeCoords[(selectedCube->selectedFace() * 12) + 3], yy + cubeCoords[(selectedCube->selectedFace() * 12) + 4], zz + cubeCoords[(selectedCube->selectedFace() * 12) + 5]);
-		glVertex3f(xx + cubeCoords[(selectedCube->selectedFace() * 12) + 6], yy + cubeCoords[(selectedCube->selectedFace() * 12) + 7], zz + cubeCoords[(selectedCube->selectedFace() * 12) + 8]);
-		glVertex3f(xx + cubeCoords[(selectedCube->selectedFace() * 12) + 9], yy + cubeCoords[(selectedCube->selectedFace() * 12) + 10], zz + cubeCoords[(selectedCube->selectedFace() * 12) + 11]);
+			glVertex3f(xx + cubeCoords[(selectedCube->selectedFace() * 12) + 0], yy + cubeCoords[(selectedCube->selectedFace() * 12) + 1], zz + cubeCoords[(selectedCube->selectedFace() * 12) + 2]);
+			glVertex3f(xx + cubeCoords[(selectedCube->selectedFace() * 12) + 3], yy + cubeCoords[(selectedCube->selectedFace() * 12) + 4], zz + cubeCoords[(selectedCube->selectedFace() * 12) + 5]);
+			glVertex3f(xx + cubeCoords[(selectedCube->selectedFace() * 12) + 6], yy + cubeCoords[(selectedCube->selectedFace() * 12) + 7], zz + cubeCoords[(selectedCube->selectedFace() * 12) + 8]);
+			glVertex3f(xx + cubeCoords[(selectedCube->selectedFace() * 12) + 9], yy + cubeCoords[(selectedCube->selectedFace() * 12) + 10], zz + cubeCoords[(selectedCube->selectedFace() * 12) + 11]);
 		glEnd();
 		
 		glDisable(GL_POLYGON_OFFSET_FILL);

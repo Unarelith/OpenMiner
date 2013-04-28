@@ -1,22 +1,33 @@
 KubKraft=/home/quentin/Bureau/KubKraft CD=. filter=".gitignore *.c *.h *.diff *.vim AUTHORS ChangeLog COPYING Makefile Notes TODO *.textile *.cpp" {
+ .gitignore
+ AUTHORS
+ ChangeLog
+ COPYING
  Makefile
+ Notes
+ TODO
+ README.textile
  include=include {
   chunk.h
   config.h
   cube.h
   game.h
+  genutils.h
   init.h
   map.h
   player.h
+  sdlglutils.h
   types.h
  }
  source=source {
   chunk.cpp
   cube.cpp
   game.cpp
+  genutils.cpp
   init.cpp
   main.cpp
   map.cpp
   player.cpp
+  sdlglutils.cpp
  }
 }

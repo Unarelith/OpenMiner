@@ -1,16 +1,8 @@
-- Multi-biome: Working on
-	- Improve multi-biome display
-	- Bugs with biomes at (1;0) and (0;1)
-	- Fix cube selected from a biome to another one bug
-	- Fix problem in manageEvents
-- Big map && map generation
-- unordered_map for maps
+- Physics
 - Pause menu
 - Main menu
 - PNG textures
-- Lightmmaing
+- Lighting
 - Improve vect3D
-- Improve cursor
-- Move cube tests in another file
 - Save and load map
 - Autofire

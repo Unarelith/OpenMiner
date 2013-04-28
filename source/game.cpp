@@ -199,7 +199,7 @@ void Game::animate() {
 }
 
 void Game::draw() {
-	// Clean screen
+	// Clear screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	
@@ -209,6 +209,7 @@ void Game::draw() {
 	// Draw the map
 	map->draw();
 	
+	// HUD render
 	glPushMatrix();
 	glLoadIdentity();
 	glMatrixMode(GL_PROJECTION);
