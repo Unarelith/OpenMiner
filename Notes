@@ -1,2 +1,19 @@
-Bug when adding cubes from a chunk to the border of another one.
-Chunks in diagonal will not be tested for cube selection.
+Issues:
+	Bug when adding cubes from a chunk to the border of another one.
+	Chunks in diagonal will not be tested for cube selection.
+	Grass on all dirt cubes
+
+Cubes:
+	0: Nothing
+	1: Stone
+	2: Dirt
+	3: Dirt with grass
+	4: Grass
+
+Faces:
+	0: FL
+	1: FR
+	2: BL
+	3: BR
+	4: Bottom
+	5: Top

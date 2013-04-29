@@ -168,8 +168,20 @@ Cube* Chunk::getCube(int x, int y, int z) {
 	else return cube;
 }
 
-float getTexOffsetU(int type) {
-	return (type - 1) * 0.125;
+float getTexOffsetU(int type, int i = -1, Cube *cube = NULL) {
+	if(i == -1) return (type - 1) * 0.125;
+	else if(type == 2) {
+		if((i == 0) || (i == 1) || (i == 2) || (i == 3)) {
+			return type * 0.125;
+		}
+		else if(i == 4) {
+			return (type + 1) * 0.125;
+		} else {
+			return (type - 1) * 0.125;
+		}
+	}
+	
+	return 0.0;
 }
 
 float getTexOffsetV(int type) {
@@ -246,7 +258,7 @@ void Chunk::refreshVBO() {
 					vertices.push_back(x + cubeCoords[(i * 12) + (j * 3)]);
 					vertices.push_back(y + cubeCoords[(i * 12) + (j * 3) + 1]);
 					vertices.push_back(z + cubeCoords[(i * 12) + (j * 3) + 2]);
-					texCoords.push_back(getTexOffsetU(qe->type()) + (cubeCoords[48 + (j * 3)] * 0.125));
+					texCoords.push_back(getTexOffsetU(qe->type(), i) + (cubeCoords[48 + (j * 3)] * 0.125));
 					texCoords.push_back(getTexOffsetV(qe->type()) + (cubeCoords[48 + (j * 3) + 1] * 0.125));
 					colors.push_back(grey[i]);
 					colors.push_back(grey[i]);
