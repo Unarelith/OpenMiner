@@ -180,7 +180,7 @@ void Game::animate() {
 	}
 	
 	if(movement) {
-		#define MOVEMENT_SPEED (2.0f)
+		#define MOVEMENT_SPEED (3.0f)
 		
 		float distance = 20 * MOVEMENT_SPEED / 1000.0f;
 		

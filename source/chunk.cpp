@@ -168,23 +168,34 @@ Cube* Chunk::getCube(int x, int y, int z) {
 	else return cube;
 }
 
-float getTexOffsetU(int type, int i = -1, Cube *cube = NULL) {
-	if(i == -1) return (type - 1) * 0.125;
-	else if(type == 2) {
-		if((i == 0) || (i == 1) || (i == 2) || (i == 3)) {
-			return type * 0.125;
+float Chunk::getTexOffsetU(int type, int i, Cube *cube) {
+	if((type == 2) && (cube != NULL)) {
+		Cube *higherCube = NULL;
+		
+		// Little bug with this way: Dirt blocks at chunk borders are grassed too...
+		if(cube->z() < m_z + CHUNK_HEIGHT - 1) higherCube = getCube(cube->x() - m_x, cube->y() - m_y, cube->z() - m_z + 1);
+		else {
+			if(m_surroundingChunks[4] != NULL) higherCube = m_surroundingChunks[4]->getCube(cube->x() - m_x, cube->y() - m_y, 0);
 		}
-		else if(i == 4) {
-			return (type + 1) * 0.125;
+		
+		if((higherCube == NULL) || (higherCube->type() == 0)) {
+			if((i == 0) || (i == 1) || (i == 2) || (i == 3)) {
+				return type * 0.125;
+			}
+			else if(i == 4) {
+				return (type + 1) * 0.125;
+			} else {
+				return (type - 1) * 0.125;
+			}
 		} else {
 			return (type - 1) * 0.125;
 		}
+	} else {
+		return (type - 1) * 0.125;
 	}
-	
-	return 0.0;
 }
 
-float getTexOffsetV(int type) {
+float Chunk::getTexOffsetV(int type) {
 	if(type > 8) {
 		type <<= 3; // Here 8 ( remember x * 8 == x << 3 ) is the texture image width
 		return 1 - type * 0.125;
@@ -258,7 +269,7 @@ void Chunk::refreshVBO() {
 					vertices.push_back(x + cubeCoords[(i * 12) + (j * 3)]);
 					vertices.push_back(y + cubeCoords[(i * 12) + (j * 3) + 1]);
 					vertices.push_back(z + cubeCoords[(i * 12) + (j * 3) + 2]);
-					texCoords.push_back(getTexOffsetU(qe->type(), i) + (cubeCoords[48 + (j * 3)] * 0.125));
+					texCoords.push_back(getTexOffsetU(qe->type(), i, qe) + (cubeCoords[48 + (j * 3)] * 0.125));
 					texCoords.push_back(getTexOffsetV(qe->type()) + (cubeCoords[48 + (j * 3) + 1] * 0.125));
 					colors.push_back(grey[i]);
 					colors.push_back(grey[i]);

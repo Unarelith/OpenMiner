@@ -56,6 +56,9 @@ class Chunk {
 		GLuint m_vboTexCoords;
 		GLuint m_vboColors;
 		int m_vboVertexCount;
+		
+		float getTexOffsetU(int type, int i = -1, Cube *cube = NULL);
+		float getTexOffsetV(int type);
 };
 
 #endif // CHUNK_H

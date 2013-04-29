@@ -1,7 +1,6 @@
 Issues:
-	Bug when adding cubes from a chunk to the border of another one.
-	Chunks in diagonal will not be tested for cube selection.
-	Grass on all dirt cubes
+	- Bug when adding cubes from a chunk to the border of another one.
+	- Chunks in diagonal will not be tested for cube selection.
 
 Cubes:
 	0: Nothing
