@@ -28,8 +28,6 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include "sdlglutils.h"
-
 #include "init.h"
 #include "config.h"
 #include "types.h"
@@ -51,18 +49,10 @@ unsigned int Game::mapHeight = 8 << 3;
 Game::Game() {
 	player = new Player(2, 2, 48, 90);
 	
-	loadTextures();
-	
-	map = new Map(mapWidth, mapDepth, mapHeight, m_textures);
+	map = new Map(mapWidth, mapDepth, mapHeight);
 }
 
 Game::~Game() {
-	// Deleting loaded textures
-	for(Textures::iterator element = m_textures.begin() ; element != m_textures.end() ; element++) {
-		glDeleteTextures(1, &element->second);
-		element->second = 0;
-	}
-	
 	delete map;
 	delete player;
 }
@@ -206,8 +196,8 @@ void Game::draw() {
 	// Put camera
 	player->watch();
 	
-	// Draw the map
-	map->draw();
+	// Display the map
+	map->render();
 	
 	// HUD render
 	glPushMatrix();
@@ -239,16 +229,6 @@ void Game::draw() {
 	
 	glFlush();
 	SDL_GL_SwapBuffers();
-}
-
-void Game::loadTextures() {
-	// Load textures
-	m_textures["dirt"] = loadTexture("textures/dirt.bmp");
-	m_textures["grass"] = loadTexture("textures/grass.bmp");
-	m_textures["cobblestone"] = loadTexture("textures/cobblestone.bmp");
-	m_textures["stone"] = loadTexture("textures/stone.bmp");
-	m_textures["bedrock"] = loadTexture("textures/bedrock.bmp");
-	m_textures["textures"] = loadTexture("textures/textures.bmp");
 }
 
 void Game::lockMouse() {

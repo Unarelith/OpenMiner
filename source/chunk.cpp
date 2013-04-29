@@ -36,7 +36,7 @@
 
 using namespace std;
 
-Chunk::Chunk(int x, int y, int z, Textures textures) {
+Chunk::Chunk(int x, int y, int z) {
 	srand(time(NULL));
 	
 	m_x = x;
@@ -97,6 +97,11 @@ void Chunk::addCube(Cube *selectedCube, int type) {
 	int x = selectedCube->x();
 	int y = selectedCube->y();
 	int z = selectedCube->z();
+	
+	/*if(x == 0) {
+		m_surroundingChunks[0]->addCube(m_surroundingChunks[0]->getCube(CHUNK_WIDTH - 1, y, z), type);
+		return;
+	}*/
 	
 	if((selectedCube == NULL) || (selectedCube->selectedFace() == -1)) {
 		m_cubes[CUBE_POS(x, y, z)] = selectedCube;

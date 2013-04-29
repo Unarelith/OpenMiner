@@ -16,7 +16,7 @@ KubKraft=/home/quentin/Bureau/KubKraft CD=. filter=".gitignore *.c *.h *.diff *.
   init.h
   map.h
   player.h
-  sdlglutils.h
+  texutils.h
   types.h
  }
  source=source {
@@ -28,6 +28,6 @@ KubKraft=/home/quentin/Bureau/KubKraft CD=. filter=".gitignore *.c *.h *.diff *.
   main.cpp
   map.cpp
   player.cpp
-  sdlglutils.cpp
+  texutils.cpp
  }
 }

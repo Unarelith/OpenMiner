@@ -65,7 +65,7 @@ void initOpenGL() {
 	glLoadIdentity();
 	
 	// Visible area definition
-	gluPerspective(VISION_ANGLE, (GLdouble)WIN_WIDTH / (GLdouble)WIN_HEIGHT, NEAR, FAR);
+	gluPerspective(WIN_FOV, (GLdouble)WIN_WIDTH / (GLdouble)WIN_HEIGHT, DIST_NEAR, DIST_FAR);
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

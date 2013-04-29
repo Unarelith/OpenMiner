@@ -25,8 +25,9 @@
 #include <cmath>
 
 #include <SDL/SDL.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <GL/glew.h>
+
+#include <png.h>
 
 #include "types.h"
 #include "config.h"
@@ -37,6 +38,7 @@
 #include "game.h"
 
 #include "genutils.h"
+#include "texutils.h"
 
 using namespace std;
 
@@ -44,12 +46,13 @@ Chunk *Map::currentChunk = NULL;
 Chunk *Map::selectedChunk = NULL;
 Cube *Map::selectedCube = NULL;
 
-Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
+Map::Map(u16 width, u16 depth, u16 height) {
 	m_width = width;
 	m_depth = depth;
 	m_height = height;
 	
-	m_textures = textures;
+	glGenTextures(1, &m_texture);
+	m_texture = loadPngTexture("textures/blocks.png");
 	
 	m_map = (u16*)malloc(m_width * m_depth * m_height * sizeof(u16));
 	
@@ -92,7 +95,7 @@ Map::Map(u16 width, u16 depth, u16 height, Textures textures) {
 	for(u16 z = 0 ; z < m_height >> 3 ; z++) {
 		for(u16 y = 0 ; y < m_depth >> 3 ; y++) {
 			for(u16 x = 0 ; x < m_width >> 3 ; x++) {
-				m_chunks[CHUNK_POS(x, y, z)] = new Chunk(x << 3, y << 3, z << 3, m_textures);
+				m_chunks[CHUNK_POS(x, y, z)] = new Chunk(x << 3, y << 3, z << 3);
 			}
 		}
 	}
@@ -146,9 +149,11 @@ Map::~Map() {
 	}
 	
 	delete[] m_chunks;
+	
+	glDeleteTextures(1, &m_texture);
 }
 
-void Map::draw() {
+void Map::render() {
 	glColor3ub(0, 0, 0);
 	glBegin(GL_QUADS);
 		glVertex3f(0, 0, -0.01);
@@ -158,7 +163,7 @@ void Map::draw() {
 	glEnd();
 	glColor3ub(255, 255, 255);
 	
-	glBindTexture(GL_TEXTURE_2D, m_textures["textures"]);
+	glBindTexture(GL_TEXTURE_2D, m_texture);
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -223,7 +228,7 @@ void Map::draw() {
 }
 
 Chunk *Map::findNearestChunk(float x, float y, float z) {
-	float distance = FAR;
+	float distance = DIST_FAR;
 	Chunk *chunk = NULL;
 	
 	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
@@ -291,7 +296,7 @@ bool Map::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigP
 	vect3D normal;
 	
 	float k = 0;
-	float smallestK = FAR;
+	float smallestK = DIST_FAR;
 	s8 nearestFace = -1;
 	bool result = false;
 	
@@ -407,7 +412,7 @@ void Map::testCubes() {
 	directionVector.y = Game::player->pointTargetedy() - Game::player->y();
 	directionVector.z = Game::player->pointTargetedz() - Game::player->z();
 	
-	float distance = FAR;
+	float distance = DIST_FAR;
 	Cube *cube = NULL;
 	int face = -1;
 	Chunk *chunk = NULL;

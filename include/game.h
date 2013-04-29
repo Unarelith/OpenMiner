@@ -31,8 +31,6 @@ class Game {
 		void animate();
 		void draw();
 		
-		void loadTextures();
-		
 		void lockMouse();
 		void unlockMouse();
 		
@@ -46,8 +44,6 @@ class Game {
 	private:
 		bool m_cont;
 		bool m_paused;
-		
-		Textures m_textures;
 };
 
 #endif // SCENE_H

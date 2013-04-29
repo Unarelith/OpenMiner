@@ -33,10 +33,10 @@ typedef struct {
 
 class Map {
 	public:
-		Map(u16 width, u16 depth, u16 height, Textures textures);
+		Map(u16 width, u16 depth, u16 height);
 		~Map();
 		
-		void draw();
+		void render();
 		
 		Chunk *findNearestChunk(float x, float y, float z);
 		
@@ -61,7 +61,7 @@ class Map {
 		u16 m_height;
 		u16 m_depth;
 		
-		Textures m_textures;
+		GLuint m_texture;
 		
 		u16 *m_map;
 		

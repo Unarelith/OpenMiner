@@ -20,15 +20,14 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define WIN_WIDTH 640
-#define WIN_HEIGHT 480
+#define WIN_WIDTH 800
+#define WIN_HEIGHT 600
+#define WIN_FOV 80
 
 #define APP_LABEL "KubKraft"
 
-#define NEAR 0.1
-#define FAR 1000.0
-
-#define VISION_ANGLE 70.0
+#define DIST_NEAR 0.1
+#define DIST_FAR 1000.
 
 #define CHUNK_WIDTH 8
 #define CHUNK_DEPTH 8

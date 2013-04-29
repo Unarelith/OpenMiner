@@ -22,7 +22,7 @@
 
 class Chunk {
 	public:
-		Chunk(int x, int y, int z, Textures textures);
+		Chunk(int x, int y, int z);
 		~Chunk();
 		
 		void setSurroundingChunk(unsigned char face, Chunk* chunk);
