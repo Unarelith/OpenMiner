@@ -49,8 +49,9 @@ int main(int argc, char *argv[]) {
 	}
 	
 	// Game execution
-	Game game = Game();
-	game.exec();
+	Game *game = new Game();
+	game->exec();
+	delete game;
 	
 	// Stop SDL
 	SDL_Quit();

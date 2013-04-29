@@ -172,7 +172,6 @@ float Chunk::getTexOffsetU(int type, int i, Cube *cube) {
 	if((type == 2) && (cube != NULL)) {
 		Cube *higherCube = NULL;
 		
-		// Little bug with this way: Dirt blocks at chunk borders are grassed too...
 		if(cube->z() < m_z + CHUNK_HEIGHT - 1) higherCube = getCube(cube->x() - m_x, cube->y() - m_y, cube->z() - m_z + 1);
 		else {
 			if(m_surroundingChunks[4] != NULL) higherCube = m_surroundingChunks[4]->getCube(cube->x() - m_x, cube->y() - m_y, 0);
