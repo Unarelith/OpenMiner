@@ -1,6 +1,14 @@
 Issues:
-	- Bug when adding cubes from a chunk to the border of another one.
-	- Chunks in diagonal will not be tested for cube selection.
+	1:  io  Bug when adding cubes from a chunk to the border of another one.
+	2:  ix  Chunks in diagonal will not be tested for cube selection.
+	3: nixs Sometimes, the distance for cube selection is too limited.
+
+Legend for issues:
+	n: New
+	i: Important
+	o: Fixed
+	x: Not fixed
+	s: With screenshot
 
 Cubes:
 	0: Nothing
@@ -10,6 +18,14 @@ Cubes:
 	4: Grass
 
 Faces:
+	0: y + 1 | 
+	1: x + 1 | 
+	2: x - 1 | 
+	3: y - 1 | 
+	4: z + 1 | Top
+	5: z - 1 | Bottom
+
+SurroundingChunks:
 	0: FL
 	1: FR
 	2: BL

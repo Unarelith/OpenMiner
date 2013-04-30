@@ -98,49 +98,50 @@ void Chunk::addCube(Cube *selectedCube, int type) {
 	int y = selectedCube->y();
 	int z = selectedCube->z();
 	
-	/*if(x == 0) {
-		m_surroundingChunks[0]->addCube(m_surroundingChunks[0]->getCube(CHUNK_WIDTH - 1, y, z), type);
-		return;
-	}*/
-	
-	if((selectedCube == NULL) || (selectedCube->selectedFace() == -1)) {
+	if(selectedCube->selectedFace() == -1) {
 		m_cubes[CUBE_POS(x, y, z)] = selectedCube;
 		return;
 	}
 	else if(selectedCube->selectedFace() == 0) {
 		if((MAP_POS(x, y + 1, z) >= 0) && (MAP_POS(x, y + 1, z) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(x, y + 1, z)] = type;
-			m_cubes[CUBE_POS(x, y + 1, z)] = new Cube(x, y + 1, z, type);
+			if(y + 1 - m_y < CHUNK_DEPTH) m_cubes[CUBE_POS(x, y + 1, z)] = new Cube(x, y + 1, z, type);
+			else if(m_surroundingChunks[3] != NULL) m_surroundingChunks[3]->putCube(x, y + 1, z, type);
 		}
 	}
 	else if(selectedCube->selectedFace() == 1) {
 		if((MAP_POS(x + 1, y, z) >= 0) && (MAP_POS(x + 1, y, z) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(x + 1, y, z)] = type;
-			m_cubes[CUBE_POS(x + 1, y, z)] = new Cube(x + 1, y, z, type);
+			if(x + 1 - m_x < CHUNK_WIDTH) m_cubes[CUBE_POS(x + 1, y, z)] = new Cube(x + 1, y, z, type);
+			else if(m_surroundingChunks[1] != NULL) m_surroundingChunks[1]->putCube(x + 1, y, z, type);
 		}
 	}
 	else if(selectedCube->selectedFace() == 2) {
 		if((MAP_POS(x - 1, y, z) >= 0) && (MAP_POS(x - 1, y, z) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(x - 1, y, z)] = type;
-			m_cubes[CUBE_POS(x - 1, y, z)] = new Cube(x - 1, y, z, type);
+			if(x - 1 - m_x >= 0) m_cubes[CUBE_POS(x - 1, y, z)] = new Cube(x - 1, y, z, type);
+			else if(m_surroundingChunks[0] != NULL) m_surroundingChunks[0]->putCube(x - 1, y, z, type);
 		}
 	}
 	else if(selectedCube->selectedFace() == 3) {
 		if((MAP_POS(x, y - 1, z) >= 0) && (MAP_POS(x, y - 1, z) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(x, y - 1, z)] = type;
-			m_cubes[CUBE_POS(x, y - 1, z)] = new Cube(x, y - 1, z, type);
+			if(y - 1 - m_y >= 0) m_cubes[CUBE_POS(x, y - 1, z)] = new Cube(x, y - 1, z, type);
+			else if(m_surroundingChunks[2] != NULL) m_surroundingChunks[2]->putCube(x, y - 1, z, type);
 		}
 	}
 	else if(selectedCube->selectedFace() == 4) {
 		if((MAP_POS(x, y, z + 1) >= 0) && (MAP_POS(x, y, z + 1) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(x, y, z + 1)] = type;
-			m_cubes[CUBE_POS(x, y, z + 1)] = new Cube(x, y, z + 1, type);
+			if(z + 1 - m_z < CHUNK_HEIGHT) m_cubes[CUBE_POS(x, y, z + 1)] = new Cube(x, y, z + 1, type);
+			else if(m_surroundingChunks[4] != NULL) m_surroundingChunks[4]->putCube(x, y, z + 1, type);
 		}
 	}
 	else if(selectedCube->selectedFace() == 5) {
 		if((MAP_POS(x, y, z - 1) >= 0) && (MAP_POS(x, y, z - 1) < Game::map->width() * Game::map->depth() * Game::map->height())) {
 			Game::map->map()[MAP_POS(x, y, z - 1)] = type;
-			m_cubes[CUBE_POS(x, y, z - 1)] = new Cube(x, y, z - 1, type);
+			if(z - 1 - m_z >= 0) m_cubes[CUBE_POS(x, y, z - 1)] = new Cube(x, y, z - 1, type);
+			else if(m_surroundingChunks[5] != NULL) m_surroundingChunks[5]->putCube(x, y, z - 1, type);
 		}
 	}
 	
