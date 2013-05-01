@@ -39,7 +39,7 @@ class Chunk {
 		int z() const { return m_z; }
 		
 		void putCube(int x, int y, int z, int type) { m_cubes[CUBE_POS(x, y, z)] = new Cube(x, y, z, type); }
-		std::unordered_map<int, Cube*> cubes() const { return m_cubes; }
+		std::unordered_map<int, Cube*> *cubes() { return &m_cubes; }
 		
 		Chunk **surroundingChunks() const { return m_surroundingChunks; }
 		

@@ -249,6 +249,16 @@ Chunk *Map::findNearestChunk(float x, float y, float z) {
 	return chunk;
 }
 
+Chunk* Map::getChunk(int x, int y, int z) {
+	if ((x < 0) || (x >= m_width) || (y < 0) || (y >= m_depth) || (z < 0) || (z >= m_height)) {
+		return NULL;
+	}
+	
+	int coords = x + (y * m_width) + (z * m_width * m_depth);
+	
+	return m_chunks[coords];
+}
+
 bool Map::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector, float *distance) {
 	float p1 = directionVector.x * normal.x + directionVector.y * normal.y + directionVector.z * normal.z; // First point to be tested
 	
@@ -416,15 +426,59 @@ void Map::testCubes() {
 	Cube *cube = NULL;
 	int face = -1;
 	Chunk *chunk = NULL;
-	unordered_map<int, Cube*> cubes;
-	for(unsigned short i = 0 ; i < 7 ; i++) {
+	Chunk *c = NULL;
+	unordered_map<int, Cube*> *cubes;
+	for(unsigned short i = 0 ; i < 7 + 20 ; i++) {
 		if(i == 6) cubes = currentChunk->cubes();
-		else {
+		else if(i < 6){
 			if(currentChunk->surroundingChunks()[i] == NULL) continue;
 			cubes = currentChunk->surroundingChunks()[i]->cubes();
+			std::cout << "w";
+		} else {
+			int coords[20 * 3] = {
+				// x + 1	// x - 1
+				1, 0, 1,	-1, 0, 1,	
+				1, 1, 0,	-1, 1, 0,
+				1, -1, 0,	-1, -1, 0,
+				1, 1, 1,	-1, 1, 1,	
+				1, -1, 1,	-1, -1, 1,
+				1, 0, -1,	-1, 0, -1,
+				1, 1, -1,	-1, 1, -1,
+				1, -1, -1,	-1, -1, -1,
+				
+				// y + 1	// y - 1
+//				-1, 1, 1,	-1, -1, 1,
+				0, 1, 1,	0, -1, 1,
+//				1, 1, 1,	1, -1, 1,
+//				-1, 1, 0,	-1, -1, 0,
+//				1, 1, 0,	1, -1, 0,
+//				-1, 1, -1,	-1, -1, -1,
+				0, 1, -1,	0, -1, -1
+//				1, 1, -1,	1, -1, -1,
+				
+				// z + 1	// z - 1
+//				-1, 1, 1,	-1, 1, -1,
+//				0, 1, 1,	0, 1, -1,
+//				1, 1, 1,	1, 1, -1,
+//				-1, 0, 1,	-1, 0, -1,
+//				1, 0, 1,	1, 0, -1,
+//				-1, -1, 1,	-1, -1, -1,
+//				0, -1, 1,	0, -1, -1,
+//				1, -1, 1,	1, -1, -1,
+			};
+			
+			c = getChunk(currentChunk->x() + coords[(i-7)*3],
+						 currentChunk->y() + coords[(i-7)*3 + 1],
+						 currentChunk->z() + coords[(i-7)*3 + 2]);
+			if(c == NULL) continue;
+			cubes = c->cubes();
+			std::cout << "v";
 		}
 		
-		for(std::unordered_map<int, Cube*>::iterator it = cubes.begin() ; it != cubes.end() ; it++) {
+		std::cout << "/";
+		
+		for(std::unordered_map<int, Cube*>::iterator it = cubes->begin() ; it != cubes->end() ; it++) {
+			std::cout << "a";
 			if(it->second == NULL) continue;
 			
 			it->second->setSelected(false, -1);
@@ -439,9 +493,12 @@ void Map::testCubes() {
 				cube = it->second;
 				face = f;
 				if(i == 6) chunk = currentChunk;
-				else chunk = currentChunk->surroundingChunks()[i];
+				else if(i < 6) chunk = currentChunk->surroundingChunks()[i];
+				else if(c != NULL) chunk = c;
 			}
 		}
+		
+		std::cout << "*" << std::endl;
 	}
 	
 	if(cube != NULL) {

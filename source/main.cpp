@@ -27,6 +27,7 @@
 #include <SDL/SDL.h>
 #include <GL/glew.h>
 
+#include "config.h"
 #include "types.h"
 #include "init.h"
 #include "cube.h"

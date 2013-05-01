@@ -34,6 +34,7 @@ class Map {
 		void render();
 		
 		Chunk *findNearestChunk(float x, float y, float z);
+		Chunk *getChunk(int x, int y, int z);
 		
 		bool intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector, float *distance);
 		bool intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector, float *distance, s8 *face);
@@ -45,7 +46,7 @@ class Map {
 		
 		u16 *map() const { return m_map; }
 		
-		Chunk** chunks() const { return m_chunks; }
+		Chunk **chunks() const { return m_chunks; }
 		
 		static Chunk *currentChunk;
 		static Chunk *selectedChunk;
