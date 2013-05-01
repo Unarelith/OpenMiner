@@ -1,7 +1,7 @@
 Issues:
 	1:  io  Bug when adding cubes from a chunk to the border of another one.
-	2:  ix  Chunks in diagonal will not be tested for cube selection.
-	3: nixs Sometimes, the distance for cube selection is too limited.
+	2:  io  Chunks in diagonal will not be tested for cube selection.
+	3: nios Sometimes, the distance for cube selection is too limited.
 			Steps to reproduce: Place yourself at the border of a chunk after adding a cube on the other chunk. Try to delete this cube.
 
 Legend for issues:

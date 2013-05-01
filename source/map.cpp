@@ -174,7 +174,7 @@ void Map::render() {
 	
 	currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
 	
-	uint32_t time = SDL_GetTicks();
+	//uint32_t time = SDL_GetTicks();
 	
 	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
 		glPushMatrix();
@@ -183,8 +183,8 @@ void Map::render() {
 		glPopMatrix();
 	}
 	
-	time = SDL_GetTicks() - time;
-	cout << "Render time: " << time << " ms" << endl;
+	//time = SDL_GetTicks() - time;
+	//cout << "Render time: " << time << " ms" << endl;
 	
 	testCubes();
 	
@@ -264,7 +264,6 @@ bool Map::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOri
 	
 	if(p1 == 0) return false; // Degenerate case
 	
-	// planePoint - lineOrigPoint
 	vect3D u = vect3D(planePoint.x - lineOrigPoint.x,
 					  planePoint.y - lineOrigPoint.y,
 					  planePoint.z - lineOrigPoint.z);
@@ -352,13 +351,13 @@ void Map::testCubes() {
 	Chunk *chunk = NULL;
 	Chunk *c = NULL;
 	unordered_map<int, Cube*> *cubes;
-	for(unsigned short i = 0 ; i < 7 ; i++) {
+	for(unsigned short i = 0 ; i < 7 + 20 ; i++) {
 		if(i == 6) cubes = currentChunk->cubes();
 		else if(i < 6) {
 			if(currentChunk->surroundingChunks()[i] == NULL) continue;
 			cubes = currentChunk->surroundingChunks()[i]->cubes();
 		} else {
-			/*int coords[20 * 3] = {
+			int coords[20 * 3] = {
 				1, 0, 1,	-1, 0, 1,	
 				1, 1, 0,	-1, 1, 0,
 				1, -1, 0,	-1, -1, 0,
@@ -371,21 +370,13 @@ void Map::testCubes() {
 				0, 1, -1,	0, -1, -1
 			};
 			
-			c = getChunk(currentChunk->x() + coords[(i-7)*3],
-						 currentChunk->y() + coords[(i-7)*3 + 1],
-						 currentChunk->z() + coords[(i-7)*3 + 2]);
+			c = getChunk((currentChunk->x() >> 3) + coords[(i-7)*3],
+						 (currentChunk->y() >> 3) + coords[(i-7)*3 + 1],
+						 (currentChunk->z() >> 3) + coords[(i-7)*3 + 2]);
 			
 			if(c == NULL) continue;
 			
-			float d = -1;
-			s8 f = -1;
-			
-			bool result = intersectionLineCube(c->x() + CHUNK_WIDTH / 2, c->y() + CHUNK_DEPTH / 2, c->z() + CHUNK_HEIGHT / 2, linePoint, directionVector, &d, &f);
-			
-			if(!result || (d >= distance) || (d >= 5)) continue;
-			
-			cubes = c->cubes();*/
-			continue;
+			cubes = c->cubes();
 		}
 		
 		for(std::unordered_map<int, Cube*>::iterator it = cubes->begin() ; it != cubes->end() ; it++) {
