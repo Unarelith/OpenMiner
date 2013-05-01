@@ -144,7 +144,6 @@ void Game::animate() {
 		
 		if(keys[SDLK_q]) direction = 45.0;
 		else if(keys[SDLK_d]) direction = -45.0;
-		
 		else direction = 0.0;
 	}
 	
@@ -154,7 +153,6 @@ void Game::animate() {
 		
 		if(keys[SDLK_q]) direction = 135.0;
 		else if(keys[SDLK_d]) direction = -135.0;
-		
 		else direction = 180.0;
 	}
 	
@@ -179,9 +177,14 @@ void Game::animate() {
 		player->land();
 	}
 	
+	if(!player->isJumping() && keys[SDLK_j]) {
+		player->setJumpSpeed(JUMP_SPEED);
+		player->setJumping(true);
+	}
+	
+	player->jump();
+	
 	if(movement) {
-		#define MOVEMENT_SPEED (3.0f)
-		
 		float distance = 20 * MOVEMENT_SPEED / 1000.0f;
 		
 		player->move(distance, direction);

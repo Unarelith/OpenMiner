@@ -20,3 +20,7 @@ SurroundingChunks:
 	3: BR
 	4: Bottom
 	5: Top
+
+Tiles informations:
+	0: Passable
+	1: Non passable

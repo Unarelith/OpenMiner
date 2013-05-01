@@ -26,8 +26,9 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include "init.h"
+#include "config.h"
 #include "types.h"
+#include "mapManager.h"
 #include "player.h"
 
 using namespace std;
@@ -36,47 +37,73 @@ Player::Player(float x, float y, float z, float angle) {
 	m_x = x;
 	m_y = y;
 	
-	m_eyeheight = 0.8 + z;
+	m_eyeheight = PLAYER_HEIGHT - 1 + z;
 	
 	m_angleH = angle;
-	m_angleV = 0.0f;
+	m_angleV = 0.0;
+	
+	m_jumpSpeed = 0.0;
+	m_isJumping = false;
 }
 
 void Player::move(float distance, float direction) {
 	direction += m_angleH;
 	
-	m_y += distance * sin(direction * M_PI / 180.0);
-	m_x += distance * cos(direction * M_PI / 180.0);
+	float vx = distance * cos(direction * M_PI / 180.0);
+	if((passable(m_x + ((vx > 0) ? vx + 0.2 : vx - 0.2) , m_y, m_eyeheight)) &&
+	   (passable(m_x + ((vx > 0) ? vx + 0.2 : vx - 0.2) , m_y, m_eyeheight - 1.0))) {
+		m_x += vx;
+	}
+	
+	float vy = distance * sin(direction * M_PI / 180.0);
+	if((passable(m_x, m_y + ((vy > 0) ? vy + 0.2 : vy - 0.2), m_eyeheight)) &&
+	   (passable(m_x, m_y + ((vy > 0) ? vy + 0.2 : vy - 0.2), m_eyeheight - 1.0))) {
+		m_y += vy;
+	}
+}
+
+void Player::jump() {
+	if(m_isJumping) {
+		m_eyeheight += m_jumpSpeed;
+		
+		if((m_jumpSpeed < 0) && (!passable(m_x, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed - 0.2))) {
+			m_jumpSpeed = 0.0;
+			m_isJumping = false;
+			return;
+		}
+		
+		m_jumpSpeed -= GRAVITY;
+	}
 }
 
 void Player::turnH(float angle) {
 	m_angleH += angle;
 	
-	while(m_angleH >= 180.0f) {
-		m_angleH -= 360.0f;
+	while(m_angleH >= 180.0) {
+		m_angleH -= 360.0;
 	}
-	while(m_angleH < -180.0f) {
-		m_angleH += 360.0f;
+	while(m_angleH < -180.0) {
+		m_angleH += 360.0;
 	}
 }
 
 void Player::turnV(float angle) {
 	m_angleV += angle;
 	
-	if(89.9f < m_angleV) {
-		m_angleV = 89.9f;
+	if(89.9 < m_angleV) {
+		m_angleV = 89.9;
 	}
-	else if(-89.9f > m_angleV) {
-		m_angleV = -89.9f;
+	else if(-89.9 > m_angleV) {
+		m_angleV = -89.9;
 	}
 }
 
 void Player::fly() {
-	if(m_eyeheight < 256) m_eyeheight += 0.05;
+	if(m_eyeheight < 256) m_eyeheight += FLY_SPEED;
 }
 
 void Player::land() {
-	/*if(m_eyeheight > 0.8)*/ m_eyeheight -= 0.05;
+	m_eyeheight -= FLY_SPEED;
 }
 
 void Player::watch() {

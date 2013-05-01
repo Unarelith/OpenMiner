@@ -17,31 +17,43 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
 ---------------------------------------------------------------------------------*/
-#ifndef CONFIG_H
-#define CONFIG_H
+#include <iostream>
+#include <map>
+#include <unordered_map>
+#include <cmath>
 
-#define WIN_WIDTH 800
-#define WIN_HEIGHT 600
-#define WIN_FOV 80
+#include <GL/gl.h>
+#include <GL/glu.h>
 
-#define APP_LABEL "KubKraft"
+#include "config.h"
+#include "types.h"
+#include "cube.h"
+#include "chunk.h"
+#include "map.h"
+#include "player.h"
+#include "game.h"
+#include "mapManager.h"
 
-#define DIST_NEAR 0.1
-#define DIST_FAR 1000.
+u16 nonPassableTiles[2] {
+	1, 2
+};
 
-#define CHUNK_WIDTH 8
-#define CHUNK_DEPTH 8
-#define CHUNK_HEIGHT 8
+bool inTable(u16 t[], u16 n) {
+	int i = 0;
+	while(t[i]) {
+		if(t[i] == n) {
+			return true;
+		}
+		i++;
+	}
+	return false;
+}
 
-#define MAP_POS(x, y, z) ((x) + ((y) * Game::mapWidth) + ((z) * Game::mapWidth * Game::mapDepth))
-#define _MAP_POS(x, y, z) ((x) + ((y) * m_width) + ((z) * m_width * m_depth))
-#define CHUNK_POS(x, y, z) ((x) + ((y) * (m_width >> 3)) + ((z) * (m_width >> 3) * (m_depth >> 3)))
-#define CUBE_POS(x, y, z) (((x) - m_x) + (((y) - m_y) * CHUNK_WIDTH) + (((z) - m_z) * CHUNK_WIDTH * CHUNK_HEIGHT))
+bool passable(s16 caseX, s16 caseY, s16 caseZ) {
+	if(inTable(nonPassableTiles, Game::map->map()[MAP_POS(caseX, caseY, caseZ)])) {
+		return false;
+	} else {
+		return true;
+	}
+}
 
-#define PLAYER_HEIGHT 1.8
-#define MOVEMENT_SPEED 3.0
-#define FLY_SPEED 0.05
-#define JUMP_SPEED 0.2
-#define GRAVITY 0.025
-
-#endif // CONFIG_H
