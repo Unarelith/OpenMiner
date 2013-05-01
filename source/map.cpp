@@ -184,7 +184,7 @@ void Map::render() {
 	}
 	
 	time = SDL_GetTicks() - time;
-	//cout << "Render time: " << time << " ms" << endl;
+	cout << "Render time: " << time << " ms" << endl;
 	
 	testCubes();
 	
