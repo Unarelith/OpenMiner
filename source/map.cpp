@@ -250,11 +250,11 @@ Chunk *Map::findNearestChunk(float x, float y, float z) {
 }
 
 Chunk* Map::getChunk(int x, int y, int z) {
-	if ((x < 0) || (x >= m_width) || (y < 0) || (y >= m_depth) || (z < 0) || (z >= m_height)) {
+	if ((x < 0) || (x >= m_width >> 3) || (y < 0) || (y >= m_depth >> 3) || (z < 0) || (z >= m_height >> 3)) {
 		return NULL;
 	}
 	
-	int coords = x + (y * m_width) + (z * m_width * m_depth);
+	int coords = x + (y * (m_width >> 3)) + (z * (m_width >> 3) * (m_depth >> 3));
 	
 	return m_chunks[coords];
 }
@@ -264,11 +264,10 @@ bool Map::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOri
 	
 	if(p1 == 0) return false; // Degenerate case
 	
-	vect3D u; // planePoint - lineOrigPoint
-	
-	u.x = planePoint.x - lineOrigPoint.x;
-	u.y = planePoint.y - lineOrigPoint.y;
-	u.z = planePoint.z - lineOrigPoint.z;
+	// planePoint - lineOrigPoint
+	vect3D u = vect3D(planePoint.x - lineOrigPoint.x,
+					  planePoint.y - lineOrigPoint.y,
+					  planePoint.z - lineOrigPoint.z);
 	
 	float p2 = u.x * normal.x + u.y * normal.y + u.z * normal.z; // Second point to be tested
 	
@@ -276,17 +275,14 @@ bool Map::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOri
 	
 	if((k < 0) || (k > 5)) return false;
 	
-	vect3D i; // Intersection point
+	// Intersection point
+	vect3D i = vect3D(lineOrigPoint.x + k * directionVector.x,
+					  lineOrigPoint.y + k * directionVector.y,
+					  lineOrigPoint.z + k * directionVector.z);
 	
-	i.x = lineOrigPoint.x + k * directionVector.x;
-	i.y = lineOrigPoint.y + k * directionVector.y;
-	i.z = lineOrigPoint.z + k * directionVector.z;
-	
-	vect3D v;
-	
-	v.x = i.x - planePoint.x;
-	v.y = i.y - planePoint.y;
-	v.z = i.z - planePoint.z;
+	vect3D v = vect3D(i.x - planePoint.x,
+					  i.y - planePoint.y,
+					  i.z - planePoint.z);
 	
 	float size = 0.5;
 	
@@ -302,125 +298,53 @@ bool Map::intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOri
 // Back right = 2 | Back left = 3
 // Top = 4 | Bottom = 5
 bool Map::intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector, float *distance, s8 *face) {
-	vect3D planePoint;
-	vect3D normal;
+	vect3D planePoint[6] = {
+		vect3D(cubeX + 0.5, cubeY + 1, cubeZ + 0.5), // back
+		vect3D(cubeX + 1, cubeY + 0.5, cubeZ + 0.5), // right
+		vect3D(cubeX, cubeY + 0.5, cubeZ + 0.5), // left
+		vect3D(cubeX + 0.5, cubeY, cubeZ + 0.5), // front
+		vect3D(cubeX + 0.5, cubeY + 0.5, cubeZ + 1), // top
+		vect3D(cubeX + 0.5, cubeY + 0.5, cubeZ) // bottom
+	};
 	
-	float k = 0;
-	float smallestK = DIST_FAR;
-	s8 nearestFace = -1;
-	bool result = false;
+	vect3D normal[6] = {
+		vect3D(0, 1, 0), // back
+		vect3D(1, 0, 0), // right
+		vect3D(-1, 0, 0), // left
+		vect3D(0, -1, 0), // front
+		vect3D(0, 0, 1), // top
+		vect3D(0, 0, -1) // bottom
+	};
 	
-	// Front right	
-	planePoint.x = cubeX + 0.5;
-	planePoint.y = cubeY + 1;
-	planePoint.z = cubeZ + 0.5;
+	float shortestDistance = DIST_FAR;
+	float dist = DIST_FAR + 1.0;
+	int nearestFace = -1;
 	
-	normal.x = 0;
-	normal.y = 1;
-	normal.z = 0;
-	
-	result = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector, &k);
-	if(result && (smallestK > k)) {
-		smallestK = k;
-		nearestFace = 0;
+	for (int i = 0; i < 6; i++) {
+		bool result = intersectionLinePlane(normal[i], planePoint[i], lineOrigPoint, directionVector, &dist);
+		if (result && (dist < shortestDistance)) {
+			shortestDistance = dist;
+			nearestFace = i;
+		}
 	}
 	
-	// Front left
-	planePoint.x = cubeX + 1;
-	planePoint.y = cubeY + 0.5;
-	planePoint.z = cubeZ + 0.5;
-	
-	normal.x = 1;
-	normal.y = 0;
-	normal.z = 0;
-	
-	result = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector, &k);
-	if(result && (smallestK > k)) {
-		smallestK = k;
-		nearestFace = 1;
-	}
-	
-	// Back left
-	planePoint.x = cubeX + 0.5;
-	planePoint.y = cubeY;
-	planePoint.z = cubeZ + 0.5;
-	
-	normal.x = 0;
-	normal.y = -1;
-	normal.z = 0;
-	
-	result = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector, &k);
-	if(result && (smallestK > k)) {
-		smallestK = k;
-		nearestFace = 3;
-	}
-	
-	// Back right
-	planePoint.x = cubeX;
-	planePoint.y = cubeY + 0.5;
-	planePoint.z = cubeZ + 0.5;
-	
-	normal.x = -1;
-	normal.y = 0;
-	normal.z = 0;
-	
-	result = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector, &k);
-	if(result && (smallestK > k)) {
-		smallestK = k;
-		nearestFace = 2;
-	}
-	
-	// Bottom
-	planePoint.x = cubeX + 0.5;
-	planePoint.y = cubeY + 0.5;
-	planePoint.z = cubeZ;
-	
-	normal.x = 0;
-	normal.y = 0;
-	normal.z = -1;
-	
-	result = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector, &k);
-	if(result && (smallestK > k)) {
-		smallestK = k;
-		nearestFace = 5;
-	}
-	
-	// Top
-	planePoint.x = cubeX + 0.5;
-	planePoint.y = cubeY + 0.5;
-	planePoint.z = cubeZ + 1;
-	
-	normal.x = 0;
-	normal.y = 0;
-	normal.z = 1;
-	
-	result = intersectionLinePlane(normal, planePoint, lineOrigPoint, directionVector, &k);
-	if(result && (smallestK > k)) {
-		smallestK = k;
-		nearestFace = 4;
-	}
-	
-	if(nearestFace < 0) {
+	if (nearestFace < 0) {
 		return false;
 	} else {
-		if(distance != NULL) *distance = smallestK;
-		if(face != NULL) *face = nearestFace;
+		if (distance != NULL) *distance = shortestDistance;
+		if (face != NULL) *face = nearestFace;
 		return true;
 	}
 }
 
 void Map::testCubes() {
-	vect3D linePoint;
+	vect3D linePoint = vect3D(Game::player->x(),
+							  Game::player->y(),
+							  Game::player->z());
 	
-	linePoint.x = Game::player->x();
-	linePoint.y = Game::player->y();
-	linePoint.z = Game::player->z();
-	
-	vect3D directionVector;
-	
-	directionVector.x = Game::player->pointTargetedx() - Game::player->x();
-	directionVector.y = Game::player->pointTargetedy() - Game::player->y();
-	directionVector.z = Game::player->pointTargetedz() - Game::player->z();
+	vect3D directionVector = vect3D(Game::player->pointTargetedx() - Game::player->x(),
+									Game::player->pointTargetedy() - Game::player->y(),
+									Game::player->pointTargetedz() - Game::player->z());
 	
 	float distance = DIST_FAR;
 	Cube *cube = NULL;
@@ -428,15 +352,13 @@ void Map::testCubes() {
 	Chunk *chunk = NULL;
 	Chunk *c = NULL;
 	unordered_map<int, Cube*> *cubes;
-	for(unsigned short i = 0 ; i < 7 + 20 ; i++) {
+	for(unsigned short i = 0 ; i < 7 ; i++) {
 		if(i == 6) cubes = currentChunk->cubes();
-		else if(i < 6){
+		else if(i < 6) {
 			if(currentChunk->surroundingChunks()[i] == NULL) continue;
 			cubes = currentChunk->surroundingChunks()[i]->cubes();
-			std::cout << "w";
 		} else {
-			int coords[20 * 3] = {
-				// x + 1	// x - 1
+			/*int coords[20 * 3] = {
 				1, 0, 1,	-1, 0, 1,	
 				1, 1, 0,	-1, 1, 0,
 				1, -1, 0,	-1, -1, 0,
@@ -445,40 +367,28 @@ void Map::testCubes() {
 				1, 0, -1,	-1, 0, -1,
 				1, 1, -1,	-1, 1, -1,
 				1, -1, -1,	-1, -1, -1,
-				
-				// y + 1	// y - 1
-//				-1, 1, 1,	-1, -1, 1,
 				0, 1, 1,	0, -1, 1,
-//				1, 1, 1,	1, -1, 1,
-//				-1, 1, 0,	-1, -1, 0,
-//				1, 1, 0,	1, -1, 0,
-//				-1, 1, -1,	-1, -1, -1,
 				0, 1, -1,	0, -1, -1
-//				1, 1, -1,	1, -1, -1,
-				
-				// z + 1	// z - 1
-//				-1, 1, 1,	-1, 1, -1,
-//				0, 1, 1,	0, 1, -1,
-//				1, 1, 1,	1, 1, -1,
-//				-1, 0, 1,	-1, 0, -1,
-//				1, 0, 1,	1, 0, -1,
-//				-1, -1, 1,	-1, -1, -1,
-//				0, -1, 1,	0, -1, -1,
-//				1, -1, 1,	1, -1, -1,
 			};
 			
 			c = getChunk(currentChunk->x() + coords[(i-7)*3],
 						 currentChunk->y() + coords[(i-7)*3 + 1],
 						 currentChunk->z() + coords[(i-7)*3 + 2]);
+			
 			if(c == NULL) continue;
-			cubes = c->cubes();
-			std::cout << "v";
+			
+			float d = -1;
+			s8 f = -1;
+			
+			bool result = intersectionLineCube(c->x() + CHUNK_WIDTH / 2, c->y() + CHUNK_DEPTH / 2, c->z() + CHUNK_HEIGHT / 2, linePoint, directionVector, &d, &f);
+			
+			if(!result || (d >= distance) || (d >= 5)) continue;
+			
+			cubes = c->cubes();*/
+			continue;
 		}
 		
-		std::cout << "/";
-		
 		for(std::unordered_map<int, Cube*>::iterator it = cubes->begin() ; it != cubes->end() ; it++) {
-			std::cout << "a";
 			if(it->second == NULL) continue;
 			
 			it->second->setSelected(false, -1);
@@ -497,8 +407,6 @@ void Map::testCubes() {
 				else if(c != NULL) chunk = c;
 			}
 		}
-		
-		std::cout << "*" << std::endl;
 	}
 	
 	if(cube != NULL) {

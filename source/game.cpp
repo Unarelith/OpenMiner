@@ -58,7 +58,7 @@ Game::~Game() {
 }
 
 void Game::exec() {
-	//lockMouse();
+	lockMouse();
 	
 	m_cont = true;
 	m_paused = false;
