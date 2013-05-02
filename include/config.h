@@ -41,7 +41,7 @@
 #define PLAYER_HEIGHT 1.8
 #define MOVEMENT_SPEED 3.0
 #define FLY_SPEED 0.05
-#define JUMP_SPEED 0.2
+#define JUMP_SPEED 0.5
 #define GRAVITY 0.025
 
 #endif // CONFIG_H

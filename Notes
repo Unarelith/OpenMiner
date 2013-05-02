@@ -1,3 +1,6 @@
+Bugs:
+	It's possible to put a cube under yourself without jumping.
+
 Cubes:
 	0: Nothing
 	1: Stone

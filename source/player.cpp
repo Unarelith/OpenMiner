@@ -37,7 +37,7 @@ Player::Player(float x, float y, float z, float angle) {
 	m_x = x;
 	m_y = y;
 	
-	m_eyeheight = PLAYER_HEIGHT - 1 + z;
+	m_eyeheight = z + 0.1;
 	
 	m_angleH = angle;
 	m_angleV = 0.0;
@@ -51,29 +51,47 @@ void Player::move(float distance, float direction) {
 	
 	float vx = distance * cos(direction * M_PI / 180.0);
 	if((passable(m_x + ((vx > 0) ? vx + 0.2 : vx - 0.2) , m_y, m_eyeheight)) &&
-	   (passable(m_x + ((vx > 0) ? vx + 0.2 : vx - 0.2) , m_y, m_eyeheight - 1.0))) {
+	   (passable(m_x + ((vx > 0) ? vx + 0.2 : vx - 0.2) , m_y, m_eyeheight - PLAYER_HEIGHT + 0.3))) {
 		m_x += vx;
 	}
 	
 	float vy = distance * sin(direction * M_PI / 180.0);
 	if((passable(m_x, m_y + ((vy > 0) ? vy + 0.2 : vy - 0.2), m_eyeheight)) &&
-	   (passable(m_x, m_y + ((vy > 0) ? vy + 0.2 : vy - 0.2), m_eyeheight - 1.0))) {
+	   (passable(m_x, m_y + ((vy > 0) ? vy + 0.2 : vy - 0.2), m_eyeheight - PLAYER_HEIGHT + 0.3))) {
 		m_y += vy;
 	}
 }
 
 void Player::jump() {
 	if(m_isJumping) {
-		m_eyeheight += m_jumpSpeed;
+		m_eyeheight += m_jumpSpeed / 4;
 		
-		if((m_jumpSpeed < 0) && (!passable(m_x, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed - 0.2))) {
+		m_jumpSpeed -= GRAVITY;
+		
+		if((m_jumpSpeed < 0) &&
+		   ((!passable(m_x, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed / 4 - 0.1)) /* ||
+			(!passable(m_x + 0.25, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed / 4 - 0.3)) ||
+			(!passable(m_x, m_y + 0.25, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed / 4 - 0.3)) ||
+		    (!passable(m_x + 0.25, m_y + 0.25, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed / 4 - 0.3)) */ )) {
 			m_jumpSpeed = 0.0;
 			m_isJumping = false;
 			return;
 		}
 		
-		m_jumpSpeed -= GRAVITY;
+		if((m_jumpSpeed >= 0) &&
+		   ((!passable(m_x, m_y, m_eyeheight + m_jumpSpeed / 4 + 0.5)) /* ||
+		    (!passable(m_x + 0.25, m_y, m_eyeheight + m_jumpSpeed / 4 + 0.3)) ||
+		    (!passable(m_x, m_y + 0.25, m_eyeheight + m_jumpSpeed / 4 + 0.3)) ||
+		    (!passable(m_x + 0.25, m_y + 0.25, m_eyeheight + m_jumpSpeed / 4 + 0.3)) */ )) {
+			m_jumpSpeed = 0.0;
+		}
 	}
+	else if((passable(m_x, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed / 4 - 0.1)) &&
+			(passable(m_x, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed / 4 - 0.1))) {
+		m_jumpSpeed = 0.0;
+		m_isJumping = true;
+	}
+	
 }
 
 void Player::turnH(float angle) {

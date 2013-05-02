@@ -170,25 +170,25 @@ void Game::animate() {
 		}
 	}
 	
-	if(keys[SDLK_SPACE]) {
+	if(keys[SDLK_j]) {
 		player->fly();
 	}
 	else if(keys[SDLK_LSHIFT]) {
 		player->land();
 	}
 	
-	if(!player->isJumping() && keys[SDLK_j]) {
+	if(!player->isJumping() && keys[SDLK_SPACE]) {
 		player->setJumpSpeed(JUMP_SPEED);
 		player->setJumping(true);
 	}
 	
-	player->jump();
-	
 	if(movement) {
-		float distance = 20 * MOVEMENT_SPEED / 1000.0f;
+		float distance = 20 * MOVEMENT_SPEED / 1000.0;
 		
 		player->move(distance, direction);
 	}
+	
+	player->jump();
 }
 
 void Game::draw() {
