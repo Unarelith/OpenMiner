@@ -39,9 +39,9 @@
 #define CUBE_POS(x, y, z) (((x) - m_x) + (((y) - m_y) * CHUNK_WIDTH) + (((z) - m_z) * CHUNK_WIDTH * CHUNK_HEIGHT))
 
 #define PLAYER_HEIGHT 1.8
-#define MOVEMENT_SPEED 3.0
+#define MOVEMENT_SPEED 3.5
 #define FLY_SPEED 0.05
-#define JUMP_SPEED 0.5
-#define GRAVITY 0.025
+#define JUMP_SPEED 0.15
+#define GRAVITY 0.00981
 
 #endif // CONFIG_H

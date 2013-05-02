@@ -50,7 +50,14 @@ bool inTable(u16 t[], u16 n) {
 }
 
 bool passable(s16 caseX, s16 caseY, s16 caseZ) {
-	if(inTable(nonPassableTiles, Game::map->map()[MAP_POS(caseX, caseY, caseZ)])) {
+	// TOO SLOW
+	/*if(inTable(nonPassableTiles, Game::map->map()[MAP_POS(caseX, caseY, caseZ)])) {
+		return false;
+	} else {
+		return true;
+	}*/
+	int cubeid = Game::map->map()[MAP_POS(caseX, caseY, caseZ)];
+	if(cubeid == 1 || cubeid == 2) {
 		return false;
 	} else {
 		return true;

@@ -37,7 +37,7 @@ Player::Player(float x, float y, float z, float angle) {
 	m_x = x;
 	m_y = y;
 	
-	m_eyeheight = z + 0.1;
+	m_eyeheight = z + 0.8;
 	
 	m_angleH = angle;
 	m_angleV = 0.0;
@@ -63,31 +63,30 @@ void Player::move(float distance, float direction) {
 }
 
 void Player::jump() {
-	if(m_isJumping) {
-		m_eyeheight += m_jumpSpeed / 4;
+	if((m_isJumping) &&
+	   (passable(m_x, m_y, m_eyeheight + m_jumpSpeed + 0.5))) {
+		m_eyeheight += m_jumpSpeed;
 		
 		m_jumpSpeed -= GRAVITY;
 		
 		if((m_jumpSpeed < 0) &&
-		   ((!passable(m_x, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed / 4 - 0.1)) /* ||
-			(!passable(m_x + 0.25, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed / 4 - 0.3)) ||
-			(!passable(m_x, m_y + 0.25, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed / 4 - 0.3)) ||
-		    (!passable(m_x + 0.25, m_y + 0.25, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed / 4 - 0.3)) */ )) {
+		   ((!passable(m_x, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed - 0.3)) /* ||
+			(!passable(m_x + 0.25, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed - 0.1)) ||
+			(!passable(m_x, m_y + 0.25, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed - 0.1)) ||
+		    (!passable(m_x + 0.25, m_y + 0.25, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed - 0.1)) */ )) {
 			m_jumpSpeed = 0.0;
 			m_isJumping = false;
-			return;
 		}
-		
-		if((m_jumpSpeed >= 0) &&
-		   ((!passable(m_x, m_y, m_eyeheight + m_jumpSpeed / 4 + 0.5)) /* ||
-		    (!passable(m_x + 0.25, m_y, m_eyeheight + m_jumpSpeed / 4 + 0.3)) ||
-		    (!passable(m_x, m_y + 0.25, m_eyeheight + m_jumpSpeed / 4 + 0.3)) ||
-		    (!passable(m_x + 0.25, m_y + 0.25, m_eyeheight + m_jumpSpeed / 4 + 0.3)) */ )) {
+		else if((m_jumpSpeed >= 0) &&
+		   ((!passable(m_x, m_y, m_eyeheight + m_jumpSpeed + 0.5)) /* ||
+		    (!passable(m_x + 0.25, m_y, m_eyeheight + m_jumpSpeed + 0.5)) ||
+		    (!passable(m_x, m_y + 0.25, m_eyeheight + m_jumpSpeed + 0.5)) ||
+		    (!passable(m_x + 0.25, m_y + 0.25, m_eyeheight + m_jumpSpeed + 0.5)) */ )) {
 			m_jumpSpeed = 0.0;
 		}
 	}
-	else if((passable(m_x, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed / 4 - 0.1)) &&
-			(passable(m_x, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed / 4 - 0.1))) {
+	else if((passable(m_x, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed - 0.3)) /*&&
+			(passable(m_x, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed - 0.1))*/) {
 		m_jumpSpeed = 0.0;
 		m_isJumping = true;
 	}
