@@ -2,4 +2,5 @@ build
 *~
 KubKraft
 *.swp
-
+*.swo
+lib

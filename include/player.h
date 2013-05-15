@@ -27,11 +27,12 @@ class Player {
 		Player(float x, float y, float z, float angle);
 		
 		void move(float distance, float direction);
+		void update();
 		void jump();
-		void turnH(float angle);
-		void turnV(float angle);
 		void fly();
 		void land();
+		void turnH(float angle);
+		void turnV(float angle);
 		
 		void watch();
 		
@@ -41,7 +42,7 @@ class Player {
 		
 		bool isJumping() const { return m_isJumping; }
 		
-		void setJumpSpeed(float jumpSpeed) { m_jumpSpeed = jumpSpeed; }
+		void setJumpSpeed(float jumpSpeed) { m_speed.z = jumpSpeed; }
 		void setJumping(bool isJumping) { m_isJumping = isJumping; }
 		
 		float pointTargetedx() { return m_x + cos(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES); }
@@ -57,8 +58,11 @@ class Player {
 		float m_angleH;
 		float m_angleV;
 		
-		float m_jumpSpeed;
 		bool m_isJumping;
+		
+		vect3D m_speed;
+		
+		void testPoint(vect3D pos, vect3D *speed);
 };
 
 #endif // PLAYER_H

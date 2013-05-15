@@ -27,4 +27,13 @@ typedef signed short s16;
 typedef unsigned long u32;
 typedef signed long s32;
 
+struct vect3D {
+	float x;
+	float y;
+	float z;
+	
+	vect3D(float xx = 0, float yy = 0, float zz = 0)
+		: x(xx), y(yy), z(zz) {}
+};
+
 #endif // TYPES_H

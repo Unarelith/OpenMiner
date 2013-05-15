@@ -1,6 +1,6 @@
 - Physics:
 	- Improve jump and collisions.
-	- Improve game speed.
+	- Improve game speed. ( Temporary solution found in mapManager.cpp )
 - Caves
 - Pause menu
 - Main menu

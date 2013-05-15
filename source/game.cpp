@@ -47,7 +47,7 @@ unsigned int Game::mapDepth = 16 << 3;
 unsigned int Game::mapHeight = 8 << 3;
 
 Game::Game() {
-	player = new Player(2, 2, 48, 90);
+	player = new Player(2.2, 2.2, 48, 90);
 	
 	map = new Map(mapWidth, mapDepth, mapHeight);
 }
@@ -189,6 +189,8 @@ void Game::animate() {
 	}
 	
 	player->jump();
+	
+	player->update();
 }
 
 void Game::draw() {

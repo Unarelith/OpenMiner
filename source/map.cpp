@@ -70,10 +70,10 @@ Map::Map(u16 width, u16 depth, u16 height) {
 				for (int xC = 0; xC < CHUNK_WIDTH; xC++) {
 					int x = xx * CHUNK_WIDTH + xC;
 					int y = yy * CHUNK_DEPTH + yC;
-					float perlin = get2DPerlinNoiseValue(x, y, 64) * 3 // 3 - 0
-								 + get2DPerlinNoiseValue(x, y, 32) * 2 // 0 - 4
-								 + get2DPerlinNoiseValue(x, y, 16) * 2 // 0.5 - 3
-								 + get2DPerlinNoiseValue(x, y, 8) * 1; // 0.1 - 2
+					float perlin = get2DPerlinNoiseValue(x, y, 64) * 0 // 3 // 3 - 0
+								 + get2DPerlinNoiseValue(x, y, 32) * 4 // 2 // 0 - 4
+								 + get2DPerlinNoiseValue(x, y, 16) * 3 // 2 // 0.5 - 3
+								 + get2DPerlinNoiseValue(x, y, 8) * 2; // 1; // 0.1 - 2
 					int heightValue = int((perlin * float(CHUNK_HEIGHT)) + float(m_height / 2));
 					
 					if (heightValue < 0) heightValue = 0;

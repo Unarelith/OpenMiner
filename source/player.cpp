@@ -21,6 +21,8 @@
 #include <string>
 #include <cmath>
 #include <cstring>
+#include <map>
+#include <unordered_map>
 
 #include <SDL/SDL.h>
 #include <GL/gl.h>
@@ -29,7 +31,11 @@
 #include "config.h"
 #include "types.h"
 #include "mapManager.h"
+#include "cube.h"
+#include "chunk.h"
+#include "map.h"
 #include "player.h"
+#include "game.h"
 
 using namespace std;
 
@@ -37,60 +43,81 @@ Player::Player(float x, float y, float z, float angle) {
 	m_x = x;
 	m_y = y;
 	
-	m_eyeheight = z + 0.8;
+	m_eyeheight = z + PLAYER_HEIGHT - 1;
 	
 	m_angleH = angle;
 	m_angleV = 0.0;
 	
-	m_jumpSpeed = 0.0;
 	m_isJumping = false;
+	
+	m_speed = vect3D(0, 0, 0);
+}
+
+void Player::testPoint(vect3D pos, vect3D *speed) {
+	if(!passable(pos.x + speed->x, pos.y, pos.z)) speed->x = 0;
+	if(!passable(pos.x, pos.y + speed->y, pos.z)) speed->y = 0;
+	if(!passable(pos.x, pos.y, pos.z + speed->z)) {
+		if(speed->z < 0 && m_isJumping) m_isJumping = false;
+		speed->z = 0;
+	}
 }
 
 void Player::move(float distance, float direction) {
 	direction += m_angleH;
 	
-	float vx = distance * cos(direction * M_PI / 180.0);
-	if((passable(m_x + ((vx > 0) ? vx + 0.2 : vx - 0.2) , m_y, m_eyeheight)) &&
-	   (passable(m_x + ((vx > 0) ? vx + 0.2 : vx - 0.2) , m_y, m_eyeheight - PLAYER_HEIGHT + 0.3))) {
-		m_x += vx;
-	}
+	m_speed.x = distance * cos(direction * M_PI / 180.0);
+	m_speed.y = distance * sin(direction * M_PI / 180.0);
+}
+
+void Player::update() {
+	testPoint(vect3D(m_x - 0.2, m_y - 0.2, m_eyeheight - PLAYER_HEIGHT), &m_speed);
+	testPoint(vect3D(m_x + 0.2, m_y - 0.2, m_eyeheight - PLAYER_HEIGHT), &m_speed);
+	testPoint(vect3D(m_x - 0.2, m_y + 0.2, m_eyeheight - PLAYER_HEIGHT), &m_speed);
+	testPoint(vect3D(m_x + 0.2, m_y + 0.2, m_eyeheight - PLAYER_HEIGHT), &m_speed);
+	testPoint(vect3D(m_x - 0.2, m_y - 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01)), &m_speed);
+	testPoint(vect3D(m_x + 0.2, m_y - 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01)), &m_speed);
+	testPoint(vect3D(m_x - 0.2, m_y + 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01)), &m_speed);
+	testPoint(vect3D(m_x + 0.2, m_y + 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01)), &m_speed);
 	
-	float vy = distance * sin(direction * M_PI / 180.0);
-	if((passable(m_x, m_y + ((vy > 0) ? vy + 0.2 : vy - 0.2), m_eyeheight)) &&
-	   (passable(m_x, m_y + ((vy > 0) ? vy + 0.2 : vy - 0.2), m_eyeheight - PLAYER_HEIGHT + 0.3))) {
-		m_y += vy;
-	}
+	m_x += m_speed.x;
+	m_y += m_speed.y;
+	m_eyeheight += m_speed.z;
+	
+	m_speed = vect3D(0, 0, 0);
 }
 
 void Player::jump() {
-	if((m_isJumping) &&
-	   (passable(m_x, m_y, m_eyeheight + m_jumpSpeed + 0.5))) {
+	/*if((m_isJumping) &&
+	   (passable(m_x, m_y, m_eyeheight + m_jumpSpeed))) {
 		m_eyeheight += m_jumpSpeed;
 		
 		m_jumpSpeed -= GRAVITY;
 		
 		if((m_jumpSpeed < 0) &&
-		   ((!passable(m_x, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed - 0.3)) /* ||
-			(!passable(m_x + 0.25, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed - 0.1)) ||
-			(!passable(m_x, m_y + 0.25, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed - 0.1)) ||
-		    (!passable(m_x + 0.25, m_y + 0.25, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed - 0.1)) */ )) {
+		   ((!passable(m_x, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed - 0.3)))) {
 			m_jumpSpeed = 0.0;
 			m_isJumping = false;
 		}
 		else if((m_jumpSpeed >= 0) &&
-		   ((!passable(m_x, m_y, m_eyeheight + m_jumpSpeed + 0.5)) /* ||
-		    (!passable(m_x + 0.25, m_y, m_eyeheight + m_jumpSpeed + 0.5)) ||
-		    (!passable(m_x, m_y + 0.25, m_eyeheight + m_jumpSpeed + 0.5)) ||
-		    (!passable(m_x + 0.25, m_y + 0.25, m_eyeheight + m_jumpSpeed + 0.5)) */ )) {
+		   ((!passable(m_x, m_y, m_eyeheight + m_jumpSpeed)))) {
 			m_jumpSpeed = 0.0;
 		}
 	}
-	else if((passable(m_x, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed - 0.3)) /*&&
-			(passable(m_x, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed - 0.1))*/) {
+	else if((passable(m_x, m_y, m_eyeheight - PLAYER_HEIGHT - m_jumpSpeed - 0.3))) {
 		m_jumpSpeed = 0.0;
 		m_isJumping = true;
+	}*/
+	if(m_isJumping) {
+		m_speed.z -= GRAVITY;
 	}
-	
+}
+
+void Player::fly() {
+	m_speed.z = FLY_SPEED;
+}
+
+void Player::land() {
+	m_speed.z = -FLY_SPEED;
 }
 
 void Player::turnH(float angle) {
@@ -115,28 +142,17 @@ void Player::turnV(float angle) {
 	}
 }
 
-void Player::fly() {
-	if(m_eyeheight < 256) m_eyeheight += FLY_SPEED;
-}
-
-void Player::land() {
-	m_eyeheight -= FLY_SPEED;
-}
-
 void Player::watch() {
 	gluLookAt(
-			// Eye position
-			m_x, m_y, m_eyeheight,
-			
-			// Point targeted
-			pointTargetedx(),
-			pointTargetedy(),
-			pointTargetedz(),
-			
-			// z is the vertical
-			0, 0, 1);
-	
-	//cout << "Eyepos: (" << int(m_x) << " ; " << int(m_y) << " ; " << int(m_eyeheight) << ")" << endl;
-	//cout << "Pt targeted: (" << pointTargetedx() << " ; " << pointTargetedy() << " ; " << pointTargetedz() << ")" << endl;
+		// Eye position
+		m_x, m_y, m_eyeheight,
+		
+		// Point targeted
+		pointTargetedx(),
+		pointTargetedy(),
+		pointTargetedz(),
+		
+		// z is the vertical
+		0, 0, 1);
 }
 

@@ -20,15 +20,6 @@
 #ifndef MAP_H
 #define MAP_H
 
-struct vect3D {
-	float x;
-	float y;
-	float z;
-	
-	vect3D(float xx = 0, float yy = 0, float zz = 0)
-		: x(xx), y(yy), z(zz) {}
-};
-
 class Map {
 	public:
 		Map(u16 width, u16 depth, u16 height);
