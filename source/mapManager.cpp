@@ -34,33 +34,18 @@
 #include "game.h"
 #include "mapManager.h"
 
-u16 nonPassableTiles[2] {
-	1, 2
+bool passableCubes[CUBE_TYPES] {
+	true,	// Void
+	false,	// Stone
+	false	// Dirt
 };
 
-bool inTable(u16 t[], u16 n) {
-	int i = 0;
-	while(t[i]) {
-		if(t[i] == n) {
-			return true;
-		}
-		i++;
-	}
-	return false;
-}
-
 bool passable(s16 caseX, s16 caseY, s16 caseZ) {
-	// TOO SLOW
-	/*if(inTable(nonPassableTiles, Game::map->map()[MAP_POS(caseX, caseY, caseZ)])) {
-		return false;
-	} else {
-		return true;
-	}*/
 	int cubeid = Game::map->map()[MAP_POS(caseX, caseY, caseZ)];
-	if(cubeid == 1 || cubeid == 2) {
-		return false;
-	} else {
+	if(passableCubes[cubeid]) {
 		return true;
+	} else {
+		return false;
 	}
 }
 

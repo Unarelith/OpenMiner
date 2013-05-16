@@ -20,9 +20,10 @@
 #ifndef MAPMANAGER_H
 #define MAPMANAGER_H
 
-extern u16 nonPassableTiles[2];
+#define CUBE_TYPES 3
 
-bool inTable(u16 t[], u16 n);
+extern bool passableCubes[CUBE_TYPES];
+
 bool passable(s16 caseX, s16 caseY, s16 caseZ);
 
 #endif // MAPMANAGER_H

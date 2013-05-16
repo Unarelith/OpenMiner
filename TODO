@@ -1,7 +1,6 @@
-- Physics:
-	- Improve jump and collisions.
-	- Improve game speed. ( Temporary solution found in mapManager.cpp )
+- Improve passable function
 - Caves
+- Text display
 - Pause menu
 - Main menu
 - PNG textures
