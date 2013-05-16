@@ -53,13 +53,13 @@ Player::Player(float x, float y, float z, float angle) {
 	m_speed = vect3D(0, 0, 0);
 }
 
-void Player::testPoint(vect3D pos, vect3D *speed) {
+void Player::testPoint(vect3D pos, vect3D *speed, bool playerFoots) {
 	if(!passable(pos.x + speed->x, pos.y, pos.z)) speed->x = 0;
 	if(!passable(pos.x, pos.y + speed->y, pos.z)) speed->y = 0;
 	if(!passable(pos.x, pos.y, pos.z + speed->z)) {
 		if(speed->z < 0 && m_isJumping) m_isJumping = false;
 		speed->z = 0;
-	}
+	} else if(playerFoots) m_isJumping = true;
 }
 
 void Player::move(float distance, float direction) {
@@ -70,10 +70,10 @@ void Player::move(float distance, float direction) {
 }
 
 void Player::update() {
-	testPoint(vect3D(m_x - 0.2, m_y - 0.2, m_eyeheight - PLAYER_HEIGHT), &m_speed);
-	testPoint(vect3D(m_x + 0.2, m_y - 0.2, m_eyeheight - PLAYER_HEIGHT), &m_speed);
-	testPoint(vect3D(m_x - 0.2, m_y + 0.2, m_eyeheight - PLAYER_HEIGHT), &m_speed);
-	testPoint(vect3D(m_x + 0.2, m_y + 0.2, m_eyeheight - PLAYER_HEIGHT), &m_speed);
+	testPoint(vect3D(m_x - 0.2, m_y - 0.2, m_eyeheight - PLAYER_HEIGHT), &m_speed, true);
+	testPoint(vect3D(m_x + 0.2, m_y - 0.2, m_eyeheight - PLAYER_HEIGHT), &m_speed, true);
+	testPoint(vect3D(m_x - 0.2, m_y + 0.2, m_eyeheight - PLAYER_HEIGHT), &m_speed, true);
+	testPoint(vect3D(m_x + 0.2, m_y + 0.2, m_eyeheight - PLAYER_HEIGHT), &m_speed, true);
 	testPoint(vect3D(m_x - 0.2, m_y - 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01)), &m_speed);
 	testPoint(vect3D(m_x + 0.2, m_y - 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01)), &m_speed);
 	testPoint(vect3D(m_x - 0.2, m_y + 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01)), &m_speed);
@@ -83,7 +83,8 @@ void Player::update() {
 	m_y += m_speed.y;
 	m_eyeheight += m_speed.z;
 	
-	m_speed = vect3D(0, 0, 0);
+	m_speed.x = 0;
+	m_speed.y = 0;
 }
 
 void Player::jump() {
@@ -107,9 +108,9 @@ void Player::jump() {
 		m_jumpSpeed = 0.0;
 		m_isJumping = true;
 	}*/
-	if(m_isJumping) {
-		m_speed.z -= GRAVITY;
-	}
+	
+	std::cout << "Speed: " << m_speed.z << " | isJumping: " << m_isJumping << std::endl;
+	if(m_isJumping) m_speed.z -= GRAVITY;
 }
 
 void Player::fly() {

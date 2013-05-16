@@ -62,7 +62,7 @@ class Player {
 		
 		vect3D m_speed;
 		
-		void testPoint(vect3D pos, vect3D *speed);
+		void testPoint(vect3D pos, vect3D *speed, bool playerFoots = false);
 };
 
 #endif // PLAYER_H
