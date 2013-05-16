@@ -42,6 +42,6 @@
 #define MOVEMENT_SPEED 3.5
 #define FLY_SPEED 0.05
 #define JUMP_SPEED 0.2
-#define GRAVITY 0.00981
+#define GRAVITY 0.01
 
 #endif // CONFIG_H
