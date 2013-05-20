@@ -20,7 +20,7 @@
 #ifndef MAPMANAGER_H
 #define MAPMANAGER_H
 
-#define CUBE_TYPES 3
+#define CUBE_TYPES 16
 
 extern bool passableCubes[CUBE_TYPES];
 

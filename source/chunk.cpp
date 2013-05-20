@@ -197,8 +197,8 @@ float Chunk::getTexOffsetU(int type, int i, Cube *cube) {
 
 float Chunk::getTexOffsetV(int type) {
 	if(type > 8) {
-		type <<= 3; // Here 8 ( remember x * 8 == x << 3 ) is the texture image width
-		return 1 - type * 0.125;
+		//type <<= 3; // Here 8 ( remember x * 8 == x << 3 ) is the texture image width
+		return 1 - ((type >> 3) + 1) * 0.125;
 	}
 	return 0.875;
 }

@@ -37,8 +37,9 @@
 #include "player.h"
 #include "game.h"
 
-#include "genutils.h"
 #include "texutils.h"
+
+#include "simplexnoise1234.h"
 
 using namespace std;
 
@@ -70,20 +71,24 @@ Map::Map(u16 width, u16 depth, u16 height) {
 				for (int xC = 0; xC < CHUNK_WIDTH; xC++) {
 					int x = xx * CHUNK_WIDTH + xC;
 					int y = yy * CHUNK_DEPTH + yC;
-					float perlin = get2DPerlinNoiseValue(x, y, 64) * 0 // 3 // 3 - 0
-								 + get2DPerlinNoiseValue(x, y, 32) * 4 // 2 // 0 - 4
-								 + get2DPerlinNoiseValue(x, y, 16) * 3 // 2 // 0.5 - 3
-								 + get2DPerlinNoiseValue(x, y, 8) * 2; // 1; // 0.1 - 2
+					
+					float perlin = snoise2((float)x * 0.035, (float)y * 0.035);
+					
 					int heightValue = int((perlin * float(CHUNK_HEIGHT)) + float(m_height / 2));
 					
-					if (heightValue < 0) heightValue = 0;
-					else if (heightValue >= m_height) heightValue = m_height - 1;
-					
 					for(int zz = 0 ; zz < heightValue ; zz++) {
-						int dirtHeight = (1.0 - rand()%10 / 100 - 0.20) * heightValue;
-						if(zz < dirtHeight) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 1;
-						else if(zz > dirtHeight && zz < dirtHeight + 3) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = rand()%2 + 1;
-						else m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 2;
+						float cavePerlin =	snoise3(x * 0.075, y * 0.075, zz * 0.1) * 2;
+						if(cavePerlin > -1 && cavePerlin < 1) {
+							int dirtHeight = (1.0 - rand()%10 / 100 - 0.20) * heightValue;
+							if(zz < dirtHeight) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 1;
+							else if(zz > dirtHeight && zz < dirtHeight + 3) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = rand()%2 + 1;
+							else m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 2;
+							if(zz < 16 && cavePerlin > 0.01 && cavePerlin < 0.05) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 10;
+						}
+						
+						if(zz == 0) {
+							m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 5;
+						}
 					}
 				}
 			}
@@ -177,10 +182,14 @@ void Map::render() {
 	//uint32_t time = SDL_GetTicks();
 	
 	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
-		glPushMatrix();
-		glTranslatef(float(m_chunks[i]->x()), float(m_chunks[i]->y()), float(m_chunks[i]->z()));
-		m_chunks[i]->render();
-		glPopMatrix();
+		if((m_chunks[i]->x() < Game::player->x() + CHUNK_FAR && m_chunks[i]->x() > Game::player->x() - CHUNK_FAR)
+		&& (m_chunks[i]->y() < Game::player->y() + CHUNK_FAR && m_chunks[i]->y() > Game::player->y() - CHUNK_FAR)
+		&& (m_chunks[i]->z() < Game::player->z() + CHUNK_FAR && m_chunks[i]->z() > Game::player->z() - CHUNK_FAR)) {
+			glPushMatrix();
+			glTranslatef(float(m_chunks[i]->x()), float(m_chunks[i]->y()), float(m_chunks[i]->z()));
+			m_chunks[i]->render();
+			glPopMatrix();
+		}
 	}
 	
 	//time = SDL_GetTicks() - time;

@@ -85,6 +85,8 @@ void Player::update() {
 	
 	m_speed.x = 0;
 	m_speed.y = 0;
+	
+	//m_speed.z = 0;
 }
 
 void Player::jump() {

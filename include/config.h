@@ -33,6 +33,8 @@
 #define CHUNK_DEPTH 8
 #define CHUNK_HEIGHT 8
 
+#define CHUNK_FAR (5 << 3)
+
 #define MAP_POS(x, y, z) ((x) + ((y) * Game::mapWidth) + ((z) * Game::mapWidth * Game::mapDepth))
 #define _MAP_POS(x, y, z) ((x) + ((y) * m_width) + ((z) * m_width * m_depth))
 #define CHUNK_POS(x, y, z) ((x) + ((y) * (m_width >> 3)) + ((z) * (m_width >> 3) * (m_depth >> 3)))

@@ -35,15 +35,31 @@
 #include "mapManager.h"
 
 bool passableCubes[CUBE_TYPES] {
-	true,	// Void
-	false,	// Stone
-	false	// Dirt
+	true,					// 00: Void
+	false,					// 01: Stone
+	false, false, false,	// 02: Dirt
+	false,					// 05: Bedrock
+	false,					// 06: Obsidian
+	false,					// 07: Gravel
+	false,					// 08: Sand
+	false,					// 09: Coal ore
+	false,					// 10: Diamond ore
+	false,					// 11: Emeraud ore
+	false,					// 12: Gold ore
+	false,					// 13: Iron ore
+	false,					// 14: Lapis lazuli ore
+	false					// 15: Redstone ore
 };
 
 bool passable(s16 caseX, s16 caseY, s16 caseZ) {
-	int cubeid = Game::map->map()[MAP_POS(caseX, caseY, caseZ)];
-	if(passableCubes[cubeid]) {
-		return true;
+	int pos = MAP_POS(caseX, caseY, caseZ);
+	if(pos > 0 && pos < Game::map->width() * Game::map->depth() * Game::map->height()) {
+		int cubeid = Game::map->map()[pos];
+		if(passableCubes[cubeid]) {
+			return true;
+		} else {
+			return false;
+		}
 	} else {
 		return false;
 	}
