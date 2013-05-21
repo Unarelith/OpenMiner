@@ -72,13 +72,14 @@ Map::Map(u16 width, u16 depth, u16 height) {
 					int x = xx * CHUNK_WIDTH + xC;
 					int y = yy * CHUNK_DEPTH + yC;
 					
-					float perlin = snoise2((float)x * 0.035, (float)y * 0.035);
+					float perlin = snoise2((float)x * 0.01, (float)y * 0.01); // 0.035
 					
 					int heightValue = int((perlin * float(CHUNK_HEIGHT)) + float(m_height / 2));
 					
 					for(int zz = 0 ; zz < heightValue ; zz++) {
-						float cavePerlin =	snoise3(x * 0.075, y * 0.075, zz * 0.1) * 2;
-						if(cavePerlin > -1 && cavePerlin < 1) {
+						float cavePerlin = snoise3(x * 0.1, y * 0.1, zz * 0.1) * 2;
+						
+						if(cavePerlin > -2 && cavePerlin < 1) {
 							int dirtHeight = (1.0 - rand()%10 / 100 - 0.20) * heightValue;
 							if(zz < dirtHeight) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 1;
 							else if(zz > dirtHeight && zz < dirtHeight + 3) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = rand()%2 + 1;
@@ -158,6 +159,108 @@ Map::~Map() {
 	glDeleteTextures(1, &m_texture);
 }
 
+float frustum[6][4];
+
+void extractFrustum() {
+	float t;
+	float proj[16];
+	float modl[16];
+	float clip[16];
+	
+	// Get the current PROJECTION matrix from OpenGL
+	glGetFloatv(GL_PROJECTION_MATRIX, proj);
+	
+	// Get the current MODELVIEW matrix from OpenGL
+	glGetFloatv(GL_MODELVIEW_MATRIX, modl);
+	
+	// Combine the two matrices (multiply projection by modelview)
+	clip[ 0] = modl[ 0] * proj[ 0] + modl[ 1] * proj[ 4] + modl[ 2] * proj[ 8] + modl[ 3] * proj[12];
+	clip[ 1] = modl[ 0] * proj[ 1] + modl[ 1] * proj[ 5] + modl[ 2] * proj[ 9] + modl[ 3] * proj[13];
+	clip[ 2] = modl[ 0] * proj[ 2] + modl[ 1] * proj[ 6] + modl[ 2] * proj[10] + modl[ 3] * proj[14];
+	clip[ 3] = modl[ 0] * proj[ 3] + modl[ 1] * proj[ 7] + modl[ 2] * proj[11] + modl[ 3] * proj[15];
+	
+	clip[ 4] = modl[ 4] * proj[ 0] + modl[ 5] * proj[ 4] + modl[ 6] * proj[ 8] + modl[ 7] * proj[12];
+	clip[ 5] = modl[ 4] * proj[ 1] + modl[ 5] * proj[ 5] + modl[ 6] * proj[ 9] + modl[ 7] * proj[13];
+	clip[ 6] = modl[ 4] * proj[ 2] + modl[ 5] * proj[ 6] + modl[ 6] * proj[10] + modl[ 7] * proj[14];
+	clip[ 7] = modl[ 4] * proj[ 3] + modl[ 5] * proj[ 7] + modl[ 6] * proj[11] + modl[ 7] * proj[15];
+	
+	clip[ 8] = modl[ 8] * proj[ 0] + modl[ 9] * proj[ 4] + modl[10] * proj[ 8] + modl[11] * proj[12];
+	clip[ 9] = modl[ 8] * proj[ 1] + modl[ 9] * proj[ 5] + modl[10] * proj[ 9] + modl[11] * proj[13];
+	clip[10] = modl[ 8] * proj[ 2] + modl[ 9] * proj[ 6] + modl[10] * proj[10] + modl[11] * proj[14];
+	clip[11] = modl[ 8] * proj[ 3] + modl[ 9] * proj[ 7] + modl[10] * proj[11] + modl[11] * proj[15];
+	
+	clip[12] = modl[12] * proj[ 0] + modl[13] * proj[ 4] + modl[14] * proj[ 8] + modl[15] * proj[12];
+	clip[13] = modl[12] * proj[ 1] + modl[13] * proj[ 5] + modl[14] * proj[ 9] + modl[15] * proj[13];
+	clip[14] = modl[12] * proj[ 2] + modl[13] * proj[ 6] + modl[14] * proj[10] + modl[15] * proj[14];
+	clip[15] = modl[12] * proj[ 3] + modl[13] * proj[ 7] + modl[14] * proj[11] + modl[15] * proj[15];
+	
+	// Extract the numbers for the RIGHT plane
+	frustum[0][0] = clip[ 3] - clip[ 0];
+	frustum[0][1] = clip[ 7] - clip[ 4];
+	frustum[0][2] = clip[11] - clip[ 8];
+	frustum[0][3] = clip[15] - clip[12];
+	
+	// Extract the numbers for the LEFT plane
+	frustum[1][0] = clip[ 3] + clip[ 0];
+	frustum[1][1] = clip[ 7] + clip[ 4];
+	frustum[1][2] = clip[11] + clip[ 8];
+	frustum[1][3] = clip[15] + clip[12];
+	
+	// Extract the BOTTOM plane
+	frustum[2][0] = clip[ 3] + clip[ 1];
+	frustum[2][1] = clip[ 7] + clip[ 5];
+	frustum[2][2] = clip[11] + clip[ 9];
+	frustum[2][3] = clip[15] + clip[13];
+	
+	// Extract the TOP plane
+	frustum[3][0] = clip[ 3] - clip[ 1];
+	frustum[3][1] = clip[ 7] - clip[ 5];
+	frustum[3][2] = clip[11] - clip[ 9];
+	frustum[3][3] = clip[15] - clip[13];
+	
+	// Extract the FAR plane
+	frustum[4][0] = clip[ 3] - clip[ 2];
+	frustum[4][1] = clip[ 7] - clip[ 6];
+	frustum[4][2] = clip[11] - clip[10];
+	frustum[4][3] = clip[15] - clip[14];
+	
+	// Extract the NEAR plane
+	frustum[5][0] = clip[ 3] + clip[ 2];
+	frustum[5][1] = clip[ 7] + clip[ 6];
+	frustum[5][2] = clip[11] + clip[10];
+	frustum[5][3] = clip[15] + clip[14];
+	
+	for(int i = 0 ; i < 6 ; i++) {
+		t = sqrt(frustum[i][0] * frustum[i][0] + frustum[i][1] * frustum[i][1] + frustum[i][2] * frustum[i][2]);
+		frustum[i][0] /= t;
+		frustum[i][1] /= t;
+		frustum[i][2] /= t;
+		frustum[i][3] /= t;
+	}
+}
+
+int cubeInFrustum(float x, float y, float z, float size) {
+	int p;
+	int c;
+	int c2 = 0;
+	
+	for(p = 0 ; p < 6 ; p++) {
+		c = 0;
+		if((frustum[p][0] * (x - size) + frustum[p][1] * (y - size) + frustum[p][2] * (z - size) + frustum[p][3] > 0)
+		|| (frustum[p][0] * (x + size) + frustum[p][1] * (y - size) + frustum[p][2] * (z - size) + frustum[p][3] > 0)
+		|| (frustum[p][0] * (x - size) + frustum[p][1] * (y + size) + frustum[p][2] * (z - size) + frustum[p][3] > 0)
+		|| (frustum[p][0] * (x + size) + frustum[p][1] * (y + size) + frustum[p][2] * (z - size) + frustum[p][3] > 0)
+		|| (frustum[p][0] * (x - size) + frustum[p][1] * (y - size) + frustum[p][2] * (z + size) + frustum[p][3] > 0)
+		|| (frustum[p][0] * (x + size) + frustum[p][1] * (y - size) + frustum[p][2] * (z + size) + frustum[p][3] > 0)
+		|| (frustum[p][0] * (x - size) + frustum[p][1] * (y + size) + frustum[p][2] * (z + size) + frustum[p][3] > 0)
+		|| (frustum[p][0] * (x + size) + frustum[p][1] * (y + size) + frustum[p][2] * (z + size) + frustum[p][3] > 0))
+			c++;
+		if(c == 0) return 0;
+		else if(c == 8) c2++;
+	}
+	return (c2 == 6) ? 2 : 1;
+}
+
 void Map::render() {
 	glColor3ub(0, 0, 0);
 	glBegin(GL_QUADS);
@@ -181,10 +284,10 @@ void Map::render() {
 	
 	//uint32_t time = SDL_GetTicks();
 	
+	extractFrustum();
+	
 	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
-		if((m_chunks[i]->x() < Game::player->x() + CHUNK_FAR && m_chunks[i]->x() > Game::player->x() - CHUNK_FAR)
-		&& (m_chunks[i]->y() < Game::player->y() + CHUNK_FAR && m_chunks[i]->y() > Game::player->y() - CHUNK_FAR)
-		&& (m_chunks[i]->z() < Game::player->z() + CHUNK_FAR && m_chunks[i]->z() > Game::player->z() - CHUNK_FAR)) {
+		if(cubeInFrustum(m_chunks[i]->x(), m_chunks[i]->y(), m_chunks[i]->z(), 8)) {
 			glPushMatrix();
 			glTranslatef(float(m_chunks[i]->x()), float(m_chunks[i]->y()), float(m_chunks[i]->z()));
 			m_chunks[i]->render();

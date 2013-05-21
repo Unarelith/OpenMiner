@@ -47,7 +47,7 @@ unsigned int Game::mapDepth = 16 << 3;
 unsigned int Game::mapHeight = 16 << 3;
 
 Game::Game() {
-	player = new Player(2.2, 2.2, 48, 90);
+	player = new Player(2.2, 2.2, 12 << 3, 90);
 	
 	map = new Map(mapWidth, mapDepth, mapHeight);
 }
