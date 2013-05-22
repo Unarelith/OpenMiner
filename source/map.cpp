@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------
 	
 	KubKraft
-	Copyright (C) 2012 Quent42340 <quent42340@gmail.com>
+	Copyright (C) 2013 Quentin Bazin <quent42340@gmail.com>
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -84,7 +84,7 @@ Map::Map(u16 width, u16 depth, u16 height) {
 							if(zz < dirtHeight) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 1;
 							else if(zz > dirtHeight && zz < dirtHeight + 3) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = rand()%2 + 1;
 							else m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 2;
-							if(zz < 16 && cavePerlin > 0.01 && cavePerlin < 0.05) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 10;
+							if(zz < 16 && cavePerlin > 0.01 && cavePerlin < 0.02) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 10;
 						}
 						
 						if(zz == 0) {
@@ -276,15 +276,15 @@ void Map::render() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
+	extractFrustum();
 	
 	currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
 	
 	//uint32_t time = SDL_GetTicks();
 	
-	extractFrustum();
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
 	
 	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
 		if(cubeInFrustum(m_chunks[i]->x(), m_chunks[i]->y(), m_chunks[i]->z(), 8)) {
@@ -292,14 +292,14 @@ void Map::render() {
 		}
 	}
 	
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	
 	//time = SDL_GetTicks() - time;
 	//cout << "Render time: " << time << " ms" << endl;
 	
 	testCubes();
-	
-	glDisableClientState(GL_COLOR_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
 	
 	glBindTexture(GL_TEXTURE_2D, 0);
 	

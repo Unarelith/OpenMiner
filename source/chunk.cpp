@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------
 	
 	KubKraft
-	Copyright (C) 2012 Quent42340 <quent42340@gmail.com>
+	Copyright (C) 2013 Quentin Bazin <quent42340@gmail.com>
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -174,33 +174,19 @@ float Chunk::getTexOffsetU(int type, int i, Cube *cube) {
 		Cube *higherCube = NULL;
 		
 		if(cube->z() < m_z + CHUNK_HEIGHT - 1) higherCube = getCube(cube->x() - m_x, cube->y() - m_y, cube->z() - m_z + 1);
-		else {
-			if(m_surroundingChunks[4] != NULL) higherCube = m_surroundingChunks[4]->getCube(cube->x() - m_x, cube->y() - m_y, 0);
-		}
+		else if(m_surroundingChunks[4] != NULL) higherCube = m_surroundingChunks[4]->getCube(cube->x() - m_x, cube->y() - m_y, 0);
 		
 		if((higherCube == NULL) || (higherCube->type() == 0)) {
-			if((i == 0) || (i == 1) || (i == 2) || (i == 3)) {
+			if((i == 0) || (i == 1) || (i == 2) || (i == 3))
 				return type * 0.125;
-			}
-			else if(i == 4) {
-				return (type + 1) * 0.125;
-			} else {
-				return (type - 1) * 0.125;
-			}
-		} else {
-			return (type - 1) * 0.125;
-		}
-	} else {
-		return (type - 1) * 0.125;
-	}
+			else if(i == 4) return (type + 1) * 0.125;
+			else return (type - 1) * 0.125;
+		} else return (type - 1) * 0.125;
+	} else return (type - 1) * 0.125;
 }
 
 float Chunk::getTexOffsetV(int type) {
-	if(type > 8) {
-		//type <<= 3; // Here 8 ( remember x * 8 == x << 3 ) is the texture image width
-		return 1 - ((type >> 3) + 1) * 0.125;
-	}
-	return 0.875;
+	return 1 - ((type >> 3) + 1) * 0.125;
 }
 
 void Chunk::refreshVBO() {

@@ -1,5 +1,5 @@
 h1. KubKraft
 
-h2. By Quent42340
+h2. By Quentin Bazin (aka. Quent42340)
 
 * KubKraft is a Minecraft-like game.
