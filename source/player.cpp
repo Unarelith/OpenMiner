@@ -70,7 +70,7 @@ void Player::move(float distance, float direction) {
 }
 
 void Player::update() {
-	/*testPoint(vect3D(m_x - 0.2, m_y - 0.2, m_eyeheight - PLAYER_HEIGHT + 0.2), &m_speed, true);
+	testPoint(vect3D(m_x - 0.2, m_y - 0.2, m_eyeheight - PLAYER_HEIGHT + 0.2), &m_speed, true);
 	testPoint(vect3D(m_x + 0.2, m_y - 0.2, m_eyeheight - PLAYER_HEIGHT + 0.2), &m_speed, true);
 	testPoint(vect3D(m_x - 0.2, m_y + 0.2, m_eyeheight - PLAYER_HEIGHT + 0.2), &m_speed, true);
 	testPoint(vect3D(m_x + 0.2, m_y + 0.2, m_eyeheight - PLAYER_HEIGHT + 0.2), &m_speed, true);
@@ -78,7 +78,6 @@ void Player::update() {
 	testPoint(vect3D(m_x + 0.2, m_y - 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01)), &m_speed);
 	testPoint(vect3D(m_x - 0.2, m_y + 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01)), &m_speed);
 	testPoint(vect3D(m_x + 0.2, m_y + 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01)), &m_speed);
-	*/
 	
 	m_x += m_speed.x;
 	m_y += m_speed.y;
@@ -87,11 +86,11 @@ void Player::update() {
 	m_speed.x = 0;
 	m_speed.y = 0;
 	
-	m_speed.z = 0;
+	//m_speed.z = 0;
 }
 
 void Player::jump() {
-	//m_speed.z -= GRAVITY;
+	m_speed.z -= GRAVITY;
 }
 
 void Player::fly() {

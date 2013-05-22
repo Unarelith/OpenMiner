@@ -54,6 +54,15 @@ void initOpenGL() {
 	glAlphaFunc(GL_GREATER, 0.9);
 	glEnable(GL_ALPHA_TEST);
 	
+	glFogi(GL_FOG_MODE, GL_LINEAR);
+	glFogf(GL_FOG_START, DIST_FAR - 2);
+	glFogf(GL_FOG_END, DIST_FAR);
+	glFogf(GL_FOG_DENSITY, 0.35f);
+	glHint(GL_FOG_HINT, GL_DONT_CARE);
+	GLfloat fog_c[] = {0.5f, 0.5f, 0.5f, 1.0f};
+	glFogfv(GL_FOG_COLOR, fog_c);
+	glEnable(GL_FOG);
+	
 	// Clean screen RGBa color
 	glClearColor(0.5, 0.5, 1.0, 0);
 	
