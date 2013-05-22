@@ -288,10 +288,7 @@ void Map::render() {
 	
 	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
 		if(cubeInFrustum(m_chunks[i]->x(), m_chunks[i]->y(), m_chunks[i]->z(), 8)) {
-			glPushMatrix();
-			glTranslatef(float(m_chunks[i]->x()), float(m_chunks[i]->y()), float(m_chunks[i]->z()));
 			m_chunks[i]->render();
-			glPopMatrix();
 		}
 	}
 	

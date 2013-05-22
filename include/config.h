@@ -27,7 +27,7 @@
 #define APP_LABEL "KubKraft"
 
 #define DIST_NEAR 0.1
-#define DIST_FAR (8 << 3)
+#define DIST_FAR (16 << 3)
 
 #define CHUNK_WIDTH 8
 #define CHUNK_DEPTH 8

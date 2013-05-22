@@ -266,9 +266,9 @@ void Chunk::refreshVBO() {
 			
 			if ((cube == NULL) || (cube->type() == 0)) {
 				for(int j = 0 ; j < 4 ; j++) {
-					vertices.push_back(x + cubeCoords[(i * 12) + (j * 3)]);
-					vertices.push_back(y + cubeCoords[(i * 12) + (j * 3) + 1]);
-					vertices.push_back(z + cubeCoords[(i * 12) + (j * 3) + 2]);
+					vertices.push_back(m_x + x + cubeCoords[(i * 12) + (j * 3)]);
+					vertices.push_back(m_y + y + cubeCoords[(i * 12) + (j * 3) + 1]);
+					vertices.push_back(m_z + z + cubeCoords[(i * 12) + (j * 3) + 2]);
 					texCoords.push_back(getTexOffsetU(qe->type(), i, qe) + (cubeCoords[48 + (j * 3)] * 0.125));
 					texCoords.push_back(getTexOffsetV(qe->type()) + (cubeCoords[48 + (j * 3) + 1] * 0.125));
 					colors.push_back(grey[i]);
