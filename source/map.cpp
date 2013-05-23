@@ -142,7 +142,34 @@ Map::Map(u16 width, u16 depth, u16 height) {
 	
 	cout << "Chunks loading time: " << (SDL_GetTicks() - time) << " ms for " << cubeCount << " cubes" << endl;
 	
-	currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
+	float distance = DIST_FAR;
+	currentChunk = NULL;
+	
+	m_chunkDisplay = new long int[6];
+	
+	updateChunkDisplay();
+	
+	unsigned long long int pos;
+	for(long int z = m_chunkDisplay[2] ; z < m_chunkDisplay[5] ; z++) {
+		for(long int y = m_chunkDisplay[1] ; y < m_chunkDisplay[4] ; y++) {
+			for(long int x = m_chunkDisplay[0] ; x < m_chunkDisplay[3] ; x++) {
+				if(x < 0 || y < 0 || z < 0 || x >= (m_width >> 3) || y >= (m_depth >> 3) || z >= (m_height >> 3)) continue;
+				pos = CHUNK_POS(x, y, z);
+				vect3D center;
+				
+				center.x = m_chunks[pos]->x() + CHUNK_WIDTH / 2;
+				center.y = m_chunks[pos]->y() + CHUNK_DEPTH / 2;
+				center.z = m_chunks[pos]->z() + CHUNK_HEIGHT / 2;
+				
+				float d = sqrt(pow(center.x - Game::player->x(), 2) + pow(center.y - Game::player->y(), 2) + pow(center.z - Game::player->z(), 2));
+				
+				if(d < distance) {
+					distance = d;
+					currentChunk = m_chunks[pos];
+				}
+			}
+		}
+	}
 	
 	selectedCube = new Cube(-1, -1, -1, 0);
 }
@@ -157,6 +184,19 @@ Map::~Map() {
 	delete[] m_chunks;
 	
 	glDeleteTextures(1, &m_texture);
+	
+	delete[] m_chunkDisplay;
+}
+
+void Map::updateChunkDisplay() {
+	// Get visible chunk surface
+	m_chunkDisplay[0] = ((long)(Game::player->x() - DIST_FAR) >> 3);
+	m_chunkDisplay[1] = ((long)(Game::player->y() - DIST_FAR) >> 3);
+	m_chunkDisplay[2] = ((long)(Game::player->z() - DIST_FAR) >> 3);
+	
+	m_chunkDisplay[3] = ((long)(Game::player->x() + DIST_FAR) >> 3);
+	m_chunkDisplay[4] = ((long)(Game::player->y() + DIST_FAR) >> 3);
+	m_chunkDisplay[5] = ((long)(Game::player->z() + DIST_FAR) >> 3);
 }
 
 float frustum[6][4];
@@ -278,7 +318,9 @@ void Map::render() {
 	
 	extractFrustum();
 	
-	currentChunk = findNearestChunk(Game::player->x(), Game::player->y(), Game::player->z());
+	updateChunkDisplay();
+	
+	//cout << "X size: " << maxChunkX - minChunkX << " | Y size: " << maxChunkY - minChunkY << " | Z size: " << maxChunkZ - minChunkZ << endl;
 	
 	//uint32_t time = SDL_GetTicks();
 	
@@ -286,9 +328,32 @@ void Map::render() {
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 	
-	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
-		if(cubeInFrustum(m_chunks[i]->x(), m_chunks[i]->y(), m_chunks[i]->z(), 8)) {
-			m_chunks[i]->render();
+	float distance = DIST_FAR;
+	currentChunk = NULL;
+	
+	unsigned long long int pos;
+	for(long int z = m_chunkDisplay[2] ; z < m_chunkDisplay[5] ; z++) {
+		for(long int y = m_chunkDisplay[1] ; y < m_chunkDisplay[4] ; y++) {
+			for(long int x = m_chunkDisplay[0] ; x < m_chunkDisplay[3] ; x++) {
+				if(x < 0 || y < 0 || z < 0 || x >= (m_width >> 3) || y >= (m_depth >> 3) || z >= (m_height >> 3)) continue;
+				pos = CHUNK_POS(x, y, z);
+				if(cubeInFrustum(m_chunks[pos]->x(), m_chunks[pos]->y(), m_chunks[pos]->z(), 8)) {
+					m_chunks[pos]->render();
+				}
+				
+				vect3D center;
+				
+				center.x = m_chunks[pos]->x() + CHUNK_WIDTH / 2;
+				center.y = m_chunks[pos]->y() + CHUNK_DEPTH / 2;
+				center.z = m_chunks[pos]->z() + CHUNK_HEIGHT / 2;
+				
+				float d = sqrt(pow(center.x - Game::player->x(), 2) + pow(center.y - Game::player->y(), 2) + pow(center.z - Game::player->z(), 2));
+				
+				if(d < distance) {
+					distance = d;
+					currentChunk = m_chunks[pos];
+				}
+			}
 		}
 	}
 	
@@ -317,7 +382,6 @@ void Map::render() {
 		int yy = selectedCube->y();
 		int zz = selectedCube->z();
 		
-		glBindTexture(GL_TEXTURE_2D, 0);
 		glColor4ub(255, 255, 255, 64);
 		glDisable(GL_ALPHA_TEST);
 		glEnable(GL_POLYGON_OFFSET_FILL);
@@ -334,28 +398,6 @@ void Map::render() {
 		glEnable(GL_ALPHA_TEST);
 		glColor4ub(255, 255, 255, 255);
 	}
-}
-
-Chunk *Map::findNearestChunk(float x, float y, float z) {
-	float distance = DIST_FAR;
-	Chunk *chunk = NULL;
-	
-	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
-		vect3D center;
-		
-		center.x = m_chunks[i]->x() + CHUNK_WIDTH / 2;
-		center.y = m_chunks[i]->y() + CHUNK_DEPTH / 2;
-		center.z = m_chunks[i]->z() + CHUNK_HEIGHT / 2;
-		
-		float d = sqrt(pow(center.x - x, 2) + pow(center.y - y, 2) + pow(center.z - z, 2));
-		
-		if(d < distance) {
-			distance = d;
-			chunk = m_chunks[i];
-		}
-	}
-	
-	return chunk;
 }
 
 Chunk* Map::getChunk(int x, int y, int z) {

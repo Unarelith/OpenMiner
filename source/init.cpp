@@ -55,9 +55,8 @@ void initOpenGL() {
 	glEnable(GL_ALPHA_TEST);
 	
 	glFogi(GL_FOG_MODE, GL_LINEAR);
-	glFogf(GL_FOG_START, DIST_FAR - 2);
+	glFogf(GL_FOG_START, DIST_FAR - (4 << 3));
 	glFogf(GL_FOG_END, DIST_FAR);
-	glFogf(GL_FOG_DENSITY, 0.35f);
 	glHint(GL_FOG_HINT, GL_DONT_CARE);
 	GLfloat fog_c[] = {0.5f, 0.5f, 0.5f, 1.0f};
 	glFogfv(GL_FOG_COLOR, fog_c);
@@ -74,7 +73,7 @@ void initOpenGL() {
 	glLoadIdentity();
 	
 	// Visible area definition
-	gluPerspective(WIN_FOV, (GLdouble)WIN_WIDTH / (GLdouble)WIN_HEIGHT, DIST_NEAR, DIST_FAR);
+	gluPerspective(WIN_FOV, (GLdouble)WIN_WIDTH / (GLdouble)WIN_HEIGHT, DIST_NEAR, DIST_FAR - (2 << 3));
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

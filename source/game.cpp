@@ -42,8 +42,8 @@ using namespace std;
 Player *Game::player;
 Map *Game::map;
 
-unsigned int Game::mapWidth = 16 << 3;
-unsigned int Game::mapDepth = 16 << 3;
+unsigned int Game::mapWidth = 32 << 3;
+unsigned int Game::mapDepth = 32 << 3;
 unsigned int Game::mapHeight = 16 << 3;
 
 Game::Game() {
@@ -76,6 +76,7 @@ void Game::exec() {
 		}
 		
 		manageEvents();
+		
 		if(!m_paused) {
 			animate();
 			draw();
@@ -216,15 +217,12 @@ void Game::draw() {
 	
 	glMatrixMode(GL_MODELVIEW);
 	
-	glBindTexture(GL_TEXTURE_2D, 0);
-	
 	glColor3ub(255, 255, 255);
 	glBegin(GL_LINES);
 		glVertex2i(-1, 0);
 		glVertex2i(1, 0);
 		glVertex2i(0, -1);
 		glVertex2i(0, 1);
-	
 	glEnd();
 	
 	glMatrixMode(GL_PROJECTION);

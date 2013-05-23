@@ -27,12 +27,13 @@ class Map {
 		
 		void render();
 		
-		Chunk *findNearestChunk(float x, float y, float z);
 		Chunk *getChunk(int x, int y, int z);
 		
 		bool intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector, float *distance);
 		bool intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector, float *distance, s8 *face);
 		void testCubes();
+		
+		void updateChunkDisplay();
 		
 		u16 width() const { return m_width; }
 		u16 height() const { return m_height; }
@@ -56,6 +57,8 @@ class Map {
 		u16 *m_map;
 		
 		Chunk** m_chunks;
+		
+		long int *m_chunkDisplay;
 };
 
 #endif // MAP_H
