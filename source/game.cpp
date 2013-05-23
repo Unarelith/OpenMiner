@@ -42,12 +42,12 @@ using namespace std;
 Player *Game::player;
 Map *Game::map;
 
-unsigned int Game::mapWidth = 32 << 3;
-unsigned int Game::mapDepth = 32 << 3;
+unsigned int Game::mapWidth = 64 << 3;
+unsigned int Game::mapDepth = 64 << 3;
 unsigned int Game::mapHeight = 16 << 3;
 
 Game::Game() {
-	player = new Player(2.2, 2.2, 12 << 3, 90);
+	player = new Player(0, 0, 12 << 3, 90);
 	
 	map = new Map(mapWidth, mapDepth, mapHeight);
 }

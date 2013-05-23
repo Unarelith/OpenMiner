@@ -320,9 +320,7 @@ void Map::render() {
 	
 	updateChunkDisplay();
 	
-	//cout << "X size: " << maxChunkX - minChunkX << " | Y size: " << maxChunkY - minChunkY << " | Z size: " << maxChunkZ - minChunkZ << endl;
-	
-	//uint32_t time = SDL_GetTicks();
+	uint32_t time = SDL_GetTicks();
 	
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -361,8 +359,8 @@ void Map::render() {
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
-	//time = SDL_GetTicks() - time;
-	//cout << "Render time: " << time << " ms" << endl;
+	time = SDL_GetTicks() - time;
+	cout << "Render time: " << time << " ms" << endl;
 	
 	testCubes();
 	
