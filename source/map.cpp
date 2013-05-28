@@ -167,7 +167,8 @@ Map::Map(u16 width, u16 depth, u16 height) {
 				}
 				
 				m_chunks[pos]->refreshVBO();
-				cout << "Chunks loaded: " << pos+1 << "/" << CHUNK_POS(m_chunkDisplay[3], m_chunkDisplay[4], m_chunkDisplay[5]) << endl;
+				// FIXME: Here 1980 is chunk size independant, and that's not logical
+				cout << "Chunks loaded: " << pos+1 << "/ 1980" << endl;
 			}
 		}
 	}
