@@ -42,12 +42,12 @@ using namespace std;
 Player *Game::player;
 Map *Game::map;
 
-unsigned int Game::mapWidth = 64 << 3;
-unsigned int Game::mapDepth = 64 << 3;
-unsigned int Game::mapHeight = 16 << 3;
+unsigned int Game::mapWidth = 16 * CHUNK_WIDTH;
+unsigned int Game::mapDepth = 16 * CHUNK_DEPTH;
+unsigned int Game::mapHeight = 8 * CHUNK_HEIGHT;
 
 Game::Game() {
-	player = new Player(0, 0, 12 << 3, 90);
+	player = new Player(0, 0, 6 * CHUNK_HEIGHT, 90);
 	
 	map = new Map(mapWidth, mapDepth, mapHeight);
 }
@@ -66,6 +66,9 @@ void Game::exec() {
 	uint32_t lastTime = SDL_GetTicks();
 	int nbFrames = 0;
 	
+	//uint32_t timeDelta = 1000/30;
+	//uint32_t timeAccumulator = 0;
+	
 	while(m_cont) {
 		uint32_t currentTime = SDL_GetTicks();
 		nbFrames++;
@@ -77,10 +80,25 @@ void Game::exec() {
 		
 		manageEvents();
 		
+		/*uint32_t timeSimulated = 0;
+		uint32_t startTime = SDL_GetTicks();
+		
+		while(timeAccumulator >= timeDelta) {
+			//stepGameState(timeDelta);
+			//for(uint32_t i = 0 ; i < timeDelta ; i++);
+			timeAccumulator -= timeDelta;
+			timeSimulated += timeDelta;
+		}
+		
+		//stepAnimation(timeSimulated);
+		//for(uint32_t i = 0 ; i < timeSimulated ; i++);
+		*/
 		if(!m_paused) {
 			animate();
 			draw();
 		}
+		
+		//timeAccumulator += SDL_GetTicks() - startTime;
 	}
 	
 	unlockMouse();
@@ -189,18 +207,20 @@ void Game::animate() {
 		player->move(distance, direction);
 	}
 	
+	// Update player jump state
 	player->jump();
 	
+	// Update player
 	player->update();
+	
+	// Put camera
+	player->watch();
 }
 
 void Game::draw() {
 	// Clear screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-	
-	// Put camera
-	player->watch();
 	
 	// Display the map
 	map->render();

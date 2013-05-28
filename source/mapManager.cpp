@@ -55,13 +55,8 @@ bool passable(s16 caseX, s16 caseY, s16 caseZ) {
 	int pos = MAP_POS(caseX, caseY, caseZ);
 	if(pos > 0 && pos < Game::map->width() * Game::map->depth() * Game::map->height()) {
 		int cubeid = Game::map->map()[pos];
-		if(passableCubes[cubeid]) {
-			return true;
-		} else {
-			return false;
-		}
-	} else {
-		return false;
-	}
+		if(passableCubes[cubeid]) return true;
+		else return false;
+	} else return false;
 }
 

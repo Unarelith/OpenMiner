@@ -40,6 +40,10 @@ class Player {
 		float y() const { return m_y; }
 		float z() const { return m_eyeheight; }
 		
+		vect3D speed() const { return m_speed; }
+		
+		float angleH() const { return m_angleH; }
+		
 		bool isJumping() const { return m_isJumping; }
 		
 		void setJumpSpeed(float jumpSpeed) { m_speed.z = jumpSpeed; }
@@ -57,6 +61,8 @@ class Player {
 		
 		float m_angleH;
 		float m_angleV;
+		
+		float m_direction;
 		
 		bool m_isJumping;
 		

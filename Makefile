@@ -7,7 +7,7 @@ CXX		:=	g++
 #---------------------------------------------------------------------------------
 # Options for code generation
 #---------------------------------------------------------------------------------
-CFLAGS	:=	-g -Wall -O3
+CFLAGS	:=	-g -Wall -Wno-unused-result -O3
 CXXFLAGS:=	$(CFLAGS) --std=c++0x
 LDFLAGS	:=	-g -Wl
 

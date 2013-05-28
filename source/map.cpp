@@ -65,8 +65,8 @@ Map::Map(u16 width, u16 depth, u16 height) {
 		}
 	}
 	
-	for (int yy = 0; yy < m_depth >> 3; yy++) {
-		for (int xx = 0; xx < m_width >> 3; xx++) {
+	for (int yy = 0; yy < m_depth / CHUNK_DEPTH; yy++) {
+		for (int xx = 0; xx < m_width / CHUNK_WIDTH; xx++) {
 			for (int yC = 0; yC < CHUNK_DEPTH; yC++) {
 				for (int xC = 0; xC < CHUNK_WIDTH; xC++) {
 					int x = xx * CHUNK_WIDTH + xC;
@@ -81,14 +81,14 @@ Map::Map(u16 width, u16 depth, u16 height) {
 						
 						if(cavePerlin > -2 && cavePerlin < 1) {
 							int dirtHeight = (1.0 - rand()%10 / 100 - 0.20) * heightValue;
-							if(zz < dirtHeight) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 1;
-							else if(zz > dirtHeight && zz < dirtHeight + 3) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = rand()%2 + 1;
-							else m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 2;
-							if(zz < 16 && cavePerlin > 0.01 && cavePerlin < 0.02) m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 10;
+							if(zz < dirtHeight) m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = 1;
+							else if(zz > dirtHeight && zz < dirtHeight + 3) m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = rand()%2 + 1;
+							else m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = 2;
+							if(zz < 16 && cavePerlin > 0.01 && cavePerlin < 0.02) m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = 10;
 						}
 						
 						if(zz == 0) {
-							m_map[_MAP_POS(xC + (xx << 3), yC + (yy << 3), zz)] = 5;
+							m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = 5;
 						}
 					}
 				}
@@ -96,33 +96,33 @@ Map::Map(u16 width, u16 depth, u16 height) {
 		}
 	}
 	
-	m_chunks = new Chunk*[(m_width >> 3) * (m_height >> 3) * (m_depth >> 3)];
+	m_chunks = new Chunk*[(m_width / CHUNK_WIDTH) * (m_height / CHUNK_HEIGHT) * (m_depth / CHUNK_DEPTH)];
 	
-	for(u16 z = 0 ; z < m_height >> 3 ; z++) {
-		for(u16 y = 0 ; y < m_depth >> 3 ; y++) {
-			for(u16 x = 0 ; x < m_width >> 3 ; x++) {
-				m_chunks[CHUNK_POS(x, y, z)] = new Chunk(x << 3, y << 3, z << 3);
+	for(u16 z = 0 ; z < m_height / CHUNK_HEIGHT ; z++) {
+		for(u16 y = 0 ; y < m_depth / CHUNK_DEPTH ; y++) {
+			for(u16 x = 0 ; x < m_width / CHUNK_WIDTH ; x++) {
+				m_chunks[CHUNK_POS(x, y, z)] = new Chunk(x * CHUNK_WIDTH, y * CHUNK_DEPTH, z * CHUNK_HEIGHT);
 			}
 		}
 	}
 				
-	for(u16 z = 0 ; z < m_height >> 3 ; z++) {
-		for(u16 y = 0 ; y < m_depth >> 3 ; y++) {
-			for(u16 x = 0 ; x < m_width >> 3 ; x++) {
-				int chunkIndex = x + (y * (m_width >> 3)) + (z * (m_width >> 3) * (m_depth >> 3));
+	for(u16 z = 0 ; z < m_height / CHUNK_HEIGHT ; z++) {
+		for(u16 y = 0 ; y < m_depth / CHUNK_DEPTH ; y++) {
+			for(u16 x = 0 ; x < m_width / CHUNK_WIDTH ; x++) {
+				int chunkIndex = x + (y * (m_width / CHUNK_WIDTH)) + (z * (m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH));
 				if(x - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(0, m_chunks[chunkIndex - 1]);
-				if(x + 1 < m_width >> 3) m_chunks[chunkIndex]->setSurroundingChunk(1, m_chunks[chunkIndex + 1]);
-				if(y - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(2, m_chunks[chunkIndex - (m_width >> 3)]);
-				if(y + 1 < m_depth >> 3) m_chunks[chunkIndex]->setSurroundingChunk(3, m_chunks[chunkIndex + (m_width >> 3)]);
-				if(z + 1 < m_height >> 3) m_chunks[chunkIndex]->setSurroundingChunk(4, m_chunks[chunkIndex + ((m_width >> 3) * (m_depth >> 3))]);
-				if(z - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(5, m_chunks[chunkIndex - ((m_width >> 3) * (m_depth >> 3))]);
+				if(x + 1 < m_width / CHUNK_WIDTH) m_chunks[chunkIndex]->setSurroundingChunk(1, m_chunks[chunkIndex + 1]);
+				if(y - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(2, m_chunks[chunkIndex - (m_width / CHUNK_WIDTH)]);
+				if(y + 1 < m_depth / CHUNK_DEPTH) m_chunks[chunkIndex]->setSurroundingChunk(3, m_chunks[chunkIndex + (m_width / CHUNK_WIDTH)]);
+				if(z + 1 < m_height / CHUNK_HEIGHT) m_chunks[chunkIndex]->setSurroundingChunk(4, m_chunks[chunkIndex + ((m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH))]);
+				if(z - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(5, m_chunks[chunkIndex - ((m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH))]);
 			}
 		}
 	}
 	
 	int cubeCount = 0;
 	
-	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
+	for(int i = 0 ; i < ((m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH) * (m_height / CHUNK_HEIGHT)); i++) {
 		for(s32 z = m_chunks[i]->z() ; z < m_chunks[i]->z() + CHUNK_HEIGHT ; z++) {
 			for(s32 y = m_chunks[i]->y() ; y < m_chunks[i]->y() + CHUNK_DEPTH ; y++) {
 				for(s32 x = m_chunks[i]->x() ; x < m_chunks[i]->x() + CHUNK_WIDTH ; x++) {
@@ -135,9 +135,9 @@ Map::Map(u16 width, u16 depth, u16 height) {
 	
 	uint32_t time = SDL_GetTicks();
 	
-	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
+	for(int i = 0 ; i < ((m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH) * (m_height / CHUNK_HEIGHT)); i++) {
 		m_chunks[i]->refreshVBO();
-		cout << "Chunks loaded: " << i+1 << "/" << ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)) << endl;
+		cout << "Chunks loaded: " << i+1 << "/" << ((m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH) * (m_height / CHUNK_HEIGHT)) << endl;
 	}
 	
 	cout << "Chunks loading time: " << (SDL_GetTicks() - time) << " ms for " << cubeCount << " cubes" << endl;
@@ -153,7 +153,7 @@ Map::Map(u16 width, u16 depth, u16 height) {
 	for(long int z = m_chunkDisplay[2] ; z < m_chunkDisplay[5] ; z++) {
 		for(long int y = m_chunkDisplay[1] ; y < m_chunkDisplay[4] ; y++) {
 			for(long int x = m_chunkDisplay[0] ; x < m_chunkDisplay[3] ; x++) {
-				if(x < 0 || y < 0 || z < 0 || x >= (m_width >> 3) || y >= (m_depth >> 3) || z >= (m_height >> 3)) continue;
+				if(x < 0 || y < 0 || z < 0 || x >= (m_width / CHUNK_WIDTH) || y >= (m_depth / CHUNK_DEPTH) || z >= (m_height / CHUNK_HEIGHT)) continue;
 				pos = CHUNK_POS(x, y, z);
 				vect3D center;
 				
@@ -177,7 +177,7 @@ Map::Map(u16 width, u16 depth, u16 height) {
 Map::~Map() {
 	free(m_map);
 	
-	for(int i = 0 ; i < ((m_width >> 3) * (m_depth >> 3) * (m_height >> 3)); i++) {
+	for(int i = 0 ; i < ((m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH) * (m_height / CHUNK_HEIGHT)); i++) {
 		if(m_chunks[i] != NULL) delete m_chunks[i];
 	}
 	
@@ -190,13 +190,13 @@ Map::~Map() {
 
 void Map::updateChunkDisplay() {
 	// Get visible chunk surface
-	m_chunkDisplay[0] = ((long)(Game::player->x() - DIST_FAR) >> 3);
-	m_chunkDisplay[1] = ((long)(Game::player->y() - DIST_FAR) >> 3);
-	m_chunkDisplay[2] = ((long)(Game::player->z() - DIST_FAR) >> 3);
+	m_chunkDisplay[0] = ((long)(Game::player->x() - DIST_FAR) / CHUNK_WIDTH);
+	m_chunkDisplay[1] = ((long)(Game::player->y() - DIST_FAR) / CHUNK_DEPTH);
+	m_chunkDisplay[2] = ((long)(Game::player->z() - DIST_FAR) / CHUNK_HEIGHT);
 	
-	m_chunkDisplay[3] = ((long)(Game::player->x() + DIST_FAR) >> 3);
-	m_chunkDisplay[4] = ((long)(Game::player->y() + DIST_FAR) >> 3);
-	m_chunkDisplay[5] = ((long)(Game::player->z() + DIST_FAR) >> 3);
+	m_chunkDisplay[3] = ((long)(Game::player->x() + DIST_FAR) / CHUNK_WIDTH);
+	m_chunkDisplay[4] = ((long)(Game::player->y() + DIST_FAR) / CHUNK_DEPTH);
+	m_chunkDisplay[5] = ((long)(Game::player->z() + DIST_FAR) / CHUNK_HEIGHT);
 }
 
 float frustum[6][4];
@@ -302,6 +302,7 @@ int cubeInFrustum(float x, float y, float z, float size) {
 }
 
 void Map::render() {
+	// Display a black square under the world
 	glColor3ub(0, 0, 0);
 	glBegin(GL_QUADS);
 		glVertex3f(0, 0, -0.01);
@@ -311,16 +312,19 @@ void Map::render() {
 	glEnd();
 	glColor3ub(255, 255, 255);
 	
+	// Select texture
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 	
+	// Turn on filters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	
+	//uint32_t time = SDL_GetTicks();
+	
 	extractFrustum();
 	
+	// Update chunk display array
 	updateChunkDisplay();
-	
-	uint32_t time = SDL_GetTicks();
 	
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -329,13 +333,27 @@ void Map::render() {
 	float distance = DIST_FAR;
 	currentChunk = NULL;
 	
+	bool changed = false;
 	unsigned long long int pos;
-	for(long int z = m_chunkDisplay[2] ; z < m_chunkDisplay[5] ; z++) {
-		for(long int y = m_chunkDisplay[1] ; y < m_chunkDisplay[4] ; y++) {
-			for(long int x = m_chunkDisplay[0] ; x < m_chunkDisplay[3] ; x++) {
-				if(x < 0 || y < 0 || z < 0 || x >= (m_width >> 3) || y >= (m_depth >> 3) || z >= (m_height >> 3)) continue;
+	long long int xMax, yMax, zMax, xMin, yMin, zMin;
+	xMax = (m_chunkDisplay[0] + (m_chunkDisplay[1] - m_chunkDisplay[0]) / 2); xMin = xMax;
+	yMax = (m_chunkDisplay[2] + (m_chunkDisplay[3] - m_chunkDisplay[2]) / 2) * (m_width / CHUNK_WIDTH); yMin = yMax;
+	zMax = (m_chunkDisplay[4] + (m_chunkDisplay[5] - m_chunkDisplay[4]) / 2) * (m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH); zMin = zMax;
+	for(long long int z = m_chunkDisplay[2] ; z < m_chunkDisplay[5] ; z++) {
+		for(long long int y = m_chunkDisplay[1] ; y < m_chunkDisplay[4] ; y++) {
+			for(long long int x = m_chunkDisplay[0] ; x < m_chunkDisplay[3] ; x++) {
+				if(x < 0 || y < 0 || z < 0 || x >= (m_width / CHUNK_WIDTH) || y >= (m_depth / CHUNK_DEPTH) || z >= (m_height / CHUNK_HEIGHT)) continue;
 				pos = CHUNK_POS(x, y, z);
-				if(cubeInFrustum(m_chunks[pos]->x(), m_chunks[pos]->y(), m_chunks[pos]->z(), 8)) {
+				
+				if(m_chunks[pos]->x() > xMax) { xMax = m_chunks[pos]->x(); changed = true; }
+				if(m_chunks[pos]->y() > yMax) { yMax = m_chunks[pos]->y(); changed = true; } 
+				if(m_chunks[pos]->z() > zMax) { zMax = m_chunks[pos]->z(); changed = true; }
+				
+				if(m_chunks[pos]->x() < xMin) { xMin = m_chunks[pos]->x(); changed = true; }
+				if(m_chunks[pos]->y() < yMin) { yMin = m_chunks[pos]->y(); changed = true; }
+				if(m_chunks[pos]->z() < zMin) { zMin = m_chunks[pos]->z(); changed = true; }
+				
+				if(changed && cubeInFrustum(m_chunks[pos]->x(), m_chunks[pos]->y(), m_chunks[pos]->z(), (CHUNK_WIDTH + CHUNK_DEPTH) / 2))  {
 					m_chunks[pos]->render();
 				}
 				
@@ -359,10 +377,10 @@ void Map::render() {
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
-	time = SDL_GetTicks() - time;
-	cout << "Render time: " << time << " ms" << endl;
-	
 	testCubes();
+	
+	//time = SDL_GetTicks() - time;
+	//cout << "Render time: " << time << " ms" << endl;
 	
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
@@ -399,11 +417,11 @@ void Map::render() {
 }
 
 Chunk* Map::getChunk(int x, int y, int z) {
-	if ((x < 0) || (x >= m_width >> 3) || (y < 0) || (y >= m_depth >> 3) || (z < 0) || (z >= m_height >> 3)) {
+	if ((x < 0) || (x >= m_width / CHUNK_WIDTH) || (y < 0) || (y >= m_depth / CHUNK_DEPTH) || (z < 0) || (z >= m_height / CHUNK_HEIGHT)) {
 		return NULL;
 	}
 	
-	int coords = x + (y * (m_width >> 3)) + (z * (m_width >> 3) * (m_depth >> 3));
+	int coords = x + (y * (m_width / CHUNK_WIDTH)) + (z * (m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH));
 	
 	return m_chunks[coords];
 }
@@ -519,9 +537,9 @@ void Map::testCubes() {
 				0, 1, -1,	0, -1, -1
 			};
 			
-			c = getChunk((currentChunk->x() >> 3) + coords[(i-7)*3],
-						 (currentChunk->y() >> 3) + coords[(i-7)*3 + 1],
-						 (currentChunk->z() >> 3) + coords[(i-7)*3 + 2]);
+			c = getChunk((currentChunk->x() / CHUNK_WIDTH) + coords[(i-7)*3],
+						 (currentChunk->y() / CHUNK_DEPTH) + coords[(i-7)*3 + 1],
+						 (currentChunk->z() / CHUNK_HEIGHT) + coords[(i-7)*3 + 2]);
 			
 			if(c == NULL) continue;
 			
