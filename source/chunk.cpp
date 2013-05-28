@@ -43,6 +43,8 @@ Chunk::Chunk(int x, int y, int z) {
 	m_y = y;
 	m_z = z;
 	
+	m_loaded = false;
+	
 	m_surroundingChunks = new Chunk*[6];
 	for (int i = 0; i < 6; i++) m_surroundingChunks[i] = NULL;
 
@@ -190,6 +192,8 @@ float Chunk::getTexOffsetV(int type) {
 }
 
 void Chunk::refreshVBO() {
+	m_loaded = true;
+	
 	m_vboVertexCount = 0;
 	
 	if(m_cubes.size() == 0) return;

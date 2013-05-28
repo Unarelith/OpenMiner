@@ -212,15 +212,15 @@ void Game::animate() {
 	
 	// Update player
 	player->update();
-	
-	// Put camera
-	player->watch();
 }
 
 void Game::draw() {
 	// Clear screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
+	
+	// Put camera
+	player->watch();
 	
 	// Display the map
 	map->render();

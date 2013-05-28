@@ -38,6 +38,8 @@ class Chunk {
 		int y() const { return m_y; }
 		int z() const { return m_z; }
 		
+		bool loaded() const { return m_loaded; }
+		
 		void putCube(int x, int y, int z, int type) { m_cubes[CUBE_POS(x, y, z)] = new Cube(x, y, z, type); }
 		std::unordered_map<int, Cube*> *cubes() { return &m_cubes; }
 		
@@ -47,6 +49,8 @@ class Chunk {
 		int m_x;
 		int m_y;
 		int m_z;
+		
+		bool m_loaded;
 		
 		std::unordered_map<int, Cube*> m_cubes;
 		Cube *getCube(int x, int y, int z);
