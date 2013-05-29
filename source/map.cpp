@@ -167,12 +167,10 @@ Map::Map(u16 width, u16 depth, u16 height) {
 				}
 				
 				m_chunks[pos]->refreshVBO();
-				// FIXME: Here 1980 is chunk size independant, and that's not logical
-				cout << "Chunks loaded: " << pos+1 << "/ 1980" << endl;
+				cout << "Chunks loaded: " << pos+1 << endl;
 			}
 		}
 	}
-	
 	cout << "Chunks loading time: " << (SDL_GetTicks() - time) << " ms for " << cubeCount << " cubes" << endl;
 	
 	selectedCube = new Cube(-1, -1, -1, 0);
@@ -325,6 +323,7 @@ void Map::render() {
 	
 	//uint32_t time = SDL_GetTicks();
 	
+	// Extract frustum from ModelViewProjection matrix
 	extractFrustum();
 	
 	// Update chunk display array
@@ -337,76 +336,6 @@ void Map::render() {
 	float distance = DIST_FAR;
 	currentChunk = NULL;
 	
-	/*double Hfar = 2 * tan(WIN_FOV / 2) * DIST_FAR;
-	double Wfar = Hfar * ((GLdouble)WIN_WIDTH / (GLdouble)WIN_HEIGHT);
-	
-	vect3D playerPos(Game::player->x(),
-					 Game::player->y(),
-					 Game::player->z());
-	
-	vect3D direction(Game::player->pointTargetedx() - playerPos.x,
-					 Game::player->pointTargetedy() - playerPos.y,
-					 Game::player->pointTargetedz() - playerPos.z);
-	
-	vect3D farCenter(playerPos.x + direction.x * DIST_FAR,
-					 playerPos.y + direction.y * DIST_FAR,
-					 playerPos.z + direction.z * DIST_FAR);
-	
-	// Near bottom left corner
-	vect3D nblc(farCenter.x - Wfar/2,
-				farCenter.y - DIST_FAR,
-				farCenter.z - Hfar/2);
-	
-	// Near bottom right corner
-	vect3D nbrc(farCenter.x + Wfar/2,
-				farCenter.y - DIST_FAR,
-				farCenter.z - Hfar/2);
-	
-	// Near top left corner
-	vect3D ntlc(farCenter.x - Wfar/2,
-				farCenter.y - DIST_FAR,
-				farCenter.z + Hfar/2);
-	
-	// Near top right corner
-	vect3D ntrc(farCenter.x + Wfar/2,
-				farCenter.y - DIST_FAR,
-				farCenter.z + Hfar/2);
-	
-	// Idem for far
-	vect3D fblc = nblc; nblc.y += DIST_FAR;
-	vect3D fbrc = nbrc; nbrc.y += DIST_FAR;
-	vect3D ftlc = ntlc; ntlc.y += DIST_FAR;
-	vect3D ftrc = ntrc; ntrc.y += DIST_FAR;
-	
-	double xMin, yMin, zMin, xMax, yMax, zMax;
-	//xMin = nearBottomLeftCorner.x / CHUNK_WIDTH; xMax = xMin - Wfar / CHUNK_WIDTH;
-	//yMin = nearBottomLeftCorner.y / CHUNK_DEPTH; yMax = yMin - DIST_FAR / CHUNK_DEPTH;
-	//zMin = nearBottomLeftCorner.z / CHUNK_HEIGHT; zMax = zMin - Hfar / CHUNK_HEIGHT;
-	xMin = min(min(min(nblc.x, nbrc.x), min(ntlc.x, ntrc.x)), min(min(fblc.x, fbrc.x), min(ftlc.x, ftrc.x)));
-	yMin = min(min(min(nblc.y, nbrc.y), min(ntlc.y, ntrc.y)), min(min(fblc.y, fbrc.y), min(ftlc.x, ftrc.y)));
-	zMin = min(min(min(nblc.z, nbrc.z), min(ntlc.z, ntrc.z)), min(min(fblc.z, fbrc.z), min(ftlc.z, ftrc.z)));
-	
-	xMax = max(max(max(nblc.x, nbrc.x), max(ntlc.x, ntrc.x)), max(max(fblc.x, fbrc.x), max(ftlc.x, ftrc.x)));
-	yMax = max(max(max(nblc.y, nbrc.y), max(ntlc.y, ntrc.y)), max(max(fblc.y, fbrc.y), max(ftlc.x, ftrc.y)));
-	zMax = max(max(max(nblc.z, nbrc.z), max(ntlc.z, ntrc.z)), max(max(fblc.z, fbrc.z), max(ftlc.z, ftrc.z)));
-	
-	xMin /= CHUNK_WIDTH; xMax /= CHUNK_WIDTH;
-	yMin /= CHUNK_DEPTH; yMax /= CHUNK_DEPTH;
-	zMin /= CHUNK_HEIGHT; zMax /= CHUNK_HEIGHT;
-	
-	double temp;
-	if(xMin > xMax) { temp = xMin; xMin = xMax; xMax = temp; }
-	if(yMin > yMax) { temp = yMin; yMin = yMax; yMax = temp; }
-	if(zMin > zMax) { temp = zMin; zMin = zMax; zMax = temp; }
-	
-	
-	//std::cout << "(" << m_chunkDisplay[0] << ";" << m_chunkDisplay[1] << ";" << m_chunkDisplay[2] << ") -> (" << m_chunkDisplay[3] << ";" << m_chunkDisplay[4] << ";" << m_chunkDisplay[5] << ")" << std::endl;
-	//std::cout << " ### (" << xMin << ";" << yMin << ";" << zMin << ") -> (" << xMax << ";" << yMax << ";" << zMax << ")" << std::endl;
-	//std::cout << "Wfar: " << Wfar / CHUNK_WIDTH << " | Hfar: " << Hfar / CHUNK_HEIGHT << std::endl;
-	
-	for(s32 z = floor(zMin) ; z < ceil(zMax) ; z++) {
-		for(s32 y = floor(yMin) ; y < ceil(yMax) ; y++) {
-			for(s32 x = floor(xMin) ; x < ceil(xMax) ; x++) { */
 	unsigned long long int pos;
 	for(long long int z = m_chunkDisplay[2] ; z < m_chunkDisplay[5] ; z++) {
 		for(long long int y = m_chunkDisplay[1] ; y < m_chunkDisplay[4] ; y++) {
