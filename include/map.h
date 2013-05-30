@@ -27,7 +27,7 @@ class Map {
 		
 		void render();
 		
-		Chunk *getChunk(int x, int y, int z);
+		Chunk *getChunk(int x, int y);
 		
 		bool intersectionLinePlane(vect3D normal, vect3D planePoint, vect3D lineOrigPoint, vect3D directionVector, float *distance);
 		bool intersectionLineCube(int cubeX, int cubeY, int cubeZ, vect3D lineOrigPoint, vect3D directionVector, float *distance, s8 *face);

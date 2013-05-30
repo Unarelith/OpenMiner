@@ -31,12 +31,12 @@
 
 #define CHUNK_WIDTH 16
 #define CHUNK_DEPTH 16
-#define CHUNK_HEIGHT 16
+#define CHUNK_HEIGHT 256
 
 #define MAP_POS(x, y, z) ((x) + ((y) * Game::mapWidth) + ((z) * Game::mapWidth * Game::mapDepth))
 #define _MAP_POS(x, y, z) ((x) + ((y) * m_width) + ((z) * m_width * m_depth))
-#define CHUNK_POS(x, y, z) ((x) + ((y) * (m_width / CHUNK_WIDTH)) + ((z) * (m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH)))
-#define CUBE_POS(x, y, z) (((x) - m_x) + (((y) - m_y) * CHUNK_WIDTH) + (((z) - m_z) * CHUNK_WIDTH * CHUNK_HEIGHT))
+#define CHUNK_POS(x, y) ((x) + ((y) * (m_width / CHUNK_WIDTH)))
+#define CUBE_POS(x, y, z) (((x) - m_x) + (((y) - m_y) * CHUNK_WIDTH) + ((z) * CHUNK_WIDTH * CHUNK_HEIGHT))
 
 #define PLAYER_HEIGHT 1.8
 #define MOVEMENT_SPEED 3.5

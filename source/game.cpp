@@ -42,12 +42,12 @@ using namespace std;
 Player *Game::player;
 Map *Game::map;
 
-unsigned int Game::mapWidth = 16 * CHUNK_WIDTH;
-unsigned int Game::mapDepth = 16 * CHUNK_DEPTH;
-unsigned int Game::mapHeight = 8 * CHUNK_HEIGHT;
+unsigned int Game::mapWidth = 4 * CHUNK_WIDTH;
+unsigned int Game::mapDepth = 4 * CHUNK_DEPTH;
+unsigned int Game::mapHeight = CHUNK_HEIGHT;
 
 Game::Game() {
-	player = new Player(0, 0, 6 * CHUNK_HEIGHT, 90);
+	player = new Player(0, 0, 96, 90);
 	
 	map = new Map(mapWidth, mapDepth, mapHeight);
 }
@@ -58,7 +58,7 @@ Game::~Game() {
 }
 
 void Game::exec() {
-	lockMouse();
+	//lockMouse();
 	
 	m_cont = true;
 	m_paused = false;

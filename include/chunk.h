@@ -22,7 +22,7 @@
 
 class Chunk {
 	public:
-		Chunk(int x, int y, int z);
+		Chunk(int x, int y);
 		~Chunk();
 		
 		void setSurroundingChunk(unsigned char face, Chunk* chunk);
@@ -36,7 +36,6 @@ class Chunk {
 		
 		int x() const { return m_x; }
 		int y() const { return m_y; }
-		int z() const { return m_z; }
 		
 		bool loaded() const { return m_loaded; }
 		
@@ -48,7 +47,6 @@ class Chunk {
 	private:
 		int m_x;
 		int m_y;
-		int m_z;
 		
 		bool m_loaded;
 		

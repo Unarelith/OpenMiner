@@ -74,7 +74,7 @@ Map::Map(u16 width, u16 depth, u16 height) {
 					
 					float perlin = snoise2((float)x * 0.01, (float)y * 0.01); // 0.035
 					
-					int heightValue = int((perlin * float(CHUNK_HEIGHT)) + float(m_height / 2));
+					int heightValue = int(perlin * float(m_height / 2));
 					
 					for(int zz = 0 ; zz < heightValue ; zz++) {
 						float cavePerlin = snoise3(x * 0.1, y * 0.1, zz * 0.1) * 2;
@@ -96,34 +96,33 @@ Map::Map(u16 width, u16 depth, u16 height) {
 		}
 	}
 	
-	m_chunks = new Chunk*[(m_width / CHUNK_WIDTH) * (m_height / CHUNK_HEIGHT) * (m_depth / CHUNK_DEPTH)];
+	m_chunks = new Chunk*[(m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH)];
 	
-	for(u16 z = 0 ; z < m_height / CHUNK_HEIGHT ; z++) {
-		for(u16 y = 0 ; y < m_depth / CHUNK_DEPTH ; y++) {
-			for(u16 x = 0 ; x < m_width / CHUNK_WIDTH ; x++) {
-				m_chunks[CHUNK_POS(x, y, z)] = new Chunk(x * CHUNK_WIDTH, y * CHUNK_DEPTH, z * CHUNK_HEIGHT);
-			}
+	for(u16 y = 0 ; y < m_depth / CHUNK_DEPTH ; y++) {
+		for(u16 x = 0 ; x < m_width / CHUNK_WIDTH ; x++) {
+			m_chunks[CHUNK_POS(x, y)] = new Chunk(x * CHUNK_WIDTH, y * CHUNK_DEPTH);
 		}
 	}
 				
-	for(u16 z = 0 ; z < m_height / CHUNK_HEIGHT ; z++) {
-		for(u16 y = 0 ; y < m_depth / CHUNK_DEPTH ; y++) {
-			for(u16 x = 0 ; x < m_width / CHUNK_WIDTH ; x++) {
-				int chunkIndex = x + (y * (m_width / CHUNK_WIDTH)) + (z * (m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH));
-				if(x - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(0, m_chunks[chunkIndex - 1]);
-				if(x + 1 < m_width / CHUNK_WIDTH) m_chunks[chunkIndex]->setSurroundingChunk(1, m_chunks[chunkIndex + 1]);
-				if(y - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(2, m_chunks[chunkIndex - (m_width / CHUNK_WIDTH)]);
-				if(y + 1 < m_depth / CHUNK_DEPTH) m_chunks[chunkIndex]->setSurroundingChunk(3, m_chunks[chunkIndex + (m_width / CHUNK_WIDTH)]);
-				if(z + 1 < m_height / CHUNK_HEIGHT) m_chunks[chunkIndex]->setSurroundingChunk(4, m_chunks[chunkIndex + ((m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH))]);
-				if(z - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(5, m_chunks[chunkIndex - ((m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH))]);
-			}
+	for(u16 y = 0 ; y < m_depth / CHUNK_DEPTH ; y++) {
+		for(u16 x = 0 ; x < m_width / CHUNK_WIDTH ; x++) {
+			int chunkIndex = CHUNK_POS(x, y);
+			if(x - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(0, m_chunks[chunkIndex - 1]);
+			if(x + 1 < m_width / CHUNK_WIDTH) m_chunks[chunkIndex]->setSurroundingChunk(1, m_chunks[chunkIndex + 1]);
+			if(y - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(2, m_chunks[chunkIndex - (m_width / CHUNK_WIDTH)]);
+			if(y + 1 < m_depth / CHUNK_DEPTH) m_chunks[chunkIndex]->setSurroundingChunk(3, m_chunks[chunkIndex + (m_width / CHUNK_WIDTH)]);
+			
+			if(y + 1 < m_depth / CHUNK_DEPTH && x + 1 < m_width / CHUNK_WIDTH) m_chunks[chunkIndex]->setSurroundingChunk(4, m_chunks[chunkIndex + 1 + (m_width / CHUNK_WIDTH)]);
+			if(y - 1 >= 0 && x + 1 < m_width / CHUNK_WIDTH) m_chunks[chunkIndex]->setSurroundingChunk(5, m_chunks[chunkIndex + 1 - (m_width / CHUNK_WIDTH)]);
+			if(y + 1 < m_depth / CHUNK_DEPTH && x - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(6, m_chunks[chunkIndex - 1 + (m_width / CHUNK_WIDTH)]);
+			if(y - 1 >= 0 && x - 1 >= 0) m_chunks[chunkIndex]->setSurroundingChunk(7, m_chunks[chunkIndex - 1 - (m_width / CHUNK_WIDTH)]);
 		}
 	}
 	
 	int cubeCount = 0;
 	
-	for(int i = 0 ; i < ((m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH) * (m_height / CHUNK_HEIGHT)); i++) {
-		for(s32 z = m_chunks[i]->z() ; z < m_chunks[i]->z() + CHUNK_HEIGHT ; z++) {
+	for(int i = 0 ; i < ((m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH)); i++) {
+		for(s32 z = 0 ; z < CHUNK_HEIGHT ; z++) {
 			for(s32 y = m_chunks[i]->y() ; y < m_chunks[i]->y() + CHUNK_DEPTH ; y++) {
 				for(s32 x = m_chunks[i]->x() ; x < m_chunks[i]->x() + CHUNK_WIDTH ; x++) {
 					if(m_map[_MAP_POS(x, y, z)] != 0) m_chunks[i]->addCube(new Cube(x, y, z, m_map[_MAP_POS(x, y, z)]));
@@ -132,11 +131,6 @@ Map::Map(u16 width, u16 depth, u16 height) {
 			}
 		}
 	}
-	
-	/*for(int i = 0 ; i < ((m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH) * (m_height / CHUNK_HEIGHT)); i++) {
-		m_chunks[i]->refreshVBO();
-		cout << "Chunks loaded: " << i+1 << "/" << ((m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH) * (m_height / CHUNK_HEIGHT)) << endl;
-	}*/
 	
 	float distance = DIST_FAR;
 	currentChunk = NULL;
@@ -148,27 +142,25 @@ Map::Map(u16 width, u16 depth, u16 height) {
 	uint32_t time = SDL_GetTicks();
 	
 	unsigned long long int pos;
-	for(long int z = m_chunkDisplay[2] ; z < m_chunkDisplay[5] ; z++) {
-		for(long int y = m_chunkDisplay[1] ; y < m_chunkDisplay[4] ; y++) {
-			for(long int x = m_chunkDisplay[0] ; x < m_chunkDisplay[3] ; x++) {
-				if(x < 0 || y < 0 || z < 0 || x >= (m_width / CHUNK_WIDTH) || y >= (m_depth / CHUNK_DEPTH) || z >= (m_height / CHUNK_HEIGHT)) continue;
-				pos = CHUNK_POS(x, y, z);
-				vect3D center;
-				
-				center.x = m_chunks[pos]->x() + CHUNK_WIDTH / 2;
-				center.y = m_chunks[pos]->y() + CHUNK_DEPTH / 2;
-				center.z = m_chunks[pos]->z() + CHUNK_HEIGHT / 2;
-				
-				float d = sqrt(pow(center.x - Game::player->x(), 2) + pow(center.y - Game::player->y(), 2) + pow(center.z - Game::player->z(), 2));
-				
-				if(d < distance) {
-					distance = d;
-					currentChunk = m_chunks[pos];
-				}
-				
-				m_chunks[pos]->refreshVBO();
-				cout << "Chunks loaded: " << pos+1 << endl;
+	for(long int y = m_chunkDisplay[1] ; y < m_chunkDisplay[3] ; y++) {
+		for(long int x = m_chunkDisplay[0] ; x < m_chunkDisplay[2] ; x++) {
+			if(x < 0 || y < 0 || x >= (m_width / CHUNK_WIDTH) || y >= (m_depth / CHUNK_DEPTH)) continue;
+			pos = CHUNK_POS(x, y);
+			vect3D center;
+			
+			center.x = m_chunks[pos]->x() + CHUNK_WIDTH / 2;
+			center.y = m_chunks[pos]->y() + CHUNK_DEPTH / 2;
+			center.z = CHUNK_HEIGHT / 2;
+			
+			float d = sqrt(pow(center.x - Game::player->x(), 2) + pow(center.y - Game::player->y(), 2) + pow(center.z - Game::player->z(), 2));
+			
+			if(d < distance) {
+				distance = d;
+				currentChunk = m_chunks[pos];
 			}
+			
+			m_chunks[pos]->refreshVBO();
+			cout << "Chunks loaded: " << pos+1 << endl;
 		}
 	}
 	cout << "Chunks loading time: " << (SDL_GetTicks() - time) << " ms for " << cubeCount << " cubes" << endl;
@@ -179,7 +171,7 @@ Map::Map(u16 width, u16 depth, u16 height) {
 Map::~Map() {
 	free(m_map);
 	
-	for(int i = 0 ; i < ((m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH) * (m_height / CHUNK_HEIGHT)); i++) {
+	for(int i = 0 ; i < ((m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH)); i++) {
 		if(m_chunks[i] != NULL) delete m_chunks[i];
 	}
 	
@@ -194,11 +186,9 @@ void Map::updateChunkDisplay() {
 	// Get visible chunk surface
 	m_chunkDisplay[0] = ((long)(Game::player->x() - DIST_FAR) / CHUNK_WIDTH);
 	m_chunkDisplay[1] = ((long)(Game::player->y() - DIST_FAR) / CHUNK_DEPTH);
-	m_chunkDisplay[2] = ((long)(Game::player->z() - DIST_FAR) / CHUNK_HEIGHT);
 	
-	m_chunkDisplay[3] = ((long)(Game::player->x() + DIST_FAR) / CHUNK_WIDTH);
-	m_chunkDisplay[4] = ((long)(Game::player->y() + DIST_FAR) / CHUNK_DEPTH);
-	m_chunkDisplay[5] = ((long)(Game::player->z() + DIST_FAR) / CHUNK_HEIGHT);
+	m_chunkDisplay[2] = ((long)(Game::player->x() + DIST_FAR) / CHUNK_WIDTH);
+	m_chunkDisplay[3] = ((long)(Game::player->y() + DIST_FAR) / CHUNK_DEPTH);
 }
 
 float frustum[6][4];
@@ -337,33 +327,31 @@ void Map::render() {
 	currentChunk = NULL;
 	
 	unsigned long long int pos;
-	for(long long int z = m_chunkDisplay[2] ; z < m_chunkDisplay[5] ; z++) {
-		for(long long int y = m_chunkDisplay[1] ; y < m_chunkDisplay[4] ; y++) {
-			for(long long int x = m_chunkDisplay[0] ; x < m_chunkDisplay[3] ; x++) {
-				//std::cout << "(" << x << ";" << y << ";" << z << ") | (" << m_width / CHUNK_WIDTH << ";" << m_depth / CHUNK_DEPTH << ";" << m_height / CHUNK_HEIGHT << ")" << std::endl;
-				if(x < 0 || y < 0 || z < 0 || x >= (m_width / CHUNK_WIDTH) || y >= (m_depth / CHUNK_DEPTH) || z >= (m_height / CHUNK_HEIGHT)) continue;
-				
-				pos = CHUNK_POS(x, y, z);
-				
-				if(cubeInFrustum(m_chunks[pos]->x() + CHUNK_WIDTH / 2, m_chunks[pos]->y() + CHUNK_DEPTH / 2, m_chunks[pos]->z() + CHUNK_HEIGHT / 2, (CHUNK_WIDTH + CHUNK_DEPTH) / 4) < 1)
-					continue;
-				
-				if(!m_chunks[pos]->loaded()) m_chunks[pos]->refreshVBO();
-				
-				m_chunks[pos]->render();
-				
-				vect3D center;
-				
-				center.x = m_chunks[pos]->x() + CHUNK_WIDTH / 2;
-				center.y = m_chunks[pos]->y() + CHUNK_DEPTH / 2;
-				center.z = m_chunks[pos]->z() + CHUNK_HEIGHT / 2;
-				
-				float d = sqrt(pow(center.x - Game::player->x(), 2) + pow(center.y - Game::player->y(), 2) + pow(center.z - Game::player->z(), 2));
-				
-				if(d < distance) {
-					distance = d;
-					currentChunk = m_chunks[pos];
-				}
+	for(long long int y = m_chunkDisplay[1] ; y < m_chunkDisplay[3] ; y++) {
+		for(long long int x = m_chunkDisplay[0] ; x < m_chunkDisplay[2] ; x++) {
+			//std::cout << "(" << x << ";" << y << ") | (" << m_width / CHUNK_WIDTH << ";" << m_depth / CHUNK_DEPTH << ")" << std::endl;
+			if(x < 0 || y < 0 || x >= (m_width / CHUNK_WIDTH) || y >= (m_depth / CHUNK_DEPTH)) continue;
+			
+			pos = CHUNK_POS(x, y);
+			
+			//if(cubeInFrustum(m_chunks[pos]->x() + CHUNK_WIDTH / 2, m_chunks[pos]->y() + CHUNK_DEPTH / 2, CHUNK_HEIGHT / 2, (CHUNK_WIDTH + CHUNK_DEPTH) / 4) < 1)
+			//	continue;
+			
+			if(!m_chunks[pos]->loaded()) m_chunks[pos]->refreshVBO();
+			
+			m_chunks[pos]->render();
+			
+			vect3D center;
+			
+			center.x = m_chunks[pos]->x() + CHUNK_WIDTH / 2;
+			center.y = m_chunks[pos]->y() + CHUNK_DEPTH / 2;
+			center.z = CHUNK_HEIGHT / 2;
+			
+			float d = sqrt(pow(center.x - Game::player->x(), 2) + pow(center.y - Game::player->y(), 2) + pow(center.z - Game::player->z(), 2));
+			
+			if(d < distance) {
+				distance = d;
+				currentChunk = m_chunks[pos];
 			}
 		}
 	}
@@ -411,12 +399,12 @@ void Map::render() {
 	}
 }
 
-Chunk* Map::getChunk(int x, int y, int z) {
-	if ((x < 0) || (x >= m_width / CHUNK_WIDTH) || (y < 0) || (y >= m_depth / CHUNK_DEPTH) || (z < 0) || (z >= m_height / CHUNK_HEIGHT)) {
+Chunk* Map::getChunk(int x, int y) {
+	if ((x < 0) || (x >= m_width / CHUNK_WIDTH) || (y < 0) || (y >= m_depth / CHUNK_DEPTH)) {
 		return NULL;
 	}
 	
-	int coords = x + (y * (m_width / CHUNK_WIDTH)) + (z * (m_width / CHUNK_WIDTH) * (m_depth / CHUNK_DEPTH));
+	int coords = CHUNK_POS(x, y);
 	
 	return m_chunks[coords];
 }
@@ -511,35 +499,15 @@ void Map::testCubes() {
 	Cube *cube = NULL;
 	int face = -1;
 	Chunk *chunk = NULL;
-	Chunk *c = NULL;
-	unordered_map<int, Cube*> *cubes;
-	for(unsigned short i = 0 ; i < 7 + 20 ; i++) {
-		if(i == 6) cubes = currentChunk->cubes();
-		else if(i < 6) {
+	unordered_map<int, Cube*> *cubes = NULL;
+	for(unsigned short i = 0 ; i < 9 ; i++) {
+		if(i == 8) cubes = currentChunk->cubes();
+		else if(i < 8) {
 			if(currentChunk->surroundingChunks()[i] == NULL) continue;
 			cubes = currentChunk->surroundingChunks()[i]->cubes();
-		} else {
-			int coords[20 * 3] = {
-				1, 0, 1,	-1, 0, 1,	
-				1, 1, 0,	-1, 1, 0,
-				1, -1, 0,	-1, -1, 0,
-				1, 1, 1,	-1, 1, 1,	
-				1, -1, 1,	-1, -1, 1,
-				1, 0, -1,	-1, 0, -1,
-				1, 1, -1,	-1, 1, -1,
-				1, -1, -1,	-1, -1, -1,
-				0, 1, 1,	0, -1, 1,
-				0, 1, -1,	0, -1, -1
-			};
-			
-			c = getChunk((currentChunk->x() / CHUNK_WIDTH) + coords[(i-7)*3],
-						 (currentChunk->y() / CHUNK_DEPTH) + coords[(i-7)*3 + 1],
-						 (currentChunk->z() / CHUNK_HEIGHT) + coords[(i-7)*3 + 2]);
-			
-			if(c == NULL) continue;
-			
-			cubes = c->cubes();
 		}
+		
+		if(cubes == NULL) continue;
 		
 		for(std::unordered_map<int, Cube*>::iterator it = cubes->begin() ; it != cubes->end() ; it++) {
 			if(it->second == NULL) continue;
@@ -555,9 +523,8 @@ void Map::testCubes() {
 				distance = d;
 				cube = it->second;
 				face = f;
-				if(i == 6) chunk = currentChunk;
-				else if(i < 6) chunk = currentChunk->surroundingChunks()[i];
-				else if(c != NULL) chunk = c;
+				if(i == 8) chunk = currentChunk;
+				else if(i < 8) chunk = currentChunk->surroundingChunks()[i];
 			}
 		}
 	}
