@@ -42,8 +42,8 @@ using namespace std;
 Player *Game::player;
 Map *Game::map;
 
-unsigned int Game::mapWidth = 4 * CHUNK_WIDTH;
-unsigned int Game::mapDepth = 4 * CHUNK_DEPTH;
+unsigned int Game::mapWidth = 16 * CHUNK_WIDTH;
+unsigned int Game::mapDepth = 16 * CHUNK_DEPTH;
 unsigned int Game::mapHeight = CHUNK_HEIGHT;
 
 Game::Game() {
@@ -58,7 +58,7 @@ Game::~Game() {
 }
 
 void Game::exec() {
-	//lockMouse();
+	lockMouse();
 	
 	m_cont = true;
 	m_paused = false;

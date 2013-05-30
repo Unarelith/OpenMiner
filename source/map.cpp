@@ -74,7 +74,7 @@ Map::Map(u16 width, u16 depth, u16 height) {
 					
 					float perlin = snoise2((float)x * 0.01, (float)y * 0.01); // 0.035
 					
-					int heightValue = int(perlin * float(m_height / 2));
+					int heightValue = int(perlin * 16 + float(m_height / 2));
 					
 					for(int zz = 0 ; zz < heightValue ; zz++) {
 						float cavePerlin = snoise3(x * 0.1, y * 0.1, zz * 0.1) * 2;
@@ -159,7 +159,7 @@ Map::Map(u16 width, u16 depth, u16 height) {
 				currentChunk = m_chunks[pos];
 			}
 			
-			m_chunks[pos]->refreshVBO();
+			//m_chunks[pos]->refreshVBO(); find where it's done
 			cout << "Chunks loaded: " << pos+1 << endl;
 		}
 	}
@@ -278,14 +278,14 @@ int cubeInFrustum(float x, float y, float z, float size) {
 	
 	for(p = 0 ; p < 6 ; p++) {
 		c = 0;
-		if((frustum[p][0] * (x - size) + frustum[p][1] * (y - size) + frustum[p][2] * (z - size) + frustum[p][3] > 0)
-		|| (frustum[p][0] * (x + size) + frustum[p][1] * (y - size) + frustum[p][2] * (z - size) + frustum[p][3] > 0)
-		|| (frustum[p][0] * (x - size) + frustum[p][1] * (y + size) + frustum[p][2] * (z - size) + frustum[p][3] > 0)
-		|| (frustum[p][0] * (x + size) + frustum[p][1] * (y + size) + frustum[p][2] * (z - size) + frustum[p][3] > 0)
-		|| (frustum[p][0] * (x - size) + frustum[p][1] * (y - size) + frustum[p][2] * (z + size) + frustum[p][3] > 0)
-		|| (frustum[p][0] * (x + size) + frustum[p][1] * (y - size) + frustum[p][2] * (z + size) + frustum[p][3] > 0)
-		|| (frustum[p][0] * (x - size) + frustum[p][1] * (y + size) + frustum[p][2] * (z + size) + frustum[p][3] > 0)
-		|| (frustum[p][0] * (x + size) + frustum[p][1] * (y + size) + frustum[p][2] * (z + size) + frustum[p][3] > 0))
+		if((frustum[p][0] * (x - size) + frustum[p][1] * (y - size) + frustum[p][2] * (z - CHUNK_HEIGHT / 2) + frustum[p][3] > 0)
+		|| (frustum[p][0] * (x + size) + frustum[p][1] * (y - size) + frustum[p][2] * (z - CHUNK_HEIGHT / 2) + frustum[p][3] > 0)
+		|| (frustum[p][0] * (x - size) + frustum[p][1] * (y + size) + frustum[p][2] * (z - CHUNK_HEIGHT / 2) + frustum[p][3] > 0)
+		|| (frustum[p][0] * (x + size) + frustum[p][1] * (y + size) + frustum[p][2] * (z - CHUNK_HEIGHT / 2) + frustum[p][3] > 0)
+		|| (frustum[p][0] * (x - size) + frustum[p][1] * (y - size) + frustum[p][2] * (z + CHUNK_HEIGHT / 2) + frustum[p][3] > 0)
+		|| (frustum[p][0] * (x + size) + frustum[p][1] * (y - size) + frustum[p][2] * (z + CHUNK_HEIGHT / 2) + frustum[p][3] > 0)
+		|| (frustum[p][0] * (x - size) + frustum[p][1] * (y + size) + frustum[p][2] * (z + CHUNK_HEIGHT / 2) + frustum[p][3] > 0)
+		|| (frustum[p][0] * (x + size) + frustum[p][1] * (y + size) + frustum[p][2] * (z + CHUNK_HEIGHT / 2) + frustum[p][3] > 0))
 			c++;
 		if(c == 0) return 0;
 		else if(c == 8) c2++;
@@ -334,8 +334,8 @@ void Map::render() {
 			
 			pos = CHUNK_POS(x, y);
 			
-			//if(cubeInFrustum(m_chunks[pos]->x() + CHUNK_WIDTH / 2, m_chunks[pos]->y() + CHUNK_DEPTH / 2, CHUNK_HEIGHT / 2, (CHUNK_WIDTH + CHUNK_DEPTH) / 4) < 1)
-			//	continue;
+			if(cubeInFrustum(m_chunks[pos]->x() + CHUNK_WIDTH / 2, m_chunks[pos]->y() + CHUNK_DEPTH / 2, CHUNK_HEIGHT / 2, (CHUNK_WIDTH + CHUNK_DEPTH) / 4) < 1)
+				continue;
 			
 			if(!m_chunks[pos]->loaded()) m_chunks[pos]->refreshVBO();
 			
