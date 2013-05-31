@@ -27,11 +27,11 @@
 #define APP_LABEL "KubKraft"
 
 #define DIST_NEAR 0.1
-#define DIST_FAR (12 * (CHUNK_WIDTH + CHUNK_DEPTH) / 2)
+#define DIST_FAR (16 * (CHUNK_WIDTH + CHUNK_DEPTH) / 2)
 
 #define CHUNK_WIDTH 16
 #define CHUNK_DEPTH 16
-#define CHUNK_HEIGHT 128
+#define CHUNK_HEIGHT 256
 
 #define MAP_POS(x, y, z) ((x) + ((y) * Game::mapWidth) + ((z) * Game::mapWidth * Game::mapDepth))
 #define _MAP_POS(x, y, z) ((x) + ((y) * m_width) + ((z) * m_width * m_depth))

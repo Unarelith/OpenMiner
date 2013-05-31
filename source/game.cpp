@@ -47,7 +47,7 @@ unsigned int Game::mapDepth = 16 * CHUNK_DEPTH;
 unsigned int Game::mapHeight = CHUNK_HEIGHT;
 
 Game::Game() {
-	player = new Player(0, 0, 96, 90);
+	player = new Player(0, 0, 200, 90);
 	
 	map = new Map(mapWidth, mapDepth, mapHeight);
 }

@@ -218,11 +218,13 @@ void Chunk::refreshVBO() {
 		if (qe == NULL) continue;
 		Cube *cube = NULL;
 		
-		int coords[4 * 3] = {
+		int coords[6 * 3] = {
 			x-1, y, z,
 			x+1, y, z,
 			x, y-1, z,
-			x, y+1, z
+			x, y+1, z,
+			x, y, z+1,
+			x, y, z-1
 		};
 		
 		for(int i = 0 ; i < 6 ; i++) {
