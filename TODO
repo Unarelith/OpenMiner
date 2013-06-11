@@ -1,7 +1,6 @@
 - Caves: Almost done.
 - Improve performances:
 	* Improve update chunk display function with player direction
-	* Try with 16*16*256 chunks
 	* Make KubKraft framerate independant
 - Text display
 - Pause menu

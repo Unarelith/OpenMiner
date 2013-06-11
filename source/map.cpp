@@ -108,11 +108,13 @@ Map::Map(u16 width, u16 depth, u16 height) {
 					int heightValue = int(perlin * 8 + float(m_height / 2));
 					
 					for(int zz = 0 ; zz < heightValue ; zz++) {	
-						float caveValue = 1.0 - abs(snoise3(x * 0.01, y * 0.01, zz * 0.01));
+						if(zz == 0) { m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = 5; continue; }
+						float caveValue = (1.0 - abs(snoise3(x * 0.01, y * 0.01, zz * 0.01))
+										+ snoise3(x * 0.01 + 40, y * 0.01 + 40, zz * 0.01 + 40)
+										+ snoise3(x * 0.01 + 10, y * 0.01 + 10, zz * 0.01 + 10)
+										+ snoise3(x * 0.01 + 20, y * 0.01 + 20, zz * 0.01 + 20)) / 4.0;
 						m_map[_MAP_POS(x, y, zz)] = 1;
-						if(caveValue > 0.9555) m_map[_MAP_POS(x, y, zz)] = 0;
-						
-						if(zz == 0) m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = 5;
+						if(caveValue < 0.05) m_map[_MAP_POS(x, y, zz)] = 0;
 					}
 				}
 			}
