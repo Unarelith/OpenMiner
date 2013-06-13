@@ -65,37 +65,6 @@ Map::Map(u16 width, u16 depth, u16 height) {
 		}
 	}
 	
-	/*double seed = 0.156564;
-	std::cout << "Seed: " << seed << std::endl;
-	for (int yy = 0; yy < m_depth / CHUNK_DEPTH; yy++) {
-		for (int xx = 0; xx < m_width / CHUNK_WIDTH; xx++) {
-			for (int yC = 0; yC < CHUNK_DEPTH; yC++) {
-				for (int xC = 0; xC < CHUNK_WIDTH; xC++) {
-					int x = xx * CHUNK_WIDTH + xC;
-					int y = yy * CHUNK_DEPTH + yC;
-					
-					float perlin = snoise2((float)x * 0.01 + seed, (float)y * 0.01 + seed); // 0.01
-					
-					int heightValue = int(perlin * 16 + float(m_height / 2));
-					
-					for(int zz = 0 ; zz < heightValue ; zz++) {
-						//float cavePerlin = snoise3(x * 0.1, y * 0.1, zz * 0.1) * 2;
-						
-						//if(cavePerlin > -2 && cavePerlin < 1) {
-							int dirtHeight = (1.0 - rand()%10 / 100 - 0.20) * heightValue;
-							if(zz < dirtHeight) m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = 1;
-							else if(zz > dirtHeight && zz < dirtHeight + 3) m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = rand()%2 + 1;
-							else m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = 2;
-						//	if(zz < 16 && cavePerlin > 0.01 && cavePerlin < 0.02) m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = 10;
-						//}
-						
-						if(zz == 0) m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = 5;
-					}
-				}
-			}
-		}
-	}*/
-	
 	for (int yy = 0; yy < m_depth / CHUNK_DEPTH; yy++) {
 		for (int xx = 0; xx < m_width / CHUNK_WIDTH; xx++) {
 			for (int yC = 0; yC < CHUNK_DEPTH; yC++) {
@@ -105,16 +74,20 @@ Map::Map(u16 width, u16 depth, u16 height) {
 					
 					float perlin = snoise2((float)x * 0.01, (float)y * 0.01); // 0.01
 					
-					int heightValue = int(perlin * 8 + float(m_height / 2));
+					int heightValue = int(perlin * 16 + float(m_height / 2));
 					
-					for(int zz = 0 ; zz < heightValue ; zz++) {	
-						if(zz == 0) { m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = 5; continue; }
-						float caveValue = (1.0 - abs(snoise3(x * 0.01, y * 0.01, zz * 0.01))
-										+ snoise3(x * 0.01 + 40, y * 0.01 + 40, zz * 0.01 + 40)
-										+ snoise3(x * 0.01 + 10, y * 0.01 + 10, zz * 0.01 + 10)
-										+ snoise3(x * 0.01 + 20, y * 0.01 + 20, zz * 0.01 + 20)) / 4.0;
-						m_map[_MAP_POS(x, y, zz)] = 1;
-						if(caveValue < 0.05) m_map[_MAP_POS(x, y, zz)] = 0;
+					for(int zz = 0 ; zz < heightValue ; zz++) {
+						//float cavePerlin = snoise3(x * 0.025, y * 0.025, zz * 0.025);
+						
+						//if(cavePerlin > -1 && cavePerlin < 0.5) {
+							int dirtHeight = (1.0 - rand()%10 / 100 - 0.20) * heightValue;
+							if(zz < dirtHeight) m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = 1;
+							else if(zz > dirtHeight && zz < dirtHeight + 3) m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = rand()%2 + 1;
+							else m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = 2;
+						//	if(zz < 16 && cavePerlin > 0.005 && cavePerlin < 0.01) m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = 10;
+						//}
+						
+						if(zz == 0) m_map[_MAP_POS(xC + (xx * CHUNK_WIDTH), yC + (yy * CHUNK_DEPTH), zz)] = 5;
 					}
 				}
 			}

@@ -40,7 +40,7 @@
 
 #define PLAYER_HEIGHT 1.8
 #define MOVEMENT_SPEED 3.5
-#define FLY_SPEED 0.05
+#define FLY_SPEED 0.15
 #define JUMP_SPEED 0.2
 #define GRAVITY 0.01
 

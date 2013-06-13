@@ -64,7 +64,7 @@ export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir))
 export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
 #---------------------------------------------------------------------------------
-.PHONY: $(BUILD) clean install uninstall
+.PHONY: $(BUILD) clean run install uninstall
 #------------------------------------------------------------------------------
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
@@ -74,6 +74,11 @@ $(BUILD):
 clean:
 	@echo clean ...
 	@rm -fr $(BUILD) $(TARGET)
+
+#---------------------------------------------------------------------------------
+run:
+	@echo running ...
+	@./$(TARGET)
 
 #---------------------------------------------------------------------------------
 install:
