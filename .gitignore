@@ -1,6 +1,5 @@
-build
 *~
-KubKraft
 *.swp
 *.swo
-lib
+build
+KubKraft
