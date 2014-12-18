@@ -26,7 +26,7 @@
 
 #define EXCEPTION(args...) (Exception(__LINE__, _FILE, args))
 
-class Exception : public std::exception {
+class Exception {
 	public:
 		template<typename... Args>
 		Exception(u16 line, std::string filename, Args... args) throw() {
@@ -40,8 +40,8 @@ class Exception : public std::exception {
 		~Exception() throw() {
 		}
 		
-		virtual const char *what() const throw() {
-			return (Debug::textColor(Debug::TextColor::Red, true) + "at " + m_filename + ":" + std::to_string(m_line) + ": " + Debug::textColor(0, true) + m_errorMsg.c_str() + Debug::textColor()).c_str();
+		virtual std::string what() const throw() {
+			return Debug::textColor(Debug::TextColor::Red, true) + "at " + m_filename + ":" + std::to_string(m_line) + ": " + Debug::textColor(0, true) + m_errorMsg.c_str() + Debug::textColor();
 		}
 		
 	private:

@@ -17,67 +17,56 @@
  */
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include "GameState.hpp"
 
 GameState::GameState() {
 	m_shader.loadFromFile("shaders/game.v.glsl", "shaders/game.f.glsl");
 	
-	glGenBuffers(1, &m_vbo);
-	
-	GLfloat vertices[2 * 4] = {
-		0.0, 1.0,
-		1.0, 0.0,
-		0.0, -1.0,
-		-1.0, 0.0
-	};
-	
-	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-	
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices) * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
-	
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	
 	Shader::bind(&m_shader);
 	
-	glm::mat4 projectionMatrix = glm::perspective(80.0f, 1.0f, 0.1f, 1000.0f);
-	glUniformMatrix4fv(m_shader.uniform("u_projectionMatrix"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
+	m_projectionMatrix = glm::perspective(45.0f, 640.0f / 480.0f, 0.1f, 3000.0f);
+	/*glm::mat4 modelviewMatrix = glm::lookAt(glm::vec3(-20.0f, 40.0f, -20.0f),
+											glm::vec3(16.0f, 16.0f, 16.0f),
+											glm::vec3(0.0f, 1.0f, 0.0f));
+	*/
+	m_viewMatrix = m_camera.update();
 	
-	glm::mat4 viewMatrix = glm::lookAt(glm::vec3(0.0f, 1.0f, 1.0f),
-									   glm::vec3(0.0f, 0.0f, 0.0f),
-									   glm::vec3(0.0f, 1.0f, 0.0f));
-	glUniformMatrix4fv(m_shader.uniform("u_viewMatrix"), 1, GL_FALSE, glm::value_ptr(viewMatrix));
+	//glActiveTexture(GL_TEXTURE0);
+	
+	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+	
+	m_shader.setUniform("u_tex", 0);
 	
 	Shader::bind(nullptr);
 }
 
 GameState::~GameState() {
-	glDeleteBuffers(1, &m_vbo);
 }
 
 void GameState::update() {
+	m_viewMatrix = m_camera.processInputs();
+	
+	//Shader::bind(&m_shader);
+	//m_shader.setUniform("u_MVP", m_projectionMatrix * m_modelviewMatrix);
+	//Shader::bind(nullptr);
 }
 
 void GameState::draw() {
 	Shader::bind(&m_shader);
 	
-	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+	m_world.draw(m_shader, m_projectionMatrix * m_viewMatrix);
 	
-	glVertexAttribPointer(m_shader.attrib("coord2d"), 2, GL_FLOAT, GL_FALSE, 0, 0);
-	
-	m_shader.enableVertexAttribArray("coord2d");
-	
-	GLubyte indices[6] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-	
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
-	
-	m_shader.disableVertexAttribArray("coord2d");
-	
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	/*glBegin(GL_LINES);
+		glColor3f(1, 1, 1); glVertex3f(0, 0, 0);
+		glColor3f(1, 1, 1); glVertex3f(0, 5, 0);
+		
+		glColor3f(1, 0, 1); glVertex3f(0, 0, 0);
+		glColor3f(1, 0, 1); glVertex3f(5, 0, 0);
+		
+		glColor3f(1, 1, 0); glVertex3f(0, 0, 0);
+		glColor3f(1, 1, 0); glVertex3f(0, 0, 5);
+	glEnd();*/
 	
 	Shader::bind(nullptr);
 }

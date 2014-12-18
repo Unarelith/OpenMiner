@@ -18,6 +18,10 @@
 #ifndef SHADER_HPP_
 #define SHADER_HPP_
 
+#include <string>
+
+#include <glm/glm.hpp>
+
 #include "OpenGL.hpp"
 
 class Shader {
@@ -30,11 +34,14 @@ class Shader {
 		
 		void compileShader(GLenum type, GLuint &shader, const char *filename);
 		
-		GLint attrib(const char *attribName);
-		GLint uniform(const char *uniformName);
+		GLint attrib(std::string name);
+		GLint uniform(std::string name);
 		
-		void enableVertexAttribArray(const char *attribName);
-		void disableVertexAttribArray(const char *attribName);
+		void enableVertexAttribArray(std::string name);
+		void disableVertexAttribArray(std::string name);
+		
+		void setUniform(std::string name, int n);
+		void setUniform(std::string name, const glm::mat4 &matrix);
 		
 		static void bind(const Shader *shader);
 		

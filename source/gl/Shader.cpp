@@ -18,6 +18,9 @@
 #include <iostream>
 #include <fstream>
 
+#define GLM_FORCE_RADIANS
+#include <glm/gtc/type_ptr.hpp>
+
 #include "Exception.hpp"
 #include "Shader.hpp"
 
@@ -107,32 +110,40 @@ void Shader::compileShader(GLenum type, GLuint &shader, const char *filename) {
 	}
 }
 
-GLint Shader::attrib(const char *attribName) {
-	GLint attrib = glGetAttribLocation(m_program, attribName);
+GLint Shader::attrib(std::string name) {
+	GLint attrib = glGetAttribLocation(m_program, name.c_str());
 	
 	if(attrib == -1) {
-		throw EXCEPTION("Could not bind attribute:", attribName);
+		throw EXCEPTION("Could not bind attribute:", name);
 	}
 	
 	return attrib;
 }
 
-GLint Shader::uniform(const char *uniformName) {
-	GLint uniform = glGetUniformLocation(m_program, uniformName);
+GLint Shader::uniform(std::string name) {
+	GLint uniform = glGetUniformLocation(m_program, name.c_str());
 	
 	if(uniform == -1) {
-		throw EXCEPTION("Could not bind uniform:", uniformName);
+		throw EXCEPTION("Could not bind uniform:", name);
 	}
 	
 	return uniform;
 }
 
-void Shader::enableVertexAttribArray(const char *attribName) {
-	glEnableVertexAttribArray(attrib(attribName));
+void Shader::enableVertexAttribArray(std::string name) {
+	glEnableVertexAttribArray(attrib(name));
 }
 
-void Shader::disableVertexAttribArray(const char *attribName) {
-	glDisableVertexAttribArray(attrib(attribName));
+void Shader::disableVertexAttribArray(std::string name) {
+	glDisableVertexAttribArray(attrib(name));
+}
+
+void Shader::setUniform(std::string name, int n) {
+	glUniform1i(uniform(name), n);
+}
+
+void Shader::setUniform(std::string name, const glm::mat4 &matrix) {
+	glUniformMatrix4fv(uniform(name), 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 void Shader::bind(const Shader *shader) {

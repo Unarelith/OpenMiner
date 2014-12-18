@@ -29,6 +29,8 @@ class Application {
 		Application();
 		~Application();
 		
+		void initGL();
+		
 		void handleEvents();
 		
 		void run();

@@ -1,13 +1,22 @@
 #version 120
 
-attribute vec2 coord2d;
+attribute vec3 coord3d;
+attribute vec3 normal;
+attribute vec2 texCoord;
 
-uniform mat4 u_projectionMatrix;
-uniform mat4 u_viewMatrix;
+varying vec4 v_coord3d;
+varying vec4 v_normal;
+varying vec2 v_texCoord;
+
+uniform mat4 u_modelMatrix;
+uniform mat4 u_viewProjectionMatrix;
 
 void main() {
-	mat4 MVP = u_projectionMatrix * u_viewMatrix;
+	v_coord3d = u_modelMatrix * vec4(coord3d, 1.0);
 	
-	gl_Position = MVP * vec4(coord2d, 0.0, 1.0);
+	gl_Position = u_viewProjectionMatrix * v_coord3d;
+	
+	v_normal = vec4(normal, 1.0);
+	v_texCoord = texCoord;
 }
 

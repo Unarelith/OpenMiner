@@ -18,9 +18,11 @@
 #ifndef GAMESTATE_HPP_
 #define GAMESTATE_HPP_
 
+#include <glm/glm.hpp>
+
 #include "ApplicationState.hpp"
-#include "OpenGL.hpp"
-#include "Shader.hpp"
+#include "Camera.hpp"
+#include "World.hpp"
 
 class GameState : public ApplicationState {
 	public:
@@ -32,9 +34,14 @@ class GameState : public ApplicationState {
 		void draw();
 		
 	private:
-		GLuint m_vbo;
+		glm::mat4 m_projectionMatrix;
+		glm::mat4 m_viewMatrix;
+		
+		Camera m_camera;
 		
 		Shader m_shader;
+		
+		World m_world;
 };
 
 #endif // GAMESTATE_HPP_
