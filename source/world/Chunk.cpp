@@ -174,6 +174,7 @@ void Chunk::update() {
 						|| (x == width - 1	&& m_surroundingChunks[1] && m_surroundingChunks[1]->getBlock(0, y, z)			&& i == 1)
 						|| (z == 0			&& m_surroundingChunks[2] && m_surroundingChunks[2]->getBlock(x, y, depth - 1)	&& i == 5)
 						|| (z == depth - 1	&& m_surroundingChunks[3] && m_surroundingChunks[3]->getBlock(x, y, 0)			&& i == 4)
+						|| y < 18
 						) {
 							continue;
 						}
@@ -183,6 +184,8 @@ void Chunk::update() {
 						glm::vec3 normal = glm::normalize(glm::cross(u, v));
 						
 						for(u8 j = 0 ; j < 4 ; j++) {
+							DEBUG("(", (int)x, (int)y, (int)z, "): [", (int)i, (int)j, "] >= (", x + cubeCoords[i * 12 + j * 3], y + cubeCoords[i * 12 + j * 3 + 1], z + cubeCoords[i * 12 + j * 3 + 2], ")");
+							
 							m_vertices.push_back(x + cubeCoords[i * 12 + j * 3]);
 							m_vertices.push_back(y + cubeCoords[i * 12 + j * 3 + 1]);
 							m_vertices.push_back(z + cubeCoords[i * 12 + j * 3 + 2]);

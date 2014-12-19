@@ -37,7 +37,6 @@ void main() {
 	}
 	
 	vec4 surfaceColor = texture2D(u_tex, v_texCoord);
-	
 	gl_FragColor = surfaceColor * (ambientColor + diffuseColor);
 }
 

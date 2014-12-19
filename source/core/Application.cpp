@@ -54,6 +54,8 @@ void Application::initGL() {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	
+	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+	
 	glClearColor(0.196078, 0.6, 0.8, 1.0); // Skyblue
 }
 

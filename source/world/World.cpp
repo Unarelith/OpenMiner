@@ -21,8 +21,8 @@
 #include "World.hpp"
 
 World::World() {
-	m_width = 4;
-	m_depth = 4;
+	m_width = 1;
+	m_depth = 1;
 	
 	//for(s32 z = -m_depth / 2 ; z < m_depth / 2 ; z++) {
 	//	for(s32 x = -m_width / 2 ; x < m_width / 2 ; x++) {

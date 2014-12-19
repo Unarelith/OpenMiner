@@ -26,15 +26,7 @@ GameState::GameState() {
 	Shader::bind(&m_shader);
 	
 	m_projectionMatrix = glm::perspective(45.0f, 640.0f / 480.0f, 0.1f, 3000.0f);
-	/*glm::mat4 modelviewMatrix = glm::lookAt(glm::vec3(-20.0f, 40.0f, -20.0f),
-											glm::vec3(16.0f, 16.0f, 16.0f),
-											glm::vec3(0.0f, 1.0f, 0.0f));
-	*/
 	m_viewMatrix = m_camera.update();
-	
-	//glActiveTexture(GL_TEXTURE0);
-	
-	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
 	
 	m_shader.setUniform("u_tex", 0);
 	
