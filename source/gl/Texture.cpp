@@ -47,9 +47,10 @@ void Texture::load(const std::string &filename) {
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	
-	//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	GLenum format = (surface->format->BytesPerPixel == 4) ? GL_RGBA : GL_RGB;
 	glTexImage2D(GL_TEXTURE_2D, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
+	
+	glGenerateMipmap(GL_TEXTURE_2D);
 	
 	bind(nullptr);
 	

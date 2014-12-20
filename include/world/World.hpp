@@ -29,7 +29,7 @@ class World {
 		
 		void draw(Shader &shader, const glm::mat4 &pv);
 		
-		Chunk *getChunk(s16 x, s16 z) { return m_chunks[x + z * m_width].get(); }
+		Chunk *getChunk(s32 x, s32 z);
 		
 	private:
 		s32 m_width;
