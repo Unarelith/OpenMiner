@@ -19,7 +19,7 @@
 #define OPENGL_HPP_
 
 #ifdef __APPLE__
-	#include <OpenGL/glew.h>
+	#include <OpenGL/gl.h>
 #else
 	#ifdef __MINGW32__
 		#include <GL/glew.h>

@@ -26,10 +26,10 @@
 class Texture {
 	public:
 		Texture();
-		Texture(std::string filename);
+		Texture(const std::string &filename);
 		~Texture();
 		
-		void load(std::string filename);
+		void load(const std::string &filename);
 		
 		static void bind(const Texture *texture);
 		
@@ -43,8 +43,6 @@ class Texture {
 		u16 m_height;
 		
 		GLuint m_texture;
-		
-		u8 m_paletteID;
 };
 
 #endif // TEXTURE_HPP_

@@ -20,8 +20,6 @@
 
 #include <vector>
 
-#include <SFML/Graphics/Texture.hpp>
-
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "VertexBuffer.hpp"

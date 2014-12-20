@@ -22,14 +22,14 @@
 Texture::Texture() {
 }
 
-Texture::Texture(std::string filename) {
+Texture::Texture(const std::string &filename) {
 	load(filename);
 }
 
 Texture::~Texture() {
 }
 
-void Texture::load(std::string filename) {
+void Texture::load(const std::string &filename) {
 	SDL_Surface *surface = IMG_Load(filename.c_str());
 	if(!surface) {
 		throw EXCEPTION("Failed to load texture:", filename);
@@ -45,17 +45,15 @@ void Texture::load(std::string filename) {
 	bind(this);
     
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	
-	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-	
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
+	//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	GLenum format = (surface->format->BytesPerPixel == 4) ? GL_RGBA : GL_RGB;
+	glTexImage2D(GL_TEXTURE_2D, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
 	
 	bind(nullptr);
 	
 	SDL_FreeSurface(surface);
-	
-	m_paletteID = 0;
 }
 
 void Texture::bind(const Texture *texture) {

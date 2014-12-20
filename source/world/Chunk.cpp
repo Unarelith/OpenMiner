@@ -200,10 +200,10 @@ void Chunk::update() {
 }
 
 void Chunk::draw(Shader &shader) {
+	//if(m_changed) update();
 	if(m_changed) {
 		int truc = GameClock::getTicks(true);
 		
-		//if(m_changed) update();
 		update();
 		
 		DEBUG("Chunk", m_x, m_y, m_z, "| Vertices:", m_vertices.size(), "| Update time:", GameClock::getTicks(true) - truc, "ms");

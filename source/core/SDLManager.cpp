@@ -30,7 +30,8 @@ void SDLManager::init() {
 		sdlInitialized = true;
 	}
 	
-	if(!IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) {
+	int imgFlags = IMG_INIT_PNG;
+	if(!IMG_Init(imgFlags) & imgFlags) {
 		EXCEPTION("SDL image init error:", SDL_GetError());
 	} else {
 		imgInitialized = true;
