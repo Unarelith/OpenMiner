@@ -17,6 +17,8 @@
  */
 #include "Application.hpp"
 #include "ApplicationState.hpp"
+#include "Config.hpp"
+#include "Mouse.hpp"
 
 ApplicationState::ApplicationState() {
 	
@@ -26,8 +28,9 @@ ApplicationState::~ApplicationState() {
 }
 
 void ApplicationState::handleEvents() {
-	SDL_Event event;
+	Mouse::reset();
 	
+	SDL_Event event;
 	while(SDL_PollEvent(&event) != 0) {
 		switch(event.type) {
 			case SDL_QUIT:
@@ -37,6 +40,9 @@ void ApplicationState::handleEvents() {
 				if(event.key.keysym.sym == SDLK_ESCAPE) {
 					Application::getInstance().window().close();
 				}
+				break;
+			case SDL_MOUSEMOTION:
+				Mouse::update(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
 				break;
 			default:
 				break;

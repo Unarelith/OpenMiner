@@ -20,6 +20,7 @@
 
 #include "Camera.hpp"
 #include "Keyboard.hpp"
+#include "Mouse.hpp"
 
 Camera::Camera() {
 	m_x = 0;
@@ -74,42 +75,36 @@ void Camera::move(float direction) {
 }
 
 glm::mat4 Camera::processInputs() {
-	if(Keyboard::isKeyPressed(Keyboard::X)) {
-		turnV(1);
-		m_viewMatrix = update();
-	}
-	else if(Keyboard::isKeyPressed(Keyboard::W)) {
-		turnV(-1);
+	if(Mouse::getDX() != 0 || Mouse::getDY() != 0) {
+		turnH(Mouse::getDX() * 0.02);
+		turnV(-Mouse::getDY() * 0.02);
 		m_viewMatrix = update();
 	}
 	
-	if(Keyboard::isKeyPressed(Keyboard::Left)) {
-		turnH(-0.8);
+	if(Keyboard::isKeyPressed(Keyboard::Space)) {
+		m_y += 0.1;
 		m_viewMatrix = update();
 	}
-	
-	if(Keyboard::isKeyPressed(Keyboard::Right)) {
-		turnH(0.8);
-		m_viewMatrix = update();
-	}
-	
-	if(Keyboard::isKeyPressed(Keyboard::BackSpace)) {
+	if(Keyboard::isKeyPressed(Keyboard::LeftShift)) {
 		m_y -= 0.1;
 		m_viewMatrix = update();
 	}
 	
-	if(Keyboard::isKeyPressed(Keyboard::Return)) {
-		m_y += 0.1;
-		m_viewMatrix = update();
-	}
-	
-	if(Keyboard::isKeyPressed(Keyboard::Up)) {
+	if(Keyboard::isKeyPressed(Keyboard::Z)) {
 		move(0.0f);
 		m_viewMatrix = update();
 	}
-	
-	if(Keyboard::isKeyPressed(Keyboard::Down)) {
+	else if(Keyboard::isKeyPressed(Keyboard::S)) {
 		move(180.0f);
+		m_viewMatrix = update();
+	}
+	
+	if(Keyboard::isKeyPressed(Keyboard::Q)) {
+		move(-90.0f);
+		m_viewMatrix = update();
+	}
+	else if(Keyboard::isKeyPressed(Keyboard::D)) {
+		move(90.0f);
 		m_viewMatrix = update();
 	}
 	

@@ -31,12 +31,17 @@ class Keyboard {
 			W,
 			X,
 			Z,
+			
 			Left,
 			Right,
 			Up,
 			Down,
+			
 			BackSpace,
-			Return
+			LeftShift,
+			Space,
+			Return,
+			RightShift
 		};
 		
 		static bool isKeyPressed(Key key);

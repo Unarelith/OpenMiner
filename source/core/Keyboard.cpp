@@ -20,11 +20,6 @@
 #include "SDLHeaders.hpp"
 
 std::map<Keyboard::Key, bool> Keyboard::pressed = {
-	{Key::Left,		false},
-	{Key::Right,	false},
-	{Key::Up,		false},
-	{Key::Down,		false},
-	
 	{Key::D,		false},
 	{Key::Q,		false},
 	{Key::S,		false},
@@ -32,16 +27,19 @@ std::map<Keyboard::Key, bool> Keyboard::pressed = {
 	{Key::X,		false},
 	{Key::Z,		false},
 	
-	{Key::BackSpace,false},
-	{Key::Return,	false}
+	{Key::Left,		false},
+	{Key::Right,	false},
+	{Key::Up,		false},
+	{Key::Down,		false},
+	
+	{Key::BackSpace,  false},
+	{Key::LeftShift,  false},
+	{Key::RightShift, false},
+	{Key::Space,	  false},
+	{Key::Return,	  false}
 };
 
 std::map<Keyboard::Key, u32> Keyboard::lastTimePressed = {
-	{Key::Left,		0},
-	{Key::Right,	0},
-	{Key::Up,		0},
-	{Key::Down,		0},
-	
 	{Key::D,		0},
 	{Key::Q,		0},
 	{Key::S,		0},
@@ -49,16 +47,19 @@ std::map<Keyboard::Key, u32> Keyboard::lastTimePressed = {
 	{Key::X,		0},
 	{Key::Z,		0},
 	
-	{Key::BackSpace,0},
-	{Key::Return,	0}
+	{Key::Left,		0},
+	{Key::Right,	0},
+	{Key::Up,		0},
+	{Key::Down,		0},
+	
+	{Key::BackSpace,  0},
+	{Key::LeftShift,  0},
+	{Key::Space,	  0},
+	{Key::Return,	  0},
+	{Key::RightShift, 0}
 };
 
 std::map<Keyboard::Key, u32> Keyboard::keysCode = {
-	{Key::Left,		SDLK_LEFT},
-	{Key::Right,	SDLK_RIGHT},
-	{Key::Up,		SDLK_UP},
-	{Key::Down,		SDLK_DOWN},
-	
 	{Key::D,		SDLK_d},
 	{Key::Q,		SDLK_q},
 	{Key::S,		SDLK_s},
@@ -66,8 +67,16 @@ std::map<Keyboard::Key, u32> Keyboard::keysCode = {
 	{Key::X,		SDLK_x},
 	{Key::Z,		SDLK_z},
 	
-	{Key::BackSpace,SDLK_BACKSPACE},
-	{Key::Return,	SDLK_RETURN}
+	{Key::Left,		SDLK_LEFT},
+	{Key::Right,	SDLK_RIGHT},
+	{Key::Up,		SDLK_UP},
+	{Key::Down,		SDLK_DOWN},
+	
+	{Key::BackSpace,  SDLK_BACKSPACE},
+	{Key::LeftShift,  SDLK_LSHIFT},
+	{Key::Space,	  SDLK_SPACE},
+	{Key::Return,	  SDLK_RETURN},
+	{Key::RightShift, SDLK_RSHIFT}
 };
 
 const u8 *Keyboard::getState() {

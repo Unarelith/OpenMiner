@@ -1,12 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  Config.hpp
+ *       Filename:  Mouse.cpp
  *
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  14/12/2014 13:45:14
+ *        Created:  20/12/2014 15:39:17
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -15,12 +15,27 @@
  *
  * =====================================================================================
  */
-#ifndef CONFIG_HPP_
-#define CONFIG_HPP_
+#include "Mouse.hpp"
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+s32 Mouse::x = 0;
+s32 Mouse::y = 0;
 
-#define APP_NAME "KubKraft"
+s32 Mouse::dx = 0;
+s32 Mouse::dy = 0;
 
-#endif // CONFIG_HPP_
+void Mouse::reset() {
+	x = 0;
+	y = 0;
+	
+	dx = 0;
+	dy = 0;
+}
+
+void Mouse::update(s32 x, s32 y, s32 dx, s32 dy) {
+	Mouse::x = x;
+	Mouse::y = y;
+	
+	Mouse::dx = dx;
+	Mouse::dy = dy;
+}
+
