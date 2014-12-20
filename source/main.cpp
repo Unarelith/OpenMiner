@@ -20,9 +20,12 @@
 #include "Application.hpp"
 #include "Debug.hpp"
 #include "Exception.hpp"
+#include "SDLManager.hpp"
 
 int main(int argc, char *argv[]) {
 	try {
+		SDLManager::init();
+		
 		Application &app = Application::getInstance();
 		
 		app.run();
@@ -39,6 +42,8 @@ int main(int argc, char *argv[]) {
 		std::cerr << "Fatal error: Unknown error." << std::endl;
 		return 1;
 	}
+	
+	SDLManager::free();
 	
 	return 0;
 }

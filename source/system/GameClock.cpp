@@ -18,7 +18,6 @@
 #include "Application.hpp"
 #include "GameClock.hpp"
 
-sf::Clock GameClock::clock;
 u32 GameClock::ticks = 0;
 
 GameClock::GameClock() {
@@ -36,7 +35,7 @@ GameClock::~GameClock() {
 
 u32 GameClock::getTicks(bool realTime) {
 	if(realTime) {
-		return clock.getElapsedTime().asMilliseconds();
+		return SDL_GetTicks();
 	} else {
 		return ticks;
 	}
@@ -76,7 +75,7 @@ void GameClock::drawGame(std::function<void(void)> drawFunc) {
 	m_lastFrameDuration = getTicks(true) - m_timeDropped - m_lastFrameDate;
 	
 	if(m_lastFrameDuration < m_timestep) {
-		sf::sleep(sf::milliseconds(m_timestep - m_lastFrameDuration));
+		SDL_Delay(m_timestep - m_lastFrameDuration);
 	}
 	
 	m_now = 0;

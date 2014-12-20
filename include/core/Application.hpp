@@ -18,10 +18,9 @@
 #ifndef APPLICATION_HPP_
 #define APPLICATION_HPP_
 
-#include <SFML/Graphics/RenderWindow.hpp>
-
 #include "ApplicationStateStack.hpp"
 #include "GameClock.hpp"
+#include "Window.hpp"
 //#include "ResourceHandler.hpp"
 
 class Application {
@@ -35,9 +34,7 @@ class Application {
 		
 		void run();
 		
-		void resetView() { m_window.setView(m_defaultView); }
-		
-		sf::RenderWindow &window() { return m_window; }
+		Window &window() { return m_window; }
 		
 		static Application &getInstance() {
 			static Application instance;
@@ -45,8 +42,7 @@ class Application {
 		}
 		
 	private:
-		sf::RenderWindow m_window;
-		sf::View m_defaultView;
+		Window m_window;
 		
 		GameClock m_clock;
 		

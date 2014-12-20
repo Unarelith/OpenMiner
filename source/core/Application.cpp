@@ -28,9 +28,10 @@
 Application::Application() {
 	srand(time(NULL));
 	
-	m_window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), APP_NAME, sf::Style::Close, sf::ContextSettings(24, 8, 2));
+	m_window.open(APP_NAME, SCREEN_WIDTH, SCREEN_HEIGHT);
+	m_window.setMouseCursorGrabbed(true);
+	m_window.setMouseCursorVisible(false);
 	m_window.setVerticalSyncEnabled(true);
-	m_defaultView.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	
 	initGL();
 	
@@ -42,9 +43,11 @@ Application::~Application() {
 }
 
 void Application::initGL() {
+#ifdef __MINGW32__
 	if(glewInit() != GLEW_OK) {
 		throw EXCEPTION("glew init failed");
 	}
+#endif
 	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -59,35 +62,18 @@ void Application::initGL() {
 	glClearColor(0.196078, 0.6, 0.8, 1.0); // Skyblue
 }
 
-void Application::handleEvents() {
-	sf::Event event;
-	while(m_window.pollEvent(event)) {
-		if(event.type == sf::Event::Closed) {
-			m_window.close();
-		}
-		
-		if(event.type == sf::Event::KeyPressed
-		&& event.key.code == sf::Keyboard::Escape) {
-			m_window.close();
-		}
-	}
-}
-
 void Application::run() {
 	while(m_window.isOpen()) {
 		m_clock.measureLastFrameDuration();
 		
-		handleEvents();
+		m_applicationStateStack->top().handleEvents();
 		
 		m_clock.updateGame([&]{
 			m_applicationStateStack->top().update();
 		});
 		
 		m_clock.drawGame([&]{
-			//m_window.clear();
-			m_window.setView(m_defaultView);
-			
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			m_window.clear();
 			
 			m_applicationStateStack->top().draw();
 			

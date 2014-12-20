@@ -1,12 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  OpenGL.hpp
+ *       Filename:  SDLManager.hpp
  *
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  15/12/2014 04:18:34
+ *        Created:  20/12/2014 01:24:24
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -15,17 +15,18 @@
  *
  * =====================================================================================
  */
-#ifndef OPENGL_HPP_
-#define OPENGL_HPP_
+#ifndef SDLMANAGER_HPP_
+#define SDLMANAGER_HPP_
 
-#ifdef __APPLE__
-	#include <OpenGL/glew.h>
-#else
-	#ifdef __MINGW32__
-		#include <GL/glew.h>
-	#else
-		#include <GL/gl.h>
-	#endif
-#endif
+class SDLManager {
+	public:
+		static void init();
+		static void free();
+		
+	private:
+		static bool sdlInitialized;
+		static bool imgInitialized;
+		static bool mixInitialized;
+};
 
-#endif // OPENGL_HPP_
+#endif // SDLMANAGER_HPP_

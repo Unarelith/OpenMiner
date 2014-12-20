@@ -21,8 +21,8 @@
 #include "World.hpp"
 
 World::World() {
-	m_width = 1;
-	m_depth = 1;
+	m_width = 2;
+	m_depth = 2;
 	
 	//for(s32 z = -m_depth / 2 ; z < m_depth / 2 ; z++) {
 	//	for(s32 x = -m_width / 2 ; x < m_width / 2 ; x++) {
@@ -64,12 +64,14 @@ void World::draw(Shader &shader, const glm::mat4 &pv) {
 		center.y /= center.w;
 		
 		// If it is behind the camera, don't bother drawing it
-		if(center.z < -Chunk::height / 2)
+		if(center.z < -Chunk::height / 2) {
 			continue;
+		}
 		
 		// It it is outside the screen, don't bother drawing it
-		if(fabsf(center.x) > 1 + fabsf(Chunk::height * 2 / center.w) || fabsf(center.y) > 1 + fabsf(Chunk::height * 2 / center.w))
+		if(fabsf(center.x) > 1 + fabsf(Chunk::height * 2 / center.w) || fabsf(center.y) > 1 + fabsf(Chunk::height * 2 / center.w)) {
 			continue;
+		}
 		
 		if(!it->initialized()) {
 			if(ux < 0 || d < ud) {
@@ -89,11 +91,12 @@ void World::draw(Shader &shader, const glm::mat4 &pv) {
 	
 	if(ux >= 0) {
 		getChunk(ux, uz)->generate();
+		getChunk(ux, uz)->setInitialized(true);
+		
 		if(getChunk(ux, uz)->left())  getChunk(ux, uz)->left()->generate();
 		if(getChunk(ux, uz)->right()) getChunk(ux, uz)->right()->generate();
 		if(getChunk(ux, uz)->front()) getChunk(ux, uz)->front()->generate();
 		if(getChunk(ux, uz)->back())  getChunk(ux, uz)->back()->generate();
-		getChunk(ux, uz)->setInitialized(true);
 	}
 }
 

@@ -38,27 +38,12 @@ GameState::~GameState() {
 
 void GameState::update() {
 	m_viewMatrix = m_camera.processInputs();
-	
-	//Shader::bind(&m_shader);
-	//m_shader.setUniform("u_MVP", m_projectionMatrix * m_modelviewMatrix);
-	//Shader::bind(nullptr);
 }
 
 void GameState::draw() {
 	Shader::bind(&m_shader);
 	
 	m_world.draw(m_shader, m_projectionMatrix * m_viewMatrix);
-	
-	/*glBegin(GL_LINES);
-		glColor3f(1, 1, 1); glVertex3f(0, 0, 0);
-		glColor3f(1, 1, 1); glVertex3f(0, 5, 0);
-		
-		glColor3f(1, 0, 1); glVertex3f(0, 0, 0);
-		glColor3f(1, 0, 1); glVertex3f(5, 0, 0);
-		
-		glColor3f(1, 1, 0); glVertex3f(0, 0, 0);
-		glColor3f(1, 1, 0); glVertex3f(0, 0, 5);
-	glEnd();*/
 	
 	Shader::bind(nullptr);
 }

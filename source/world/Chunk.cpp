@@ -28,16 +28,7 @@ Chunk::Chunk(s32 x, s32 y, s32 z) {
 	m_y = y;
 	m_z = z;
 	
-	m_texture.loadFromFile("textures/cobblestone.bmp");
-	
-	sf::Texture::bind(&m_texture);
-    
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	
-	glGenerateMipmap(GL_TEXTURE_2D);
-	
-	sf::Texture::bind(nullptr);
+	m_texture.load("textures/cobblestone.bmp");
 	
 	m_changed = false;
 	m_initialized = false;
@@ -157,8 +148,6 @@ void Chunk::update() {
 	m_normals.clear();
 	m_texCoords.clear();
 	
-	//int truc = GameClock::getTicks(true);
-	
 	for(u8 z = 0 ; z < depth ; z++) {
 		for(u8 y = 0 ; y < height ; y++) {
 			for(u8 x = 0 ; x < width ; x++) {
@@ -174,7 +163,6 @@ void Chunk::update() {
 						|| (x == width - 1	&& m_surroundingChunks[1] && m_surroundingChunks[1]->getBlock(0, y, z)			&& i == 1)
 						|| (z == 0			&& m_surroundingChunks[2] && m_surroundingChunks[2]->getBlock(x, y, depth - 1)	&& i == 5)
 						|| (z == depth - 1	&& m_surroundingChunks[3] && m_surroundingChunks[3]->getBlock(x, y, 0)			&& i == 4)
-						|| y < 18
 						) {
 							continue;
 						}
@@ -184,8 +172,6 @@ void Chunk::update() {
 						glm::vec3 normal = glm::normalize(glm::cross(u, v));
 						
 						for(u8 j = 0 ; j < 4 ; j++) {
-							DEBUG("(", (int)x, (int)y, (int)z, "): [", (int)i, (int)j, "] >= (", x + cubeCoords[i * 12 + j * 3], y + cubeCoords[i * 12 + j * 3 + 1], z + cubeCoords[i * 12 + j * 3 + 2], ")");
-							
 							m_vertices.push_back(x + cubeCoords[i * 12 + j * 3]);
 							m_vertices.push_back(y + cubeCoords[i * 12 + j * 3 + 1]);
 							m_vertices.push_back(z + cubeCoords[i * 12 + j * 3 + 2]);
@@ -202,8 +188,6 @@ void Chunk::update() {
 			}
 		}
 	}
-	
-	//DEBUG("Sending vertices:", GameClock::getTicks(true) - truc, "ms");
 	
 	VertexBuffer::bind(&m_vbo);
 	
@@ -237,11 +221,11 @@ void Chunk::draw(Shader &shader) {
 	glVertexAttribPointer(shader.attrib("normal"), 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(m_vertices.size() * sizeof(float)));
 	glVertexAttribPointer(shader.attrib("texCoord"), 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)((m_vertices.size() + m_normals.size()) * sizeof(float)));
 	
-	sf::Texture::bind(&m_texture);
+	Texture::bind(&m_texture);
 	
-	glDrawArrays(GL_QUADS, 0, m_vertices.size());
+	glDrawArrays(GL_QUADS, 0, m_vertices.size() / 3);
 	
-	sf::Texture::bind(nullptr);
+	Texture::bind(nullptr);
 	
 	shader.disableVertexAttribArray("texCoord");
 	shader.disableVertexAttribArray("normal");

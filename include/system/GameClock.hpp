@@ -20,8 +20,6 @@
 
 #include <functional>
 
-#include <SFML/System.hpp>
-
 #include "Types.hpp"
 
 class GameClock {
@@ -37,8 +35,9 @@ class GameClock {
 		
 		void drawGame(std::function<void(void)> drawFunc);
 		
+		u8 timestep() const { return m_timestep; }
+		
 	private:
-		static sf::Clock clock;
 		static u32 ticks;
 		
 		u32 m_lastFrameDate;
@@ -46,7 +45,7 @@ class GameClock {
 		u32 m_timeDropped;
 		u32 m_now;
 		u32 m_lastFrameDuration;
-		u32 m_timestep;
+		u8 m_timestep;
 		u8 m_numUpdates;
 };
 

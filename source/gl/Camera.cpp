@@ -15,12 +15,11 @@
  *
  * =====================================================================================
  */
-#include <SFML/Window/Keyboard.hpp>
-
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Camera.hpp"
+#include "Keyboard.hpp"
 
 Camera::Camera() {
 	m_x = 0;
@@ -75,41 +74,41 @@ void Camera::move(float direction) {
 }
 
 glm::mat4 Camera::processInputs() {
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {
+	if(Keyboard::isKeyPressed(Keyboard::X)) {
 		turnV(1);
 		m_viewMatrix = update();
 	}
-	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+	else if(Keyboard::isKeyPressed(Keyboard::W)) {
 		turnV(-1);
 		m_viewMatrix = update();
 	}
 	
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+	if(Keyboard::isKeyPressed(Keyboard::Left)) {
 		turnH(-0.8);
 		m_viewMatrix = update();
 	}
 	
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+	if(Keyboard::isKeyPressed(Keyboard::Right)) {
 		turnH(0.8);
 		m_viewMatrix = update();
 	}
 	
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
+	if(Keyboard::isKeyPressed(Keyboard::BackSpace)) {
 		m_y -= 0.1;
 		m_viewMatrix = update();
 	}
 	
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+	if(Keyboard::isKeyPressed(Keyboard::Return)) {
 		m_y += 0.1;
 		m_viewMatrix = update();
 	}
 	
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+	if(Keyboard::isKeyPressed(Keyboard::Up)) {
 		move(0.0f);
 		m_viewMatrix = update();
 	}
 	
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+	if(Keyboard::isKeyPressed(Keyboard::Down)) {
 		move(180.0f);
 		m_viewMatrix = update();
 	}

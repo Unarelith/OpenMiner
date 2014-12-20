@@ -1,12 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  OpenGL.hpp
+ *       Filename:  SDLHeaders.hpp
  *
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  15/12/2014 04:18:34
+ *        Created:  20/12/2014 01:18:31
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -15,17 +15,17 @@
  *
  * =====================================================================================
  */
-#ifndef OPENGL_HPP_
-#define OPENGL_HPP_
+#ifndef SDLHEADERS_HPP_
+#define SDLHEADERS_HPP_
 
-#ifdef __APPLE__
-	#include <OpenGL/glew.h>
+#ifdef __ANDROID__
+	#include "SDL.h"
+	#include "SDL_image.h"
+	#include "SDL_mixer.h"
 #else
-	#ifdef __MINGW32__
-		#include <GL/glew.h>
-	#else
-		#include <GL/gl.h>
-	#endif
+	#include <SDL2/SDL.h>
+	#include <SDL2/SDL_image.h>
+	#include <SDL2/SDL_mixer.h>
 #endif
 
-#endif // OPENGL_HPP_
+#endif // SDLHEADERS_HPP_

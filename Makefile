@@ -12,14 +12,14 @@ CXX		:=	g++
 #---------------------------------------------------------------------------------
 # Options for code generation
 #---------------------------------------------------------------------------------
-CFLAGS	:=	-g -Wall
+CFLAGS	:=	-g -Wall -DGL_GLEXT_PROTOTYPES
 CXXFLAGS:=	$(CFLAGS) -std=c++11 -MD
 LDFLAGS	:=	-g
 
 #---------------------------------------------------------------------------------
 # Any extra libraries you wish to link with your project
 #---------------------------------------------------------------------------------
-LIBS	:= -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
+LIBS	:=	-lSDL2_mixer -lSDL2_image -lSDL2
 
 #---------------------------------------------------------------------------------
 ifeq ($(shell uname), Darwin)

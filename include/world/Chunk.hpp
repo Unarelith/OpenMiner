@@ -23,7 +23,7 @@
 #include <SFML/Graphics/Texture.hpp>
 
 #include "Shader.hpp"
-#include "Types.hpp"
+#include "Texture.hpp"
 #include "VertexBuffer.hpp"
 
 class Chunk {
@@ -67,7 +67,7 @@ class Chunk {
 		s32 m_y;
 		s32 m_z;
 		
-		sf::Texture m_texture;
+		Texture m_texture;
 		
 		std::vector<u8> m_data;
 		
