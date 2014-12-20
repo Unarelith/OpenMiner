@@ -148,6 +148,7 @@ void Chunk::update() {
 	m_normals.clear();
 	m_texCoords.clear();
 	
+	u32 skipped = 0;
 	for(u8 z = 0 ; z < depth ; z++) {
 		for(u8 y = 0 ; y < height ; y++) {
 			for(u8 x = 0 ; x < width ; x++) {
@@ -164,15 +165,25 @@ void Chunk::update() {
 						|| (z == 0			&& m_surroundingChunks[2] && m_surroundingChunks[2]->getBlock(x, y, depth - 1)	&& i == 5)
 						|| (z == depth - 1	&& m_surroundingChunks[3] && m_surroundingChunks[3]->getBlock(x, y, 0)			&& i == 4)
 						) {
+							skipped++;
 							continue;
 						}
 						
-						glm::vec3 u(cubeCoords[i * 12 + 0], cubeCoords[i * 12 + 1], cubeCoords[i * 12 + 2]);
-						glm::vec3 v(cubeCoords[i * 12 + 3], cubeCoords[i * 12 + 4], cubeCoords[i * 12 + 5]);
-						glm::vec3 normal = glm::normalize(glm::cross(u, v));
+						// Three points of the face
+						glm::vec3 a(cubeCoords[i * 12 + 0], cubeCoords[i * 12 + 1], cubeCoords[i * 12 + 2]);
+						glm::vec3 b(cubeCoords[i * 12 + 3], cubeCoords[i * 12 + 4], cubeCoords[i * 12 + 5]);
+						glm::vec3 c(cubeCoords[i * 12 + 6], cubeCoords[i * 12 + 7], cubeCoords[i * 12 + 8]);
+						
+						// Computing vectors
+						glm::vec3 v1 = b - a;
+						glm::vec3 v2 = c - a;
+						
+						// Computing face normal (already normalized because cubeCoords are normalized)
+						glm::vec3 normal = glm::cross(v1, v2);
 						
 						for(u8 j = 0 ; j < 4 ; j++) {
 							m_vertices.push_back(x + cubeCoords[i * 12 + j * 3]);
+							//DEBUG(m_vertices.back(), "/", m_vertices[(j + i * 4 + z * 4 * 6 + y * 4 * 6 * Chunk::depth + x * 4 * 6 * Chunk::depth * Chunk::height) * 3 - skipped * 3]);
 							m_vertices.push_back(y + cubeCoords[i * 12 + j * 3 + 1]);
 							m_vertices.push_back(z + cubeCoords[i * 12 + j * 3 + 2]);
 							
