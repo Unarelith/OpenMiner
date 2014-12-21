@@ -148,52 +148,80 @@ void Chunk::update() {
 	m_normals.clear();
 	m_texCoords.clear();
 	
-	u32 skipped = 0;
+	m_verticesID.clear();
+	
 	for(u8 z = 0 ; z < depth ; z++) {
 		for(u8 y = 0 ; y < height ; y++) {
 			for(u8 x = 0 ; x < width ; x++) {
-				if(getBlock(x, y, z)) {
-					for(u8 i = 0 ; i < 6 ; i++) {
-						if((x > 0			&& getBlock(x - 1, y, z) && i == 0)
-						|| (x < width - 1	&& getBlock(x + 1, y, z) && i == 1)
-						|| (y > 0			&& getBlock(x, y - 1, z) && i == 2)
-						|| (y < height - 1	&& getBlock(x, y + 1, z) && i == 3)
-						|| (z > 0			&& getBlock(x, y, z - 1) && i == 5)
-						|| (z < depth - 1	&& getBlock(x, y, z + 1) && i == 4)
-						|| (x == 0			&& m_surroundingChunks[0] && m_surroundingChunks[0]->getBlock(width - 1, y, z)	&& i == 0)
-						|| (x == width - 1	&& m_surroundingChunks[1] && m_surroundingChunks[1]->getBlock(0, y, z)			&& i == 1)
-						|| (z == 0			&& m_surroundingChunks[2] && m_surroundingChunks[2]->getBlock(x, y, depth - 1)	&& i == 5)
-						|| (z == depth - 1	&& m_surroundingChunks[3] && m_surroundingChunks[3]->getBlock(x, y, 0)			&& i == 4)
-						) {
-							skipped++;
-							continue;
-						}
-						
-						// Three points of the face
-						glm::vec3 a(cubeCoords[i * 12 + 0], cubeCoords[i * 12 + 1], cubeCoords[i * 12 + 2]);
-						glm::vec3 b(cubeCoords[i * 12 + 3], cubeCoords[i * 12 + 4], cubeCoords[i * 12 + 5]);
-						glm::vec3 c(cubeCoords[i * 12 + 6], cubeCoords[i * 12 + 7], cubeCoords[i * 12 + 8]);
-						
-						// Computing vectors
-						glm::vec3 v1 = b - a;
-						glm::vec3 v2 = c - a;
-						
-						// Computing face normal (already normalized because cubeCoords are normalized)
-						glm::vec3 normal = glm::cross(v1, v2);
-						
-						for(u8 j = 0 ; j < 4 ; j++) {
-							m_vertices.push_back(x + cubeCoords[i * 12 + j * 3]);
-							//DEBUG(m_vertices.back(), "/", m_vertices[(j + i * 4 + z * 4 * 6 + y * 4 * 6 * Chunk::depth + x * 4 * 6 * Chunk::depth * Chunk::height) * 3 - skipped * 3]);
-							m_vertices.push_back(y + cubeCoords[i * 12 + j * 3 + 1]);
-							m_vertices.push_back(z + cubeCoords[i * 12 + j * 3 + 2]);
+				if(!getBlock(x, y, z)) {
+					continue;
+				}
+				
+				for(u8 i = 0 ; i < 6 ; i++) {
+					// Check if the face is visible
+					if((x > 0           && getBlock(x - 1, y, z) && i == 0)
+					|| (x < width - 1   && getBlock(x + 1, y, z) && i == 1)
+					|| (y > 0           && getBlock(x, y - 1, z) && i == 2)
+					|| (y < height - 1  && getBlock(x, y + 1, z) && i == 3)
+					|| (z > 0           && getBlock(x, y, z - 1) && i == 5)
+					|| (z < depth - 1   && getBlock(x, y, z + 1) && i == 4)
+					|| (x == 0          && m_surroundingChunks[0] && m_surroundingChunks[0]->getBlock(width - 1, y, z)  && i == 0)
+					|| (x == width - 1  && m_surroundingChunks[1] && m_surroundingChunks[1]->getBlock(0, y, z)          && i == 1)
+					|| (z == 0          && m_surroundingChunks[2] && m_surroundingChunks[2]->getBlock(x, y, depth - 1)  && i == 5)
+					|| (z == depth - 1  && m_surroundingChunks[3] && m_surroundingChunks[3]->getBlock(x, y, 0)          && i == 4)
+					) {
+						continue;
+					}
+					
+					// Merge adjacent cube faces
+					if(x > 0 && getBlock(x - 1, y, z) && i == 5) {
+						if(m_verticesID.count(getVertexID(x - 1, y, z, 5, 0, 0))) {
+							//DEBUG(x - 1, (int)y, (int)z, 5, 0, 0, skipped, "=>", m_vertices.size() - getVertexID(x - 1, y, z, 5, 0, 0, skipped));
+							m_vertices[m_verticesID[getVertexID(x - 1, y, z, 5, 0, 0)]] += 1;
+							m_vertices[m_verticesID[getVertexID(x - 1, y, z, 5, 1, 0)]] += 1;
 							
-							m_normals.push_back(normal.x);
-							m_normals.push_back(normal.y);
-							m_normals.push_back(normal.z);
+							m_texCoords[m_verticesID[getVertexID(x - 1, y, z, 5, 0, 0, 2)]] += 1;
+							m_texCoords[m_verticesID[getVertexID(x - 1, y, z, 5, 1, 0, 2)]] += 1;
 							
-							m_texCoords.push_back(texCoords[i * 8 + j * 2]);
-							m_texCoords.push_back(texCoords[i * 8 + j * 2 + 1]);
+							//m_texCoords[getTexCoordID(x - 1, y, z, 5, 0, 1, skipped)] += 1;
+							//m_texCoords[getTexCoordID(x - 1, y, z, 5, 1, 1)] += 1;
 						}
+						//m_vertices[getVertexID(x - 1, y, z, 1, 2, 0, skipped)] += 1;
+						//m_vertices[getVertexID(x - 1, y, z, 1, 1, 0, skipped)] += 1;
+						//m_vertices[getVertexID(x - 1, y, z, 2, 2, 0, skipped)] += 1;
+						//m_vertices[getVertexID(x - 1, y, z, 3, 1, 0, skipped)] += 1;
+						
+						continue;
+					}
+					
+					// Three points of the face
+					glm::vec3 a(cubeCoords[i * 12 + 0], cubeCoords[i * 12 + 1], cubeCoords[i * 12 + 2]);
+					glm::vec3 b(cubeCoords[i * 12 + 3], cubeCoords[i * 12 + 4], cubeCoords[i * 12 + 5]);
+					glm::vec3 c(cubeCoords[i * 12 + 6], cubeCoords[i * 12 + 7], cubeCoords[i * 12 + 8]);
+					
+					// Computing two vectors
+					glm::vec3 v1 = b - a;
+					glm::vec3 v2 = c - a;
+					
+					// Computing face normal (already normalized because cubeCoords are normalized)
+					glm::vec3 normal = glm::cross(v1, v2);
+										
+					// Store vertex information
+					for(u8 j = 0 ; j < 4 ; j++) {
+						m_vertices.push_back(x + cubeCoords[i * 12 + j * 3]);
+						m_vertices.push_back(y + cubeCoords[i * 12 + j * 3 + 1]);
+						m_vertices.push_back(z + cubeCoords[i * 12 + j * 3 + 2]);
+						
+						m_normals.push_back(normal.x);
+						m_normals.push_back(normal.y);
+						m_normals.push_back(normal.z);
+						
+						m_texCoords.push_back(texCoords[i * 8 + j * 2]);
+						m_texCoords.push_back(texCoords[i * 8 + j * 2 + 1]);
+						
+						m_verticesID[getVertexID(x, y, z, i, j, 0)] = m_vertices.size() - 3;
+						m_verticesID[getVertexID(x, y, z, i, j, 1)] = m_vertices.size() - 2;
+						m_verticesID[getVertexID(x, y, z, i, j, 2)] = m_vertices.size() - 1;
 					}
 				}
 			}
@@ -234,6 +262,7 @@ void Chunk::draw(Shader &shader) {
 	
 	Texture::bind(&m_texture);
 	
+	//glDrawArrays(GL_LINES, 0, m_vertices.size() / 3);
 	glDrawArrays(GL_QUADS, 0, m_vertices.size() / 3);
 	
 	Texture::bind(nullptr);
@@ -252,6 +281,10 @@ u8 Chunk::getBlock(s8 x, s8 y, s8 z) {
 	} else {
 		return 0;
 	}
+}
+
+s32 Chunk::getVertexID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate, u8 nbCoordinates) {
+	return (j + i * 4 + x * 4 * 6 + y * 4 * 6 * Chunk::width + z * 4 * 6 * Chunk::width * Chunk::height) * nbCoordinates + coordinate;
 }
 
 float Chunk::noise2d(float x, float y, int seed, int octaves, float persistence) {

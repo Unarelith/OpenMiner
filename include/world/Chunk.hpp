@@ -18,6 +18,7 @@
 #ifndef CHUNK_HPP_
 #define CHUNK_HPP_
 
+#include <map>
 #include <vector>
 
 #include "Shader.hpp"
@@ -35,6 +36,8 @@ class Chunk {
 		void draw(Shader &shader);
 		
 		u8 getBlock(s8 x, s8 y, s8 z);
+		
+		s32 getVertexID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate, u8 nbCoordinates = 3);
 		
 		static float noise2d(float x, float y, int seed, int octaves, float persistence);
 		static float noise3d_abs(float x, float y, float z, int seed, int octaves, float persistence);
@@ -72,6 +75,8 @@ class Chunk {
 		std::vector<float> m_vertices;
 		std::vector<float> m_normals;
 		std::vector<float> m_texCoords;
+		
+		std::map<size_t, size_t> m_verticesID;
 		
 		VertexBuffer m_vbo;
 		
