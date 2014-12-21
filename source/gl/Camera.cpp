@@ -23,12 +23,12 @@
 #include "Mouse.hpp"
 
 Camera::Camera() {
-	m_x = -32;
-	m_y = 32;
-	m_z = -32;
+	m_x = 0;
+	m_y = 16;
+	m_z = -64;
 	
-	m_angleH = 45.0;
-	m_angleV = -20.0;
+	m_angleH = 90.0;
+	m_angleV = 0.0;
 	
 	m_vx = 0;
 	m_vz = 0;

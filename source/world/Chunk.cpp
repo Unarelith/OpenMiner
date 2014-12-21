@@ -51,16 +51,7 @@ void Chunk::generate() {
 				float n = noise2d((x + m_x * width) / 256.0, (z + m_z * depth) / 256.0, seed, 5, 0.5) * 4;
 				float h = 10 + n * 2;
 				
-				/*float n = noise3d_abs((x + m_x * 32) * 0.015, (y + m_y * 32) * 0.015, (z + m_z * 32) * 0.015, seed, 3, 4) / 2;
-				
-				if(3 < n && n < 8) {
-					m_data.push_back(1);
-				} else {
-					m_data.push_back(0);
-				}*/
-				
 				if(y + m_y * height < h) {
-				//if(y < abs(h)) {
 					m_data.push_back(1);
 				} else {
 					m_data.push_back(0);
@@ -127,10 +118,10 @@ void Chunk::update() {
 		1, 0, 1,
 		1, 1, 1,
 		
+		0, 1, 0,
 		1, 1, 0,
 		1, 0, 0,
 		0, 0, 0,
-		0, 1, 0
 	};
 	
 	float texCoords[2 * 4 * 6] = {
@@ -149,6 +140,7 @@ void Chunk::update() {
 	m_texCoords.clear();
 	
 	m_verticesID.clear();
+	m_extendedFaces.clear();
 	
 	for(u8 z = 0 ; z < depth ; z++) {
 		for(u8 y = 0 ; y < height ; y++) {
@@ -158,7 +150,7 @@ void Chunk::update() {
 				}
 				
 				for(u8 i = 0 ; i < 6 ; i++) {
-					// Check if the face is visible
+					// Skip hidden faces
 					if((x > 0           && getBlock(x - 1, y, z) && i == 0)
 					|| (x < width - 1   && getBlock(x + 1, y, z) && i == 1)
 					|| (y > 0           && getBlock(x, y - 1, z) && i == 2)
@@ -173,23 +165,17 @@ void Chunk::update() {
 						continue;
 					}
 					
-					// Merge adjacent cube faces
+					// Merge adjacent faces
 					if(x > 0 && getBlock(x - 1, y, z) && i == 5) {
-						if(m_verticesID.count(getVertexID(x - 1, y, z, 5, 0, 0))) {
-							//DEBUG(x - 1, (int)y, (int)z, 5, 0, 0, skipped, "=>", m_vertices.size() - getVertexID(x - 1, y, z, 5, 0, 0, skipped));
-							m_vertices[m_verticesID[getVertexID(x - 1, y, z, 5, 0, 0)]] += 1;
-							m_vertices[m_verticesID[getVertexID(x - 1, y, z, 5, 1, 0)]] += 1;
+						if(vertexExists(x - 1, y, z, i, 0)) {
+							m_vertices[getVertexID(x - 1, y, z, i, 1, 0)] += 1;
+							m_vertices[getVertexID(x - 1, y, z, i, 2, 0)] += 1;
 							
-							m_texCoords[getTexCoordID(x - 1, y, z, 5, 0, 0)] += 1;
-							m_texCoords[getTexCoordID(x - 1, y, z, 5, 1, 0)] += 1;
+							m_texCoords[getTexCoordID(x - 1, y, z, i, 1, 0)] += 1;
+							m_texCoords[getTexCoordID(x - 1, y, z, i, 2, 0)] += 1;
 							
-							//m_texCoords[getTexCoordID(x - 1, y, z, 5, 0, 1, skipped)] += 1;
-							//m_texCoords[getTexCoordID(x - 1, y, z, 5, 1, 1)] += 1;
+							m_extendedFaces[getCoordID(x, y, z, i, 0, 0)] = getCoordID(x - 1, y, z, i, 0, 0);
 						}
-						//m_vertices[getVertexID(x - 1, y, z, 1, 2, 0, skipped)] += 1;
-						//m_vertices[getVertexID(x - 1, y, z, 1, 1, 0, skipped)] += 1;
-						//m_vertices[getVertexID(x - 1, y, z, 2, 2, 0, skipped)] += 1;
-						//m_vertices[getVertexID(x - 1, y, z, 3, 1, 0, skipped)] += 1;
 						
 						continue;
 					}
@@ -219,9 +205,9 @@ void Chunk::update() {
 						m_texCoords.push_back(texCoords[i * 8 + j * 2]);
 						m_texCoords.push_back(texCoords[i * 8 + j * 2 + 1]);
 						
-						m_verticesID[getVertexID(x, y, z, i, j, 0)] = m_vertices.size() - 3;
-						m_verticesID[getVertexID(x, y, z, i, j, 1)] = m_vertices.size() - 2;
-						m_verticesID[getVertexID(x, y, z, i, j, 2)] = m_vertices.size() - 1;
+						m_verticesID[getCoordID(x, y, z, i, j, 0)] = m_vertices.size() - 3;
+						m_verticesID[getCoordID(x, y, z, i, j, 1)] = m_vertices.size() - 2;
+						m_verticesID[getCoordID(x, y, z, i, j, 2)] = m_vertices.size() - 1;
 					}
 				}
 			}
@@ -262,7 +248,7 @@ void Chunk::draw(Shader &shader) {
 	
 	Texture::bind(&m_texture);
 	
-	//glDrawArrays(GL_LINES, 0, m_vertices.size() / 3);
+	glDrawArrays(GL_LINES, 0, m_vertices.size() / 3);
 	glDrawArrays(GL_QUADS, 0, m_vertices.size() / 3);
 	
 	Texture::bind(nullptr);
@@ -283,12 +269,27 @@ u8 Chunk::getBlock(s8 x, s8 y, s8 z) {
 	}
 }
 
-s32 Chunk::getVertexID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate) {
+u32 Chunk::getCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate) {
 	return (j + i * 4 + x * 4 * 6 + y * 4 * 6 * Chunk::width + z * 4 * 6 * Chunk::width * Chunk::height) * 3 + coordinate;
 }
 
-s32 Chunk::getTexCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate) {
-	return m_verticesID[getVertexID(x, y, z, i, j, coordinate)] - m_vertices.size() / 3;
+u32 Chunk::getVertexID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate) {
+	u32 id = getCoordID(x, y, z, i, j, coordinate);
+	
+	while(m_extendedFaces.count(id - j * 3 - coordinate)) {
+		id = m_extendedFaces[id - j * 3 - coordinate] + j * 3 + coordinate;
+	}
+	
+	return m_verticesID[id];
+}
+
+u32 Chunk::getTexCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate) {
+	return float(getVertexID(x, y, z, i, j, coordinate)) / 3 * 2;
+}
+
+bool Chunk::vertexExists(u8 x, u8 y, u8 z, u8 i, u8 j) {
+	return (m_verticesID.count(getCoordID(x, y, z, i, j, 0))
+	     || m_extendedFaces.count(getCoordID(x, y, z, i, j, 0)));
 }
 
 float Chunk::noise2d(float x, float y, int seed, int octaves, float persistence) {

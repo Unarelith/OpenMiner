@@ -51,8 +51,6 @@ World::World() {
 World::~World() {
 }
 
-#include "Debug.hpp"
-
 void World::draw(Shader &shader, const glm::mat4 &pv) {
 	float ud = 1000.0;
 	s32 ux = 0;

@@ -37,8 +37,12 @@ class Chunk {
 		
 		u8 getBlock(s8 x, s8 y, s8 z);
 		
-		s32 getVertexID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate);
-		s32 getTexCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate);
+		u32 getCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate);
+		
+		u32 getVertexID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate);
+		u32 getTexCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate);
+		
+		bool vertexExists(u8 x, u8 y, u8 z, u8 i, u8 j);
 		
 		static float noise2d(float x, float y, int seed, int octaves, float persistence);
 		static float noise3d_abs(float x, float y, float z, int seed, int octaves, float persistence);
@@ -77,7 +81,8 @@ class Chunk {
 		std::vector<float> m_normals;
 		std::vector<float> m_texCoords;
 		
-		std::map<size_t, size_t> m_verticesID;
+		std::map<u32, u32> m_verticesID;
+		std::map<u32, u32> m_extendedFaces;
 		
 		VertexBuffer m_vbo;
 		
