@@ -3,3 +3,23 @@ h1. KubKraft
 h2. By Quentin Bazin (aka. Quent42340)
 
 * KubKraft is a Minecraft-like game.
+
+h2. Keys
+
+* View: mouse controlled
+* Movement: @Z@, @Q@, @S@ and @D@
+* Land: @Shift@
+* Fly: @Space@
+* Exit: @Escape@
+
+h2. How to compile (Linux and Mac OS-X only)
+
+* Required: @SDL@ (>= 2.0), @OpenGL@ (=> 2.1), @glm@
+* Run @make@ at the root of the game folder
+* Run @make run@, and enjoy!
+
+h2. Note for Windows users
+
+* Windows requires @glew@ to compile
+* The @Makefile@ is not yet compatible with Windows
+

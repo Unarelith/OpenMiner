@@ -37,7 +37,8 @@ class Chunk {
 		
 		u8 getBlock(s8 x, s8 y, s8 z);
 		
-		s32 getVertexID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate, u8 nbCoordinates = 3);
+		s32 getVertexID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate);
+		s32 getTexCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate);
 		
 		static float noise2d(float x, float y, int seed, int octaves, float persistence);
 		static float noise3d_abs(float x, float y, float z, int seed, int octaves, float persistence);

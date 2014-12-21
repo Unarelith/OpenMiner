@@ -180,8 +180,8 @@ void Chunk::update() {
 							m_vertices[m_verticesID[getVertexID(x - 1, y, z, 5, 0, 0)]] += 1;
 							m_vertices[m_verticesID[getVertexID(x - 1, y, z, 5, 1, 0)]] += 1;
 							
-							m_texCoords[m_verticesID[getVertexID(x - 1, y, z, 5, 0, 0, 2)]] += 1;
-							m_texCoords[m_verticesID[getVertexID(x - 1, y, z, 5, 1, 0, 2)]] += 1;
+							m_texCoords[getTexCoordID(x - 1, y, z, 5, 0, 0)] += 1;
+							m_texCoords[getTexCoordID(x - 1, y, z, 5, 1, 0)] += 1;
 							
 							//m_texCoords[getTexCoordID(x - 1, y, z, 5, 0, 1, skipped)] += 1;
 							//m_texCoords[getTexCoordID(x - 1, y, z, 5, 1, 1)] += 1;
@@ -283,8 +283,12 @@ u8 Chunk::getBlock(s8 x, s8 y, s8 z) {
 	}
 }
 
-s32 Chunk::getVertexID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate, u8 nbCoordinates) {
-	return (j + i * 4 + x * 4 * 6 + y * 4 * 6 * Chunk::width + z * 4 * 6 * Chunk::width * Chunk::height) * nbCoordinates + coordinate;
+s32 Chunk::getVertexID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate) {
+	return (j + i * 4 + x * 4 * 6 + y * 4 * 6 * Chunk::width + z * 4 * 6 * Chunk::width * Chunk::height) * 3 + coordinate;
+}
+
+s32 Chunk::getTexCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate) {
+	return m_verticesID[getVertexID(x, y, z, i, j, coordinate)] - m_vertices.size() / 3;
 }
 
 float Chunk::noise2d(float x, float y, int seed, int octaves, float persistence) {
