@@ -175,9 +175,9 @@ void Chunk::update() {
 							m_texCoords[getTexCoordID(x - 1, y, z, i, 2, 0)] += 1;
 							
 							m_extendedFaces[getCoordID(x, y, z, i, 0, 0)] = getCoordID(x - 1, y, z, i, 0, 0);
+							
+							continue;
 						}
-						
-						continue;
 					}
 					
 					// Three points of the face
