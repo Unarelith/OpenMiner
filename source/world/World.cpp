@@ -21,25 +21,17 @@
 #include "World.hpp"
 
 World::World() {
-	m_width = 4;
-	m_depth = 4;
+	m_width = 16;
+	m_depth = 16;
 	
 	for(s32 z = -m_depth / 2 ; z < m_depth / 2 ; z++) {
 		for(s32 x = -m_width / 2 ; x < m_width / 2 ; x++) {
-	//for(s32 z = 0 ; z < m_depth ; z++) {
-	//	for(s32 x = 0 ; x < m_width ; x++) {
 			m_chunks.push_back(std::unique_ptr<Chunk>(new Chunk(x, 0, z)));
 		}
 	}
 	
 	for(s32 z = -m_depth / 2 ; z < m_depth / 2 ; z++) {
 		for(s32 x = -m_width / 2 ; x < m_width / 2 ; x++) {
-	//for(s32 z = 0 ; z < m_depth ; z++) {
-		//for(s32 x = 0 ; x < m_width ; x++) {
-			//if(x > 0)			getChunk(x, z)->setLeft(getChunk(x - 1, z));
-			//if(x < m_width - 1) getChunk(x, z)->setRight(getChunk(x + 1, z));
-			//if(z > 0)			getChunk(x, z)->setFront(getChunk(x, z - 1));
-			//if(z < m_depth - 1) getChunk(x, z)->setBack(getChunk(x, z + 1));
 			if(x > -m_width / 2)	 getChunk(x, z)->setLeft(getChunk(x - 1, z));
 			if(x <  m_width / 2 - 1) getChunk(x, z)->setRight(getChunk(x + 1, z));
 			if(z > -m_depth / 2)	 getChunk(x, z)->setFront(getChunk(x, z - 1));

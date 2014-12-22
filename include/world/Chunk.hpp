@@ -90,6 +90,7 @@ class Chunk {
 		
 		bool m_changed;
 		bool m_initialized;
+		bool m_generated;
 };
 
 #endif // CHUNK_HPP_

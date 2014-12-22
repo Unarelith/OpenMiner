@@ -114,7 +114,6 @@ GLint Shader::attrib(std::string name) {
 	GLint attrib = glGetAttribLocation(m_program, name.c_str());
 	
 	if(attrib == -1) {
-		//throw EXCEPTION("Could not bind attribute:", name);
 		DEBUG("Could not bind attribute:", name);
 	}
 	
@@ -125,7 +124,6 @@ GLint Shader::uniform(std::string name) {
 	GLint uniform = glGetUniformLocation(m_program, name.c_str());
 	
 	if(uniform == -1) {
-		//throw EXCEPTION("Could not bind uniform:", name);
 		DEBUG("Could not bind uniform:", name);
 	}
 	

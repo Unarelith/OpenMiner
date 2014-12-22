@@ -32,6 +32,7 @@ Chunk::Chunk(s32 x, s32 y, s32 z) {
 	
 	m_changed = false;
 	m_initialized = false;
+	m_generated = false;
 	
 	m_surroundingChunks[0] = nullptr;
 	m_surroundingChunks[1] = nullptr;
@@ -43,6 +44,9 @@ Chunk::~Chunk() {
 }
 
 void Chunk::generate() {
+	if(m_generated) return;
+	else m_generated = true;
+	
 	time_t seed = time(NULL);
 	
 	for(u8 z = 0 ; z < depth ; z++) {
@@ -92,7 +96,7 @@ void Chunk::generate() {
 void Chunk::update() {
 	m_changed = false;
 	
-	float cubeCoords[6 * 4 * 3] = {
+	static const float cubeCoords[6 * 4 * 3] = {
 		0, 1, 1,
 		0, 1, 0,
 		0, 0, 0,
@@ -103,20 +107,20 @@ void Chunk::update() {
 		1, 1, 0,
 		1, 1, 1,
 		
-		0, 0, 1,
 		0, 0, 0,
 		1, 0, 0,
 		1, 0, 1,
+		0, 0, 1,
 		
+		0, 1, 1,
 		1, 1, 1,
 		1, 1, 0,
 		0, 1, 0,
-		0, 1, 1,
 		
-		0, 1, 1,
 		0, 0, 1,
 		1, 0, 1,
 		1, 1, 1,
+		0, 1, 1,
 		
 		0, 1, 0,
 		1, 1, 0,
@@ -166,19 +170,39 @@ void Chunk::update() {
 					}
 					
 					// Merge adjacent faces
-					if(x > 0 && getBlock(x - 1, y, z) && i == 5) {
-						if(vertexExists(x - 1, y, z, i, 0)) {
-							m_vertices[getVertexID(x - 1, y, z, i, 1, 0)] += 1;
-							m_vertices[getVertexID(x - 1, y, z, i, 2, 0)] += 1;
-							
-							m_texCoords[getTexCoordID(x - 1, y, z, i, 1, 0)] += 1;
-							m_texCoords[getTexCoordID(x - 1, y, z, i, 2, 0)] += 1;
-							
-							m_extendedFaces[getCoordID(x, y, z, i, 0, 0)] = getCoordID(x - 1, y, z, i, 0, 0);
-							
-							continue;
-						}
+					if(x > 0 && getBlock(x - 1, y, z) && (i != 0 || i != 1) && vertexExists(x - 1, y, z, i, 0)) {
+						m_vertices[getVertexID(x - 1, y, z, i, 1, 0)] += 1;
+						m_vertices[getVertexID(x - 1, y, z, i, 2, 0)] += 1;
+						
+						m_texCoords[getTexCoordID(x - 1, y, z, i, 1, 0)] += 1;
+						m_texCoords[getTexCoordID(x - 1, y, z, i, 2, 0)] += 1;
+						
+						m_extendedFaces[getCoordID(x, y, z, i, 0, 0)] = getCoordID(x - 1, y, z, i, 0, 0);
+						
+						continue;
 					}
+					if(z > 0 && getBlock(x, y, z - 1) && (i == 0 || i == 1) && vertexExists(x, y, z - 1, i, 0)) {
+						m_vertices[getVertexID(x, y, z - 1, i, 0, 2)] += 1;
+						m_vertices[getVertexID(x, y, z - 1, i, 3, 2)] += 1;
+						
+						m_texCoords[getTexCoordID(x, y, z - 1, i, 1, 0)] += 1;
+						m_texCoords[getTexCoordID(x, y, z - 1, i, 2, 0)] += 1;
+						
+						m_extendedFaces[getCoordID(x, y, z, i, 0, 0)] = getCoordID(x, y, z - 1, i, 0, 0);
+						
+						continue;
+					}
+					/*if(y > 0 && getBlock(x, y - 1, z) && (i == 2 || i == 3) && vertexExists(x, y - 1, z, i, 0)) {
+						m_vertices[getVertexID(x, y - 1, z, i, 0, 1)] += 1;
+						m_vertices[getVertexID(x, y - 1, z, i, 3, 1)] += 1;
+						
+						m_texCoords[getTexCoordID(x, y - 1, z, i, 1, 1)] += 1;
+						m_texCoords[getTexCoordID(x, y - 1, z, i, 2, 1)] += 1;
+						
+						m_extendedFaces[getCoordID(x, y, z, i, 0, 0)] = getCoordID(x, y - 1, z, i, 0, 0);
+						
+						continue;
+					}*/
 					
 					// Three points of the face
 					glm::vec3 a(cubeCoords[i * 12 + 0], cubeCoords[i * 12 + 1], cubeCoords[i * 12 + 2]);
@@ -227,11 +251,11 @@ void Chunk::update() {
 void Chunk::draw(Shader &shader) {
 	//if(m_changed) update();
 	if(m_changed) {
-		int truc = GameClock::getTicks(true);
+		//int truc = GameClock::getTicks(true);
 		
 		update();
 		
-		DEBUG("Chunk", m_x, m_y, m_z, "| Vertices:", m_vertices.size(), "| Update time:", GameClock::getTicks(true) - truc, "ms");
+		//DEBUG("Chunk", m_x, m_y, m_z, "| Vertices:", m_vertices.size(), "| Update time:", GameClock::getTicks(true) - truc, "ms");
 	}
 	
 	if(m_vertices.size() == 0) return;
@@ -248,10 +272,13 @@ void Chunk::draw(Shader &shader) {
 	
 	Texture::bind(&m_texture);
 	
-	glDrawArrays(GL_LINES, 0, m_vertices.size() / 3);
 	glDrawArrays(GL_QUADS, 0, m_vertices.size() / 3);
 	
 	Texture::bind(nullptr);
+	
+	//for(u32 i = 0 ; i < m_vertices.size() / 3 ; i += 4) {
+	//	glDrawArrays(GL_LINE_LOOP, i, 4);
+	//}
 	
 	shader.disableVertexAttribArray("texCoord");
 	shader.disableVertexAttribArray("normal");
