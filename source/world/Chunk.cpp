@@ -50,11 +50,11 @@ void Chunk::generate() {
 	time_t seed = time(NULL);
 	
 	for(u8 z = 0 ; z < depth ; z++) {
-		for(u8 y = 0 ; y < height ; y++) {
-			for(u8 x = 0 ; x < width ; x++) {
-				float n = noise2d((x + m_x * width) / 256.0, (z + m_z * depth) / 256.0, seed, 5, 0.5) * 4;
-				float h = 10 + n * 2;
-				
+		for(u8 x = 0 ; x < width ; x++) {
+			float n = noise2d((x + m_x * width) / 256.0, (z + m_z * depth) / 256.0, seed, 5, 0.5) * 4;
+			float h = 10 + n * 2;
+			
+			for(u8 y = 0 ; y < height ; y++) {
 				if(y + m_y * height < h) {
 					m_data.push_back(1);
 				} else {
@@ -143,8 +143,15 @@ void Chunk::update() {
 	m_normals.clear();
 	m_texCoords.clear();
 	
+	m_vertices.reserve(width * height * depth * 6 * 4 * 3);
+	m_normals.reserve(width * height * depth * 6 * 4 * 3);
+	m_texCoords.reserve(width * height * depth * 6 * 4 * 2);
+	
 	m_verticesID.clear();
 	m_extendedFaces.clear();
+	
+	// Needed in the loop
+	glm::vec3 a, b, c, v1, v2, normal;
 	
 	for(u8 z = 0 ; z < depth ; z++) {
 		for(u8 y = 0 ; y < height ; y++) {
@@ -205,17 +212,25 @@ void Chunk::update() {
 					}*/
 					
 					// Three points of the face
-					glm::vec3 a(cubeCoords[i * 12 + 0], cubeCoords[i * 12 + 1], cubeCoords[i * 12 + 2]);
-					glm::vec3 b(cubeCoords[i * 12 + 3], cubeCoords[i * 12 + 4], cubeCoords[i * 12 + 5]);
-					glm::vec3 c(cubeCoords[i * 12 + 6], cubeCoords[i * 12 + 7], cubeCoords[i * 12 + 8]);
+					a.x = cubeCoords[i * 12 + 0];
+					a.y = cubeCoords[i * 12 + 1];
+					a.z = cubeCoords[i * 12 + 2];
+					
+					b.x = cubeCoords[i * 12 + 3];
+					b.y = cubeCoords[i * 12 + 4];
+					b.z = cubeCoords[i * 12 + 5];
+					
+					c.x = cubeCoords[i * 12 + 6];
+					c.y = cubeCoords[i * 12 + 7];
+					c.z = cubeCoords[i * 12 + 8];
 					
 					// Computing two vectors
-					glm::vec3 v1 = b - a;
-					glm::vec3 v2 = c - a;
+					v1 = b - a;
+					v2 = c - a;
 					
 					// Computing face normal (already normalized because cubeCoords are normalized)
-					glm::vec3 normal = glm::cross(v1, v2);
-										
+					normal = glm::cross(v1, v2);
+					
 					// Store vertex information
 					for(u8 j = 0 ; j < 4 ; j++) {
 						m_vertices.push_back(x + cubeCoords[i * 12 + j * 3]);
@@ -251,11 +266,11 @@ void Chunk::update() {
 void Chunk::draw(Shader &shader) {
 	//if(m_changed) update();
 	if(m_changed) {
-		//int truc = GameClock::getTicks(true);
+		int truc = GameClock::getTicks(true);
 		
 		update();
 		
-		//DEBUG("Chunk", m_x, m_y, m_z, "| Vertices:", m_vertices.size(), "| Update time:", GameClock::getTicks(true) - truc, "ms");
+		DEBUG("Chunk", m_x, m_y, m_z, "| Vertices:", m_vertices.size(), "| Update time:", GameClock::getTicks(true) - truc, "ms");
 	}
 	
 	if(m_vertices.size() == 0) return;
@@ -288,7 +303,7 @@ void Chunk::draw(Shader &shader) {
 }
 
 u8 Chunk::getBlock(s8 x, s8 y, s8 z) {
-	u16 i = x + y * width + z * width * height;
+	u16 i = y + x * height + z * height * width;
 	if(i < m_data.size()) {
 		return m_data[i];
 	} else {
