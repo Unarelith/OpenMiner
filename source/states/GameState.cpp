@@ -25,7 +25,7 @@ GameState::GameState() {
 	
 	Shader::bind(&m_shader);
 	
-	m_projectionMatrix = glm::perspective(45.0f, 640.0f / 480.0f, 0.1f, 3000.0f);
+	m_projectionMatrix = glm::perspective(45.0f, 640.0f / 480.0f, 0.1f, float(World::renderDistance * Chunk::width));
 	m_viewMatrix = m_camera.update();
 	
 	m_shader.setUniform("u_tex", 0);

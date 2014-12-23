@@ -253,6 +253,10 @@ void Chunk::update() {
 		}
 	}
 	
+	m_vertices.shrink_to_fit();
+	m_normals.shrink_to_fit();
+	m_texCoords.shrink_to_fit();
+	
 	VertexBuffer::bind(&m_vbo);
 	
 	m_vbo.setData((m_vertices.size() + m_normals.size() + m_texCoords.size()) * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
@@ -264,14 +268,7 @@ void Chunk::update() {
 }
 
 void Chunk::draw(Shader &shader) {
-	//if(m_changed) update();
-	if(m_changed) {
-		int truc = GameClock::getTicks(true);
-		
-		update();
-		
-		DEBUG("Chunk", m_x, m_y, m_z, "| Vertices:", m_vertices.size(), "| Update time:", GameClock::getTicks(true) - truc, "ms");
-	}
+	if(m_changed) update();
 	
 	if(m_vertices.size() == 0) return;
 	

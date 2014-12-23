@@ -31,6 +31,9 @@ class World {
 		
 		Chunk *getChunk(s32 x, s32 z);
 		
+		// Render distance in chunks
+		static const u16 renderDistance = 16;
+		
 	private:
 		s32 m_width;
 		s32 m_depth;

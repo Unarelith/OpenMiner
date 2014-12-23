@@ -21,8 +21,8 @@
 #include "World.hpp"
 
 World::World() {
-	m_width = 16;
-	m_depth = 16;
+	m_width = 100;
+	m_depth = 100;
 	
 	for(s32 z = -m_depth / 2 ; z < m_depth / 2 ; z++) {
 		for(s32 x = -m_width / 2 ; x < m_width / 2 ; x++) {
@@ -48,12 +48,19 @@ void World::draw(Shader &shader, const glm::mat4 &pv) {
 	s32 ux = 0;
 	s32 uz = 0;
 	
+	shader.setUniform("u_renderDistance", renderDistance);
+	
 	for(auto &it : m_chunks) {
-		glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(it->x() * Chunk::width, it->y() * Chunk::height, it->z() * Chunk::depth));
+		glm::mat4 model = glm::translate(glm::mat4(1.0f),
+		                                 glm::vec3(it->x() * Chunk::width,
+		                                           it->y() * Chunk::height,
+		                                           it->z() * Chunk::depth));
 		glm::mat4 mvp = pv * model;
 		
 		// Is this chunk on the screen?
-		glm::vec4 center = mvp * glm::vec4(Chunk::width / 2, Chunk::height / 2, Chunk::depth / 2, 1);
+		glm::vec4 center = mvp * glm::vec4(Chunk::width  / 2,
+		                                   Chunk::height / 2,
+		                                   Chunk::depth  / 2, 1);
 		
 		float d = glm::length(center);
 		center.x /= center.w;
@@ -65,7 +72,8 @@ void World::draw(Shader &shader, const glm::mat4 &pv) {
 		}
 		
 		// It it is outside the screen, don't bother drawing it
-		if(fabsf(center.x) > 1 + fabsf(Chunk::height * 2 / center.w) || fabsf(center.y) > 1 + fabsf(Chunk::height * 2 / center.w)) {
+		if(fabsf(center.x) > 1 + fabsf(Chunk::height * 2 / center.w)
+		|| fabsf(center.y) > 1 + fabsf(Chunk::height * 2 / center.w)) {
 			continue;
 		}
 		

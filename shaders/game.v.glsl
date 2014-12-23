@@ -11,8 +11,11 @@ varying vec2 v_texCoord;
 uniform mat4 u_modelMatrix;
 uniform mat4 u_viewProjectionMatrix;
 
+varying float v_depth;
+
 void main() {
 	v_coord3d = u_modelMatrix * vec4(coord3d, 1.0);
+	v_depth = length((u_viewProjectionMatrix * v_coord3d).xyz);
 	
 	gl_Position = u_viewProjectionMatrix * v_coord3d;
 	
