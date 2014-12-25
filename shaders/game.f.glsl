@@ -17,12 +17,14 @@ const vec4 ambientColor = vec4(lightColor * ambientIntensity, 1.0);
 
 const float diffuseIntensity = 0.5;
 
-//const vec4 fogColor = vec4(0.196078, 0.6, 0.8, 1.0);
-const vec4 fogColor = vec4(0.6, 0.8, 1.0, 1.0);
+const vec4 fogColor = vec4(0.196078, 0.6, 0.8, 1.0);
+//const vec4 fogColor = vec4(0.6, 0.8, 1.0, 1.0);
 //const float fogDensity = 0.00003;
 
-vec4 fog(vec4 color, vec4 fogColor, float depth, float density) {
-	float fog = exp(-pow(depth * density, 2));
+//vec4 fog(vec4 color, vec4 fogColor, float depth, float density) {
+	//float fog = exp(-pow(depth * density, 2));
+vec4 fog(vec4 color, vec4 fogColor, float fogCoord, float fogStart, float fogEnd) {
+	float fog = clamp((fogEnd - fogCoord) / (fogEnd - fogStart), 0.0, 1.0);
 	return mix(fogColor, color, fog);
 }
 
@@ -48,8 +50,9 @@ void main() {
 	//float fog = clamp(exp(-pow(fogDensity * z * z, 2)), 0.0, 1.0);
 	//float fog = clamp(exp(-fogDensity * z * z), 0.4, 1.0);
 	
-	//gl_FragColor = mix(fogColor, color, fog);
-	gl_FragColor = fog(color, fogColor, v_depth, 0.005);
-	//gl_FragColor = fog(color, fogColor, v_depth, 0.03);
+	//gl_FragColor = color;
+	float z = abs(gl_FragCoord.z / gl_FragCoord.w);
+	gl_FragColor = fog(color, fogColor, z, u_renderDistance - 10, u_renderDistance);
+	//gl_FragColor = fog(color, fogColor, v_depth, 0.005);
 }
 

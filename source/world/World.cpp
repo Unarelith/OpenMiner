@@ -48,7 +48,7 @@ void World::draw(Shader &shader, const glm::mat4 &pv) {
 	s32 ux = 0;
 	s32 uz = 0;
 	
-	shader.setUniform("u_renderDistance", renderDistance);
+	shader.setUniform("u_renderDistance", renderDistance * Chunk::width);
 	
 	for(auto &it : m_chunks) {
 		glm::mat4 model = glm::translate(glm::mat4(1.0f),

@@ -199,6 +199,7 @@ void Chunk::update() {
 						
 						continue;
 					}
+					
 					/*if(y > 0 && getBlock(x, y - 1, z) && (i == 2 || i == 3) && vertexExists(x, y - 1, z, i, 0)) {
 						m_vertices[getVertexID(x, y - 1, z, i, 0, 1)] += 1;
 						m_vertices[getVertexID(x, y - 1, z, i, 3, 1)] += 1;
@@ -288,9 +289,9 @@ void Chunk::draw(Shader &shader) {
 	
 	Texture::bind(nullptr);
 	
-	//for(u32 i = 0 ; i < m_vertices.size() / 3 ; i += 4) {
-	//	glDrawArrays(GL_LINE_LOOP, i, 4);
-	//}
+	/*for(u32 i = 0 ; i < m_vertices.size() / 3 ; i += 4) {
+		glDrawArrays(GL_LINE_LOOP, i, 4);
+	}*/
 	
 	shader.disableVertexAttribArray("texCoord");
 	shader.disableVertexAttribArray("normal");
