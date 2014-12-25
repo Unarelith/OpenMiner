@@ -22,6 +22,7 @@
 
 #include "ApplicationState.hpp"
 #include "Camera.hpp"
+#include "Skybox.hpp"
 #include "World.hpp"
 
 class GameState : public ApplicationState {
@@ -37,10 +38,11 @@ class GameState : public ApplicationState {
 		glm::mat4 m_projectionMatrix;
 		glm::mat4 m_viewMatrix;
 		
-		Camera m_camera;
+		Camera &m_camera;
 		
 		Shader m_shader;
 		
+		Skybox m_skybox;
 		World m_world;
 };
 

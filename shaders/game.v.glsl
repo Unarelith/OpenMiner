@@ -1,9 +1,11 @@
 #version 120
 
+attribute vec3 color;
 attribute vec3 coord3d;
 attribute vec3 normal;
 attribute vec2 texCoord;
 
+varying vec4 v_color;
 varying vec4 v_coord3d;
 varying vec4 v_normal;
 varying vec2 v_texCoord;
@@ -19,6 +21,7 @@ void main() {
 	
 	gl_Position = u_viewProjectionMatrix * v_coord3d;
 	
+	v_color = vec4(color, 1.0);
 	v_normal = vec4(normal, 1.0);
 	v_texCoord = texCoord;
 }

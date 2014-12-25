@@ -1,5 +1,6 @@
 #version 120
 
+varying vec4 v_color;
 varying vec4 v_coord3d;
 varying vec4 v_normal;
 varying vec2 v_texCoord;
@@ -17,8 +18,8 @@ const vec4 ambientColor = vec4(lightColor * ambientIntensity, 1.0);
 
 const float diffuseIntensity = 0.5;
 
-const vec4 fogColor = vec4(0.196078, 0.6, 0.8, 1.0);
-//const vec4 fogColor = vec4(0.6, 0.8, 1.0, 1.0);
+//const vec4 fogColor = vec4(0.196078, 0.6, 0.8, 1.0);
+const vec4 fogColor = vec4(0.6, 0.8, 1.0, 1.0);
 //const float fogDensity = 0.00003;
 
 //vec4 fog(vec4 color, vec4 fogColor, float depth, float density) {
@@ -38,7 +39,13 @@ void main() {
 		diffuseColor = vec4(lightColor * diffuseIntensity * diffuseFactor, 1.0);
 	}
 	
-	vec4 color = texture2D(u_tex, v_texCoord) * (ambientColor + diffuseColor);
+	vec4 color;
+	if(v_color == vec4(0, 0, 0, 1)) {
+		color = texture2D(u_tex, v_texCoord) * (ambientColor + diffuseColor);
+	} else {
+		color = v_color;
+	}
+	
 	if(color.a < 0.4) discard;
 	
 	//float z = gl_FragCoord.z / gl_FragCoord.w;

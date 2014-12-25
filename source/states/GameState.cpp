@@ -20,12 +20,12 @@
 
 #include "GameState.hpp"
 
-GameState::GameState() {
+GameState::GameState() : m_camera(Camera::getInstance()) {
 	m_shader.loadFromFile("shaders/game.v.glsl", "shaders/game.f.glsl");
 	
 	Shader::bind(&m_shader);
 	
-	m_projectionMatrix = glm::perspective(45.0f, 640.0f / 480.0f, 0.1f, float(World::renderDistance * Chunk::width));
+	m_projectionMatrix = glm::perspective(45.0f, 640.0f / 480.0f, 0.1f, 1000.0f);
 	m_viewMatrix = m_camera.update();
 	
 	m_shader.setUniform("u_tex", 0);
@@ -42,6 +42,8 @@ void GameState::update() {
 
 void GameState::draw() {
 	Shader::bind(&m_shader);
+	
+	m_skybox.draw(m_shader, m_projectionMatrix * m_viewMatrix);
 	
 	m_world.draw(m_shader, m_projectionMatrix * m_viewMatrix);
 	
