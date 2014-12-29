@@ -48,7 +48,7 @@ void GameState::draw() {
 	
 	//m_skybox.draw(m_shader);
 	
-	m_world.draw(m_shader, m_projectionMatrix * m_viewMatrix);
+	m_world.draw(m_shader, m_projectionMatrix, m_viewMatrix);
 	
 	Shader::bind(nullptr);
 }

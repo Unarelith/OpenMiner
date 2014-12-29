@@ -43,7 +43,7 @@ World::World() {
 World::~World() {
 }
 
-void World::draw(Shader &shader, const glm::mat4 &pv) {
+void World::draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix) {
 	float ud = 1000.0;
 	s32 ux = 0;
 	s32 uz = 0;
@@ -51,16 +51,22 @@ void World::draw(Shader &shader, const glm::mat4 &pv) {
 	shader.setUniform("u_renderDistance", renderDistance * Chunk::width);
 	
 	for(auto &it : m_chunks) {
-		glm::mat4 model = glm::translate(glm::mat4(1.0f),
-		                                 glm::vec3(it->x() * Chunk::width,
-		                                           it->y() * Chunk::height,
-		                                           it->z() * Chunk::depth));
-		glm::mat4 mvp = pv * model;
+		glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f),
+		                                       glm::vec3(it->x() * Chunk::width,
+		                                                 it->y() * Chunk::height,
+		                                                 it->z() * Chunk::depth));
+		
+		// Is the chunk closer enough?
+		glm::vec4 center = viewMatrix * modelMatrix * glm::vec4(Chunk::width  / 2,
+		                                                        Chunk::height / 2,
+		                                                        Chunk::depth  / 2, 1);
+		
+		if(glm::length(center) > (renderDistance + 1) * Chunk::width) {
+			continue;
+		}
 		
 		// Is this chunk on the screen?
-		glm::vec4 center = mvp * glm::vec4(Chunk::width  / 2,
-		                                   Chunk::height / 2,
-		                                   Chunk::depth  / 2, 1);
+		center = projectionMatrix * center;
 		
 		float d = glm::length(center);
 		center.x /= center.w;
@@ -87,7 +93,7 @@ void World::draw(Shader &shader, const glm::mat4 &pv) {
 			continue;
 		}
 		
-		shader.setUniform("u_modelMatrix", model);
+		shader.setUniform("u_modelMatrix", modelMatrix);
 		
 		it->draw(shader);
 	}

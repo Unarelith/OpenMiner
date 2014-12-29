@@ -27,7 +27,7 @@ class World {
 		World();
 		~World();
 		
-		void draw(Shader &shader, const glm::mat4 &pv);
+		void draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix);
 		
 		Chunk *getChunk(s32 x, s32 z);
 		

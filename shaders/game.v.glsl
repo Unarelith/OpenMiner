@@ -18,9 +18,9 @@ uniform mat4 u_viewMatrix;
 
 void main() {
 	v_coord3d = u_modelMatrix * vec4(coord3d, 1.0);
-	v_viewSpace = u_viewMatrix * u_modelMatrix * vec4(coord3d, 1.0);
+	v_viewSpace = u_viewMatrix * v_coord3d;
 	
-	gl_Position = u_projectionMatrix * u_viewMatrix * v_coord3d;
+	gl_Position = u_projectionMatrix * v_viewSpace;
 	
 	v_color = vec4(color, 1.0);
 	v_normal = vec4(normal, 1.0);

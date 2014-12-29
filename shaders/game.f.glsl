@@ -43,7 +43,7 @@ void main() {
 	float dist = length(v_viewSpace);
 	if(dist > u_renderDistance) discard;
 	
-	gl_FragColor = fog(color, fogColor, dist, u_renderDistance - 4, u_renderDistance);
+	gl_FragColor = fog(color, fogColor, dist, u_renderDistance - 6, u_renderDistance);
 }
 
 vec4 fog(vec4 color, vec4 fogColor, float fogCoord, float fogStart, float fogEnd) {
