@@ -32,8 +32,6 @@ class VertexBuffer {
 		
 	private:
 		GLuint m_id;
-		
-		static VertexBuffer *activeBuffer;
 };
 
 #endif // VERTEXBUFFER_HPP_

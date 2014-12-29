@@ -26,7 +26,7 @@ class Skybox {
 		Skybox();
 		~Skybox();
 		
-		void draw(Shader &shader, const glm::mat4 &pv);
+		void draw(Shader &shader);
 		
 	private:
 		VertexBuffer m_vbo;

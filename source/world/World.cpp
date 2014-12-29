@@ -88,7 +88,6 @@ void World::draw(Shader &shader, const glm::mat4 &pv) {
 		}
 		
 		shader.setUniform("u_modelMatrix", model);
-		shader.setUniform("u_viewProjectionMatrix", pv);
 		
 		it->draw(shader);
 	}

@@ -43,7 +43,10 @@ void GameState::update() {
 void GameState::draw() {
 	Shader::bind(&m_shader);
 	
-	m_skybox.draw(m_shader, m_projectionMatrix * m_viewMatrix);
+	m_shader.setUniform("u_projectionMatrix", m_projectionMatrix);
+	m_shader.setUniform("u_viewMatrix", m_viewMatrix);
+	
+	//m_skybox.draw(m_shader);
 	
 	m_world.draw(m_shader, m_projectionMatrix * m_viewMatrix);
 	

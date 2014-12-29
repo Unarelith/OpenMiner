@@ -74,24 +74,26 @@ Skybox::Skybox() {
 		memcpy(&colors[3 * 4 * i], &colors[0], 3 * 4 * sizeof(float));	
 	}
 	
+	VertexBuffer::bind(&m_vbo);
+	
 	m_vbo.setData(36 * 16 * 9 * sizeof(float), nullptr, GL_STATIC_DRAW);
 	m_vbo.updateData(0, 6 * 4 * 3 * sizeof(float), cubeCoords);
 	m_vbo.updateData(6 * 4 * 3 * sizeof(float), 6 * 4 * 3 * sizeof(float), colors);
+	
+	VertexBuffer::bind(nullptr);
 }
 
 Skybox::~Skybox() {
 }
 
-void Skybox::draw(Shader &shader, const glm::mat4 &pv) {
-	glm::mat4 model(1.0);
-	model *= glm::translate(glm::mat4(1.0f),
+void Skybox::draw(Shader &shader) {
+	glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f),
 	                        glm::vec3(Camera::getInstance().x() - World::renderDistance * Chunk::width / 2,
 	                                  Camera::getInstance().y() - World::renderDistance * Chunk::width / 2,
 	                                  Camera::getInstance().z() - World::renderDistance * Chunk::width / 2));
-	model *= glm::scale(glm::mat4(1.0), glm::vec3(World::renderDistance * Chunk::width));
+	modelMatrix *= glm::scale(glm::mat4(1.0), glm::vec3(World::renderDistance * Chunk::width));
 	
-	shader.setUniform("u_modelMatrix", model);
-	shader.setUniform("u_viewProjectionMatrix", pv);
+	shader.setUniform("u_modelMatrix", modelMatrix);
 	
 	VertexBuffer::bind(&m_vbo);
 	

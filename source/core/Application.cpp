@@ -57,8 +57,8 @@ void Application::initGL() {
 	
 	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
 	
-	//glClearColor(0.196078, 0.6, 0.8, 1.0); // Skyblue
-	glClearColor(0.0, 0.0, 0.0, 1.0); // Skyblue
+	glClearColor(0.196078, 0.6, 0.8, 1.0); // Skyblue
+	//glClearColor(0.0, 0.0, 0.0, 1.0); // Skyblue
 }
 
 void Application::run() {
