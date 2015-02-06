@@ -1,53 +1,28 @@
 #version 120
 
-varying vec4 v_color;
-varying vec4 v_coord3d;
-varying vec4 v_normal;
-varying vec2 v_texCoord;
-
-varying vec4 v_viewSpace;
+varying float v_dist;
 
 uniform int u_renderDistance;
-uniform sampler2D u_tex;
 
-const vec4 lightPosition = vec4(0.0, 48.0, 0.0, 1.0);
-const vec3 lightColor = vec3(1.0, 1.0, 1.0);
+// Get current pixel color
+vec4 getColor();
 
-const float ambientIntensity = 0.5;
-const vec4 ambientColor = vec4(lightColor * ambientIntensity, 1.0);
+// Get light color
+vec4 light(vec3 lightColor, vec4 lightPosition, float ambientIntensity, float diffuseIntensity);
 
-const float diffuseIntensity = 0.5;
-
-const vec4 fogColor = vec4(0.196078, 0.6, 0.8, 1.0);
-//const vec4 fogColor = vec4(0.6, 0.8, 1.0, 1.0);
-
-vec4 fog(vec4 color, vec4 fogColor, float fogCoord, float fogStart, float fogEnd);
+// Apply fog
+vec4 fog(vec4 color, float fogCoord, float fogStart, float fogEnd);
 
 void main() {
-	vec4 lightDirection = normalize(lightPosition - v_coord3d);
+	// Discard if the pixel is too far away
+	if(v_dist > u_renderDistance) discard;
 	
-	float diffuseFactor = dot(v_normal, lightDirection);
+	vec4 color = getColor();
 	
-	vec4 diffuseColor = vec4(0.0, 0.0, 0.0, 1.0);
-	if(diffuseFactor > 0) {
-		diffuseColor = vec4(lightColor * diffuseIntensity * diffuseFactor, 1.0);
-	}
+	color *= light(vec3(1.0, 1.0, 1.0), vec4(0.0, 48.0, 0.0, 1.0), 0.5, 0.5);
 	
-	vec4 color = v_color;
-	if(color == vec4(0, 0, 0, 1)) {
-		color = texture2D(u_tex, v_texCoord) * (ambientColor + diffuseColor);
-	}
+	color = fog(color, v_dist, u_renderDistance - 8, u_renderDistance);
 	
-	if(color.a < 0.4) discard;
-	
-	float dist = length(v_viewSpace);
-	if(dist > u_renderDistance) discard;
-	
-	gl_FragColor = fog(color, fogColor, dist, u_renderDistance - 6, u_renderDistance);
-}
-
-vec4 fog(vec4 color, vec4 fogColor, float fogCoord, float fogStart, float fogEnd) {
-	float fog = clamp((fogEnd - fogCoord) / (fogEnd - fogStart), 0.0, 1.0);
-	return mix(fogColor, color, fog);
+	gl_FragColor = color;
 }
 

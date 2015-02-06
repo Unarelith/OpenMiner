@@ -19,6 +19,7 @@
 #define SHADER_HPP_
 
 #include <string>
+#include <vector>
 
 #include <glm/glm.hpp>
 
@@ -32,7 +33,10 @@ class Shader {
 		
 		void loadFromFile(const char *vertexFilename, const char *fragementFilename);
 		
-		void compileShader(GLenum type, GLuint &shader, const char *filename);
+		void createProgram();
+		void linkProgram();
+		
+		void addShader(GLenum type, const char *filename);
 		
 		GLint attrib(std::string name);
 		GLint uniform(std::string name);
@@ -48,8 +52,8 @@ class Shader {
 		GLint program() const { return m_program; }
 		
 	private:
-		GLuint m_vertexShader;
-		GLuint m_fragmentShader;
+		std::vector<GLuint> m_vertexShaders;
+		std::vector<GLuint> m_fragmentShaders;
 		GLuint m_program;
 };
 

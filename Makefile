@@ -12,7 +12,7 @@ CXX		:=	g++
 #---------------------------------------------------------------------------------
 # Options for code generation
 #---------------------------------------------------------------------------------
-CFLAGS	:=	-g -Wall -DGL_GLEXT_PROTOTYPES
+CFLAGS	:=	-g -Wall
 CXXFLAGS:=	$(CFLAGS) -std=c++11 -MD
 LDFLAGS	:=	-g
 

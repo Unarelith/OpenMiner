@@ -24,9 +24,12 @@ World::World() {
 	m_width = 100;
 	m_depth = 100;
 	
+	//m_texture.load("textures/cobblestone.bmp");
+	m_texture.load("textures/blocks.png");
+	
 	for(s32 z = -m_depth / 2 ; z < m_depth / 2 ; z++) {
 		for(s32 x = -m_width / 2 ; x < m_width / 2 ; x++) {
-			m_chunks.push_back(std::unique_ptr<Chunk>(new Chunk(x, 0, z)));
+			m_chunks.push_back(std::unique_ptr<Chunk>(new Chunk(x, 0, z, m_texture)));
 		}
 	}
 	
@@ -109,11 +112,7 @@ void World::draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::m
 	}
 }
 
-//#include "Debug.hpp"
-
 Chunk *World::getChunk(s32 x, s32 z) {
-	//DEBUG("(", x, z, ") => (", x + m_width / 2, z + m_depth / 2, ")");
-	
 	x += m_width / 2;
 	z += m_depth / 2;
 	

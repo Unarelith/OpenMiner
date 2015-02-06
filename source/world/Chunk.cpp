@@ -23,12 +23,10 @@
 
 #include "Chunk.hpp"
 
-Chunk::Chunk(s32 x, s32 y, s32 z) {
+Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
 	m_x = x;
 	m_y = y;
 	m_z = z;
-	
-	m_texture.load("textures/cobblestone.bmp");
 	
 	m_changed = false;
 	m_initialized = false;
@@ -56,9 +54,9 @@ void Chunk::generate() {
 			
 			for(u8 y = 0 ; y < height ; y++) {
 				if(y + m_y * height < h) {
-					m_data.push_back(1);
+					m_data.push_back(std::unique_ptr<Block>(new Block(1)));
 				} else {
-					m_data.push_back(0);
+					m_data.push_back(std::unique_ptr<Block>(new Block(0)));
 				}
 				
 				// Random value used to determine land type
@@ -128,17 +126,6 @@ void Chunk::update() {
 		0, 0, 0,
 	};
 	
-	float texCoords[2 * 4 * 6] = {
-		0.0f, 1.0f,
-		1.0f, 1.0f,
-		1.0f, 0.0f,
-		0.0f, 0.0f
-	};
-	
-	for(int i = 1 ; i < 6 ; i++) {
-		memcpy(&texCoords[2 * 4 * i], &texCoords[0], 2 * 4 * sizeof(float));	
-	}
-	
 	m_vertices.clear();
 	m_normals.clear();
 	m_texCoords.clear();
@@ -150,57 +137,76 @@ void Chunk::update() {
 	m_verticesID.clear();
 	m_extendedFaces.clear();
 	
-	// Needed in the loop
+	// Needed in the loop (avoid a lot of glm::vec3 creation)
 	glm::vec3 a, b, c, v1, v2, normal;
 	
 	for(u8 z = 0 ; z < depth ; z++) {
 		for(u8 y = 0 ; y < height ; y++) {
 			for(u8 x = 0 ; x < width ; x++) {
-				if(!getBlock(x, y, z)) {
+				Block *block = getBlock(x, y, z);
+				
+				if(!block->id()) {
 					continue;
+				}
+				
+				const glm::vec4 &blockTexCoords = block->getTexCoords();
+				
+				float texCoords[2 * 4 * 6] = {
+					blockTexCoords.x, blockTexCoords.w,
+					blockTexCoords.z, blockTexCoords.w,
+					blockTexCoords.z, blockTexCoords.y,
+					blockTexCoords.x, blockTexCoords.y
+				//	0.0f, 1.0f,
+				//	1.0f, 1.0f,
+				//	1.0f, 0.0f,
+				//	0.0f, 0.0f
+				};
+				
+				for(int i = 1 ; i < 6 ; i++) {
+					memcpy(&texCoords[2 * 4 * i], &texCoords[0], 2 * 4 * sizeof(float));	
 				}
 				
 				for(u8 i = 0 ; i < 6 ; i++) {
 					// Skip hidden faces
-					if((x > 0           && getBlock(x - 1, y, z) && i == 0)
-					|| (x < width - 1   && getBlock(x + 1, y, z) && i == 1)
-					|| (y > 0           && getBlock(x, y - 1, z) && i == 2)
-					|| (y < height - 1  && getBlock(x, y + 1, z) && i == 3)
-					|| (z > 0           && getBlock(x, y, z - 1) && i == 5)
-					|| (z < depth - 1   && getBlock(x, y, z + 1) && i == 4)
-					|| (x == 0          && m_surroundingChunks[0] && m_surroundingChunks[0]->getBlock(width - 1, y, z)  && i == 0)
-					|| (x == width - 1  && m_surroundingChunks[1] && m_surroundingChunks[1]->getBlock(0, y, z)          && i == 1)
-					|| (z == 0          && m_surroundingChunks[2] && m_surroundingChunks[2]->getBlock(x, y, depth - 1)  && i == 5)
-					|| (z == depth - 1  && m_surroundingChunks[3] && m_surroundingChunks[3]->getBlock(x, y, 0)          && i == 4)
+					if((x > 0           && getBlock(x - 1, y, z)->id() && i == 0)
+					|| (x < width - 1   && getBlock(x + 1, y, z)->id() && i == 1)
+					|| (y > 0           && getBlock(x, y - 1, z)->id() && i == 2)
+					|| (y < height - 1  && getBlock(x, y + 1, z)->id() && i == 3)
+					|| (z > 0           && getBlock(x, y, z - 1)->id() && i == 5)
+					|| (z < depth - 1   && getBlock(x, y, z + 1)->id() && i == 4)
+					|| (x == 0          && m_surroundingChunks[0] && m_surroundingChunks[0]->getBlock(width - 1, y, z)->id()  && i == 0)
+					|| (x == width - 1  && m_surroundingChunks[1] && m_surroundingChunks[1]->getBlock(0, y, z)->id()          && i == 1)
+					|| (z == 0          && m_surroundingChunks[2] && m_surroundingChunks[2]->getBlock(x, y, depth - 1)->id()  && i == 5)
+					|| (z == depth - 1  && m_surroundingChunks[3] && m_surroundingChunks[3]->getBlock(x, y, 0)->id()          && i == 4)
 					) {
 						continue;
 					}
 					
 					// Merge adjacent faces
-					if(x > 0 && getBlock(x - 1, y, z) && (i != 0 || i != 1) && vertexExists(x - 1, y, z, i, 0)) {
+					/*if(x > 0 && getBlock(x - 1, y, z)->id() && (i != 0 || i != 1) && vertexExists(x - 1, y, z, i, 0)) {
 						m_vertices[getVertexID(x - 1, y, z, i, 1, 0)] += 1;
 						m_vertices[getVertexID(x - 1, y, z, i, 2, 0)] += 1;
 						
-						m_texCoords[getTexCoordID(x - 1, y, z, i, 1, 0)] += 1;
-						m_texCoords[getTexCoordID(x - 1, y, z, i, 2, 0)] += 1;
+						m_texCoords[getTexCoordID(x - 1, y, z, i, 1, 0)] += 16 / 256 * 2;//1;
+						m_texCoords[getTexCoordID(x - 1, y, z, i, 2, 0)] += 16 / 256 * 2;//1;
 						
 						m_extendedFaces[getCoordID(x, y, z, i, 0, 0)] = getCoordID(x - 1, y, z, i, 0, 0);
 						
 						continue;
 					}
-					if(z > 0 && getBlock(x, y, z - 1) && (i == 0 || i == 1) && vertexExists(x, y, z - 1, i, 0)) {
+					if(z > 0 && getBlock(x, y, z - 1)->id() && (i == 0 || i == 1) && vertexExists(x, y, z - 1, i, 0)) {
 						m_vertices[getVertexID(x, y, z - 1, i, 0, 2)] += 1;
 						m_vertices[getVertexID(x, y, z - 1, i, 3, 2)] += 1;
 						
-						m_texCoords[getTexCoordID(x, y, z - 1, i, 1, 0)] += 1;
-						m_texCoords[getTexCoordID(x, y, z - 1, i, 2, 0)] += 1;
+						m_texCoords[getTexCoordID(x, y, z - 1, i, 1, 0)] += 16 / 256 * 2;//1;
+						m_texCoords[getTexCoordID(x, y, z - 1, i, 2, 0)] += 16 / 256 * 2;//1;
 						
 						m_extendedFaces[getCoordID(x, y, z, i, 0, 0)] = getCoordID(x, y, z - 1, i, 0, 0);
 						
 						continue;
-					}
+					}*/
 					
-					/*if(y > 0 && getBlock(x, y - 1, z) && (i == 2 || i == 3) && vertexExists(x, y - 1, z, i, 0)) {
+					/*if(y > 0 && getBlock(x, y - 1, z)->id() && (i == 2 || i == 3) && vertexExists(x, y - 1, z, i, 0)) {
 						m_vertices[getVertexID(x, y - 1, z, i, 0, 1)] += 1;
 						m_vertices[getVertexID(x, y - 1, z, i, 3, 1)] += 1;
 						
@@ -300,12 +306,12 @@ void Chunk::draw(Shader &shader) {
 	VertexBuffer::bind(nullptr);
 }
 
-u8 Chunk::getBlock(s8 x, s8 y, s8 z) {
+Block *Chunk::getBlock(s8 x, s8 y, s8 z) {
 	u16 i = y + x * height + z * height * width;
 	if(i < m_data.size()) {
-		return m_data[i];
+		return m_data[i].get();
 	} else {
-		return 0;
+		return nullptr;
 	}
 }
 

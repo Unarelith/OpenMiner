@@ -4,6 +4,8 @@ h2. By Quentin Bazin (aka. Quent42340)
 
 * KubKraft is a Minecraft-like game.
 
+!http://sdz-upload.s3.amazonaws.com/prod/upload/screenshot-20150103233518.png!
+
 h2. Keys
 
 * View: mouse controlled

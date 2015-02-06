@@ -1,12 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  OpenGL.hpp
+ *       Filename:  Block.hpp
  *
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  15/12/2014 04:18:34
+ *        Created:  29/12/2014 04:56:02
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -15,20 +15,24 @@
  *
  * =====================================================================================
  */
-#ifndef OPENGL_HPP_
-#define OPENGL_HPP_
+#ifndef BLOCK_HPP_
+#define BLOCK_HPP_
 
-#define GL_GLEXT_PROTOTYPES
-#define GL3_PROTOTYPES 1
+#include <glm/glm.hpp>
 
-#ifdef __APPLE__
-	#include <OpenGL/gl.h>
-#else
-	#ifdef __MINGW32__
-		#include <GL/glew.h>
-	#else
-		#include <GL/gl.h>
-	#endif
-#endif
+#include "Types.hpp"
 
-#endif // OPENGL_HPP_
+class Block {
+	public:
+		Block(u16 id);
+		~Block();
+		
+		glm::vec4 getTexCoords();
+		
+		u16 id() const { return m_id; }
+		
+	private:
+		u16 m_id;
+};
+
+#endif // BLOCK_HPP_

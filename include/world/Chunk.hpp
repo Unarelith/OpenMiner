@@ -19,15 +19,17 @@
 #define CHUNK_HPP_
 
 #include <map>
+#include <memory>
 #include <vector>
 
+#include "Block.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "VertexBuffer.hpp"
 
 class Chunk {
 	public:
-		Chunk(s32 x, s32 y, s32 z);
+		Chunk(s32 x, s32 y, s32 z, Texture &texture);
 		~Chunk();
 		
 		void generate();
@@ -35,7 +37,7 @@ class Chunk {
 		
 		void draw(Shader &shader);
 		
-		u8 getBlock(s8 x, s8 y, s8 z);
+		Block *getBlock(s8 x, s8 y, s8 z);
 		
 		u32 getCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate);
 		
@@ -75,7 +77,7 @@ class Chunk {
 		
 		Texture m_texture;
 		
-		std::vector<u8> m_data;
+		std::vector<std::unique_ptr<Block>> m_data;
 		
 		std::vector<float> m_vertices;
 		std::vector<float> m_normals;

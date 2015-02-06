@@ -32,20 +32,33 @@ Shader::Shader(const char *vertexFilename, const char *fragmentFilename) {
 }
 
 Shader::~Shader() {
-	glDeleteShader(m_vertexShader);
-	glDeleteShader(m_fragmentShader);
+	while(m_vertexShaders.size() != 0) {
+		glDeleteShader(m_vertexShaders.back());
+		m_vertexShaders.pop_back();
+	}
+	
+	while(m_fragmentShaders.size() != 0) {
+		glDeleteShader(m_fragmentShaders.back());
+		m_fragmentShaders.pop_back();
+	}
+	
 	glDeleteProgram(m_program);
 }
 
 void Shader::loadFromFile(const char *vertexFilename, const char *fragmentFilename) {
-	compileShader(GL_VERTEX_SHADER, m_vertexShader, vertexFilename);
-	compileShader(GL_FRAGMENT_SHADER, m_fragmentShader, fragmentFilename);
+	createProgram();
 	
+	addShader(GL_VERTEX_SHADER, vertexFilename);
+	addShader(GL_FRAGMENT_SHADER, fragmentFilename);
+	
+	linkProgram();
+}
+
+void Shader::createProgram() {
 	m_program = glCreateProgram();
-	
-	glAttachShader(m_program, m_vertexShader);
-	glAttachShader(m_program, m_fragmentShader);
-	
+}
+
+void Shader::linkProgram() {
 	glLinkProgram(m_program);
 	
 	GLint linkOK = GL_FALSE;
@@ -68,12 +81,18 @@ void Shader::loadFromFile(const char *vertexFilename, const char *fragmentFilena
 	}
 }
 
-void Shader::compileShader(GLenum type, GLuint &shader, const char *filename) {
-	shader = glCreateShader(type);
+void Shader::addShader(GLenum type, const char *filename) {
+	GLuint shader = glCreateShader(type);
+	
+	if(type == GL_VERTEX_SHADER) {
+		m_vertexShaders.push_back(shader);
+	} else {
+		m_fragmentShaders.push_back(shader);
+	}
 	
 	std::ifstream file(filename);
 	if(!file) {
-		glDeleteShader(type);
+		glDeleteShader(shader);
 		
 		throw EXCEPTION("Failed to open", filename);
 	}
@@ -108,6 +127,8 @@ void Shader::compileShader(GLenum type, GLuint &shader, const char *filename) {
 		
 		throw EXCEPTION("Shader", filename, "compilation failed:", error);
 	}
+	
+	glAttachShader(m_program, shader);
 }
 
 GLint Shader::attrib(std::string name) {

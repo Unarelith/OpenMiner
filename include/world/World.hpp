@@ -32,11 +32,13 @@ class World {
 		Chunk *getChunk(s32 x, s32 z);
 		
 		// Render distance in chunks
-		static const u16 renderDistance = 4;
+		static const u16 renderDistance = 8;
 		
 	private:
 		s32 m_width;
 		s32 m_depth;
+		
+		Texture m_texture;
 		
 		std::vector<std::unique_ptr<Chunk>> m_chunks;
 };
