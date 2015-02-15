@@ -1,6 +1,6 @@
 h1. KubKraft
 
-h2. By Quentin Bazin (aka. Quent42340)
+h3. By gnidmoo
 
 * KubKraft is a Minecraft-like game.
 
@@ -9,19 +9,19 @@ h2. By Quentin Bazin (aka. Quent42340)
 h2. Keys
 
 * View: mouse controlled
-* Movement: @Z@, @Q@, @S@ and @D@
+* Movement: @W@, @A@, @S@ and @D@
 * Land: @Shift@
 * Fly: @Space@
 * Exit: @Escape@
 
-h2. How to compile (Linux and OS-X only)
+h2. How to compile
 
-* Make sure you have @SDL@ (>= 2.0), @OpenGL@ (=> 2.1) and @glm@
-* Run @make@ at the root of the game folder
-* Run @make run@, and enjoy!
+* Dependencies:
+    - "CMake":http://www.cmake.org/download/
+    - "SDL2":https://www.libsdl.org/download-2.0.php, "SDL2_image":https://www.libsdl.org/projects/SDL_image/, "SDL2_mixer":https://www.libsdl.org/projects/SDL_mixer/
+    - OpenGL >= 3.0, "glm":http://sourceforge.net/projects/ogl-math/files/latest/download?source=files
+    - "glew":http://sourceforge.net/projects/glew/files/latest/download _(only required for Windows)_
 
-h2. Note for Windows users
-
-* Windows requires @glew@
-* The @Makefile@ is not yet compatible with Windows
+* Run @cmake .@ at the root of the game folder
+* Run @make@, wait, run the game and enjoy!
 
