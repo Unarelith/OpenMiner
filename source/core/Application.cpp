@@ -21,25 +21,19 @@
 #include <SFML/Window/Event.hpp>
 
 #include "Application.hpp"
-#include "Config.hpp"
 #include "Exception.hpp"
+#include "Mouse.hpp"
 #include "OpenGL.hpp"
 
-Application::Application() {
+Application::Application() : m_stateStack(ApplicationStateStack::getInstance()) {
 	srand(time(NULL));
 	
-	m_window.open(APP_NAME, SCREEN_WIDTH, SCREEN_HEIGHT);
+	m_window.open("KubKraft", 640, 480);
 	m_window.setMouseCursorGrabbed(true);
 	m_window.setMouseCursorVisible(false);
 	m_window.setVerticalSyncEnabled(true);
 	
 	initGL();
-	
-	//ResourceHandler::getInstance().loadResources();
-	m_applicationStateStack = &ApplicationStateStack::getInstance();
-}
-
-Application::~Application() {
 }
 
 void Application::initGL() {
@@ -58,23 +52,45 @@ void Application::initGL() {
 	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
 	
 	glClearColor(0.196078, 0.6, 0.8, 1.0); // Skyblue
-	//glClearColor(0.0, 0.0, 0.0, 1.0); // Skyblue
+}
+
+void Application::handleEvents() {
+	Mouse::reset();
+	
+	SDL_Event event;
+	while(SDL_PollEvent(&event) != 0) {
+		switch(event.type) {
+			case SDL_QUIT:
+				m_window.close();
+				break;
+			case SDL_KEYDOWN:
+				if(event.key.keysym.sym == SDLK_ESCAPE) {
+					m_window.close();
+				}
+				break;
+			case SDL_MOUSEMOTION:
+				Mouse::update(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
+				break;
+			default:
+				break;
+		}
+	}
 }
 
 void Application::run() {
 	while(m_window.isOpen()) {
 		m_clock.measureLastFrameDuration();
 		
-		m_applicationStateStack->top().handleEvents();
+		handleEvents();
 		
 		m_clock.updateGame([&]{
-			m_applicationStateStack->top().update();
+			m_stateStack.top().update();
 		});
 		
 		m_clock.drawGame([&]{
 			m_window.clear();
 			
-			m_applicationStateStack->top().draw();
+			m_stateStack.top().draw();
 			
 			m_window.display();
 		});

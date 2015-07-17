@@ -57,7 +57,7 @@ void GameClock::measureLastFrameDuration() {
 void GameClock::updateGame(std::function<void(void)> updateFunc) {
 	m_numUpdates = 0;
 	
-	while(m_lag >= m_timestep && m_numUpdates < 10 && Application::getInstance().window().isOpen()) {
+	while(m_lag >= m_timestep && m_numUpdates < 10) {
 		ticks += m_timestep;
 		
 		updateFunc();

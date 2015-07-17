@@ -27,7 +27,7 @@
 Shader::Shader() {
 }
 
-Shader::Shader(const char *vertexFilename, const char *fragmentFilename) {
+Shader::Shader(const std::string &vertexFilename, const std::string &fragmentFilename) {
 	loadFromFile(vertexFilename, fragmentFilename);
 }
 
@@ -45,7 +45,7 @@ Shader::~Shader() {
 	glDeleteProgram(m_program);
 }
 
-void Shader::loadFromFile(const char *vertexFilename, const char *fragmentFilename) {
+void Shader::loadFromFile(const std::string &vertexFilename, const std::string &fragmentFilename) {
 	createProgram();
 	
 	addShader(GL_VERTEX_SHADER, vertexFilename);
@@ -81,7 +81,7 @@ void Shader::linkProgram() {
 	}
 }
 
-void Shader::addShader(GLenum type, const char *filename) {
+void Shader::addShader(GLenum type, const std::string &filename) {
 	GLuint shader = glCreateShader(type);
 	
 	if(type == GL_VERTEX_SHADER) {
@@ -105,7 +105,7 @@ void Shader::addShader(GLenum type, const char *filename) {
 	
 	const GLchar *sourceCodeString = sourceCode.c_str();
 	
-	glShaderSource(shader, 1, &sourceCodeString, NULL);
+	glShaderSource(shader, 1, &sourceCodeString, nullptr);
 	
 	glCompileShader(shader);
 	
@@ -131,7 +131,7 @@ void Shader::addShader(GLenum type, const char *filename) {
 	glAttachShader(m_program, shader);
 }
 
-GLint Shader::attrib(std::string name) {
+GLint Shader::attrib(const std::string &name) {
 	GLint attrib = glGetAttribLocation(m_program, name.c_str());
 	
 	if(attrib == -1) {
@@ -141,7 +141,7 @@ GLint Shader::attrib(std::string name) {
 	return attrib;
 }
 
-GLint Shader::uniform(std::string name) {
+GLint Shader::uniform(const std::string &name) {
 	GLint uniform = glGetUniformLocation(m_program, name.c_str());
 	
 	if(uniform == -1) {
@@ -151,19 +151,19 @@ GLint Shader::uniform(std::string name) {
 	return uniform;
 }
 
-void Shader::enableVertexAttribArray(std::string name) {
+void Shader::enableVertexAttribArray(const std::string &name) {
 	glEnableVertexAttribArray(attrib(name));
 }
 
-void Shader::disableVertexAttribArray(std::string name) {
+void Shader::disableVertexAttribArray(const std::string &name) {
 	glDisableVertexAttribArray(attrib(name));
 }
 
-void Shader::setUniform(std::string name, int n) {
+void Shader::setUniform(const std::string &name, int n) {
 	glUniform1i(uniform(name), n);
 }
 
-void Shader::setUniform(std::string name, const glm::mat4 &matrix) {
+void Shader::setUniform(const std::string &name, const glm::mat4 &matrix) {
 	glUniformMatrix4fv(uniform(name), 1, GL_FALSE, glm::value_ptr(matrix));
 }
 

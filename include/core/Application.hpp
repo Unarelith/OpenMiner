@@ -21,12 +21,10 @@
 #include "ApplicationStateStack.hpp"
 #include "GameClock.hpp"
 #include "Window.hpp"
-//#include "ResourceHandler.hpp"
 
 class Application {
 	public:
 		Application();
-		~Application();
 		
 		void initGL();
 		
@@ -36,17 +34,15 @@ class Application {
 		
 		Window &window() { return m_window; }
 		
-		static Application &getInstance() {
-			static Application instance;
-			return instance;
-		}
+		static const u16 screenWidth = 640;
+		static const u16 screenHeight = 480;
 		
 	private:
-		Window m_window;
+		ApplicationStateStack &m_stateStack;
 		
 		GameClock m_clock;
 		
-		ApplicationStateStack *m_applicationStateStack;
+		Window m_window;
 };
 
 #endif // APPLICATION_HPP_

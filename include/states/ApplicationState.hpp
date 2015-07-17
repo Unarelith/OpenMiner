@@ -20,14 +20,17 @@
 
 class ApplicationState {
 	public:
-		ApplicationState();
-		virtual ~ApplicationState();
-		
-		virtual void handleEvents();
+		ApplicationState(ApplicationState *parent = nullptr) : m_parent(parent) {}
+		ApplicationState(const ApplicationState &) = delete;
+		ApplicationState(ApplicationState &&) = default;
+		virtual ~ApplicationState() = default;
 		
 		virtual void update() = 0;
 		
 		virtual void draw() = 0;
+		
+	protected:
+		ApplicationState *m_parent = nullptr;
 };
 
 #endif // APPLICATIONSTATE_HPP_

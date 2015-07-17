@@ -18,6 +18,8 @@
 #ifndef WINDOW_HPP_
 #define WINDOW_HPP_
 
+#include <string>
+
 #include "SDLHeaders.hpp"
 #include "Types.hpp"
 

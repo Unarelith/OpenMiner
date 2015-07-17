@@ -28,24 +28,24 @@
 class Shader {
 	public:
 		Shader();
-		Shader(const char *vertexFilename, const char *fragementFilename);
+		Shader(const std::string &vertexFilename, const std::string &fragementFilename);
 		~Shader();
 		
-		void loadFromFile(const char *vertexFilename, const char *fragementFilename);
+		void loadFromFile(const std::string &vertexFilename, const std::string &fragementFilename);
 		
 		void createProgram();
 		void linkProgram();
 		
-		void addShader(GLenum type, const char *filename);
+		void addShader(GLenum type, const std::string &filename);
 		
-		GLint attrib(std::string name);
-		GLint uniform(std::string name);
+		GLint attrib(const std::string &name);
+		GLint uniform(const std::string &name);
 		
-		void enableVertexAttribArray(std::string name);
-		void disableVertexAttribArray(std::string name);
+		void enableVertexAttribArray(const std::string &name);
+		void disableVertexAttribArray(const std::string &name);
 		
-		void setUniform(std::string name, int n);
-		void setUniform(std::string name, const glm::mat4 &matrix);
+		void setUniform(const std::string &name, int n);
+		void setUniform(const std::string &name, const glm::mat4 &matrix);
 		
 		static void bind(const Shader *shader);
 		
@@ -54,6 +54,7 @@ class Shader {
 	private:
 		std::vector<GLuint> m_vertexShaders;
 		std::vector<GLuint> m_fragmentShaders;
+		
 		GLuint m_program;
 };
 
