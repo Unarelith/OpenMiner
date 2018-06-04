@@ -3,7 +3,7 @@
  *
  *       Filename:  SDLManager.cpp
  *
- *    Description:  
+ *    Description:
  *
  *        Version:  1.0
  *        Created:  20/12/2014 01:24:53
@@ -11,7 +11,7 @@
  *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:  
+ *        Company:
  *
  * =====================================================================================
  */
@@ -29,20 +29,20 @@ void SDLManager::init() {
 	} else {
 		sdlInitialized = true;
 	}
-	
+
 	int imgFlags = IMG_INIT_PNG;
 	if(!IMG_Init(imgFlags) & imgFlags) {
 		EXCEPTION("SDL image init error:", SDL_GetError());
 	} else {
 		imgInitialized = true;
 	}
-	
+
 	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) {
 		EXCEPTION("SDL image init error:", SDL_GetError());
 	} else {
 		mixInitialized = true;
 	}
-	
+
 	Mix_AllocateChannels(32);
 	Mix_VolumeMusic(MIX_MAX_VOLUME / 3);
 	Mix_Volume(-1, MIX_MAX_VOLUME);

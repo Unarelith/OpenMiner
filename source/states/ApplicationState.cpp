@@ -3,7 +3,7 @@
  *
  *       Filename:  ApplicationState.cpp
  *
- *    Description:  
+ *    Description:
  *
  *        Version:  1.0
  *        Created:  14/12/2014 13:50:04
@@ -11,7 +11,7 @@
  *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:  
+ *        Company:
  *
  * =====================================================================================
  */
@@ -21,7 +21,7 @@
 #include "Mouse.hpp"
 
 ApplicationState::ApplicationState() {
-	
+
 }
 
 ApplicationState::~ApplicationState() {
@@ -29,7 +29,7 @@ ApplicationState::~ApplicationState() {
 
 void ApplicationState::handleEvents() {
 	Mouse::reset();
-	
+
 	SDL_Event event;
 	while(SDL_PollEvent(&event) != 0) {
 		switch(event.type) {

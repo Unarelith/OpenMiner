@@ -3,7 +3,7 @@
  *
  *       Filename:  GameState.hpp
  *
- *    Description:  
+ *    Description:
  *
  *        Version:  1.0
  *        Created:  15/12/2014 03:51:32
@@ -11,7 +11,7 @@
  *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:  
+ *        Company:
  *
  * =====================================================================================
  */
@@ -29,19 +29,19 @@ class GameState : public ApplicationState {
 	public:
 		GameState();
 		~GameState();
-		
+
 		void update();
-		
+
 		void draw();
-		
+
 	private:
 		glm::mat4 m_projectionMatrix;
 		glm::mat4 m_viewMatrix;
-		
+
 		Camera &m_camera;
-		
+
 		Shader m_shader;
-		
+
 		Skybox m_skybox;
 		World m_world;
 };

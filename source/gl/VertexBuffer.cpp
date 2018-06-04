@@ -3,7 +3,7 @@
  *
  *       Filename:  VertexBuffer.cpp
  *
- *    Description:  
+ *    Description:
  *
  *        Version:  1.0
  *        Created:  15/12/2014 17:10:16
@@ -11,7 +11,7 @@
  *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:  
+ *        Company:
  *
  * =====================================================================================
  */

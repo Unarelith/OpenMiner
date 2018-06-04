@@ -3,7 +3,7 @@
  *
  *       Filename:  Skybox.hpp
  *
- *    Description:  
+ *    Description:
  *
  *        Version:  1.0
  *        Created:  25/12/2014 23:43:07
@@ -11,7 +11,7 @@
  *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:  
+ *        Company:
  *
  * =====================================================================================
  */
@@ -25,9 +25,9 @@ class Skybox {
 	public:
 		Skybox();
 		~Skybox();
-		
+
 		void draw(Shader &shader);
-		
+
 	private:
 		VertexBuffer m_vbo;
 };

@@ -3,7 +3,7 @@
  *
  *       Filename:  OpenGL.hpp
  *
- *    Description:  
+ *    Description:
  *
  *        Version:  1.0
  *        Created:  15/12/2014 04:18:34
@@ -11,7 +11,7 @@
  *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:  
+ *        Company:
  *
  * =====================================================================================
  */

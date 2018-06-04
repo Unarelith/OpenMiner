@@ -3,7 +3,7 @@
  *
  *       Filename:  GameClock.hpp
  *
- *    Description:  
+ *    Description:
  *
  *        Version:  1.0
  *        Created:  14/12/2014 13:42:17
@@ -11,7 +11,7 @@
  *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:  
+ *        Company:
  *
  * =====================================================================================
  */
@@ -26,20 +26,20 @@ class GameClock {
 	public:
 		GameClock();
 		~GameClock();
-		
+
 		static u32 getTicks(bool realTime = false);
-		
+
 		void measureLastFrameDuration();
-		
+
 		void updateGame(std::function<void(void)> updateFunc);
-		
+
 		void drawGame(std::function<void(void)> drawFunc);
-		
+
 		u8 timestep() const { return m_timestep; }
-		
+
 	private:
 		static u32 ticks;
-		
+
 		u32 m_lastFrameDate;
 		u32 m_lag;
 		u32 m_timeDropped;

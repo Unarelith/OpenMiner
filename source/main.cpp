@@ -3,7 +3,7 @@
  *
  *       Filename:  main.cpp
  *
- *    Description:  
+ *    Description:
  *
  *        Version:  1.0
  *        Created:  13/12/2014 20:49:00
@@ -11,7 +11,7 @@
  *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:  
+ *        Company:
  *
  * =====================================================================================
  */
@@ -25,9 +25,9 @@
 int main(int argc, char *argv[]) {
 	try {
 		SDLManager::init();
-		
+
 		Application &app = Application::getInstance();
-		
+
 		app.run();
 	}
 	catch(const Exception &err) {
@@ -42,9 +42,9 @@ int main(int argc, char *argv[]) {
 		std::cerr << "Fatal error: Unknown error." << std::endl;
 		return 1;
 	}
-	
+
 	SDLManager::free();
-	
+
 	return 0;
 }
 

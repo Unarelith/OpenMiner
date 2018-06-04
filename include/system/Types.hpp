@@ -3,7 +3,7 @@
  *
  *       Filename:  Types.hpp
  *
- *    Description:  
+ *    Description:
  *
  *        Version:  1.0
  *        Created:  14/12/2014 05:05:33
@@ -11,7 +11,7 @@
  *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:  
+ *        Company:
  *
  * =====================================================================================
  */

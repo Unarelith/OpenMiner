@@ -3,7 +3,7 @@
  *
  *       Filename:  Block.hpp
  *
- *    Description:  
+ *    Description:
  *
  *        Version:  1.0
  *        Created:  29/12/2014 04:56:02
@@ -11,7 +11,7 @@
  *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:  
+ *        Company:
  *
  * =====================================================================================
  */
@@ -26,11 +26,11 @@ class Block {
 	public:
 		Block(u16 id);
 		~Block();
-		
+
 		glm::vec4 getTexCoords();
-		
+
 		u16 id() const { return m_id; }
-		
+
 	private:
 		u16 m_id;
 };

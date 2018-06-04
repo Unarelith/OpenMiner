@@ -3,7 +3,7 @@
  *
  *       Filename:  SDLManager.hpp
  *
- *    Description:  
+ *    Description:
  *
  *        Version:  1.0
  *        Created:  20/12/2014 01:24:24
@@ -11,7 +11,7 @@
  *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:  
+ *        Company:
  *
  * =====================================================================================
  */
@@ -22,7 +22,7 @@ class SDLManager {
 	public:
 		static void init();
 		static void free();
-		
+
 	private:
 		static bool sdlInitialized;
 		static bool imgInitialized;

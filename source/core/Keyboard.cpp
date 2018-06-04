@@ -3,7 +3,7 @@
  *
  *       Filename:  Keyboard.cpp
  *
- *    Description:  
+ *    Description:
  *
  *        Version:  1.0
  *        Created:  20/12/2014 00:52:10
@@ -11,7 +11,7 @@
  *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:  
+ *        Company:
  *
  * =====================================================================================
  */
@@ -26,12 +26,12 @@ std::map<Keyboard::Key, bool> Keyboard::pressed = {
 	{Key::W,		false},
 	{Key::X,		false},
 	{Key::Z,		false},
-	
+
 	{Key::Left,		false},
 	{Key::Right,	false},
 	{Key::Up,		false},
 	{Key::Down,		false},
-	
+
 	{Key::BackSpace,  false},
 	{Key::LeftShift,  false},
 	{Key::RightShift, false},
@@ -46,12 +46,12 @@ std::map<Keyboard::Key, u32> Keyboard::lastTimePressed = {
 	{Key::W,		0},
 	{Key::X,		0},
 	{Key::Z,		0},
-	
+
 	{Key::Left,		0},
 	{Key::Right,	0},
 	{Key::Up,		0},
 	{Key::Down,		0},
-	
+
 	{Key::BackSpace,  0},
 	{Key::LeftShift,  0},
 	{Key::Space,	  0},
@@ -66,12 +66,12 @@ std::map<Keyboard::Key, u32> Keyboard::keysCode = {
 	{Key::W,		SDLK_w},
 	{Key::X,		SDLK_x},
 	{Key::Z,		SDLK_z},
-	
+
 	{Key::Left,		SDLK_LEFT},
 	{Key::Right,	SDLK_RIGHT},
 	{Key::Up,		SDLK_UP},
 	{Key::Down,		SDLK_DOWN},
-	
+
 	{Key::BackSpace,  SDLK_BACKSPACE},
 	{Key::LeftShift,  SDLK_LSHIFT},
 	{Key::Space,	  SDLK_SPACE},
@@ -113,7 +113,7 @@ bool Keyboard::isKeyPressedWithDelay(Key key, u16 delay) {
 		if(!Keyboard::isKeyPressed(key)) {
 			lastTimePressed[key] = 0;
 		}
-		
+
 		return false;
 	}
 }

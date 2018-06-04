@@ -3,7 +3,7 @@
  *
  *       Filename:  Texture.cpp
  *
- *    Description:  
+ *    Description:
  *
  *        Version:  1.0
  *        Created:  20/12/2014 01:15:43
@@ -11,7 +11,7 @@
  *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:  
+ *        Company:
  *
  * =====================================================================================
  */
@@ -34,27 +34,27 @@ void Texture::load(const std::string &filename) {
 	if(!surface) {
 		throw EXCEPTION("Failed to load texture:", filename);
 	}
-	
+
 	m_filename = filename;
-	
+
 	m_width = surface->w;
 	m_height = surface->h;
-	
+
 	glGenTextures(1, &m_texture);
-	
+
 	bind(this);
-    
+
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	
+
 	GLenum format = (surface->format->BytesPerPixel == 4) ? GL_RGBA : GL_RGB;
 	glTexImage2D(GL_TEXTURE_2D, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
-	
+
 	//glGenerateMipmap(GL_TEXTURE_2D);
-	
+
 	bind(nullptr);
-	
+
 	SDL_FreeSurface(surface);
 }
 
