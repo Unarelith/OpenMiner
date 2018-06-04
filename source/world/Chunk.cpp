@@ -183,28 +183,28 @@ void Chunk::update() {
 					}
 
 					// Merge adjacent faces
-					/*if(x > 0 && getBlock(x - 1, y, z)->id() && (i != 0 || i != 1) && vertexExists(x - 1, y, z, i, 0)) {
-						m_vertices[getVertexID(x - 1, y, z, i, 1, 0)] += 1;
-						m_vertices[getVertexID(x - 1, y, z, i, 2, 0)] += 1;
-
-						m_texCoords[getTexCoordID(x - 1, y, z, i, 1, 0)] += 16 / 256 * 2;//1;
-						m_texCoords[getTexCoordID(x - 1, y, z, i, 2, 0)] += 16 / 256 * 2;//1;
-
-						m_extendedFaces[getCoordID(x, y, z, i, 0, 0)] = getCoordID(x - 1, y, z, i, 0, 0);
-
-						continue;
-					}
-					if(z > 0 && getBlock(x, y, z - 1)->id() && (i == 0 || i == 1) && vertexExists(x, y, z - 1, i, 0)) {
-						m_vertices[getVertexID(x, y, z - 1, i, 0, 2)] += 1;
-						m_vertices[getVertexID(x, y, z - 1, i, 3, 2)] += 1;
-
-						m_texCoords[getTexCoordID(x, y, z - 1, i, 1, 0)] += 16 / 256 * 2;//1;
-						m_texCoords[getTexCoordID(x, y, z - 1, i, 2, 0)] += 16 / 256 * 2;//1;
-
-						m_extendedFaces[getCoordID(x, y, z, i, 0, 0)] = getCoordID(x, y, z - 1, i, 0, 0);
-
-						continue;
-					}*/
+					// if(x > 0 && getBlock(x - 1, y, z)->id() && (i != 0 || i != 1) && vertexExists(x - 1, y, z, i, 0)) {
+					// 	m_vertices[getVertexID(x - 1, y, z, i, 1, 0)] += 1;
+					// 	m_vertices[getVertexID(x - 1, y, z, i, 2, 0)] += 1;
+                    //
+					// 	m_texCoords[getTexCoordID(x - 1, y, z, i, 1, 0)] += 16 / 256 * 2;//1;
+					// 	m_texCoords[getTexCoordID(x - 1, y, z, i, 2, 0)] += 16 / 256 * 2;//1;
+                    //
+					// 	m_extendedFaces[getCoordID(x, y, z, i, 0, 0)] = getCoordID(x - 1, y, z, i, 0, 0);
+                    //
+					// 	continue;
+					// }
+					// if(z > 0 && getBlock(x, y, z - 1)->id() && (i == 0 || i == 1) && vertexExists(x, y, z - 1, i, 0)) {
+					// 	m_vertices[getVertexID(x, y, z - 1, i, 0, 2)] += 1;
+					// 	m_vertices[getVertexID(x, y, z - 1, i, 3, 2)] += 1;
+                    //
+					// 	m_texCoords[getTexCoordID(x, y, z - 1, i, 1, 0)] += 16 / 256 * 2;//1;
+					// 	m_texCoords[getTexCoordID(x, y, z - 1, i, 2, 0)] += 16 / 256 * 2;//1;
+                    //
+					// 	m_extendedFaces[getCoordID(x, y, z, i, 0, 0)] = getCoordID(x, y, z - 1, i, 0, 0);
+                    //
+					// 	continue;
+					// }
 
 					/*if(y > 0 && getBlock(x, y - 1, z)->id() && (i == 2 || i == 3) && vertexExists(x, y - 1, z, i, 0)) {
 						m_vertices[getVertexID(x, y - 1, z, i, 0, 1)] += 1;
@@ -295,9 +295,9 @@ void Chunk::draw(Shader &shader) {
 
 	Texture::bind(nullptr);
 
-	/*for(u32 i = 0 ; i < m_vertices.size() / 3 ; i += 4) {
-		glDrawArrays(GL_LINE_LOOP, i, 4);
-	}*/
+	// for(u32 i = 0 ; i < m_vertices.size() / 3 ; i += 4) {
+	//	glDrawArrays(GL_LINE_LOOP, i, 4);
+	//}
 
 	shader.disableVertexAttribArray("texCoord");
 	shader.disableVertexAttribArray("normal");

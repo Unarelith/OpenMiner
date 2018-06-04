@@ -65,10 +65,10 @@ class Chunk {
 		static const u8 height = 32;
 		static const u8 depth = 16;
 
-		void setLeft(Chunk *left)	{ m_surroundingChunks[0] = left; }
+		void setLeft(Chunk *left)   { m_surroundingChunks[0] = left; }
 		void setRight(Chunk *right) { m_surroundingChunks[1] = right; }
 		void setFront(Chunk *front) { m_surroundingChunks[2] = front; }
-		void setBack(Chunk *back)	{ m_surroundingChunks[3] = back; }
+		void setBack(Chunk *back)   { m_surroundingChunks[3] = back; }
 
 	private:
 		s32 m_x;

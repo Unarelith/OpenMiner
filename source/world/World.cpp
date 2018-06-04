@@ -43,9 +43,6 @@ World::World() {
 	}
 }
 
-World::~World() {
-}
-
 void World::draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix) {
 	float ud = 1000.0;
 	s32 ux = 0;

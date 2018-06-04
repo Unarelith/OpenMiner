@@ -42,30 +42,30 @@ Camera::~Camera() {
 void Camera::turnH(float angle) {
 	m_angleH += angle;
 
-	while(m_angleH >= 180.0) {
-		m_angleH -= 360.0;
+	while(m_angleH >= 180.0f) {
+		m_angleH -= 360.0f;
 	}
-	while(m_angleH < -180.0) {
-		m_angleH += 360.0;
+	while(m_angleH < -180.0f) {
+		m_angleH += 360.0f;
 	}
 }
 
 void Camera::turnV(float angle) {
 	m_angleV += angle;
 
-	if(89.9 < m_angleV) {
-		m_angleV = 89.9;
+	if(89.9f < m_angleV) {
+		m_angleV = 89.9f;
 	}
-	else if(-89.9 > m_angleV) {
-		m_angleV = -89.9;
+	else if(-89.9f > m_angleV) {
+		m_angleV = -89.9f;
 	}
 }
 
 void Camera::move(float direction) {
 	direction += m_angleH;
 
-	m_vx = 0.04f * cos(direction * M_PI / 180.0);
-	m_vz = 0.04f * sin(direction * M_PI / 180.0);
+	m_vx = 0.04f * cos(direction * M_PI / 180.0f);
+	m_vz = 0.04f * sin(direction * M_PI / 180.0f);
 
 	m_x += m_vx;
 	m_z += m_vz;
@@ -76,8 +76,8 @@ void Camera::move(float direction) {
 
 glm::mat4 Camera::processInputs() {
 	if(Mouse::getDX() != 0 || Mouse::getDY() != 0) {
-		turnH(Mouse::getDX() * 0.02);
-		turnV(-Mouse::getDY() * 0.02);
+		turnH(Mouse::getDX() * 0.2f);//0.02);
+		turnV(-Mouse::getDY() * 0.2f);//0.02);
 		m_viewMatrix = update();
 	}
 

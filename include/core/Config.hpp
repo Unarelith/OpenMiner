@@ -18,8 +18,8 @@
 #ifndef CONFIG_HPP_
 #define CONFIG_HPP_
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_WIDTH 1600
+#define SCREEN_HEIGHT 1050
 
 #define APP_NAME "KubKraft"
 
