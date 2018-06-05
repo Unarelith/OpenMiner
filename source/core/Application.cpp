@@ -18,14 +18,13 @@
 #include <cstdlib>
 #include <ctime>
 
-#include <SFML/Window/Event.hpp>
-
 #include "Application.hpp"
 #include "Config.hpp"
 #include "Exception.hpp"
 #include "GameState.hpp"
 #include "Mouse.hpp"
 #include "OpenGL.hpp"
+#include "SDLHeaders.hpp"
 
 Application::Application() : m_stateStack(ApplicationStateStack::getInstance()) {
 	srand(time(NULL));
@@ -55,7 +54,13 @@ void Application::handleEvents() {
 				}
 				break;
 			case SDL_MOUSEMOTION:
-				Mouse::update(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
+				// Mouse::update(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
+				if(SCREEN_WIDTH / 2 != event.motion.x || SCREEN_HEIGHT / 2 != event.motion.y) {
+					Camera::getInstance().turnH(event.motion.xrel * 0.06);
+					Camera::getInstance().turnV(-event.motion.yrel * 0.06);
+
+					SDL_WarpMouseInWindow(m_window.window(), SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+				}
 				break;
 			default:
 				break;

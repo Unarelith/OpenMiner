@@ -42,6 +42,8 @@ class Window {
 		void close() { m_isOpen = false; }
 		bool isOpen() const { return m_isOpen; }
 
+		SDL_Window *window() const { return m_window.get(); }
+
 	private:
 		using SDL_WindowPtr = std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)>;
 		using SDL_GLContextPtr = std::unique_ptr<void, decltype(&SDL_GL_DeleteContext)>;

@@ -69,11 +69,11 @@ void Camera::move(float direction) {
 }
 
 glm::mat4 Camera::processInputs() {
-	if(Mouse::getDX() != 0 || Mouse::getDY() != 0) {
-		turnH(Mouse::getDX() * 0.2f);//0.02);
-		turnV(-Mouse::getDY() * 0.2f);//0.02);
-		// m_viewMatrix = update();
-	}
+	// if(Mouse::getDX() != 0 || Mouse::getDY() != 0) {
+	// 	turnH(Mouse::getDX() * 0.2f);//0.02);
+	// 	turnV(-Mouse::getDY() * 0.2f);//0.02);
+	// 	// m_viewMatrix = update();
+	// }
 
 	if(Keyboard::isKeyPressed(Keyboard::Space)) {
 		m_y += 0.1;
