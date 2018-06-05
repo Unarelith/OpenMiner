@@ -32,13 +32,8 @@ class Application {
 
 		Window &window() { return m_window; }
 
-		static Application &getInstance() {
-			static Application instance;
-			return instance;
-		}
-
 	private:
-		ApplicationStateStack *m_applicationStateStack;
+		ApplicationStateStack &m_stateStack;
 
 		GameClock m_clock;
 

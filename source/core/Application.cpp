@@ -23,8 +23,11 @@
 #include "Application.hpp"
 #include "Config.hpp"
 #include "Exception.hpp"
+#include "GameState.hpp"
+#include "Mouse.hpp"
+#include "OpenGL.hpp"
 
-Application::Application() {
+Application::Application() : m_stateStack(ApplicationStateStack::getInstance()) {
 	srand(time(NULL));
 
 	m_window.open(APP_NAME, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -34,24 +37,46 @@ Application::Application() {
 
 	m_renderer.init(m_window);
 
-	//ResourceHandler::getInstance().loadResources();
-	m_applicationStateStack = &ApplicationStateStack::getInstance();
+	m_stateStack.push(new GameState());
+}
+
+void Application::handleEvents() {
+	Mouse::reset();
+
+	SDL_Event event;
+	while(SDL_PollEvent(&event) != 0) {
+		switch(event.type) {
+			case SDL_QUIT:
+				m_window.close();
+				break;
+			case SDL_KEYDOWN:
+				if(event.key.keysym.sym == SDLK_ESCAPE) {
+					m_window.close();
+				}
+				break;
+			case SDL_MOUSEMOTION:
+				Mouse::update(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
+				break;
+			default:
+				break;
+		}
+	}
 }
 
 void Application::run() {
 	while(m_window.isOpen()) {
 		m_clock.measureLastFrameDuration();
 
-		m_applicationStateStack->top().handleEvents();
+		handleEvents();
 
 		m_clock.updateGame([&]{
-			m_applicationStateStack->top().update();
+			m_stateStack.top().update();
 		});
 
 		m_clock.drawGame([&]{
 			m_window.clear();
 
-			m_applicationStateStack->top().draw();
+			m_stateStack.top().draw();
 
 			m_window.display();
 		});

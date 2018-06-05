@@ -21,14 +21,14 @@
 
 class ApplicationStateStack {
 	public:
-		ApplicationStateStack();
-		~ApplicationStateStack();
-
 		ApplicationState &top() { return *m_stack.top().get(); }
 		void push(ApplicationState *state) { m_stack.push(std::unique_ptr<ApplicationState>(state)); }
 		void pop() { m_stack.pop(); }
 
-		static ApplicationStateStack &getInstance();
+		static ApplicationStateStack &getInstance() {
+			static ApplicationStateStack instance;
+			return instance;
+		}
 
 	private:
 		std::stack<std::unique_ptr<ApplicationState>> m_stack;

@@ -16,13 +16,13 @@ vec4 fog(vec4 color, float fogCoord, float fogStart, float fogEnd);
 void main() {
 	// Discard if the pixel is too far away
 	if(v_dist > u_renderDistance) discard;
-	
+
 	vec4 color = getColor();
-	
+
 	color *= light(vec3(1.0, 1.0, 1.0), vec4(0.0, 48.0, 0.0, 1.0), 0.5, 0.5);
-	
+
 	color = fog(color, v_dist, u_renderDistance - 8, u_renderDistance);
-	
+
 	gl_FragColor = color;
 }
 

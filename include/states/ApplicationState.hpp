@@ -16,13 +16,15 @@
 
 class ApplicationState {
 	public:
+		ApplicationState(ApplicationState *parent = nullptr) : m_parent(parent) {}
 		virtual ~ApplicationState() = default;
-
-		virtual void handleEvents();
 
 		virtual void update() = 0;
 
 		virtual void draw() = 0;
+
+	protected:
+		ApplicationState *m_parent = nullptr;
 };
 
 #endif // APPLICATIONSTATE_HPP_
