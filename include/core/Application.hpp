@@ -20,15 +20,11 @@
 
 #include "ApplicationStateStack.hpp"
 #include "GameClock.hpp"
-#include "Window.hpp"
-//#include "ResourceHandler.hpp"
+#include "Renderer.hpp"
 
 class Application {
 	public:
 		Application();
-		~Application();
-
-		void initGL();
 
 		void handleEvents();
 
@@ -42,11 +38,13 @@ class Application {
 		}
 
 	private:
-		Window m_window;
+		ApplicationStateStack *m_applicationStateStack;
 
 		GameClock m_clock;
 
-		ApplicationStateStack *m_applicationStateStack;
+		Renderer m_renderer;
+
+		Window m_window;
 };
 
 #endif // APPLICATION_HPP_

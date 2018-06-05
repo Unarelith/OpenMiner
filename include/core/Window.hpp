@@ -18,15 +18,15 @@
 #ifndef WINDOW_HPP_
 #define WINDOW_HPP_
 
+#include <memory>
+#include <string>
+
 #include "SDLHeaders.hpp"
 #include "Types.hpp"
 
 class Window {
 	public:
-		Window();
-		~Window();
-
-		void open(std::string caption, u16 width, u16 height);
+		void open(const std::string &caption, u16 width, u16 height);
 
 		void clear();
 		void display();
@@ -43,8 +43,11 @@ class Window {
 		bool isOpen() const { return m_isOpen; }
 
 	private:
-		SDL_Window *m_window;
-		SDL_GLContext m_glContext;
+		using SDL_WindowPtr = std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)>;
+		using SDL_GLContextPtr = std::unique_ptr<void, decltype(&SDL_GL_DeleteContext)>;
+
+		SDL_WindowPtr m_window{nullptr, SDL_DestroyWindow};
+		SDL_GLContextPtr m_context{nullptr, SDL_GL_DeleteContext};
 
 		u16 m_width;
 		u16 m_height;

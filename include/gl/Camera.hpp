@@ -5,13 +5,9 @@
  *
  *    Description:
  *
- *        Version:  1.0
  *        Created:  16/12/2014 12:21:03
- *       Revision:  none
- *       Compiler:  gcc
  *
- *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:
+ *         Author:  Quentin Bazin, <quent42340@gmail.com>
  *
  * =====================================================================================
  */
@@ -22,16 +18,16 @@
 
 #include <glm/glm.hpp>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+// #ifndef M_PI
+// #define M_PI 3.14159265358979323846
+// #endif
 
-#define RADIANS_PER_DEGREES 0.0174532925199
+// #define RADIANS_PER_DEGREES 0.0174532925199
+#define RADIANS_PER_DEGREES (M_PI / 180.0f)
 
 class Camera {
 	public:
 		Camera();
-		~Camera();
 
 		void turnH(float angle);
 		void turnV(float angle);

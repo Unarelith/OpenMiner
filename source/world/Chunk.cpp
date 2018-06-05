@@ -38,9 +38,6 @@ Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
 	m_surroundingChunks[3] = nullptr;
 }
 
-Chunk::~Chunk() {
-}
-
 void Chunk::generate() {
 	if(m_generated) return;
 	else m_generated = true;

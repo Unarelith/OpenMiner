@@ -5,17 +5,12 @@
  *
  *    Description:
  *
- *        Version:  1.0
  *        Created:  16/12/2014 12:21:19
- *       Revision:  none
- *       Compiler:  gcc
  *
- *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:
+ *         Author:  Quentin Bazin, <quent42340@gmail.com>
  *
  * =====================================================================================
  */
-#define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Camera.hpp"
@@ -36,8 +31,7 @@ Camera::Camera() {
 	m_viewMatrix = update();
 }
 
-Camera::~Camera() {
-}
+#include "Debug.hpp"
 
 void Camera::turnH(float angle) {
 	m_angleH += angle;
@@ -78,36 +72,37 @@ glm::mat4 Camera::processInputs() {
 	if(Mouse::getDX() != 0 || Mouse::getDY() != 0) {
 		turnH(Mouse::getDX() * 0.2f);//0.02);
 		turnV(-Mouse::getDY() * 0.2f);//0.02);
-		m_viewMatrix = update();
+		// m_viewMatrix = update();
 	}
 
 	if(Keyboard::isKeyPressed(Keyboard::Space)) {
 		m_y += 0.1;
-		m_viewMatrix = update();
+		// m_viewMatrix = update();
 	}
 	if(Keyboard::isKeyPressed(Keyboard::LeftShift)) {
 		m_y -= 0.1;
-		m_viewMatrix = update();
+		// m_viewMatrix = update();
 	}
 
 	if(Keyboard::isKeyPressed(Keyboard::Z)) {
 		move(0.0f);
-		m_viewMatrix = update();
+		// m_viewMatrix = update();
 	}
 	else if(Keyboard::isKeyPressed(Keyboard::S)) {
 		move(180.0f);
-		m_viewMatrix = update();
+		// m_viewMatrix = update();
 	}
 
 	if(Keyboard::isKeyPressed(Keyboard::Q)) {
 		move(-90.0f);
-		m_viewMatrix = update();
+		// m_viewMatrix = update();
 	}
 	else if(Keyboard::isKeyPressed(Keyboard::D)) {
 		move(90.0f);
-		m_viewMatrix = update();
+		// m_viewMatrix = update();
 	}
 
+	m_viewMatrix = update();
 	return m_viewMatrix;
 }
 

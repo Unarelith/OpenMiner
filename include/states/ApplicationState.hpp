@@ -5,13 +5,9 @@
  *
  *    Description:
  *
- *        Version:  1.0
- *        Created:  14/12/2014 13:49:55
- *       Revision:  none
- *       Compiler:  gcc
+ *        Created:  05/06/2018 15:45:26
  *
- *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:
+ *         Author:  Quentin Bazin, <quent42340@gmail.com>
  *
  * =====================================================================================
  */
@@ -20,8 +16,7 @@
 
 class ApplicationState {
 	public:
-		ApplicationState();
-		virtual ~ApplicationState();
+		virtual ~ApplicationState() = default;
 
 		virtual void handleEvents();
 

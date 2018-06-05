@@ -19,26 +19,17 @@
 #include "Exception.hpp"
 #include "Window.hpp"
 
-Window::Window() {
-}
-
-Window::~Window() {
-	SDL_GL_DeleteContext(m_glContext);
-	SDL_DestroyWindow(m_window);
-}
-
-void Window::open(std::string caption, u16 width, u16 height) {
+void Window::open(const std::string &caption, u16 width, u16 height) {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
-	m_window = SDL_CreateWindow(caption.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+	m_window.reset(SDL_CreateWindow(caption.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN));
 	if(!m_window) {
 		throw EXCEPTION("Window initialization failed:", SDL_GetError());
 	}
 
-	m_glContext = SDL_GL_CreateContext(m_window);
-	if(!m_glContext) {
-		SDL_DestroyWindow(m_window);
+	m_context.reset(SDL_GL_CreateContext(m_window.get()));
+	if(!m_context) {
 		throw EXCEPTION("OpenGL context creation failed:", SDL_GetError());
 	}
 
@@ -53,7 +44,7 @@ void Window::clear() {
 }
 
 void Window::display() {
-	SDL_GL_SwapWindow(m_window);
+	SDL_GL_SwapWindow(m_window.get());
 }
 
 void Window::setMouseCursorGrabbed(bool grabbed) {

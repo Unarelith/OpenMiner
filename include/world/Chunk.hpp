@@ -30,7 +30,6 @@
 class Chunk {
 	public:
 		Chunk(s32 x, s32 y, s32 z, Texture &texture);
-		~Chunk();
 
 		void generate();
 		void update();

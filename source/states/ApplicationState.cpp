@@ -20,13 +20,6 @@
 #include "Config.hpp"
 #include "Mouse.hpp"
 
-ApplicationState::ApplicationState() {
-
-}
-
-ApplicationState::~ApplicationState() {
-}
-
 void ApplicationState::handleEvents() {
 	Mouse::reset();
 

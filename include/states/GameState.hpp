@@ -5,13 +5,9 @@
  *
  *    Description:
  *
- *        Version:  1.0
  *        Created:  15/12/2014 03:51:32
- *       Revision:  none
- *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:
  *
  * =====================================================================================
  */
@@ -28,7 +24,6 @@
 class GameState : public ApplicationState {
 	public:
 		GameState();
-		~GameState();
 
 		void update();
 
