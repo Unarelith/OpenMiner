@@ -17,6 +17,7 @@
 #include <memory>
 
 #include "Chunk.hpp"
+#include "TerrainGenerator.hpp"
 
 class World {
 	public:
@@ -36,6 +37,8 @@ class World {
 		Texture m_texture;
 
 		std::vector<std::unique_ptr<Chunk>> m_chunks;
+
+		TerrainGenerator m_terrainGenerator;
 };
 
 #endif // WORLD_HPP_

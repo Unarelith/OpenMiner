@@ -24,15 +24,14 @@
 
 class Block {
 	public:
-		Block(u16 id);
-		~Block();
+		Block(u32 id);
 
 		glm::vec4 getTexCoords();
 
-		u16 id() const { return m_id; }
+		u32 id() const { return m_id; }
 
 	private:
-		u16 m_id;
+		u32 m_id;
 };
 
 #endif // BLOCK_HPP_

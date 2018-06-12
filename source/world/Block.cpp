@@ -17,16 +17,13 @@
  */
 #include "Block.hpp"
 
-Block::Block(u16 id) {
+Block::Block(u32 id) {
 	m_id = id;
 }
 
-Block::~Block() {
-}
-
 glm::vec4 Block::getTexCoords() {
-	u16 textureWidth = 256;
-	u16 textureHeight = 256;
+	const u16 textureWidth = 256;
+	const u16 textureHeight = 256;
 
 	float textureX = m_id % (textureWidth / 16) * 16.0f / textureWidth;
 	float textureY = m_id / (textureWidth / 16) * 16.0f / textureHeight;

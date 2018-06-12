@@ -11,12 +11,6 @@
  *
  * =====================================================================================
  */
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
-
-#include <glm/gtc/noise.hpp>
-
 #include "Chunk.hpp"
 
 Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
@@ -24,9 +18,9 @@ Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
 	m_y = y;
 	m_z = z;
 
-	m_changed = false;
-	m_initialized = false;
-	m_generated = false;
+	m_isChanged = false;
+	m_isInitialized = false;
+	m_isGenerated = false;
 
 	m_surroundingChunks[0] = nullptr;
 	m_surroundingChunks[1] = nullptr;
@@ -34,32 +28,8 @@ Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
 	m_surroundingChunks[3] = nullptr;
 }
 
-void Chunk::generate() {
-	if(m_generated) return;
-	else m_generated = true;
-
-	time_t seed = time(NULL);
-
-	for(u8 z = 0 ; z < depth ; z++) {
-		for(u8 x = 0 ; x < width ; x++) {
-			float n = noise2d((x + m_x * width) / 256.0, (z + m_z * depth) / 256.0, seed, 5, 0.5) * 4;
-			float h = 10 + n * 2;
-
-			for(u8 y = 0 ; y < height ; y++) {
-				if(y + m_y * height < h) {
-					m_data.push_back(std::unique_ptr<Block>(new Block(1)));
-				} else {
-					m_data.push_back(std::unique_ptr<Block>(new Block(0)));
-				}
-			}
-		}
-	}
-
-	m_changed = true;
-}
-
 void Chunk::update() {
-	m_changed = false;
+	m_isChanged = false;
 
 	static const float cubeCoords[6 * 4 * 3] = {
 		0, 1, 1,
@@ -242,7 +212,7 @@ void Chunk::update() {
 }
 
 void Chunk::draw(Shader &shader) {
-	if(m_changed) update();
+	if(m_isChanged) update();
 
 	if(m_vertices.size() == 0) return;
 
@@ -271,6 +241,10 @@ void Chunk::draw(Shader &shader) {
 	shader.disableVertexAttribArray("coord3d");
 
 	VertexBuffer::bind(nullptr);
+}
+
+void Chunk::addBlock(u32 id) {
+	m_data.push_back(std::unique_ptr<Block>(new Block(id)));
 }
 
 Block *Chunk::getBlock(s8 x, s8 y, s8 z) {
@@ -303,33 +277,5 @@ u32 Chunk::getTexCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate) {
 bool Chunk::vertexExists(u8 x, u8 y, u8 z, u8 i, u8 j) {
 	return (m_verticesID.count(getCoordID(x, y, z, i, j, 0))
 	     || m_extendedFaces.count(getCoordID(x, y, z, i, j, 0)));
-}
-
-float Chunk::noise2d(float x, float y, int seed, int octaves, float persistence) {
-	float sum = 0;
-	float strength = 1.0;
-	float scale = 1.0;
-
-	for(int i = 0 ; i < octaves ; i++) {
-		sum += strength * glm::simplex(glm::vec2(x, y) * scale);
-		scale *= 2.0;
-		strength *= persistence;
-	}
-
-	return sum;
-}
-
-float Chunk::noise3d_abs(float x, float y, float z, int seed, int octaves, float persistence) {
-	float sum = 0;
-	float strength = 1.0;
-	float scale = 1.0;
-
-	for(int i = 0 ; i < octaves ; i++) {
-		sum += strength * fabs(glm::simplex(glm::vec3(x, y, z) * scale));
-		scale *= 2.0;
-		strength *= persistence;
-	}
-
-	return sum;
 }
 

@@ -18,12 +18,9 @@
 
 #include <glm/glm.hpp>
 
-// #ifndef M_PI
-// #define M_PI 3.14159265358979323846
-// #endif
-
-// #define RADIANS_PER_DEGREES 0.0174532925199
+#ifndef RADIANS_PER_DEGREES
 #define RADIANS_PER_DEGREES (M_PI / 180.0f)
+#endif
 
 class Camera {
 	public:

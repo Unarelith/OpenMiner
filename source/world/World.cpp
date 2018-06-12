@@ -79,7 +79,7 @@ void World::draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::m
 			continue;
 		}
 
-		if(!it->initialized()) {
+		if(!it->isInitialized()) {
 			if(d < ud) {
 				ud = d;
 				ux = it->x();
@@ -95,13 +95,14 @@ void World::draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::m
 	}
 
 	if(ud < 1000) {
-		getChunk(ux, uz)->generate();
+		m_terrainGenerator.generate(*getChunk(ux, uz));
+
 		getChunk(ux, uz)->setInitialized(true);
 
-		if(getChunk(ux, uz)->left())  getChunk(ux, uz)->left()->generate();
-		if(getChunk(ux, uz)->right()) getChunk(ux, uz)->right()->generate();
-		if(getChunk(ux, uz)->front()) getChunk(ux, uz)->front()->generate();
-		if(getChunk(ux, uz)->back())  getChunk(ux, uz)->back()->generate();
+		if(getChunk(ux, uz)->left())  m_terrainGenerator.generate(*getChunk(ux, uz)->left());
+		if(getChunk(ux, uz)->right()) m_terrainGenerator.generate(*getChunk(ux, uz)->right());
+		if(getChunk(ux, uz)->front()) m_terrainGenerator.generate(*getChunk(ux, uz)->front());
+		if(getChunk(ux, uz)->back())  m_terrainGenerator.generate(*getChunk(ux, uz)->back());
 	}
 }
 
@@ -109,6 +110,6 @@ Chunk *World::getChunk(s32 x, s32 z) {
 	x += m_width / 2;
 	z += m_depth / 2;
 
-	return m_chunks[x + z * m_width].get();
+	return m_chunks.at(x + z * m_width).get();
 }
 

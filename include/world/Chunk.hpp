@@ -19,19 +19,20 @@
 #include <vector>
 
 #include "Block.hpp"
+#include "NonCopyable.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "VertexBuffer.hpp"
 
-class Chunk {
+class Chunk : public NonCopyable {
 	public:
 		Chunk(s32 x, s32 y, s32 z, Texture &texture);
 
-		void generate();
 		void update();
 
 		void draw(Shader &shader);
 
+		void addBlock(u32 id);
 		Block *getBlock(s8 x, s8 y, s8 z);
 
 		u32 getCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate);
@@ -41,15 +42,9 @@ class Chunk {
 
 		bool vertexExists(u8 x, u8 y, u8 z, u8 i, u8 j);
 
-		static float noise2d(float x, float y, int seed, int octaves, float persistence);
-		static float noise3d_abs(float x, float y, float z, int seed, int octaves, float persistence);
-
 		s32 x() const { return m_x; }
 		s32 y() const { return m_y; }
 		s32 z() const { return m_z; }
-
-		bool initialized() const { return m_initialized; }
-		void setInitialized(bool initialized) { m_initialized = initialized; }
 
 		Chunk *left()  const { return m_surroundingChunks[0]; }
 		Chunk *right() const { return m_surroundingChunks[1]; }
@@ -64,6 +59,13 @@ class Chunk {
 		void setRight(Chunk *right) { m_surroundingChunks[1] = right; }
 		void setFront(Chunk *front) { m_surroundingChunks[2] = front; }
 		void setBack(Chunk *back)   { m_surroundingChunks[3] = back; }
+
+		bool isGenerated() const { return m_isGenerated; }
+		bool isInitialized() const { return m_isInitialized; }
+
+		void setChanged(bool isChanged) { m_isChanged = isChanged; }
+		void setGenerated(bool isGenerated) { m_isGenerated = isGenerated; }
+		void setInitialized(bool isInitialized) { m_isInitialized = isInitialized; }
 
 	private:
 		s32 m_x;
@@ -85,9 +87,9 @@ class Chunk {
 
 		Chunk *m_surroundingChunks[4];
 
-		bool m_changed;
-		bool m_initialized;
-		bool m_generated;
+		bool m_isChanged;
+		bool m_isInitialized;
+		bool m_isGenerated;
 };
 
 #endif // CHUNK_HPP_
