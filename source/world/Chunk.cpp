@@ -51,38 +51,12 @@ void Chunk::generate() {
 				} else {
 					m_data.push_back(std::unique_ptr<Block>(new Block(0)));
 				}
-
-				// Random value used to determine land type
-				/*float r = noise3d_abs((x + m_x * 32) / 16.0, (y + m_y * 32) / 16.0, (z + m_z * CZ) / 16.0, -seed, 2, 1);
-
-				// Sand layer
-				if(n + r * 5 < 4) {
-					//m_blocks[x][y][z] = 7;
-					m_data.push_back(1);
-				}
-				// Dirt layer, but use grass blocks for the top
-				else if(n + r * 5 < 8) {
-					//m_blocks[x][y][z] = (h < 4 || y + m_y * 32 < h - 1) ? 1 : 3;
-					m_data.push_back(1);
-				}
-				// Rock layer
-				else if(r < 1.25) {
-					//m_blocks[x][y][z] = 6;
-					m_data.push_back(1);
-				// Sometimes, ores!
-				} else {
-					//m_blocks[x][y][z] = 11;
-					m_data.push_back(1);
-				}*/
 			}
 		}
 	}
 
 	m_changed = true;
 }
-
-#include "Debug.hpp"
-#include "GameClock.hpp"
 
 void Chunk::update() {
 	m_changed = false;
