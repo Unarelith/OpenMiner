@@ -26,9 +26,9 @@ void TerrainGenerator::generate(Chunk &chunk) {
 
 			for(u8 y = 0 ; y < Chunk::height ; y++) {
 				if(y + chunk.y() * Chunk::height < h) {
-					chunk.addBlock(1);
+					chunk.addBlock(glm::vec3{x + chunk.x() * Chunk::width, y + chunk.y() * Chunk::height, z + chunk.z() * Chunk::depth}, 1);
 				} else {
-					chunk.addBlock(0);
+					chunk.addBlock(glm::vec3{x + chunk.x() * Chunk::width, y + chunk.y() * Chunk::height, z + chunk.z() * Chunk::depth}, 0);
 				}
 			}
 		}

@@ -5,19 +5,15 @@
  *
  *    Description:
  *
- *        Version:  1.0
  *        Created:  29/12/2014 04:56:17
- *       Revision:  none
- *       Compiler:  gcc
  *
- *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:
+ *         Author:  Quentin Bazin, <quent42340@gmail.com>
  *
  * =====================================================================================
  */
 #include "Block.hpp"
 
-Block::Block(u32 id) {
+Block::Block(const glm::vec3 &pos, u32 id) : m_pos(pos) {
 	m_id = id;
 }
 
@@ -31,6 +27,6 @@ glm::vec4 Block::getTexCoords() {
 	return glm::vec4(textureX,
 	                 textureY,
 	                 textureX + 16.0f / textureWidth,
-					 textureY + 16.0f / textureHeight);
+	                 textureY + 16.0f / textureHeight);
 }
 

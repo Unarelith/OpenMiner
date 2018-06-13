@@ -19,6 +19,8 @@
 #include "Chunk.hpp"
 #include "TerrainGenerator.hpp"
 
+class Camera;
+
 class World {
 	public:
 		World();
@@ -27,8 +29,19 @@ class World {
 
 		Chunk *getChunk(s32 x, s32 z);
 
+		void addSelectedBlock() { if(!selectedChunk || !selectedBlock) return; selectedChunk->setBlock(selectedBlock->pos(), 1); selectedChunk->update(); }
+		void removeSelectedBlock() { if(!selectedChunk || !selectedBlock) return; selectedChunk->setBlock(selectedBlock->pos(), 0); selectedChunk->update(); }
+
+		bool intersectionLinePlane(const glm::vec3 &normal, const glm::vec3 &planePoint, const glm::vec3 &lineOrigPoint, const glm::vec3 &directionVector, float *distance);
+		bool intersectionLineCube(int cubeX, int cubeY, int cubeZ, const glm::vec3 &lineOrigPoint, const glm::vec3 &directionVector, float *distance, s8 *face);
+		void testCubes(Camera &camera);
+
 		// Render distance in chunks
 		static const u16 renderDistance = 8;
+
+		// FIXME: MOVE THIS QUICKLY
+		static Block *selectedBlock;
+		static Chunk *selectedChunk;
 
 	private:
 		s32 m_width;

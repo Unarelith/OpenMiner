@@ -32,8 +32,10 @@ class Chunk : public NonCopyable {
 
 		void draw(Shader &shader);
 
-		void addBlock(u32 id);
 		Block *getBlock(s8 x, s8 y, s8 z);
+
+		void addBlock(const glm::vec3 &pos, u32 id);
+		void setBlock(const glm::vec3 &pos, u32 id);
 
 		u32 getCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate);
 
@@ -46,10 +48,13 @@ class Chunk : public NonCopyable {
 		s32 y() const { return m_y; }
 		s32 z() const { return m_z; }
 
+		const std::vector<std::unique_ptr<Block>> &data() const { return m_data; }
+
 		Chunk *left()  const { return m_surroundingChunks[0]; }
 		Chunk *right() const { return m_surroundingChunks[1]; }
 		Chunk *front() const { return m_surroundingChunks[2]; }
 		Chunk *back()  const { return m_surroundingChunks[3]; }
+		Chunk *getSurroundingChunk(u8 i) { return (i > 3) ? nullptr : m_surroundingChunks[i]; }
 
 		static const u8 width = 16;
 		static const u8 height = 32;

@@ -5,13 +5,9 @@
  *
  *    Description:
  *
- *        Version:  1.0
  *        Created:  14/12/2014 13:45:14
- *       Revision:  none
- *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:
  *
  * =====================================================================================
  */
@@ -22,5 +18,8 @@
 #define SCREEN_HEIGHT 1050
 
 #define APP_NAME "KubKraft"
+
+#define DIST_NEAR 0.1f
+#define DIST_FAR 1000.0f
 
 #endif // CONFIG_HPP_

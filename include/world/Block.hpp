@@ -5,13 +5,9 @@
  *
  *    Description:
  *
- *        Version:  1.0
  *        Created:  29/12/2014 04:56:02
- *       Revision:  none
- *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:
  *
  * =====================================================================================
  */
@@ -24,13 +20,17 @@
 
 class Block {
 	public:
-		Block(u32 id);
+		Block(const glm::vec3 &pos, u32 id);
 
 		glm::vec4 getTexCoords();
+
+		const glm::vec3 &pos() const { return m_pos; }
 
 		u32 id() const { return m_id; }
 
 	private:
+		glm::vec3 m_pos;
+
 		u32 m_id;
 };
 

@@ -14,7 +14,12 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Camera.hpp"
+#include "Config.hpp"
 #include "World.hpp"
+
+Block *World::selectedBlock = nullptr;
+Chunk *World::selectedChunk = nullptr;
 
 World::World() {
 	m_width = 100;
@@ -111,5 +116,147 @@ Chunk *World::getChunk(s32 x, s32 z) {
 	z += m_depth / 2;
 
 	return m_chunks.at(x + z * m_width).get();
+}
+
+// FIXME: Move to a math module
+bool World::intersectionLinePlane(const glm::vec3 &normal, const glm::vec3 &planePoint, const glm::vec3 &lineOrigPoint, const glm::vec3 &directionVector, float *distance) {
+	float p1 = directionVector.x * normal.x + directionVector.y * normal.y + directionVector.z * normal.z; // First point to be tested
+
+	if(p1 == 0) return false; // Degenerate case
+
+	glm::vec3 u = glm::vec3(planePoint.x - lineOrigPoint.x,
+					  planePoint.y - lineOrigPoint.y,
+					  planePoint.z - lineOrigPoint.z);
+
+	float p2 = u.x * normal.x + u.y * normal.y + u.z * normal.z; // Second point to be tested
+
+	float k = p2 / p1;
+
+	if((k < 0) || (k > 5)) return false;
+
+	// Intersection point
+	glm::vec3 i = glm::vec3(lineOrigPoint.x + k * directionVector.x,
+					  lineOrigPoint.y + k * directionVector.y,
+					  lineOrigPoint.z + k * directionVector.z);
+
+	glm::vec3 v = glm::vec3(i.x - planePoint.x,
+					  i.y - planePoint.y,
+					  i.z - planePoint.z);
+
+	float size = 0.5;
+
+	if(v.x >= -size && v.x <= size && v.y >= -size && v.y <= size && v.z >= -size && v.z <= size) {
+		if(distance != nullptr) *distance = k;
+		return true;
+	} else {
+		return false;
+	}
+}
+
+// Front right = 0 | Front left = 1
+// Back right = 2 | Back left = 3
+// Top = 4 | Bottom = 5
+// FIXME: Move to a math module
+bool World::intersectionLineCube(int cubeX, int cubeY, int cubeZ, const glm::vec3 &lineOrigPoint, const glm::vec3 &directionVector, float *distance, s8 *face) {
+	glm::vec3 planePoint[6] = {
+		glm::vec3(cubeX + 0.5, cubeY + 1, cubeZ + 0.5), // back
+		glm::vec3(cubeX + 1, cubeY + 0.5, cubeZ + 0.5), // right
+		glm::vec3(cubeX, cubeY + 0.5, cubeZ + 0.5), // left
+		glm::vec3(cubeX + 0.5, cubeY, cubeZ + 0.5), // front
+		glm::vec3(cubeX + 0.5, cubeY + 0.5, cubeZ + 1), // top
+		glm::vec3(cubeX + 0.5, cubeY + 0.5, cubeZ) // bottom
+	};
+
+	glm::vec3 normal[6] = {
+		glm::vec3(0, 1, 0), // back
+		glm::vec3(1, 0, 0), // right
+		glm::vec3(-1, 0, 0), // left
+		glm::vec3(0, -1, 0), // front
+		glm::vec3(0, 0, 1), // top
+		glm::vec3(0, 0, -1) // bottom
+	};
+
+	float shortestDistance = DIST_FAR;
+	float dist = DIST_FAR + 1.0;
+	int nearestFace = -1;
+
+	for (int i = 0; i < 6; i++) {
+		bool result = intersectionLinePlane(normal[i], planePoint[i], lineOrigPoint, directionVector, &dist);
+		if (result && (dist < shortestDistance)) {
+			shortestDistance = dist;
+			nearestFace = i;
+		}
+	}
+
+	if (nearestFace < 0) {
+		return false;
+	} else {
+		if (distance != nullptr) *distance = shortestDistance;
+		if (face != nullptr) *face = nearestFace;
+		return true;
+	}
+}
+
+#include <unordered_map>
+#include <unistd.h>
+
+// FIXME: MOVE THIS FUNCTION
+void World::testCubes(Camera &camera) {
+	glm::vec3 linePoint = glm::vec3(camera.x(),
+	                                camera.y(),
+	                                camera.z());
+
+	glm::vec3 directionVector = glm::vec3(camera.pointTargetedX() - camera.x(),
+	                                      camera.pointTargetedY() - camera.y(),
+	                                      camera.pointTargetedZ() - camera.z());
+
+	Chunk *currentChunk = getChunk(camera.x() / Chunk::width, camera.z() / Chunk::depth);
+	float distance = DIST_FAR;
+	Block *block = nullptr;
+	int face = -1;
+	Chunk *chunk = nullptr;
+	const std::vector<std::unique_ptr<Block>> *blocks = nullptr;
+	for(unsigned short i = 0 ; i < 9 ; i++) {
+		if(i == 8) blocks = &currentChunk->data();
+		else if(i < 8) {
+			if(currentChunk->getSurroundingChunk(i) == nullptr) continue;
+			blocks = &currentChunk->getSurroundingChunk(i)->data();
+		}
+
+		for(auto &it : *blocks) {
+			if(it->pos().z < linePoint.z - 10 || it->pos().z > linePoint.z + 10) continue;
+			if(it->pos().y < linePoint.y - 10 || it->pos().y > linePoint.y + 10) continue;
+			if(it->pos().x < linePoint.x - 10 || it->pos().x > linePoint.x + 10) continue;
+
+			// it->setSelected(false, -1);
+
+			float d = -1;
+			s8 f = -1;
+
+			bool result = intersectionLineCube(it->pos().x, it->pos().y, it->pos().z, linePoint, directionVector, &d, &f);
+
+			if(result && (d < distance) && (d < 5)) {
+				distance = d;
+				block = it.get();
+				face = f;
+				if(i == 8) chunk = currentChunk;
+				else if(i < 8) chunk = currentChunk->getSurroundingChunk(i);
+				write(1, result ? "y" : "n", 1);
+			}
+		}
+	}
+
+	if(block != nullptr) {
+		selectedBlock = block;
+		// block->setSelected(true, face);
+	} else {
+		// selectedCube->setSelected(false, -1);
+	}
+
+	if(chunk != nullptr) {
+		selectedChunk = chunk;
+	} else {
+		selectedChunk = nullptr;
+	}
 }
 

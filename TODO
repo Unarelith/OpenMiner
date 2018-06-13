@@ -1,0 +1,60 @@
+TODO
+
+# Nettoyage
+
+• TODO: Vérifier les utilisations inutiles de pointeurs
+• TODO: Nettoyer les vieux headers
+• TODO: `Types.hpp` → `IntTypes.hpp`
+• TODO: Remplacer les anciennes classes par leur upgrade:
+   ◦ TODO: `ApplicationState` / `ApplicationStateStack`
+   ◦ TODO: `GameClock`
+   ◦ TODO: `Window` (depuis `ZeldaOOL`)
+   ◦ TODO: `Debug` / `Exception` (+ gestion dans le `main()`)
+   ◦ TODO: Input system (Mouse + Keyboard)
+• TODO: Découper les gros pâtés en sous-classes
+• TODO: Séparer le code client du code serveur
+
+# ToDoList
+
+## Joueur
+
+• TODO: Collisions + Gravité
+   ◦ TODO: Système d’entités (réutiliser l’ECS mais en multi-thread)
+• TODO: Ciblage de bloc
+   ◦ TODO: Ajout de bloc
+   ◦ TODO: Suppression de bloc
+
+## Items
+
+• TODO: Créer un système d’items
+   ◦ TODO: Inventaire basique (1 slot)
+   ◦ TODO: Récupération du bloc cassé
+• TODO: Faire un vrai drop d’item
+• TODO: Ajouter les animations de destruction des blocs
+
+## Monde
+
+• TODO: Cycle jour/nuit
+   ◦ TODO: Dynamic lighting
+• TODO: Chargement des chunks multi-thread
+
+## Génération
+
+• TODO: Augmenter la hauteur du terrain
+• TODO: Dirt + Grass
+• TODO: WATEEEEEEER
+• TODO: Arbres
+• TODO: Fleurs (emit light at night?)
+• TODO: Biomes
+• TODO: Génération multi-thread
+
+## Affichage
+
+• TODO: Optimiser au maximum l’affichage des chunks
+   ◦ TODO: Faire le max de culling
+      ▸ DONE: Face culling
+      ▸ DONE: Frustum culling
+      ▸ TODO: Occlusion culling
+   ◦ TODO: Face-merging
+      → Trouver une solution pour utiliser un texture atlas avec ça
+

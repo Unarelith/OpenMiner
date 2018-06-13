@@ -14,7 +14,10 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "OpenGL.hpp"
+
 #include "Config.hpp"
+#include "Mouse.hpp"
 #include "GameState.hpp"
 
 GameState::GameState() : m_camera(Camera::getInstance()) {
@@ -30,7 +33,8 @@ GameState::GameState() : m_camera(Camera::getInstance()) {
 
 	Shader::bind(&m_shader);
 
-	m_projectionMatrix = glm::perspective(45.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 1000.0f);
+	// m_projectionMatrix = glm::perspective(45.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, DIST_NEAR, DIST_FAR);
+	m_projectionMatrix = glm::perspective(45.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, DIST_NEAR, DIST_FAR);
 	m_viewMatrix = m_camera.update();
 
 	m_shader.setUniform("u_projectionMatrix", m_projectionMatrix);
@@ -42,6 +46,12 @@ GameState::GameState() : m_camera(Camera::getInstance()) {
 
 void GameState::update() {
 	m_viewMatrix = m_camera.processInputs();
+
+	// glm::vec3 start = glm::unProject(glm::vec3(Mouse::getX(), Mouse::getY(), 0.0), m_viewMatrix, m_projectionMatrix, glm::ivec4(0.0, 0.0, SCREEN_WIDTH, SCREEN_HEIGHT));
+	// glm::vec3 end = glm::unProject(glm::vec3(Mouse::getX(), Mouse::getY(), 1.0), m_viewMatrix, m_projectionMatrix, glm::ivec4(0.0, 0.0, SCREEN_WIDTH, SCREEN_HEIGHT));
+	m_world.testCubes(m_camera);
+
+	// m_world.removeSelectedBlock();
 }
 
 void GameState::draw() {
