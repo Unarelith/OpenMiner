@@ -29,6 +29,8 @@ void Renderer::init(Window &window) {
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_POLYGON_OFFSET_FILL);
+	glPolygonOffset(1, 1);
 
 	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
 

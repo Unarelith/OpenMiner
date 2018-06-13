@@ -28,6 +28,10 @@ class GameState : public ApplicationState {
 		void update();
 
 		void draw();
+		void drawSelectedBlock();
+		void drawCross();
+
+		void findSelectedBlock(bool useDepthBuffer);
 
 	private:
 		glm::mat4 m_projectionMatrix;
@@ -39,6 +43,8 @@ class GameState : public ApplicationState {
 
 		Skybox m_skybox;
 		World m_world;
+
+		GLuint m_cursorVBO;
 };
 
 #endif // GAMESTATE_HPP_

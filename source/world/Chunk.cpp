@@ -277,8 +277,8 @@ void Chunk::draw(Shader &shader) {
 	shader.enableVertexAttribArray("normal");
 	shader.enableVertexAttribArray("texCoord");
 
-	glVertexAttribPointer(shader.attrib("coord3d"), 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glVertexAttribPointer(shader.attrib("normal"), 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(m_vertices.size() * sizeof(float)));
+	glVertexAttribPointer(shader.attrib("coord3d"),  3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(shader.attrib("normal"),   3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(m_vertices.size() * sizeof(float)));
 	glVertexAttribPointer(shader.attrib("texCoord"), 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)((m_vertices.size() + m_normals.size()) * sizeof(float)));
 
 	Texture::bind(&m_texture);
@@ -288,8 +288,8 @@ void Chunk::draw(Shader &shader) {
 	Texture::bind(nullptr);
 
 	// for(u32 i = 0 ; i < m_vertices.size() / 3 ; i += 4) {
-	//	glDrawArrays(GL_LINE_LOOP, i, 4);
-	//}
+	// 	glDrawArrays(GL_LINE_LOOP, i, 4);
+	// }
 
 	shader.disableVertexAttribArray("texCoord");
 	shader.disableVertexAttribArray("normal");

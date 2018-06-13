@@ -25,7 +25,7 @@ class World {
 	public:
 		World();
 
-		void draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix);
+		void draw(Camera &camera, Shader &shader, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix);
 
 		Chunk *getChunk(s32 x, s32 z);
 
@@ -33,8 +33,8 @@ class World {
 		void removeSelectedBlock() { if(!selectedChunk || !selectedBlock) return; selectedChunk->setBlock(selectedBlock->pos(), 0); selectedChunk->update(); }
 
 		bool intersectionLinePlane(const glm::vec3 &normal, const glm::vec3 &planePoint, const glm::vec3 &lineOrigPoint, const glm::vec3 &directionVector, float *distance);
-		bool intersectionLineCube(int cubeX, int cubeY, int cubeZ, const glm::vec3 &lineOrigPoint, const glm::vec3 &directionVector, float *distance, s8 *face);
-		void testCubes(Camera &camera);
+		bool intersectionLineBlock(int blockX, int blockY, int blockZ, const glm::vec3 &lineOrigPoint, const glm::vec3 &directionVector, float *distance, s8 *face);
+		void testBlocks(Camera &camera, float maxDistance);
 
 		// Render distance in chunks
 		static const u16 renderDistance = 8;

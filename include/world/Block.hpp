@@ -28,10 +28,16 @@ class Block {
 
 		u32 id() const { return m_id; }
 
+		s8 selectedFace() const { return m_selectedFace; }
+		void setSelected(bool isSelected, s8 face) { m_isSelected = isSelected; m_selectedFace = face; }
+
 	private:
 		glm::vec3 m_pos;
 
 		u32 m_id;
+
+		bool m_isSelected = false;
+		s8 m_selectedFace = -1;
 };
 
 #endif // BLOCK_HPP_

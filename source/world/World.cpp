@@ -44,7 +44,7 @@ World::World() {
 	}
 }
 
-void World::draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix) {
+void World::draw(Camera &camera, Shader &shader, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix) {
 	float ud = 1000.0;
 	s32 ux = 0;
 	s32 uz = 0;
@@ -109,6 +109,40 @@ void World::draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::m
 		if(getChunk(ux, uz)->front()) m_terrainGenerator.generate(*getChunk(ux, uz)->front());
 		if(getChunk(ux, uz)->back())  m_terrainGenerator.generate(*getChunk(ux, uz)->back());
 	}
+
+	// FIXME: MOVE AND REWRITE THIS SH*T
+	// glBindTexture(GL_TEXTURE_2D, 0);
+	// Chunk *currentChunk = getChunk(camera.x() / Chunk::width, camera.z() / Chunk::depth);
+	// if (currentChunk && selectedBlock) {
+	// 	float blockCoords[6 * 12] = {
+	// 		1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, // FR | 0
+	// 		1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, // FL | 1
+	// 		0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, // BR | 2
+	// 		0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, // BL | 3
+	// 		0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, // T  | 4
+	// 		1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0  // B  | 5
+	// 	};
+    //
+	// 	int xx = selectedBlock->pos().x;
+	// 	int yy = selectedBlock->pos().y;
+	// 	int zz = selectedBlock->pos().z;
+    //
+	// 	glColor4ub(255, 255, 255, 64);
+	// 	glDisable(GL_ALPHA_TEST);
+	// 	glEnable(GL_POLYGON_OFFSET_FILL);
+	// 	glPolygonOffset(-1.0, -1.0);
+    //
+	// 	glBegin(GL_QUADS);
+	// 		glVertex3f(xx + blockCoords[(selectedBlock->selectedFace() * 12) + 0], yy + blockCoords[(selectedBlock->selectedFace() * 12) + 1], zz + blockCoords[(selectedBlock->selectedFace() * 12) + 2]);
+	// 		glVertex3f(xx + blockCoords[(selectedBlock->selectedFace() * 12) + 3], yy + blockCoords[(selectedBlock->selectedFace() * 12) + 4], zz + blockCoords[(selectedBlock->selectedFace() * 12) + 5]);
+	// 		glVertex3f(xx + blockCoords[(selectedBlock->selectedFace() * 12) + 6], yy + blockCoords[(selectedBlock->selectedFace() * 12) + 7], zz + blockCoords[(selectedBlock->selectedFace() * 12) + 8]);
+	// 		glVertex3f(xx + blockCoords[(selectedBlock->selectedFace() * 12) + 9], yy + blockCoords[(selectedBlock->selectedFace() * 12) + 10], zz + blockCoords[(selectedBlock->selectedFace() * 12) + 11]);
+	// 	glEnd();
+    //
+	// 	glDisable(GL_POLYGON_OFFSET_FILL);
+	// 	glEnable(GL_ALPHA_TEST);
+	// 	glColor4ub(255, 255, 255, 255);
+	// }
 }
 
 Chunk *World::getChunk(s32 x, s32 z) {
@@ -157,14 +191,14 @@ bool World::intersectionLinePlane(const glm::vec3 &normal, const glm::vec3 &plan
 // Back right = 2 | Back left = 3
 // Top = 4 | Bottom = 5
 // FIXME: Move to a math module
-bool World::intersectionLineCube(int cubeX, int cubeY, int cubeZ, const glm::vec3 &lineOrigPoint, const glm::vec3 &directionVector, float *distance, s8 *face) {
+bool World::intersectionLineBlock(int blockX, int blockY, int blockZ, const glm::vec3 &lineOrigPoint, const glm::vec3 &directionVector, float *distance, s8 *face) {
 	glm::vec3 planePoint[6] = {
-		glm::vec3(cubeX + 0.5, cubeY + 1, cubeZ + 0.5), // back
-		glm::vec3(cubeX + 1, cubeY + 0.5, cubeZ + 0.5), // right
-		glm::vec3(cubeX, cubeY + 0.5, cubeZ + 0.5), // left
-		glm::vec3(cubeX + 0.5, cubeY, cubeZ + 0.5), // front
-		glm::vec3(cubeX + 0.5, cubeY + 0.5, cubeZ + 1), // top
-		glm::vec3(cubeX + 0.5, cubeY + 0.5, cubeZ) // bottom
+		glm::vec3(blockX + 0.5, blockY + 1, blockZ + 0.5), // back
+		glm::vec3(blockX + 1, blockY + 0.5, blockZ + 0.5), // right
+		glm::vec3(blockX, blockY + 0.5, blockZ + 0.5), // left
+		glm::vec3(blockX + 0.5, blockY, blockZ + 0.5), // front
+		glm::vec3(blockX + 0.5, blockY + 0.5, blockZ + 1), // top
+		glm::vec3(blockX + 0.5, blockY + 0.5, blockZ) // bottom
 	};
 
 	glm::vec3 normal[6] = {
@@ -199,9 +233,10 @@ bool World::intersectionLineCube(int cubeX, int cubeY, int cubeZ, const glm::vec
 
 #include <unordered_map>
 #include <unistd.h>
+#include "Debug.hpp"
 
-// FIXME: MOVE THIS FUNCTION
-void World::testCubes(Camera &camera) {
+// FIXME: IMPROVE AND MOVE THIS FUNCTION
+void World::testBlocks(Camera &camera, float maxDistance) {
 	glm::vec3 linePoint = glm::vec3(camera.x(),
 	                                camera.y(),
 	                                camera.z());
@@ -224,39 +259,38 @@ void World::testCubes(Camera &camera) {
 		}
 
 		for(auto &it : *blocks) {
+			if(it->id() == 0) continue;
+
 			if(it->pos().z < linePoint.z - 10 || it->pos().z > linePoint.z + 10) continue;
 			if(it->pos().y < linePoint.y - 10 || it->pos().y > linePoint.y + 10) continue;
 			if(it->pos().x < linePoint.x - 10 || it->pos().x > linePoint.x + 10) continue;
 
-			// it->setSelected(false, -1);
+			it->setSelected(false, -1);
 
 			float d = -1;
 			s8 f = -1;
 
-			bool result = intersectionLineCube(it->pos().x, it->pos().y, it->pos().z, linePoint, directionVector, &d, &f);
+			bool result = intersectionLineBlock(it->pos().x, it->pos().y, it->pos().z, linePoint, directionVector, &d, &f);
 
-			if(result && (d < distance) && (d < 5)) {
+			if(result && (d < distance) && (d < maxDistance)) {
 				distance = d;
 				block = it.get();
 				face = f;
 				if(i == 8) chunk = currentChunk;
 				else if(i < 8) chunk = currentChunk->getSurroundingChunk(i);
-				write(1, result ? "y" : "n", 1);
+				DEBUG(block->pos().x, block->pos().y, block->pos().z);
 			}
 		}
 	}
 
-	if(block != nullptr) {
+	if(block) {
 		selectedBlock = block;
-		// block->setSelected(true, face);
-	} else {
-		// selectedCube->setSelected(false, -1);
+		block->setSelected(true, face);
+	}
+	else if (selectedBlock) {
+		selectedBlock->setSelected(false, -1);
 	}
 
-	if(chunk != nullptr) {
-		selectedChunk = chunk;
-	} else {
-		selectedChunk = nullptr;
-	}
+	selectedChunk = chunk;
 }
 
