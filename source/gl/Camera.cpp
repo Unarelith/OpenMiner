@@ -31,8 +31,6 @@ Camera::Camera() {
 	m_viewMatrix = update();
 }
 
-#include "Debug.hpp"
-
 void Camera::turnH(float angle) {
 	m_angleH += angle;
 
@@ -58,8 +56,8 @@ void Camera::turnV(float angle) {
 void Camera::move(float direction) {
 	direction += m_angleH;
 
-	m_vx = 0.04f * cos(direction * M_PI / 180.0f);
-	m_vz = 0.04f * sin(direction * M_PI / 180.0f);
+	m_vx = 0.04f * cos(direction * RADIANS_PER_DEGREES);
+	m_vz = 0.04f * sin(direction * RADIANS_PER_DEGREES);
 
 	m_x += m_vx;
 	m_z += m_vz;
@@ -108,7 +106,7 @@ glm::mat4 Camera::processInputs() {
 
 glm::mat4 Camera::update() {
 	return glm::lookAt(glm::vec3(m_x, m_y, m_z),
-					   glm::vec3(pointTargetedX(), pointTargetedY(), pointTargetedZ()),
-					   glm::vec3(0, 1, 0));
+	                   glm::vec3(pointTargetedX(), pointTargetedY(), pointTargetedZ()),
+	                   glm::vec3(0, 1, 0));
 }
 

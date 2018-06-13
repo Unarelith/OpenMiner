@@ -302,15 +302,6 @@ void Chunk::addBlock(const glm::vec3 &pos, u32 id) {
 	m_data.push_back(std::unique_ptr<Block>(new Block(pos, id)));
 }
 
-void Chunk::setBlock(const glm::vec3 &pos, u32 id) {
-	glm::vec3 localPos = pos;
-	localPos.x -= m_x * width;
-	localPos.y -= m_y * height;
-	localPos.z -= m_z * depth;
-
-	m_data.at(localPos.y + localPos.x * height + localPos.z * height * width).reset(new Block(pos, id));
-}
-
 Block *Chunk::getBlock(s8 x, s8 y, s8 z) {
 	u16 i = y + x * height + z * height * width;
 	if(i < m_data.size()) {
@@ -318,6 +309,22 @@ Block *Chunk::getBlock(s8 x, s8 y, s8 z) {
 	} else {
 		return nullptr;
 	}
+}
+
+void Chunk::setBlock(s8 x, s8 y, s8 z, u32 id) {
+	glm::vec3 pos;
+	pos.x = x + m_x * width;
+	pos.y = y + m_y * height;
+	pos.z = z + m_z * depth;
+
+	m_data.at(y + x * height + z * height * width).reset(new Block(pos, id));
+
+	m_isChanged = true;
+
+	if(x == 0         && left())  { left()->m_isChanged = true; }
+	if(x == width - 1 && right()) { right()->m_isChanged = true; }
+	if(z == 0         && front()) { front()->m_isChanged = true; }
+	if(z == depth - 1 && back())  { back()->m_isChanged = true; }
 }
 
 u32 Chunk::getCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate) {

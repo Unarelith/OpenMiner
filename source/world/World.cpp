@@ -18,13 +18,10 @@
 #include "Config.hpp"
 #include "World.hpp"
 
-Block *World::selectedBlock = nullptr;
-Chunk *World::selectedChunk = nullptr;
+// Block *World::selectedBlock = nullptr;
+// Chunk *World::selectedChunk = nullptr;
 
 World::World() {
-	m_width = 100;
-	m_depth = 100;
-
 	//m_texture.load("textures/cobblestone.bmp");
 	m_texture.load("textures/blocks.png");
 
@@ -36,9 +33,9 @@ World::World() {
 
 	for(s32 z = -m_depth / 2 ; z < m_depth / 2 ; z++) {
 		for(s32 x = -m_width / 2 ; x < m_width / 2 ; x++) {
-			if(x > -m_width / 2)	 getChunk(x, z)->setLeft(getChunk(x - 1, z));
+			if(x > -m_width / 2)     getChunk(x, z)->setLeft(getChunk(x - 1, z));
 			if(x <  m_width / 2 - 1) getChunk(x, z)->setRight(getChunk(x + 1, z));
-			if(z > -m_depth / 2)	 getChunk(x, z)->setFront(getChunk(x, z - 1));
+			if(z > -m_depth / 2)     getChunk(x, z)->setFront(getChunk(x, z - 1));
 			if(z <  m_depth / 2 - 1) getChunk(x, z)->setBack(getChunk(x, z + 1));
 		}
 	}
@@ -109,188 +106,42 @@ void World::draw(Camera &camera, Shader &shader, const glm::mat4 &projectionMatr
 		if(getChunk(ux, uz)->front()) m_terrainGenerator.generate(*getChunk(ux, uz)->front());
 		if(getChunk(ux, uz)->back())  m_terrainGenerator.generate(*getChunk(ux, uz)->back());
 	}
-
-	// FIXME: MOVE AND REWRITE THIS SH*T
-	// glBindTexture(GL_TEXTURE_2D, 0);
-	// Chunk *currentChunk = getChunk(camera.x() / Chunk::width, camera.z() / Chunk::depth);
-	// if (currentChunk && selectedBlock) {
-	// 	float blockCoords[6 * 12] = {
-	// 		1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, // FR | 0
-	// 		1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, // FL | 1
-	// 		0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, // BR | 2
-	// 		0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, // BL | 3
-	// 		0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, // T  | 4
-	// 		1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0  // B  | 5
-	// 	};
-    //
-	// 	int xx = selectedBlock->pos().x;
-	// 	int yy = selectedBlock->pos().y;
-	// 	int zz = selectedBlock->pos().z;
-    //
-	// 	glColor4ub(255, 255, 255, 64);
-	// 	glDisable(GL_ALPHA_TEST);
-	// 	glEnable(GL_POLYGON_OFFSET_FILL);
-	// 	glPolygonOffset(-1.0, -1.0);
-    //
-	// 	glBegin(GL_QUADS);
-	// 		glVertex3f(xx + blockCoords[(selectedBlock->selectedFace() * 12) + 0], yy + blockCoords[(selectedBlock->selectedFace() * 12) + 1], zz + blockCoords[(selectedBlock->selectedFace() * 12) + 2]);
-	// 		glVertex3f(xx + blockCoords[(selectedBlock->selectedFace() * 12) + 3], yy + blockCoords[(selectedBlock->selectedFace() * 12) + 4], zz + blockCoords[(selectedBlock->selectedFace() * 12) + 5]);
-	// 		glVertex3f(xx + blockCoords[(selectedBlock->selectedFace() * 12) + 6], yy + blockCoords[(selectedBlock->selectedFace() * 12) + 7], zz + blockCoords[(selectedBlock->selectedFace() * 12) + 8]);
-	// 		glVertex3f(xx + blockCoords[(selectedBlock->selectedFace() * 12) + 9], yy + blockCoords[(selectedBlock->selectedFace() * 12) + 10], zz + blockCoords[(selectedBlock->selectedFace() * 12) + 11]);
-	// 	glEnd();
-    //
-	// 	glDisable(GL_POLYGON_OFFSET_FILL);
-	// 	glEnable(GL_ALPHA_TEST);
-	// 	glColor4ub(255, 255, 255, 255);
-	// }
 }
 
-Chunk *World::getChunk(s32 x, s32 z) {
-	x += m_width / 2;
-	z += m_depth / 2;
+Chunk *World::getChunk(int cx, int cz) {
+	cx += m_width / 2;
+	cz += m_depth / 2;
 
-	return m_chunks.at(x + z * m_width).get();
+	if (cx < 0 || cx >= m_width /*|| cy < 0 || cy > m_height */ || cz < 0 || cz >= m_depth)
+		return nullptr;
+
+	return m_chunks.at(cx + cz * m_width).get();
 }
 
-// FIXME: Move to a math module
-bool World::intersectionLinePlane(const glm::vec3 &normal, const glm::vec3 &planePoint, const glm::vec3 &lineOrigPoint, const glm::vec3 &directionVector, float *distance) {
-	float p1 = directionVector.x * normal.x + directionVector.y * normal.y + directionVector.z * normal.z; // First point to be tested
+Block *World::getBlock(int x, int y, int z) {
+	s32 cx = (x + Chunk::width * (m_width / 2)) / Chunk::width;
+	s32 cy = (y + Chunk::height * (m_height / 2)) / Chunk::height;
+	s32 cz = (z + Chunk::depth * (m_depth / 2)) / Chunk::depth;
 
-	if(p1 == 0) return false; // Degenerate case
+	if (cx < 0 || cx >= m_width || cy < 0 || cy > m_height || cz < 0 || cz >= m_depth)
+		return nullptr;
 
-	glm::vec3 u = glm::vec3(planePoint.x - lineOrigPoint.x,
-					  planePoint.y - lineOrigPoint.y,
-					  planePoint.z - lineOrigPoint.z);
-
-	float p2 = u.x * normal.x + u.y * normal.y + u.z * normal.z; // Second point to be tested
-
-	float k = p2 / p1;
-
-	if((k < 0) || (k > 5)) return false;
-
-	// Intersection point
-	glm::vec3 i = glm::vec3(lineOrigPoint.x + k * directionVector.x,
-					  lineOrigPoint.y + k * directionVector.y,
-					  lineOrigPoint.z + k * directionVector.z);
-
-	glm::vec3 v = glm::vec3(i.x - planePoint.x,
-					  i.y - planePoint.y,
-					  i.z - planePoint.z);
-
-	float size = 0.5;
-
-	if(v.x >= -size && v.x <= size && v.y >= -size && v.y <= size && v.z >= -size && v.z <= size) {
-		if(distance != nullptr) *distance = k;
-		return true;
-	} else {
-		return false;
-	}
+	Chunk *chunk = m_chunks.at(cx + cz * m_width).get();
+	if (chunk)
+		return chunk->getBlock(x & (Chunk::width - 1), y & (Chunk::height - 1), z & (Chunk::depth - 1));
+	return nullptr;
 }
 
-// Front right = 0 | Front left = 1
-// Back right = 2 | Back left = 3
-// Top = 4 | Bottom = 5
-// FIXME: Move to a math module
-bool World::intersectionLineBlock(int blockX, int blockY, int blockZ, const glm::vec3 &lineOrigPoint, const glm::vec3 &directionVector, float *distance, s8 *face) {
-	glm::vec3 planePoint[6] = {
-		glm::vec3(blockX + 0.5, blockY + 1, blockZ + 0.5), // back
-		glm::vec3(blockX + 1, blockY + 0.5, blockZ + 0.5), // right
-		glm::vec3(blockX, blockY + 0.5, blockZ + 0.5), // left
-		glm::vec3(blockX + 0.5, blockY, blockZ + 0.5), // front
-		glm::vec3(blockX + 0.5, blockY + 0.5, blockZ + 1), // top
-		glm::vec3(blockX + 0.5, blockY + 0.5, blockZ) // bottom
-	};
+void World::setBlock(int x, int y, int z, u32 id) {
+	s32 cx = (x + Chunk::width * (m_width / 2)) / Chunk::width;
+	s32 cy = (y + Chunk::height * (m_height / 2)) / Chunk::height;
+	s32 cz = (z + Chunk::depth * (m_depth / 2)) / Chunk::depth;
 
-	glm::vec3 normal[6] = {
-		glm::vec3(0, 1, 0), // back
-		glm::vec3(1, 0, 0), // right
-		glm::vec3(-1, 0, 0), // left
-		glm::vec3(0, -1, 0), // front
-		glm::vec3(0, 0, 1), // top
-		glm::vec3(0, 0, -1) // bottom
-	};
+	if (cx < 0 || cx >= m_width || cy < 0 || cy > m_height || cz < 0 || cz >= m_depth)
+		return;
 
-	float shortestDistance = DIST_FAR;
-	float dist = DIST_FAR + 1.0;
-	int nearestFace = -1;
-
-	for (int i = 0; i < 6; i++) {
-		bool result = intersectionLinePlane(normal[i], planePoint[i], lineOrigPoint, directionVector, &dist);
-		if (result && (dist < shortestDistance)) {
-			shortestDistance = dist;
-			nearestFace = i;
-		}
-	}
-
-	if (nearestFace < 0) {
-		return false;
-	} else {
-		if (distance != nullptr) *distance = shortestDistance;
-		if (face != nullptr) *face = nearestFace;
-		return true;
-	}
-}
-
-#include <unordered_map>
-#include <unistd.h>
-#include "Debug.hpp"
-
-// FIXME: IMPROVE AND MOVE THIS FUNCTION
-void World::testBlocks(Camera &camera, float maxDistance) {
-	glm::vec3 linePoint = glm::vec3(camera.x(),
-	                                camera.y(),
-	                                camera.z());
-
-	glm::vec3 directionVector = glm::vec3(camera.pointTargetedX() - camera.x(),
-	                                      camera.pointTargetedY() - camera.y(),
-	                                      camera.pointTargetedZ() - camera.z());
-
-	Chunk *currentChunk = getChunk(camera.x() / Chunk::width, camera.z() / Chunk::depth);
-	float distance = DIST_FAR;
-	Block *block = nullptr;
-	int face = -1;
-	Chunk *chunk = nullptr;
-	const std::vector<std::unique_ptr<Block>> *blocks = nullptr;
-	for(unsigned short i = 0 ; i < 9 ; i++) {
-		if(i == 8) blocks = &currentChunk->data();
-		else if(i < 8) {
-			if(currentChunk->getSurroundingChunk(i) == nullptr) continue;
-			blocks = &currentChunk->getSurroundingChunk(i)->data();
-		}
-
-		for(auto &it : *blocks) {
-			if(it->id() == 0) continue;
-
-			if(it->pos().z < linePoint.z - 10 || it->pos().z > linePoint.z + 10) continue;
-			if(it->pos().y < linePoint.y - 10 || it->pos().y > linePoint.y + 10) continue;
-			if(it->pos().x < linePoint.x - 10 || it->pos().x > linePoint.x + 10) continue;
-
-			it->setSelected(false, -1);
-
-			float d = -1;
-			s8 f = -1;
-
-			bool result = intersectionLineBlock(it->pos().x, it->pos().y, it->pos().z, linePoint, directionVector, &d, &f);
-
-			if(result && (d < distance) && (d < maxDistance)) {
-				distance = d;
-				block = it.get();
-				face = f;
-				if(i == 8) chunk = currentChunk;
-				else if(i < 8) chunk = currentChunk->getSurroundingChunk(i);
-				DEBUG(block->pos().x, block->pos().y, block->pos().z);
-			}
-		}
-	}
-
-	if(block) {
-		selectedBlock = block;
-		block->setSelected(true, face);
-	}
-	else if (selectedBlock) {
-		selectedBlock->setSelected(false, -1);
-	}
-
-	selectedChunk = chunk;
+	Chunk *chunk = m_chunks.at(cx + cz * m_width).get();
+	if (chunk)
+		chunk->setBlock(x & (Chunk::width - 1), y & (Chunk::height - 1), z & (Chunk::depth - 1), id);
 }
 

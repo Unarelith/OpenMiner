@@ -33,9 +33,9 @@ class Chunk : public NonCopyable {
 		void draw(Shader &shader);
 
 		Block *getBlock(s8 x, s8 y, s8 z);
+		void setBlock(s8 x, s8 y, s8 z, u32 id);
 
 		void addBlock(const glm::vec3 &pos, u32 id);
-		void setBlock(const glm::vec3 &pos, u32 id);
 
 		u32 getCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate);
 

@@ -31,7 +31,8 @@ class GameState : public ApplicationState {
 		void drawSelectedBlock();
 		void drawCross();
 
-		void findSelectedBlock(bool useDepthBuffer);
+		float fract(float value);
+		glm::vec4 findSelectedBlock(bool useDepthBuffer);
 
 	private:
 		glm::mat4 m_projectionMatrix;
@@ -43,6 +44,8 @@ class GameState : public ApplicationState {
 
 		Skybox m_skybox;
 		World m_world;
+
+		glm::vec4 m_selectedBlock{99999, 99999, 99999, -1};
 
 		GLuint m_cursorVBO;
 };

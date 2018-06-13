@@ -11,6 +11,7 @@ TODO
    ◦ TODO: `Window` (depuis `ZeldaOOL`)
    ◦ TODO: `Debug` / `Exception` (+ gestion dans le `main()`)
    ◦ TODO: Input system (Mouse + Keyboard)
+• TODO: Passer un clang-tidy sur le code
 • TODO: Découper les gros pâtés en sous-classes
 • TODO: Séparer le code client du code serveur
 
@@ -20,9 +21,9 @@ TODO
 
 • TODO: Collisions + Gravité
    ◦ TODO: Système d’entités (réutiliser l’ECS mais en multi-thread)
-• TODO: Ciblage de bloc
+• WIP: Ciblage de bloc
+   ◦ DONE: Suppression de bloc
    ◦ TODO: Ajout de bloc
-   ◦ TODO: Suppression de bloc
 
 ## Items
 

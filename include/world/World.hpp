@@ -27,25 +27,18 @@ class World {
 
 		void draw(Camera &camera, Shader &shader, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix);
 
-		Chunk *getChunk(s32 x, s32 z);
+		Chunk *getChunk(int cx, int cz);
 
-		void addSelectedBlock() { if(!selectedChunk || !selectedBlock) return; selectedChunk->setBlock(selectedBlock->pos(), 1); selectedChunk->update(); }
-		void removeSelectedBlock() { if(!selectedChunk || !selectedBlock) return; selectedChunk->setBlock(selectedBlock->pos(), 0); selectedChunk->update(); }
-
-		bool intersectionLinePlane(const glm::vec3 &normal, const glm::vec3 &planePoint, const glm::vec3 &lineOrigPoint, const glm::vec3 &directionVector, float *distance);
-		bool intersectionLineBlock(int blockX, int blockY, int blockZ, const glm::vec3 &lineOrigPoint, const glm::vec3 &directionVector, float *distance, s8 *face);
-		void testBlocks(Camera &camera, float maxDistance);
+		Block *getBlock(int x, int y, int z);
+		void setBlock(int x, int y, int z, u32 id);
 
 		// Render distance in chunks
 		static const u16 renderDistance = 8;
 
-		// FIXME: MOVE THIS QUICKLY
-		static Block *selectedBlock;
-		static Chunk *selectedChunk;
-
 	private:
-		s32 m_width;
-		s32 m_depth;
+		const s32 m_width = 100;
+		const s32 m_height = 1; // FIXME: Never used
+		const s32 m_depth = 100;
 
 		Texture m_texture;
 

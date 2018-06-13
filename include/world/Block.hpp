@@ -27,6 +27,7 @@ class Block {
 		const glm::vec3 &pos() const { return m_pos; }
 
 		u32 id() const { return m_id; }
+		void setId(u32 id) { m_id = id; }
 
 		s8 selectedFace() const { return m_selectedFace; }
 		void setSelected(bool isSelected, s8 face) { m_isSelected = isSelected; m_selectedFace = face; }
