@@ -41,6 +41,13 @@ World::World() {
 	}
 }
 
+void World::updateChunks() {
+	// FIXME
+	for (auto &it : m_chunks) {
+		it->update();
+	}
+}
+
 void World::draw(RenderTarget &target, RenderStates states) const {
 	float ud = 1000.0;
 	int ux = 0;
@@ -100,8 +107,8 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 		}
 
 		Shader::bind(states.shader);
-		states.shader->setUniform("u_modelMatrix", modelMatrix);
-		it->draw(*states.shader);
+		// states.shader->setUniform("u_modelMatrix", modelMatrix);
+		target.draw(*it, states);
 		Shader::bind(nullptr);
 	}
 

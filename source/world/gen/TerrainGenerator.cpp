@@ -36,6 +36,11 @@ void TerrainGenerator::generate(Chunk &chunk) const {
 
 	chunk.setGenerated(true);
 	chunk.setChanged(true);
+
+	if (chunk.getSurroundingChunk(0) && chunk.getSurroundingChunk(0)->isGenerated()) chunk.getSurroundingChunk(0)->setChanged(true);
+	if (chunk.getSurroundingChunk(1) && chunk.getSurroundingChunk(1)->isGenerated()) chunk.getSurroundingChunk(1)->setChanged(true);
+	if (chunk.getSurroundingChunk(2) && chunk.getSurroundingChunk(2)->isGenerated()) chunk.getSurroundingChunk(2)->setChanged(true);
+	if (chunk.getSurroundingChunk(3) && chunk.getSurroundingChunk(3)->isGenerated()) chunk.getSurroundingChunk(3)->setChanged(true);
 }
 
 float TerrainGenerator::noise2d(float x, float y, int octaves, float persistence) {

@@ -118,6 +118,8 @@ void GameState::onEvent(const SDL_Event &event) {
 }
 
 void GameState::update() {
+	m_world.updateChunks();
+
 	m_viewMatrix = m_camera.processInputs();
 
 	m_selectedBlock = findSelectedBlock(false);

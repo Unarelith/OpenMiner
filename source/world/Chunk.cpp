@@ -29,6 +29,8 @@ Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
 }
 
 void Chunk::update() {
+	if (!m_isChanged || m_data.empty()) return;
+
 	m_isChanged = false;
 
 	static const float cubeCoords[6 * 4 * 3] = {
@@ -63,16 +65,13 @@ void Chunk::update() {
 		0, 0, 0,
 	};
 
-	m_vertices.clear();
-	m_normals.clear();
-	m_texCoords.clear();
+	std::vector<float> vertices;
+	std::vector<float> normals;
+	std::vector<float> texCoords;
 
-	m_vertices.reserve(width * height * depth * 6 * 4 * 3);
-	m_normals.reserve(width * height * depth * 6 * 4 * 3);
-	m_texCoords.reserve(width * height * depth * 6 * 4 * 2);
-
-	m_verticesID.clear();
-	m_extendedFaces.clear();
+	vertices.reserve(width * height * depth * 6 * 4 * 3);
+	normals.reserve(width * height * depth * 6 * 4 * 3);
+	texCoords.reserve(width * height * depth * 6 * 4 * 2);
 
 	// Needed in the loop (avoid a lot of glm::vec3 creation)
 	glm::vec3 a, b, c, v1, v2, normal;
@@ -88,7 +87,7 @@ void Chunk::update() {
 
 				const glm::vec4 &blockTexCoords = block->getTexCoords();
 
-				float texCoords[2 * 4 * 6] = {
+				float cubeTexCoords[2 * 4 * 6] = {
 					blockTexCoords.x, blockTexCoords.w,
 					blockTexCoords.z, blockTexCoords.w,
 					blockTexCoords.z, blockTexCoords.y,
@@ -100,60 +99,31 @@ void Chunk::update() {
 				};
 
 				for(int i = 1 ; i < 6 ; i++) {
-					memcpy(&texCoords[2 * 4 * i], &texCoords[0], 2 * 4 * sizeof(float));
+					memcpy(&cubeTexCoords[2 * 4 * i], &cubeTexCoords[0], 2 * 4 * sizeof(float));
 				}
 
 				for(u8 i = 0 ; i < 6 ; i++) {
 					// Skip hidden faces
+					Block *surroundingBlocks[4] = {nullptr, nullptr, nullptr, nullptr};
+
+					if (m_surroundingChunks[0]) surroundingBlocks[0] = m_surroundingChunks[0]->getBlock(width - 1, y, z);
+					if (m_surroundingChunks[1]) surroundingBlocks[1] = m_surroundingChunks[1]->getBlock(0, y, z);
+					if (m_surroundingChunks[2]) surroundingBlocks[2] = m_surroundingChunks[2]->getBlock(x, y, depth - 1);
+					if (m_surroundingChunks[3]) surroundingBlocks[3] = m_surroundingChunks[3]->getBlock(x, y, 0);
+
 					if((x > 0           && getBlock(x - 1, y, z)->id() && i == 0)
 					|| (x < width - 1   && getBlock(x + 1, y, z)->id() && i == 1)
 					|| (y > 0           && getBlock(x, y - 1, z)->id() && i == 2)
 					|| (y < height - 1  && getBlock(x, y + 1, z)->id() && i == 3)
 					|| (z > 0           && getBlock(x, y, z - 1)->id() && i == 5)
 					|| (z < depth - 1   && getBlock(x, y, z + 1)->id() && i == 4)
-					|| (x == 0          && m_surroundingChunks[0] && m_surroundingChunks[0]->getBlock(width - 1, y, z)->id()  && i == 0)
-					|| (x == width - 1  && m_surroundingChunks[1] && m_surroundingChunks[1]->getBlock(0, y, z)->id()          && i == 1)
-					|| (z == 0          && m_surroundingChunks[2] && m_surroundingChunks[2]->getBlock(x, y, depth - 1)->id()  && i == 5)
-					|| (z == depth - 1  && m_surroundingChunks[3] && m_surroundingChunks[3]->getBlock(x, y, 0)->id()          && i == 4)
+					|| (x == 0          && surroundingBlocks[0] && surroundingBlocks[0]->id()  && i == 0)
+					|| (x == width - 1  && surroundingBlocks[1] && surroundingBlocks[1]->id()          && i == 1)
+					|| (z == 0          && surroundingBlocks[2] && surroundingBlocks[2]->id()  && i == 5)
+					|| (z == depth - 1  && surroundingBlocks[3] && surroundingBlocks[3]->id()          && i == 4)
 					) {
 						continue;
 					}
-
-					// Merge adjacent faces
-					// if(x > 0 && getBlock(x - 1, y, z)->id() && (i != 0 || i != 1) && vertexExists(x - 1, y, z, i, 0)) {
-					// 	m_vertices[getVertexID(x - 1, y, z, i, 1, 0)] += 1;
-					// 	m_vertices[getVertexID(x - 1, y, z, i, 2, 0)] += 1;
-                    //
-					// 	m_texCoords[getTexCoordID(x - 1, y, z, i, 1, 0)] += 16 / 256 * 2;//1;
-					// 	m_texCoords[getTexCoordID(x - 1, y, z, i, 2, 0)] += 16 / 256 * 2;//1;
-                    //
-					// 	m_extendedFaces[getCoordID(x, y, z, i, 0, 0)] = getCoordID(x - 1, y, z, i, 0, 0);
-                    //
-					// 	continue;
-					// }
-					// if(z > 0 && getBlock(x, y, z - 1)->id() && (i == 0 || i == 1) && vertexExists(x, y, z - 1, i, 0)) {
-					// 	m_vertices[getVertexID(x, y, z - 1, i, 0, 2)] += 1;
-					// 	m_vertices[getVertexID(x, y, z - 1, i, 3, 2)] += 1;
-                    //
-					// 	m_texCoords[getTexCoordID(x, y, z - 1, i, 1, 0)] += 16 / 256 * 2;//1;
-					// 	m_texCoords[getTexCoordID(x, y, z - 1, i, 2, 0)] += 16 / 256 * 2;//1;
-                    //
-					// 	m_extendedFaces[getCoordID(x, y, z, i, 0, 0)] = getCoordID(x, y, z - 1, i, 0, 0);
-                    //
-					// 	continue;
-					// }
-
-					/*if(y > 0 && getBlock(x, y - 1, z)->id() && (i == 2 || i == 3) && vertexExists(x, y - 1, z, i, 0)) {
-						m_vertices[getVertexID(x, y - 1, z, i, 0, 1)] += 1;
-						m_vertices[getVertexID(x, y - 1, z, i, 3, 1)] += 1;
-
-						m_texCoords[getTexCoordID(x, y - 1, z, i, 1, 1)] += 1;
-						m_texCoords[getTexCoordID(x, y - 1, z, i, 2, 1)] += 1;
-
-						m_extendedFaces[getCoordID(x, y, z, i, 0, 0)] = getCoordID(x, y - 1, z, i, 0, 0);
-
-						continue;
-					}*/
 
 					// Three points of the face
 					a.x = cubeCoords[i * 12 + 0];
@@ -177,132 +147,44 @@ void Chunk::update() {
 
 					// Store vertex information
 					for(u8 j = 0 ; j < 4 ; j++) {
-						m_vertices.push_back(x + cubeCoords[i * 12 + j * 3]);
-						m_vertices.push_back(y + cubeCoords[i * 12 + j * 3 + 1]);
-						m_vertices.push_back(z + cubeCoords[i * 12 + j * 3 + 2]);
+						vertices.push_back(x + cubeCoords[i * 12 + j * 3]);
+						vertices.push_back(y + cubeCoords[i * 12 + j * 3 + 1]);
+						vertices.push_back(z + cubeCoords[i * 12 + j * 3 + 2]);
 
-						m_normals.push_back(normal.x);
-						m_normals.push_back(normal.y);
-						m_normals.push_back(normal.z);
+						normals.push_back(normal.x);
+						normals.push_back(normal.y);
+						normals.push_back(normal.z);
 
-						m_texCoords.push_back(texCoords[i * 8 + j * 2]);
-						m_texCoords.push_back(texCoords[i * 8 + j * 2 + 1]);
-
-						m_verticesID[getCoordID(x, y, z, i, j, 0)] = m_vertices.size() - 3;
-						m_verticesID[getCoordID(x, y, z, i, j, 1)] = m_vertices.size() - 2;
-						m_verticesID[getCoordID(x, y, z, i, j, 2)] = m_vertices.size() - 1;
+						texCoords.push_back(cubeTexCoords[i * 8 + j * 2]);
+						texCoords.push_back(cubeTexCoords[i * 8 + j * 2 + 1]);
 					}
 				}
 			}
 		}
 	}
 
-	m_vertices.shrink_to_fit();
-	m_normals.shrink_to_fit();
-	m_texCoords.shrink_to_fit();
+	vertices.shrink_to_fit();
+	normals.shrink_to_fit();
+	texCoords.shrink_to_fit();
 
 	VertexBuffer::bind(&m_vbo);
 
-	m_vbo.setData((m_vertices.size() + m_normals.size() + m_texCoords.size()) * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
-	m_vbo.updateData(0, m_vertices.size() * sizeof(float), m_vertices.data());
-	m_vbo.updateData(m_vertices.size() * sizeof(float), m_normals.size() * sizeof(float), m_normals.data());
-	m_vbo.updateData((m_vertices.size() + m_normals.size()) * sizeof(float), m_texCoords.size() * sizeof(float), m_texCoords.data());
+	m_vbo.setData((vertices.size() + normals.size() + texCoords.size()) * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
+	m_vbo.updateData(0, vertices.size() * sizeof(float), vertices.data());
+	m_vbo.updateData(vertices.size() * sizeof(float), normals.size() * sizeof(float), normals.data());
+	m_vbo.updateData((vertices.size() + normals.size()) * sizeof(float), texCoords.size() * sizeof(float), texCoords.data());
 
 	VertexBuffer::bind(nullptr);
-}
 
-class Ray {
-	public:
-		Ray(const glm::vec3 &orig, const glm::vec3 &dir) : orig(orig), dir(dir)
-	{
-		invdir.x = 1 / dir.x;
-		invdir.y = 1 / dir.y;
-		invdir.z = 1 / dir.z;
-		sign[0] = (invdir.x < 0);
-		sign[1] = (invdir.y < 0);
-		sign[2] = (invdir.z < 0);
-	}
-		glm::vec3 orig, dir;       // ray orig and dir
-		glm::vec3 invdir;
-		int sign[3];
-};
-
-class AxisAlignedBB {
-	public:
-		AxisAlignedBB(const glm::vec3 &vmin, const glm::vec3 &vmax)
-		{
-			bounds[0] = vmin;
-			bounds[1] = vmax;
-		}
-		glm::vec3 bounds[2];
-
-		bool intersect(const Ray &r) const
-		{
-			float tmin, tmax, tymin, tymax, tzmin, tzmax;
-
-			tmin = (bounds[r.sign[0]].x - r.orig.x) * r.invdir.x;
-			tmax = (bounds[1-r.sign[0]].x - r.orig.x) * r.invdir.x;
-			tymin = (bounds[r.sign[1]].y - r.orig.y) * r.invdir.y;
-			tymax = (bounds[1-r.sign[1]].y - r.orig.y) * r.invdir.y;
-
-			if ((tmin > tymax) || (tymin > tmax))
-				return false;
-			if (tymin > tmin)
-				tmin = tymin;
-			if (tymax < tmax)
-				tmax = tymax;
-
-			tzmin = (bounds[r.sign[2]].z - r.orig.z) * r.invdir.z;
-			tzmax = (bounds[1-r.sign[2]].z - r.orig.z) * r.invdir.z;
-
-			if ((tmin > tzmax) || (tzmin > tmax))
-				return false;
-			if (tzmin > tmin)
-				tmin = tzmin;
-			if (tzmax < tmax)
-				tmax = tzmax;
-
-			return true;
-		}
-};
-
-void Chunk::draw(const Shader &shader) {
-	if(m_isChanged) update();
-
-	if(m_vertices.size() == 0) return;
-
-	VertexBuffer::bind(&m_vbo);
-
-	shader.enableVertexAttribArray("coord3d");
-	shader.enableVertexAttribArray("normal");
-	shader.enableVertexAttribArray("texCoord");
-
-	glVertexAttribPointer(shader.attrib("coord3d"),  3, GL_FLOAT, GL_FALSE, 0, 0);
-	glVertexAttribPointer(shader.attrib("normal"),   3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(m_vertices.size() * sizeof(float)));
-	glVertexAttribPointer(shader.attrib("texCoord"), 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)((m_vertices.size() + m_normals.size()) * sizeof(float)));
-
-	Texture::bind(&m_texture);
-
-	glDrawArrays(GL_QUADS, 0, m_vertices.size() / 3);
-
-	Texture::bind(nullptr);
-
-	// for(u32 i = 0 ; i < m_vertices.size() / 3 ; i += 4) {
-	// 	glDrawArrays(GL_LINE_LOOP, i, 4);
-	// }
-
-	shader.disableVertexAttribArray("texCoord");
-	shader.disableVertexAttribArray("normal");
-	shader.disableVertexAttribArray("coord3d");
-
-	VertexBuffer::bind(nullptr);
+	m_verticesCount = vertices.size();
+	m_normalsCount = normals.size();
 }
 
 void Chunk::addBlock(const glm::vec3 &pos, u32 id) {
 	m_data.push_back(std::unique_ptr<Block>(new Block(pos, id)));
 }
 
-Block *Chunk::getBlock(s8 x, s8 y, s8 z) {
+Block *Chunk::getBlock(s8 x, s8 y, s8 z) const {
 	u16 i = y + x * height + z * height * width;
 	if(i < m_data.size()) {
 		return m_data[i].get();
@@ -327,56 +209,37 @@ void Chunk::setBlock(s8 x, s8 y, s8 z, u32 id) {
 	if(z == depth - 1 && back())  { back()->m_isChanged = true; }
 }
 
-u32 Chunk::getCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate) {
-	return (j + i * 4 + x * 4 * 6 + y * 4 * 6 * Chunk::width + z * 4 * 6 * Chunk::width * Chunk::height) * 3 + coordinate;
-}
-
-u32 Chunk::getVertexID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate) {
-	u32 id = getCoordID(x, y, z, i, j, coordinate);
-
-	while(m_extendedFaces.count(id - j * 3 - coordinate)) {
-		id = m_extendedFaces[id - j * 3 - coordinate] + j * 3 + coordinate;
-	}
-
-	return m_verticesID[id];
-}
-
-u32 Chunk::getTexCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate) {
-	return float(getVertexID(x, y, z, i, j, coordinate)) / 3 * 2;
-}
-
-bool Chunk::vertexExists(u8 x, u8 y, u8 z, u8 i, u8 j) {
-	return (m_verticesID.count(getCoordID(x, y, z, i, j, 0))
-	     || m_extendedFaces.count(getCoordID(x, y, z, i, j, 0)));
-}
-
-// FIXME: Remove old func when this one works
+// FIXME: Implement vertex attributes in VertexBuffer and remove most of the code here
 void Chunk::draw(RenderTarget &target, RenderStates states) const {
-	// if(m_isChanged) update();
-    //
-	// if(m_vertices.size() == 0) return;
-    //
+	if(m_verticesCount == 0) return;
+
+	VertexBuffer::bind(&m_vbo);
+
+	states.shader->enableVertexAttribArray("coord3d");
+	states.shader->enableVertexAttribArray("normal");
+	states.shader->enableVertexAttribArray("texCoord");
+
+	glVertexAttribPointer(states.shader->attrib("coord3d"),  3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(states.shader->attrib("normal"),   3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(m_verticesCount * sizeof(float)));
+	glVertexAttribPointer(states.shader->attrib("texCoord"), 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)((m_verticesCount + m_normalsCount) * sizeof(float)));
+
+	states.texture = &m_texture;
+
+	target.draw(m_vbo, 0, m_verticesCount / 3, states);
+
+	states.shader->disableVertexAttribArray("texCoord");
+	states.shader->disableVertexAttribArray("normal");
+
+	// Shader::bind(states.shader);
 	// VertexBuffer::bind(&m_vbo);
     //
-	// shader->enableVertexAttribArray("coord3d");
-	// shader->enableVertexAttribArray("normal");
-	// shader->enableVertexAttribArray("texCoord");
+	// states.shader->enableVertexAttribArray("coord3d");
     //
-	// glVertexAttribPointer(shader>attrib("normal"),   3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(m_vertices.size() * sizeof(float)));
-	// glVertexAttribPointer(shader>attrib("texCoord"), 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)((m_vertices.size() + m_normals.size()) * sizeof(float)));
+	// for(u32 i = 0 ; i < m_verticesCount / 3 ; i += 4) {
+	// 	glDrawArrays(GL_LINE_LOOP, i, 4);
+	// }
     //
-	// Texture::bind(&m_texture);
-    //
-	// glDrawArrays(GL_QUADS, 0, m_vertices.size() / 3);
-    //
-	// Texture::bind(nullptr);
-    //
-	// // for(u32 i = 0 ; i < m_vertices.size() / 3 ; i += 4) {
-	// // 	glDrawArrays(GL_LINE_LOOP, i, 4);
-	// // }
-    //
-	// shader.disableVertexAttribArray("normal");
-	// shader.disableVertexAttribArray("coord3d");
+	// states.shader->disableVertexAttribArray("coord3d");
     //
 	// VertexBuffer::bind(nullptr);
 }

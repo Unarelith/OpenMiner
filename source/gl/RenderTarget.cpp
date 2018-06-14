@@ -14,6 +14,7 @@
 #include "IDrawable.hpp"
 #include "RenderTarget.hpp"
 #include "Shader.hpp"
+#include "Texture.hpp"
 #include "VertexBuffer.hpp"
 
 void RenderTarget::draw(const IDrawable &drawable, const RenderStates &states) {
@@ -21,6 +22,10 @@ void RenderTarget::draw(const IDrawable &drawable, const RenderStates &states) {
 }
 
 void RenderTarget::draw(const VertexBuffer &vertexBuffer, const RenderStates &states) {
+	draw(vertexBuffer, vertexBuffer.first(), vertexBuffer.count(), states);
+}
+
+void RenderTarget::draw(const VertexBuffer &vertexBuffer, std::size_t firstVertex, std::size_t vertexCount, const RenderStates &states) {
 	if (!states.shader) return;
 
 	Shader::bind(states.shader);
@@ -35,7 +40,12 @@ void RenderTarget::draw(const VertexBuffer &vertexBuffer, const RenderStates &st
 
 	glVertexAttribPointer(states.shader->attrib("coord3d"), 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	glDrawArrays(vertexBuffer.mode(), vertexBuffer.first(), vertexBuffer.count());
+	if (states.texture)
+		Texture::bind(states.texture);
+
+	glDrawArrays(vertexBuffer.mode(), firstVertex, vertexCount);
+
+	Texture::bind(nullptr);
 
 	states.shader->disableVertexAttribArray("coord3d");
 

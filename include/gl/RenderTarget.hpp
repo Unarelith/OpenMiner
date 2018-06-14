@@ -23,6 +23,7 @@ class RenderTarget {
 	public:
 		void draw(const IDrawable &drawable, const RenderStates &states = RenderStates::Default);
 		void draw(const VertexBuffer &vertexBuffer, const RenderStates &states = RenderStates::Default);
+		void draw(const VertexBuffer &vertexBuffer, std::size_t firstVertex, std::size_t vertexCount, const RenderStates &states = RenderStates::Default);
 };
 
 #endif // RENDERTARGET_HPP_

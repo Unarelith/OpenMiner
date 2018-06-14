@@ -31,19 +31,10 @@ class Chunk : public NonCopyable, public IDrawable {
 
 		void update();
 
-		void draw(const Shader &shader);
-
-		Block *getBlock(s8 x, s8 y, s8 z);
+		Block *getBlock(s8 x, s8 y, s8 z) const;
 		void setBlock(s8 x, s8 y, s8 z, u32 id);
 
 		void addBlock(const glm::vec3 &pos, u32 id);
-
-		u32 getCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate);
-
-		u32 getVertexID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate);
-		u32 getTexCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate);
-
-		bool vertexExists(u8 x, u8 y, u8 z, u8 i, u8 j);
 
 		s32 x() const { return m_x; }
 		s32 y() const { return m_y; }
@@ -84,12 +75,8 @@ class Chunk : public NonCopyable, public IDrawable {
 
 		std::vector<std::unique_ptr<Block>> m_data;
 
-		std::vector<float> m_vertices;
-		std::vector<float> m_normals;
-		std::vector<float> m_texCoords;
-
-		std::map<u32, u32> m_verticesID;
-		std::map<u32, u32> m_extendedFaces;
+		std::size_t m_verticesCount;
+		std::size_t m_normalsCount;
 
 		VertexBuffer m_vbo{GL_QUADS, 0, 0};
 
