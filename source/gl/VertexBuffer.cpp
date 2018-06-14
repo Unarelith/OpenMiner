@@ -13,19 +13,23 @@
  */
 #include "VertexBuffer.hpp"
 
-VertexBuffer::VertexBuffer() {
+VertexBuffer::VertexBuffer(GLenum mode, GLint first, GLsizei count) {
 	glGenBuffers(1, &m_id);
+
+	m_mode = mode;
+	m_first = first;
+	m_count = count;
 }
 
 VertexBuffer::~VertexBuffer() {
 	glDeleteBuffers(1, &m_id);
 }
 
-void VertexBuffer::setData(GLsizeiptr size, const GLvoid *data, GLenum usage) {
+void VertexBuffer::setData(GLsizeiptr size, const GLvoid *data, GLenum usage) const {
 	glBufferData(GL_ARRAY_BUFFER, size, data, usage);
 }
 
-void VertexBuffer::updateData(GLintptr offset, GLsizeiptr size, const GLvoid *data) {
+void VertexBuffer::updateData(GLintptr offset, GLsizeiptr size, const GLvoid *data) const {
 	glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
 }
 

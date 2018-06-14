@@ -41,8 +41,6 @@ GameState::GameState() : m_camera(Camera::getInstance()) {
 	m_shader.setUniform("u_tex", 0);
 
 	Shader::bind(nullptr);
-
-	glGenBuffers(1, &m_cursorVBO);
 }
 
 void GameState::onEvent(const SDL_Event &event) {
@@ -96,7 +94,10 @@ void GameState::draw() {
 	m_world.draw(m_shader, m_projectionMatrix, m_viewMatrix);
 
 	drawSelectedBlock();
-	m_crosshair.draw(m_shader);
+
+	RenderStates states;
+	states.shader = &m_shader;
+	m_renderTarget.draw(m_crosshair, states);
 
 	Shader::bind(nullptr);
 }
@@ -139,14 +140,18 @@ void GameState::drawSelectedBlock() {
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glDisable(GL_CULL_FACE);
 
-	glBindBuffer(GL_ARRAY_BUFFER, m_cursorVBO);
+	VertexBuffer::bind(&m_cursorVBO);
+
+	m_cursorVBO.setData(sizeof(box), box, GL_DYNAMIC_DRAW);
+
 	m_shader.setUniform("u_modelMatrix", glm::mat4(1));
-	glBufferData(GL_ARRAY_BUFFER, sizeof(box), box, GL_DYNAMIC_DRAW);
+
 	m_shader.enableVertexAttribArray("coord3d");
 	glVertexAttribPointer(m_shader.attrib("coord3d"), 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glDrawArrays(GL_LINES, 0, 24);
 	m_shader.disableVertexAttribArray("coord3d");
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	VertexBuffer::bind(nullptr);
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_POLYGON_OFFSET_FILL);

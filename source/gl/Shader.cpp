@@ -20,9 +20,6 @@
 #include "Exception.hpp"
 #include "Shader.hpp"
 
-Shader::Shader() {
-}
-
 Shader::Shader(const std::string &vertexFilename, const std::string &fragmentFilename) {
 	loadFromFile(vertexFilename, fragmentFilename);
 }
@@ -127,7 +124,7 @@ void Shader::addShader(GLenum type, const std::string &filename) {
 	glAttachShader(m_program, shader);
 }
 
-GLint Shader::attrib(const std::string &name) {
+GLint Shader::attrib(const std::string &name) const {
 	GLint attrib = glGetAttribLocation(m_program, name.c_str());
 
 	if(attrib == -1) {
@@ -137,7 +134,7 @@ GLint Shader::attrib(const std::string &name) {
 	return attrib;
 }
 
-GLint Shader::uniform(const std::string &name) {
+GLint Shader::uniform(const std::string &name) const {
 	GLint uniform = glGetUniformLocation(m_program, name.c_str());
 
 	if(uniform == -1) {
@@ -147,19 +144,19 @@ GLint Shader::uniform(const std::string &name) {
 	return uniform;
 }
 
-void Shader::enableVertexAttribArray(const std::string &name) {
+void Shader::enableVertexAttribArray(const std::string &name) const {
 	glEnableVertexAttribArray(attrib(name));
 }
 
-void Shader::disableVertexAttribArray(const std::string &name) {
+void Shader::disableVertexAttribArray(const std::string &name) const {
 	glDisableVertexAttribArray(attrib(name));
 }
 
-void Shader::setUniform(const std::string &name, int n) {
+void Shader::setUniform(const std::string &name, int n) const {
 	glUniform1i(uniform(name), n);
 }
 
-void Shader::setUniform(const std::string &name, const glm::mat4 &matrix) {
+void Shader::setUniform(const std::string &name, const glm::mat4 &matrix) const {
 	glUniformMatrix4fv(uniform(name), 1, GL_FALSE, glm::value_ptr(matrix));
 }
 

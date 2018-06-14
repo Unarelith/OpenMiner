@@ -88,7 +88,7 @@ class Chunk : public NonCopyable {
 		std::map<u32, u32> m_verticesID;
 		std::map<u32, u32> m_extendedFaces;
 
-		VertexBuffer m_vbo;
+		VertexBuffer m_vbo{GL_QUADS, 0, 0};
 
 		Chunk *m_surroundingChunks[4];
 

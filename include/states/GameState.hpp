@@ -22,6 +22,8 @@
 #include "Skybox.hpp"
 #include "World.hpp"
 
+#include "RenderTarget.hpp"
+
 class GameState : public ApplicationState {
 	public:
 		GameState();
@@ -49,9 +51,10 @@ class GameState : public ApplicationState {
 
 		glm::vec4 m_selectedBlock{99999, 99999, 99999, -1};
 
-		GLuint m_cursorVBO;
-
+		VertexBuffer m_cursorVBO{GL_LINES, 0, 24};
 		Crosshair m_crosshair;
+
+		RenderTarget m_renderTarget;
 };
 
 #endif // GAMESTATE_HPP_

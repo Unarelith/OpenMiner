@@ -18,16 +18,24 @@
 
 class VertexBuffer {
 	public:
-		VertexBuffer();
+		VertexBuffer(GLenum mode, GLint first, GLsizei count);
 		~VertexBuffer();
 
-		void setData(GLsizeiptr size, const GLvoid *data, GLenum usage);
-		void updateData(GLintptr offset, GLsizeiptr size, const GLvoid *data);
+		void setData(GLsizeiptr size, const GLvoid *data, GLenum usage) const;
+		void updateData(GLintptr offset, GLsizeiptr size, const GLvoid *data) const;
+
+		GLenum mode() const { return m_mode; }
+		GLint first() const { return m_first; }
+		GLsizei count() const { return m_count; }
 
 		static void bind(const VertexBuffer *vertexBuffer);
 
 	private:
 		GLuint m_id;
+
+		GLenum m_mode;
+		GLint m_first;
+		GLsizei m_count;
 };
 
 #endif // VERTEXBUFFER_HPP_

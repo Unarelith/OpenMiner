@@ -25,7 +25,7 @@ class Skybox {
 		void draw(Shader &shader);
 
 	private:
-		VertexBuffer m_vbo;
+		VertexBuffer m_vbo{GL_QUADS, 0, 4 * 6};
 };
 
 #endif // SKYBOX_HPP_

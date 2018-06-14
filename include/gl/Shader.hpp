@@ -23,7 +23,7 @@
 
 class Shader {
 	public:
-		Shader();
+		Shader() = default;
 		Shader(const std::string &vertexFilename, const std::string &fragementFilename);
 		~Shader();
 
@@ -34,14 +34,14 @@ class Shader {
 
 		void addShader(GLenum type, const std::string &filename);
 
-		GLint attrib(const std::string &name);
-		GLint uniform(const std::string &name);
+		GLint attrib(const std::string &name) const;
+		GLint uniform(const std::string &name) const;
 
-		void enableVertexAttribArray(const std::string &name);
-		void disableVertexAttribArray(const std::string &name);
+		void enableVertexAttribArray(const std::string &name) const;
+		void disableVertexAttribArray(const std::string &name) const;
 
-		void setUniform(const std::string &name, int n);
-		void setUniform(const std::string &name, const glm::mat4 &matrix);
+		void setUniform(const std::string &name, int n) const;
+		void setUniform(const std::string &name, const glm::mat4 &matrix) const;
 
 		static void bind(const Shader *shader);
 

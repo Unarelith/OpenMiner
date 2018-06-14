@@ -12,6 +12,7 @@
  * =====================================================================================
  */
 #include "Crosshair.hpp"
+#include "Shader.hpp"
 
 Crosshair::Crosshair() {
 	float cross[4][3] = {
@@ -26,24 +27,10 @@ Crosshair::Crosshair() {
 	VertexBuffer::bind(nullptr);
 }
 
-void Crosshair::draw(Shader &shader) {
+void Crosshair::draw(RenderTarget &target, RenderStates states) const {
 	glDisable(GL_DEPTH_TEST);
 
-	VertexBuffer::bind(&m_vbo);
-
-	shader.setUniform("u_modelMatrix", glm::mat4(1));
-	shader.setUniform("u_viewMatrix", glm::mat4(1));
-	shader.setUniform("u_projectionMatrix", glm::mat4(1));
-
-	shader.enableVertexAttribArray("coord3d");
-
-	glVertexAttribPointer(shader.attrib("coord3d"), 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-	glDrawArrays(GL_LINES, 0, 4);
-
-	shader.disableVertexAttribArray("coord3d");
-
-	VertexBuffer::bind(nullptr);
+	target.draw(m_vbo, states);
 
 	glEnable(GL_DEPTH_TEST);
 }
