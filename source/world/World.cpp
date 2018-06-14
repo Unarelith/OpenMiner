@@ -43,8 +43,9 @@ World::World() {
 
 void World::draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix) {
 	float ud = 1000.0;
-	s32 ux = 0;
-	s32 uz = 0;
+	int ux = 0;
+	// int uy = 0;
+	int uz = 0;
 
 	shader.setUniform("u_renderDistance", renderDistance * Chunk::width);
 
@@ -54,7 +55,7 @@ void World::draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::m
 		                                                 it->y() * Chunk::height,
 		                                                 it->z() * Chunk::depth));
 
-		// Is the chunk closer enough?
+		// Is the chunk close enough?
 		glm::vec4 center = viewMatrix * modelMatrix * glm::vec4(Chunk::width  / 2,
 		                                                        Chunk::height / 2,
 		                                                        Chunk::depth  / 2, 1);
@@ -81,10 +82,13 @@ void World::draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::m
 			continue;
 		}
 
+		// If this chunk is not initialized, skip it
 		if(!it->isInitialized()) {
+			// But if it is the closest to the camera, mark it for initialization
 			if(d < ud) {
 				ud = d;
 				ux = it->x();
+				// ux = it->y();
 				uz = it->z();
 			}
 
@@ -99,12 +103,12 @@ void World::draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::m
 	if(ud < 1000) {
 		m_terrainGenerator.generate(*getChunk(ux, uz));
 
-		getChunk(ux, uz)->setInitialized(true);
-
 		if(getChunk(ux, uz)->left())  m_terrainGenerator.generate(*getChunk(ux, uz)->left());
 		if(getChunk(ux, uz)->right()) m_terrainGenerator.generate(*getChunk(ux, uz)->right());
 		if(getChunk(ux, uz)->front()) m_terrainGenerator.generate(*getChunk(ux, uz)->front());
 		if(getChunk(ux, uz)->back())  m_terrainGenerator.generate(*getChunk(ux, uz)->back());
+
+		getChunk(ux, uz)->setInitialized(true);
 	}
 }
 

@@ -34,9 +34,7 @@ GameState::GameState() : m_camera(Camera::getInstance()) {
 
 	Shader::bind(&m_shader);
 
-	// m_projectionMatrix = glm::perspective(45.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, DIST_NEAR, DIST_FAR);
 	m_projectionMatrix = glm::perspective(45.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, DIST_NEAR, DIST_FAR);
-	m_viewMatrix = m_camera.update();
 
 	m_shader.setUniform("u_projectionMatrix", m_projectionMatrix);
 
@@ -54,6 +52,8 @@ void GameState::onEvent(const SDL_Event &event) {
 			m_camera.turnV(-event.motion.yrel * 0.06);
 
 			Mouse::resetToWindowCenter();
+
+			m_camera.update();
 		}
 	}
 	if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {

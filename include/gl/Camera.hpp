@@ -32,7 +32,7 @@ class Camera {
 		void move(float direction);
 
 		glm::mat4 processInputs();
-		glm::mat4 update();
+		void update();
 
 		float pointTargetedX() const { return m_x + cos(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES); }
 		float pointTargetedY() const { return m_y + sin(m_angleV * RADIANS_PER_DEGREES); }

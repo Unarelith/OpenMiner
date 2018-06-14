@@ -28,7 +28,7 @@ Camera::Camera() {
 	m_vx = 0;
 	m_vz = 0;
 
-	m_viewMatrix = update();
+	update();
 }
 
 void Camera::turnH(float angle) {
@@ -75,38 +75,37 @@ glm::mat4 Camera::processInputs() {
 
 	if(Keyboard::isKeyPressed(Keyboard::Space)) {
 		m_y += 0.1;
-		// m_viewMatrix = update();
+		update();
 	}
 	if(Keyboard::isKeyPressed(Keyboard::LeftShift)) {
 		m_y -= 0.1;
-		// m_viewMatrix = update();
+		update();
 	}
 
 	if(Keyboard::isKeyPressed(Keyboard::Z)) {
 		move(0.0f);
-		// m_viewMatrix = update();
+		update();
 	}
 	else if(Keyboard::isKeyPressed(Keyboard::S)) {
 		move(180.0f);
-		// m_viewMatrix = update();
+		update();
 	}
 
 	if(Keyboard::isKeyPressed(Keyboard::Q)) {
 		move(-90.0f);
-		// m_viewMatrix = update();
+		update();
 	}
 	else if(Keyboard::isKeyPressed(Keyboard::D)) {
 		move(90.0f);
-		// m_viewMatrix = update();
+		update();
 	}
 
-	m_viewMatrix = update();
 	return m_viewMatrix;
 }
 
-glm::mat4 Camera::update() {
-	return glm::lookAt(glm::vec3(m_x, m_y, m_z),
-	                   glm::vec3(pointTargetedX(), pointTargetedY(), pointTargetedZ()),
-	                   glm::vec3(0, 1, 0));
+void Camera::update() {
+	m_viewMatrix = glm::lookAt(glm::vec3(m_x, m_y, m_z),
+	                           glm::vec3(pointTargetedX(), pointTargetedY(), pointTargetedZ()),
+	                           glm::vec3(0, 1, 0));
 }
 

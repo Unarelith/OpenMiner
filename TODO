@@ -64,3 +64,8 @@ TODO
    ◦ TODO: Face-merging
       → Trouver une solution pour utiliser un texture atlas avec ça
 
+# Idées diverses
+
+• TODO: Ajouter un “builder mode” qui débloque la souris de la vue et permet de sélectionner
+        un bloc juste mettant la souris dessus
+
