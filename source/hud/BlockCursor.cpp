@@ -18,7 +18,7 @@
 #include "BlockCursor.hpp"
 
 void BlockCursor::onEvent(const SDL_Event &event) {
-	if (event.type == SDL_MOUSEBUTTONDOWN) {
+	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
 			m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
 		}
@@ -43,6 +43,8 @@ void BlockCursor::onEvent(const SDL_Event &event) {
 
 void BlockCursor::update(bool useDepthBuffer) {
 	m_selectedBlock = findSelectedBlock(useDepthBuffer);
+
+	if (m_selectedBlock.w == -1) return;
 
 	float bx = m_selectedBlock.x;
 	float by = m_selectedBlock.y;
@@ -84,6 +86,8 @@ void BlockCursor::update(bool useDepthBuffer) {
 }
 
 void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
+	if (m_selectedBlock.w == -1) return;
+
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glDisable(GL_CULL_FACE);
 
@@ -182,11 +186,10 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 		else if(pz < mz) face = 5;
 	}
 
-	// If we are looking at air, move the cursor out of sight
+	// If we are looking at air, disable the cursor
 	Block *block = m_world.getBlock(mx, my, mz);
 	if(!block || !block->id()) {
-		// FIXME: Find another way to do that, maybe using `face = -1`?
-		mx = my = mz = 99999;
+		face = -1;
 	}
 
 	return {mx, my, mz, face};

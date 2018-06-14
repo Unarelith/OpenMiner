@@ -51,7 +51,7 @@ class GameState : public ApplicationState {
 		Skybox m_skybox;
 		World m_world;
 
-		glm::vec4 m_selectedBlock{99999, 99999, 99999, -1};
+		glm::vec4 m_selectedBlock{0, 0, 0, -1};
 		BlockCursor m_blockCursor{m_camera, m_world, m_viewMatrix, m_projectionMatrix};
 		Crosshair m_crosshair;
 };
