@@ -17,6 +17,8 @@
 #include "Texture.hpp"
 #include "VertexBuffer.hpp"
 
+const RenderStates RenderStates::Default{};
+
 void RenderTarget::draw(const IDrawable &drawable, const RenderStates &states) {
 	drawable.draw(*this, states);
 }

@@ -126,7 +126,7 @@ void GameState::update() {
 	updateCursorBlockData();
 }
 
-void GameState::draw() {
+void GameState::draw(RenderTarget &target, RenderStates states) const {
 	// Shader::bind(&m_shader);
     //
 	// m_shader.setUniform("u_viewMatrix", m_viewMatrix);
@@ -136,29 +136,17 @@ void GameState::draw() {
 
 	// Shader::bind(nullptr);
 
-	drawSelectedBlock();
-
-	RenderStates worldStates;
-	worldStates.shader = &m_shader;
-	worldStates.projectionMatrix = &m_projectionMatrix;
-	worldStates.viewMatrix = &m_viewMatrix;
-	m_renderTarget.draw(m_world, worldStates);
-	// m_world.draw(m_shader, m_projectionMatrix, m_viewMatrix);
-
-	RenderStates states;
-	states.shader = &m_shader;
-	m_renderTarget.draw(m_crosshair, states);
-}
-
-void GameState::drawSelectedBlock() {
-	glDisable(GL_POLYGON_OFFSET_FILL);
-	glDisable(GL_CULL_FACE);
-
-	RenderStates states;
 	states.shader = &m_shader;
 	states.projectionMatrix = &m_projectionMatrix;
 	states.viewMatrix = &m_viewMatrix;
-	m_renderTarget.draw(m_cursorVBO, states);
+
+	target.draw(m_world, states);
+	target.draw(m_crosshair, states);
+
+	glDisable(GL_POLYGON_OFFSET_FILL);
+	glDisable(GL_CULL_FACE);
+
+	target.draw(m_cursorVBO, states);
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_POLYGON_OFFSET_FILL);
@@ -166,14 +154,14 @@ void GameState::drawSelectedBlock() {
 
 // Not really GLSL fract(), but the absolute distance to the nearest integer value
 // FIXME: fract also exists in glm, check if its the same thing
-float GameState::fract(float value) {
+float GameState::fract(float value) const {
 	float f = value - floorf(value);
 	if(f > 0.5) return 1 - f;
 	else return f;
 }
 
 // FIXME
-glm::vec4 GameState::findSelectedBlock(bool useDepthBuffer) {
+glm::vec4 GameState::findSelectedBlock(bool useDepthBuffer) const {
 	int mx, my, mz;
 	int face = -1;
 

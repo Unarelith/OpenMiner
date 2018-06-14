@@ -28,6 +28,7 @@ Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
 	m_surroundingChunks[3] = nullptr;
 }
 
+// FIXME: Find a better way to do that
 void Chunk::update() {
 	if (!m_isChanged || m_data.empty()) return;
 
@@ -230,17 +231,23 @@ void Chunk::draw(RenderTarget &target, RenderStates states) const {
 	states.shader->disableVertexAttribArray("texCoord");
 	states.shader->disableVertexAttribArray("normal");
 
-	// Shader::bind(states.shader);
-	// VertexBuffer::bind(&m_vbo);
-    //
-	// states.shader->enableVertexAttribArray("coord3d");
-    //
-	// for(u32 i = 0 ; i < m_verticesCount / 3 ; i += 4) {
-	// 	glDrawArrays(GL_LINE_LOOP, i, 4);
-	// }
-    //
-	// states.shader->disableVertexAttribArray("coord3d");
-    //
-	// VertexBuffer::bind(nullptr);
+	// drawOutlines(target, states);
+}
+
+// FIXME: Use the renderer to do that
+void Chunk::drawOutlines(RenderTarget &, RenderStates states) const {
+	Shader::bind(states.shader);
+	VertexBuffer::bind(&m_vbo);
+
+	states.shader->enableVertexAttribArray("coord3d");
+
+	for(u32 i = 0 ; i < m_verticesCount / 3 ; i += 4) {
+		glDrawArrays(GL_LINE_LOOP, i, 4);
+	}
+
+	states.shader->disableVertexAttribArray("coord3d");
+
+	VertexBuffer::bind(nullptr);
+	Shader::bind(nullptr);
 }
 

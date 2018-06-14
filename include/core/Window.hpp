@@ -17,10 +17,11 @@
 #include <memory>
 #include <string>
 
+#include "RenderTarget.hpp"
 #include "SDLHeaders.hpp"
 #include "Types.hpp"
 
-class Window {
+class Window : public RenderTarget {
 	public:
 		void open(const std::string &caption, u16 width, u16 height);
 

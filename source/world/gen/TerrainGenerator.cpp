@@ -37,6 +37,8 @@ void TerrainGenerator::generate(Chunk &chunk) const {
 	chunk.setGenerated(true);
 	chunk.setChanged(true);
 
+	// FIXME: I had to add that after moving chunk loading into update() since generation is in draw()
+	//        Check for potential drawbacks
 	if (chunk.getSurroundingChunk(0) && chunk.getSurroundingChunk(0)->isGenerated()) chunk.getSurroundingChunk(0)->setChanged(true);
 	if (chunk.getSurroundingChunk(1) && chunk.getSurroundingChunk(1)->isGenerated()) chunk.getSurroundingChunk(1)->setChanged(true);
 	if (chunk.getSurroundingChunk(2) && chunk.getSurroundingChunk(2)->isGenerated()) chunk.getSurroundingChunk(2)->setChanged(true);

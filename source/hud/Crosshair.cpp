@@ -28,6 +28,9 @@ Crosshair::Crosshair() {
 }
 
 void Crosshair::draw(RenderTarget &target, RenderStates states) const {
+	states.projectionMatrix = nullptr;
+	states.viewMatrix = nullptr;
+
 	glDisable(GL_DEPTH_TEST);
 
 	target.draw(m_vbo, states);

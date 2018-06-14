@@ -20,14 +20,14 @@ class Texture;
 class Shader;
 
 struct RenderStates {
-	glm::mat4 *projectionMatrix = nullptr;
-	glm::mat4 *viewMatrix = nullptr;
-	glm::mat4 *modelMatrix = nullptr;
+	const glm::mat4 *projectionMatrix = nullptr;
+	const glm::mat4 *viewMatrix = nullptr;
+	const glm::mat4 *modelMatrix = nullptr;
 
 	const Texture *texture = nullptr;
 	const Shader *shader = nullptr;
 
-	static const RenderStates Default;
+	static const RenderStates Default; // Defined in RenderTarget.cpp
 };
 
 #endif // RENDERSTATES_HPP_

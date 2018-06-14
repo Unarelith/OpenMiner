@@ -66,6 +66,7 @@ class Chunk : public NonCopyable, public IDrawable {
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
+		void drawOutlines(RenderTarget &target, RenderStates states) const;
 
 		s32 m_x;
 		s32 m_y;

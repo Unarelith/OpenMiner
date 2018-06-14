@@ -34,13 +34,12 @@ class GameState : public ApplicationState {
 
 		void update() override;
 
-		void draw() override;
-		void drawSelectedBlock();
-
-		float fract(float value);
-		glm::vec4 findSelectedBlock(bool useDepthBuffer);
+		float fract(float value) const;
+		glm::vec4 findSelectedBlock(bool useDepthBuffer) const;
 
 	private:
+		void draw(RenderTarget &target, RenderStates states) const override;
+
 		glm::mat4 m_projectionMatrix;
 		glm::mat4 m_viewMatrix;
 
@@ -55,8 +54,6 @@ class GameState : public ApplicationState {
 
 		VertexBuffer m_cursorVBO{GL_LINES, 0, 24};
 		Crosshair m_crosshair;
-
-		RenderTarget m_renderTarget;
 };
 
 #endif // GAMESTATE_HPP_

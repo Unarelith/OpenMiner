@@ -134,7 +134,7 @@ Chunk *World::getChunk(int cx, int cz) const {
 	return m_chunks.at(cx + cz * m_width).get();
 }
 
-Block *World::getBlock(int x, int y, int z) {
+Block *World::getBlock(int x, int y, int z) const {
 	s32 cx = (x + Chunk::width * (m_width / 2)) / Chunk::width;
 	s32 cy = (y + Chunk::height * (m_height / 2)) / Chunk::height;
 	s32 cz = (z + Chunk::depth * (m_depth / 2)) / Chunk::depth;
