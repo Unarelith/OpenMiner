@@ -11,9 +11,14 @@ TODO
    ◦ TODO: `Window` (depuis `ZeldaOOL`)
    ◦ TODO: `Debug` / `Exception` (+ gestion dans le `main()`)
    ◦ TODO: Input system (Mouse + Keyboard)
+• TODO: Catch SDLLoader exception
 • TODO: Passer un clang-tidy sur le code
 • TODO: Découper les gros pâtés en sous-classes
 • TODO: Séparer le code client du code serveur
+
+# FixMe
+
+• FIXME: Les blocs sont ciblables dans le vide depuis l’extérieur du monde
 
 # ToDoList
 

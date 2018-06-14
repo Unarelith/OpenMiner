@@ -25,7 +25,7 @@ class World {
 	public:
 		World();
 
-		void draw(Camera &camera, Shader &shader, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix);
+		void draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix);
 
 		Chunk *getChunk(int cx, int cz);
 
@@ -36,9 +36,9 @@ class World {
 		static const u16 renderDistance = 8;
 
 	private:
-		const s32 m_width = 100;
+		const s32 m_width = 20;
 		const s32 m_height = 1; // FIXME: Never used
-		const s32 m_depth = 100;
+		const s32 m_depth = 20;
 
 		Texture m_texture;
 

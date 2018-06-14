@@ -56,15 +56,15 @@ void GameState::onEvent(const SDL_Event &event) {
 			Mouse::resetToWindowCenter();
 		}
 	}
+	if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
+		m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
+	}
 }
 
 void GameState::update() {
 	m_viewMatrix = m_camera.processInputs();
 
 	m_selectedBlock = findSelectedBlock(false);
-	if (Keyboard::isKeyPressedOnce(Keyboard::X)) {
-		m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
-	}
 }
 
 void GameState::draw() {
@@ -74,7 +74,7 @@ void GameState::draw() {
 
 	// m_skybox.draw(m_shader);
 
-	m_world.draw(m_camera, m_shader, m_projectionMatrix, m_viewMatrix);
+	m_world.draw(m_shader, m_projectionMatrix, m_viewMatrix);
 
 	drawSelectedBlock();
 	drawCross();
