@@ -266,7 +266,7 @@ class AxisAlignedBB {
 		}
 };
 
-void Chunk::draw(Shader &shader) {
+void Chunk::draw(const Shader &shader) {
 	if(m_isChanged) update();
 
 	if(m_vertices.size() == 0) return;
@@ -348,5 +348,36 @@ u32 Chunk::getTexCoordID(u8 x, u8 y, u8 z, u8 i, u8 j, u8 coordinate) {
 bool Chunk::vertexExists(u8 x, u8 y, u8 z, u8 i, u8 j) {
 	return (m_verticesID.count(getCoordID(x, y, z, i, j, 0))
 	     || m_extendedFaces.count(getCoordID(x, y, z, i, j, 0)));
+}
+
+// FIXME: Remove old func when this one works
+void Chunk::draw(RenderTarget &target, RenderStates states) const {
+	// if(m_isChanged) update();
+    //
+	// if(m_vertices.size() == 0) return;
+    //
+	// VertexBuffer::bind(&m_vbo);
+    //
+	// shader->enableVertexAttribArray("coord3d");
+	// shader->enableVertexAttribArray("normal");
+	// shader->enableVertexAttribArray("texCoord");
+    //
+	// glVertexAttribPointer(shader>attrib("normal"),   3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(m_vertices.size() * sizeof(float)));
+	// glVertexAttribPointer(shader>attrib("texCoord"), 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)((m_vertices.size() + m_normals.size()) * sizeof(float)));
+    //
+	// Texture::bind(&m_texture);
+    //
+	// glDrawArrays(GL_QUADS, 0, m_vertices.size() / 3);
+    //
+	// Texture::bind(nullptr);
+    //
+	// // for(u32 i = 0 ; i < m_vertices.size() / 3 ; i += 4) {
+	// // 	glDrawArrays(GL_LINE_LOOP, i, 4);
+	// // }
+    //
+	// shader.disableVertexAttribArray("normal");
+	// shader.disableVertexAttribArray("coord3d");
+    //
+	// VertexBuffer::bind(nullptr);
 }
 

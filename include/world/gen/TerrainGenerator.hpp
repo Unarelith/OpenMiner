@@ -18,7 +18,7 @@ class Chunk;
 
 class TerrainGenerator {
 	public:
-		void generate(Chunk &chunk);
+		void generate(Chunk &chunk) const;
 
 		static float noise2d(float x, float y, int octaves, float persistence);
 		static float noise3d_abs(float x, float y, float z, int octaves, float persistence);

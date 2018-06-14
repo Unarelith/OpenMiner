@@ -19,18 +19,19 @@
 #include <vector>
 
 #include "Block.hpp"
+#include "IDrawable.hpp"
 #include "NonCopyable.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "VertexBuffer.hpp"
 
-class Chunk : public NonCopyable {
+class Chunk : public NonCopyable, public IDrawable {
 	public:
 		Chunk(s32 x, s32 y, s32 z, Texture &texture);
 
 		void update();
 
-		void draw(Shader &shader);
+		void draw(const Shader &shader);
 
 		Block *getBlock(s8 x, s8 y, s8 z);
 		void setBlock(s8 x, s8 y, s8 z, u32 id);
@@ -73,6 +74,8 @@ class Chunk : public NonCopyable {
 		void setInitialized(bool isInitialized) { m_isInitialized = isInitialized; }
 
 	private:
+		void draw(RenderTarget &target, RenderStates states) const override;
+
 		s32 m_x;
 		s32 m_y;
 		s32 m_z;

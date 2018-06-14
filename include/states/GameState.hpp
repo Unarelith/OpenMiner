@@ -28,6 +28,8 @@ class GameState : public ApplicationState {
 	public:
 		GameState();
 
+		void updateCursorBlockData();
+
 		void onEvent(const SDL_Event &event) override;
 
 		void update() override;

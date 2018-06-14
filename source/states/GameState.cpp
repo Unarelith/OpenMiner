@@ -43,6 +43,46 @@ GameState::GameState() : m_camera(Camera::getInstance()) {
 	Shader::bind(nullptr);
 }
 
+void GameState::updateCursorBlockData() {
+	float bx = m_selectedBlock.x;
+	float by = m_selectedBlock.y;
+	float bz = m_selectedBlock.z;
+
+	/* Render a box around the block we are pointing at */
+	float box[24][3] = {
+		{bx + 0, by + 0, bz + 0},//, 14},
+		{bx + 1, by + 0, bz + 0},//, 14},
+		{bx + 0, by + 1, bz + 0},//, 14},
+		{bx + 1, by + 1, bz + 0},//, 14},
+		{bx + 0, by + 0, bz + 1},//, 14},
+		{bx + 1, by + 0, bz + 1},//, 14},
+		{bx + 0, by + 1, bz + 1},//, 14},
+		{bx + 1, by + 1, bz + 1},//, 14},
+
+		{bx + 0, by + 0, bz + 0},//, 14},
+		{bx + 0, by + 1, bz + 0},//, 14},
+		{bx + 1, by + 0, bz + 0},//, 14},
+		{bx + 1, by + 1, bz + 0},//, 14},
+		{bx + 0, by + 0, bz + 1},//, 14},
+		{bx + 0, by + 1, bz + 1},//, 14},
+		{bx + 1, by + 0, bz + 1},//, 14},
+		{bx + 1, by + 1, bz + 1},//, 14},
+
+		{bx + 0, by + 0, bz + 0},//, 14},
+		{bx + 0, by + 0, bz + 1},//, 14},
+		{bx + 1, by + 0, bz + 0},//, 14},
+		{bx + 1, by + 0, bz + 1},//, 14},
+		{bx + 0, by + 1, bz + 0},//, 14},
+		{bx + 0, by + 1, bz + 1},//, 14},
+		{bx + 1, by + 1, bz + 0},//, 14},
+		{bx + 1, by + 1, bz + 1},//, 14},
+	};
+
+	VertexBuffer::bind(&m_cursorVBO);
+	m_cursorVBO.setData(sizeof(box), box, GL_DYNAMIC_DRAW);
+	VertexBuffer::bind(nullptr);
+}
+
 void GameState::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_MOUSEMOTION) {
 		if(SCREEN_WIDTH / 2 != event.motion.x || SCREEN_HEIGHT / 2 != event.motion.y) {
@@ -81,77 +121,42 @@ void GameState::update() {
 	m_viewMatrix = m_camera.processInputs();
 
 	m_selectedBlock = findSelectedBlock(false);
+	updateCursorBlockData();
 }
 
 void GameState::draw() {
-	Shader::bind(&m_shader);
-
-	m_shader.setUniform("u_viewMatrix", m_viewMatrix);
-	m_shader.setUniform("u_projectionMatrix", m_projectionMatrix);
+	// Shader::bind(&m_shader);
+    //
+	// m_shader.setUniform("u_viewMatrix", m_viewMatrix);
+	// m_shader.setUniform("u_projectionMatrix", m_projectionMatrix);
 
 	// m_skybox.draw(m_shader);
 
-	m_world.draw(m_shader, m_projectionMatrix, m_viewMatrix);
+	// Shader::bind(nullptr);
 
 	drawSelectedBlock();
+
+	RenderStates worldStates;
+	worldStates.shader = &m_shader;
+	worldStates.projectionMatrix = &m_projectionMatrix;
+	worldStates.viewMatrix = &m_viewMatrix;
+	m_renderTarget.draw(m_world, worldStates);
+	// m_world.draw(m_shader, m_projectionMatrix, m_viewMatrix);
 
 	RenderStates states;
 	states.shader = &m_shader;
 	m_renderTarget.draw(m_crosshair, states);
-
-	Shader::bind(nullptr);
 }
 
 void GameState::drawSelectedBlock() {
-	float bx = m_selectedBlock.x;
-	float by = m_selectedBlock.y;
-	float bz = m_selectedBlock.z;
-
-	/* Render a box around the block we are pointing at */
-	float box[24][3] = {
-		{bx + 0, by + 0, bz + 0},//, 14},
-		{bx + 1, by + 0, bz + 0},//, 14},
-		{bx + 0, by + 1, bz + 0},//, 14},
-		{bx + 1, by + 1, bz + 0},//, 14},
-		{bx + 0, by + 0, bz + 1},//, 14},
-		{bx + 1, by + 0, bz + 1},//, 14},
-		{bx + 0, by + 1, bz + 1},//, 14},
-		{bx + 1, by + 1, bz + 1},//, 14},
-
-		{bx + 0, by + 0, bz + 0},//, 14},
-		{bx + 0, by + 1, bz + 0},//, 14},
-		{bx + 1, by + 0, bz + 0},//, 14},
-		{bx + 1, by + 1, bz + 0},//, 14},
-		{bx + 0, by + 0, bz + 1},//, 14},
-		{bx + 0, by + 1, bz + 1},//, 14},
-		{bx + 1, by + 0, bz + 1},//, 14},
-		{bx + 1, by + 1, bz + 1},//, 14},
-
-		{bx + 0, by + 0, bz + 0},//, 14},
-		{bx + 0, by + 0, bz + 1},//, 14},
-		{bx + 1, by + 0, bz + 0},//, 14},
-		{bx + 1, by + 0, bz + 1},//, 14},
-		{bx + 0, by + 1, bz + 0},//, 14},
-		{bx + 0, by + 1, bz + 1},//, 14},
-		{bx + 1, by + 1, bz + 0},//, 14},
-		{bx + 1, by + 1, bz + 1},//, 14},
-	};
-
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glDisable(GL_CULL_FACE);
 
-	VertexBuffer::bind(&m_cursorVBO);
-
-	m_cursorVBO.setData(sizeof(box), box, GL_DYNAMIC_DRAW);
-
-	m_shader.setUniform("u_modelMatrix", glm::mat4(1));
-
-	m_shader.enableVertexAttribArray("coord3d");
-	glVertexAttribPointer(m_shader.attrib("coord3d"), 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(GL_LINES, 0, 24);
-	m_shader.disableVertexAttribArray("coord3d");
-
-	VertexBuffer::bind(nullptr);
+	RenderStates states;
+	states.shader = &m_shader;
+	states.projectionMatrix = &m_projectionMatrix;
+	states.viewMatrix = &m_viewMatrix;
+	m_renderTarget.draw(m_cursorVBO, states);
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_POLYGON_OFFSET_FILL);

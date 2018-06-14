@@ -16,7 +16,7 @@
 #include "Chunk.hpp"
 #include "TerrainGenerator.hpp"
 
-void TerrainGenerator::generate(Chunk &chunk) {
+void TerrainGenerator::generate(Chunk &chunk) const {
 	if(chunk.isGenerated()) return;
 
 	for(u8 z = 0 ; z < Chunk::depth ; z++) {

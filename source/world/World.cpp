@@ -41,13 +41,15 @@ World::World() {
 	}
 }
 
-void World::draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix) {
+void World::draw(RenderTarget &target, RenderStates states) const {
 	float ud = 1000.0;
 	int ux = 0;
 	// int uy = 0;
 	int uz = 0;
 
-	shader.setUniform("u_renderDistance", renderDistance * Chunk::width);
+	Shader::bind(states.shader);
+	states.shader->setUniform("u_renderDistance", renderDistance * Chunk::width);
+	Shader::bind(nullptr);
 
 	for(auto &it : m_chunks) {
 		glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f),
@@ -55,17 +57,19 @@ void World::draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::m
 		                                                 it->y() * Chunk::height,
 		                                                 it->z() * Chunk::depth));
 
+		states.modelMatrix = &modelMatrix;
+
 		// Is the chunk close enough?
-		glm::vec4 center = viewMatrix * modelMatrix * glm::vec4(Chunk::width  / 2,
-		                                                        Chunk::height / 2,
-		                                                        Chunk::depth  / 2, 1);
+		glm::vec4 center = *states.viewMatrix * *states.modelMatrix * glm::vec4(Chunk::width  / 2,
+		                                                                        Chunk::height / 2,
+		                                                                        Chunk::depth  / 2, 1);
 
 		if(glm::length(center) > (renderDistance + 1) * Chunk::width) {
 			continue;
 		}
 
 		// Is this chunk on the screen?
-		center = projectionMatrix * center;
+		center = *states.projectionMatrix * center;
 
 		float d = glm::length(center);
 		center.x /= center.w;
@@ -76,7 +80,7 @@ void World::draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::m
 			continue;
 		}
 
-		// It it is outside the screen, don't bother drawing it
+		// If it is outside the screen, don't bother drawing it
 		if(fabsf(center.x) > 1 + fabsf(Chunk::height * 2 / center.w)
 		|| fabsf(center.y) > 1 + fabsf(Chunk::height * 2 / center.w)) {
 			continue;
@@ -95,9 +99,10 @@ void World::draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::m
 			continue;
 		}
 
-		shader.setUniform("u_modelMatrix", modelMatrix);
-
-		it->draw(shader);
+		Shader::bind(states.shader);
+		states.shader->setUniform("u_modelMatrix", modelMatrix);
+		it->draw(*states.shader);
+		Shader::bind(nullptr);
 	}
 
 	if(ud < 1000) {
@@ -112,7 +117,7 @@ void World::draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::m
 	}
 }
 
-Chunk *World::getChunk(int cx, int cz) {
+Chunk *World::getChunk(int cx, int cz) const {
 	cx += m_width / 2;
 	cz += m_depth / 2;
 

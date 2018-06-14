@@ -17,17 +17,16 @@
 #include <memory>
 
 #include "Chunk.hpp"
+#include "IDrawable.hpp"
 #include "TerrainGenerator.hpp"
 
 class Camera;
 
-class World {
+class World : public IDrawable {
 	public:
 		World();
 
-		void draw(Shader &shader, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix);
-
-		Chunk *getChunk(int cx, int cz);
+		Chunk *getChunk(int cx, int cz) const;
 
 		Block *getBlock(int x, int y, int z);
 		void setBlock(int x, int y, int z, u32 id);
@@ -36,6 +35,8 @@ class World {
 		static const u16 renderDistance = 8;
 
 	private:
+		void draw(RenderTarget &target, RenderStates states) const override;
+
 		const s32 m_width = 20;
 		const s32 m_height = 1; // FIXME: Never used
 		const s32 m_depth = 20;
