@@ -6,8 +6,8 @@ TODO
 • TODO: Nettoyer les vieux headers
 • TODO: `Types.hpp` → `IntTypes.hpp`
 • TODO: Remplacer les anciennes classes par leur upgrade:
-   ◦ TODO: `ApplicationState` / `ApplicationStateStack`
-   ◦ TODO: `GameClock`
+   ◦ DONE: `ApplicationState` / `ApplicationStateStack`
+   ◦ DONE: `GameClock`
    ◦ TODO: `Window` (depuis `ZeldaOOL`)
    ◦ TODO: `Debug` / `Exception` (+ gestion dans le `main()`)
    ◦ TODO: Input system (Mouse + Keyboard)

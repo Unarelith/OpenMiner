@@ -25,9 +25,11 @@ class GameState : public ApplicationState {
 	public:
 		GameState();
 
-		void update();
+		void onEvent(const SDL_Event &event) override;
 
-		void draw();
+		void update() override;
+
+		void draw() override;
 		void drawSelectedBlock();
 		void drawCross();
 

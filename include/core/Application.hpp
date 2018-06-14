@@ -14,28 +14,17 @@
 #ifndef APPLICATION_HPP_
 #define APPLICATION_HPP_
 
-#include "ApplicationStateStack.hpp"
-#include "GameClock.hpp"
+#include "CoreApplication.hpp"
 #include "Renderer.hpp"
 
-class Application {
+class Application : public CoreApplication {
 	public:
-		Application();
+		Application(int argc, char **argv) : CoreApplication(argc, argv) {}
 
-		void handleEvents();
-
-		void run();
-
-		Window &window() { return m_window; }
+		void init() override;
 
 	private:
-		ApplicationStateStack &m_stateStack;
-
-		GameClock m_clock;
-
 		Renderer m_renderer;
-
-		Window m_window;
 };
 
 #endif // APPLICATION_HPP_

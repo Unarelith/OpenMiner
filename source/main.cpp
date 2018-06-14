@@ -21,28 +21,12 @@
 #include "Exception.hpp"
 #include "SDLLoader.hpp"
 
-int main(int, char *[]) {
+int main(int argc, char **argv) {
 	SDLLoader sdlLoader;
+	sdlLoader.load();
 
-	try {
-		sdlLoader.load();
-
-		Application app;
-
-		app.run();
-	}
-	catch(const Exception &e) {
-		std::cerr << "Fatal error " << e.what() << std::endl;
-		return 1;
-	}
-	// catch(const std::exception &e) {
-	// 	std::cerr << "Exception caught: " << e.what() << std::endl;
-	// 	return 1;
-	// }
-	// catch(...) {
-	// 	std::cerr << "Fatal error: Unknown error." << std::endl;
-	// 	return 1;
-	// }
+	Application app(argc, argv);
+	app.run();
 
 	return 0;
 }

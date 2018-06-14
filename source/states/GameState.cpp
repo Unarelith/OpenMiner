@@ -47,6 +47,17 @@ GameState::GameState() : m_camera(Camera::getInstance()) {
 	glGenBuffers(1, &m_cursorVBO);
 }
 
+void GameState::onEvent(const SDL_Event &event) {
+	if (event.type == SDL_MOUSEMOTION) {
+		if(SCREEN_WIDTH / 2 != event.motion.x || SCREEN_HEIGHT / 2 != event.motion.y) {
+			m_camera.turnH(event.motion.xrel * 0.06);
+			m_camera.turnV(-event.motion.yrel * 0.06);
+
+			Mouse::resetToWindowCenter();
+		}
+	}
+}
+
 void GameState::update() {
 	m_viewMatrix = m_camera.processInputs();
 

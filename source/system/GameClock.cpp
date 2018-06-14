@@ -5,13 +5,9 @@
  *
  *    Description:
  *
- *        Version:  1.0
  *        Created:  14/12/2014 13:42:26
- *       Revision:  none
- *       Compiler:  gcc
  *
  *         Author:  Quentin BAZIN, <quent42340@gmail.com>
- *        Company:
  *
  * =====================================================================================
  */
@@ -19,19 +15,6 @@
 #include "SDLHeaders.hpp"
 
 u32 GameClock::ticks = 0;
-
-GameClock::GameClock() {
-	m_lastFrameDate = 0;
-	m_lag = 0;
-	m_timeDropped = 0;
-	m_now = 0;
-	m_lastFrameDuration = 0;
-	m_timestep = 6;
-	m_numUpdates = 0;
-}
-
-GameClock::~GameClock() {
-}
 
 u32 GameClock::getTicks(bool realTime) {
 	if(realTime) {
@@ -42,10 +25,11 @@ u32 GameClock::getTicks(bool realTime) {
 }
 
 void GameClock::measureLastFrameDuration() {
-	m_now = getTicks(true) - m_timeDropped;
-	m_lastFrameDuration = m_now - m_lastFrameDate;
-	m_lastFrameDate = m_now;
-	m_lag += m_lastFrameDuration;
+	u32 now = getTicks(true) - m_timeDropped;
+	u32 lastFrameDuration = now - m_lastFrameDate;
+
+	m_lastFrameDate = now;
+	m_lag += lastFrameDuration;
 
 	if(m_lag >= 200) {
 		m_timeDropped += m_lag - m_timestep;
@@ -56,6 +40,7 @@ void GameClock::measureLastFrameDuration() {
 
 void GameClock::updateGame(std::function<void(void)> updateFunc) {
 	m_numUpdates = 0;
+
 	while(m_lag >= m_timestep && m_numUpdates < 10) {
 		ticks += m_timestep;
 
@@ -71,13 +56,16 @@ void GameClock::drawGame(std::function<void(void)> drawFunc) {
 		drawFunc();
 	}
 
-	m_lastFrameDuration = getTicks(true) - m_timeDropped - m_lastFrameDate;
+	waitForNextFrame();
+}
 
-	if(m_lastFrameDuration < m_timestep) {
-		SDL_Delay(m_timestep - m_lastFrameDuration);
+void GameClock::waitForNextFrame() {
+	u32 lastFrameDuration = getTicks(true) - m_timeDropped - m_lastFrameDate;
+
+	if(lastFrameDuration < m_timestep) {
+		SDL_Delay(m_timestep - lastFrameDuration);
 	}
 
-	m_now = 0;
-	m_lastFrameDuration = 0;
+	measureLastFrameDuration();
 }
 

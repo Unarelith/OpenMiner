@@ -21,17 +21,36 @@
 
 class ApplicationStateStack {
 	public:
-		ApplicationState &top() { return *m_stack.top().get(); }
-		void push(ApplicationState *state) { m_stack.push(std::unique_ptr<ApplicationState>(state)); }
-		void pop() { m_stack.pop(); }
+		template<typename T, typename... Args>
+		T &push(Args &&...args) {
+			m_states.emplace(std::make_shared<T>(std::forward<Args>(args)...));
+			m_states.top()->setStateStack(this);
+			return static_cast<T&>(top());
+		}
+
+		void pop();
+
+		void clearDeletedStates();
+
+		ApplicationState &top() const { return *m_states.top().get(); }
+
+		bool empty() const { return m_states.empty(); }
+
+		std::size_t size() const { return m_states.size(); }
 
 		static ApplicationStateStack &getInstance() {
-			static ApplicationStateStack instance;
-			return instance;
+			return *s_instance;
+		}
+
+		static void setInstance(ApplicationStateStack &instance) {
+			s_instance = &instance;
 		}
 
 	private:
-		std::stack<std::unique_ptr<ApplicationState>> m_stack;
+		static ApplicationStateStack *s_instance;
+
+		std::stack<std::shared_ptr<ApplicationState>> m_states;
+		std::stack<std::shared_ptr<ApplicationState>> m_trash;
 };
 
 #endif // APPLICATIONSTATESTACK_HPP_
