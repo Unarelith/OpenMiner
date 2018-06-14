@@ -89,13 +89,14 @@ void GameState::draw() {
 	Shader::bind(&m_shader);
 
 	m_shader.setUniform("u_viewMatrix", m_viewMatrix);
+	m_shader.setUniform("u_projectionMatrix", m_projectionMatrix);
 
 	// m_skybox.draw(m_shader);
 
 	m_world.draw(m_shader, m_projectionMatrix, m_viewMatrix);
 
 	drawSelectedBlock();
-	drawCross();
+	m_crosshair.draw(m_shader);
 
 	Shader::bind(nullptr);
 }
@@ -149,30 +150,6 @@ void GameState::drawSelectedBlock() {
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_POLYGON_OFFSET_FILL);
-}
-
-void GameState::drawCross() {
-	/* Draw a cross in the center of the screen */
-	float cross[4][3] = {
-		{-0.04, 0, 0},//, 13},
-		{+0.04, 0, 0},//, 13},
-		{0, -0.05, 0},//, 13},
-		{0, +0.05, 0},//, 13}
-	};
-
-	glDisable(GL_DEPTH_TEST);
-	glBindBuffer(GL_ARRAY_BUFFER, m_cursorVBO);
-	m_shader.setUniform("u_modelMatrix", glm::mat4(1));
-	m_shader.setUniform("u_viewMatrix", glm::mat4(1));
-	m_shader.setUniform("u_projectionMatrix", glm::mat4(1));
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cross), cross, GL_DYNAMIC_DRAW);
-	m_shader.enableVertexAttribArray("coord3d");
-	glVertexAttribPointer(m_shader.attrib("coord3d"), 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(GL_LINES, 0, 4);
-	m_shader.disableVertexAttribArray("coord3d");
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glEnable(GL_DEPTH_TEST);
-	m_shader.setUniform("u_projectionMatrix", m_projectionMatrix);
 }
 
 // Not really GLSL fract(), but the absolute distance to the nearest integer value

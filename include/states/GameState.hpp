@@ -18,6 +18,7 @@
 
 #include "ApplicationState.hpp"
 #include "Camera.hpp"
+#include "Crosshair.hpp"
 #include "Skybox.hpp"
 #include "World.hpp"
 
@@ -31,7 +32,6 @@ class GameState : public ApplicationState {
 
 		void draw() override;
 		void drawSelectedBlock();
-		void drawCross();
 
 		float fract(float value);
 		glm::vec4 findSelectedBlock(bool useDepthBuffer);
@@ -50,6 +50,8 @@ class GameState : public ApplicationState {
 		glm::vec4 m_selectedBlock{99999, 99999, 99999, -1};
 
 		GLuint m_cursorVBO;
+
+		Crosshair m_crosshair;
 };
 
 #endif // GAMESTATE_HPP_
