@@ -56,8 +56,26 @@ void GameState::onEvent(const SDL_Event &event) {
 			m_camera.update();
 		}
 	}
-	if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
-		m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
+	if (event.type == SDL_MOUSEBUTTONDOWN) {
+		if (event.button.button == SDL_BUTTON_LEFT) {
+			m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
+		}
+		else if (event.button.button == SDL_BUTTON_RIGHT) {
+			int face = m_selectedBlock.w;
+
+			int x = m_selectedBlock.x;
+			int y = m_selectedBlock.y;
+			int z = m_selectedBlock.z;
+
+			if(face == 0) x++;
+			if(face == 3) x--;
+			if(face == 1) y++;
+			if(face == 4) y--;
+			if(face == 2) z++;
+			if(face == 5) z--;
+
+			m_world.setBlock(x, y, z, 1);
+		}
 	}
 }
 

@@ -16,6 +16,11 @@ TODO
 • TODO: Découper les gros pâtés en sous-classes
 • TODO: Séparer le code client du code serveur
 
+# Finalisation par rapport à TestCraft
+
+• TODO: Changer la génération du terrain et ajouter eau, minerais et arbres
+• TODO: Permettre à l’utilisateur de choisir le bloc qu’il pose
+
 # FixMe
 
 • FIXME: Les blocs sont ciblables dans le vide depuis l’extérieur du monde
@@ -24,11 +29,11 @@ TODO
 
 ## Joueur
 
+• DONE: Ciblage de bloc
+   ◦ DONE: Suppression de bloc
+   ◦ DONE: Ajout de bloc
 • TODO: Collisions + Gravité
    ◦ TODO: Système d’entités (réutiliser l’ECS mais en multi-thread)
-• WIP: Ciblage de bloc
-   ◦ DONE: Suppression de bloc
-   ◦ TODO: Ajout de bloc
 
 ## Items
 
