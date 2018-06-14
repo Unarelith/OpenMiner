@@ -113,7 +113,7 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 	                   m_camera.y(),
 	                   m_camera.z()};
 
-	// FIXME: Targeting air blocks
+	// FIXME: Add max distance
 	if(useDepthBuffer) {
 		// At which voxel are we looking? First, find out coords of the center pixel
 		float depth;
@@ -170,7 +170,6 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 		}
 
 		// Find out which face of the block we are looking at
-
 		int px = floorf(prevPos.x);
 		int py = floorf(prevPos.y);
 		int pz = floorf(prevPos.z);
@@ -181,12 +180,13 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 		else if(py < my) face = 4;
 		else if(pz > mz) face = 2;
 		else if(pz < mz) face = 5;
+	}
 
-		// If we are looking at air, move the cursor out of sight
-		Block *block = m_world.getBlock(mx, my, mz);
-		if(!block || !block->id()) {
-			mx = my = mz = 99999;
-		}
+	// If we are looking at air, move the cursor out of sight
+	Block *block = m_world.getBlock(mx, my, mz);
+	if(!block || !block->id()) {
+		// FIXME: Find another way to do that, maybe using `face = -1`?
+		mx = my = mz = 99999;
 	}
 
 	return {mx, my, mz, face};

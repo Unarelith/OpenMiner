@@ -5,15 +5,18 @@ TODO
 • TODO: Vérifier les utilisations inutiles de pointeurs
 • DONE: Nettoyer les vieux headers
 • TODO: `Types.hpp` → `IntTypes.hpp`
+   → TODO: Vérifier que les types sont bien corrects
 • TODO: Remplacer les anciennes classes par leur upgrade:
    ◦ DONE: `ApplicationState` / `ApplicationStateStack`
    ◦ DONE: `GameClock`
    ◦ TODO: `Window` (depuis `ZeldaOOL`)
-   ◦ TODO: `Debug` / `Exception` (+ gestion dans le `main()`)
+   ◦ TODO: `Debug` / `Exception`
    ◦ TODO: Input system (Mouse + Keyboard)
 • TODO: Catch SDLLoader exception
 • TODO: Passer un clang-tidy sur le code
 • TODO: Découper les gros pâtés en sous-classes
+• TODO: Passer à la SFML
+• TODO: Séparer l’engine et le gameplay
 • TODO: Séparer le code client du code serveur
 
 # Finalisation par rapport à TestCraft
@@ -72,5 +75,5 @@ TODO
 # Idées diverses
 
 • TODO: Ajouter un “builder mode” qui débloque la souris de la vue et permet de sélectionner
-        un bloc juste mettant la souris dessus
+        un bloc juste en mettant la souris dessus
 
