@@ -1,20 +1,13 @@
 #------------------------------------------------------------------------------
 # CMakeLists.txt
 #------------------------------------------------------------------------------
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
-project(KubKraft)
+project(KubKraft VERSION 0.0.1 LANGUAGES CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
-#------------------------------------------------------------------------------
-# Compiler flags
-#------------------------------------------------------------------------------
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++17")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wfatal-errors")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-variadic-macros")
 
 #------------------------------------------------------------------------------
 # Get source files
@@ -28,9 +21,15 @@ foreach(HEADER_FILE ${HEADER_FILES})
 endforeach(HEADER_FILE)
 
 #------------------------------------------------------------------------------
-# Add executables
+# Create executable target
 #------------------------------------------------------------------------------
 add_executable(${CMAKE_PROJECT_NAME} ${SOURCE_FILES})
+
+#------------------------------------------------------------------------------
+# Compiler flags
+#------------------------------------------------------------------------------
+target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -g -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
+target_compile_features(${CMAKE_PROJECT_NAME} PRIVATE cxx_std_17)
 
 #------------------------------------------------------------------------------
 # Packages
