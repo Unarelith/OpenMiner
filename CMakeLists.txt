@@ -28,7 +28,7 @@ add_executable(${CMAKE_PROJECT_NAME} ${SOURCE_FILES})
 #------------------------------------------------------------------------------
 # Compiler flags
 #------------------------------------------------------------------------------
-target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -g -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
+target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -O3 -ffast-math -g -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
 target_compile_features(${CMAKE_PROJECT_NAME} PRIVATE cxx_std_17)
 
 #------------------------------------------------------------------------------

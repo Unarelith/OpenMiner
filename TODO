@@ -3,7 +3,7 @@ TODO
 # Nettoyage
 
 • TODO: Vérifier les utilisations inutiles de pointeurs
-• TODO: Nettoyer les vieux headers
+• DONE: Nettoyer les vieux headers
 • TODO: `Types.hpp` → `IntTypes.hpp`
 • TODO: Remplacer les anciennes classes par leur upgrade:
    ◦ DONE: `ApplicationState` / `ApplicationStateStack`

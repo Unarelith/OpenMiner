@@ -7,7 +7,7 @@
  *
  *        Created:  15/12/2014 16:30:20
  *
- *         Author:  Quentin BAZIN, <quent42340@gmail.com>
+ *         Author:  Quentin Bazin, <quent42340@gmail.com>
  *
  * =====================================================================================
  */
