@@ -17,6 +17,7 @@
 #include <glm/glm.hpp>
 
 #include "ApplicationState.hpp"
+#include "BlockCursor.hpp"
 #include "Camera.hpp"
 #include "Crosshair.hpp"
 #include "Skybox.hpp"
@@ -28,7 +29,7 @@ class GameState : public ApplicationState {
 	public:
 		GameState();
 
-		void updateCursorBlockData();
+		void initShaders();
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -43,7 +44,7 @@ class GameState : public ApplicationState {
 		glm::mat4 m_projectionMatrix;
 		glm::mat4 m_viewMatrix;
 
-		Camera &m_camera;
+		Camera &m_camera{Camera::getInstance()};
 
 		Shader m_shader;
 
@@ -51,8 +52,7 @@ class GameState : public ApplicationState {
 		World m_world;
 
 		glm::vec4 m_selectedBlock{99999, 99999, 99999, -1};
-
-		VertexBuffer m_cursorVBO{GL_LINES, 0, 24};
+		BlockCursor m_blockCursor{m_camera, m_world, m_viewMatrix, m_projectionMatrix};
 		Crosshair m_crosshair;
 };
 
