@@ -31,16 +31,14 @@ class Chunk : public NonCopyable, public IDrawable {
 
 		void update();
 
-		Block *getBlock(s8 x, s8 y, s8 z) const;
-		void setBlock(s8 x, s8 y, s8 z, u32 id);
-
-		void addBlock(const glm::vec3 &pos, u32 id);
+		Block *getBlock(int x, int y, int z) const;
+		void setBlock(int x, int y, int z, u32 id);
 
 		s32 x() const { return m_x; }
 		s32 y() const { return m_y; }
 		s32 z() const { return m_z; }
 
-		const std::vector<std::unique_ptr<Block>> &data() const { return m_data; }
+		// const std::vector<std::unique_ptr<Block>> &data() const { return m_data; }
 
 		Chunk *left()  const { return m_surroundingChunks[0]; }
 		Chunk *right() const { return m_surroundingChunks[1]; }
@@ -74,7 +72,9 @@ class Chunk : public NonCopyable, public IDrawable {
 
 		Texture m_texture;
 
-		std::vector<std::unique_ptr<Block>> m_data;
+		// std::vector<std::unique_ptr<Block>> m_data;
+		using DataArray = std::array<std::array<std::array<std::unique_ptr<Block>, Chunk::depth>, Chunk::height>, Chunk::width>;
+		DataArray m_data;
 
 		std::size_t m_verticesCount;
 		std::size_t m_normalsCount;

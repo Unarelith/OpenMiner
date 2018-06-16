@@ -16,9 +16,14 @@
 
 class Chunk;
 
+#define SEALEVEL 4
+
 class TerrainGenerator {
 	public:
 		void generate(Chunk &chunk) const;
+
+		void basicGeneration(Chunk &chunk) const;
+		void testCraftGeneration(Chunk &chunk) const;
 
 		static float noise2d(float x, float y, int octaves, float persistence);
 		static float noise3d_abs(float x, float y, float z, int octaves, float persistence);

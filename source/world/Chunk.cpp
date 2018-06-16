@@ -82,7 +82,7 @@ void Chunk::update() {
 			for(u8 x = 0 ; x < width ; x++) {
 				Block *block = getBlock(x, y, z);
 
-				if(!block->id()) {
+				if(!block || !block->id()) {
 					continue;
 				}
 
@@ -112,16 +112,17 @@ void Chunk::update() {
 					if (m_surroundingChunks[2]) surroundingBlocks[2] = m_surroundingChunks[2]->getBlock(x, y, depth - 1);
 					if (m_surroundingChunks[3]) surroundingBlocks[3] = m_surroundingChunks[3]->getBlock(x, y, 0);
 
-					if((x > 0           && getBlock(x - 1, y, z)->id() && i == 0)
-					|| (x < width - 1   && getBlock(x + 1, y, z)->id() && i == 1)
-					|| (y > 0           && getBlock(x, y - 1, z)->id() && i == 2)
-					|| (y < height - 1  && getBlock(x, y + 1, z)->id() && i == 3)
-					|| (z > 0           && getBlock(x, y, z - 1)->id() && i == 5)
-					|| (z < depth - 1   && getBlock(x, y, z + 1)->id() && i == 4)
-					|| (x == 0          && surroundingBlocks[0] && surroundingBlocks[0]->id()  && i == 0)
-					|| (x == width - 1  && surroundingBlocks[1] && surroundingBlocks[1]->id()          && i == 1)
-					|| (z == 0          && surroundingBlocks[2] && surroundingBlocks[2]->id()  && i == 5)
-					|| (z == depth - 1  && surroundingBlocks[3] && surroundingBlocks[3]->id()          && i == 4)
+					// FIXME: Too many getBlock() calls
+					if((x > 0          && getBlock(x - 1, y, z) && getBlock(x - 1, y, z)->id() && i == 0)
+					|| (x < width - 1  && getBlock(x + 1, y, z) && getBlock(x + 1, y, z)->id() && i == 1)
+					|| (y > 0          && getBlock(x, y - 1, z) && getBlock(x, y - 1, z)->id() && i == 2)
+					|| (y < height - 1 && getBlock(x, y + 1, z) && getBlock(x, y + 1, z)->id() && i == 3)
+					|| (z > 0          && getBlock(x, y, z - 1) && getBlock(x, y, z - 1)->id() && i == 5)
+					|| (z < depth - 1  && getBlock(x, y, z + 1) && getBlock(x, y, z + 1)->id() && i == 4)
+					|| (x == 0         && surroundingBlocks[0]  && surroundingBlocks[0]->id()  && i == 0)
+					|| (x == width - 1 && surroundingBlocks[1]  && surroundingBlocks[1]->id()  && i == 1)
+					|| (z == 0         && surroundingBlocks[2]  && surroundingBlocks[2]->id()  && i == 5)
+					|| (z == depth - 1 && surroundingBlocks[3]  && surroundingBlocks[3]->id()  && i == 4)
 					) {
 						continue;
 					}
@@ -181,26 +182,30 @@ void Chunk::update() {
 	m_normalsCount = normals.size();
 }
 
-void Chunk::addBlock(const glm::vec3 &pos, u32 id) {
-	m_data.push_back(std::unique_ptr<Block>(new Block(pos, id)));
+Block *Chunk::getBlock(int x, int y, int z) const {
+	if(x < 0)              return m_surroundingChunks[0] ? m_surroundingChunks[0]->getBlock(x + Chunk::width, y, z) : 0;
+	if(x >= Chunk::width)  return m_surroundingChunks[1] ? m_surroundingChunks[1]->getBlock(x - Chunk::width, y, z) : 0;
+	// if(y < 0)              return m_surroundingChunks[2] ? m_surroundingChunks[2]->getBlock(x, y + Chunk::height, z) : 0;
+	// if(y >= Chunk::height) return m_surroundingChunks[3] ? m_surroundingChunks[3]->getBlock(x, y - Chunk::height, z) : 0;
+	if(z < 0)              return m_surroundingChunks[2] ? m_surroundingChunks[2]->getBlock(x, y, z + Chunk::depth) : 0;
+	if(z >= Chunk::depth)  return m_surroundingChunks[3] ? m_surroundingChunks[3]->getBlock(x, y, z - Chunk::depth) : 0;
+	return m_data[x][y][z].get();
 }
 
-Block *Chunk::getBlock(s8 x, s8 y, s8 z) const {
-	u16 i = y + x * height + z * height * width;
-	if(i < m_data.size()) {
-		return m_data[i].get();
-	} else {
-		return nullptr;
-	}
-}
+void Chunk::setBlock(int x, int y, int z, u32 type) {
+	if(x < 0)              { if(m_surroundingChunks[0]) m_surroundingChunks[0]->setBlock(x + Chunk::width, y, z, type); return; }
+	if(x >= Chunk::width)  { if(m_surroundingChunks[1]) m_surroundingChunks[1]->setBlock(x - Chunk::width, y, z, type); return; }
+	// if(y < 0)              { if(m_below) m_below->setBlock(x, y + Chunk::height, z, type); return; }
+	// if(y >= Chunk::height) { if(m_above) m_above->setBlock(x, y - Chunk::height, z, type); return; }
+	if(z < 0)              { if(m_surroundingChunks[2]) m_surroundingChunks[2]->setBlock(x, y, z + Chunk::depth, type); return; }
+	if(z >= Chunk::depth)  { if(m_surroundingChunks[3]) m_surroundingChunks[3]->setBlock(x, y, z - Chunk::depth, type); return; }
 
-void Chunk::setBlock(s8 x, s8 y, s8 z, u32 id) {
 	glm::vec3 pos;
 	pos.x = x + m_x * width;
 	pos.y = y + m_y * height;
 	pos.z = z + m_z * depth;
 
-	m_data.at(y + x * height + z * height * width).reset(new Block(pos, id));
+	m_data[x][y][z].reset(new Block(pos, type));
 
 	m_isChanged = true;
 
