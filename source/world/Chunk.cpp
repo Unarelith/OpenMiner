@@ -40,10 +40,10 @@ void Chunk::update() {
 		0, 0, 0,
 		0, 0, 1,
 
-		1, 0, 1,
-		1, 0, 0,
 		1, 1, 0,
 		1, 1, 1,
+		1, 0, 1,
+		1, 0, 0,
 
 		0, 0, 0,
 		1, 0, 0,
@@ -55,10 +55,10 @@ void Chunk::update() {
 		1, 1, 0,
 		0, 1, 0,
 
-		0, 0, 1,
-		1, 0, 1,
 		1, 1, 1,
 		0, 1, 1,
+		0, 0, 1,
+		1, 0, 1,
 
 		0, 1, 0,
 		1, 1, 0,
@@ -86,21 +86,28 @@ void Chunk::update() {
 					continue;
 				}
 
-				const glm::vec4 &blockTexCoords = block->getTexCoords();
+                //
+				float cubeTexCoords[2 * 4 * 6];
+				// 	blockTexCoords.x, blockTexCoords.w,
+				// 	blockTexCoords.z, blockTexCoords.w,
+				// 	blockTexCoords.z, blockTexCoords.y,
+				// 	blockTexCoords.x, blockTexCoords.y
+				// 		//	0.0f, 1.0f,
+				// 		//	1.0f, 1.0f,
+				// 		//	1.0f, 0.0f,
+				// 		//	0.0f, 0.0f
+				// };
 
-				float cubeTexCoords[2 * 4 * 6] = {
-					blockTexCoords.x, blockTexCoords.w,
-					blockTexCoords.z, blockTexCoords.w,
-					blockTexCoords.z, blockTexCoords.y,
-					blockTexCoords.x, blockTexCoords.y
-				//	0.0f, 1.0f,
-				//	1.0f, 1.0f,
-				//	1.0f, 0.0f,
-				//	0.0f, 0.0f
-				};
+				for(int i = 0 ; i < 6 ; i++) {
+					const glm::vec4 &blockTexCoords = block->getTexCoords(i);
+					float faceTexCoords[2 * 4] = {
+						blockTexCoords.x, blockTexCoords.w,
+						blockTexCoords.z, blockTexCoords.w,
+						blockTexCoords.z, blockTexCoords.y,
+						blockTexCoords.x, blockTexCoords.y
+					};
 
-				for(int i = 1 ; i < 6 ; i++) {
-					memcpy(&cubeTexCoords[2 * 4 * i], &cubeTexCoords[0], 2 * 4 * sizeof(float));
+					memcpy(&cubeTexCoords[2 * 4 * i], &faceTexCoords[0], 2 * 4 * sizeof(float));
 				}
 
 				for(u8 i = 0 ; i < 6 ; i++) {
