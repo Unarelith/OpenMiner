@@ -24,6 +24,8 @@ class VertexBuffer {
 		void setData(GLsizeiptr size, const GLvoid *data, GLenum usage) const;
 		void updateData(GLintptr offset, GLsizeiptr size, const GLvoid *data) const;
 
+		void setAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer) const;
+
 		GLenum mode() const { return m_mode; }
 		GLint first() const { return m_first; }
 		GLsizei count() const { return m_count; }

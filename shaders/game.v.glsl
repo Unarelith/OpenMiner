@@ -21,11 +21,11 @@ uniform int u_time;
 
 void main() {
 	vec3 finalPos = coord3d.xyz;
-	if (coord3d.w == 8) {
-		finalPos.y += sin((u_time / 1000.0 + finalPos.x) * 1.5) / 8.8f;
-		finalPos.y += cos((u_time / 1000.0 + finalPos.z) * 1.5) / 8.1f;
-		finalPos.y -= 0.2;
-	}
+	// if (coord3d.w == 8) {
+	// 	finalPos.y += sin((u_time / 1000.0 + finalPos.x) * 1.5) / 8.8f;
+	// 	finalPos.y += cos((u_time / 1000.0 + finalPos.z) * 1.5) / 8.1f;
+	// 	finalPos.y -= 0.2;
+	// }
 
 	// Used for lighting
 	v_coord3d = u_modelMatrix * vec4(finalPos, 1.0);

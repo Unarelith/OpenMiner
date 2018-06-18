@@ -39,6 +39,8 @@ void RenderTarget::draw(const VertexBuffer &vertexBuffer, std::size_t firstVerte
 	states.shader->setUniform("u_viewMatrix", (states.viewMatrix) ? *states.viewMatrix : glm::mat4{1});
 
 	states.shader->enableVertexAttribArray("coord3d");
+	states.shader->enableVertexAttribArray("normal");
+	states.shader->enableVertexAttribArray("texCoord");
 
 	glVertexAttribPointer(states.shader->attrib("coord3d"), 4, GL_FLOAT, GL_FALSE, 0, 0);
 
@@ -49,6 +51,8 @@ void RenderTarget::draw(const VertexBuffer &vertexBuffer, std::size_t firstVerte
 
 	Texture::bind(nullptr);
 
+	states.shader->disableVertexAttribArray("texCoord");
+	states.shader->disableVertexAttribArray("normal");
 	states.shader->disableVertexAttribArray("coord3d");
 
 	VertexBuffer::bind(nullptr);

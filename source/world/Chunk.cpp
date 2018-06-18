@@ -185,6 +185,10 @@ void Chunk::update() {
 	m_vbo.updateData(vertices.size() * sizeof(float), normals.size() * sizeof(float), normals.data());
 	m_vbo.updateData((vertices.size() + normals.size()) * sizeof(float), texCoords.size() * sizeof(float), texCoords.data());
 
+	// m_vbo.setAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	// m_vbo.setAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(m_verticesCount * sizeof(float)));
+	// m_vbo.setAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)((m_verticesCount + m_normalsCount) * sizeof(float)));
+
 	VertexBuffer::bind(nullptr);
 
 	m_verticesCount = vertices.size();
@@ -228,22 +232,14 @@ void Chunk::setBlock(int x, int y, int z, u32 type) {
 void Chunk::draw(RenderTarget &target, RenderStates states) const {
 	if(m_verticesCount == 0) return;
 
-	VertexBuffer::bind(&m_vbo);
-
-	states.shader->enableVertexAttribArray("coord3d");
-	states.shader->enableVertexAttribArray("normal");
-	states.shader->enableVertexAttribArray("texCoord");
-
-	glVertexAttribPointer(states.shader->attrib("coord3d"),  4, GL_FLOAT, GL_FALSE, 0, 0);
-	glVertexAttribPointer(states.shader->attrib("normal"),   3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(m_verticesCount * sizeof(float)));
-	glVertexAttribPointer(states.shader->attrib("texCoord"), 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)((m_verticesCount + m_normalsCount) * sizeof(float)));
-
 	states.texture = &m_texture;
 
-	target.draw(m_vbo, 0, m_verticesCount / 4, states);
+	VertexBuffer::bind(&m_vbo);
 
-	states.shader->disableVertexAttribArray("texCoord");
-	states.shader->disableVertexAttribArray("normal");
+	m_vbo.setAttribPointer(states.shader->attrib("normal"), 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(m_verticesCount * sizeof(float)));
+	m_vbo.setAttribPointer(states.shader->attrib("texCoord"), 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)((m_verticesCount + m_normalsCount) * sizeof(float)));
+
+	target.draw(m_vbo, 0, m_verticesCount / 4, states);
 
 	// drawOutlines(target, states);
 }
