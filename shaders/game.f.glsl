@@ -8,7 +8,7 @@ uniform int u_renderDistance;
 vec4 getColor();
 
 // Get light color
-vec4 light(vec3 lightColor, vec4 lightPosition, float ambientIntensity, float diffuseIntensity);
+vec4 light(vec4 color, vec3 lightColor, vec4 lightPosition, float ambientIntensity, float diffuseIntensity);
 
 // Apply fog
 vec4 fog(vec4 color, float fogCoord, float fogStart, float fogEnd);
@@ -25,7 +25,7 @@ void main() {
 	// vec3 lightPosition = vec3(0.0, sin(time) * 40, cos(time) * 40);
 	// color *= light(vec3(1.0, 1.0, 1.0), vec4(lightPosition, 1.0), 0.5, 0.5);
 
-	color *= light(vec3(1.0, 1.0, 1.0), vec4(0.0, 48.0, 0.0, 1.0), 0.5, 0.5);
+	color = light(color, vec3(1.0, 1.0, 1.0), vec4(0.0, 48.0, 0.0, 1.0), 0.5, 0.5);
 
 	color = fog(color, v_dist, u_renderDistance - 32, u_renderDistance);
 
