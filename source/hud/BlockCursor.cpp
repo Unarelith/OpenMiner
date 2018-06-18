@@ -51,37 +51,58 @@ void BlockCursor::update(bool useDepthBuffer) {
 	float bz = m_selectedBlock.z;
 
 	/* Render a box around the block we are pointing at */
-	float box[24][3] = {
-		{bx + 0, by + 0, bz + 0},//, 14},
-		{bx + 1, by + 0, bz + 0},//, 14},
-		{bx + 0, by + 1, bz + 0},//, 14},
-		{bx + 1, by + 1, bz + 0},//, 14},
-		{bx + 0, by + 0, bz + 1},//, 14},
-		{bx + 1, by + 0, bz + 1},//, 14},
-		{bx + 0, by + 1, bz + 1},//, 14},
-		{bx + 1, by + 1, bz + 1},//, 14},
+	float box[24][4] = {
+		{bx + 0, by + 0, bz + 0, 1},
+		{bx + 1, by + 0, bz + 0, 1},
+		{bx + 0, by + 1, bz + 0, 1},
+		{bx + 1, by + 1, bz + 0, 1},
+		{bx + 0, by + 0, bz + 1, 1},
+		{bx + 1, by + 0, bz + 1, 1},
+		{bx + 0, by + 1, bz + 1, 1},
+		{bx + 1, by + 1, bz + 1, 1},
 
-		{bx + 0, by + 0, bz + 0},//, 14},
-		{bx + 0, by + 1, bz + 0},//, 14},
-		{bx + 1, by + 0, bz + 0},//, 14},
-		{bx + 1, by + 1, bz + 0},//, 14},
-		{bx + 0, by + 0, bz + 1},//, 14},
-		{bx + 0, by + 1, bz + 1},//, 14},
-		{bx + 1, by + 0, bz + 1},//, 14},
-		{bx + 1, by + 1, bz + 1},//, 14},
+		{bx + 0, by + 0, bz + 0, 1},
+		{bx + 0, by + 1, bz + 0, 1},
+		{bx + 1, by + 0, bz + 0, 1},
+		{bx + 1, by + 1, bz + 0, 1},
+		{bx + 0, by + 0, bz + 1, 1},
+		{bx + 0, by + 1, bz + 1, 1},
+		{bx + 1, by + 0, bz + 1, 1},
+		{bx + 1, by + 1, bz + 1, 1},
 
-		{bx + 0, by + 0, bz + 0},//, 14},
-		{bx + 0, by + 0, bz + 1},//, 14},
-		{bx + 1, by + 0, bz + 0},//, 14},
-		{bx + 1, by + 0, bz + 1},//, 14},
-		{bx + 0, by + 1, bz + 0},//, 14},
-		{bx + 0, by + 1, bz + 1},//, 14},
-		{bx + 1, by + 1, bz + 0},//, 14},
-		{bx + 1, by + 1, bz + 1},//, 14},
+		{bx + 0, by + 0, bz + 0, 1},
+		{bx + 0, by + 0, bz + 1, 1},
+		{bx + 1, by + 0, bz + 0, 1},
+		{bx + 1, by + 0, bz + 1, 1},
+		{bx + 0, by + 1, bz + 0, 1},
+		{bx + 0, by + 1, bz + 1, 1},
+		{bx + 1, by + 1, bz + 0, 1},
+		{bx + 1, by + 1, bz + 1, 1},
 	};
+
+	// float cubeCoords[6 * 4 * 4] = {
+	// 	1, 0, 1, 1, #<{(||)}># 1, 0, 0, 1, #<{(||)}># 1, 1, 0, 1, #<{(||)}># 1, 1, 1, 1, // FL | 1
+	// 	1, 1, 1, 1, #<{(||)}># 1, 1, 0, 1, #<{(||)}># 0, 1, 0, 1, #<{(||)}># 0, 1, 1, 1, // T  | 0
+	// 	0, 1, 1, 1, #<{(||)}># 0, 0, 1, 1, #<{(||)}># 1, 0, 1, 1, #<{(||)}># 1, 1, 1, 1, // FR | 4
+	// 	0, 1, 1, 1, #<{(||)}># 0, 1, 0, 1, #<{(||)}># 0, 0, 0, 1, #<{(||)}># 0, 0, 1, 1, // BR | 2
+	// 	0, 0, 1, 1, #<{(||)}># 0, 0, 0, 1, #<{(||)}># 1, 0, 0, 1, #<{(||)}># 1, 0, 1, 1, // B  | 3
+	// 	1, 1, 0, 1, #<{(||)}># 1, 0, 0, 1, #<{(||)}># 0, 0, 0, 1, #<{(||)}># 0, 1, 0, 1, // BL | 5
+	// };
+    //
+	// float cubeColors[6 * 4 * 4] = {
+	// 	1, 1, 1, 0.3, 1, 1, 1, 0.3, 1, 1, 1, 0.3, 1, 1, 1, 0.3,
+	// 	1, 1, 1, 0.3, 1, 1, 1, 0.3, 1, 1, 1, 0.3, 1, 1, 1, 0.3,
+	// 	1, 1, 1, 0.3, 1, 1, 1, 0.3, 1, 1, 1, 0.3, 1, 1, 1, 0.3,
+	// 	1, 1, 1, 0.3, 1, 1, 1, 0.3, 1, 1, 1, 0.3, 1, 1, 1, 0.3,
+	// 	1, 1, 1, 0.3, 1, 1, 1, 0.3, 1, 1, 1, 0.3, 1, 1, 1, 0.3,
+	// 	1, 1, 1, 0.3, 1, 1, 1, 0.3, 1, 1, 1, 0.3, 1, 1, 1, 0.3,
+	// };
 
 	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(box), box, GL_DYNAMIC_DRAW);
+	// m_vbo.setData(sizeof(cubeCoords) + sizeof(cubeColors), nullptr, GL_DYNAMIC_DRAW);
+	// m_vbo.updateData(0, sizeof(cubeCoords), cubeCoords);
+	// m_vbo.updateData(sizeof(cubeCoords), sizeof(cubeColors), cubeColors);
 	VertexBuffer::bind(nullptr);
 }
 
@@ -91,10 +112,31 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glDisable(GL_CULL_FACE);
 
+	// 	glEnable(GL_POLYGON_OFFSET_FILL);
+	// 	glPolygonOffset(-1.0, -1.0);
+    //
+	// glm::mat4 modelMatrix = glm::translate(glm::mat4{1},
+	//                                        glm::vec3{m_selectedBlock.x,
+	//                                                  m_selectedBlock.y,
+	//                                                  m_selectedBlock.z});
+	// states.modelMatrix = &modelMatrix;
+
+	VertexBuffer::bind(&m_vbo);
+
+	// states.shader->enableVertexAttribArray("coord3d");
+	// states.shader->enableVertexAttribArray("color");
+    //
+	// glVertexAttribPointer(states.shader->attrib("coord3d"), 4, GL_FLOAT, GL_FALSE, 0, 0);
+	// glVertexAttribPointer(states.shader->attrib("color"), 4, GL_FLOAT, GL_FALSE, 0, (GLvoid *)(6 * 4 * 4 * sizeof(float)));
+
 	target.draw(m_vbo, states);
+	// target.draw(m_vbo, m_selectedBlock.w * 4, 4, states);
+
+	// states.shader->disableVertexAttribArray("color");
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_POLYGON_OFFSET_FILL);
+	// glDisable(GL_POLYGON_OFFSET_FILL);
 }
 
 // Not really GLSL fract(), but the absolute distance to the nearest integer value

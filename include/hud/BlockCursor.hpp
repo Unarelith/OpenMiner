@@ -38,6 +38,7 @@ class BlockCursor : public IDrawable {
 		glm::mat4 &m_viewMatrix;
 		glm::mat4 &m_projectionMatrix;
 
+		// VertexBuffer m_vbo{GL_QUADS, 0, 4};
 		VertexBuffer m_vbo{GL_LINES, 0, 24};
 
 		glm::vec4 m_selectedBlock;

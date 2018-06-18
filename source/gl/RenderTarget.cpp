@@ -40,7 +40,7 @@ void RenderTarget::draw(const VertexBuffer &vertexBuffer, std::size_t firstVerte
 
 	states.shader->enableVertexAttribArray("coord3d");
 
-	glVertexAttribPointer(states.shader->attrib("coord3d"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(states.shader->attrib("coord3d"), 4, GL_FLOAT, GL_FALSE, 0, 0);
 
 	if (states.texture)
 		Texture::bind(states.texture);

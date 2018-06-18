@@ -1,7 +1,7 @@
 #version 120
 
-attribute vec3 color;
-attribute vec3 coord3d;
+attribute vec4 color;
+attribute vec4 coord3d;
 attribute vec3 normal;
 attribute vec2 texCoord;
 
@@ -20,10 +20,10 @@ uniform int u_renderDistance;
 
 void main() {
 	// Used for lighting
-	v_coord3d = u_modelMatrix * vec4(coord3d, 1.0);
+	v_coord3d = u_modelMatrix * coord3d;
 	v_normal = vec4(normal, 1.0);
 
-	v_color = vec4(color, 1.0);
+	v_color = color;
 	v_texCoord = texCoord;
 
 	// Distance from eye

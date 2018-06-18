@@ -160,6 +160,7 @@ void Chunk::update() {
 						vertices.push_back(x + cubeCoords[i * 12 + j * 3]);
 						vertices.push_back(y + cubeCoords[i * 12 + j * 3 + 1]);
 						vertices.push_back(z + cubeCoords[i * 12 + j * 3 + 2]);
+						vertices.push_back(1);
 
 						normals.push_back(normal.x);
 						normals.push_back(normal.y);
@@ -233,13 +234,13 @@ void Chunk::draw(RenderTarget &target, RenderStates states) const {
 	states.shader->enableVertexAttribArray("normal");
 	states.shader->enableVertexAttribArray("texCoord");
 
-	glVertexAttribPointer(states.shader->attrib("coord3d"),  3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(states.shader->attrib("coord3d"),  4, GL_FLOAT, GL_FALSE, 0, 0);
 	glVertexAttribPointer(states.shader->attrib("normal"),   3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(m_verticesCount * sizeof(float)));
 	glVertexAttribPointer(states.shader->attrib("texCoord"), 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)((m_verticesCount + m_normalsCount) * sizeof(float)));
 
 	states.texture = &m_texture;
 
-	target.draw(m_vbo, 0, m_verticesCount / 3, states);
+	target.draw(m_vbo, 0, m_verticesCount / 4, states);
 
 	states.shader->disableVertexAttribArray("texCoord");
 	states.shader->disableVertexAttribArray("normal");
@@ -254,7 +255,7 @@ void Chunk::drawOutlines(RenderTarget &, RenderStates states) const {
 
 	states.shader->enableVertexAttribArray("coord3d");
 
-	for(u32 i = 0 ; i < m_verticesCount / 3 ; i += 4) {
+	for(u32 i = 0 ; i < m_verticesCount / 4 ; i += 4) {
 		glDrawArrays(GL_LINE_LOOP, i, 4);
 	}
 
