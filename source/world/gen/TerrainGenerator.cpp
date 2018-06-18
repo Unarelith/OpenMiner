@@ -50,7 +50,6 @@ void TerrainGenerator::basicGeneration(Chunk &chunk) const {
 	}
 }
 
-// FIXME: Still doesn't work
 void TerrainGenerator::testCraftGeneration(Chunk &chunk) const {
 	for(int z = 0 ; z < Chunk::depth ; z++) {
 		for(int x = 0 ; x < Chunk::width ; x++) {

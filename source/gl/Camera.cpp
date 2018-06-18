@@ -73,19 +73,16 @@ glm::mat4 Camera::processInputs(const World &world) {
 		// m_velocity.y = 0.1;
 	}
 
-	if(Keyboard::isKeyPressed(Keyboard::Z)) {
-		move(0.0f);
-	}
-	else if(Keyboard::isKeyPressed(Keyboard::S)) {
-		move(180.0f);
-	}
+	if(Keyboard::isKeyPressed(Keyboard::Z))      move(0.0f);
+	else if(Keyboard::isKeyPressed(Keyboard::S)) move(180.0f);
 
-	if(Keyboard::isKeyPressed(Keyboard::Q)) {
-		move(-90.0f);
-	}
-	else if(Keyboard::isKeyPressed(Keyboard::D)) {
-		move(90.0f);
-	}
+	if(Keyboard::isKeyPressed(Keyboard::Q))      move(-90.0f);
+	else if(Keyboard::isKeyPressed(Keyboard::D)) move(90.0f);
+
+	if (Keyboard::isKeyPressed(Keyboard::Q) && Keyboard::isKeyPressed(Keyboard::Z)) move(-45.0f);
+	if (Keyboard::isKeyPressed(Keyboard::D) && Keyboard::isKeyPressed(Keyboard::Z)) move(45.0f);
+	if (Keyboard::isKeyPressed(Keyboard::Q) && Keyboard::isKeyPressed(Keyboard::S)) move(-135.0f);
+	if (Keyboard::isKeyPressed(Keyboard::D) && Keyboard::isKeyPressed(Keyboard::S)) move(135.0f);
 
 	m_velocity.y -= m_gravity; // Gravity
 
