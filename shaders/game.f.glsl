@@ -27,7 +27,7 @@ void main() {
 
 	color *= light(vec3(1.0, 1.0, 1.0), vec4(0.0, 48.0, 0.0, 1.0), 0.5, 0.5);
 
-	color = fog(color, v_dist, u_renderDistance - 8, u_renderDistance);
+	color = fog(color, v_dist, u_renderDistance - 32, u_renderDistance);
 
 	gl_FragColor = color;
 }
