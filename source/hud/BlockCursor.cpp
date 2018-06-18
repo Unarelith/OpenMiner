@@ -36,7 +36,7 @@ void BlockCursor::onEvent(const SDL_Event &event) {
 			if(face == 2) z++;
 			if(face == 5) z--;
 
-			m_world.setBlock(x, y, z, 1);
+			m_world.setBlock(x, y, z, 9);
 		}
 	}
 }

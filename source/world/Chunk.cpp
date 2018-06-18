@@ -120,6 +120,7 @@ void Chunk::update() {
 					if (m_surroundingChunks[3]) surroundingBlocks[3] = m_surroundingChunks[3]->getBlock(x, y, 0);
 
 					// FIXME: Too many getBlock() calls
+					// FIXME: Check for block transparency here
 					if((x > 0          && getBlock(x - 1, y, z) && getBlock(x - 1, y, z)->id() && i == 0)
 					|| (x < width - 1  && getBlock(x + 1, y, z) && getBlock(x + 1, y, z)->id() && i == 1)
 					|| (y > 0          && getBlock(x, y - 1, z) && getBlock(x, y - 1, z)->id() && i == 2)

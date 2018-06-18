@@ -59,10 +59,10 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 	Shader::bind(nullptr);
 
 	for(auto &it : m_chunks) {
-		glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f),
-		                                       glm::vec3(it->x() * Chunk::width,
-		                                                 it->y() * Chunk::height,
-		                                                 it->z() * Chunk::depth));
+		glm::mat4 modelMatrix{glm::translate(glm::mat4(1.0f),
+		                                     glm::vec3(it->x() * Chunk::width,
+		                                               it->y() * Chunk::height,
+		                                               it->z() * Chunk::depth))};
 
 		states.modelMatrix = &modelMatrix;
 

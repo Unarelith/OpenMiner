@@ -22,6 +22,8 @@
 #define RADIANS_PER_DEGREES (M_PI / 180.0f)
 #endif
 
+class World;
+
 class Camera {
 	public:
 		Camera();
@@ -31,7 +33,8 @@ class Camera {
 
 		void move(float direction);
 
-		glm::mat4 processInputs();
+		glm::mat4 processInputs(const World &world);
+		void checkCollisions(const World &world);
 		void update();
 
 		float pointTargetedX() const { return m_x + cos(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES); }
@@ -48,6 +51,8 @@ class Camera {
 		float z() const { return m_z; }
 
 	private:
+		void testPoint(const World &world, glm::vec3 pos, glm::vec3 &speed);
+
 		glm::mat4 m_viewMatrix;
 
 		float m_x;
@@ -57,8 +62,11 @@ class Camera {
 		float m_angleH;
 		float m_angleV;
 
-		float m_vx;
-		float m_vz;
+		glm::vec3 m_velocity{0};
+		bool m_isJumping = false;
+
+		const float m_gravity = 0.001;
+		const float m_jumpSpeed = 0.07f;
 };
 
 #endif // CAMERA_HPP_
