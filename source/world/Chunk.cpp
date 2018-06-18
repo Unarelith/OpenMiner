@@ -81,23 +81,9 @@ void Chunk::update() {
 		for(u8 y = 0 ; y < height ; y++) {
 			for(u8 x = 0 ; x < width ; x++) {
 				Block *block = getBlock(x, y, z);
+				if(!block || !block->id()) continue;
 
-				if(!block || !block->id()) {
-					continue;
-				}
-
-                //
 				float cubeTexCoords[2 * 4 * 6];
-				// 	blockTexCoords.x, blockTexCoords.w,
-				// 	blockTexCoords.z, blockTexCoords.w,
-				// 	blockTexCoords.z, blockTexCoords.y,
-				// 	blockTexCoords.x, blockTexCoords.y
-				// 		//	0.0f, 1.0f,
-				// 		//	1.0f, 1.0f,
-				// 		//	1.0f, 0.0f,
-				// 		//	0.0f, 0.0f
-				// };
-
 				for(int i = 0 ; i < 6 ; i++) {
 					const glm::vec4 &blockTexCoords = block->getTexCoords(i);
 					float faceTexCoords[2 * 4] = {
@@ -213,12 +199,7 @@ void Chunk::setBlock(int x, int y, int z, u32 type) {
 	if(z < 0)              { if(m_surroundingChunks[2]) m_surroundingChunks[2]->setBlock(x, y, z + Chunk::depth, type); return; }
 	if(z >= Chunk::depth)  { if(m_surroundingChunks[3]) m_surroundingChunks[3]->setBlock(x, y, z - Chunk::depth, type); return; }
 
-	glm::vec3 pos;
-	pos.x = x + m_x * width;
-	pos.y = y + m_y * height;
-	pos.z = z + m_z * depth;
-
-	m_data[x][y][z].reset(new Block(pos, type));
+	m_data[x][y][z].reset(new Block(type));
 
 	m_isChanged = true;
 
@@ -228,7 +209,6 @@ void Chunk::setBlock(int x, int y, int z, u32 type) {
 	if(z == depth - 1 && back())  { back()->m_isChanged = true; }
 }
 
-// FIXME: Implement vertex attributes in VertexBuffer and remove most of the code here
 void Chunk::draw(RenderTarget &target, RenderStates states) const {
 	if(m_verticesCount == 0) return;
 
@@ -236,6 +216,7 @@ void Chunk::draw(RenderTarget &target, RenderStates states) const {
 
 	VertexBuffer::bind(&m_vbo);
 
+	// FIXME: Find a way to give this job to RenderTarget
 	m_vbo.setAttribPointer(states.shader->attrib("normal"), 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(m_verticesCount * sizeof(float)));
 	m_vbo.setAttribPointer(states.shader->attrib("texCoord"), 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)((m_verticesCount + m_normalsCount) * sizeof(float)));
 

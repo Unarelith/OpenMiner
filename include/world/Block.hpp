@@ -20,11 +20,9 @@
 
 class Block {
 	public:
-		Block(const glm::vec3 &pos, u32 id);
+		Block(u32 id);
 
 		glm::vec4 getTexCoords(int face);
-
-		const glm::vec3 &pos() const { return m_pos; }
 
 		u32 id() const { return m_id; }
 		void setId(u32 id) { m_id = id; }
@@ -33,8 +31,6 @@ class Block {
 		void setSelected(bool isSelected, s8 face) { m_isSelected = isSelected; m_selectedFace = face; }
 
 	private:
-		glm::vec3 m_pos;
-
 		u32 m_id;
 
 		bool m_isSelected = false;

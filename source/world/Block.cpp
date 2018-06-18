@@ -13,7 +13,7 @@
  */
 #include "Block.hpp"
 
-Block::Block(const glm::vec3 &pos, u32 id) : m_pos(pos) {
+Block::Block(u32 id) {
 	m_id = id;
 }
 
