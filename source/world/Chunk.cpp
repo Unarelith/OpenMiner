@@ -160,7 +160,7 @@ void Chunk::update() {
 						vertices.push_back(x + cubeCoords[i * 12 + j * 3]);
 						vertices.push_back(y + cubeCoords[i * 12 + j * 3 + 1]);
 						vertices.push_back(z + cubeCoords[i * 12 + j * 3 + 2]);
-						vertices.push_back(1);
+						vertices.push_back(block->id());
 
 						normals.push_back(normal.x);
 						normals.push_back(normal.y);

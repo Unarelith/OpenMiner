@@ -17,6 +17,7 @@
 #include "OpenGL.hpp"
 
 #include "Config.hpp"
+#include "GameClock.hpp"
 #include "Keyboard.hpp"
 #include "Mouse.hpp"
 #include "GameState.hpp"
@@ -41,6 +42,7 @@ void GameState::initShaders() {
 	m_projectionMatrix = glm::perspective(45.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, DIST_NEAR, DIST_FAR);
 	m_shader.setUniform("u_projectionMatrix", m_projectionMatrix);
 	m_shader.setUniform("u_tex", 0);
+	m_shader.setUniform("u_time", 0);
 
 	Shader::bind(nullptr);
 }
@@ -61,6 +63,10 @@ void GameState::onEvent(const SDL_Event &event) {
 }
 
 void GameState::update() {
+	Shader::bind(&m_shader);
+	m_shader.setUniform("u_time", GameClock::getTicks());
+	Shader::bind(nullptr);
+
 	m_world.updateChunks();
 
 	m_viewMatrix = m_camera.processInputs(m_world);
