@@ -54,8 +54,8 @@ void TerrainGenerator::testCraftGeneration(Chunk &chunk) const {
 	for(int z = 0 ; z < Chunk::depth ; z++) {
 		for(int x = 0 ; x < Chunk::width ; x++) {
 			// Land height
-			float n = noise2d((x + chunk.x() * Chunk::width) / 256.0, (z + chunk.z() * Chunk::depth) / 256.0, 5, 0.8) * 4;
-
+			// float n = noise2d((x + chunk.x() * Chunk::width) / 256.0, (z + chunk.z() * Chunk::depth) / 256.0, 5, 0.8) * 4;
+			float n = noise2d((x + chunk.x() * Chunk::width) / 256.0, (z + chunk.z() * Chunk::depth) / 256.0, 4, 0.8) * 4;
 			int h = n * 2;
 
 			// Land blocks

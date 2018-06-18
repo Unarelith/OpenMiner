@@ -69,8 +69,11 @@ glm::mat4 Camera::processInputs(const World &world) {
 		m_isJumping = true;
 		m_velocity.y = m_jumpSpeed;
 	}
+	if(Keyboard::isKeyPressed(Keyboard::X)) {
+		m_velocity.y = 0.1;
+	}
 	if(Keyboard::isKeyPressed(Keyboard::LeftShift)) {
-		// m_velocity.y = 0.1;
+		m_velocity.y = -0.1;
 	}
 
 	if(Keyboard::isKeyPressed(Keyboard::Z))      move(0.0f);
