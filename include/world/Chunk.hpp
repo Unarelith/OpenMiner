@@ -80,16 +80,14 @@ class Chunk : public NonCopyable, public IDrawable {
 
 		ChunkBuilder m_builder;
 
-		std::size_t m_verticesCount;
-		std::size_t m_normalsCount;
-
 		VertexBuffer m_vbo{GL_QUADS, 0, 0};
+		std::size_t m_verticesCount;
 
-		Chunk *m_surroundingChunks[6];
+		Chunk *m_surroundingChunks[6]{nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 
-		bool m_isChanged;
-		bool m_isInitialized;
-		bool m_isGenerated;
+		bool m_isChanged = false;
+		bool m_isInitialized = false;
+		bool m_isGenerated = false;
 };
 
 #endif // CHUNK_HPP_

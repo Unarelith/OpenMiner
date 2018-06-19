@@ -21,7 +21,7 @@ class VertexBuffer;
 
 class ChunkBuilder {
 	public:
-		std::pair<std::size_t, std::size_t> buildChunk(const Chunk &chunk, const VertexBuffer &vbo);
+		std::size_t buildChunk(const Chunk &chunk, const VertexBuffer &vbo);
 };
 
 #endif // CHUNKBUILDER_HPP_

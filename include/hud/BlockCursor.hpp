@@ -21,7 +21,10 @@
 class BlockCursor : public IDrawable {
 	public:
 		BlockCursor(Camera &camera, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix)
-			: m_camera(camera), m_world(world), m_viewMatrix(viewMatrix), m_projectionMatrix(projectionMatrix) {}
+			: m_camera(camera), m_world(world), m_viewMatrix(viewMatrix), m_projectionMatrix(projectionMatrix)
+		{ init(); }
+
+		void init();
 
 		void onEvent(const SDL_Event &event);
 

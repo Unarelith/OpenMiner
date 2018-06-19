@@ -13,7 +13,7 @@ vec4 getColor() {
 	}
 
 	// Very cheap "transparency": don't draw pixels with a low alpha value
-	if(color.a < 0.4) discard;
+	// if(color.a < 0.3) discard;
 
 	return color;
 }

@@ -13,17 +13,26 @@
  */
 #include "Crosshair.hpp"
 #include "Shader.hpp"
+#include "Vertex.hpp"
 
 Crosshair::Crosshair() {
-	float cross[4][4] = {
-		{-0.04, 0, 0, 1},//, 13},
-		{+0.04, 0, 0, 1},//, 13},
-		{0, -0.05, 0, 1},//, 13},
-		{0, +0.05, 0, 1},//, 13}
+	// float cross[4][4] = {
+	// 	{-0.04, 0, 0, 1},//, 13},
+	// 	{ 0.04, 0, 0, 1},//, 13},
+	// 	{0, -0.05, 0, 1},//, 13},
+	// 	{0,  0.05, 0, 1},//, 13}
+	// };
+
+	Vertex vertices[4] = {
+		{{-0.04, 0, 0, 1}},//, 13},
+		{{ 0.04, 0, 0, 1}},//, 13},
+		{{0, -0.05, 0, 1}},//, 13},
+		{{0,  0.05, 0, 1}},//, 13}
 	};
 
 	VertexBuffer::bind(&m_vbo);
-	m_vbo.setData(sizeof(cross), cross, GL_DYNAMIC_DRAW);
+	// m_vbo.setData(sizeof(cross), cross, GL_DYNAMIC_DRAW);
+	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	VertexBuffer::bind(nullptr);
 }
 

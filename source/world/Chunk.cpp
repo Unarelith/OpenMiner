@@ -17,28 +17,14 @@ Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
 	m_x = x;
 	m_y = y;
 	m_z = z;
-
-	m_isChanged = false;
-	m_isInitialized = false;
-	m_isGenerated = false;
-
-	m_surroundingChunks[0] = nullptr;
-	m_surroundingChunks[1] = nullptr;
-	m_surroundingChunks[2] = nullptr;
-	m_surroundingChunks[3] = nullptr;
-	m_surroundingChunks[4] = nullptr;
-	m_surroundingChunks[5] = nullptr;
 }
 
-// FIXME: Find a better way to do that
 void Chunk::update() {
 	if (!m_isChanged || m_data.empty()) return;
 
 	m_isChanged = false;
 
-	auto result = m_builder.buildChunk(*this, m_vbo);
-	m_verticesCount = result.first;
-	m_normalsCount = result.second;
+	m_verticesCount = m_builder.buildChunk(*this, m_vbo);
 }
 
 Block *Chunk::getBlock(int x, int y, int z) const {
@@ -76,15 +62,9 @@ void Chunk::draw(RenderTarget &target, RenderStates states) const {
 
 	states.texture = &m_texture;
 
-	VertexBuffer::bind(&m_vbo);
+	target.draw(m_vbo, 0, m_verticesCount, states);
 
-	// FIXME: Find a way to give this job to RenderTarget
-	m_vbo.setAttribPointer(states.shader->attrib("normal"), 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(m_verticesCount * sizeof(float)));
-	m_vbo.setAttribPointer(states.shader->attrib("texCoord"), 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)((m_verticesCount + m_normalsCount) * sizeof(float)));
-
-	target.draw(m_vbo, 0, m_verticesCount / 4, states);
-
-	drawOutlines(target, states);
+	// drawOutlines(target, states);
 }
 
 // FIXME: Use the renderer to do that
@@ -94,9 +74,9 @@ void Chunk::drawOutlines(RenderTarget &, RenderStates states) const {
 
 	states.shader->enableVertexAttribArray("coord3d");
 
-	// for(u32 i = 0 ; i < m_verticesCount / 4 ; i += 4) {
-	// 	glDrawArrays(GL_LINE_LOOP, i, 4);
-	// }
+	for(u32 i = 0 ; i < m_verticesCount ; i += 4) {
+		glDrawArrays(GL_LINE_LOOP, i, 4);
+	}
 
 	states.shader->disableVertexAttribArray("coord3d");
 

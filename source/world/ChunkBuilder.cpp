@@ -13,8 +13,9 @@
  */
 #include "Chunk.hpp"
 #include "ChunkBuilder.hpp"
+#include "Vertex.hpp"
 
-std::pair<std::size_t, std::size_t> ChunkBuilder::buildChunk(const Chunk &chunk, const VertexBuffer &vbo) {
+std::size_t ChunkBuilder::buildChunk(const Chunk &chunk, const VertexBuffer &vbo) {
 	static const float cubeCoords[6 * 4 * 3] = {
 		// Left
 		0, 0, 0,
@@ -53,13 +54,8 @@ std::pair<std::size_t, std::size_t> ChunkBuilder::buildChunk(const Chunk &chunk,
 		0, 1, 1,
 	};
 
-	std::vector<float> vertices;
-	std::vector<float> normals;
-	std::vector<float> texCoords;
-
-	vertices.reserve(Chunk::width * Chunk::height * Chunk::depth * 6 * 4 * 4);
-	normals.reserve(Chunk::width * Chunk::height * Chunk::depth * 6 * 4 * 3);
-	texCoords.reserve(Chunk::width * Chunk::height * Chunk::depth * 6 * 4 * 2);
+	std::vector<Vertex> vertices;
+	vertices.reserve(Chunk::width * Chunk::height * Chunk::depth * 6 * 4);
 
 	// Needed in the loop (avoid a lot of glm::vec3 creation)
 	glm::vec3 a, b, c, v1, v2, normal;
@@ -114,17 +110,21 @@ std::pair<std::size_t, std::size_t> ChunkBuilder::buildChunk(const Chunk &chunk,
 
 					// Store vertex information
 					for(u8 j = 0 ; j < 4 ; j++) {
-						vertices.emplace_back(x + cubeCoords[i * 12 + j * 3]);
-						vertices.emplace_back(y + cubeCoords[i * 12 + j * 3 + 1]);
-						vertices.emplace_back(z + cubeCoords[i * 12 + j * 3 + 2]);
-						vertices.emplace_back(block->id());
+						Vertex vertex;
 
-						normals.emplace_back(normal.x);
-						normals.emplace_back(normal.y);
-						normals.emplace_back(normal.z);
+						vertex.coord3d[0] = x + cubeCoords[i * 12 + j * 3];
+						vertex.coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1];
+						vertex.coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2];
+						vertex.coord3d[3] = static_cast<GLfloat>(block->id());
 
-						texCoords.emplace_back(faceTexCoords[j * 2]);
-						texCoords.emplace_back(faceTexCoords[j * 2 + 1]);
+						vertex.normal[0] = normal.x;
+						vertex.normal[1] = normal.y;
+						vertex.normal[2] = normal.z;
+
+						vertex.texCoord[0] = faceTexCoords[j * 2];
+						vertex.texCoord[1] = faceTexCoords[j * 2 + 1];
+
+						vertices.emplace_back(vertex);
 					}
 				}
 			}
@@ -132,22 +132,11 @@ std::pair<std::size_t, std::size_t> ChunkBuilder::buildChunk(const Chunk &chunk,
 	}
 
 	vertices.shrink_to_fit();
-	normals.shrink_to_fit();
-	texCoords.shrink_to_fit();
 
 	VertexBuffer::bind(&vbo);
-
-	vbo.setData((vertices.size() + normals.size() + texCoords.size()) * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
-	vbo.updateData(0, vertices.size() * sizeof(float), vertices.data());
-	vbo.updateData(vertices.size() * sizeof(float), normals.size() * sizeof(float), normals.data());
-	vbo.updateData((vertices.size() + normals.size()) * sizeof(float), texCoords.size() * sizeof(float), texCoords.data());
-
-	// m_vbo.setAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);
-	// m_vbo.setAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(m_verticesCount * sizeof(float)));
-	// m_vbo.setAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)((m_verticesCount + m_normalsCount) * sizeof(float)));
-
+	vbo.setData(vertices.size() * sizeof(Vertex), vertices.data(), GL_DYNAMIC_DRAW);
 	VertexBuffer::bind(nullptr);
 
-	return {vertices.size(), normals.size()};
+	return vertices.size();
 }
 

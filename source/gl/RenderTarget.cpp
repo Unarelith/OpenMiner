@@ -15,6 +15,7 @@
 #include "RenderTarget.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
+#include "Vertex.hpp"
 #include "VertexBuffer.hpp"
 
 const RenderStates RenderStates::Default{};
@@ -40,9 +41,16 @@ void RenderTarget::draw(const VertexBuffer &vertexBuffer, std::size_t firstVerte
 
 	states.shader->enableVertexAttribArray("coord3d");
 	states.shader->enableVertexAttribArray("normal");
-	states.shader->enableVertexAttribArray("texCoord");
+	states.shader->enableVertexAttribArray((states.texture) ? "texCoord" : "color");
 
-	glVertexAttribPointer(states.shader->attrib("coord3d"), 4, GL_FLOAT, GL_FALSE, 0, 0);
+	// glVertexAttribPointer(states.shader->attrib("coord3d"), 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(states.shader->attrib("coord3d"), 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
+	glVertexAttribPointer(states.shader->attrib("normal"), 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, normal)));
+	if (states.texture)
+		glVertexAttribPointer(states.shader->attrib("texCoord"), 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, texCoord)));
+	else
+		glVertexAttribPointer(states.shader->attrib("color"), 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, color)));
+
 
 	if (states.texture)
 		Texture::bind(states.texture);
@@ -51,7 +59,7 @@ void RenderTarget::draw(const VertexBuffer &vertexBuffer, std::size_t firstVerte
 
 	Texture::bind(nullptr);
 
-	states.shader->disableVertexAttribArray("texCoord");
+	states.shader->disableVertexAttribArray((states.texture) ? "texCoord" : "color");
 	states.shader->disableVertexAttribArray("normal");
 	states.shader->disableVertexAttribArray("coord3d");
 
