@@ -26,6 +26,8 @@ Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
 	m_surroundingChunks[1] = nullptr;
 	m_surroundingChunks[2] = nullptr;
 	m_surroundingChunks[3] = nullptr;
+	m_surroundingChunks[4] = nullptr;
+	m_surroundingChunks[5] = nullptr;
 }
 
 // FIXME: Find a better way to do that
@@ -96,30 +98,47 @@ void Chunk::update() {
 					memcpy(&cubeTexCoords[2 * 4 * i], &faceTexCoords[0], 2 * 4 * sizeof(float));
 				}
 
+				Block *surroundingBlocks[6] = {
+					getBlock(x - 1, y, z),
+					getBlock(x + 1, y, z),
+					getBlock(x, y - 1, z),
+					getBlock(x, y + 1, z),
+					getBlock(x, y, z + 1),
+					getBlock(x, y, z - 1),
+				};
+
 				for(u8 i = 0 ; i < 6 ; i++) {
 					// Skip hidden faces
-					Block *surroundingBlocks[4] = {nullptr, nullptr, nullptr, nullptr};
-
-					if (m_surroundingChunks[0]) surroundingBlocks[0] = m_surroundingChunks[0]->getBlock(width - 1, y, z);
-					if (m_surroundingChunks[1]) surroundingBlocks[1] = m_surroundingChunks[1]->getBlock(0, y, z);
-					if (m_surroundingChunks[2]) surroundingBlocks[2] = m_surroundingChunks[2]->getBlock(x, y, depth - 1);
-					if (m_surroundingChunks[3]) surroundingBlocks[3] = m_surroundingChunks[3]->getBlock(x, y, 0);
-
-					// FIXME: Too many getBlock() calls
 					// FIXME: Check for block transparency here
-					if((x > 0          && getBlock(x - 1, y, z) && getBlock(x - 1, y, z)->id() && i == 0)
-					|| (x < width - 1  && getBlock(x + 1, y, z) && getBlock(x + 1, y, z)->id() && i == 1)
-					|| (y > 0          && getBlock(x, y - 1, z) && getBlock(x, y - 1, z)->id() && i == 2)
-					|| (y < height - 1 && getBlock(x, y + 1, z) && getBlock(x, y + 1, z)->id() && i == 3)
-					|| (z > 0          && getBlock(x, y, z - 1) && getBlock(x, y, z - 1)->id() && i == 5)
-					|| (z < depth - 1  && getBlock(x, y, z + 1) && getBlock(x, y, z + 1)->id() && i == 4)
-					|| (x == 0         && surroundingBlocks[0]  && surroundingBlocks[0]->id()  && i == 0)
-					|| (x == width - 1 && surroundingBlocks[1]  && surroundingBlocks[1]->id()  && i == 1)
-					|| (z == 0         && surroundingBlocks[2]  && surroundingBlocks[2]->id()  && i == 5)
-					|| (z == depth - 1 && surroundingBlocks[3]  && surroundingBlocks[3]->id()  && i == 4)
-					) {
+					if(surroundingBlocks[i] && surroundingBlocks[i]->id()) //  && surroundingBlocks[i]->id() == block->id())
 						continue;
-					}
+
+					// Block *surroundingBlocks[6] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+                    //
+					// if (m_surroundingChunks[0]) surroundingBlocks[0] = m_surroundingChunks[0]->getBlock(width - 1, y, z);
+					// if (m_surroundingChunks[1]) surroundingBlocks[1] = m_surroundingChunks[1]->getBlock(0, y, z);
+					// if (m_surroundingChunks[2]) surroundingBlocks[2] = m_surroundingChunks[2]->getBlock(x, y, depth - 1);
+					// if (m_surroundingChunks[3]) surroundingBlocks[3] = m_surroundingChunks[3]->getBlock(x, y, 0);
+					// if (m_surroundingChunks[4]) surroundingBlocks[4] = m_surroundingChunks[4]->getBlock(x, height - 1, z);
+					// if (m_surroundingChunks[5]) surroundingBlocks[5] = m_surroundingChunks[5]->getBlock(x, 0, z);
+                    //
+					// // FIXME: Too many getBlock() calls
+					// // FIXME: Check for block transparency here
+					// if((i == 0 && x > 0           && getBlock(x - 1, y, z) && getBlock(x - 1, y, z)->id())
+					// || (i == 1 && x < width - 1   && getBlock(x + 1, y, z) && getBlock(x + 1, y, z)->id())
+					// || (i == 2 && y > 0           && getBlock(x, y - 1, z) && getBlock(x, y - 1, z)->id())
+					// || (i == 3 && y < height - 1  && getBlock(x, y + 1, z) && getBlock(x, y + 1, z)->id())
+					// || (i == 5 && z > 0           && getBlock(x, y, z - 1) && getBlock(x, y, z - 1)->id())
+					// || (i == 4 && z < depth - 1   && getBlock(x, y, z + 1) && getBlock(x, y, z + 1)->id())
+					// || (i == 0 && x == 0          && surroundingBlocks[0] && surroundingBlocks[0]->id())
+					// || (i == 1 && x == width - 1  && surroundingBlocks[1] && surroundingBlocks[1]->id())
+					// // || (i == 2 && y == 0          && surroundingBlocks[4] && surroundingBlocks[4]->id())
+					// // || (i == 3 && y == height - 1 && surroundingBlocks[5] && surroundingBlocks[5]->id())
+					// || (i == 5 && z == 0          && surroundingBlocks[2] && surroundingBlocks[2]->id())
+					// || (i == 4 && z == depth - 1  && surroundingBlocks[3] && surroundingBlocks[3]->id())
+					// ) {
+					// 	continue;
+					// }
 
 					// Three points of the face
 					a.x = cubeCoords[i * 12 + 0];

@@ -121,6 +121,8 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 
 		if(getChunk(ux, uy, uz)->left())  m_terrainGenerator.generate(*getChunk(ux, uy, uz)->left());
 		if(getChunk(ux, uy, uz)->right()) m_terrainGenerator.generate(*getChunk(ux, uy, uz)->right());
+		if(getChunk(ux, uy, uz)->below()) m_terrainGenerator.generate(*getChunk(ux, uy, uz)->below());
+		if(getChunk(ux, uy, uz)->above()) m_terrainGenerator.generate(*getChunk(ux, uy, uz)->above());
 		if(getChunk(ux, uy, uz)->front()) m_terrainGenerator.generate(*getChunk(ux, uy, uz)->front());
 		if(getChunk(ux, uy, uz)->back())  m_terrainGenerator.generate(*getChunk(ux, uy, uz)->back());
 
