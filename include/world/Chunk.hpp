@@ -19,6 +19,7 @@
 #include <vector>
 
 #include "Block.hpp"
+#include "ChunkBuilder.hpp"
 #include "IDrawable.hpp"
 #include "NonCopyable.hpp"
 #include "Shader.hpp"
@@ -37,8 +38,6 @@ class Chunk : public NonCopyable, public IDrawable {
 		s32 x() const { return m_x; }
 		s32 y() const { return m_y; }
 		s32 z() const { return m_z; }
-
-		// const std::vector<std::unique_ptr<Block>> &data() const { return m_data; }
 
 		Chunk *left()  const { return m_surroundingChunks[0]; }
 		Chunk *right() const { return m_surroundingChunks[1]; }
@@ -76,9 +75,10 @@ class Chunk : public NonCopyable, public IDrawable {
 
 		Texture m_texture;
 
-		// std::vector<std::unique_ptr<Block>> m_data;
 		using DataArray = std::array<std::array<std::array<std::unique_ptr<Block>, Chunk::depth>, Chunk::height>, Chunk::width>;
 		DataArray m_data;
+
+		ChunkBuilder m_builder;
 
 		std::size_t m_verticesCount;
 		std::size_t m_normalsCount;

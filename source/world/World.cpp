@@ -34,12 +34,13 @@ World::World() {
 	for(s32 z = -m_depth / 2 ; z < m_depth / 2 ; z++) {
 		for(s32 y = -m_height / 2 ; y < m_height / 2 ; y++) {
 			for(s32 x = -m_width / 2 ; x < m_width / 2 ; x++) {
-				if(x > -m_width / 2)      getChunk(x, y, z)->setLeft(getChunk(x - 1, y, z));
-				if(x <  m_width / 2 - 1)  getChunk(x, y, z)->setRight(getChunk(x + 1, y, z));
-				if(y > -m_height / 2)     getChunk(x, y, z)->setBelow(getChunk(x, y - 1, z));
-				if(y <  m_height / 2 - 1) getChunk(x, y, z)->setAbove(getChunk(x, y + 1, z));
-				if(z > -m_depth / 2)      getChunk(x, y, z)->setFront(getChunk(x, y, z - 1));
-				if(z <  m_depth / 2 - 1)  getChunk(x, y, z)->setBack(getChunk(x, y, z + 1));
+				Chunk *chunk = getChunk(x, y, z);
+				if(x > -m_width / 2)      chunk->setLeft(getChunk(x - 1, y, z));
+				if(x <  m_width / 2 - 1)  chunk->setRight(getChunk(x + 1, y, z));
+				if(y > -m_height / 2)     chunk->setBelow(getChunk(x, y - 1, z));
+				if(y <  m_height / 2 - 1) chunk->setAbove(getChunk(x, y + 1, z));
+				if(z > -m_depth / 2)      chunk->setFront(getChunk(x, y, z - 1));
+				if(z <  m_depth / 2 - 1)  chunk->setBack(getChunk(x, y, z + 1));
 			}
 		}
 	}
@@ -71,9 +72,10 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 		states.modelMatrix = &modelMatrix;
 
 		// Is the chunk close enough?
-		glm::vec4 center = *states.viewMatrix * *states.modelMatrix * glm::vec4(Chunk::width  / 2,
-		                                                                        Chunk::height / 2,
-		                                                                        Chunk::depth  / 2, 1);
+		glm::vec4 center = *states.viewMatrix
+		                 // * *states.projectionMatrix
+		                 * *states.modelMatrix
+		                 * glm::vec4(Chunk::width / 2, Chunk::height / 2, Chunk::depth / 2, 1);
 
 		if(glm::length(center) > (renderDistance + 1) * Chunk::width) {
 			continue;
@@ -142,9 +144,9 @@ Chunk *World::getChunk(int cx, int cy, int cz) const {
 }
 
 Block *World::getBlock(int x, int y, int z) const {
-	s32 cx = (x + Chunk::width * (m_width / 2)) / Chunk::width;
-	s32 cy = (y + Chunk::height * (m_height / 2)) / Chunk::height;
-	s32 cz = (z + Chunk::depth * (m_depth / 2)) / Chunk::depth;
+	int cx = (x + Chunk::width * (m_width / 2)) / Chunk::width;
+	int cy = (y + Chunk::height * (m_height / 2)) / Chunk::height;
+	int cz = (z + Chunk::depth * (m_depth / 2)) / Chunk::depth;
 
 	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
 		return nullptr;
@@ -156,9 +158,9 @@ Block *World::getBlock(int x, int y, int z) const {
 }
 
 void World::setBlock(int x, int y, int z, u32 id) {
-	s32 cx = (x + Chunk::width * (m_width / 2)) / Chunk::width;
-	s32 cy = (y + Chunk::height * (m_height / 2)) / Chunk::height;
-	s32 cz = (z + Chunk::depth * (m_depth / 2)) / Chunk::depth;
+	int cx = (x + Chunk::width * (m_width / 2)) / Chunk::width;
+	int cy = (y + Chunk::height * (m_height / 2)) / Chunk::height;
+	int cz = (z + Chunk::depth * (m_depth / 2)) / Chunk::depth;
 
 	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
 		return;

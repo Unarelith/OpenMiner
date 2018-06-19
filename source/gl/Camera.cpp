@@ -21,7 +21,7 @@
 Camera::Camera() {
 	m_x = 0;
 	m_y = 16;
-	m_z = -64;
+	m_z = 0;
 
 	m_angleH = 90.0;
 	m_angleV = 0.01;
