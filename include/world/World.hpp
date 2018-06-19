@@ -28,7 +28,7 @@ class World : public IDrawable {
 
 		void updateChunks();
 
-		Chunk *getChunk(int cx, int cz) const;
+		Chunk *getChunk(int cx, int cy, int cz) const;
 
 		Block *getBlock(int x, int y, int z) const;
 		void setBlock(int x, int y, int z, u32 id);
@@ -39,9 +39,9 @@ class World : public IDrawable {
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		const s32 m_width = 20;
-		const s32 m_height = 1; // FIXME: Never used
-		const s32 m_depth = 20;
+		const s32 m_width = 32;
+		const s32 m_height = 4;
+		const s32 m_depth = 32;
 
 		Texture m_texture;
 

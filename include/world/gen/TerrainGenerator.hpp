@@ -16,7 +16,7 @@
 
 class Chunk;
 
-#define SEALEVEL 1
+#define SEALEVEL 4
 
 class TerrainGenerator {
 	public:

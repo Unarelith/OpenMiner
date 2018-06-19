@@ -18,25 +18,29 @@
 #include "Config.hpp"
 #include "World.hpp"
 
-// Block *World::selectedBlock = nullptr;
-// Chunk *World::selectedChunk = nullptr;
-
 World::World() {
-	//m_texture.load("textures/cobblestone.bmp");
 	m_texture.load("textures/blocks.png");
 
-	for(s32 z = -m_depth / 2 ; z < m_depth / 2 ; z++) {
-		for(s32 x = -m_width / 2 ; x < m_width / 2 ; x++) {
-			m_chunks.push_back(std::unique_ptr<Chunk>(new Chunk(x, 0, z, m_texture)));
+	for(s32 z = 0 ; z < m_depth ; z++) {
+		for(s32 y = 0 ; y < m_height ; y++) {
+			for(s32 x = 0 ; x < m_width ; x++) {
+				m_chunks.push_back(std::unique_ptr<Chunk>(new Chunk(x - m_width / 2,
+				                                                    y - m_height / 2,
+				                                                    z - m_depth / 2, m_texture)));
+			}
 		}
 	}
 
 	for(s32 z = -m_depth / 2 ; z < m_depth / 2 ; z++) {
-		for(s32 x = -m_width / 2 ; x < m_width / 2 ; x++) {
-			if(x > -m_width / 2)     getChunk(x, z)->setLeft(getChunk(x - 1, z));
-			if(x <  m_width / 2 - 1) getChunk(x, z)->setRight(getChunk(x + 1, z));
-			if(z > -m_depth / 2)     getChunk(x, z)->setFront(getChunk(x, z - 1));
-			if(z <  m_depth / 2 - 1) getChunk(x, z)->setBack(getChunk(x, z + 1));
+		for(s32 y = -m_height / 2 ; y < m_height / 2 ; y++) {
+			for(s32 x = -m_width / 2 ; x < m_width / 2 ; x++) {
+				if(x > -m_width / 2)      getChunk(x, y, z)->setLeft(getChunk(x - 1, y, z));
+				if(x <  m_width / 2 - 1)  getChunk(x, y, z)->setRight(getChunk(x + 1, y, z));
+				if(y > -m_height / 2)     getChunk(x, y, z)->setBelow(getChunk(x, y - 1, z));
+				if(y <  m_height / 2 - 1) getChunk(x, y, z)->setAbove(getChunk(x, y + 1, z));
+				if(z > -m_depth / 2)      getChunk(x, y, z)->setFront(getChunk(x, y, z - 1));
+				if(z <  m_depth / 2 - 1)  getChunk(x, y, z)->setBack(getChunk(x, y, z + 1));
+			}
 		}
 	}
 }
@@ -51,7 +55,7 @@ void World::updateChunks() {
 void World::draw(RenderTarget &target, RenderStates states) const {
 	float ud = 1000.0;
 	int ux = 0;
-	// int uy = 0;
+	int uy = 0;
 	int uz = 0;
 
 	Shader::bind(states.shader);
@@ -99,7 +103,7 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 			if(d < ud) {
 				ud = d;
 				ux = it->x();
-				// ux = it->y();
+				uy = it->y();
 				uz = it->z();
 			}
 
@@ -113,25 +117,26 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 	}
 
 	if(ud < 1000) {
-		m_terrainGenerator.generate(*getChunk(ux, uz));
+		m_terrainGenerator.generate(*getChunk(ux, uy, uz));
 
-		if(getChunk(ux, uz)->left())  m_terrainGenerator.generate(*getChunk(ux, uz)->left());
-		if(getChunk(ux, uz)->right()) m_terrainGenerator.generate(*getChunk(ux, uz)->right());
-		if(getChunk(ux, uz)->front()) m_terrainGenerator.generate(*getChunk(ux, uz)->front());
-		if(getChunk(ux, uz)->back())  m_terrainGenerator.generate(*getChunk(ux, uz)->back());
+		if(getChunk(ux, uy, uz)->left())  m_terrainGenerator.generate(*getChunk(ux, uy, uz)->left());
+		if(getChunk(ux, uy, uz)->right()) m_terrainGenerator.generate(*getChunk(ux, uy, uz)->right());
+		if(getChunk(ux, uy, uz)->front()) m_terrainGenerator.generate(*getChunk(ux, uy, uz)->front());
+		if(getChunk(ux, uy, uz)->back())  m_terrainGenerator.generate(*getChunk(ux, uy, uz)->back());
 
-		getChunk(ux, uz)->setInitialized(true);
+		getChunk(ux, uy, uz)->setInitialized(true);
 	}
 }
 
-Chunk *World::getChunk(int cx, int cz) const {
+Chunk *World::getChunk(int cx, int cy, int cz) const {
 	cx += m_width / 2;
+	cy += m_height / 2;
 	cz += m_depth / 2;
 
-	if (cx < 0 || cx >= m_width /*|| cy < 0 || cy > m_height */ || cz < 0 || cz >= m_depth)
+	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
 		return nullptr;
 
-	return m_chunks.at(cx + cz * m_width).get();
+	return m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
 }
 
 Block *World::getBlock(int x, int y, int z) const {
@@ -139,10 +144,10 @@ Block *World::getBlock(int x, int y, int z) const {
 	s32 cy = (y + Chunk::height * (m_height / 2)) / Chunk::height;
 	s32 cz = (z + Chunk::depth * (m_depth / 2)) / Chunk::depth;
 
-	if (cx < 0 || cx >= m_width || cy < 0 || cy > m_height || cz < 0 || cz >= m_depth)
+	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
 		return nullptr;
 
-	Chunk *chunk = m_chunks.at(cx + cz * m_width).get();
+	Chunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
 	if (chunk)
 		return chunk->getBlock(x & (Chunk::width - 1), y & (Chunk::height - 1), z & (Chunk::depth - 1));
 	return nullptr;
@@ -153,10 +158,10 @@ void World::setBlock(int x, int y, int z, u32 id) {
 	s32 cy = (y + Chunk::height * (m_height / 2)) / Chunk::height;
 	s32 cz = (z + Chunk::depth * (m_depth / 2)) / Chunk::depth;
 
-	if (cx < 0 || cx >= m_width || cy < 0 || cy > m_height || cz < 0 || cz >= m_depth)
+	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
 		return;
 
-	Chunk *chunk = m_chunks.at(cx + cz * m_width).get();
+	Chunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
 	if (chunk)
 		chunk->setBlock(x & (Chunk::width - 1), y & (Chunk::height - 1), z & (Chunk::depth - 1), id);
 }

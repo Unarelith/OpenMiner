@@ -107,14 +107,15 @@ glm::mat4 Camera::processInputs(const World &world) {
 	return m_viewMatrix;
 }
 
+// FIXME: Use AABB for more precision
 void Camera::checkCollisions(const World &world) {
 	const float PLAYER_HEIGHT = 1.8;
 	float m_eyeheight = m_y + PLAYER_HEIGHT - 1;
 	// testPoint(world, glm::vec3(m_x, m_y, m_z), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4,        m_z - 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4,        m_z - 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4,        m_z + 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4,        m_z + 0.2), m_velocity);
 	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01), m_z - 0.2), m_velocity);
 	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01), m_z - 0.2), m_velocity);
 	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01), m_z + 0.2), m_velocity);
@@ -127,7 +128,7 @@ void Camera::update() {
 	                           glm::vec3(0, 1, 0));
 }
 
-bool passable(const World &world, int x, int y, int z) {
+bool passable(const World &world, float x, float y, float z) {
 	Block *block = world.getBlock(x, y, z);
 	return !block || !block->id();
 }

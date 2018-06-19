@@ -184,8 +184,8 @@ void Chunk::update() {
 Block *Chunk::getBlock(int x, int y, int z) const {
 	if(x < 0)              return m_surroundingChunks[0] ? m_surroundingChunks[0]->getBlock(x + Chunk::width, y, z) : 0;
 	if(x >= Chunk::width)  return m_surroundingChunks[1] ? m_surroundingChunks[1]->getBlock(x - Chunk::width, y, z) : 0;
-	// if(y < 0)              return m_surroundingChunks[2] ? m_surroundingChunks[2]->getBlock(x, y + Chunk::height, z) : 0;
-	// if(y >= Chunk::height) return m_surroundingChunks[3] ? m_surroundingChunks[3]->getBlock(x, y - Chunk::height, z) : 0;
+	if(y < 0)              return m_surroundingChunks[4] ? m_surroundingChunks[4]->getBlock(x, y + Chunk::height, z) : 0;
+	if(y >= Chunk::height) return m_surroundingChunks[5] ? m_surroundingChunks[5]->getBlock(x, y - Chunk::height, z) : 0;
 	if(z < 0)              return m_surroundingChunks[2] ? m_surroundingChunks[2]->getBlock(x, y, z + Chunk::depth) : 0;
 	if(z >= Chunk::depth)  return m_surroundingChunks[3] ? m_surroundingChunks[3]->getBlock(x, y, z - Chunk::depth) : 0;
 	return m_data[x][y][z].get();
@@ -194,8 +194,8 @@ Block *Chunk::getBlock(int x, int y, int z) const {
 void Chunk::setBlock(int x, int y, int z, u32 type) {
 	if(x < 0)              { if(m_surroundingChunks[0]) m_surroundingChunks[0]->setBlock(x + Chunk::width, y, z, type); return; }
 	if(x >= Chunk::width)  { if(m_surroundingChunks[1]) m_surroundingChunks[1]->setBlock(x - Chunk::width, y, z, type); return; }
-	// if(y < 0)              { if(m_below) m_below->setBlock(x, y + Chunk::height, z, type); return; }
-	// if(y >= Chunk::height) { if(m_above) m_above->setBlock(x, y - Chunk::height, z, type); return; }
+	if(y < 0)              { if(m_surroundingChunks[4]) m_surroundingChunks[4]->setBlock(x, y + Chunk::height, z, type); return; }
+	if(y >= Chunk::height) { if(m_surroundingChunks[5]) m_surroundingChunks[5]->setBlock(x, y - Chunk::height, z, type); return; }
 	if(z < 0)              { if(m_surroundingChunks[2]) m_surroundingChunks[2]->setBlock(x, y, z + Chunk::depth, type); return; }
 	if(z >= Chunk::depth)  { if(m_surroundingChunks[3]) m_surroundingChunks[3]->setBlock(x, y, z - Chunk::depth, type); return; }
 
@@ -203,10 +203,12 @@ void Chunk::setBlock(int x, int y, int z, u32 type) {
 
 	m_isChanged = true;
 
-	if(x == 0         && left())  { left()->m_isChanged = true; }
-	if(x == width - 1 && right()) { right()->m_isChanged = true; }
-	if(z == 0         && front()) { front()->m_isChanged = true; }
-	if(z == depth - 1 && back())  { back()->m_isChanged = true; }
+	if(x == 0          && left())  { left()->m_isChanged = true; }
+	if(x == width - 1  && right()) { right()->m_isChanged = true; }
+	if(y == 0          && below()) { below()->m_isChanged = true; }
+	if(y == height - 1 && above()) { above()->m_isChanged = true; }
+	if(z == 0          && front()) { front()->m_isChanged = true; }
+	if(z == depth - 1  && back())  { back()->m_isChanged = true; }
 }
 
 void Chunk::draw(RenderTarget &target, RenderStates states) const {

@@ -44,7 +44,9 @@ class Chunk : public NonCopyable, public IDrawable {
 		Chunk *right() const { return m_surroundingChunks[1]; }
 		Chunk *front() const { return m_surroundingChunks[2]; }
 		Chunk *back()  const { return m_surroundingChunks[3]; }
-		Chunk *getSurroundingChunk(u8 i) { return (i > 3) ? nullptr : m_surroundingChunks[i]; }
+		Chunk *below() const { return m_surroundingChunks[4]; }
+		Chunk *above() const { return m_surroundingChunks[5]; }
+		Chunk *getSurroundingChunk(u8 i) { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
 
 		static const u8 width = 16;
 		static const u8 height = 32;
@@ -54,6 +56,8 @@ class Chunk : public NonCopyable, public IDrawable {
 		void setRight(Chunk *right) { m_surroundingChunks[1] = right; }
 		void setFront(Chunk *front) { m_surroundingChunks[2] = front; }
 		void setBack(Chunk *back)   { m_surroundingChunks[3] = back; }
+		void setBelow(Chunk *below) { m_surroundingChunks[4] = below; }
+		void setAbove(Chunk *above) { m_surroundingChunks[5] = above; }
 
 		bool isGenerated() const { return m_isGenerated; }
 		bool isInitialized() const { return m_isInitialized; }
@@ -81,7 +85,7 @@ class Chunk : public NonCopyable, public IDrawable {
 
 		VertexBuffer m_vbo{GL_QUADS, 0, 0};
 
-		Chunk *m_surroundingChunks[4];
+		Chunk *m_surroundingChunks[6];
 
 		bool m_isChanged;
 		bool m_isInitialized;

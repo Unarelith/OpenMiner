@@ -4,17 +4,17 @@ varying vec4 v_coord3d;
 varying vec4 v_normal;
 
 vec4 light(vec4 color, vec3 lightColor, vec4 lightPosition, float ambientIntensity, float diffuseIntensity) {
-	vec4 ambientColor = vec4(lightColor * ambientIntensity, color.w);
+	vec3 ambientColor = vec3(lightColor * ambientIntensity);
 
 	vec4 lightDirection = normalize(lightPosition - v_coord3d);
 
 	float diffuseFactor = dot(v_normal, lightDirection);
 
-	vec4 diffuseColor = vec4(0.0, 0.0, 0.0, color.w);
+	vec3 diffuseColor = vec3(0.0, 0.0, 0.0);
 	if(diffuseFactor > 0) {
-		diffuseColor = vec4(lightColor * diffuseIntensity * diffuseFactor, color.w);
+		diffuseColor = vec3(lightColor * diffuseIntensity * diffuseFactor);
 	}
 
-	return color * (ambientColor + diffuseColor);
+	return color * vec4(ambientColor + diffuseColor, 1.0);
 }
 

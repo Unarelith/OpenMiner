@@ -1,5 +1,6 @@
 #version 120
 
+varying float v_blockID;
 varying float v_dist;
 
 uniform int u_renderDistance;
@@ -18,6 +19,9 @@ void main() {
 	if(v_dist > u_renderDistance) discard;
 
 	vec4 color = getColor();
+	if (v_blockID == 8) {
+		color.w = 0.5;
+	}
 
 	// FIXME: FINISH THIS WITH PROPER CODE AND SUN BASIC DISPLAY
 	// int maxTime = 5 * 1000;

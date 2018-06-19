@@ -10,6 +10,7 @@ varying vec4 v_coord3d;
 varying vec4 v_normal;
 varying vec2 v_texCoord;
 
+varying float v_blockID;
 varying float v_dist;
 
 uniform mat4 u_modelMatrix;
@@ -30,6 +31,8 @@ void main() {
 	// Used for lighting
 	v_coord3d = u_modelMatrix * vec4(finalPos, 1.0);
 	v_normal = vec4(normal, 1.0);
+
+	v_blockID = coord3d.w;
 
 	v_color = color;
 	v_texCoord = texCoord;
