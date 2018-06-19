@@ -13,15 +13,11 @@
  */
 #include "VertexBuffer.hpp"
 
-VertexBuffer::VertexBuffer(GLenum mode, GLint first, GLsizei count) {
+VertexBuffer::VertexBuffer() {
 	glGenBuffers(1, &m_id);
-
-	m_mode = mode;
-	m_first = first;
-	m_count = count;
 }
 
-VertexBuffer::~VertexBuffer() {
+VertexBuffer::~VertexBuffer() noexcept {
 	glDeleteBuffers(1, &m_id);
 }
 

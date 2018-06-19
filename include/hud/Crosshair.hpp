@@ -24,7 +24,7 @@ class Crosshair : public IDrawable {
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		VertexBuffer m_vbo{GL_LINES, 0, 4};
+		VertexBuffer m_vbo;
 };
 
 #endif // CROSSHAIR_HPP_

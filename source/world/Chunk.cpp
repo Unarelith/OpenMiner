@@ -62,7 +62,7 @@ void Chunk::draw(RenderTarget &target, RenderStates states) const {
 
 	states.texture = &m_texture;
 
-	target.draw(m_vbo, 0, m_verticesCount, states);
+	target.draw(m_vbo, GL_QUADS, 0, m_verticesCount, states);
 
 	// drawOutlines(target, states);
 }

@@ -15,7 +15,6 @@
 
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
-// #include <glm/gtx/transform.hpp>
 
 #include "Camera.hpp"
 #include "Skybox.hpp"
@@ -77,9 +76,6 @@ Skybox::Skybox() {
 	m_vbo.updateData(6 * 4 * 3 * sizeof(float), 6 * 4 * 3 * sizeof(float), colors);
 
 	VertexBuffer::bind(nullptr);
-}
-
-Skybox::~Skybox() {
 }
 
 void Skybox::draw(Shader &shader) {

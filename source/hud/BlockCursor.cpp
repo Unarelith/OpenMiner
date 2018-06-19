@@ -132,8 +132,8 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 
 	VertexBuffer::bind(&m_vbo);
 
-	target.draw(m_vbo, states);
-	// target.draw(m_vbo, m_selectedBlock.w * 4, 4, states);
+	target.draw(m_vbo, GL_LINES, 0, 24, states);
+	// target.draw(m_vbo, GL_QUADS, m_selectedBlock.w * 4, 4, states);
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_POLYGON_OFFSET_FILL);

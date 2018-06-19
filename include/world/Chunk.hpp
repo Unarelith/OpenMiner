@@ -80,7 +80,7 @@ class Chunk : public NonCopyable, public IDrawable {
 
 		ChunkBuilder m_builder;
 
-		VertexBuffer m_vbo{GL_QUADS, 0, 0};
+		VertexBuffer m_vbo;
 		std::size_t m_verticesCount;
 
 		Chunk *m_surroundingChunks[6]{nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
