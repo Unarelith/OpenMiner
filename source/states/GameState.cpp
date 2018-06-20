@@ -82,5 +82,6 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 	target.draw(m_world, states);
 	target.draw(m_crosshair, states);
 	target.draw(m_blockCursor, states);
+	target.draw(m_hotbar, states);
 }
 

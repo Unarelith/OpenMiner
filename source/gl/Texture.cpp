@@ -15,14 +15,12 @@
 #include "SDLHeaders.hpp"
 #include "Texture.hpp"
 
-Texture::Texture() {
-}
-
 Texture::Texture(const std::string &filename) {
 	load(filename);
 }
 
-Texture::~Texture() {
+Texture::~Texture() noexcept {
+	glDeleteTextures(1, &m_texture);
 }
 
 void Texture::load(const std::string &filename) {

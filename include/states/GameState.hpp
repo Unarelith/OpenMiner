@@ -20,6 +20,7 @@
 #include "BlockCursor.hpp"
 #include "Camera.hpp"
 #include "Crosshair.hpp"
+#include "Hotbar.hpp"
 #include "Skybox.hpp"
 #include "World.hpp"
 
@@ -54,6 +55,9 @@ class GameState : public ApplicationState {
 		glm::vec4 m_selectedBlock{0, 0, 0, -1};
 		BlockCursor m_blockCursor{m_camera, m_world, m_viewMatrix, m_projectionMatrix};
 		Crosshair m_crosshair;
+
+		Texture m_widgetTexture;
+		Hotbar m_hotbar;
 };
 
 #endif // GAMESTATE_HPP_

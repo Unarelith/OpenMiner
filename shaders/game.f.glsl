@@ -16,7 +16,7 @@ vec4 fog(vec4 color, float fogCoord, float fogStart, float fogEnd);
 
 void main() {
 	// Discard if the pixel is too far away
-	if(v_dist > u_renderDistance) discard;
+	if(v_blockID != -1 && v_dist > u_renderDistance) discard;
 
 	vec4 color = getColor();
 	if (v_blockID == 8) {

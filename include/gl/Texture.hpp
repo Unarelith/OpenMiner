@@ -21,9 +21,9 @@
 
 class Texture {
 	public:
-		Texture();
+		Texture() = default;
 		Texture(const std::string &filename);
-		~Texture();
+		~Texture() noexcept;
 
 		void load(const std::string &filename);
 

@@ -9,7 +9,7 @@ TODO
 • TODO: Remplacer les anciennes classes par leur upgrade:
    ◦ DONE: `ApplicationState` / `ApplicationStateStack`
    ◦ DONE: `GameClock`
-   ◦ TODO: `Window` (depuis `ZeldaOOL`)
+   ◦ TODO: `Window` et `Texture` (depuis `ZeldaOOL`)
    ◦ TODO: `Debug` / `Exception`
    ◦ TODO: Input system (Mouse + Keyboard)
 • TODO: Catch SDLLoader exception
