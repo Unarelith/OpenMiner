@@ -77,7 +77,8 @@ std::size_t ChunkBuilder::buildChunk(const Chunk &chunk, const VertexBuffer &vbo
 
 				for(u8 i = 0 ; i < 6 ; i++) {
 					// Skip hidden faces
-					if(surroundingBlocks[i] && surroundingBlocks[i]->id()) //  && surroundingBlocks[i]->id() == block->id())
+					if(surroundingBlocks[i] && surroundingBlocks[i]->id()
+					&& (surroundingBlocks[i]->isOpaque() || block->id() == surroundingBlocks[i]->id()))
 						continue;
 
 					// Three points of the face
