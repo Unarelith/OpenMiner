@@ -18,6 +18,8 @@
 #include "SDLHeaders.hpp"
 #include "World.hpp"
 
+class Hotbar;
+
 class BlockCursor : public IDrawable {
 	public:
 		BlockCursor(Camera &camera, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix)
@@ -26,7 +28,7 @@ class BlockCursor : public IDrawable {
 
 		void init();
 
-		void onEvent(const SDL_Event &event);
+		void onEvent(const SDL_Event &event, const Hotbar &hotbar);
 
 		void update(bool useDepthBuffer);
 

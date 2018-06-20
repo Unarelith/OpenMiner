@@ -84,7 +84,7 @@ void Image::updateVertexBuffer() const {
 void Image::draw(RenderTarget &target, RenderStates states) const {
 	states.viewMatrix = nullptr;
 
-	glm::mat4 projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
+	static glm::mat4 projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
 	states.projectionMatrix = &projectionMatrix;
 
 	glm::mat4 modelMatrix = glm::translate(glm::mat4{1.0f}, glm::vec3{m_posRect.x, m_posRect.y, 0});

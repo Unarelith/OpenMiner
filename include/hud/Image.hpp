@@ -26,6 +26,9 @@ class Image : public IDrawable {
 
 		void load(const Texture &texture);
 
+		const FloatRect &clipRect() const { return m_clipRect; }
+		const FloatRect &posRect() const { return m_posRect; }
+
 		void setClipRect(float x, float y, u16 width, u16 height);
 		void setPosRect(float x, float y, u16 width, u16 height);
 

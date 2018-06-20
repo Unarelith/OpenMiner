@@ -16,6 +16,7 @@
 
 #include "BlockCursor.hpp"
 #include "Config.hpp"
+#include "Hotbar.hpp"
 #include "Vertex.hpp"
 
 void BlockCursor::init() {
@@ -93,7 +94,7 @@ void BlockCursor::init() {
 	VertexBuffer::bind(nullptr);
 }
 
-void BlockCursor::onEvent(const SDL_Event &event) {
+void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
 			m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
@@ -119,7 +120,7 @@ void BlockCursor::onEvent(const SDL_Event &event) {
 				if(face == 2) z++;
 				if(face == 5) z--;
 
-				m_world.setBlock(x, y, z, 9);
+				m_world.setBlock(x, y, z, hotbar.cursorPos() + 1);
 			}
 		}
 	}

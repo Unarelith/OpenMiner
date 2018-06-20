@@ -59,7 +59,8 @@ void GameState::onEvent(const SDL_Event &event) {
 		}
 	}
 
-	m_blockCursor.onEvent(event);
+	m_hotbar.onEvent(event);
+	m_blockCursor.onEvent(event, m_hotbar);
 }
 
 void GameState::update() {
