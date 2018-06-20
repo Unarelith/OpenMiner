@@ -99,20 +99,28 @@ void BlockCursor::onEvent(const SDL_Event &event) {
 			m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
 		}
 		else if (event.button.button == SDL_BUTTON_RIGHT) {
-			int face = m_selectedBlock.w;
+			Block *block = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
 
-			int x = m_selectedBlock.x;
-			int y = m_selectedBlock.y;
-			int z = m_selectedBlock.z;
+			Chunk *chunk = m_world.getChunk(m_selectedBlock.x / Chunk::width,
+			                                m_selectedBlock.y / Chunk::height,
+			                                m_selectedBlock.z / Chunk::depth);
 
-			if(face == 0) x++;
-			if(face == 3) x--;
-			if(face == 1) y++;
-			if(face == 4) y--;
-			if(face == 2) z++;
-			if(face == 5) z--;
+			if (block && !block->onClickEvent(chunk)) {
+				int face = m_selectedBlock.w;
 
-			m_world.setBlock(x, y, z, 9);
+				int x = m_selectedBlock.x;
+				int y = m_selectedBlock.y;
+				int z = m_selectedBlock.z;
+
+				if(face == 0) x++;
+				if(face == 3) x--;
+				if(face == 1) y++;
+				if(face == 4) y--;
+				if(face == 2) z++;
+				if(face == 5) z--;
+
+				m_world.setBlock(x, y, z, 9);
+			}
 		}
 	}
 }

@@ -18,9 +18,13 @@
 
 #include "Types.hpp"
 
+class Chunk;
+
 class Block {
 	public:
 		Block(u32 id);
+
+		bool onClickEvent(Chunk *chunk);
 
 		glm::vec4 getTexCoords(int face) const;
 
