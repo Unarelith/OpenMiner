@@ -67,20 +67,11 @@ void Chunk::draw(RenderTarget &target, RenderStates states) const {
 	// drawOutlines(target, states);
 }
 
-// FIXME: Use the renderer to do that
-void Chunk::drawOutlines(RenderTarget &, RenderStates states) const {
-	Shader::bind(states.shader);
-	VertexBuffer::bind(&m_vbo);
-
-	states.shader->enableVertexAttribArray("coord3d");
+void Chunk::drawOutlines(RenderTarget &target, RenderStates states) const {
+	states.texture = nullptr;
 
 	for(u32 i = 0 ; i < m_verticesCount ; i += 4) {
-		glDrawArrays(GL_LINE_LOOP, i, 4);
+		target.draw(m_vbo, GL_LINE_LOOP, i, 4, states);
 	}
-
-	states.shader->disableVertexAttribArray("coord3d");
-
-	VertexBuffer::bind(nullptr);
-	Shader::bind(nullptr);
 }
 

@@ -14,14 +14,23 @@
 #ifndef CHUNKBUILDER_HPP_
 #define CHUNKBUILDER_HPP_
 
-#include <utility>
+#include <vector>
 
+#include "Types.hpp"
+#include "Vertex.hpp"
+
+class Block;
 class Chunk;
 class VertexBuffer;
 
 class ChunkBuilder {
 	public:
 		std::size_t buildChunk(const Chunk &chunk, const VertexBuffer &vbo);
+
+	private:
+		void addFace(u8 x, u8 y, u8 z, u8 i, const Block *block, const Block *surroundingBlock);
+
+		std::vector<Vertex> m_vertices;
 };
 
 #endif // CHUNKBUILDER_HPP_

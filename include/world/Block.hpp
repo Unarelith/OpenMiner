@@ -22,7 +22,7 @@ class Block {
 	public:
 		Block(u32 id);
 
-		glm::vec4 getTexCoords(int face);
+		glm::vec4 getTexCoords(int face) const;
 
 		u32 id() const { return m_id; }
 		void setId(u32 id) { m_id = id; }

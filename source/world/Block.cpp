@@ -17,7 +17,7 @@ Block::Block(u32 id) {
 	m_id = id;
 }
 
-glm::vec4 Block::getTexCoords(int face) {
+glm::vec4 Block::getTexCoords(int face) const {
 	u32 id = m_id;
 
 	// 0 -> right
