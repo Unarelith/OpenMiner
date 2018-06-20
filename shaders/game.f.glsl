@@ -20,7 +20,7 @@ void main() {
 
 	vec4 color = getColor();
 	if (v_blockID == 8) {
-		color.w = 0.75;
+		color.w = 0.85;
 	}
 
 	// FIXME: FINISH THIS WITH PROPER CODE AND SUN BASIC DISPLAY
