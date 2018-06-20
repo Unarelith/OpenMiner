@@ -212,7 +212,7 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 
 			// If we find a block that is not air, we are done
 			Block *block = m_world.getBlock(mx, my, mz);
-			if(block && block->id()) break;
+			if(block && block->id() && block->id() != 8) break;
 		}
 
 		// Find out which face of the block we are looking at
@@ -230,7 +230,7 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 
 	// If we are looking at air, disable the cursor
 	Block *block = m_world.getBlock(mx, my, mz);
-	if(!block || !block->id()) {
+	if(!block || !block->id() || block->id() == 8) {
 		face = -1;
 	}
 

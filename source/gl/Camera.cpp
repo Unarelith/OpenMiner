@@ -20,8 +20,8 @@
 
 Camera::Camera() {
 	m_x = 0;
-	m_y = 16;
-	m_z = 0;
+	m_y = 18;
+	m_z = 20;
 
 	m_angleH = 90.0;
 	m_angleV = 0.01;
@@ -130,7 +130,7 @@ void Camera::update() {
 
 bool passable(const World &world, float x, float y, float z) {
 	Block *block = world.getBlock(x, y, z);
-	return !block || !block->id();
+	return !block || !block->id() || block->id() == 8;
 }
 
 void Camera::testPoint(const World &world, glm::vec3 pos, glm::vec3 &speed) {
