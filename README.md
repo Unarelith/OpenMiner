@@ -4,7 +4,7 @@
 
 - KubKraft is a Minecraft-like game.
 
-![](http://sdz-upload.s3.amazonaws.com/prod/upload/screenshot-20150103233518.png)
+![](screenshot.png?raw=true)
 
 ## Keys
 
@@ -27,4 +27,5 @@
 ## Previous version
 
 - Here is the [commit](https://github.com/Quent42340/KubKraft/tree/8eba845421efff6ce941f8550ff79e6364970fd5) matching the end of the first version made in 2013.
+- And here is the [commit](https://github.com/Quent42340/KubKraft/tree/58c23a7e66404dab94e51998a179dc370c89ea06) matching the end of the rewrite made in 2014.
 
