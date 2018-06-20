@@ -22,6 +22,7 @@ std::map<Keyboard::Key, bool> Keyboard::pressed = {
 	{Key::W,		false},
 	{Key::X,		false},
 	{Key::Z,		false},
+	{Key::E,		false},
 
 	{Key::Left,		false},
 	{Key::Right,	false},
@@ -42,6 +43,7 @@ std::map<Keyboard::Key, u32> Keyboard::lastTimePressed = {
 	{Key::W,		0},
 	{Key::X,		0},
 	{Key::Z,		0},
+	{Key::E,		0},
 
 	{Key::Left,		0},
 	{Key::Right,	0},
@@ -62,6 +64,7 @@ std::map<Keyboard::Key, u32> Keyboard::keysCode = {
 	{Key::W,		SDLK_w},
 	{Key::X,		SDLK_x},
 	{Key::Z,		SDLK_z},
+	{Key::E,		SDLK_e},
 
 	{Key::Left,		SDLK_LEFT},
 	{Key::Right,	SDLK_RIGHT},

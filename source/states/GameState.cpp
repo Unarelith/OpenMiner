@@ -16,11 +16,13 @@
 
 #include "OpenGL.hpp"
 
+#include "ApplicationStateStack.hpp"
 #include "Config.hpp"
 #include "GameClock.hpp"
+#include "GameState.hpp"
+#include "InventoryState.hpp"
 #include "Keyboard.hpp"
 #include "Mouse.hpp"
-#include "GameState.hpp"
 
 GameState::GameState() {
 	initShaders();
@@ -45,6 +47,8 @@ void GameState::initShaders() {
 	m_shader.setUniform("u_time", 0);
 
 	Shader::bind(nullptr);
+
+	m_viewMatrix = m_camera.processInputs(m_world);
 }
 
 void GameState::onEvent(const SDL_Event &event) {
@@ -70,9 +74,14 @@ void GameState::update() {
 
 	m_world.updateChunks();
 
-	m_viewMatrix = m_camera.processInputs(m_world);
+	if (&m_stateStack->top() == this)
+		m_viewMatrix = m_camera.processInputs(m_world);
 
 	m_blockCursor.update(false);
+
+	if (Keyboard::isKeyPressedOnce(Keyboard::E) && &m_stateStack->top() == this) {
+		m_stateStack->push<InventoryState>(this);
+	}
 }
 
 void GameState::draw(RenderTarget &target, RenderStates states) const {

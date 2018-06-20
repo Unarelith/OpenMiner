@@ -27,6 +27,7 @@ class Keyboard {
 			W,
 			X,
 			Z,
+			E,
 
 			Left,
 			Right,

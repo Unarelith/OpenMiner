@@ -11,24 +11,20 @@
  *
  * =====================================================================================
  */
-#include <cstdlib>
-#include <ctime>
-
 #include "Application.hpp"
 #include "Config.hpp"
-#include "Exception.hpp"
-#include "GameState.hpp"
 #include "Mouse.hpp"
-#include "OpenGL.hpp"
-#include "SDLHeaders.hpp"
+
+#include "GameState.hpp"
 
 void Application::init() {
 	CoreApplication::init();
 
 	createWindow(SCREEN_WIDTH, SCREEN_HEIGHT, APP_NAME);
-	m_window.setMouseCursorGrabbed(true);
-	m_window.setMouseCursorVisible(false);
 	m_window.setVerticalSyncEnabled(true);
+
+	Mouse::setCursorVisible(false);
+	Mouse::setCursorGrabbed(true);
 
 	m_renderer.init(m_window);
 

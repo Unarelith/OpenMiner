@@ -28,9 +28,6 @@ class Window : public RenderTarget {
 		void clear();
 		void display();
 
-		void setMouseCursorGrabbed(bool grabbed);
-		void setMouseCursorVisible(bool visible);
-
 		void setVerticalSyncEnabled(bool enabled);
 
 		u16 width() const { return m_width; }

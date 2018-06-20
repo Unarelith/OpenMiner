@@ -43,14 +43,6 @@ void Window::display() {
 	SDL_GL_SwapWindow(m_window.get());
 }
 
-void Window::setMouseCursorGrabbed(bool grabbed) {
-	SDL_SetRelativeMouseMode((SDL_bool)grabbed);
-}
-
-void Window::setMouseCursorVisible(bool visible) {
-	SDL_ShowCursor(visible);
-}
-
 void Window::setVerticalSyncEnabled(bool enabled) {
 	if(SDL_GL_SetSwapInterval(enabled) < 0) {
 		DEBUG("Warning: Can't enable VSync");

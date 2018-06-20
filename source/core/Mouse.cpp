@@ -20,3 +20,11 @@ void Mouse::resetToWindowCenter() {
 	SDL_WarpMouseInWindow(s_window->window(), SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 }
 
+void Mouse::setCursorGrabbed(bool grabbed) {
+	SDL_SetRelativeMouseMode((SDL_bool)grabbed);
+}
+
+void Mouse::setCursorVisible(bool visible) {
+	SDL_ShowCursor(visible);
+}
+

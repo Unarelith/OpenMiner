@@ -23,6 +23,9 @@ class Mouse {
 
 		static void setWindow(Window *window) { s_window = window; }
 
+		static void setCursorVisible(bool isVisible);
+		static void setCursorGrabbed(bool isGrabbed);
+
 	private:
 		static Window *s_window;
 };

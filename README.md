@@ -9,6 +9,7 @@
 ## Keys
 
 - Movement: <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
+- Inventory: <kbd>E</kbd>
 - Land: <kbd>Shift</kbd>
 - Fly: <kbd>Space</kbd>
 - Exit: <kbd>Escape</kbd>
