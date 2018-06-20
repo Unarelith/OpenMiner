@@ -23,7 +23,10 @@ WorkbenchWidget::WorkbenchWidget() {
 	                        m_background.clipRect().width * 3,
 	                        m_background.clipRect().height * 3);
 
-	m_blocksTexture.load("textures/blocks.png");
+	for (u16 i = 1 ; i < 10 ; ++i)
+		m_inventory.addItem(i);
+
+	m_inventoryWidget.update(m_inventory);
 }
 
 void WorkbenchWidget::onEvent(const SDL_Event &event) {
@@ -31,15 +34,14 @@ void WorkbenchWidget::onEvent(const SDL_Event &event) {
 
 void WorkbenchWidget::draw(RenderTarget &target, RenderStates states) const {
 	target.draw(m_background, states);
+	target.draw(m_inventoryWidget, states);
 
-	for (u16 i = 1 ; i < 10 ; ++i) {
-		Image image;
-		image.load(m_blocksTexture);
-		image.setClipRect(i * 16, 0, 16, 16);
-		image.setPosRect(m_background.posRect().x + 10.5 * 3 + (i - 1) * 27 * 2,
-		                 m_background.posRect().y + 86.5 * 3,
-		                 16 * 2, 16 * 2);
-		target.draw(image, states);
-	}
+		// Image image;
+		// image.load(m_blocksTexture);
+		// image.setClipRect(i * 16, 0, 16, 16);
+		// image.setPosRect(m_background.posRect().x + 10.5 * 3 + (i - 1) * 27 * 2,
+		//                  m_background.posRect().y + 86.5 * 3,
+		//                  16 * 2, 16 * 2);
+		// target.draw(image, states);
 }
 

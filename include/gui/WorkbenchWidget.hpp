@@ -14,8 +14,10 @@
 #ifndef WORKBENCHWIDGET_HPP_
 #define WORKBENCHWIDGET_HPP_
 
-#include "Image.hpp"
+#include "InventoryWidget.hpp"
 #include "SDLHeaders.hpp"
+
+#include "Inventory.hpp"
 
 class WorkbenchWidget : public IDrawable {
 	public:
@@ -29,7 +31,8 @@ class WorkbenchWidget : public IDrawable {
 		Texture m_backgroundTexture;
 		Image m_background;
 
-		Texture m_blocksTexture;
+		Inventory m_inventory{9, 3};
+		InventoryWidget m_inventoryWidget;
 };
 
 #endif // WORKBENCHWIDGET_HPP_
