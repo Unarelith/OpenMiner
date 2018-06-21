@@ -15,6 +15,8 @@
 #include "Config.hpp"
 #include "Mouse.hpp"
 
+#include "TextureLoader.hpp"
+
 #include "GameState.hpp"
 
 void Application::init() {
@@ -23,11 +25,38 @@ void Application::init() {
 	createWindow(SCREEN_WIDTH, SCREEN_HEIGHT, APP_NAME);
 	m_window.setVerticalSyncEnabled(true);
 
+	initOpenGL();
+
 	Mouse::setCursorVisible(false);
 	Mouse::setCursorGrabbed(true);
 
-	m_renderer.init(m_window);
+	m_resourceHandler.loadConfigFile<TextureLoader>("resources/config/textures.xml");
 
 	m_stateStack.push<GameState>();
 }
+
+void Application::initOpenGL() {
+#ifdef __MINGW32__
+	if(glewInit() != GLEW_OK) {
+		throw EXCEPTION("glew init failed");
+	}
+#endif
+
+	// FIXME: Water transparency is fkin buggy...
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	// glBlendEquation(GL_FUNC_ADD);
+	// glEnable(GL_ALPHA_TEST);
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+
+	glEnable(GL_POLYGON_OFFSET_FILL);
+	glPolygonOffset(1, 1);
+
+	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+
+	glClearColor(0.196078, 0.6, 0.8, 1.0); // Skyblue
+}
+
 

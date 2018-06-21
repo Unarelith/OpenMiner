@@ -23,7 +23,8 @@ class ItemWidget : public IDrawable, public Transformable {
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		Texture m_texture;
+		u16 m_id;
+
 		Image m_image;
 };
 

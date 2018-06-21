@@ -26,24 +26,14 @@ class Exception {
 	public:
 		template<typename... Args>
 		Exception(u16 line, std::string filename, Args... args) throw() {
-			m_line = line;
-			m_filename = filename;
-
-			std::stringstream stream;
-			m_errorMsg = Debug::makeString(stream, args...);
+			m_errorMsg = Debug::textColor(Debug::TextColor::Red, true) + "at " + filename + ":" + std::to_string(line) + ": " + Debug::textColor(0, true) + Debug::makeString(args...) + Debug::textColor();
 		}
 
-		~Exception() throw() {
-		}
-
-		virtual std::string what() const throw() {
-			return Debug::textColor(Debug::TextColor::Red, true) + "at " + m_filename + ":" + std::to_string(m_line) + ": " + Debug::textColor(0, true) + m_errorMsg.c_str() + Debug::textColor();
+		virtual std::string what() const noexcept {
+			return m_errorMsg.c_str();
 		}
 
 	private:
-		u16 m_line;
-		std::string m_filename;
-
 		std::string m_errorMsg;
 };
 

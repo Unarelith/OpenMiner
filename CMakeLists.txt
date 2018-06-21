@@ -92,6 +92,7 @@ include_directories(${SDL2_INCLUDE_DIRS}
 # Link options
 #------------------------------------------------------------------------------
 target_link_libraries(${CMAKE_PROJECT_NAME}
+                      ${TINYXML2_LIBRARIES}
                       ${OPENGL_LIBRARIES}
                       ${SDL2_LIBRARIES}
                       ${SDL2IMAGE_LIBRARIES}

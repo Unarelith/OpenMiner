@@ -18,8 +18,9 @@
 
 #include "Inventory.hpp"
 #include "ItemWidget.hpp"
+#include "Transformable.hpp"
 
-class InventoryWidget : public IDrawable {
+class InventoryWidget : public IDrawable, public Transformable {
 	public:
 		void update(const Inventory &inventory);
 

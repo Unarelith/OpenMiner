@@ -23,8 +23,10 @@
 class Image : public IDrawable, public Transformable {
 	public:
 		Image() = default;
+		Image(const std::string &textureName);
 		Image(const Texture &texture);
 
+		void load(const std::string &textureName);
 		void load(const Texture &texture);
 
 		const FloatRect &clipRect() const { return m_clipRect; }

@@ -16,14 +16,14 @@
 #include "Texture.hpp"
 
 Texture::Texture(const std::string &filename) {
-	load(filename);
+	loadFromFile(filename);
 }
 
 Texture::~Texture() noexcept {
-	glDeleteTextures(1, &m_texture);
+	if (m_texture) glDeleteTextures(1, &m_texture);
 }
 
-void Texture::load(const std::string &filename) {
+void Texture::loadFromFile(const std::string &filename) {
 	SDL_Surface *surface = IMG_Load(filename.c_str());
 	if(!surface) {
 		throw EXCEPTION("Failed to load texture:", filename);

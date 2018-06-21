@@ -43,7 +43,7 @@ class World : public IDrawable {
 		const s32 m_height = 4;
 		const s32 m_depth = 32;
 
-		Texture m_texture;
+		Texture &m_texture;
 
 		std::vector<std::unique_ptr<Chunk>> m_chunks;
 

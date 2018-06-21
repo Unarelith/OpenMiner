@@ -25,7 +25,7 @@ class Texture {
 		Texture(const std::string &filename);
 		~Texture() noexcept;
 
-		void load(const std::string &filename);
+		void loadFromFile(const std::string &filename);
 
 		static void bind(const Texture *texture);
 
@@ -38,7 +38,7 @@ class Texture {
 		u16 m_width;
 		u16 m_height;
 
-		GLuint m_texture;
+		GLuint m_texture = 0;
 };
 
 #endif // TEXTURE_HPP_

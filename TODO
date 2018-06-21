@@ -2,19 +2,19 @@ TODO
 
 # Nettoyage
 
-• TODO: Vérifier les utilisations inutiles de pointeurs
+• DONE: Découper les gros pâtés en sous-classes
 • DONE: Nettoyer les vieux headers
-• TODO: `Types.hpp` → `IntTypes.hpp`
    → TODO: Vérifier que les types sont bien corrects
-• TODO: Remplacer les anciennes classes par leur upgrade:
+• WIP: Remplacer les anciennes classes par leur upgrade:
    ◦ DONE: `ApplicationState` / `ApplicationStateStack`
    ◦ DONE: `GameClock`
+   ◦ DONE: `Debug` / `Exception`
    ◦ TODO: `Window` et `Texture` (depuis `ZeldaOOL`)
-   ◦ TODO: `Debug` / `Exception`
    ◦ TODO: Input system (Mouse + Keyboard)
+• TODO: `Types.hpp` → `IntTypes.hpp`
+• TODO: Vérifier les utilisations inutiles de pointeurs
 • TODO: Catch SDLLoader exception
 • TODO: Passer un clang-tidy sur le code
-• TODO: Découper les gros pâtés en sous-classes
 • TODO: Passer à la SFML
 • TODO: Séparer l’engine et le gameplay
 • TODO: Séparer le code client du code serveur
@@ -30,18 +30,21 @@ TODO
 
 # ToDoList
 
+## Moteur
+
+• DONE: Rajouter le `ResourceHandler`
+
 ## Joueur
 
 • DONE: Ciblage de bloc
    ◦ DONE: Suppression de bloc
    ◦ DONE: Ajout de bloc
 • TODO: Collisions + Gravité
-   ◦ TODO: Système d’entités (réutiliser l’ECS mais en multi-thread)
+• TODO: Système d’entités (réutiliser l’ECS mais en multi-thread)
 
 ## Items
 
 • TODO: Créer un système d’items
-   ◦ TODO: Inventaire basique (1 slot)
    ◦ TODO: Récupération du bloc cassé
 • TODO: Ajouter les animations de destruction des blocs
 • TODO: Faire un vrai drop d’item
@@ -54,18 +57,19 @@ TODO
 
 ## Génération
 
-• TODO: Augmenter la hauteur du terrain
-• TODO: Dirt + Grass
-• TODO: WATEEEEEEER
-• TODO: Arbres
-• TODO: Fleurs (emit light at night?)
+• DONE: Augmenter la hauteur du terrain
+•  WIP: Rajouter des blocs
+   ◦ DONE: Dirt + Grass
+   ◦ DONE: WATEEEEEEER
+   ◦ DONE: Arbres
+   ◦ TODO: Fleurs (emit light at night?)
 • TODO: Biomes
 • TODO: Génération multi-thread
 
 ## Affichage
 
-• TODO: Optimiser au maximum l’affichage des chunks
-   ◦ TODO: Faire le max de culling
+• WIP: Optimiser au maximum l’affichage des chunks
+   ◦ WIP: Faire le max de culling
       ▸ DONE: Face culling
       ▸ DONE: Frustum culling
       ▸ TODO: Occlusion culling

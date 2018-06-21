@@ -15,8 +15,7 @@
 #include "WorkbenchWidget.hpp"
 
 WorkbenchWidget::WorkbenchWidget() {
-	m_backgroundTexture.load("textures/workbench.png");
-	m_background.load(m_backgroundTexture);
+	m_background.load("texture-workbench");
 	m_background.setClipRect(0, 0, 176, 166);
 
 	for (u16 i = 1 ; i < 10 ; ++i)

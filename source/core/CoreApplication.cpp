@@ -29,7 +29,7 @@ void CoreApplication::init() {
 	// GamePad::init(m_keyboardHandler);
 
 	ApplicationStateStack::setInstance(m_stateStack);
-	// ResourceHandler::setInstance(m_resourceHandler);
+	ResourceHandler::setInstance(m_resourceHandler);
 }
 
 int CoreApplication::run() {

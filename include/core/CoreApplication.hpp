@@ -17,7 +17,7 @@
 #include "ApplicationStateStack.hpp"
 #include "GameClock.hpp"
 // #include "KeyboardHandler.hpp"
-// #include "ResourceHandler.hpp"
+#include "ResourceHandler.hpp"
 #include "Window.hpp"
 
 class CoreApplication {
@@ -38,8 +38,8 @@ class CoreApplication {
 		GameClock m_clock;
 
 		// KeyboardHandler m_keyboardHandler;
-        //
-		// ResourceHandler m_resourceHandler;
+
+		ResourceHandler m_resourceHandler;
 
 	private:
 		void handleEvents();

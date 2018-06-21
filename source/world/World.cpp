@@ -16,11 +16,10 @@
 
 #include "Camera.hpp"
 #include "Config.hpp"
+#include "ResourceHandler.hpp"
 #include "World.hpp"
 
-World::World() {
-	m_texture.load("textures/blocks.png");
-
+World::World() : m_texture(ResourceHandler::getInstance().get<Texture>("texture-blocks")) {
 	for(s32 z = 0 ; z < m_depth ; z++) {
 		for(s32 y = 0 ; y < m_height ; y++) {
 			for(s32 x = 0 ; x < m_width ; x++) {

@@ -14,13 +14,21 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Application.hpp"
 #include "Config.hpp"
 #include "Image.hpp"
+#include "ResourceHandler.hpp"
 #include "Vertex.hpp"
+
+Image::Image(const std::string &textureName) {
+	load(ResourceHandler::getInstance().get<Texture>(textureName));
+}
 
 Image::Image(const Texture &texture) {
 	load(texture);
+}
+
+void Image::load(const std::string &textureName) {
+	load(ResourceHandler::getInstance().get<Texture>(textureName));
 }
 
 void Image::load(const Texture &texture) {
@@ -29,9 +37,7 @@ void Image::load(const Texture &texture) {
 	m_width = m_texture->width();
 	m_height = m_texture->height();
 
-	m_clipRect = FloatRect(0, 0, m_width, m_height);
-
-	updateVertexBuffer();
+	setClipRect(0, 0, m_width, m_height);
 }
 
 void Image::setClipRect(float x, float y, u16 width, u16 height) {

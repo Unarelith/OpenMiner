@@ -32,13 +32,11 @@ class Hotbar : public IDrawable {
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		Texture m_texture;
 		Image m_background;
 
 		Image m_cursor;
 		int m_cursorPos = 0;
 
-		Texture m_blocksTexture;
 		// std::vector<Image> m_items;
 };
 

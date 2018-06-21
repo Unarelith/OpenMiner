@@ -29,7 +29,6 @@ class WorkbenchWidget : public IDrawable, public Transformable {
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		Texture m_backgroundTexture;
 		Image m_background;
 
 		Inventory m_inventory{9, 3};

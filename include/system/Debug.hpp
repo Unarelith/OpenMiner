@@ -18,6 +18,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "Types.hpp"
 
@@ -47,23 +48,17 @@ namespace Debug {
 #endif
 	}
 
-	template<typename T>
-	std::string makeString(std::stringstream &stream, T value) {
-		stream << value;
+	template<typename... Args>
+	std::string makeString(Args &&...args) {
+		std::ostringstream stream;
+		std::vector<int> tmp{0, ((void)(stream << args << " "), 0)...};
+
 		return stream.str();
 	}
 
-	template<typename T, typename... Args>
-	std::string makeString(std::stringstream &stream, T value, Args... args) {
-		stream << value << " ";
-		return makeString(stream, args...);
-	}
-
 	template<typename... Args>
-	void print(Args... args) {
-		std::stringstream stream;
-
-		std::cout << textColor(0, true) << makeString(stream, args...) << textColor() << std::endl;
+	void print(Args &&...args) {
+		std::cerr << makeString(std::forward<Args>(args)...) << std::endl;
 	}
 }
 

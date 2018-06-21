@@ -73,7 +73,7 @@ class Chunk : public NonCopyable, public IDrawable {
 		s32 m_y;
 		s32 m_z;
 
-		Texture m_texture;
+		Texture &m_texture;
 
 		using DataArray = std::array<std::array<std::array<std::unique_ptr<Block>, Chunk::depth>, Chunk::height>, Chunk::width>;
 		DataArray m_data;

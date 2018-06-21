@@ -15,7 +15,6 @@
 #define APPLICATION_HPP_
 
 #include "CoreApplication.hpp"
-#include "Renderer.hpp"
 
 class Application : public CoreApplication {
 	public:
@@ -23,8 +22,7 @@ class Application : public CoreApplication {
 
 		void init() override;
 
-	private:
-		Renderer m_renderer;
+		void initOpenGL();
 };
 
 #endif // APPLICATION_HPP_
