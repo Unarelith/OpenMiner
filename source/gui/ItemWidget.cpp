@@ -25,6 +25,12 @@ void ItemWidget::draw(RenderTarget &target, RenderStates states) const {
 	applyTransform(states);
 
 	// FIXME: Image act weirdly when created in the constructor...
-	target.draw(m_image, states);
+	Image image;
+	image.load("texture-blocks");
+	image.setClipRect(m_id * 16, 0, 16, 16);
+	image.setScale(2.0f / 3.0f, 2.0f / 3.0f, 1.0f);
+	target.draw(image, states);
+
+	// target.draw(m_image, states);
 }
 

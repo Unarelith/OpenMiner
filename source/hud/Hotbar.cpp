@@ -29,8 +29,11 @@ Hotbar::Hotbar() {
 	m_cursor.setPosition(backgroundX - 3, backgroundY - 3, 0);
 	m_cursor.setScale(3, 3, 1);
 
-	// for (u16 i = 1 ; i < 9 ; ++i)
-	// 	addItem(i);
+	for (u16 i = 1 ; i < 10 ; ++i) {
+		ItemWidget &widget = m_items.emplace_back(i);
+		widget.setPosition(backgroundX + 16.5 + 182 * 3 / 9 * (i - 1), backgroundY + 13, 0);
+		widget.setScale(3, 3, 1);
+	}
 }
 
 void Hotbar::onEvent(const SDL_Event &event) {
@@ -41,32 +44,14 @@ void Hotbar::onEvent(const SDL_Event &event) {
 			m_cursorPos = (m_cursorPos == 0) ? 8 : m_cursorPos - 1;
 
 		m_cursor.setPosition(backgroundX - 3 + 20 * 3 * m_cursorPos, backgroundY - 3, 0);
-		// FIXME: Setting position resets scaling, fix that in Transformable
-		m_cursor.setScale(3, 3, 1);
 	}
 }
-
-// void Hotbar::addItem(u16 id) {
-// 	Image &image = m_items.emplace_back();
-// 	image.load(m_blocksTexture);
-// 	image.setClipRect(id * 16, 0, 16, 16);
-// 	image.setPosRect(m_background.posRect().x + 16 + 182 * 3 / 9 * id, m_background.posRect().y + 16, 16 * 2, 16 * 2);
-// }
 
 void Hotbar::draw(RenderTarget &target, RenderStates states) const {
 	target.draw(m_background, states);
 
-	// for (auto &it : m_items)
-	// 	target.draw(it, states);
-
-	for (u16 i = 1 ; i < 10 ; ++i) {
-		Image image;
-		image.load("texture-blocks");
-		image.setClipRect(i * 16, 0, 16, 16);
-		image.setPosition(backgroundX + 16 + 182 * 3 / 9 * (i - 1), backgroundY + 16, 0);
-		image.setScale(2, 2, 1);
-		target.draw(image, states);
-	}
+	for (auto &it : m_items)
+		target.draw(it, states);
 
 	target.draw(m_cursor, states);
 }

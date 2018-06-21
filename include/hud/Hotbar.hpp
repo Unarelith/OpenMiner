@@ -16,7 +16,7 @@
 
 #include <vector>
 
-#include "Image.hpp"
+#include "ItemWidget.hpp"
 #include "SDLHeaders.hpp"
 
 class Hotbar : public IDrawable {
@@ -24,8 +24,6 @@ class Hotbar : public IDrawable {
 		Hotbar();
 
 		void onEvent(const SDL_Event &event);
-
-		void addItem(u16 id);
 
 		int cursorPos() const { return m_cursorPos; }
 
@@ -37,7 +35,7 @@ class Hotbar : public IDrawable {
 		Image m_cursor;
 		int m_cursorPos = 0;
 
-		// std::vector<Image> m_items;
+		std::vector<ItemWidget> m_items;
 };
 
 #endif // HOTBAR_HPP_
