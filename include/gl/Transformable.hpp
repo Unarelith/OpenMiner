@@ -34,7 +34,7 @@ class Transformable {
 		glm::mat4 m_modelMatrix{1};
 		glm::mat4 m_tmpMatrix;
 
-		glm::vec3 m_position;
+		glm::vec3 m_position{0, 0, 0};
 		glm::vec3 m_scale{1, 1, 1};
 };
 

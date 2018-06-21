@@ -16,14 +16,18 @@
 
 #include <string>
 
+#include "NonCopyable.hpp"
 #include "OpenGL.hpp"
 #include "Types.hpp"
 
-class Texture {
+class Texture : public NonCopyable {
 	public:
 		Texture() = default;
 		Texture(const std::string &filename);
+		Texture(Texture &&);
 		~Texture() noexcept;
+
+		Texture &operator=(Texture &&) = default;
 
 		void loadFromFile(const std::string &filename);
 

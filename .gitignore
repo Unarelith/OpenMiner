@@ -14,6 +14,7 @@ a.out
 # Debug stuff
 vgcore.*
 .gdb_history
+.valgrind_suppressions
 
 # CMake temporary files
 CMakeFiles

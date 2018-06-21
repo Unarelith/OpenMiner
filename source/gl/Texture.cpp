@@ -19,8 +19,18 @@ Texture::Texture(const std::string &filename) {
 	loadFromFile(filename);
 }
 
+Texture::Texture(Texture &&texture) {
+	m_filename = texture.m_filename;
+
+	m_width = texture.m_width;
+	m_height = texture.m_height;
+
+	m_texture = texture.m_texture;
+	texture.m_texture = 0;
+}
+
 Texture::~Texture() noexcept {
-	if (m_texture) glDeleteTextures(1, &m_texture);
+	glDeleteTextures(1, &m_texture);
 }
 
 void Texture::loadFromFile(const std::string &filename) {
