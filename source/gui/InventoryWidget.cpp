@@ -52,7 +52,12 @@ void InventoryWidget::onEvent(const SDL_Event &event) {
 void InventoryWidget::draw(RenderTarget &target, RenderStates states) const {
 	applyTransform(states);
 
-	for (auto &it : m_itemWidgets)
-		target.draw(it, states);
+	for (std::size_t i = 0 ; i < m_itemWidgets.size() ; ++i) {
+		if ((int)i != m_selectedItem)
+			target.draw(m_itemWidgets[i], states);
+	}
+
+	if (m_selectedItem != -1)
+		target.draw(m_itemWidgets[m_selectedItem], states);
 }
 
