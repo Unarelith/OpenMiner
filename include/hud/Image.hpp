@@ -17,9 +17,10 @@
 #include "IDrawable.hpp"
 #include "Rect.hpp"
 #include "Texture.hpp"
+#include "Transformable.hpp"
 #include "VertexBuffer.hpp"
 
-class Image : public IDrawable {
+class Image : public IDrawable, public Transformable {
 	public:
 		Image() = default;
 		Image(const Texture &texture);
@@ -27,10 +28,7 @@ class Image : public IDrawable {
 		void load(const Texture &texture);
 
 		const FloatRect &clipRect() const { return m_clipRect; }
-		const FloatRect &posRect() const { return m_posRect; }
-
 		void setClipRect(float x, float y, u16 width, u16 height);
-		void setPosRect(float x, float y, u16 width, u16 height);
 
 		u16 width() const { return m_width; }
 		u16 height() const { return m_height; }
@@ -46,7 +44,6 @@ class Image : public IDrawable {
 		u16 m_height = 0;
 
 		FloatRect m_clipRect;
-		FloatRect m_posRect;
 
 		VertexBuffer m_vbo;
 };

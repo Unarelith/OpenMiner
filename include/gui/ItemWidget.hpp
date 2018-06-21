@@ -16,7 +16,7 @@
 
 #include "Image.hpp"
 
-class ItemWidget : public IDrawable {
+class ItemWidget : public IDrawable, public Transformable {
 	public:
 		ItemWidget(u16 id);
 

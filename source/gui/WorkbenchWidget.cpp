@@ -18,21 +18,24 @@ WorkbenchWidget::WorkbenchWidget() {
 	m_backgroundTexture.load("textures/workbench.png");
 	m_background.load(m_backgroundTexture);
 	m_background.setClipRect(0, 0, 176, 166);
-	m_background.setPosRect(SCREEN_WIDTH  / 2.0 - m_background.clipRect().width  * 3.0 / 2.0,
-	                        SCREEN_HEIGHT / 2.0 - m_background.clipRect().height * 3.0 / 2.0,
-	                        m_background.clipRect().width * 3,
-	                        m_background.clipRect().height * 3);
 
 	for (u16 i = 1 ; i < 10 ; ++i)
 		m_inventory.addItem(i);
 
 	m_inventoryWidget.update(m_inventory);
+
+	setPosition(SCREEN_WIDTH  / 2.0 - m_background.clipRect().width  * 3 / 2.0,
+	            SCREEN_HEIGHT / 2.0 - m_background.clipRect().height * 3 / 2.0, 0);
+
+	setScale(3, 3, 1);
 }
 
 void WorkbenchWidget::onEvent(const SDL_Event &event) {
 }
 
 void WorkbenchWidget::draw(RenderTarget &target, RenderStates states) const {
+	applyTransform(states);
+
 	target.draw(m_background, states);
 	target.draw(m_inventoryWidget, states);
 

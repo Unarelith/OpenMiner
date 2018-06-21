@@ -18,10 +18,14 @@ ItemWidget::ItemWidget(u16 id) {
 
 	m_image.load(m_texture);
 	m_image.setClipRect(id * 16, 0, 16, 16);
-	m_image.setPosRect(10, 10, 16 * 2, 16 * 2);
+	m_image.setScale(2.0f / 3.0f, 2.0f / 3.0f, 1.0f);
+
+	setPosition(10, 10, 0);
 }
 
 void ItemWidget::draw(RenderTarget &target, RenderStates states) const {
+	applyTransform(states);
+
 	target.draw(m_image, states);
 }
 

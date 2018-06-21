@@ -16,10 +16,11 @@
 
 #include "InventoryWidget.hpp"
 #include "SDLHeaders.hpp"
+#include "Transformable.hpp"
 
 #include "Inventory.hpp"
 
-class WorkbenchWidget : public IDrawable {
+class WorkbenchWidget : public IDrawable, public Transformable {
 	public:
 		WorkbenchWidget();
 

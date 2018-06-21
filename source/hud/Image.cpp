@@ -29,7 +29,6 @@ void Image::load(const Texture &texture) {
 	m_width = m_texture->width();
 	m_height = m_texture->height();
 
-	m_posRect = FloatRect(0, 0, m_width, m_height);
 	m_clipRect = FloatRect(0, 0, m_width, m_height);
 
 	updateVertexBuffer();
@@ -41,18 +40,12 @@ void Image::setClipRect(float x, float y, u16 width, u16 height) {
 	updateVertexBuffer();
 }
 
-void Image::setPosRect(float x, float y, u16 width, u16 height) {
-	m_posRect.reset(x, y, width, height);
-
-	updateVertexBuffer();
-}
-
 void Image::updateVertexBuffer() const {
 	Vertex vertices[4] = {
-		{{m_posRect.width, 0,                0, -1}},
-		{{0,               0,                0, -1}},
-		{{0,               m_posRect.height, 0, -1}},
-		{{m_posRect.width, m_posRect.height, 0, -1}},
+		{{m_clipRect.width, 0,                 0, -1}},
+		{{0,                0,                 0, -1}},
+		{{0,                m_clipRect.height, 0, -1}},
+		{{m_clipRect.width, m_clipRect.height, 0, -1}},
 	};
 
 	FloatRect texRect = FloatRect(
@@ -82,13 +75,12 @@ void Image::updateVertexBuffer() const {
 }
 
 void Image::draw(RenderTarget &target, RenderStates states) const {
+	applyTransform(states);
+
 	states.viewMatrix = nullptr;
 
 	static glm::mat4 projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
 	states.projectionMatrix = &projectionMatrix;
-
-	glm::mat4 modelMatrix = glm::translate(glm::mat4{1.0f}, glm::vec3{m_posRect.x, m_posRect.y, 0});
-	states.modelMatrix = &modelMatrix;
 
 	states.texture = m_texture;
 
