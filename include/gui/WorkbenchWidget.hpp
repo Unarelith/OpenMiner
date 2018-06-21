@@ -15,14 +15,10 @@
 #define WORKBENCHWIDGET_HPP_
 
 #include "InventoryWidget.hpp"
-#include "SDLHeaders.hpp"
-#include "Transformable.hpp"
 
-#include "Inventory.hpp"
-
-class WorkbenchWidget : public IDrawable, public Transformable {
+class WorkbenchWidget : public Widget {
 	public:
-		WorkbenchWidget();
+		WorkbenchWidget(Widget *parent = nullptr);
 
 		void onEvent(const SDL_Event &event);
 
@@ -32,7 +28,7 @@ class WorkbenchWidget : public IDrawable, public Transformable {
 		Image m_background;
 
 		Inventory m_inventory{9, 3};
-		InventoryWidget m_inventoryWidget;
+		InventoryWidget m_inventoryWidget{this};
 };
 
 #endif // WORKBENCHWIDGET_HPP_

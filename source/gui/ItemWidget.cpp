@@ -13,12 +13,16 @@
  */
 #include "ItemWidget.hpp"
 
-ItemWidget::ItemWidget(u16 id) {
-	m_id = id;
-
+ItemWidget::ItemWidget(u16 id, Widget *parent) : Widget(16, 16, parent) {
 	m_image.load("texture-blocks");
-	m_image.setClipRect(m_id * 16, 0, 16, 16);
 	m_image.setScale(2.0f / 3.0f, 2.0f / 3.0f, 1.0f);
+	m_image.setPosition(3, 0, 0);
+
+	setItem(id);
+}
+
+void ItemWidget::setItem(u16 id) {
+	m_image.setClipRect(id * 16, 0, 16, 16);
 }
 
 void ItemWidget::draw(RenderTarget &target, RenderStates states) const {

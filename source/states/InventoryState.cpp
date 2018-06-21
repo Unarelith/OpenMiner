@@ -24,6 +24,8 @@ InventoryState::InventoryState(ApplicationState *parent) : ApplicationState(pare
 	Mouse::setCursorGrabbed(false);
 	Mouse::setCursorVisible(true);
 	Mouse::resetToWindowCenter();
+
+	setScale(3, 3, 1);
 }
 
 void InventoryState::onEvent(const SDL_Event &event) {
@@ -46,6 +48,8 @@ void InventoryState::update() {
 }
 
 void InventoryState::draw(RenderTarget &target, RenderStates states) const {
+	applyTransform(states);
+
 	if (m_parent)
 		target.draw(*m_parent);
 

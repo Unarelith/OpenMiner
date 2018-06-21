@@ -31,7 +31,7 @@ Hotbar::Hotbar() {
 
 	for (u16 i = 1 ; i < 10 ; ++i) {
 		ItemWidget &widget = m_items.emplace_back(i);
-		widget.setPosition(backgroundX + 16 + 182 * 3 / 9 * (i - 1), backgroundY + 16, 0);
+		widget.setPosition(backgroundX + 16 + 180 / 3.0 * (i - 1) - 8, backgroundY + 16, 0);
 		widget.setScale(3, 3, 1);
 	}
 }

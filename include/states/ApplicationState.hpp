@@ -15,11 +15,12 @@
 #define APPLICATIONSTATE_HPP_
 
 #include "IDrawable.hpp"
+#include "Transformable.hpp"
 #include "SDLHeaders.hpp"
 
 class ApplicationStateStack;
 
-class ApplicationState : public IDrawable {
+class ApplicationState : public IDrawable, public Transformable {
 	public:
 		ApplicationState(ApplicationState *parent = nullptr) : m_parent(parent) {}
 		ApplicationState(const ApplicationState &) = delete;

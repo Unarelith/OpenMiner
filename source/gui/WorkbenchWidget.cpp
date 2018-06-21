@@ -14,7 +14,7 @@
 #include "Config.hpp"
 #include "WorkbenchWidget.hpp"
 
-WorkbenchWidget::WorkbenchWidget() {
+WorkbenchWidget::WorkbenchWidget(Widget *parent) : Widget(176, 166, parent) {
 	m_background.load("texture-workbench");
 	m_background.setClipRect(0, 0, 176, 166);
 
@@ -22,14 +22,15 @@ WorkbenchWidget::WorkbenchWidget() {
 		m_inventory.addItem(i);
 
 	m_inventoryWidget.update(m_inventory);
+	m_inventoryWidget.setPosition(7, 86, 0);
 
-	setPosition(SCREEN_WIDTH  / 2.0 - m_background.clipRect().width  * 3 / 2.0,
-	            SCREEN_HEIGHT / 2.0 - m_background.clipRect().height * 3 / 2.0, 0);
-
-	setScale(3, 3, 1);
+	// setScale(3, 3, 1);
+	setPosition(SCREEN_WIDTH  / 3.0 / 2.0 - m_background.clipRect().width  / 2.0,
+	            SCREEN_HEIGHT / 3.0 / 2.0 - m_background.clipRect().height / 2.0, 0);
 }
 
 void WorkbenchWidget::onEvent(const SDL_Event &event) {
+	m_inventoryWidget.onEvent(event);
 }
 
 void WorkbenchWidget::draw(RenderTarget &target, RenderStates states) const {
@@ -37,13 +38,5 @@ void WorkbenchWidget::draw(RenderTarget &target, RenderStates states) const {
 
 	target.draw(m_background, states);
 	target.draw(m_inventoryWidget, states);
-
-		// Image image;
-		// image.load(m_blocksTexture);
-		// image.setClipRect(i * 16, 0, 16, 16);
-		// image.setPosRect(m_background.posRect().x + 10.5 * 3 + (i - 1) * 27 * 2,
-		//                  m_background.posRect().y + 86.5 * 3,
-		//                  16 * 2, 16 * 2);
-		// target.draw(image, states);
 }
 

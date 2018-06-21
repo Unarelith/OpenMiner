@@ -15,15 +15,16 @@
 #define ITEMWIDGET_HPP_
 
 #include "Image.hpp"
+#include "Widget.hpp"
 
-class ItemWidget : public IDrawable, public Transformable {
+class ItemWidget : public Widget {
 	public:
-		ItemWidget(u16 id);
+		ItemWidget(u16 id, Widget *parent = nullptr);
+
+		void setItem(u16 id);
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
-
-		u16 m_id;
 
 		Image m_image;
 };

@@ -36,9 +36,7 @@ void Transformable::setScale(float factorX, float factorY, float factorZ) {
 
 void Transformable::applyTransform(RenderStates &states) const {
 	glm::mat4 &modelMatrix = const_cast<Transformable *>(this)->m_modelMatrix;
-	modelMatrix = glm::mat4{1};
-	modelMatrix = glm::translate(modelMatrix, m_position);
-	modelMatrix = glm::scale(modelMatrix, m_scale);
+	modelMatrix = glm::translate(glm::mat4{1}, m_position) * glm::scale(glm::mat4{1}, m_scale);
 
 	if (states.modelMatrix) {
 		const_cast<Transformable *>(this)->m_tmpMatrix = *states.modelMatrix * m_modelMatrix;

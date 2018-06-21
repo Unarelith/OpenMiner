@@ -14,20 +14,24 @@
 #ifndef INVENTORYWIDGET_HPP_
 #define INVENTORYWIDGET_HPP_
 
-#include <vector>
-
 #include "Inventory.hpp"
 #include "ItemWidget.hpp"
-#include "Transformable.hpp"
+#include "SDLHeaders.hpp"
 
-class InventoryWidget : public IDrawable, public Transformable {
+class InventoryWidget : public Widget {
 	public:
+		InventoryWidget(Widget *parent = nullptr) : Widget(parent) {}
+
+		void onEvent(const SDL_Event &event);
+
 		void update(const Inventory &inventory);
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
 		std::vector<ItemWidget> m_itemWidgets;
+
+		int m_selectedItem = -1;
 };
 
 #endif // INVENTORYWIDGET_HPP_
