@@ -29,6 +29,9 @@ class InventoryWidget : public Widget {
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
+		u16 m_inventoryWidth = 0;
+		u16 m_inventoryHeight = 0;
+
 		std::vector<ItemWidget> m_itemWidgets;
 
 		int m_selectedItem = -1;

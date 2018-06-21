@@ -41,6 +41,8 @@ TODO
    ◦ DONE: Ajout de bloc
 • TODO: Collisions + Gravité
 • TODO: Système d’entités (réutiliser l’ECS mais en multi-thread)
+   ◦ TODO: Les controlleurs doivent garder une liste de références vers les entités
+           sur lesquelles ils travaillent
 
 ## Items
 

@@ -13,7 +13,7 @@
  */
 #include "Inventory.hpp"
 
-void Inventory::addItem(u16 id) {
-	m_items.emplace_back(id);
+void Inventory::setItem(u16 x, u16 y, u16 id) {
+	m_items.at(x + y * m_width) = id;
 }
 

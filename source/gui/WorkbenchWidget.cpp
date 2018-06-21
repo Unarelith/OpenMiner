@@ -18,8 +18,8 @@ WorkbenchWidget::WorkbenchWidget(Widget *parent) : Widget(176, 166, parent) {
 	m_background.load("texture-workbench");
 	m_background.setClipRect(0, 0, 176, 166);
 
-	for (u16 i = 1 ; i < 10 ; ++i)
-		m_inventory.addItem(i);
+	for (u16 i = 0 ; i < 12 ; ++i)
+		m_inventory.setItem(i % m_inventory.width(), i / m_inventory.width(), i + 1);
 
 	m_inventoryWidget.update(m_inventory);
 	m_inventoryWidget.setPosition(7, 86, 0);

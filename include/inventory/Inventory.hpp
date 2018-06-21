@@ -21,9 +21,9 @@
 class Inventory {
 	public:
 		Inventory(u16 width, u16 height)
-			: m_width(width), m_height(height) {}
+			: m_width(width), m_height(height) { m_items.resize(width * height); }
 
-		void addItem(u16 id);
+		void setItem(u16 x, u16 y, u16 id);
 
 		u16 width() const { return m_width; }
 		u16 height() const { return m_height; }
@@ -31,8 +31,8 @@ class Inventory {
 		const std::vector<u16> &items() const { return m_items; }
 
 	private:
-		u16 m_width;
-		u16 m_height;
+		u16 m_width = 0;
+		u16 m_height = 0;
 
 		std::vector<u16> m_items;
 };

@@ -21,10 +21,13 @@ class ItemWidget : public Widget {
 	public:
 		ItemWidget(u16 id, Widget *parent = nullptr);
 
+		u16 item() const { return m_id; }
 		void setItem(u16 id);
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
+
+		u16 m_id = 0;
 
 		Image m_image;
 };
