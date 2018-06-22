@@ -24,6 +24,9 @@ ItemWidget::ItemWidget(u16 id, Widget *parent) : Widget(16, 16, parent) {
 void ItemWidget::setItem(u16 id) {
 	m_id = id;
 
+	// if (id == 0)
+	// 	id = 15;
+
 	m_image.setClipRect(id * 16, 0, 16, 16);
 }
 

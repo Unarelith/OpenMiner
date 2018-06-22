@@ -23,7 +23,7 @@ class VertexBuffer : public NonCopyable {
 		VertexBuffer(VertexBuffer &&);
 		~VertexBuffer() noexcept;
 
-		VertexBuffer &operator=(VertexBuffer &&);
+		VertexBuffer &operator=(VertexBuffer &&) = default;
 
 		void setData(GLsizeiptr size, const GLvoid *data, GLenum usage) const;
 		void updateData(GLintptr offset, GLsizeiptr size, const GLvoid *data) const;

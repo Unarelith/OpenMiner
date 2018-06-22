@@ -33,6 +33,7 @@ class InventoryWidget : public Widget {
 		u16 m_inventoryHeight = 0;
 
 		std::vector<ItemWidget> m_itemWidgets;
+		ItemWidget m_mouseItemWidget{0, this};
 
 		int m_selectedItem = -1;
 };

@@ -45,6 +45,8 @@ void Application::initOpenGL() {
 	// FIXME: Water transparency is fkin buggy...
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	// glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+	// glBlendFunc(GL_ONE, GL_ONE);
 	// glBlendEquation(GL_FUNC_ADD);
 	// glEnable(GL_ALPHA_TEST);
 
