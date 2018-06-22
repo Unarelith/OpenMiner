@@ -15,16 +15,16 @@
 #define INVENTORYWIDGET_HPP_
 
 #include "Inventory.hpp"
-#include "ItemWidget.hpp"
+#include "MouseItemWidget.hpp"
 #include "SDLHeaders.hpp"
 
 class InventoryWidget : public Widget {
 	public:
 		InventoryWidget(Widget *parent = nullptr) : Widget(parent) {}
 
-		void onEvent(const SDL_Event &event);
+		void init(const Inventory &inventory);
 
-		void update(const Inventory &inventory);
+		void onEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget);
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
@@ -33,7 +33,6 @@ class InventoryWidget : public Widget {
 		u16 m_inventoryHeight = 0;
 
 		std::vector<ItemWidget> m_itemWidgets;
-		ItemWidget m_mouseItemWidget{0, this};
 
 		int m_selectedItem = -1;
 };

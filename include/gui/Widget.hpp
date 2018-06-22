@@ -26,6 +26,8 @@ class Widget : public IDrawable, public Transformable {
 
 		bool isPointInWidget(float x, float y);
 
+		const Widget *parent() { return m_parent; }
+
 		unsigned int width() const { return m_width; }
 		unsigned int height() const { return m_height; }
 

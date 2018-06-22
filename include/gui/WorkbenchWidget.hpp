@@ -27,8 +27,16 @@ class WorkbenchWidget : public Widget {
 
 		Image m_background;
 
+		Inventory m_craftingInventory{3, 3};
+		InventoryWidget m_craftingInventoryWidget{this};
+
 		Inventory m_inventory{9, 3};
 		InventoryWidget m_inventoryWidget{this};
+
+		Inventory m_hotbarInventory{9, 1};
+		InventoryWidget m_hotbarInventoryWidget{this};
+
+		MouseItemWidget m_mouseItemWidget{this};
 };
 
 #endif // WORKBENCHWIDGET_HPP_

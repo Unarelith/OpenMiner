@@ -16,7 +16,7 @@
 ItemWidget::ItemWidget(u16 id, Widget *parent) : Widget(16, 16, parent) {
 	m_image.load("texture-blocks");
 	m_image.setScale(2.0f / 3.0f, 2.0f / 3.0f, 1.0f);
-	m_image.setPosition(3, 0, 0);
+	m_image.setPosition(3, 3, 0);
 
 	setItem(id);
 }
