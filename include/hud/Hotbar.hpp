@@ -28,7 +28,7 @@ class Hotbar : public IDrawable {
 
 		void onEvent(const SDL_Event &event);
 
-		u16 currentItem() const { return m_inventory.getItem(m_cursorPos, 0); }
+		u16 currentItem() const { return m_inventory.getStack(m_cursorPos, 0).item().id(); }
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;

@@ -13,14 +13,14 @@
  */
 #include "Inventory.hpp"
 
-void Inventory::setItem(u16 x, u16 y, u16 id) {
-	m_items[x + y * m_width] = id;
+void Inventory::setStack(u16 x, u16 y, u16 id, u16 amount) {
+	m_items[x + y * m_width] = ItemStack(id, amount);
 }
 
-void Inventory::addItem(u16 id) {
+void Inventory::addStack(u16 id, u16 amount) {
 	for (std::size_t i = 0 ; i < m_items.size() ; ++i) {
-		if (m_items[i] == 0) {
-			m_items[i] = id;
+		if (m_items[i].item().id() == 0) {
+			m_items[i] = ItemStack(id, amount);
 			break;
 		}
 	}

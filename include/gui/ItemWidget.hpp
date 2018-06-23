@@ -24,7 +24,7 @@ class ItemWidget : public Widget {
 
 		void update();
 
-		u16 item() const { return m_inventory.getItem(m_x, m_y); }
+		u16 item() const { return m_inventory.getStack(m_x, m_y).item().id(); }
 		void setItem(unsigned int id);
 
 	private:

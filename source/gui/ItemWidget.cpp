@@ -27,7 +27,7 @@ void ItemWidget::update() {
 }
 
 void ItemWidget::setItem(unsigned int id) {
-	m_inventory.setItem(m_x, m_y, id);
+	m_inventory.setStack(m_x, m_y, id);
 	update();
 }
 

@@ -33,6 +33,7 @@ class Registry {
 		}
 
 		const Block &getBlock(std::size_t id) const { return *m_blocks.at(id).get(); }
+		const Item &getItem(std::size_t id) const { return *m_items.at(id).get(); }
 
 		void registerBlocks();
 		void registerItems();
