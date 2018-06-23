@@ -18,7 +18,7 @@
 static const auto backgroundX = SCREEN_WIDTH / 2 - 182 * 3 / 2;
 static const auto backgroundY = SCREEN_HEIGHT - 22 * 3;
 
-Hotbar::Hotbar() {
+Hotbar::Hotbar(Inventory &inventory) : m_inventory(inventory) {
 	m_background.load("texture-widgets");
 	m_background.setClipRect(0, 0, 182, 22);
 	m_background.setPosition(backgroundX, backgroundY, 0);
@@ -29,10 +29,17 @@ Hotbar::Hotbar() {
 	m_cursor.setPosition(backgroundX - 3, backgroundY - 3, 0);
 	m_cursor.setScale(3, 3, 1);
 
-	for (u16 i = 1 ; i < 10 ; ++i) {
-		ItemWidget &widget = m_items.emplace_back(i);
-		widget.setPosition(backgroundX + 16 + 180 / 3.0 * (i - 1) - 8, backgroundY + 7, 0);
+	for (u16 i = 0 ; i < 9 ; ++i) {
+		ItemWidget &widget = m_items.emplace_back(m_inventory, i, 0);
+		widget.update();
+		widget.setPosition(backgroundX + 16 + 180 / 3.0 * i - 8.5, backgroundY + 7.5, 0);
 		widget.setScale(3, 3, 1);
+	}
+}
+
+void Hotbar::update() {
+	for (u16 i = 0 ; i < 9 ; ++i) {
+		m_items[i].setItem(m_inventory.getItem(i, 0));
 	}
 }
 

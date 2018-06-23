@@ -14,6 +14,6 @@
 #include "Inventory.hpp"
 
 void Inventory::setItem(u16 x, u16 y, u16 id) {
-	m_items.at(x + y * m_width) = id;
+	m_items[x + y * m_width] = id;
 }
 

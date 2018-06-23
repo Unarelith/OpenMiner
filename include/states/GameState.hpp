@@ -57,7 +57,9 @@ class GameState : public ApplicationState {
 		Crosshair m_crosshair;
 
 		Texture m_widgetTexture;
-		Hotbar m_hotbar;
+		Inventory m_playerInventory{9, 3};
+		Inventory m_hotbarInventory{9, 1};
+		Hotbar m_hotbar{m_hotbarInventory};
 };
 
 #endif // GAMESTATE_HPP_

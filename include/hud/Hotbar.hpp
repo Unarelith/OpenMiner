@@ -16,16 +16,19 @@
 
 #include <vector>
 
+#include "Inventory.hpp"
 #include "ItemWidget.hpp"
 #include "SDLHeaders.hpp"
 
 class Hotbar : public IDrawable {
 	public:
-		Hotbar();
+		Hotbar(Inventory &inventory);
+
+		void update();
 
 		void onEvent(const SDL_Event &event);
 
-		int cursorPos() const { return m_cursorPos; }
+		u16 currentItem() const { return m_inventory.getItem(m_cursorPos, 0); }
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
@@ -34,6 +37,8 @@ class Hotbar : public IDrawable {
 
 		Image m_cursor;
 		int m_cursorPos = 0;
+
+		Inventory &m_inventory;
 
 		std::vector<ItemWidget> m_items;
 };

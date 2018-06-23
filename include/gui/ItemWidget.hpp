@@ -15,19 +15,25 @@
 #define ITEMWIDGET_HPP_
 
 #include "Image.hpp"
+#include "Inventory.hpp"
 #include "Widget.hpp"
 
 class ItemWidget : public Widget {
 	public:
-		ItemWidget(u16 id, Widget *parent = nullptr);
+		ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent = nullptr);
 
-		u16 item() const { return m_id; }
-		void setItem(u16 id);
+		void update();
+
+		u16 item() const { return m_inventory.getItem(m_x, m_y); }
+		void setItem(unsigned int id);
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		u16 m_id = 0;
+		Inventory &m_inventory;
+
+		unsigned int m_x = 0;
+		unsigned int m_y = 0;
 
 		Image m_image;
 };

@@ -14,7 +14,6 @@
 #ifndef INVENTORYWIDGET_HPP_
 #define INVENTORYWIDGET_HPP_
 
-#include "Inventory.hpp"
 #include "MouseItemWidget.hpp"
 #include "SDLHeaders.hpp"
 
@@ -22,7 +21,7 @@ class InventoryWidget : public Widget {
 	public:
 		InventoryWidget(Widget *parent = nullptr) : Widget(parent) {}
 
-		void init(const Inventory &inventory);
+		void init(Inventory &inventory);
 
 		void onEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget);
 

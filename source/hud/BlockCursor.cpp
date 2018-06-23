@@ -106,7 +106,7 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 			                                m_selectedBlock.y / Chunk::height,
 			                                m_selectedBlock.z / Chunk::depth);
 
-			if (block && !block->onClickEvent(chunk)) {
+			if (block && !block->onClickEvent(chunk) && hotbar.currentItem()) {
 				int face = m_selectedBlock.w;
 
 				int x = m_selectedBlock.x;
@@ -120,7 +120,7 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 				if(face == 2) z++;
 				if(face == 5) z--;
 
-				m_world.setBlock(x, y, z, hotbar.cursorPos() + 1);
+				m_world.setBlock(x, y, z, hotbar.currentItem());
 			}
 		}
 	}

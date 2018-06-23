@@ -18,7 +18,7 @@
 
 class MouseItemWidget : public ItemWidget {
 	public:
-		MouseItemWidget(Widget *parent) : ItemWidget(0, parent) {}
+		MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0, parent) { update(); }
 
 		void onEvent(const SDL_Event &event);
 
@@ -26,6 +26,8 @@ class MouseItemWidget : public ItemWidget {
 
 	private:
 		void updatePosition(float x, float y);
+
+		Inventory m_inventory{1, 1};
 };
 
 #endif // MOUSEITEMWIDGET_HPP_

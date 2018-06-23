@@ -13,12 +13,16 @@
  */
 #include "InventoryWidget.hpp"
 
-void InventoryWidget::init(const Inventory &inventory) {
+void InventoryWidget::init(Inventory &inventory) {
 	m_itemWidgets.clear();
 
-	for (u16 y = 0 ; y < inventory.height() ; ++y)
-		for (u16 x = 0 ; x < inventory.width() ; ++x)
-			m_itemWidgets.emplace_back(inventory.items().at(x + y * inventory.width()), this).setPosition(x * 18, y * 18, 0);
+	for (u16 y = 0 ; y < inventory.height() ; ++y) {
+		for (u16 x = 0 ; x < inventory.width() ; ++x) {
+			ItemWidget &widget = m_itemWidgets.emplace_back(inventory, x, y, this);
+			widget.update();
+			widget.setPosition(x * 18, y * 18, 0);
+		}
+	}
 
 	m_width = inventory.width() * 18;
 	m_height = inventory.height() * 18;

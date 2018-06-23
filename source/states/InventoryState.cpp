@@ -15,7 +15,9 @@
 #include "InventoryState.hpp"
 #include "Mouse.hpp"
 
-InventoryState::InventoryState(ApplicationState *parent) : ApplicationState(parent) {
+InventoryState::InventoryState(Inventory &playerInventory, Inventory &hotbarInventory, ApplicationState *parent)
+	: ApplicationState(parent), m_playerInventory{playerInventory}, m_hotbarInventory{hotbarInventory}
+{
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "shaders/basic.v.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "shaders/basic.f.glsl");

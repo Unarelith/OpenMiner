@@ -25,6 +25,13 @@
 #include "Mouse.hpp"
 
 GameState::GameState() {
+	for (u16 i = 0 ; i < 11 ; ++i) {
+		if (i < 9)
+			m_hotbarInventory.setItem(i, 0, i + 1);
+		else
+			m_playerInventory.setItem(i - 9, 0, i + 1);
+	}
+
 	initShaders();
 }
 
@@ -77,10 +84,13 @@ void GameState::update() {
 	if (&m_stateStack->top() == this)
 		m_viewMatrix = m_camera.processInputs(m_world);
 
+	// FIXME: Shouldn't be called every tick
+	m_hotbar.update();
+
 	m_blockCursor.update(false);
 
 	if (Keyboard::isKeyPressedOnce(Keyboard::E) && &m_stateStack->top() == this) {
-		m_stateStack->push<InventoryState>(this);
+		m_stateStack->push<InventoryState>(m_playerInventory, m_hotbarInventory, this);
 	}
 }
 

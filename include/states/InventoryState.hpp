@@ -20,7 +20,7 @@
 
 class InventoryState : public ApplicationState {
 	public:
-		InventoryState(ApplicationState *parent = nullptr);
+		InventoryState(Inventory &playerInventory, Inventory &hotbarInventory, ApplicationState *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -31,7 +31,10 @@ class InventoryState : public ApplicationState {
 
 		Shader m_shader;
 
-		WorkbenchWidget m_widget;
+		Inventory &m_playerInventory;
+		Inventory &m_hotbarInventory;
+
+		WorkbenchWidget m_widget{m_playerInventory, m_hotbarInventory};
 };
 
 #endif // INVENTORYSTATE_HPP_

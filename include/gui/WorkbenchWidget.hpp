@@ -18,7 +18,7 @@
 
 class WorkbenchWidget : public Widget {
 	public:
-		WorkbenchWidget(Widget *parent = nullptr);
+		WorkbenchWidget(Inventory &playerInventory, Inventory &hotbarInventory, Widget *parent = nullptr);
 
 		void onEvent(const SDL_Event &event);
 
@@ -30,10 +30,10 @@ class WorkbenchWidget : public Widget {
 		Inventory m_craftingInventory{3, 3};
 		InventoryWidget m_craftingInventoryWidget{this};
 
-		Inventory m_inventory{9, 3};
-		InventoryWidget m_inventoryWidget{this};
+		Inventory &m_playerInventory;
+		InventoryWidget m_playerInventoryWidget{this};
 
-		Inventory m_hotbarInventory{9, 1};
+		Inventory &m_hotbarInventory;
 		InventoryWidget m_hotbarInventoryWidget{this};
 
 		MouseItemWidget m_mouseItemWidget{this};
