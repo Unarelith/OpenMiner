@@ -135,7 +135,6 @@ bool passable(const World &world, float x, float y, float z) {
 
 void Camera::testPoint(const World &world, glm::vec3 pos, glm::vec3 &speed) {
 	// FIXME: Temporary fix, find the real problem!!!
-	// FIXME: This causes one layer to be totally fucked up
 	if (pos.x < 0) --pos.x;
 	if (pos.y < 1) --pos.y;
 	if (pos.z < 0) --pos.z;

@@ -14,8 +14,8 @@
 #ifndef CHUNK_HPP_
 #define CHUNK_HPP_
 
-#include <map>
 #include <memory>
+#include <unordered_map>
 #include <vector>
 
 #include "Block.hpp"
@@ -30,7 +30,7 @@ class Chunk : public NonCopyable, public IDrawable {
 	public:
 		Chunk(s32 x, s32 y, s32 z, Texture &texture);
 
-		void update();
+		void update(World &world);
 
 		u32 getBlock(int x, int y, int z) const;
 		void setBlock(int x, int y, int z, u32 id);
@@ -89,6 +89,8 @@ class Chunk : public NonCopyable, public IDrawable {
 		bool m_isChanged = false;
 		bool m_isInitialized = false;
 		bool m_isGenerated = false;
+
+		std::unordered_map<std::size_t, const Block&> m_tickingBlocks;
 };
 
 #endif // CHUNK_HPP_

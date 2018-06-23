@@ -46,9 +46,8 @@ World::World() : m_texture(ResourceHandler::getInstance().get<Texture>("texture-
 }
 
 void World::updateChunks() {
-	// FIXME
 	for (auto &it : m_chunks) {
-		it->update();
+		it->update(*this);
 	}
 }
 

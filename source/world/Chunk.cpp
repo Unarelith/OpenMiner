@@ -12,6 +12,7 @@
  * =====================================================================================
  */
 #include "Chunk.hpp"
+#include "Registry.hpp"
 
 Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
 	m_x = x;
@@ -19,12 +20,19 @@ Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
 	m_z = z;
 }
 
-void Chunk::update() {
+void Chunk::update(World &world) {
 	if (!m_isChanged) return;
 
 	m_isChanged = false;
 
 	m_verticesCount = m_builder.buildChunk(*this, m_vbo);
+
+	// for (auto &it : m_tickingBlocks) {
+	// 	int z = it.first / (width * height);
+	// 	int y = (it.first - z * width * height) / width;
+	// 	int x = (it.first - z * width * height) % width;
+	// 	it.second.onTick(glm::ivec3{x + m_x * width, y + m_y * height, z + m_z * depth}, world);
+	// }
 }
 
 u32 Chunk::getBlock(int x, int y, int z) const {
@@ -37,6 +45,8 @@ u32 Chunk::getBlock(int x, int y, int z) const {
 	return m_data[x][y][z];
 }
 
+// #include "Debug.hpp"
+
 void Chunk::setBlock(int x, int y, int z, u32 type) {
 	if(x < 0)              { if(m_surroundingChunks[0]) m_surroundingChunks[0]->setBlock(x + Chunk::width, y, z, type); return; }
 	if(x >= Chunk::width)  { if(m_surroundingChunks[1]) m_surroundingChunks[1]->setBlock(x - Chunk::width, y, z, type); return; }
@@ -44,6 +54,18 @@ void Chunk::setBlock(int x, int y, int z, u32 type) {
 	if(y >= Chunk::height) { if(m_surroundingChunks[5]) m_surroundingChunks[5]->setBlock(x, y - Chunk::height, z, type); return; }
 	if(z < 0)              { if(m_surroundingChunks[2]) m_surroundingChunks[2]->setBlock(x, y, z + Chunk::depth, type); return; }
 	if(z >= Chunk::depth)  { if(m_surroundingChunks[3]) m_surroundingChunks[3]->setBlock(x, y, z - Chunk::depth, type); return; }
+
+	const Block &block = Registry::getInstance().getBlock(type);
+	// if (type == 8)
+	// 	DEBUG("at (", m_x, m_y, m_z, ")", "(", x, y, z, ")", type, "is", block.canUpdate());
+	if (block.canUpdate()) {
+		m_tickingBlocks.emplace(x + y * width + z * width * height, block);
+	}
+	else {
+		auto it = m_tickingBlocks.find(x + y * width + z * width * height);
+		if (it != m_tickingBlocks.end())
+			m_tickingBlocks.erase(it);
+	}
 
 	m_data[x][y][z] = type;
 

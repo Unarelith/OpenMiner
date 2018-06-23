@@ -19,12 +19,18 @@
 #include "Types.hpp"
 
 class Chunk;
+class World;
 
 class Block {
 	public:
 		Block(u32 id);
+		virtual ~Block() = default;
 
-		glm::vec4 getTexCoords(int face) const;
+		virtual void onTick(const glm::ivec3 &, World &) const {}
+		virtual void onClick(const glm::ivec3 &, World &) const {}
+		virtual void onBlockDestroy(const glm::ivec3 &, const glm::ivec3 &, World &) const {}
+
+		virtual glm::vec4 getTexCoords(int face) const;
 
 		u32 id() const { return m_id; }
 		void setId(u32 id) { m_id = id; }
@@ -33,6 +39,11 @@ class Block {
 		void setSelected(bool isSelected, s8 face) { m_isSelected = isSelected; m_selectedFace = face; }
 
 		bool isOpaque() const { return m_id != 0 && m_id != 8 && m_id != 9; }
+
+		bool canUpdate() const { return m_canUpdate; }
+
+	protected:
+		bool m_canUpdate = false;
 
 	private:
 		u32 m_id;

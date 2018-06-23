@@ -11,6 +11,7 @@
  *
  * =====================================================================================
  */
+#include "BlockWater.hpp"
 #include "Registry.hpp"
 
 Registry *Registry::s_instance = nullptr;
@@ -24,7 +25,7 @@ void Registry::registerBlocks() {
 	registerBlock<Block>(5);
 	registerBlock<Block>(6);
 	registerBlock<Block>(7);
-	registerBlock<Block>(8);
+	registerBlock<BlockWater>(8);
 	registerBlock<Block>(9);
 	registerBlock<Block>(10);
 	registerBlock<Block>(11);
