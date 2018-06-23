@@ -142,18 +142,18 @@ Chunk *World::getChunk(int cx, int cy, int cz) const {
 	return m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
 }
 
-Block *World::getBlock(int x, int y, int z) const {
+u32 World::getBlock(int x, int y, int z) const {
 	int cx = (x + Chunk::width * (m_width / 2)) / Chunk::width;
 	int cy = (y + Chunk::height * (m_height / 2)) / Chunk::height;
 	int cz = (z + Chunk::depth * (m_depth / 2)) / Chunk::depth;
 
 	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
-		return nullptr;
+		return 0;
 
 	Chunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
 	if (chunk)
 		return chunk->getBlock(x & (Chunk::width - 1), y & (Chunk::height - 1), z & (Chunk::depth - 1));
-	return nullptr;
+	return 0;
 }
 
 void World::setBlock(int x, int y, int z, u32 id) {

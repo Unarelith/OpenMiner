@@ -20,21 +20,21 @@ Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
 }
 
 void Chunk::update() {
-	if (!m_isChanged || m_data.empty()) return;
+	if (!m_isChanged) return;
 
 	m_isChanged = false;
 
 	m_verticesCount = m_builder.buildChunk(*this, m_vbo);
 }
 
-Block *Chunk::getBlock(int x, int y, int z) const {
+u32 Chunk::getBlock(int x, int y, int z) const {
 	if(x < 0)              return m_surroundingChunks[0] ? m_surroundingChunks[0]->getBlock(x + Chunk::width, y, z) : 0;
 	if(x >= Chunk::width)  return m_surroundingChunks[1] ? m_surroundingChunks[1]->getBlock(x - Chunk::width, y, z) : 0;
 	if(y < 0)              return m_surroundingChunks[4] ? m_surroundingChunks[4]->getBlock(x, y + Chunk::height, z) : 0;
 	if(y >= Chunk::height) return m_surroundingChunks[5] ? m_surroundingChunks[5]->getBlock(x, y - Chunk::height, z) : 0;
 	if(z < 0)              return m_surroundingChunks[2] ? m_surroundingChunks[2]->getBlock(x, y, z + Chunk::depth) : 0;
 	if(z >= Chunk::depth)  return m_surroundingChunks[3] ? m_surroundingChunks[3]->getBlock(x, y, z - Chunk::depth) : 0;
-	return m_data[x][y][z].get();
+	return m_data[x][y][z];
 }
 
 void Chunk::setBlock(int x, int y, int z, u32 type) {
@@ -45,7 +45,7 @@ void Chunk::setBlock(int x, int y, int z, u32 type) {
 	if(z < 0)              { if(m_surroundingChunks[2]) m_surroundingChunks[2]->setBlock(x, y, z + Chunk::depth, type); return; }
 	if(z >= Chunk::depth)  { if(m_surroundingChunks[3]) m_surroundingChunks[3]->setBlock(x, y, z - Chunk::depth, type); return; }
 
-	m_data[x][y][z].reset(new Block(type));
+	m_data[x][y][z] = type;
 
 	m_isChanged = true;
 

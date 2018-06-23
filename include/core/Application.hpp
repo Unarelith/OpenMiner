@@ -15,6 +15,7 @@
 #define APPLICATION_HPP_
 
 #include "CoreApplication.hpp"
+#include "Registry.hpp"
 
 class Application : public CoreApplication {
 	public:
@@ -23,6 +24,9 @@ class Application : public CoreApplication {
 		void init() override;
 
 		void initOpenGL();
+
+	private:
+		Registry m_registry;
 };
 
 #endif // APPLICATION_HPP_

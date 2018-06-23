@@ -129,8 +129,8 @@ void Camera::update() {
 }
 
 bool passable(const World &world, float x, float y, float z) {
-	Block *block = world.getBlock(x, y, z);
-	return !block || !block->id() || block->id() == 8;
+	u32 block = world.getBlock(x, y, z);
+	return !block || block == 8;
 }
 
 void Camera::testPoint(const World &world, glm::vec3 pos, glm::vec3 &speed) {

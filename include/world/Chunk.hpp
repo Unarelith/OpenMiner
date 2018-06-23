@@ -32,7 +32,7 @@ class Chunk : public NonCopyable, public IDrawable {
 
 		void update();
 
-		Block *getBlock(int x, int y, int z) const;
+		u32 getBlock(int x, int y, int z) const;
 		void setBlock(int x, int y, int z, u32 id);
 
 		s32 x() const { return m_x; }
@@ -75,7 +75,8 @@ class Chunk : public NonCopyable, public IDrawable {
 
 		Texture &m_texture;
 
-		using DataArray = std::array<std::array<std::array<std::unique_ptr<Block>, Chunk::depth>, Chunk::height>, Chunk::width>;
+		// using DataArray = std::array<std::array<std::array<std::unique_ptr<Block>, Chunk::depth>, Chunk::height>, Chunk::width>;
+		using DataArray = u32[Chunk::width][Chunk::height][Chunk::depth];
 		DataArray m_data;
 
 		ChunkBuilder m_builder;

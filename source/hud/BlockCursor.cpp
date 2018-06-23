@@ -17,6 +17,7 @@
 #include "BlockCursor.hpp"
 #include "Config.hpp"
 #include "Hotbar.hpp"
+#include "Registry.hpp"
 #include "Vertex.hpp"
 
 void BlockCursor::init() {
@@ -100,13 +101,10 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 			m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
 		}
 		else if (event.button.button == SDL_BUTTON_RIGHT) {
-			Block *block = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
+			u32 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
+			const Block &block = Registry::getInstance().getBlock(blockId);
 
-			Chunk *chunk = m_world.getChunk(m_selectedBlock.x / Chunk::width,
-			                                m_selectedBlock.y / Chunk::height,
-			                                m_selectedBlock.z / Chunk::depth);
-
-			if (block && !block->onClickEvent(chunk) && hotbar.currentItem()) {
+			if (block.id() && hotbar.currentItem()) {
 				int face = m_selectedBlock.w;
 
 				int x = m_selectedBlock.x;
@@ -220,8 +218,8 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 			mz = floorf(testPos.z);
 
 			// If we find a block that is not air, we are done
-			Block *block = m_world.getBlock(mx, my, mz);
-			if(block && block->id() && block->id() != 8) break;
+			u32 block = m_world.getBlock(mx, my, mz);
+			if(block && block != 8) break;
 		}
 
 		// Find out which face of the block we are looking at
@@ -238,8 +236,8 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 	}
 
 	// If we are looking at air, disable the cursor
-	Block *block = m_world.getBlock(mx, my, mz);
-	if(!block || !block->id() || block->id() == 8) {
+	u32 block = m_world.getBlock(mx, my, mz);
+	if(!block || block == 8) {
 		face = -1;
 	}
 

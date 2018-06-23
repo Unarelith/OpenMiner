@@ -66,7 +66,7 @@ void TerrainGenerator::testCraftGeneration(Chunk &chunk) const {
 					// Otherwise we are in the air
 					} else {
 						// A tree!
-						if(chunk.getBlock(x, y - 1, z) && chunk.getBlock(x, y - 1, z)->id() == 3 && (rand() & 0xff) == 0) {
+						if(chunk.getBlock(x, y - 1, z) == 3 && (rand() & 0xff) == 0) {
 							// Trunk
 							h = (rand() & 0x3) + 3;
 							for(int i = 0 ; i < h ; i++) {

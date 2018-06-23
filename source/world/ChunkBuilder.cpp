@@ -13,6 +13,7 @@
  */
 #include "Chunk.hpp"
 #include "ChunkBuilder.hpp"
+#include "Registry.hpp"
 
 static const float cubeCoords[6 * 4 * 3] = {
 	// Left
@@ -58,20 +59,20 @@ std::size_t ChunkBuilder::buildChunk(const Chunk &chunk, const VertexBuffer &vbo
 	for(u8 z = 0 ; z < Chunk::depth ; z++) {
 		for(u8 y = 0 ; y < Chunk::height ; y++) {
 			for(u8 x = 0 ; x < Chunk::width ; x++) {
-				Block *block = chunk.getBlock(x, y, z);
-				if(!block || !block->id()) continue;
+				const Block &block = Registry::getInstance().getBlock(chunk.getBlock(x, y, z));
+				if(!block.id()) continue;
 
-				Block *surroundingBlocks[6] = {
-					chunk.getBlock(x - 1, y, z),
-					chunk.getBlock(x + 1, y, z),
-					chunk.getBlock(x, y - 1, z),
-					chunk.getBlock(x, y + 1, z),
-					chunk.getBlock(x, y, z - 1),
-					chunk.getBlock(x, y, z + 1),
+				const Block *surroundingBlocks[6] = {
+					&Registry::getInstance().getBlock(chunk.getBlock(x - 1, y, z)),
+					&Registry::getInstance().getBlock(chunk.getBlock(x + 1, y, z)),
+					&Registry::getInstance().getBlock(chunk.getBlock(x, y - 1, z)),
+					&Registry::getInstance().getBlock(chunk.getBlock(x, y + 1, z)),
+					&Registry::getInstance().getBlock(chunk.getBlock(x, y, z - 1)),
+					&Registry::getInstance().getBlock(chunk.getBlock(x, y, z + 1)),
 				};
 
 				for(u8 i = 0 ; i < 6 ; i++) {
-					addFace(x, y, z, i, block, surroundingBlocks[i]);
+					addFace(x, y, z, i, &block, surroundingBlocks[i]);
 				}
 			}
 		}

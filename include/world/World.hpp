@@ -30,7 +30,7 @@ class World : public IDrawable {
 
 		Chunk *getChunk(int cx, int cy, int cz) const;
 
-		Block *getBlock(int x, int y, int z) const;
+		u32 getBlock(int x, int y, int z) const;
 		void setBlock(int x, int y, int z, u32 id);
 
 		// Render distance in chunks

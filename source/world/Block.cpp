@@ -19,18 +19,6 @@ Block::Block(u32 id) {
 
 #include "Chunk.hpp"
 
-bool Block::onClickEvent(Chunk *chunk) {
-	if (m_id == 3) {
-		m_id = 1;
-
-		chunk->setChanged(true);
-
-		return true;
-	}
-
-	return false;
-}
-
 glm::vec4 Block::getTexCoords(int face) const {
 	u32 id = m_id;
 
