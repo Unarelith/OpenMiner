@@ -53,7 +53,7 @@ glm::vec4 Block::getTexCoords(int face) const {
 
 	// FIXME: HARDCODED VALUES
 	const u16 textureWidth = 256;
-	const u16 textureHeight = 16;
+	const u16 textureHeight = 32;
 
 	float textureX = id % (textureWidth / 16) * 16.0f / textureWidth;
 	float textureY = id / (textureWidth / 16) * 16.0f / textureHeight;

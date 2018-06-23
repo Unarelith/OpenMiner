@@ -60,6 +60,10 @@ void TerrainGenerator::testCraftGeneration(Chunk &chunk) const {
 
 			// Land blocks
 			for(int y = 0 ; y < Chunk::height ; y++) {
+				// if (y == 0 && chunk.y() == 0) {
+				// 	chunk.setBlock(x, y, z, 16);
+				// 	continue;
+				// }
 				// Are we above "ground" level?
 				if(y + chunk.y() * Chunk::height >= h) {
 					// if we are not yet up to sea level, fill with water blocks

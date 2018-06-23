@@ -22,7 +22,7 @@ ItemWidget::ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent)
 }
 
 void ItemWidget::update() {
-	m_image.setClipRect(item() * 16, 0, 16, 16);
+	m_image.setClipRect(item() * 16, item() / 16 * 16, 16, 16);
 }
 
 void ItemWidget::setItem(unsigned int id) {

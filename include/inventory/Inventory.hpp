@@ -26,6 +26,8 @@ class Inventory {
 		u16 getItem(u16 x, u16 y) { return m_items.at(x + y * m_width); }
 		void setItem(u16 x, u16 y, u16 id);
 
+		void addItem(u16 id);
+
 		u16 width() const { return m_width; }
 		u16 height() const { return m_height; }
 
