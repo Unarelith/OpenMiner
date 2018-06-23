@@ -55,7 +55,7 @@ void TerrainGenerator::testCraftGeneration(Chunk &chunk) const {
 		for(int x = 0 ; x < Chunk::width ; x++) {
 			// Land height
 			// float n = noise2d((x + chunk.x() * Chunk::width) / 256.0, (z + chunk.z() * Chunk::depth) / 256.0, 5, 0.8) * 4;
-			float n = noise2d((x + chunk.x() * Chunk::width) / 256.0, (z + chunk.z() * Chunk::depth) / 256.0, 4, 0.8) * 4;
+			float n = noise2d((x / 2.0 + chunk.x() / 2.0 * Chunk::width) / 256.0, (z / 2.0 + chunk.z() / 2.0 * Chunk::depth) / 256.0, 4, 0.8) * 4;
 			int h = n * 2;
 
 			// Land blocks
@@ -96,7 +96,7 @@ void TerrainGenerator::testCraftGeneration(Chunk &chunk) const {
 				}
 
 				// Random value used to determine land type
-				float r = noise3d_abs((x + chunk.x() * Chunk::width) / 16.0, (y + chunk.y() * Chunk::height) / 16.0, (z + chunk.z() * Chunk::depth) / 16.0, 2, 1);
+				float r = noise3d_abs((x / 2.0 + chunk.x() / 2.0 * Chunk::width) / 16.0, (y / 2.0 + chunk.y() / 2.0 * Chunk::height) / 16.0, (z / 2.0 + chunk.z() / 2.0 * Chunk::depth) / 16.0, 2, 1);
 
 				// Sand layer
 				if(n + r * 5 < 4) {
