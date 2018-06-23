@@ -112,14 +112,14 @@ void Camera::checkCollisions(const World &world) {
 	const float PLAYER_HEIGHT = 1.8;
 	float m_eyeheight = m_y + PLAYER_HEIGHT - 1;
 	// testPoint(world, glm::vec3(m_x, m_y, m_z), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4,        m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4,        m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4,        m_z + 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4,        m_z + 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01), m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01), m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01), m_z + 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight + (2 - PLAYER_HEIGHT - 0.01), m_z + 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight - 0.4, m_z - 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - 0.4, m_z - 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight - 0.4, m_z + 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - 0.4, m_z + 0.2), m_velocity);
 }
 
 void Camera::update() {
@@ -134,6 +134,12 @@ bool passable(const World &world, float x, float y, float z) {
 }
 
 void Camera::testPoint(const World &world, glm::vec3 pos, glm::vec3 &speed) {
+	// FIXME: Temporary fix, find the real problem!!!
+	// FIXME: This causes one layer to be totally fucked up
+	if (pos.x < 0) --pos.x;
+	if (pos.y < 1) --pos.y;
+	if (pos.z < 0) --pos.z;
+
 	if(!passable(world, pos.x + speed.x, pos.y, pos.z)) speed.x = 0;
 	if(!passable(world, pos.x, pos.y, pos.z + speed.z)) speed.z = 0;
 	if(!passable(world, pos.x, pos.y + speed.y, pos.z)) {

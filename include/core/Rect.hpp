@@ -16,7 +16,7 @@
 
 #include <algorithm>
 
-// #include "Vector2.hpp"
+#include "Vector2.hpp"
 
 template<typename T>
 class Rect {
@@ -27,9 +27,9 @@ class Rect {
 			reset(_x, _y, _width, _height);
 		}
 
-		// Rect(const Vector2<T> &_position, const Vector2<T> &_size) {
-		// 	reset(_position.x, _position.y, _size.x, _size.y);
-		// }
+		Rect(const Vector2<T> &_position, const Vector2<T> &_size) {
+			reset(_position.x, _position.y, _size.x, _size.y);
+		}
 
 		template<typename U>
 		Rect(const Rect<U> &rect)
@@ -45,7 +45,7 @@ class Rect {
 		void reset(Rect<T> rect) { reset(rect.x, rect.y, rect.width, rect.height); }
 
 		void move(T _x, T _y) { x += _x; y += _y; }
-		// void move(Vector2<T> d) { move(d.x, d.y); }
+		void move(Vector2<T> d) { move(d.x, d.y); }
 
 		bool intersects(const Rect<T> &rect) const {
 			T r1MinX = std::min(x, static_cast<T>(x + width));
@@ -93,15 +93,15 @@ class Rect {
 			}
 		}
 
-		// Vector2<T> position() const { return {x, y}; }
+		Vector2<T> position() const { return {x, y}; }
 
-		// void setPosition(Vector2<T> vector2) { x = vector2.x; y = vector2.y; }
+		void setPosition(Vector2<T> vector2) { x = vector2.x; y = vector2.y; }
 
-		// Rect operator+(const Vector2<T> &vector2) const { return Rect{x + vector2.x, y + vector2.y, width, height}; }
-		// Rect operator-(const Vector2<T> &vector2) const { return Rect{x - vector2.x, y - vector2.y, width, height}; }
-        //
-		// Rect &operator+=(const Vector2<T> &vector2) { *this = operator+(vector2); return *this; }
-		// Rect &operator-=(const Vector2<T> &vector2) { *this = operator-(vector2); return *this; }
+		Rect operator+(const Vector2<T> &vector2) const { return Rect{x + vector2.x, y + vector2.y, width, height}; }
+		Rect operator-(const Vector2<T> &vector2) const { return Rect{x - vector2.x, y - vector2.y, width, height}; }
+
+		Rect &operator+=(const Vector2<T> &vector2) { *this = operator+(vector2); return *this; }
+		Rect &operator-=(const Vector2<T> &vector2) { *this = operator-(vector2); return *this; }
 
 		T x = 0;
 		T y = 0;
