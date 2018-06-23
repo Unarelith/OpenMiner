@@ -31,7 +31,6 @@ Hotbar::Hotbar(Inventory &inventory) : m_inventory(inventory) {
 
 	for (u16 i = 0 ; i < 9 ; ++i) {
 		ItemWidget &widget = m_items.emplace_back(m_inventory, i, 0);
-		widget.update();
 		widget.setPosition(backgroundX + 16 + 180 / 3.0 * i - 8.5, backgroundY + 7.5, 0);
 		widget.setScale(3, 3, 1);
 	}

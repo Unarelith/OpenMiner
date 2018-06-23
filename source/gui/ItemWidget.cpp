@@ -19,6 +19,7 @@ ItemWidget::ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent)
 	m_image.load("texture-blocks");
 	m_image.setScale(2.0f / 3.0f, 2.0f / 3.0f, 1.0f);
 	m_image.setPosition(3, 3, 0);
+	m_image.setClipRect(0, 0, 0, 0);
 }
 
 void ItemWidget::update() {

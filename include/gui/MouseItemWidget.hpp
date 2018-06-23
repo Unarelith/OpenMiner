@@ -18,7 +18,7 @@
 
 class MouseItemWidget : public ItemWidget {
 	public:
-		MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0, parent) { update(); }
+		MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0, parent) {}
 
 		void onEvent(const SDL_Event &event);
 

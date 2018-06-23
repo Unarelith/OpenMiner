@@ -28,6 +28,7 @@ TODO
 
 • FIXME: Les blocs sont ciblables dans le vide depuis l’extérieur du monde
 • FIXME: Les collisions son décalées d’un bloc à certains endroits
+• FIXME: Afficher tous les blocs solides, puis l’eau, pour régler les problèmes de transparence
 
 # ToDoList
 
