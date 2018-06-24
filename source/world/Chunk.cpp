@@ -146,11 +146,12 @@ void Chunk::updateLights(Chunk &chunk) {
 
 		int lightLevel = chunk.getTorchlight(node.x, node.y, node.z);
 		for (const LightNode &surroundingNode : surroundingNodes) {
-			if (/*!Registry::getInstance().getBlock(getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z)).isOpaque()
-			&& */ chunk.getTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= lightLevel) {
+			if (chunk.getTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= lightLevel) {
 				chunk.setTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, lightLevel - 1);
 
-				m_lightBfsQueue.emplace(surroundingNode.x, surroundingNode.y, surroundingNode.z);
+				if (!Registry::getInstance().getBlock(getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z)).isOpaque()) {
+					m_lightBfsQueue.emplace(surroundingNode.x, surroundingNode.y, surroundingNode.z);
+				}
 			}
 		}
 	}
