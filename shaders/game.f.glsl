@@ -23,8 +23,6 @@ void main() {
 		color.w = 0.85;
 	}
 	else if (v_blockID == 4) {
-		if (color.r == 1 && color.g == 1 && color.b == 1) discard;
-
 		color += vec4(-0.5, -0.15, -0.4, 0);
 	}
 	/* else if (v_blockID == 3 || v_blockID == 2) { */

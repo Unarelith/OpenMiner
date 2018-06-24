@@ -38,7 +38,7 @@ class Block {
 		s8 selectedFace() const { return m_selectedFace; }
 		void setSelected(bool isSelected, s8 face) { m_isSelected = isSelected; m_selectedFace = face; }
 
-		bool isOpaque() const { return m_id != 0 && m_id != 8 && m_id != 9; }
+		bool isOpaque() const { return m_id != 0 && m_id != 4 && m_id != 8 && m_id != 9; }
 
 		bool canUpdate() const { return m_canUpdate; }
 
