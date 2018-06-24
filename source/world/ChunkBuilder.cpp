@@ -72,7 +72,7 @@ std::size_t ChunkBuilder::buildChunk(const Chunk &chunk, const VertexBuffer &vbo
 				};
 
 				for(u8 i = 0 ; i < 6 ; i++) {
-					addFace(x, y, z, i, &block, surroundingBlocks[i]);
+					addFace(x, y, z, i, chunk, &block, surroundingBlocks[i]);
 				}
 			}
 		}
@@ -89,7 +89,7 @@ std::size_t ChunkBuilder::buildChunk(const Chunk &chunk, const VertexBuffer &vbo
 	return verticesCount;
 }
 
-void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Block *block, const Block *surroundingBlock) {
+void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Block *block, const Block *surroundingBlock) {
 	// Skip hidden faces
 	if(surroundingBlock && surroundingBlock->id()
 	&& (surroundingBlock->isOpaque() || (block->id() == surroundingBlock->id() && block->id() != 4)))
@@ -140,6 +140,9 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Block *block, const Blo
 
 		vertex.texCoord[0] = faceTexCoords[j * 2];
 		vertex.texCoord[1] = faceTexCoords[j * 2 + 1];
+
+		vertex.lightValue[0] = chunk.getSunlight(x, y, z);
+		vertex.lightValue[1] = chunk.getTorchlight(x, y, z);
 
 		m_vertices.emplace_back(vertex);
 	}

@@ -28,7 +28,7 @@ class ChunkBuilder {
 		std::size_t buildChunk(const Chunk &chunk, const VertexBuffer &vbo);
 
 	private:
-		void addFace(u8 x, u8 y, u8 z, u8 i, const Block *block, const Block *surroundingBlock);
+		void addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Block *block, const Block *surroundingBlock);
 
 		std::vector<Vertex> m_vertices;
 };

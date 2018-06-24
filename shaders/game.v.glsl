@@ -4,11 +4,13 @@ attribute vec4 color;
 attribute vec4 coord3d;
 attribute vec3 normal;
 attribute vec2 texCoord;
+attribute vec2 lightValue;
 
 varying vec4 v_color;
 varying vec4 v_coord3d;
 varying vec4 v_normal;
 varying vec2 v_texCoord;
+varying vec2 v_lightValue;
 
 varying float v_blockID;
 varying float v_dist;
@@ -42,6 +44,7 @@ void main() {
 
 	v_color = color;
 	v_texCoord = texCoord;
+	v_lightValue = lightValue;
 
 	// Distance from eye
 	v_dist = length(u_viewMatrix * v_coord3d);

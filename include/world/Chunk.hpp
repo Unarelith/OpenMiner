@@ -26,6 +26,23 @@
 #include "Texture.hpp"
 #include "VertexBuffer.hpp"
 
+#include <queue>
+
+struct LightNode {
+	LightNode(int _x, int _y, int _z) : x(_x), y(_y), z(_z) {}
+	int x;
+	int y;
+	int z;
+};
+
+struct LightRemovalNode {
+	LightRemovalNode(int _x, int _y, int _z, int _value) : x(_x), y(_y), z(_z), value(_value) {}
+	int x;
+	int y;
+	int z;
+	int value;
+};
+
 class Chunk : public NonCopyable, public IDrawable {
 	public:
 		Chunk(s32 x, s32 y, s32 z, Texture &texture);
@@ -34,6 +51,11 @@ class Chunk : public NonCopyable, public IDrawable {
 
 		u32 getBlock(int x, int y, int z) const;
 		void setBlock(int x, int y, int z, u32 id);
+
+		void addLight(Chunk &chunk, int x, int y, int z, int val);
+		void removeLight(Chunk &chunk, int x, int y, int z);
+
+		void updateLights(Chunk &chunk);
 
 		s32 x() const { return m_x; }
 		s32 y() const { return m_y; }
@@ -65,6 +87,12 @@ class Chunk : public NonCopyable, public IDrawable {
 		void setGenerated(bool isGenerated) { m_isGenerated = isGenerated; }
 		void setInitialized(bool isInitialized) { m_isInitialized = isInitialized; }
 
+		int getSunlight(int x, int y, int z) const;
+		void setSunlight(int x, int y, int z, int val);
+
+		int getTorchlight(int x, int y, int z) const;
+		void setTorchlight(int x, int y, int z, int val);
+
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 		void drawOutlines(RenderTarget &target, RenderStates states) const;
@@ -78,6 +106,12 @@ class Chunk : public NonCopyable, public IDrawable {
 		// using DataArray = std::array<std::array<std::array<std::unique_ptr<Block>, Chunk::depth>, Chunk::height>, Chunk::width>;
 		using DataArray = u32[Chunk::width][Chunk::height][Chunk::depth];
 		DataArray m_data;
+
+		using LightMapArray = u8[Chunk::width][Chunk::height][Chunk::depth];
+		LightMapArray m_lightMap;
+		std::queue<LightNode> m_lightBfsQueue;
+		std::queue<LightRemovalNode> m_lightRemovalBfsQueue;
+		std::queue<LightNode> m_sunlightBfsQueue;
 
 		ChunkBuilder m_builder;
 
