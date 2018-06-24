@@ -28,6 +28,8 @@ void Chunk::update(World &world) {
 
 	m_isChanged = false;
 
+	updateLights(*this);
+
 	m_verticesCount = m_builder.buildChunk(*this, m_vbo);
 
 	// for (auto &it : m_tickingBlocks) {
@@ -72,7 +74,8 @@ void Chunk::setBlock(int x, int y, int z, u32 type) {
 
 	if (type == 2)
 		addLight(*this, x, y, z, 14);
-	else if (m_data[x][y][z] == 2)
+	// else if (m_data[x][y][z] == 2)
+	else
 		removeLight(*this, x, y, z);
 
 	m_data[x][y][z] = type;
@@ -90,19 +93,16 @@ void Chunk::setBlock(int x, int y, int z, u32 type) {
 void Chunk::addLight(Chunk &chunk, int x, int y, int z, int val) {
 	chunk.setTorchlight(x, y, z, val);
 	m_lightBfsQueue.emplace(x, y, z);
-	updateLights(chunk);
 }
 
 void Chunk::addSunlight(Chunk &chunk, int x, int y, int z, int val) {
 	chunk.setSunlight(x, y, z, val);
 	m_sunlightBfsQueue.emplace(x, y, z);
-	updateLights(chunk);
 }
 
 void Chunk::removeLight(Chunk &chunk, int x, int y, int z) {
 	m_lightRemovalBfsQueue.emplace(x, y, z, chunk.getTorchlight(x, y, z));
 	chunk.setTorchlight(x, y, z, 0);
-	updateLights(chunk);
 }
 
 void Chunk::updateLights(Chunk &chunk) {
