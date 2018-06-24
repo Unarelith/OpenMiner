@@ -45,7 +45,7 @@ void MouseItemWidget::putItem(ItemWidget &widget) {
 	}
 	else if (widget.stack().item().id() == stack().item().id()) {
 		widget.setStack(stack().item().id(), widget.stack().amount() + 1);
-		setStack(stack().item().id(), stack().amount() - 1);
+		setStack(stack().amount() > 1 ? stack().item().id() : 0, stack().amount() - 1);
 	}
 	else if (stack().item().id() == 0) {
 		setStack(widget.stack().item().id(), ceil(widget.stack().amount() / 2.0));
