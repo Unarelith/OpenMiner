@@ -93,6 +93,12 @@ void Chunk::addLight(Chunk &chunk, int x, int y, int z, int val) {
 	updateLights(chunk);
 }
 
+void Chunk::addSunlight(Chunk &chunk, int x, int y, int z, int val) {
+	chunk.setSunlight(x, y, z, val);
+	m_sunlightBfsQueue.emplace(x, y, z);
+	updateLights(chunk);
+}
+
 void Chunk::removeLight(Chunk &chunk, int x, int y, int z) {
 	m_lightRemovalBfsQueue.emplace(x, y, z, chunk.getTorchlight(x, y, z));
 	chunk.setTorchlight(x, y, z, 0);
@@ -165,7 +171,10 @@ void Chunk::updateLights(Chunk &chunk) {
 		for (const LightNode &surroundingNode : surroundingNodes) {
 			if (/*!Registry::getInstance().getBlock(getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z)).isOpaque()
 			&& */ chunk.getSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= sunlightLevel) {
-				chunk.setSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel - 1);
+				if (sunlightLevel == 16 && surroundingNode.y == node.y - 1)
+					chunk.setSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel);
+				else
+					chunk.setSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel - 1);
 
 				m_sunlightBfsQueue.emplace(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 			}

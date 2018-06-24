@@ -40,10 +40,7 @@ void main() {
 	// color *= light(vec3(1.0, 1.0, 1.0), vec4(lightPosition, 1.0), 0.5, 0.5);
 
 	if (v_lightValue.x != -1)
-		color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, v_lightValue.y / 14.0, 1.0);
-
-	/* if (v_blockID != -1) */
-	/* 	color = light(color, vec3(1.0, 1.0, 1.0), vec4(0.0, 48.0, 0.0, 1.0), 0.5, 0.5); */
+		color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, max(v_lightValue.x, v_lightValue.y) / 16.0, 0.4);
 
 	color = fog(color, v_dist, u_renderDistance - 32, u_renderDistance);
 

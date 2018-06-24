@@ -79,10 +79,16 @@ void TerrainGenerator::testCraftGeneration(Chunk &chunk) const {
 									for(int iz = -3 ; iz <= 3 ; iz++) {
 										if(ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + h + iy, z + iz)) {
 											chunk.setBlock(x + ix, y + h + iy, z + iz, 4);
+
+											if (iy == 2)
+												chunk.addSunlight(chunk, x + ix, y + h + iy, z + iz, 8);
 										}
 									}
 								}
 							}
+						}
+						else {
+							chunk.addSunlight(chunk, x, y, z, 8);
 						}
 						break;
 					}

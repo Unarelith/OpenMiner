@@ -53,6 +53,7 @@ class Chunk : public NonCopyable, public IDrawable {
 		void setBlock(int x, int y, int z, u32 id);
 
 		void addLight(Chunk &chunk, int x, int y, int z, int val);
+		void addSunlight(Chunk &chunk, int x, int y, int z, int val);
 		void removeLight(Chunk &chunk, int x, int y, int z);
 
 		void updateLights(Chunk &chunk);
