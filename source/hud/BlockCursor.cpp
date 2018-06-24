@@ -104,7 +104,7 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 			u32 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
 			const Block &block = Registry::getInstance().getBlock(blockId);
 
-			if (block.id() && hotbar.currentItem()) {
+			if (block.id() && hotbar.currentItem() && hotbar.currentItem() < 25) { // FIXME
 				int face = m_selectedBlock.w;
 
 				int x = m_selectedBlock.x;

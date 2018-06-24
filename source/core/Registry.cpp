@@ -70,5 +70,12 @@ void Registry::registerItems() {
 	registerItem<Item>(22);
 	registerItem<Item>(23);
 	registerItem<Item>(24);
+
+	registerItem<Item>(25);
+	registerItem<Item>(26);
+	registerItem<Item>(27);
+	registerItem<Item>(28);
+	registerItem<Item>(29);
+	registerItem<Item>(30);
 }
 

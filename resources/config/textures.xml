@@ -1,6 +1,7 @@
 <textures>
 	<texture name="blocks"    path="textures/blocks.png" />
 	<texture name="font"      path="textures/font.png" />
+	<texture name="items"     path="textures/items.png" />
 	<texture name="widgets"   path="textures/widgets.png" />
 	<texture name="workbench" path="textures/workbench.png" />
 </textures>

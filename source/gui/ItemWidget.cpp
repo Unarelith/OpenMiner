@@ -16,14 +16,21 @@
 ItemWidget::ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent)
 	: Widget(16, 16, parent), m_inventory(inventory), m_x(x), m_y(y)
 {
-	m_image.load("texture-blocks");
-	m_image.setScale(2.0f / 3.0f, 2.0f / 3.0f, 1.0f);
-	m_image.setPosition(3, 3, 0);
-	m_image.setClipRect(0, 0, 16, 16);
 }
 
 void ItemWidget::update() {
-	m_image.setClipRect(stack().item().id() * 16, stack().item().id() / 16 * 16, 16, 16);
+	if (stack().item().id() < 25) { // FIXME
+		m_image.load("texture-blocks");
+		m_image.setClipRect(stack().item().id() * 16, stack().item().id() / 16 * 16, 16, 16);
+		m_image.setScale(2.0f / 3.0f, 2.0f / 3.0f, 1.0f);
+		m_image.setPosition(3, 3, 0);
+	}
+	else {
+		m_image.load("texture-items");
+		m_image.setClipRect((stack().item().id() + 299) * 16, (stack().item().id() + 299) / 16 * 16, 16, 16);
+		m_image.setScale(1, 1, 1);
+		m_image.setPosition(0.6, 0.6, 0);
+	}
 
 	m_text.setText(std::to_string(stack().amount()));
 	m_text.setPosition(16 - 4 - 6 * floor(log10(stack().amount())), 16 - 6, 0);

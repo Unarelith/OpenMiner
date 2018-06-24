@@ -27,14 +27,17 @@
 GameState::GameState() {
 	for (u16 i = 0 ; i < 11 ; ++i) {
 		if (i < 9)
-			m_hotbarInventory.addStack(i + 1);
+			m_hotbarInventory.addStack(i + 1, 64);
 		else
-			m_playerInventory.addStack(i + 1);
+			m_playerInventory.addStack(i + 1, 10);
 	}
 
 	for (u16 i = 16 ; i < 25 ; ++i) {
-		m_playerInventory.addStack(i, 64);
+		m_playerInventory.addStack(i, 10);
 	}
+
+	m_playerInventory.addStack(25, 32);
+	m_playerInventory.addStack(27, 1);
 
 	initShaders();
 }
