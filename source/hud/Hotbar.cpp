@@ -19,6 +19,11 @@ static const auto backgroundX = SCREEN_WIDTH / 2 - 182 * 3 / 2;
 static const auto backgroundY = SCREEN_HEIGHT - 22 * 3;
 
 Hotbar::Hotbar(Inventory &inventory) : m_inventory(inventory) {
+	m_shader.createProgram();
+	m_shader.addShader(GL_VERTEX_SHADER, "shaders/basic.v.glsl");
+	m_shader.addShader(GL_FRAGMENT_SHADER, "shaders/basic.f.glsl");
+	m_shader.linkProgram();
+
 	m_background.load("texture-widgets");
 	m_background.setClipRect(0, 0, 182, 22);
 	m_background.setPosition(backgroundX, backgroundY, 0);
@@ -54,6 +59,8 @@ void Hotbar::onEvent(const SDL_Event &event) {
 }
 
 void Hotbar::draw(RenderTarget &target, RenderStates states) const {
+	states.shader = &m_shader;
+
 	target.draw(m_background, states);
 
 	for (auto &it : m_items)
