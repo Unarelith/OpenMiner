@@ -51,12 +51,12 @@ TODO
 • DONE: Créer un registre d’information pour les blocs/items (utiliser `ResourceHandler`?)
 • DONE: Créer une classe `ItemStack` et l’utiliser dans `Inventory`
 • DONE: Rajouter les classes `BitmapFont` et `Text` pour afficher le nombre d’items dans un stack
-• TODO: Essayer d’utiliser un seul `Inventory` pour le joueur
-   → Probablement en ajoutant un offset dans `InventoryWidget` et `Hotbar`
-• TODO: Rajouter le système de craft
-• TODO: Rajouter un bouton sur la table de craft pour voir les recettes
+• DONE: Rajouter le système de craft
 • TODO: Récupération du bloc cassé
 • TODO: Ajouter les animations de destruction des blocs
+• TODO: Essayer d’utiliser un seul `Inventory` pour le joueur
+   → Probablement en ajoutant un offset dans `InventoryWidget` et `Hotbar`
+• TODO: Rajouter un bouton sur la table de craft pour voir les recettes
 • TODO: Faire un vrai drop d’item
 • TODO: Utiliser un cube pour afficher les blocs dans l’inventaire
 
