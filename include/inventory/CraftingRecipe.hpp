@@ -20,7 +20,7 @@
 
 class CraftingRecipe {
 	public:
-		CraftingRecipe(const std::array<u32, 9> &recipe, const ItemStack &result);
+		CraftingRecipe(const std::array<u32, 9> &recipe, const ItemStack &result, bool isShapeless = false);
 
 		bool isMatching(const Inventory &inventory) const;
 
@@ -29,6 +29,8 @@ class CraftingRecipe {
 	private:
 		std::array<u32, 9> m_recipe;
 		ItemStack m_result;
+
+		bool m_isShapeless;
 };
 
 #endif // CRAFTINGRECIPE_HPP_

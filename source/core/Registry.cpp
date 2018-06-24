@@ -84,8 +84,8 @@ void Registry::registerItems() {
 
 void Registry::registerRecipes() {
 	m_recipes.emplace_back(std::array<u32, 9>{6, 6, 0, 6, 25, 0, 0, 25, 0}, ItemStack{26});
-	m_recipes.emplace_back(std::array<u32, 9>{0, 0, 0, 0, 19, 0, 0, 19, 0}, ItemStack{25, 4});
-	m_recipes.emplace_back(std::array<u32, 9>{0, 0, 0, 0, 5, 0, 0, 0, 0}, ItemStack{19, 4});
+	m_recipes.emplace_back(std::array<u32, 9>{19, 19, 0, 0, 0, 0, 0, 0, 0}, ItemStack{25, 4}, true);
+	m_recipes.emplace_back(std::array<u32, 9>{5, 0, 0, 0, 0, 0, 0, 0, 0}, ItemStack{19, 4}, true);
 }
 
 const CraftingRecipe *Registry::getRecipe(const Inventory &inventory) const {
