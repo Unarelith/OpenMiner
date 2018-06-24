@@ -15,7 +15,7 @@ TODO
 • TODO: Vérifier les utilisations inutiles de pointeurs
 • TODO: Catch SDLLoader exception
 • TODO: Passer un clang-tidy sur le code
-• TODO: Passer à la SFML
+• TODO: Passer à la SFML si nécessaire
 • TODO: Séparer l’engine et le gameplay
 • TODO: Séparer le code client du code serveur
 

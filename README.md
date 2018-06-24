@@ -10,8 +10,8 @@
 
 - Movement: <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
 - Inventory: <kbd>E</kbd>
-- Land: <kbd>Shift</kbd>
-- Fly: <kbd>Space</kbd>
+- Jump: <kbd>Space</kbd>
+- Jetpack: <kbd>X</kbd>
 - Exit: <kbd>Escape</kbd>
 
 ## How to compile
