@@ -30,6 +30,9 @@ class WorkbenchWidget : public Widget {
 		Inventory m_craftingInventory{3, 3};
 		InventoryWidget m_craftingInventoryWidget{this};
 
+		Inventory m_craftingResultInventory{1, 1};
+		InventoryWidget m_craftingResultInventoryWidget{this};
+
 		Inventory &m_playerInventory;
 		InventoryWidget m_playerInventoryWidget{this};
 

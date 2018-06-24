@@ -19,6 +19,7 @@
 
 #include "Block.hpp"
 #include "Item.hpp"
+#include "CraftingRecipe.hpp"
 
 class Registry {
 	public:
@@ -32,11 +33,14 @@ class Registry {
 			m_items.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));
 		}
 
+		void registerBlocks();
+		void registerItems();
+		void registerRecipes();
+
 		const Block &getBlock(std::size_t id) const { return *m_blocks.at(id).get(); }
 		const Item &getItem(std::size_t id) const { return *m_items.at(id).get(); }
 
-		void registerBlocks();
-		void registerItems();
+		const CraftingRecipe *getRecipe(const Inventory &inventory) const;
 
 		static Registry &getInstance() { return *s_instance; }
 		static void setInstance(Registry &instance) { s_instance = &instance; }
@@ -46,6 +50,7 @@ class Registry {
 
 		std::vector<std::unique_ptr<Block>> m_blocks;
 		std::vector<std::unique_ptr<Item>> m_items;
+		std::vector<CraftingRecipe> m_recipes;
 };
 
 #endif // REGISTRY_HPP_

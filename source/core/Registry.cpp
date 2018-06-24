@@ -77,5 +77,21 @@ void Registry::registerItems() {
 	registerItem<Item>(28);
 	registerItem<Item>(29);
 	registerItem<Item>(30);
+
+	// FIXME: Move this to Application or load from XML file
+	registerRecipes();
+}
+
+void Registry::registerRecipes() {
+	m_recipes.emplace_back(std::array<u32, 9>{6, 6, 0, 6, 25, 0, 0, 25, 0}, ItemStack{26});
+	// m_recipes.emplace_back(std::array<u32, 9>{0, 0, 0, 0, 0, 0, 0, 0, 0}, ItemStack{1});
+}
+
+const CraftingRecipe *Registry::getRecipe(const Inventory &inventory) const {
+	for (const CraftingRecipe &recipe : m_recipes) {
+		if (recipe.isMatching(inventory))
+			return &recipe;
+	}
+	return nullptr;
 }
 
