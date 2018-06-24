@@ -22,6 +22,15 @@ void main() {
 	if (v_blockID == 8) {
 		color.w = 0.85;
 	}
+	else if (v_blockID == 4) {
+		if (color.r == 1 && color.g == 1 && color.b == 1) discard;
+
+		color += vec4(-0.5, -0.15, -0.4, 0);
+	}
+	else if (v_blockID == 3 || v_blockID == 2) {
+		if (color.y > 0.55)
+			color -= vec4(0.1, 0.1, 0.1, 0);
+	}
 
 	// FIXME: FINISH THIS WITH PROPER CODE AND SUN BASIC DISPLAY
 	// int maxTime = 5 * 1000;
