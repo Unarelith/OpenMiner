@@ -14,7 +14,7 @@
 #include "MouseItemWidget.hpp"
 
 void MouseItemWidget::onEvent(const SDL_Event &event) {
-	if (event.type == SDL_MOUSEMOTION && item() != 0) {
+	if (event.type == SDL_MOUSEMOTION && stack().item().id() != 0) {
 		updatePosition(event.motion.x, event.motion.y);
 	}
 
@@ -24,9 +24,31 @@ void MouseItemWidget::onEvent(const SDL_Event &event) {
 }
 
 void MouseItemWidget::swapItems(ItemWidget &widget) {
-	u16 widgetItem = widget.item();
-	widget.setItem(item());
-	setItem(widgetItem);
+	u32 id = widget.stack().item().id();
+	u32 amount = widget.stack().amount();
+	if (stack().item().id() != id) {
+		widget.setStack(stack().item().id(), stack().amount());
+		setStack(id, amount);
+	}
+	else {
+		widget.setStack(widget.stack().item().id(), widget.stack().amount() + stack().amount());
+		setStack(0, 0);
+	}
+}
+
+void MouseItemWidget::putItem(ItemWidget &widget) {
+	if (!widget.stack().item().id()) {
+		widget.setStack(stack().item().id(), 1);
+		setStack(stack().item().id(), stack().amount() - 1);
+	}
+	else if (widget.stack().item().id() == stack().item().id()) {
+		widget.setStack(stack().item().id(), widget.stack().amount() + 1);
+		setStack(stack().item().id(), stack().amount() - 1);
+	}
+	else if (stack().item().id() == 0) {
+		setStack(widget.stack().item().id(), ceil(widget.stack().amount() / 2.0));
+		widget.setStack(widget.stack().item().id(), widget.stack().amount() / 2);
+	}
 }
 
 void MouseItemWidget::updatePosition(float x, float y) {

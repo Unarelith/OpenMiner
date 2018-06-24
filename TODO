@@ -48,9 +48,9 @@ TODO
 
 ## Items/Blocks
 
-• TODO: Créer un registre d’information pour les blocs/items (utiliser `ResourceHandler`?)
-• TODO: Créer une classe `ItemStack` et l’utiliser dans `Inventory`
-• TODO: Rajouter les classes `BitmapFont` et `Text` pour afficher le nombre d’items dans un stack
+• DONE: Créer un registre d’information pour les blocs/items (utiliser `ResourceHandler`?)
+• DONE: Créer une classe `ItemStack` et l’utiliser dans `Inventory`
+• DONE: Rajouter les classes `BitmapFont` et `Text` pour afficher le nombre d’items dans un stack
 • TODO: Essayer d’utiliser un seul `Inventory` pour le joueur
    → Probablement en ajoutant un offset dans `InventoryWidget` et `Hotbar`
 • TODO: Rajouter le système de craft

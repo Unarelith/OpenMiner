@@ -39,6 +39,13 @@ void InventoryWidget::onEvent(const SDL_Event &event, MouseItemWidget &mouseItem
 			}
 		}
 	}
+	if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT) {
+		for (std::size_t i = 0 ; i < m_itemWidgets.size() ; ++i) {
+			if (m_itemWidgets[i].isPointInWidget(event.button.x / 3.0, event.button.y / 3.0)) {
+				mouseItemWidget.putItem(m_itemWidgets.at(i));
+			}
+		}
+	}
 }
 
 void InventoryWidget::draw(RenderTarget &target, RenderStates states) const {

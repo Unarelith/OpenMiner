@@ -33,7 +33,7 @@ GameState::GameState() {
 	}
 
 	for (u16 i = 16 ; i < 25 ; ++i) {
-		m_playerInventory.addStack(i);
+		m_playerInventory.addStack(i, 64);
 	}
 
 	initShaders();

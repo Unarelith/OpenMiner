@@ -23,6 +23,7 @@ class MouseItemWidget : public ItemWidget {
 		void onEvent(const SDL_Event &event);
 
 		void swapItems(ItemWidget &widget);
+		void putItem(ItemWidget &widget);
 
 	private:
 		void updatePosition(float x, float y);

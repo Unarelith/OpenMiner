@@ -16,6 +16,7 @@
 
 #include "Image.hpp"
 #include "Inventory.hpp"
+#include "Text.hpp"
 #include "Widget.hpp"
 
 class ItemWidget : public Widget {
@@ -24,8 +25,8 @@ class ItemWidget : public Widget {
 
 		void update();
 
-		u16 item() const { return m_inventory.getStack(m_x, m_y).item().id(); }
-		void setItem(unsigned int id);
+		const ItemStack &stack() const { return m_inventory.getStack(m_x, m_y); }
+		void setStack(unsigned int id, unsigned int amount = 1);
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
@@ -36,6 +37,7 @@ class ItemWidget : public Widget {
 		unsigned int m_y = 0;
 
 		Image m_image;
+		Text m_text;
 };
 
 #endif // ITEMWIDGET_HPP_

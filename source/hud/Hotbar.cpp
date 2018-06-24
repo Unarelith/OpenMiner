@@ -38,7 +38,7 @@ Hotbar::Hotbar(Inventory &inventory) : m_inventory(inventory) {
 
 void Hotbar::update() {
 	for (u16 i = 0 ; i < 9 ; ++i) {
-		m_items[i].setItem(m_inventory.getStack(i, 0).item().id());
+		m_items[i].setStack(m_inventory.getStack(i, 0).item().id(), m_inventory.getStack(i, 0).amount());
 	}
 }
 

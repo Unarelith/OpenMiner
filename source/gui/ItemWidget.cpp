@@ -19,15 +19,18 @@ ItemWidget::ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent)
 	m_image.load("texture-blocks");
 	m_image.setScale(2.0f / 3.0f, 2.0f / 3.0f, 1.0f);
 	m_image.setPosition(3, 3, 0);
-	m_image.setClipRect(0, 0, 0, 0);
+	m_image.setClipRect(0, 0, 16, 16);
 }
 
 void ItemWidget::update() {
-	m_image.setClipRect(item() * 16, item() / 16 * 16, 16, 16);
+	m_image.setClipRect(stack().item().id() * 16, stack().item().id() / 16 * 16, 16, 16);
+
+	m_text.setText(std::to_string(stack().amount()));
+	m_text.setPosition(16 - 4 - 6 * floor(log10(stack().amount())), 16 - 6, 0);
 }
 
-void ItemWidget::setItem(unsigned int id) {
-	m_inventory.setStack(m_x, m_y, id);
+void ItemWidget::setStack(unsigned int id, unsigned int amount) {
+	m_inventory.setStack(m_x, m_y, id, amount);
 	update();
 }
 
@@ -35,5 +38,8 @@ void ItemWidget::draw(RenderTarget &target, RenderStates states) const {
 	applyTransform(states);
 
 	target.draw(m_image, states);
+
+	if (stack().item().id() && stack().amount() > 1)
+		target.draw(m_text, states);
 }
 

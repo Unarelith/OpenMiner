@@ -23,7 +23,7 @@ class ItemStack {
 
 		const Item &item() const { return *m_item; }
 
-		u16 amount() const;
+		u16 amount() const { return m_amount; }
 
 	private:
 		const Item *m_item = nullptr;
