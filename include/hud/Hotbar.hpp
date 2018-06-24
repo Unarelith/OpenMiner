@@ -29,6 +29,7 @@ class Hotbar : public IDrawable {
 
 		void onEvent(const SDL_Event &event);
 
+		int cursorPos() const { return m_cursorPos; }
 		u16 currentItem() const { return m_inventory.getStack(m_cursorPos, 0).item().id(); }
 
 	private:

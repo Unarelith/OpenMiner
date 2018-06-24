@@ -15,6 +15,7 @@
 #define BLOCKCURSOR_HPP_
 
 #include "Camera.hpp"
+#include "Inventory.hpp"
 #include "SDLHeaders.hpp"
 #include "World.hpp"
 
@@ -28,7 +29,7 @@ class BlockCursor : public IDrawable {
 
 		void init();
 
-		void onEvent(const SDL_Event &event, const Hotbar &hotbar);
+		void onEvent(const SDL_Event &event, Inventory &playerInventory, Inventory &hotbarInventory, const Hotbar &hotbar);
 
 		void update(bool useDepthBuffer);
 

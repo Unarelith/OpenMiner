@@ -52,7 +52,7 @@ TODO
 • DONE: Créer une classe `ItemStack` et l’utiliser dans `Inventory`
 • DONE: Rajouter les classes `BitmapFont` et `Text` pour afficher le nombre d’items dans un stack
 • DONE: Rajouter le système de craft
-• TODO: Récupération du bloc cassé
+• DONE: Récupération du bloc cassé
 • TODO: Ajouter les animations de destruction des blocs
 • TODO: Essayer d’utiliser un seul `Inventory` pour le joueur
    → Probablement en ajoutant un offset dans `InventoryWidget` et `Hotbar`

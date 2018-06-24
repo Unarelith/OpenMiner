@@ -69,9 +69,11 @@ void BlockCursor::init() {
 	VertexBuffer::bind(nullptr);
 }
 
-void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
+void BlockCursor::onEvent(const SDL_Event &event, Inventory &playerInventory, Inventory &hotbarInventory, const Hotbar &hotbar) {
 	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
+			u16 block = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
+			playerInventory.addStack(block);
 			m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
 		}
 		else if (event.button.button == SDL_BUTTON_RIGHT) {
@@ -93,6 +95,9 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 				if(face == 5) z--;
 
 				m_world.setBlock(x, y, z, hotbar.currentItem());
+
+				const ItemStack &currentStack = hotbarInventory.getStack(hotbar.cursorPos(), 0);
+				hotbarInventory.setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().id() : 0, currentStack.amount() - 1);
 			}
 		}
 	}

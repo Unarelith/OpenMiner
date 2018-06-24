@@ -23,6 +23,10 @@ void Inventory::addStack(u16 id, u16 amount) {
 			m_items[i] = ItemStack(id, amount);
 			break;
 		}
+		else if (m_items[i].item().id() == id) {
+			m_items[i] = ItemStack(id, m_items[i].amount() + amount);
+			break;
+		}
 	}
 }
 

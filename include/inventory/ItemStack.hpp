@@ -24,6 +24,7 @@ class ItemStack {
 		const Item &item() const { return *m_item; }
 
 		u16 amount() const { return m_amount; }
+		void setAmount(u16 amount) { m_amount = amount; }
 
 	private:
 		const Item *m_item = nullptr;
