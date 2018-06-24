@@ -23,6 +23,7 @@ void MouseItemWidget::onEvent(const SDL_Event &event) {
 	}
 }
 
+// FIXME
 void MouseItemWidget::swapItems(ItemWidget &widget) {
 	u32 id = widget.stack().item().id();
 	u32 amount = widget.stack().amount();
@@ -36,10 +37,11 @@ void MouseItemWidget::swapItems(ItemWidget &widget) {
 	}
 }
 
+// FIXME
 void MouseItemWidget::putItem(ItemWidget &widget) {
 	if (!widget.stack().item().id()) {
 		widget.setStack(stack().item().id(), 1);
-		setStack(stack().item().id(), stack().amount() - 1);
+		setStack(stack().amount() > 1 ? stack().item().id() : 0, stack().amount() - 1);
 	}
 	else if (widget.stack().item().id() == stack().item().id()) {
 		widget.setStack(stack().item().id(), widget.stack().amount() + 1);
@@ -47,7 +49,7 @@ void MouseItemWidget::putItem(ItemWidget &widget) {
 	}
 	else if (stack().item().id() == 0) {
 		setStack(widget.stack().item().id(), ceil(widget.stack().amount() / 2.0));
-		widget.setStack(widget.stack().item().id(), widget.stack().amount() / 2);
+		widget.setStack(widget.stack().amount() > 1 ? widget.stack().item().id() : 0, widget.stack().amount() / 2);
 	}
 }
 
