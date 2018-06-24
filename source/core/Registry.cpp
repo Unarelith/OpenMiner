@@ -84,6 +84,11 @@ void Registry::registerItems() {
 
 void Registry::registerRecipes() {
 	m_recipes.emplace_back(std::array<u32, 9>{6, 6, 0, 6, 25, 0, 0, 25, 0}, ItemStack{26});
+	m_recipes.emplace_back(std::array<u32, 9>{6, 6, 0, 0, 25, 0, 0, 25, 0}, ItemStack{27});
+	m_recipes.emplace_back(std::array<u32, 9>{6, 6, 6, 0, 25, 0, 0, 25, 0}, ItemStack{28});
+	m_recipes.emplace_back(std::array<u32, 9>{0, 6, 0, 0, 25, 0, 0, 25, 0}, ItemStack{29});
+	m_recipes.emplace_back(std::array<u32, 9>{0, 6, 0, 0, 6, 0, 0, 25, 0}, ItemStack{30});
+
 	m_recipes.emplace_back(std::array<u32, 9>{19, 19, 0, 0, 0, 0, 0, 0, 0}, ItemStack{25, 4}, true);
 	m_recipes.emplace_back(std::array<u32, 9>{5, 0, 0, 0, 0, 0, 0, 0, 0}, ItemStack{19, 4}, true);
 }
