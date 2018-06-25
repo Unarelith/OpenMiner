@@ -34,9 +34,8 @@ void InventoryWidget::init(Inventory &inventory) {
 void InventoryWidget::onEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly) {
 	if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
 		for (std::size_t i = 0 ; i < m_itemWidgets.size() ; ++i) {
-			if (m_itemWidgets[i].isPointInWidget(event.button.x / 3.0, event.button.y / 3.0)
-			&& (!isReadOnly || mouseItemWidget.getStack().item().id() == 0)) {
-				mouseItemWidget.swapItems(m_itemWidgets.at(i));
+			if (m_itemWidgets[i].isPointInWidget(event.button.x / 3.0, event.button.y / 3.0)) {
+				mouseItemWidget.swapItems(m_itemWidgets.at(i), isReadOnly);
 			}
 		}
 	}

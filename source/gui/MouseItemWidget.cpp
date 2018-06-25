@@ -24,16 +24,22 @@ void MouseItemWidget::onEvent(const SDL_Event &event) {
 }
 
 // FIXME
-void MouseItemWidget::swapItems(ItemWidget &widget) {
+void MouseItemWidget::swapItems(ItemWidget &widget, bool isReadOnly) {
 	u32 id = widget.stack().item().id();
 	u32 amount = widget.stack().amount();
-	if (stack().item().id() != id) {
-		widget.setStack(stack().item().id(), stack().amount());
-		setStack(id, amount);
-	}
-	else {
-		widget.setStack(widget.stack().item().id(), widget.stack().amount() + stack().amount());
-		setStack(0, 0);
+	if (!isReadOnly || stack().item().id() == 0 || stack().item().id() == id) {
+		if (stack().item().id() != id) {
+			widget.setStack(stack().item().id(), stack().amount());
+			setStack(id, amount);
+		}
+		else if (!isReadOnly) {
+			widget.setStack(widget.stack().item().id(), widget.stack().amount() + stack().amount());
+			setStack(0, 0);
+		}
+		else {
+			setStack(stack().item().id(), stack().amount() + widget.stack().amount());
+			widget.setStack(0, 0);
+		}
 	}
 }
 

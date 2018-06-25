@@ -22,7 +22,7 @@ class MouseItemWidget : public ItemWidget {
 
 		void onEvent(const SDL_Event &event);
 
-		void swapItems(ItemWidget &widget);
+		void swapItems(ItemWidget &widget, bool isReadOnly = false);
 		void putItem(ItemWidget &widget);
 
 		const ItemStack &getStack() const { return m_inventory.getStack(0, 0); }
