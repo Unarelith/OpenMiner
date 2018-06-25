@@ -24,16 +24,21 @@ CraftingWidget::CraftingWidget(Widget *parent) : Widget(parent) {
 
 void CraftingWidget::onEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget) {
 	m_craftingInventoryWidget.onEvent(event, mouseItemWidget);
-	m_craftingResultInventoryWidget.onEvent(event, mouseItemWidget);
+	m_craftingResultInventoryWidget.onEvent(event, mouseItemWidget, true);
 
 	const CraftingRecipe *recipe = Registry::getInstance().getRecipe(m_craftingInventory);
-	if (recipe != nullptr && !m_craftingResultInventory.getStack(0, 0).item().id()) {
-		m_craftingResultInventory.setStack(0, 0, recipe->result().item().id(), recipe->result().amount());
-		m_craftingResultInventoryWidget.init(m_craftingResultInventory);
+	if (!m_recipe || m_recipe != recipe) {
+		m_recipe = recipe;
 
-		// FIXME: Make a subclass CraftingInventory to handle source items and crafting result
-		//        Source elements should be destroyed if crafting result is taken
-		//        Crafting result should be read-only
+		if (m_recipe)
+			m_craftingResultInventory.setStack(0, 0, m_recipe->result().item().id(), m_recipe->result().amount());
+		else
+			m_craftingResultInventory.setStack(0, 0, 0, 0);
+
+		m_craftingResultInventoryWidget.init(m_craftingResultInventory);
+	}
+
+	if (m_recipe && !m_craftingResultInventory.getStack(0, 0).item().id()) {
 		for (u8 i = 0 ; i < 9 ; ++i) {
 			const ItemStack &stack = m_craftingInventory.getStack(i % 3, i / 3);
 			if (stack.item().id()) {
@@ -41,6 +46,8 @@ void CraftingWidget::onEvent(const SDL_Event &event, MouseItemWidget &mouseItemW
 			}
 		}
 		m_craftingInventoryWidget.init(m_craftingInventory);
+
+		m_recipe = nullptr;
 	}
 }
 

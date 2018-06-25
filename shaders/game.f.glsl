@@ -39,8 +39,12 @@ void main() {
 	// vec3 lightPosition = vec3(0.0, sin(time) * 40, cos(time) * 40);
 	// color *= light(vec3(1.0, 1.0, 1.0), vec4(lightPosition, 1.0), 0.5, 0.5);
 
-	if (v_lightValue.x != -1)
-		color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, max(v_lightValue.x, v_lightValue.y) / 16.0, 0.4);
+	if (v_lightValue.x != -1) {
+		float ambientIntensity = max(v_lightValue.x, v_lightValue.y) / 16.0;
+		float diffuseIntensity = max(v_lightValue.x, v_lightValue.y) / 32.0;
+
+		color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
+	}
 
 	color = fog(color, v_dist, u_renderDistance - 32, u_renderDistance);
 

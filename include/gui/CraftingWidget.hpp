@@ -16,6 +16,8 @@
 
 #include "InventoryWidget.hpp"
 
+class CraftingRecipe;
+
 class CraftingWidget : public Widget {
 	public:
 		CraftingWidget(Widget *parent = nullptr);
@@ -30,6 +32,8 @@ class CraftingWidget : public Widget {
 
 		Inventory m_craftingResultInventory{1, 1};
 		InventoryWidget m_craftingResultInventoryWidget{this};
+
+		const CraftingRecipe *m_recipe = nullptr;
 };
 
 #endif // CRAFTINGWIDGET_HPP_

@@ -23,7 +23,7 @@ class InventoryWidget : public Widget {
 
 		void init(Inventory &inventory);
 
-		void onEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget);
+		void onEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly = false);
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;

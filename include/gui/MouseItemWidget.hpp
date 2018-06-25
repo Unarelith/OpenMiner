@@ -25,6 +25,8 @@ class MouseItemWidget : public ItemWidget {
 		void swapItems(ItemWidget &widget);
 		void putItem(ItemWidget &widget);
 
+		const ItemStack &getStack() const { return m_inventory.getStack(0, 0); }
+
 	private:
 		void updatePosition(float x, float y);
 
