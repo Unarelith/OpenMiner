@@ -14,7 +14,7 @@
 #ifndef WORKBENCHWIDGET_HPP_
 #define WORKBENCHWIDGET_HPP_
 
-#include "InventoryWidget.hpp"
+#include "CraftingWidget.hpp"
 
 class WorkbenchWidget : public Widget {
 	public:
@@ -27,11 +27,7 @@ class WorkbenchWidget : public Widget {
 
 		Image m_background;
 
-		Inventory m_craftingInventory{3, 3};
-		InventoryWidget m_craftingInventoryWidget{this};
-
-		Inventory m_craftingResultInventory{1, 1};
-		InventoryWidget m_craftingResultInventoryWidget{this};
+		CraftingWidget m_craftingWidget{this};
 
 		Inventory &m_playerInventory;
 		InventoryWidget m_playerInventoryWidget{this};
