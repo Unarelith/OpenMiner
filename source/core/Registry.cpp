@@ -45,38 +45,38 @@ void Registry::registerBlocks() {
 }
 
 void Registry::registerItems() {
-	registerItem<Item>(0);
-	registerItem<Item>(1);
-	registerItem<Item>(2);
-	registerItem<Item>(3);
-	registerItem<Item>(4);
-	registerItem<Item>(5);
-	registerItem<Item>(6);
-	registerItem<Item>(7);
-	registerItem<Item>(8);
-	registerItem<Item>(9);
-	registerItem<Item>(10);
-	registerItem<Item>(11);
-	registerItem<Item>(12);
-	registerItem<Item>(13);
-	registerItem<Item>(14);
-	registerItem<Item>(15);
-	registerItem<Item>(16);
-	registerItem<Item>(17);
-	registerItem<Item>(18);
-	registerItem<Item>(19);
-	registerItem<Item>(20);
-	registerItem<Item>(21);
-	registerItem<Item>(22);
-	registerItem<Item>(23);
-	registerItem<Item>(24);
+	registerItem<Item>(0, 0, true);
+	registerItem<Item>(1, 1, true);
+	registerItem<Item>(2, 2, true);
+	registerItem<Item>(3, 3, true);
+	registerItem<Item>(4, 4, true);
+	registerItem<Item>(5, 5, true);
+	registerItem<Item>(6, 6, true);
+	registerItem<Item>(7, 7, true);
+	registerItem<Item>(8, 8, true);
+	registerItem<Item>(9, 9, true);
+	registerItem<Item>(10, 10, true);
+	registerItem<Item>(11, 11, true);
+	registerItem<Item>(12, 12, true);
+	registerItem<Item>(13, 13, true);
+	registerItem<Item>(14, 14, true);
+	registerItem<Item>(15, 15, true);
+	registerItem<Item>(16, 16, true);
+	registerItem<Item>(17, 17, true);
+	registerItem<Item>(18, 18, true);
+	registerItem<Item>(19, 19, true);
+	registerItem<Item>(20, 20, true);
+	registerItem<Item>(21, 21, true);
+	registerItem<Item>(22, 22, true);
+	registerItem<Item>(23, 23, true);
+	registerItem<Item>(24, 24, true);
 
-	registerItem<Item>(25);
-	registerItem<Item>(26);
-	registerItem<Item>(27);
-	registerItem<Item>(28);
-	registerItem<Item>(29);
-	registerItem<Item>(30);
+	registerItem<Item>(25, 324);
+	registerItem<Item>(26, 325);
+	registerItem<Item>(27, 326);
+	registerItem<Item>(28, 327);
+	registerItem<Item>(29, 328);
+	registerItem<Item>(30, 329);
 
 	// FIXME: Move this to Application or load from XML file
 	registerRecipes();

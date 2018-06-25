@@ -13,7 +13,10 @@
  */
 #include "Item.hpp"
 
-Item::Item(u32 id) {
+Item::Item(u32 id, u32 textureID, bool isBlock) {
 	m_id = id;
+	m_textureID = textureID;
+
+	m_isBlock = isBlock;
 }
 

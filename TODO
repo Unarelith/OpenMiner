@@ -53,6 +53,10 @@ TODO
 • DONE: Rajouter les classes `BitmapFont` et `Text` pour afficher le nombre d’items dans un stack
 • DONE: Rajouter le système de craft
 • DONE: Récupération du bloc cassé
+• TODO: Améliorer la gestion d’items
+   ◦ TODO: Ajouter des enum `ItemType` et `BlockType`
+   ◦ TODO: Ajouter une méthode virtuelle dans `Item` pour la récupération des infos de l’`Image`
+   ◦ TODO: Ajouter une classe `ItemBlock`
 • TODO: Ajouter les animations de destruction des blocs
 • TODO: Essayer d’utiliser un seul `Inventory` pour le joueur
    → Probablement en ajoutant un offset dans `InventoryWidget` et `Hotbar`

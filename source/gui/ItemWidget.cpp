@@ -19,15 +19,15 @@ ItemWidget::ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent)
 }
 
 void ItemWidget::update() {
-	if (stack().item().id() < 25) { // FIXME
+	if (stack().item().isBlock()) {
 		m_image.load("texture-blocks");
-		m_image.setClipRect(stack().item().id() * 16, stack().item().id() / 16 * 16, 16, 16);
+		m_image.setClipRect(stack().item().textureID() * 16, stack().item().textureID() / 16 * 16, 16, 16);
 		m_image.setScale(2.0f / 3.0f, 2.0f / 3.0f, 1.0f);
 		m_image.setPosition(3, 3, 0);
 	}
 	else {
 		m_image.load("texture-items");
-		m_image.setClipRect((stack().item().id() + 299) * 16, (stack().item().id() + 299) / 16 * 16, 16, 16);
+		m_image.setClipRect(stack().item().textureID() * 16, stack().item().textureID() / 16 * 16, 16, 16);
 		m_image.setScale(1, 1, 1);
 		m_image.setPosition(0.6, 0.6, 0);
 	}
