@@ -15,6 +15,7 @@
 #define INVENTORYSTATE_HPP_
 
 #include "ApplicationState.hpp"
+#include "RectangleShape.hpp"
 #include "Shader.hpp"
 #include "WorkbenchWidget.hpp"
 
@@ -35,6 +36,8 @@ class InventoryState : public ApplicationState {
 		Inventory &m_hotbarInventory;
 
 		WorkbenchWidget m_widget{m_playerInventory, m_hotbarInventory};
+
+		RectangleShape m_background;
 };
 
 #endif // INVENTORYSTATE_HPP_

@@ -31,6 +31,9 @@ InventoryState::InventoryState(Inventory &playerInventory, Inventory &hotbarInve
 	m_widget.setScale(3, 3, 1);
 	m_widget.setPosition(SCREEN_WIDTH  / 2.0 - m_widget.getGlobalBounds().width  / 2.0,
 	                     SCREEN_HEIGHT / 2.0 - m_widget.getGlobalBounds().height / 2.0, 0);
+
+	m_background.setColor(Color{0, 0, 0, 127});
+	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 void InventoryState::onEvent(const SDL_Event &event) {
@@ -62,6 +65,7 @@ void InventoryState::draw(RenderTarget &target, RenderStates states) const {
 
 	states.shader = &m_shader;
 
+	target.draw(m_background, states);
 	target.draw(m_widget, states);
 }
 

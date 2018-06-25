@@ -12,7 +12,7 @@ void main() {
 		color = texture2D(u_tex, v_texCoord);
 	}
 
-	if (color.a < 0.5) discard;
+	if (color.a < 0.3) discard;
 
 	gl_FragColor = color;
 }
