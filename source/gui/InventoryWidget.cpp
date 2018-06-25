@@ -37,6 +37,8 @@ void InventoryWidget::onEvent(const SDL_Event &event, MouseItemWidget &mouseItem
 		for (std::size_t i = 0 ; i < m_itemWidgets.size() ; ++i) {
 			if (m_itemWidgets[i].isPointInWidget(event.motion.x, event.motion.y)) {
 				m_currentItemWidget = &m_itemWidgets[i];
+
+				m_selectedItemBackground.setPosition(1 + (i % m_inventoryWidth) * 18, 1 + (i / m_inventoryWidth) * 18, 0);
 			}
 		}
 	}
@@ -52,6 +54,9 @@ void InventoryWidget::onEvent(const SDL_Event &event, MouseItemWidget &mouseItem
 
 void InventoryWidget::draw(RenderTarget &target, RenderStates states) const {
 	applyTransform(states);
+
+	if (m_currentItemWidget)
+		target.draw(m_selectedItemBackground, states);
 
 	for (std::size_t i = 0 ; i < m_itemWidgets.size() ; ++i) {
 		target.draw(m_itemWidgets[i], states);

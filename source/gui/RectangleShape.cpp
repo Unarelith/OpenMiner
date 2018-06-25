@@ -19,11 +19,11 @@
 #include "Shader.hpp"
 #include "Vertex.hpp"
 
-RectangleShape::RectangleShape(u16 width, u16 height) {
+RectangleShape::RectangleShape(u16 width, u16 height, const Color &color) {
+	m_color = color;
+
 	setSize(width, height);
 }
-
-#include "Debug.hpp"
 
 void RectangleShape::updateVertexBuffer() const {
 	Vertex vertices[4] = {
@@ -49,8 +49,6 @@ void RectangleShape::updateVertexBuffer() const {
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	VertexBuffer::bind(nullptr);
 }
-
-#include "ResourceHandler.hpp"
 
 void RectangleShape::draw(RenderTarget &target, RenderStates states) const {
 	applyTransform(states);

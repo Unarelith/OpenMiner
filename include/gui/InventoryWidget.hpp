@@ -15,6 +15,7 @@
 #define INVENTORYWIDGET_HPP_
 
 #include "MouseItemWidget.hpp"
+#include "RectangleShape.hpp"
 #include "SDLHeaders.hpp"
 
 class InventoryWidget : public Widget {
@@ -35,8 +36,7 @@ class InventoryWidget : public Widget {
 
 		std::vector<ItemWidget> m_itemWidgets;
 		ItemWidget *m_currentItemWidget = nullptr;
-
-		int m_selectedItem = -1;
+		RectangleShape m_selectedItemBackground{16, 16, Color{255, 255, 255, 80}};
 };
 
 #endif // INVENTORYWIDGET_HPP_

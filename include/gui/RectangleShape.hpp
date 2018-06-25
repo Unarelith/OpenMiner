@@ -23,7 +23,7 @@
 class RectangleShape : public IDrawable, public Transformable {
 	public:
 		RectangleShape() = default;
-		RectangleShape(u16 width, u16 height);
+		RectangleShape(u16 width, u16 height, const Color &color = Color::black);
 
 		const Color &color() const { return m_color; }
 		void setColor(const Color &color) { m_color = color; updateVertexBuffer(); }
