@@ -33,8 +33,6 @@ bool CraftingRecipe::isMatching(const Inventory &inventory) const {
 	else {
 		std::array<bool, 9> match{false, false, false, false, false, false, false, false, false};
 		for (u32 id : m_recipe) {
-			if (!id) continue;
-
 			bool matched = false;
 			for (u16 i = 0 ; i < 9 ; ++i) {
 				if (inventory.getStack(i % 3, i / 3).item().id() == id && !match[i]) {

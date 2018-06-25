@@ -58,14 +58,14 @@ void Registry::registerItems() {
 }
 
 void Registry::registerRecipes() {
-	m_recipes.emplace_back(std::array<u32, 9>{6, 6, 0, 6, 12, 0, 0, 12, 0}, ItemStack{13});
-	m_recipes.emplace_back(std::array<u32, 9>{6, 6, 0, 0, 12, 0, 0, 12, 0}, ItemStack{14});
-	m_recipes.emplace_back(std::array<u32, 9>{6, 6, 6, 0, 12, 0, 0, 12, 0}, ItemStack{15});
-	m_recipes.emplace_back(std::array<u32, 9>{0, 6, 0, 0, 12, 0, 0, 12, 0}, ItemStack{16});
-	m_recipes.emplace_back(std::array<u32, 9>{0, 6, 0, 0, 6, 0, 0, 12, 0}, ItemStack{17});
+	m_recipes.emplace_back(std::array<u32, 9>{6, 6, 0, 6, 12, 0, 0, 12, 0}, ItemStack{ItemType::StoneAxe});
+	m_recipes.emplace_back(std::array<u32, 9>{6, 6, 0, 0, 12, 0, 0, 12, 0}, ItemStack{ItemType::StoneHoe});
+	m_recipes.emplace_back(std::array<u32, 9>{6, 6, 6, 0, 12, 0, 0, 12, 0}, ItemStack{ItemType::StonePickaxe});
+	m_recipes.emplace_back(std::array<u32, 9>{0, 6, 0, 0, 12, 0, 0, 12, 0}, ItemStack{ItemType::StoneShovel});
+	m_recipes.emplace_back(std::array<u32, 9>{0, 6, 0, 0, 6, 0, 0, 12, 0},  ItemStack{ItemType::StoneSword});
 
-	m_recipes.emplace_back(std::array<u32, 9>{11, 11, 0, 0, 0, 0, 0, 0, 0}, ItemStack{12, 4}, true);
-	m_recipes.emplace_back(std::array<u32, 9>{5, 0, 0, 0, 0, 0, 0, 0, 0}, ItemStack{11, 4}, true);
+	m_recipes.emplace_back(std::array<u32, 9>{5, 0, 0, 0, 0, 0, 0, 0, 0},   ItemStack{ItemType::Wood, 4}, true);
+	m_recipes.emplace_back(std::array<u32, 9>{11, 11, 0, 0, 0, 0, 0, 0, 0}, ItemStack{ItemType::Stick, 4}, true);
 }
 
 const CraftingRecipe *Registry::getRecipe(const Inventory &inventory) const {
