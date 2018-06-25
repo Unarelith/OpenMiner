@@ -20,8 +20,8 @@ static const auto backgroundY = SCREEN_HEIGHT - 22 * 3;
 
 Hotbar::Hotbar(Inventory &inventory) : m_inventory(inventory) {
 	m_shader.createProgram();
-	m_shader.addShader(GL_VERTEX_SHADER, "shaders/basic.v.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "shaders/basic.f.glsl");
+	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
+	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
 	m_shader.linkProgram();
 
 	m_background.load("texture-widgets");

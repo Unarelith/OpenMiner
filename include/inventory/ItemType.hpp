@@ -14,8 +14,6 @@
 #ifndef ITEMTYPE_HPP_
 #define ITEMTYPE_HPP_
 
-#include "Types.hpp"
-
 namespace ItemType {
 	enum {
 		Air          = 0,

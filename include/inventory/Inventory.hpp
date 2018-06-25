@@ -17,7 +17,6 @@
 #include <vector>
 
 #include "ItemStack.hpp"
-#include "Types.hpp"
 
 class Inventory {
 	public:

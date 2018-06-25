@@ -20,7 +20,7 @@
 #include <string>
 #include <vector>
 
-#include "Types.hpp"
+#include "IntTypes.hpp"
 
 #define DEBUG_ENABLED
 #define DEBUG_COLOR

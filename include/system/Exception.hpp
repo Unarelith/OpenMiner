@@ -18,7 +18,6 @@
 #include <string>
 
 #include "Debug.hpp"
-#include "Types.hpp"
 
 #define EXCEPTION(args...) (Exception(__LINE__, _FILE, args))
 

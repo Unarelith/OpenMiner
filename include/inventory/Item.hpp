@@ -14,6 +14,7 @@
 #ifndef ITEM_HPP_
 #define ITEM_HPP_
 
+#include "IntTypes.hpp"
 #include "ItemType.hpp"
 
 class Item {

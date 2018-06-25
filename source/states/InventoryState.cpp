@@ -19,8 +19,8 @@ InventoryState::InventoryState(Inventory &playerInventory, Inventory &hotbarInve
 	: ApplicationState(parent), m_playerInventory{playerInventory}, m_hotbarInventory{hotbarInventory}
 {
 	m_shader.createProgram();
-	m_shader.addShader(GL_VERTEX_SHADER, "shaders/basic.v.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "shaders/basic.f.glsl");
+	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
+	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
 	m_shader.linkProgram();
 
 	Mouse::setCursorGrabbed(false);

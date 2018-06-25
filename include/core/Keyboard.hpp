@@ -16,7 +16,7 @@
 
 #include <map>
 
-#include "Types.hpp"
+#include "IntTypes.hpp"
 
 class Keyboard {
 	public:

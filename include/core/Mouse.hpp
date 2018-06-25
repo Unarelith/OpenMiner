@@ -14,7 +14,7 @@
 #ifndef MOUSE_HPP_
 #define MOUSE_HPP_
 
-#include "Types.hpp"
+#include "IntTypes.hpp"
 #include "Window.hpp"
 
 class Mouse {

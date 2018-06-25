@@ -16,7 +16,7 @@
 
 #include <functional>
 
-#include "Types.hpp"
+#include "IntTypes.hpp"
 
 class GameClock {
 	public:

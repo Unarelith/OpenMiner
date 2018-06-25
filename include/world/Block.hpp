@@ -17,6 +17,7 @@
 #include <glm/glm.hpp>
 
 #include "BlockType.hpp"
+#include "IntTypes.hpp"
 
 class Chunk;
 class World;

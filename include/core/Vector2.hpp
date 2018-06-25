@@ -17,7 +17,7 @@
 #include <stdexcept>
 #include <utility>
 
-#include "Types.hpp"
+#include "IntTypes.hpp"
 
 template<typename T>
 class Vector2 {

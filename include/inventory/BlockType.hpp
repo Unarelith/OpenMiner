@@ -14,8 +14,6 @@
 #ifndef BLOCKTYPE_HPP_
 #define BLOCKTYPE_HPP_
 
-#include "Types.hpp"
-
 namespace BlockType {
 	enum {
 		Air          = 0,

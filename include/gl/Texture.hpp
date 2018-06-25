@@ -16,9 +16,9 @@
 
 #include <string>
 
+#include "IntTypes.hpp"
 #include "NonCopyable.hpp"
 #include "OpenGL.hpp"
-#include "Types.hpp"
 
 class Texture : public NonCopyable {
 	public:

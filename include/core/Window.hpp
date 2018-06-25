@@ -17,9 +17,9 @@
 #include <memory>
 #include <string>
 
+#include "IntTypes.hpp"
 #include "RenderTarget.hpp"
 #include "SDLHeaders.hpp"
-#include "Types.hpp"
 
 class Window : public RenderTarget {
 	public:

@@ -10,7 +10,7 @@ TODO
    ◦ DONE: `Debug` / `Exception`
    ◦ TODO: `Window` et `Texture` (depuis `ZeldaOOL`)
    ◦ TODO: Input system (Mouse + Keyboard)
-• TODO: `Types.hpp` → `IntTypes.hpp`
+• DONE: `Types.hpp` → `IntTypes.hpp`
    → TODO: Vérifier que les types sont bien corrects
 • TODO: Vérifier les utilisations inutiles de pointeurs
 • TODO: Catch SDLLoader exception

@@ -17,7 +17,7 @@
 #include <queue>
 
 #include "Config.hpp"
-#include "Types.hpp"
+#include "IntTypes.hpp"
 
 struct LightNode {
 	LightNode(int _x, int _y, int _z) : x(_x), y(_y), z(_z) {}
