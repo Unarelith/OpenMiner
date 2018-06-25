@@ -28,9 +28,10 @@ class ItemWidget : public Widget {
 		const ItemStack &stack() const { return m_inventory.getStack(m_x, m_y); }
 		void setStack(unsigned int id, unsigned int amount = 1);
 
-	private:
+	protected:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
+	private:
 		Inventory &m_inventory;
 
 		unsigned int m_x = 0;

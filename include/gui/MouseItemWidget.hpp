@@ -15,12 +15,16 @@
 #define MOUSEITEMWIDGET_HPP_
 
 #include "ItemWidget.hpp"
+#include "Sprite.hpp"
+#include "Text.hpp"
 
 class MouseItemWidget : public ItemWidget {
 	public:
-		MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0, parent) {}
+		MouseItemWidget(Widget *parent);
 
 		void onEvent(const SDL_Event &event);
+
+		void update(const ItemWidget *currentItemWidget);
 
 		void swapItems(ItemWidget &widget, bool isReadOnly = false);
 		void putItem(ItemWidget &widget);
@@ -28,9 +32,16 @@ class MouseItemWidget : public ItemWidget {
 		const ItemStack &getStack() const { return m_inventory.getStack(0, 0); }
 
 	private:
+		void draw(RenderTarget &target, RenderStates states) const override;
+
 		void updatePosition(float x, float y);
 
 		Inventory m_inventory{1, 1};
+
+		const ItemWidget *m_currentItemWidget = nullptr;
+
+		Sprite m_tooltipBackground{"texture-toasts", 160, 32};
+		Text m_tooltipText;
 };
 
 #endif // MOUSEITEMWIDGET_HPP_

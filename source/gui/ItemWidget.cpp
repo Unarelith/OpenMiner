@@ -14,7 +14,7 @@
 #include "ItemWidget.hpp"
 
 ItemWidget::ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent)
-	: Widget(16, 16, parent), m_inventory(inventory), m_x(x), m_y(y)
+	: Widget(18, 18, parent), m_inventory(inventory), m_x(x), m_y(y)
 {
 }
 

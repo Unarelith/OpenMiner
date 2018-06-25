@@ -25,6 +25,8 @@ class InventoryWidget : public Widget {
 
 		void onEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly = false);
 
+		const ItemWidget *currentItemWidget() const { return m_currentItemWidget; }
+
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
@@ -32,6 +34,7 @@ class InventoryWidget : public Widget {
 		u16 m_inventoryHeight = 0;
 
 		std::vector<ItemWidget> m_itemWidgets;
+		ItemWidget *m_currentItemWidget = nullptr;
 
 		int m_selectedItem = -1;
 };

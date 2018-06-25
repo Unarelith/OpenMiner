@@ -12,6 +12,7 @@
  * =====================================================================================
  */
 #include "ApplicationStateStack.hpp"
+#include "Config.hpp"
 #include "InventoryState.hpp"
 #include "Mouse.hpp"
 
@@ -27,7 +28,9 @@ InventoryState::InventoryState(Inventory &playerInventory, Inventory &hotbarInve
 	Mouse::setCursorVisible(true);
 	Mouse::resetToWindowCenter();
 
-	setScale(3, 3, 1);
+	m_widget.setScale(3, 3, 1);
+	m_widget.setPosition(SCREEN_WIDTH  / 2.0 - m_widget.getGlobalBounds().width  / 2.0,
+	                     SCREEN_HEIGHT / 2.0 - m_widget.getGlobalBounds().height / 2.0, 0);
 }
 
 void InventoryState::onEvent(const SDL_Event &event) {

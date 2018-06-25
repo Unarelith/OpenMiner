@@ -27,9 +27,13 @@ class Text : public IDrawable, public Transformable {
 		void setText(const std::string &text) { m_text = text; }
 
 	private:
+		void updateCharWidth();
+
 		void draw(RenderTarget &target, RenderStates states) const override;
 
 		std::string m_text;
+
+		int m_charWidth[256];
 
 		Texture &m_texture;
 		VertexBuffer m_vbo;

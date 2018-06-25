@@ -15,6 +15,7 @@
 #define WIDGET_HPP_
 
 #include "IDrawable.hpp"
+#include "Rect.hpp"
 #include "SDLHeaders.hpp"
 #include "Transformable.hpp"
 
@@ -25,6 +26,8 @@ class Widget : public IDrawable, public Transformable {
 			: m_parent(parent), m_width(width), m_height(height) {}
 
 		bool isPointInWidget(float x, float y);
+
+		FloatRect getGlobalBounds() const;
 
 		const Widget *parent() { return m_parent; }
 

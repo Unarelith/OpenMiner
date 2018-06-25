@@ -32,19 +32,20 @@ void InventoryWidget::init(Inventory &inventory) {
 }
 
 void InventoryWidget::onEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly) {
-	if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
+	if (event.type == SDL_MOUSEMOTION) {
+		m_currentItemWidget = nullptr;
 		for (std::size_t i = 0 ; i < m_itemWidgets.size() ; ++i) {
-			if (m_itemWidgets[i].isPointInWidget(event.button.x / 3.0, event.button.y / 3.0)) {
-				mouseItemWidget.swapItems(m_itemWidgets.at(i), isReadOnly);
+			if (m_itemWidgets[i].isPointInWidget(event.motion.x, event.motion.y)) {
+				m_currentItemWidget = &m_itemWidgets[i];
 			}
 		}
 	}
-	if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT) {
-		for (std::size_t i = 0 ; i < m_itemWidgets.size() ; ++i) {
-			if (m_itemWidgets[i].isPointInWidget(event.button.x / 3.0, event.button.y / 3.0)
-			&& !isReadOnly) {
-				mouseItemWidget.putItem(m_itemWidgets.at(i));
-			}
+	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && m_currentItemWidget) {
+		mouseItemWidget.swapItems(*m_currentItemWidget, isReadOnly);
+	}
+	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT && m_currentItemWidget) {
+		if (!isReadOnly) {
+			mouseItemWidget.putItem(*m_currentItemWidget);
 		}
 	}
 }

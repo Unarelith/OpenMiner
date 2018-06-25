@@ -11,7 +11,6 @@
  *
  * =====================================================================================
  */
-#include "Config.hpp"
 #include "WorkbenchWidget.hpp"
 
 WorkbenchWidget::WorkbenchWidget(Inventory &playerInventory, Inventory &hotbarInventory, Widget *parent)
@@ -25,10 +24,6 @@ WorkbenchWidget::WorkbenchWidget(Inventory &playerInventory, Inventory &hotbarIn
 
 	m_hotbarInventoryWidget.init(m_hotbarInventory);
 	m_hotbarInventoryWidget.setPosition(7, 141, 0);
-
-	// setScale(3, 3, 1);
-	setPosition(SCREEN_WIDTH  / 3.0 / 2.0 - m_background.clipRect().width  / 2.0,
-	            SCREEN_HEIGHT / 3.0 / 2.0 - m_background.clipRect().height / 2.0, 0);
 }
 
 void WorkbenchWidget::onEvent(const SDL_Event &event) {
@@ -42,6 +37,14 @@ void WorkbenchWidget::onEvent(const SDL_Event &event) {
 
 void WorkbenchWidget::update() {
 	m_craftingWidget.update();
+
+	const ItemWidget *currentItemWidget = nullptr;
+	if ((currentItemWidget = m_playerInventoryWidget.currentItemWidget())
+	 || (currentItemWidget = m_hotbarInventoryWidget.currentItemWidget())
+	 || (currentItemWidget = m_craftingWidget.currentItemWidget()))
+		m_mouseItemWidget.update(currentItemWidget);
+	else
+		m_mouseItemWidget.update(nullptr);
 }
 
 void WorkbenchWidget::draw(RenderTarget &target, RenderStates states) const {

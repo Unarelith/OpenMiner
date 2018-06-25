@@ -13,7 +13,9 @@
  */
 #include "Item.hpp"
 
-Item::Item(u32 id, u32 textureID) {
+Item::Item(u32 id, u32 textureID, const std::string &name) {
+	m_name = name;
+
 	m_id = id;
 	m_textureID = textureID;
 }

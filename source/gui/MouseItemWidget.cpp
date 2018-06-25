@@ -13,13 +13,28 @@
  */
 #include "MouseItemWidget.hpp"
 
+MouseItemWidget::MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0, parent) {
+	m_tooltipBackground.setPosition(20, 20, 0);
+	m_tooltipText.setPosition(27, 27, 0);
+}
+
 void MouseItemWidget::onEvent(const SDL_Event &event) {
-	if (event.type == SDL_MOUSEMOTION && stack().item().id() != 0) {
+	if (event.type == SDL_MOUSEMOTION) {
 		updatePosition(event.motion.x, event.motion.y);
 	}
 
 	if (event.type == SDL_MOUSEBUTTONDOWN) {
 		updatePosition(event.button.x, event.button.y);
+	}
+}
+
+void MouseItemWidget::update(const ItemWidget *currentItemWidget) {
+	if (currentItemWidget) {
+		m_currentItemWidget = (currentItemWidget->stack().item().id()) ? currentItemWidget : nullptr;
+		m_tooltipText.setText(currentItemWidget->stack().item().name() + " [" + std::to_string(currentItemWidget->stack().item().id()) + "]");
+	}
+	else {
+		m_currentItemWidget = nullptr;
 	}
 }
 
@@ -59,10 +74,21 @@ void MouseItemWidget::putItem(ItemWidget &widget) {
 	}
 }
 
-void MouseItemWidget::updatePosition(float x, float y) {
-	x = x / 3 - m_parent->getPosition().x - 8;
-	y = y / 3 - m_parent->getPosition().y - 8;
+void MouseItemWidget::draw(RenderTarget &target, RenderStates states) const {
+	ItemWidget::draw(target, states);
 
-	setPosition(x, y, 0);
+	applyTransform(states);
+
+	if (m_currentItemWidget) {
+		target.draw(m_tooltipBackground, states);
+		target.draw(m_tooltipText, states);
+	}
+}
+
+void MouseItemWidget::updatePosition(float x, float y) {
+	x -= m_parent->getPosition().x + 10 * m_parent->getScale().x;
+	y -= m_parent->getPosition().y + 10 * m_parent->getScale().y;
+
+	setPosition(x / m_parent->getScale().x, y / m_parent->getScale().y, 0);
 }
 

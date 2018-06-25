@@ -11,31 +11,29 @@
  *
  * =====================================================================================
  */
-#include "Rect.hpp"
 #include "Widget.hpp"
 
-#include "Debug.hpp"
-
 bool Widget::isPointInWidget(float x, float y) {
-	FloatRect aabb;
-	aabb.x = getPosition().x;
-	aabb.y = getPosition().y;
-	aabb.width = m_width * getScale().x;
-	aabb.height = m_height * getScale().y;
+	return getGlobalBounds().intersects(FloatRect{x, y, 1, 1});
+}
 
-	Widget *parent = m_parent;
-	while (parent) {
-		aabb.x += parent->getPosition().x;
-		aabb.y += parent->getPosition().y;
+FloatRect Widget::getGlobalBounds() const {
+	FloatRect aabb{0, 0, static_cast<float>(m_width), static_cast<float>(m_height)};
 
-		aabb.width *= parent->getScale().x;
-		aabb.height *= parent->getScale().y;
+	const Widget *widget = this;
+	while (widget) {
+		aabb.x *= widget->getScale().x;
+		aabb.y *= widget->getScale().y;
 
-		parent = parent->m_parent;
+		aabb.x += widget->getPosition().x;
+		aabb.y += widget->getPosition().y;
+
+		aabb.width *= widget->getScale().x;
+		aabb.height *= widget->getScale().y;
+
+		widget = widget->m_parent;
 	}
 
-	// DEBUG("Checking aabb:", aabb.x, aabb.y, aabb.width, aabb.height, "|", x, y);
-
-	return aabb.intersects(FloatRect{x, y, 1, 1});
+	return aabb;
 }
 

@@ -26,6 +26,8 @@ class CraftingWidget : public Widget {
 
 		void update();
 
+		const ItemWidget *currentItemWidget() const { return m_craftingResultInventoryWidget.currentItemWidget() ? m_craftingResultInventoryWidget.currentItemWidget() : m_craftingInventoryWidget.currentItemWidget(); }
+
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
