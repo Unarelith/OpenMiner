@@ -14,6 +14,7 @@
 #ifndef ITEMWIDGET_HPP_
 #define ITEMWIDGET_HPP_
 
+#include "Cube.hpp"
 #include "Image.hpp"
 #include "Inventory.hpp"
 #include "Text.hpp"
@@ -39,6 +40,8 @@ class ItemWidget : public Widget {
 
 		Image m_image;
 		Text m_text;
+
+		Cube m_cube{8};
 };
 
 #endif // ITEMWIDGET_HPP_

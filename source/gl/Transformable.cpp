@@ -34,9 +34,14 @@ void Transformable::setScale(float factorX, float factorY, float factorZ) {
 	m_scale.z = factorZ;
 }
 
+void Transformable::setRotation(float rotationAngle, const glm::vec3 &rotationAxis) {
+	m_rotationAngle = rotationAngle * RADIANS_PER_DEGREES;
+	m_rotationAxis = rotationAxis;
+}
+
 void Transformable::applyTransform(RenderStates &states) const {
 	glm::mat4 &modelMatrix = const_cast<Transformable *>(this)->m_modelMatrix;
-	modelMatrix = glm::translate(glm::mat4{1}, m_position) * glm::scale(glm::mat4{1}, m_scale);
+	modelMatrix = glm::translate(glm::mat4{1}, m_position) * glm::scale(glm::mat4{1}, m_scale) * glm::rotate(glm::mat4{1}, m_rotationAngle, m_rotationAxis);
 
 	if (states.modelMatrix) {
 		const_cast<Transformable *>(this)->m_tmpMatrix = *states.modelMatrix * m_modelMatrix;

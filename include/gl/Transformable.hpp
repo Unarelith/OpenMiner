@@ -18,12 +18,18 @@
 
 #include "RenderStates.hpp"
 
+#ifndef RADIANS_PER_DEGREES
+#define RADIANS_PER_DEGREES (M_PI / 180.0f)
+#endif
+
 class Transformable {
 	public:
 		void move(float x, float y, float z);
 		void setPosition(float x, float y, float z);
 
 		void setScale(float factorX, float factorY, float factorZ);
+
+		void setRotation(float rotationAngle, const glm::vec3 &rotationAxis);
 
 		void applyTransform(RenderStates &states) const;
 
@@ -36,6 +42,9 @@ class Transformable {
 
 		glm::vec3 m_position{0, 0, 0};
 		glm::vec3 m_scale{1, 1, 1};
+
+		float m_rotationAngle = 0;
+		glm::vec3 m_rotationAxis = {0, 1, 0};
 };
 
 #endif // TRANSFORMABLE_HPP_
