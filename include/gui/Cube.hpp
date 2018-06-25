@@ -34,6 +34,8 @@ class Cube : public IDrawable, public Transformable {
 		const Texture &m_texture;
 
 		VertexBuffer m_vbo;
+
+		glm::mat4 m_modelMatrix{1};
 };
 
 #endif // CUBE_HPP_

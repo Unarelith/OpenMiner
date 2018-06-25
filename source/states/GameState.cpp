@@ -25,15 +25,16 @@
 #include "Mouse.hpp"
 
 GameState::GameState() {
-	m_hotbarInventory.addStack(ItemType::Grass, 10);
-	m_hotbarInventory.addStack(ItemType::Stone, 10);
-	m_hotbarInventory.addStack(ItemType::Glass, 10);
-	m_hotbarInventory.addStack(ItemType::Glowstone, 10);
+	m_hotbarInventory.addStack(ItemType::Dirt, 64);
+	m_hotbarInventory.addStack(ItemType::Grass, 64);
+	m_hotbarInventory.addStack(ItemType::Stone, 64);
+	m_hotbarInventory.addStack(ItemType::Glass, 64);
+	m_hotbarInventory.addStack(ItemType::Glowstone, 64);
 
-	m_playerInventory.addStack(ItemType::Wood, 4);
-	m_playerInventory.addStack(ItemType::Planks, 10);
-	m_playerInventory.addStack(ItemType::Stick, 10);
-	m_playerInventory.addStack(ItemType::Cobblestone, 10);
+	m_playerInventory.addStack(ItemType::Wood, 64);
+	m_playerInventory.addStack(ItemType::Planks, 64);
+	m_playerInventory.addStack(ItemType::Stick, 64);
+	m_playerInventory.addStack(ItemType::Cobblestone, 64);
 	m_playerInventory.addStack(ItemType::StoneAxe, 1);
 	m_playerInventory.addStack(ItemType::StoneHoe, 1);
 	m_playerInventory.addStack(ItemType::StonePickaxe, 1);

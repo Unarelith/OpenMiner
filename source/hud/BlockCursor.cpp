@@ -79,8 +79,9 @@ void BlockCursor::onEvent(const SDL_Event &event, Inventory &playerInventory, In
 		else if (event.button.button == SDL_BUTTON_RIGHT) {
 			u32 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
 			const Block &block = Registry::getInstance().getBlock(blockId);
+			const Item &item = Registry::getInstance().getItem(hotbar.currentItem());
 
-			if (block.id() && hotbar.currentItem() && hotbar.currentItem() < 25) { // FIXME
+			if (block.id() && hotbar.currentItem() && item.isBlock()) {
 				int face = m_selectedBlock.w;
 
 				int x = m_selectedBlock.x;

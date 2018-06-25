@@ -11,12 +11,14 @@ varying vec4 v_coord3d;
 varying vec4 v_normal;
 varying vec2 v_texCoord;
 varying vec2 v_lightValue;
+varying float v_faceValue;
 
 uniform mat4 u_modelMatrix;
 uniform mat4 u_projectionMatrix;
 uniform mat4 u_viewMatrix;
 
 void main() {
+	v_faceValue = coord3d.w;
 	v_coord3d = u_modelMatrix * vec4(coord3d.xyz, 1.0);
 	v_normal = vec4(normal, 1.0);
 	v_color = color;

@@ -22,15 +22,19 @@
 
 Cube::Cube(float size) : m_texture(ResourceHandler::getInstance().get<Texture>("texture-blocks")) {
 	m_size = size;
+
+	m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(-180.0f), glm::vec3{0, 0, 1});
+	m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(-25.0f), glm::vec3{1, 0, 0});
+	m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(-45.0f), glm::vec3{0, 1, 0});
 }
 
 void Cube::updateVertexBuffer(const Block &block) const {
 	Vertex vertices[6 * 4] = {
 		// Left
-		{{0, 0, 0, -1}},
-		{{0, 0, m_size, -1}},
-		{{0, m_size, m_size, -1}},
-		{{0, m_size, 0, -1}},
+		{{0, 0, 0, 2}},
+		{{0, 0, m_size, 2}},
+		{{0, m_size, m_size, 2}},
+		{{0, m_size, 0, 2}},
 
 		// Right
 		{{m_size, 0, m_size, -1}},
@@ -45,16 +49,16 @@ void Cube::updateVertexBuffer(const Block &block) const {
 		{{0, 0, m_size, -1}},
 
 		// Top
-		{{0, m_size, m_size, -1}},
-		{{m_size, m_size, m_size, -1}},
-		{{m_size, m_size, 0, -1}},
-		{{0, m_size, 0, -1}},
+		{{0, m_size, m_size, 3}},
+		{{m_size, m_size, m_size, 3}},
+		{{m_size, m_size, 0, 3}},
+		{{0, m_size, 0, 3}},
 
 		// Front
-		{{m_size, 0, 0, -1}},
-		{{0, 0, 0, -1}},
-		{{0, m_size, 0, -1}},
-		{{m_size, m_size, 0, -1}},
+		{{m_size, 0, 0, 4}},
+		{{0, 0, 0, 4}},
+		{{0, m_size, 0, 4}},
+		{{m_size, m_size, 0, 4}},
 
 		// Back
 		{{0, 0, m_size, -1}},
@@ -83,6 +87,12 @@ void Cube::updateVertexBuffer(const Block &block) const {
 }
 
 void Cube::draw(RenderTarget &target, RenderStates states) const {
+	glm::mat4 tmpMatrix;
+	if (states.modelMatrix) {
+		tmpMatrix = *states.modelMatrix * m_modelMatrix;
+		states.modelMatrix = &tmpMatrix;
+	}
+
 	applyTransform(states);
 
 	states.viewMatrix = nullptr;

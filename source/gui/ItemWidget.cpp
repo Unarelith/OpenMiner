@@ -17,8 +17,9 @@
 ItemWidget::ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent)
 	: Widget(18, 18, parent), m_inventory(inventory), m_x(x), m_y(y)
 {
-	m_cube.setPosition(8.5, 14, 0);
-	m_cube.setRotation(-172, glm::vec3{0.42, -0.2, 1});
+	m_cube.setPosition(-12, -12, 0);
+	// m_cube.setPosition(8.5, 14, 0);
+	// m_cube.setRotation(-172, glm::vec3{0.42, -0.2, 1});
 
 	m_image.load("texture-items");
 	m_image.setPosition(1, 1, 0);
@@ -43,9 +44,9 @@ void ItemWidget::setStack(unsigned int id, unsigned int amount) {
 void ItemWidget::draw(RenderTarget &target, RenderStates states) const {
 	applyTransform(states);
 
-	if (stack().item().isBlock())
+	if (stack().item().isBlock() && stack().item().id())
 		target.draw(m_cube, states);
-	else
+	else if (stack().amount() >= 1)
 		target.draw(m_image, states);
 
 	if (stack().item().id() && stack().amount() > 1)

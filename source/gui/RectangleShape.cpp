@@ -58,14 +58,14 @@ void RectangleShape::draw(RenderTarget &target, RenderStates states) const {
 	static glm::mat4 projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
 	states.projectionMatrix = &projectionMatrix;
 
-	// glDisable(GL_CULL_FACE);
-	// glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
 
 	if(m_wireframeMode) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	target.draw(m_vbo, GL_QUADS, 0, 4, states);
 	if(m_wireframeMode) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	// glEnable(GL_DEPTH_TEST);
-	// glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 }
 
