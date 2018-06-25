@@ -30,16 +30,13 @@ class GameState : public ApplicationState {
 	public:
 		GameState();
 
-		void initShaders();
-
 		void onEvent(const SDL_Event &event) override;
 
 		void update() override;
 
-		float fract(float value) const;
-		glm::vec4 findSelectedBlock(bool useDepthBuffer) const;
-
 	private:
+		void initShaders();
+
 		void draw(RenderTarget &target, RenderStates states) const override;
 
 		glm::mat4 m_projectionMatrix;

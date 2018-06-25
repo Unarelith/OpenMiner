@@ -39,30 +39,9 @@ GameState::GameState() {
 	m_playerInventory.addStack(25, 32);
 	m_playerInventory.addStack(27, 1);
 
-	initShaders();
-}
-
-void GameState::initShaders() {
-	m_shader.createProgram();
-
-	m_shader.addShader(GL_VERTEX_SHADER, "shaders/game.v.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "shaders/color.f.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "shaders/light.f.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "shaders/fog.f.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "shaders/game.f.glsl");
-
-	m_shader.linkProgram();
-
-	Shader::bind(&m_shader);
-
 	m_projectionMatrix = glm::perspective(45.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, DIST_NEAR, DIST_FAR);
-	m_shader.setUniform("u_projectionMatrix", m_projectionMatrix);
-	m_shader.setUniform("u_tex", 0);
-	m_shader.setUniform("u_time", 0);
 
-	Shader::bind(nullptr);
-
-	m_viewMatrix = m_camera.processInputs(m_world);
+	initShaders();
 }
 
 void GameState::onEvent(const SDL_Event &event) {
@@ -99,6 +78,18 @@ void GameState::update() {
 	if (Keyboard::isKeyPressedOnce(Keyboard::E) && &m_stateStack->top() == this) {
 		m_stateStack->push<InventoryState>(m_playerInventory, m_hotbarInventory, this);
 	}
+}
+
+void GameState::initShaders() {
+	m_shader.createProgram();
+
+	m_shader.addShader(GL_VERTEX_SHADER, "shaders/game.v.glsl");
+	m_shader.addShader(GL_FRAGMENT_SHADER, "shaders/color.f.glsl");
+	m_shader.addShader(GL_FRAGMENT_SHADER, "shaders/light.f.glsl");
+	m_shader.addShader(GL_FRAGMENT_SHADER, "shaders/fog.f.glsl");
+	m_shader.addShader(GL_FRAGMENT_SHADER, "shaders/game.f.glsl");
+
+	m_shader.linkProgram();
 }
 
 void GameState::draw(RenderTarget &target, RenderStates states) const {
