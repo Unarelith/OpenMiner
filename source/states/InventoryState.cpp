@@ -47,6 +47,8 @@ void InventoryState::onEvent(const SDL_Event &event) {
 void InventoryState::update() {
 	if (m_parent)
 		m_parent->update();
+
+	m_widget.update();
 }
 
 void InventoryState::draw(RenderTarget &target, RenderStates states) const {

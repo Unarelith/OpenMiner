@@ -24,6 +24,8 @@ class CraftingWidget : public Widget {
 
 		void onEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget);
 
+		void update();
+
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 

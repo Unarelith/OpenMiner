@@ -22,6 +22,8 @@ class WorkbenchWidget : public Widget {
 
 		void onEvent(const SDL_Event &event);
 
+		void update();
+
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 

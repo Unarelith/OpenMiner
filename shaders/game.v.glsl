@@ -32,8 +32,8 @@ void main() {
 		finalPos.y += sin(u_time / 1000.0) / 16.0 - 0.125;
 	}
 	else if (coord3d.w == 4) {
-		finalPos.xz += sin((u_time / 1000.0 + mod(finalPos.x, 16)) * 2) / 30.0;
-		finalPos.xz += cos((u_time / 1000.0 + mod(finalPos.z, 16)) * 2) / 30.0;
+		finalPos.xz += sin((u_time / 1000.0 + mod(finalPos.x, 32)) * 2) / 30.0;
+		finalPos.xz += cos((u_time / 1000.0 + mod(finalPos.z, 32)) * 2) / 30.0;
 	}
 
 	// Used for lighting

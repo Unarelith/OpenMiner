@@ -25,7 +25,9 @@ CraftingWidget::CraftingWidget(Widget *parent) : Widget(parent) {
 void CraftingWidget::onEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget) {
 	m_craftingInventoryWidget.onEvent(event, mouseItemWidget);
 	m_craftingResultInventoryWidget.onEvent(event, mouseItemWidget, true);
+}
 
+void CraftingWidget::update() {
 	const CraftingRecipe *recipe = Registry::getInstance().getRecipe(m_craftingInventory);
 	if (!m_recipe || m_recipe != recipe) {
 		m_recipe = recipe;
@@ -45,6 +47,7 @@ void CraftingWidget::onEvent(const SDL_Event &event, MouseItemWidget &mouseItemW
 				m_craftingInventory.setStack(i % 3, i / 3, (stack.amount() > 1) ? stack.item().id() : 0, stack.amount() - 1);
 			}
 		}
+
 		m_craftingInventoryWidget.init(m_craftingInventory);
 
 		m_recipe = nullptr;

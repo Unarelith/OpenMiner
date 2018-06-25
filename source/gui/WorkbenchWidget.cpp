@@ -40,6 +40,10 @@ void WorkbenchWidget::onEvent(const SDL_Event &event) {
 	m_mouseItemWidget.onEvent(event);
 }
 
+void WorkbenchWidget::update() {
+	m_craftingWidget.update();
+}
+
 void WorkbenchWidget::draw(RenderTarget &target, RenderStates states) const {
 	applyTransform(states);
 
