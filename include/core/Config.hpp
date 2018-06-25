@@ -14,12 +14,20 @@
 #ifndef CONFIG_HPP_
 #define CONFIG_HPP_
 
-#define SCREEN_WIDTH 1600
-#define SCREEN_HEIGHT 1050
+namespace {
+	constexpr const char *APP_NAME = "KubKraft";
 
-#define APP_NAME "KubKraft"
+	constexpr float SCREEN_WIDTH  = 1600;
+	constexpr float SCREEN_HEIGHT = 1050;
 
-#define DIST_NEAR 0.1f
-#define DIST_FAR 1000.0f
+	constexpr float DIST_NEAR = 0.1f;
+	constexpr float DIST_FAR  = 1000.0f;
+
+	constexpr int CHUNK_WIDTH  = 16.0f;
+	constexpr int CHUNK_HEIGHT = 32.0f;
+	constexpr int CHUNK_DEPTH  = 16.0f;
+
+	constexpr int SEALEVEL = 4;
+}
 
 #endif // CONFIG_HPP_

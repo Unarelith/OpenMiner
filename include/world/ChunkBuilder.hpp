@@ -16,8 +16,8 @@
 
 #include <vector>
 
-#include "Types.hpp"
 #include "Vertex.hpp"
+#include "Types.hpp"
 
 class Block;
 class Chunk;

@@ -89,6 +89,8 @@ TODO
       ▸ TODO: Occlusion culling
    ◦ TODO: Face-merging
       → Trouver une solution pour utiliser un texture atlas avec ça
+• TODO: Séparer le pipeline 2D du pipeline 3D
+   ◦ TODO: Ajouter une implémentation de VAO par type de rendu (2D/Chunk/Liquid/Plant)
 
 # Idées diverses
 

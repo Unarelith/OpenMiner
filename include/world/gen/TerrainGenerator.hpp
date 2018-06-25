@@ -16,8 +16,6 @@
 
 class Chunk;
 
-#define SEALEVEL 4
-
 class TerrainGenerator {
 	public:
 		void generate(Chunk &chunk) const;

@@ -20,28 +20,12 @@
 
 #include "Block.hpp"
 #include "ChunkBuilder.hpp"
+#include "ChunkLightmap.hpp"
 #include "IDrawable.hpp"
 #include "NonCopyable.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "VertexBuffer.hpp"
-
-#include <queue>
-
-struct LightNode {
-	LightNode(int _x, int _y, int _z) : x(_x), y(_y), z(_z) {}
-	int x;
-	int y;
-	int z;
-};
-
-struct LightRemovalNode {
-	LightRemovalNode(int _x, int _y, int _z, int _value) : x(_x), y(_y), z(_z), value(_value) {}
-	int x;
-	int y;
-	int z;
-	int value;
-};
 
 class Chunk : public NonCopyable, public IDrawable {
 	public:
@@ -51,12 +35,6 @@ class Chunk : public NonCopyable, public IDrawable {
 
 		u32 getBlock(int x, int y, int z) const;
 		void setBlock(int x, int y, int z, u32 id);
-
-		void addLight(Chunk &chunk, int x, int y, int z, int val);
-		void addSunlight(Chunk &chunk, int x, int y, int z, int val);
-		void removeLight(Chunk &chunk, int x, int y, int z);
-
-		void updateLights(Chunk &chunk);
 
 		s32 x() const { return m_x; }
 		s32 y() const { return m_y; }
@@ -69,10 +47,11 @@ class Chunk : public NonCopyable, public IDrawable {
 		Chunk *below() const { return m_surroundingChunks[4]; }
 		Chunk *above() const { return m_surroundingChunks[5]; }
 		Chunk *getSurroundingChunk(u8 i) { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
+		const Chunk *getSurroundingChunk(u8 i) const { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
 
-		static const u8 width = 16;
-		static const u8 height = 32;
-		static const u8 depth = 16;
+		static constexpr u8 width = CHUNK_WIDTH;
+		static constexpr u8 height = CHUNK_HEIGHT;
+		static constexpr u8 depth = CHUNK_DEPTH;
 
 		void setLeft(Chunk *left)   { m_surroundingChunks[0] = left; }
 		void setRight(Chunk *right) { m_surroundingChunks[1] = right; }
@@ -88,11 +67,8 @@ class Chunk : public NonCopyable, public IDrawable {
 		void setGenerated(bool isGenerated) { m_isGenerated = isGenerated; }
 		void setInitialized(bool isInitialized) { m_isInitialized = isInitialized; }
 
-		int getSunlight(int x, int y, int z) const;
-		void setSunlight(int x, int y, int z, int val);
-
-		int getTorchlight(int x, int y, int z) const;
-		void setTorchlight(int x, int y, int z, int val);
+		ChunkLightmap &lightmap() { return m_lightmap; }
+		const ChunkLightmap &lightmap() const { return m_lightmap; }
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
@@ -108,13 +84,8 @@ class Chunk : public NonCopyable, public IDrawable {
 		using DataArray = u32[Chunk::width][Chunk::height][Chunk::depth];
 		DataArray m_data;
 
-		using LightMapArray = u8[Chunk::width][Chunk::height][Chunk::depth];
-		LightMapArray m_lightMap;
-		std::queue<LightNode> m_lightBfsQueue;
-		std::queue<LightRemovalNode> m_lightRemovalBfsQueue;
-		std::queue<LightNode> m_sunlightBfsQueue;
-
 		ChunkBuilder m_builder;
+		ChunkLightmap m_lightmap{this};
 
 		VertexBuffer m_vbo;
 		std::size_t m_verticesCount;

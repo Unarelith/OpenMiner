@@ -40,7 +40,7 @@ void main() {
 	// color *= light(vec3(1.0, 1.0, 1.0), vec4(lightPosition, 1.0), 0.5, 0.5);
 
 	if (v_lightValue.x != -1) {
-		float ambientIntensity = max(v_lightValue.x, v_lightValue.y) / 16.0;
+		float ambientIntensity = max(max(v_lightValue.x, v_lightValue.y) / 16.0, 4.0 / 16.0);
 		float diffuseIntensity = max(v_lightValue.x, v_lightValue.y) / 32.0;
 
 		color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);

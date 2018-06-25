@@ -81,14 +81,14 @@ void TerrainGenerator::testCraftGeneration(Chunk &chunk) const {
 											chunk.setBlock(x + ix, y + h + iy, z + iz, 4);
 
 											if (iy == 2)
-												chunk.addSunlight(chunk, x + ix, y + h + iy, z + iz, 15);
+												chunk.lightmap().addSunlight(x + ix, y + h + iy, z + iz, 15);
 										}
 									}
 								}
 							}
 						}
 						else {
-							chunk.addSunlight(chunk, x, y, z, 15);
+							chunk.lightmap().addSunlight(x, y, z, 15);
 						}
 						break;
 					}

@@ -141,14 +141,14 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 		vertex.texCoord[0] = faceTexCoords[j * 2];
 		vertex.texCoord[1] = faceTexCoords[j * 2 + 1];
 
-		int sunlight = chunk.getSunlight(x, y, z);
+		int sunlight = chunk.lightmap().getSunlight(x, y, z);
 		if ((i == 0 || i == 1 || i == 4 || i == 5) && sunlight > 2)
 			vertex.lightValue[0] = sunlight - 2;
 		if (i == 4 && sunlight > 3)
 			vertex.lightValue[0] = sunlight - 3;
 		else
 			vertex.lightValue[0] = sunlight;
-		vertex.lightValue[1] = chunk.getTorchlight(x, y, z);
+		vertex.lightValue[1] = chunk.lightmap().getTorchlight(x, y, z);
 
 		m_vertices.emplace_back(vertex);
 	}
