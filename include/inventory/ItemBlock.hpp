@@ -1,20 +1,25 @@
 /*
  * =====================================================================================
  *
- *       Filename:  Item.cpp
+ *       Filename:  ItemBlock.hpp
  *
  *    Description:
  *
- *        Created:  23/06/2018 22:30:25
+ *        Created:  25/06/2018 17:28:04
  *
  *         Author:  Quentin Bazin, <quent42340@gmail.com>
  *
  * =====================================================================================
  */
+#ifndef ITEMBLOCK_HPP_
+#define ITEMBLOCK_HPP_
+
+#include "BlockType.hpp"
 #include "Item.hpp"
 
-Item::Item(u32 id, u32 textureID) {
-	m_id = id;
-	m_textureID = textureID;
-}
+class ItemBlock : public Item {
+	public:
+		ItemBlock(u32 id, u32 blockID);
+};
 
+#endif // ITEMBLOCK_HPP_

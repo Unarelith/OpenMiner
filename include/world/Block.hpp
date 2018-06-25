@@ -16,14 +16,14 @@
 
 #include <glm/glm.hpp>
 
-#include "Types.hpp"
+#include "BlockType.hpp"
 
 class Chunk;
 class World;
 
 class Block {
 	public:
-		Block(u32 id);
+		Block(u32 id, u32 textureID);
 		virtual ~Block() = default;
 
 		virtual void onTick(const glm::ivec3 &, World &) const {}
@@ -34,6 +34,8 @@ class Block {
 
 		u32 id() const { return m_id; }
 		void setId(u32 id) { m_id = id; }
+
+		u32 textureID() const { return m_textureID; }
 
 		s8 selectedFace() const { return m_selectedFace; }
 		void setSelected(bool isSelected, s8 face) { m_isSelected = isSelected; m_selectedFace = face; }
@@ -47,6 +49,7 @@ class Block {
 
 	private:
 		u32 m_id;
+		u32 m_textureID;
 
 		bool m_isSelected = false;
 		s8 m_selectedFace = -1;

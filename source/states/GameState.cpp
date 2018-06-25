@@ -25,19 +25,19 @@
 #include "Mouse.hpp"
 
 GameState::GameState() {
-	for (u16 i = 0 ; i < 11 ; ++i) {
-		if (i < 9)
-			m_hotbarInventory.addStack(i + 1, 64);
-		else
-			m_playerInventory.addStack(i + 1, 10);
-	}
+	m_hotbarInventory.addStack(ItemType::Grass, 10);
+	m_hotbarInventory.addStack(ItemType::Glass, 10);
+	m_hotbarInventory.addStack(ItemType::Stone, 10);
 
-	for (u16 i = 16 ; i < 25 ; ++i) {
-		m_playerInventory.addStack(i, 10);
-	}
-
-	m_playerInventory.addStack(25, 32);
-	m_playerInventory.addStack(27, 1);
+	m_playerInventory.addStack(ItemType::Wood, 4);
+	m_playerInventory.addStack(ItemType::Planks, 10);
+	m_playerInventory.addStack(ItemType::Stick, 10);
+	m_playerInventory.addStack(ItemType::Cobblestone, 10);
+	m_playerInventory.addStack(ItemType::StoneAxe, 1);
+	m_playerInventory.addStack(ItemType::StoneHoe, 1);
+	m_playerInventory.addStack(ItemType::StonePickaxe, 1);
+	m_playerInventory.addStack(ItemType::StoneShovel, 1);
+	m_playerInventory.addStack(ItemType::StoneSword, 1);
 
 	m_projectionMatrix = glm::perspective(45.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, DIST_NEAR, DIST_FAR);
 

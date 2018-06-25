@@ -13,15 +13,12 @@
  */
 #include "Block.hpp"
 
-Block::Block(u32 id) {
+Block::Block(u32 id, u32 textureID) {
 	m_id = id;
+	m_textureID = textureID;
 }
 
-#include "Chunk.hpp"
-
 glm::vec4 Block::getTexCoords(int face) const {
-	u32 id = m_id;
-
 	// 0 -> right
 	// 1 -> left
 	// 2 -> bottom
@@ -29,22 +26,24 @@ glm::vec4 Block::getTexCoords(int face) const {
 	// 4 -> back
 	// 5 -> front
 
+	u32 textureID = m_textureID;
+
 	// Grass blocks has dirt sides and bottom
-	if(id == 3) {
-		if (face == 2) id = 1;
-		if (face == 0 || face == 1 || face == 4 || face == 5) id = 2;
+	if(m_id == 3) {
+		if (face == 2) textureID = 37;
+		if (face == 0 || face == 1 || face == 4 || face == 5) textureID = 224;
 	}
 
 	// Wood blocks have rings on top and bottom
-	if (id == 5 && (face == 3 || face == 2))
-		id = 12;
+	if (m_id == 5 && (face == 3 || face == 2))
+		textureID = 278;
 
 	// FIXME: HARDCODED VALUES
 	const u16 textureWidth = 256;
-	const u16 textureHeight = 32;
+	const u16 textureHeight = 464;
 
-	float textureX = id % (textureWidth / 16) * 16.0f / textureWidth;
-	float textureY = id / (textureWidth / 16) * 16.0f / textureHeight;
+	float textureX = textureID % (textureWidth / 16) * 16.0f / textureWidth;
+	float textureY = textureID / (textureWidth / 16) * 16.0f / textureHeight;
 
 	return glm::vec4(textureX,
 	                 textureY,

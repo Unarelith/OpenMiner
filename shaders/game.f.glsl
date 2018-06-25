@@ -28,7 +28,7 @@ void main() {
 	else if (v_blockID == 4) {
 		color += vec4(-0.5, -0.15, -0.4, 0);
 	}
-	else if (v_blockID == 3 || v_blockID == 2) {
+	else if (v_blockID == 3) {
 		if (color.x == color.y && color.x == color.z)
 			color += vec4(-0.3, -0.1, -0.25, 0);
 	}

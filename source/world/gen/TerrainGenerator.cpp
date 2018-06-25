@@ -61,16 +61,16 @@ void TerrainGenerator::testCraftGeneration(Chunk &chunk) const {
 				if(y + chunk.y() * Chunk::height >= h) {
 					// if we are not yet up to sea level, fill with water blocks
 					if(y + chunk.y() * Chunk::height < SEALEVEL) {
-						chunk.setBlock(x, y, z, 8);
+						chunk.setBlock(x, y, z, BlockType::Water);
 						continue;
 					// Otherwise we are in the air
 					} else {
 						// A tree!
-						if(chunk.getBlock(x, y - 1, z) == 3 && (rand() & 0xff) == 0) {
+						if(chunk.getBlock(x, y - 1, z) == BlockType::Grass && (rand() & 0xff) == 0) {
 							// Trunk
 							h = (rand() & 0x3) + 3;
 							for(int i = 0 ; i < h ; i++) {
-								chunk.setBlock(x, y + i, z, 5);
+								chunk.setBlock(x, y + i, z, BlockType::Wood);
 							}
 
 							// Leaves
@@ -78,7 +78,7 @@ void TerrainGenerator::testCraftGeneration(Chunk &chunk) const {
 								for(int iy = -3 ; iy <= 3 ; iy++) {
 									for(int iz = -3 ; iz <= 3 ; iz++) {
 										if(ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + h + iy, z + iz)) {
-											chunk.setBlock(x + ix, y + h + iy, z + iz, 4);
+											chunk.setBlock(x + ix, y + h + iy, z + iz, BlockType::Leaves);
 
 											if (iy == 2)
 												chunk.lightmap().addSunlight(x + ix, y + h + iy, z + iz, 15);
@@ -99,18 +99,18 @@ void TerrainGenerator::testCraftGeneration(Chunk &chunk) const {
 
 				// Sand layer
 				if(n + r * 5 < 4) {
-					chunk.setBlock(x, y, z, 7);
+					chunk.setBlock(x, y, z, BlockType::Sand);
 				}
 				// Dirt layer, but use grass blocks for the top
 				else if(n + r * 5 < 8) {
-					chunk.setBlock(x, y, z, (h < SEALEVEL || y + chunk.y() * Chunk::height < h - 1) ? 1 : 3);
+					chunk.setBlock(x, y, z, (h < SEALEVEL || y + chunk.y() * Chunk::height < h - 1) ? BlockType::Dirt : BlockType::Grass);
 				}
 				// Rock layer
 				else if(r < 1.25) {
-					chunk.setBlock(x, y, z, 6);
+					chunk.setBlock(x, y, z, BlockType::Stone);
 				// Sometimes, ores!
 				} else {
-					chunk.setBlock(x, y, z, 11);
+					chunk.setBlock(x, y, z, BlockType::CoalOre);
 				}
 			}
 		}
