@@ -71,7 +71,7 @@ void Chunk::setBlock(int x, int y, int z, u32 type) {
 			m_tickingBlocks.erase(it);
 	}
 
-	if (type == BlockType::Cobblestone)
+	if (type == BlockType::Glowstone)
 		m_lightmap.addLight(x, y, z, 14);
 	else
 		m_lightmap.removeLight(x, y, z);

@@ -28,6 +28,7 @@ namespace BlockType {
 		Glass        = 9,
 		CoalOre      = 10,
 		Planks       = 11,
+		Glowstone    = 12,
 	};
 }
 

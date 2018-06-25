@@ -30,6 +30,7 @@ void Registry::registerBlocks() {
 	registerBlock<Block>(BlockType::Glass,       168);
 	registerBlock<Block>(BlockType::CoalOre,     36);
 	registerBlock<Block>(BlockType::Planks,      316);
+	registerBlock<Block>(BlockType::Glowstone,   218);
 }
 
 void Registry::registerItems() {
@@ -45,6 +46,7 @@ void Registry::registerItems() {
 	registerItem<ItemBlock>(ItemType::Glass,       BlockType::Glass,       "Glass");
 	registerItem<ItemBlock>(ItemType::CoalOre,     BlockType::CoalOre,     "Coal Ore");
 	registerItem<ItemBlock>(ItemType::Planks,      BlockType::Planks,      "Planks");
+	registerItem<ItemBlock>(ItemType::Glowstone,   BlockType::Glowstone,   "Glowstone");
 
 	registerItem<Item>(ItemType::Stick,        324, "Stick");
 	registerItem<Item>(ItemType::StoneAxe,     325, "Stone Axe");
@@ -58,14 +60,14 @@ void Registry::registerItems() {
 }
 
 void Registry::registerRecipes() {
-	m_recipes.emplace_back(std::array<u32, 9>{2, 2, 0, 2, 12, 0, 0, 12, 0}, ItemStack{ItemType::StoneAxe});
-	m_recipes.emplace_back(std::array<u32, 9>{2, 2, 0, 0, 12, 0, 0, 12, 0}, ItemStack{ItemType::StoneHoe});
-	m_recipes.emplace_back(std::array<u32, 9>{2, 2, 2, 0, 12, 0, 0, 12, 0}, ItemStack{ItemType::StonePickaxe});
-	m_recipes.emplace_back(std::array<u32, 9>{0, 2, 0, 0, 12, 0, 0, 12, 0}, ItemStack{ItemType::StoneShovel});
-	m_recipes.emplace_back(std::array<u32, 9>{0, 2, 0, 0, 2, 0, 0, 12, 0},  ItemStack{ItemType::StoneSword});
+	m_recipes.emplace_back(std::array<u32, 9>{2, 2, 0, 2, ItemType::Stick, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StoneAxe});
+	m_recipes.emplace_back(std::array<u32, 9>{2, 2, 0, 0, ItemType::Stick, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StoneHoe});
+	m_recipes.emplace_back(std::array<u32, 9>{2, 2, 2, 0, ItemType::Stick, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StonePickaxe});
+	m_recipes.emplace_back(std::array<u32, 9>{0, 2, 0, 0, ItemType::Stick, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StoneShovel});
+	m_recipes.emplace_back(std::array<u32, 9>{0, 2, 0, 0, 2, 0, 0, ItemType::Stick, 0},  ItemStack{ItemType::StoneSword});
 
-	m_recipes.emplace_back(std::array<u32, 9>{5, 0, 0, 0, 0, 0, 0, 0, 0},   ItemStack{ItemType::Planks, 4}, true);
-	m_recipes.emplace_back(std::array<u32, 9>{11, 11, 0, 0, 0, 0, 0, 0, 0}, ItemStack{ItemType::Stick, 4}, true);
+	m_recipes.emplace_back(std::array<u32, 9>{ItemType::Wood, 0, 0, 0, 0, 0, 0, 0, 0},   ItemStack{ItemType::Planks, 4}, true);
+	m_recipes.emplace_back(std::array<u32, 9>{ItemType::Planks, ItemType::Planks, 0, 0, 0, 0, 0, 0, 0}, ItemStack{ItemType::Stick, 4}, true);
 }
 
 const CraftingRecipe *Registry::getRecipe(const Inventory &inventory) const {

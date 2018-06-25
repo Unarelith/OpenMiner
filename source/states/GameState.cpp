@@ -26,8 +26,9 @@
 
 GameState::GameState() {
 	m_hotbarInventory.addStack(ItemType::Grass, 10);
-	m_hotbarInventory.addStack(ItemType::Glass, 10);
 	m_hotbarInventory.addStack(ItemType::Stone, 10);
+	m_hotbarInventory.addStack(ItemType::Glass, 10);
+	m_hotbarInventory.addStack(ItemType::Glowstone, 10);
 
 	m_playerInventory.addStack(ItemType::Wood, 4);
 	m_playerInventory.addStack(ItemType::Planks, 10);

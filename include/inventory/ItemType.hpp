@@ -28,13 +28,14 @@ namespace ItemType {
 		Glass        = 9,
 		CoalOre      = 10,
 		Planks       = 11,
+		Glowstone    = 12,
 
-		Stick        = 12,
-		StoneAxe     = 13,
-		StoneHoe     = 14,
-		StonePickaxe = 15,
-		StoneShovel  = 16,
-		StoneSword   = 17,
+		Stick        = 13,
+		StoneAxe     = 14,
+		StoneHoe     = 15,
+		StonePickaxe = 16,
+		StoneShovel  = 17,
+		StoneSword   = 18,
 	};
 }
 
