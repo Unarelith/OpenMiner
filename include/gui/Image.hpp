@@ -14,6 +14,7 @@
 #ifndef IMAGE_HPP_
 #define IMAGE_HPP_
 
+#include "Color.hpp"
 #include "IDrawable.hpp"
 #include "Rect.hpp"
 #include "Texture.hpp"
@@ -35,6 +36,8 @@ class Image : public IDrawable, public Transformable {
 		u16 width() const { return m_width; }
 		u16 height() const { return m_height; }
 
+		void setColor(const Color &color) { m_color = color; updateVertexBuffer(); }
+
 	private:
 		void updateVertexBuffer() const;
 
@@ -48,6 +51,8 @@ class Image : public IDrawable, public Transformable {
 		FloatRect m_clipRect;
 
 		VertexBuffer m_vbo;
+
+		Color m_color = Color::white;
 };
 
 #endif // IMAGE_HPP_

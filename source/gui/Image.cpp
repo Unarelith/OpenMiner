@@ -70,6 +70,13 @@ void Image::updateVertexBuffer() const {
 	vertices[3].texCoord[0] = texRect.x + texRect.width;
 	vertices[3].texCoord[1] = texRect.y + texRect.height;
 
+	for (u8 i = 0 ; i < 4 ; ++i) {
+		vertices[i].color[0] = m_color.r;
+		vertices[i].color[1] = m_color.g;
+		vertices[i].color[2] = m_color.b;
+		vertices[i].color[3] = m_color.a;
+	}
+
 	// GLubyte indices[] = {
 	// 	0, 1, 3,
 	// 	3, 1, 2

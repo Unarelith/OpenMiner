@@ -20,7 +20,7 @@ struct Vertex {
 	GLfloat coord3d[4]    = {0, 0, 0, 1};
 	GLfloat color[4]      = {0, 0, 0, 1};
 	GLfloat normal[3]     = {0, 0, 0};
-	GLfloat texCoord[2]   = {0, 0};
+	GLfloat texCoord[2]   = {-1, -1};
 	GLfloat lightValue[2] = {-1, -1};
 };
 

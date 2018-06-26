@@ -24,16 +24,28 @@ Text::Text() : m_texture(ResourceHandler::getInstance().get<Texture>("texture-fo
 void Text::draw(RenderTarget &target, RenderStates states) const {
 	applyTransform(states);
 
-	int x = 0;
-	int i = 0;
 	// FIXME: USE A VBO INSTEAD
+	int x = 0;
+	Color color = Color{70, 70, 70, 255};
+	for(char c : m_text) {
+		Sprite sprite{"texture-font", 8, 8};
+		sprite.setCurrentFrame(c);
+		sprite.setPosition(x + 1, 1, 0);
+		sprite.setColor(color);
+		target.draw(sprite, states);
+		x += m_charWidth[(u8)c];
+	}
+	x = 0;
+	color = Color::white;
 	for(char c : m_text) {
 		Sprite sprite{"texture-font", 8, 8};
 		sprite.setCurrentFrame(c);
 		sprite.setPosition(x, 0, 0);
+		if (c == '[')
+			color = Color::blue;
+		sprite.setColor(color);
 		target.draw(sprite, states);
 		x += m_charWidth[(u8)c];
-		++i;
 	}
 }
 

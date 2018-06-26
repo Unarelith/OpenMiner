@@ -15,6 +15,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Block.hpp"
+#include "Color.hpp"
 #include "Config.hpp"
 #include "Cube.hpp"
 #include "ResourceHandler.hpp"
@@ -79,6 +80,14 @@ void Cube::updateVertexBuffer(const Block &block) const {
 			vertices[j + i * 4].texCoord[0] = faceTexCoords[j * 2];
 			vertices[j + i * 4].texCoord[1] = faceTexCoords[j * 2 + 1];
 		}
+	}
+
+	Color color = Color::white;
+	for (u8 i = 0 ; i < 6 * 4 ; ++i) {
+		vertices[i].color[0] = color.r;
+		vertices[i].color[1] = color.g;
+		vertices[i].color[2] = color.b;
+		vertices[i].color[3] = color.a;
 	}
 
 	VertexBuffer::bind(&m_vbo);

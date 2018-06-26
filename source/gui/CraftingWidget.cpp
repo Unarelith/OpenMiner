@@ -19,7 +19,7 @@ CraftingWidget::CraftingWidget(Widget *parent) : Widget(parent) {
 	m_craftingInventoryWidget.setPosition(29, 16, 0);
 
 	m_craftingResultInventoryWidget.init(m_craftingResultInventory);
-	m_craftingResultInventoryWidget.setPosition(122, 34, 0);
+	m_craftingResultInventoryWidget.setPosition(123, 34, 0);
 }
 
 void CraftingWidget::onEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget) {
