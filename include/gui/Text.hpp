@@ -16,22 +16,22 @@
 
 #include <string>
 
-#include "IDrawable.hpp"
-#include "Transformable.hpp"
-#include "VertexBuffer.hpp"
+#include "Sprite.hpp"
 
 class Text : public IDrawable, public Transformable {
 	public:
 		Text();
 
-		void setText(const std::string &text) { m_text = text; }
+		void setText(const std::string &text) { m_text = text; updateTextSprites(); }
 
 	private:
-		void updateCharWidth();
-
 		void draw(RenderTarget &target, RenderStates states) const override;
 
+		void updateTextSprites();
+		void updateCharWidth();
+
 		std::string m_text;
+		std::vector<Sprite> m_textSprites;
 
 		int m_charWidth[256];
 

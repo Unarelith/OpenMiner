@@ -15,8 +15,6 @@
 #include "Text.hpp"
 #include "Texture.hpp"
 
-#include "Sprite.hpp"
-
 Text::Text() : m_texture(ResourceHandler::getInstance().get<Texture>("texture-font")) {
 	updateCharWidth();
 }
@@ -24,7 +22,15 @@ Text::Text() : m_texture(ResourceHandler::getInstance().get<Texture>("texture-fo
 void Text::draw(RenderTarget &target, RenderStates states) const {
 	applyTransform(states);
 
-	// FIXME: USE A VBO INSTEAD
+	for(const Sprite &sprite : m_textSprites) {
+		target.draw(sprite, states);
+	}
+}
+
+// FIXME: USE A VBO INSTEAD
+void Text::updateTextSprites() {
+	m_textSprites.clear();
+
 	int x = 0;
 	Color color = Color{70, 70, 70, 255};
 	for(char c : m_text) {
@@ -32,7 +38,7 @@ void Text::draw(RenderTarget &target, RenderStates states) const {
 		sprite.setCurrentFrame(c);
 		sprite.setPosition(x + 1, 1, 0);
 		sprite.setColor(color);
-		target.draw(sprite, states);
+		m_textSprites.emplace_back(std::move(sprite));
 		x += m_charWidth[(u8)c];
 	}
 	x = 0;
@@ -44,7 +50,7 @@ void Text::draw(RenderTarget &target, RenderStates states) const {
 		if (c == '[')
 			color = Color::blue;
 		sprite.setColor(color);
-		target.draw(sprite, states);
+		m_textSprites.emplace_back(std::move(sprite));
 		x += m_charWidth[(u8)c];
 	}
 }
@@ -99,3 +105,4 @@ void Text::updateCharWidth() {
 		m_charWidth[i] = (int)(0.5 + (double)((float)l1 * lvt_9_1_)) + 1;
 	}
 }
+
