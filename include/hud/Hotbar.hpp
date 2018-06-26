@@ -21,13 +21,13 @@
 #include "SDLHeaders.hpp"
 #include "Shader.hpp"
 
-class Hotbar : public IDrawable {
+class Hotbar : public Widget {
 	public:
 		Hotbar(Inventory &inventory);
 
-		void update();
-
 		void onEvent(const SDL_Event &event);
+
+		void update();
 
 		int cursorPos() const { return m_cursorPos; }
 		u16 currentItem() const { return m_inventory.getStack(m_cursorPos, 0).item().id(); }

@@ -41,7 +41,7 @@ class ItemWidget : public Widget {
 		Image m_image;
 		Text m_text;
 
-		Cube m_cube{9};
+		Cube m_cube{10};
 };
 
 #endif // ITEMWIDGET_HPP_
