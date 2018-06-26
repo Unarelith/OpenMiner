@@ -24,7 +24,7 @@ Cube::Cube(float size) : m_texture(ResourceHandler::getInstance().get<Texture>("
 	m_size = size;
 
 	m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(-180.0f), glm::vec3{0, 0, 1});
-	m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(-25.0f), glm::vec3{1, 0, 0});
+	m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(-30.0f), glm::vec3{1, 0, 0});
 	m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(-45.0f), glm::vec3{0, 1, 0});
 }
 
