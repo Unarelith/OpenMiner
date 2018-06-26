@@ -38,39 +38,41 @@ void MouseItemWidget::update(const ItemWidget *currentItemWidget) {
 	}
 }
 
-// FIXME
 void MouseItemWidget::swapItems(ItemWidget &widget, bool isReadOnly) {
-	u32 id = widget.stack().item().id();
-	u32 amount = widget.stack().amount();
-	if (!isReadOnly || stack().item().id() == 0 || stack().item().id() == id) {
-		if (stack().item().id() != id) {
+	u32 widgetItemID = widget.stack().item().id();
+	u32 widgetItemAmount = widget.stack().amount();
+
+	if (!isReadOnly || stack().item().id() == 0 || stack().item().id() == widgetItemID) {
+		if (stack().item().id() != widgetItemID) {
 			widget.setStack(stack().item().id(), stack().amount());
-			setStack(id, amount);
+			setStack(widgetItemID, widgetItemAmount);
 		}
 		else if (!isReadOnly) {
-			widget.setStack(widget.stack().item().id(), widget.stack().amount() + stack().amount());
+			widget.setStack(widgetItemID, widgetItemAmount + stack().amount());
 			setStack(0, 0);
 		}
 		else {
-			setStack(stack().item().id(), stack().amount() + widget.stack().amount());
+			setStack(stack().item().id(), stack().amount() + widgetItemAmount);
 			widget.setStack(0, 0);
 		}
 	}
 }
 
-// FIXME
 void MouseItemWidget::putItem(ItemWidget &widget) {
-	if (!widget.stack().item().id()) {
+	u32 widgetItemID = widget.stack().item().id();
+	u32 widgetItemAmount = widget.stack().amount();
+
+	if (!widgetItemID && stack().item().id()) {
 		widget.setStack(stack().item().id(), 1);
 		setStack(stack().amount() > 1 ? stack().item().id() : 0, stack().amount() - 1);
 	}
-	else if (widget.stack().item().id() == stack().item().id()) {
-		widget.setStack(stack().item().id(), widget.stack().amount() + 1);
+	else if (widgetItemID && widgetItemID == stack().item().id()) {
+		widget.setStack(stack().item().id(), widgetItemAmount + 1);
 		setStack(stack().amount() > 1 ? stack().item().id() : 0, stack().amount() - 1);
 	}
 	else if (stack().item().id() == 0) {
-		setStack(widget.stack().item().id(), ceil(widget.stack().amount() / 2.0));
-		widget.setStack(widget.stack().amount() > 1 ? widget.stack().item().id() : 0, widget.stack().amount() / 2);
+		setStack(widgetItemID, ceil(widgetItemAmount / 2.0));
+		widget.setStack(widgetItemAmount > 1 ? widgetItemID : 0, widgetItemAmount / 2);
 	}
 }
 

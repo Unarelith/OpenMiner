@@ -49,7 +49,7 @@ void ItemWidget::draw(RenderTarget &target, RenderStates states) const {
 	else if (stack().amount() >= 1)
 		target.draw(m_image, states);
 
-	if (stack().item().id() && stack().amount() > 1)
+	if (stack().amount() != 1)
 		target.draw(m_text, states);
 }
 
