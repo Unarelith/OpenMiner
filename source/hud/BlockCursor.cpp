@@ -128,7 +128,7 @@ void BlockCursor::onEvent(const SDL_Event &event, Inventory &hotbarInventory, co
 void BlockCursor::update(Inventory &playerInventory, bool useDepthBuffer) {
 	glm::vec4 selectedBlock = findSelectedBlock(useDepthBuffer);
 	if (selectedBlock.x != m_selectedBlock.x || selectedBlock.y != m_selectedBlock.y || selectedBlock.z != m_selectedBlock.z)
-		m_animationStart = 0;
+		m_animationStart = (m_animationStart) ? GameClock::getTicks() : 0;
 
 	m_selectedBlock = selectedBlock;
 
@@ -136,7 +136,7 @@ void BlockCursor::update(Inventory &playerInventory, bool useDepthBuffer) {
 		u16 block = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
 		playerInventory.addStack(block);
 		m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
-		m_animationStart = 0;
+		m_animationStart = GameClock::getTicks();
 	}
 
 	updateVertexBuffer((GameClock::getTicks() - m_animationStart) / 100);
