@@ -25,6 +25,19 @@ CraftingWidget::CraftingWidget(Widget *parent) : Widget(parent) {
 void CraftingWidget::onEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget) {
 	m_craftingInventoryWidget.onEvent(event, mouseItemWidget);
 	m_craftingResultInventoryWidget.onEvent(event, mouseItemWidget, true);
+
+	if (m_recipe && !m_craftingResultInventory.getStack(0, 0).item().id()) {
+		for (u8 i = 0 ; i < 9 ; ++i) {
+			const ItemStack &stack = m_craftingInventory.getStack(i % 3, i / 3);
+			if (stack.item().id()) {
+				m_craftingInventory.setStack(i % 3, i / 3, (stack.amount() > 1) ? stack.item().id() : 0, stack.amount() - 1);
+			}
+		}
+
+		m_craftingInventoryWidget.init(m_craftingInventory);
+
+		m_recipe = nullptr;
+	}
 }
 
 void CraftingWidget::update() {
@@ -38,19 +51,6 @@ void CraftingWidget::update() {
 			m_craftingResultInventory.setStack(0, 0, 0, 0);
 
 		m_craftingResultInventoryWidget.init(m_craftingResultInventory);
-	}
-
-	if (m_recipe && !m_craftingResultInventory.getStack(0, 0).item().id()) {
-		for (u8 i = 0 ; i < 9 ; ++i) {
-			const ItemStack &stack = m_craftingInventory.getStack(i % 3, i / 3);
-			if (stack.item().id()) {
-				m_craftingInventory.setStack(i % 3, i / 3, (stack.amount() > 1) ? stack.item().id() : 0, stack.amount() - 1);
-			}
-		}
-
-		m_craftingInventoryWidget.init(m_craftingInventory);
-
-		m_recipe = nullptr;
 	}
 }
 
