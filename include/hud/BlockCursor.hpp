@@ -25,15 +25,15 @@ class BlockCursor : public IDrawable {
 	public:
 		BlockCursor(Camera &camera, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix)
 			: m_camera(camera), m_world(world), m_viewMatrix(viewMatrix), m_projectionMatrix(projectionMatrix)
-		{ init(); }
+		{ updateVertexBuffer(); }
 
-		void init();
+		void onEvent(const SDL_Event &event, Inventory &hotbarInventory, const Hotbar &hotbar);
 
-		void onEvent(const SDL_Event &event, Inventory &playerInventory, Inventory &hotbarInventory, const Hotbar &hotbar);
-
-		void update(bool useDepthBuffer);
+		void update(Inventory &playerInventory, bool useDepthBuffer);
 
 	private:
+		void updateVertexBuffer(int animationPos = -1);
+
 		void draw(RenderTarget &target, RenderStates states) const override;
 
 		float fract(float value) const;
@@ -46,6 +46,7 @@ class BlockCursor : public IDrawable {
 
 		VertexBuffer m_vbo;
 
+		unsigned int m_animationStart = 0;
 		glm::vec4 m_selectedBlock;
 };
 

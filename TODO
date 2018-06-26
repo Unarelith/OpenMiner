@@ -57,7 +57,7 @@ TODO
    ◦ DONE: Ajouter des enum `ItemType` et `BlockType`
    ◦ DONE: Ajouter une classe `ItemBlock`
 • DONE: Utiliser un cube pour afficher les blocs dans l’inventaire
-• TODO: Ajouter les animations de destruction des blocs
+• DONE: Ajouter les animations de destruction des blocs
 • TODO: Essayer d’utiliser un seul `Inventory` pour le joueur
    → Probablement en ajoutant un offset dans `InventoryWidget` et `Hotbar`
 • TODO: Rajouter un bouton sur la table de craft pour voir les recettes

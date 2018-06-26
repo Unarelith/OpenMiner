@@ -16,11 +16,12 @@
 
 #include "BlockCursor.hpp"
 #include "Config.hpp"
+#include "GameClock.hpp"
 #include "Hotbar.hpp"
 #include "Registry.hpp"
 #include "Vertex.hpp"
 
-void BlockCursor::init() {
+void BlockCursor::updateVertexBuffer(int animationPos) {
 	Vertex vertices[24] = {
 		// Right
 		{{1, 1, 1, -1}},
@@ -60,21 +61,36 @@ void BlockCursor::init() {
 	};
 
 	// GLfloat color[4] = {1, 1, 1, 0.2};
-	GLfloat color[4] = {0, 0, 0, 1};
-	for (int i = 0 ; i < 24 ; ++i)
-		memcpy(vertices[i].color, color, 4 * sizeof(GLfloat));
+	// GLfloat color[4] = {0, 0, 0, 1};
+	// for (int i = 0 ; i < 24 ; ++i)
+	// 	memcpy(vertices[i].color, color, 4 * sizeof(GLfloat));
+
+	if (animationPos != -1) {
+		glm::vec4 blockTexCoords{0.1 * animationPos, 0.0, 0.1 + 0.1 * animationPos, 1.0};
+		float faceTexCoords[2 * 4] = {
+			blockTexCoords.x, blockTexCoords.w,
+			blockTexCoords.z, blockTexCoords.w,
+			blockTexCoords.z, blockTexCoords.y,
+			blockTexCoords.x, blockTexCoords.y
+		};
+
+		for (u8 i = 0 ; i < 6 ; ++i) {
+			for(u8 j = 0 ; j < 4 ; j++) {
+				vertices[j + i * 4].texCoord[0] = faceTexCoords[j * 2];
+				vertices[j + i * 4].texCoord[1] = faceTexCoords[j * 2 + 1];
+			}
+		}
+	}
 
 	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	VertexBuffer::bind(nullptr);
 }
 
-void BlockCursor::onEvent(const SDL_Event &event, Inventory &playerInventory, Inventory &hotbarInventory, const Hotbar &hotbar) {
+void BlockCursor::onEvent(const SDL_Event &event, Inventory &hotbarInventory, const Hotbar &hotbar) {
 	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
-			u16 block = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
-			playerInventory.addStack(block);
-			m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
+			m_animationStart = GameClock::getTicks();
 		}
 		else if (event.button.button == SDL_BUTTON_RIGHT) {
 			u32 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
@@ -102,11 +118,31 @@ void BlockCursor::onEvent(const SDL_Event &event, Inventory &playerInventory, In
 			}
 		}
 	}
+	else if (event.type == SDL_MOUSEBUTTONUP) {
+		if (event.button.button == SDL_BUTTON_LEFT) {
+			m_animationStart = 0;
+		}
+	}
 }
 
-void BlockCursor::update(bool useDepthBuffer) {
-	m_selectedBlock = findSelectedBlock(useDepthBuffer);
+void BlockCursor::update(Inventory &playerInventory, bool useDepthBuffer) {
+	glm::vec4 selectedBlock = findSelectedBlock(useDepthBuffer);
+	if (selectedBlock.x != m_selectedBlock.x || selectedBlock.y != m_selectedBlock.y || selectedBlock.z != m_selectedBlock.z)
+		m_animationStart = 0;
+
+	m_selectedBlock = selectedBlock;
+
+	if (m_animationStart && GameClock::getTicks() > m_animationStart + 1000) {
+		u16 block = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
+		playerInventory.addStack(block);
+		m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
+		m_animationStart = 0;
+	}
+
+	updateVertexBuffer((GameClock::getTicks() - m_animationStart) / 100);
 }
+
+#include "ResourceHandler.hpp"
 
 void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 	if (m_selectedBlock.w == -1) return;
@@ -119,6 +155,10 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 
 	target.draw(m_vbo, GL_LINES, 0, 24, states);
 	// target.draw(m_vbo, GL_QUADS, m_selectedBlock.w * 4, 4, states);
+	states.texture = &ResourceHandler::getInstance().get<Texture>("texture-block_destroy");
+	// target.draw(m_vbo, GL_QUADS, m_selectedBlock.w * 4, 4, states);
+	if (m_animationStart > 0)
+		target.draw(m_vbo, GL_QUADS, 0, 24, states);
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_POLYGON_OFFSET_FILL);

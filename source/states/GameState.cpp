@@ -59,7 +59,7 @@ void GameState::onEvent(const SDL_Event &event) {
 	}
 
 	m_hotbar.onEvent(event);
-	m_blockCursor.onEvent(event, m_playerInventory, m_hotbarInventory, m_hotbar);
+	m_blockCursor.onEvent(event, m_hotbarInventory, m_hotbar);
 }
 
 void GameState::update() {
@@ -75,7 +75,7 @@ void GameState::update() {
 	// FIXME: Shouldn't be called every tick
 	m_hotbar.update();
 
-	m_blockCursor.update(false);
+	m_blockCursor.update(m_playerInventory, false);
 
 	if (Keyboard::isKeyPressedOnce(Keyboard::E) && &m_stateStack->top() == this) {
 		m_stateStack->push<InventoryState>(m_playerInventory, m_hotbarInventory, this);
