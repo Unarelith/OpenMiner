@@ -20,6 +20,7 @@
 #include "IntTypes.hpp"
 
 class Chunk;
+class Player;
 class World;
 
 class Block {
@@ -27,9 +28,9 @@ class Block {
 		Block(u32 id, u32 textureID);
 		virtual ~Block() = default;
 
-		virtual void onTick(const glm::ivec3 &, World &) const {}
-		virtual void onClick(const glm::ivec3 &, World &) const {}
-		virtual void onBlockDestroy(const glm::ivec3 &, const glm::ivec3 &, World &) const {}
+		virtual void onTick(const glm::ivec3 &, Player &, World &) const {}
+		virtual bool onBlockActivated(const glm::ivec3 &, Player &, World &) const { return false; }
+		virtual void onBlockDestroy(const glm::ivec3 &, const glm::ivec3 &, Player &, World &) const {}
 
 		virtual glm::vec4 getTexCoords(int face) const;
 

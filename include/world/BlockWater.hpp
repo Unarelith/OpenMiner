@@ -20,8 +20,8 @@ class BlockWater : public Block {
 	public:
 		BlockWater();
 
-		void onBlockDestroy(const glm::ivec3 &blockPosition, const glm::ivec3 &thisBlockPosition, World &world) const override;
-		void onTick(const glm::ivec3 &blockPosition, World &world) const override;
+		void onBlockDestroy(const glm::ivec3 &blockPosition, const glm::ivec3 &thisBlockPosition, Player &player, World &world) const override;
+		void onTick(const glm::ivec3 &blockPosition, Player &player, World &world) const override;
 };
 
 #endif // BLOCKWATER_HPP_

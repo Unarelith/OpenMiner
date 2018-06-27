@@ -29,6 +29,8 @@ namespace BlockType {
 		CoalOre      = 10,
 		Planks       = 11,
 		Glowstone    = 12,
+		Workbench    = 13,
+		Furnace      = 14,
 	};
 }
 

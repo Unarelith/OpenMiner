@@ -25,21 +25,23 @@
 #include "Mouse.hpp"
 
 GameState::GameState() {
-	m_hotbarInventory.addStack(ItemType::Dirt, 64);
-	m_hotbarInventory.addStack(ItemType::Grass, 64);
-	m_hotbarInventory.addStack(ItemType::Stone, 64);
-	m_hotbarInventory.addStack(ItemType::Glass, 64);
-	m_hotbarInventory.addStack(ItemType::Glowstone, 64);
+	m_player.hotbarInventory().addStack(ItemType::Dirt, 64);
+	m_player.hotbarInventory().addStack(ItemType::Grass, 64);
+	m_player.hotbarInventory().addStack(ItemType::Stone, 64);
+	m_player.hotbarInventory().addStack(ItemType::Glass, 64);
+	m_player.hotbarInventory().addStack(ItemType::Glowstone, 64);
+	m_player.hotbarInventory().addStack(ItemType::Workbench, 1);
+	m_player.hotbarInventory().addStack(ItemType::Furnace, 1);
 
-	m_playerInventory.addStack(ItemType::Wood, 64);
-	m_playerInventory.addStack(ItemType::Planks, 64);
-	m_playerInventory.addStack(ItemType::Stick, 64);
-	m_playerInventory.addStack(ItemType::Cobblestone, 64);
-	m_playerInventory.addStack(ItemType::StoneAxe, 1);
-	m_playerInventory.addStack(ItemType::StoneHoe, 1);
-	m_playerInventory.addStack(ItemType::StonePickaxe, 1);
-	m_playerInventory.addStack(ItemType::StoneShovel, 1);
-	m_playerInventory.addStack(ItemType::StoneSword, 1);
+	m_player.inventory().addStack(ItemType::Wood, 64);
+	m_player.inventory().addStack(ItemType::Planks, 64);
+	m_player.inventory().addStack(ItemType::Stick, 64);
+	m_player.inventory().addStack(ItemType::Cobblestone, 64);
+	m_player.inventory().addStack(ItemType::StoneAxe, 1);
+	m_player.inventory().addStack(ItemType::StoneHoe, 1);
+	m_player.inventory().addStack(ItemType::StonePickaxe, 1);
+	m_player.inventory().addStack(ItemType::StoneShovel, 1);
+	m_player.inventory().addStack(ItemType::StoneSword, 1);
 
 	m_projectionMatrix = glm::perspective(45.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, DIST_NEAR, DIST_FAR);
 
@@ -59,7 +61,7 @@ void GameState::onEvent(const SDL_Event &event) {
 	}
 
 	m_hotbar.onEvent(event);
-	m_blockCursor.onEvent(event, m_hotbarInventory, m_hotbar);
+	m_blockCursor.onEvent(event, m_player.hotbarInventory(), m_hotbar);
 }
 
 void GameState::update() {
@@ -75,10 +77,10 @@ void GameState::update() {
 	// FIXME: Shouldn't be called every tick
 	m_hotbar.update();
 
-	m_blockCursor.update(m_playerInventory, false);
+	m_blockCursor.update(m_player.inventory(), false);
 
 	if (Keyboard::isKeyPressedOnce(Keyboard::E) && &m_stateStack->top() == this) {
-		m_stateStack->push<InventoryState>(m_playerInventory, m_hotbarInventory, this);
+		m_stateStack->push<InventoryState>(m_player.inventory(), m_player.hotbarInventory(), this);
 	}
 }
 

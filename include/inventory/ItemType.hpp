@@ -29,13 +29,15 @@ namespace ItemType {
 		CoalOre      = 10,
 		Planks       = 11,
 		Glowstone    = 12,
+		Workbench    = 13,
+		Furnace      = 14,
 
-		Stick        = 13,
-		StoneAxe     = 14,
-		StoneHoe     = 15,
-		StonePickaxe = 16,
-		StoneShovel  = 17,
-		StoneSword   = 18,
+		Stick        = 15,
+		StoneAxe     = 16,
+		StoneHoe     = 17,
+		StonePickaxe = 18,
+		StoneShovel  = 19,
+		StoneSword   = 20,
 	};
 }
 

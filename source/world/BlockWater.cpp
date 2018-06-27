@@ -18,7 +18,7 @@ BlockWater::BlockWater() : Block(BlockType::Water, 457) {
 	m_canUpdate = true;
 }
 
-void BlockWater::onBlockDestroy(const glm::ivec3 &blockPosition, const glm::ivec3 &thisBlockPosition, World &world) const {
+void BlockWater::onBlockDestroy(const glm::ivec3 &blockPosition, const glm::ivec3 &thisBlockPosition, Player &, World &world) const {
 	glm::ivec3 left{thisBlockPosition.x - 1, thisBlockPosition.y, thisBlockPosition.z};
 	glm::ivec3 right{thisBlockPosition.x + 1, thisBlockPosition.y, thisBlockPosition.z};
 	glm::ivec3 front{thisBlockPosition.x, thisBlockPosition.y, thisBlockPosition.z - 1};
@@ -28,7 +28,7 @@ void BlockWater::onBlockDestroy(const glm::ivec3 &blockPosition, const glm::ivec
 		world.setBlock(blockPosition.x, blockPosition.y, blockPosition.z, 8);
 }
 
-void BlockWater::onTick(const glm::ivec3 &blockPosition, World &world) const {
+void BlockWater::onTick(const glm::ivec3 &blockPosition, Player &, World &world) const {
 	if (world.getBlock(blockPosition.x - 1, blockPosition.y, blockPosition.z) == 0) {
 		world.setBlock(blockPosition.x - 1, blockPosition.y, blockPosition.z, 8);
 	}

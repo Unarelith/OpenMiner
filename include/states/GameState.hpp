@@ -21,6 +21,7 @@
 #include "Camera.hpp"
 #include "Crosshair.hpp"
 #include "Hotbar.hpp"
+#include "Player.hpp"
 #include "Skybox.hpp"
 #include "World.hpp"
 
@@ -49,14 +50,12 @@ class GameState : public ApplicationState {
 		Skybox m_skybox;
 		World m_world;
 
-		glm::vec4 m_selectedBlock{0, 0, 0, -1};
-		BlockCursor m_blockCursor{m_camera, m_world, m_viewMatrix, m_projectionMatrix};
-		Crosshair m_crosshair;
+		Player m_player;
+		Hotbar m_hotbar{m_player.hotbarInventory()};
 
-		Texture m_widgetTexture;
-		Inventory m_playerInventory{9, 3};
-		Inventory m_hotbarInventory{9, 1};
-		Hotbar m_hotbar{m_hotbarInventory};
+		glm::vec4 m_selectedBlock{0, 0, 0, -1};
+		BlockCursor m_blockCursor{m_camera, m_player, m_world, m_viewMatrix, m_projectionMatrix};
+		Crosshair m_crosshair;
 };
 
 #endif // GAMESTATE_HPP_

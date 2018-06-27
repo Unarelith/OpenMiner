@@ -38,6 +38,18 @@ glm::vec4 Block::getTexCoords(int face) const {
 	if (m_id == 5 && (face == 3 || face == 2))
 		textureID = 278;
 
+	// Workbench
+	if (m_id == BlockType::Workbench) {
+		if (face == 0 || face == 5) textureID = m_textureID + 1;
+		if (face == 3 || face == 2) textureID = m_textureID + 2;
+	}
+
+	// Furnace
+	if (m_id == BlockType::Furnace) {
+		if (face == 1 || face == 4 || face == 5) textureID = m_textureID + 2;
+		if (face == 3 || face == 2) textureID = m_textureID + 3;
+	}
+
 	// FIXME: HARDCODED VALUES
 	const u16 textureWidth = 256;
 	const u16 textureHeight = 464;
