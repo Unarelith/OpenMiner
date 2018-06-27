@@ -24,7 +24,7 @@ class ItemWidget : public Widget {
 	public:
 		ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent = nullptr);
 
-		void update();
+		void update() override;
 
 		const ItemStack &stack() const { return m_inventory.getStack(m_x, m_y); }
 		void setStack(unsigned int id, unsigned int amount = 1);

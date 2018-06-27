@@ -15,12 +15,14 @@
 #include "BlockWorkbench.hpp"
 #include "InventoryState.hpp"
 #include "Player.hpp"
+#include "WorkbenchWidget.hpp"
 
 BlockWorkbench::BlockWorkbench() : Block(BlockType::Workbench, 77) {
 }
 
 bool BlockWorkbench::onBlockActivated(const glm::ivec3 &, Player &player, World &) const {
-	ApplicationStateStack::getInstance().push<InventoryState>(player.inventory(), player.hotbarInventory(), &ApplicationStateStack::getInstance().top());
+	auto &inventoryState = ApplicationStateStack::getInstance().push<InventoryState>(&ApplicationStateStack::getInstance().top());
+	inventoryState.setupWidget<WorkbenchWidget>(player.inventory(), player.hotbarInventory());
 	return true;
 }
 

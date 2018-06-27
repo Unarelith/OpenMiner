@@ -22,9 +22,9 @@ class CraftingWidget : public Widget {
 	public:
 		CraftingWidget(Widget *parent = nullptr);
 
-		void onEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget);
+		void onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget);
 
-		void update();
+		void update() override;
 
 		const ItemWidget *currentItemWidget() const { return m_craftingResultInventoryWidget.currentItemWidget() ? m_craftingResultInventoryWidget.currentItemWidget() : m_craftingInventoryWidget.currentItemWidget(); }
 

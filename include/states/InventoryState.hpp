@@ -14,14 +14,26 @@
 #ifndef INVENTORYSTATE_HPP_
 #define INVENTORYSTATE_HPP_
 
+#include <memory>
+
 #include "ApplicationState.hpp"
+#include "Config.hpp"
 #include "RectangleShape.hpp"
 #include "Shader.hpp"
 #include "WorkbenchWidget.hpp"
 
 class InventoryState : public ApplicationState {
 	public:
-		InventoryState(Inventory &playerInventory, Inventory &hotbarInventory, ApplicationState *parent = nullptr);
+		InventoryState(ApplicationState *parent = nullptr);
+
+		template<typename T, typename... Args>
+		void setupWidget(Args &&...args) {
+			m_widget.reset(new T(std::forward<Args>(args)...));
+
+			m_widget->setScale(3, 3, 1);
+			m_widget->setPosition(SCREEN_WIDTH  / 2.0 - m_widget->getGlobalBounds().width  / 2.0,
+			                      SCREEN_HEIGHT / 2.0 - m_widget->getGlobalBounds().height / 2.0, 0);
+		}
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -32,10 +44,7 @@ class InventoryState : public ApplicationState {
 
 		Shader m_shader;
 
-		Inventory &m_playerInventory;
-		Inventory &m_hotbarInventory;
-
-		WorkbenchWidget m_widget{m_playerInventory, m_hotbarInventory};
+		std::unique_ptr<Widget> m_widget;
 
 		RectangleShape m_background;
 };

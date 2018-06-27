@@ -25,6 +25,9 @@ class Widget : public IDrawable, public Transformable {
 		Widget(unsigned int width, unsigned int height, Widget *parent = nullptr)
 			: m_parent(parent), m_width(width), m_height(height) {}
 
+		virtual void onEvent(const SDL_Event &) {}
+		virtual void update() {}
+
 		bool isPointInWidget(float x, float y);
 
 		FloatRect getGlobalBounds() const;

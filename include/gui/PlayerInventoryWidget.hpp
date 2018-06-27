@@ -1,24 +1,24 @@
 /*
  * =====================================================================================
  *
- *       Filename:  WorkbenchWidget.hpp
+ *       Filename:  PlayerInventoryWidget.hpp
  *
  *    Description:
  *
- *        Created:  20/06/2018 23:22:08
+ *        Created:  27/06/2018 05:32:49
  *
  *         Author:  Quentin Bazin, <quent42340@gmail.com>
  *
  * =====================================================================================
  */
-#ifndef WORKBENCHWIDGET_HPP_
-#define WORKBENCHWIDGET_HPP_
+#ifndef PLAYERINVENTORYWIDGET_HPP_
+#define PLAYERINVENTORYWIDGET_HPP_
 
-#include "CraftingWidget.hpp"
+#include "InventoryWidget.hpp"
 
-class WorkbenchWidget : public Widget {
+class PlayerInventoryWidget : public Widget {
 	public:
-		WorkbenchWidget(Inventory &playerInventory, Inventory &hotbarInventory, Widget *parent = nullptr);
+		PlayerInventoryWidget(Inventory &playerInventory, Inventory &hotbarInventory, Widget *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -29,8 +29,6 @@ class WorkbenchWidget : public Widget {
 
 		Image m_background;
 
-		CraftingWidget m_craftingWidget{this};
-
 		Inventory &m_playerInventory;
 		InventoryWidget m_playerInventoryWidget{this};
 
@@ -40,4 +38,4 @@ class WorkbenchWidget : public Widget {
 		MouseItemWidget m_mouseItemWidget{this};
 };
 
-#endif // WORKBENCHWIDGET_HPP_
+#endif // PLAYERINVENTORYWIDGET_HPP_

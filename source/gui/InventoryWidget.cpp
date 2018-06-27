@@ -31,7 +31,7 @@ void InventoryWidget::init(Inventory &inventory) {
 	m_inventoryHeight = inventory.height();
 }
 
-void InventoryWidget::onEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly) {
+void InventoryWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly) {
 	if (event.type == SDL_MOUSEMOTION) {
 		m_currentItemWidget = nullptr;
 		for (std::size_t i = 0 ; i < m_itemWidgets.size() ; ++i) {

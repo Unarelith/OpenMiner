@@ -23,6 +23,7 @@
 #include "InventoryState.hpp"
 #include "Keyboard.hpp"
 #include "Mouse.hpp"
+#include "PlayerInventoryWidget.hpp"
 
 GameState::GameState() {
 	m_player.hotbarInventory().addStack(ItemType::Dirt, 64);
@@ -80,7 +81,8 @@ void GameState::update() {
 	m_blockCursor.update(m_player.inventory(), false);
 
 	if (Keyboard::isKeyPressedOnce(Keyboard::E) && &m_stateStack->top() == this) {
-		m_stateStack->push<InventoryState>(m_player.inventory(), m_player.hotbarInventory(), this);
+		auto &inventoryState = m_stateStack->push<InventoryState>(this);
+		inventoryState.setupWidget<PlayerInventoryWidget>(m_player.inventory(), m_player.hotbarInventory());
 	}
 }
 

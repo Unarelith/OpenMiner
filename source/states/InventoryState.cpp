@@ -12,13 +12,10 @@
  * =====================================================================================
  */
 #include "ApplicationStateStack.hpp"
-#include "Config.hpp"
 #include "InventoryState.hpp"
 #include "Mouse.hpp"
 
-InventoryState::InventoryState(Inventory &playerInventory, Inventory &hotbarInventory, ApplicationState *parent)
-	: ApplicationState(parent), m_playerInventory{playerInventory}, m_hotbarInventory{hotbarInventory}
-{
+InventoryState::InventoryState(ApplicationState *parent) : ApplicationState(parent) {
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
@@ -27,10 +24,6 @@ InventoryState::InventoryState(Inventory &playerInventory, Inventory &hotbarInve
 	Mouse::setCursorGrabbed(false);
 	Mouse::setCursorVisible(true);
 	Mouse::resetToWindowCenter();
-
-	m_widget.setScale(3, 3, 1);
-	m_widget.setPosition(SCREEN_WIDTH  / 2.0 - m_widget.getGlobalBounds().width  / 2.0,
-	                     SCREEN_HEIGHT / 2.0 - m_widget.getGlobalBounds().height / 2.0, 0);
 
 	m_background.setColor(Color{0, 0, 0, 127});
 	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -47,14 +40,16 @@ void InventoryState::onEvent(const SDL_Event &event) {
 		m_stateStack->pop();
 	}
 
-	m_widget.onEvent(event);
+	if (m_widget)
+		m_widget->onEvent(event);
 }
 
 void InventoryState::update() {
 	if (m_parent)
 		m_parent->update();
 
-	m_widget.update();
+	if (m_widget)
+		m_widget->update();
 }
 
 void InventoryState::draw(RenderTarget &target, RenderStates states) const {
@@ -66,6 +61,8 @@ void InventoryState::draw(RenderTarget &target, RenderStates states) const {
 	states.shader = &m_shader;
 
 	target.draw(m_background, states);
-	target.draw(m_widget, states);
+
+	if (m_widget)
+		target.draw(*m_widget, states);
 }
 

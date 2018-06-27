@@ -22,9 +22,9 @@ CraftingWidget::CraftingWidget(Widget *parent) : Widget(parent) {
 	m_craftingResultInventoryWidget.setPosition(123, 34, 0);
 }
 
-void CraftingWidget::onEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget) {
-	m_craftingInventoryWidget.onEvent(event, mouseItemWidget);
-	m_craftingResultInventoryWidget.onEvent(event, mouseItemWidget, true);
+void CraftingWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget) {
+	m_craftingInventoryWidget.onMouseEvent(event, mouseItemWidget);
+	m_craftingResultInventoryWidget.onMouseEvent(event, mouseItemWidget, true);
 
 	if (m_recipe && !m_craftingResultInventory.getStack(0, 0).item().id()) {
 		for (u8 i = 0 ; i < 9 ; ++i) {

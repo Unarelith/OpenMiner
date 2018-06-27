@@ -24,7 +24,7 @@ class InventoryWidget : public Widget {
 
 		void init(Inventory &inventory);
 
-		void onEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly = false);
+		void onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly = false);
 
 		const ItemWidget *currentItemWidget() const { return m_currentItemWidget; }
 
