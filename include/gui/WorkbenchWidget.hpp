@@ -29,7 +29,7 @@ class WorkbenchWidget : public Widget {
 
 		Image m_background;
 
-		CraftingWidget m_craftingWidget{this};
+		CraftingWidget m_craftingWidget{3, 3, this};
 
 		Inventory &m_playerInventory;
 		InventoryWidget m_playerInventoryWidget{this};

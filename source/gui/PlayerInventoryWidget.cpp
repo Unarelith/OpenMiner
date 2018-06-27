@@ -27,7 +27,7 @@ PlayerInventoryWidget::PlayerInventoryWidget(Inventory &playerInventory, Invento
 }
 
 void PlayerInventoryWidget::onEvent(const SDL_Event &event) {
-	// m_craftingWidget.onMouseEvent(event, m_mouseItemWidget);
+	m_craftingWidget.onMouseEvent(event, m_mouseItemWidget);
 
 	m_playerInventoryWidget.onMouseEvent(event, m_mouseItemWidget);
 	m_hotbarInventoryWidget.onMouseEvent(event, m_mouseItemWidget);
@@ -36,12 +36,12 @@ void PlayerInventoryWidget::onEvent(const SDL_Event &event) {
 }
 
 void PlayerInventoryWidget::update() {
-	// m_craftingWidget.update();
+	m_craftingWidget.update();
 
 	const ItemWidget *currentItemWidget = nullptr;
 	if ((currentItemWidget = m_playerInventoryWidget.currentItemWidget())
-	 || (currentItemWidget = m_hotbarInventoryWidget.currentItemWidget()))
-	 // || (currentItemWidget = m_craftingWidget.currentItemWidget()))
+	 || (currentItemWidget = m_hotbarInventoryWidget.currentItemWidget())
+	 || (currentItemWidget = m_craftingWidget.currentItemWidget()))
 		m_mouseItemWidget.update(currentItemWidget);
 	else
 		m_mouseItemWidget.update(nullptr);
@@ -52,7 +52,7 @@ void PlayerInventoryWidget::draw(RenderTarget &target, RenderStates states) cons
 
 	target.draw(m_background, states);
 
-	// target.draw(m_craftingWidget, states);
+	target.draw(m_craftingWidget, states);
 
 	target.draw(m_playerInventoryWidget, states);
 	target.draw(m_hotbarInventoryWidget, states);

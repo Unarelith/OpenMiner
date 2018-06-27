@@ -14,7 +14,7 @@
 #ifndef PLAYERINVENTORYWIDGET_HPP_
 #define PLAYERINVENTORYWIDGET_HPP_
 
-#include "InventoryWidget.hpp"
+#include "SmallCraftingWidget.hpp"
 
 class PlayerInventoryWidget : public Widget {
 	public:
@@ -28,6 +28,8 @@ class PlayerInventoryWidget : public Widget {
 		void draw(RenderTarget &target, RenderStates states) const override;
 
 		Image m_background;
+
+		SmallCraftingWidget m_craftingWidget{this};
 
 		Inventory &m_playerInventory;
 		InventoryWidget m_playerInventoryWidget{this};

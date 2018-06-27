@@ -15,19 +15,23 @@
 #define CRAFTINGRECIPE_HPP_
 
 #include <array>
+#include <map>
 
 #include "Inventory.hpp"
 
 class CraftingRecipe {
 	public:
-		CraftingRecipe(const std::array<u32, 9> &recipe, const ItemStack &result, bool isShapeless = false);
+		CraftingRecipe(const std::vector<std::string> &pattern, const std::map<char, std::vector<u32>> &keys, const ItemStack &result, bool isShapeless = false);
 
 		bool isMatching(const Inventory &inventory) const;
 
 		const ItemStack &result() const { return m_result; }
 
 	private:
-		std::array<u32, 9> m_recipe;
+		bool checkMatch(const Inventory &inventory, int offsetX, int offsetY) const;
+
+		std::vector<std::string> m_pattern;
+		std::map<char, std::vector<u32>> m_keys;
 		ItemStack m_result;
 
 		bool m_isShapeless;

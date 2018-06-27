@@ -66,28 +66,119 @@ void Registry::registerItems() {
 }
 
 void Registry::registerRecipes() {
-	m_recipes.emplace_back(std::array<u32, 9>{2, 2, 0, 2, ItemType::Stick, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StoneAxe});
-	m_recipes.emplace_back(std::array<u32, 9>{2, 2, 0, 0, ItemType::Stick, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StoneHoe});
-	m_recipes.emplace_back(std::array<u32, 9>{2, 2, 2, 0, ItemType::Stick, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StonePickaxe});
-	m_recipes.emplace_back(std::array<u32, 9>{0, 2, 0, 0, ItemType::Stick, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StoneShovel});
-	m_recipes.emplace_back(std::array<u32, 9>{0, 2, 0, 0, 2, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StoneSword});
+	// m_recipes.emplace_back(std::array<u32, 9>{2, 2, 0, 2, ItemType::Stick, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StoneAxe});
+	// m_recipes.emplace_back(std::array<u32, 9>{2, 2, 0, 0, ItemType::Stick, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StoneHoe});
+	// m_recipes.emplace_back(std::array<u32, 9>{2, 2, 2, 0, ItemType::Stick, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StonePickaxe});
+	// m_recipes.emplace_back(std::array<u32, 9>{0, 2, 0, 0, ItemType::Stick, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StoneShovel});
+	// m_recipes.emplace_back(std::array<u32, 9>{0, 2, 0, 0, 2, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StoneSword});
+    //
+	// m_recipes.emplace_back(std::array<u32, 9>{ItemType::Wood, 0, 0, 0, 0, 0, 0, 0, 0}, ItemStack{ItemType::Planks, 4}, true);
+	// m_recipes.emplace_back(std::array<u32, 9>{ItemType::Planks, ItemType::Planks, 0, 0, 0, 0, 0, 0, 0}, ItemStack{ItemType::Stick, 4}, true);
+    //
+	// m_recipes.emplace_back(std::array<u32, 9>{
+	// 		ItemType::Cobblestone, ItemType::Cobblestone, ItemType::Cobblestone,
+	// 		ItemType::Cobblestone, 0,                     ItemType::Cobblestone,
+	// 		ItemType::Cobblestone, ItemType::Cobblestone, ItemType::Cobblestone,
+	// }, ItemStack{ItemType::Furnace});
+    //
+	// // FIXME: This recipe will only for in the top-left corner
+	// //        Find a way to handle recipe size
+	// m_recipes.emplace_back(std::array<u32, 9>{
+	// 		ItemType::Planks, ItemType::Planks, 0,
+	// 		ItemType::Planks, ItemType::Planks, 0,
+	// 		0, 0, 0
+	// }, ItemStack{ItemType::Workbench});
 
-	m_recipes.emplace_back(std::array<u32, 9>{ItemType::Wood, 0, 0, 0, 0, 0, 0, 0, 0}, ItemStack{ItemType::Planks, 4}, true);
-	m_recipes.emplace_back(std::array<u32, 9>{ItemType::Planks, ItemType::Planks, 0, 0, 0, 0, 0, 0, 0}, ItemStack{ItemType::Stick, 4}, true);
+	m_recipes.emplace_back(std::vector<std::string>{
+	                           "##",
+	                           "#|",
+	                           " |"
+	                       },
+	                       std::map<char, std::vector<u32>>{
+	                           {'#', {ItemType::Cobblestone}},
+	                           {'|', {ItemType::Stick}},
+	                       },
+	                       ItemStack{ItemType::StoneAxe});
 
-	m_recipes.emplace_back(std::array<u32, 9>{
-			ItemType::Cobblestone, ItemType::Cobblestone, ItemType::Cobblestone,
-			ItemType::Cobblestone, 0,                     ItemType::Cobblestone,
-			ItemType::Cobblestone, ItemType::Cobblestone, ItemType::Cobblestone,
-	}, ItemStack{ItemType::Furnace});
+	m_recipes.emplace_back(std::vector<std::string>{
+	                           "##",
+	                           " |",
+	                           " |"
+	                       },
+	                       std::map<char, std::vector<u32>>{
+	                           {'#', {ItemType::Cobblestone}},
+	                           {'|', {ItemType::Stick}},
+	                       },
+	                       ItemStack{ItemType::StoneHoe});
 
-	// FIXME: This recipe will only for in the top-left corner
-	//        Find a way to handle recipe size
-	m_recipes.emplace_back(std::array<u32, 9>{
-			ItemType::Planks, ItemType::Planks, 0,
-			ItemType::Planks, ItemType::Planks, 0,
-			0, 0, 0
-	}, ItemStack{ItemType::Workbench});
+	m_recipes.emplace_back(std::vector<std::string>{
+	                           "###",
+	                           " | ",
+	                           " | "
+	                       },
+	                       std::map<char, std::vector<u32>>{
+	                           {'#', {ItemType::Cobblestone}},
+	                           {'|', {ItemType::Stick}},
+	                       },
+	                       ItemStack{ItemType::StonePickaxe});
+
+	m_recipes.emplace_back(std::vector<std::string>{
+	                           "#",
+	                           "|",
+	                           "|"
+	                       },
+	                       std::map<char, std::vector<u32>>{
+	                           {'#', {ItemType::Cobblestone}},
+	                           {'|', {ItemType::Stick}},
+	                       },
+	                       ItemStack{ItemType::StoneShovel});
+
+	m_recipes.emplace_back(std::vector<std::string>{
+	                           "#",
+	                           "#",
+	                           "|"
+	                       },
+	                       std::map<char, std::vector<u32>>{
+	                           {'#', {ItemType::Cobblestone}},
+	                           {'|', {ItemType::Stick}},
+	                       },
+	                       ItemStack{ItemType::StoneSword});
+
+	m_recipes.emplace_back(std::vector<std::string>{
+	                           "#",
+	                           "#",
+	                       },
+	                       std::map<char, std::vector<u32>>{
+	                           {'#', {ItemType::Planks}},
+	                       },
+	                       ItemStack{ItemType::Stick, 4});
+
+	m_recipes.emplace_back(std::vector<std::string>{
+	                           "#",
+	                       },
+	                       std::map<char, std::vector<u32>>{
+	                           {'#', {ItemType::Wood}},
+	                       },
+	                       ItemStack{ItemType::Planks, 4});
+
+	m_recipes.emplace_back(std::vector<std::string>{
+	                           "##",
+	                           "##",
+	                       },
+	                       std::map<char, std::vector<u32>>{
+	                           {'#', {ItemType::Planks}},
+	                       },
+	                       ItemStack{ItemType::Workbench});
+
+	m_recipes.emplace_back(std::vector<std::string>{
+	                           "###",
+	                           "# #",
+	                           "###",
+	                       },
+	                       std::map<char, std::vector<u32>>{
+	                           {'#', {ItemType::Cobblestone}},
+	                       },
+	                       ItemStack{ItemType::Furnace});
 }
 
 const CraftingRecipe *Registry::getRecipe(const Inventory &inventory) const {

@@ -20,7 +20,7 @@ class CraftingRecipe;
 
 class CraftingWidget : public Widget {
 	public:
-		CraftingWidget(Widget *parent = nullptr);
+		CraftingWidget(u16 width, u16 height, Widget *parent = nullptr);
 
 		void onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget);
 
@@ -28,14 +28,15 @@ class CraftingWidget : public Widget {
 
 		const ItemWidget *currentItemWidget() const { return m_craftingResultInventoryWidget.currentItemWidget() ? m_craftingResultInventoryWidget.currentItemWidget() : m_craftingInventoryWidget.currentItemWidget(); }
 
-	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
-
-		Inventory m_craftingInventory{3, 3};
+	protected:
+		Inventory m_craftingInventory;
 		InventoryWidget m_craftingInventoryWidget{this};
 
 		Inventory m_craftingResultInventory{1, 1};
 		InventoryWidget m_craftingResultInventoryWidget{this};
+
+	private:
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		const CraftingRecipe *m_recipe = nullptr;
 };

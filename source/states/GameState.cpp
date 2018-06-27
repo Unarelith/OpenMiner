@@ -26,12 +26,12 @@
 #include "PlayerInventoryWidget.hpp"
 
 GameState::GameState() {
+	m_player.hotbarInventory().addStack(ItemType::Workbench, 1);
 	m_player.hotbarInventory().addStack(ItemType::Dirt, 64);
 	m_player.hotbarInventory().addStack(ItemType::Grass, 64);
 	m_player.hotbarInventory().addStack(ItemType::Stone, 64);
 	m_player.hotbarInventory().addStack(ItemType::Glass, 64);
 	m_player.hotbarInventory().addStack(ItemType::Glowstone, 64);
-	m_player.hotbarInventory().addStack(ItemType::Workbench, 1);
 	m_player.hotbarInventory().addStack(ItemType::Furnace, 1);
 
 	m_player.inventory().addStack(ItemType::Wood, 64);

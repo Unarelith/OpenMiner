@@ -14,7 +14,7 @@
 #include "CraftingWidget.hpp"
 #include "Registry.hpp"
 
-CraftingWidget::CraftingWidget(Widget *parent) : Widget(parent) {
+CraftingWidget::CraftingWidget(u16 width, u16 height, Widget *parent) : Widget(parent), m_craftingInventory{width, height} {
 	m_craftingInventoryWidget.init(m_craftingInventory);
 	m_craftingInventoryWidget.setPosition(29, 16, 0);
 
@@ -27,10 +27,12 @@ void CraftingWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mouse
 	m_craftingResultInventoryWidget.onMouseEvent(event, mouseItemWidget, true);
 
 	if (m_recipe && !m_craftingResultInventory.getStack(0, 0).item().id()) {
-		for (u8 i = 0 ; i < 9 ; ++i) {
-			const ItemStack &stack = m_craftingInventory.getStack(i % 3, i / 3);
-			if (stack.item().id()) {
-				m_craftingInventory.setStack(i % 3, i / 3, (stack.amount() > 1) ? stack.item().id() : 0, stack.amount() - 1);
+		for (u8 x = 0 ; x < m_craftingInventory.width() ; ++x) {
+			for (u8 y = 0 ; y < m_craftingInventory.height() ; ++y) {
+				const ItemStack &stack = m_craftingInventory.getStack(x, y);
+				if (stack.item().id()) {
+					m_craftingInventory.setStack(x, y, (stack.amount() > 1) ? stack.item().id() : 0, stack.amount() - 1);
+				}
 			}
 		}
 
