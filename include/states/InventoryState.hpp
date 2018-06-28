@@ -30,7 +30,7 @@ class InventoryState : public ApplicationState {
 		void setupWidget(Args &&...args) {
 			m_widget.reset(new T(std::forward<Args>(args)...));
 
-			m_widget->setScale(3, 3, 1);
+			m_widget->setScale(GUI_SCALE, GUI_SCALE, 1);
 			m_widget->setPosition(SCREEN_WIDTH  / 2.0 - m_widget->getGlobalBounds().width  / 2.0,
 			                      SCREEN_HEIGHT / 2.0 - m_widget->getGlobalBounds().height / 2.0, 0);
 		}

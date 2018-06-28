@@ -16,7 +16,7 @@
 
 Hotbar::Hotbar(Inventory &inventory) : m_inventory(inventory) {
 	setPosition(SCREEN_WIDTH / 2 - 182 * 3 / 2, SCREEN_HEIGHT - 22 * 3, 0);
-	setScale(3, 3, 1);
+	setScale(GUI_SCALE, GUI_SCALE, 1);
 
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
