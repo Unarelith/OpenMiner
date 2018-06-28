@@ -53,25 +53,27 @@ void Text::updateTextSprites() {
 		m_textSprites.emplace_back(std::move(sprite));
 		x += m_charWidth[(u8)c];
 	}
+
+	m_size.x = x;
+	m_size.y = 8;
 }
 
 // FIXME: Since I use the font from Minecraft assets, I needed to use
 //        this piece of code to make it look good
 //        I'll remove it later anyway
 void Text::updateCharWidth() {
-	int width = m_texture.width();
-	int height = m_texture.height();
+	const int width = m_texture.width();
+	const int height = m_texture.height();
 	unsigned int data[width * height];
 
 	Texture::bind(&m_texture);
 	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, &data);
 	Texture::bind(nullptr);
 
-	int charMaxHeight = height / 16;
-	int charMaxWidth = width / 16;
-	float lvt_9_1_ = 8.0f / (float)charMaxWidth;
+	const int charMaxHeight = height / 16;
+	const int charMaxWidth = width / 16;
 
-	for (int i = 0; i < 256 ; ++i) {
+	for (int i = 0 ; i < 256 ; ++i) {
 		if (i == ' ') {
 			m_charWidth[i] = 4;
 			continue;
@@ -91,18 +93,15 @@ void Text::updateCharWidth() {
 			for (int j2 = 0 ; j2 < charMaxHeight && flag1 ; ++j2) {
 				int k2 = (charY * charMaxWidth + j2) * width;
 
-				if ((data[i2 + k2] & 255) != 0) {
+				if ((data[i2 + k2] & 255) != 0)
 					flag1 = false;
-				}
 			}
 
-			if (!flag1) {
-				break;
-			}
+			if (!flag1) break;
 		}
 
 		++l1;
-		m_charWidth[i] = (int)(0.5 + (double)((float)l1 * lvt_9_1_)) + 1;
+		m_charWidth[i] = (int)(0.5 + (double)((float)l1 * (8.0f / (float)charMaxWidth))) + 1;
 	}
 }
 

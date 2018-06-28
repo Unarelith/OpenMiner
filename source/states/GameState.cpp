@@ -23,6 +23,7 @@
 #include "InventoryState.hpp"
 #include "Keyboard.hpp"
 #include "Mouse.hpp"
+#include "PauseMenuState.hpp"
 #include "PlayerInventoryWidget.hpp"
 
 GameState::GameState() {
@@ -83,6 +84,9 @@ void GameState::update() {
 	if (Keyboard::isKeyPressedOnce(Keyboard::E) && &m_stateStack->top() == this) {
 		auto &inventoryState = m_stateStack->push<InventoryState>(this);
 		inventoryState.setupWidget<PlayerInventoryWidget>(m_player.inventory(), m_player.hotbarInventory());
+	}
+	else if (Keyboard::isKeyPressedOnce(Keyboard::Return) && &m_stateStack->top() == this) {
+		m_stateStack->push<PauseMenuState>(this);
 	}
 }
 

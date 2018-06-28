@@ -24,6 +24,8 @@ class Text : public IDrawable, public Transformable {
 
 		void setText(const std::string &text) { m_text = text; updateTextSprites(); }
 
+		const Vector2i &getSize() const { return m_size; }
+
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
@@ -37,6 +39,8 @@ class Text : public IDrawable, public Transformable {
 
 		Texture &m_texture;
 		VertexBuffer m_vbo;
+
+		Vector2i m_size;
 };
 
 #endif // TEXT_HPP_
