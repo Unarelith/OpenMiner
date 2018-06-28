@@ -33,6 +33,7 @@ class Widget : public IDrawable, public Transformable {
 		FloatRect getGlobalBounds() const;
 
 		const Widget *parent() { return m_parent; }
+		void setParent(Widget *parent) { m_parent = parent; }
 
 		unsigned int width() const { return m_width; }
 		unsigned int height() const { return m_height; }

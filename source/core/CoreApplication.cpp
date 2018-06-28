@@ -61,9 +61,8 @@ void CoreApplication::createWindow(u16 screenWidth, u16 screenHeight, const char
 void CoreApplication::handleEvents() {
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
-		// FIXME
-		if (event.type == SDL_QUIT
-		|| (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE && m_stateStack.size() == 1)) {
+		if (event.type == SDL_QUIT) {
+		// || (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE && m_stateStack.size() == 1)) {
 			m_window.close();
 		}
 

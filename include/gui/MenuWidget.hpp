@@ -18,12 +18,20 @@
 
 class MenuWidget : public Widget {
 	public:
+		MenuWidget(u16 width, u16 height, Widget *parent = nullptr);
+
 		void onEvent(const SDL_Event &event) override;
 
-		void addButton(const std::string &text, const TextButton::Callback &callback);
+		void addButton(u16 x, u16 y, const std::string &text, const TextButton::Callback &callback);
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
+
+		static constexpr u16 s_verticalSpacing = 5;
+		static constexpr u16 s_horizontalSpacing = 5;
+
+		u16 m_width;
+		u16 m_height;
 
 		std::vector<TextButton> m_buttons;
 };

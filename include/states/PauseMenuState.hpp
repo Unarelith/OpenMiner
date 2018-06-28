@@ -30,7 +30,7 @@ class PauseMenuState : public ApplicationState {
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		MenuWidget m_menuWidget;
+		MenuWidget m_menuWidget{1, 2};
 
 		Shader m_shader;
 

@@ -14,17 +14,26 @@
 #include "Config.hpp"
 #include "MenuWidget.hpp"
 
+MenuWidget::MenuWidget(u16 width, u16 height, Widget *parent) : Widget(parent) {
+	m_width = width;
+	m_height = height;
+
+	m_buttons.resize(m_width * m_height);
+}
+
 void MenuWidget::onEvent(const SDL_Event &event) {
 	for (TextButton &button : m_buttons) {
 		button.onEvent(event);
 	}
 }
 
-void MenuWidget::addButton(const std::string &text, const TextButton::Callback &callback) {
-	TextButton &button = m_buttons.emplace_back(callback, this);
+void MenuWidget::addButton(u16 x, u16 y, const std::string &text, const TextButton::Callback &callback) {
+	TextButton &button = m_buttons.at(x + y);
+	button.setParent(this);
 	button.setText(text);
-	button.setPosition(SCREEN_WIDTH  / getScale().x / 2 - button.width() / 2,
-	                   SCREEN_HEIGHT / getScale().y / 2 - button.height() / 2, 0);
+	button.setCallback(callback);
+	button.setPosition(SCREEN_WIDTH  / getScale().x / 2 - (m_width  * (button.width()  + s_horizontalSpacing) - s_horizontalSpacing) / 2 + x * (button.width() + s_horizontalSpacing),
+	                   SCREEN_HEIGHT / getScale().y / 2 - (m_height * (button.height() + s_verticalSpacing)   - s_verticalSpacing)   / 2 + y * (button.height() + s_verticalSpacing), 0);
 }
 
 void MenuWidget::draw(RenderTarget &target, RenderStates states) const {

@@ -61,6 +61,9 @@ void GameState::onEvent(const SDL_Event &event) {
 			m_camera.update();
 		}
 	}
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE && &m_stateStack->top() == this) {
+		m_stateStack->push<PauseMenuState>(this);
+	}
 
 	m_hotbar.onEvent(event);
 	m_blockCursor.onEvent(event, m_player.hotbarInventory(), m_hotbar);
@@ -84,9 +87,6 @@ void GameState::update() {
 	if (Keyboard::isKeyPressedOnce(Keyboard::E) && &m_stateStack->top() == this) {
 		auto &inventoryState = m_stateStack->push<InventoryState>(this);
 		inventoryState.setupWidget<PlayerInventoryWidget>(m_player.inventory(), m_player.hotbarInventory());
-	}
-	else if (Keyboard::isKeyPressedOnce(Keyboard::Return) && &m_stateStack->top() == this) {
-		m_stateStack->push<PauseMenuState>(this);
 	}
 }
 

@@ -23,11 +23,13 @@
 class TextButton : public Widget {
 	public:
 		using Callback = std::function<void(void)>;
+		TextButton(Widget *parent = nullptr);
 		TextButton(const Callback &callback, Widget *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
 		void setText(const std::string &text);
+		void setCallback(const Callback &callback) { m_callback = callback; }
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
