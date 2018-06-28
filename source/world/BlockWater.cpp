@@ -41,7 +41,7 @@ void BlockWater::onNeighbourUpdate(const glm::ivec3 &blockPosition, const glm::i
 	}
 }
 
-void BlockWater::onTick(const glm::ivec3 &blockPosition, Player &, Chunk &chunk, World &world) const {
+void BlockWater::onTick(const glm::ivec3 &, Player &, Chunk &, World &) const {
 	// if (world.getBlock(blockPosition.x - 1, blockPosition.y, blockPosition.z) == 0) {
 	// 	world.setBlock(blockPosition.x - 1, blockPosition.y, blockPosition.z, 8);
 	// }

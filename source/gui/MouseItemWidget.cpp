@@ -21,7 +21,7 @@ MouseItemWidget::MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0,
 
 void MouseItemWidget::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_MOUSEMOTION) {
-		updatePosition(event.motion.x + event.motion.xrel, event.motion.y + event.motion.yrel);
+		updatePosition(event.motion.x, event.motion.y);
 	}
 
 	if (event.type == SDL_MOUSEBUTTONDOWN) {

@@ -14,6 +14,7 @@
 #include "ItemBlock.hpp"
 #include "Registry.hpp"
 
+#include "BlockFurnace.hpp"
 #include "BlockWater.hpp"
 #include "BlockWorkbench.hpp"
 
@@ -34,7 +35,7 @@ void Registry::registerBlocks() {
 	registerBlock<Block>(BlockType::Planks,      316);
 	registerBlock<Block>(BlockType::Glowstone,   218);
 	registerBlock<BlockWorkbench>();
-	registerBlock<Block>(BlockType::Furnace,     164);
+	registerBlock<BlockFurnace>();
 }
 
 void Registry::registerItems() {
