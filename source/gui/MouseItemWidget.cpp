@@ -14,13 +14,14 @@
 #include "MouseItemWidget.hpp"
 
 MouseItemWidget::MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0, parent) {
-	m_tooltipBackground.setPosition(20, 20, 0);
-	m_tooltipText.setPosition(27, 27, 0);
+	m_tooltipBackground.setColor(Color{255, 255, 255, 220});
+	m_tooltipBackground.setPosition(20, 17, 0);
+	m_tooltipText.setPosition(27, 25, 0);
 }
 
 void MouseItemWidget::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_MOUSEMOTION) {
-		updatePosition(event.motion.x, event.motion.y);
+		updatePosition(event.motion.x + event.motion.xrel, event.motion.y + event.motion.yrel);
 	}
 
 	if (event.type == SDL_MOUSEBUTTONDOWN) {

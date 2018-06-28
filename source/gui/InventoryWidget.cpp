@@ -55,11 +55,11 @@ void InventoryWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mous
 void InventoryWidget::draw(RenderTarget &target, RenderStates states) const {
 	applyTransform(states);
 
-	if (m_currentItemWidget)
-		target.draw(m_selectedItemBackground, states);
-
 	for (std::size_t i = 0 ; i < m_itemWidgets.size() ; ++i) {
 		target.draw(m_itemWidgets[i], states);
 	}
+
+	if (m_currentItemWidget)
+		target.draw(m_selectedItemBackground, states);
 }
 
