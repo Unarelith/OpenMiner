@@ -34,9 +34,8 @@ class Block {
 
 		virtual glm::vec4 getTexCoords(int face) const;
 
-		u32 id() const { return m_id; }
-		void setId(u32 id) { m_id = id; }
-
+		u16 id() const { return m_id & 0xffff; }
+		u16 data() const { return (m_id >> 16) & 0xffff; }
 		u32 textureID() const { return m_textureID; }
 
 		s8 selectedFace() const { return m_selectedFace; }

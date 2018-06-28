@@ -34,12 +34,12 @@ World::World() : m_texture(ResourceHandler::getInstance().get<Texture>("texture-
 		for(s32 y = -m_height / 2 ; y < m_height / 2 ; y++) {
 			for(s32 x = -m_width / 2 ; x < m_width / 2 ; x++) {
 				Chunk *chunk = getChunk(x, y, z);
-				if(x > -m_width / 2)      chunk->setLeft(getChunk(x - 1, y, z));
-				if(x <  m_width / 2 - 1)  chunk->setRight(getChunk(x + 1, y, z));
-				if(y > -m_height / 2)     chunk->setBelow(getChunk(x, y - 1, z));
-				if(y <  m_height / 2 - 1) chunk->setAbove(getChunk(x, y + 1, z));
-				if(z > -m_depth / 2)      chunk->setFront(getChunk(x, y, z - 1));
-				if(z <  m_depth / 2 - 1)  chunk->setBack(getChunk(x, y, z + 1));
+				if(x > -m_width / 2)      chunk->setSurroundingChunk(Chunk::Left,   getChunk(x - 1, y, z));
+				if(x <  m_width / 2 - 1)  chunk->setSurroundingChunk(Chunk::Right,  getChunk(x + 1, y, z));
+				if(y > -m_height / 2)     chunk->setSurroundingChunk(Chunk::Bottom, getChunk(x, y - 1, z));
+				if(y <  m_height / 2 - 1) chunk->setSurroundingChunk(Chunk::Top,    getChunk(x, y + 1, z));
+				if(z > -m_depth / 2)      chunk->setSurroundingChunk(Chunk::Front,  getChunk(x, y, z - 1));
+				if(z <  m_depth / 2 - 1)  chunk->setSurroundingChunk(Chunk::Back,   getChunk(x, y, z + 1));
 			}
 		}
 	}
@@ -119,12 +119,12 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 	if(ud < 1000) {
 		m_terrainGenerator.generate(*getChunk(ux, uy, uz));
 
-		if(getChunk(ux, uy, uz)->left())  m_terrainGenerator.generate(*getChunk(ux, uy, uz)->left());
-		if(getChunk(ux, uy, uz)->right()) m_terrainGenerator.generate(*getChunk(ux, uy, uz)->right());
-		if(getChunk(ux, uy, uz)->below()) m_terrainGenerator.generate(*getChunk(ux, uy, uz)->below());
-		if(getChunk(ux, uy, uz)->above()) m_terrainGenerator.generate(*getChunk(ux, uy, uz)->above());
-		if(getChunk(ux, uy, uz)->front()) m_terrainGenerator.generate(*getChunk(ux, uy, uz)->front());
-		if(getChunk(ux, uy, uz)->back())  m_terrainGenerator.generate(*getChunk(ux, uy, uz)->back());
+		if(getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Left))   m_terrainGenerator.generate(*getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Left));
+		if(getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Right))  m_terrainGenerator.generate(*getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Right));
+		if(getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Bottom)) m_terrainGenerator.generate(*getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Bottom));
+		if(getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Top))    m_terrainGenerator.generate(*getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Top));
+		if(getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Front))  m_terrainGenerator.generate(*getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Front));
+		if(getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Back))   m_terrainGenerator.generate(*getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Back));
 
 		getChunk(ux, uy, uz)->setInitialized(true);
 	}

@@ -80,12 +80,12 @@ void Chunk::setBlock(int x, int y, int z, u32 type) {
 
 	m_isChanged = true;
 
-	if(x == 0          && left())  { left()->m_isChanged = true; }
-	if(x == width - 1  && right()) { right()->m_isChanged = true; }
-	if(y == 0          && below()) { below()->m_isChanged = true; }
-	if(y == height - 1 && above()) { above()->m_isChanged = true; }
-	if(z == 0          && front()) { front()->m_isChanged = true; }
-	if(z == depth - 1  && back())  { back()->m_isChanged = true; }
+	if(x == 0          && m_surroundingChunks[Left])   { m_surroundingChunks[Left]->m_isChanged = true; }
+	if(x == width - 1  && m_surroundingChunks[Right])  { m_surroundingChunks[Right]->m_isChanged = true; }
+	if(y == 0          && m_surroundingChunks[Bottom]) { m_surroundingChunks[Bottom]->m_isChanged = true; }
+	if(y == height - 1 && m_surroundingChunks[Top])    { m_surroundingChunks[Top]->m_isChanged = true; }
+	if(z == 0          && m_surroundingChunks[Front])  { m_surroundingChunks[Front]->m_isChanged = true; }
+	if(z == depth - 1  && m_surroundingChunks[Back])   { m_surroundingChunks[Back]->m_isChanged = true; }
 }
 
 void Chunk::draw(RenderTarget &target, RenderStates states) const {

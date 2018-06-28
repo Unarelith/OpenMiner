@@ -29,6 +29,16 @@
 
 class Chunk : public NonCopyable, public IDrawable {
 	public:
+		enum {
+			Left,
+			Right,
+			Front,
+			Back,
+			Bottom,
+			Top
+		};
+
+	public:
 		Chunk(s32 x, s32 y, s32 z, Texture &texture);
 
 		void update(World &world);
@@ -40,25 +50,9 @@ class Chunk : public NonCopyable, public IDrawable {
 		s32 y() const { return m_y; }
 		s32 z() const { return m_z; }
 
-		Chunk *left()  const { return m_surroundingChunks[0]; }
-		Chunk *right() const { return m_surroundingChunks[1]; }
-		Chunk *front() const { return m_surroundingChunks[2]; }
-		Chunk *back()  const { return m_surroundingChunks[3]; }
-		Chunk *below() const { return m_surroundingChunks[4]; }
-		Chunk *above() const { return m_surroundingChunks[5]; }
 		Chunk *getSurroundingChunk(u8 i) { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
 		const Chunk *getSurroundingChunk(u8 i) const { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
-
-		static constexpr u8 width = CHUNK_WIDTH;
-		static constexpr u8 height = CHUNK_HEIGHT;
-		static constexpr u8 depth = CHUNK_DEPTH;
-
-		void setLeft(Chunk *left)   { m_surroundingChunks[0] = left; }
-		void setRight(Chunk *right) { m_surroundingChunks[1] = right; }
-		void setFront(Chunk *front) { m_surroundingChunks[2] = front; }
-		void setBack(Chunk *back)   { m_surroundingChunks[3] = back; }
-		void setBelow(Chunk *below) { m_surroundingChunks[4] = below; }
-		void setAbove(Chunk *above) { m_surroundingChunks[5] = above; }
+		void setSurroundingChunk(u8 i, Chunk *chunk) { if (i < 6) m_surroundingChunks[i] = chunk; }
 
 		bool isGenerated() const { return m_isGenerated; }
 		bool isInitialized() const { return m_isInitialized; }
@@ -70,6 +64,10 @@ class Chunk : public NonCopyable, public IDrawable {
 		ChunkLightmap &lightmap() { return m_lightmap; }
 		const ChunkLightmap &lightmap() const { return m_lightmap; }
 
+		static constexpr u8 width = CHUNK_WIDTH;
+		static constexpr u8 height = CHUNK_HEIGHT;
+		static constexpr u8 depth = CHUNK_DEPTH;
+
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 		void drawOutlines(RenderTarget &target, RenderStates states) const;
@@ -80,7 +78,6 @@ class Chunk : public NonCopyable, public IDrawable {
 
 		Texture &m_texture;
 
-		// using DataArray = std::array<std::array<std::array<std::unique_ptr<Block>, Chunk::depth>, Chunk::height>, Chunk::width>;
 		using DataArray = u32[Chunk::width][Chunk::height][Chunk::depth];
 		DataArray m_data;
 
