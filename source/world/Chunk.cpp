@@ -12,6 +12,7 @@
  * =====================================================================================
  */
 #include "Chunk.hpp"
+#include "GameClock.hpp"
 #include "Registry.hpp"
 
 Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
@@ -22,7 +23,7 @@ Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
 	std::memset(m_data, 0, sizeof(m_data));
 }
 
-void Chunk::update(World &) {
+void Chunk::update(Player &player, World &world) {
 	if (!m_isChanged) return;
 
 	m_isChanged = false;
@@ -31,12 +32,16 @@ void Chunk::update(World &) {
 
 	m_verticesCount = m_builder.buildChunk(*this, m_vbo);
 
-	// for (auto &it : m_tickingBlocks) {
-	// 	int z = it.first / (width * height);
-	// 	int y = (it.first - z * width * height) / width;
-	// 	int x = (it.first - z * width * height) % width;
-	// 	it.second.onTick(glm::ivec3{x + m_x * width, y + m_y * height, z + m_z * depth}, world);
-	// }
+	if (m_lastTick < GameClock::getTicks() / 50) {
+		m_lastTick = GameClock::getTicks() / 50;
+
+		for (auto &it : m_tickingBlocks) {
+			int z = it.first / (width * height);
+			int y = (it.first - z * width * height) / width;
+			int x = (it.first - z * width * height) % width;
+			it.second.onTick(glm::ivec3{x + m_x * width, y + m_y * height, z + m_z * depth}, player, *this, world);
+		}
+	}
 }
 
 u32 Chunk::getBlock(int x, int y, int z) const {
@@ -80,12 +85,36 @@ void Chunk::setBlock(int x, int y, int z, u32 type) {
 
 	m_isChanged = true;
 
+	updateNeighbours(x, y, z);
+
 	if(x == 0          && m_surroundingChunks[Left])   { m_surroundingChunks[Left]->m_isChanged = true; }
 	if(x == width - 1  && m_surroundingChunks[Right])  { m_surroundingChunks[Right]->m_isChanged = true; }
 	if(y == 0          && m_surroundingChunks[Bottom]) { m_surroundingChunks[Bottom]->m_isChanged = true; }
 	if(y == height - 1 && m_surroundingChunks[Top])    { m_surroundingChunks[Top]->m_isChanged = true; }
 	if(z == 0          && m_surroundingChunks[Front])  { m_surroundingChunks[Front]->m_isChanged = true; }
 	if(z == depth - 1  && m_surroundingChunks[Back])   { m_surroundingChunks[Back]->m_isChanged = true; }
+}
+
+void Chunk::updateNeighbours(int x, int y, int z) {
+	int neighbours[7][3] = {
+		{x, y, z},
+		{x - 1, y, z},
+		{x + 1, y, z},
+		{x, y - 1, z},
+		{x, y + 1, z},
+		{x, y, z - 1},
+		{x, y, z + 1},
+	};
+
+	for (u32 i = 0 ; i < 7 ; ++i) {
+		u32 blockID = getBlock(neighbours[i][0], neighbours[i][1], neighbours[i][2]);
+		if (blockID) {
+			const Block &block = Registry::getInstance().getBlock(blockID);
+			block.onNeighbourUpdate(glm::vec3{x, y, z},
+			                        glm::vec3{neighbours[i][0], neighbours[i][1], neighbours[i][2]},
+			                        *this);
+		}
+	}
 }
 
 void Chunk::draw(RenderTarget &target, RenderStates states) const {

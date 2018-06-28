@@ -26,7 +26,7 @@ class World : public IDrawable {
 	public:
 		World();
 
-		void updateChunks();
+		void update(Player &player);
 
 		Chunk *getChunk(int cx, int cy, int cz) const;
 

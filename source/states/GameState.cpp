@@ -70,7 +70,7 @@ void GameState::update() {
 	m_shader.setUniform("u_time", GameClock::getTicks());
 	Shader::bind(nullptr);
 
-	m_world.updateChunks();
+	m_world.update(m_player);
 
 	if (&m_stateStack->top() == this)
 		m_viewMatrix = m_camera.processInputs(m_world);

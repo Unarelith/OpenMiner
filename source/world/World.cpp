@@ -45,9 +45,9 @@ World::World() : m_texture(ResourceHandler::getInstance().get<Texture>("texture-
 	}
 }
 
-void World::updateChunks() {
+void World::update(Player &player) {
 	for (auto &it : m_chunks) {
-		it->update(*this);
+		it->update(player, *this);
 	}
 }
 

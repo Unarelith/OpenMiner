@@ -28,9 +28,9 @@ class Block {
 		Block(u32 id, u32 textureID);
 		virtual ~Block() = default;
 
-		virtual void onTick(const glm::ivec3 &, Player &, World &) const {}
+		virtual void onTick(const glm::ivec3 &, Player &, Chunk &, World &) const {}
 		virtual bool onBlockActivated(const glm::ivec3 &, Player &, World &) const { return false; }
-		virtual void onBlockDestroy(const glm::ivec3 &, const glm::ivec3 &, Player &, World &) const {}
+		virtual void onNeighbourUpdate(const glm::ivec3 &, const glm::ivec3 &, Chunk &) const {}
 
 		virtual glm::vec4 getTexCoords(int face) const;
 

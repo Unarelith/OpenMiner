@@ -41,7 +41,7 @@ class Chunk : public NonCopyable, public IDrawable {
 	public:
 		Chunk(s32 x, s32 y, s32 z, Texture &texture);
 
-		void update(World &world);
+		void update(Player &player, World &world);
 
 		u32 getBlock(int x, int y, int z) const;
 		void setBlock(int x, int y, int z, u32 id);
@@ -69,6 +69,8 @@ class Chunk : public NonCopyable, public IDrawable {
 		static constexpr u8 depth = CHUNK_DEPTH;
 
 	private:
+		void updateNeighbours(int x, int y, int z);
+
 		void draw(RenderTarget &target, RenderStates states) const override;
 		void drawOutlines(RenderTarget &target, RenderStates states) const;
 
@@ -93,6 +95,7 @@ class Chunk : public NonCopyable, public IDrawable {
 		bool m_isInitialized = false;
 		bool m_isGenerated = false;
 
+		u32 m_lastTick = 0;
 		std::unordered_map<std::size_t, const Block&> m_tickingBlocks;
 };
 
