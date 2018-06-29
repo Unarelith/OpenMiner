@@ -13,8 +13,8 @@
  */
 #include "WorkbenchWidget.hpp"
 
-WorkbenchWidget::WorkbenchWidget(Inventory &playerInventory, Inventory &hotbarInventory, Widget *parent)
-	: Widget(176, 166, parent), m_playerInventory(playerInventory), m_hotbarInventory(hotbarInventory)
+WorkbenchWidget::WorkbenchWidget(Inventory &playerInventory, Inventory &hotbarInventory, Inventory &craftingInventory, Widget *parent)
+	: Widget(176, 166, parent), m_playerInventory(playerInventory), m_hotbarInventory(hotbarInventory), m_craftingWidget(craftingInventory, this)
 {
 	m_background.load("texture-workbench");
 	m_background.setClipRect(0, 0, 176, 166);

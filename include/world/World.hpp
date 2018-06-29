@@ -33,6 +33,8 @@ class World : public IDrawable {
 		u32 getBlock(int x, int y, int z) const;
 		void setBlock(int x, int y, int z, u32 id);
 
+		BlockData *getBlockData(int x, int y, int z);
+
 		// Render distance in chunks
 		static const u16 renderDistance = 8;
 

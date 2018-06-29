@@ -19,6 +19,9 @@
 class SmallCraftingWidget : public CraftingWidget {
 	public:
 		SmallCraftingWidget(Widget *parent = nullptr);
+
+	private:
+		Inventory m_inventory{2, 2};
 };
 
 #endif // SMALLCRAFTINGWIDGET_HPP_

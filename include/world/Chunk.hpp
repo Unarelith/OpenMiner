@@ -19,12 +19,14 @@
 #include <vector>
 
 #include "Block.hpp"
+#include "BlockData.hpp"
 #include "ChunkBuilder.hpp"
 #include "ChunkLightmap.hpp"
 #include "IDrawable.hpp"
 #include "NonCopyable.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
+#include "Vector3.hpp"
 #include "VertexBuffer.hpp"
 
 class Chunk : public NonCopyable, public IDrawable {
@@ -45,6 +47,8 @@ class Chunk : public NonCopyable, public IDrawable {
 
 		u32 getBlock(int x, int y, int z) const;
 		void setBlock(int x, int y, int z, u32 id);
+
+		BlockData *getBlockData(int x, int y, int z);
 
 		s32 x() const { return m_x; }
 		s32 y() const { return m_y; }
@@ -97,6 +101,8 @@ class Chunk : public NonCopyable, public IDrawable {
 
 		u32 m_lastTick = 0;
 		std::unordered_map<std::size_t, const Block&> m_tickingBlocks;
+
+		std::unordered_map<Vector3i, BlockData> m_blockData;
 };
 
 #endif // CHUNK_HPP_

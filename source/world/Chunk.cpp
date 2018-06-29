@@ -81,6 +81,17 @@ void Chunk::setBlock(int x, int y, int z, u32 type) {
 	else
 		m_lightmap.removeLight(x, y, z);
 
+	if (type == BlockType::Workbench)
+		m_blockData.emplace(Vector3i{x, y, z}, BlockData{3, 3});
+	else if (type == BlockType::Furnace)
+		m_blockData.emplace(Vector3i{x, y, z}, BlockData{1, 3});
+
+	if (m_data[x][y][z] == BlockType::Workbench || m_data[x][y][z] == BlockType::Furnace) {
+		auto it = m_blockData.find(Vector3i{x, y, z});
+		if (it != m_blockData.end())
+			m_blockData.erase(it);
+	}
+
 	m_data[x][y][z] = type;
 
 	m_isChanged = true;
@@ -93,6 +104,21 @@ void Chunk::setBlock(int x, int y, int z, u32 type) {
 	if(y == height - 1 && m_surroundingChunks[Top])    { m_surroundingChunks[Top]->m_isChanged = true; }
 	if(z == 0          && m_surroundingChunks[Front])  { m_surroundingChunks[Front]->m_isChanged = true; }
 	if(z == depth - 1  && m_surroundingChunks[Back])   { m_surroundingChunks[Back]->m_isChanged = true; }
+}
+
+BlockData *Chunk::getBlockData(int x, int y, int z) {
+	if(x < 0)              return m_surroundingChunks[0] ? m_surroundingChunks[0]->getBlockData(x + Chunk::width, y, z) : 0;
+	if(x >= Chunk::width)  return m_surroundingChunks[1] ? m_surroundingChunks[1]->getBlockData(x - Chunk::width, y, z) : 0;
+	if(y < 0)              return m_surroundingChunks[4] ? m_surroundingChunks[4]->getBlockData(x, y + Chunk::height, z) : 0;
+	if(y >= Chunk::height) return m_surroundingChunks[5] ? m_surroundingChunks[5]->getBlockData(x, y - Chunk::height, z) : 0;
+	if(z < 0)              return m_surroundingChunks[2] ? m_surroundingChunks[2]->getBlockData(x, y, z + Chunk::depth) : 0;
+	if(z >= Chunk::depth)  return m_surroundingChunks[3] ? m_surroundingChunks[3]->getBlockData(x, y, z - Chunk::depth) : 0;
+
+	auto it = m_blockData.find(Vector3i{x, y, z});
+	if (it == m_blockData.end())
+		return nullptr;
+
+	return &it->second;
 }
 
 void Chunk::updateNeighbours(int x, int y, int z) {

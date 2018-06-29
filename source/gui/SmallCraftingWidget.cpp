@@ -13,7 +13,7 @@
  */
 #include "SmallCraftingWidget.hpp"
 
-SmallCraftingWidget::SmallCraftingWidget(Widget *parent) : CraftingWidget(2, 2, parent) {
+SmallCraftingWidget::SmallCraftingWidget(Widget *parent) : CraftingWidget(m_inventory, parent) {
 	m_craftingInventoryWidget.setPosition(97, 17, 0);
 	m_craftingResultInventoryWidget.setPosition(153, 27, 0);
 }
