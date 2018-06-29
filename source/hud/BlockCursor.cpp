@@ -134,8 +134,8 @@ void BlockCursor::update(Inventory &playerInventory, bool useDepthBuffer) {
 	m_selectedBlock = selectedBlock;
 
 	if (m_animationStart && GameClock::getTicks() > m_animationStart + 1000) {
-		u16 block = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
-		playerInventory.addStack(block);
+		ItemStack itemDrop = Registry::getInstance().getBlock(m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z)).getItemDrop();
+		playerInventory.addStack(itemDrop.item().id(), itemDrop.amount());
 		m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
 		m_animationStart = GameClock::getTicks();
 	}

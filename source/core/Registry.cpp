@@ -27,11 +27,11 @@ void Registry::registerBlocks() {
 	registerBlock<Block>(BlockType::Grass,       226);
 	registerBlock<Block>(BlockType::Leaves,      266);
 	registerBlock<Block>(BlockType::Wood,        277);
-	registerBlock<Block>(BlockType::Stone,       402);
+	registerBlock<Block>(BlockType::Stone,       402).setItemDrop(ItemType::Cobblestone);
 	registerBlock<Block>(BlockType::Sand,        369);
 	registerBlock<BlockWater>();
 	registerBlock<Block>(BlockType::Glass,       168);
-	registerBlock<Block>(BlockType::CoalOre,     36);
+	registerBlock<Block>(BlockType::CoalOre,     36).setItemDrop(ItemType::Coal);
 	registerBlock<Block>(BlockType::Planks,      316);
 	registerBlock<Block>(BlockType::Glowstone,   218);
 	registerBlock<BlockWorkbench>();

@@ -18,6 +18,7 @@
 
 #include "BlockType.hpp"
 #include "IntTypes.hpp"
+#include "ItemStack.hpp"
 
 class Chunk;
 class Player;
@@ -45,6 +46,9 @@ class Block {
 
 		bool canUpdate() const { return m_canUpdate; }
 
+		ItemStack getItemDrop() const { return ItemStack{m_itemDrop, m_itemDropAmount}; };
+		void setItemDrop(u16 itemDrop, u16 itemDropAmount = 1) { m_itemDrop = itemDrop; m_itemDropAmount = itemDropAmount; }
+
 	protected:
 		glm::vec4 getTexCoordsFromID(int textureID) const;
 
@@ -56,6 +60,9 @@ class Block {
 
 		bool m_isSelected = false;
 		s8 m_selectedFace = -1;
+
+		u16 m_itemDrop;
+		u16 m_itemDropAmount;
 };
 
 #endif // BLOCK_HPP_

@@ -16,6 +16,9 @@
 Block::Block(u32 id, u32 textureID) {
 	m_id = id;
 	m_textureID = textureID;
+
+	m_itemDrop = id;
+	m_itemDropAmount = 1;
 }
 
 glm::vec4 Block::getTexCoords(int face, u16) const {
