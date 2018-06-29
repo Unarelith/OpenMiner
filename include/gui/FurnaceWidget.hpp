@@ -14,11 +14,12 @@
 #ifndef FURNACEWIDGET_HPP_
 #define FURNACEWIDGET_HPP_
 
+#include "BlockData.hpp"
 #include "InventoryWidget.hpp"
 
 class FurnaceWidget : public Widget {
 	public:
-		FurnaceWidget(Inventory &playerInventory, Inventory &hotbarInventory, Widget *parent = nullptr);
+		FurnaceWidget(Inventory &playerInventory, Inventory &hotbarInventory, BlockData &blockData, Widget *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -34,6 +35,12 @@ class FurnaceWidget : public Widget {
 
 		Inventory &m_hotbarInventory;
 		InventoryWidget m_hotbarInventoryWidget{this};
+
+		InventoryWidget m_inputInventoryWidget{this};
+		InventoryWidget m_outputInventoryWidget{this};
+		InventoryWidget m_fuelInventoryWidget{this};
+
+		BlockData &m_blockData;
 
 		MouseItemWidget m_mouseItemWidget{this};
 };

@@ -31,6 +31,7 @@ namespace BlockType {
 		Glowstone    = 12,
 		Workbench    = 13,
 		Furnace      = 14,
+		IronOre      = 15,
 	};
 }
 

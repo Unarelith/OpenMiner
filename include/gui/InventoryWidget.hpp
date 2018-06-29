@@ -22,7 +22,7 @@ class InventoryWidget : public Widget {
 	public:
 		InventoryWidget(Widget *parent = nullptr) : Widget(parent) {}
 
-		void init(Inventory &inventory);
+		void init(Inventory &inventory, unsigned int offset = 0, unsigned int size = 0);
 
 		void onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly = false);
 

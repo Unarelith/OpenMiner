@@ -20,6 +20,8 @@ struct BlockData {
 	BlockData(int width, int height) : inventory(width, height) {}
 
 	Inventory inventory;
+
+	u64 data = 0;
 };
 
 #endif // BLOCKDATA_HPP_

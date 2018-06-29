@@ -31,13 +31,16 @@ namespace ItemType {
 		Glowstone    = 12,
 		Workbench    = 13,
 		Furnace      = 14,
+		IronOre      = 15,
 
-		Stick        = 15,
-		StoneAxe     = 16,
-		StoneHoe     = 17,
-		StonePickaxe = 18,
-		StoneShovel  = 19,
-		StoneSword   = 20,
+		Stick        = 16,
+		StoneAxe     = 17,
+		StoneHoe     = 18,
+		StonePickaxe = 19,
+		StoneShovel  = 20,
+		StoneSword   = 21,
+		Coal         = 22,
+		IronIngot    = 23
 	};
 }
 

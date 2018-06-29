@@ -24,13 +24,13 @@
 class Registry {
 	public:
 		template<typename T, typename... Args>
-		auto registerBlock(Args &&...args) -> typename std::enable_if<std::is_base_of<Block, T>::value>::type {
-			m_blocks.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));
+		auto registerBlock(Args &&...args) -> typename std::enable_if<std::is_base_of<Block, T>::value, Block&>::type {
+			return *m_blocks.emplace_back(std::make_unique<T>(std::forward<Args>(args)...)).get();
 		}
 
 		template<typename T, typename... Args>
-		auto registerItem(Args &&...args) -> typename std::enable_if<std::is_base_of<Item, T>::value>::type {
-			m_items.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));
+		auto registerItem(Args &&...args) -> typename std::enable_if<std::is_base_of<Item, T>::value, Item&>::type {
+			return *m_items.emplace_back(std::make_unique<T>(std::forward<Args>(args)...)).get();
 		}
 
 		void registerBlocks();

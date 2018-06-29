@@ -20,7 +20,7 @@ class BlockFurnace : public Block {
 	public:
 		BlockFurnace();
 
-		bool onBlockActivated(const glm::ivec3 &position, Player &player, World &world) const override;
+		bool onBlockActivated(const glm::ivec3 &blockPosition, Player &player, World &world) const override;
 		void onTick(const glm::ivec3 &blockPosition, Player &player, Chunk &chunk, World &world) const override;
 };
 

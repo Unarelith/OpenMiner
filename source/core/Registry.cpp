@@ -36,6 +36,7 @@ void Registry::registerBlocks() {
 	registerBlock<Block>(BlockType::Glowstone,   218);
 	registerBlock<BlockWorkbench>();
 	registerBlock<BlockFurnace>();
+	registerBlock<Block>(BlockType::IronOre,     254);
 }
 
 void Registry::registerItems() {
@@ -54,6 +55,7 @@ void Registry::registerItems() {
 	registerItem<ItemBlock>(ItemType::Glowstone,   BlockType::Glowstone,   "Glowstone");
 	registerItem<ItemBlock>(ItemType::Workbench,   BlockType::Workbench,   "Workbench");
 	registerItem<ItemBlock>(ItemType::Furnace,     BlockType::Furnace,     "Furnace");
+	registerItem<ItemBlock>(ItemType::IronOre,     BlockType::IronOre,     "Iron Ore");
 
 	registerItem<Item>(ItemType::Stick,        324, "Stick");
 	registerItem<Item>(ItemType::StoneAxe,     325, "Stone Axe");
@@ -61,6 +63,12 @@ void Registry::registerItems() {
 	registerItem<Item>(ItemType::StonePickaxe, 327, "Stone Pickaxe");
 	registerItem<Item>(ItemType::StoneShovel,  328, "Stone Shovel");
 	registerItem<Item>(ItemType::StoneSword,   329, "Stone Sword");
+
+	Item &itemCoal = registerItem<Item>(ItemType::Coal, 111, "Coal");
+	itemCoal.setIsFuel(true);
+	itemCoal.setBurnTime(1600);
+
+	registerItem<Item>(ItemType::IronIngot,    232, "Iron Ingot");
 
 	// FIXME: Move this to Application or load from XML file
 	registerRecipes();

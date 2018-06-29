@@ -44,6 +44,8 @@ GameState::GameState() {
 	m_player.inventory().addStack(ItemType::StonePickaxe, 1);
 	m_player.inventory().addStack(ItemType::StoneShovel, 1);
 	m_player.inventory().addStack(ItemType::StoneSword, 1);
+	m_player.inventory().addStack(ItemType::IronOre, 64);
+	m_player.inventory().addStack(ItemType::Coal, 64);
 
 	m_projectionMatrix = glm::perspective(45.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, DIST_NEAR, DIST_FAR);
 

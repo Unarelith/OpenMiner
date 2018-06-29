@@ -24,15 +24,7 @@ Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
 }
 
 void Chunk::update(Player &player, World &world) {
-	if (!m_isChanged) return;
-
-	m_isChanged = false;
-
-	m_lightmap.updateLights();
-
-	m_verticesCount = m_builder.buildChunk(*this, m_vbo);
-
-	if (m_lastTick < GameClock::getTicks() / 50) {
+	if (!m_tickingBlocks.empty() && m_lastTick < GameClock::getTicks() / 50) {
 		m_lastTick = GameClock::getTicks() / 50;
 
 		for (auto &it : m_tickingBlocks) {
@@ -41,6 +33,12 @@ void Chunk::update(Player &player, World &world) {
 			int x = (it.first - z * width * height) % width;
 			it.second.onTick(glm::ivec3{x + m_x * width, y + m_y * height, z + m_z * depth}, player, *this, world);
 		}
+	}
+
+	if (m_isChanged) {
+		m_isChanged = false;
+		m_lightmap.updateLights();
+		m_verticesCount = m_builder.buildChunk(*this, m_vbo);
 	}
 }
 
@@ -84,7 +82,7 @@ void Chunk::setBlock(int x, int y, int z, u32 type) {
 	if (type == BlockType::Workbench)
 		m_blockData.emplace(Vector3i{x, y, z}, BlockData{3, 3});
 	else if (type == BlockType::Furnace)
-		m_blockData.emplace(Vector3i{x, y, z}, BlockData{1, 3});
+		m_blockData.emplace(Vector3i{x, y, z}, BlockData{3, 1});
 
 	if (m_data[x][y][z] == BlockType::Workbench || m_data[x][y][z] == BlockType::Furnace) {
 		auto it = m_blockData.find(Vector3i{x, y, z});
