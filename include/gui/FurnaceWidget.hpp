@@ -42,6 +42,9 @@ class FurnaceWidget : public Widget {
 
 		BlockData &m_blockData;
 
+		Image m_burnImage{"texture-furnace"};
+		Image m_progressImage{"texture-furnace"};
+
 		MouseItemWidget m_mouseItemWidget{this};
 };
 
