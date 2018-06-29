@@ -16,10 +16,16 @@ void main() {
 
 	if (color.a < 0.3) discard;
 
-	if (v_faceValue == 2)
-		color -= vec4(0.25, 0.25, 0.25, 0.0);
-	else if (v_faceValue == 4)
-		color -= vec4(0.15, 0.15, 0.15, 0.0);
+	if (v_faceValue == 2) {
+		// color -= vec4(0.25, 0.25, 0.25, 0.0);
+		color /= 2;
+		color.a = v_color.a;
+	}
+	else if (v_faceValue == 4) {
+		// color -= vec4(0.15, 0.15, 0.15, 0.0);
+		color /= 1.5;
+		color.a = v_color.a;
+	}
 
 	gl_FragColor = color;
 }
