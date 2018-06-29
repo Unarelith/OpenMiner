@@ -28,9 +28,9 @@ class BlockCursor : public IDrawable {
 			: m_camera(camera), m_player(player), m_world(world), m_viewMatrix(viewMatrix), m_projectionMatrix(projectionMatrix)
 		{ updateVertexBuffer(); }
 
-		void onEvent(const SDL_Event &event, Inventory &hotbarInventory, const Hotbar &hotbar);
+		void onEvent(const SDL_Event &event, const Hotbar &hotbar);
 
-		void update(Inventory &playerInventory, bool useDepthBuffer);
+		void update(const Hotbar &hotbar, bool useDepthBuffer);
 
 	private:
 		void updateVertexBuffer(int animationPos = -1);

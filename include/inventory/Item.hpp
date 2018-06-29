@@ -35,6 +35,12 @@ class Item {
 		u16 burnTime() const { return m_burnTime; }
 		void setBurnTime(u16 burnTime) { m_burnTime = burnTime; }
 
+		u8 harvestCapability() const { return m_harvestCapability; }
+		void setHarvestCapability(u8 harvestCapability) { m_harvestCapability = harvestCapability; }
+
+		float miningSpeed() const { return m_miningSpeed; }
+		void setMiningSpeed(float miningSpeed) { m_miningSpeed = miningSpeed; }
+
 	protected:
 		bool m_isBlock = false;
 		bool m_isFuel = false;
@@ -46,6 +52,9 @@ class Item {
 
 		u32 m_id = 0;
 		u32 m_textureID = 0;
+
+		u8 m_harvestCapability = 0;
+		float m_miningSpeed = 1;
 };
 
 #endif // ITEM_HPP_

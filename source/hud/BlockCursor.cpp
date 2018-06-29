@@ -87,7 +87,7 @@ void BlockCursor::updateVertexBuffer(int animationPos) {
 	VertexBuffer::bind(nullptr);
 }
 
-void BlockCursor::onEvent(const SDL_Event &event, Inventory &hotbarInventory, const Hotbar &hotbar) {
+void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
 			m_animationStart = GameClock::getTicks();
@@ -114,8 +114,8 @@ void BlockCursor::onEvent(const SDL_Event &event, Inventory &hotbarInventory, co
 
 				m_world.setBlock(x, y, z, hotbar.currentItem());
 
-				const ItemStack &currentStack = hotbarInventory.getStack(hotbar.cursorPos(), 0);
-				hotbarInventory.setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().id() : 0, currentStack.amount() - 1);
+				const ItemStack &currentStack = m_player.hotbarInventory().getStack(hotbar.cursorPos(), 0);
+				m_player.hotbarInventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().id() : 0, currentStack.amount() - 1);
 			}
 		}
 	}
@@ -126,21 +126,24 @@ void BlockCursor::onEvent(const SDL_Event &event, Inventory &hotbarInventory, co
 	}
 }
 
-void BlockCursor::update(Inventory &playerInventory, bool useDepthBuffer) {
+void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
 	glm::vec4 selectedBlock = findSelectedBlock(useDepthBuffer);
 	if (selectedBlock.x != m_selectedBlock.x || selectedBlock.y != m_selectedBlock.y || selectedBlock.z != m_selectedBlock.z)
 		m_animationStart = (m_animationStart) ? GameClock::getTicks() : 0;
 
 	m_selectedBlock = selectedBlock;
 
-	if (m_animationStart && GameClock::getTicks() > m_animationStart + 1000) {
-		ItemStack itemDrop = Registry::getInstance().getBlock(m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z)).getItemDrop();
-		playerInventory.addStack(itemDrop.item().id(), itemDrop.amount());
+	const ItemStack &currentStack = m_player.hotbarInventory().getStack(hotbar.cursorPos(), 0);
+	const Block &block = Registry::getInstance().getBlock(m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z));
+	float timeToBreak = block.timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed());
+	if (m_animationStart && GameClock::getTicks() > m_animationStart + timeToBreak * 1000) {
+		ItemStack itemDrop = block.getItemDrop();
+		m_player.inventory().addStack(itemDrop.item().id(), itemDrop.amount());
 		m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
 		m_animationStart = GameClock::getTicks();
 	}
 
-	updateVertexBuffer((GameClock::getTicks() - m_animationStart) / 100);
+	updateVertexBuffer((GameClock::getTicks() - m_animationStart) / (timeToBreak * 100));
 }
 
 #include "ResourceHandler.hpp"

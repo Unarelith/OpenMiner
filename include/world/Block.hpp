@@ -49,6 +49,16 @@ class Block {
 		ItemStack getItemDrop() const { return ItemStack{m_itemDrop, m_itemDropAmount}; };
 		void setItemDrop(u16 itemDrop, u16 itemDropAmount = 1) { m_itemDrop = itemDrop; m_itemDropAmount = itemDropAmount; }
 
+		u8 harvestRequirements() const { return m_harvestRequirements; }
+		void setHarvestRequirements(u8 harvestRequirements) { m_harvestRequirements = harvestRequirements; }
+
+		float hardness() const { return m_hardness; }
+		void setHardness(float hardness) { m_hardness = hardness; }
+
+		float timeToBreak(u8 harvestCapability, float miningSpeed) const {
+			return ((m_harvestRequirements & harvestCapability) == m_harvestRequirements) ? 1.5 * m_hardness / miningSpeed : 5 * m_hardness;
+		}
+
 	protected:
 		glm::vec4 getTexCoordsFromID(int textureID) const;
 
@@ -63,6 +73,9 @@ class Block {
 
 		u16 m_itemDrop;
 		u16 m_itemDropAmount;
+
+		u8 m_harvestRequirements = 0;
+		float m_hardness = 1.0f;
 };
 
 #endif // BLOCK_HPP_

@@ -23,15 +23,29 @@ Registry *Registry::s_instance = nullptr;
 void Registry::registerBlocks() {
 	registerBlock<Block>(BlockType::Air,         0);
 	registerBlock<Block>(BlockType::Dirt,        37);
-	registerBlock<Block>(BlockType::Cobblestone, 38);
+
+	auto &cobblestoneBlock = registerBlock<Block>(BlockType::Cobblestone, 38);
+	cobblestoneBlock.setHarvestRequirements(1);
+	cobblestoneBlock.setHardness(2);
+
 	registerBlock<Block>(BlockType::Grass,       226);
-	registerBlock<Block>(BlockType::Leaves,      266);
-	registerBlock<Block>(BlockType::Wood,        277);
-	registerBlock<Block>(BlockType::Stone,       402).setItemDrop(ItemType::Cobblestone);
+	registerBlock<Block>(BlockType::Leaves,      266).setHardness(0.5);
+	registerBlock<Block>(BlockType::Wood,        277).setHardness(2);
+
+	auto &stoneBlock = registerBlock<Block>(BlockType::Stone, 402);
+	stoneBlock.setItemDrop(ItemType::Cobblestone);
+	stoneBlock.setHardness(1.5);
+	stoneBlock.setHarvestRequirements(1);
+
 	registerBlock<Block>(BlockType::Sand,        369);
 	registerBlock<BlockWater>();
 	registerBlock<Block>(BlockType::Glass,       168);
-	registerBlock<Block>(BlockType::CoalOre,     36).setItemDrop(ItemType::Coal);
+
+	auto &coalBlock = registerBlock<Block>(BlockType::CoalOre, 36);
+	coalBlock.setItemDrop(ItemType::Coal);
+	coalBlock.setHardness(3);
+	coalBlock.setHarvestRequirements(1);
+
 	registerBlock<Block>(BlockType::Planks,      316);
 	registerBlock<Block>(BlockType::Glowstone,   218);
 	registerBlock<BlockWorkbench>();
@@ -58,10 +72,18 @@ void Registry::registerItems() {
 	registerItem<ItemBlock>(ItemType::IronOre,     BlockType::IronOre,     "Iron Ore");
 
 	registerItem<Item>(ItemType::Stick,        324, "Stick");
-	registerItem<Item>(ItemType::StoneAxe,     325, "Stone Axe");
+
+	auto &stoneAxe = registerItem<Item>(ItemType::StoneAxe,     325, "Stone Axe");
+	stoneAxe.setHarvestCapability(4);
+	stoneAxe.setMiningSpeed(4);
+
 	registerItem<Item>(ItemType::StoneHoe,     326, "Stone Hoe");
-	registerItem<Item>(ItemType::StonePickaxe, 327, "Stone Pickaxe");
-	registerItem<Item>(ItemType::StoneShovel,  328, "Stone Shovel");
+
+	auto &stonePickaxe = registerItem<Item>(ItemType::StonePickaxe, 327, "Stone Pickaxe");
+	stonePickaxe.setHarvestCapability(1);
+	stonePickaxe.setMiningSpeed(4);
+
+	registerItem<Item>(ItemType::StoneShovel,  328, "Stone Shovel").setHarvestCapability(2);
 	registerItem<Item>(ItemType::StoneSword,   329, "Stone Sword");
 
 	Item &itemCoal = registerItem<Item>(ItemType::Coal, 111, "Coal");
