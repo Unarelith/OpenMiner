@@ -22,7 +22,7 @@ class MenuWidget : public Widget {
 
 		void onEvent(const SDL_Event &event) override;
 
-		void addButton(u16 x, u16 y, const std::string &text, const TextButton::Callback &callback);
+		TextButton &addButton(u16 x, u16 y, const std::string &text, const TextButton::Callback &callback);
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;

@@ -16,6 +16,7 @@
 TextButton::TextButton(Widget *parent) : Widget(200, 20, parent) {
 	m_background.setClipRect(0, 66, 200, 20);
 	m_hoverBackground.setClipRect(0, 86, 200, 20);
+	m_disabledBackground.setClipRect(0, 46, 200, 20);
 }
 
 TextButton::TextButton(const Callback &callback, Widget *parent) : TextButton(parent) {
@@ -39,7 +40,9 @@ void TextButton::setText(const std::string &text) {
 void TextButton::draw(RenderTarget &target, RenderStates states) const {
 	applyTransform(states);
 
-	if (m_isHovered)
+	if (!m_isEnabled)
+		target.draw(m_disabledBackground, states);
+	else if (m_isHovered)
 		target.draw(m_hoverBackground, states);
 	else
 		target.draw(m_background, states);

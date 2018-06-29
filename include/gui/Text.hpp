@@ -22,6 +22,7 @@ class Text : public IDrawable, public Transformable {
 	public:
 		Text();
 
+		const std::string &text() const { return m_text; }
 		void setText(const std::string &text) { m_text = text; updateTextSprites(); }
 
 		const Vector2i &getSize() const { return m_size; }

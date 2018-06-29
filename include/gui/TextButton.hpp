@@ -28,20 +28,24 @@ class TextButton : public Widget {
 
 		void onEvent(const SDL_Event &event) override;
 
+		const std::string &text() const { return m_text.text(); }
 		void setText(const std::string &text);
 		void setCallback(const Callback &callback) { m_callback = callback; }
+		void setEnabled(bool isEnabled) { m_isEnabled = isEnabled; }
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
 		Image m_background{"texture-widgets"};
 		Image m_hoverBackground{"texture-widgets"};
+		Image m_disabledBackground{"texture-widgets"};
 
 		Text m_text;
 
 		Callback m_callback;
 
 		bool m_isHovered = false;
+		bool m_isEnabled = true;
 };
 
 #endif // TEXTBUTTON_HPP_
