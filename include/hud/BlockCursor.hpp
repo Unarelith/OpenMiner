@@ -33,7 +33,8 @@ class BlockCursor : public IDrawable {
 		void update(const Hotbar &hotbar, bool useDepthBuffer);
 
 	private:
-		void updateVertexBuffer(int animationPos = -1);
+		void updateVertexBuffer();
+		void updateAnimationVertexBuffer(int animationPos = -1);
 
 		void draw(RenderTarget &target, RenderStates states) const override;
 
@@ -47,6 +48,7 @@ class BlockCursor : public IDrawable {
 		glm::mat4 &m_projectionMatrix;
 
 		VertexBuffer m_vbo;
+		VertexBuffer m_animationVBO;
 
 		unsigned int m_animationStart = 0;
 		glm::vec4 m_selectedBlock{0, 0, 0, 0};

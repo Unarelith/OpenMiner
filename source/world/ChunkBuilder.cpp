@@ -138,6 +138,11 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 		vertex.normal[1] = normal.y;
 		vertex.normal[2] = normal.z;
 
+		vertex.color[0] = 1.0;
+		vertex.color[1] = 1.0;
+		vertex.color[2] = 1.0;
+		vertex.color[3] = 1.0;
+
 		vertex.texCoord[0] = faceTexCoords[j * 2];
 		vertex.texCoord[1] = faceTexCoords[j * 2 + 1];
 

@@ -21,7 +21,7 @@
 #include "Registry.hpp"
 #include "Vertex.hpp"
 
-void BlockCursor::updateVertexBuffer(int animationPos) {
+void BlockCursor::updateVertexBuffer() {
 	Vertex vertices[24] = {
 		// Right
 		{{1, 1, 1, -1}},
@@ -60,13 +60,56 @@ void BlockCursor::updateVertexBuffer(int animationPos) {
 		{{1, 0, 0, -1}},
 	};
 
-	// GLfloat color[4] = {1, 1, 1, 0.2};
-	// GLfloat color[4] = {0, 0, 0, 1};
-	// for (int i = 0 ; i < 24 ; ++i)
-	// 	memcpy(vertices[i].color, color, 4 * sizeof(GLfloat));
+	VertexBuffer::bind(&m_vbo);
+	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+	VertexBuffer::bind(nullptr);
+}
+
+void BlockCursor::updateAnimationVertexBuffer(int animationPos) {
+	Vertex vertices[24] = {
+		// Right
+		{{1, 1, 1, -1}},
+		{{1, 1, 0, -1}},
+		{{1, 0, 0, -1}},
+		{{1, 0, 1, -1}},
+
+		// Top
+		{{1, 1, 1, -1}},
+		{{0, 1, 1, -1}},
+		{{0, 1, 0, -1}},
+		{{1, 1, 0, -1}},
+
+		// Back
+		{{1, 1, 1, -1}},
+		{{1, 0, 1, -1}},
+		{{0, 0, 1, -1}},
+		{{0, 1, 1, -1}},
+
+		// Left
+		{{0, 1, 1, -1}},
+		{{0, 1, 0, -1}},
+		{{0, 0, 0, -1}},
+		{{0, 0, 1, -1}},
+
+		// Bottom
+		{{1, 0, 1, -1}},
+		{{0, 0, 1, -1}},
+		{{0, 0, 0, -1}},
+		{{1, 0, 0, -1}},
+
+		// Front
+		{{0, 0, 0, -1}},
+		{{0, 1, 0, -1}},
+		{{1, 1, 0, -1}},
+		{{1, 0, 0, -1}},
+	};
+
+	GLfloat color[4] = {1, 1, 1, 0.5};
+	for (int i = 0 ; i < 24 ; ++i)
+		memcpy(vertices[i].color, color, 4 * sizeof(GLfloat));
 
 	if (animationPos != -1) {
-		glm::vec4 blockTexCoords{0.1 * animationPos, 0.0, 0.1 + 0.1 * animationPos, 1.0};
+		glm::vec4 blockTexCoords{0.1f * animationPos, 0.0, 0.1f + 0.1f * animationPos, 1.0};
 		float faceTexCoords[2 * 4] = {
 			blockTexCoords.x, blockTexCoords.w,
 			blockTexCoords.z, blockTexCoords.w,
@@ -82,8 +125,8 @@ void BlockCursor::updateVertexBuffer(int animationPos) {
 		}
 	}
 
-	VertexBuffer::bind(&m_vbo);
-	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+	VertexBuffer::bind(&m_animationVBO);
+	m_animationVBO.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	VertexBuffer::bind(nullptr);
 }
 
@@ -143,7 +186,8 @@ void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
 		m_animationStart = GameClock::getTicks();
 	}
 
-	updateVertexBuffer((GameClock::getTicks() - m_animationStart) / (timeToBreak * 100));
+	if (m_animationStart)
+		updateAnimationVertexBuffer((GameClock::getTicks() - m_animationStart) / (timeToBreak * 100));
 }
 
 #include "ResourceHandler.hpp"
@@ -158,11 +202,13 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 	states.modelMatrix = &modelMatrix;
 
 	target.draw(m_vbo, GL_LINES, 0, 24, states);
-	// target.draw(m_vbo, GL_QUADS, m_selectedBlock.w * 4, 4, states);
-	states.texture = &ResourceHandler::getInstance().get<Texture>("texture-block_destroy");
-	// target.draw(m_vbo, GL_QUADS, m_selectedBlock.w * 4, 4, states);
-	if (m_animationStart > 0)
-		target.draw(m_vbo, GL_QUADS, 0, 24, states);
+
+	if (m_animationStart > 0) {
+		glBlendFunc(GL_DST_COLOR, GL_ZERO);
+		states.texture = &ResourceHandler::getInstance().get<Texture>("texture-block_destroy");
+		target.draw(m_animationVBO, GL_QUADS, 0, 24, states);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_POLYGON_OFFSET_FILL);
