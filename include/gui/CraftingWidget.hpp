@@ -28,6 +28,9 @@ class CraftingWidget : public Widget {
 
 		const ItemWidget *currentItemWidget() const { return m_craftingResultInventoryWidget.currentItemWidget() ? m_craftingResultInventoryWidget.currentItemWidget() : m_craftingInventoryWidget.currentItemWidget(); }
 
+		InventoryWidget &craftingInventoryWidget() { return m_craftingInventoryWidget; }
+		InventoryWidget &craftingResultInventoryWidget() { return m_craftingResultInventoryWidget; }
+
 	protected:
 		Inventory &m_craftingInventory;
 		InventoryWidget m_craftingInventoryWidget{this};

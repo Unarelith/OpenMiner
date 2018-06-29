@@ -49,7 +49,7 @@ class BlockCursor : public IDrawable {
 		VertexBuffer m_vbo;
 
 		unsigned int m_animationStart = 0;
-		glm::vec4 m_selectedBlock;
+		glm::vec4 m_selectedBlock{0, 0, 0, 0};
 };
 
 #endif // BLOCKCURSOR_HPP_

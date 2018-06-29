@@ -14,7 +14,7 @@
 #ifndef PLAYERINVENTORYWIDGET_HPP_
 #define PLAYERINVENTORYWIDGET_HPP_
 
-#include "SmallCraftingWidget.hpp"
+#include "CraftingWidget.hpp"
 
 class PlayerInventoryWidget : public Widget {
 	public:
@@ -29,7 +29,8 @@ class PlayerInventoryWidget : public Widget {
 
 		Image m_background;
 
-		SmallCraftingWidget m_craftingWidget{this};
+		Inventory m_craftingInventory{2, 2};
+		CraftingWidget m_craftingWidget{m_craftingInventory, this};
 
 		Inventory &m_playerInventory;
 		InventoryWidget m_playerInventoryWidget{this};

@@ -24,6 +24,9 @@ PlayerInventoryWidget::PlayerInventoryWidget(Inventory &playerInventory, Invento
 
 	m_hotbarInventoryWidget.init(m_hotbarInventory);
 	m_hotbarInventoryWidget.setPosition(7, 141, 0);
+
+	m_craftingWidget.craftingInventoryWidget().setPosition(97, 17, 0);
+	m_craftingWidget.craftingResultInventoryWidget().setPosition(153, 27, 0);
 }
 
 void PlayerInventoryWidget::onEvent(const SDL_Event &event) {
