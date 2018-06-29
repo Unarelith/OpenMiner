@@ -92,7 +92,7 @@ std::size_t ChunkBuilder::buildChunk(const Chunk &chunk, const VertexBuffer &vbo
 void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Block *block, const Block *surroundingBlock) {
 	// Skip hidden faces
 	if(surroundingBlock && surroundingBlock->id()
-	&& (surroundingBlock->isOpaque() || (block->id() == surroundingBlock->id() && block->id() != 4)))
+	&& (surroundingBlock->isOpaque() || (block->id() == surroundingBlock->id() && block->id() != BlockType::Leaves)))
 		return;
 
 	static glm::vec3 a, b, c, v1, v2, normal;
@@ -117,7 +117,7 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 	// Computing face normal (already normalized because cubeCoords are normalized)
 	normal = glm::cross(v1, v2);
 
-	const glm::vec4 &blockTexCoords = block->getTexCoords(i);
+	const glm::vec4 &blockTexCoords = block->getTexCoords(i, chunk.getData(x, y, z));
 	float faceTexCoords[2 * 4] = {
 		blockTexCoords.x, blockTexCoords.w,
 		blockTexCoords.z, blockTexCoords.w,

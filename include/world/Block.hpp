@@ -32,7 +32,7 @@ class Block {
 		virtual bool onBlockActivated(const glm::ivec3 &, Player &, World &) const { return false; }
 		virtual void onNeighbourUpdate(const glm::ivec3 &, const glm::ivec3 &, Chunk &) const {}
 
-		virtual glm::vec4 getTexCoords(int face) const;
+		virtual glm::vec4 getTexCoords(int face, u16 blockData) const;
 
 		u16 id() const { return m_id & 0xffff; }
 		u16 data() const { return (m_id >> 16) & 0xffff; }
@@ -46,6 +46,8 @@ class Block {
 		bool canUpdate() const { return m_canUpdate; }
 
 	protected:
+		glm::vec4 getTexCoordsFromID(int textureID) const;
+
 		bool m_canUpdate = false;
 
 	private:

@@ -20,6 +20,8 @@ class BlockFurnace : public Block {
 	public:
 		BlockFurnace();
 
+		glm::vec4 getTexCoords(int face, u16 blockData) const override;
+
 		bool onBlockActivated(const glm::ivec3 &blockPosition, Player &player, World &world) const override;
 		void onTick(const glm::ivec3 &blockPosition, Player &player, Chunk &chunk, World &world) const override;
 };

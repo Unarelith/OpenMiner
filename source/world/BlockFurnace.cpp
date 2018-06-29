@@ -23,6 +23,17 @@ BlockFurnace::BlockFurnace() : Block(BlockType::Furnace, 164) {
 	m_canUpdate = true;
 }
 
+glm::vec4 BlockFurnace::getTexCoords(int face, u16 blockData) const {
+	u32 texID = textureID();
+	if (face == 1 || face == 4 || face == 5) texID = 166;
+	if (face == 3 || face == 2) texID = 167;
+
+	if (face == 0 && blockData)
+		texID = 165;
+
+	return getTexCoordsFromID(texID);
+}
+
 bool BlockFurnace::onBlockActivated(const glm::ivec3 &blockPosition, Player &player, World &world) const {
 	BlockData *data = world.getBlockData(blockPosition.x, blockPosition.y, blockPosition.z);
 	if (!data)
@@ -50,13 +61,18 @@ void BlockFurnace::onTick(const glm::ivec3 &blockPosition, Player &, Chunk &, Wo
 		data->inventory.setStack(2, 0, fuelStack.item().id(), fuelStack.amount() - 1);
 		ticksRemaining = fuelStack.item().burnTime();
 		currentBurnTime = fuelStack.item().burnTime();
+		world.setData(blockPosition.x, blockPosition.y, blockPosition.z, 1);
 	}
 	else if (ticksRemaining > 0 && (!outputStack.amount() || !outputStack.item().id() || outputStack.item().id() == ItemType::IronIngot)) { // FIXME
 		--ticksRemaining;
-		++itemProgress;
+		if (inputStack.amount())
+			++itemProgress;
+		else
+			itemProgress = 0;
 	}
 	else if (ticksRemaining == 0) {
 		currentBurnTime = 0;
+		world.setData(blockPosition.x, blockPosition.y, blockPosition.z, 0);
 	}
 
 	if (itemProgress >= 200) {

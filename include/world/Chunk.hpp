@@ -45,8 +45,10 @@ class Chunk : public NonCopyable, public IDrawable {
 
 		void update(Player &player, World &world);
 
-		u32 getBlock(int x, int y, int z) const;
-		void setBlock(int x, int y, int z, u32 id);
+		u16 getBlock(int x, int y, int z) const;
+		u16 getData(int x, int y, int z) const;
+		void setBlock(int x, int y, int z, u16 type);
+		void setData(int x, int y, int z, u16 data);
 
 		BlockData *getBlockData(int x, int y, int z);
 

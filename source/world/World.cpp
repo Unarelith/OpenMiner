@@ -141,7 +141,7 @@ Chunk *World::getChunk(int cx, int cy, int cz) const {
 	return m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
 }
 
-u32 World::getBlock(int x, int y, int z) const {
+u16 World::getBlock(int x, int y, int z) const {
 	int cx = (x + Chunk::width * (m_width / 2)) / Chunk::width;
 	int cy = (y + Chunk::height * (m_height / 2)) / Chunk::height;
 	int cz = (z + Chunk::depth * (m_depth / 2)) / Chunk::depth;
@@ -155,7 +155,7 @@ u32 World::getBlock(int x, int y, int z) const {
 	return 0;
 }
 
-void World::setBlock(int x, int y, int z, u32 id) {
+void World::setBlock(int x, int y, int z, u16 id) {
 	int cx = (x + Chunk::width * (m_width / 2)) / Chunk::width;
 	int cy = (y + Chunk::height * (m_height / 2)) / Chunk::height;
 	int cz = (z + Chunk::depth * (m_depth / 2)) / Chunk::depth;
@@ -166,6 +166,33 @@ void World::setBlock(int x, int y, int z, u32 id) {
 	Chunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
 	if (chunk)
 		chunk->setBlock(x & (Chunk::width - 1), y & (Chunk::height - 1), z & (Chunk::depth - 1), id);
+}
+
+u16 World::getData(int x, int y, int z) const {
+	int cx = (x + Chunk::width * (m_width / 2)) / Chunk::width;
+	int cy = (y + Chunk::height * (m_height / 2)) / Chunk::height;
+	int cz = (z + Chunk::depth * (m_depth / 2)) / Chunk::depth;
+
+	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
+		return 0;
+
+	Chunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
+	if (chunk)
+		return chunk->getData(x & (Chunk::width - 1), y & (Chunk::height - 1), z & (Chunk::depth - 1));
+	return 0;
+}
+
+void World::setData(int x, int y, int z, u16 id) {
+	int cx = (x + Chunk::width * (m_width / 2)) / Chunk::width;
+	int cy = (y + Chunk::height * (m_height / 2)) / Chunk::height;
+	int cz = (z + Chunk::depth * (m_depth / 2)) / Chunk::depth;
+
+	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
+		return;
+
+	Chunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
+	if (chunk)
+		chunk->setData(x & (Chunk::width - 1), y & (Chunk::height - 1), z & (Chunk::depth - 1), id);
 }
 
 BlockData *World::getBlockData(int x, int y, int z) {

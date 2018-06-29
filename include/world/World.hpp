@@ -30,8 +30,11 @@ class World : public IDrawable {
 
 		Chunk *getChunk(int cx, int cy, int cz) const;
 
-		u32 getBlock(int x, int y, int z) const;
-		void setBlock(int x, int y, int z, u32 id);
+		u16 getBlock(int x, int y, int z) const;
+		void setBlock(int x, int y, int z, u16 id);
+
+		u16 getData(int x, int y, int z) const;
+		void setData(int x, int y, int z, u16 id);
 
 		BlockData *getBlockData(int x, int y, int z);
 

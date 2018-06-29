@@ -69,7 +69,7 @@ void Cube::updateVertexBuffer(const Block &block) const {
 	};
 
 	for (u8 i = 0 ; i < 6 ; ++i) {
-		const glm::vec4 &blockTexCoords = block.getTexCoords(i);
+		const glm::vec4 &blockTexCoords = block.getTexCoords(i, 0);
 		float faceTexCoords[2 * 4] = {
 			blockTexCoords.x, blockTexCoords.w,
 			blockTexCoords.z, blockTexCoords.w,
