@@ -22,7 +22,7 @@
 
 class TextButton : public Widget {
 	public:
-		using Callback = std::function<void(void)>;
+		using Callback = std::function<void(TextButton &)>;
 		TextButton(Widget *parent = nullptr);
 		TextButton(const Callback &callback, Widget *parent = nullptr);
 

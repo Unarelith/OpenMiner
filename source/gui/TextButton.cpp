@@ -28,7 +28,7 @@ void TextButton::onEvent(const SDL_Event &event) {
 		m_isHovered = isPointInWidget(event.motion.x, event.motion.y);
 	}
 	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && m_isHovered && m_callback) {
-		m_callback();
+		m_callback(*this);
 	}
 }
 

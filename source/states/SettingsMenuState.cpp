@@ -11,6 +11,8 @@
  *
  * =====================================================================================
  */
+#include <algorithm>
+
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
 #include "Keyboard.hpp"
@@ -28,12 +30,20 @@ SettingsMenuState::SettingsMenuState(ApplicationState *parent) : ApplicationStat
 	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	m_menuWidget.setScale(GUI_SCALE, GUI_SCALE, 1);
-	m_menuWidget.addButton(0, 7, "Done", [this] { m_stateStack->pop(); });
+	m_menuWidget.addButton(0, 7, "Done", [this] (TextButton &) { m_stateStack->pop(); });
 
-	m_menuWidget.addButton(0, 0, "Render distance: " + std::to_string(World::renderDistance), [] {}).setEnabled(false);
-	m_menuWidget.addButton(0, 1, "GUI Scale: " + std::to_string(GUI_SCALE), [] {}).setEnabled(false);
-	m_menuWidget.addButton(0, 2, "Fullscreen: OFF", [] {}).setEnabled(false);
-	m_menuWidget.addButton(0, 3, "Use VSync: OFF", [] {}).setEnabled(false);
+	m_menuWidget.addButton(0, 0, "Render distance: " + std::to_string(World::renderDistance), [] (TextButton &button) {
+		World::renderDistance = std::max(4, (World::renderDistance + 2) % 16);
+		button.setText("Render distance: " + std::to_string(World::renderDistance));
+	});
+
+	m_menuWidget.addButton(0, 1, "GUI Scale: " + std::to_string(GUI_SCALE), [] (TextButton &) {
+		// GUI_SCALE = std::max(1, GUI_SCALE % 5);
+		// button.setText("GUI Scale: " + std::to_string(GUI_SCALE));
+	}).setEnabled(false);
+
+	m_menuWidget.addButton(0, 2, "Fullscreen: OFF", [] (TextButton &) {}).setEnabled(false);
+	m_menuWidget.addButton(0, 3, "Use VSync: OFF", [] (TextButton &) {}).setEnabled(false);
 }
 
 void SettingsMenuState::onEvent(const SDL_Event &event) {

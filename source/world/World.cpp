@@ -19,6 +19,8 @@
 #include "ResourceHandler.hpp"
 #include "World.hpp"
 
+u16 World::renderDistance = 8;
+
 World::World() : m_texture(ResourceHandler::getInstance().get<Texture>("texture-blocks")) {
 	for(s32 z = 0 ; z < m_depth ; z++) {
 		for(s32 y = 0 ; y < m_height ; y++) {

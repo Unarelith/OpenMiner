@@ -39,7 +39,7 @@ class World : public IDrawable {
 		BlockData *getBlockData(int x, int y, int z);
 
 		// Render distance in chunks
-		static const u16 renderDistance = 8;
+		static u16 renderDistance;
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
