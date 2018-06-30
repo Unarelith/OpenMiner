@@ -23,4 +23,21 @@
 	<block id="13" name="Workbench"/>
 	<block id="14" name="Furnace" />
 	<block id="15" name="Iron Ore"    textureID="254" />
+	<block id="16" name="Undefined"   textureID="4" />
+	<block id="17" name="Undefined"   textureID="4" />
+	<block id="18" name="Undefined"   textureID="4" />
+	<block id="19" name="Undefined"   textureID="4" />
+	<block id="20" name="Undefined"   textureID="4" />
+	<block id="21" name="Undefined"   textureID="4" />
+	<block id="22" name="Undefined"   textureID="4" />
+	<block id="23" name="Undefined"   textureID="4" />
+	<block id="24" name="Undefined"   textureID="4" />
+	<block id="25" name="Undefined"   textureID="4" />
+	<block id="26" name="Undefined"   textureID="4" />
+	<block id="27" name="Undefined"   textureID="4" />
+	<block id="28" name="Undefined"   textureID="4" />
+	<block id="29" name="Undefined"   textureID="4" />
+	<block id="30" name="Undefined"   textureID="4" />
+	<block id="31" name="Undefined"   textureID="4" />
+	<block id="32" name="Undefined"   textureID="4" />
 </blocks>

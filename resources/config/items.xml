@@ -15,12 +15,29 @@
 	<item id="13" name="Workbench"   />
 	<item id="14" name="Furnace"     />
 	<item id="15" name="Iron Ore"    />
-	<item id="16" name="Stick"         textureID="324" />
-	<item id="17" name="Stone Axe"     textureID="325" miningSpeed="4" harvestCapability="4"/>
-	<item id="18" name="Stone Hoe"     textureID="326" />
-	<item id="19" name="Stone Pickaxe" textureID="327" miningSpeed="4" harvestCapability="1" />
-	<item id="20" name="Stone Shovel"  textureID="328" miningSpeed="4" harvestCapability="2" />
-	<item id="21" name="Stone Sword"   textureID="329" />
-	<item id="22" name="Coal"          textureID="111" burnTime="1600" />
-	<item id="23" name="Iron Ingot"    textureID="232" />
+	<item id="16" name="Undefined"   />
+	<item id="17" name="Undefined"   />
+	<item id="18" name="Undefined"   />
+	<item id="19" name="Undefined"   />
+	<item id="20" name="Undefined"   />
+	<item id="21" name="Undefined"   />
+	<item id="22" name="Undefined"   />
+	<item id="23" name="Undefined"   />
+	<item id="24" name="Undefined"   />
+	<item id="25" name="Undefined"   />
+	<item id="26" name="Undefined"   />
+	<item id="27" name="Undefined"   />
+	<item id="28" name="Undefined"   />
+	<item id="29" name="Undefined"   />
+	<item id="30" name="Undefined"   />
+	<item id="31" name="Undefined"   />
+
+	<item id="32" name="Stick"         textureID="324" />
+	<item id="33" name="Stone Axe"     textureID="325" miningSpeed="4" harvestCapability="4"/>
+	<item id="34" name="Stone Hoe"     textureID="326" />
+	<item id="35" name="Stone Pickaxe" textureID="327" miningSpeed="4" harvestCapability="1" />
+	<item id="36" name="Stone Shovel"  textureID="328" miningSpeed="4" harvestCapability="2" />
+	<item id="37" name="Stone Sword"   textureID="329" />
+	<item id="38" name="Coal"          textureID="111" burnTime="1600" />
+	<item id="39" name="Iron Ingot"    textureID="232" />
 </items>
