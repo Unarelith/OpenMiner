@@ -44,7 +44,10 @@ void CraftingWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mouse
 
 void CraftingWidget::update() {
 	const Recipe *recipe = Registry::getInstance().getRecipe(m_craftingInventory);
-	if (!m_recipe || (m_recipe != recipe && recipe->type() == "craft")) {
+	if (recipe && recipe->type() != "craft")
+		recipe = nullptr;
+
+	if ((!m_recipe || m_recipe != recipe)) {
 		m_recipe = recipe;
 
 		if (m_recipe)
