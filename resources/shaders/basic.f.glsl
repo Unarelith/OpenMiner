@@ -6,6 +6,8 @@ varying float v_faceValue;
 
 uniform sampler2D u_tex;
 
+// uniform int u_renderType;
+
 void main() {
 	vec4 color = v_color;
 
@@ -13,6 +15,11 @@ void main() {
 		vec4 texColor = texture2D(u_tex, v_texCoord);
 		color = vec4(texColor.rgb - (1 - color.rgb), min(texColor.a, color.a));
 	}
+
+	// if (u_renderType == -1) {
+	// 	float averageColor = (color.r + color.g + color.b) / 3.0f;
+	// 	color.rgb = vec3(averageColor, averageColor, averageColor);
+	// }
 
 	if (color.a < 0.3) discard;
 
