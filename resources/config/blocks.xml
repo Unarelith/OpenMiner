@@ -20,7 +20,7 @@
 
 	<block id="11" name="Planks"      textureID="316" />
 	<block id="12" name="Glowstone"   textureID="218" />
-	<block id="13" name="Workbench"/>
+	<block id="13" name="Workbench" />
 	<block id="14" name="Furnace" />
 	<block id="15" name="Iron Ore"    textureID="254" hardness="3" harvestRequirements="1" />
 	<block id="16" name="Undefined"   textureID="4" />

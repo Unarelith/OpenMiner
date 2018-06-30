@@ -33,14 +33,20 @@ namespace ItemType {
 		Furnace      = 14,
 		IronOre      = 15,
 
-		Stick        = 32,
-		StoneAxe     = 33,
-		StoneHoe     = 34,
-		StonePickaxe = 35,
-		StoneShovel  = 36,
-		StoneSword   = 37,
-		Coal         = 38,
-		IronIngot    = 39
+		Stick         = 32,
+		StoneAxe      = 33,
+		StoneHoe      = 34,
+		StonePickaxe  = 35,
+		StoneShovel   = 36,
+		StoneSword    = 37,
+		Coal          = 38,
+		IronIngot     = 39,
+		Charcoal      = 40,
+		WoodenAxe     = 41,
+		WoodenHoe     = 42,
+		WoodenPickaxe = 43,
+		WoodenShovel  = 44,
+		WoodenSword   = 45,
 	};
 }
 

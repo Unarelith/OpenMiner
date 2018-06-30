@@ -32,12 +32,18 @@
 	<item id="30" name="Undefined"   />
 	<item id="31" name="Undefined"   />
 
-	<item id="32" name="Stick"         textureID="324" />
-	<item id="33" name="Stone Axe"     textureID="325" miningSpeed="4" harvestCapability="4"/>
-	<item id="34" name="Stone Hoe"     textureID="326" />
-	<item id="35" name="Stone Pickaxe" textureID="327" miningSpeed="4" harvestCapability="1" />
-	<item id="36" name="Stone Shovel"  textureID="328" miningSpeed="4" harvestCapability="2" />
-	<item id="37" name="Stone Sword"   textureID="329" />
-	<item id="38" name="Coal"          textureID="111" burnTime="1600" />
-	<item id="39" name="Iron Ingot"    textureID="232" />
+	<item id="32" name="Stick"          textureID="324" />
+	<item id="33" name="Stone Axe"      textureID="325" miningSpeed="4" harvestCapability="4"/>
+	<item id="34" name="Stone Hoe"      textureID="326" />
+	<item id="35" name="Stone Pickaxe"  textureID="327" miningSpeed="4" harvestCapability="1" />
+	<item id="36" name="Stone Shovel"   textureID="328" miningSpeed="4" harvestCapability="2" />
+	<item id="37" name="Stone Sword"    textureID="329" />
+	<item id="38" name="Coal"           textureID="111" burnTime="1600" />
+	<item id="39" name="Iron Ingot"     textureID="232" />
+	<item id="40" name="Charcoal"       textureID="41"  burnTime="1600" />
+	<item id="41" name="Wooden Axe"     textureID="337" miningSpeed="2" harvestCapability="4" />
+	<item id="42" name="Wooden Hoe"     textureID="338" />
+	<item id="43" name="Wooden Pickaxe" textureID="339" miningSpeed="2" harvestCapability="1" />
+	<item id="44" name="Wooden Shovel"  textureID="340" miningSpeed="2" harvestCapability="2" />
+	<item id="45" name="Wooden Sword"   textureID="341" />
 </items>
