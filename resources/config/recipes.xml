@@ -1,0 +1,92 @@
+<recipes>
+	<recipe>
+		<pattern string="##" />
+		<pattern string="#|" />
+		<pattern string=" |" />
+
+		<key char="#" item="2" />
+		<key char="|" item="16" />
+
+		<result item="17" amount="1" />
+	</recipe>
+
+	<recipe>
+		<pattern string="##" />
+		<pattern string=" |" />
+		<pattern string=" |" />
+
+		<key char="#" item="2" />
+		<key char="|" item="16" />
+
+		<result item="18" amount="1" />
+	</recipe>
+
+	<recipe>
+		<pattern string="###" />
+		<pattern string=" | " />
+		<pattern string=" | " />
+
+		<key char="#" item="2" />
+		<key char="|" item="16" />
+
+		<result item="19" amount="1" />
+	</recipe>
+
+	<recipe>
+		<pattern string="#" />
+		<pattern string="|" />
+		<pattern string="|" />
+
+		<key char="#" item="2" />
+		<key char="|" item="16" />
+
+		<result item="20" amount="1" />
+	</recipe>
+
+	<recipe>
+		<pattern string="#" />
+		<pattern string="#" />
+		<pattern string="|" />
+
+		<key char="#" item="2" />
+		<key char="|" item="16" />
+
+		<result item="21" amount="1" />
+	</recipe>
+
+	<recipe>
+		<pattern string="#" />
+		<pattern string="#" />
+
+		<key char="#" item="11" />
+
+		<result item="16" amount="4" />
+	</recipe>
+
+	<recipe>
+		<pattern string="#" />
+
+		<key char="#" item="5" />
+
+		<result item="11" amount="4" />
+	</recipe>
+
+	<recipe>
+		<pattern string="##" />
+		<pattern string="##" />
+
+		<key char="#" item="11" />
+
+		<result item="13" amount="1" />
+	</recipe>
+
+	<recipe>
+		<pattern string="###" />
+		<pattern string="# #" />
+		<pattern string="###" />
+
+		<key char="#" item="2" />
+
+		<result item="14" amount="1" />
+	</recipe>
+</recipes>

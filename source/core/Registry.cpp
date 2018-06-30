@@ -17,199 +17,106 @@
 #include "BlockFurnace.hpp"
 #include "BlockWater.hpp"
 #include "BlockWorkbench.hpp"
+#include "XMLFile.hpp"
 
 Registry *Registry::s_instance = nullptr;
 
 void Registry::registerBlocks() {
-	registerBlock<Block>(BlockType::Air,         0);
-	registerBlock<Block>(BlockType::Dirt,        37);
+	XMLFile doc("resources/config/blocks.xml");
 
-	auto &cobblestoneBlock = registerBlock<Block>(BlockType::Cobblestone, 38);
-	cobblestoneBlock.setHarvestRequirements(1);
-	cobblestoneBlock.setHardness(2);
+	tinyxml2::XMLElement *blockElement = doc.FirstChildElement("blocks").FirstChildElement("block").ToElement();
+	while (blockElement) {
+		u16 id = blockElement->UnsignedAttribute("id");
+		// const char *name = blockElement->Attribute("name");
 
-	registerBlock<Block>(BlockType::Grass,       226);
-	registerBlock<Block>(BlockType::Leaves,      266).setHardness(0.5);
-	registerBlock<Block>(BlockType::Wood,        277).setHardness(2);
+		if (id == BlockType::Workbench)    registerBlock<BlockWorkbench>();
+		else if (id == BlockType::Furnace) registerBlock<BlockFurnace>();
+		else if (id == BlockType::Water)   registerBlock<BlockWater>();
+		else {
+			u16 textureID = blockElement->UnsignedAttribute("textureID");
 
-	auto &stoneBlock = registerBlock<Block>(BlockType::Stone, 402);
-	stoneBlock.setItemDrop(ItemType::Cobblestone);
-	stoneBlock.setHardness(1.5);
-	stoneBlock.setHarvestRequirements(1);
+			auto &block = registerBlock<Block>(id, textureID);
 
-	registerBlock<Block>(BlockType::Sand,        369);
-	registerBlock<BlockWater>();
-	registerBlock<Block>(BlockType::Glass,       168);
+			float hardness = 0;
+			if (blockElement->QueryFloatAttribute("hardness", &hardness) == tinyxml2::XMLError::XML_SUCCESS)
+				block.setHardness(hardness);
 
-	auto &coalBlock = registerBlock<Block>(BlockType::CoalOre, 36);
-	coalBlock.setItemDrop(ItemType::Coal);
-	coalBlock.setHardness(3);
-	coalBlock.setHarvestRequirements(1);
+			unsigned int harvestRequirements = 0;
+			if (blockElement->QueryUnsignedAttribute("harvestRequirements", &harvestRequirements) == tinyxml2::XMLError::XML_SUCCESS)
+				block.setHarvestRequirements(harvestRequirements);
+		}
 
-	registerBlock<Block>(BlockType::Planks,      316);
-	registerBlock<Block>(BlockType::Glowstone,   218);
-	registerBlock<BlockWorkbench>();
-	registerBlock<BlockFurnace>();
-	registerBlock<Block>(BlockType::IronOre,     254);
+		blockElement = blockElement->NextSiblingElement("block");
+	}
 }
 
 void Registry::registerItems() {
-	registerItem<ItemBlock>(ItemType::Air,         BlockType::Air,         "");
-	registerItem<ItemBlock>(ItemType::Dirt,        BlockType::Dirt,        "Dirt");
-	registerItem<ItemBlock>(ItemType::Cobblestone, BlockType::Cobblestone, "Cobblestone");
-	registerItem<ItemBlock>(ItemType::Grass,       BlockType::Grass,       "Grass");
-	registerItem<ItemBlock>(ItemType::Leaves,      BlockType::Leaves,      "Leaves");
-	registerItem<ItemBlock>(ItemType::Wood,        BlockType::Wood,        "Wood");
-	registerItem<ItemBlock>(ItemType::Stone,       BlockType::Stone,       "Stone");
-	registerItem<ItemBlock>(ItemType::Sand,        BlockType::Sand,        "Sand");
-	registerItem<ItemBlock>(ItemType::Water,       BlockType::Water,       "Water");
-	registerItem<ItemBlock>(ItemType::Glass,       BlockType::Glass,       "Glass");
-	registerItem<ItemBlock>(ItemType::CoalOre,     BlockType::CoalOre,     "Coal Ore");
-	registerItem<ItemBlock>(ItemType::Planks,      BlockType::Planks,      "Planks");
-	registerItem<ItemBlock>(ItemType::Glowstone,   BlockType::Glowstone,   "Glowstone");
-	registerItem<ItemBlock>(ItemType::Workbench,   BlockType::Workbench,   "Workbench");
-	registerItem<ItemBlock>(ItemType::Furnace,     BlockType::Furnace,     "Furnace");
-	registerItem<ItemBlock>(ItemType::IronOre,     BlockType::IronOre,     "Iron Ore");
+	XMLFile doc("resources/config/items.xml");
 
-	registerItem<Item>(ItemType::Stick,        324, "Stick");
+	tinyxml2::XMLElement *itemElement = doc.FirstChildElement("items").FirstChildElement("item").ToElement();
+	while (itemElement) {
+		u16 id = itemElement->UnsignedAttribute("id");
+		const char *name = itemElement->Attribute("name");
 
-	auto &stoneAxe = registerItem<Item>(ItemType::StoneAxe,     325, "Stone Axe");
-	stoneAxe.setHarvestCapability(4);
-	stoneAxe.setMiningSpeed(4);
+		unsigned int textureID;
+		if (itemElement->QueryUnsignedAttribute("textureID", &textureID) == tinyxml2::XMLError::XML_SUCCESS) {
+			auto &item = registerItem<Item>(id, textureID, name);
 
-	registerItem<Item>(ItemType::StoneHoe,     326, "Stone Hoe");
+			float miningSpeed = 0;
+			if (itemElement->QueryFloatAttribute("miningSpeed", &miningSpeed) == tinyxml2::XMLError::XML_SUCCESS)
+				item.setMiningSpeed(miningSpeed);
 
-	auto &stonePickaxe = registerItem<Item>(ItemType::StonePickaxe, 327, "Stone Pickaxe");
-	stonePickaxe.setHarvestCapability(1);
-	stonePickaxe.setMiningSpeed(4);
+			unsigned int harvestCapability = 0;
+			if (itemElement->QueryUnsignedAttribute("harvestCapability", &harvestCapability) == tinyxml2::XMLError::XML_SUCCESS)
+				item.setHarvestCapability(harvestCapability);
+		}
+		else {
+			registerItem<ItemBlock>(id, id, name);
+		}
 
-	registerItem<Item>(ItemType::StoneShovel,  328, "Stone Shovel").setHarvestCapability(2);
-	registerItem<Item>(ItemType::StoneSword,   329, "Stone Sword");
-
-	Item &itemCoal = registerItem<Item>(ItemType::Coal, 111, "Coal");
-	itemCoal.setIsFuel(true);
-	itemCoal.setBurnTime(1600);
-
-	registerItem<Item>(ItemType::IronIngot,    232, "Iron Ingot");
-
-	// FIXME: Move this to Application or load from XML file
-	registerRecipes();
+		itemElement = itemElement->NextSiblingElement("item");
+	}
 }
 
 void Registry::registerRecipes() {
-	// m_recipes.emplace_back(std::array<u32, 9>{2, 2, 0, 2, ItemType::Stick, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StoneAxe});
-	// m_recipes.emplace_back(std::array<u32, 9>{2, 2, 0, 0, ItemType::Stick, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StoneHoe});
-	// m_recipes.emplace_back(std::array<u32, 9>{2, 2, 2, 0, ItemType::Stick, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StonePickaxe});
-	// m_recipes.emplace_back(std::array<u32, 9>{0, 2, 0, 0, ItemType::Stick, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StoneShovel});
-	// m_recipes.emplace_back(std::array<u32, 9>{0, 2, 0, 0, 2, 0, 0, ItemType::Stick, 0}, ItemStack{ItemType::StoneSword});
-    //
-	// m_recipes.emplace_back(std::array<u32, 9>{ItemType::Wood, 0, 0, 0, 0, 0, 0, 0, 0}, ItemStack{ItemType::Planks, 4}, true);
-	// m_recipes.emplace_back(std::array<u32, 9>{ItemType::Planks, ItemType::Planks, 0, 0, 0, 0, 0, 0, 0}, ItemStack{ItemType::Stick, 4}, true);
-    //
-	// m_recipes.emplace_back(std::array<u32, 9>{
-	// 		ItemType::Cobblestone, ItemType::Cobblestone, ItemType::Cobblestone,
-	// 		ItemType::Cobblestone, 0,                     ItemType::Cobblestone,
-	// 		ItemType::Cobblestone, ItemType::Cobblestone, ItemType::Cobblestone,
-	// }, ItemStack{ItemType::Furnace});
-    //
-	// // FIXME: This recipe will only for in the top-left corner
-	// //        Find a way to handle recipe size
-	// m_recipes.emplace_back(std::array<u32, 9>{
-	// 		ItemType::Planks, ItemType::Planks, 0,
-	// 		ItemType::Planks, ItemType::Planks, 0,
-	// 		0, 0, 0
-	// }, ItemStack{ItemType::Workbench});
+	XMLFile doc("resources/config/recipes.xml");
 
-	m_recipes.emplace_back(std::vector<std::string>{
-	                           "##",
-	                           "#|",
-	                           " |"
-	                       },
-	                       std::map<char, std::vector<u32>>{
-	                           {'#', {ItemType::Cobblestone}},
-	                           {'|', {ItemType::Stick}},
-	                       },
-	                       ItemStack{ItemType::StoneAxe});
+	tinyxml2::XMLElement *recipeElement = doc.FirstChildElement("recipes").FirstChildElement("recipe").ToElement();
+	while (recipeElement) {
+		std::vector<std::string> pattern;
+		std::map<char, std::vector<u32>> keys;
+		ItemStack result;
+		bool isShapeless = false;
 
-	m_recipes.emplace_back(std::vector<std::string>{
-	                           "##",
-	                           " |",
-	                           " |"
-	                       },
-	                       std::map<char, std::vector<u32>>{
-	                           {'#', {ItemType::Cobblestone}},
-	                           {'|', {ItemType::Stick}},
-	                       },
-	                       ItemStack{ItemType::StoneHoe});
+		tinyxml2::XMLElement *patternElement = recipeElement->FirstChildElement("pattern");
+		while (patternElement) {
+			pattern.emplace_back(patternElement->Attribute("string"));
+			patternElement = patternElement->NextSiblingElement("pattern");
+		}
 
-	m_recipes.emplace_back(std::vector<std::string>{
-	                           "###",
-	                           " | ",
-	                           " | "
-	                       },
-	                       std::map<char, std::vector<u32>>{
-	                           {'#', {ItemType::Cobblestone}},
-	                           {'|', {ItemType::Stick}},
-	                       },
-	                       ItemStack{ItemType::StonePickaxe});
+		tinyxml2::XMLElement *keyElement = recipeElement->FirstChildElement("key");
+		while (keyElement) {
+			char ch = keyElement->Attribute("char")[0];
+			u32 item = keyElement->UnsignedAttribute("item");
 
-	m_recipes.emplace_back(std::vector<std::string>{
-	                           "#",
-	                           "|",
-	                           "|"
-	                       },
-	                       std::map<char, std::vector<u32>>{
-	                           {'#', {ItemType::Cobblestone}},
-	                           {'|', {ItemType::Stick}},
-	                       },
-	                       ItemStack{ItemType::StoneShovel});
+			std::vector<u32> items;
+			items.emplace_back(item);
+			keys.emplace(ch, items);
 
-	m_recipes.emplace_back(std::vector<std::string>{
-	                           "#",
-	                           "#",
-	                           "|"
-	                       },
-	                       std::map<char, std::vector<u32>>{
-	                           {'#', {ItemType::Cobblestone}},
-	                           {'|', {ItemType::Stick}},
-	                       },
-	                       ItemStack{ItemType::StoneSword});
+			keyElement = keyElement->NextSiblingElement("key");
+		}
 
-	m_recipes.emplace_back(std::vector<std::string>{
-	                           "#",
-	                           "#",
-	                       },
-	                       std::map<char, std::vector<u32>>{
-	                           {'#', {ItemType::Planks}},
-	                       },
-	                       ItemStack{ItemType::Stick, 4});
+		tinyxml2::XMLElement *resultElement = recipeElement->FirstChildElement("result");
+		if (resultElement) {
+			u16 item = resultElement->UnsignedAttribute("item");
+			u16 amount = resultElement->UnsignedAttribute("amount");
+			result = ItemStack{item, amount};
+		}
 
-	m_recipes.emplace_back(std::vector<std::string>{
-	                           "#",
-	                       },
-	                       std::map<char, std::vector<u32>>{
-	                           {'#', {ItemType::Wood}},
-	                       },
-	                       ItemStack{ItemType::Planks, 4});
+		m_recipes.emplace_back(pattern, keys, result, isShapeless);
 
-	m_recipes.emplace_back(std::vector<std::string>{
-	                           "##",
-	                           "##",
-	                       },
-	                       std::map<char, std::vector<u32>>{
-	                           {'#', {ItemType::Planks}},
-	                       },
-	                       ItemStack{ItemType::Workbench});
-
-	m_recipes.emplace_back(std::vector<std::string>{
-	                           "###",
-	                           "# #",
-	                           "###",
-	                       },
-	                       std::map<char, std::vector<u32>>{
-	                           {'#', {ItemType::Cobblestone}},
-	                       },
-	                       ItemStack{ItemType::Furnace});
+		recipeElement = recipeElement->NextSiblingElement("recipe");
+	}
 }
 
 const CraftingRecipe *Registry::getRecipe(const Inventory &inventory) const {

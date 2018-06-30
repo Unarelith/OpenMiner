@@ -1,0 +1,26 @@
+<items>
+	<item id="0"  name=""            />
+	<item id="1"  name="Dirt"        />
+	<item id="2"  name="Cobblestone" />
+	<item id="3"  name="Grass"       />
+	<item id="4"  name="Leaves"      />
+	<item id="5"  name="Wood"        />
+	<item id="6"  name="Stone"       />
+	<item id="7"  name="Sand"        />
+	<item id="8"  name="Water"       />
+	<item id="9"  name="Glass"       />
+	<item id="10" name="Coal Ore"    />
+	<item id="11" name="Planks"      />
+	<item id="12" name="Glowstone"   />
+	<item id="13" name="Workbench"   />
+	<item id="14" name="Furnace"     />
+	<item id="15" name="Iron Ore"    />
+	<item id="16" name="Stick"         textureID="324" />
+	<item id="17" name="Stone Axe"     textureID="325" miningSpeed="4" harvestCapability="4"/>
+	<item id="18" name="Stone Hoe"     textureID="326" />
+	<item id="19" name="Stone Pickaxe" textureID="327" miningSpeed="4" harvestCapability="1" />
+	<item id="20" name="Stone Shovel"  textureID="328" miningSpeed="4" harvestCapability="2" />
+	<item id="21" name="Stone Sword"   textureID="329" />
+	<item id="22" name="Coal"          textureID="111" />
+	<item id="23" name="Iron Ingot"    textureID="232" />
+</items>
