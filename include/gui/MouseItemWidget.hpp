@@ -42,6 +42,7 @@ class MouseItemWidget : public ItemWidget {
 
 		Sprite m_tooltipBackground{"texture-toasts", 160, 32};
 		Text m_tooltipText;
+		Text m_tooltipInfoText;
 };
 
 #endif // MOUSEITEMWIDGET_HPP_

@@ -14,9 +14,13 @@
 #include "MouseItemWidget.hpp"
 
 MouseItemWidget::MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0, parent) {
-	m_tooltipBackground.setColor(Color{255, 255, 255, 220});
+	m_tooltipBackground.setColor(Color{255, 255, 255, 240});
 	m_tooltipBackground.setPosition(20, 17, 0);
-	m_tooltipText.setPosition(27, 25, 0);
+
+	m_tooltipText.setPosition(26, 24, 0);
+
+	m_tooltipInfoText.setPosition(26, 35, 0);
+	m_tooltipInfoText.setColor({180, 180, 180});
 }
 
 void MouseItemWidget::onEvent(const SDL_Event &event) {
@@ -33,6 +37,11 @@ void MouseItemWidget::update(const ItemWidget *currentItemWidget) {
 	if (currentItemWidget) {
 		m_currentItemWidget = (currentItemWidget->stack().item().id()) ? currentItemWidget : nullptr;
 		m_tooltipText.setText(currentItemWidget->stack().item().name() + " [" + std::to_string(currentItemWidget->stack().item().id()) + "]");
+
+		if (currentItemWidget->stack().item().isFuel())
+			m_tooltipInfoText.setText("Burn time: " + std::to_string(currentItemWidget->stack().item().burnTime()) + " ticks");
+		else
+			m_tooltipInfoText.setText("");
 	}
 	else {
 		m_currentItemWidget = nullptr;
@@ -85,6 +94,7 @@ void MouseItemWidget::draw(RenderTarget &target, RenderStates states) const {
 	if (m_currentItemWidget) {
 		target.draw(m_tooltipBackground, states);
 		target.draw(m_tooltipText, states);
+		target.draw(m_tooltipInfoText, states);
 	}
 }
 

@@ -42,7 +42,7 @@ void Text::updateTextSprites() {
 		x += m_charWidth[(u8)c];
 	}
 	x = 0;
-	color = Color::white;
+	color = m_color;
 	for(char c : m_text) {
 		Sprite sprite{"texture-font", 8, 8};
 		sprite.setCurrentFrame(c);

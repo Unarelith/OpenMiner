@@ -25,6 +25,8 @@ class Text : public IDrawable, public Transformable {
 		const std::string &text() const { return m_text; }
 		void setText(const std::string &text) { m_text = text; updateTextSprites(); }
 
+		void setColor(const Color &color) { m_color = color; }
+
 		const Vector2i &getSize() const { return m_size; }
 
 	private:
@@ -42,6 +44,8 @@ class Text : public IDrawable, public Transformable {
 		VertexBuffer m_vbo;
 
 		Vector2i m_size;
+
+		Color m_color = Color::white;
 };
 
 #endif // TEXT_HPP_
