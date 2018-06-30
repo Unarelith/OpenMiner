@@ -23,17 +23,17 @@
 class RectangleShape : public IDrawable, public Transformable {
 	public:
 		RectangleShape() = default;
-		RectangleShape(u16 width, u16 height, const Color &color = Color::black);
+		RectangleShape(float width, float height, const Color &color = Color::black);
 
 		const Color &color() const { return m_color; }
 		void setColor(const Color &color) { m_color = color; updateVertexBuffer(); }
 
 		void setWireframeMode(bool wireframeMode) { m_wireframeMode = wireframeMode; }
 
-		u16 width() const { return m_width; }
-		u16 height() const { return m_height; }
+		float width() const { return m_width; }
+		float height() const { return m_height; }
 
-		void setSize(u16 width, u16 height) { m_width = width; m_height = height; updateVertexBuffer(); }
+		void setSize(float width, float height) { m_width = width; m_height = height; updateVertexBuffer(); }
 
 	private:
 		void updateVertexBuffer() const;

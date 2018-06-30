@@ -6,7 +6,7 @@ varying float v_faceValue;
 
 uniform sampler2D u_tex;
 
-// uniform int u_renderType;
+uniform int u_renderType;
 
 void main() {
 	vec4 color = v_color;

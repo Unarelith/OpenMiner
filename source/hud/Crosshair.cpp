@@ -25,9 +25,9 @@ Crosshair::Crosshair() {
 	float xFactor = SCREEN_WIDTH * SCREEN_HEIGHT / 100;
 	float yFactor = SCREEN_HEIGHT * SCREEN_WIDTH / 100;
 
-	m_hShape.setSize(0.002 * xFactor, 0.0004 * yFactor);
-	m_vShape1.setSize(0.0004 * xFactor, 0.001 * yFactor - m_hShape.height() / 2);
-	m_vShape2.setSize(0.0004 * xFactor, 0.001 * yFactor - m_hShape.height() / 2);
+	m_hShape.setSize(0.002 * xFactor, 0.0002 * yFactor);
+	m_vShape1.setSize(0.0002 * xFactor, 0.001 * yFactor - m_hShape.height() / 2);
+	m_vShape2.setSize(0.0002 * xFactor, 0.001 * yFactor - m_hShape.height() / 2);
 
 	m_hShape.setColor(Color{200, 200, 200, 180});
 	m_vShape1.setColor(Color{200, 200, 200, 180});
@@ -46,12 +46,8 @@ void Crosshair::draw(RenderTarget &target, RenderStates states) const {
 	// m_shader.setUniform("u_renderType", -1);
 	// Shader::bind(nullptr);
 
-	// glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);
-
 	target.draw(m_hShape, states);
 	target.draw(m_vShape1, states);
 	target.draw(m_vShape2, states);
-
-	// glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 

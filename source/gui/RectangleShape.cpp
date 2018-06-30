@@ -19,7 +19,7 @@
 #include "Shader.hpp"
 #include "Vertex.hpp"
 
-RectangleShape::RectangleShape(u16 width, u16 height, const Color &color) {
+RectangleShape::RectangleShape(float width, float height, const Color &color) {
 	m_color = color;
 
 	setSize(width, height);
