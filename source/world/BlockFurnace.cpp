@@ -17,6 +17,7 @@
 #include "FurnaceWidget.hpp"
 #include "InventoryState.hpp"
 #include "Player.hpp"
+#include "Registry.hpp"
 #include "World.hpp"
 
 BlockFurnace::BlockFurnace() : Block(BlockType::Furnace, 164) {
@@ -57,15 +58,19 @@ void BlockFurnace::onTick(const glm::ivec3 &blockPosition, Player &, Chunk &, Wo
 	u16 currentBurnTime = (data->data >> 16) & 0xffff;
 	u16 itemProgress = (data->data >> 32) & 0xffff;
 
-	if (ticksRemaining == 0 && fuelStack.amount() && inputStack.amount() && inputStack.item().id() == ItemType::IronOre) {
+	const Recipe *recipe = Registry::getInstance().getRecipe(data->inventory);
+	if (recipe && recipe->type() != "smelt")
+		recipe = nullptr;
+
+	if (ticksRemaining == 0 && recipe && fuelStack.amount() && (!outputStack.item().id() || !outputStack.amount() || outputStack.item().id() == recipe->result().item().id())) {
 		data->inventory.setStack(2, 0, fuelStack.item().id(), fuelStack.amount() - 1);
 		ticksRemaining = fuelStack.item().burnTime();
 		currentBurnTime = fuelStack.item().burnTime();
 		world.setData(blockPosition.x, blockPosition.y, blockPosition.z, 1);
 	}
-	else if (ticksRemaining > 0 && (!outputStack.amount() || !outputStack.item().id() || outputStack.item().id() == ItemType::IronIngot)) { // FIXME
+	else if (ticksRemaining > 0) {
 		--ticksRemaining;
-		if (inputStack.amount())
+		if (recipe && (!outputStack.item().id() || !outputStack.amount() || outputStack.item().id() == recipe->result().item().id()))
 			++itemProgress;
 		else
 			itemProgress = 0;
@@ -75,12 +80,10 @@ void BlockFurnace::onTick(const glm::ivec3 &blockPosition, Player &, Chunk &, Wo
 		world.setData(blockPosition.x, blockPosition.y, blockPosition.z, 0);
 	}
 
-	if (itemProgress >= 200) {
+	if (itemProgress >= 200 && recipe) {
 		itemProgress = 0;
-		if (inputStack.item().id() == ItemType::IronOre && inputStack.amount()) {
-			data->inventory.setStack(0, 0, inputStack.item().id(), inputStack.amount() - 1);
-			data->inventory.setStack(1, 0, ItemType::IronIngot, outputStack.amount() + 1);
-		}
+		data->inventory.setStack(0, 0, (inputStack.amount() - 1 > 0) ? inputStack.item().id() : 0, inputStack.amount() - 1);
+		data->inventory.setStack(1, 0, recipe->result().item().id(), outputStack.amount() + recipe->result().amount());
 	}
 
 	data->data = ticksRemaining | (currentBurnTime << 16) | ((u32)itemProgress << 32);

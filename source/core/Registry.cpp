@@ -11,8 +11,10 @@
  *
  * =====================================================================================
  */
+#include "CraftingRecipe.hpp"
 #include "ItemBlock.hpp"
 #include "Registry.hpp"
+#include "SmeltingRecipe.hpp"
 
 #include "BlockFurnace.hpp"
 #include "BlockWater.hpp"
@@ -69,6 +71,12 @@ void Registry::registerItems() {
 			unsigned int harvestCapability = 0;
 			if (itemElement->QueryUnsignedAttribute("harvestCapability", &harvestCapability) == tinyxml2::XMLError::XML_SUCCESS)
 				item.setHarvestCapability(harvestCapability);
+
+			unsigned int burnTime = 0;
+			if (itemElement->QueryUnsignedAttribute("burnTime", &burnTime) == tinyxml2::XMLError::XML_SUCCESS) {
+				item.setIsFuel(true);
+				item.setBurnTime(burnTime);
+			}
 		}
 		else {
 			registerItem<ItemBlock>(id, id, name);
@@ -83,46 +91,62 @@ void Registry::registerRecipes() {
 
 	tinyxml2::XMLElement *recipeElement = doc.FirstChildElement("recipes").FirstChildElement("recipe").ToElement();
 	while (recipeElement) {
-		std::vector<std::string> pattern;
-		std::map<char, std::vector<u32>> keys;
-		ItemStack result;
-		bool isShapeless = false;
+		std::string type = recipeElement->Attribute("type");
+		if (type == "craft") {
+			std::vector<std::string> pattern;
+			std::map<char, std::vector<u32>> keys;
+			ItemStack result;
+			bool isShapeless = false;
 
-		tinyxml2::XMLElement *patternElement = recipeElement->FirstChildElement("pattern");
-		while (patternElement) {
-			pattern.emplace_back(patternElement->Attribute("string"));
-			patternElement = patternElement->NextSiblingElement("pattern");
+			tinyxml2::XMLElement *patternElement = recipeElement->FirstChildElement("pattern");
+			while (patternElement) {
+				pattern.emplace_back(patternElement->Attribute("string"));
+				patternElement = patternElement->NextSiblingElement("pattern");
+			}
+
+			tinyxml2::XMLElement *keyElement = recipeElement->FirstChildElement("key");
+			while (keyElement) {
+				char ch = keyElement->Attribute("char")[0];
+				u32 item = keyElement->UnsignedAttribute("item");
+
+				std::vector<u32> items;
+				items.emplace_back(item);
+				keys.emplace(ch, items);
+
+				keyElement = keyElement->NextSiblingElement("key");
+			}
+
+			tinyxml2::XMLElement *resultElement = recipeElement->FirstChildElement("result");
+			if (resultElement) {
+				u16 item = resultElement->UnsignedAttribute("item");
+				u16 amount = resultElement->UnsignedAttribute("amount");
+				result = ItemStack{item, amount};
+			}
+
+			registerRecipe<CraftingRecipe>(pattern, keys, result, isShapeless);
 		}
+		else if (type == "smelt") {
+			tinyxml2::XMLElement *inputElement = recipeElement->FirstChildElement("input");
+			u16 inputItem = inputElement->UnsignedAttribute("id");
+			u16 inputAmount = inputElement->UnsignedAttribute("amount");
+			ItemStack input{inputItem, inputAmount};
 
-		tinyxml2::XMLElement *keyElement = recipeElement->FirstChildElement("key");
-		while (keyElement) {
-			char ch = keyElement->Attribute("char")[0];
-			u32 item = keyElement->UnsignedAttribute("item");
+			tinyxml2::XMLElement *outputElement = recipeElement->FirstChildElement("output");
+			u16 outputItem = outputElement->UnsignedAttribute("id");
+			u16 outputAmount = outputElement->UnsignedAttribute("amount");
+			ItemStack output{outputItem, outputAmount};
 
-			std::vector<u32> items;
-			items.emplace_back(item);
-			keys.emplace(ch, items);
-
-			keyElement = keyElement->NextSiblingElement("key");
+			registerRecipe<SmeltingRecipe>(input, output);
 		}
-
-		tinyxml2::XMLElement *resultElement = recipeElement->FirstChildElement("result");
-		if (resultElement) {
-			u16 item = resultElement->UnsignedAttribute("item");
-			u16 amount = resultElement->UnsignedAttribute("amount");
-			result = ItemStack{item, amount};
-		}
-
-		m_recipes.emplace_back(pattern, keys, result, isShapeless);
 
 		recipeElement = recipeElement->NextSiblingElement("recipe");
 	}
 }
 
-const CraftingRecipe *Registry::getRecipe(const Inventory &inventory) const {
-	for (const CraftingRecipe &recipe : m_recipes) {
-		if (recipe.isMatching(inventory))
-			return &recipe;
+const Recipe *Registry::getRecipe(const Inventory &inventory) const {
+	for (auto &recipe : m_recipes) {
+		if (recipe->isMatching(inventory))
+			return recipe.get();
 	}
 	return nullptr;
 }

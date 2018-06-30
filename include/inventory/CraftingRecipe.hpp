@@ -17,22 +17,19 @@
 #include <array>
 #include <map>
 
-#include "Inventory.hpp"
+#include "Recipe.hpp"
 
-class CraftingRecipe {
+class CraftingRecipe : public Recipe {
 	public:
 		CraftingRecipe(const std::vector<std::string> &pattern, const std::map<char, std::vector<u32>> &keys, const ItemStack &result, bool isShapeless = false);
 
-		bool isMatching(const Inventory &inventory) const;
-
-		const ItemStack &result() const { return m_result; }
+		bool isMatching(const Inventory &inventory) const override;
 
 	private:
 		bool checkMatch(const Inventory &inventory, int offsetX, int offsetY) const;
 
 		std::vector<std::string> m_pattern;
 		std::map<char, std::vector<u32>> m_keys;
-		ItemStack m_result;
 
 		bool m_isShapeless;
 };

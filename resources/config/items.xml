@@ -21,6 +21,6 @@
 	<item id="19" name="Stone Pickaxe" textureID="327" miningSpeed="4" harvestCapability="1" />
 	<item id="20" name="Stone Shovel"  textureID="328" miningSpeed="4" harvestCapability="2" />
 	<item id="21" name="Stone Sword"   textureID="329" />
-	<item id="22" name="Coal"          textureID="111" />
+	<item id="22" name="Coal"          textureID="111" burnTime="1600" />
 	<item id="23" name="Iron Ingot"    textureID="232" />
 </items>

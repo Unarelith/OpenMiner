@@ -16,7 +16,7 @@
 
 #include "InventoryWidget.hpp"
 
-class CraftingRecipe;
+class Recipe;
 
 class CraftingWidget : public Widget {
 	public:
@@ -41,7 +41,7 @@ class CraftingWidget : public Widget {
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		const CraftingRecipe *m_recipe = nullptr;
+		const Recipe *m_recipe = nullptr;
 };
 
 #endif // CRAFTINGWIDGET_HPP_

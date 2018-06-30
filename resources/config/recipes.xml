@@ -1,5 +1,5 @@
 <recipes>
-	<recipe>
+	<recipe type="craft">
 		<pattern string="##" />
 		<pattern string="#|" />
 		<pattern string=" |" />
@@ -10,7 +10,7 @@
 		<result item="17" amount="1" />
 	</recipe>
 
-	<recipe>
+	<recipe type="craft">
 		<pattern string="##" />
 		<pattern string=" |" />
 		<pattern string=" |" />
@@ -21,7 +21,7 @@
 		<result item="18" amount="1" />
 	</recipe>
 
-	<recipe>
+	<recipe type="craft">
 		<pattern string="###" />
 		<pattern string=" | " />
 		<pattern string=" | " />
@@ -32,7 +32,7 @@
 		<result item="19" amount="1" />
 	</recipe>
 
-	<recipe>
+	<recipe type="craft">
 		<pattern string="#" />
 		<pattern string="|" />
 		<pattern string="|" />
@@ -43,7 +43,7 @@
 		<result item="20" amount="1" />
 	</recipe>
 
-	<recipe>
+	<recipe type="craft">
 		<pattern string="#" />
 		<pattern string="#" />
 		<pattern string="|" />
@@ -54,7 +54,7 @@
 		<result item="21" amount="1" />
 	</recipe>
 
-	<recipe>
+	<recipe type="craft">
 		<pattern string="#" />
 		<pattern string="#" />
 
@@ -63,7 +63,7 @@
 		<result item="16" amount="4" />
 	</recipe>
 
-	<recipe>
+	<recipe type="craft">
 		<pattern string="#" />
 
 		<key char="#" item="5" />
@@ -71,7 +71,7 @@
 		<result item="11" amount="4" />
 	</recipe>
 
-	<recipe>
+	<recipe type="craft">
 		<pattern string="##" />
 		<pattern string="##" />
 
@@ -80,7 +80,7 @@
 		<result item="13" amount="1" />
 	</recipe>
 
-	<recipe>
+	<recipe type="craft">
 		<pattern string="###" />
 		<pattern string="# #" />
 		<pattern string="###" />
@@ -88,5 +88,20 @@
 		<key char="#" item="2" />
 
 		<result item="14" amount="1" />
+	</recipe>
+
+	<recipe type="smelt">
+		<input  id="15" amount="1" />
+		<output id="23" amount="1" />
+	</recipe>
+
+	<recipe type="smelt">
+		<input  id="2" amount="1" />
+		<output id="6" amount="1" />
+	</recipe>
+
+	<recipe type="smelt">
+		<input  id="7" amount="1" />
+		<output id="9" amount="1" />
 	</recipe>
 </recipes>

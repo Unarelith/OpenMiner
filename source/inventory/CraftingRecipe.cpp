@@ -20,10 +20,9 @@
 //        - Pattern section | char[3][3]
 //        - Key section     | map<char, vector<ItemType>>
 //        - Result section  | ItemStack
-CraftingRecipe::CraftingRecipe(const std::vector<std::string> &pattern, const std::map<char, std::vector<u32>> &keys, const ItemStack &result, bool isShapeless) {
+CraftingRecipe::CraftingRecipe(const std::vector<std::string> &pattern, const std::map<char, std::vector<u32>> &keys, const ItemStack &result, bool isShapeless) : Recipe("craft", result) {
 	m_pattern = pattern;
 	m_keys = keys;
-	m_result = result;
 
 	m_isShapeless = isShapeless;
 }

@@ -42,7 +42,9 @@ void FurnaceWidget::onEvent(const SDL_Event &event) {
 
 	m_inputInventoryWidget.onMouseEvent(event, m_mouseItemWidget);
 	m_outputInventoryWidget.onMouseEvent(event, m_mouseItemWidget);
-	m_fuelInventoryWidget.onMouseEvent(event, m_mouseItemWidget);
+
+	if (!m_mouseItemWidget.stack().item().id() || m_mouseItemWidget.stack().item().isFuel())
+		m_fuelInventoryWidget.onMouseEvent(event, m_mouseItemWidget);
 
 	m_mouseItemWidget.onEvent(event);
 }
