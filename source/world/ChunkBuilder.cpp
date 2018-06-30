@@ -53,6 +53,44 @@ static const float cubeCoords[6 * 4 * 3] = {
 	0, 1, 1,
 };
 
+static const float slabCoords[6 * 4 * 3] = {
+	// Left
+	0, 0, 0,
+	0, 0, 1,
+	0, .5, 1,
+	0, .5, 0,
+
+	// Right
+	1, 0, 1,
+	1, 0, 0,
+	1, .5, 0,
+	1, .5, 1,
+
+	// Bottom
+	0, 0, 0,
+	1, 0, 0,
+	1, 0, 1,
+	0, 0, 1,
+
+	// Top
+	0, .5, 1,
+	1, .5, 1,
+	1, .5, 0,
+	0, .5, 0,
+
+	// Front
+	1, 0, 0,
+	0, 0, 0,
+	0, .5, 0,
+	1, .5, 0,
+
+	// Back
+	0, 0, 1,
+	1, 0, 1,
+	1, .5, 1,
+	0, .5, 1,
+};
+
 std::size_t ChunkBuilder::buildChunk(const Chunk &chunk, const VertexBuffer &vbo) {
 	m_vertices.reserve(Chunk::width * Chunk::height * Chunk::depth * 6 * 4);
 
@@ -97,24 +135,26 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 
 	static glm::vec3 a, b, c, v1, v2, normal;
 
+	const float *vertexCoords = (block->id() == BlockType::PlankSlab) ? slabCoords : cubeCoords;
+
 	// Three points of the face
-	a.x = cubeCoords[i * 12 + 0];
-	a.y = cubeCoords[i * 12 + 1];
-	a.z = cubeCoords[i * 12 + 2];
+	a.x = vertexCoords[i * 12 + 0];
+	a.y = vertexCoords[i * 12 + 1];
+	a.z = vertexCoords[i * 12 + 2];
 
-	b.x = cubeCoords[i * 12 + 3];
-	b.y = cubeCoords[i * 12 + 4];
-	b.z = cubeCoords[i * 12 + 5];
+	b.x = vertexCoords[i * 12 + 3];
+	b.y = vertexCoords[i * 12 + 4];
+	b.z = vertexCoords[i * 12 + 5];
 
-	c.x = cubeCoords[i * 12 + 6];
-	c.y = cubeCoords[i * 12 + 7];
-	c.z = cubeCoords[i * 12 + 8];
+	c.x = vertexCoords[i * 12 + 6];
+	c.y = vertexCoords[i * 12 + 7];
+	c.z = vertexCoords[i * 12 + 8];
 
 	// Computing two vectors
 	v1 = b - a;
 	v2 = c - a;
 
-	// Computing face normal (already normalized because cubeCoords are normalized)
+	// Computing face normal (already normalized because vertexCoords are normalized)
 	normal = glm::cross(v1, v2);
 
 	const glm::vec4 &blockTexCoords = block->getTexCoords(i, chunk.getData(x, y, z));
@@ -129,9 +169,9 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 	for(u8 j = 0 ; j < 4 ; j++) {
 		Vertex vertex;
 
-		vertex.coord3d[0] = x + cubeCoords[i * 12 + j * 3];
-		vertex.coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1];
-		vertex.coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2];
+		vertex.coord3d[0] = x + vertexCoords[i * 12 + j * 3];
+		vertex.coord3d[1] = y + vertexCoords[i * 12 + j * 3 + 1];
+		vertex.coord3d[2] = z + vertexCoords[i * 12 + j * 3 + 2];
 		vertex.coord3d[3] = static_cast<GLfloat>(block->id());
 
 		vertex.normal[0] = normal.x;

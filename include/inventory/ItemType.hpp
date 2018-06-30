@@ -32,6 +32,7 @@ namespace ItemType {
 		Workbench    = 13,
 		Furnace      = 14,
 		IronOre      = 15,
+		PlankSlab    = 16,
 
 		Stick         = 32,
 		StoneAxe      = 33,

@@ -34,6 +34,7 @@ GameState::GameState() {
 	m_player.hotbarInventory().addStack(ItemType::Glass, 64);
 	m_player.hotbarInventory().addStack(ItemType::Glowstone, 64);
 	m_player.hotbarInventory().addStack(ItemType::Furnace, 1);
+	m_player.hotbarInventory().addStack(ItemType::PlankSlab, 64);
 
 	m_player.inventory().addStack(ItemType::Wood, 64);
 	m_player.inventory().addStack(ItemType::Planks, 64);
