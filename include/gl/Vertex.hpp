@@ -22,6 +22,7 @@ struct Vertex {
 	GLfloat normal[3]     = {0, 0, 0};
 	GLfloat texCoord[2]   = {-1, -1};
 	GLfloat lightValue[2] = {-1, -1};
+	GLfloat blockType     = -1;
 };
 
 #endif // VERTEX_HPP_

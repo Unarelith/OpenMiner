@@ -134,7 +134,7 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 		vertex.coord3d[0] = x + cubeCoords[i * 12 + j * 3]     * boundingBox.width  + boundingBox.x;
 		vertex.coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1] * boundingBox.height + boundingBox.y;
 		vertex.coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2] * boundingBox.depth  + boundingBox.z;
-		vertex.coord3d[3] = static_cast<GLfloat>(block->id());
+		vertex.coord3d[3] = i;
 
 		vertex.normal[0] = normal.x;
 		vertex.normal[1] = normal.y;
@@ -148,14 +148,16 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 		vertex.texCoord[0] = faceTexCoords[j * 2];
 		vertex.texCoord[1] = faceTexCoords[j * 2 + 1];
 
-		int sunlight = chunk.lightmap().getSunlight(x, y, z);
-		if ((i == 0 || i == 1 || i == 4 || i == 5) && sunlight > 2)
-			vertex.lightValue[0] = sunlight - 2;
-		if (i == 4 && sunlight > 3)
-			vertex.lightValue[0] = sunlight - 3;
-		else
-			vertex.lightValue[0] = sunlight;
+		// int sunlight = chunk.lightmap().getSunlight(x, y, z);
+		// if ((i == 0 || i == 1 || i == 4 || i == 5) && sunlight > 2)
+		// 	vertex.lightValue[0] = sunlight - 2;
+		// if (i == 4 && sunlight > 3)
+		// 	vertex.lightValue[0] = sunlight - 3;
+		// else
+		vertex.lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
 		vertex.lightValue[1] = chunk.lightmap().getTorchlight(x, y, z);
+
+		vertex.blockType = block->id();
 
 		m_vertices.emplace_back(vertex);
 	}

@@ -110,6 +110,7 @@ void Cube::draw(RenderTarget &target, RenderStates states) const {
 	states.projectionMatrix = &projectionMatrix;
 
 	states.texture = &m_texture;
+	states.vertexAttributes = VertexAttribute::Only2d;
 
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);

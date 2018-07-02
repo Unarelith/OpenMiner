@@ -1,5 +1,6 @@
 #version 120
 
+varying float v_blockFace;
 varying float v_blockID;
 varying float v_dist;
 
@@ -33,6 +34,7 @@ void main() {
 			color += vec4(-0.3, -0.1, -0.25, 0);
 	}
 
+
 	// FIXME: FINISH THIS WITH PROPER CODE AND SUN BASIC DISPLAY
 	// int maxTime = 5 * 1000;
 	// float time = mod(u_lightPosition, maxTime) / maxTime * 2 - 1;
@@ -42,6 +44,11 @@ void main() {
 	if (v_lightValue.x != -1) {
 		float ambientIntensity = max(max(v_lightValue.x, v_lightValue.y) / 16.0, 2.0 / 16.0);
 		float diffuseIntensity = max(v_lightValue.x, v_lightValue.y) / 32.0;
+
+		if (v_blockFace == 2)
+			ambientIntensity = max(ambientIntensity * 0.7, 2.0 / 16.0);
+		if (v_blockFace == 0 || v_blockFace == 1 || v_blockFace == 4 || v_blockFace == 5)
+			ambientIntensity = max(ambientIntensity * 0.8, 2.0 / 16.0);
 
 		color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
 	}

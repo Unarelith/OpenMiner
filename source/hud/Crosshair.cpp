@@ -41,6 +41,7 @@ Crosshair::Crosshair() {
 
 void Crosshair::draw(RenderTarget &target, RenderStates states) const {
 	states.shader = &m_shader;
+	states.vertexAttributes = VertexAttribute::Only2d;
 
 	// Shader::bind(&m_shader);
 	// m_shader.setUniform("u_renderType", -1);

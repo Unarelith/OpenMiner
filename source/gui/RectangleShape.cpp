@@ -58,6 +58,8 @@ void RectangleShape::draw(RenderTarget &target, RenderStates states) const {
 	static glm::mat4 projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
 	states.projectionMatrix = &projectionMatrix;
 
+	states.vertexAttributes = VertexAttribute::Only2d;
+
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
 

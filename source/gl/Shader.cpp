@@ -128,7 +128,7 @@ GLint Shader::attrib(const std::string &name) const {
 	GLint attrib = glGetAttribLocation(m_program, name.c_str());
 
 	if(attrib == -1) {
-		DEBUG("Could not bind attribute:", name);
+		throw EXCEPTION("Could not bind attribute:", name);
 	}
 
 	return attrib;

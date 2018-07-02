@@ -58,6 +58,7 @@ void Hotbar::draw(RenderTarget &target, RenderStates states) const {
 	applyTransform(states);
 
 	states.shader = &m_shader;
+	states.vertexAttributes = VertexAttribute::Only2d;
 
 	target.draw(m_background, states);
 
