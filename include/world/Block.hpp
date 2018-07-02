@@ -17,6 +17,7 @@
 #include <glm/glm.hpp>
 
 #include "BlockType.hpp"
+#include "Box.hpp"
 #include "IntTypes.hpp"
 #include "ItemStack.hpp"
 
@@ -59,6 +60,9 @@ class Block {
 			return ((m_harvestRequirements & harvestCapability) == m_harvestRequirements) ? 1.5 * m_hardness / miningSpeed : 5 * m_hardness;
 		}
 
+		const FloatBox &boundingBox() const { return m_boundingBox; }
+		void setBoundingBox(const FloatBox &boundingBox) { m_boundingBox = boundingBox; }
+
 	protected:
 		glm::vec4 getTexCoordsFromID(int textureID) const;
 
@@ -76,6 +80,8 @@ class Block {
 
 		u8 m_harvestRequirements = 0;
 		float m_hardness = 1.0f;
+
+		FloatBox m_boundingBox{0, 0, 0, 1, 1, 1};
 };
 
 #endif // BLOCK_HPP_

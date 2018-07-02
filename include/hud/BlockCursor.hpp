@@ -25,16 +25,15 @@ class Hotbar;
 class BlockCursor : public IDrawable {
 	public:
 		BlockCursor(Camera &camera, Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix)
-			: m_camera(camera), m_player(player), m_world(world), m_viewMatrix(viewMatrix), m_projectionMatrix(projectionMatrix)
-		{ updateVertexBuffer(); }
+			: m_camera(camera), m_player(player), m_world(world), m_viewMatrix(viewMatrix), m_projectionMatrix(projectionMatrix) {}
 
 		void onEvent(const SDL_Event &event, const Hotbar &hotbar);
 
 		void update(const Hotbar &hotbar, bool useDepthBuffer);
 
 	private:
-		void updateVertexBuffer();
-		void updateAnimationVertexBuffer(int animationPos = -1);
+		void updateVertexBuffer(const Block &block);
+		void updateAnimationVertexBuffer(const Block &block, int animationPos = -1);
 
 		void draw(RenderTarget &target, RenderStates states) const override;
 

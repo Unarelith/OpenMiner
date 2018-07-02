@@ -21,7 +21,7 @@
 #include "Registry.hpp"
 #include "Vertex.hpp"
 
-void BlockCursor::updateVertexBuffer() {
+void BlockCursor::updateVertexBuffer(const Block &block) {
 	Vertex vertices[24] = {
 		// Right
 		{{1, 1, 1, -1}},
@@ -59,13 +59,19 @@ void BlockCursor::updateVertexBuffer() {
 		{{1, 1, 0, -1}},
 		{{1, 0, 0, -1}},
 	};
+
+	for (u8 i = 0 ; i < 24 ; ++i) {
+		vertices[i].coord3d[0] = vertices[i].coord3d[0] * block.boundingBox().width  + block.boundingBox().x;
+		vertices[i].coord3d[1] = vertices[i].coord3d[1] * block.boundingBox().height + block.boundingBox().y;
+		vertices[i].coord3d[2] = vertices[i].coord3d[2] * block.boundingBox().depth  + block.boundingBox().z;
+	}
 
 	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	VertexBuffer::bind(nullptr);
 }
 
-void BlockCursor::updateAnimationVertexBuffer(int animationPos) {
+void BlockCursor::updateAnimationVertexBuffer(const Block &block, int animationPos) {
 	Vertex vertices[24] = {
 		// Right
 		{{1, 1, 1, -1}},
@@ -103,6 +109,12 @@ void BlockCursor::updateAnimationVertexBuffer(int animationPos) {
 		{{1, 1, 0, -1}},
 		{{1, 0, 0, -1}},
 	};
+
+	for (u8 i = 0 ; i < 24 ; ++i) {
+		vertices[i].coord3d[0] = vertices[i].coord3d[0] * block.boundingBox().width  + block.boundingBox().x;
+		vertices[i].coord3d[1] = vertices[i].coord3d[1] * block.boundingBox().height + block.boundingBox().y;
+		vertices[i].coord3d[2] = vertices[i].coord3d[2] * block.boundingBox().depth  + block.boundingBox().z;
+	}
 
 	GLfloat color[4] = {1, 1, 1, 0.5};
 	for (int i = 0 ; i < 24 ; ++i)
@@ -170,14 +182,23 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 }
 
 void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
+	bool selectedBlockChanged = false;
 	glm::vec4 selectedBlock = findSelectedBlock(useDepthBuffer);
 	if (selectedBlock.x != m_selectedBlock.x || selectedBlock.y != m_selectedBlock.y || selectedBlock.z != m_selectedBlock.z)
-		m_animationStart = (m_animationStart) ? GameClock::getTicks() : 0;
+		selectedBlockChanged = true;
 
 	m_selectedBlock = selectedBlock;
 
-	const ItemStack &currentStack = m_player.hotbarInventory().getStack(hotbar.cursorPos(), 0);
 	const Block &block = Registry::getInstance().getBlock(m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z));
+	// if (block.boundingBox().intersects(FloatBox{m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 1, 1, 1})) {
+	// 	selectedBlockChanged = false;
+	// 	m_selectedBlock.w = -1;
+	// }
+
+	if (selectedBlockChanged)
+		m_animationStart = (m_animationStart) ? GameClock::getTicks() : 0;
+
+	const ItemStack &currentStack = m_player.hotbarInventory().getStack(hotbar.cursorPos(), 0);
 	float timeToBreak = block.timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed());
 	if (m_animationStart && GameClock::getTicks() > m_animationStart + timeToBreak * 1000) {
 		ItemStack itemDrop = block.getItemDrop();
@@ -186,8 +207,11 @@ void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
 		m_animationStart = GameClock::getTicks();
 	}
 
+	if (m_selectedBlock.w != -1)
+		updateVertexBuffer(block);
+
 	if (m_animationStart)
-		updateAnimationVertexBuffer((GameClock::getTicks() - m_animationStart) / (timeToBreak * 100));
+		updateAnimationVertexBuffer(block, (GameClock::getTicks() - m_animationStart) / (timeToBreak * 100));
 }
 
 #include "ResourceHandler.hpp"
@@ -287,7 +311,7 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 
 			// If we find a block that is not air, we are done
 			u32 block = m_world.getBlock(mx, my, mz);
-			if(block && block != 8) break;
+			if(block && block != BlockType::Water) break;
 		}
 
 		// Find out which face of the block we are looking at
@@ -305,7 +329,7 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 
 	// If we are looking at air, disable the cursor
 	u32 block = m_world.getBlock(mx, my, mz);
-	if(!block || block == 8) {
+	if(!block || block == BlockType::Water) {
 		face = -1;
 	}
 

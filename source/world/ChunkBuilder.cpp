@@ -53,44 +53,6 @@ static const float cubeCoords[6 * 4 * 3] = {
 	0, 1, 1,
 };
 
-static const float slabCoords[6 * 4 * 3] = {
-	// Left
-	0, 0, 0,
-	0, 0, 1,
-	0, .5, 1,
-	0, .5, 0,
-
-	// Right
-	1, 0, 1,
-	1, 0, 0,
-	1, .5, 0,
-	1, .5, 1,
-
-	// Bottom
-	0, 0, 0,
-	1, 0, 0,
-	1, 0, 1,
-	0, 0, 1,
-
-	// Top
-	0, .5, 1,
-	1, .5, 1,
-	1, .5, 0,
-	0, .5, 0,
-
-	// Front
-	1, 0, 0,
-	0, 0, 0,
-	0, .5, 0,
-	1, .5, 0,
-
-	// Back
-	0, 0, 1,
-	1, 0, 1,
-	1, .5, 1,
-	0, .5, 1,
-};
-
 std::size_t ChunkBuilder::buildChunk(const Chunk &chunk, const VertexBuffer &vbo) {
 	m_vertices.reserve(Chunk::width * Chunk::height * Chunk::depth * 6 * 4);
 
@@ -130,25 +92,25 @@ std::size_t ChunkBuilder::buildChunk(const Chunk &chunk, const VertexBuffer &vbo
 void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Block *block, const Block *surroundingBlock) {
 	// Skip hidden faces
 	if(surroundingBlock && surroundingBlock->id()
-	&& (surroundingBlock->isOpaque() || (block->id() == surroundingBlock->id() && block->id() != BlockType::Leaves)))
+	&& (surroundingBlock->isOpaque() || (block->id() == surroundingBlock->id() && block->id() != BlockType::Leaves && ((i != 2 && i != 3) || block->id() != BlockType::PlankSlab))))
 		return;
 
 	static glm::vec3 a, b, c, v1, v2, normal;
 
-	const float *vertexCoords = (block->id() == BlockType::PlankSlab) ? slabCoords : cubeCoords;
+	const FloatBox boundingBox = block->boundingBox();
 
 	// Three points of the face
-	a.x = vertexCoords[i * 12 + 0];
-	a.y = vertexCoords[i * 12 + 1];
-	a.z = vertexCoords[i * 12 + 2];
+	a.x = cubeCoords[i * 12 + 0] * boundingBox.width  + boundingBox.x;
+	a.y = cubeCoords[i * 12 + 1] * boundingBox.height + boundingBox.y;
+	a.z = cubeCoords[i * 12 + 2] * boundingBox.depth  + boundingBox.z;
 
-	b.x = vertexCoords[i * 12 + 3];
-	b.y = vertexCoords[i * 12 + 4];
-	b.z = vertexCoords[i * 12 + 5];
+	b.x = cubeCoords[i * 12 + 3] * boundingBox.width  + boundingBox.x;
+	b.y = cubeCoords[i * 12 + 4] * boundingBox.height + boundingBox.y;
+	b.z = cubeCoords[i * 12 + 5] * boundingBox.depth  + boundingBox.z;
 
-	c.x = vertexCoords[i * 12 + 6];
-	c.y = vertexCoords[i * 12 + 7];
-	c.z = vertexCoords[i * 12 + 8];
+	c.x = cubeCoords[i * 12 + 6] * boundingBox.width  + boundingBox.x;
+	c.y = cubeCoords[i * 12 + 7] * boundingBox.height + boundingBox.y;
+	c.z = cubeCoords[i * 12 + 8] * boundingBox.depth  + boundingBox.z;
 
 	// Computing two vectors
 	v1 = b - a;
@@ -169,9 +131,9 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 	for(u8 j = 0 ; j < 4 ; j++) {
 		Vertex vertex;
 
-		vertex.coord3d[0] = x + vertexCoords[i * 12 + j * 3];
-		vertex.coord3d[1] = y + vertexCoords[i * 12 + j * 3 + 1];
-		vertex.coord3d[2] = z + vertexCoords[i * 12 + j * 3 + 2];
+		vertex.coord3d[0] = x + cubeCoords[i * 12 + j * 3]     * boundingBox.width  + boundingBox.x;
+		vertex.coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1] * boundingBox.height + boundingBox.y;
+		vertex.coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2] * boundingBox.depth  + boundingBox.z;
 		vertex.coord3d[3] = static_cast<GLfloat>(block->id());
 
 		vertex.normal[0] = normal.x;

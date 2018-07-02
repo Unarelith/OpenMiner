@@ -27,7 +27,11 @@
 	<block id="13" name="Workbench" />
 	<block id="14" name="Furnace" />
 	<block id="15" name="Iron Ore"    textureID="254" hardness="3" harvestRequirements="1" />
-	<block id="16" name="Plank Slab"  textureID="316" />
+
+	<block id="16" name="Plank Slab"  textureID="316">
+		<box x="0" y="0" z="0" width="1" height="0.5" depth="1"/>
+	</block>
+
 	<block id="17" name="Undefined"   textureID="4" />
 	<block id="18" name="Undefined"   textureID="4" />
 	<block id="19" name="Undefined"   textureID="4" />

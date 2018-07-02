@@ -51,6 +51,16 @@ void Registry::registerBlocks() {
 			if (itemDropElement) {
 				block.setItemDrop(itemDropElement->UnsignedAttribute("id"), itemDropElement->UnsignedAttribute("amount"));
 			}
+
+			tinyxml2::XMLElement *boundingBoxElement = blockElement->FirstChildElement("box");
+			if (boundingBoxElement) {
+				block.setBoundingBox(FloatBox{boundingBoxElement->FloatAttribute("x"),
+				                              boundingBoxElement->FloatAttribute("y"),
+				                              boundingBoxElement->FloatAttribute("z"),
+				                              boundingBoxElement->FloatAttribute("width"),
+				                              boundingBoxElement->FloatAttribute("height"),
+				                              boundingBoxElement->FloatAttribute("depth")});
+			}
 		}
 
 		blockElement = blockElement->NextSiblingElement("block");
