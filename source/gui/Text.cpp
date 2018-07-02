@@ -101,7 +101,7 @@ void Text::updateCharWidth() {
 		}
 
 		++l1;
-		m_charWidth[i] = (int)(0.5 + (double)((float)l1 * (8.0f / (float)charMaxWidth))) + 1;
+		m_charWidth[i] = 0.5f + l1 * (8.0f / charMaxWidth) + 1;
 	}
 }
 

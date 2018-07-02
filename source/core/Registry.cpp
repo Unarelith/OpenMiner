@@ -46,6 +46,11 @@ void Registry::registerBlocks() {
 			unsigned int harvestRequirements = 0;
 			if (blockElement->QueryUnsignedAttribute("harvestRequirements", &harvestRequirements) == tinyxml2::XMLError::XML_SUCCESS)
 				block.setHarvestRequirements(harvestRequirements);
+
+			tinyxml2::XMLElement *itemDropElement = blockElement->FirstChildElement("item_drop");
+			if (itemDropElement) {
+				block.setItemDrop(itemDropElement->UnsignedAttribute("id"), itemDropElement->UnsignedAttribute("amount"));
+			}
 		}
 
 		blockElement = blockElement->NextSiblingElement("block");
