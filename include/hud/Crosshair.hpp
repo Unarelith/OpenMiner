@@ -15,7 +15,6 @@
 #define CROSSHAIR_HPP_
 
 #include "RectangleShape.hpp"
-#include "Shader.hpp"
 
 class Crosshair : public IDrawable {
 	public:
@@ -25,8 +24,6 @@ class Crosshair : public IDrawable {
 		void draw(RenderTarget &target, RenderStates states) const override;
 
 		VertexBuffer m_vbo;
-
-		Shader m_shader;
 
 		RectangleShape m_hShape;
 		RectangleShape m_vShape1;

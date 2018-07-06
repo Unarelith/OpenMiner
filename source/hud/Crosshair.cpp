@@ -17,11 +17,6 @@
 #include "Vertex.hpp"
 
 Crosshair::Crosshair() {
-	m_shader.createProgram();
-	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
-	m_shader.linkProgram();
-
 	float xFactor = SCREEN_WIDTH * SCREEN_HEIGHT / 100;
 	float yFactor = SCREEN_HEIGHT * SCREEN_WIDTH / 100;
 
@@ -40,11 +35,8 @@ Crosshair::Crosshair() {
 }
 
 void Crosshair::draw(RenderTarget &target, RenderStates states) const {
-	states.shader = &m_shader;
-	states.vertexAttributes = VertexAttribute::Only2d;
-
-	// Shader::bind(&m_shader);
-	// m_shader.setUniform("u_renderType", -1);
+	// Shader::bind(states.shader);
+	// states.shader->setUniform("u_renderType", -1);
 	// Shader::bind(nullptr);
 
 	target.draw(m_hShape, states);

@@ -18,11 +18,6 @@ Hotbar::Hotbar(Inventory &inventory) : m_inventory(inventory) {
 	setPosition(SCREEN_WIDTH / 2 - 182 * 3 / 2, SCREEN_HEIGHT - 22 * 3, 0);
 	setScale(GUI_SCALE, GUI_SCALE, 1);
 
-	m_shader.createProgram();
-	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
-	m_shader.linkProgram();
-
 	m_background.load("texture-widgets");
 	m_background.setClipRect(0, 0, 182, 22);
 	m_background.setPosition(0, 0, 0);
@@ -56,9 +51,6 @@ void Hotbar::update() {
 
 void Hotbar::draw(RenderTarget &target, RenderStates states) const {
 	applyTransform(states);
-
-	states.shader = &m_shader;
-	states.vertexAttributes = VertexAttribute::Only2d;
 
 	target.draw(m_background, states);
 

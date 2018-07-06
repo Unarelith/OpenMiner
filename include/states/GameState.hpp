@@ -17,10 +17,8 @@
 #include <glm/glm.hpp>
 
 #include "ApplicationState.hpp"
-#include "BlockCursor.hpp"
 #include "Camera.hpp"
-#include "Crosshair.hpp"
-#include "Hotbar.hpp"
+#include "HUD.hpp"
 #include "Player.hpp"
 #include "Skybox.hpp"
 #include "World.hpp"
@@ -51,11 +49,8 @@ class GameState : public ApplicationState {
 		World m_world;
 
 		Player m_player;
-		Hotbar m_hotbar{m_player.hotbarInventory()};
 
-		glm::vec4 m_selectedBlock{0, 0, 0, -1};
-		BlockCursor m_blockCursor{m_camera, m_player, m_world, m_viewMatrix, m_projectionMatrix};
-		Crosshair m_crosshair;
+		HUD m_hud{m_camera, m_player, m_world, m_viewMatrix, m_projectionMatrix};
 };
 
 #endif // GAMESTATE_HPP_

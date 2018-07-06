@@ -78,8 +78,7 @@ void GameState::onEvent(const SDL_Event &event) {
 		}
 	}
 
-	m_hotbar.onEvent(event);
-	m_blockCursor.onEvent(event, m_hotbar);
+	m_hud.onEvent(event);
 }
 
 void GameState::update() {
@@ -92,10 +91,7 @@ void GameState::update() {
 	if (&m_stateStack->top() == this)
 		m_viewMatrix = m_camera.processInputs(m_world);
 
-	// FIXME: Shouldn't be called every tick
-	m_hotbar.update();
-
-	m_blockCursor.update(m_hotbar, false);
+	m_hud.update();
 
 	if (Keyboard::isKeyPressedOnce(Keyboard::E) && &m_stateStack->top() == this) {
 		auto &inventoryState = m_stateStack->push<InventoryState>(this);
@@ -121,8 +117,6 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 	states.viewMatrix = &m_viewMatrix;
 
 	target.draw(m_world, states);
-	target.draw(m_blockCursor, states);
-	target.draw(m_hotbar, states);
-	target.draw(m_crosshair, states);
+	target.draw(m_hud, states);
 }
 
