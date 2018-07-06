@@ -22,7 +22,7 @@
 
 class Hotbar : public Widget {
 	public:
-		Hotbar(Inventory &inventory);
+		Hotbar(Inventory &inventory, Widget *parent = nullptr);
 
 		void onEvent(const SDL_Event &event);
 

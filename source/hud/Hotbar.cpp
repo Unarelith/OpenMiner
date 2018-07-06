@@ -14,10 +14,7 @@
 #include "Config.hpp"
 #include "Hotbar.hpp"
 
-Hotbar::Hotbar(Inventory &inventory) : m_inventory(inventory) {
-	setPosition(SCREEN_WIDTH / 2 - 182 * 3 / 2, SCREEN_HEIGHT - 22 * 3, 0);
-	setScale(GUI_SCALE, GUI_SCALE, 1);
-
+Hotbar::Hotbar(Inventory &inventory, Widget *parent) : Widget(182, 22, parent), m_inventory(inventory) {
 	m_background.load("texture-widgets");
 	m_background.setClipRect(0, 0, 182, 22);
 	m_background.setPosition(0, 0, 0);

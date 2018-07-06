@@ -22,6 +22,7 @@ class ItemStack {
 		ItemStack(u16 id, u16 amount = 1);
 
 		const Item &item() const { return *m_item; }
+		void setItem(u16 item);
 
 		u16 amount() const { return m_amount; }
 		void setAmount(u16 amount) { m_amount = amount; }

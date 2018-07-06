@@ -20,7 +20,7 @@
 #include "Registry.hpp"
 #include "World.hpp"
 
-BlockFurnace::BlockFurnace() : Block(BlockType::Furnace, 164) {
+BlockFurnace::BlockFurnace() : Block(BlockType::Furnace, 164, "Furnace") {
 	m_canUpdate = true;
 }
 

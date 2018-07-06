@@ -19,7 +19,6 @@
 
 DebugOverlay::DebugOverlay(const Camera &camera) : m_camera(camera) {
 	setPosition(4, 4, 0);
-	setScale(GUI_SCALE, GUI_SCALE, 1);
 
 	m_versionText.setText(APP_NAME + std::string(" v0.0.1"));
 	m_versionText.setColor(Color::white);

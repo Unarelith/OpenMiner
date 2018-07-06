@@ -31,6 +31,8 @@ class BlockCursor : public IDrawable {
 
 		void update(const Hotbar &hotbar, bool useDepthBuffer);
 
+		const Block *currentBlock() const { return m_currentBlock; }
+
 	private:
 		void updateVertexBuffer(const Block &block);
 		void updateAnimationVertexBuffer(const Block &block, int animationPos = -1);
@@ -51,6 +53,7 @@ class BlockCursor : public IDrawable {
 
 		unsigned int m_animationStart = 0;
 		glm::vec4 m_selectedBlock{0, 0, 0, 0};
+		const Block *m_currentBlock = nullptr;
 };
 
 #endif // BLOCKCURSOR_HPP_

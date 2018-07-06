@@ -189,7 +189,7 @@ void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
 
 	m_selectedBlock = selectedBlock;
 
-	const Block &block = Registry::getInstance().getBlock(m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z));
+	m_currentBlock = &Registry::getInstance().getBlock(m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z));
 	// if (block.boundingBox().intersects(FloatBox{m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 1, 1, 1})) {
 	// 	selectedBlockChanged = false;
 	// 	m_selectedBlock.w = -1;
@@ -199,19 +199,21 @@ void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
 		m_animationStart = (m_animationStart) ? GameClock::getTicks() : 0;
 
 	const ItemStack &currentStack = m_player.hotbarInventory().getStack(hotbar.cursorPos(), 0);
-	float timeToBreak = block.timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed());
+	float timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed());
 	if (m_animationStart && GameClock::getTicks() > m_animationStart + timeToBreak * 1000) {
-		ItemStack itemDrop = block.getItemDrop();
+		ItemStack itemDrop = m_currentBlock->getItemDrop();
 		m_player.inventory().addStack(itemDrop.item().id(), itemDrop.amount());
 		m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
 		m_animationStart = GameClock::getTicks();
 	}
 
 	if (m_selectedBlock.w != -1)
-		updateVertexBuffer(block);
+		updateVertexBuffer(*m_currentBlock);
+	else
+		m_currentBlock = nullptr;
 
-	if (m_animationStart)
-		updateAnimationVertexBuffer(block, (GameClock::getTicks() - m_animationStart) / (timeToBreak * 100));
+	if (m_animationStart && m_currentBlock)
+		updateAnimationVertexBuffer(*m_currentBlock, (GameClock::getTicks() - m_animationStart) / (timeToBreak * 100));
 }
 
 #include "ResourceHandler.hpp"

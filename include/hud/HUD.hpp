@@ -15,6 +15,7 @@
 #define HUD_HPP_
 
 #include "BlockCursor.hpp"
+#include "BlockInfoWidget.hpp"
 #include "Crosshair.hpp"
 #include "DebugOverlay.hpp"
 #include "Hotbar.hpp"
@@ -40,6 +41,8 @@ class HUD : public Transformable, public IDrawable {
 
 		DebugOverlay m_debugOverlay;
 		bool m_isDebugOverlayVisible = false;
+
+		BlockInfoWidget m_blockInfoWidget;
 };
 
 #endif // HUD_HPP_

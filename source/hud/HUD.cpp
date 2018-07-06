@@ -18,11 +18,16 @@ HUD::HUD(Camera &camera, Player &player, World &world, glm::mat4 &viewMatrix, gl
    m_blockCursor(camera, player, world, viewMatrix, projectionMatrix),
    m_debugOverlay(camera)
 {
+	setScale(GUI_SCALE, GUI_SCALE, 1);
+
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
 	m_shader.linkProgram();
 
+	m_hotbar.setPosition(SCREEN_WIDTH / getScale().x / 2 - m_hotbar.width() / 2, SCREEN_HEIGHT / getScale().y - m_hotbar.height(), 0);
+
+	m_blockInfoWidget.setPosition(SCREEN_WIDTH / getScale().x / 2 - m_blockInfoWidget.width() / 2, 2, 0);
 }
 
 void HUD::onEvent(const SDL_Event &event) {
@@ -39,7 +44,13 @@ void HUD::update() {
 
 	m_blockCursor.update(m_hotbar, false);
 
-	m_debugOverlay.update();
+	if (m_isDebugOverlayVisible)
+		m_debugOverlay.update();
+
+	m_blockInfoWidget.update();
+
+	if (m_blockCursor.currentBlock() != m_blockInfoWidget.currentBlock())
+		m_blockInfoWidget.setCurrentBlock(m_blockCursor.currentBlock());
 }
 
 void HUD::draw(RenderTarget &target, RenderStates states) const {
@@ -48,10 +59,16 @@ void HUD::draw(RenderTarget &target, RenderStates states) const {
 	states.shader = &m_shader;
 	states.vertexAttributes = VertexAttribute::Only2d;
 
+	applyTransform(states);
+
 	if (m_isDebugOverlayVisible)
 		target.draw(m_debugOverlay, states);
 
+	target.draw(m_blockInfoWidget, states);
 	target.draw(m_hotbar, states);
+
+	states.modelMatrix = nullptr;
+
 	target.draw(m_crosshair, states);
 }
 

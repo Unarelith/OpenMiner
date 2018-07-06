@@ -14,7 +14,7 @@
 #include "BlockWater.hpp"
 #include "World.hpp"
 
-BlockWater::BlockWater() : Block(BlockType::Water, 457) {
+BlockWater::BlockWater() : Block(BlockType::Water, 457, "Water") {
 	m_canUpdate = true;
 }
 
