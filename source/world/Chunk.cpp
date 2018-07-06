@@ -87,10 +87,12 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 
 	if (type == BlockType::Glowstone)
 		m_lightmap.addLight(x, y, z, 14);
-	else if (m_data[x][y][z] == BlockType::Glowstone)
+	else {
+	// else if (m_data[x][y][z] == BlockType::Glowstone)
 		m_lightmap.removeLight(x, y, z);
-	else
+	// else {
 		m_lightmap.removeSunlight(x, y, z);
+	}
 
 	if (type == BlockType::Workbench)
 		m_blockData.emplace(Vector3i{x, y, z}, BlockData{3, 3});
