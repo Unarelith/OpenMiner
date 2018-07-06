@@ -19,7 +19,7 @@
 #include "WorkbenchWidget.hpp"
 #include "World.hpp"
 
-BlockWorkbench::BlockWorkbench() : Block(BlockType::Workbench, 77) {
+BlockWorkbench::BlockWorkbench() : Block(BlockType::Workbench, 77, "Workbench") {
 }
 
 bool BlockWorkbench::onBlockActivated(const glm::ivec3 &position, Player &player, World &world) const {

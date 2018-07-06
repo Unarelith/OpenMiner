@@ -19,11 +19,10 @@
 #include "Inventory.hpp"
 #include "ItemWidget.hpp"
 #include "SDLHeaders.hpp"
-#include "Shader.hpp"
 
 class Hotbar : public Widget {
 	public:
-		Hotbar(Inventory &inventory);
+		Hotbar(Inventory &inventory, Widget *parent = nullptr);
 
 		void onEvent(const SDL_Event &event);
 
@@ -34,8 +33,6 @@ class Hotbar : public Widget {
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
-
-		Shader m_shader;
 
 		Image m_background;
 

@@ -29,7 +29,7 @@
 #include "Vector3.hpp"
 #include "VertexBuffer.hpp"
 
-class Chunk : public NonCopyable, public IDrawable {
+class Chunk : public NonCopyable {
 	public:
 		enum {
 			Left,
@@ -74,11 +74,12 @@ class Chunk : public NonCopyable, public IDrawable {
 		static constexpr u8 height = CHUNK_HEIGHT;
 		static constexpr u8 depth = CHUNK_DEPTH;
 
+		void drawLayer(RenderTarget &target, RenderStates states, u16 layer) const;
+
 	private:
 		void updateNeighbours(int x, int y, int z);
 
-		void draw(RenderTarget &target, RenderStates states) const override;
-		void drawOutlines(RenderTarget &target, RenderStates states) const;
+		// void drawOutlines(RenderTarget &target, RenderStates states) const;
 
 		s32 m_x;
 		s32 m_y;
@@ -92,8 +93,8 @@ class Chunk : public NonCopyable, public IDrawable {
 		ChunkBuilder m_builder;
 		ChunkLightmap m_lightmap{this};
 
-		VertexBuffer m_vbo;
-		std::size_t m_verticesCount;
+		std::array<VertexBuffer, ChunkBuilder::layers> m_vbo;
+		std::array<std::size_t, ChunkBuilder::layers> m_verticesCount;
 
 		Chunk *m_surroundingChunks[6]{nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 

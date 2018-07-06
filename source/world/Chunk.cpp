@@ -38,6 +38,7 @@ void Chunk::update(Player &player, World &world) {
 	if (m_isChanged) {
 		m_isChanged = false;
 		m_lightmap.updateLights();
+
 		m_verticesCount = m_builder.buildChunk(*this, m_vbo);
 	}
 }
@@ -86,8 +87,10 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 
 	if (type == BlockType::Glowstone)
 		m_lightmap.addLight(x, y, z, 14);
-	else
+	else if (m_data[x][y][z] == BlockType::Glowstone)
 		m_lightmap.removeLight(x, y, z);
+	else
+		m_lightmap.removeSunlight(x, y, z);
 
 	if (type == BlockType::Workbench)
 		m_blockData.emplace(Vector3i{x, y, z}, BlockData{3, 3});
@@ -165,21 +168,21 @@ void Chunk::updateNeighbours(int x, int y, int z) {
 	}
 }
 
-void Chunk::draw(RenderTarget &target, RenderStates states) const {
-	if(m_verticesCount == 0) return;
+void Chunk::drawLayer(RenderTarget &target, RenderStates states, u16 layer) const {
+	if (m_verticesCount.at(layer) == 0) return;
 
 	states.texture = &m_texture;
 
-	target.draw(m_vbo, GL_QUADS, 0, m_verticesCount, states);
+	target.draw(m_vbo.at(layer), GL_QUADS, 0, m_verticesCount.at(layer), states);
 
 	// drawOutlines(target, states);
 }
 
-void Chunk::drawOutlines(RenderTarget &target, RenderStates states) const {
-	states.texture = nullptr;
-
-	for(u32 i = 0 ; i < m_verticesCount ; i += 4) {
-		target.draw(m_vbo, GL_LINE_LOOP, i, 4, states);
-	}
-}
+// void Chunk::drawOutlines(RenderTarget &target, RenderStates states) const {
+// 	states.texture = nullptr;
+//
+// 	for(u32 i = 0 ; i < m_verticesCount ; i += 4) {
+// 		target.draw(m_vbo, GL_LINE_LOOP, i, 4, states);
+// 	}
+// }
 

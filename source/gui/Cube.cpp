@@ -79,6 +79,10 @@ void Cube::updateVertexBuffer(const Block &block) const {
 		for(u8 j = 0 ; j < 4 ; j++) {
 			vertices[j + i * 4].texCoord[0] = faceTexCoords[j * 2];
 			vertices[j + i * 4].texCoord[1] = faceTexCoords[j * 2 + 1];
+
+			vertices[j + i * 4].coord3d[0] = vertices[j + i * 4].coord3d[0] * block.boundingBox().width  + block.boundingBox().x;
+			vertices[j + i * 4].coord3d[1] = vertices[j + i * 4].coord3d[1] * block.boundingBox().height + block.boundingBox().y;
+			vertices[j + i * 4].coord3d[2] = vertices[j + i * 4].coord3d[2] * block.boundingBox().depth  + block.boundingBox().z;
 		}
 	}
 

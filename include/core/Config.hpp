@@ -28,8 +28,12 @@ namespace {
 	constexpr int CHUNK_DEPTH  = 16.0f;
 
 	constexpr int SEALEVEL = 4;
+}
 
-	constexpr int GUI_SCALE = 3;
+extern int GUI_SCALE; // FIXME
+
+namespace Config {
+	extern bool isSmoothLightingEnabled;
 }
 
 #endif // CONFIG_HPP_

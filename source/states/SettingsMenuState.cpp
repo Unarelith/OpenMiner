@@ -35,15 +35,24 @@ SettingsMenuState::SettingsMenuState(ApplicationState *parent) : ApplicationStat
 	m_menuWidget.addButton(0, 0, "Render distance: " + std::to_string(World::renderDistance), [] (TextButton &button) {
 		World::renderDistance = std::max(4, (World::renderDistance + 2) % 16);
 		button.setText("Render distance: " + std::to_string(World::renderDistance));
+		World::isReloadRequested = true;
 	});
 
-	m_menuWidget.addButton(0, 1, "GUI Scale: " + std::to_string(GUI_SCALE), [] (TextButton &) {
-		// GUI_SCALE = std::max(1, GUI_SCALE % 5);
-		// button.setText("GUI Scale: " + std::to_string(GUI_SCALE));
-	}).setEnabled(false);
+	m_menuWidget.addButton(0, 1, std::string("Smooth lighting: ") + (Config::isSmoothLightingEnabled ? "ON" : "OFF"), [] (TextButton &button) {
+		Config::isSmoothLightingEnabled = !Config::isSmoothLightingEnabled;
+		button.setText(std::string("Smooth lighting: ") + (Config::isSmoothLightingEnabled ? "ON" : "OFF"));
+		World::isReloadRequested = true;
+	});
 
-	m_menuWidget.addButton(0, 2, "Fullscreen: OFF", [] (TextButton &) {}).setEnabled(false);
-	m_menuWidget.addButton(0, 3, "Use VSync: OFF", [] (TextButton &) {}).setEnabled(false);
+	m_menuWidget.addButton(0, 2, "GUI Scale: " + std::to_string(GUI_SCALE), [] (TextButton &button) {
+		GUI_SCALE = 1 + (GUI_SCALE + 1) % 3;
+		button.setText("GUI Scale: " + std::to_string(GUI_SCALE));
+		// FIXME: Fix decrease bug
+		//        Reload menus with new scaling
+	});
+
+	m_menuWidget.addButton(0, 3, "Fullscreen: OFF", [] (TextButton &) {}).setEnabled(false);
+	m_menuWidget.addButton(0, 4, "Use VSync: OFF", [] (TextButton &) {}).setEnabled(false);
 }
 
 void SettingsMenuState::onEvent(const SDL_Event &event) {

@@ -20,6 +20,7 @@
 #include "World.hpp"
 
 u16 World::renderDistance = 8;
+bool World::isReloadRequested = false;
 
 World::World() : m_texture(ResourceHandler::getInstance().get<Texture>("texture-blocks")) {
 	for(s32 z = 0 ; z < m_depth ; z++) {
@@ -49,8 +50,13 @@ World::World() : m_texture(ResourceHandler::getInstance().get<Texture>("texture-
 
 void World::update(Player &player) {
 	for (auto &it : m_chunks) {
+		if (isReloadRequested)
+			it->setChanged(true);
+
 		it->update(player, *this);
 	}
+
+	isReloadRequested = false;
 }
 
 void World::draw(RenderTarget &target, RenderStates states) const {
@@ -63,6 +69,7 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 	states.shader->setUniform("u_renderDistance", renderDistance * Chunk::width);
 	Shader::bind(nullptr);
 
+	std::vector<std::pair<Chunk*, glm::mat4>> chunks;
 	for(auto &it : m_chunks) {
 		glm::mat4 modelMatrix{glm::translate(glm::mat4(1.0f),
 		                                     glm::vec3(it->x() * Chunk::width,
@@ -112,10 +119,7 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 			continue;
 		}
 
-		Shader::bind(states.shader);
-		// states.shader->setUniform("u_modelMatrix", modelMatrix);
-		target.draw(*it, states);
-		Shader::bind(nullptr);
+		chunks.emplace_back(&*it, *states.modelMatrix);
 	}
 
 	if(ud < 1000) {
@@ -129,6 +133,13 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 		if(getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Back))   m_terrainGenerator.generate(*getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Back));
 
 		getChunk(ux, uy, uz)->setInitialized(true);
+	}
+
+	for (u8 i = 0 ; i < ChunkBuilder::layers ; ++i) {
+		for (auto &it : chunks) {
+			states.modelMatrix = &it.second;
+			it.first->drawLayer(target, states, i);
+		}
 	}
 }
 

@@ -27,7 +27,7 @@ class World;
 
 class Block {
 	public:
-		Block(u32 id, u32 textureID);
+		Block(u32 id, u32 textureID, const std::string &name);
 		virtual ~Block() = default;
 
 		virtual void onTick(const glm::ivec3 &, Player &, Chunk &, World &) const {}
@@ -39,6 +39,9 @@ class Block {
 		u16 id() const { return m_id & 0xffff; }
 		u16 data() const { return (m_id >> 16) & 0xffff; }
 		u32 textureID() const { return m_textureID; }
+
+		const std::string &name() const { return m_name; }
+		void setName(const std::string &name) { m_name = name; }
 
 		s8 selectedFace() const { return m_selectedFace; }
 		void setSelected(bool isSelected, s8 face) { m_isSelected = isSelected; m_selectedFace = face; }
@@ -71,6 +74,8 @@ class Block {
 	private:
 		u32 m_id;
 		u32 m_textureID;
+
+		std::string m_name;
 
 		bool m_isSelected = false;
 		s8 m_selectedFace = -1;

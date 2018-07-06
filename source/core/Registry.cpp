@@ -29,7 +29,7 @@ void Registry::registerBlocks() {
 	tinyxml2::XMLElement *blockElement = doc.FirstChildElement("blocks").FirstChildElement("block").ToElement();
 	while (blockElement) {
 		u16 id = blockElement->UnsignedAttribute("id");
-		// const char *name = blockElement->Attribute("name");
+		const char *name = blockElement->Attribute("name");
 
 		if (id == BlockType::Workbench)    registerBlock<BlockWorkbench>();
 		else if (id == BlockType::Furnace) registerBlock<BlockFurnace>();
@@ -37,7 +37,7 @@ void Registry::registerBlocks() {
 		else {
 			u16 textureID = blockElement->UnsignedAttribute("textureID");
 
-			auto &block = registerBlock<Block>(id, textureID);
+			auto &block = registerBlock<Block>(id, textureID, name);
 
 			float hardness = 0;
 			if (blockElement->QueryFloatAttribute("hardness", &hardness) == tinyxml2::XMLError::XML_SUCCESS)

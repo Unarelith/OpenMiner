@@ -21,3 +21,7 @@ ItemStack::ItemStack(u16 id, u16 amount) : m_item(&Registry::getInstance().getIt
 	m_amount = amount;
 }
 
+void ItemStack::setItem(u16 item) {
+	m_item = &Registry::getInstance().getItem(item);
+}
+

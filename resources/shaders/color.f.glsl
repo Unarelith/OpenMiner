@@ -16,8 +16,5 @@ vec4 getColor() {
 		color = vec4(texColor.rgb - (1 - color.rgb), min(texColor.a, color.a));
 	}
 
-	// Very cheap "transparency": don't draw pixels with a low alpha value
-	if(color.a < 0.3 && v_blockID != -1) discard;
-
 	return color;
 }

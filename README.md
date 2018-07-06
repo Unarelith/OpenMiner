@@ -22,6 +22,7 @@
     - OpenGL >= 2.1, [glm](http://sourceforge.net/projects/ogl-math/files/latest/download?source=files)
     - [glew](http://sourceforge.net/projects/glew/files/latest/download) *(only required for Windows)*
     - [tinyxml2](http://leethomason.github.io/tinyxml2/)
+    - [jsoncpp](https://github.com/open-source-parsers/jsoncpp/releases)
     - _Linux users: Check your distribution repositories for packages._
 - Run `cmake .` at the root of the game folder
 - Run `make`, wait, run the game and enjoy!
