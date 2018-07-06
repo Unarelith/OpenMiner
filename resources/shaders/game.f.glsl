@@ -24,16 +24,20 @@ void main() {
 
 	vec4 color = getColor();
 	if (v_blockID == 8) {
-		color.w = 0.85;
+		color.a = 0.85;
 	}
 	else if (v_blockID == 4) {
 		color += vec4(-0.5, -0.15, -0.4, 0);
+		/* if (v_dist > 20 && color.a == 0) */
+		/* 	color.a = 0.5; */
 	}
 	else if (v_blockID == 3) {
-		if (color.x == color.y && color.x == color.z)
+		if (color.r == color.g && color.r == color.b)
 			color += vec4(-0.3, -0.1, -0.25, 0);
 	}
 
+	// Very cheap "transparency": don't draw pixels with a low alpha value
+	if(color.a < 0.3 && v_blockID != -1) discard;
 
 	// FIXME: FINISH THIS WITH PROPER CODE AND SUN BASIC DISPLAY
 	// int maxTime = 5 * 1000;

@@ -40,12 +40,6 @@ class Chunk : public NonCopyable {
 			Top
 		};
 
-		enum Layer {
-			Solid,
-			Liquid,
-			Other
-		};
-
 	public:
 		Chunk(s32 x, s32 y, s32 z, Texture &texture);
 
@@ -85,7 +79,7 @@ class Chunk : public NonCopyable {
 	private:
 		void updateNeighbours(int x, int y, int z);
 
-		void drawOutlines(RenderTarget &target, RenderStates states) const;
+		// void drawOutlines(RenderTarget &target, RenderStates states) const;
 
 		s32 m_x;
 		s32 m_y;
@@ -99,11 +93,8 @@ class Chunk : public NonCopyable {
 		ChunkBuilder m_builder;
 		ChunkLightmap m_lightmap{this};
 
-		VertexBuffer m_vbo;
-		std::size_t m_verticesCount;
-
-		VertexBuffer m_liquidVbo;
-		std::size_t m_liquidVerticesCount;
+		std::array<VertexBuffer, ChunkBuilder::layers> m_vbo;
+		std::array<std::size_t, ChunkBuilder::layers> m_verticesCount;
 
 		Chunk *m_surroundingChunks[6]{nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 

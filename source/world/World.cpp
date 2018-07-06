@@ -135,14 +135,11 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 		getChunk(ux, uy, uz)->setInitialized(true);
 	}
 
-	for (auto &it : chunks) {
-		states.modelMatrix = &it.second;
-		it.first->drawLayer(target, states, Chunk::Layer::Solid);
-	}
-
-	for (auto &it : chunks) {
-		states.modelMatrix = &it.second;
-		it.first->drawLayer(target, states, Chunk::Layer::Liquid);
+	for (u8 i = 0 ; i < ChunkBuilder::layers ; ++i) {
+		for (auto &it : chunks) {
+			states.modelMatrix = &it.second;
+			it.first->drawLayer(target, states, i);
+		}
 	}
 }
 

@@ -53,9 +53,9 @@ static const float cubeCoords[6 * 4 * 3] = {
 	0, 1, 1,
 };
 
-std::pair<std::size_t, std::size_t> ChunkBuilder::buildChunk(const Chunk &chunk, const VertexBuffer &vbo, const VertexBuffer &liquidVbo) {
-	m_vertices[Chunk::Layer::Solid].reserve(Chunk::width * Chunk::height * Chunk::depth * 6 * 4);
-	m_vertices[Chunk::Layer::Liquid].reserve(Chunk::width * Chunk::height * Chunk::depth * 6 * 4);
+std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Chunk &chunk, const std::array<VertexBuffer, layers> &vbo) {
+	for (u8 i = 0 ; i < layers ; ++i)
+		m_vertices[i].reserve(Chunk::width * Chunk::height * Chunk::depth * 6 * 4);
 
 	for(u8 z = 0 ; z < Chunk::depth ; z++) {
 		for(u8 y = 0 ; y < Chunk::height ; y++) {
@@ -79,24 +79,20 @@ std::pair<std::size_t, std::size_t> ChunkBuilder::buildChunk(const Chunk &chunk,
 		}
 	}
 
-	m_vertices[Chunk::Layer::Solid].shrink_to_fit();
-	m_vertices[Chunk::Layer::Liquid].shrink_to_fit();
+	std::array<std::size_t, layers> verticesCount;
+	for (u8 i = 0 ; i < layers ; ++i) {
+		m_vertices[i].shrink_to_fit();
 
-	VertexBuffer::bind(&vbo);
-	vbo.setData(m_vertices[Chunk::Layer::Solid].size() * sizeof(Vertex), m_vertices[Chunk::Layer::Solid].data(), GL_DYNAMIC_DRAW);
-	VertexBuffer::bind(nullptr);
+		VertexBuffer::bind(&vbo[i]);
+		vbo[i].setData(m_vertices[i].size() * sizeof(Vertex), m_vertices[i].data(), GL_DYNAMIC_DRAW);
+		VertexBuffer::bind(nullptr);
 
-	VertexBuffer::bind(&liquidVbo);
-	liquidVbo.setData(m_vertices[Chunk::Layer::Liquid].size() * sizeof(Vertex), m_vertices[Chunk::Layer::Liquid].data(), GL_DYNAMIC_DRAW);
-	VertexBuffer::bind(nullptr);
+		verticesCount[i] = m_vertices[i].size();
 
-	std::size_t verticesCount = m_vertices[Chunk::Layer::Solid].size();
-	std::size_t liquidVerticesCount = m_vertices[Chunk::Layer::Liquid].size();
+		m_vertices[i].clear();
+	}
 
-	m_vertices[Chunk::Layer::Solid].clear();
-	m_vertices[Chunk::Layer::Liquid].clear();
-
-	return {verticesCount, liquidVerticesCount};
+	return verticesCount;
 }
 
 void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Block *block, const Block *surroundingBlock) {
@@ -177,9 +173,11 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 		vertex.blockType = block->id();
 
 		if (block->id() == BlockType::Water)
-			m_vertices[Chunk::Layer::Liquid].emplace_back(vertex);
+			m_vertices[Layer::Liquid].emplace_back(vertex);
+		else if (block->id() == BlockType::Leaves)
+			m_vertices[Layer::Other].emplace_back(vertex);
 		else
-			m_vertices[Chunk::Layer::Solid].emplace_back(vertex);
+			m_vertices[Layer::Solid].emplace_back(vertex);
 	}
 }
 

@@ -39,9 +39,7 @@ void Chunk::update(Player &player, World &world) {
 		m_isChanged = false;
 		m_lightmap.updateLights();
 
-		auto [verticesCount, liquidVerticesCount] = m_builder.buildChunk(*this, m_vbo, m_liquidVbo);
-		m_verticesCount = verticesCount;
-		m_liquidVerticesCount = liquidVerticesCount;
+		m_verticesCount = m_builder.buildChunk(*this, m_vbo);
 	}
 }
 
@@ -171,23 +169,20 @@ void Chunk::updateNeighbours(int x, int y, int z) {
 }
 
 void Chunk::drawLayer(RenderTarget &target, RenderStates states, u16 layer) const {
-	if(m_verticesCount == 0 && m_liquidVerticesCount == 0) return;
+	if (m_verticesCount.at(layer) == 0) return;
 
 	states.texture = &m_texture;
 
-	if (layer == Layer::Solid)
-		target.draw(m_vbo, GL_QUADS, 0, m_verticesCount, states);
-	else if (layer == Layer::Liquid)
-		target.draw(m_liquidVbo, GL_QUADS, 0, m_liquidVerticesCount, states);
+	target.draw(m_vbo.at(layer), GL_QUADS, 0, m_verticesCount.at(layer), states);
 
 	// drawOutlines(target, states);
 }
 
-void Chunk::drawOutlines(RenderTarget &target, RenderStates states) const {
-	states.texture = nullptr;
-
-	for(u32 i = 0 ; i < m_verticesCount ; i += 4) {
-		target.draw(m_vbo, GL_LINE_LOOP, i, 4, states);
-	}
-}
+// void Chunk::drawOutlines(RenderTarget &target, RenderStates states) const {
+// 	states.texture = nullptr;
+//
+// 	for(u32 i = 0 ; i < m_verticesCount ; i += 4) {
+// 		target.draw(m_vbo, GL_LINE_LOOP, i, 4, states);
+// 	}
+// }
 
