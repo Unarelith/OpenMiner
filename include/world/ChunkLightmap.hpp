@@ -43,8 +43,11 @@ class ChunkLightmap {
 		void addLight(int x, int y, int z, int val);
 		void addSunlight(int x, int y, int z, int val);
 		void removeLight(int x, int y, int z);
+		void removeSunlight(int x, int y, int z);
 
 		void updateLights();
+		void updateTorchlight();
+		void updateSunlight();
 
 		int getSunlight(int x, int y, int z) const;
 		int getTorchlight(int x, int y, int z) const;
@@ -59,8 +62,9 @@ class ChunkLightmap {
 		LightMapArray m_lightMap;
 
 		std::queue<LightNode> m_lightBfsQueue;
-		std::queue<LightRemovalNode> m_lightRemovalBfsQueue;
 		std::queue<LightNode> m_sunlightBfsQueue;
+		std::queue<LightRemovalNode> m_lightRemovalBfsQueue;
+		std::queue<LightRemovalNode> m_sunlightRemovalBfsQueue;
 };
 
 #endif // CHUNKLIGHTMAP_HPP_
