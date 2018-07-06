@@ -20,6 +20,7 @@
 #include "World.hpp"
 
 u16 World::renderDistance = 8;
+bool World::isReloadRequested = false;
 
 World::World() : m_texture(ResourceHandler::getInstance().get<Texture>("texture-blocks")) {
 	for(s32 z = 0 ; z < m_depth ; z++) {
@@ -49,8 +50,13 @@ World::World() : m_texture(ResourceHandler::getInstance().get<Texture>("texture-
 
 void World::update(Player &player) {
 	for (auto &it : m_chunks) {
+		if (isReloadRequested)
+			it->setChanged(true);
+
 		it->update(player, *this);
 	}
+
+	isReloadRequested = false;
 }
 
 void World::draw(RenderTarget &target, RenderStates states) const {

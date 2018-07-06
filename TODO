@@ -8,7 +8,7 @@ TODO
    ◦ DONE: `ApplicationState` / `ApplicationStateStack`
    ◦ DONE: `GameClock`
    ◦ DONE: `Debug` / `Exception`
-   ◦ TODO: `Window` et `Texture` (depuis `ZeldaOOL`)
+   ◦ DONE: `Window` et `Texture` (depuis `ZeldaOOL`)
    ◦ TODO: Input system (Mouse + Keyboard)
 • DONE: `Types.hpp` → `IntTypes.hpp`
    → TODO: Vérifier que les types sont bien corrects
@@ -27,7 +27,7 @@ TODO
 # FixMe
 
 • FIXME: Les blocs sont ciblables dans le vide depuis l’extérieur du monde
-• FIXME: Les collisions son décalées d’un bloc à certains endroits
+• FIXME: Les collisions sont décalées d’un bloc à certains endroits
 • FIXME: Afficher tous les blocs solides, puis l’eau, pour régler les problèmes de transparence
 
 # ToDoList
@@ -76,7 +76,7 @@ TODO
    ◦ DONE: Dirt + Grass
    ◦ DONE: WATEEEEEEER
    ◦ DONE: Arbres
-   ◦ TODO: Fleurs (emit light at night?)
+   ◦ TODO: Fleurs
    ◦ TODO: Herbe
    ◦ TODO: Demi-blocs
    ◦ TODO: Escaliers

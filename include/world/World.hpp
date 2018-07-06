@@ -40,6 +40,7 @@ class World : public IDrawable {
 
 		// Render distance in chunks
 		static u16 renderDistance;
+		static bool isReloadRequested;
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;

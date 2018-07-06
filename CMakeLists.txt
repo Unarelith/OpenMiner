@@ -35,6 +35,17 @@ target_compile_features(${CMAKE_PROJECT_NAME} PRIVATE cxx_std_17)
 #------------------------------------------------------------------------------
 # Packages
 #------------------------------------------------------------------------------
+# - jsoncpp
+#------------------------------------------------------------------------------
+find_package(JsonCpp REQUIRED)
+if(NOT JSONCPP_FOUND)
+	message(FATAL_ERROR "jsoncpp is needed to build the project. Please install it correctly.")
+endif()
+
+include_directories(${JSONCPP_INCLUDE_DIRS})
+link_directories(${JSONCPP_LIBRARY_DIRS})
+
+#------------------------------------------------------------------------------
 # - tinyxml2
 #------------------------------------------------------------------------------
 find_package(TinyXml2 REQUIRED)
@@ -93,6 +104,7 @@ include_directories(${SDL2_INCLUDE_DIRS}
 #------------------------------------------------------------------------------
 target_link_libraries(${CMAKE_PROJECT_NAME}
                       ${TINYXML2_LIBRARIES}
+                      ${JSONCPP_LIBRARIES}
                       ${OPENGL_LIBRARIES}
                       ${SDL2_LIBRARIES}
                       ${SDL2IMAGE_LIBRARIES}
