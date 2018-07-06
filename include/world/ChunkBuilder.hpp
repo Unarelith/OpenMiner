@@ -14,6 +14,7 @@
 #ifndef CHUNKBUILDER_HPP_
 #define CHUNKBUILDER_HPP_
 
+#include <array>
 #include <vector>
 
 #include "IntTypes.hpp"
@@ -25,7 +26,7 @@ class VertexBuffer;
 
 class ChunkBuilder {
 	public:
-		std::size_t buildChunk(const Chunk &chunk, const VertexBuffer &vbo);
+		std::pair<std::size_t, std::size_t> buildChunk(const Chunk &chunk, const VertexBuffer &vbo, const VertexBuffer &liquidVbo);
 
 	private:
 		void addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Block *block, const Block *surroundingBlock);
@@ -36,7 +37,7 @@ class ChunkBuilder {
 		float getSunlightForVertex(u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk);
 		float getTorchlightForVertex(u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk);
 
-		std::vector<Vertex> m_vertices;
+		std::array<std::vector<Vertex>, 2> m_vertices;
 
 		enum Face {
 			Left,

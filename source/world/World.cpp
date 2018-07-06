@@ -69,6 +69,7 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 	states.shader->setUniform("u_renderDistance", renderDistance * Chunk::width);
 	Shader::bind(nullptr);
 
+	std::vector<std::pair<Chunk*, glm::mat4>> chunks;
 	for(auto &it : m_chunks) {
 		glm::mat4 modelMatrix{glm::translate(glm::mat4(1.0f),
 		                                     glm::vec3(it->x() * Chunk::width,
@@ -118,10 +119,7 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 			continue;
 		}
 
-		Shader::bind(states.shader);
-		// states.shader->setUniform("u_modelMatrix", modelMatrix);
-		target.draw(*it, states);
-		Shader::bind(nullptr);
+		chunks.emplace_back(&*it, *states.modelMatrix);
 	}
 
 	if(ud < 1000) {
@@ -135,6 +133,16 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 		if(getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Back))   m_terrainGenerator.generate(*getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Back));
 
 		getChunk(ux, uy, uz)->setInitialized(true);
+	}
+
+	for (auto &it : chunks) {
+		states.modelMatrix = &it.second;
+		it.first->drawLayer(target, states, Chunk::Layer::Solid);
+	}
+
+	for (auto &it : chunks) {
+		states.modelMatrix = &it.second;
+		it.first->drawLayer(target, states, Chunk::Layer::Liquid);
 	}
 }
 

@@ -53,8 +53,9 @@ static const float cubeCoords[6 * 4 * 3] = {
 	0, 1, 1,
 };
 
-std::size_t ChunkBuilder::buildChunk(const Chunk &chunk, const VertexBuffer &vbo) {
-	m_vertices.reserve(Chunk::width * Chunk::height * Chunk::depth * 6 * 4);
+std::pair<std::size_t, std::size_t> ChunkBuilder::buildChunk(const Chunk &chunk, const VertexBuffer &vbo, const VertexBuffer &liquidVbo) {
+	m_vertices[Chunk::Layer::Solid].reserve(Chunk::width * Chunk::height * Chunk::depth * 6 * 4);
+	m_vertices[Chunk::Layer::Liquid].reserve(Chunk::width * Chunk::height * Chunk::depth * 6 * 4);
 
 	for(u8 z = 0 ; z < Chunk::depth ; z++) {
 		for(u8 y = 0 ; y < Chunk::height ; y++) {
@@ -78,15 +79,24 @@ std::size_t ChunkBuilder::buildChunk(const Chunk &chunk, const VertexBuffer &vbo
 		}
 	}
 
-	m_vertices.shrink_to_fit();
+	m_vertices[Chunk::Layer::Solid].shrink_to_fit();
+	m_vertices[Chunk::Layer::Liquid].shrink_to_fit();
 
 	VertexBuffer::bind(&vbo);
-	vbo.setData(m_vertices.size() * sizeof(Vertex), m_vertices.data(), GL_DYNAMIC_DRAW);
+	vbo.setData(m_vertices[Chunk::Layer::Solid].size() * sizeof(Vertex), m_vertices[Chunk::Layer::Solid].data(), GL_DYNAMIC_DRAW);
 	VertexBuffer::bind(nullptr);
 
-	std::size_t verticesCount = m_vertices.size();
-	m_vertices.clear();
-	return verticesCount;
+	VertexBuffer::bind(&liquidVbo);
+	liquidVbo.setData(m_vertices[Chunk::Layer::Liquid].size() * sizeof(Vertex), m_vertices[Chunk::Layer::Liquid].data(), GL_DYNAMIC_DRAW);
+	VertexBuffer::bind(nullptr);
+
+	std::size_t verticesCount = m_vertices[Chunk::Layer::Solid].size();
+	std::size_t liquidVerticesCount = m_vertices[Chunk::Layer::Liquid].size();
+
+	m_vertices[Chunk::Layer::Solid].clear();
+	m_vertices[Chunk::Layer::Liquid].clear();
+
+	return {verticesCount, liquidVerticesCount};
 }
 
 void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Block *block, const Block *surroundingBlock) {
@@ -166,7 +176,10 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 
 		vertex.blockType = block->id();
 
-		m_vertices.emplace_back(vertex);
+		if (block->id() == BlockType::Water)
+			m_vertices[Chunk::Layer::Liquid].emplace_back(vertex);
+		else
+			m_vertices[Chunk::Layer::Solid].emplace_back(vertex);
 	}
 }
 
