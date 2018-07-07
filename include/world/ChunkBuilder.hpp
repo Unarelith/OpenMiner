@@ -33,11 +33,13 @@ class ChunkBuilder {
 	private:
 		void addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Block *block, const Block *surroundingBlock);
 
-		float getAverageTorchlight(u8 x, u8 y, u8 z, s8 offsetX, s8 offsetY, s8 offsetZ, const Chunk &chunk);
-		float getAverageSunlight(u8 x, u8 y, u8 z, s8 offsetX, s8 offsetY, s8 offsetZ, const Chunk &chunk);
+		enum class Light {
+			Sun,
+			Torch
+		};
 
-		float getSunlightForVertex(u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk);
-		float getTorchlightForVertex(u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk);
+		float getAverageLight(Light light, u8 x, u8 y, u8 z, s8 offsetX, s8 offsetY, s8 offsetZ, const Chunk &chunk);
+		float getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk);
 
 		std::array<std::vector<Vertex>, layers> m_vertices;
 

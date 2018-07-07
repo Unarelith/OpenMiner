@@ -145,6 +145,14 @@
 		<result item="14" amount="1" />
 	</recipe>
 
+	<recipe type="craft">
+		<pattern string="###" />
+
+		<key char="#" item="11" />
+
+		<result item="16" amount="6" />
+	</recipe>
+
 	<recipe type="smelt">
 		<input  id="15" amount="1" />
 		<output id="39" amount="1" />
