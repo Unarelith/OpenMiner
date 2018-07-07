@@ -33,9 +33,11 @@ class Camera {
 
 		void move(float direction);
 
-		glm::mat4 processInputs(const World &world);
+		void processInputs();
+		glm::mat4 updatePosition(const World &world);
+
 		void checkCollisions(const World &world);
-		void update();
+		void updateViewMatrix();
 
 		float pointTargetedX() const { return m_x + cos(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES); }
 		float pointTargetedY() const { return m_y + sin(m_angleV * RADIANS_PER_DEGREES); }

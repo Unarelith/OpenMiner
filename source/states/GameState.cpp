@@ -61,7 +61,7 @@ void GameState::onEvent(const SDL_Event &event) {
 
 			Mouse::resetToWindowCenter();
 
-			m_camera.update();
+			m_camera.updateViewMatrix();
 		}
 	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE && &m_stateStack->top() == this) {
@@ -88,15 +88,18 @@ void GameState::update() {
 
 	m_world.update(m_player);
 
-	if (&m_stateStack->top() == this)
-		m_viewMatrix = m_camera.processInputs(m_world);
+	if (&m_stateStack->top() == this) {
+		m_camera.processInputs();
+
+		if (Keyboard::isKeyPressedOnce(Keyboard::E)) {
+			auto &inventoryState = m_stateStack->push<InventoryState>(this);
+			inventoryState.setupWidget<PlayerInventoryWidget>(m_player.inventory());
+		}
+	}
+
+	m_viewMatrix = m_camera.updatePosition(m_world);
 
 	m_hud.update();
-
-	if (Keyboard::isKeyPressedOnce(Keyboard::E) && &m_stateStack->top() == this) {
-		auto &inventoryState = m_stateStack->push<InventoryState>(this);
-		inventoryState.setupWidget<PlayerInventoryWidget>(m_player.inventory());
-	}
 }
 
 void GameState::initShaders() {

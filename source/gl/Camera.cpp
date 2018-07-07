@@ -26,7 +26,7 @@ Camera::Camera() {
 	m_angleH = 90.0;
 	m_angleV = 0.01;
 
-	update();
+	updateViewMatrix();
 }
 
 void Camera::turnH(float angle) {
@@ -58,7 +58,7 @@ void Camera::move(float direction) {
 	m_velocity.z = 0.04f * sin(direction * RADIANS_PER_DEGREES);
 }
 
-glm::mat4 Camera::processInputs(const World &world) {
+void Camera::processInputs() {
 	// if(Mouse::getDX() != 0 || Mouse::getDY() != 0) {
 	// 	turnH(Mouse::getDX() * 0.2f);//0.02);
 	// 	turnV(-Mouse::getDY() * 0.2f);//0.02);
@@ -86,7 +86,9 @@ glm::mat4 Camera::processInputs(const World &world) {
 	if (Keyboard::isKeyPressed(Keyboard::D) && Keyboard::isKeyPressed(Keyboard::Z)) move(45.0f);
 	if (Keyboard::isKeyPressed(Keyboard::Q) && Keyboard::isKeyPressed(Keyboard::S)) move(-135.0f);
 	if (Keyboard::isKeyPressed(Keyboard::D) && Keyboard::isKeyPressed(Keyboard::S)) move(135.0f);
+}
 
+glm::mat4 Camera::updatePosition(const World &world) {
 	m_velocity.y -= m_gravity; // Gravity
 
 	if (m_velocity.y < -m_jumpSpeed) // Jump max accel
@@ -99,7 +101,7 @@ glm::mat4 Camera::processInputs(const World &world) {
 	m_z += m_velocity.z;
 
 	if (m_velocity.x != 0 || m_velocity.y != 0 || m_velocity.z != 0)
-		update();
+		updateViewMatrix();
 
 	m_velocity.x = 0;
 	m_velocity.z = 0;
@@ -122,7 +124,7 @@ void Camera::checkCollisions(const World &world) {
 	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - 0.4, m_z + 0.2), m_velocity);
 }
 
-void Camera::update() {
+void Camera::updateViewMatrix() {
 	m_viewMatrix = glm::lookAt(glm::vec3(m_x, m_y, m_z),
 	                           glm::vec3(pointTargetedX(), pointTargetedY(), pointTargetedZ()),
 	                           glm::vec3(0, 1, 0));
