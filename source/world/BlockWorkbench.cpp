@@ -28,7 +28,7 @@ bool BlockWorkbench::onBlockActivated(const glm::ivec3 &position, Player &player
 		throw EXCEPTION("BlockWorkbench at (", position.x, position.y, position.z, ") has no inventory");
 
 	auto &inventoryState = ApplicationStateStack::getInstance().push<InventoryState>(&ApplicationStateStack::getInstance().top());
-	inventoryState.setupWidget<WorkbenchWidget>(player.inventory(), player.hotbarInventory(), data->inventory);
+	inventoryState.setupWidget<WorkbenchWidget>(player.inventory(), data->inventory);
 
 	return true;
 }

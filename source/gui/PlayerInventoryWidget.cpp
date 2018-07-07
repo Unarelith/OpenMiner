@@ -13,16 +13,16 @@
  */
 #include "PlayerInventoryWidget.hpp"
 
-PlayerInventoryWidget::PlayerInventoryWidget(Inventory &playerInventory, Inventory &hotbarInventory, Widget *parent)
-	: Widget(176, 166, parent), m_playerInventory(playerInventory), m_hotbarInventory(hotbarInventory)
+PlayerInventoryWidget::PlayerInventoryWidget(Inventory &playerInventory, Widget *parent)
+	: Widget(176, 166, parent), m_playerInventory(playerInventory)
 {
 	m_background.load("texture-inventory");
 	m_background.setClipRect(0, 0, 176, 166);
 
-	m_playerInventoryWidget.init(m_playerInventory);
+	m_playerInventoryWidget.init(m_playerInventory, 9, 9 * 3);
 	m_playerInventoryWidget.setPosition(7, 83, 0);
 
-	m_hotbarInventoryWidget.init(m_hotbarInventory);
+	m_hotbarInventoryWidget.init(m_playerInventory, 0, 9);
 	m_hotbarInventoryWidget.setPosition(7, 141, 0);
 
 	m_craftingWidget.craftingInventoryWidget().setPosition(97, 17, 0);

@@ -18,7 +18,7 @@
 
 class PlayerInventoryWidget : public Widget {
 	public:
-		PlayerInventoryWidget(Inventory &playerInventory, Inventory &hotbarInventory, Widget *parent = nullptr);
+		PlayerInventoryWidget(Inventory &playerInventory, Widget *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -34,8 +34,6 @@ class PlayerInventoryWidget : public Widget {
 
 		Inventory &m_playerInventory;
 		InventoryWidget m_playerInventoryWidget{this};
-
-		Inventory &m_hotbarInventory;
 		InventoryWidget m_hotbarInventoryWidget{this};
 
 		MouseItemWidget m_mouseItemWidget{this};

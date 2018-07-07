@@ -27,14 +27,15 @@
 #include "PlayerInventoryWidget.hpp"
 
 GameState::GameState() {
-	m_player.hotbarInventory().addStack(ItemType::Workbench, 1);
-	m_player.hotbarInventory().addStack(ItemType::Dirt, 64);
-	m_player.hotbarInventory().addStack(ItemType::Grass, 64);
-	m_player.hotbarInventory().addStack(ItemType::Stone, 64);
-	m_player.hotbarInventory().addStack(ItemType::Glass, 64);
-	m_player.hotbarInventory().addStack(ItemType::Glowstone, 64);
-	m_player.hotbarInventory().addStack(ItemType::Furnace, 1);
-	m_player.hotbarInventory().addStack(ItemType::PlankSlab, 64);
+	m_player.inventory().addStack(ItemType::Workbench, 1);
+	m_player.inventory().addStack(ItemType::Dirt, 64);
+	m_player.inventory().addStack(ItemType::Grass, 64);
+	m_player.inventory().addStack(ItemType::Stone, 64);
+	m_player.inventory().addStack(ItemType::Glass, 64);
+	m_player.inventory().addStack(ItemType::Glowstone, 64);
+	m_player.inventory().addStack(ItemType::Furnace, 1);
+	m_player.inventory().addStack(ItemType::PlankSlab, 64);
+	m_player.inventory().addStack(ItemType::StonePickaxe, 1);
 
 	m_player.inventory().addStack(ItemType::Wood, 64);
 	m_player.inventory().addStack(ItemType::Planks, 64);
@@ -42,7 +43,6 @@ GameState::GameState() {
 	m_player.inventory().addStack(ItemType::Cobblestone, 64);
 	m_player.inventory().addStack(ItemType::StoneAxe, 1);
 	m_player.inventory().addStack(ItemType::StoneHoe, 1);
-	m_player.inventory().addStack(ItemType::StonePickaxe, 1);
 	m_player.inventory().addStack(ItemType::StoneShovel, 1);
 	m_player.inventory().addStack(ItemType::StoneSword, 1);
 	m_player.inventory().addStack(ItemType::IronOre, 64);
@@ -95,7 +95,7 @@ void GameState::update() {
 
 	if (Keyboard::isKeyPressedOnce(Keyboard::E) && &m_stateStack->top() == this) {
 		auto &inventoryState = m_stateStack->push<InventoryState>(this);
-		inventoryState.setupWidget<PlayerInventoryWidget>(m_player.inventory(), m_player.hotbarInventory());
+		inventoryState.setupWidget<PlayerInventoryWidget>(m_player.inventory());
 	}
 }
 

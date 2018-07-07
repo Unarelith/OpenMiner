@@ -41,7 +41,7 @@ bool BlockFurnace::onBlockActivated(const glm::ivec3 &blockPosition, Player &pla
 		throw EXCEPTION("BlockFurnace at (", blockPosition.x, blockPosition.y, blockPosition.z, ") has no inventory");
 
 	auto &inventoryState = ApplicationStateStack::getInstance().push<InventoryState>(&ApplicationStateStack::getInstance().top());
-	inventoryState.setupWidget<FurnaceWidget>(player.inventory(), player.hotbarInventory(), *data);
+	inventoryState.setupWidget<FurnaceWidget>(player.inventory(), *data);
 	return true;
 }
 

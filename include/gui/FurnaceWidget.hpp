@@ -19,7 +19,7 @@
 
 class FurnaceWidget : public Widget {
 	public:
-		FurnaceWidget(Inventory &playerInventory, Inventory &hotbarInventory, BlockData &blockData, Widget *parent = nullptr);
+		FurnaceWidget(Inventory &playerInventory, BlockData &blockData, Widget *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -32,8 +32,6 @@ class FurnaceWidget : public Widget {
 
 		Inventory &m_playerInventory;
 		InventoryWidget m_playerInventoryWidget{this};
-
-		Inventory &m_hotbarInventory;
 		InventoryWidget m_hotbarInventoryWidget{this};
 
 		InventoryWidget m_inputInventoryWidget{this};

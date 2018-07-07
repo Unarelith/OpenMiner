@@ -13,16 +13,16 @@
  */
 #include "FurnaceWidget.hpp"
 
-FurnaceWidget::FurnaceWidget(Inventory &playerInventory, Inventory &hotbarInventory, BlockData &blockData, Widget *parent)
-	: Widget(176, 166, parent), m_playerInventory(playerInventory), m_hotbarInventory(hotbarInventory), m_blockData(blockData)
+FurnaceWidget::FurnaceWidget(Inventory &playerInventory, BlockData &blockData, Widget *parent)
+	: Widget(176, 166, parent), m_playerInventory(playerInventory), m_blockData(blockData)
 {
 	m_background.load("texture-furnace");
 	m_background.setClipRect(0, 0, 176, 166);
 
-	m_playerInventoryWidget.init(m_playerInventory);
+	m_playerInventoryWidget.init(m_playerInventory, 9, 9 * 3);
 	m_playerInventoryWidget.setPosition(7, 83, 0);
 
-	m_hotbarInventoryWidget.init(m_hotbarInventory);
+	m_hotbarInventoryWidget.init(m_playerInventory, 0, 9);
 	m_hotbarInventoryWidget.setPosition(7, 141, 0);
 
 	m_inputInventoryWidget.setPosition(55, 16, 0);

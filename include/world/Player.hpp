@@ -19,11 +19,9 @@
 class Player {
 	public:
 		Inventory &inventory() { return m_inventory; }
-		Inventory &hotbarInventory() { return m_hotbarInventory; }
 
 	private:
-		Inventory m_inventory{9, 3};
-		Inventory m_hotbarInventory{9, 1};
+		Inventory m_inventory{9, 4};
 };
 
 #endif // PLAYER_HPP_

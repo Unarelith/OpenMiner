@@ -169,8 +169,8 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 
 				m_world.setBlock(x, y, z, hotbar.currentItem());
 
-				const ItemStack &currentStack = m_player.hotbarInventory().getStack(hotbar.cursorPos(), 0);
-				m_player.hotbarInventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().id() : 0, currentStack.amount() - 1);
+				const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
+				m_player.inventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().id() : 0, currentStack.amount() - 1);
 			}
 		}
 	}
@@ -198,7 +198,7 @@ void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
 	if (selectedBlockChanged)
 		m_animationStart = (m_animationStart) ? GameClock::getTicks() : 0;
 
-	const ItemStack &currentStack = m_player.hotbarInventory().getStack(hotbar.cursorPos(), 0);
+	const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
 	float timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed());
 	if (m_animationStart && GameClock::getTicks() > m_animationStart + timeToBreak * 1000) {
 		ItemStack itemDrop = m_currentBlock->getItemDrop();
