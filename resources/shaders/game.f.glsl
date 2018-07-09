@@ -55,6 +55,8 @@ void main() {
 			ambientIntensity = max(ambientIntensity * 0.8, 2.0 / 16.0);
 
 		color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
+
+		// color = vec4(0, 0, v_lightValue.x / 16.0, 1);
 	}
 
 	color = fog(color, v_dist, u_renderDistance - 32, u_renderDistance);

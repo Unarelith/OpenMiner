@@ -88,6 +88,9 @@ void TerrainGenerator::testCraftGeneration(Chunk &chunk) const {
 							}
 						}
 						else {
+							chunk.lightmap().addSunlight(x, y - 1, z, 15);
+
+							// FIXME: Temporary fix for air blocks light level
 							chunk.lightmap().addSunlight(x, y, z, 15);
 						}
 						break;

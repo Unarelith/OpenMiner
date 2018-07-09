@@ -182,6 +182,7 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 }
 
 float ChunkBuilder::getAverageLight(Light light, u8 x, u8 y, u8 z, s8 offsetX, s8 offsetY, s8 offsetZ, const Chunk &chunk) {
+	// FIXME: Air blocks have a light level of 0
 	if (light == Light::Sun)
 		return (chunk.lightmap().getSunlight(x,           y + offsetY, z)
 		      + chunk.lightmap().getSunlight(x + offsetX, y + offsetY, z)
