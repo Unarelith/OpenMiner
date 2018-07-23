@@ -37,10 +37,14 @@ PauseMenuState::PauseMenuState(ApplicationState *parent) : ApplicationState(pare
 	m_menuWidget.addButton(0, 2, "Exit", [this] (TextButton &) { while(!m_stateStack->empty()) m_stateStack->pop(); });
 }
 
-void PauseMenuState::onEvent(const SDL_Event &event) {
+void PauseMenuState::onEvent(const S_Event &event) {
 	m_menuWidget.onEvent(event);
 
+#ifdef USE_SDL
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+#elif defined USE_SFML
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+#endif // USE_SDL, USE_SFML
 		Mouse::setCursorGrabbed(true);
 		Mouse::setCursorVisible(false);
 

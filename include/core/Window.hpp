@@ -36,14 +36,22 @@ class Window : public RenderTarget {
 		void close() { m_isOpen = false; }
 		bool isOpen() const { return m_isOpen; }
 
-		SDL_Window *window() const { return m_window.get(); }
+		S_Window *window() const { return m_window.get(); }
 
 	private:
+    #ifdef USE_SDL
 		using SDL_WindowPtr = std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)>;
 		using SDL_GLContextPtr = std::unique_ptr<void, decltype(&SDL_GL_DeleteContext)>;
 
 		SDL_WindowPtr m_window{nullptr, SDL_DestroyWindow};
 		SDL_GLContextPtr m_context{nullptr, SDL_GL_DeleteContext};
+    #elif defined USE_SFML
+		using SFML_WindowPtr = std::unique_ptr<S_Window>;
+//		using SDL_GLContextPtr = std::unique_ptr<void, decltype(&SDL_GL_DeleteContext)>;
+
+		SFML_WindowPtr m_window{nullptr};
+//		SDL_GLContextPtr m_context{nullptr, SDL_GL_DeleteContext};
+    #endif // USE_SDL, USE_SFML
 
 		u16 m_width;
 		u16 m_height;

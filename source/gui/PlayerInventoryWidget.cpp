@@ -29,7 +29,7 @@ PlayerInventoryWidget::PlayerInventoryWidget(Inventory &playerInventory, Widget 
 	m_craftingWidget.craftingResultInventoryWidget().setPosition(153, 27, 0);
 }
 
-void PlayerInventoryWidget::onEvent(const SDL_Event &event) {
+void PlayerInventoryWidget::onEvent(const S_Event &event) {
 	m_craftingWidget.onMouseEvent(event, m_mouseItemWidget);
 
 	m_playerInventoryWidget.onMouseEvent(event, m_mouseItemWidget);

@@ -58,6 +58,7 @@ std::map<Keyboard::Key, u32> Keyboard::lastTimePressed = {
 };
 
 std::map<Keyboard::Key, u32> Keyboard::keysCode = {
+#ifdef USE_SDL
 	{Key::D,		SDLK_d},
 	{Key::Q,		SDLK_q},
 	{Key::S,		SDLK_s},
@@ -76,18 +77,44 @@ std::map<Keyboard::Key, u32> Keyboard::keysCode = {
 	{Key::Space,	  SDLK_SPACE},
 	{Key::Return,	  SDLK_RETURN},
 	{Key::RightShift, SDLK_RSHIFT}
+#elif defined USE_SFML
+	{Key::D,		sf::Keyboard::D},
+	{Key::Q,		sf::Keyboard::Q},
+	{Key::S,		sf::Keyboard::S},
+	{Key::W,		sf::Keyboard::W},
+	{Key::X,		sf::Keyboard::X},
+	{Key::Z,		sf::Keyboard::Z},
+	{Key::E,		sf::Keyboard::E},
+
+	{Key::Left,		sf::Keyboard::Left},
+	{Key::Right,	sf::Keyboard::Right},
+	{Key::Up,		sf::Keyboard::Up},
+	{Key::Down,		sf::Keyboard::Down},
+
+	{Key::BackSpace,  sf::Keyboard::BackSpace},
+	{Key::LeftShift,  sf::Keyboard::LShift},
+	{Key::Space,	  sf::Keyboard::Space},
+	{Key::Return,	  sf::Keyboard::Return},
+	{Key::RightShift, sf::Keyboard::RShift}
+#endif // USE_SDL, USE_SFML
 };
 
+#ifdef USE_SDL
 const u8 *Keyboard::getState() {
 	return SDL_GetKeyboardState(nullptr);
 }
+#endif // USE_SDL
 
 bool Keyboard::isKeyPressed(Key key) {
+#ifdef USE_SDL
 	if(getState()[SDL_GetScancodeFromKey(keysCode[key])]) {
 		return true;
 	} else {
 		return false;
 	}
+#elif defined USE_SFML
+    return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keysCode[key]));
+#endif // USE_SDL, USE_SFML
 }
 
 bool Keyboard::isKeyPressedOnce(Key key) {

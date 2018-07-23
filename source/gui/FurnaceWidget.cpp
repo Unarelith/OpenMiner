@@ -36,7 +36,7 @@ FurnaceWidget::FurnaceWidget(Inventory &playerInventory, BlockData &blockData, W
 	m_progressImage.setPosition(80, 35, 0);
 }
 
-void FurnaceWidget::onEvent(const SDL_Event &event) {
+void FurnaceWidget::onEvent(const S_Event &event) {
 	m_playerInventoryWidget.onMouseEvent(event, m_mouseItemWidget);
 	m_hotbarInventoryWidget.onMouseEvent(event, m_mouseItemWidget);
 

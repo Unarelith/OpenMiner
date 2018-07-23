@@ -21,7 +21,7 @@ class FurnaceWidget : public Widget {
 	public:
 		FurnaceWidget(Inventory &playerInventory, BlockData &blockData, Widget *parent = nullptr);
 
-		void onEvent(const SDL_Event &event) override;
+		void onEvent(const S_Event &event) override;
 
 		void update() override;
 

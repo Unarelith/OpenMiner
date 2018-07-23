@@ -24,7 +24,7 @@ class HUD : public Transformable, public IDrawable {
 	public:
 		HUD(Camera &camera, Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix);
 
-		void onEvent(const SDL_Event &event);
+		void onEvent(const S_Event &event);
 
 		void update();
 

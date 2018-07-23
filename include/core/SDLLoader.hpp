@@ -3,7 +3,7 @@
  *
  *       Filename:  SDLLoader.hpp
  *
- *    Description:  
+ *    Description:
  *
  *        Created:  15/09/2014 00:06:50
  *
@@ -20,12 +20,12 @@ class SDLLoader {
 		SDLLoader(const SDLLoader &) = delete;
 		SDLLoader(SDLLoader &&) = delete;
 		~SDLLoader();
-		
+
 		SDLLoader& operator=(const SDLLoader &) = delete;
 		SDLLoader& operator=(SDLLoader &&) = delete;
-		
+
 		void load();
-		
+
 	private:
 		bool m_sdlInitialized = false;
 		bool m_imgInitialized = false;

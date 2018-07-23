@@ -30,7 +30,7 @@ class ApplicationState : public IDrawable, public Transformable {
 		ApplicationState &operator=(const ApplicationState &) = delete;
 		ApplicationState &operator=(ApplicationState &&) = default;
 
-		virtual void onEvent(const SDL_Event &) {}
+		virtual void onEvent(const S_Event &) {}
 
 		virtual void update() = 0;
 

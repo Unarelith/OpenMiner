@@ -20,6 +20,9 @@
 class Mouse {
 	public:
 		static void resetToWindowCenter();
+    #ifdef USE_SFML
+        static sf::Vector2i getPosition();
+    #endif // USE_SFML
 
 		static void setWindow(Window *window) { s_window = window; }
 

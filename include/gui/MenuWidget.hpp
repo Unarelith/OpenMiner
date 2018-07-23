@@ -20,7 +20,7 @@ class MenuWidget : public Widget {
 	public:
 		MenuWidget(u16 width, u16 height, Widget *parent = nullptr);
 
-		void onEvent(const SDL_Event &event) override;
+		void onEvent(const S_Event &event) override;
 
 		TextButton &addButton(u16 x, u16 y, const std::string &text, const TextButton::Callback &callback);
 

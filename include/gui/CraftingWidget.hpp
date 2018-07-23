@@ -22,7 +22,7 @@ class CraftingWidget : public Widget {
 	public:
 		CraftingWidget(Inventory &craftingInventory, Widget *parent = nullptr);
 
-		void onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget);
+		void onMouseEvent(const S_Event &event, MouseItemWidget &mouseItemWidget);
 
 		void update() override;
 

@@ -21,7 +21,7 @@ MenuWidget::MenuWidget(u16 width, u16 height, Widget *parent) : Widget(parent) {
 	m_buttons.resize(m_width * m_height);
 }
 
-void MenuWidget::onEvent(const SDL_Event &event) {
+void MenuWidget::onEvent(const S_Event &event) {
 	for (TextButton &button : m_buttons) {
 		button.onEvent(event);
 	}

@@ -26,7 +26,7 @@ WorkbenchWidget::WorkbenchWidget(Inventory &playerInventory, Inventory &crafting
 	m_hotbarInventoryWidget.setPosition(7, 141, 0);
 }
 
-void WorkbenchWidget::onEvent(const SDL_Event &event) {
+void WorkbenchWidget::onEvent(const S_Event &event) {
 	m_craftingWidget.onMouseEvent(event, m_mouseItemWidget);
 
 	m_playerInventoryWidget.onMouseEvent(event, m_mouseItemWidget);

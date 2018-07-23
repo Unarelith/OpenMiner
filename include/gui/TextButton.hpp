@@ -26,7 +26,7 @@ class TextButton : public Widget {
 		TextButton(Widget *parent = nullptr);
 		TextButton(const Callback &callback, Widget *parent = nullptr);
 
-		void onEvent(const SDL_Event &event) override;
+		void onEvent(const S_Event &event) override;
 
 		const std::string &text() const { return m_text.text(); }
 		void setText(const std::string &text);

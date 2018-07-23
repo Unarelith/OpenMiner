@@ -15,11 +15,15 @@
 
 #include "Application.hpp"
 #include "Exception.hpp"
-#include "SDLLoader.hpp"
+#ifdef USE_SDL
+    #include "SDLLoader.hpp"
+#endif // USE_SDL
 
 int main(int argc, char **argv) {
+#ifdef USE_SDL
 	SDLLoader sdlLoader;
 	sdlLoader.load();
+#endif // USE_SDL
 
 	Application app(argc, argv);
 	app.run();
