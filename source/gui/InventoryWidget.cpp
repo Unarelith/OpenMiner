@@ -32,11 +32,7 @@ void InventoryWidget::init(Inventory &inventory, unsigned int offset, unsigned i
 }
 
 void InventoryWidget::onMouseEvent(const S_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly) {
-#ifdef USE_SDL
-	if (event.type == SDL_MOUSEMOTION) {
-#elif defined USE_SFML
-	if (event.type == sf::Event::MouseMoved) {
-#endif // USE_SDL, USE_SFML
+	if (event.type == S_EventType(S_EventTypeID::MouseMoved)) {
 		m_currentItemWidget = nullptr;
 		for (std::size_t i = 0 ; i < m_itemWidgets.size() ; ++i) {
 #ifdef USE_SDL

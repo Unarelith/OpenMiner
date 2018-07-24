@@ -30,18 +30,17 @@ Hotbar::Hotbar(Inventory &inventory, Widget *parent) : Widget(182, 22, parent), 
 }
 
 void Hotbar::onEvent(const S_Event &event) {
+	if (event.type == S_EventType(S_EventTypeID::MouseWheelScrolled)) {
 #ifdef USE_SDL
-	if (event.type == SDL_MOUSEWHEEL) {
 		if (event.wheel.y == -1)
 #elif defined USE_SFML
-	if (event.type == sf::Event::MouseWheelScrolled) {
-		if (event.mouseWheelScroll.wheel == sf::Mouse::Wheel::VerticalWheel  &&  int(event.mouseWheelScroll.delta) == -1)
+		if (int(event.mouseWheelScroll.delta) == -1)
 #endif // USE_SDL, USE_SFML
 			m_cursorPos = (m_cursorPos + 1) % 9;
 #ifdef USE_SDL
 		else if (event.wheel.y == 1)
 #elif defined USE_SFML
-		else if (event.mouseWheelScroll.wheel == sf::Mouse::Wheel::VerticalWheel  &&  int(event.mouseWheelScroll.delta) == 1)
+		else if (int(event.mouseWheelScroll.delta) == 1)
 #endif // USE_SDL, USE_SFML
 			m_cursorPos = (m_cursorPos == 0) ? 8 : m_cursorPos - 1;
 

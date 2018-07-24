@@ -143,11 +143,10 @@ void BlockCursor::updateAnimationVertexBuffer(const Block &block, int animationP
 }
 
 void BlockCursor::onEvent(const S_Event &event, const Hotbar &hotbar) {
+	if (event.type == S_EventType(S_EventTypeID::MouseButtonPressed) && m_selectedBlock.w != -1) {
 #ifdef USE_SDL
-	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
 #elif defined USE_SFML
-	if (event.type == sf::Event::MouseButtonPressed && m_selectedBlock.w != -1) {
 		if (event.mouseButton.button == sf::Mouse::Left) {
 #endif // USE_SDL, USE_SFML
 			m_animationStart = GameClock::getTicks();
@@ -183,11 +182,10 @@ void BlockCursor::onEvent(const S_Event &event, const Hotbar &hotbar) {
 			}
 		}
 	}
+	else if (event.type == S_EventType(S_EventTypeID::MouseButtonReleased)) {
 #ifdef USE_SDL
-	else if (event.type == SDL_MOUSEBUTTONUP) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
 #elif defined USE_SFML
-	else if (event.type == sf::Event::MouseButtonReleased) {
 		if (event.mouseButton.button == sf::Mouse::Left) {
 #endif // USE_SDL, USE_SFML
 			m_animationStart = 0;
