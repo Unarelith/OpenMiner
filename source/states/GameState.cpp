@@ -44,7 +44,7 @@ void GameState::onEvent(const S_Event &event) {
 			m_camera.turnH(event.motion.xrel * 0.06);
 			m_camera.turnV(-event.motion.yrel * 0.06);
 #elif defined USE_SFML
-    static sf::Vector2i lastPosition;
+	static sf::Vector2i lastPosition;
 	if (event.type == sf::Event::MouseMoved) {
 		if(SCREEN_WIDTH / 2 != event.mouseMove.x || SCREEN_HEIGHT / 2 != event.mouseMove.y) {
 			m_camera.turnH((event.mouseMove.x-lastPosition.x) * 0.06);
@@ -52,10 +52,10 @@ void GameState::onEvent(const S_Event &event) {
 #endif // USE_SDL, USE_SFML
 
 			Mouse::resetToWindowCenter();
-        #ifdef USE_SFML
-            const Vector2i pos = Mouse::getPosition();
-            lastPosition = {pos.x, pos.y};
-        #endif // USE_SFML
+		#ifdef USE_SFML
+			const Vector2i pos0 = Mouse::getPosition();
+			lastPosition = {pos0.x, pos0.y};
+		#endif // USE_SFML
 
 			m_camera.updateViewMatrix();
 		}
@@ -71,7 +71,7 @@ void GameState::onEvent(const S_Event &event) {
 	else if (event.type == SDL_WINDOWEVENT) {
 		if (event.window.event == SDL_WINDOWEVENT_LEAVE) {
 #elif defined USE_SFML
-		if (event.type == sf::Event::MouseLeft) {
+		if (event.type == sf::Event::LostFocus) {
 #endif // USE_SDL, USE_SFML
 			Mouse::setCursorGrabbed(false);
 			Mouse::setCursorVisible(true);
@@ -79,7 +79,7 @@ void GameState::onEvent(const S_Event &event) {
 #ifdef USE_SDL
 		else if (event.window.event == SDL_WINDOWEVENT_ENTER) {
 #elif defined USE_SFML
-		else if (event.type == sf::Event::MouseEntered) {
+		else if (event.type == sf::Event::GainedFocus) {
 #endif // USE_SDL, USE_SFML
 			Mouse::setCursorGrabbed(true);
 			Mouse::setCursorVisible(false);

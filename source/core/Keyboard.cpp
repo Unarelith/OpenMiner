@@ -115,7 +115,7 @@ bool Keyboard::isKeyPressed(Key key) {
 		return false;
 	}
 #elif defined USE_SFML
-    return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keysCode[key]));
+	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keysCode[key]));
 #endif // USE_SDL, USE_SFML
 }
 

@@ -45,13 +45,13 @@ class Window : public RenderTarget {
 
 		SDL_WindowPtr m_window{nullptr, SDL_DestroyWindow};
 		SDL_GLContextPtr m_context{nullptr, SDL_GL_DeleteContext};
-    #elif defined USE_SFML
+	#elif defined USE_SFML
 		using SFML_WindowPtr = std::unique_ptr<S_Window>;
 //		using SFML_GLContextPtr = std::unique_ptr<sf::Context>;  //For multithreading?
 
 		SFML_WindowPtr m_window{nullptr};
 //		SFML_GLContextPtr m_context{nullptr};
-    #endif // USE_SDL, USE_SFML
+	#endif // USE_SDL, USE_SFML
 
 		u16 m_width;
 		u16 m_height;

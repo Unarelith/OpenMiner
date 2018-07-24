@@ -21,7 +21,7 @@
 class Mouse {
 	public:
 		static void resetToWindowCenter();
-        static Vector2i getPosition();
+		static Vector2i getPosition();
 
 		static void setWindow(Window *window) { s_window = window; }
 

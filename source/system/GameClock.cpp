@@ -18,7 +18,7 @@ u32 GameClock::ticks = 0;
 
 u32 GameClock::getTicks(bool realTime) {
 #ifdef USE_SFML
-    static sf::Clock clock;
+	static sf::Clock clock;
 #endif // USE_SFML
 	if(realTime) {
 #ifdef USE_SDL
@@ -73,7 +73,7 @@ void GameClock::waitForNextFrame() {
 #ifdef USE_SDL
 		SDL_Delay(m_timestep - lastFrameDuration);
 #elif defined USE_SFML
-        sf::sleep(sf::milliseconds(m_timestep - lastFrameDuration));
+		sf::sleep(sf::milliseconds(m_timestep - lastFrameDuration));
 #endif // USE_SDL, USE_SFML
 	}
 

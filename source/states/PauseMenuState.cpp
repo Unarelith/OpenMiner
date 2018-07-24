@@ -47,6 +47,9 @@ void PauseMenuState::onEvent(const S_Event &event) {
 #endif // USE_SDL, USE_SFML
 		Mouse::setCursorGrabbed(true);
 		Mouse::setCursorVisible(false);
+#ifdef USE_SFML
+		Mouse::resetToWindowCenter();
+#endif // USE_SFML
 
 		m_stateStack->pop();
 	}
