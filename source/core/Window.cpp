@@ -36,7 +36,7 @@ void Window::open(const std::string &caption, u16 width, u16 height) {
     //For OpenGL version >=3.2 with Core profile set settings.attributeFlags = sf::ContextSettings::Core;
 
     m_window = std::make_unique<S_Window>(sf::VideoMode(width, height), caption, sf::Style::Titlebar | sf::Style::Close, settings);
-    //SFML throws exception with message automatically if failed
+    //SFML prints error message automatically if failed
     m_window->setPosition({int(sf::VideoMode::getDesktopMode().width/2  - width/2),
                            10});  //int(sf::VideoMode::getDesktopMode().height/2 - height/2)});  //How to subtract height of title bar?
 #endif // USE_SDL, USE_SFML

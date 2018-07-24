@@ -46,10 +46,6 @@ class Keyboard {
 		static bool isKeyPressedWithDelay(Key key, u16 delay);
 
 	private:
-    #ifdef USE_SDL
-		static const u8 *getState();
-    #endif // USE_SDL
-
 		static std::map<Key, bool> pressed;
 		static std::map<Key, u32> lastTimePressed;
 		static std::map<Key, u32> keysCode;

@@ -25,11 +25,16 @@ void Mouse::resetToWindowCenter() {
 #endif // USE_SDL, USE_SFML
 }
 
-#ifdef USE_SFML
-sf::Vector2i Mouse::getPosition() {
-    return sf::Mouse::getPosition(*s_window->window());
+Vector2i Mouse::getPosition() {
+#ifdef USE_SDL
+    Vector2i pos;
+    SDL_GetMouseState(&pos.x, &pos.y);
+    return {pos.x, pos.y};
+#elif defined USE_SFML
+    const sf::Vector2i pos = sf::Mouse::getPosition(*s_window->window());
+    return {pos.x, pos.y};
+#endif // USE_SDL, USE_SFML
 }
-#endif // USE_SFML
 
 void Mouse::setCursorGrabbed(bool grabbed) {
 #ifdef USE_SDL

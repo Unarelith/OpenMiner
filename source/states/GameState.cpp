@@ -53,7 +53,8 @@ void GameState::onEvent(const S_Event &event) {
 
 			Mouse::resetToWindowCenter();
         #ifdef USE_SFML
-            lastPosition = Mouse::getPosition();
+            const Vector2i pos = Mouse::getPosition();
+            lastPosition = {pos.x, pos.y};
         #endif // USE_SFML
 
 			m_camera.updateViewMatrix();

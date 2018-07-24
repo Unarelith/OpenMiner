@@ -100,8 +100,10 @@ std::map<Keyboard::Key, u32> Keyboard::keysCode = {
 };
 
 #ifdef USE_SDL
-const u8 *Keyboard::getState() {
+namespace {
+const u8 *getState() {
 	return SDL_GetKeyboardState(nullptr);
+}
 }
 #endif // USE_SDL
 
