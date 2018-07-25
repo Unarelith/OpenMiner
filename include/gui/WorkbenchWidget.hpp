@@ -20,7 +20,7 @@ class WorkbenchWidget : public Widget {
 	public:
 		WorkbenchWidget(Inventory &playerInventory, Inventory &craftingInventory, Widget *parent = nullptr);
 
-		void onEvent(const S_Event &event) override;
+		void onEvent(const sf::Event &event) override;
 
 		void update() override;
 

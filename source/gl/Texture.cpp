@@ -12,7 +12,7 @@
  * =====================================================================================
  */
 #include "Exception.hpp"
-#include "SDLHeaders.hpp"
+#include "SFMLHeaders.hpp"
 #include "Texture.hpp"
 
 Texture::Texture(const std::string &filename) {
@@ -34,39 +34,22 @@ Texture::~Texture() noexcept {
 }
 
 void Texture::loadFromFile(const std::string &filename) {
-#ifdef USE_SDL
-	SDL_Surface *surface = IMG_Load(filename.c_str());
-	if(!surface) {
-		throw EXCEPTION("Failed to load texture:", filename);
-	}
-#elif defined USE_SFML
 	sf::Image image;
 	if(!image.loadFromFile(filename)) {
 		throw EXCEPTION("Failed to load texture:", filename);
 	}
-#endif // USE_SDL, USE_SFML
 
 	m_filename = filename;
 
-#ifdef USE_SDL
-	m_width = surface->w;
-	m_height = surface->h;
-#elif defined USE_SFML
     m_width = image.getSize().x;
     m_height = image.getSize().y;
-#endif // USE_SDL, USE_SFML
 
 	glGenTextures(1, &m_texture);
 
 	bind(this);
 
-#ifdef USE_SDL
-	GLenum format = (surface->format->BytesPerPixel == 4) ? GL_RGBA : GL_RGB;
-	glTexImage2D(GL_TEXTURE_2D, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
-#elif defined USE_SFML
-	GLenum format = GL_RGBA;
+	GLenum format = GL_RGBA;  //sf::Image is always stored as RGBA. Support for GL_RGB needed?
 	glTexImage2D(GL_TEXTURE_2D, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, image.getPixelsPtr());
-#endif // USE_SDL, USE_SFML
 
 	glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -77,10 +60,6 @@ void Texture::loadFromFile(const std::string &filename) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 4);
 
 	bind(nullptr);
-
-#ifdef USE_SDL
-	SDL_FreeSurface(surface);
-#endif // USE_SDL
 }
 
 void Texture::bind(const Texture *texture) {

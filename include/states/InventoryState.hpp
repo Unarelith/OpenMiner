@@ -35,7 +35,7 @@ class InventoryState : public ApplicationState {
 			                      SCREEN_HEIGHT / 2.0 - m_widget->getGlobalBounds().height / 2.0, 0);
 		}
 
-		void onEvent(const S_Event &event) override;
+		void onEvent(const sf::Event &event) override;
 
 		void update() override;
 

@@ -19,7 +19,7 @@
 
 #include "IntTypes.hpp"
 #include "RenderTarget.hpp"
-#include "SDLHeaders.hpp"
+#include "SFMLHeaders.hpp"
 
 class Window : public RenderTarget {
 	public:
@@ -36,22 +36,14 @@ class Window : public RenderTarget {
 		void close() { m_isOpen = false; }
 		bool isOpen() const { return m_isOpen; }
 
-		S_Window *window() const { return m_window.get(); }
+		sf::RenderWindow *window() const { return m_window.get(); }
 
 	private:
-    #ifdef USE_SDL
-		using SDL_WindowPtr = std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)>;
-		using SDL_GLContextPtr = std::unique_ptr<void, decltype(&SDL_GL_DeleteContext)>;
-
-		SDL_WindowPtr m_window{nullptr, SDL_DestroyWindow};
-		SDL_GLContextPtr m_context{nullptr, SDL_GL_DeleteContext};
-	#elif defined USE_SFML
-		using SFML_WindowPtr = std::unique_ptr<S_Window>;
+		using SFML_WindowPtr = std::unique_ptr<sf::RenderWindow>;
 //		using SFML_GLContextPtr = std::unique_ptr<sf::Context>;  //For multithreading?
 
 		SFML_WindowPtr m_window{nullptr};
 //		SFML_GLContextPtr m_context{nullptr};
-	#endif // USE_SDL, USE_SFML
 
 		u16 m_width;
 		u16 m_height;

@@ -23,7 +23,7 @@ class PauseMenuState : public ApplicationState {
 	public:
 		PauseMenuState(ApplicationState *parent = nullptr);
 
-		void onEvent(const S_Event &event) override;
+		void onEvent(const sf::Event &event) override;
 
 		void update() override;
 

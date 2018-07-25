@@ -31,33 +31,21 @@ void InventoryWidget::init(Inventory &inventory, unsigned int offset, unsigned i
 	m_inventoryHeight = inventory.height();
 }
 
-void InventoryWidget::onMouseEvent(const S_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly) {
-	if (event.type == S_EventType(S_EventTypeID::MouseMoved)) {
+void InventoryWidget::onMouseEvent(const sf::Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly) {
+	if (event.type == sf::Event::MouseMoved) {
 		m_currentItemWidget = nullptr;
 		for (std::size_t i = 0 ; i < m_itemWidgets.size() ; ++i) {
-#ifdef USE_SDL
-			if (m_itemWidgets[i].isPointInWidget(event.motion.x, event.motion.y)) {
-#elif defined USE_SFML
 			if (m_itemWidgets[i].isPointInWidget(event.mouseMove.x, event.mouseMove.y)) {
-#endif // USE_SDL, USE_SFML
 				m_currentItemWidget = &m_itemWidgets[i];
 
 				m_selectedItemBackground.setPosition(1 + (i % m_inventoryWidth) * 18, 1 + (i / m_inventoryWidth) * 18, 0);
 			}
 		}
 	}
-#ifdef USE_SDL
-	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && m_currentItemWidget) {
-#elif defined USE_SFML
 	else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && m_currentItemWidget) {
-#endif // USE_SDL, USE_SFML
 		mouseItemWidget.swapItems(*m_currentItemWidget, isReadOnly);
 	}
-#ifdef USE_SDL
-	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT && m_currentItemWidget) {
-#elif defined USE_SFML
 	else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right && m_currentItemWidget) {
-#endif // USE_SDL, USE_SFML
 		if (!isReadOnly) {
 			mouseItemWidget.putItem(*m_currentItemWidget);
 		}

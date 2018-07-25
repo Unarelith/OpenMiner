@@ -23,21 +23,13 @@ MouseItemWidget::MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0,
 	m_tooltipInfoText.setColor({180, 180, 180});
 }
 
-void MouseItemWidget::onEvent(const S_Event &event) {
-	if (event.type == S_EventType(S_EventTypeID::MouseMoved)) {
-#ifdef USE_SDL
-		updatePosition(event.motion.x, event.motion.y);
-#elif defined USE_SFML
+void MouseItemWidget::onEvent(const sf::Event &event) {
+	if (event.type == sf::Event::MouseMoved) {
 		updatePosition(event.mouseMove.x, event.mouseMove.y);
-#endif // USE_SDL, USE_SFML
 	}
 
-	else if (event.type == S_EventType(S_EventTypeID::MouseButtonPressed)) {
-#ifdef USE_SDL
-		updatePosition(event.button.x, event.button.y);
-#elif defined USE_SFML
+	else if (event.type == sf::Event::MouseButtonPressed) {
 		updatePosition(event.mouseButton.x, event.mouseButton.y);
-#endif // USE_SDL, USE_SFML
 	}
 }
 

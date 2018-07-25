@@ -61,16 +61,10 @@ void CoreApplication::createWindow(u16 screenWidth, u16 screenHeight, const char
 }
 
 void CoreApplication::handleEvents() {
-	S_Event event;
-#ifdef USE_SDL
-	while (SDL_PollEvent(&event)) {
-		if (event.type == SDL_QUIT) {
-		// || (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE && m_stateStack.size() == 1)) {
-#elif defined USE_SFML
+	sf::Event event;
 	while (m_window.window()->pollEvent(event)) {
 		if (event.type == sf::Event::Closed) {
 		// || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape && m_stateStack.size() == 1)) {
-#endif // USE_SDL, USE_SFML
 			m_window.close();
 		}
 

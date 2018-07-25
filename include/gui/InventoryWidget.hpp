@@ -16,7 +16,7 @@
 
 #include "MouseItemWidget.hpp"
 #include "RectangleShape.hpp"
-#include "SDLHeaders.hpp"
+#include "SFMLHeaders.hpp"
 
 class InventoryWidget : public Widget {
 	public:
@@ -24,7 +24,7 @@ class InventoryWidget : public Widget {
 
 		void init(Inventory &inventory, unsigned int offset = 0, unsigned int size = 0);
 
-		void onMouseEvent(const S_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly = false);
+		void onMouseEvent(const sf::Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly = false);
 
 		const ItemWidget *currentItemWidget() const { return m_currentItemWidget; }
 

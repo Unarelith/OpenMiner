@@ -55,14 +55,10 @@ SettingsMenuState::SettingsMenuState(ApplicationState *parent) : ApplicationStat
 	m_menuWidget.addButton(0, 4, "Use VSync: OFF", [] (TextButton &) {}).setEnabled(false);
 }
 
-void SettingsMenuState::onEvent(const S_Event &event) {
+void SettingsMenuState::onEvent(const sf::Event &event) {
 	m_menuWidget.onEvent(event);
 
-#ifdef USE_SDL
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-#elif defined USE_SFML
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-#endif // USE_SDL, USE_SFML
 		m_stateStack->pop();
 	}
 }

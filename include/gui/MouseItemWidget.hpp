@@ -22,7 +22,7 @@ class MouseItemWidget : public ItemWidget {
 	public:
 		MouseItemWidget(Widget *parent);
 
-		void onEvent(const S_Event &event) override;
+		void onEvent(const sf::Event &event) override;
 
 		void update(const ItemWidget *currentItemWidget);
 

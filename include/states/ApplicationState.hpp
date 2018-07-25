@@ -16,7 +16,7 @@
 
 #include "IDrawable.hpp"
 #include "Transformable.hpp"
-#include "SDLHeaders.hpp"
+#include "SFMLHeaders.hpp"
 
 class ApplicationStateStack;
 
@@ -30,7 +30,7 @@ class ApplicationState : public IDrawable, public Transformable {
 		ApplicationState &operator=(const ApplicationState &) = delete;
 		ApplicationState &operator=(ApplicationState &&) = default;
 
-		virtual void onEvent(const S_Event &) {}
+		virtual void onEvent(const sf::Event &) {}
 
 		virtual void update() = 0;
 

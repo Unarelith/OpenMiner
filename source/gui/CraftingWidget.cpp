@@ -22,7 +22,7 @@ CraftingWidget::CraftingWidget(Inventory &craftingInventory, Widget *parent) : W
 	m_craftingResultInventoryWidget.setPosition(123, 34, 0);
 }
 
-void CraftingWidget::onMouseEvent(const S_Event &event, MouseItemWidget &mouseItemWidget) {
+void CraftingWidget::onMouseEvent(const sf::Event &event, MouseItemWidget &mouseItemWidget) {
 	m_craftingInventoryWidget.onMouseEvent(event, mouseItemWidget);
 	m_craftingResultInventoryWidget.onMouseEvent(event, mouseItemWidget, true);
 

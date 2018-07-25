@@ -29,20 +29,14 @@ InventoryState::InventoryState(ApplicationState *parent) : ApplicationState(pare
 	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
-void InventoryState::onEvent(const S_Event &event) {
+void InventoryState::onEvent(const sf::Event &event) {
 	// if (m_parent)
 	// 	m_parent->onEvent(event);
 
-#ifdef USE_SDL
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-#elif defined USE_SFML
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-#endif // USE_SDL, USE_SFML
 		Mouse::setCursorGrabbed(true);
 		Mouse::setCursorVisible(false);
-#ifdef USE_SFML
 		Mouse::resetToWindowCenter();
-#endif // USE_SFML
 
 		m_stateStack->pop();
 	}
