@@ -11,6 +11,8 @@
  *
  * =====================================================================================
  */
+#include <cstring>
+
 #include "Chunk.hpp"
 #include "GameClock.hpp"
 #include "Registry.hpp"
