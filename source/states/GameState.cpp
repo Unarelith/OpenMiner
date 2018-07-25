@@ -45,10 +45,8 @@ void GameState::onEvent(const sf::Event &event) {
 			m_camera.turnH((event.mouseMove.x-lastPosition.x) * 0.06);
 			m_camera.turnV(-(event.mouseMove.y-lastPosition.y) * 0.06);
 
-			Mouse::resetToWindowCenter();
-
-			const Vector2i pos0 = Mouse::getPosition();
-			lastPosition = {pos0.x, pos0.y};
+			auto midPos = Mouse::resetToWindowCenter();
+			lastPosition = {midPos.x, midPos.y};
 
 			m_camera.updateViewMatrix();
 		}
