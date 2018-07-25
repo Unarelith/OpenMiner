@@ -18,6 +18,7 @@
 #include <utility>
 
 #include "IntTypes.hpp"
+#include "SFMLHeaders.hpp"
 
 template<typename T>
 class Vector3 {
@@ -58,6 +59,11 @@ class Vector3 {
 		T x;
 		T y;
 		T z;
+
+
+		//Conversion to/from sf::Vector3<T>:
+		operator sf::Vector3<T>() const  { return {x, y, z}; }
+		Vector3(const sf::Vector3<T> v) : Vector3(v.x, v.y, v.z) {}
 };
 
 template<typename T>
