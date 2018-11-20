@@ -25,7 +25,7 @@
 			#include <GLAD/glad.h>
 		#else
 			#include <GL/glew.h>
-		#endif // USE_GLAD, else GLEW
+		#endif
 	#else
 		#include <GL/gl.h>
 	#endif

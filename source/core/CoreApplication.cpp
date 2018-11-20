@@ -24,7 +24,7 @@ CoreApplication::CoreApplication(int, char **) {
 }
 
 void CoreApplication::init() {
-	srand(time(nullptr));
+	std::srand(std::time(nullptr));
 
 	Mouse::setWindow(&m_window);
 

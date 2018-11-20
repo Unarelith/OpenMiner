@@ -44,13 +44,13 @@ void Application::initOpenGL() {
 #ifdef __MINGW32__
 #ifdef USE_GLAD
 	if(!gladLoadGL()) {
-		throw EXCEPTION("OpenGL init failed");
+		throw EXCEPTION("glad init failed");
 	}
 #else
 	if(glewInit() != GLEW_OK) {
 		throw EXCEPTION("glew init failed");
 	}
-#endif // USE_GLAD, else GLEW
+#endif
 #endif
 
 	glEnable(GL_BLEND);
