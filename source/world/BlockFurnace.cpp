@@ -86,6 +86,6 @@ void BlockFurnace::onTick(const glm::ivec3 &blockPosition, Player &, Chunk &, Wo
 		data->inventory.setStack(1, 0, recipe->result().item().id(), outputStack.amount() + recipe->result().amount());
 	}
 
-	data->data = ticksRemaining | (currentBurnTime << 16) | ((u32)itemProgress << 32);
+	data->data = ticksRemaining | ((u32)currentBurnTime << 16) | ((u64)itemProgress << 32);
 }
 

@@ -11,6 +11,8 @@
  *
  * =====================================================================================
  */
+#include <ctime>
+
 #include "CoreApplication.hpp"
 #include "Exception.hpp"
 // #include "GamePad.hpp"

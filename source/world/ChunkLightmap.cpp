@@ -11,6 +11,8 @@
  *
  * =====================================================================================
  */
+#include <cstring>
+
 #include "Chunk.hpp"
 #include "ChunkLightmap.hpp"
 #include "Registry.hpp"
