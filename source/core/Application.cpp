@@ -37,6 +37,9 @@ void Application::init() {
 	m_registry.registerItems();
 	m_registry.registerRecipes();
 
+	m_lua.open_libraries();
+	m_lua.script("print('lol')");
+
 	m_stateStack.push<GameState>();
 }
 
@@ -70,5 +73,4 @@ void Application::initOpenGL() {
 
 	glClearColor(0.196078, 0.6, 0.8, 1.0); // Skyblue
 }
-
 

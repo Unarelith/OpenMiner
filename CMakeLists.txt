@@ -12,8 +12,8 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 #------------------------------------------------------------------------------
 # Get source files
 #------------------------------------------------------------------------------
-file(GLOB_RECURSE SOURCE_FILES source/*.cpp)
-file(GLOB_RECURSE HEADER_FILES include/*.hpp)
+file(GLOB_RECURSE SOURCE_FILES source/*.cpp external/*.cpp)
+file(GLOB_RECURSE HEADER_FILES include/*.hpp external/*.hpp)
 
 foreach(HEADER_FILE ${HEADER_FILES})
 	get_filename_component(HEADER_DIRECTORY ${HEADER_FILE} DIRECTORY)
@@ -35,15 +35,15 @@ target_compile_features(${CMAKE_PROJECT_NAME} PRIVATE cxx_std_17)
 #------------------------------------------------------------------------------
 # Packages
 #------------------------------------------------------------------------------
-# - jsoncpp
+# - Lua
 #------------------------------------------------------------------------------
-find_package(JsonCpp REQUIRED)
-if(NOT JSONCPP_FOUND)
-	message(FATAL_ERROR "jsoncpp is needed to build the project. Please install it correctly.")
+find_package(Lua REQUIRED)
+if(NOT LUA_FOUND)
+	message(FATAL_ERROR "Lua is needed to build the project. Please install it correctly.")
 endif()
 
-include_directories(${JSONCPP_INCLUDE_DIRS})
-link_directories(${JSONCPP_LIBRARY_DIRS})
+include_directories(${LUA_INCLUDE_DIRS})
+link_directories(${LUA_LIBRARY_DIRS})
 
 #------------------------------------------------------------------------------
 # - tinyxml2
@@ -104,7 +104,7 @@ include_directories(${SDL2_INCLUDE_DIRS}
 #------------------------------------------------------------------------------
 target_link_libraries(${CMAKE_PROJECT_NAME}
                       ${TINYXML2_LIBRARIES}
-                      ${JSONCPP_LIBRARIES}
+                      ${LUA_LIBRARIES}
                       ${OPENGL_LIBRARIES}
                       ${SDL2_LIBRARIES}
                       ${SDL2IMAGE_LIBRARIES}

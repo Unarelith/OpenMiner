@@ -14,6 +14,8 @@
 #ifndef APPLICATION_HPP_
 #define APPLICATION_HPP_
 
+#include <sol.hpp>
+
 #include "CoreApplication.hpp"
 #include "Registry.hpp"
 
@@ -27,6 +29,7 @@ class Application : public CoreApplication {
 
 	private:
 		Registry m_registry;
+		sol::state m_lua;
 };
 
 #endif // APPLICATION_HPP_
