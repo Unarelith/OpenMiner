@@ -1,8 +1,8 @@
-# KubKraft
+# OpenMiner
 
-### By gnidmoo
+### By Unarelith
 
-- KubKraft is a Minecraft-like game.
+- OpenMiner is a Minecraft-like game.
 
 ![](screenshot.png?raw=true)
 
@@ -22,12 +22,11 @@
     - OpenGL >= 2.1, [glm](http://sourceforge.net/projects/ogl-math/files/latest/download?source=files)
     - [glew](http://sourceforge.net/projects/glew/files/latest/download) *(only required for Windows)*
     - [tinyxml2](http://leethomason.github.io/tinyxml2/)
-    - [jsoncpp](https://github.com/open-source-parsers/jsoncpp/releases)
     - _Linux users: Check your distribution repositories for packages._
-- Run `cmake .` at the root of the game folder
-- Run `make`, wait, run the game and enjoy!
+- Run `mkdir build && cd build` at the root of the game folder
+- Run `cmake .. && make`, wait (or use `-j8`), run the game and enjoy!
 
-## Previous version
+## Previous versions
 
 - Here is the [commit](https://github.com/Quent42340/KubKraft/tree/8eba845421efff6ce941f8550ff79e6364970fd5) matching the end of the first version made in 2013.
 - And here is the [commit](https://github.com/Quent42340/KubKraft/tree/58c23a7e66404dab94e51998a179dc370c89ea06) matching the end of the rewrite made in 2014.

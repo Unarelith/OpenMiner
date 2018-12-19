@@ -29,7 +29,7 @@ doc/html
 doc/latex
 
 # Binaries
-KubKraft
+OpenMiner
 *.exe
 
 # Misc

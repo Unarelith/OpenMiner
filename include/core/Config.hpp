@@ -15,7 +15,7 @@
 #define CONFIG_HPP_
 
 namespace {
-	constexpr const char *APP_NAME = "KubKraft";
+	constexpr const char *APP_NAME = "OpenMiner";
 
 	constexpr float SCREEN_WIDTH  = 1600;
 	constexpr float SCREEN_HEIGHT = 1050;
