@@ -19,6 +19,7 @@
 class ScriptEngine {
 	public:
 		void init();
+		void initUsertypes();
 
 		sol::state &lua() { return m_lua; }
 
