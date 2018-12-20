@@ -72,57 +72,15 @@ void ScriptEngine::initUsertypes() {
 	);
 
 	m_lua.new_usertype<Registry>("Registry",
-		"register_block", [] (Registry *reg, u32 id, u32 textureID, const std::string &name)
-		-> Block*
-		{
-			if (id == BlockType::Workbench)    return reg->registerBlock<BlockWorkbench>();
-			else if (id == BlockType::Furnace) return reg->registerBlock<BlockFurnace>();
-			else if (id == BlockType::Water)   return reg->registerBlock<BlockWater>();
-			else return reg->registerBlock<Block>(id, textureID, name);
-		},
+		"register_block", &Registry::registerBlockFromTable,
 		"register_item_block", [] (Registry *reg, u32 id, const std::string &name) {
 			return reg->registerItem<ItemBlock>(id, id, name);
 		},
 		"register_item", [] (Registry *reg, u32 id, const std::string &name, u32 textureID) {
 			return reg->registerItem<Item>(id, textureID, name);
 		},
-		"register_crafting_recipe", [] (Registry *reg, const sol::table &recipeDefinition) {
-			sol::table resultTable = recipeDefinition["result"];
-			sol::table patternTable = recipeDefinition["pattern"];
-			sol::table keysTable = recipeDefinition["keys"];
-
-			ItemStack result = {
-				resultTable["item"].get<u16>(),
-				resultTable["amount"].get<u16>()
-			};
-
-			std::vector<std::string> pattern;
-			for (auto &it : patternTable)
-				pattern.emplace_back(it.second.as<std::string>());
-
-			std::map<char, std::vector<u32>> keys;
-			for (auto &it : keysTable) {
-				keys.emplace(it.first.as<char>(), std::vector<u32>{it.second.as<u32>()});
-			}
-
-			reg->registerRecipe<CraftingRecipe>(pattern, keys, result);
-		},
-		"register_smelting_recipe", [] (Registry *reg, const sol::table &recipeDefinition) {
-			sol::table inputTable = recipeDefinition["input"];
-			sol::table outputTable = recipeDefinition["output"];
-
-			ItemStack input = {
-				inputTable["item"].get<u16>(),
-				inputTable["amount"].get<u16>()
-			};
-
-			ItemStack output = {
-				outputTable["item"].get<u16>(),
-				outputTable["amount"].get<u16>()
-			};
-
-			reg->registerRecipe<SmeltingRecipe>(input, output);
-		}
+		"register_crafting_recipe", &Registry::registerCraftingRecipeFromTable,
+		"register_smelting_recipe", &Registry::registerSmeltingRecipeFromTable
 	);
 }
 

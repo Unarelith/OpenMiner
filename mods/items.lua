@@ -1,41 +1,133 @@
-registry:register_block(0, 0,  "Air")
-registry:register_block(1, 37, "Dirt")
+registry:register_block({
+	id = 0,
+	texture = 0,
+	name = "Air",
+})
 
-local cobblestone = registry:register_block(2, 38, "Cobblestone")
-cobblestone.hardness = 2
-cobblestone.harvest_requirements = 1
+registry:register_block({
+	id = 1,
+	texture = 37,
+	name = "Dirt",
+})
 
-registry:register_block(3, 226, "Grass"):set_item_drop(1, 1)
-registry:register_block(4, 266, "Leaves").hardness = 0.5
-registry:register_block(5, 277, "Wood").hardness = 2
+registry:register_block({
+	id = 2,
+	texture = 38,
+	name = "Cobblestone",
+	hardness = 2,
+	harvest_requirements = 1,
+})
 
-local stone = registry:register_block(6, 402, "Stone")
-stone.hardness = 1.5
-stone.harvest_requirements = 1
-stone:set_item_drop(2, 1)
+registry:register_block({
+	id = 3,
+	texture = 226,
+	name = "Grass",
+	item_drop = {
+		id = 1,
+		amount = 1
+	}
+})
 
-registry:register_block(7, 369, "Sand")
-registry:register_block(8, 457, "Water")
-registry:register_block(9, 168, "Glass")
+registry:register_block({
+	id = 4,
+	texture = 266,
+	name = "Leaves",
+	hardness = 0.5,
+})
 
-local coalOre = registry:register_block(10, 36, "Coal Ore")
-coalOre.hardness = 3
-coalOre.harvest_requirements = 1
-coalOre:set_item_drop(38, 1)
+registry:register_block({
+	id = 5,
+	texture = 277,
+	name = "Wood",
+	hardness = 2
+})
 
-registry:register_block(11, 316, "Planks")
-registry:register_block(12, 218, "Glowstone")
-registry:register_block(13, 77,  "Workbench")
-registry:register_block(14, 164, "Furnace")
+registry:register_block({
+	id = 6,
+	texture = 402,
+	name = "Stone",
+	hardness = 1.5,
+	harvest_requirements = 1,
+	item_drop = {
+		id = 2,
+		amount = 1
+	},
+})
 
-local ironOre = registry:register_block(15, 254, "Iron Ore")
-ironOre.hardness = 3
-ironOre.harvest_requirements = 1
+registry:register_block({
+	id = 7,
+	texture = 369,
+	name = "Sand"
+})
 
-registry:register_block(16, 316, "Plank Slab")
+registry:register_block({
+	id = 8,
+	texture = 457,
+	name = "Water",
+})
+
+registry:register_block({
+	id = 9,
+	texture = 168,
+	name = "Glass",
+})
+
+registry:register_block({
+	id = 10,
+	texture = 36,
+	name = "Coal Ore",
+	hardness = 3,
+	harvest_requirements = 1,
+	item_drop = {
+		id = 38,
+		amount = 1
+	},
+})
+
+registry:register_block({
+	id = 11,
+	texture = 316,
+	name = "Planks",
+})
+
+registry:register_block({
+	id = 12,
+	texture = 218,
+	name = "Glowstone",
+})
+
+registry:register_block({
+	id = 13,
+	texture = 77,
+	name = "Workbench",
+})
+
+registry:register_block({
+	id = 14,
+	texture = 164,
+	name = "Furnace",
+})
+
+registry:register_block({
+	id = 15,
+	texture = 254,
+	name = "Iron Ore",
+	hardness = 3,
+	harvest_requirements = 1,
+})
+
+registry:register_block({
+	id = 16,
+	texture = 316,
+	name = "Plank Slab"
+})
 
 for i = 17, 31 do
-	registry:register_block(i, 4, "Undefined")
+	registry:register_block({
+		id = i,
+		texture = 4,
+		name = "Undefined"
+	})
 end
 
 registry:register_item_block(0,  "")
