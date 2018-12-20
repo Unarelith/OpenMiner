@@ -14,6 +14,8 @@
 #ifndef SCRIPTENGINE_HPP_
 #define SCRIPTENGINE_HPP_
 
+#define SOL_CHECK_ARGUMENTS 1
+
 #include <sol.hpp>
 
 class ScriptEngine {

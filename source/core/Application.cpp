@@ -34,7 +34,6 @@ void Application::init() {
 
 	Registry::setInstance(m_registry);
 	m_scriptEngine.init();
-	m_registry.registerRecipes();
 
 	m_stateStack.push<GameState>();
 }

@@ -38,8 +38,6 @@ class Registry {
 			return m_recipes.emplace_back(std::make_unique<T>(std::forward<Args>(args)...)).get();
 		}
 
-		void registerRecipes();
-
 		const Block &getBlock(std::size_t id) const { return *m_blocks.at(id).get(); }
 		const Item &getItem(std::size_t id) const { return *m_items.at(id).get(); }
 
