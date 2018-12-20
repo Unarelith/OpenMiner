@@ -14,10 +14,9 @@
 #ifndef APPLICATION_HPP_
 #define APPLICATION_HPP_
 
-#include <sol.hpp>
-
 #include "CoreApplication.hpp"
 #include "Registry.hpp"
+#include "ScriptEngine.hpp"
 
 class Application : public CoreApplication {
 	public:
@@ -29,7 +28,8 @@ class Application : public CoreApplication {
 
 	private:
 		Registry m_registry;
-		sol::state m_lua;
+
+		ScriptEngine m_scriptEngine;
 };
 
 #endif // APPLICATION_HPP_

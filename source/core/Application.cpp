@@ -33,12 +33,8 @@ void Application::init() {
 	m_resourceHandler.loadConfigFile<TextureLoader>("resources/config/textures.xml");
 
 	Registry::setInstance(m_registry);
-	m_registry.registerBlocks();
-	m_registry.registerItems();
+	m_scriptEngine.init();
 	m_registry.registerRecipes();
-
-	m_lua.open_libraries();
-	m_lua.script("print('lol')");
 
 	m_stateStack.push<GameState>();
 }

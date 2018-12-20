@@ -24,7 +24,7 @@ class Inventory {
 			: m_width(width), m_height(height) { m_items.resize(width * height); }
 
 		const ItemStack &getStack(u16 x, u16 y) const { return m_items.at(x + y * m_width); }
-		ItemStack &getStack(u16 x, u16 y) { return m_items.at(x + y * m_width); }
+		ItemStack &getStackRef(u16 x, u16 y) { return m_items.at(x + y * m_width); }
 		void setStack(u16 x, u16 y, u16 id, u16 amount = 1);
 		void addStack(u16 id, u16 amount = 1);
 

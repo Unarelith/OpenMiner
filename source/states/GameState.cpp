@@ -25,30 +25,14 @@
 #include "Mouse.hpp"
 #include "PauseMenuState.hpp"
 #include "PlayerInventoryWidget.hpp"
+#include "ScriptEngine.hpp"
 
 GameState::GameState() {
-	m_player.inventory().addStack(ItemType::Workbench, 1);
-	m_player.inventory().addStack(ItemType::Dirt, 64);
-	m_player.inventory().addStack(ItemType::Grass, 64);
-	m_player.inventory().addStack(ItemType::Stone, 64);
-	m_player.inventory().addStack(ItemType::Glass, 64);
-	m_player.inventory().addStack(ItemType::Glowstone, 64);
-	m_player.inventory().addStack(ItemType::Furnace, 1);
-	m_player.inventory().addStack(ItemType::PlankSlab, 64);
-	m_player.inventory().addStack(ItemType::StonePickaxe, 1);
-
-	m_player.inventory().addStack(ItemType::Wood, 64);
-	m_player.inventory().addStack(ItemType::Planks, 64);
-	m_player.inventory().addStack(ItemType::Stick, 64);
-	m_player.inventory().addStack(ItemType::Cobblestone, 64);
-	m_player.inventory().addStack(ItemType::StoneAxe, 1);
-	m_player.inventory().addStack(ItemType::StoneHoe, 1);
-	m_player.inventory().addStack(ItemType::StoneShovel, 1);
-	m_player.inventory().addStack(ItemType::StoneSword, 1);
-	m_player.inventory().addStack(ItemType::IronOre, 64);
-	m_player.inventory().addStack(ItemType::Coal, 64);
-
 	m_projectionMatrix = glm::perspective(45.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, DIST_NEAR, DIST_FAR);
+
+	auto &lua = ScriptEngine::getInstance().lua();
+	lua["Player"] = &m_player;
+	lua["init"]();
 
 	initShaders();
 }
