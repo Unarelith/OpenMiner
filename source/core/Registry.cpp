@@ -40,12 +40,23 @@ void Registry::registerBlockFromTable(const sol::table &table) {
 	sol::optional<sol::table> itemDrop = table["item_drop"];
 	if (itemDrop != sol::nullopt) {
 		u16 id = table["id"];
-		u16 amount = table["amoun"];
+		u16 amount = table["amount"];
 		block->setItemDrop(id, amount);
 	}
+
+	registerItem<ItemBlock>(id, id, name);
 }
 
 void Registry::registerItemFromTable(const sol::table &table) {
+	u32 id = table["id"].get<u32>();
+	u32 textureID = table["texture"].get<u32>();
+	std::string name = table["name"].get<std::string>();
+
+	Item *item = registerItem<Item>(id, textureID, name);
+	item->setIsFuel(table["is_fuel"].get_or(false));
+	item->setBurnTime(table["burn_time"].get_or(0));
+	item->setHarvestCapability(table["harvest_capability"].get_or(0));
+	item->setMiningSpeed(table["mining_speed"].get_or(1));
 }
 
 void Registry::registerCraftingRecipeFromTable(const sol::table &table) {

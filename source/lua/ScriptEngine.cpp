@@ -76,9 +76,7 @@ void ScriptEngine::initUsertypes() {
 		"register_item_block", [] (Registry *reg, u32 id, const std::string &name) {
 			return reg->registerItem<ItemBlock>(id, id, name);
 		},
-		"register_item", [] (Registry *reg, u32 id, const std::string &name, u32 textureID) {
-			return reg->registerItem<Item>(id, textureID, name);
-		},
+		"register_item", &Registry::registerItemFromTable,
 		"register_crafting_recipe", &Registry::registerCraftingRecipeFromTable,
 		"register_smelting_recipe", &Registry::registerSmeltingRecipeFromTable
 	);

@@ -130,69 +130,103 @@ for i = 17, 31 do
 	})
 end
 
-registry:register_item_block(0,  "")
-registry:register_item_block(1,  "Dirt")
-registry:register_item_block(2,  "Cobblestone")
-registry:register_item_block(3,  "Grass")
-registry:register_item_block(4,  "Leaves")
-registry:register_item_block(5,  "Wood")
-registry:register_item_block(6,  "Stone")
-registry:register_item_block(7,  "Sand")
-registry:register_item_block(8,  "Water")
-registry:register_item_block(9,  "Glass")
-registry:register_item_block(10, "Coal Ore")
-registry:register_item_block(11, "Planks")
-registry:register_item_block(12, "Glowstone")
-registry:register_item_block(13, "Workbench")
-registry:register_item_block(14, "Furnace")
-registry:register_item_block(15, "Iron Ore")
-registry:register_item_block(16, "Plank Slab")
+registry:register_item({
+	id = 32,
+	name = "Stick",
+	texture = 324,
+})
 
-for i = 17, 31 do
-	registry:register_item_block(i, "Undefined")
-end
+registry:register_item({
+	id = 33,
+	name = "Stone Axe",
+	texture = 325,
+	mining_speed = 4,
+	harvest_capability = 4,
+})
 
-registry:register_item(32, "Stick", 324)
+registry:register_item({
+	id = 34,
+	name = "Stone Hoe",
+	texture = 326,
+})
 
-local stone_axe = registry:register_item(33, "Stone Axe", 325)
-stone_axe.mining_speed = 4
-stone_axe.harvest_capability = 4
+registry:register_item({
+	id = 35,
+	name = "Stone Pickaxe",
+	texture = 327,
+	mining_speed = 4,
+	harvest_capability = 1,
+})
 
-registry:register_item(34, "Stone Hoe", 326)
+registry:register_item({
+	id = 36,
+	name = "Stone Shovel",
+	texture = 328,
+	mining_speed = 4,
+	harvest_capability = 2,
+})
 
-local stone_pickaxe = registry:register_item(35, "Stone Pickaxe", 327)
-stone_pickaxe.mining_speed = 4
-stone_pickaxe.harvest_capability = 1
+registry:register_item({
+	id = 37,
+	name = "Stone Sword",
+	texture = 329,
+})
 
-local stoneShovel = registry:register_item(36, "Stone Shovel", 328)
-stoneShovel.mining_speed = 4
-stoneShovel.harvest_capability = 2
+registry:register_item({
+	id = 38,
+	name = "Coal",
+	texture = 111,
+	is_fuel = true,
+	burn_time = 1600,
+})
 
-registry:register_item(37, "Stone Sword", 329)
+registry:register_item({
+	id = 39,
+	name = "Iron Ingot",
+	texture = 232,
+})
 
-local coal = registry:register_item(38, "Coal", 111)
-coal.is_fuel = true
-coal.burn_time = 1600
+registry:register_item({
+	id = 40,
+	name = "Charcoal",
+	texture = 41,
+	is_fuel = true,
+	burn_time = 1600,
+})
 
-registry:register_item(39, "Iron Ingot", 232)
+registry:register_item({
+	id = 41,
+	name = "Wooden Axe",
+	texture = 337,
+	mining_speed = 2,
+	harvest_capability = 4,
+})
 
-local charcoal = registry:register_item(40, "Charcoal", 41)
-charcoal.is_fuel = true
-charcoal.burn_time = 1600
+registry:register_item({
+	id = 42,
+	name = "Wooden Hoe",
+	texture = 338,
+})
 
-local woodenAxe = registry:register_item(41, "Wooden Axe", 337)
-woodenAxe.mining_speed = 2
-woodenAxe.harvest_capability = 4
+registry:register_item({
+	id = 43,
+	name = "Wooden Pickaxe",
+	texture = 339,
+	mining_speed = 2,
+	harvest_capability = 1,
+})
 
-registry:register_item(42, "Wooden Hoe", 338)
+registry:register_item({
+	id = 44,
+	name = "Wooden Shovel",
+	texture = 340,
+	mining_speed = 2,
+	harvest_capability = 2,
+})
 
-local woodenPickaxe = registry:register_item(43, "Wooden Pickaxe", 339)
-woodenPickaxe.mining_speed = 2
-woodenPickaxe.harvest_capability = 1
-
-local woodenShovel = registry:register_item(44, "Wooden Shovel", 340)
-woodenShovel.mining_speed = 2
-woodenShovel.harvest_capability = 2
-
-registry:register_item(45, "Wooden Sword", 341)
+registry:register_item({
+	id = 45,
+	name = "Wooden Sword",
+	texture = 341,
+})
 
