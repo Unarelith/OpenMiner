@@ -4,24 +4,24 @@ dofile("mods/items.lua")
 dofile("mods/recipes.lua")
 
 function init()
-	Player:inventory():addStack(13, 1);
-	Player:inventory():addStack(1, 64);
-	Player:inventory():addStack(3, 64);
-	Player:inventory():addStack(6, 64);
-	Player:inventory():addStack(9, 64);
-	Player:inventory():addStack(12, 64);
-	Player:inventory():addStack(14, 1);
-	Player:inventory():addStack(16, 64);
-	Player:inventory():addStack(35, 1);
-	Player:inventory():addStack(5, 64);
-	Player:inventory():addStack(11, 64);
-	Player:inventory():addStack(2, 64);
-	Player:inventory():addStack(32, 64);
-	Player:inventory():addStack(33, 1);
-	Player:inventory():addStack(34, 1);
-	Player:inventory():addStack(35, 1);
-	Player:inventory():addStack(36, 1);
-	Player:inventory():addStack(15, 64);
-	Player:inventory():addStack(38, 64);
+	player:inventory():add_stack(13, 1);
+	player:inventory():add_stack(1, 64);
+	player:inventory():add_stack(3, 64);
+	player:inventory():add_stack(6, 64);
+	player:inventory():add_stack(9, 64);
+	player:inventory():add_stack(12, 64);
+	player:inventory():add_stack(14, 1);
+	player:inventory():add_stack(16, 64);
+	player:inventory():add_stack(35, 1);
+	player:inventory():add_stack(5, 64);
+	player:inventory():add_stack(11, 64);
+	player:inventory():add_stack(2, 64);
+	player:inventory():add_stack(32, 64);
+	player:inventory():add_stack(33, 1);
+	player:inventory():add_stack(34, 1);
+	player:inventory():add_stack(35, 1);
+	player:inventory():add_stack(36, 1);
+	player:inventory():add_stack(15, 64);
+	player:inventory():add_stack(38, 64);
 end
 

@@ -1,5 +1,5 @@
 -- Wooden Axe
-Registry:registerCraftingRecipe({
+registry:register_crafting_recipe({
 	result = {
 		item = 41,
 		amount = 1
@@ -18,7 +18,7 @@ Registry:registerCraftingRecipe({
 })
 
 -- Wooden Hoe
-Registry:registerCraftingRecipe({
+registry:register_crafting_recipe({
 	result = {
 		item = 42,
 		amount = 1
@@ -37,7 +37,7 @@ Registry:registerCraftingRecipe({
 })
 
 -- Wooden Pickaxe
-Registry:registerCraftingRecipe({
+registry:register_crafting_recipe({
 	result = {
 		item = 43,
 		amount = 1
@@ -56,7 +56,7 @@ Registry:registerCraftingRecipe({
 })
 
 -- Wooden Shovel
-Registry:registerCraftingRecipe({
+registry:register_crafting_recipe({
 	result = {
 		item = 44,
 		amount = 1
@@ -75,7 +75,7 @@ Registry:registerCraftingRecipe({
 })
 
 -- Wooden Sword
-Registry:registerCraftingRecipe({
+registry:register_crafting_recipe({
 	result = {
 		item = 45,
 		amount = 1
@@ -94,7 +94,7 @@ Registry:registerCraftingRecipe({
 })
 
 -- Stone Axe
-Registry:registerCraftingRecipe({
+registry:register_crafting_recipe({
 	result = {
 		item = 33,
 		amount = 1
@@ -113,7 +113,7 @@ Registry:registerCraftingRecipe({
 })
 
 -- Stone Hoe
-Registry:registerCraftingRecipe({
+registry:register_crafting_recipe({
 	result = {
 		item = 34,
 		amount = 1
@@ -132,7 +132,7 @@ Registry:registerCraftingRecipe({
 })
 
 -- Stone Pickaxe
-Registry:registerCraftingRecipe({
+registry:register_crafting_recipe({
 	result = {
 		item = 35,
 		amount = 1
@@ -151,7 +151,7 @@ Registry:registerCraftingRecipe({
 })
 
 -- Stone Shovel
-Registry:registerCraftingRecipe({
+registry:register_crafting_recipe({
 	result = {
 		item = 36,
 		amount = 1
@@ -170,7 +170,7 @@ Registry:registerCraftingRecipe({
 })
 
 -- Stone Sword
-Registry:registerCraftingRecipe({
+registry:register_crafting_recipe({
 	result = {
 		item = 37,
 		amount = 1
@@ -189,7 +189,7 @@ Registry:registerCraftingRecipe({
 })
 
 -- Stick
-Registry:registerCraftingRecipe({
+registry:register_crafting_recipe({
 	result = {
 		item = 32,
 		amount = 4
@@ -204,7 +204,7 @@ Registry:registerCraftingRecipe({
 })
 
 -- Planks
-Registry:registerCraftingRecipe({
+registry:register_crafting_recipe({
 	result = {
 		item = 11,
 		amount = 4
@@ -214,7 +214,7 @@ Registry:registerCraftingRecipe({
 })
 
 -- Workbench
-Registry:registerCraftingRecipe({
+registry:register_crafting_recipe({
 	result = {
 		item = 13,
 		amount = 1
@@ -227,7 +227,7 @@ Registry:registerCraftingRecipe({
 })
 
 -- Furnace
-Registry:registerCraftingRecipe({
+registry:register_crafting_recipe({
 	result = {
 		item = 14,
 		amount = 1
@@ -244,7 +244,7 @@ Registry:registerCraftingRecipe({
 
 
 -- Plank Slab
-Registry:registerCraftingRecipe({
+registry:register_crafting_recipe({
 	result = {
 		item = 16,
 		amount = 6
@@ -256,25 +256,25 @@ Registry:registerCraftingRecipe({
 })
 
 -- Iron Ingot
-Registry:registerSmeltingRecipe({
+registry:register_smelting_recipe({
 	input = {item = 15, amount = 1},
 	output = {item = 39, amount = 1}
 })
 
 -- Stone
-Registry:registerSmeltingRecipe({
+registry:register_smelting_recipe({
 	input = {item = 2, amount = 1},
 	output = {item = 6, amount = 1}
 })
 
 -- Glass
-Registry:registerSmeltingRecipe({
+registry:register_smelting_recipe({
 	input = {item = 7, amount = 1},
 	output = {item = 9, amount = 1}
 })
 
 -- Charcoal
-Registry:registerSmeltingRecipe({
+registry:register_smelting_recipe({
 	input = {item = 5, amount = 1},
 	output = {item = 40, amount = 1}
 })

@@ -31,7 +31,7 @@ GameState::GameState() {
 	m_projectionMatrix = glm::perspective(45.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, DIST_NEAR, DIST_FAR);
 
 	auto &lua = ScriptEngine::getInstance().lua();
-	lua["Player"] = &m_player;
+	lua["player"] = &m_player;
 	lua["init"]();
 
 	initShaders();

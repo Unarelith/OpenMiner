@@ -30,7 +30,7 @@ void ScriptEngine::init() {
 
 	initUsertypes();
 
-	m_lua["Registry"] = &Registry::getInstance();
+	m_lua["registry"] = &Registry::getInstance();
 
 	m_lua.open_libraries(sol::lib::base);
 	m_lua.safe_script_file("mods/test.lua");
@@ -41,11 +41,11 @@ void ScriptEngine::initUsertypes() {
 		"inventory", &Player::inventory);
 
 	m_lua.new_usertype<Inventory>("Inventory",
-		"width",    &Inventory::width,
-		"height",   &Inventory::height,
-		"getStack", &Inventory::getStackRef,
-		"setStack", &Inventory::setStack,
-		"addStack", &Inventory::addStack
+		"get_width",    &Inventory::width,
+		"get_height",   &Inventory::height,
+		"get_stack", &Inventory::getStackRef,
+		"set_stack", &Inventory::setStack,
+		"add_stack", &Inventory::addStack
 	);
 
 	m_lua.new_usertype<ItemStack>("ItemStack",
@@ -54,25 +54,25 @@ void ScriptEngine::initUsertypes() {
 	);
 
 	m_lua.new_usertype<Item>("Item",
-		"name",              &Item::name,
-		"id",                &Item::id,
-		"isFuel",            sol::property(&Item::isFuel, &Item::setIsFuel),
-		"burnTime",          sol::property(&Item::burnTime, &Item::setBurnTime),
-		"harvestCapability", sol::property(&Item::harvestCapability, &Item::setHarvestCapability),
-		"miningSpeed",       sol::property(&Item::miningSpeed, &Item::setMiningSpeed)
+		"name",               &Item::name,
+		"id",                 &Item::id,
+		"is_fuel",            sol::property(&Item::isFuel, &Item::setIsFuel),
+		"burn_time",          sol::property(&Item::burnTime, &Item::setBurnTime),
+		"harvest_capability", sol::property(&Item::harvestCapability, &Item::setHarvestCapability),
+		"mining_speed",       sol::property(&Item::miningSpeed, &Item::setMiningSpeed)
 	);
 
 	m_lua.new_usertype<Block>("Block",
-		"id",                  &Block::id,
-		"data",                &Block::data,
-		"name",                sol::property(&Block::name, &Block::setName),
-		"harvestRequirements", sol::property(&Block::harvestRequirements, &Block::setHarvestRequirements),
-		"hardness",            sol::property(&Block::hardness, &Block::setHardness),
-		"setItemDrop",         &Block::setItemDrop
+		"id",                   &Block::id,
+		"data",                 &Block::data,
+		"name",                 sol::property(&Block::name, &Block::setName),
+		"harvest_requirements", sol::property(&Block::harvestRequirements, &Block::setHarvestRequirements),
+		"hardness",             sol::property(&Block::hardness, &Block::setHardness),
+		"set_item_drop",        &Block::setItemDrop
 	);
 
 	m_lua.new_usertype<Registry>("Registry",
-		"registerBlock", [] (Registry *reg, u32 id, u32 textureID, const std::string &name)
+		"register_block", [] (Registry *reg, u32 id, u32 textureID, const std::string &name)
 		-> Block*
 		{
 			if (id == BlockType::Workbench)    return reg->registerBlock<BlockWorkbench>();
@@ -80,13 +80,13 @@ void ScriptEngine::initUsertypes() {
 			else if (id == BlockType::Water)   return reg->registerBlock<BlockWater>();
 			else return reg->registerBlock<Block>(id, textureID, name);
 		},
-		"registerItemBlock", [] (Registry *reg, u32 id, const std::string &name) {
+		"register_item_block", [] (Registry *reg, u32 id, const std::string &name) {
 			return reg->registerItem<ItemBlock>(id, id, name);
 		},
-		"registerItem", [] (Registry *reg, u32 id, const std::string &name, u32 textureID) {
+		"register_item", [] (Registry *reg, u32 id, const std::string &name, u32 textureID) {
 			return reg->registerItem<Item>(id, textureID, name);
 		},
-		"registerCraftingRecipe", [] (Registry *reg, const sol::table &recipeDefinition) {
+		"register_crafting_recipe", [] (Registry *reg, const sol::table &recipeDefinition) {
 			sol::table resultTable = recipeDefinition["result"];
 			sol::table patternTable = recipeDefinition["pattern"];
 			sol::table keysTable = recipeDefinition["keys"];
@@ -107,7 +107,7 @@ void ScriptEngine::initUsertypes() {
 
 			reg->registerRecipe<CraftingRecipe>(pattern, keys, result);
 		},
-		"registerSmeltingRecipe", [] (Registry *reg, const sol::table &recipeDefinition) {
+		"register_smelting_recipe", [] (Registry *reg, const sol::table &recipeDefinition) {
 			sol::table inputTable = recipeDefinition["input"];
 			sol::table outputTable = recipeDefinition["output"];
 
