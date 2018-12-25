@@ -21,6 +21,8 @@
 
 #include "OpenGL.hpp"
 
+class Transform;
+
 class Shader {
 	public:
 		Shader() = default;
@@ -42,6 +44,7 @@ class Shader {
 
 		void setUniform(const std::string &name, int n) const;
 		void setUniform(const std::string &name, const glm::mat4 &matrix) const;
+		void setUniform(const std::string &name, const Transform &transform) const;
 
 		static void bind(const Shader *shader);
 

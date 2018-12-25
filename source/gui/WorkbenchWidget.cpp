@@ -48,7 +48,7 @@ void WorkbenchWidget::update() {
 }
 
 void WorkbenchWidget::draw(RenderTarget &target, RenderStates states) const {
-	applyTransform(states);
+	states.transform *= getTransform();
 
 	target.draw(m_background, states);
 

@@ -100,18 +100,12 @@ void Cube::updateVertexBuffer(const Block &block) const {
 }
 
 void Cube::draw(RenderTarget &target, RenderStates states) const {
-	glm::mat4 tmpMatrix;
-	if (states.modelMatrix) {
-		tmpMatrix = *states.modelMatrix * m_modelMatrix;
-		states.modelMatrix = &tmpMatrix;
-	}
+	states.transform *= m_modelMatrix;
+	states.transform *= getTransform();
 
-	applyTransform(states);
+	states.viewMatrix = Transform::Identity;
 
-	states.viewMatrix = nullptr;
-
-	static glm::mat4 projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f, -40.0f, DIST_FAR);
-	states.projectionMatrix = &projectionMatrix;
+	states.projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f, -40.0f, DIST_FAR);
 
 	states.texture = &m_texture;
 	states.vertexAttributes = VertexAttribute::Only2d;

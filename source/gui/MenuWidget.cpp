@@ -38,7 +38,7 @@ TextButton &MenuWidget::addButton(u16 x, u16 y, const std::string &text, const T
 }
 
 void MenuWidget::draw(RenderTarget &target, RenderStates states) const {
-	applyTransform(states);
+	states.transform *= getTransform();
 
 	for (const TextButton &button : m_buttons) {
 		if (!button.text().empty())

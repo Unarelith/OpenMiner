@@ -100,8 +100,8 @@ void GameState::initShaders() {
 
 void GameState::draw(RenderTarget &target, RenderStates states) const {
 	states.shader = &m_shader;
-	states.projectionMatrix = &m_projectionMatrix;
-	states.viewMatrix = &m_viewMatrix;
+	states.projectionMatrix = m_projectionMatrix;
+	states.viewMatrix = m_viewMatrix;
 
 	target.draw(m_world, states);
 	target.draw(m_hud, states);

@@ -20,7 +20,7 @@ Text::Text() : m_texture(ResourceHandler::getInstance().get<Texture>("texture-fo
 }
 
 void Text::draw(RenderTarget &target, RenderStates states) const {
-	applyTransform(states);
+	states.transform *= getTransform();
 
 	for(const Sprite &sprite : m_textSprites) {
 		target.draw(sprite, states);

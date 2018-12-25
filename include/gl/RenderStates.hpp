@@ -17,6 +17,7 @@
 #include <glm/matrix.hpp>
 
 #include "IntTypes.hpp"
+#include "Transform.hpp"
 
 class Texture;
 class Shader;
@@ -36,9 +37,9 @@ namespace VertexAttribute {
 }
 
 struct RenderStates {
-	const glm::mat4 *projectionMatrix = nullptr;
-	const glm::mat4 *viewMatrix = nullptr;
-	const glm::mat4 *modelMatrix = nullptr;
+	Transform projectionMatrix;
+	Transform viewMatrix;
+	Transform transform;
 
 	const Texture *texture = nullptr;
 	const Shader *shader = nullptr;

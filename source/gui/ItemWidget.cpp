@@ -42,7 +42,7 @@ void ItemWidget::setStack(unsigned int id, unsigned int amount) {
 }
 
 void ItemWidget::draw(RenderTarget &target, RenderStates states) const {
-	applyTransform(states);
+	states.transform *= getTransform();
 
 	if (stack().item().isBlock() && stack().item().id())
 		target.draw(m_cube, states);

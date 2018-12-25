@@ -42,7 +42,7 @@ void BlockInfoWidget::setCurrentBlock(const Block *block) {
 
 void BlockInfoWidget::draw(RenderTarget &target, RenderStates states) const {
 	if (m_isVisible) {
-		applyTransform(states);
+		states.transform *= getTransform();
 
 		target.draw(m_background, states);
 		target.draw(m_itemWidget, states);

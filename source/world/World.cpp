@@ -69,19 +69,16 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 	states.shader->setUniform("u_renderDistance", renderDistance * Chunk::width);
 	Shader::bind(nullptr);
 
-	std::vector<std::pair<Chunk*, glm::mat4>> chunks;
+	std::vector<std::pair<Chunk*, Transform>> chunks;
 	for(auto &it : m_chunks) {
-		glm::mat4 modelMatrix{glm::translate(glm::mat4(1.0f),
-		                                     glm::vec3(it->x() * Chunk::width,
-		                                               it->y() * Chunk::height,
-		                                               it->z() * Chunk::depth))};
-
-		states.modelMatrix = &modelMatrix;
+		states.transform = glm::translate(glm::mat4(1.0f),
+		                                  glm::vec3(it->x() * Chunk::width,
+		                                            it->y() * Chunk::height,
+		                                            it->z() * Chunk::depth));
 
 		// Is the chunk close enough?
-		glm::vec4 center = *states.viewMatrix
-		                 // * *states.projectionMatrix
-		                 * *states.modelMatrix
+		glm::vec4 center = states.viewMatrix.getMatrix()
+		                 * states.transform.getMatrix()
 		                 * glm::vec4(Chunk::width / 2, Chunk::height / 2, Chunk::depth / 2, 1);
 
 		if(glm::length(center) > (renderDistance + 1) * Chunk::width) {
@@ -89,7 +86,7 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 		}
 
 		// Is this chunk on the screen?
-		center = *states.projectionMatrix * center;
+		center = states.projectionMatrix.getMatrix() * center;
 
 		float d = glm::length(center);
 		center.x /= center.w;
@@ -119,7 +116,7 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 			continue;
 		}
 
-		chunks.emplace_back(&*it, *states.modelMatrix);
+		chunks.emplace_back(&*it, states.transform);
 	}
 
 	if(ud < 1000) {
@@ -137,7 +134,7 @@ void World::draw(RenderTarget &target, RenderStates states) const {
 
 	for (u8 i = 0 ; i < ChunkBuilder::layers ; ++i) {
 		for (auto &it : chunks) {
-			states.modelMatrix = &it.second;
+			states.transform = it.second;
 			it.first->drawLayer(target, states, i);
 		}
 	}

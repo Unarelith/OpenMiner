@@ -37,7 +37,7 @@ void DebugOverlay::update() {
 }
 
 void DebugOverlay::draw(RenderTarget &target, RenderStates states) const {
-	applyTransform(states);
+	states.transform *= getTransform();
 
 	target.draw(m_versionText, states);
 	target.draw(m_positionText, states);

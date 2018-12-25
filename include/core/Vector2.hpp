@@ -31,6 +31,7 @@ class Vector2 {
 
 		Vector2 operator+(const Vector2<T> &vector2) const { return Vector2{x + vector2.x, y + vector2.y}; }
 		Vector2 operator-(const Vector2<T> &vector2) const { return Vector2{x - vector2.x, y - vector2.y}; }
+		Vector2 operator-()                          const { return Vector2{-x, -y}; }
 		Vector2 operator*(T n)                       const { return Vector2{x * n, y * n}; }
 
 		Vector2 operator/(T n) const {

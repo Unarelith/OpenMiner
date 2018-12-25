@@ -5,7 +5,7 @@
  *
  *    Description:
  *
- *        Created:  21/06/2018 01:34:48
+ *        Created:  11/11/2018 18:06:05
  *
  *         Author:  Quentin Bazin, <quent42340@gmail.com>
  *
@@ -14,41 +14,53 @@
 #ifndef TRANSFORMABLE_HPP_
 #define TRANSFORMABLE_HPP_
 
-#include <glm/matrix.hpp>
-
-#include "RenderStates.hpp"
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
-#ifndef RADIANS_PER_DEGREES
-#define RADIANS_PER_DEGREES (M_PI / 180.0f)
-#endif
+#include "Transform.hpp"
 
 class Transformable {
 	public:
-		void move(float x, float y, float z);
-		void setPosition(float x, float y, float z);
+		virtual ~Transformable() = default;
 
-		void setScale(float factorX, float factorY, float factorZ);
+		void setPosition(float x, float y, float z = 0);
+		void setPosition(const Vector3f &position) { setPosition(position.x, position.y, position.z); }
 
-		void setRotation(float rotationAngle, const glm::vec3 &rotationAxis);
+		void setOrigin(float x, float y, float z = 0);
+		void setOrigin(const Vector3f &origin) { setOrigin(origin.x, origin.y, origin.z); }
 
-		void applyTransform(RenderStates &states) const;
+		void setScale(float factorX, float factorY, float factorZ = 1);
+		void setScale(const Vector3f &factors) { setScale(factors.x, factors.y, factors.z); }
 
-		const glm::vec3 &getPosition() const { return m_position; }
-		const glm::vec3 &getScale() const { return m_scale; }
+		void setRotation(float angle) { setRotation(angle, {0, 0, 1}); }
+		void setRotation(float angle, const Vector3f &axis);
+
+		const Vector3f& getPosition() const { return m_position; }
+		const Vector3f& getOrigin() const { return m_origin; }
+		const Vector3f& getScale() const { return m_scale; }
+		float getRotation() const { return m_rotation; }
+
+		void move(float offsetX, float offsetY, float offsetZ = 0);
+		void move(const Vector3f &offset);
+
+		void scale(float factorX, float factorY, float factorZ = 1);
+		void scale(const Vector3f &factor);
+
+		void rotate(float angle);
+		void rotate(float angle, const Vector3f &axis);
+
+		const Transform& getTransform() const;
+		const Transform& getInverseTransform() const;
 
 	private:
-		glm::mat4 m_modelMatrix{1};
-		glm::mat4 m_tmpMatrix;
+		Vector3f m_position{0, 0, 0};
+		Vector3f m_origin{0, 0, 0};
+		Vector3f m_scale{1, 1, 1};
+		float m_rotation = 0;
 
-		glm::vec3 m_position{0, 0, 0};
-		glm::vec3 m_scale{1, 1, 1};
+		mutable Transform m_transform;
+		mutable Transform m_inverseTransform;
+		mutable Transform m_rotationTransform;
 
-		float m_rotationAngle = 0;
-		glm::vec3 m_rotationAxis = {0, 1, 0};
+		mutable bool m_transformNeedUpdate = true;
+		mutable bool m_inverseTransformNeedUpdate = true;
 };
 
 #endif // TRANSFORMABLE_HPP_

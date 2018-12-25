@@ -88,12 +88,11 @@ void Image::updateVertexBuffer() const {
 }
 
 void Image::draw(RenderTarget &target, RenderStates states) const {
-	applyTransform(states);
+	states.transform *= getTransform();
 
-	states.viewMatrix = nullptr;
+	states.viewMatrix = Transform::Identity;
 
-	static glm::mat4 projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
-	states.projectionMatrix = &projectionMatrix;
+	states.projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
 
 	states.texture = m_texture;
 	states.vertexAttributes = VertexAttribute::Only2d;

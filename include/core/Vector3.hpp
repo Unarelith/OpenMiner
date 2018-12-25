@@ -31,6 +31,7 @@ class Vector3 {
 
 		Vector3 operator+(const Vector3<T> &vector3) const { return Vector3{x + vector3.x, y + vector3.y, z + vector3.z}; }
 		Vector3 operator-(const Vector3<T> &vector3) const { return Vector3{x - vector3.x, y - vector3.y, z - vector3.z}; }
+		Vector3 operator-()                          const { return Vector3{-x, -y, -z}; }
 		Vector3 operator*(T n)                       const { return Vector3{x * n, y * n, z * n}; }
 
 		Vector3 operator/(T n) const {

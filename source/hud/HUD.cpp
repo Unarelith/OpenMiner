@@ -59,7 +59,7 @@ void HUD::draw(RenderTarget &target, RenderStates states) const {
 	states.shader = &m_shader;
 	states.vertexAttributes = VertexAttribute::Only2d;
 
-	applyTransform(states);
+	states.transform *= getTransform();
 
 	if (m_isDebugOverlayVisible)
 		target.draw(m_debugOverlay, states);
@@ -67,7 +67,7 @@ void HUD::draw(RenderTarget &target, RenderStates states) const {
 	target.draw(m_blockInfoWidget, states);
 	target.draw(m_hotbar, states);
 
-	states.modelMatrix = nullptr;
+	states.transform = Transform::Identity;
 
 	target.draw(m_crosshair, states);
 }

@@ -70,7 +70,7 @@ void SettingsMenuState::draw(RenderTarget &target, RenderStates states) const {
 	if (m_parent)
 		target.draw(*m_parent, states);
 
-	applyTransform(states);
+	states.transform *= getTransform();
 
 	states.shader = &m_shader;
 	states.vertexAttributes = VertexAttribute::Only2d;

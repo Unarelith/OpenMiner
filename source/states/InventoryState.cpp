@@ -53,7 +53,7 @@ void InventoryState::update() {
 }
 
 void InventoryState::draw(RenderTarget &target, RenderStates states) const {
-	applyTransform(states);
+	states.transform *= getTransform();
 
 	if (m_parent)
 		target.draw(*m_parent);

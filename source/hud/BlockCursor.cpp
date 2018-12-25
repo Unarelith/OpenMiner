@@ -224,8 +224,7 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glDisable(GL_CULL_FACE);
 
-	glm::mat4 modelMatrix = glm::translate(glm::mat4{1}, glm::vec3{m_selectedBlock});
-	states.modelMatrix = &modelMatrix;
+	states.transform = glm::translate(glm::mat4{1}, glm::vec3{m_selectedBlock});
 
 	target.draw(m_vbo, GL_LINES, 0, 24, states);
 

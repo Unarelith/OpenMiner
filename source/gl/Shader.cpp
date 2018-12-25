@@ -19,6 +19,7 @@
 
 #include "Exception.hpp"
 #include "Shader.hpp"
+#include "Transform.hpp"
 
 Shader::Shader(const std::string &vertexFilename, const std::string &fragmentFilename) {
 	loadFromFile(vertexFilename, fragmentFilename);
@@ -158,6 +159,10 @@ void Shader::setUniform(const std::string &name, int n) const {
 
 void Shader::setUniform(const std::string &name, const glm::mat4 &matrix) const {
 	glUniformMatrix4fv(uniform(name), 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
+void Shader::setUniform(const std::string &name, const Transform &transform) const {
+	glUniformMatrix4fv(uniform(name), 1, GL_FALSE, transform.getRawMatrix());
 }
 
 void Shader::bind(const Shader *shader) {

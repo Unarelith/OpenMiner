@@ -38,7 +38,7 @@ void TextButton::setText(const std::string &text) {
 }
 
 void TextButton::draw(RenderTarget &target, RenderStates states) const {
-	applyTransform(states);
+	states.transform *= getTransform();
 
 	if (!m_isEnabled)
 		target.draw(m_disabledBackground, states);

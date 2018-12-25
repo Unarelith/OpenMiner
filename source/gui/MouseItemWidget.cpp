@@ -89,7 +89,7 @@ void MouseItemWidget::putItem(ItemWidget &widget) {
 void MouseItemWidget::draw(RenderTarget &target, RenderStates states) const {
 	ItemWidget::draw(target, states);
 
-	applyTransform(states);
+	states.transform *= getTransform();
 
 	if (m_currentItemWidget) {
 		target.draw(m_tooltipBackground, states);
