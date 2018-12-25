@@ -29,16 +29,11 @@ Crosshair::Crosshair() {
 	m_vShape2.setColor(Color{200, 200, 200, 180});
 
 	m_hShape.setPosition(SCREEN_WIDTH / 2 - m_hShape.width() / 2, SCREEN_HEIGHT / 2 - m_hShape.height() / 2, 0);
-
 	m_vShape1.setPosition(SCREEN_WIDTH / 2 - m_vShape1.width() / 2, SCREEN_HEIGHT / 2 - m_hShape.height() / 2 - m_vShape1.height(), 0);
 	m_vShape2.setPosition(SCREEN_WIDTH / 2 - m_vShape2.width() / 2, SCREEN_HEIGHT / 2 + m_hShape.height() / 2, 0);
 }
 
 void Crosshair::draw(RenderTarget &target, RenderStates states) const {
-	// Shader::bind(states.shader);
-	// states.shader->setUniform("u_renderType", -1);
-	// Shader::bind(nullptr);
-
 	target.draw(m_hShape, states);
 	target.draw(m_vShape1, states);
 	target.draw(m_vShape2, states);

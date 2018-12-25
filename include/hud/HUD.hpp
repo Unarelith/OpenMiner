@@ -22,7 +22,7 @@
 
 class HUD : public Transformable, public IDrawable {
 	public:
-		HUD(Camera &camera, Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix);
+		HUD(Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix);
 
 		void onEvent(const sf::Event &event);
 

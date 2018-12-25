@@ -16,7 +16,7 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Camera.hpp"
+#include "Player.hpp"
 #include "Skybox.hpp"
 #include "World.hpp"
 
@@ -80,9 +80,9 @@ Skybox::Skybox() {
 
 void Skybox::draw(Shader &shader) {
 	glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f),
-	                        glm::vec3(Camera::getInstance().x() - World::renderDistance * Chunk::width / 2,
-	                                  Camera::getInstance().y() - World::renderDistance * Chunk::width / 2,
-	                                  Camera::getInstance().z() - World::renderDistance * Chunk::width / 2));
+	                        glm::vec3(Player::getInstance().x() - World::renderDistance * Chunk::width / 2,
+	                                  Player::getInstance().y() - World::renderDistance * Chunk::width / 2,
+	                                  Player::getInstance().z() - World::renderDistance * Chunk::width / 2));
 	modelMatrix *= glm::scale(glm::mat4(1.0), glm::vec3(World::renderDistance * Chunk::width));
 
 	shader.setUniform("u_modelMatrix", modelMatrix);

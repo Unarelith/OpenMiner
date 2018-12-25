@@ -13,10 +13,10 @@
  */
 #include "HUD.hpp"
 
-HUD::HUD(Camera &camera, Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix)
+HUD::HUD(Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix)
  : m_hotbar{player.inventory()},
-   m_blockCursor(camera, player, world, viewMatrix, projectionMatrix),
-   m_debugOverlay(camera)
+   m_blockCursor(player, world, viewMatrix, projectionMatrix),
+   m_debugOverlay(player)
 {
 	setScale(GUI_SCALE, GUI_SCALE, 1);
 

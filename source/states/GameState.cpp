@@ -42,12 +42,12 @@ void GameState::onEvent(const sf::Event &event) {
 
 	if (event.type == sf::Event::MouseMoved) {
 		if(SCREEN_WIDTH / 2 != event.mouseMove.x || SCREEN_HEIGHT / 2 != event.mouseMove.y) {
-			m_camera.turnH((event.mouseMove.x-lastPosition.x) * 0.06);
-			m_camera.turnV(-(event.mouseMove.y-lastPosition.y) * 0.06);
+			m_player.turnH((event.mouseMove.x - lastPosition.x) * 0.06);
+			m_player.turnV(-(event.mouseMove.y - lastPosition.y) * 0.06);
 
 			lastPosition = Mouse::resetToWindowCenter();
 
-			m_camera.updateViewMatrix();
+			m_player.updateViewMatrix();
 		}
 	}
 	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape && &m_stateStack->top() == this) {
@@ -75,7 +75,7 @@ void GameState::update() {
 	m_world.update(m_player);
 
 	if (&m_stateStack->top() == this) {
-		m_camera.processInputs();
+		m_player.processInputs();
 
 		if (Keyboard::isKeyPressedOnce(Keyboard::E)) {
 			auto &inventoryState = m_stateStack->push<InventoryState>(this);
@@ -83,7 +83,7 @@ void GameState::update() {
 		}
 	}
 
-	m_viewMatrix = m_camera.updatePosition(m_world);
+	m_viewMatrix = m_player.updatePosition(m_world);
 
 	m_hud.update();
 }

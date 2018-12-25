@@ -16,18 +16,18 @@
 
 #include "Text.hpp"
 
-class Camera;
+class Player;
 
 class DebugOverlay : public Transformable, public IDrawable {
 	public:
-		DebugOverlay(const Camera &camera);
+		DebugOverlay(const Player &player);
 
 		void update();
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		const Camera &m_camera;
+		const Player &m_player;
 
 		Text m_versionText;
 		Text m_positionText;
