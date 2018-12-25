@@ -14,8 +14,9 @@
 #ifndef COLOR_HPP_
 #define COLOR_HPP_
 
+#include <SFML/Graphics/Color.hpp>
+
 #include "IntTypes.hpp"
-#include "SFMLHeaders.hpp"
 
 class Color {
 	public:
@@ -43,7 +44,7 @@ class Color {
 		static Color red;
 
 
-		//Conversion to/from sf::Color:
+		// Conversion to/from sf::Color:
 		operator sf::Color() const  { return sf::Color(r*255, g*255, b*255, a*255); }
 		Color(const sf::Color col) : Color(col.r, col.g, col.b, col.a) {}
 };

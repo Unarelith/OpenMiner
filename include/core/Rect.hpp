@@ -16,8 +16,9 @@
 
 #include <algorithm>
 
+#include <SFML/Graphics/Rect.hpp>
+
 #include "Vector2.hpp"
-#include "SFMLHeaders.hpp"
 
 template<typename T>
 class Rect {
@@ -110,7 +111,7 @@ class Rect {
 		T height = 0;
 
 
-		//Conversion to/from sf::Rect<T>:
+		// Conversion to/from sf::Rect<T>:
 		operator sf::Rect<T>() const  { return {x, y, width, height}; }
 		Rect(const sf::Rect<T> rect) : Rect(rect.left, rect.top, rect.width, rect.height) {}
 };

@@ -17,9 +17,10 @@
 #include <memory>
 #include <string>
 
+#include <SFML/Graphics/RenderWindow.hpp>
+
 #include "IntTypes.hpp"
 #include "RenderTarget.hpp"
-#include "SFMLHeaders.hpp"
 
 class Window : public RenderTarget {
 	public:
@@ -36,14 +37,10 @@ class Window : public RenderTarget {
 		void close() { m_isOpen = false; }
 		bool isOpen() const { return m_isOpen; }
 
-		sf::RenderWindow *window() const { return m_window.get(); }
+		sf::RenderWindow *window() { return &m_window; }
 
 	private:
-		using SFML_WindowPtr = std::unique_ptr<sf::RenderWindow>;
-//		using SFML_GLContextPtr = std::unique_ptr<sf::Context>;  //For multithreading?
-
-		SFML_WindowPtr m_window{nullptr};
-//		SFML_GLContextPtr m_context{nullptr};
+		sf::RenderWindow m_window;
 
 		u16 m_width;
 		u16 m_height;

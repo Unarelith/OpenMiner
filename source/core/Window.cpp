@@ -16,15 +16,18 @@
 #include "Window.hpp"
 
 void Window::open(const std::string &caption, u16 width, u16 height) {
-	sf::ContextSettings settings(/*depthBits:*/24, /*stencilBits:*/8, /*antialiasingLevel:*/4);
-	settings.majorVersion = 2;  //OpenGL major Version
-	settings.minorVersion = 1;  //OpenGL minor Version
-	//For OpenGL version >=3.2 with Core profile set settings.attributeFlags = sf::ContextSettings::Core;
+	sf::ContextSettings settings;
+	settings.majorVersion = 2;
+	settings.minorVersion = 1;
+	// For OpenGL version >=3.2 with Core profile set settings.attributeFlags = sf::ContextSettings::Core;
+	settings.depthBits = 24;
+	settings.stencilBits = 8;
+	settings.antialiasingLevel = 4;
 
-	m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), caption, sf::Style::Titlebar | sf::Style::Close, settings);
-	//SFML prints error message automatically if failed. Redirect sf::err() ?
-	m_window->setPosition({int(sf::VideoMode::getDesktopMode().width/2  - width/2),
-						   10}); //int(sf::VideoMode::getDesktopMode().height/2 - height/2)});  //FIXME: Cannot center properly. How to subtract height of title bar?
+	m_window.create(sf::VideoMode(width, height), caption, sf::Style::Titlebar | sf::Style::Close, settings);
+	// SFML prints error message automatically if failed. Redirect sf::err() ?
+	m_window.setPosition({int(sf::VideoMode::getDesktopMode().width/2  - width/2),
+						  /*int(sf::VideoMode::getDesktopMode().height/2 - height/2)})*/ 10});  // FIXME: Cannot center properly. How to subtract height of title bar?
 
 	m_width = width;
 	m_height = height;
@@ -37,10 +40,10 @@ void Window::clear() {
 }
 
 void Window::display() {
-	m_window->display();
+	m_window.display();
 }
 
 void Window::setVerticalSyncEnabled(bool enabled) {
-	m_window->setVerticalSyncEnabled(enabled);
+	m_window.setVerticalSyncEnabled(enabled);
 }
 

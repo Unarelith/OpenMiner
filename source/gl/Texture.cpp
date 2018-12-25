@@ -11,8 +11,9 @@
  *
  * =====================================================================================
  */
+#include <SFML/Graphics/Image.hpp>
+
 #include "Exception.hpp"
-#include "SFMLHeaders.hpp"
 #include "Texture.hpp"
 
 Texture::Texture(const std::string &filename) {
@@ -48,7 +49,7 @@ void Texture::loadFromFile(const std::string &filename) {
 
 	bind(this);
 
-	GLenum format = GL_RGBA;  //sf::Image is always stored as RGBA. Support for GL_RGB needed?
+	GLenum format = GL_RGBA;
 	glTexImage2D(GL_TEXTURE_2D, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, image.getPixelsPtr());
 
 	glGenerateMipmap(GL_TEXTURE_2D);

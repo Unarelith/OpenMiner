@@ -53,8 +53,6 @@ void GameState::onEvent(const sf::Event &event) {
 	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape && &m_stateStack->top() == this) {
 		m_stateStack->push<PauseMenuState>(this);
 	}
-	//When window is not in focus SFML still receives Mouse movement and sf::Keyboard::isKeyPressed() still returns true
-	//To fix, push Pause state. Alternative: check if window has focus and only handle input if it does (Need access to Window somehow...)
 	else if (event.type == sf::Event::LostFocus) {
 		m_stateStack->push<PauseMenuState>(this);
 

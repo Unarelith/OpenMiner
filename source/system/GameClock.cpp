@@ -11,8 +11,9 @@
  *
  * =====================================================================================
  */
+#include <SFML/System.hpp>
+
 #include "GameClock.hpp"
-#include "SFMLHeaders.hpp"
 
 u32 GameClock::ticks = 0;
 

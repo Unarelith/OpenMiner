@@ -14,9 +14,10 @@
 #ifndef BLOCKCURSOR_HPP_
 #define BLOCKCURSOR_HPP_
 
+#include <SFML/Window/Event.hpp>
+
 #include "Camera.hpp"
 #include "Inventory.hpp"
-#include "SFMLHeaders.hpp"
 #include "Player.hpp"
 #include "World.hpp"
 

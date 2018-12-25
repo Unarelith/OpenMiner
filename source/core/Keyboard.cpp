@@ -11,9 +11,10 @@
  *
  * =====================================================================================
  */
+#include <SFML/Window/Keyboard.hpp>
+
 #include "GameClock.hpp"
 #include "Keyboard.hpp"
-#include "SFMLHeaders.hpp"
 
 std::map<Keyboard::Key, bool> Keyboard::pressed = {
 	{Key::D,		false},

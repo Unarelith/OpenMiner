@@ -11,6 +11,8 @@
  *
  * =====================================================================================
  */
+#include <SFML/Window/Mouse.hpp>
+
 #include "Config.hpp"
 #include "Mouse.hpp"
 

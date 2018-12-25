@@ -14,9 +14,10 @@
 #ifndef WIDGET_HPP_
 #define WIDGET_HPP_
 
+#include <SFML/Window/Event.hpp>
+
 #include "IDrawable.hpp"
 #include "Rect.hpp"
-#include "SFMLHeaders.hpp"
 #include "Transformable.hpp"
 
 class Widget : public IDrawable, public Transformable {

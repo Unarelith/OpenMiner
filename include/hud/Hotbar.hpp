@@ -16,9 +16,10 @@
 
 #include <vector>
 
+#include <SFML/Window/Event.hpp>
+
 #include "Inventory.hpp"
 #include "ItemWidget.hpp"
-#include "SFMLHeaders.hpp"
 
 class Hotbar : public Widget {
 	public:

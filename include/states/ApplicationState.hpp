@@ -14,9 +14,10 @@
 #ifndef APPLICATIONSTATE_HPP_
 #define APPLICATIONSTATE_HPP_
 
+#include <SFML/Window/Event.hpp>
+
 #include "IDrawable.hpp"
 #include "Transformable.hpp"
-#include "SFMLHeaders.hpp"
 
 class ApplicationStateStack;
 
