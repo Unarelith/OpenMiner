@@ -20,8 +20,6 @@
 #include "IDrawable.hpp"
 #include "TerrainGenerator.hpp"
 
-class Camera;
-
 class World : public IDrawable {
 	public:
 		World();

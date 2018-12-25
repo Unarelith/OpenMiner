@@ -1,11 +1,11 @@
 /*
  * =====================================================================================
  *
- *       Filename:  Camera.cpp
+ *       Filename:  Player.cpp
  *
  *    Description:
  *
- *        Created:  16/12/2014 12:21:19
+ *        Created:  25/12/2018 22:59:17
  *
  *         Author:  Quentin Bazin, <quent42340@gmail.com>
  *
@@ -13,12 +13,14 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Camera.hpp"
+#include "Player.hpp"
 #include "Keyboard.hpp"
 #include "Mouse.hpp"
 #include "World.hpp"
 
-Camera::Camera() {
+Player *Player::s_instance = nullptr;
+
+Player::Player() {
 	m_x = 0;
 	m_y = 18;
 	m_z = 20;
@@ -29,7 +31,7 @@ Camera::Camera() {
 	updateViewMatrix();
 }
 
-void Camera::turnH(float angle) {
+void Player::turnH(float angle) {
 	m_angleH += angle;
 
 	while(m_angleH >= 180.0f) {
@@ -40,7 +42,7 @@ void Camera::turnH(float angle) {
 	}
 }
 
-void Camera::turnV(float angle) {
+void Player::turnV(float angle) {
 	m_angleV += angle;
 
 	if(89.9f < m_angleV) {
@@ -51,14 +53,14 @@ void Camera::turnV(float angle) {
 	}
 }
 
-void Camera::move(float direction) {
+void Player::move(float direction) {
 	direction += m_angleH;
 
 	m_velocity.x = 0.04f * cos(direction * RADIANS_PER_DEGREES);
 	m_velocity.z = 0.04f * sin(direction * RADIANS_PER_DEGREES);
 }
 
-void Camera::processInputs() {
+void Player::processInputs() {
 	// if(Mouse::getDX() != 0 || Mouse::getDY() != 0) {
 	// 	turnH(Mouse::getDX() * 0.2f);//0.02);
 	// 	turnV(-Mouse::getDY() * 0.2f);//0.02);
@@ -88,7 +90,7 @@ void Camera::processInputs() {
 	if (Keyboard::isKeyPressed(Keyboard::D) && Keyboard::isKeyPressed(Keyboard::S)) move(135.0f);
 }
 
-glm::mat4 Camera::updatePosition(const World &world) {
+glm::mat4 Player::updatePosition(const World &world) {
 	m_velocity.y -= m_gravity; // Gravity
 
 	if (m_velocity.y < -m_jumpSpeed) // Jump max accel
@@ -110,7 +112,7 @@ glm::mat4 Camera::updatePosition(const World &world) {
 }
 
 // FIXME: Use AABB for more precision
-void Camera::checkCollisions(const World &world) {
+void Player::checkCollisions(const World &world) {
 	const float PLAYER_HEIGHT = 1.8;
 	float m_eyeheight = m_y + PLAYER_HEIGHT - 1;
 	// testPoint(world, glm::vec3(m_x, m_y, m_z), m_velocity);
@@ -124,7 +126,7 @@ void Camera::checkCollisions(const World &world) {
 	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - 0.4, m_z + 0.2), m_velocity);
 }
 
-void Camera::updateViewMatrix() {
+void Player::updateViewMatrix() {
 	m_viewMatrix = glm::lookAt(glm::vec3(m_x, m_y, m_z),
 	                           glm::vec3(pointTargetedX(), pointTargetedY(), pointTargetedZ()),
 	                           glm::vec3(0, 1, 0));
@@ -135,7 +137,7 @@ bool passable(const World &world, float x, float y, float z) {
 	return !block || block == 8;
 }
 
-void Camera::testPoint(const World &world, glm::vec3 pos, glm::vec3 &speed) {
+void Player::testPoint(const World &world, glm::vec3 pos, glm::vec3 &speed) {
 	// FIXME: Temporary fix, find the real problem!!!
 	if (pos.x < 0) --pos.x;
 	if (pos.y < 1) --pos.y;

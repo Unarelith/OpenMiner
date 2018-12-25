@@ -16,7 +16,6 @@
 
 #include <SFML/Window/Event.hpp>
 
-#include "Camera.hpp"
 #include "Inventory.hpp"
 #include "Player.hpp"
 #include "World.hpp"
@@ -25,8 +24,8 @@ class Hotbar;
 
 class BlockCursor : public IDrawable {
 	public:
-		BlockCursor(Camera &camera, Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix)
-			: m_camera(camera), m_player(player), m_world(world), m_viewMatrix(viewMatrix), m_projectionMatrix(projectionMatrix) {}
+		BlockCursor(Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix)
+			: m_player(player), m_world(world), m_viewMatrix(viewMatrix), m_projectionMatrix(projectionMatrix) {}
 
 		void onEvent(const sf::Event &event, const Hotbar &hotbar);
 
@@ -43,7 +42,6 @@ class BlockCursor : public IDrawable {
 		float fract(float value) const;
 		glm::vec4 findSelectedBlock(bool useDepthBuffer) const;
 
-		Camera &m_camera;
 		Player &m_player;
 		World &m_world;
 		glm::mat4 &m_viewMatrix;

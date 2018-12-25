@@ -30,12 +30,6 @@ class Registry {
 		void registerCraftingRecipeFromTable(const sol::table &table);
 		void registerSmeltingRecipeFromTable(const sol::table &table);
 
-		// FIXME: Should be private
-		template<typename T, typename... Args>
-		auto registerItem(Args &&...args) -> typename std::enable_if<std::is_base_of<Item, T>::value, Item*>::type {
-			return m_items.emplace_back(std::make_unique<T>(std::forward<Args>(args)...)).get();
-		}
-
 		const Block &getBlock(std::size_t id) const { return *m_blocks.at(id).get(); }
 		const Item &getItem(std::size_t id) const { return *m_items.at(id).get(); }
 
@@ -48,6 +42,11 @@ class Registry {
 		template<typename T, typename... Args>
 		auto registerBlock(Args &&...args) -> typename std::enable_if<std::is_base_of<Block, T>::value, Block*>::type {
 			return m_blocks.emplace_back(std::make_unique<T>(std::forward<Args>(args)...)).get();
+		}
+
+		template<typename T, typename... Args>
+		auto registerItem(Args &&...args) -> typename std::enable_if<std::is_base_of<Item, T>::value, Item*>::type {
+			return m_items.emplace_back(std::make_unique<T>(std::forward<Args>(args)...)).get();
 		}
 
 		template<typename T, typename... Args>

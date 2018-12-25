@@ -14,7 +14,6 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Camera.hpp"
 #include "Config.hpp"
 #include "ResourceHandler.hpp"
 #include "World.hpp"

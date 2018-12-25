@@ -41,11 +41,11 @@ void ScriptEngine::initUsertypes() {
 		"inventory", &Player::inventory);
 
 	m_lua.new_usertype<Inventory>("Inventory",
-		"get_width",    &Inventory::width,
-		"get_height",   &Inventory::height,
-		"get_stack", &Inventory::getStackRef,
-		"set_stack", &Inventory::setStack,
-		"add_stack", &Inventory::addStack
+		"get_width",  &Inventory::width,
+		"get_height", &Inventory::height,
+		"get_stack",  &Inventory::getStackRef,
+		"set_stack",  &Inventory::setStack,
+		"add_stack",  &Inventory::addStack
 	);
 
 	m_lua.new_usertype<ItemStack>("ItemStack",
@@ -73,9 +73,6 @@ void ScriptEngine::initUsertypes() {
 
 	m_lua.new_usertype<Registry>("Registry",
 		"register_block", &Registry::registerBlockFromTable,
-		"register_item_block", [] (Registry *reg, u32 id, const std::string &name) {
-			return reg->registerItem<ItemBlock>(id, id, name);
-		},
 		"register_item", &Registry::registerItemFromTable,
 		"register_crafting_recipe", &Registry::registerCraftingRecipeFromTable,
 		"register_smelting_recipe", &Registry::registerSmeltingRecipeFromTable

@@ -17,7 +17,6 @@
 #include <glm/glm.hpp>
 
 #include "ApplicationState.hpp"
-#include "Camera.hpp"
 #include "HUD.hpp"
 #include "Player.hpp"
 #include "Skybox.hpp"
@@ -41,8 +40,6 @@ class GameState : public ApplicationState {
 		glm::mat4 m_projectionMatrix;
 		glm::mat4 m_viewMatrix;
 
-		Camera &m_camera{Camera::getInstance()};
-
 		Shader m_shader;
 
 		Skybox m_skybox;
@@ -50,7 +47,7 @@ class GameState : public ApplicationState {
 
 		Player m_player;
 
-		HUD m_hud{m_camera, m_player, m_world, m_viewMatrix, m_projectionMatrix};
+		HUD m_hud{m_player, m_world, m_viewMatrix, m_projectionMatrix};
 };
 
 #endif // GAMESTATE_HPP_
