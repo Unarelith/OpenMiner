@@ -11,6 +11,7 @@
  *
  * =====================================================================================
  */
+#include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
 
 #include "Config.hpp"
@@ -18,11 +19,33 @@
 
 Window *Mouse::s_window = nullptr;
 
-Vector2i Mouse::resetToWindowCenter() {
-	const Vector2i newPos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-	sf::Mouse::setPosition(newPos, s_window->window());
-//	sf::Mouse::setPosition({s_window->window().getSize() / 2}, s_window->window());
-	return newPos;
+Vector2i Mouse::s_lastMousePos;
+Vector2f Mouse::s_lastDelta;
+
+void Mouse::update(const sf::Event &event) {
+	Vector2i mousePos(event.mouseMove.x, event.mouseMove.y);
+
+	auto windowSize = s_window->window().getSize();
+	uint16_t aspectRatio = windowSize.x / windowSize.y;
+	Vector2i windowCenter(windowSize.x / 2, windowSize.y / 2);
+
+	const float mouseSensitivity = 0.01f;
+	s_lastDelta.x = (mousePos.x - s_lastMousePos.x) * mouseSensitivity * aspectRatio;
+	s_lastDelta.y = -(mousePos.y - s_lastMousePos.y) * mouseSensitivity * aspectRatio;
+
+	if (mousePos != windowCenter) {
+		resetToWindowCenter();
+		s_lastMousePos = windowCenter;
+	}
+	else {
+		s_lastMousePos = mousePos;
+	}
+}
+
+void Mouse::resetToWindowCenter() {
+	auto windowSize = s_window->window().getSize();
+	Vector2i windowCenter(windowSize.x / 2, windowSize.y / 2);
+	sf::Mouse::setPosition(windowCenter, s_window->window());
 }
 
 Vector2i Mouse::getPosition() {

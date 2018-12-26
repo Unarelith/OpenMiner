@@ -20,8 +20,11 @@
 
 class Mouse {
 	public:
-		static Vector2i resetToWindowCenter();
+		static void update(const sf::Event &event);
+		static void resetToWindowCenter();
+
 		static Vector2i getPosition();
+		static Vector2f getDelta() { return s_lastDelta; }
 
 		static void setWindow(Window *window) { s_window = window; }
 
@@ -30,6 +33,9 @@ class Mouse {
 
 	private:
 		static Window *s_window;
+
+		static Vector2i s_lastMousePos;
+		static Vector2f s_lastDelta;
 };
 
 #endif // MOUSE_HPP_

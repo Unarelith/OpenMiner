@@ -38,15 +38,11 @@ GameState::GameState() {
 }
 
 void GameState::onEvent(const sf::Event &event) {
-	static sf::Vector2i lastPosition;
-
 	if (event.type == sf::Event::MouseMoved) {
-		if(SCREEN_WIDTH / 2 != event.mouseMove.x || SCREEN_HEIGHT / 2 != event.mouseMove.y) {
-			m_player.turnH((event.mouseMove.x - lastPosition.x) * 0.06);
-			m_player.turnV(-(event.mouseMove.y - lastPosition.y) * 0.06);
+		Mouse::update(event);
 
-			lastPosition = Mouse::resetToWindowCenter();
-		}
+		m_player.turnH(Mouse::getDelta().x);
+		m_player.turnV(Mouse::getDelta().y);
 	}
 	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape && &m_stateStack->top() == this) {
 		m_stateStack->push<PauseMenuState>(this);
