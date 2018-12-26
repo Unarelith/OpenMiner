@@ -75,29 +75,14 @@ endif(NOT GLM_FOUND)
 include_directories(${GLM_INCLUDE_DIRS})
 
 #------------------------------------------------------------------------------
-# - SDL2, SDL2_image, SDL2_mixer
+# - SFML
 #------------------------------------------------------------------------------
-include(FindPkgConfig)
+find_package(SFML COMPONENTS audio graphics network system window REQUIRED)
+if(NOT SFML_FOUND)
+	message(FATAL_ERROR "SFML is needed to build the project. Please install it correctly.")
+endif()
 
-pkg_search_module(SDL2 REQUIRED sdl2)
-pkg_search_module(SDL2IMAGE REQUIRED SDL2_image)
-pkg_search_module(SDL2MIXER REQUIRED SDL2_mixer)
-
-if(NOT SDL2_FOUND)
-	message(FATAL_ERROR "SDL2 not found!")
-endif(NOT SDL2_FOUND)
-
-if(NOT SDL2IMAGE_FOUND)
-	message(FATAL_ERROR "SDL2_image not found!")
-endif(NOT SDL2IMAGE_FOUND)
-
-if(NOT SDL2MIXER_FOUND)
-	message(FATAL_ERROR "SDL2_mixer not found!")
-endif(NOT SDL2MIXER_FOUND)
-
-include_directories(${SDL2_INCLUDE_DIRS}
-                    ${SDL2IMAGE_INCLUDE_DIRS}
-                    ${SDL2MIXER_INCLUDE_DIRS})
+include_directories(${SFML_INCLUDE_DIRS})
 
 #------------------------------------------------------------------------------
 # Link options
@@ -106,7 +91,9 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
                       ${TINYXML2_LIBRARIES}
                       ${LUA_LIBRARIES}
                       ${OPENGL_LIBRARIES}
-                      ${SDL2_LIBRARIES}
-                      ${SDL2IMAGE_LIBRARIES}
-                      ${SDL2MIXER_LIBRARIES})
+                      sfml-audio
+                      sfml-graphics
+                      sfml-network
+                      sfml-system
+                      sfml-window)
 

@@ -19,7 +19,6 @@ void Window::open(const std::string &caption, u16 width, u16 height) {
 	sf::ContextSettings settings;
 	settings.majorVersion = 2;
 	settings.minorVersion = 1;
-	// For OpenGL version >=3.2 with Core profile set settings.attributeFlags = sf::ContextSettings::Core;
 	settings.depthBits = 24;
 	settings.stencilBits = 8;
 	settings.antialiasingLevel = 4;
