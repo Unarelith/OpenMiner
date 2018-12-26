@@ -21,12 +21,11 @@ void Window::open(const std::string &caption, u16 width, u16 height) {
 	settings.minorVersion = 1;
 	settings.depthBits = 24;
 	settings.stencilBits = 8;
-	settings.antialiasingLevel = 4;
+	settings.antialiasingLevel = 0;
 
 	m_window.create(sf::VideoMode(width, height), caption, sf::Style::Titlebar | sf::Style::Close, settings);
-	// SFML prints error message automatically if failed. Redirect sf::err() ?
-	m_window.setPosition({int(sf::VideoMode::getDesktopMode().width/2  - width/2),
-						  /*int(sf::VideoMode::getDesktopMode().height/2 - height/2)})*/ 10});  // FIXME: Cannot center properly. How to subtract height of title bar?
+	m_window.setPosition({int(sf::VideoMode::getDesktopMode().width / 2  - width / 2),
+						  int(sf::VideoMode::getDesktopMode().height / 2 - height / 2)});
 
 	m_width = width;
 	m_height = height;
