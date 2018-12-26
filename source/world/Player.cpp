@@ -28,7 +28,8 @@ Player::Player() {
 	m_angleH = 90.0;
 	m_angleV = 0.01;
 
-	updateViewMatrix();
+	m_camera.setPosition(m_x, m_y, m_z);
+	m_camera.setTargetPosition(pointTargetedX(), pointTargetedY(), pointTargetedZ());
 }
 
 void Player::turnH(float angle) {
@@ -40,6 +41,8 @@ void Player::turnH(float angle) {
 	while(m_angleH < -180.0f) {
 		m_angleH += 360.0f;
 	}
+
+	m_camera.setTargetPosition(pointTargetedX(), pointTargetedY(), pointTargetedZ());
 }
 
 void Player::turnV(float angle) {
@@ -51,6 +54,8 @@ void Player::turnV(float angle) {
 	else if(-89.9f > m_angleV) {
 		m_angleV = -89.9f;
 	}
+
+	m_camera.setTargetPosition(pointTargetedX(), pointTargetedY(), pointTargetedZ());
 }
 
 void Player::move(float direction) {
@@ -102,13 +107,15 @@ glm::mat4 Player::updatePosition(const World &world) {
 	m_y += m_velocity.y;
 	m_z += m_velocity.z;
 
+	m_camera.setPosition(m_x, m_y, m_z);
+
 	if (m_velocity.x != 0 || m_velocity.y != 0 || m_velocity.z != 0)
-		updateViewMatrix();
+		m_camera.setTargetPosition(pointTargetedX(), pointTargetedY(), pointTargetedZ());
 
 	m_velocity.x = 0;
 	m_velocity.z = 0;
 
-	return m_viewMatrix;
+	return m_camera.getViewMatrix().getMatrix();
 }
 
 // FIXME: Use AABB for more precision
@@ -124,12 +131,6 @@ void Player::checkCollisions(const World &world) {
 	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - 0.4, m_z - 0.2), m_velocity);
 	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight - 0.4, m_z + 0.2), m_velocity);
 	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - 0.4, m_z + 0.2), m_velocity);
-}
-
-void Player::updateViewMatrix() {
-	m_viewMatrix = glm::lookAt(glm::vec3(m_x, m_y, m_z),
-	                           glm::vec3(pointTargetedX(), pointTargetedY(), pointTargetedZ()),
-	                           glm::vec3(0, 1, 0));
 }
 
 bool passable(const World &world, float x, float y, float z) {

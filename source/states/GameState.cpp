@@ -46,8 +46,6 @@ void GameState::onEvent(const sf::Event &event) {
 			m_player.turnV(-(event.mouseMove.y - lastPosition.y) * 0.06);
 
 			lastPosition = Mouse::resetToWindowCenter();
-
-			m_player.updateViewMatrix();
 		}
 	}
 	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape && &m_stateStack->top() == this) {
