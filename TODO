@@ -4,6 +4,7 @@ TODO
 
 • DONE: Découper les gros pâtés en sous-classes
 • DONE: Nettoyer les vieux headers
+• DONE: Passer à la SFML si nécessaire
 • WIP: Remplacer les anciennes classes par leur upgrade:
    ◦ DONE: `ApplicationState` / `ApplicationStateStack`
    ◦ DONE: `GameClock`
@@ -13,10 +14,7 @@ TODO
 • DONE: `Types.hpp` → `IntTypes.hpp`
    → TODO: Vérifier que les types sont bien corrects
 • TODO: Vérifier les utilisations inutiles de pointeurs
-• TODO: Catch SDLLoader exception
 • TODO: Passer un clang-tidy sur le code
-• TODO: Passer à la SFML si nécessaire
-• TODO: Séparer l’engine et le gameplay
 • TODO: Séparer le code client du code serveur
 
 # Finalisation par rapport à TestCraft
