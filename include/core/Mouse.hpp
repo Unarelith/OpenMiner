@@ -15,11 +15,13 @@
 #define MOUSE_HPP_
 
 #include "IntTypes.hpp"
+#include "Vector2.hpp"
 #include "Window.hpp"
 
 class Mouse {
 	public:
-		static void resetToWindowCenter();
+		static Vector2i resetToWindowCenter();
+		static Vector2i getPosition();
 
 		static void setWindow(Window *window) { s_window = window; }
 

@@ -31,21 +31,21 @@ void InventoryWidget::init(Inventory &inventory, unsigned int offset, unsigned i
 	m_inventoryHeight = inventory.height();
 }
 
-void InventoryWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly) {
-	if (event.type == SDL_MOUSEMOTION) {
+void InventoryWidget::onMouseEvent(const sf::Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly) {
+	if (event.type == sf::Event::MouseMoved) {
 		m_currentItemWidget = nullptr;
 		for (std::size_t i = 0 ; i < m_itemWidgets.size() ; ++i) {
-			if (m_itemWidgets[i].isPointInWidget(event.motion.x, event.motion.y)) {
+			if (m_itemWidgets[i].isPointInWidget(event.mouseMove.x, event.mouseMove.y)) {
 				m_currentItemWidget = &m_itemWidgets[i];
 
 				m_selectedItemBackground.setPosition(1 + (i % m_inventoryWidth) * 18, 1 + (i / m_inventoryWidth) * 18, 0);
 			}
 		}
 	}
-	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && m_currentItemWidget) {
+	else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && m_currentItemWidget) {
 		mouseItemWidget.swapItems(*m_currentItemWidget, isReadOnly);
 	}
-	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT && m_currentItemWidget) {
+	else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right && m_currentItemWidget) {
 		if (!isReadOnly) {
 			mouseItemWidget.putItem(*m_currentItemWidget);
 		}

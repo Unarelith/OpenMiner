@@ -142,12 +142,12 @@ void BlockCursor::updateAnimationVertexBuffer(const Block &block, int animationP
 	VertexBuffer::bind(nullptr);
 }
 
-void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
-	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
-		if (event.button.button == SDL_BUTTON_LEFT) {
+void BlockCursor::onEvent(const sf::Event &event, const Hotbar &hotbar) {
+	if (event.type == sf::Event::MouseButtonPressed && m_selectedBlock.w != -1) {
+		if (event.mouseButton.button == sf::Mouse::Left) {
 			m_animationStart = GameClock::getTicks();
 		}
-		else if (event.button.button == SDL_BUTTON_RIGHT) {
+		else if (event.mouseButton.button == sf::Mouse::Right) {
 			u32 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
 			const Block &block = Registry::getInstance().getBlock(blockId);
 			const Item &item = Registry::getInstance().getItem(hotbar.currentItem());
@@ -174,8 +174,8 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 			}
 		}
 	}
-	else if (event.type == SDL_MOUSEBUTTONUP) {
-		if (event.button.button == SDL_BUTTON_LEFT) {
+	else if (event.type == sf::Event::MouseButtonReleased) {
+		if (event.mouseButton.button == sf::Mouse::Left) {
 			m_animationStart = 0;
 		}
 	}

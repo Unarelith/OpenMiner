@@ -11,14 +11,17 @@
  *
  * =====================================================================================
  */
+#include <SFML/System.hpp>
+
 #include "GameClock.hpp"
-#include "SDLHeaders.hpp"
 
 u32 GameClock::ticks = 0;
 
 u32 GameClock::getTicks(bool realTime) {
+	static sf::Clock clock;
+
 	if(realTime) {
-		return SDL_GetTicks();
+		return clock.getElapsedTime().asMilliseconds();
 	} else {
 		return ticks;
 	}
@@ -63,7 +66,7 @@ void GameClock::waitForNextFrame() {
 	u32 lastFrameDuration = getTicks(true) - m_timeDropped - m_lastFrameDate;
 
 	if(lastFrameDuration < m_timestep) {
-		SDL_Delay(m_timestep - lastFrameDuration);
+		sf::sleep(sf::milliseconds(m_timestep - lastFrameDuration));
 	}
 
 	measureLastFrameDuration();

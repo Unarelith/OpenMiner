@@ -13,7 +13,6 @@
  */
 #include "GameClock.hpp"
 #include "Keyboard.hpp"
-#include "SDLHeaders.hpp"
 
 std::map<Keyboard::Key, bool> Keyboard::pressed = {
 	{Key::D,		false},
@@ -57,37 +56,29 @@ std::map<Keyboard::Key, u32> Keyboard::lastTimePressed = {
 	{Key::RightShift, 0}
 };
 
-std::map<Keyboard::Key, u32> Keyboard::keysCode = {
-	{Key::D,		SDLK_d},
-	{Key::Q,		SDLK_q},
-	{Key::S,		SDLK_s},
-	{Key::W,		SDLK_w},
-	{Key::X,		SDLK_x},
-	{Key::Z,		SDLK_z},
-	{Key::E,		SDLK_e},
+std::map<Keyboard::Key, sf::Keyboard::Key> Keyboard::keysCode = {
+	{Key::D,		sf::Keyboard::D},
+	{Key::Q,		sf::Keyboard::Q},
+	{Key::S,		sf::Keyboard::S},
+	{Key::W,		sf::Keyboard::W},
+	{Key::X,		sf::Keyboard::X},
+	{Key::Z,		sf::Keyboard::Z},
+	{Key::E,		sf::Keyboard::E},
 
-	{Key::Left,		SDLK_LEFT},
-	{Key::Right,	SDLK_RIGHT},
-	{Key::Up,		SDLK_UP},
-	{Key::Down,		SDLK_DOWN},
+	{Key::Left,		sf::Keyboard::Left},
+	{Key::Right,	sf::Keyboard::Right},
+	{Key::Up,		sf::Keyboard::Up},
+	{Key::Down,		sf::Keyboard::Down},
 
-	{Key::BackSpace,  SDLK_BACKSPACE},
-	{Key::LeftShift,  SDLK_LSHIFT},
-	{Key::Space,	  SDLK_SPACE},
-	{Key::Return,	  SDLK_RETURN},
-	{Key::RightShift, SDLK_RSHIFT}
+	{Key::BackSpace,  sf::Keyboard::BackSpace},
+	{Key::LeftShift,  sf::Keyboard::LShift},
+	{Key::Space,	  sf::Keyboard::Space},
+	{Key::Return,	  sf::Keyboard::Return},
+	{Key::RightShift, sf::Keyboard::RShift}
 };
 
-const u8 *Keyboard::getState() {
-	return SDL_GetKeyboardState(nullptr);
-}
-
 bool Keyboard::isKeyPressed(Key key) {
-	if(getState()[SDL_GetScancodeFromKey(keysCode[key])]) {
-		return true;
-	} else {
-		return false;
-	}
+	return sf::Keyboard::isKeyPressed(keysCode[key]);
 }
 
 bool Keyboard::isKeyPressedOnce(Key key) {

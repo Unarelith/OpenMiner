@@ -15,11 +15,8 @@
 
 #include "Application.hpp"
 #include "Exception.hpp"
-#include "SDLLoader.hpp"
 
 int main(int argc, char **argv) {
-	SDLLoader sdlLoader;
-	sdlLoader.load();
 
 	Application app(argc, argv);
 	app.run();

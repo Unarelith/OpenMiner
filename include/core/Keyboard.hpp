@@ -16,6 +16,8 @@
 
 #include <map>
 
+#include <SFML/Window/Keyboard.hpp>
+
 #include "IntTypes.hpp"
 
 class Keyboard {
@@ -46,11 +48,9 @@ class Keyboard {
 		static bool isKeyPressedWithDelay(Key key, u16 delay);
 
 	private:
-		static const u8 *getState();
-
 		static std::map<Key, bool> pressed;
 		static std::map<Key, u32> lastTimePressed;
-		static std::map<Key, u32> keysCode;
+		static std::map<Key, sf::Keyboard::Key> keysCode;
 };
 
 #endif // KEYBOARD_HPP_

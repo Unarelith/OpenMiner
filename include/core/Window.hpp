@@ -17,9 +17,10 @@
 #include <memory>
 #include <string>
 
+#include <SFML/Graphics/RenderWindow.hpp>
+
 #include "IntTypes.hpp"
 #include "RenderTarget.hpp"
-#include "SDLHeaders.hpp"
 
 class Window : public RenderTarget {
 	public:
@@ -36,14 +37,11 @@ class Window : public RenderTarget {
 		void close() { m_isOpen = false; }
 		bool isOpen() const { return m_isOpen; }
 
-		SDL_Window *window() const { return m_window.get(); }
+		sf::RenderWindow &window() { return m_window; }
+		const sf::RenderWindow &window() const { return m_window; }
 
 	private:
-		using SDL_WindowPtr = std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)>;
-		using SDL_GLContextPtr = std::unique_ptr<void, decltype(&SDL_GL_DeleteContext)>;
-
-		SDL_WindowPtr m_window{nullptr, SDL_DestroyWindow};
-		SDL_GLContextPtr m_context{nullptr, SDL_GL_DeleteContext};
+		sf::RenderWindow m_window;
 
 		u16 m_width;
 		u16 m_height;

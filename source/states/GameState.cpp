@@ -37,29 +37,31 @@ GameState::GameState() {
 	initShaders();
 }
 
-void GameState::onEvent(const SDL_Event &event) {
-	if (event.type == SDL_MOUSEMOTION) {
-		if(SCREEN_WIDTH / 2 != event.motion.x || SCREEN_HEIGHT / 2 != event.motion.y) {
-			m_camera.turnH(event.motion.xrel * 0.06);
-			m_camera.turnV(-event.motion.yrel * 0.06);
+void GameState::onEvent(const sf::Event &event) {
+	static sf::Vector2i lastPosition;
 
-			Mouse::resetToWindowCenter();
+	if (event.type == sf::Event::MouseMoved) {
+		if(SCREEN_WIDTH / 2 != event.mouseMove.x || SCREEN_HEIGHT / 2 != event.mouseMove.y) {
+			m_camera.turnH((event.mouseMove.x-lastPosition.x) * 0.06);
+			m_camera.turnV(-(event.mouseMove.y-lastPosition.y) * 0.06);
+
+			lastPosition = Mouse::resetToWindowCenter();
 
 			m_camera.updateViewMatrix();
 		}
 	}
-	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE && &m_stateStack->top() == this) {
+	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape && &m_stateStack->top() == this) {
 		m_stateStack->push<PauseMenuState>(this);
 	}
-	else if (event.type == SDL_WINDOWEVENT) {
-		if (event.window.event == SDL_WINDOWEVENT_LEAVE) {
-			Mouse::setCursorGrabbed(false);
-			Mouse::setCursorVisible(true);
-		}
-		else if (event.window.event == SDL_WINDOWEVENT_ENTER) {
-			Mouse::setCursorGrabbed(true);
-			Mouse::setCursorVisible(false);
-		}
+	else if (event.type == sf::Event::LostFocus) {
+		m_stateStack->push<PauseMenuState>(this);
+
+		Mouse::setCursorGrabbed(false);
+		Mouse::setCursorVisible(true);
+	}
+	else if (event.type == sf::Event::GainedFocus) {
+		Mouse::setCursorGrabbed(true);
+		Mouse::setCursorVisible(false);
 	}
 
 	m_hud.onEvent(event);

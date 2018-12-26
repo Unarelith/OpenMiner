@@ -14,9 +14,10 @@
 #ifndef BLOCKCURSOR_HPP_
 #define BLOCKCURSOR_HPP_
 
+#include <SFML/Window/Event.hpp>
+
 #include "Camera.hpp"
 #include "Inventory.hpp"
-#include "SDLHeaders.hpp"
 #include "Player.hpp"
 #include "World.hpp"
 
@@ -27,7 +28,7 @@ class BlockCursor : public IDrawable {
 		BlockCursor(Camera &camera, Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix)
 			: m_camera(camera), m_player(player), m_world(world), m_viewMatrix(viewMatrix), m_projectionMatrix(projectionMatrix) {}
 
-		void onEvent(const SDL_Event &event, const Hotbar &hotbar);
+		void onEvent(const sf::Event &event, const Hotbar &hotbar);
 
 		void update(const Hotbar &hotbar, bool useDepthBuffer);
 

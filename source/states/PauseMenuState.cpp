@@ -37,12 +37,13 @@ PauseMenuState::PauseMenuState(ApplicationState *parent) : ApplicationState(pare
 	m_menuWidget.addButton(0, 2, "Exit", [this] (TextButton &) { while(!m_stateStack->empty()) m_stateStack->pop(); });
 }
 
-void PauseMenuState::onEvent(const SDL_Event &event) {
+void PauseMenuState::onEvent(const sf::Event &event) {
 	m_menuWidget.onEvent(event);
 
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
 		Mouse::setCursorGrabbed(true);
 		Mouse::setCursorVisible(false);
+		Mouse::resetToWindowCenter();
 
 		m_stateStack->pop();
 	}

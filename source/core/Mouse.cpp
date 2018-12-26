@@ -11,20 +11,29 @@
  *
  * =====================================================================================
  */
+#include <SFML/Window/Mouse.hpp>
+
 #include "Config.hpp"
 #include "Mouse.hpp"
 
 Window *Mouse::s_window = nullptr;
 
-void Mouse::resetToWindowCenter() {
-	SDL_WarpMouseInWindow(s_window->window(), SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+Vector2i Mouse::resetToWindowCenter() {
+	const Vector2i newPos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+	sf::Mouse::setPosition(newPos, s_window->window());
+//	sf::Mouse::setPosition({s_window->window().getSize() / 2}, s_window->window());
+	return newPos;
+}
+
+Vector2i Mouse::getPosition() {
+	return sf::Mouse::getPosition(s_window->window());
 }
 
 void Mouse::setCursorGrabbed(bool grabbed) {
-	SDL_SetRelativeMouseMode((SDL_bool)grabbed);
+	s_window->window().setMouseCursorGrabbed(grabbed);
 }
 
 void Mouse::setCursorVisible(bool visible) {
-	SDL_ShowCursor(visible);
+	s_window->window().setMouseCursorVisible(visible);
 }
 

@@ -14,9 +14,10 @@
 #ifndef WIDGET_HPP_
 #define WIDGET_HPP_
 
+#include <SFML/Window/Event.hpp>
+
 #include "IDrawable.hpp"
 #include "Rect.hpp"
-#include "SDLHeaders.hpp"
 #include "Transformable.hpp"
 
 class Widget : public IDrawable, public Transformable {
@@ -25,7 +26,7 @@ class Widget : public IDrawable, public Transformable {
 		Widget(unsigned int width, unsigned int height, Widget *parent = nullptr)
 			: m_parent(parent), m_width(width), m_height(height) {}
 
-		virtual void onEvent(const SDL_Event &) {}
+		virtual void onEvent(const sf::Event &) {}
 		virtual void update() {}
 
 		bool isPointInWidget(float x, float y);

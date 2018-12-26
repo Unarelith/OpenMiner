@@ -16,15 +16,16 @@
 
 #include <vector>
 
+#include <SFML/Window/Event.hpp>
+
 #include "Inventory.hpp"
 #include "ItemWidget.hpp"
-#include "SDLHeaders.hpp"
 
 class Hotbar : public Widget {
 	public:
 		Hotbar(Inventory &inventory, Widget *parent = nullptr);
 
-		void onEvent(const SDL_Event &event);
+		void onEvent(const sf::Event &event);
 
 		void update();
 
