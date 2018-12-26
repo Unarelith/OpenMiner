@@ -62,7 +62,7 @@ void CoreApplication::createWindow(u16 screenWidth, u16 screenHeight, const char
 
 void CoreApplication::handleEvents() {
 	sf::Event event;
-	while (m_window.window()->pollEvent(event)) {
+	while (m_window.window().pollEvent(event)) {
 		if (event.type == sf::Event::Closed) {
 		// || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape && m_stateStack.size() == 1)) {
 			m_window.close();

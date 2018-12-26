@@ -31,9 +31,9 @@ Hotbar::Hotbar(Inventory &inventory, Widget *parent) : Widget(182, 22, parent), 
 
 void Hotbar::onEvent(const sf::Event &event) {
 	if (event.type == sf::Event::MouseWheelScrolled) {
-		if (int(event.mouseWheelScroll.delta) == -1)
+		if (event.mouseWheelScroll.delta < 0)
 			m_cursorPos = (m_cursorPos + 1) % 9;
-		else if (int(event.mouseWheelScroll.delta) == 1)
+		else if (event.mouseWheelScroll.delta > 0)
 			m_cursorPos = (m_cursorPos == 0) ? 8 : m_cursorPos - 1;
 
 		m_cursor.setPosition(-1 + 20 * m_cursorPos, -1, 0);

@@ -11,8 +11,6 @@
  *
  * =====================================================================================
  */
-#include <SFML/Window/Keyboard.hpp>
-
 #include "GameClock.hpp"
 #include "Keyboard.hpp"
 
@@ -58,7 +56,7 @@ std::map<Keyboard::Key, u32> Keyboard::lastTimePressed = {
 	{Key::RightShift, 0}
 };
 
-std::map<Keyboard::Key, u32> Keyboard::keysCode = {
+std::map<Keyboard::Key, sf::Keyboard::Key> Keyboard::keysCode = {
 	{Key::D,		sf::Keyboard::D},
 	{Key::Q,		sf::Keyboard::Q},
 	{Key::S,		sf::Keyboard::S},
@@ -80,7 +78,7 @@ std::map<Keyboard::Key, u32> Keyboard::keysCode = {
 };
 
 bool Keyboard::isKeyPressed(Key key) {
-	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keysCode[key]));
+	return sf::Keyboard::isKeyPressed(keysCode[key]);
 }
 
 bool Keyboard::isKeyPressedOnce(Key key) {

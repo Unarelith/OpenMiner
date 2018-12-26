@@ -37,7 +37,8 @@ class Window : public RenderTarget {
 		void close() { m_isOpen = false; }
 		bool isOpen() const { return m_isOpen; }
 
-		sf::RenderWindow *window() { return &m_window; }
+		sf::RenderWindow &window() { return m_window; }
+		const sf::RenderWindow &window() const { return m_window; }
 
 	private:
 		sf::RenderWindow m_window;

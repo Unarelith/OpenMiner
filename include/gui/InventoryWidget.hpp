@@ -16,7 +16,6 @@
 
 #include "MouseItemWidget.hpp"
 #include "RectangleShape.hpp"
-//#include "SFMLHeaders.hpp"
 
 class InventoryWidget : public Widget {
 	public:

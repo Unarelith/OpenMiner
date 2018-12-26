@@ -16,6 +16,8 @@
 
 #include <map>
 
+#include <SFML/Window/Keyboard.hpp>
+
 #include "IntTypes.hpp"
 
 class Keyboard {
@@ -48,7 +50,7 @@ class Keyboard {
 	private:
 		static std::map<Key, bool> pressed;
 		static std::map<Key, u32> lastTimePressed;
-		static std::map<Key, u32> keysCode;
+		static std::map<Key, sf::Keyboard::Key> keysCode;
 };
 
 #endif // KEYBOARD_HPP_
