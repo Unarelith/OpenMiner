@@ -230,7 +230,7 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 
 	if (m_animationStart > 0) {
 		glBlendFunc(GL_DST_COLOR, GL_ZERO);
-		states.texture = &ResourceHandler::getInstance().get<Texture>("texture-block_destroy");
+		states.texture = &ResourceHandler::getInstance().get<sf::Texture>("texture-block_destroy"); // FIXME
 		target.draw(m_animationVBO, GL_QUADS, 0, 24, states);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}

@@ -13,9 +13,8 @@
  */
 #include "ResourceHandler.hpp"
 #include "Text.hpp"
-#include "Texture.hpp"
 
-Text::Text() : m_texture(ResourceHandler::getInstance().get<Texture>("texture-font")) {
+Text::Text() : m_texture(ResourceHandler::getInstance().get<sf::Texture>("texture-font")) {
 	updateCharWidth();
 }
 
@@ -62,13 +61,13 @@ void Text::updateTextSprites() {
 //        this piece of code to make it look good
 //        I'll remove it later anyway
 void Text::updateCharWidth() {
-	const int width = m_texture.width();
-	const int height = m_texture.height();
+	const int width = m_texture.getSize().x;
+	const int height = m_texture.getSize().y;
 	unsigned int data[width * height];
 
-	Texture::bind(&m_texture);
+	sf::Texture::bind(&m_texture);
 	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, &data);
-	Texture::bind(nullptr);
+	sf::Texture::bind(nullptr);
 
 	const int charMaxHeight = height / 16;
 	const int charMaxWidth = width / 16;

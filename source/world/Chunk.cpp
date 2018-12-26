@@ -17,7 +17,7 @@
 #include "GameClock.hpp"
 #include "Registry.hpp"
 
-Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
+Chunk::Chunk(s32 x, s32 y, s32 z, sf::Texture &texture) : m_texture(texture) {
 	m_x = x;
 	m_y = y;
 	m_z = z;

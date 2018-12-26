@@ -19,7 +19,10 @@
 #include "IntTypes.hpp"
 #include "Transform.hpp"
 
-class Texture;
+namespace sf {
+	class Texture;
+}
+
 class Shader;
 
 namespace VertexAttribute {
@@ -41,7 +44,7 @@ struct RenderStates {
 	Transform viewMatrix;
 	Transform transform;
 
-	const Texture *texture = nullptr;
+	const sf::Texture *texture = nullptr;
 	const Shader *shader = nullptr;
 
 	u8 vertexAttributes = VertexAttribute::All;
