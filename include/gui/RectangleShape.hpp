@@ -16,7 +16,6 @@
 
 #include "Color.hpp"
 #include "IDrawable.hpp"
-#include "Rect.hpp"
 #include "Transformable.hpp"
 #include "VertexBuffer.hpp"
 

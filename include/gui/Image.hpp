@@ -18,7 +18,6 @@
 
 #include "Color.hpp"
 #include "IDrawable.hpp"
-#include "Rect.hpp"
 #include "Transformable.hpp"
 #include "VertexBuffer.hpp"
 
@@ -31,7 +30,7 @@ class Image : public IDrawable, public Transformable {
 		void load(const std::string &textureName);
 		void load(const sf::Texture &texture);
 
-		const FloatRect &clipRect() const { return m_clipRect; }
+		const sf::FloatRect &clipRect() const { return m_clipRect; }
 		void setClipRect(float x, float y, u16 width, u16 height);
 
 		u16 width() const { return m_width; }
@@ -49,7 +48,7 @@ class Image : public IDrawable, public Transformable {
 		u16 m_width = 0;
 		u16 m_height = 0;
 
-		FloatRect m_clipRect;
+		sf::FloatRect m_clipRect;
 
 		VertexBuffer m_vbo;
 

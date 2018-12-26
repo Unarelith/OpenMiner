@@ -19,15 +19,15 @@
 
 Window *Mouse::s_window = nullptr;
 
-Vector2i Mouse::s_lastMousePos;
-Vector2f Mouse::s_lastDelta;
+sf::Vector2i Mouse::s_lastMousePos;
+sf::Vector2f Mouse::s_lastDelta;
 
 void Mouse::update(const sf::Event &event) {
-	Vector2i mousePos(event.mouseMove.x, event.mouseMove.y);
+	sf::Vector2i mousePos(event.mouseMove.x, event.mouseMove.y);
 
 	auto windowSize = s_window->window().getSize();
 	uint16_t aspectRatio = windowSize.x / windowSize.y;
-	Vector2i windowCenter(windowSize.x / 2, windowSize.y / 2);
+	sf::Vector2i windowCenter(windowSize.x / 2, windowSize.y / 2);
 
 	const float mouseSensitivity = 0.01f;
 	s_lastDelta.x = (mousePos.x - s_lastMousePos.x) * mouseSensitivity * aspectRatio;
@@ -44,11 +44,11 @@ void Mouse::update(const sf::Event &event) {
 
 void Mouse::resetToWindowCenter() {
 	auto windowSize = s_window->window().getSize();
-	Vector2i windowCenter(windowSize.x / 2, windowSize.y / 2);
+	sf::Vector2i windowCenter(windowSize.x / 2, windowSize.y / 2);
 	sf::Mouse::setPosition(windowCenter, s_window->window());
 }
 
-Vector2i Mouse::getPosition() {
+sf::Vector2i Mouse::getPosition() {
 	return sf::Mouse::getPosition(s_window->window());
 }
 
