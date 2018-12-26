@@ -14,10 +14,11 @@
 #ifndef IMAGE_HPP_
 #define IMAGE_HPP_
 
+#include <SFML/Graphics/Texture.hpp>
+
 #include "Color.hpp"
 #include "IDrawable.hpp"
 #include "Rect.hpp"
-#include "Texture.hpp"
 #include "Transformable.hpp"
 #include "VertexBuffer.hpp"
 
@@ -25,10 +26,10 @@ class Image : public IDrawable, public Transformable {
 	public:
 		Image() = default;
 		Image(const std::string &textureName);
-		Image(const Texture &texture);
+		Image(const sf::Texture &texture);
 
 		void load(const std::string &textureName);
-		void load(const Texture &texture);
+		void load(const sf::Texture &texture);
 
 		const FloatRect &clipRect() const { return m_clipRect; }
 		void setClipRect(float x, float y, u16 width, u16 height);
@@ -43,7 +44,7 @@ class Image : public IDrawable, public Transformable {
 
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		const Texture *m_texture = nullptr;
+		const sf::Texture *m_texture = nullptr;
 
 		u16 m_width = 0;
 		u16 m_height = 0;

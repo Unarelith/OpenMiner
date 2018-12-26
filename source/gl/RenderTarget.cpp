@@ -11,10 +11,11 @@
  *
  * =====================================================================================
  */
+#include <SFML/Graphics/Texture.hpp>
+
 #include "IDrawable.hpp"
 #include "RenderTarget.hpp"
 #include "Shader.hpp"
-#include "Texture.hpp"
 #include "Vertex.hpp"
 #include "VertexBuffer.hpp"
 
@@ -67,11 +68,11 @@ void RenderTarget::draw(const VertexBuffer &vertexBuffer, GLenum mode, std::size
 
 
 	if (states.texture)
-		Texture::bind(states.texture);
+		sf::Texture::bind(states.texture);
 
 	glDrawArrays(mode, firstVertex, vertexCount);
 
-	Texture::bind(nullptr);
+	sf::Texture::bind(nullptr);
 
 	if (states.vertexAttributes & VertexAttribute::BlockType)
 		states.shader->disableVertexAttribArray("blockType");

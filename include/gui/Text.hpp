@@ -40,7 +40,7 @@ class Text : public IDrawable, public Transformable {
 
 		int m_charWidth[256];
 
-		Texture &m_texture;
+		sf::Texture &m_texture;
 		VertexBuffer m_vbo;
 
 		Vector2i m_size;

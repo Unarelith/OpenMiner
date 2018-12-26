@@ -20,22 +20,22 @@
 #include "Vertex.hpp"
 
 Image::Image(const std::string &textureName) {
-	load(ResourceHandler::getInstance().get<Texture>(textureName));
+	load(ResourceHandler::getInstance().get<sf::Texture>(textureName));
 }
 
-Image::Image(const Texture &texture) {
+Image::Image(const sf::Texture &texture) {
 	load(texture);
 }
 
 void Image::load(const std::string &textureName) {
-	load(ResourceHandler::getInstance().get<Texture>(textureName));
+	load(ResourceHandler::getInstance().get<sf::Texture>(textureName));
 }
 
-void Image::load(const Texture &texture) {
+void Image::load(const sf::Texture &texture) {
 	m_texture = &texture;
 
-	m_width = m_texture->width();
-	m_height = m_texture->height();
+	m_width = m_texture->getSize().x;
+	m_height = m_texture->getSize().y;
 
 	setClipRect(0, 0, m_width, m_height);
 }
