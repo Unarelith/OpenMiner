@@ -14,10 +14,10 @@
 #ifndef WIDGET_HPP_
 #define WIDGET_HPP_
 
+#include <SFML/Graphics/Rect.hpp>
 #include <SFML/Window/Event.hpp>
 
 #include "IDrawable.hpp"
-#include "Rect.hpp"
 #include "Transformable.hpp"
 
 class Widget : public IDrawable, public Transformable {
@@ -31,7 +31,7 @@ class Widget : public IDrawable, public Transformable {
 
 		bool isPointInWidget(float x, float y);
 
-		FloatRect getGlobalBounds() const;
+		sf::FloatRect getGlobalBounds() const;
 
 		const Widget *parent() { return m_parent; }
 		void setParent(Widget *parent) { m_parent = parent; }

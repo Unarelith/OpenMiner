@@ -18,8 +18,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Box.hpp"
-#include "Rect.hpp"
-#include "Vector2.hpp"
 
 #ifndef RADIANS_PER_DEGREES
 # define RADIANS_PER_DEGREES (M_PI / 180.0f)

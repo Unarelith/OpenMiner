@@ -27,7 +27,7 @@ class Text : public IDrawable, public Transformable {
 
 		void setColor(const Color &color) { m_color = color; }
 
-		const Vector2i &getSize() const { return m_size; }
+		const sf::Vector2i &getSize() const { return m_size; }
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
@@ -43,7 +43,7 @@ class Text : public IDrawable, public Transformable {
 		sf::Texture &m_texture;
 		VertexBuffer m_vbo;
 
-		Vector2i m_size;
+		sf::Vector2i m_size;
 
 		Color m_color = Color::white;
 };
