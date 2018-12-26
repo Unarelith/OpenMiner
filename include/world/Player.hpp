@@ -18,6 +18,7 @@
 
 #include <glm/glm.hpp>
 
+#include "Camera.hpp"
 #include "Inventory.hpp"
 
 #ifndef M_PI
@@ -43,7 +44,6 @@ class Player {
 		glm::mat4 updatePosition(const World &world);
 
 		void checkCollisions(const World &world);
-		void updateViewMatrix();
 
 		float pointTargetedX() const { return m_x + cos(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES); }
 		float pointTargetedY() const { return m_y + sin(m_angleV * RADIANS_PER_DEGREES); }
@@ -63,7 +63,7 @@ class Player {
 
 		static Player *s_instance;
 
-		glm::mat4 m_viewMatrix;
+		Camera m_camera{45.0f, 0.1f, 1000.0f};
 
 		float m_x;
 		float m_y;

@@ -26,6 +26,11 @@
 - Run `mkdir build && cd build` at the root of the game folder
 - Run `cmake .. && make`, wait (or use `-j8`), run the game and enjoy!
 
+## Discussion
+
+- IRC: irc.freenode.net `#openminer`
+- Discord: [join server](https://discord.gg/eN8k8wt)
+
 ## Previous versions
 
 - Here is the [commit](https://github.com/Quent42340/KubKraft/tree/8eba845421efff6ce941f8550ff79e6364970fd5) matching the end of the first version made in 2013.
