@@ -28,6 +28,10 @@ class SettingsMenuState : public ApplicationState {
 		void update() override;
 
 	private:
+		void addMainButtons();
+		void addGraphicsButtons();
+		void addInputButtons();
+
 		void draw(RenderTarget &target, RenderStates states) const override;
 
 		MenuWidget m_menuWidget{1, 8};

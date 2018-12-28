@@ -15,9 +15,14 @@
 #include "MenuWidget.hpp"
 
 MenuWidget::MenuWidget(u16 width, u16 height, Widget *parent) : Widget(parent) {
+	reset(width, height);
+}
+
+void MenuWidget::reset(u16 width, u16 height) {
 	m_width = width;
 	m_height = height;
 
+	m_buttons.clear();
 	m_buttons.resize(m_width * m_height);
 }
 

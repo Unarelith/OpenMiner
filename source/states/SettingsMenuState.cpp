@@ -29,8 +29,36 @@ SettingsMenuState::SettingsMenuState(ApplicationState *parent) : ApplicationStat
 	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	m_menuWidget.setScale(GUI_SCALE, GUI_SCALE, 1);
-	m_menuWidget.addButton(0, 7, "Done", [this] (TextButton &) { m_stateStack->pop(); });
 
+	addMainButtons();
+}
+
+void SettingsMenuState::onEvent(const SDL_Event &event) {
+	m_menuWidget.onEvent(event);
+
+	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+		m_stateStack->pop();
+	}
+}
+
+void SettingsMenuState::update() {
+}
+
+void SettingsMenuState::addMainButtons() {
+	m_menuWidget.addButton(0, 0, "Graphics...", [this] (TextButton &) {
+		m_menuWidget.reset(1, 8);
+		addGraphicsButtons();
+	});
+
+	m_menuWidget.addButton(0, 1, "Input...", [this] (TextButton &) {
+		m_menuWidget.reset(1, 8);
+		addInputButtons();
+	});
+
+	m_menuWidget.addButton(0, 7, "Done", [this] (TextButton &) { m_stateStack->pop(); });
+}
+
+void SettingsMenuState::addGraphicsButtons() {
 	m_menuWidget.addButton(0, 0, "Render distance: " + std::to_string(World::renderDistance), [] (TextButton &button) {
 		World::renderDistance = std::max(4, (World::renderDistance + 2) % 16);
 		button.setText("Render distance: " + std::to_string(World::renderDistance));
@@ -52,17 +80,18 @@ SettingsMenuState::SettingsMenuState(ApplicationState *parent) : ApplicationStat
 
 	m_menuWidget.addButton(0, 3, "Fullscreen: OFF", [] (TextButton &) {}).setEnabled(false);
 	m_menuWidget.addButton(0, 4, "Use VSync: OFF", [] (TextButton &) {}).setEnabled(false);
+
+	m_menuWidget.addButton(0, 7, "Done", [this] (TextButton &) {
+		m_menuWidget.reset(1, 8);
+		addMainButtons();
+	});
 }
 
-void SettingsMenuState::onEvent(const SDL_Event &event) {
-	m_menuWidget.onEvent(event);
-
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-		m_stateStack->pop();
-	}
-}
-
-void SettingsMenuState::update() {
+void SettingsMenuState::addInputButtons() {
+	m_menuWidget.addButton(0, 7, "Done", [this] (TextButton &) {
+		m_menuWidget.reset(1, 8);
+		addMainButtons();
+	});
 }
 
 void SettingsMenuState::draw(RenderTarget &target, RenderStates states) const {
@@ -77,5 +106,4 @@ void SettingsMenuState::draw(RenderTarget &target, RenderStates states) const {
 	target.draw(m_background, states);
 	target.draw(m_menuWidget, states);
 }
-
 
