@@ -36,8 +36,8 @@ void ItemWidget::update() {
 	m_text.setPosition(16 - 4 - 6 * floor(log10(stack().amount())), 16 - 6, 0);
 }
 
-void ItemWidget::setStack(unsigned int id, unsigned int amount) {
-	m_inventory.setStack(m_x, m_y, id, amount);
+void ItemWidget::setStack(const std::string &name, unsigned int amount) {
+	m_inventory.setStack(m_x, m_y, name, amount);
 	update();
 }
 

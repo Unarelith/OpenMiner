@@ -1,5 +1,5 @@
 registry:register_block({
-	name = "default:air",
+	name = "",
 	label = "Air",
 	texture = 0,
 })
@@ -23,6 +23,7 @@ registry:register_block({
 	label = "Grass",
 	texture = 226,
 	item_drop = {
+		item = "default:dirt",
 		amount = 1
 	}
 })
@@ -48,6 +49,7 @@ registry:register_block({
 	hardness = 1.5,
 	harvest_requirements = 1,
 	item_drop = {
+		item = "default:cobblestone",
 		amount = 1
 	},
 })
@@ -77,6 +79,7 @@ registry:register_block({
 	hardness = 3,
 	harvest_requirements = 1,
 	item_drop = {
+		item = "default:coal",
 		amount = 1
 	},
 })

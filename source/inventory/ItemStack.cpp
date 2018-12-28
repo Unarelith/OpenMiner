@@ -5,7 +5,7 @@
  *
  *    Description:
  *
- *        Created:  24/06/2018 01:23:52
+ *        Created:  28/12/2018 20:00:00
  *
  *         Author:  Quentin Bazin, <quent42340@gmail.com>
  *
@@ -14,14 +14,7 @@
 #include "ItemStack.hpp"
 #include "Registry.hpp"
 
-ItemStack::ItemStack() : m_item(&Registry::getInstance().getItem(0)) {
-}
-
-ItemStack::ItemStack(u16 id, u16 amount) : m_item(&Registry::getInstance().getItem(id)) {
-	m_amount = amount;
-}
-
-void ItemStack::setItem(u16 item) {
-	m_item = &Registry::getInstance().getItem(item);
+const Item &ItemStack::item() const {
+	return Registry::getInstance().getItem(m_name);
 }
 

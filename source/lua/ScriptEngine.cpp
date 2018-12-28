@@ -11,7 +11,6 @@
  *
  * =====================================================================================
  */
-#include "ItemBlock.hpp"
 #include "ScriptEngine.hpp"
 #include "Player.hpp"
 #include "Registry.hpp"

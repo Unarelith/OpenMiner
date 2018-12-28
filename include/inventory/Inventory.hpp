@@ -25,8 +25,8 @@ class Inventory {
 
 		const ItemStack &getStack(u16 x, u16 y) const { return m_items.at(x + y * m_width); }
 		ItemStack &getStackRef(u16 x, u16 y) { return m_items.at(x + y * m_width); }
-		void setStack(u16 x, u16 y, u16 id, u16 amount = 1);
-		void addStack(u16 id, u16 amount = 1);
+		void setStack(u16 x, u16 y, const std::string &name, u16 amount = 1);
+		void addStack(const std::string &name, u16 amount = 1);
 
 		u16 width() const { return m_width; }
 		u16 height() const { return m_height; }

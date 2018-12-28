@@ -13,18 +13,18 @@
  */
 #include "Inventory.hpp"
 
-void Inventory::setStack(u16 x, u16 y, u16 id, u16 amount) {
-	m_items[x + y * m_width] = ItemStack(id, amount);
+void Inventory::setStack(u16 x, u16 y, const std::string &name, u16 amount) {
+	m_items[x + y * m_width] = ItemStack(name, amount);
 }
 
-void Inventory::addStack(u16 id, u16 amount) {
+void Inventory::addStack(const std::string &name, u16 amount) {
 	for (std::size_t i = 0 ; i < m_items.size() ; ++i) {
 		if (m_items[i].item().id() == 0) {
-			m_items[i] = ItemStack(id, amount);
+			m_items[i] = ItemStack(name, amount);
 			break;
 		}
-		else if (m_items[i].item().id() == id) {
-			m_items[i] = ItemStack(id, m_items[i].amount() + amount);
+		else if (m_items[i].item().name() == name) {
+			m_items[i] = ItemStack(name, m_items[i].amount() + amount);
 			break;
 		}
 	}

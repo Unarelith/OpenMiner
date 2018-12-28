@@ -11,6 +11,8 @@
  *
  * =====================================================================================
  */
+#include <iostream>
+
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -29,9 +31,14 @@
 GameState::GameState() {
 	m_projectionMatrix = glm::perspective(45.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, DIST_NEAR, DIST_FAR);
 
-	auto &lua = ScriptEngine::getInstance().lua();
-	lua["player"] = &m_player;
-	lua["init"]();
+	try {
+		auto &lua = ScriptEngine::getInstance().lua();
+		lua["player"] = &m_player;
+		lua.script("init()");
+	}
+	catch (const sol::error &e) {
+		std::cerr << e.what() << std::endl;
+	}
 
 	initShaders();
 }

@@ -30,6 +30,8 @@ class Item {
 		u32 textureID() const { return m_textureID; }
 
 		bool isBlock() const { return m_isBlock; }
+		void setIsBlock(bool isBlock) { m_isBlock = isBlock; }
+
 		bool isFuel() const { return m_isFuel; }
 		void setIsFuel(bool isFuel) { m_isFuel = isFuel; }
 

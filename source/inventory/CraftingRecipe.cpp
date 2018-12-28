@@ -20,7 +20,7 @@
 //        - Pattern section | char[3][3]
 //        - Key section     | map<char, vector<ItemType>>
 //        - Result section  | ItemStack
-CraftingRecipe::CraftingRecipe(const std::vector<std::string> &pattern, const std::map<char, std::vector<u32>> &keys, const ItemStack &result, bool isShapeless) : Recipe("craft", result) {
+CraftingRecipe::CraftingRecipe(const std::vector<std::string> &pattern, const std::map<char, std::vector<std::string>> &keys, const ItemStack &result, bool isShapeless) : Recipe("craft", result) {
 	m_pattern = pattern;
 	m_keys = keys;
 
@@ -70,16 +70,16 @@ bool CraftingRecipe::checkMatch(const Inventory &inventory, int offsetX, int off
 		for (x = 0 ; x < m_pattern[y].size() ; ++x) {
 			itemFound = false;
 
-			u32 inventoryItem = inventory.getStack(offsetX + x, offsetY + y).item().id();
+			std::string inventoryItem = inventory.getStack(offsetX + x, offsetY + y).item().name();
 			if (m_pattern[y][x] == ' ') {
-				itemFound = !inventoryItem;
+				itemFound = !inventoryItem.empty();
 			}
 			else {
 				auto it = m_keys.find(m_pattern[y][x]);
 				if (it == m_keys.end())
 					throw EXCEPTION("Recipe error: Invalid key char(", (int)m_pattern[y][x], ")'");
 
-				for (u32 item : it->second) {
+				for (std::string item : it->second) {
 					if (item == inventoryItem)
 						itemFound = true;
 				}

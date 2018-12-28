@@ -35,16 +35,16 @@ void CoreApplication::init() {
 }
 
 int CoreApplication::run() {
-	// try {
+	try {
 		m_sdlLoader.load();
 
 		init();
 		mainLoop();
-	// }
-	// catch(const Exception &e) {
-	// 	std::cerr << "Fatal error " << e.what() << std::endl;
-	// 	return 1;
-	// }
+	}
+	catch(const Exception &e) {
+		std::cerr << "Fatal error " << e.what() << std::endl;
+		return 1;
+	}
 	// catch(const std::exception &e) {
 	// 	std::cerr << "Exception caught: " << e.what() << std::endl;
 	// 	return 1;

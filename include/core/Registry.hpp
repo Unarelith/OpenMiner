@@ -20,6 +20,7 @@
 #include <sol.hpp>
 
 #include "Block.hpp"
+#include "Exception.hpp"
 #include "Item.hpp"
 #include "Recipe.hpp"
 
@@ -30,8 +31,24 @@ class Registry {
 		void registerCraftingRecipeFromTable(const sol::table &table);
 		void registerSmeltingRecipeFromTable(const sol::table &table);
 
-		const Block &getBlock(std::size_t id) const { return *m_blocks.at(id).get(); }
-		const Item &getItem(std::size_t id) const { return *m_items.at(id).get(); }
+		const Block &getBlock(std::size_t id) const { return m_blocks.at(id); }
+		const Item &getItem(std::size_t id) const { return m_items.at(id); }
+
+		const Block &getBlock(const std::string &name) {
+			if (name.empty()) return getBlock((int)0);
+			auto it = m_blocksID.find(name);
+			if (it == m_blocksID.end())
+				throw EXCEPTION("Unknown block:", name);
+			return getBlock(it->second);
+		}
+
+		const Item &getItem(const std::string &name) {
+			if (name.empty()) return getItem((int)0);
+			auto it = m_itemsID.find(name);
+			if (it == m_itemsID.end())
+				throw EXCEPTION("Unknown item:", name);
+			return getItem(it->second);
+		}
 
 		const Recipe *getRecipe(const Inventory &inventory) const;
 
@@ -39,15 +56,16 @@ class Registry {
 		static void setInstance(Registry &instance) { s_instance = &instance; }
 
 	private:
-		template<typename T, typename... Args>
-		auto registerBlock(Args &&...args) -> typename std::enable_if<std::is_base_of<Block, T>::value, Block*>::type {
-			return m_blocks.emplace_back(std::make_unique<T>(std::forward<Args>(args)...)).get();
+		Block &registerBlock(u32 textureID, const std::string &name, const std::string &label) {
+			u32 id = m_blocks.size();
+			m_blocksID.emplace(name, id);
+			return m_blocks.emplace_back(id, textureID, name, label);
 		}
 
-		template<typename T, typename... Args>
-		auto registerItem(Args &&...args) -> typename std::enable_if<std::is_base_of<Item, T>::value, Item*>::type {
+		Item &registerItem(u32 textureID, const std::string &name, const std::string &label) {
 			u32 id = m_items.size();
-			return m_items.emplace_back(std::make_unique<T>(id, std::forward<Args>(args)...)).get();
+			m_itemsID.emplace(name, id);
+			return m_items.emplace_back(id, textureID, name, label);
 		}
 
 		template<typename T, typename... Args>
@@ -57,9 +75,12 @@ class Registry {
 
 		static Registry *s_instance;
 
-		std::vector<std::unique_ptr<Block>> m_blocks;
-		std::vector<std::unique_ptr<Item>> m_items;
+		std::vector<Block> m_blocks;
+		std::vector<Item> m_items;
 		std::vector<std::unique_ptr<Recipe>> m_recipes;
+
+		std::unordered_map<std::string, u32> m_blocksID;
+		std::unordered_map<std::string, u32> m_itemsID;
 };
 
 #endif // REGISTRY_HPP_

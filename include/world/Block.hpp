@@ -52,7 +52,7 @@ class Block {
 		bool canUpdate() const { return m_canUpdate; }
 
 		ItemStack getItemDrop() const { return ItemStack{m_itemDrop, m_itemDropAmount}; };
-		void setItemDrop(u16 itemDrop, u16 itemDropAmount = 1) { m_itemDrop = itemDrop; m_itemDropAmount = itemDropAmount; }
+		void setItemDrop(const std::string &itemDrop, u16 itemDropAmount = 1) { m_itemDrop = itemDrop; m_itemDropAmount = itemDropAmount; }
 
 		u8 harvestRequirements() const { return m_harvestRequirements; }
 		void setHarvestRequirements(u8 harvestRequirements) { m_harvestRequirements = harvestRequirements; }
@@ -82,7 +82,7 @@ class Block {
 		bool m_isSelected = false;
 		s8 m_selectedFace = -1;
 
-		u16 m_itemDrop;
+		std::string m_itemDrop;
 		u16 m_itemDropAmount;
 
 		u8 m_harvestRequirements = 0;

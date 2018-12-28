@@ -27,7 +27,7 @@ class ItemWidget : public Widget {
 		void update() override;
 
 		const ItemStack &stack() const { return m_inventory.getStack(m_x, m_y); }
-		void setStack(unsigned int id, unsigned int amount = 1);
+		void setStack(const std::string &name, unsigned int amount = 1);
 
 	protected:
 		void draw(RenderTarget &target, RenderStates states) const override;

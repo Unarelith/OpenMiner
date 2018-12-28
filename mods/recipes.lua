@@ -1,7 +1,7 @@
 -- Wooden Axe
 registry:register_crafting_recipe({
 	result = {
-		item = 41,
+		item = "default:axe_wood",
 		amount = 1
 	},
 
@@ -12,15 +12,15 @@ registry:register_crafting_recipe({
 	},
 
 	keys = {
-		['#'] = 11,
-		['|'] = 32
+		['#'] = "default:planks",
+		['|'] = "default:stick",
 	}
 })
 
 -- Wooden Hoe
 registry:register_crafting_recipe({
 	result = {
-		item = 42,
+		item = "default:hoe_wood",
 		amount = 1
 	},
 
@@ -31,15 +31,15 @@ registry:register_crafting_recipe({
 	},
 
 	keys = {
-		['#'] = 11,
-		['|'] = 32
+		['#'] = "default:planks",
+		['|'] = "default:stick",
 	}
 })
 
 -- Wooden Pickaxe
 registry:register_crafting_recipe({
 	result = {
-		item = 43,
+		item = "default:pickaxe_wood",
 		amount = 1
 	},
 
@@ -50,15 +50,15 @@ registry:register_crafting_recipe({
 	},
 
 	keys = {
-		['#'] = 11,
-		['|'] = 32
+		['#'] = "default:planks",
+		['|'] = "default:stick",
 	}
 })
 
 -- Wooden Shovel
 registry:register_crafting_recipe({
 	result = {
-		item = 44,
+		item = "default:shovel_wood",
 		amount = 1
 	},
 
@@ -69,15 +69,15 @@ registry:register_crafting_recipe({
 	},
 
 	keys = {
-		['#'] = 11,
-		['|'] = 32
+		['#'] = "default:planks",
+		['|'] = "default:stick",
 	}
 })
 
 -- Wooden Sword
 registry:register_crafting_recipe({
 	result = {
-		item = 45,
+		item = "default:sword_wood",
 		amount = 1
 	},
 
@@ -88,8 +88,8 @@ registry:register_crafting_recipe({
 	},
 
 	keys = {
-		['#'] = 11,
-		['|'] = 32
+		['#'] = "default:planks",
+		['|'] = "default:stick",
 	}
 })
 
@@ -191,7 +191,7 @@ registry:register_crafting_recipe({
 -- Stick
 registry:register_crafting_recipe({
 	result = {
-		item = 32,
+		item = "default:wood",
 		amount = 4
 	},
 
@@ -200,36 +200,36 @@ registry:register_crafting_recipe({
 		'#'
 	},
 
-	keys = {['#'] = 11}
+	keys = {['#'] = "default:planks"}
 })
 
 -- Planks
 registry:register_crafting_recipe({
 	result = {
-		item = 11,
+		item = "default:planks",
 		amount = 4
 	},
 	pattern = {"#"},
-	keys = {["#"] = 5}
+	keys = {["#"] = "default:wood"}
 })
 
 -- Workbench
 registry:register_crafting_recipe({
 	result = {
-		item = 13,
+		item = "default:workbench",
 		amount = 1
 	},
 	pattern = {
 		"##",
 		"##"
 	},
-	keys = {["#"] = 11}
+	keys = {["#"] = "default:planks"}
 })
 
 -- Furnace
 registry:register_crafting_recipe({
 	result = {
-		item = 14,
+		item = "default:furnace",
 		amount = 1
 	},
 
@@ -239,43 +239,43 @@ registry:register_crafting_recipe({
 		"###"
 	},
 
-	keys = {["#"] = 2}
+	keys = {["#"] = "default:cobblestone"}
 })
 
 
 -- Plank Slab
 registry:register_crafting_recipe({
 	result = {
-		item = 16,
+		item = "default:slab_planks",
 		amount = 6
 	},
 
 	pattern = {"###"},
 
-	keys = {['#'] = 11}
+	keys = {['#'] = "default:planks"}
 })
 
 -- Iron Ingot
 registry:register_smelting_recipe({
-	input = {item = 15, amount = 1},
-	output = {item = 39, amount = 1}
+	input = {item = "default:ore_iron", amount = 1},
+	output = {item = "default:ingot_iron", amount = 1}
 })
 
 -- Stone
 registry:register_smelting_recipe({
-	input = {item = 2, amount = 1},
-	output = {item = 6, amount = 1}
+	input = {item = "default:cobblestone", amount = 1},
+	output = {item = "default:stone", amount = 1}
 })
 
 -- Glass
 registry:register_smelting_recipe({
-	input = {item = 7, amount = 1},
-	output = {item = 9, amount = 1}
+	input = {item = "default:sand", amount = 1},
+	output = {item = "default:glass", amount = 1}
 })
 
 -- Charcoal
 registry:register_smelting_recipe({
-	input = {item = 5, amount = 1},
-	output = {item = 40, amount = 1}
+	input = {item = "default:wood", amount = 1},
+	output = {item = "default:charcoal", amount = 1}
 })
 

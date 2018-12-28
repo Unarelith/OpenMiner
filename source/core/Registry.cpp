@@ -12,7 +12,6 @@
  * =====================================================================================
  */
 #include "CraftingRecipe.hpp"
-#include "ItemBlock.hpp"
 #include "Registry.hpp"
 #include "SmeltingRecipe.hpp"
 
@@ -28,24 +27,18 @@ void Registry::registerBlockFromTable(const sol::table &table) {
 	std::string name = table["name"].get<std::string>();
 	std::string label = table["label"].get<std::string>();
 
-	u32 id = m_blocks.size();
-	Block *block = nullptr;
-	if (id == BlockType::Workbench)    block = registerBlock<BlockWorkbench>();
-	else if (id == BlockType::Furnace) block = registerBlock<BlockFurnace>();
-	else if (id == BlockType::Water)   block = registerBlock<BlockWater>();
-	else block = registerBlock<Block>(id, textureID, name, label);
-
-	block->setHarvestRequirements(table["harvest_requirements"].get_or(0));
-	block->setHardness(table["hardness"].get_or(1.0f));
+	Block &block = registerBlock(textureID, name, label);
+	block.setHarvestRequirements(table["harvest_requirements"].get_or(0));
+	block.setHardness(table["hardness"].get_or(1.0f));
 
 	sol::optional<sol::table> itemDrop = table["item_drop"];
 	if (itemDrop != sol::nullopt) {
-		u16 id = table["id"];
+		std::string name = table["name"];
 		u16 amount = table["amount"];
-		block->setItemDrop(id, amount);
+		block.setItemDrop(name, amount);
 	}
 
-	registerItem<ItemBlock>(id, name, label);
+	registerItem(block.textureID(), name, label).setIsBlock(true);
 }
 
 void Registry::registerItemFromTable(const sol::table &table) {
@@ -53,11 +46,11 @@ void Registry::registerItemFromTable(const sol::table &table) {
 	std::string name = table["name"].get<std::string>();
 	std::string label = table["label"].get<std::string>();
 
-	Item *item = registerItem<Item>(textureID, name, label);
-	item->setIsFuel(table["is_fuel"].get_or(false));
-	item->setBurnTime(table["burn_time"].get_or(0));
-	item->setHarvestCapability(table["harvest_capability"].get_or(0));
-	item->setMiningSpeed(table["mining_speed"].get_or(1));
+	Item &item = registerItem(textureID, name, label);
+	item.setIsFuel(table["is_fuel"].get_or(false));
+	item.setBurnTime(table["burn_time"].get_or(0));
+	item.setHarvestCapability(table["harvest_capability"].get_or(0));
+	item.setMiningSpeed(table["mining_speed"].get_or(1));
 }
 
 void Registry::registerCraftingRecipeFromTable(const sol::table &table) {
@@ -66,7 +59,7 @@ void Registry::registerCraftingRecipeFromTable(const sol::table &table) {
 	sol::table keysTable = table["keys"];
 
 	ItemStack result = {
-		resultTable["item"].get<u16>(),
+		resultTable["item"].get<std::string>(),
 		resultTable["amount"].get<u16>()
 	};
 
@@ -74,9 +67,9 @@ void Registry::registerCraftingRecipeFromTable(const sol::table &table) {
 	for (auto &it : patternTable)
 		pattern.emplace_back(it.second.as<std::string>());
 
-	std::map<char, std::vector<u32>> keys;
+	std::map<char, std::vector<std::string>> keys;
 	for (auto &it : keysTable) {
-		keys.emplace(it.first.as<char>(), std::vector<u32>{it.second.as<u32>()});
+		keys.emplace(it.first.as<char>(), std::vector<std::string>{it.second.as<std::string>()});
 	}
 
 	registerRecipe<CraftingRecipe>(pattern, keys, result);
@@ -87,12 +80,12 @@ void Registry::registerSmeltingRecipeFromTable(const sol::table &table) {
 	sol::table outputTable = table["output"];
 
 	ItemStack input = {
-		inputTable["item"].get<u16>(),
+		inputTable["item"].get<std::string>(),
 		inputTable["amount"].get<u16>()
 	};
 
 	ItemStack output = {
-		outputTable["item"].get<u16>(),
+		outputTable["item"].get<std::string>(),
 		outputTable["amount"].get<u16>()
 	};
 

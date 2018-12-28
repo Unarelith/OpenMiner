@@ -42,7 +42,7 @@ void Hotbar::onEvent(const SDL_Event &event) {
 
 void Hotbar::update() {
 	for (u16 i = 0 ; i < 9 ; ++i) {
-		m_items[i].setStack(m_inventory.getStack(i, 0).item().id(), m_inventory.getStack(i, 0).amount());
+		m_items[i].setStack(m_inventory.getStack(i, 0).item().name(), m_inventory.getStack(i, 0).amount());
 	}
 }
 

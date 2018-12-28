@@ -31,7 +31,7 @@ void CraftingWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mouse
 			for (u8 y = 0 ; y < m_craftingInventory.height() ; ++y) {
 				const ItemStack &stack = m_craftingInventory.getStack(x, y);
 				if (stack.item().id()) {
-					m_craftingInventory.setStack(x, y, (stack.amount() > 1) ? stack.item().id() : 0, stack.amount() - 1);
+					m_craftingInventory.setStack(x, y, (stack.amount() > 1) ? stack.item().name() : "", stack.amount() - 1);
 				}
 			}
 		}
@@ -51,9 +51,9 @@ void CraftingWidget::update() {
 		m_recipe = recipe;
 
 		if (m_recipe)
-			m_craftingResultInventory.setStack(0, 0, m_recipe->result().item().id(), m_recipe->result().amount());
+			m_craftingResultInventory.setStack(0, 0, m_recipe->result().item().name(), m_recipe->result().amount());
 		else
-			m_craftingResultInventory.setStack(0, 0, 0, 0);
+			m_craftingResultInventory.setStack(0, 0, "", 0);
 
 		m_craftingResultInventoryWidget.init(m_craftingResultInventory);
 	}

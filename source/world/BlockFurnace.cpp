@@ -63,7 +63,7 @@ void BlockFurnace::onTick(const glm::ivec3 &blockPosition, Player &, Chunk &, Wo
 		recipe = nullptr;
 
 	if (ticksRemaining == 0 && recipe && fuelStack.amount() && (!outputStack.item().id() || !outputStack.amount() || outputStack.item().id() == recipe->result().item().id())) {
-		data->inventory.setStack(2, 0, fuelStack.item().id(), fuelStack.amount() - 1);
+		data->inventory.setStack(2, 0, fuelStack.item().name(), fuelStack.amount() - 1);
 		ticksRemaining = fuelStack.item().burnTime();
 		currentBurnTime = fuelStack.item().burnTime();
 		world.setData(blockPosition.x, blockPosition.y, blockPosition.z, 1);
@@ -82,8 +82,8 @@ void BlockFurnace::onTick(const glm::ivec3 &blockPosition, Player &, Chunk &, Wo
 
 	if (itemProgress >= 200 && recipe) {
 		itemProgress = 0;
-		data->inventory.setStack(0, 0, (inputStack.amount() - 1 > 0) ? inputStack.item().id() : 0, inputStack.amount() - 1);
-		data->inventory.setStack(1, 0, recipe->result().item().id(), outputStack.amount() + recipe->result().amount());
+		data->inventory.setStack(0, 0, (inputStack.amount() - 1 > 0) ? inputStack.item().name() : "", inputStack.amount() - 1);
+		data->inventory.setStack(1, 0, recipe->result().item().name(), outputStack.amount() + recipe->result().amount());
 	}
 
 	data->data = ticksRemaining | ((u32)currentBurnTime << 16) | ((u64)itemProgress << 32);

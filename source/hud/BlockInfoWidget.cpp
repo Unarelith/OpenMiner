@@ -36,7 +36,7 @@ void BlockInfoWidget::setCurrentBlock(const Block *block) {
 		m_isVisible = true;
 
 		m_text.setText(block->label());
-		m_itemWidget.setStack(block->id(), 1);
+		m_itemWidget.setStack(block->name(), 1);
 	}
 }
 

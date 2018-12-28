@@ -18,17 +18,18 @@
 
 class ItemStack {
 	public:
-		ItemStack();
-		ItemStack(u16 id, u16 amount = 1);
+		ItemStack() = default;
+		ItemStack(const std::string &name, u16 amount = 1)
+			: m_name(name), m_amount(amount) {}
 
-		const Item &item() const { return *m_item; }
-		void setItem(u16 item);
+		const Item &item() const;
+		void setItem(const std::string &name) { m_name = name; }
 
 		u16 amount() const { return m_amount; }
 		void setAmount(u16 amount) { m_amount = amount; }
 
 	private:
-		const Item *m_item = nullptr;
+		std::string m_name;
 
 		u16 m_amount = 0;
 };
