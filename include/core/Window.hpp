@@ -22,31 +22,14 @@
 #include "IntTypes.hpp"
 #include "RenderTarget.hpp"
 
-class Window : public RenderTarget {
+class Window : public sf::Window, public RenderTarget {
 	public:
 		void open(const std::string &caption, u16 width, u16 height);
 
 		void clear();
-		void display();
-
-		void setVerticalSyncEnabled(bool enabled);
-
-		u16 width() const { return m_width; }
-		u16 height() const { return m_height; }
-
-		void close() { m_isOpen = false; }
-		bool isOpen() const { return m_isOpen; }
-
-		sf::RenderWindow &window() { return m_window; }
-		const sf::RenderWindow &window() const { return m_window; }
 
 	private:
-		sf::RenderWindow m_window;
-
-		u16 m_width;
-		u16 m_height;
-
-		bool m_isOpen;
+		void initOpenGL();
 };
 
 #endif // WINDOW_HPP_

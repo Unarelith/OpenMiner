@@ -23,25 +23,45 @@ void Window::open(const std::string &caption, u16 width, u16 height) {
 	settings.stencilBits = 8;
 	settings.antialiasingLevel = 0;
 
-	m_window.create(sf::VideoMode(width, height), caption, sf::Style::Titlebar | sf::Style::Close, settings);
-	m_window.setPosition({int(sf::VideoMode::getDesktopMode().width / 2  - width / 2),
-						  int(sf::VideoMode::getDesktopMode().height / 2 - height / 2)});
+	create(sf::VideoMode(width, height), caption, sf::Style::Titlebar | sf::Style::Close, settings);
+	setPosition({int(sf::VideoMode::getDesktopMode().width / 2  - width / 2),
+			int(sf::VideoMode::getDesktopMode().height / 2 - height / 2)});
 
-	m_width = width;
-	m_height = height;
-
-	m_isOpen = true;
+	initOpenGL();
 }
 
 void Window::clear() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Window::display() {
-	m_window.display();
-}
+void Window::initOpenGL() {
+#ifdef __MINGW32__
+#ifdef USE_GLAD
+	if(!gladLoadGL()) {
+		throw EXCEPTION("glad init failed");
+	}
+#else
+	if(glewInit() != GLEW_OK) {
+		throw EXCEPTION("glew init failed");
+	}
+#endif
+#endif
 
-void Window::setVerticalSyncEnabled(bool enabled) {
-	m_window.setVerticalSyncEnabled(enabled);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	// glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+	// glBlendFunc(GL_ONE, GL_ONE);
+	// glBlendEquation(GL_FUNC_ADD);
+	// glEnable(GL_ALPHA_TEST);
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+
+	glEnable(GL_POLYGON_OFFSET_FILL);
+	glPolygonOffset(1, 1);
+
+	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+
+	glClearColor(0.196078, 0.6, 0.8, 1.0); // Skyblue
 }
 

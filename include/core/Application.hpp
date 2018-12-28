@@ -24,8 +24,6 @@ class Application : public CoreApplication {
 
 		void init() override;
 
-		void initOpenGL();
-
 	private:
 		Registry m_registry;
 
