@@ -14,16 +14,20 @@
 #ifndef INTTYPES_HPP_
 #define INTTYPES_HPP_
 
-#include <SFML/Config.hpp>
+using s8  = signed char;
+using s16 = signed short;
+using s32 = signed int;
 
-using s8  = sf::Int8;
-using s16 = sf::Int16;
-using s32 = sf::Int32;
-using s64 = sf::Int64;
+using u8  = unsigned char;
+using u16 = unsigned short;
+using u32 = unsigned int;
 
-using u8  = sf::Uint8;
-using u16 = sf::Uint16;
-using u32 = sf::Uint32;
-using u64 = sf::Uint64;
+#if defined(_MSC_VER)
+	using s64 = signed __int64;
+	using u64 = unsigned __int64;
+#else
+	using s64 = signed long long;
+	using u64 = unsigned long long;
+#endif
 
 #endif // INTTYPES_HPP_

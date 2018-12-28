@@ -30,53 +30,11 @@ class InputHandler {
 		const std::map<GameKey, bool> &keysPressed() const { return m_keysPressed; }
 
 	protected:
-		std::map<GameKey, bool> m_keysPressed{
-			{GameKey::Left,      false},
-			{GameKey::Right,     false},
-			{GameKey::Up,        false},
-			{GameKey::Down,      false},
+		void addKey(GameKey key);
 
-			{GameKey::Jump,      false},
-			{GameKey::Fly,       false},
-			{GameKey::Sneak,     false},
-
-			{GameKey::Dig,       false},
-			{GameKey::Use,       false},
-
-			{GameKey::Inventory, false},
-		};
-
-		std::map<GameKey, bool> m_keysPressedOnce{
-			{GameKey::Left,      false},
-			{GameKey::Right,     false},
-			{GameKey::Up,        false},
-			{GameKey::Down,      false},
-
-			{GameKey::Jump,      false},
-			{GameKey::Fly,       false},
-			{GameKey::Sneak,     false},
-
-			{GameKey::Dig,       false},
-			{GameKey::Use,       false},
-
-			{GameKey::Inventory, false},
-		};
-
-		std::map<GameKey, u32> m_lastTimePressed{
-			{GameKey::Left,      0},
-			{GameKey::Right,     0},
-			{GameKey::Up,        0},
-			{GameKey::Down,      0},
-
-			{GameKey::Jump,      0},
-			{GameKey::Fly,       0},
-			{GameKey::Sneak,     0},
-
-			{GameKey::Dig,       0},
-			{GameKey::Use,       0},
-
-			{GameKey::Inventory, 0},
-		};
+		std::map<GameKey, bool> m_keysPressed;
+		std::map<GameKey, bool> m_keysPressedOnce;
+		std::map<GameKey, u32> m_lastTimePressed;
 };
 
 #endif // INPUTHANDLER_HPP_

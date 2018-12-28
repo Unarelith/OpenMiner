@@ -11,13 +11,9 @@
  *
  * =====================================================================================
  */
-#include <iostream>
-
 #include "Application.hpp"
-#include "Exception.hpp"
 
 int main(int argc, char **argv) {
-
 	Application app(argc, argv);
 	app.run();
 

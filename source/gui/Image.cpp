@@ -17,31 +17,32 @@
 #include "Config.hpp"
 #include "Image.hpp"
 #include "ResourceHandler.hpp"
+#include "Texture.hpp"
 #include "Vertex.hpp"
 
 Image::Image(const std::string &textureName) {
-	load(ResourceHandler::getInstance().get<sf::Texture>(textureName));
+	load(ResourceHandler::getInstance().get<Texture>(textureName));
 }
 
-Image::Image(const sf::Texture &texture) {
+Image::Image(const Texture &texture) {
 	load(texture);
 }
 
 void Image::load(const std::string &textureName) {
-	load(ResourceHandler::getInstance().get<sf::Texture>(textureName));
+	load(ResourceHandler::getInstance().get<Texture>(textureName));
 }
 
-void Image::load(const sf::Texture &texture) {
+void Image::load(const Texture &texture) {
 	m_texture = &texture;
 
-	m_width = m_texture->getSize().x;
-	m_height = m_texture->getSize().y;
+	m_width = m_texture->width();
+	m_height = m_texture->height();
 
 	setClipRect(0, 0, m_width, m_height);
 }
 
 void Image::setClipRect(float x, float y, u16 width, u16 height) {
-	m_clipRect = sf::FloatRect(x, y, width, height);
+	m_clipRect = FloatRect(x, y, width, height);
 
 	updateVertexBuffer();
 }
@@ -54,21 +55,21 @@ void Image::updateVertexBuffer() const {
 		{{m_clipRect.width, m_clipRect.height, 0, -1}},
 	};
 
-	sf::FloatRect texRect{
-		m_clipRect.left / float(m_width),
-		m_clipRect.top / float(m_height),
+	FloatRect texRect{
+		m_clipRect.x / float(m_width),
+		m_clipRect.y / float(m_height),
 		m_clipRect.width / float(m_width),
 		m_clipRect.height / float(m_height)
 	};
 
-	vertices[0].texCoord[0] = texRect.left + texRect.width;
-	vertices[0].texCoord[1] = texRect.top;
-	vertices[1].texCoord[0] = texRect.left;
-	vertices[1].texCoord[1] = texRect.top;
-	vertices[2].texCoord[0] = texRect.left;
-	vertices[2].texCoord[1] = texRect.top  + texRect.height;
-	vertices[3].texCoord[0] = texRect.left + texRect.width;
-	vertices[3].texCoord[1] = texRect.top  + texRect.height;
+	vertices[0].texCoord[0] = texRect.x + texRect.width;
+	vertices[0].texCoord[1] = texRect.y;
+	vertices[1].texCoord[0] = texRect.x;
+	vertices[1].texCoord[1] = texRect.y;
+	vertices[2].texCoord[0] = texRect.x;
+	vertices[2].texCoord[1] = texRect.y + texRect.height;
+	vertices[3].texCoord[0] = texRect.x + texRect.width;
+	vertices[3].texCoord[1] = texRect.y + texRect.height;
 
 	for (u8 i = 0 ; i < 4 ; ++i) {
 		vertices[i].color[0] = m_color.r;

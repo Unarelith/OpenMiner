@@ -31,7 +31,7 @@ class Cube : public IDrawable, public Transformable {
 
 		float m_size = 1.0f;
 
-		const sf::Texture &m_texture;
+		const Texture &m_texture;
 
 		VertexBuffer m_vbo;
 

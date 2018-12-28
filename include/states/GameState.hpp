@@ -28,7 +28,7 @@ class GameState : public ApplicationState {
 	public:
 		GameState();
 
-		void onEvent(const sf::Event &event) override;
+		void onEvent(const SDL_Event &event) override;
 
 		void update() override;
 

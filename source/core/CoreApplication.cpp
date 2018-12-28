@@ -35,22 +35,24 @@ void CoreApplication::init() {
 }
 
 int CoreApplication::run() {
-	try {
+	// try {
+		m_sdlLoader.load();
+
 		init();
 		mainLoop();
-	}
-	catch(const Exception &e) {
-		std::cerr << "Fatal error " << e.what() << std::endl;
-		return 1;
-	}
-	catch(const std::exception &e) {
-		std::cerr << "Exception caught: " << e.what() << std::endl;
-		return 1;
-	}
-	catch(...) {
-		std::cerr << "Fatal error: Unknown error." << std::endl;
-		return 1;
-	}
+	// }
+	// catch(const Exception &e) {
+	// 	std::cerr << "Fatal error " << e.what() << std::endl;
+	// 	return 1;
+	// }
+	// catch(const std::exception &e) {
+	// 	std::cerr << "Exception caught: " << e.what() << std::endl;
+	// 	return 1;
+	// }
+	// catch(...) {
+	// 	std::cerr << "Fatal error: Unknown error." << std::endl;
+	// 	return 1;
+	// }
 
 	return 0;
 }
@@ -60,16 +62,14 @@ void CoreApplication::createWindow(u16 screenWidth, u16 screenHeight, const char
 }
 
 void CoreApplication::handleEvents() {
-	sf::Event event;
-	while (m_window.pollEvent(event)) {
-		if (event.type == sf::Event::Closed) {
+	SDL_Event event;
+	while (SDL_PollEvent(&event)) {
+ 		if (event.type == SDL_QUIT) {
 			m_window.close();
 		}
 
 		if (!m_stateStack.empty())
 			m_stateStack.top().onEvent(event);
-
-		m_keyboardHandler.updateState(event);
 	}
 }
 

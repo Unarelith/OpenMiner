@@ -1,0 +1,16 @@
+<!-- Key names are defined here: https://wiki.libsdl.org/SDL_Keycode -->
+<keys>
+	<Left      key="Q"/>
+	<Right     key="S"/>
+	<Up        key="Z"/>
+	<Down      key="S"/>
+
+	<Jump      key="Space"/>
+	<Fly       key="X"/>
+	<Sneak     key="Left Shift"/>
+
+	<Dig       key="L"/>
+	<Use       key="M"/>
+
+	<Inventory key="E"/>
+</keys>

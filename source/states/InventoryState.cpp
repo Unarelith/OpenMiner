@@ -29,11 +29,11 @@ InventoryState::InventoryState(ApplicationState *parent) : ApplicationState(pare
 	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
-void InventoryState::onEvent(const sf::Event &event) {
+void InventoryState::onEvent(const SDL_Event &event) {
 	// if (m_parent)
 	// 	m_parent->onEvent(event);
 
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 		Mouse::setCursorGrabbed(true);
 		Mouse::setCursorVisible(false);
 		Mouse::resetToWindowCenter();

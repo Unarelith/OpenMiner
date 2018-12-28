@@ -14,8 +14,6 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "OpenGL.hpp"
-
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
 #include "GameClock.hpp"
@@ -23,6 +21,7 @@
 #include "GameState.hpp"
 #include "InventoryState.hpp"
 #include "Mouse.hpp"
+#include "OpenGL.hpp"
 #include "PauseMenuState.hpp"
 #include "PlayerInventoryWidget.hpp"
 #include "ScriptEngine.hpp"
@@ -37,25 +36,29 @@ GameState::GameState() {
 	initShaders();
 }
 
-void GameState::onEvent(const sf::Event &event) {
-	if (event.type == sf::Event::MouseMoved) {
-		Mouse::update(event);
+void GameState::onEvent(const SDL_Event &event) {
+	if (event.type == SDL_MOUSEMOTION) {
+		if(SCREEN_WIDTH / 2 != event.motion.x || SCREEN_HEIGHT / 2 != event.motion.y) {
+			m_player.turnH(event.motion.xrel * 0.06);
+			m_player.turnV(-event.motion.yrel * 0.06);
 
-		m_player.turnH(Mouse::getDelta().x);
-		m_player.turnV(Mouse::getDelta().y);
+			Mouse::resetToWindowCenter();
+		}
 	}
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape && &m_stateStack->top() == this) {
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE && &m_stateStack->top() == this) {
 		m_stateStack->push<PauseMenuState>(this);
 	}
-	else if (event.type == sf::Event::LostFocus) {
-		m_stateStack->push<PauseMenuState>(this);
+	else if (event.type == SDL_WINDOWEVENT) {
+		if (event.window.event == SDL_WINDOWEVENT_LEAVE) {
+			m_stateStack->push<PauseMenuState>(this);
 
-		Mouse::setCursorGrabbed(false);
-		Mouse::setCursorVisible(true);
-	}
-	else if (event.type == sf::Event::GainedFocus) {
-		Mouse::setCursorGrabbed(true);
-		Mouse::setCursorVisible(false);
+			Mouse::setCursorGrabbed(false);
+			Mouse::setCursorVisible(true);
+		}
+		else if (event.window.event == SDL_WINDOWEVENT_ENTER) {
+			Mouse::setCursorGrabbed(true);
+			Mouse::setCursorVisible(false);
+		}
 	}
 
 	m_hud.onEvent(event);

@@ -30,8 +30,8 @@ HUD::HUD(Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &project
 	m_blockInfoWidget.setPosition(SCREEN_WIDTH / getScale().x / 2 - m_blockInfoWidget.width() / 2, 2, 0);
 }
 
-void HUD::onEvent(const sf::Event &event) {
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F3)
+void HUD::onEvent(const SDL_Event &event) {
+	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_F3)
 		m_isDebugOverlayVisible ^= 1;
 
 	m_hotbar.onEvent(event);

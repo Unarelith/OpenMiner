@@ -40,7 +40,7 @@ class Chunk : public NonCopyable {
 		};
 
 	public:
-		Chunk(s32 x, s32 y, s32 z, sf::Texture &texture);
+		Chunk(s32 x, s32 y, s32 z, Texture &texture);
 
 		void update(Player &player, World &world);
 
@@ -84,7 +84,7 @@ class Chunk : public NonCopyable {
 		s32 m_y;
 		s32 m_z;
 
-		sf::Texture &m_texture;
+		Texture &m_texture;
 
 		using DataArray = u32[Chunk::width][Chunk::height][Chunk::depth];
 		DataArray m_data;

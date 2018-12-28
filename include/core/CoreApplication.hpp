@@ -18,6 +18,7 @@
 #include "GameClock.hpp"
 #include "KeyboardHandler.hpp"
 #include "ResourceHandler.hpp"
+#include "SDLLoader.hpp"
 #include "Window.hpp"
 
 class CoreApplication {
@@ -31,8 +32,6 @@ class CoreApplication {
 	protected:
 		void createWindow(u16 screenWidth, u16 screenHeight, const char *windowTitle);
 
-		Window m_window;
-
 		ApplicationStateStack m_stateStack;
 
 		GameClock m_clock;
@@ -40,6 +39,11 @@ class CoreApplication {
 		KeyboardHandler m_keyboardHandler;
 
 		ResourceHandler m_resourceHandler;
+
+		SDLLoader m_sdlLoader;
+
+		Window m_window;
+
 
 	private:
 		void handleEvents();

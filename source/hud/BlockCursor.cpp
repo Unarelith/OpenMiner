@@ -142,12 +142,12 @@ void BlockCursor::updateAnimationVertexBuffer(const Block &block, int animationP
 	VertexBuffer::bind(nullptr);
 }
 
-void BlockCursor::onEvent(const sf::Event &event, const Hotbar &hotbar) {
-	if (event.type == sf::Event::MouseButtonPressed && m_selectedBlock.w != -1) {
-		if (event.mouseButton.button == sf::Mouse::Left) {
+void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
+	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
+		if (event.button.button == SDL_BUTTON_LEFT) {
 			m_animationStart = GameClock::getTicks();
 		}
-		else if (event.mouseButton.button == sf::Mouse::Right) {
+		else if (event.button.button == SDL_BUTTON_RIGHT) {
 			u32 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
 			const Block &block = Registry::getInstance().getBlock(blockId);
 			const Item &item = Registry::getInstance().getItem(hotbar.currentItem());
@@ -174,8 +174,8 @@ void BlockCursor::onEvent(const sf::Event &event, const Hotbar &hotbar) {
 			}
 		}
 	}
-	else if (event.type == sf::Event::MouseButtonReleased) {
-		if (event.mouseButton.button == sf::Mouse::Left) {
+	else if (event.type == SDL_MOUSEBUTTONUP) {
+		if (event.button.button == SDL_BUTTON_LEFT) {
 			m_animationStart = 0;
 		}
 	}
@@ -230,7 +230,7 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 
 	if (m_animationStart > 0) {
 		glBlendFunc(GL_DST_COLOR, GL_ZERO);
-		states.texture = &ResourceHandler::getInstance().get<sf::Texture>("texture-block_destroy"); // FIXME
+		states.texture = &ResourceHandler::getInstance().get<Texture>("texture-block_destroy"); // FIXME
 		target.draw(m_animationVBO, GL_QUADS, 0, 24, states);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}

@@ -38,3 +38,9 @@ bool InputHandler::isKeyPressedWithDelay(GameKey key, u16 delay) {
 	}
 }
 
+void InputHandler::addKey(GameKey key) {
+	m_keysPressed[key] = false;
+	m_keysPressedOnce[key] = false;
+	m_lastTimePressed[key] = 0;
+}
+

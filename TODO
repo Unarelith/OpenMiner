@@ -13,6 +13,7 @@ TODO
    ◦ DONE: Input system (Mouse + Keyboard)
 • DONE: `Types.hpp` → `IntTypes.hpp`
    → DONE: Vérifier que les types sont bien corrects
+• TODO: Catch `SDLLoader` exception
 • TODO: Vérifier les utilisations inutiles de pointeurs
 • TODO: Passer un clang-tidy sur le code
 • TODO: Séparer le code client du code serveur

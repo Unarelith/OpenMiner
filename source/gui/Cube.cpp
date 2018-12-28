@@ -21,7 +21,7 @@
 #include "ResourceHandler.hpp"
 #include "Vertex.hpp"
 
-Cube::Cube(float size) : m_texture(ResourceHandler::getInstance().get<sf::Texture>("texture-blocks")) {
+Cube::Cube(float size) : m_texture(ResourceHandler::getInstance().get<Texture>("texture-blocks")) {
 	m_size = size;
 
 	m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(-180.0f), glm::vec3{0, 0, 1});
