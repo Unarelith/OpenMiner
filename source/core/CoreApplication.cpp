@@ -15,7 +15,7 @@
 
 #include "CoreApplication.hpp"
 #include "Exception.hpp"
-// #include "GamePad.hpp"
+#include "GamePad.hpp"
 #include "Mouse.hpp"
 
 CoreApplication::CoreApplication(int, char **) {
@@ -28,30 +28,29 @@ void CoreApplication::init() {
 
 	Mouse::setWindow(&m_window);
 
-	// GamePad::init(m_keyboardHandler);
+	GamePad::init(m_keyboardHandler);
 
 	ApplicationStateStack::setInstance(m_stateStack);
 	ResourceHandler::setInstance(m_resourceHandler);
 }
 
 int CoreApplication::run() {
-	// try {
+	try {
 		init();
 		mainLoop();
-	// }
-	// catch(const Exception &e) {
-	// 	std::cerr << "Fatal error " << e.what() << std::endl;
-	// 	return 1;
-	// }
-	// FIXME
-	// catch(const std::exception &e) {
-	// 	std::cerr << "Exception caught: " << e.what() << std::endl;
-	// 	return 1;
-	// }
-	// catch(...) {
-	// 	std::cerr << "Fatal error: Unknown error." << std::endl;
-	// 	return 1;
-	// }
+	}
+	catch(const Exception &e) {
+		std::cerr << "Fatal error " << e.what() << std::endl;
+		return 1;
+	}
+	catch(const std::exception &e) {
+		std::cerr << "Exception caught: " << e.what() << std::endl;
+		return 1;
+	}
+	catch(...) {
+		std::cerr << "Fatal error: Unknown error." << std::endl;
+		return 1;
+	}
 
 	return 0;
 }
@@ -64,14 +63,13 @@ void CoreApplication::handleEvents() {
 	sf::Event event;
 	while (m_window.pollEvent(event)) {
 		if (event.type == sf::Event::Closed) {
-		// || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape && m_stateStack.size() == 1)) {
 			m_window.close();
 		}
 
 		if (!m_stateStack.empty())
 			m_stateStack.top().onEvent(event);
 
-		// m_keyboardHandler.updateState(event);
+		m_keyboardHandler.updateState(event);
 	}
 }
 
@@ -96,3 +94,4 @@ void CoreApplication::mainLoop() {
 		});
 	}
 }
+

@@ -16,7 +16,7 @@
 
 #include "ApplicationStateStack.hpp"
 #include "GameClock.hpp"
-// #include "KeyboardHandler.hpp"
+#include "KeyboardHandler.hpp"
 #include "ResourceHandler.hpp"
 #include "Window.hpp"
 
@@ -37,7 +37,7 @@ class CoreApplication {
 
 		GameClock m_clock;
 
-		// KeyboardHandler m_keyboardHandler;
+		KeyboardHandler m_keyboardHandler;
 
 		ResourceHandler m_resourceHandler;
 

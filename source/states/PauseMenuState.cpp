@@ -13,7 +13,6 @@
  */
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
-#include "Keyboard.hpp"
 #include "Mouse.hpp"
 #include "PauseMenuState.hpp"
 #include "SettingsMenuState.hpp"

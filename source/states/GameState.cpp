@@ -19,9 +19,9 @@
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
 #include "GameClock.hpp"
+#include "GamePad.hpp"
 #include "GameState.hpp"
 #include "InventoryState.hpp"
-#include "Keyboard.hpp"
 #include "Mouse.hpp"
 #include "PauseMenuState.hpp"
 #include "PlayerInventoryWidget.hpp"
@@ -71,7 +71,7 @@ void GameState::update() {
 	if (&m_stateStack->top() == this) {
 		m_player.processInputs();
 
-		if (Keyboard::isKeyPressedOnce(Keyboard::E)) {
+		if (GamePad::isKeyPressedOnce(GameKey::Inventory)) {
 			auto &inventoryState = m_stateStack->push<InventoryState>(this);
 			inventoryState.setupWidget<PlayerInventoryWidget>(m_player.inventory());
 		}

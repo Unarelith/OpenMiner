@@ -5,14 +5,14 @@ TODO
 • DONE: Découper les gros pâtés en sous-classes
 • DONE: Nettoyer les vieux headers
 • DONE: Passer à la SFML si nécessaire
-• WIP: Remplacer les anciennes classes par leur upgrade:
+• DONE: Remplacer les anciennes classes par leur upgrade:
    ◦ DONE: `ApplicationState` / `ApplicationStateStack`
    ◦ DONE: `GameClock`
    ◦ DONE: `Debug` / `Exception`
    ◦ DONE: `Window` et `Texture` (depuis `ZeldaOOL`)
-   ◦ TODO: Input system (Mouse + Keyboard)
+   ◦ DONE: Input system (Mouse + Keyboard)
 • DONE: `Types.hpp` → `IntTypes.hpp`
-   → TODO: Vérifier que les types sont bien corrects
+   → DONE: Vérifier que les types sont bien corrects
 • TODO: Vérifier les utilisations inutiles de pointeurs
 • TODO: Passer un clang-tidy sur le code
 • TODO: Séparer le code client du code serveur
@@ -24,9 +24,9 @@ TODO
 
 # FixMe
 
+• DONE: Afficher tous les blocs solides, puis l’eau, pour régler les problèmes de transparence
 • TODO: Les blocs sont ciblables dans le vide depuis l’extérieur du monde
 • TODO: Les collisions sont décalées d’un bloc à certains endroits
-• DONE: Afficher tous les blocs solides, puis l’eau, pour régler les problèmes de transparence
 
 # ToDoList
 

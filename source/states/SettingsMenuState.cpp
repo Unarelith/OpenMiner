@@ -15,7 +15,6 @@
 
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
-#include "Keyboard.hpp"
 #include "Mouse.hpp"
 #include "SettingsMenuState.hpp"
 #include "World.hpp"
