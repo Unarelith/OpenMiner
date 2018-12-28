@@ -191,7 +191,7 @@ registry:register_crafting_recipe({
 -- Stick
 registry:register_crafting_recipe({
 	result = {
-		item = "default:wood",
+		item = "default:stick",
 		amount = 4
 	},
 

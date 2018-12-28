@@ -92,11 +92,39 @@ void Registry::registerSmeltingRecipeFromTable(const sol::table &table) {
 	registerRecipe<SmeltingRecipe>(input, output);
 }
 
+const Block &Registry::getBlock(const std::string &name) {
+	if (name.empty()) return getBlock((int)0);
+	auto it = m_blocksID.find(name);
+	if (it == m_blocksID.end())
+		throw EXCEPTION("Unknown block:", name);
+	return getBlock(it->second);
+}
+
+const Item &Registry::getItem(const std::string &name) {
+	if (name.empty()) return getItem((int)0);
+	auto it = m_itemsID.find(name);
+	if (it == m_itemsID.end())
+		throw EXCEPTION("Unknown item:", name);
+	return getItem(it->second);
+}
+
 const Recipe *Registry::getRecipe(const Inventory &inventory) const {
 	for (auto &recipe : m_recipes) {
 		if (recipe->isMatching(inventory))
 			return recipe.get();
 	}
 	return nullptr;
+}
+
+Block &Registry::registerBlock(u32 textureID, const std::string &name, const std::string &label) {
+	u32 id = m_blocks.size();
+	m_blocksID.emplace(name, id);
+	return m_blocks.emplace_back(id, textureID, name, label);
+}
+
+Item &Registry::registerItem(u32 textureID, const std::string &name, const std::string &label) {
+	u32 id = m_items.size();
+	m_itemsID.emplace(name, id);
+	return m_items.emplace_back(id, textureID, name, label);
 }
 
