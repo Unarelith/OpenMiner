@@ -19,7 +19,7 @@
 
 class ItemBlock : public Item {
 	public:
-		ItemBlock(u32 id, u32 blockID, const std::string &name);
+		ItemBlock(u32 id, u32 blockID, const std::string &name, const std::string &label);
 };
 
 #endif // ITEMBLOCK_HPP_

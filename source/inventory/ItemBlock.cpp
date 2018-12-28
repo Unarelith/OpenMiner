@@ -14,7 +14,7 @@
 #include "ItemBlock.hpp"
 #include "Registry.hpp"
 
-ItemBlock::ItemBlock(u32 id, u32 blockID, const std::string &name) : Item(id, Registry::getInstance().getBlock(blockID).textureID(), name) {
+ItemBlock::ItemBlock(u32 id, u32 blockID, const std::string &name, const std::string &label) : Item(id, Registry::getInstance().getBlock(blockID).textureID(), name, label) {
 	m_isBlock = true;
 }
 

@@ -25,7 +25,7 @@ Registry *Registry::s_instance = nullptr;
 
 void Registry::registerBlockFromTable(const sol::table &table) {
 	u32 textureID = table["texture"].get<u32>();
-	// std::string name = table["name"].get<std::string>();
+	std::string name = table["name"].get<std::string>();
 	std::string label = table["label"].get<std::string>();
 
 	u32 id = m_blocks.size();
@@ -33,7 +33,7 @@ void Registry::registerBlockFromTable(const sol::table &table) {
 	if (id == BlockType::Workbench)    block = registerBlock<BlockWorkbench>();
 	else if (id == BlockType::Furnace) block = registerBlock<BlockFurnace>();
 	else if (id == BlockType::Water)   block = registerBlock<BlockWater>();
-	else block = registerBlock<Block>(id, textureID, label);
+	else block = registerBlock<Block>(id, textureID, name, label);
 
 	block->setHarvestRequirements(table["harvest_requirements"].get_or(0));
 	block->setHardness(table["hardness"].get_or(1.0f));
@@ -45,14 +45,15 @@ void Registry::registerBlockFromTable(const sol::table &table) {
 		block->setItemDrop(id, amount);
 	}
 
-	registerItem<ItemBlock>(id, label);
+	registerItem<ItemBlock>(id, name, label);
 }
 
 void Registry::registerItemFromTable(const sol::table &table) {
 	u32 textureID = table["texture"].get<u32>();
+	std::string name = table["name"].get<std::string>();
 	std::string label = table["label"].get<std::string>();
 
-	Item *item = registerItem<Item>(textureID, label);
+	Item *item = registerItem<Item>(textureID, name, label);
 	item->setIsFuel(table["is_fuel"].get_or(false));
 	item->setBurnTime(table["burn_time"].get_or(0));
 	item->setHarvestCapability(table["harvest_capability"].get_or(0));
