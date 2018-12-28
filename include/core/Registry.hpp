@@ -46,7 +46,8 @@ class Registry {
 
 		template<typename T, typename... Args>
 		auto registerItem(Args &&...args) -> typename std::enable_if<std::is_base_of<Item, T>::value, Item*>::type {
-			return m_items.emplace_back(std::make_unique<T>(std::forward<Args>(args)...)).get();
+			u32 id = m_items.size();
+			return m_items.emplace_back(std::make_unique<T>(id, std::forward<Args>(args)...)).get();
 		}
 
 		template<typename T, typename... Args>

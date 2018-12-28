@@ -54,8 +54,8 @@ void ScriptEngine::initUsertypes() {
 	);
 
 	m_lua.new_usertype<Item>("Item",
-		"name",               &Item::name,
 		"id",                 &Item::id,
+		"label",              &Item::label,
 		"is_fuel",            sol::property(&Item::isFuel, &Item::setIsFuel),
 		"burn_time",          sol::property(&Item::burnTime, &Item::setBurnTime),
 		"harvest_capability", sol::property(&Item::harvestCapability, &Item::setHarvestCapability),
@@ -65,7 +65,7 @@ void ScriptEngine::initUsertypes() {
 	m_lua.new_usertype<Block>("Block",
 		"id",                   &Block::id,
 		"data",                 &Block::data,
-		"name",                 sol::property(&Block::name, &Block::setName),
+		"label",                sol::property(&Block::label, &Block::setLabel),
 		"harvest_requirements", sol::property(&Block::harvestRequirements, &Block::setHarvestRequirements),
 		"hardness",             sol::property(&Block::hardness, &Block::setHardness),
 		"set_item_drop",        &Block::setItemDrop

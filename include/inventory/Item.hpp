@@ -21,9 +21,9 @@
 
 class Item {
 	public:
-		Item(u32 id, u32 textureID, const std::string &name);
+		Item(u32 id, u32 textureID, const std::string &label);
 
-		const std::string &name() const { return m_name; }
+		const std::string &label() const { return m_label; }
 
 		u32 id() const { return m_id; }
 		u32 textureID() const { return m_textureID; }
@@ -48,10 +48,10 @@ class Item {
 		u16 m_burnTime = 0;
 
 	private:
-		std::string m_name;
-
 		u32 m_id = 0;
 		u32 m_textureID = 0;
+
+		std::string m_label;
 
 		u8 m_harvestCapability = 0;
 		float m_miningSpeed = 1;
