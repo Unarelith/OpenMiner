@@ -30,7 +30,7 @@ void ItemWidget::update() {
 	if (stack().item().isBlock())
 		m_cube.updateVertexBuffer(Registry::getInstance().getBlock(stack().item().id()));
 	else
-		m_image.setClipRect(stack().item().textureID() * 16, stack().item().textureID() / 16 * 16, 16, 16);
+		m_image.setClipRect(stack().item().textureID() % 16 * 16, stack().item().textureID() / 16 * 16, 16, 16);
 
 	m_text.setText(std::to_string(stack().amount()));
 	m_text.setPosition(16 - 4 - 6 * floor(log10(stack().amount())), 16 - 6, 0);
