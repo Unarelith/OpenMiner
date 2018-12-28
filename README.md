@@ -2,7 +2,7 @@
 
 ### By Unarelith
 
-- OpenMiner is a Minecraft-like game.
+- OpenMiner is a Minecraft-like game engine.
 
 ![](screenshot.png?raw=true)
 
@@ -22,6 +22,7 @@
     - OpenGL >= 2.1, [glm](http://sourceforge.net/projects/ogl-math/files/latest/download?source=files)
     - [glew](http://sourceforge.net/projects/glew/files/latest/download) or [glad](https://github.com/Dav1dde/glad) *(only required for Windows)*
     - [tinyxml2](http://leethomason.github.io/tinyxml2/)
+    - Lua
     - _Linux users: Check your distribution repositories for packages._
 - Run `mkdir build && cd build` at the root of the game folder
 - Run `cmake .. && make`, wait (or use `-j8`), run the game and enjoy!

@@ -20,7 +20,7 @@ Block::Block(u32 id, u32 textureID, const std::string &name, const std::string &
 	m_name = name;
 	m_label = label;
 
-	m_itemDrop = id;
+	m_itemDrop = name;
 	m_itemDropAmount = 1;
 }
 

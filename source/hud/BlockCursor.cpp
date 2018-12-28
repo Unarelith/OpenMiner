@@ -21,6 +21,80 @@
 #include "Registry.hpp"
 #include "Vertex.hpp"
 
+void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
+	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
+		if (event.button.button == SDL_BUTTON_LEFT) {
+			m_animationStart = GameClock::getTicks();
+		}
+		else if (event.button.button == SDL_BUTTON_RIGHT) {
+			u32 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
+			const Block &block = Registry::getInstance().getBlock(blockId);
+			const Item &item = Registry::getInstance().getItem(hotbar.currentItem());
+
+			if (block.id() && !block.onBlockActivated(m_selectedBlock, m_player, m_world)
+			&& hotbar.currentItem() && item.isBlock()) {
+				int face = m_selectedBlock.w;
+
+				int x = m_selectedBlock.x;
+				int y = m_selectedBlock.y;
+				int z = m_selectedBlock.z;
+
+				if(face == 0) x++;
+				if(face == 3) x--;
+				if(face == 1) y++;
+				if(face == 4) y--;
+				if(face == 2) z++;
+				if(face == 5) z--;
+
+				m_world.setBlock(x, y, z, hotbar.currentItem());
+
+				const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
+				m_player.inventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().name() : "", currentStack.amount() - 1);
+			}
+		}
+	}
+	else if (event.type == SDL_MOUSEBUTTONUP) {
+		if (event.button.button == SDL_BUTTON_LEFT) {
+			m_animationStart = 0;
+		}
+	}
+}
+
+void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
+	bool selectedBlockChanged = false;
+	glm::vec4 selectedBlock = findSelectedBlock(useDepthBuffer);
+	if (selectedBlock.x != m_selectedBlock.x || selectedBlock.y != m_selectedBlock.y || selectedBlock.z != m_selectedBlock.z)
+		selectedBlockChanged = true;
+
+	m_selectedBlock = selectedBlock;
+
+	m_currentBlock = &Registry::getInstance().getBlock(m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z));
+	// if (block.boundingBox().intersects(FloatBox{m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 1, 1, 1})) {
+	// 	selectedBlockChanged = false;
+	// 	m_selectedBlock.w = -1;
+	// }
+
+	if (selectedBlockChanged)
+		m_animationStart = (m_animationStart) ? GameClock::getTicks() : 0;
+
+	const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
+	float timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed());
+	if (m_animationStart && GameClock::getTicks() > m_animationStart + timeToBreak * 1000) {
+		ItemStack itemDrop = m_currentBlock->getItemDrop();
+		m_player.inventory().addStack(itemDrop.item().name(), itemDrop.amount());
+		m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
+		m_animationStart = GameClock::getTicks();
+	}
+
+	if (m_selectedBlock.w != -1)
+		updateVertexBuffer(*m_currentBlock);
+	else
+		m_currentBlock = nullptr;
+
+	if (m_animationStart && m_currentBlock)
+		updateAnimationVertexBuffer(*m_currentBlock, (GameClock::getTicks() - m_animationStart) / (timeToBreak * 100));
+}
+
 void BlockCursor::updateVertexBuffer(const Block &block) {
 	Vertex vertices[24] = {
 		// Right
@@ -140,80 +214,6 @@ void BlockCursor::updateAnimationVertexBuffer(const Block &block, int animationP
 	VertexBuffer::bind(&m_animationVBO);
 	m_animationVBO.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	VertexBuffer::bind(nullptr);
-}
-
-void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
-	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
-		if (event.button.button == SDL_BUTTON_LEFT) {
-			m_animationStart = GameClock::getTicks();
-		}
-		else if (event.button.button == SDL_BUTTON_RIGHT) {
-			u32 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
-			const Block &block = Registry::getInstance().getBlock(blockId);
-			const Item &item = Registry::getInstance().getItem(hotbar.currentItem());
-
-			if (block.id() && !block.onBlockActivated(m_selectedBlock, m_player, m_world)
-			&& hotbar.currentItem() && item.isBlock()) {
-				int face = m_selectedBlock.w;
-
-				int x = m_selectedBlock.x;
-				int y = m_selectedBlock.y;
-				int z = m_selectedBlock.z;
-
-				if(face == 0) x++;
-				if(face == 3) x--;
-				if(face == 1) y++;
-				if(face == 4) y--;
-				if(face == 2) z++;
-				if(face == 5) z--;
-
-				m_world.setBlock(x, y, z, hotbar.currentItem());
-
-				const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
-				m_player.inventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().name() : "", currentStack.amount() - 1);
-			}
-		}
-	}
-	else if (event.type == SDL_MOUSEBUTTONUP) {
-		if (event.button.button == SDL_BUTTON_LEFT) {
-			m_animationStart = 0;
-		}
-	}
-}
-
-void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
-	bool selectedBlockChanged = false;
-	glm::vec4 selectedBlock = findSelectedBlock(useDepthBuffer);
-	if (selectedBlock.x != m_selectedBlock.x || selectedBlock.y != m_selectedBlock.y || selectedBlock.z != m_selectedBlock.z)
-		selectedBlockChanged = true;
-
-	m_selectedBlock = selectedBlock;
-
-	m_currentBlock = &Registry::getInstance().getBlock(m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z));
-	// if (block.boundingBox().intersects(FloatBox{m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 1, 1, 1})) {
-	// 	selectedBlockChanged = false;
-	// 	m_selectedBlock.w = -1;
-	// }
-
-	if (selectedBlockChanged)
-		m_animationStart = (m_animationStart) ? GameClock::getTicks() : 0;
-
-	const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
-	float timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed());
-	if (m_animationStart && GameClock::getTicks() > m_animationStart + timeToBreak * 1000) {
-		ItemStack itemDrop = m_currentBlock->getItemDrop();
-		m_player.inventory().addStack(itemDrop.item().name(), itemDrop.amount());
-		m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
-		m_animationStart = GameClock::getTicks();
-	}
-
-	if (m_selectedBlock.w != -1)
-		updateVertexBuffer(*m_currentBlock);
-	else
-		m_currentBlock = nullptr;
-
-	if (m_animationStart && m_currentBlock)
-		updateAnimationVertexBuffer(*m_currentBlock, (GameClock::getTicks() - m_animationStart) / (timeToBreak * 100));
 }
 
 #include "ResourceHandler.hpp"

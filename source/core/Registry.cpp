@@ -33,9 +33,9 @@ void Registry::registerBlockFromTable(const sol::table &table) {
 
 	sol::optional<sol::table> itemDrop = table["item_drop"];
 	if (itemDrop != sol::nullopt) {
-		std::string name = table["name"];
-		u16 amount = table["amount"];
-		block.setItemDrop(name, amount);
+		std::string dropName = itemDrop.value()["name"];
+		u16 dropAmount = itemDrop.value()["amount"];
+		block.setItemDrop(dropName, dropAmount);
 	}
 
 	registerItem(block.textureID(), name, label).setIsBlock(true);

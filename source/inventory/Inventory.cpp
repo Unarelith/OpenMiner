@@ -14,7 +14,7 @@
 #include "Inventory.hpp"
 
 void Inventory::setStack(u16 x, u16 y, const std::string &name, u16 amount) {
-	m_items[x + y * m_width] = ItemStack(name, amount);
+	m_items.at(x + y * m_width) = ItemStack(name, amount);
 }
 
 void Inventory::addStack(const std::string &name, u16 amount) {
