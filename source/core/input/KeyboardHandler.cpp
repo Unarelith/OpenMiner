@@ -15,6 +15,7 @@
 #include <gk/core/XMLFile.hpp>
 #include <gk/system/Debug.hpp>
 
+#include "GameKey.hpp"
 #include "KeyboardHandler.hpp"
 
 KeyboardHandler::KeyboardHandler() {
@@ -34,19 +35,19 @@ KeyboardHandler::KeyboardHandler() {
 		InputHandler::addKey(key);
 	};
 
-	addKey(gk::GameKey::Left,      "Left");
-	addKey(gk::GameKey::Right,     "Right");
-	addKey(gk::GameKey::Up,        "Up");
-	addKey(gk::GameKey::Down,      "Down");
+	addKey(GameKey::Left,      "Left");
+	addKey(GameKey::Right,     "Right");
+	addKey(GameKey::Up,        "Up");
+	addKey(GameKey::Down,      "Down");
 
-	addKey(gk::GameKey::Jump,      "Jump");
-	addKey(gk::GameKey::Fly,       "Fly");
-	addKey(gk::GameKey::Sneak,     "Sneak");
+	addKey(GameKey::Jump,      "Jump");
+	addKey(GameKey::Fly,       "Fly");
+	addKey(GameKey::Sneak,     "Sneak");
 
-	addKey(gk::GameKey::Dig,       "Dig");
-	addKey(gk::GameKey::Use,       "Use");
+	addKey(GameKey::Dig,       "Dig");
+	addKey(GameKey::Use,       "Use");
 
-	addKey(gk::GameKey::Inventory, "Inventory");
+	addKey(GameKey::Inventory, "Inventory");
 }
 
 bool KeyboardHandler::isKeyPressed(gk::GameKey key) {
