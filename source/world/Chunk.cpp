@@ -13,11 +13,12 @@
  */
 #include <cstring>
 
+#include <gk/system/GameClock.hpp>
+
 #include "Chunk.hpp"
-#include "GameClock.hpp"
 #include "Registry.hpp"
 
-Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
+Chunk::Chunk(s32 x, s32 y, s32 z, gk::Texture &texture) : m_texture(texture) {
 	m_x = x;
 	m_y = y;
 	m_z = z;
@@ -26,8 +27,8 @@ Chunk::Chunk(s32 x, s32 y, s32 z, Texture &texture) : m_texture(texture) {
 }
 
 void Chunk::update(Player &player, World &world) {
-	if (!m_tickingBlocks.empty() && m_lastTick < GameClock::getTicks() / 50) {
-		m_lastTick = GameClock::getTicks() / 50;
+	if (!m_tickingBlocks.empty() && m_lastTick < gk::GameClock::getTicks() / 50) {
+		m_lastTick = gk::GameClock::getTicks() / 50;
 
 		for (auto &it : m_tickingBlocks) {
 			int z = it.first / (width * height);
@@ -97,12 +98,12 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 	}
 
 	if (type == BlockType::Workbench)
-		m_blockData.emplace(Vector3i{x, y, z}, BlockData{3, 3});
+		m_blockData.emplace(gk::Vector3i{x, y, z}, BlockData{3, 3});
 	else if (type == BlockType::Furnace)
-		m_blockData.emplace(Vector3i{x, y, z}, BlockData{3, 1});
+		m_blockData.emplace(gk::Vector3i{x, y, z}, BlockData{3, 1});
 
 	if (m_data[x][y][z] == BlockType::Workbench || m_data[x][y][z] == BlockType::Furnace) {
-		auto it = m_blockData.find(Vector3i{x, y, z});
+		auto it = m_blockData.find(gk::Vector3i{x, y, z});
 		if (it != m_blockData.end())
 			m_blockData.erase(it);
 	}
@@ -143,7 +144,7 @@ BlockData *Chunk::getBlockData(int x, int y, int z) {
 	if(z < 0)              return m_surroundingChunks[2] ? m_surroundingChunks[2]->getBlockData(x, y, z + Chunk::depth) : 0;
 	if(z >= Chunk::depth)  return m_surroundingChunks[3] ? m_surroundingChunks[3]->getBlockData(x, y, z - Chunk::depth) : 0;
 
-	auto it = m_blockData.find(Vector3i{x, y, z});
+	auto it = m_blockData.find(gk::Vector3i{x, y, z});
 	if (it == m_blockData.end())
 		return nullptr;
 
@@ -172,7 +173,7 @@ void Chunk::updateNeighbours(int x, int y, int z) {
 	}
 }
 
-void Chunk::drawLayer(RenderTarget &target, RenderStates states, u16 layer) const {
+void Chunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u16 layer) const {
 	if (m_verticesCount.at(layer) == 0) return;
 
 	states.texture = &m_texture;

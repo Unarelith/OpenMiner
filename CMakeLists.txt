@@ -46,6 +46,17 @@ include_directories(${LUA_INCLUDE_DIRS})
 link_directories(${LUA_LIBRARY_DIRS})
 
 #------------------------------------------------------------------------------
+# - gamekit
+#------------------------------------------------------------------------------
+find_package(GameKit REQUIRED)
+if(NOT GAMEKIT_FOUND)
+	message(FATAL_ERROR "gamekit is needed to build the project. Please install it correctly.")
+endif()
+
+include_directories(${GAMEKIT_INCLUDE_DIRS})
+link_directories(${GAMEKIT_LIBRARY_DIRS})
+
+#------------------------------------------------------------------------------
 # - tinyxml2
 #------------------------------------------------------------------------------
 find_package(TinyXml2 REQUIRED)
@@ -102,8 +113,9 @@ include_directories(${SDL2_INCLUDE_DIRS}
 # Link options
 #------------------------------------------------------------------------------
 target_link_libraries(${CMAKE_PROJECT_NAME}
-                      ${TINYXML2_LIBRARIES}
                       ${LUA_LIBRARIES}
+                      ${GAMEKIT_LIBRARIES}
+                      ${TINYXML2_LIBRARIES}
                       ${OPENGL_LIBRARIES}
                       ${SDL2_LIBRARIES}
                       ${SDL2IMAGE_LIBRARIES}

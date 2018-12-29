@@ -13,19 +13,22 @@
  */
 #include <algorithm>
 
-#include "ApplicationStateStack.hpp"
+#include <gk/core/ApplicationStateStack.hpp>
+#include <gk/core/Mouse.hpp>
+
 #include "Config.hpp"
-#include "Mouse.hpp"
 #include "SettingsMenuState.hpp"
 #include "World.hpp"
 
-SettingsMenuState::SettingsMenuState(ApplicationState *parent) : ApplicationState(parent) {
+SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : ApplicationState(parent) {
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
 	m_shader.linkProgram();
 
-	m_background.setColor(Color{0, 0, 0, 127});
+	m_projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
+
+	m_background.setColor(gk::Color{0, 0, 0, 127});
 	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	m_menuWidget.setScale(GUI_SCALE, GUI_SCALE, 1);
@@ -94,14 +97,16 @@ void SettingsMenuState::addInputButtons() {
 	});
 }
 
-void SettingsMenuState::draw(RenderTarget &target, RenderStates states) const {
+void SettingsMenuState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (m_parent)
 		target.draw(*m_parent, states);
 
 	states.transform *= getTransform();
 
+	states.projectionMatrix = m_projectionMatrix;
+
 	states.shader = &m_shader;
-	states.vertexAttributes = VertexAttribute::Only2d;
+	states.vertexAttributes = gk::VertexAttribute::Only2d;
 
 	target.draw(m_background, states);
 	target.draw(m_menuWidget, states);

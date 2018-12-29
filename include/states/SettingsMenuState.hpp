@@ -14,14 +14,15 @@
 #ifndef SETTINGSMENUSTATE_HPP_
 #define SETTINGSMENUSTATE_HPP_
 
-#include "ApplicationState.hpp"
-#include "MenuWidget.hpp"
-#include "Shader.hpp"
-#include "RectangleShape.hpp"
+#include <gk/core/ApplicationState.hpp>
+#include <gk/gl/Shader.hpp>
+#include <gk/gui/RectangleShape.hpp>
 
-class SettingsMenuState : public ApplicationState {
+#include "MenuWidget.hpp"
+
+class SettingsMenuState : public gk::ApplicationState {
 	public:
-		SettingsMenuState(ApplicationState *parent = nullptr);
+		SettingsMenuState(gk::ApplicationState *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -32,13 +33,15 @@ class SettingsMenuState : public ApplicationState {
 		void addGraphicsButtons();
 		void addInputButtons();
 
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		MenuWidget m_menuWidget{1, 8};
 
-		Shader m_shader;
+		gk::Shader m_shader;
 
-		RectangleShape m_background;
+		glm::mat4 m_projectionMatrix;
+
+		gk::RectangleShape m_background;
 };
 
 #endif // SETTINGSMENUSTATE_HPP_

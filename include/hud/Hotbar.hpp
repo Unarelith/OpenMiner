@@ -23,19 +23,19 @@ class Hotbar : public Widget {
 	public:
 		Hotbar(Inventory &inventory, Widget *parent = nullptr);
 
-		void onEvent(const SDL_Event &event);
+		void onEvent(const SDL_Event &event) override;
 
-		void update();
+		void update() override;
 
 		int cursorPos() const { return m_cursorPos; }
 		u16 currentItem() const { return m_inventory.getStack(m_cursorPos, 0).item().id(); }
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		Image m_background;
+		gk::Image m_background;
 
-		Image m_cursor;
+		gk::Image m_cursor;
 		int m_cursorPos = 0;
 
 		Inventory &m_inventory;

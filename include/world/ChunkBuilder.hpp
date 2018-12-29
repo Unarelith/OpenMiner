@@ -17,18 +17,18 @@
 #include <array>
 #include <vector>
 
-#include "IntTypes.hpp"
-#include "Vertex.hpp"
+#include <gk/core/IntTypes.hpp>
+#include <gk/gl/Vertex.hpp>
+#include <gk/gl/VertexBuffer.hpp>
 
 class Block;
 class Chunk;
-class VertexBuffer;
 
 class ChunkBuilder {
 	public:
 		static constexpr u8 layers = 3;
 
-		std::array<std::size_t, layers> buildChunk(const Chunk &chunk, const std::array<VertexBuffer, layers> &vbo);
+		std::array<std::size_t, layers> buildChunk(const Chunk &chunk, const std::array<gk::VertexBuffer, layers> &vbo);
 
 	private:
 		void addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Block *block, const Block *surroundingBlock);
@@ -41,7 +41,7 @@ class ChunkBuilder {
 		float getAverageLight(Light light, u8 x, u8 y, u8 z, s8 offsetX, s8 offsetY, s8 offsetZ, const Chunk &chunk);
 		float getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk);
 
-		std::array<std::vector<Vertex>, layers> m_vertices;
+		std::array<std::vector<gk::Vertex>, layers> m_vertices;
 
 		enum Face {
 			Left,

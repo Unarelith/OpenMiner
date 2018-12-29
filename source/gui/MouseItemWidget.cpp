@@ -14,7 +14,7 @@
 #include "MouseItemWidget.hpp"
 
 MouseItemWidget::MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0, parent) {
-	m_tooltipBackground.setColor(Color{255, 255, 255, 240});
+	m_tooltipBackground.setColor(gk::Color{255, 255, 255, 240});
 	m_tooltipBackground.setPosition(20, 17, 0);
 
 	m_tooltipText.setPosition(26, 24, 0);
@@ -87,7 +87,7 @@ void MouseItemWidget::putItem(ItemWidget &widget) {
 	}
 }
 
-void MouseItemWidget::draw(RenderTarget &target, RenderStates states) const {
+void MouseItemWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	ItemWidget::draw(target, states);
 
 	states.transform *= getTransform();

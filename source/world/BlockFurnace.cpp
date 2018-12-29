@@ -11,9 +11,10 @@
  *
  * =====================================================================================
  */
-#include "ApplicationStateStack.hpp"
+#include <gk/core/ApplicationStateStack.hpp>
+#include <gk/system/Exception.hpp>
+
 #include "BlockFurnace.hpp"
-#include "Exception.hpp"
 #include "FurnaceWidget.hpp"
 #include "InventoryState.hpp"
 #include "Player.hpp"
@@ -40,7 +41,7 @@ bool BlockFurnace::onBlockActivated(const glm::ivec3 &blockPosition, Player &pla
 	if (!data)
 		throw EXCEPTION("BlockFurnace at (", blockPosition.x, blockPosition.y, blockPosition.z, ") has no inventory");
 
-	auto &inventoryState = ApplicationStateStack::getInstance().push<InventoryState>(&ApplicationStateStack::getInstance().top());
+	auto &inventoryState = gk::ApplicationStateStack::getInstance().push<InventoryState>(&gk::ApplicationStateStack::getInstance().top());
 	inventoryState.setupWidget<FurnaceWidget>(player.inventory(), *data);
 	return true;
 }

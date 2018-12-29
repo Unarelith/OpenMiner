@@ -16,11 +16,12 @@
 
 #include <memory>
 
+#include <gk/gl/IDrawable.hpp>
+
 #include "Chunk.hpp"
-#include "IDrawable.hpp"
 #include "TerrainGenerator.hpp"
 
-class World : public IDrawable {
+class World : public gk::IDrawable {
 	public:
 		World();
 
@@ -41,13 +42,13 @@ class World : public IDrawable {
 		static bool isReloadRequested;
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		const s32 m_width = 32;
 		const s32 m_height = 4;
 		const s32 m_depth = 32;
 
-		Texture &m_texture;
+		gk::Texture &m_texture;
 
 		std::vector<std::unique_ptr<Chunk>> m_chunks;
 

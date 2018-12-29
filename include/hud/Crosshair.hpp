@@ -14,20 +14,20 @@
 #ifndef CROSSHAIR_HPP_
 #define CROSSHAIR_HPP_
 
-#include "RectangleShape.hpp"
+#include <gk/gui/RectangleShape.hpp>
 
-class Crosshair : public IDrawable {
+class Crosshair : public gk::IDrawable {
 	public:
 		Crosshair();
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		VertexBuffer m_vbo;
+		gk::VertexBuffer m_vbo;
 
-		RectangleShape m_hShape;
-		RectangleShape m_vShape1;
-		RectangleShape m_vShape2;
+		gk::RectangleShape m_hShape;
+		gk::RectangleShape m_vShape1;
+		gk::RectangleShape m_vShape2;
 };
 
 #endif // CROSSHAIR_HPP_

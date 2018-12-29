@@ -27,7 +27,7 @@ class MenuWidget : public Widget {
 		TextButton &addButton(u16 x, u16 y, const std::string &text, const TextButton::Callback &callback);
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		static constexpr u16 s_verticalSpacing = 5;
 		static constexpr u16 s_horizontalSpacing = 5;

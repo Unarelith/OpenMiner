@@ -13,8 +13,9 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "GamePad.hpp"
-#include "Mouse.hpp"
+#include <gk/core/input/GamePad.hpp>
+#include <gk/core/Mouse.hpp>
+
 #include "Player.hpp"
 #include "World.hpp"
 
@@ -66,29 +67,29 @@ void Player::move(float direction) {
 }
 
 void Player::processInputs() {
-	if(GamePad::isKeyPressed(GameKey::Jump) && !m_isJumping) {
+	if(gk::GamePad::isKeyPressed(gk::GameKey::Jump) && !m_isJumping) {
 		m_isJumping = true;
 		m_velocity.y = m_jumpSpeed;
 	}
 
-	if(GamePad::isKeyPressed(GameKey::Fly)) {
+	if(gk::GamePad::isKeyPressed(gk::GameKey::Fly)) {
 		m_velocity.y = 0.1;
 	}
 
-	if(GamePad::isKeyPressed(GameKey::Sneak)) {
+	if(gk::GamePad::isKeyPressed(gk::GameKey::Sneak)) {
 		m_velocity.y = -0.1;
 	}
 
-	if(GamePad::isKeyPressed(GameKey::Up))      move(0.0f);
-	else if(GamePad::isKeyPressed(GameKey::Down)) move(180.0f);
+	if(gk::GamePad::isKeyPressed(gk::GameKey::Up))        move(0.0f);
+	else if(gk::GamePad::isKeyPressed(gk::GameKey::Down)) move(180.0f);
 
-	if(GamePad::isKeyPressed(GameKey::Left))      move(-90.0f);
-	else if(GamePad::isKeyPressed(GameKey::Right)) move(90.0f);
+	if(gk::GamePad::isKeyPressed(gk::GameKey::Left))       move(-90.0f);
+	else if(gk::GamePad::isKeyPressed(gk::GameKey::Right)) move(90.0f);
 
-	if (GamePad::isKeyPressed(GameKey::Left)  && GamePad::isKeyPressed(GameKey::Up))   move(-45.0f);
-	if (GamePad::isKeyPressed(GameKey::Right) && GamePad::isKeyPressed(GameKey::Up))   move(45.0f);
-	if (GamePad::isKeyPressed(GameKey::Left)  && GamePad::isKeyPressed(GameKey::Down)) move(-135.0f);
-	if (GamePad::isKeyPressed(GameKey::Right) && GamePad::isKeyPressed(GameKey::Down)) move(135.0f);
+	if (gk::GamePad::isKeyPressed(gk::GameKey::Left)  && gk::GamePad::isKeyPressed(gk::GameKey::Up))   move(-45.0f);
+	if (gk::GamePad::isKeyPressed(gk::GameKey::Right) && gk::GamePad::isKeyPressed(gk::GameKey::Up))   move(45.0f);
+	if (gk::GamePad::isKeyPressed(gk::GameKey::Left)  && gk::GamePad::isKeyPressed(gk::GameKey::Down)) move(-135.0f);
+	if (gk::GamePad::isKeyPressed(gk::GameKey::Right) && gk::GamePad::isKeyPressed(gk::GameKey::Down)) move(135.0f);
 }
 
 glm::mat4 Player::updatePosition(const World &world) {

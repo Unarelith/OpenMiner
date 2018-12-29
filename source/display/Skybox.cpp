@@ -69,16 +69,16 @@ Skybox::Skybox() {
 		memcpy(&colors[3 * 4 * i], &colors[0], 3 * 4 * sizeof(float));
 	}
 
-	VertexBuffer::bind(&m_vbo);
+	gk::VertexBuffer::bind(&m_vbo);
 
 	m_vbo.setData(36 * 16 * 9 * sizeof(float), nullptr, GL_STATIC_DRAW);
 	m_vbo.updateData(0, 6 * 4 * 3 * sizeof(float), cubeCoords);
 	m_vbo.updateData(6 * 4 * 3 * sizeof(float), 6 * 4 * 3 * sizeof(float), colors);
 
-	VertexBuffer::bind(nullptr);
+	gk::VertexBuffer::bind(nullptr);
 }
 
-void Skybox::draw(Shader &shader) {
+void Skybox::draw(gk::Shader &shader) {
 	glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f),
 	                        glm::vec3(Player::getInstance().x() - World::renderDistance * Chunk::width / 2,
 	                                  Player::getInstance().y() - World::renderDistance * Chunk::width / 2,
@@ -87,7 +87,7 @@ void Skybox::draw(Shader &shader) {
 
 	shader.setUniform("u_modelMatrix", modelMatrix);
 
-	VertexBuffer::bind(&m_vbo);
+	gk::VertexBuffer::bind(&m_vbo);
 
 	shader.enableVertexAttribArray("coord3d");
 	shader.enableVertexAttribArray("color");
@@ -100,6 +100,6 @@ void Skybox::draw(Shader &shader) {
 	shader.disableVertexAttribArray("color");
 	shader.disableVertexAttribArray("coord3d");
 
-	VertexBuffer::bind(nullptr);
+	gk::VertexBuffer::bind(nullptr);
 }
 

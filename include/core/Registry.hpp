@@ -20,7 +20,6 @@
 #include <sol.hpp>
 
 #include "Block.hpp"
-#include "Exception.hpp"
 #include "Item.hpp"
 #include "Recipe.hpp"
 

@@ -16,17 +16,17 @@
 
 #include <map>
 
-#include "InputHandler.hpp"
-#include "SDLHeaders.hpp"
+#include <gk/core/input/InputHandler.hpp>
+#include <gk/core/SDLHeaders.hpp>
 
-class KeyboardHandler : public InputHandler {
+class KeyboardHandler : public gk::InputHandler {
 	public:
 		KeyboardHandler();
 
-		bool isKeyPressed(GameKey key);
+		bool isKeyPressed(gk::GameKey key);
 
 	private:
-		std::map<GameKey, SDL_Keycode> m_keys;
+		std::map<gk::GameKey, SDL_Keycode> m_keys;
 };
 
 #endif // KEYBOARDHANDLER_HPP_

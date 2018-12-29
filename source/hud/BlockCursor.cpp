@@ -14,17 +14,19 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <gk/gl/Vertex.hpp>
+#include <gk/system/GameClock.hpp>
+#include <gk/resource/ResourceHandler.hpp>
+
 #include "BlockCursor.hpp"
 #include "Config.hpp"
-#include "GameClock.hpp"
 #include "Hotbar.hpp"
 #include "Registry.hpp"
-#include "Vertex.hpp"
 
 void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
-			m_animationStart = GameClock::getTicks();
+			m_animationStart = gk::GameClock::getTicks();
 		}
 		else if (event.button.button == SDL_BUTTON_RIGHT) {
 			u32 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
@@ -75,15 +77,15 @@ void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
 	// }
 
 	if (selectedBlockChanged)
-		m_animationStart = (m_animationStart) ? GameClock::getTicks() : 0;
+		m_animationStart = (m_animationStart) ? gk::GameClock::getTicks() : 0;
 
 	const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
 	float timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed());
-	if (m_animationStart && GameClock::getTicks() > m_animationStart + timeToBreak * 1000) {
+	if (m_animationStart && gk::GameClock::getTicks() > m_animationStart + timeToBreak * 1000) {
 		ItemStack itemDrop = m_currentBlock->getItemDrop();
 		m_player.inventory().addStack(itemDrop.item().name(), itemDrop.amount());
 		m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
-		m_animationStart = GameClock::getTicks();
+		m_animationStart = gk::GameClock::getTicks();
 	}
 
 	if (m_selectedBlock.w != -1)
@@ -92,11 +94,11 @@ void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
 		m_currentBlock = nullptr;
 
 	if (m_animationStart && m_currentBlock)
-		updateAnimationVertexBuffer(*m_currentBlock, (GameClock::getTicks() - m_animationStart) / (timeToBreak * 100));
+		updateAnimationVertexBuffer(*m_currentBlock, (gk::GameClock::getTicks() - m_animationStart) / (timeToBreak * 100));
 }
 
 void BlockCursor::updateVertexBuffer(const Block &block) {
-	Vertex vertices[24] = {
+	gk::Vertex vertices[24] = {
 		// Right
 		{{1, 1, 1, -1}},
 		{{1, 1, 0, -1}},
@@ -140,13 +142,13 @@ void BlockCursor::updateVertexBuffer(const Block &block) {
 		vertices[i].coord3d[2] = vertices[i].coord3d[2] * block.boundingBox().depth  + block.boundingBox().z;
 	}
 
-	VertexBuffer::bind(&m_vbo);
+	gk::VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	VertexBuffer::bind(nullptr);
+	gk::VertexBuffer::bind(nullptr);
 }
 
 void BlockCursor::updateAnimationVertexBuffer(const Block &block, int animationPos) {
-	Vertex vertices[24] = {
+	gk::Vertex vertices[24] = {
 		// Right
 		{{1, 1, 1, -1}},
 		{{1, 1, 0, -1}},
@@ -211,14 +213,12 @@ void BlockCursor::updateAnimationVertexBuffer(const Block &block, int animationP
 		}
 	}
 
-	VertexBuffer::bind(&m_animationVBO);
+	gk::VertexBuffer::bind(&m_animationVBO);
 	m_animationVBO.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	VertexBuffer::bind(nullptr);
+	gk::VertexBuffer::bind(nullptr);
 }
 
-#include "ResourceHandler.hpp"
-
-void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
+void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (m_selectedBlock.w == -1) return;
 
 	glDisable(GL_POLYGON_OFFSET_FILL);
@@ -230,7 +230,7 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 
 	if (m_animationStart > 0) {
 		glBlendFunc(GL_DST_COLOR, GL_ZERO);
-		states.texture = &ResourceHandler::getInstance().get<Texture>("texture-block_destroy"); // FIXME
+		states.texture = &gk::ResourceHandler::getInstance().get<gk::Texture>("texture-block_destroy"); // FIXME
 		target.draw(m_animationVBO, GL_QUADS, 0, 24, states);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}

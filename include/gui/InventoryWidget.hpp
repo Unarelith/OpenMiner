@@ -14,8 +14,9 @@
 #ifndef INVENTORYWIDGET_HPP_
 #define INVENTORYWIDGET_HPP_
 
+#include <gk/gui/RectangleShape.hpp>
+
 #include "MouseItemWidget.hpp"
-#include "RectangleShape.hpp"
 
 class InventoryWidget : public Widget {
 	public:
@@ -28,14 +29,15 @@ class InventoryWidget : public Widget {
 		const ItemWidget *currentItemWidget() const { return m_currentItemWidget; }
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		u16 m_inventoryWidth = 0;
 		u16 m_inventoryHeight = 0;
 
 		std::vector<ItemWidget> m_itemWidgets;
 		ItemWidget *m_currentItemWidget = nullptr;
-		RectangleShape m_selectedItemBackground{16, 16, Color{255, 255, 255, 80}};
+
+		gk::RectangleShape m_selectedItemBackground{16, 16, gk::Color{255, 255, 255, 80}};
 };
 
 #endif // INVENTORYWIDGET_HPP_

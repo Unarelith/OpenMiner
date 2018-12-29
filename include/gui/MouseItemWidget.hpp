@@ -14,8 +14,9 @@
 #ifndef MOUSEITEMWIDGET_HPP_
 #define MOUSEITEMWIDGET_HPP_
 
+#include <gk/gui/Sprite.hpp>
+
 #include "ItemWidget.hpp"
-#include "Sprite.hpp"
 #include "Text.hpp"
 
 class MouseItemWidget : public ItemWidget {
@@ -32,7 +33,7 @@ class MouseItemWidget : public ItemWidget {
 		const ItemStack &getStack() const { return m_inventory.getStack(0, 0); }
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		void updatePosition(float x, float y);
 
@@ -40,7 +41,7 @@ class MouseItemWidget : public ItemWidget {
 
 		const ItemWidget *m_currentItemWidget = nullptr;
 
-		Sprite m_tooltipBackground{"texture-toasts", 160, 32};
+		gk::Sprite m_tooltipBackground{"texture-toasts", 160, 32};
 		Text m_tooltipText;
 		Text m_tooltipInfoText;
 };

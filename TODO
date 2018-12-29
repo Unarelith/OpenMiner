@@ -4,7 +4,6 @@ TODO
 
 • DONE: Découper les gros pâtés en sous-classes
 • DONE: Nettoyer les vieux headers
-• DONE: Passer à la SFML si nécessaire
 • DONE: Remplacer les anciennes classes par leur upgrade:
    ◦ DONE: `ApplicationState` / `ApplicationStateStack`
    ◦ DONE: `GameClock`
@@ -13,7 +12,7 @@ TODO
    ◦ DONE: Input system (Mouse + Keyboard)
 • DONE: `Types.hpp` → `IntTypes.hpp`
    → DONE: Vérifier que les types sont bien corrects
-• TODO: Catch `SDLLoader` exception
+• DONE: Catch `SDLLoader` exception
 • TODO: Vérifier les utilisations inutiles de pointeurs
 • TODO: Passer un clang-tidy sur le code
 • TODO: Séparer le code client du code serveur

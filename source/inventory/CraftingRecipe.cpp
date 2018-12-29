@@ -13,8 +13,9 @@
  */
 #include <algorithm>
 
+#include <gk/system/Exception.hpp>
+
 #include "CraftingRecipe.hpp"
-#include "Exception.hpp"
 
 // FIXME: Try to handle recipes a bit more like minecraft
 //        - Pattern section | char[3][3]

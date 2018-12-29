@@ -37,7 +37,7 @@ void TextButton::setText(const std::string &text) {
 	m_text.setPosition(m_width / 2 - m_text.getSize().x / 2, m_height / 2 - m_text.getSize().y / 2, 0);
 }
 
-void TextButton::draw(RenderTarget &target, RenderStates states) const {
+void TextButton::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
 	if (!m_isEnabled)

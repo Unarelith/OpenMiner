@@ -16,7 +16,8 @@
 
 #include <functional>
 
-#include "Image.hpp"
+#include <gk/gui/Image.hpp>
+
 #include "Text.hpp"
 #include "Widget.hpp"
 
@@ -34,11 +35,11 @@ class TextButton : public Widget {
 		void setEnabled(bool isEnabled) { m_isEnabled = isEnabled; }
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		Image m_background{"texture-widgets"};
-		Image m_hoverBackground{"texture-widgets"};
-		Image m_disabledBackground{"texture-widgets"};
+		gk::Image m_background{"texture-widgets"};
+		gk::Image m_hoverBackground{"texture-widgets"};
+		gk::Image m_disabledBackground{"texture-widgets"};
 
 		Text m_text;
 

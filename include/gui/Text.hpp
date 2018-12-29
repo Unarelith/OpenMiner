@@ -16,36 +16,36 @@
 
 #include <string>
 
-#include "Sprite.hpp"
+#include <gk/gui/Sprite.hpp>
 
-class Text : public IDrawable, public Transformable {
+class Text : public gk::IDrawable, public gk::Transformable {
 	public:
 		Text();
 
 		const std::string &text() const { return m_text; }
 		void setText(const std::string &text) { m_text = text; updateTextSprites(); }
 
-		void setColor(const Color &color) { m_color = color; }
+		void setColor(const gk::Color &color) { m_color = color; }
 
-		const Vector2i &getSize() const { return m_size; }
+		const gk::Vector2i &getSize() const { return m_size; }
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		void updateTextSprites();
 		void updateCharWidth();
 
 		std::string m_text;
-		std::vector<Sprite> m_textSprites;
+		std::vector<gk::Sprite> m_textSprites;
 
 		int m_charWidth[256];
 
-		Texture &m_texture;
-		VertexBuffer m_vbo;
+		gk::Texture &m_texture;
+		gk::VertexBuffer m_vbo;
 
-		Vector2i m_size;
+		gk::Vector2i m_size;
 
-		Color m_color = Color::white;
+		gk::Color m_color = gk::Color::white;
 };
 
 #endif // TEXT_HPP_

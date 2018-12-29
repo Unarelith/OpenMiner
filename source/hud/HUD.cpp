@@ -14,7 +14,8 @@
 #include "HUD.hpp"
 
 HUD::HUD(Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix)
- : m_hotbar{player.inventory()},
+ : m_projectionMatrix{projectionMatrix},
+   m_hotbar{player.inventory()},
    m_blockCursor(player, world, viewMatrix, projectionMatrix),
    m_debugOverlay(player)
 {
@@ -53,11 +54,13 @@ void HUD::update() {
 		m_blockInfoWidget.setCurrentBlock(m_blockCursor.currentBlock());
 }
 
-void HUD::draw(RenderTarget &target, RenderStates states) const {
+void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	target.draw(m_blockCursor, states);
 
 	states.shader = &m_shader;
-	states.vertexAttributes = VertexAttribute::Only2d;
+	states.projectionMatrix = m_projectionMatrix;
+	states.viewMatrix = gk::Transform::Identity;
+	states.vertexAttributes = gk::VertexAttribute::Only2d;
 
 	states.transform *= getTransform();
 
@@ -67,7 +70,7 @@ void HUD::draw(RenderTarget &target, RenderStates states) const {
 	target.draw(m_blockInfoWidget, states);
 	target.draw(m_hotbar, states);
 
-	states.transform = Transform::Identity;
+	states.transform = gk::Transform::Identity;
 
 	target.draw(m_crosshair, states);
 }

@@ -26,9 +26,9 @@ class FurnaceWidget : public Widget {
 		void update() override;
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		Image m_background;
+		gk::Image m_background;
 
 		Inventory &m_playerInventory;
 		InventoryWidget m_playerInventoryWidget{this};
@@ -40,8 +40,8 @@ class FurnaceWidget : public Widget {
 
 		BlockData &m_blockData;
 
-		Image m_burnImage{"texture-furnace"};
-		Image m_progressImage{"texture-furnace"};
+		gk::Image m_burnImage{"texture-furnace"};
+		gk::Image m_progressImage{"texture-furnace"};
 
 		MouseItemWidget m_mouseItemWidget{this};
 };

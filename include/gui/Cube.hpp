@@ -14,26 +14,26 @@
 #ifndef CUBE_HPP_
 #define CUBE_HPP_
 
-#include "IDrawable.hpp"
-#include "Transformable.hpp"
-#include "VertexBuffer.hpp"
+#include <gk/gl/IDrawable.hpp>
+#include <gk/gl/Transformable.hpp>
+#include <gk/gl/VertexBuffer.hpp>
 
 class Block;
 
-class Cube : public IDrawable, public Transformable {
+class Cube : public gk::IDrawable, public gk::Transformable {
 	public:
 		Cube(float size = 1.0f);
 
 		void updateVertexBuffer(const Block &block) const;
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		float m_size = 1.0f;
 
-		const Texture &m_texture;
+		const gk::Texture &m_texture;
 
-		VertexBuffer m_vbo;
+		gk::VertexBuffer m_vbo;
 
 		glm::mat4 m_modelMatrix{1};
 };

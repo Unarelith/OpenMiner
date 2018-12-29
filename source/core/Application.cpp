@@ -11,22 +11,24 @@
  *
  * =====================================================================================
  */
+#include <gk/core/input/GamePad.hpp>
+#include <gk/core/Mouse.hpp>
+
 #include "Application.hpp"
 #include "Config.hpp"
-#include "Mouse.hpp"
-
+#include "GameState.hpp"
 #include "TextureLoader.hpp"
 
-#include "GameState.hpp"
-
 void Application::init() {
-	CoreApplication::init();
+	gk::CoreApplication::init();
+
+	gk::GamePad::init(m_keyboardHandler);
 
 	createWindow(SCREEN_WIDTH, SCREEN_HEIGHT, APP_NAME);
 	m_window.setVerticalSyncEnabled(true);
 
-	Mouse::setCursorVisible(false);
-	Mouse::setCursorGrabbed(true);
+	gk::Mouse::setCursorVisible(false);
+	gk::Mouse::setCursorGrabbed(true);
 
 	m_resourceHandler.loadConfigFile<TextureLoader>("resources/config/textures.xml");
 

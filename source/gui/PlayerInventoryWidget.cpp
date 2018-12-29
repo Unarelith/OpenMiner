@@ -50,7 +50,7 @@ void PlayerInventoryWidget::update() {
 		m_mouseItemWidget.update(nullptr);
 }
 
-void PlayerInventoryWidget::draw(RenderTarget &target, RenderStates states) const {
+void PlayerInventoryWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_background, states);

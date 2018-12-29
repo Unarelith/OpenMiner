@@ -11,10 +11,11 @@
  *
  * =====================================================================================
  */
-#include "Debug.hpp"
-#include "IntTypes.hpp"
+#include <gk/core/IntTypes.hpp>
+#include <gk/core/XMLFile.hpp>
+#include <gk/system/Debug.hpp>
+
 #include "KeyboardHandler.hpp"
-#include "XMLFile.hpp"
 
 KeyboardHandler::KeyboardHandler() {
 	XMLFile doc("resources/config/keys.xml");
@@ -22,7 +23,7 @@ KeyboardHandler::KeyboardHandler() {
 	tinyxml2::XMLElement *keys = doc.FirstChildElement("keys").ToElement();
 
 	// Reading keys from names as defined here: https://wiki.libsdl.org/SDL_Keycode
-	auto addKey = [&](GameKey key, const char *name) {
+	auto addKey = [&](gk::GameKey key, const char *name) {
 		tinyxml2::XMLElement *keyElement = keys->FirstChildElement(name);
 		m_keys[key] = SDL_GetKeyFromName(keyElement->Attribute("key"));
 
@@ -33,22 +34,22 @@ KeyboardHandler::KeyboardHandler() {
 		InputHandler::addKey(key);
 	};
 
-	addKey(GameKey::Left,      "Left");
-	addKey(GameKey::Right,     "Right");
-	addKey(GameKey::Up,        "Up");
-	addKey(GameKey::Down,      "Down");
+	addKey(gk::GameKey::Left,      "Left");
+	addKey(gk::GameKey::Right,     "Right");
+	addKey(gk::GameKey::Up,        "Up");
+	addKey(gk::GameKey::Down,      "Down");
 
-	addKey(GameKey::Jump,      "Jump");
-	addKey(GameKey::Fly,       "Fly");
-	addKey(GameKey::Sneak,     "Sneak");
+	addKey(gk::GameKey::Jump,      "Jump");
+	addKey(gk::GameKey::Fly,       "Fly");
+	addKey(gk::GameKey::Sneak,     "Sneak");
 
-	addKey(GameKey::Dig,       "Dig");
-	addKey(GameKey::Use,       "Use");
+	addKey(gk::GameKey::Dig,       "Dig");
+	addKey(gk::GameKey::Use,       "Use");
 
-	addKey(GameKey::Inventory, "Inventory");
+	addKey(gk::GameKey::Inventory, "Inventory");
 }
 
-bool KeyboardHandler::isKeyPressed(GameKey key) {
+bool KeyboardHandler::isKeyPressed(gk::GameKey key) {
 	const u8 *keyboardState = SDL_GetKeyboardState(nullptr);
 	SDL_Scancode keyScancode = SDL_GetScancodeFromKey(m_keys[key]);
 

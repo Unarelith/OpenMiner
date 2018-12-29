@@ -47,7 +47,7 @@ void WorkbenchWidget::update() {
 		m_mouseItemWidget.update(nullptr);
 }
 
-void WorkbenchWidget::draw(RenderTarget &target, RenderStates states) const {
+void WorkbenchWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_background, states);

@@ -14,17 +14,17 @@
 #ifndef SKYBOX_HPP_
 #define SKYBOX_HPP_
 
-#include "Shader.hpp"
-#include "VertexBuffer.hpp"
+#include <gk/gl/Shader.hpp>
+#include <gk/gl/VertexBuffer.hpp>
 
 class Skybox {
 	public:
 		Skybox();
 
-		void draw(Shader &shader);
+		void draw(gk::Shader &shader);
 
 	private:
-		VertexBuffer m_vbo;
+		gk::VertexBuffer m_vbo;
 };
 
 #endif // SKYBOX_HPP_

@@ -11,18 +11,19 @@
  *
  * =====================================================================================
  */
-#include "ResourceHandler.hpp"
-#include "Text.hpp"
-#include "Texture.hpp"
+#include <gk/gl/Texture.hpp>
+#include <gk/resource/ResourceHandler.hpp>
 
-Text::Text() : m_texture(ResourceHandler::getInstance().get<Texture>("texture-font")) {
+#include "Text.hpp"
+
+Text::Text() : m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-font")) {
 	updateCharWidth();
 }
 
-void Text::draw(RenderTarget &target, RenderStates states) const {
+void Text::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
-	for(const Sprite &sprite : m_textSprites) {
+	for(const gk::Sprite &sprite : m_textSprites) {
 		target.draw(sprite, states);
 	}
 }
@@ -32,9 +33,9 @@ void Text::updateTextSprites() {
 	m_textSprites.clear();
 
 	int x = 0;
-	Color color = Color{70, 70, 70, 255};
+	gk::Color color = gk::Color{70, 70, 70, 255};
 	for(char c : m_text) {
-		Sprite sprite{"texture-font", 8, 8};
+		gk::Sprite sprite{"texture-font", 8, 8};
 		sprite.setCurrentFrame(c);
 		sprite.setPosition(x + 1, 1, 0);
 		sprite.setColor(color);
@@ -44,11 +45,11 @@ void Text::updateTextSprites() {
 	x = 0;
 	color = m_color;
 	for(char c : m_text) {
-		Sprite sprite{"texture-font", 8, 8};
+		gk::Sprite sprite{"texture-font", 8, 8};
 		sprite.setCurrentFrame(c);
 		sprite.setPosition(x, 0, 0);
 		if (c == '[')
-			color = Color::blue;
+			color = gk::Color::blue;
 		sprite.setColor(color);
 		m_textSprites.emplace_back(std::move(sprite));
 		x += m_charWidth[(u8)c];
@@ -66,9 +67,9 @@ void Text::updateCharWidth() {
 	const int height = m_texture.height();
 	unsigned int data[width * height];
 
-	Texture::bind(&m_texture);
+	gk::Texture::bind(&m_texture);
 	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, &data);
-	Texture::bind(nullptr);
+	gk::Texture::bind(nullptr);
 
 	const int charMaxHeight = height / 16;
 	const int charMaxWidth = width / 16;

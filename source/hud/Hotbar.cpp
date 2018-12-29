@@ -46,7 +46,7 @@ void Hotbar::update() {
 	}
 }
 
-void Hotbar::draw(RenderTarget &target, RenderStates states) const {
+void Hotbar::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_background, states);

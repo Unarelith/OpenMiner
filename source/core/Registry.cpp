@@ -11,14 +11,11 @@
  *
  * =====================================================================================
  */
+#include <gk/system/Exception.hpp>
+
 #include "CraftingRecipe.hpp"
 #include "Registry.hpp"
 #include "SmeltingRecipe.hpp"
-
-#include "BlockFurnace.hpp"
-#include "BlockWater.hpp"
-#include "BlockWorkbench.hpp"
-#include "XMLFile.hpp"
 
 Registry *Registry::s_instance = nullptr;
 

@@ -42,7 +42,7 @@ TextButton &MenuWidget::addButton(u16 x, u16 y, const std::string &text, const T
 	return button;
 }
 
-void MenuWidget::draw(RenderTarget &target, RenderStates states) const {
+void MenuWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
 	for (const TextButton &button : m_buttons) {

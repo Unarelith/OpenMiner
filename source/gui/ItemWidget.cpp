@@ -41,7 +41,7 @@ void ItemWidget::setStack(const std::string &name, unsigned int amount) {
 	update();
 }
 
-void ItemWidget::draw(RenderTarget &target, RenderStates states) const {
+void ItemWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
 	if (stack().item().isBlock() && stack().item().id())

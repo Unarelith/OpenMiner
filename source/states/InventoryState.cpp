@@ -11,9 +11,10 @@
  *
  * =====================================================================================
  */
-#include "ApplicationStateStack.hpp"
+#include <gk/core/ApplicationStateStack.hpp>
+#include <gk/core/Mouse.hpp>
+
 #include "InventoryState.hpp"
-#include "Mouse.hpp"
 
 InventoryState::InventoryState(ApplicationState *parent) : ApplicationState(parent) {
 	m_shader.createProgram();
@@ -21,11 +22,13 @@ InventoryState::InventoryState(ApplicationState *parent) : ApplicationState(pare
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
 	m_shader.linkProgram();
 
-	Mouse::setCursorGrabbed(false);
-	Mouse::setCursorVisible(true);
-	Mouse::resetToWindowCenter();
+	m_projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
 
-	m_background.setColor(Color{0, 0, 0, 127});
+	gk::Mouse::setCursorGrabbed(false);
+	gk::Mouse::setCursorVisible(true);
+	gk::Mouse::resetToWindowCenter();
+
+	m_background.setColor(gk::Color{0, 0, 0, 127});
 	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
@@ -34,9 +37,9 @@ void InventoryState::onEvent(const SDL_Event &event) {
 	// 	m_parent->onEvent(event);
 
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-		Mouse::setCursorGrabbed(true);
-		Mouse::setCursorVisible(false);
-		Mouse::resetToWindowCenter();
+		gk::Mouse::setCursorGrabbed(true);
+		gk::Mouse::setCursorVisible(false);
+		gk::Mouse::resetToWindowCenter();
 
 		m_stateStack->pop();
 	}
@@ -53,11 +56,13 @@ void InventoryState::update() {
 		m_widget->update();
 }
 
-void InventoryState::draw(RenderTarget &target, RenderStates states) const {
+void InventoryState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	if (m_parent)
+		target.draw(*m_parent, states);
+
 	states.transform *= getTransform();
 
-	if (m_parent)
-		target.draw(*m_parent);
+	states.projectionMatrix = m_projectionMatrix;
 
 	states.shader = &m_shader;
 

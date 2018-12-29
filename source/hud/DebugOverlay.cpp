@@ -21,10 +21,10 @@ DebugOverlay::DebugOverlay(const Player &player) : m_player(player) {
 	setPosition(4, 4, 0);
 
 	m_versionText.setText(APP_NAME + std::string(" v0.0.1"));
-	m_versionText.setColor(Color::white);
+	m_versionText.setColor(gk::Color::white);
 
 	m_positionText.setPosition(0, 10, 0);
-	m_positionText.setColor(Color::white);
+	m_positionText.setColor(gk::Color::white);
 }
 
 void DebugOverlay::update() {
@@ -36,7 +36,7 @@ void DebugOverlay::update() {
 	m_positionText.setText(stream.str());
 }
 
-void DebugOverlay::draw(RenderTarget &target, RenderStates states) const {
+void DebugOverlay::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_versionText, states);

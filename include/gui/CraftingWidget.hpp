@@ -39,7 +39,7 @@ class CraftingWidget : public Widget {
 		InventoryWidget m_craftingResultInventoryWidget{this};
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		const Recipe *m_recipe = nullptr;
 };

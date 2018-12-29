@@ -79,7 +79,7 @@ void FurnaceWidget::update() {
 		m_mouseItemWidget.update(nullptr);
 }
 
-void FurnaceWidget::draw(RenderTarget &target, RenderStates states) const {
+void FurnaceWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_background, states);

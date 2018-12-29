@@ -14,8 +14,9 @@
 #ifndef ITEMWIDGET_HPP_
 #define ITEMWIDGET_HPP_
 
+#include <gk/gui/Image.hpp>
+
 #include "Cube.hpp"
-#include "Image.hpp"
 #include "Inventory.hpp"
 #include "Text.hpp"
 #include "Widget.hpp"
@@ -30,7 +31,7 @@ class ItemWidget : public Widget {
 		void setStack(const std::string &name, unsigned int amount = 1);
 
 	protected:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 	private:
 		Inventory &m_inventory;
@@ -38,7 +39,7 @@ class ItemWidget : public Widget {
 		unsigned int m_x = 0;
 		unsigned int m_y = 0;
 
-		Image m_image;
+		gk::Image m_image;
 		Text m_text;
 
 		Cube m_cube{10};

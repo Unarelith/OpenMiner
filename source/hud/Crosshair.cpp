@@ -13,8 +13,6 @@
  */
 #include "Config.hpp"
 #include "Crosshair.hpp"
-#include "Shader.hpp"
-#include "Vertex.hpp"
 
 Crosshair::Crosshair() {
 	float xFactor = SCREEN_WIDTH * SCREEN_HEIGHT / 100;
@@ -24,16 +22,16 @@ Crosshair::Crosshair() {
 	m_vShape1.setSize(0.0002 * xFactor, 0.001 * yFactor - m_hShape.height() / 2);
 	m_vShape2.setSize(0.0002 * xFactor, 0.001 * yFactor - m_hShape.height() / 2);
 
-	m_hShape.setColor(Color{200, 200, 200, 180});
-	m_vShape1.setColor(Color{200, 200, 200, 180});
-	m_vShape2.setColor(Color{200, 200, 200, 180});
+	m_hShape.setColor(gk::Color{200, 200, 200, 180});
+	m_vShape1.setColor(gk::Color{200, 200, 200, 180});
+	m_vShape2.setColor(gk::Color{200, 200, 200, 180});
 
 	m_hShape.setPosition(SCREEN_WIDTH / 2 - m_hShape.width() / 2, SCREEN_HEIGHT / 2 - m_hShape.height() / 2, 0);
 	m_vShape1.setPosition(SCREEN_WIDTH / 2 - m_vShape1.width() / 2, SCREEN_HEIGHT / 2 - m_hShape.height() / 2 - m_vShape1.height(), 0);
 	m_vShape2.setPosition(SCREEN_WIDTH / 2 - m_vShape2.width() / 2, SCREEN_HEIGHT / 2 + m_hShape.height() / 2, 0);
 }
 
-void Crosshair::draw(RenderTarget &target, RenderStates states) const {
+void Crosshair::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	target.draw(m_hShape, states);
 	target.draw(m_vShape1, states);
 	target.draw(m_vShape2, states);

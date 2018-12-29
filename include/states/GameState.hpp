@@ -16,15 +16,15 @@
 
 #include <glm/glm.hpp>
 
-#include "ApplicationState.hpp"
+#include <gk/core/ApplicationState.hpp>
+#include <gk/gl/RenderTarget.hpp>
+
 #include "HUD.hpp"
 #include "Player.hpp"
 #include "Skybox.hpp"
 #include "World.hpp"
 
-#include "RenderTarget.hpp"
-
-class GameState : public ApplicationState {
+class GameState : public gk::ApplicationState {
 	public:
 		GameState();
 
@@ -35,19 +35,20 @@ class GameState : public ApplicationState {
 	private:
 		void initShaders();
 
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		glm::mat4 m_projectionMatrix;
+		glm::mat4 m_perspectiveMatrix;
+		glm::mat4 m_orthoMatrix;
 		glm::mat4 m_viewMatrix;
 
-		Shader m_shader;
+		gk::Shader m_shader;
 
 		Skybox m_skybox;
 		World m_world;
 
 		Player m_player;
 
-		HUD m_hud{m_player, m_world, m_viewMatrix, m_projectionMatrix};
+		HUD m_hud{m_player, m_world, m_viewMatrix, m_orthoMatrix};
 };
 
 #endif // GAMESTATE_HPP_

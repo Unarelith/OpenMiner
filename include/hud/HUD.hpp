@@ -20,7 +20,7 @@
 #include "DebugOverlay.hpp"
 #include "Hotbar.hpp"
 
-class HUD : public Transformable, public IDrawable {
+class HUD : public gk::Transformable, public gk::IDrawable {
 	public:
 		HUD(Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix);
 
@@ -29,9 +29,11 @@ class HUD : public Transformable, public IDrawable {
 		void update();
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		Shader m_shader;
+		gk::Shader m_shader;
+
+		glm::mat4 &m_projectionMatrix;
 
 		Hotbar m_hotbar;
 

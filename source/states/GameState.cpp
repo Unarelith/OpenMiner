@@ -16,20 +16,22 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "ApplicationStateStack.hpp"
+#include <gk/core/ApplicationStateStack.hpp>
+#include <gk/core/input/GamePad.hpp>
+#include <gk/core/Mouse.hpp>
+#include <gk/gl/OpenGL.hpp>
+#include <gk/system/GameClock.hpp>
+
 #include "Config.hpp"
-#include "GameClock.hpp"
-#include "GamePad.hpp"
 #include "GameState.hpp"
 #include "InventoryState.hpp"
-#include "Mouse.hpp"
-#include "OpenGL.hpp"
 #include "PauseMenuState.hpp"
 #include "PlayerInventoryWidget.hpp"
 #include "ScriptEngine.hpp"
 
 GameState::GameState() {
-	m_projectionMatrix = glm::perspective(45.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, DIST_NEAR, DIST_FAR);
+	m_perspectiveMatrix = glm::perspective(45.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, DIST_NEAR, DIST_FAR);
+	m_orthoMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
 
 	try {
 		auto &lua = ScriptEngine::getInstance().lua();
@@ -49,7 +51,7 @@ void GameState::onEvent(const SDL_Event &event) {
 			m_player.turnH(event.motion.xrel * 0.06);
 			m_player.turnV(-event.motion.yrel * 0.06);
 
-			Mouse::resetToWindowCenter();
+			gk::Mouse::resetToWindowCenter();
 		}
 	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE && &m_stateStack->top() == this) {
@@ -59,12 +61,12 @@ void GameState::onEvent(const SDL_Event &event) {
 		if (event.window.event == SDL_WINDOWEVENT_LEAVE) {
 			m_stateStack->push<PauseMenuState>(this);
 
-			Mouse::setCursorGrabbed(false);
-			Mouse::setCursorVisible(true);
+			gk::Mouse::setCursorGrabbed(false);
+			gk::Mouse::setCursorVisible(true);
 		}
 		else if (event.window.event == SDL_WINDOWEVENT_ENTER) {
-			Mouse::setCursorGrabbed(true);
-			Mouse::setCursorVisible(false);
+			gk::Mouse::setCursorGrabbed(true);
+			gk::Mouse::setCursorVisible(false);
 		}
 	}
 
@@ -72,16 +74,16 @@ void GameState::onEvent(const SDL_Event &event) {
 }
 
 void GameState::update() {
-	Shader::bind(&m_shader);
-	m_shader.setUniform("u_time", GameClock::getTicks());
-	Shader::bind(nullptr);
+	gk::Shader::bind(&m_shader);
+	m_shader.setUniform("u_time", gk::GameClock::getTicks());
+	gk::Shader::bind(nullptr);
 
 	m_world.update(m_player);
 
 	if (&m_stateStack->top() == this) {
 		m_player.processInputs();
 
-		if (GamePad::isKeyPressedOnce(GameKey::Inventory)) {
+		if (gk::GamePad::isKeyPressedOnce(gk::GameKey::Inventory)) {
 			auto &inventoryState = m_stateStack->push<InventoryState>(this);
 			inventoryState.setupWidget<PlayerInventoryWidget>(m_player.inventory());
 		}
@@ -104,9 +106,9 @@ void GameState::initShaders() {
 	m_shader.linkProgram();
 }
 
-void GameState::draw(RenderTarget &target, RenderStates states) const {
+void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.shader = &m_shader;
-	states.projectionMatrix = m_projectionMatrix;
+	states.projectionMatrix = m_perspectiveMatrix;
 	states.viewMatrix = m_viewMatrix;
 
 	target.draw(m_world, states);

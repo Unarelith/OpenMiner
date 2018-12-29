@@ -14,14 +14,15 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <gk/resource/ResourceHandler.hpp>
+
 #include "Config.hpp"
-#include "ResourceHandler.hpp"
 #include "World.hpp"
 
 u16 World::renderDistance = 8;
 bool World::isReloadRequested = false;
 
-World::World() : m_texture(ResourceHandler::getInstance().get<Texture>("texture-blocks")) {
+World::World() : m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-blocks")) {
 	for(s32 z = 0 ; z < m_depth ; z++) {
 		for(s32 y = 0 ; y < m_height ; y++) {
 			for(s32 x = 0 ; x < m_width ; x++) {
@@ -58,17 +59,17 @@ void World::update(Player &player) {
 	isReloadRequested = false;
 }
 
-void World::draw(RenderTarget &target, RenderStates states) const {
+void World::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	float ud = 1000.0;
 	int ux = 0;
 	int uy = 0;
 	int uz = 0;
 
-	Shader::bind(states.shader);
+	gk::Shader::bind(states.shader);
 	states.shader->setUniform("u_renderDistance", renderDistance * Chunk::width);
-	Shader::bind(nullptr);
+	gk::Shader::bind(nullptr);
 
-	std::vector<std::pair<Chunk*, Transform>> chunks;
+	std::vector<std::pair<Chunk*, gk::Transform>> chunks;
 	for(auto &it : m_chunks) {
 		states.transform = glm::translate(glm::mat4(1.0f),
 		                                  glm::vec3(it->x() * Chunk::width,

@@ -16,7 +16,8 @@
 
 #include <string>
 
-#include "IntTypes.hpp"
+#include <gk/core/IntTypes.hpp>
+
 #include "ItemType.hpp"
 
 class Item {

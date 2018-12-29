@@ -14,11 +14,11 @@
 #ifndef TEXTURELOADER_HPP_
 #define TEXTURELOADER_HPP_
 
-#include "IResourceLoader.hpp"
+#include <gk/resource/IResourceLoader.hpp>
 
-class TextureLoader : public IResourceLoader {
+class TextureLoader : public gk::IResourceLoader {
 	public:
-		void load(const char *xmlFilename, ResourceHandler &handler);
+		void load(const char *xmlFilename, gk::ResourceHandler &handler);
 };
 
 #endif // TEXTURELOADER_HPP_

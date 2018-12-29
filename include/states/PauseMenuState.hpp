@@ -14,27 +14,30 @@
 #ifndef PAUSEMENUSTATE_HPP_
 #define PAUSEMENUSTATE_HPP_
 
-#include "ApplicationState.hpp"
-#include "MenuWidget.hpp"
-#include "Shader.hpp"
-#include "RectangleShape.hpp"
+#include <gk/core/ApplicationState.hpp>
+#include <gk/gl/Shader.hpp>
+#include <gk/gui/RectangleShape.hpp>
 
-class PauseMenuState : public ApplicationState {
+#include "MenuWidget.hpp"
+
+class PauseMenuState : public gk::ApplicationState {
 	public:
-		PauseMenuState(ApplicationState *parent = nullptr);
+		PauseMenuState(gk::ApplicationState *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
 		void update() override;
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		MenuWidget m_menuWidget{1, 3};
 
-		Shader m_shader;
+		gk::Shader m_shader;
 
-		RectangleShape m_background;
+		glm::mat4 m_projectionMatrix;
+
+		gk::RectangleShape m_background;
 };
 
 #endif // PAUSEMENUSTATE_HPP_

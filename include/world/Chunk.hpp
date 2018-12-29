@@ -18,17 +18,18 @@
 #include <unordered_map>
 #include <vector>
 
+#include <gk/core/Vector3.hpp>
+#include <gk/gl/IDrawable.hpp>
+#include <gk/gl/Shader.hpp>
+#include <gk/gl/VertexBuffer.hpp>
+#include <gk/utils/NonCopyable.hpp>
+
 #include "Block.hpp"
 #include "BlockData.hpp"
 #include "ChunkBuilder.hpp"
 #include "ChunkLightmap.hpp"
-#include "IDrawable.hpp"
-#include "NonCopyable.hpp"
-#include "Shader.hpp"
-#include "Vector3.hpp"
-#include "VertexBuffer.hpp"
 
-class Chunk : public NonCopyable {
+class Chunk : public gk::NonCopyable {
 	public:
 		enum {
 			Left,
@@ -40,7 +41,7 @@ class Chunk : public NonCopyable {
 		};
 
 	public:
-		Chunk(s32 x, s32 y, s32 z, Texture &texture);
+		Chunk(s32 x, s32 y, s32 z, gk::Texture &texture);
 
 		void update(Player &player, World &world);
 
@@ -73,7 +74,7 @@ class Chunk : public NonCopyable {
 		static constexpr u8 height = CHUNK_HEIGHT;
 		static constexpr u8 depth = CHUNK_DEPTH;
 
-		void drawLayer(RenderTarget &target, RenderStates states, u16 layer) const;
+		void drawLayer(gk::RenderTarget &target, gk::RenderStates states, u16 layer) const;
 
 	private:
 		void updateNeighbours(int x, int y, int z);
@@ -84,7 +85,7 @@ class Chunk : public NonCopyable {
 		s32 m_y;
 		s32 m_z;
 
-		Texture &m_texture;
+		gk::Texture &m_texture;
 
 		using DataArray = u32[Chunk::width][Chunk::height][Chunk::depth];
 		DataArray m_data;
@@ -92,7 +93,7 @@ class Chunk : public NonCopyable {
 		ChunkBuilder m_builder;
 		ChunkLightmap m_lightmap{this};
 
-		std::array<VertexBuffer, ChunkBuilder::layers> m_vbo;
+		std::array<gk::VertexBuffer, ChunkBuilder::layers> m_vbo;
 		std::array<std::size_t, ChunkBuilder::layers> m_verticesCount;
 
 		Chunk *m_surroundingChunks[6]{nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
@@ -104,7 +105,7 @@ class Chunk : public NonCopyable {
 		u32 m_lastTick = 0;
 		std::unordered_map<std::size_t, const Block&> m_tickingBlocks;
 
-		std::unordered_map<Vector3i, BlockData> m_blockData;
+		std::unordered_map<gk::Vector3i, BlockData> m_blockData;
 };
 
 #endif // CHUNK_HPP_

@@ -18,7 +18,8 @@
 
 #include <glm/glm.hpp>
 
-#include "Camera.hpp"
+#include <gk/gl/Camera.hpp>
+
 #include "Inventory.hpp"
 
 #ifndef M_PI
@@ -63,7 +64,7 @@ class Player {
 
 		static Player *s_instance;
 
-		Camera m_camera{45.0f, 0.1f, 1000.0f};
+		gk::Camera m_camera{45.0f, 0.1f, 1000.0f};
 
 		float m_x;
 		float m_y;

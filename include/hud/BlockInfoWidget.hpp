@@ -26,12 +26,12 @@ class BlockInfoWidget : public Widget {
 		void setCurrentBlock(const Block *block);
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		Inventory m_inventory{1, 1};
 		ItemWidget m_itemWidget{m_inventory, 0, 0, this};
 
-		Sprite m_background{"texture-toasts", 160, 32};
+		gk::Sprite m_background{"texture-toasts", 160, 32};
 		Text m_text;
 
 		bool m_isVisible = false;

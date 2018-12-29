@@ -53,7 +53,7 @@ static const float cubeCoords[6 * 4 * 3] = {
 	0, 1, 1,
 };
 
-std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Chunk &chunk, const std::array<VertexBuffer, layers> &vbo) {
+std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Chunk &chunk, const std::array<gk::VertexBuffer, layers> &vbo) {
 	for (u8 i = 0 ; i < layers ; ++i)
 		m_vertices[i].reserve(Chunk::width * Chunk::height * Chunk::depth * 6 * 4);
 
@@ -83,9 +83,9 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Chu
 	for (u8 i = 0 ; i < layers ; ++i) {
 		m_vertices[i].shrink_to_fit();
 
-		VertexBuffer::bind(&vbo[i]);
-		vbo[i].setData(m_vertices[i].size() * sizeof(Vertex), m_vertices[i].data(), GL_DYNAMIC_DRAW);
-		VertexBuffer::bind(nullptr);
+		gk::VertexBuffer::bind(&vbo[i]);
+		vbo[i].setData(m_vertices[i].size() * sizeof(gk::Vertex), m_vertices[i].data(), GL_DYNAMIC_DRAW);
+		gk::VertexBuffer::bind(nullptr);
 
 		verticesCount[i] = m_vertices[i].size();
 
@@ -103,7 +103,7 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 
 	static glm::vec3 a, b, c, v1, v2, normal;
 
-	const FloatBox boundingBox = block->boundingBox();
+	const gk::FloatBox boundingBox = block->boundingBox();
 
 	// Three points of the face
 	a.x = cubeCoords[i * 12 + 0] * boundingBox.width  + boundingBox.x;
@@ -135,7 +135,7 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 
 	// Store vertex information
 	for(u8 j = 0 ; j < 4 ; j++) {
-		Vertex vertex;
+		gk::Vertex vertex;
 
 		vertex.coord3d[0] = x + cubeCoords[i * 12 + j * 3]     * boundingBox.width  + boundingBox.x;
 		vertex.coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1] * boundingBox.height + boundingBox.y;

@@ -14,14 +14,15 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <gk/core/Color.hpp>
+#include <gk/gl/Vertex.hpp>
+#include <gk/resource/ResourceHandler.hpp>
+
 #include "Block.hpp"
-#include "Color.hpp"
 #include "Config.hpp"
 #include "Cube.hpp"
-#include "ResourceHandler.hpp"
-#include "Vertex.hpp"
 
-Cube::Cube(float size) : m_texture(ResourceHandler::getInstance().get<Texture>("texture-blocks")) {
+Cube::Cube(float size) : m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-blocks")) {
 	m_size = size;
 
 	m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(-180.0f), glm::vec3{0, 0, 1});
@@ -30,7 +31,7 @@ Cube::Cube(float size) : m_texture(ResourceHandler::getInstance().get<Texture>("
 }
 
 void Cube::updateVertexBuffer(const Block &block) const {
-	Vertex vertices[6 * 4] = {
+	gk::Vertex vertices[6 * 4] = {
 		// Left
 		{{0, 0, 0, 2}},
 		{{0, 0, m_size, 2}},
@@ -86,7 +87,7 @@ void Cube::updateVertexBuffer(const Block &block) const {
 		}
 	}
 
-	Color color = Color::white;
+	gk::Color color = gk::Color::white;
 	for (u8 i = 0 ; i < 6 * 4 ; ++i) {
 		vertices[i].color[0] = color.r;
 		vertices[i].color[1] = color.g;
@@ -94,21 +95,21 @@ void Cube::updateVertexBuffer(const Block &block) const {
 		vertices[i].color[3] = color.a;
 	}
 
-	VertexBuffer::bind(&m_vbo);
+	gk::VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	VertexBuffer::bind(nullptr);
+	gk::VertexBuffer::bind(nullptr);
 }
 
-void Cube::draw(RenderTarget &target, RenderStates states) const {
+void Cube::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= m_modelMatrix;
 	states.transform *= getTransform();
 
-	states.viewMatrix = Transform::Identity;
+	states.viewMatrix = gk::Transform::Identity;
 
 	states.projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f, -40.0f, DIST_FAR);
 
 	states.texture = &m_texture;
-	states.vertexAttributes = VertexAttribute::Only2d;
+	states.vertexAttributes = gk::VertexAttribute::Only2d;
 
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);

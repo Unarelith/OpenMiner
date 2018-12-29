@@ -14,11 +14,11 @@
 #include "Widget.hpp"
 
 bool Widget::isPointInWidget(float x, float y) {
-	return getGlobalBounds().intersects(FloatRect{x, y, 1, 1});
+	return getGlobalBounds().intersects(gk::FloatRect{x, y, 1, 1});
 }
 
-FloatRect Widget::getGlobalBounds() const {
-	FloatRect aabb{0, 0, static_cast<float>(m_width), static_cast<float>(m_height)};
+gk::FloatRect Widget::getGlobalBounds() const {
+	gk::FloatRect aabb{0, 0, static_cast<float>(m_width), static_cast<float>(m_height)};
 
 	const Widget *widget = this;
 	while (widget) {

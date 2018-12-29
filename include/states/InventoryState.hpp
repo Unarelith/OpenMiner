@@ -16,15 +16,16 @@
 
 #include <memory>
 
-#include "ApplicationState.hpp"
+#include <gk/core/ApplicationState.hpp>
+#include <gk/gui/RectangleShape.hpp>
+#include <gk/gl/Shader.hpp>
+
 #include "Config.hpp"
-#include "RectangleShape.hpp"
-#include "Shader.hpp"
 #include "WorkbenchWidget.hpp"
 
-class InventoryState : public ApplicationState {
+class InventoryState : public gk::ApplicationState {
 	public:
-		InventoryState(ApplicationState *parent = nullptr);
+		InventoryState(gk::ApplicationState *parent = nullptr);
 
 		template<typename T, typename... Args>
 		void setupWidget(Args &&...args) {
@@ -40,13 +41,15 @@ class InventoryState : public ApplicationState {
 		void update() override;
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		Shader m_shader;
+		gk::Shader m_shader;
+
+		glm::mat4 m_projectionMatrix;
 
 		std::unique_ptr<Widget> m_widget;
 
-		RectangleShape m_background;
+		gk::RectangleShape m_background;
 };
 
 #endif // INVENTORYSTATE_HPP_

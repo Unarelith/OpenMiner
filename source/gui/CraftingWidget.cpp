@@ -59,7 +59,7 @@ void CraftingWidget::update() {
 	}
 }
 
-void CraftingWidget::draw(RenderTarget &target, RenderStates states) const {
+void CraftingWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_craftingInventoryWidget, states);

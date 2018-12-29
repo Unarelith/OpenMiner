@@ -25,9 +25,9 @@ class WorkbenchWidget : public Widget {
 		void update() override;
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		Image m_background;
+		gk::Image m_background;
 
 		Inventory &m_playerInventory;
 		InventoryWidget m_playerInventoryWidget{this};

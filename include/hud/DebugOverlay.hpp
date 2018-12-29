@@ -18,14 +18,14 @@
 
 class Player;
 
-class DebugOverlay : public Transformable, public IDrawable {
+class DebugOverlay : public gk::Transformable, public gk::IDrawable {
 	public:
 		DebugOverlay(const Player &player);
 
 		void update();
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		const Player &m_player;
 

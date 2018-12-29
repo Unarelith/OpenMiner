@@ -11,9 +11,10 @@
  *
  * =====================================================================================
  */
-#include "ApplicationStateStack.hpp"
+#include <gk/core/ApplicationStateStack.hpp>
+#include <gk/system/Exception.hpp>
+
 #include "BlockWorkbench.hpp"
-#include "Exception.hpp"
 #include "InventoryState.hpp"
 #include "Player.hpp"
 #include "WorkbenchWidget.hpp"
@@ -27,7 +28,7 @@ bool BlockWorkbench::onBlockActivated(const glm::ivec3 &position, Player &player
 	if (!data)
 		throw EXCEPTION("BlockWorkbench at (", position.x, position.y, position.z, ") has no inventory");
 
-	auto &inventoryState = ApplicationStateStack::getInstance().push<InventoryState>(&ApplicationStateStack::getInstance().top());
+	auto &inventoryState = gk::ApplicationStateStack::getInstance().push<InventoryState>(&gk::ApplicationStateStack::getInstance().top());
 	inventoryState.setupWidget<WorkbenchWidget>(player.inventory(), data->inventory);
 
 	return true;
