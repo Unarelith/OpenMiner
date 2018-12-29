@@ -27,6 +27,8 @@ class Application : public gk::CoreApplication {
 		void init() override;
 
 	private:
+		void initOpenGL();
+
 		KeyboardHandler m_keyboardHandler;
 
 		Registry m_registry;

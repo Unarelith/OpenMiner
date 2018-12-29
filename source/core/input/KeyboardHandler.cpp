@@ -18,7 +18,7 @@
 #include "KeyboardHandler.hpp"
 
 KeyboardHandler::KeyboardHandler() {
-	XMLFile doc("resources/config/keys.xml");
+	gk::XMLFile doc("resources/config/keys.xml");
 
 	tinyxml2::XMLElement *keys = doc.FirstChildElement("keys").ToElement();
 

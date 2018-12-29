@@ -178,6 +178,9 @@ void Chunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u16 lay
 
 	states.texture = &m_texture;
 
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+
 	target.draw(m_vbo.at(layer), GL_QUADS, 0, m_verticesCount.at(layer), states);
 
 	// drawOutlines(target, states);

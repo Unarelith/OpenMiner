@@ -19,7 +19,7 @@
 #include "TextureLoader.hpp"
 
 void TextureLoader::load(const char *xmlFilename, gk::ResourceHandler &handler) {
-	XMLFile doc(xmlFilename);
+	gk::XMLFile doc(xmlFilename);
 
 	tinyxml2::XMLElement *textureElement = doc.FirstChildElement("textures").FirstChildElement("texture").ToElement();
 	while (textureElement) {
