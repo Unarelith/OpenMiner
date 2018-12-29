@@ -77,7 +77,7 @@ class Player {
 		bool m_isJumping = false;
 
 		const float m_gravity = 0.001;
-		const float m_jumpSpeed = 0.07f;
+		const float m_jumpSpeed = 0.06f;
 
 		Inventory m_inventory{9, 4};
 };

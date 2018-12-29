@@ -118,16 +118,16 @@ glm::mat4 Player::updatePosition(const World &world) {
 // FIXME: Use AABB for more precision
 void Player::checkCollisions(const World &world) {
 	const float PLAYER_HEIGHT = 1.8;
-	float m_eyeheight = m_y + PLAYER_HEIGHT - 1;
+	float eyeheight = m_y + PLAYER_HEIGHT - 1.4;
 	// testPoint(world, glm::vec3(m_x, m_y, m_z), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - PLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight - 0.4, m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - 0.4, m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, m_eyeheight - 0.4, m_z + 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, m_eyeheight - 0.4, m_z + 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - 0.4, m_z - 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - 0.4, m_z - 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - 0.4, m_z + 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - 0.4, m_z + 0.2), m_velocity);
 }
 
 bool passable(const World &world, float x, float y, float z) {
