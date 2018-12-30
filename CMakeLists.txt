@@ -93,6 +93,7 @@ include(FindPkgConfig)
 pkg_search_module(SDL2 REQUIRED sdl2)
 pkg_search_module(SDL2IMAGE REQUIRED SDL2_image)
 pkg_search_module(SDL2MIXER REQUIRED SDL2_mixer)
+pkg_search_module(SDL2TTF REQUIRED SDL2_ttf)
 
 if(NOT SDL2_FOUND)
 	message(FATAL_ERROR "SDL2 not found!")
@@ -106,9 +107,15 @@ if(NOT SDL2MIXER_FOUND)
 	message(FATAL_ERROR "SDL2_mixer not found!")
 endif(NOT SDL2MIXER_FOUND)
 
+if(NOT SDL2TTF_FOUND)
+	message(FATAL_ERROR "SDL2_ttf not found!")
+endif(NOT SDL2TTF_FOUND)
+
 include_directories(${SDL2_INCLUDE_DIRS}
                     ${SDL2IMAGE_INCLUDE_DIRS}
-                    ${SDL2MIXER_INCLUDE_DIRS})
+                    ${SDL2MIXER_INCLUDE_DIRS}
+                    ${SDL2TTF_INCLUDE_DIRS})
+
 #------------------------------------------------------------------------------
 # Link options
 #------------------------------------------------------------------------------
@@ -119,5 +126,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
                       ${OPENGL_LIBRARIES}
                       ${SDL2_LIBRARIES}
                       ${SDL2IMAGE_LIBRARIES}
-                      ${SDL2MIXER_LIBRARIES})
+                      ${SDL2MIXER_LIBRARIES}
+                      ${SDL2TTF_LIBRARIES})
 

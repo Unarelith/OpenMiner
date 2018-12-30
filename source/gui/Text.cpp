@@ -14,6 +14,7 @@
 #include <gk/gl/Texture.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
+#include "Color.hpp"
 #include "Text.hpp"
 
 Text::Text() : m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-font")) {
@@ -49,7 +50,7 @@ void Text::updateTextSprites() {
 		sprite.setCurrentFrame(c);
 		sprite.setPosition(x, 0, 0);
 		if (c == '[')
-			color = gk::Color::blue;
+			color = Color::Blue;
 		sprite.setColor(color);
 		m_textSprites.emplace_back(std::move(sprite));
 		x += m_charWidth[(u8)c];

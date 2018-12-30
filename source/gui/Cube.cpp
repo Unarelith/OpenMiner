@@ -87,7 +87,7 @@ void Cube::updateVertexBuffer(const Block &block) const {
 		}
 	}
 
-	gk::Color color = gk::Color::white;
+	gk::Color color = gk::Color::White;
 	for (u8 i = 0 ; i < 6 * 4 ; ++i) {
 		vertices[i].color[0] = color.r;
 		vertices[i].color[1] = color.g;

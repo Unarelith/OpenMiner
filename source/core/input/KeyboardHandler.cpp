@@ -54,6 +54,8 @@ bool KeyboardHandler::isKeyPressed(gk::GameKey key) {
 	const u8 *keyboardState = SDL_GetKeyboardState(nullptr);
 	SDL_Scancode keyScancode = SDL_GetScancodeFromKey(m_keys[key]);
 
+	m_keysPressed[key] = keyboardState[keyScancode];
+
 	return keyboardState[keyScancode];
 }
 
