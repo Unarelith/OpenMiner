@@ -88,7 +88,7 @@ void GameState::update() {
 		}
 	}
 
-	m_viewMatrix = m_player.updatePosition(m_world);
+	m_player.updatePosition(m_world);
 
 	m_hud.update();
 }
@@ -108,7 +108,7 @@ void GameState::initShaders() {
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.shader = &m_shader;
 	states.projectionMatrix = m_camera.getProjectionMatrix();
-	states.viewMatrix = m_viewMatrix;
+	states.viewMatrix = m_camera.getViewMatrix();
 
 	target.draw(m_world, states);
 	target.draw(m_hud, states);

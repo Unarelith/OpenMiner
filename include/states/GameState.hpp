@@ -38,14 +38,12 @@ class GameState : public gk::ApplicationState {
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		glm::mat4 m_viewMatrix;
-
 		gk::Shader m_shader;
 
 		Skybox m_skybox;
 		World m_world;
 
-		gk::Camera m_camera{45.0f, DIST_NEAR, DIST_FAR};
+		gk::Camera m_camera{FOV, DIST_NEAR, DIST_FAR};
 		Player m_player{m_camera};
 
 		HUD m_hud{m_player, m_world};

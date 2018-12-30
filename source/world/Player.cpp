@@ -93,7 +93,7 @@ void Player::processInputs() {
 	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Down)) move(135.0f);
 }
 
-glm::mat4 Player::updatePosition(const World &world) {
+void Player::updatePosition(const World &world) {
 	m_velocity.y -= m_gravity; // Gravity
 
 	if (m_velocity.y < -m_jumpSpeed) // Jump max accel
@@ -112,8 +112,6 @@ glm::mat4 Player::updatePosition(const World &world) {
 
 	m_velocity.x = 0;
 	m_velocity.z = 0;
-
-	return m_camera.getViewMatrix().getMatrix();
 }
 
 // FIXME: Use AABB for more precision

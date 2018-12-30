@@ -42,7 +42,7 @@ class Player {
 		void move(float direction);
 
 		void processInputs();
-		glm::mat4 updatePosition(const World &world);
+		void updatePosition(const World &world);
 
 		void checkCollisions(const World &world);
 
