@@ -19,6 +19,7 @@
 #include <gk/core/ApplicationState.hpp>
 #include <gk/gl/RenderTarget.hpp>
 
+#include "Config.hpp"
 #include "HUD.hpp"
 #include "Player.hpp"
 #include "Skybox.hpp"
@@ -46,7 +47,8 @@ class GameState : public gk::ApplicationState {
 		Skybox m_skybox;
 		World m_world;
 
-		Player m_player;
+		gk::Camera m_camera{45.0f, DIST_NEAR, DIST_FAR};
+		Player m_player{m_camera};
 
 		HUD m_hud{m_player, m_world, m_viewMatrix, m_orthoMatrix};
 };

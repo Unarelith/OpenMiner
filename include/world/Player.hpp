@@ -34,7 +34,7 @@ class World;
 
 class Player {
 	public:
-		Player();
+		Player(gk::Camera &camera);
 
 		void turnH(float angle);
 		void turnV(float angle);
@@ -64,7 +64,7 @@ class Player {
 
 		static Player *s_instance;
 
-		gk::Camera m_camera{45.0f, 0.1f, 1000.0f};
+		gk::Camera &m_camera;
 
 		float m_x;
 		float m_y;

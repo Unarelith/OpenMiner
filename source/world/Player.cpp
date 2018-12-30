@@ -22,7 +22,7 @@
 
 Player *Player::s_instance = nullptr;
 
-Player::Player() {
+Player::Player(gk::Camera &camera) : m_camera(camera) {
 	m_x = 0;
 	m_y = 18;
 	m_z = 20;

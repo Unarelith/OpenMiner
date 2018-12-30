@@ -22,7 +22,6 @@
 #include <gk/gl/OpenGL.hpp>
 #include <gk/system/GameClock.hpp>
 
-#include "Config.hpp"
 #include "GameKey.hpp"
 #include "GameState.hpp"
 #include "InventoryState.hpp"
@@ -31,8 +30,9 @@
 #include "ScriptEngine.hpp"
 
 GameState::GameState() {
-	m_perspectiveMatrix = glm::perspective(45.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, DIST_NEAR, DIST_FAR);
 	m_orthoMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
+
+	m_camera.setAspectRatio((float)SCREEN_WIDTH / SCREEN_HEIGHT);
 
 	try {
 		auto &lua = ScriptEngine::getInstance().lua();
@@ -109,7 +109,7 @@ void GameState::initShaders() {
 
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.shader = &m_shader;
-	states.projectionMatrix = m_perspectiveMatrix;
+	states.projectionMatrix = m_camera.getProjectionMatrix();
 	states.viewMatrix = m_viewMatrix;
 
 	target.draw(m_world, states);
