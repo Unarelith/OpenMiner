@@ -59,6 +59,8 @@ class Player {
 
 		Inventory &inventory() { return m_inventory; }
 
+		const gk::Camera &camera() { return m_camera; }
+
 	private:
 		void testPoint(const World &world, glm::vec3 pos, glm::vec3 &speed);
 

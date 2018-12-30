@@ -30,8 +30,6 @@
 #include "ScriptEngine.hpp"
 
 GameState::GameState() {
-	m_orthoMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
-
 	m_camera.setAspectRatio((float)SCREEN_WIDTH / SCREEN_HEIGHT);
 
 	try {

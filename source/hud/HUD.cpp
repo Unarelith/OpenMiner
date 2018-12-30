@@ -13,10 +13,9 @@
  */
 #include "HUD.hpp"
 
-HUD::HUD(Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix)
- : m_projectionMatrix{projectionMatrix},
-   m_hotbar{player.inventory()},
-   m_blockCursor(player, world, viewMatrix, projectionMatrix),
+HUD::HUD(Player &player, World &world)
+ : m_hotbar{player.inventory()},
+   m_blockCursor(player, world),
    m_debugOverlay(player)
 {
 	setScale(GUI_SCALE, GUI_SCALE, 1);
@@ -25,6 +24,8 @@ HUD::HUD(Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &project
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
 	m_shader.linkProgram();
+
+	m_orthoMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
 
 	m_hotbar.setPosition(SCREEN_WIDTH / getScale().x / 2 - m_hotbar.width() / 2, SCREEN_HEIGHT / getScale().y - m_hotbar.height(), 0);
 
@@ -58,7 +59,7 @@ void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	target.draw(m_blockCursor, states);
 
 	states.shader = &m_shader;
-	states.projectionMatrix = m_projectionMatrix;
+	states.projectionMatrix = m_orthoMatrix;
 	states.viewMatrix = gk::Transform::Identity;
 	states.vertexAttributes = gk::VertexAttribute::Only2d;
 

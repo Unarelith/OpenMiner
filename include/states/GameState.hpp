@@ -38,8 +38,6 @@ class GameState : public gk::ApplicationState {
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		glm::mat4 m_perspectiveMatrix;
-		glm::mat4 m_orthoMatrix;
 		glm::mat4 m_viewMatrix;
 
 		gk::Shader m_shader;
@@ -50,7 +48,7 @@ class GameState : public gk::ApplicationState {
 		gk::Camera m_camera{45.0f, DIST_NEAR, DIST_FAR};
 		Player m_player{m_camera};
 
-		HUD m_hud{m_player, m_world, m_viewMatrix, m_orthoMatrix};
+		HUD m_hud{m_player, m_world};
 };
 
 #endif // GAMESTATE_HPP_

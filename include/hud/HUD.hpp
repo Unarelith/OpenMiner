@@ -22,7 +22,7 @@
 
 class HUD : public gk::Transformable, public gk::IDrawable {
 	public:
-		HUD(Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix);
+		HUD(Player &player, World &world);
 
 		void onEvent(const SDL_Event &event);
 
@@ -33,7 +33,7 @@ class HUD : public gk::Transformable, public gk::IDrawable {
 
 		gk::Shader m_shader;
 
-		glm::mat4 &m_projectionMatrix;
+		glm::mat4 m_orthoMatrix;
 
 		Hotbar m_hotbar;
 

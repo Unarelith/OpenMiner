@@ -267,7 +267,9 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 
 		glm::vec4 viewport = glm::vec4(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		glm::vec3 winCoord = glm::vec3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, depth);
-		glm::vec3 objCoord = glm::unProject(winCoord, m_viewMatrix, m_projectionMatrix, viewport);
+		glm::vec3 objCoord = glm::unProject(winCoord,
+				m_player.camera().getViewMatrix().getMatrix(),
+				m_player.camera().getProjectionMatrix().getMatrix(), viewport);
 
 		// Find out which block it belongs to
 		mx = objCoord.x;

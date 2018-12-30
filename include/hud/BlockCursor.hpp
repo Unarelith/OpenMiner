@@ -24,8 +24,8 @@ class Hotbar;
 
 class BlockCursor : public gk::IDrawable {
 	public:
-		BlockCursor(Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix)
-			: m_player(player), m_world(world), m_viewMatrix(viewMatrix), m_projectionMatrix(projectionMatrix) {}
+		BlockCursor(Player &player, World &world)
+			: m_player(player), m_world(world) {}
 
 		void onEvent(const SDL_Event &event, const Hotbar &hotbar);
 
@@ -44,8 +44,6 @@ class BlockCursor : public gk::IDrawable {
 
 		Player &m_player;
 		World &m_world;
-		glm::mat4 &m_viewMatrix;
-		glm::mat4 &m_projectionMatrix;
 
 		gk::VertexBuffer m_vbo;
 		gk::VertexBuffer m_animationVBO;
