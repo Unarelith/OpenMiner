@@ -1,5 +1,16 @@
 TODO
 
+# API Lua
+
+• TODO: Better API, for example:
+```lua
+local mod = miner.mod { id="io.owlish.test" }
+
+mod:block {
+   id="fabric",
+   name="Universal Fabric",
+}```
+
 # Nettoyage
 
 • DONE: Découper les gros pâtés en sous-classes

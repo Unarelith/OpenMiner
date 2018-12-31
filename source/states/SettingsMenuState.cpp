@@ -62,15 +62,15 @@ void SettingsMenuState::addMainButtons() {
 }
 
 void SettingsMenuState::addGraphicsButtons() {
-	m_menuWidget.addButton(0, 0, "Render distance: " + std::to_string(World::renderDistance), [] (TextButton &button) {
+	m_menuWidget.addButton(0, 0, "Render Distance: " + std::to_string(World::renderDistance), [] (TextButton &button) {
 		World::renderDistance = std::max(4, (World::renderDistance + 2) % 16);
-		button.setText("Render distance: " + std::to_string(World::renderDistance));
+		button.setText("Render Distance: " + std::to_string(World::renderDistance));
 		World::isReloadRequested = true;
 	});
 
-	m_menuWidget.addButton(0, 1, std::string("Smooth lighting: ") + (Config::isSmoothLightingEnabled ? "ON" : "OFF"), [] (TextButton &button) {
+	m_menuWidget.addButton(0, 1, std::string("Smooth Lighting: ") + (Config::isSmoothLightingEnabled ? "ON" : "OFF"), [] (TextButton &button) {
 		Config::isSmoothLightingEnabled = !Config::isSmoothLightingEnabled;
-		button.setText(std::string("Smooth lighting: ") + (Config::isSmoothLightingEnabled ? "ON" : "OFF"));
+		button.setText(std::string("Smooth Lighting: ") + (Config::isSmoothLightingEnabled ? "ON" : "OFF"));
 		World::isReloadRequested = true;
 	});
 

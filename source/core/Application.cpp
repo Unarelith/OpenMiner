@@ -13,6 +13,7 @@
  */
 #include <gk/core/input/GamePad.hpp>
 #include <gk/core/Mouse.hpp>
+#include <gk/gui/Font.hpp>
 
 #include "Application.hpp"
 #include "Config.hpp"
@@ -33,6 +34,7 @@ void Application::init() {
 	gk::Mouse::setCursorGrabbed(true);
 
 	m_resourceHandler.loadConfigFile<TextureLoader>("resources/config/textures.xml");
+	m_resourceHandler.add<gk::Font>("font-default", "resources/fonts/default.ttf");
 
 	Registry::setInstance(m_registry);
 	m_scriptEngine.init();

@@ -17,6 +17,7 @@
 #include <functional>
 
 #include <gk/gui/Image.hpp>
+// #include <gk/gui/Text.hpp>
 
 #include "Text.hpp"
 #include "Widget.hpp"
@@ -42,9 +43,12 @@ class TextButton : public Widget {
 		gk::Image m_disabledBackground{"texture-widgets"};
 
 		Text m_text;
+		// gk::Text m_text;
+		// gk::Text m_textShadow;
 
 		Callback m_callback;
 
+		// FIXME: Replace these by an enum State
 		bool m_isHovered = false;
 		bool m_isEnabled = true;
 };
