@@ -208,33 +208,38 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 	}
 }
 
-u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk) {
-	// s16 offsetX = 0;
-	s16 offsetX = (
+gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) {
+	gk::Vector3i offset;
+	offset.x = (
 			(i == 0) ||
 			(i == 2 && (j == 0 || j == 3)) ||
 			(i == 3 && (j == 0 || j == 3)) ||
 			(i == 4 && (j == 1 || j == 2)) ||
 			(i == 5 && (j == 0 || j == 3))) ? -1 : 1;
 
-	// s16 offsetZ = 0;
-	s16 offsetZ = (
+	offset.z = (
 			(i == 4) ||
 			(i == 0 && (j == 0 || j == 3)) ||
 			(i == 1 && (j == 1 || j == 2)) ||
 			(i == 2 && (j == 0 || j == 1)) ||
 			(i == 3 && (j == 2 || j == 3))) ? -1 : 1;
 
-	s16 offsetY = (
+	offset.y = (
 			(i == 2) ||
 			(i == 0 && (j == 0 || j == 1)) ||
 			(i == 1 && (j == 0 || j == 1)) ||
 			(i == 4 && (j == 0 || j == 1)) ||
 			(i == 5 && (j == 0 || j == 1))) ? 0 : 1;
 
-	bool side1 = chunk.getBlock(x + offsetX, y + offsetY, z) != 0;
-	bool side2 = chunk.getBlock(x, y + offsetY, z + offsetZ) != 0;
-	bool corner = chunk.getBlock(x + offsetX, y + offsetY, z + offsetZ) != 0;
+	return offset;
+}
+
+u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk) {
+	gk::Vector3i offset = getOffsetFromVertex(i, j);
+
+	bool side1  = chunk.getBlock(x + offset.x, y + offset.y, z) != 0;
+	bool side2  = chunk.getBlock(x,            y + offset.y, z + offset.z) != 0;
+	bool corner = chunk.getBlock(x + offset.x, y + offset.y, z + offset.z) != 0;
 
 	if (side1 && side2)
 		return 0;
@@ -242,68 +247,19 @@ u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &
 	return 3 - (side1 + side2 + corner);
 }
 
-float ChunkBuilder::getAverageLight(Light light, u8 x, u8 y, u8 z, s8 offsetX, s8 offsetY, s8 offsetZ, const Chunk &chunk) {
+float ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk) {
+	gk::Vector3i offset = getOffsetFromVertex(i, j);
+
 	// FIXME: Air blocks have a light level of 0
 	if (light == Light::Sun)
-		return (chunk.lightmap().getSunlight(x,           y + offsetY, z)
-		      + chunk.lightmap().getSunlight(x + offsetX, y + offsetY, z)
-		      + chunk.lightmap().getSunlight(x,           y + offsetY, z + offsetZ)
-		      + chunk.lightmap().getSunlight(x + offsetX, y + offsetY, z + offsetZ)) / 4;
+		return (chunk.lightmap().getSunlight(x,            y + offset.y, z)
+		      + chunk.lightmap().getSunlight(x + offset.x, y + offset.y, z)
+		      + chunk.lightmap().getSunlight(x,            y + offset.y, z + offset.z)
+		      + chunk.lightmap().getSunlight(x + offset.x, y + offset.y, z + offset.z)) / 4.0f;
 	else
-		return (chunk.lightmap().getTorchlight(x,           y + offsetY, z)
-		      + chunk.lightmap().getTorchlight(x + offsetX, y + offsetY, z)
-		      + chunk.lightmap().getTorchlight(x,           y + offsetY, z + offsetZ)
-		      + chunk.lightmap().getTorchlight(x + offsetX, y + offsetY, z + offsetZ)) / 4;
-}
-
-float ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk) {
-	float lightValues[4] = {
-		getAverageLight(light, x, y, z, -1, 0, -1, chunk),
-		getAverageLight(light, x, y, z, -1, 0,  1, chunk),
-		getAverageLight(light, x, y, z,  1, 0, -1, chunk),
-		getAverageLight(light, x, y, z,  1, 0,  1, chunk),
-	};
-
-	if (i == Face::Left) {
-		if (j == 0)      return lightValues[0];
-		else if (j == 1) return lightValues[1];
-		else if (j == 2) return lightValues[1];
-		else if (j == 3) return lightValues[0];
-	}
-	else if (i == Face::Front) {
-		if (j == 0)      return lightValues[2];
-		else if (j == 1) return lightValues[0];
-		else if (j == 2) return lightValues[0];
-		else if (j == 3) return lightValues[2];
-	}
-	else if (i == Face::Top) {
-		if (j == 0)      return lightValues[1];
-		else if (j == 1) return lightValues[3];
-		else if (j == 2) return lightValues[2];
-		else if (j == 3) return lightValues[0];
-	}
-	else if (i == Face::Right) {
-		if (j == 0)      return lightValues[3];
-		else if (j == 1) return lightValues[2];
-		else if (j == 2) return lightValues[2];
-		else if (j == 3) return lightValues[3];
-	}
-	else if (i == Face::Back) {
-		if (j == 0)      return lightValues[1];
-		else if (j == 1) return lightValues[3];
-		else if (j == 2) return lightValues[3];
-		else if (j == 3) return lightValues[1];
-	}
-	else if (i == Face::Bottom) {
-		if (j == 0)      return lightValues[0];
-		else if (j == 1) return lightValues[2];
-		else if (j == 2) return lightValues[3];
-		else if (j == 3) return lightValues[1];
-	}
-
-	if (light == Light::Sun)
-		return chunk.lightmap().getSunlight(x, y, z);
-	else
-		return chunk.lightmap().getTorchlight(x, y, z);
+		return (chunk.lightmap().getTorchlight(x,            y + offset.y, z)
+		      + chunk.lightmap().getTorchlight(x + offset.x, y + offset.y, z)
+		      + chunk.lightmap().getTorchlight(x,            y + offset.y, z + offset.z)
+		      + chunk.lightmap().getTorchlight(x + offset.x, y + offset.y, z + offset.z)) / 4.0f;
 }
 

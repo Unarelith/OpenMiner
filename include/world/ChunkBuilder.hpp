@@ -17,7 +17,9 @@
 #include <array>
 #include <vector>
 
-#include <gk/core/IntTypes.hpp>
+#include <glm/matrix.hpp>
+
+#include <gk/core/Vector3.hpp>
 #include <gk/gl/Vertex.hpp>
 #include <gk/gl/VertexBuffer.hpp>
 
@@ -33,6 +35,7 @@ class ChunkBuilder {
 	private:
 		void addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Block *block, const Block *surroundingBlock);
 
+		gk::Vector3i getOffsetFromVertex(u8 i, u8 j);
 		u8 getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk);
 
 		enum class Light {
@@ -40,7 +43,6 @@ class ChunkBuilder {
 			Torch
 		};
 
-		float getAverageLight(Light light, u8 x, u8 y, u8 z, s8 offsetX, s8 offsetY, s8 offsetZ, const Chunk &chunk);
 		float getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk);
 
 		std::array<std::vector<gk::Vertex>, layers> m_vertices;
