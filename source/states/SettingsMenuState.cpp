@@ -74,15 +74,27 @@ void SettingsMenuState::addGraphicsButtons() {
 		World::isReloadRequested = true;
 	});
 
-	m_menuWidget.addButton(0, 2, "GUI Scale: " + std::to_string(GUI_SCALE), [] (TextButton &button) {
+	m_menuWidget.addButton(0, 2, std::string("Ambient Occlusion: ") + (Config::isAmbientOcclusionEnabled ? "ON" : "OFF"), [] (TextButton &button) {
+		Config::isAmbientOcclusionEnabled = !Config::isAmbientOcclusionEnabled;
+		button.setText(std::string("Ambient Occlusion: ") + (Config::isAmbientOcclusionEnabled ? "ON" : "OFF"));
+		World::isReloadRequested = true;
+	});
+
+	m_menuWidget.addButton(0, 3, std::string("Wireframe Mode: ") + (Config::isWireframeModeEnabled ? "ON" : "OFF"), [] (TextButton &button) {
+		Config::isWireframeModeEnabled = !Config::isWireframeModeEnabled;
+		button.setText(std::string("Wireframe Mode: ") + (Config::isWireframeModeEnabled ? "ON" : "OFF"));
+		World::isReloadRequested = true;
+	});
+
+	m_menuWidget.addButton(0, 4, "GUI Scale: " + std::to_string(GUI_SCALE), [] (TextButton &button) {
 		GUI_SCALE = 1 + (GUI_SCALE + 1) % 3;
 		button.setText("GUI Scale: " + std::to_string(GUI_SCALE));
 		// FIXME: Fix decrease bug
 		//        Reload menus with new scaling
 	});
 
-	m_menuWidget.addButton(0, 3, "Fullscreen: OFF", [] (TextButton &) {}).setEnabled(false);
-	m_menuWidget.addButton(0, 4, "Use VSync: OFF", [] (TextButton &) {}).setEnabled(false);
+	m_menuWidget.addButton(0, 5, "Fullscreen: OFF", [] (TextButton &) {}).setEnabled(false);
+	m_menuWidget.addButton(0, 6, "Use VSync: OFF", [] (TextButton &) {}).setEnabled(false);
 
 	m_menuWidget.addButton(0, 7, "Done", [this] (TextButton &) {
 		m_menuWidget.reset(1, 8);

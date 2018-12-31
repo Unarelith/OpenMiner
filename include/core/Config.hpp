@@ -36,6 +36,8 @@ extern int GUI_SCALE; // FIXME
 
 namespace Config {
 	extern bool isSmoothLightingEnabled;
+	extern bool isAmbientOcclusionEnabled;
+	extern bool isWireframeModeEnabled;
 }
 
 #endif // CONFIG_HPP_

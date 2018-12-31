@@ -16,6 +16,7 @@
 #include <gk/system/GameClock.hpp>
 
 #include "Chunk.hpp"
+#include "Config.hpp"
 #include "Registry.hpp"
 
 Chunk::Chunk(s32 x, s32 y, s32 z, gk::Texture &texture) : m_texture(texture) {
@@ -181,16 +182,9 @@ void Chunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u16 lay
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 
-	target.draw(m_vbo.at(layer), GL_QUADS, 0, m_verticesCount.at(layer), states);
-
-	// drawOutlines(target, states);
+	if(Config::isWireframeModeEnabled) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	// target.draw(m_vbo.at(layer), GL_QUADS, 0, m_verticesCount.at(layer), states);
+	target.draw(m_vbo.at(layer), GL_TRIANGLES, 0, m_verticesCount.at(layer), states);
+	if(Config::isWireframeModeEnabled) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
-
-// void Chunk::drawOutlines(RenderTarget &target, RenderStates states) const {
-// 	states.texture = nullptr;
-//
-// 	for(u32 i = 0 ; i < m_verticesCount ; i += 4) {
-// 		target.draw(m_vbo, GL_LINE_LOOP, i, 4, states);
-// 	}
-// }
 

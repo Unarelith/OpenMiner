@@ -33,6 +33,8 @@ class ChunkBuilder {
 	private:
 		void addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Block *block, const Block *surroundingBlock);
 
+		u8 getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk);
+
 		enum class Light {
 			Sun,
 			Torch

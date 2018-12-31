@@ -1,11 +1,12 @@
 #version 120
 
+varying vec4 v_coord3d;
+varying vec2 v_lightValue;
+varying float v_ambientOcclusion;
+
 varying float v_blockFace;
 varying float v_blockID;
 varying float v_dist;
-
-varying vec4 v_coord3d;
-varying vec2 v_lightValue;
 
 uniform int u_renderDistance;
 
@@ -58,6 +59,8 @@ void main() {
 
 		// color = vec4(0, 0, v_lightValue.x / 16.0, 1);
 	}
+
+	color.rgb *= v_ambientOcclusion;
 
 	color = fog(color, v_dist, u_renderDistance - 32, u_renderDistance);
 

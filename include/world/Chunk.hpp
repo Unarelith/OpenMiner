@@ -79,8 +79,6 @@ class Chunk : public gk::NonCopyable {
 	private:
 		void updateNeighbours(int x, int y, int z);
 
-		// void drawOutlines(RenderTarget &target, RenderStates states) const;
-
 		s32 m_x;
 		s32 m_y;
 		s32 m_z;

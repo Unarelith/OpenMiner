@@ -16,4 +16,6 @@
 int GUI_SCALE = 3; // FIXME
 
 bool Config::isSmoothLightingEnabled = true;
+bool Config::isAmbientOcclusionEnabled = true;
+bool Config::isWireframeModeEnabled = false;
 

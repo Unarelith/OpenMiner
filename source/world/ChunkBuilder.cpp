@@ -134,51 +134,112 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 	};
 
 	// Store vertex information
+	gk::Vertex vertices[4];
 	for(u8 j = 0 ; j < 4 ; j++) {
-		gk::Vertex vertex;
+		vertices[j].coord3d[0] = x + cubeCoords[i * 12 + j * 3]     * boundingBox.width  + boundingBox.x;
+		vertices[j].coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1] * boundingBox.height + boundingBox.y;
+		vertices[j].coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2] * boundingBox.depth  + boundingBox.z;
+		vertices[j].coord3d[3] = i;
 
-		vertex.coord3d[0] = x + cubeCoords[i * 12 + j * 3]     * boundingBox.width  + boundingBox.x;
-		vertex.coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1] * boundingBox.height + boundingBox.y;
-		vertex.coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2] * boundingBox.depth  + boundingBox.z;
-		vertex.coord3d[3] = i;
+		vertices[j].normal[0] = normal.x;
+		vertices[j].normal[1] = normal.y;
+		vertices[j].normal[2] = normal.z;
 
-		vertex.normal[0] = normal.x;
-		vertex.normal[1] = normal.y;
-		vertex.normal[2] = normal.z;
+		vertices[j].color[0] = 1.0;
+		vertices[j].color[1] = 1.0;
+		vertices[j].color[2] = 1.0;
+		vertices[j].color[3] = 1.0;
 
-		vertex.color[0] = 1.0;
-		vertex.color[1] = 1.0;
-		vertex.color[2] = 1.0;
-		vertex.color[3] = 1.0;
-
-		vertex.texCoord[0] = faceTexCoords[j * 2];
-		vertex.texCoord[1] = faceTexCoords[j * 2 + 1];
+		vertices[j].texCoord[0] = faceTexCoords[j * 2];
+		vertices[j].texCoord[1] = faceTexCoords[j * 2 + 1];
 
 		// int sunlight = chunk.lightmap().getSunlight(x, y, z);
 		// if ((i == 0 || i == 1 || i == 4 || i == 5) && sunlight > 2)
-		// 	vertex.lightValue[0] = sunlight - 2;
+		// 	vertices[j].lightValue[0] = sunlight - 2;
 		// if (i == 4 && sunlight > 3)
-		// 	vertex.lightValue[0] = sunlight - 3;
+		// 	vertices[j].lightValue[0] = sunlight - 3;
 		// else
 
 		if (Config::isSmoothLightingEnabled) {
-			vertex.lightValue[0] = getLightForVertex(Light::Sun,   x, y, z, i, j, chunk);
-			vertex.lightValue[1] = getLightForVertex(Light::Torch, x, y, z, i, j, chunk);
+			if (Config::isAmbientOcclusionEnabled)
+				vertices[j].lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
+			else
+				vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, chunk);
+
+			vertices[j].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, i, j, chunk);
 		}
 		else {
-			vertex.lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
-			vertex.lightValue[1] = chunk.lightmap().getTorchlight(x, y, z);
+			vertices[j].lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
+			vertices[j].lightValue[1] = chunk.lightmap().getTorchlight(x, y, z);
 		}
 
-		vertex.blockType = block->id();
-
-		if (block->id() == BlockType::Water)
-			m_vertices[Layer::Liquid].emplace_back(vertex);
-		else if (block->id() == BlockType::Leaves)
-			m_vertices[Layer::Other].emplace_back(vertex);
+		if (Config::isAmbientOcclusionEnabled)
+			vertices[j].ambientOcclusion = getAmbientOcclusion(x, y, z, i, j, chunk);
 		else
-			m_vertices[Layer::Solid].emplace_back(vertex);
+			vertices[j].ambientOcclusion = 5;
+
+		vertices[j].blockType = block->id();
 	}
+
+	auto addVertex = [&](u8 j) {
+		if (block->id() == BlockType::Water)
+			m_vertices[Layer::Liquid].emplace_back(vertices[j]);
+		else if (block->id() == BlockType::Leaves)
+			m_vertices[Layer::Other].emplace_back(vertices[j]);
+		else
+			m_vertices[Layer::Solid].emplace_back(vertices[j]);
+	};
+
+	if (vertices[0].ambientOcclusion + vertices[2].ambientOcclusion >
+			vertices[1].ambientOcclusion + vertices[3].ambientOcclusion) {
+		addVertex(0);
+		addVertex(1);
+		addVertex(3);
+		addVertex(3);
+		addVertex(1);
+		addVertex(2);
+	} else {
+		addVertex(0);
+		addVertex(1);
+		addVertex(2);
+		addVertex(2);
+		addVertex(3);
+		addVertex(0);
+	}
+}
+
+u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk) {
+	// s16 offsetX = 0;
+	s16 offsetX = (
+			(i == 0) ||
+			(i == 2 && (j == 0 || j == 3)) ||
+			(i == 3 && (j == 0 || j == 3)) ||
+			(i == 4 && (j == 1 || j == 2)) ||
+			(i == 5 && (j == 0 || j == 3))) ? -1 : 1;
+
+	// s16 offsetZ = 0;
+	s16 offsetZ = (
+			(i == 4) ||
+			(i == 0 && (j == 0 || j == 3)) ||
+			(i == 1 && (j == 1 || j == 2)) ||
+			(i == 2 && (j == 0 || j == 1)) ||
+			(i == 3 && (j == 2 || j == 3))) ? -1 : 1;
+
+	s16 offsetY = (
+			(i == 2) ||
+			(i == 0 && (j == 0 || j == 1)) ||
+			(i == 1 && (j == 0 || j == 1)) ||
+			(i == 4 && (j == 0 || j == 1)) ||
+			(i == 5 && (j == 0 || j == 1))) ? 0 : 1;
+
+	bool side1 = chunk.getBlock(x + offsetX, y + offsetY, z) != 0;
+	bool side2 = chunk.getBlock(x, y + offsetY, z + offsetZ) != 0;
+	bool corner = chunk.getBlock(x + offsetX, y + offsetY, z + offsetZ) != 0;
+
+	if (side1 && side2)
+		return 0;
+
+	return 3 - (side1 + side2 + corner);
 }
 
 float ChunkBuilder::getAverageLight(Light light, u8 x, u8 y, u8 z, s8 offsetX, s8 offsetY, s8 offsetZ, const Chunk &chunk) {

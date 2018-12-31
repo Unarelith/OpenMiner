@@ -6,12 +6,14 @@ attribute vec3 normal;
 attribute vec2 texCoord;
 attribute vec2 lightValue;
 attribute float blockType;
+attribute float ambientOcclusion;
 
 varying vec4 v_color;
 varying vec4 v_coord3d;
 varying vec4 v_normal;
 varying vec2 v_texCoord;
 varying vec2 v_lightValue;
+varying float v_ambientOcclusion;
 
 varying float v_blockFace;
 varying float v_blockID;
@@ -42,12 +44,19 @@ void main() {
 	v_coord3d = u_modelMatrix * vec4(finalPos, 1.0);
 	v_normal = vec4(normal, 1.0);
 
-	v_blockFace = coord3d.w;
-	v_blockID = blockType;
-
 	v_color = color;
 	v_texCoord = texCoord;
 	v_lightValue = lightValue;
+
+	if (ambientOcclusion != 5) {
+		const float aovalues[] = float[](0.5, 0.75, 0.9, 1.0);
+		v_ambientOcclusion = aovalues[int(ambientOcclusion)];
+	} else {
+		v_ambientOcclusion = 1.0;
+	}
+
+	v_blockFace = coord3d.w;
+	v_blockID = blockType;
 
 	// Distance from eye
 	v_dist = length(u_viewMatrix * v_coord3d);
