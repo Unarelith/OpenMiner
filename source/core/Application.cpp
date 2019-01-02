@@ -27,6 +27,7 @@ void Application::init() {
 
 	createWindow(SCREEN_WIDTH, SCREEN_HEIGHT, APP_NAME);
 	m_window.setVerticalSyncEnabled(true);
+	m_window.disableView();
 
 	initOpenGL();
 
