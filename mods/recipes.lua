@@ -1,7 +1,7 @@
 -- Wooden Axe
-registry:register_crafting_recipe({
+mod:crafting_recipe {
 	result = {
-		item = "default:axe_wood",
+		id = "default:axe_wood",
 		amount = 1
 	},
 
@@ -15,12 +15,12 @@ registry:register_crafting_recipe({
 		['#'] = "default:planks",
 		['|'] = "default:stick",
 	}
-})
+}
 
 -- Wooden Hoe
-registry:register_crafting_recipe({
+mod:crafting_recipe {
 	result = {
-		item = "default:hoe_wood",
+		id = "default:hoe_wood",
 		amount = 1
 	},
 
@@ -34,12 +34,12 @@ registry:register_crafting_recipe({
 		['#'] = "default:planks",
 		['|'] = "default:stick",
 	}
-})
+}
 
 -- Wooden Pickaxe
-registry:register_crafting_recipe({
+mod:crafting_recipe {
 	result = {
-		item = "default:pickaxe_wood",
+		id = "default:pickaxe_wood",
 		amount = 1
 	},
 
@@ -53,12 +53,12 @@ registry:register_crafting_recipe({
 		['#'] = "default:planks",
 		['|'] = "default:stick",
 	}
-})
+}
 
 -- Wooden Shovel
-registry:register_crafting_recipe({
+mod:crafting_recipe {
 	result = {
-		item = "default:shovel_wood",
+		id = "default:shovel_wood",
 		amount = 1
 	},
 
@@ -72,12 +72,12 @@ registry:register_crafting_recipe({
 		['#'] = "default:planks",
 		['|'] = "default:stick",
 	}
-})
+}
 
 -- Wooden Sword
-registry:register_crafting_recipe({
+mod:crafting_recipe {
 	result = {
-		item = "default:sword_wood",
+		id = "default:sword_wood",
 		amount = 1
 	},
 
@@ -91,12 +91,12 @@ registry:register_crafting_recipe({
 		['#'] = "default:planks",
 		['|'] = "default:stick",
 	}
-})
+}
 
 -- Stone Axe
-registry:register_crafting_recipe({
+mod:crafting_recipe {
 	result = {
-		item = "default:axe_stone",
+		id = "default:axe_stone",
 		amount = 1
 	},
 
@@ -110,12 +110,12 @@ registry:register_crafting_recipe({
 		['#'] = "default:cobblestone",
 		['|'] = "default:stick",
 	}
-})
+}
 
 -- Stone Hoe
-registry:register_crafting_recipe({
+mod:crafting_recipe {
 	result = {
-		item = "default:hoe_stone",
+		id = "default:hoe_stone",
 		amount = 1
 	},
 
@@ -129,12 +129,12 @@ registry:register_crafting_recipe({
 		['#'] = "default:cobblestone",
 		['|'] = "default:stick",
 	}
-})
+}
 
 -- Stone Pickaxe
-registry:register_crafting_recipe({
+mod:crafting_recipe {
 	result = {
-		item = "default:pickaxe_stone",
+		id = "default:pickaxe_stone",
 		amount = 1
 	},
 
@@ -148,12 +148,12 @@ registry:register_crafting_recipe({
 		['#'] = "default:cobblestone",
 		['|'] = "default:stick",
 	}
-})
+}
 
 -- Stone Shovel
-registry:register_crafting_recipe({
+mod:crafting_recipe {
 	result = {
-		item = "default:shovel_stone",
+		id = "default:shovel_stone",
 		amount = 1
 	},
 
@@ -167,12 +167,12 @@ registry:register_crafting_recipe({
 		['#'] = "default:cobblestone",
 		['|'] = "default:stick",
 	}
-})
+}
 
 -- Stone Sword
-registry:register_crafting_recipe({
+mod:crafting_recipe {
 	result = {
-		item = "default:sword_stone",
+		id = "default:sword_stone",
 		amount = 1
 	},
 
@@ -186,12 +186,12 @@ registry:register_crafting_recipe({
 		['#'] = "default:cobblestone",
 		['|'] = "default:stick",
 	}
-})
+}
 
 -- Stick
-registry:register_crafting_recipe({
+mod:crafting_recipe {
 	result = {
-		item = "default:stick",
+		id = "default:stick",
 		amount = 4
 	},
 
@@ -201,22 +201,22 @@ registry:register_crafting_recipe({
 	},
 
 	keys = {['#'] = "default:planks"}
-})
+}
 
 -- Planks
-registry:register_crafting_recipe({
+mod:crafting_recipe {
 	result = {
-		item = "default:planks",
+		id = "default:planks",
 		amount = 4
 	},
 	pattern = {"#"},
 	keys = {["#"] = "default:wood"}
-})
+}
 
 -- Workbench
-registry:register_crafting_recipe({
+mod:crafting_recipe {
 	result = {
-		item = "default:workbench",
+		id = "default:workbench",
 		amount = 1
 	},
 	pattern = {
@@ -224,12 +224,12 @@ registry:register_crafting_recipe({
 		"##"
 	},
 	keys = {["#"] = "default:planks"}
-})
+}
 
 -- Furnace
-registry:register_crafting_recipe({
+mod:crafting_recipe {
 	result = {
-		item = "default:furnace",
+		id = "default:furnace",
 		amount = 1
 	},
 
@@ -240,42 +240,42 @@ registry:register_crafting_recipe({
 	},
 
 	keys = {["#"] = "default:cobblestone"}
-})
+}
 
 
 -- Plank Slab
-registry:register_crafting_recipe({
+mod:crafting_recipe {
 	result = {
-		item = "default:slab_planks",
+		id = "default:slab_planks",
 		amount = 6
 	},
 
 	pattern = {"###"},
 
 	keys = {['#'] = "default:planks"}
-})
+}
 
 -- Iron Ingot
-registry:register_smelting_recipe({
-	input = {item = "default:ore_iron", amount = 1},
-	output = {item = "default:ingot_iron", amount = 1}
-})
+mod:smelting_recipe {
+	input = {id = "default:ore_iron", amount = 1},
+	output = {id = "default:ingot_iron", amount = 1}
+}
 
 -- Stone
-registry:register_smelting_recipe({
-	input = {item = "default:cobblestone", amount = 1},
-	output = {item = "default:stone", amount = 1}
-})
+mod:smelting_recipe {
+	input = {id = "default:cobblestone", amount = 1},
+	output = {id = "default:stone", amount = 1}
+}
 
 -- Glass
-registry:register_smelting_recipe({
-	input = {item = "default:sand", amount = 1},
-	output = {item = "default:glass", amount = 1}
-})
+mod:smelting_recipe {
+	input = {id = "default:sand", amount = 1},
+	output = {id = "default:glass", amount = 1}
+}
 
 -- Charcoal
-registry:register_smelting_recipe({
-	input = {item = "default:wood", amount = 1},
-	output = {item = "default:charcoal", amount = 1}
-})
+mod:smelting_recipe {
+	input = {id = "default:wood", amount = 1},
+	output = {id = "default:charcoal", amount = 1}
+}
 

@@ -24,6 +24,9 @@ class LuaMod {
 		LuaMod(const std::string &id) : m_id(id) {}
 
 		void registerBlock(const sol::table &table);
+		void registerItem(const sol::table &table);
+		void registerCraftingRecipe(const sol::table &table);
+		void registerSmeltingRecipe(const sol::table &table);
 
 		const std::string &id() const { return m_id; }
 

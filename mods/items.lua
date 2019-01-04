@@ -1,100 +1,100 @@
-registry:register_item({
-	name = "default:stick",
-	label = "Stick",
+mod:item {
+	id = "default:stick",
+	name = "Stick",
 	texture = 324,
-})
+}
 
-registry:register_item({
-	name = "default:axe_stone",
-	label = "Stone Axe",
+mod:item {
+	id = "default:axe_stone",
+	name = "Stone Axe",
 	texture = 325,
 	mining_speed = 4,
 	harvest_capability = 4,
-})
+}
 
-registry:register_item({
-	name = "default:hoe_stone",
-	label = "Stone Hoe",
+mod:item {
+	id = "default:hoe_stone",
+	name = "Stone Hoe",
 	texture = 326,
-})
+}
 
-registry:register_item({
-	name = "default:pickaxe_stone",
-	label = "Stone Pickaxe",
+mod:item {
+	id = "default:pickaxe_stone",
+	name = "Stone Pickaxe",
 	texture = 327,
 	mining_speed = 4,
 	harvest_capability = 1,
-})
+}
 
-registry:register_item({
-	name = "default:shovel_stone",
-	label = "Stone Shovel",
+mod:item {
+	id = "default:shovel_stone",
+	name = "Stone Shovel",
 	texture = 328,
 	mining_speed = 4,
 	harvest_capability = 2,
-})
+}
 
-registry:register_item({
-	name = "default:sword_stone",
-	label = "Stone Sword",
+mod:item {
+	id = "default:sword_stone",
+	name = "Stone Sword",
 	texture = 329,
-})
+}
 
-registry:register_item({
-	name = "default:coal",
-	label = "Coal",
+mod:item {
+	id = "default:coal",
+	name = "Coal",
 	texture = 111,
 	is_fuel = true,
 	burn_time = 1600,
-})
+}
 
-registry:register_item({
-	name = "default:ingot_iron",
-	label = "Iron Ingot",
+mod:item {
+	id = "default:ingot_iron",
+	name = "Iron Ingot",
 	texture = 232,
-})
+}
 
-registry:register_item({
-	name = "default:charcoal",
-	label = "Charcoal",
+mod:item {
+	id = "default:charcoal",
+	name = "Charcoal",
 	texture = 41,
 	is_fuel = true,
 	burn_time = 1600,
-})
+}
 
-registry:register_item({
-	name = "default:axe_wood",
-	label = "Wooden Axe",
+mod:item {
+	id = "default:axe_wood",
+	name = "Wooden Axe",
 	texture = 337,
 	mining_speed = 2,
 	harvest_capability = 4,
-})
+}
 
-registry:register_item({
-	name = "default:hoe_wood",
-	label = "Wooden Hoe",
+mod:item {
+	id = "default:hoe_wood",
+	name = "Wooden Hoe",
 	texture = 338,
-})
+}
 
-registry:register_item({
-	name = "default:pickaxe_wood",
-	label = "Wooden Pickaxe",
+mod:item {
+	id = "default:pickaxe_wood",
+	name = "Wooden Pickaxe",
 	texture = 339,
 	mining_speed = 2,
 	harvest_capability = 1,
-})
+}
 
-registry:register_item({
-	name = "default:shovel_wood",
-	label = "Wooden Shovel",
+mod:item {
+	id = "default:shovel_wood",
+	name = "Wooden Shovel",
 	texture = 340,
 	mining_speed = 2,
 	harvest_capability = 2,
-})
+}
 
-registry:register_item({
-	name = "default:sword_wood",
-	label = "Wooden Sword",
+mod:item {
+	id = "default:sword_wood",
+	name = "Wooden Sword",
 	texture = 341,
-})
+}
 

@@ -51,10 +51,10 @@ void Cube::updateVertexBuffer(const Block &block) const {
 		{{0, 0, m_size, -1}},
 
 		// Top
-		{{0, m_size, m_size, 3}},
-		{{m_size, m_size, m_size, 3}},
 		{{m_size, m_size, 0, 3}},
 		{{0, m_size, 0, 3}},
+		{{0, m_size, m_size, 3}},
+		{{m_size, m_size, m_size, 3}},
 
 		// Front
 		{{m_size, 0, 0, 4}},

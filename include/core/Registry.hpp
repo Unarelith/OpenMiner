@@ -15,9 +15,8 @@
 #define REGISTRY_HPP_
 
 #include <memory>
+#include <unordered_map>
 #include <vector>
-
-#include <sol.hpp>
 
 #include "Block.hpp"
 #include "Item.hpp"
@@ -25,18 +24,19 @@
 
 class Registry {
 	public:
-		void registerItemFromTable(const sol::table &table);
-		void registerCraftingRecipeFromTable(const sol::table &table);
-		void registerSmeltingRecipeFromTable(const sol::table &table);
-
 		Block &registerBlock(u32 textureID, const std::string &id, const std::string &name);
 		Item &registerItem(u32 textureID, const std::string &id, const std::string &name);
+
+		template<typename T, typename... Args>
+		auto registerRecipe(Args &&...args) -> typename std::enable_if<std::is_base_of<Recipe, T>::value, Recipe*>::type {
+			return m_recipes.emplace_back(std::make_unique<T>(std::forward<Args>(args)...)).get();
+		}
 
 		const Block &getBlock(std::size_t id) const { return m_blocks.at(id); }
 		const Item &getItem(std::size_t id) const { return m_items.at(id); }
 
-		const Block &getBlock(const std::string &name);
-		const Item &getItem(const std::string &name);
+		const Block &getBlock(const std::string &id);
+		const Item &getItem(const std::string &id);
 
 		const Recipe *getRecipe(const Inventory &inventory) const;
 
@@ -44,11 +44,6 @@ class Registry {
 		static void setInstance(Registry &instance) { s_instance = &instance; }
 
 	private:
-		template<typename T, typename... Args>
-		auto registerRecipe(Args &&...args) -> typename std::enable_if<std::is_base_of<Recipe, T>::value, Recipe*>::type {
-			return m_recipes.emplace_back(std::make_unique<T>(std::forward<Args>(args)...)).get();
-		}
-
 		static Registry *s_instance;
 
 		std::vector<Block> m_blocks;
