@@ -1,5 +1,8 @@
 # OpenMiner
 
+[![Documentation](https://codedocs.xyz/Quent42340/OpenMiner.svg)](https://codedocs.xyz/Quent42340/OpenMiner/)
+[![License](https://img.shields.io/badge/license-LGPLv2.1%2B-blue.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
+
 ### By Unarelith
 
 - OpenMiner is a Minecraft-like game engine.
