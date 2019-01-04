@@ -12,6 +12,8 @@
  * =====================================================================================
  */
 #include "Block.hpp"
+#include "Player.hpp"
+#include "World.hpp"
 
 Block::Block(u32 id, u32 textureID, const std::string &name, const std::string &label) {
 	m_id = id;
@@ -22,6 +24,15 @@ Block::Block(u32 id, u32 textureID, const std::string &name, const std::string &
 
 	m_itemDrop = name;
 	m_itemDropAmount = 1;
+}
+
+bool Block::onBlockActivated(const glm::ivec3 &pos, Player &player, World &world) const {
+	if (m_onBlockActivated.valid()) {
+		m_onBlockActivated(pos, player, world);
+		return true;
+	}
+
+	return false;
 }
 
 glm::vec4 Block::getTexCoords(int face, u16) const {

@@ -31,9 +31,9 @@ class Application : public gk::CoreApplication {
 
 		KeyboardHandler m_keyboardHandler;
 
-		Registry m_registry;
-
 		ScriptEngine m_scriptEngine;
+
+		Registry m_registry;
 };
 
 #endif // APPLICATION_HPP_

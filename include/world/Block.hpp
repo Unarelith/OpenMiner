@@ -16,6 +16,8 @@
 
 #include <glm/glm.hpp>
 
+#include <sol.hpp>
+
 #include <gk/core/Box.hpp>
 #include <gk/core/IntTypes.hpp>
 
@@ -32,7 +34,7 @@ class Block {
 		virtual ~Block() = default;
 
 		virtual void onTick(const glm::ivec3 &, Player &, Chunk &, World &) const {}
-		virtual bool onBlockActivated(const glm::ivec3 &, Player &, World &) const { return false; }
+		virtual bool onBlockActivated(const glm::ivec3 &pos, Player &player, World &world) const;
 		virtual void onNeighbourUpdate(const glm::ivec3 &, const glm::ivec3 &, Chunk &) const {}
 
 		virtual glm::vec4 getTexCoords(int face, u16 blockData) const;
@@ -68,6 +70,8 @@ class Block {
 		const gk::FloatBox &boundingBox() const { return m_boundingBox; }
 		void setBoundingBox(const gk::FloatBox &boundingBox) { m_boundingBox = boundingBox; }
 
+		void setOnBlockActivated(const sol::function &function) { m_onBlockActivated = function; }
+
 	protected:
 		glm::vec4 getTexCoordsFromID(int textureID) const;
 
@@ -90,6 +94,8 @@ class Block {
 		float m_hardness = 1.0f;
 
 		gk::FloatBox m_boundingBox{0, 0, 0, 1, 1, 1};
+
+		sol::function m_onBlockActivated;
 };
 
 #endif // BLOCK_HPP_

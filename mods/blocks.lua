@@ -100,6 +100,9 @@ mod:block {
 	id = "workbench",
 	name = "Workbench",
 	texture = 77,
+	on_block_activated = function(pos, player, world)
+		print("hello")
+	end,
 }
 
 mod:block {
