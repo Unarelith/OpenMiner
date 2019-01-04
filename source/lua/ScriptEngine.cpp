@@ -41,34 +41,7 @@ void ScriptEngine::initUsertypes() {
 		"inventory", &Player::inventory);
 
 	m_lua.new_usertype<Inventory>("Inventory",
-		"get_width",  &Inventory::width,
-		"get_height", &Inventory::height,
-		"get_stack",  &Inventory::getStackRef,
-		"set_stack",  &Inventory::setStack,
 		"add_stack",  &Inventory::addStack
-	);
-
-	m_lua.new_usertype<ItemStack>("ItemStack",
-		"item",   sol::property(&ItemStack::item,   &ItemStack::setItem),
-		"amount", sol::property(&ItemStack::amount, &ItemStack::setAmount)
-	);
-
-	m_lua.new_usertype<Item>("Item",
-		"id",                 &Item::id,
-		"label",              &Item::label,
-		"is_fuel",            sol::property(&Item::isFuel, &Item::setIsFuel),
-		"burn_time",          sol::property(&Item::burnTime, &Item::setBurnTime),
-		"harvest_capability", sol::property(&Item::harvestCapability, &Item::setHarvestCapability),
-		"mining_speed",       sol::property(&Item::miningSpeed, &Item::setMiningSpeed)
-	);
-
-	m_lua.new_usertype<Block>("Block",
-		"id",                   &Block::id,
-		"data",                 &Block::data,
-		"label",                sol::property(&Block::label, &Block::setLabel),
-		"harvest_requirements", sol::property(&Block::harvestRequirements, &Block::setHarvestRequirements),
-		"hardness",             sol::property(&Block::hardness, &Block::setHardness),
-		"set_item_drop",        &Block::setItemDrop
 	);
 
 	m_lua.new_usertype<LuaMod>("LuaMod",

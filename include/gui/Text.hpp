@@ -25,7 +25,8 @@ class Text : public gk::IDrawable, public gk::Transformable {
 		const std::string &text() const { return m_text; }
 		void setText(const std::string &text) { m_text = text; updateTextSprites(); }
 
-		void setColor(const gk::Color &color) { m_color = color; }
+		const gk::Color &color() const { return m_color; }
+		void setColor(const gk::Color &color) { m_color = color; updateTextSprites(); }
 
 		const gk::Vector2i &getSize() const { return m_size; }
 
