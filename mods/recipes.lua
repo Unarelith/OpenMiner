@@ -96,7 +96,7 @@ registry:register_crafting_recipe({
 -- Stone Axe
 registry:register_crafting_recipe({
 	result = {
-		item = 33,
+		item = "default:axe_stone",
 		amount = 1
 	},
 
@@ -107,15 +107,15 @@ registry:register_crafting_recipe({
 	},
 
 	keys = {
-		['#'] = 2,
-		['|'] = 32
+		['#'] = "default:cobblestone",
+		['|'] = "default:stick",
 	}
 })
 
 -- Stone Hoe
 registry:register_crafting_recipe({
 	result = {
-		item = 34,
+		item = "default:hoe_stone",
 		amount = 1
 	},
 
@@ -126,15 +126,15 @@ registry:register_crafting_recipe({
 	},
 
 	keys = {
-		['#'] = 2,
-		['|'] = 32
+		['#'] = "default:cobblestone",
+		['|'] = "default:stick",
 	}
 })
 
 -- Stone Pickaxe
 registry:register_crafting_recipe({
 	result = {
-		item = 35,
+		item = "default:pickaxe_stone",
 		amount = 1
 	},
 
@@ -145,15 +145,15 @@ registry:register_crafting_recipe({
 	},
 
 	keys = {
-		['#'] = 2,
-		['|'] = 32
+		['#'] = "default:cobblestone",
+		['|'] = "default:stick",
 	}
 })
 
 -- Stone Shovel
 registry:register_crafting_recipe({
 	result = {
-		item = 36,
+		item = "default:shovel_stone",
 		amount = 1
 	},
 
@@ -164,15 +164,15 @@ registry:register_crafting_recipe({
 	},
 
 	keys = {
-		['#'] = 2,
-		['|'] = 32
+		['#'] = "default:cobblestone",
+		['|'] = "default:stick",
 	}
 })
 
 -- Stone Sword
 registry:register_crafting_recipe({
 	result = {
-		item = 37,
+		item = "default:sword_stone",
 		amount = 1
 	},
 
@@ -183,8 +183,8 @@ registry:register_crafting_recipe({
 	},
 
 	keys = {
-		['#'] = 2,
-		['|'] = 32
+		['#'] = "default:cobblestone",
+		['|'] = "default:stick",
 	}
 })
 

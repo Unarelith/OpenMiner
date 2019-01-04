@@ -31,6 +31,17 @@ add_executable(${CMAKE_PROJECT_NAME} ${SOURCE_FILES})
 target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -O3 -ffast-math)
 target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -g -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
 target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -DDEBUG_ENABLED)
+target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
+	-DSOL_SAFE_USERTYPE=1
+	-DSOL_SAFE_REFERENCES=1
+	-DSOL_SAFE_FUNCTION_CALLS=1
+	-DSOL_SAFE_FUNCTION=1
+	-DSOL_SAFE_NUMERICS=1
+	-DSOL_SAFE_GETTER=1
+	-DSOL_CHECK_ARGUMENTS=1
+	# -DSOL_PRINT_ERRORS=1
+)
+
 target_compile_features(${CMAKE_PROJECT_NAME} PRIVATE cxx_std_17)
 
 #------------------------------------------------------------------------------

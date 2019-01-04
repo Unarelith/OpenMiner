@@ -1,5 +1,7 @@
 print("Hello from Lua!")
 
+mod = LuaMod.new("default")
+
 dofile("mods/blocks.lua")
 dofile("mods/items.lua")
 dofile("mods/recipes.lua")

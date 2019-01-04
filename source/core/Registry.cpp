@@ -19,25 +19,6 @@
 
 Registry *Registry::s_instance = nullptr;
 
-void Registry::registerBlockFromTable(const sol::table &table) {
-	u32 textureID = table["texture"].get<u32>();
-	std::string name = table["name"].get<std::string>();
-	std::string label = table["label"].get<std::string>();
-
-	Block &block = registerBlock(textureID, name, label);
-	block.setHarvestRequirements(table["harvest_requirements"].get_or(0));
-	block.setHardness(table["hardness"].get_or(1.0f));
-
-	sol::optional<sol::table> itemDrop = table["item_drop"];
-	if (itemDrop != sol::nullopt) {
-		std::string dropName = itemDrop.value()["name"];
-		u16 dropAmount = itemDrop.value()["amount"];
-		block.setItemDrop(dropName, dropAmount);
-	}
-
-	registerItem(block.textureID(), name, label).setIsBlock(true);
-}
-
 void Registry::registerItemFromTable(const sol::table &table) {
 	u32 textureID = table["texture"].get<u32>();
 	std::string name = table["name"].get<std::string>();
@@ -89,6 +70,18 @@ void Registry::registerSmeltingRecipeFromTable(const sol::table &table) {
 	registerRecipe<SmeltingRecipe>(input, output);
 }
 
+Block &Registry::registerBlock(u32 textureID, const std::string &id, const std::string &name) {
+	u32 internalID = m_blocks.size();
+	m_blocksID.emplace(id, internalID);
+	return m_blocks.emplace_back(internalID, textureID, id, name);
+}
+
+Item &Registry::registerItem(u32 textureID, const std::string &id, const std::string &name) {
+	u32 internalID = m_items.size();
+	m_itemsID.emplace(id, internalID);
+	return m_items.emplace_back(internalID, textureID, id, name);
+}
+
 const Block &Registry::getBlock(const std::string &name) {
 	if (name.empty()) return getBlock((int)0);
 	auto it = m_blocksID.find(name);
@@ -111,17 +104,5 @@ const Recipe *Registry::getRecipe(const Inventory &inventory) const {
 			return recipe.get();
 	}
 	return nullptr;
-}
-
-Block &Registry::registerBlock(u32 textureID, const std::string &name, const std::string &label) {
-	u32 id = m_blocks.size();
-	m_blocksID.emplace(name, id);
-	return m_blocks.emplace_back(id, textureID, name, label);
-}
-
-Item &Registry::registerItem(u32 textureID, const std::string &name, const std::string &label) {
-	u32 id = m_items.size();
-	m_itemsID.emplace(name, id);
-	return m_items.emplace_back(id, textureID, name, label);
 }
 

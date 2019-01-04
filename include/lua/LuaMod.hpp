@@ -1,0 +1,34 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  LuaMod.hpp
+ *
+ *    Description:
+ *
+ *        Created:  04/01/2019 17:19:44
+ *
+ *         Author:  Quentin Bazin, <quent42340@gmail.com>
+ *
+ * =====================================================================================
+ */
+#ifndef LUAMOD_HPP_
+#define LUAMOD_HPP_
+
+#include <sol.hpp>
+
+#include "Block.hpp"
+
+// This class is meant to be used ONLY in Lua
+class LuaMod {
+	public:
+		LuaMod(const std::string &id) : m_id(id) {}
+
+		void registerBlock(const sol::table &table);
+
+		const std::string &id() const { return m_id; }
+
+	private:
+		std::string m_id;
+};
+
+#endif // LUAMOD_HPP_

@@ -25,10 +25,12 @@
 
 class Registry {
 	public:
-		void registerBlockFromTable(const sol::table &table);
 		void registerItemFromTable(const sol::table &table);
 		void registerCraftingRecipeFromTable(const sol::table &table);
 		void registerSmeltingRecipeFromTable(const sol::table &table);
+
+		Block &registerBlock(u32 textureID, const std::string &id, const std::string &name);
+		Item &registerItem(u32 textureID, const std::string &id, const std::string &name);
 
 		const Block &getBlock(std::size_t id) const { return m_blocks.at(id); }
 		const Item &getItem(std::size_t id) const { return m_items.at(id); }
@@ -42,9 +44,6 @@ class Registry {
 		static void setInstance(Registry &instance) { s_instance = &instance; }
 
 	private:
-		Block &registerBlock(u32 textureID, const std::string &name, const std::string &label);
-		Item &registerItem(u32 textureID, const std::string &name, const std::string &label);
-
 		template<typename T, typename... Args>
 		auto registerRecipe(Args &&...args) -> typename std::enable_if<std::is_base_of<Recipe, T>::value, Recipe*>::type {
 			return m_recipes.emplace_back(std::make_unique<T>(std::forward<Args>(args)...)).get();

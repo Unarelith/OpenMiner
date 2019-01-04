@@ -11,9 +11,10 @@
  *
  * =====================================================================================
  */
-#include "ScriptEngine.hpp"
+#include "LuaMod.hpp"
 #include "Player.hpp"
 #include "Registry.hpp"
+#include "ScriptEngine.hpp"
 
 #include "CraftingRecipe.hpp"
 #include "SmeltingRecipe.hpp"
@@ -71,10 +72,15 @@ void ScriptEngine::initUsertypes() {
 	);
 
 	m_lua.new_usertype<Registry>("Registry",
-		"register_block", &Registry::registerBlockFromTable,
 		"register_item", &Registry::registerItemFromTable,
 		"register_crafting_recipe", &Registry::registerCraftingRecipeFromTable,
 		"register_smelting_recipe", &Registry::registerSmeltingRecipeFromTable
+	);
+
+	m_lua.new_usertype<LuaMod>("LuaMod",
+		sol::constructors<LuaMod(std::string)>(),
+		"id",    &LuaMod::id,
+		"block", &LuaMod::registerBlock
 	);
 }
 
