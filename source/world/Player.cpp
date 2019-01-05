@@ -131,7 +131,7 @@ void Player::checkCollisions(const World &world) {
 
 bool passable(const World &world, float x, float y, float z) {
 	u32 block = world.getBlock(x, y, z);
-	return !block || block == 8;
+	return !block || block == 8 || block == BlockType::Flower;
 }
 
 void Player::testPoint(const World &world, glm::vec3 pos, glm::vec3 &speed) {

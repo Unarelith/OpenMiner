@@ -29,6 +29,14 @@ void TextureLoader::load(const char *xmlFilename, gk::ResourceHandler &handler) 
 		auto &texture = handler.add<gk::Texture>("texture-" + name);
 		texture.loadFromFile(path);
 
+		gk::Texture::bind(&texture);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 4);
+		gk::Texture::bind(nullptr);
+
 		textureElement = textureElement->NextSiblingElement("texture");
 	}
 }

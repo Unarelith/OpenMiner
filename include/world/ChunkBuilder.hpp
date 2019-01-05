@@ -32,8 +32,15 @@ class ChunkBuilder {
 
 		std::array<std::size_t, layers> buildChunk(const Chunk &chunk, const std::array<gk::VertexBuffer, layers> &vbo);
 
+		enum Layer {
+			Solid,
+			Liquid,
+			Other,
+		};
+
 	private:
 		void addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Block *block, const Block *surroundingBlock);
+		void addCross(u8 x, u8 y, u8 z, const Chunk &chunk, const Block *block);
 
 		gk::Vector3i getOffsetFromVertex(u8 i, u8 j);
 		u8 getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk);
@@ -55,12 +62,7 @@ class ChunkBuilder {
 			Front,
 			Back
 		};
-
-		enum Layer {
-			Solid,
-			Liquid,
-			Other
-		};
+;
 };
 
 #endif // CHUNKBUILDER_HPP_

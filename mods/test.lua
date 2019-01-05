@@ -8,8 +8,8 @@ dofile("mods/recipes.lua")
 
 function init()
 	player:inventory():add_stack("default:workbench", 1);
+	player:inventory():add_stack("default:flower", 64);
 	player:inventory():add_stack("default:dirt", 64);
-	player:inventory():add_stack("default:grass", 64);
 	player:inventory():add_stack("default:stone", 64);
 	player:inventory():add_stack("default:glass", 64);
 	player:inventory():add_stack("default:glowstone", 64);
@@ -27,5 +27,6 @@ function init()
 	player:inventory():add_stack("default:shovel_stone", 1);
 	player:inventory():add_stack("default:ore_iron", 64);
 	player:inventory():add_stack("default:coal", 64);
+	player:inventory():add_stack("default:grass", 64);
 end
 

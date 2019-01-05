@@ -31,6 +31,11 @@ void LuaMod::registerBlock(const sol::table &table) {
 	block.setOnBlockActivated(onBlockActivated);
 	block.setOnTick(onTick);
 
+	sol::optional<BlockDrawType> drawType = table["draw_type"];
+	if (drawType != sol::nullopt) {
+		block.setDrawType(drawType.value());
+	}
+
 	sol::optional<sol::table> itemDrop = table["item_drop"];
 	if (itemDrop != sol::nullopt) {
 		std::string dropID = itemDrop.value()["id"];

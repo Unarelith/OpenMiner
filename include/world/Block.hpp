@@ -28,6 +28,11 @@ class Chunk;
 class Player;
 class World;
 
+enum class BlockDrawType {
+	Solid  = 0,
+	XShape = 1,
+};
+
 class Block {
 	public:
 		Block(u32 id, u32 textureID, const std::string &name, const std::string &label);
@@ -50,7 +55,7 @@ class Block {
 		s8 selectedFace() const { return m_selectedFace; }
 		void setSelected(bool isSelected, s8 face) { m_isSelected = isSelected; m_selectedFace = face; }
 
-		bool isOpaque() const { return m_id != 0 && m_id != 4 && m_id != 8 && m_id != 9 && m_id != 16; }
+		bool isOpaque() const { return m_id != 0 && m_id != 4 && m_id != 8 && m_id != 9 && m_id != 16 && m_drawType != BlockDrawType::XShape; }
 
 		bool canUpdate() const { return m_onTick.valid(); }
 
@@ -72,6 +77,9 @@ class Block {
 
 		void setOnBlockActivated(const sol::function &function) { m_onBlockActivated = function; }
 		void setOnTick(const sol::function &function) { m_onTick = function; }
+
+		BlockDrawType drawType() const { return m_drawType; }
+		void setDrawType(BlockDrawType drawType) { m_drawType = drawType; }
 
 	protected:
 		glm::vec4 getTexCoordsFromID(int textureID) const;
@@ -96,6 +104,8 @@ class Block {
 
 		sol::function m_onBlockActivated;
 		sol::function m_onTick;
+
+		BlockDrawType m_drawType = BlockDrawType::Solid;
 };
 
 #endif // BLOCK_HPP_

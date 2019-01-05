@@ -33,6 +33,7 @@ namespace BlockType {
 		Furnace      = 14,
 		IronOre      = 15,
 		PlankSlab    = 16,
+		Flower       = 17,
 	};
 }
 

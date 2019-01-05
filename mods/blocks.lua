@@ -137,7 +137,14 @@ mod:block {
 	texture = 316,
 }
 
-for i = 17, 31 do
+mod:block {
+	id = "flower",
+	name = "Flower",
+	texture = 150,
+	draw_type = 1,
+}
+
+for i = 18, 31 do
 	mod:block {
 		id = "undefined" .. i,
 		name = "Undefined",

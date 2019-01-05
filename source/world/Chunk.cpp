@@ -179,7 +179,10 @@ void Chunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u16 lay
 
 	states.texture = &m_texture;
 
-	glEnable(GL_CULL_FACE);
+	if (layer == ChunkBuilder::Layer::Other)
+		glDisable(GL_CULL_FACE);
+	else
+		glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 
 	if(Config::isWireframeModeEnabled) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

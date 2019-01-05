@@ -53,6 +53,19 @@ static const float cubeCoords[6 * 4 * 3] = {
 	0, 1, 1,
 };
 
+static const float crossCoords[2 * 4 * 3] = {
+	0, 0, 0,
+	1, 0, 1,
+	1, 1, 1,
+	0, 1, 0,
+
+	0, 0, 1,
+	1, 0, 0,
+	1, 1, 0,
+	0, 1, 1,
+};
+
+
 std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Chunk &chunk, const std::array<gk::VertexBuffer, layers> &vbo) {
 	for (u8 i = 0 ; i < layers ; ++i)
 		m_vertices[i].reserve(Chunk::width * Chunk::height * Chunk::depth * 6 * 4);
@@ -72,8 +85,13 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Chu
 					&Registry::getInstance().getBlock(chunk.getBlock(x, y, z + 1)),
 				};
 
-				for(u8 i = 0 ; i < 6 ; i++) {
-					addFace(x, y, z, i, chunk, &block, surroundingBlocks[i]);
+				if (block.drawType() == BlockDrawType::Solid) {
+					for(u8 i = 0 ; i < 6 ; i++) {
+						addFace(x, y, z, i, chunk, &block, surroundingBlocks[i]);
+					}
+				}
+				else if (block.drawType() == BlockDrawType::XShape) {
+					addCross(x, y, z, chunk, &block);
 				}
 			}
 		}
@@ -97,7 +115,7 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Chu
 
 void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Block *block, const Block *surroundingBlock) {
 	// Skip hidden faces
-	if(surroundingBlock && surroundingBlock->id()
+	if(surroundingBlock && surroundingBlock->id() && surroundingBlock->drawType() == BlockDrawType::Solid
 	&& (surroundingBlock->isOpaque() || (block->id() == surroundingBlock->id() && block->id() != BlockType::Leaves && ((i != 2 && i != 3) || block->id() != BlockType::PlankSlab))))
 		return;
 
@@ -205,6 +223,47 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 		addVertex(2);
 		addVertex(3);
 		addVertex(0);
+	}
+}
+
+void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const Chunk &chunk, const Block *block) {
+	const glm::vec4 &blockTexCoords = block->getTexCoords(0, chunk.getData(x, y, z));
+	float faceTexCoords[2 * 4] = {
+		blockTexCoords.x, blockTexCoords.w,
+		blockTexCoords.z, blockTexCoords.w,
+		blockTexCoords.z, blockTexCoords.y,
+		blockTexCoords.x, blockTexCoords.y,
+	};
+
+	for (int i = 0 ; i < 2 ; ++i) {
+		gk::Vertex vertices[4];
+		for (int j = 0 ; j < 4 ; ++j) {
+			vertices[j].coord3d[0] = x + crossCoords[i * 12 + j * 3];
+			vertices[j].coord3d[1] = y + crossCoords[i * 12 + j * 3 + 1];
+			vertices[j].coord3d[2] = z + crossCoords[i * 12 + j * 3 + 2];
+			vertices[j].coord3d[3] = i;
+
+			vertices[j].normal[0] = 0;
+			vertices[j].normal[1] = 0;
+			vertices[j].normal[2] = 0;
+
+			vertices[j].color[0] = 1.0;
+			vertices[j].color[1] = 1.0;
+			vertices[j].color[2] = 1.0;
+			vertices[j].color[3] = 1.0;
+
+			vertices[j].texCoord[0] = faceTexCoords[j * 2];
+			vertices[j].texCoord[1] = faceTexCoords[j * 2 + 1];
+
+			vertices[j].blockType = block->id();
+		}
+
+		m_vertices[Layer::Other].emplace_back(vertices[0]);
+		m_vertices[Layer::Other].emplace_back(vertices[1]);
+		m_vertices[Layer::Other].emplace_back(vertices[3]);
+		m_vertices[Layer::Other].emplace_back(vertices[3]);
+		m_vertices[Layer::Other].emplace_back(vertices[1]);
+		m_vertices[Layer::Other].emplace_back(vertices[2]);
 	}
 }
 
