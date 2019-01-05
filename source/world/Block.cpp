@@ -26,6 +26,12 @@ Block::Block(u32 id, u32 textureID, const std::string &name, const std::string &
 	m_itemDropAmount = 1;
 }
 
+void Block::onTick(const glm::ivec3 &pos, Player &player, Chunk &chunk, World &world) const {
+	if (m_onTick.valid()) {
+		m_onTick(pos, player, chunk, world);
+	}
+}
+
 bool Block::onBlockActivated(const glm::ivec3 &pos, Player &player, World &world) const {
 	if (m_onBlockActivated.valid()) {
 		m_onBlockActivated(pos, player, world);
@@ -35,7 +41,7 @@ bool Block::onBlockActivated(const glm::ivec3 &pos, Player &player, World &world
 	return false;
 }
 
-glm::vec4 Block::getTexCoords(int face, u16) const {
+glm::vec4 Block::getTexCoords(int face, u16 blockData) const {
 	// 0 -> right
 	// 1 -> left
 	// 2 -> bottom
@@ -59,6 +65,15 @@ glm::vec4 Block::getTexCoords(int face, u16) const {
 	if (m_id == BlockType::Workbench) {
 		if (face == 0 || face == 5) textureID = m_textureID + 1;
 		if (face == 3 || face == 2) textureID = m_textureID + 2;
+	}
+
+	// Furnace
+	if (m_id == BlockType::Furnace) {
+		if (face == 1 || face == 4 || face == 5) textureID = 166;
+		if (face == 3 || face == 2) textureID = 167;
+
+		if (face == 0 && blockData)
+			textureID = 165;
 	}
 
 	return getTexCoordsFromID(textureID);

@@ -33,7 +33,7 @@ class Block {
 		Block(u32 id, u32 textureID, const std::string &name, const std::string &label);
 		virtual ~Block() = default;
 
-		virtual void onTick(const glm::ivec3 &, Player &, Chunk &, World &) const {}
+		virtual void onTick(const glm::ivec3 &, Player &, Chunk &, World &) const;
 		virtual bool onBlockActivated(const glm::ivec3 &pos, Player &player, World &world) const;
 		virtual void onNeighbourUpdate(const glm::ivec3 &, const glm::ivec3 &, Chunk &) const {}
 
@@ -52,7 +52,7 @@ class Block {
 
 		bool isOpaque() const { return m_id != 0 && m_id != 4 && m_id != 8 && m_id != 9 && m_id != 16; }
 
-		bool canUpdate() const { return m_canUpdate; }
+		bool canUpdate() const { return m_onTick.valid(); }
 
 		ItemStack getItemDrop() const { return ItemStack{m_itemDrop, m_itemDropAmount}; };
 		void setItemDrop(const std::string &itemDrop, u16 itemDropAmount = 1) { m_itemDrop = itemDrop; m_itemDropAmount = itemDropAmount; }
@@ -71,11 +71,10 @@ class Block {
 		void setBoundingBox(const gk::FloatBox &boundingBox) { m_boundingBox = boundingBox; }
 
 		void setOnBlockActivated(const sol::function &function) { m_onBlockActivated = function; }
+		void setOnTick(const sol::function &function) { m_onTick = function; }
 
 	protected:
 		glm::vec4 getTexCoordsFromID(int textureID) const;
-
-		bool m_canUpdate = false;
 
 	private:
 		u32 m_id;
@@ -96,6 +95,7 @@ class Block {
 		gk::FloatBox m_boundingBox{0, 0, 0, 1, 1, 1};
 
 		sol::function m_onBlockActivated;
+		sol::function m_onTick;
 };
 
 #endif // BLOCK_HPP_

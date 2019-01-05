@@ -23,11 +23,13 @@ void LuaMod::registerBlock(const sol::table &table) {
 	std::string id = m_id + ":" + table["id"].get<std::string>();
 	std::string name = table["name"].get<std::string>();
 	sol::function onBlockActivated = table["on_block_activated"];
+	sol::function onTick = table["on_tick"];
 
 	Block &block = Registry::getInstance().registerBlock(textureID, id, name);
 	block.setHarvestRequirements(table["harvest_requirements"].get_or(0));
 	block.setHardness(table["hardness"].get_or(1.0f));
 	block.setOnBlockActivated(onBlockActivated);
+	block.setOnTick(onTick);
 
 	sol::optional<sol::table> itemDrop = table["item_drop"];
 	if (itemDrop != sol::nullopt) {

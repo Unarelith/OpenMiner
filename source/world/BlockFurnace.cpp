@@ -22,18 +22,6 @@
 #include "World.hpp"
 
 BlockFurnace::BlockFurnace() : Block(BlockType::Furnace, 164, "default:furnace", "Furnace") {
-	m_canUpdate = true;
-}
-
-glm::vec4 BlockFurnace::getTexCoords(int face, u16 blockData) const {
-	u32 texID = textureID();
-	if (face == 1 || face == 4 || face == 5) texID = 166;
-	if (face == 3 || face == 2) texID = 167;
-
-	if (face == 0 && blockData)
-		texID = 165;
-
-	return getTexCoordsFromID(texID);
 }
 
 bool BlockFurnace::onBlockActivated(const glm::ivec3 &blockPosition, Player &player, World &world) const {

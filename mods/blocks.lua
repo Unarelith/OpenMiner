@@ -100,8 +100,12 @@ mod:block {
 	id = "workbench",
 	name = "Workbench",
 	texture = 77,
+
 	on_block_activated = function(pos, player, world)
-		print("hello")
+		open_workbench(pos, player, world)
+		-- local data = world:getBlockData(position.x, position.y, position.z)
+		-- local inventoryState = ApplicationStateStack.getInstance():push<InventoryState>(&gk::ApplicationStateStack::getInstance().top());
+		-- inventoryState.setupWidget<WorkbenchWidget>(player.inventory(), data->inventory);
 	end,
 }
 
@@ -109,6 +113,14 @@ mod:block {
 	id = "furnace",
 	name = "Furnace",
 	texture = 164,
+
+	on_block_activated = function(pos, player, world)
+		open_furnace(pos, player, world)
+	end,
+
+	on_tick = function(pos, player, chunk, world)
+		update_furnace(pos, player, chunk, world)
+	end,
 }
 
 mod:block {

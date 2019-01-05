@@ -15,7 +15,6 @@
 #include "World.hpp"
 
 BlockWater::BlockWater() : Block(BlockType::Water, 457, "default:water", "Water") {
-	m_canUpdate = true;
 }
 
 void BlockWater::onNeighbourUpdate(const glm::ivec3 &blockPosition, const glm::ivec3 &thisBlockPosition, Chunk &chunk) const {
