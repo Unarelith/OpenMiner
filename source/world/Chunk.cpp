@@ -13,7 +13,7 @@
  */
 #include <cstring>
 
-#include <gk/system/GameClock.hpp>
+#include <gk/core/GameClock.hpp>
 
 #include "Chunk.hpp"
 #include "Config.hpp"

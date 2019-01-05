@@ -13,7 +13,7 @@
  */
 #include <gk/core/input/GamePad.hpp>
 #include <gk/core/Mouse.hpp>
-#include <gk/gui/Font.hpp>
+#include <gk/graphics/Font.hpp>
 
 #include "Application.hpp"
 #include "Config.hpp"

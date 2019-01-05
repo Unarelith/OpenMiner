@@ -14,7 +14,7 @@
 #ifndef MOUSEITEMWIDGET_HPP_
 #define MOUSEITEMWIDGET_HPP_
 
-#include <gk/gui/Sprite.hpp>
+#include <gk/graphics/Sprite.hpp>
 
 #include "ItemWidget.hpp"
 #include "Text.hpp"

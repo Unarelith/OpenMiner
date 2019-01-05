@@ -13,7 +13,7 @@
  */
 #include <gk/core/IntTypes.hpp>
 #include <gk/core/XMLFile.hpp>
-#include <gk/system/Debug.hpp>
+#include <gk/core/Debug.hpp>
 
 #include "GameKey.hpp"
 #include "KeyboardHandler.hpp"

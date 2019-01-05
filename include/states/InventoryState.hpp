@@ -17,7 +17,7 @@
 #include <memory>
 
 #include <gk/core/ApplicationState.hpp>
-#include <gk/gui/RectangleShape.hpp>
+#include <gk/graphics/RectangleShape.hpp>
 #include <gk/gl/Shader.hpp>
 
 #include "Config.hpp"

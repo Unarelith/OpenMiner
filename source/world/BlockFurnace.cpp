@@ -12,7 +12,7 @@
  * =====================================================================================
  */
 #include <gk/core/ApplicationStateStack.hpp>
-#include <gk/system/Exception.hpp>
+#include <gk/core/Exception.hpp>
 
 #include "BlockFurnace.hpp"
 #include "FurnaceWidget.hpp"

@@ -20,7 +20,7 @@
 #include <gk/core/input/GamePad.hpp>
 #include <gk/core/Mouse.hpp>
 #include <gk/gl/OpenGL.hpp>
-#include <gk/system/GameClock.hpp>
+#include <gk/core/GameClock.hpp>
 
 #include "GameKey.hpp"
 #include "GameState.hpp"

@@ -14,7 +14,7 @@
 #ifndef CROSSHAIR_HPP_
 #define CROSSHAIR_HPP_
 
-#include <gk/gui/RectangleShape.hpp>
+#include <gk/graphics/RectangleShape.hpp>
 
 class Crosshair : public gk::IDrawable {
 	public:

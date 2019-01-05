@@ -16,8 +16,8 @@
 
 #include <functional>
 
-#include <gk/gui/Image.hpp>
-// #include <gk/gui/Text.hpp>
+#include <gk/graphics/Image.hpp>
+// #include <gk/graphics/Text.hpp>
 
 #include "Text.hpp"
 #include "Widget.hpp"

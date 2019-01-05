@@ -15,7 +15,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <gk/gl/Vertex.hpp>
-#include <gk/system/GameClock.hpp>
+#include <gk/core/GameClock.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "BlockCursor.hpp"

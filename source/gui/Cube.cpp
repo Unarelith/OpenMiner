@@ -14,7 +14,7 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/Color.hpp>
+#include <gk/graphics/Color.hpp>
 #include <gk/gl/Vertex.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 

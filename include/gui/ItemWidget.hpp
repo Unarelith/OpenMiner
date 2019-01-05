@@ -14,7 +14,7 @@
 #ifndef ITEMWIDGET_HPP_
 #define ITEMWIDGET_HPP_
 
-#include <gk/gui/Image.hpp>
+#include <gk/graphics/Image.hpp>
 
 #include "Cube.hpp"
 #include "Inventory.hpp"

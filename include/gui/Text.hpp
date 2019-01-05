@@ -16,7 +16,7 @@
 
 #include <string>
 
-#include <gk/gui/Sprite.hpp>
+#include <gk/graphics/Sprite.hpp>
 
 class Text : public gk::IDrawable, public gk::Transformable {
 	public:

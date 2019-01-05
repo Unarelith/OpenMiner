@@ -13,7 +13,7 @@
  */
 #include <algorithm>
 
-#include <gk/system/Exception.hpp>
+#include <gk/core/Exception.hpp>
 
 #include "CraftingRecipe.hpp"
 
