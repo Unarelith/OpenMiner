@@ -60,6 +60,11 @@ void World::update(Player &player) {
 }
 
 void World::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	if (!target.getView()) {
+		DEBUG("ERROR: Trying to draw world without a camera");
+		return;
+	}
+
 	float ud = 1000.0;
 	int ux = 0;
 	int uy = 0;
@@ -77,7 +82,7 @@ void World::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 		                                            it->z() * Chunk::depth));
 
 		// Is the chunk close enough?
-		glm::vec4 center = states.viewMatrix.getMatrix()
+		glm::vec4 center = target.getView()->getViewTransform().getMatrix()
 		                 * states.transform.getMatrix()
 		                 * glm::vec4(Chunk::width / 2, Chunk::height / 2, Chunk::depth / 2, 1);
 
@@ -86,7 +91,7 @@ void World::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 		}
 
 		// Is this chunk on the screen?
-		center = states.projectionMatrix.getMatrix() * center;
+		center = target.getView()->getTransform().getMatrix() * center;
 
 		float d = glm::length(center);
 		center.x /= center.w;

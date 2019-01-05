@@ -107,12 +107,10 @@ void GameState::initShaders() {
 
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.shader = &m_shader;
-	states.projectionMatrix = m_camera.getTransform();
-	states.viewMatrix = m_camera.getViewTransform();
 
-	// target.setView(m_camera);
+	target.setView(m_camera);
 	target.draw(m_world, states);
-	// target.setView(target.getDefaultView());
+	target.disableView();
 
 	target.draw(m_hud, states);
 }
