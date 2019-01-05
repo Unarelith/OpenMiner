@@ -1,109 +1,20 @@
 TODO
 
-# API Lua
+# Engine
 
-• TODO: Better API, for example:
-```lua
-local mod = miner.mod { id="io.owlish.test" }
+• TODO: Client/server architecture
 
-mod:block {
-   id="fabric",
-   name="Universal Fabric",
-}```
+# World
 
-# Nettoyage
+• TODO: Day/night cycle
 
-• DONE: Découper les gros pâtés en sous-classes
-• DONE: Nettoyer les vieux headers
-• DONE: Remplacer les anciennes classes par leur upgrade:
-   ◦ DONE: `ApplicationState` / `ApplicationStateStack`
-   ◦ DONE: `GameClock`
-   ◦ DONE: `Debug` / `Exception`
-   ◦ DONE: `Window` et `Texture` (depuis `ZeldaOOL`)
-   ◦ DONE: Input system (Mouse + Keyboard)
-• DONE: `Types.hpp` → `IntTypes.hpp`
-   → DONE: Vérifier que les types sont bien corrects
-• DONE: Catch `SDLLoader` exception
-• TODO: Vérifier les utilisations inutiles de pointeurs
-• TODO: Passer un clang-tidy sur le code
-• TODO: Séparer le code client du code serveur
+# Chunk generation
 
-# Finalisation par rapport à TestCraft
-
-• DONE: Changer la génération du terrain et ajouter eau, minerais et arbres
-• DONE: Permettre à l’utilisateur de choisir le bloc qu’il pose
-
-# FixMe
-
-• DONE: Afficher tous les blocs solides, puis l’eau, pour régler les problèmes de transparence
-• TODO: Les blocs sont ciblables dans le vide depuis l’extérieur du monde
-• TODO: Les collisions sont décalées d’un bloc à certains endroits
-
-# ToDoList
-
-## Moteur
-
-• DONE: Rajouter le `ResourceHandler`
-
-## Joueur
-
-• DONE: Ciblage de bloc
-   ◦ DONE: Suppression de bloc
-   ◦ DONE: Ajout de bloc
-• DONE: Collisions + Gravité
-• TODO: Système d’entités (réutiliser l’ECS mais en multi-thread)
-   ◦ TODO: Les controlleurs doivent garder une liste de références vers les entités
-           sur lesquelles ils travaillent
-
-## Items/Blocks
-
-• DONE: Créer un registre d’information pour les blocs/items (utiliser `ResourceHandler`?)
-• DONE: Créer une classe `ItemStack` et l’utiliser dans `Inventory`
-• DONE: Rajouter les classes `BitmapFont` et `Text` pour afficher le nombre d’items dans un stack
-• DONE: Rajouter le système de craft
-• DONE: Récupération du bloc cassé
-• DONE: Améliorer la gestion d’items
-   ◦ DONE: Ajouter des enum `ItemType` et `BlockType`
-   ◦ DONE: Ajouter une classe `ItemBlock`
-• DONE: Utiliser un cube pour afficher les blocs dans l’inventaire
-• DONE: Ajouter les animations de destruction des blocs
-• DONE: Essayer d’utiliser un seul `Inventory` pour le joueur
-   ◦ DONE: Probablement en ajoutant un offset dans `InventoryWidget` et `Hotbar`
-• TODO: Rajouter un bouton sur la table de craft pour voir les recettes
-• TODO: Faire un vrai drop d’item
-
-## Monde
-
-• TODO: Cycle jour/nuit
-   ◦ TODO: Dynamic lighting
-• TODO: Chargement des chunks multi-thread
-
-## Génération
-
-• DONE: Augmenter la hauteur du terrain
-•  WIP: Rajouter des blocs
-   ◦ DONE: Dirt + Grass
-   ◦ DONE: WATEEEEEEER
-   ◦ DONE: Arbres
-   ◦ TODO: Fleurs
-   ◦ TODO: Herbe
-   ◦ TODO: Demi-blocs
-   ◦ TODO: Escaliers
 • TODO: Biomes
-• TODO: Génération multi-thread
 
-## Affichage
+# Graphics
 
-• WIP: Optimiser au maximum l’affichage des chunks
-   ◦ DONE: Faire le max de culling
-      ▸ DONE: Face culling
-      ▸ DONE: Frustum culling
-   ◦ TODO: Face-merging (greedy meshing?)
-• TODO: Séparer le pipeline 2D du pipeline 3D
-   ◦ TODO: Ajouter une implémentation de VAO par type de rendu (2D/Chunk/Liquid/Plant)
-
-# Idées diverses
-
-• TODO: Ajouter un “builder mode” qui débloque la souris de la vue et permet de sélectionner
-        un bloc juste en mettant la souris dessus
+• TODO: Add new draw types
+   ◦ TODO: Flower-like
+   ◦ TODO: Nodeboxes
 
