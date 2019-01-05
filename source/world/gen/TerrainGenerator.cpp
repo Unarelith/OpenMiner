@@ -87,6 +87,9 @@ void TerrainGenerator::testCraftGeneration(Chunk &chunk) const {
 								}
 							}
 						}
+						else if(chunk.getBlock(x, y - 1, z) == BlockType::Grass && (rand() & 0xff) == 0) {
+							chunk.setBlock(x, y, z, BlockType::Flower);
+						}
 						else {
 							chunk.lightmap().addSunlight(x, y - 1, z, 15);
 

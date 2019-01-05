@@ -296,9 +296,15 @@ gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) {
 u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk) {
 	gk::Vector3i offset = getOffsetFromVertex(i, j);
 
-	bool side1  = chunk.getBlock(x + offset.x, y + offset.y, z) != 0;
-	bool side2  = chunk.getBlock(x,            y + offset.y, z + offset.z) != 0;
-	bool corner = chunk.getBlock(x + offset.x, y + offset.y, z + offset.z) != 0;
+	u16 blocks[3] = {
+		chunk.getBlock(x + offset.x, y + offset.y, z),
+		chunk.getBlock(x,            y + offset.y, z + offset.z),
+		chunk.getBlock(x + offset.x, y + offset.y, z + offset.z)
+	};
+
+	bool side1  = blocks[0] != 0 && blocks[0] != BlockType::Flower;
+	bool side2  = blocks[1] != 0 && blocks[1] != BlockType::Flower;
+	bool corner = blocks[2] != 0 && blocks[2] != BlockType::Flower;
 
 	if (side1 && side2)
 		return 0;
