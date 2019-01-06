@@ -224,7 +224,7 @@ void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	glDisable(GL_POLYGON_OFFSET_FILL);
 	glDisable(GL_CULL_FACE);
 
-	states.transform = glm::translate(glm::mat4{1}, glm::vec3{m_selectedBlock});
+	states.transform.translate({m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z});
 
 	target.draw(m_vbo, GL_LINES, 0, 24, states);
 

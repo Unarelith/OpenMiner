@@ -110,8 +110,6 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	target.setView(m_camera);
 	target.draw(m_world, states);
-	target.disableView();
-
 	target.draw(m_hud, states);
 }
 
