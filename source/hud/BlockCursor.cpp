@@ -23,6 +23,44 @@
 #include "Hotbar.hpp"
 #include "Registry.hpp"
 
+static float cubeCoords[6 * 4 * 3] = {
+	// Right
+	1, 1, 1,
+	1, 1, 0,
+	1, 0, 0,
+	1, 0, 1,
+
+	// Top
+	1, 1, 1,
+	0, 1, 1,
+	0, 1, 0,
+	1, 1, 0,
+
+	// Back
+	1, 1, 1,
+	1, 0, 1,
+	0, 0, 1,
+	0, 1, 1,
+
+	// Left
+	0, 1, 1,
+	0, 1, 0,
+	0, 0, 0,
+	0, 0, 1,
+
+	// Bottom
+	1, 0, 1,
+	0, 0, 1,
+	0, 0, 0,
+	1, 0, 0,
+
+	// Front
+	0, 0, 0,
+	0, 1, 0,
+	1, 1, 0,
+	1, 0, 0,
+};
+
 void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
@@ -98,48 +136,12 @@ void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
 }
 
 void BlockCursor::updateVertexBuffer(const Block &block) {
-	gk::Vertex vertices[24] = {
-		// Right
-		{{1, 1, 1, -1}},
-		{{1, 1, 0, -1}},
-		{{1, 0, 0, -1}},
-		{{1, 0, 1, -1}},
-
-		// Top
-		{{1, 1, 1, -1}},
-		{{0, 1, 1, -1}},
-		{{0, 1, 0, -1}},
-		{{1, 1, 0, -1}},
-
-		// Back
-		{{1, 1, 1, -1}},
-		{{1, 0, 1, -1}},
-		{{0, 0, 1, -1}},
-		{{0, 1, 1, -1}},
-
-		// Left
-		{{0, 1, 1, -1}},
-		{{0, 1, 0, -1}},
-		{{0, 0, 0, -1}},
-		{{0, 0, 1, -1}},
-
-		// Bottom
-		{{1, 0, 1, -1}},
-		{{0, 0, 1, -1}},
-		{{0, 0, 0, -1}},
-		{{1, 0, 0, -1}},
-
-		// Front
-		{{0, 0, 0, -1}},
-		{{0, 1, 0, -1}},
-		{{1, 1, 0, -1}},
-		{{1, 0, 0, -1}},
-	};
-
+	gk::Vertex vertices[24];
 	for (u8 i = 0 ; i < 24 ; ++i) {
-		vertices[i].coord3d[0] = vertices[i].coord3d[0] * block.boundingBox().width  + block.boundingBox().x;
-		vertices[i].coord3d[1] = vertices[i].coord3d[1] * block.boundingBox().height + block.boundingBox().y;
-		vertices[i].coord3d[2] = vertices[i].coord3d[2] * block.boundingBox().depth  + block.boundingBox().z;
+		vertices[i].coord3d[0] = cubeCoords[i * 3] * block.boundingBox().width  + block.boundingBox().x;
+		vertices[i].coord3d[1] = cubeCoords[i * 3 + 1] * block.boundingBox().height + block.boundingBox().y;
+		vertices[i].coord3d[2] = cubeCoords[i * 3 + 2] * block.boundingBox().depth  + block.boundingBox().z;
+		vertices[i].coord3d[3] = -1;
 	}
 
 	gk::VertexBuffer::bind(&m_vbo);
@@ -148,48 +150,12 @@ void BlockCursor::updateVertexBuffer(const Block &block) {
 }
 
 void BlockCursor::updateAnimationVertexBuffer(const Block &block, int animationPos) {
-	gk::Vertex vertices[24] = {
-		// Right
-		{{1, 1, 1, -1}},
-		{{1, 1, 0, -1}},
-		{{1, 0, 0, -1}},
-		{{1, 0, 1, -1}},
-
-		// Top
-		{{1, 1, 1, -1}},
-		{{0, 1, 1, -1}},
-		{{0, 1, 0, -1}},
-		{{1, 1, 0, -1}},
-
-		// Back
-		{{1, 1, 1, -1}},
-		{{1, 0, 1, -1}},
-		{{0, 0, 1, -1}},
-		{{0, 1, 1, -1}},
-
-		// Left
-		{{0, 1, 1, -1}},
-		{{0, 1, 0, -1}},
-		{{0, 0, 0, -1}},
-		{{0, 0, 1, -1}},
-
-		// Bottom
-		{{1, 0, 1, -1}},
-		{{0, 0, 1, -1}},
-		{{0, 0, 0, -1}},
-		{{1, 0, 0, -1}},
-
-		// Front
-		{{0, 0, 0, -1}},
-		{{0, 1, 0, -1}},
-		{{1, 1, 0, -1}},
-		{{1, 0, 0, -1}},
-	};
-
+	gk::Vertex vertices[24];
 	for (u8 i = 0 ; i < 24 ; ++i) {
-		vertices[i].coord3d[0] = vertices[i].coord3d[0] * block.boundingBox().width  + block.boundingBox().x;
-		vertices[i].coord3d[1] = vertices[i].coord3d[1] * block.boundingBox().height + block.boundingBox().y;
-		vertices[i].coord3d[2] = vertices[i].coord3d[2] * block.boundingBox().depth  + block.boundingBox().z;
+		vertices[i].coord3d[0] = cubeCoords[i * 3] * block.boundingBox().width  + block.boundingBox().x;
+		vertices[i].coord3d[1] = cubeCoords[i * 3 + 1] * block.boundingBox().height + block.boundingBox().y;
+		vertices[i].coord3d[2] = cubeCoords[i * 3 + 2] * block.boundingBox().depth  + block.boundingBox().z;
+		vertices[i].coord3d[3] = -1;
 	}
 
 	GLfloat color[4] = {1, 1, 1, 0.5};
