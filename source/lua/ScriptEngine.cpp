@@ -11,11 +11,13 @@
  *
  * =====================================================================================
  */
+#include "LuaCore.hpp"
 #include "LuaGUI.hpp"
 #include "LuaMod.hpp"
 #include "Player.hpp"
 #include "Registry.hpp"
 #include "ScriptEngine.hpp"
+#include "World.hpp"
 
 ScriptEngine *ScriptEngine::s_instance = nullptr;
 
@@ -34,6 +36,8 @@ void ScriptEngine::init() {
 }
 
 void ScriptEngine::initUsertypes() {
+	m_lua.new_usertype<World>("World");
+
 	m_lua.new_usertype<Player>("Player",
 		"inventory", &Player::inventory);
 
@@ -47,6 +51,7 @@ void ScriptEngine::initUsertypes() {
 		"z", &glm::ivec3::z
 	);
 
+	LuaCore::initUsertype(m_lua);
 	LuaMod::initUsertype(m_lua);
 	LuaGUI::initUsertype(m_lua);
 }

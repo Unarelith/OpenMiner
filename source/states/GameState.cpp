@@ -40,9 +40,12 @@ GameState::GameState() {
 }
 
 void GameState::testLuaAPI() {
+	m_luaCore.setPlayer(m_player);
+	m_luaCore.setWorld(m_world);
+
 	try {
 		auto &lua = ScriptEngine::getInstance().lua();
-		lua["player"] = &m_player;
+		lua["openminer"] = &m_luaCore;
 		lua.script("init()");
 	}
 	catch (const sol::error &e) {

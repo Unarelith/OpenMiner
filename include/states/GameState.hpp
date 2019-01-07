@@ -21,6 +21,7 @@
 
 #include "Config.hpp"
 #include "HUD.hpp"
+#include "LuaCore.hpp"
 #include "Player.hpp"
 #include "Skybox.hpp"
 #include "World.hpp"
@@ -49,6 +50,8 @@ class GameState : public gk::ApplicationState {
 		Player m_player{m_camera};
 
 		HUD m_hud{m_player, m_world};
+
+		LuaCore m_luaCore;
 };
 
 #endif // GAMESTATE_HPP_
