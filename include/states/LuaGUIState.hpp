@@ -33,6 +33,8 @@ class LuaGUIState : public gk::ApplicationState {
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
+		void loadGUI(LuaGUI &gui);
+
 		gk::Shader m_shader;
 		glm::mat4 m_orthoMatrix;
 

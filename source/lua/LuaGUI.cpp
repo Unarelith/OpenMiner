@@ -28,31 +28,33 @@ void LuaGUI::addButton(const sol::table &table) {
 
 	std::string text = table["text"].get<std::string>();
 	sol::function on_click = table["on_click"].get<sol::function>();
-	buttons.emplace_back(GUIDefinition::Button{{name, x, y}, text, on_click});
+	buttons.emplace_back(LuaWidgetDef::Button{{name, x, y}, text, on_click});
 }
 
 void LuaGUI::addInventory(const sol::table &table) {
-	// // FIXME: Duplicated above
-	// float x = 0, y = 0;
-	// sol::optional<sol::table> pos = table["pos"];
-	// std::string name = table["name"].get<std::string>();
-	// if (pos != sol::nullopt) {
-	// 	x = pos.value()["x"];
-	// 	y = pos.value()["y"];
-	// }
-    //
-	// std::string player = table["player"].get<std::string>();
-	// std::string inventory = table["inventory"].get<std::string>();
-	// u16 offset = table["offset"].get<u16>();
-    //
-	// float width = 0, height = 0;
-	// sol::optional<sol::table> size = table["size"];
-	// if (size != sol::nullopt) {
-	// 	width = size.value()["x"];
-	// 	height = size.value()["y"];
-	// }
-    //
-	// inventoryLists.emplace_back(name, x, y, player, inventory, width, height, offset);
+	// FIXME: Duplicated above
+	float x = 0, y = 0;
+	sol::optional<sol::table> pos = table["pos"];
+	std::string name = table["name"].get<std::string>();
+	if (pos != sol::nullopt) {
+		x = pos.value()["x"];
+		y = pos.value()["y"];
+	}
+
+	std::string player = table["player"].get<std::string>();
+	std::string inventory = table["inventory"].get<std::string>();
+	u16 offset = table["offset"].get<u16>();
+	u16 count = table["count"].get<u16>();
+
+	float width = 0, height = 0;
+	sol::optional<sol::table> size = table["size"];
+	if (size != sol::nullopt) {
+		width = size.value()["x"];
+		height = size.value()["y"];
+	}
+
+	inventoryLists.emplace_back(LuaWidgetDef::InventoryList{{name, x, y},
+			player, inventory, width, height, offset, count});
 }
 
 void LuaGUI::show() {

@@ -37,12 +37,21 @@ class World : public gk::IDrawable {
 
 		BlockData *getBlockData(int x, int y, int z);
 
+		Player *getPlayer() const { return m_player; }
+
 		// Render distance in chunks
 		static u16 renderDistance;
 		static bool isReloadRequested;
 
+		static World &getInstance() { return *s_instance; }
+		static void setInstance(World &instance) { s_instance = &instance; }
+
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		// FIXME: Needed for LuaGUIState
+		static World *s_instance;
+		Player *m_player = nullptr;
 
 		const s32 m_width = 32;
 		const s32 m_height = 4;

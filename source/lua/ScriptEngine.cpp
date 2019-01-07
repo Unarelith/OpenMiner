@@ -31,6 +31,7 @@ void ScriptEngine::init() {
 
 	initUsertypes();
 
+	// FIXME: Remove these lines when they're not needed anymore
 	m_lua["registry"] = &Registry::getInstance();
 	m_lua["open_workbench"] = &openWorkbench;
 	m_lua["open_furnace"] = &openFurnace;
@@ -40,6 +41,8 @@ void ScriptEngine::init() {
 	m_lua.safe_script_file("mods/test.lua");
 }
 
+// FIXME: Compiling this functions is REALLY long
+//        It's probably better to split it into respective classes files
 void ScriptEngine::initUsertypes() {
 	m_lua.new_usertype<Player>("Player",
 		"inventory", &Player::inventory);
@@ -63,6 +66,8 @@ void ScriptEngine::initUsertypes() {
 		"show",      &LuaGUI::show
 	);
 }
+
+// FIXME: All the code below will be removed once these blocks are fully implemented in Lua
 
 #include "BlockFurnace.hpp"
 #include "BlockWorkbench.hpp"

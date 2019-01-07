@@ -107,14 +107,39 @@ mod:block {
 		-- local inventoryState = ApplicationStateStack.getInstance():push<InventoryState>(&gk::ApplicationStateStack::getInstance().top());
 		-- inventoryState.setupWidget<WorkbenchWidget>(player.inventory(), data->inventory);
 		gui = LuaGUI.new()
+
 		gui:button {
 			name = "btn_hello",
 			pos = {x = 0, y = 0},
+
 			text = "Hello",
 			on_click = function(self)
 				print("hello")
 			end,
 		}
+
+		gui:inventory {
+			name = "inv_main",
+			pos = {x = 176 + 7, y = 166 + 83},
+
+			player = "player",
+			inventory = "main",
+			size = {x = 9, y = 3},
+			offset = 9,
+			count = 9 * 3,
+		}
+
+		gui:inventory {
+			name = "inv_hotbar",
+			pos = {x = 176 + 7, y = 166 + 141},
+
+			player = "player",
+			inventory = "main",
+			size = {x = 9, y = 1},
+			offset = 0,
+			count = 9,
+		}
+
 		gui:show()
 	end,
 }

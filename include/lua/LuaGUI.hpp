@@ -14,36 +14,7 @@
 #ifndef LUAGUI_HPP_
 #define LUAGUI_HPP_
 
-#include <sol.hpp>
-
-#include <gk/core/IntTypes.hpp>
-
-// FIXME: Move this namespace to its own file
-namespace GUIDefinition {
-
-struct Widget {
-	std::string name;
-
-	float x = 0;
-	float y = 0;
-};
-
-struct Button : public Widget {
-	std::string text;
-	sol::function on_click;
-};
-
-struct InventoryList : public Widget {
-	std::string player;
-	std::string inventory;
-
-	float width = 0;
-	float height = 0;
-
-	u16 offset = 0;
-};
-
-} // namespace GUIDefinition
+#include "LuaWidgetDef.hpp"
 
 // This class is meant to be used ONLY in Lua
 class LuaGUI {
@@ -53,7 +24,8 @@ class LuaGUI {
 
 		void show();
 
-		std::vector<GUIDefinition::Button> buttons;
+		std::vector<LuaWidgetDef::Button> buttons;
+		std::vector<LuaWidgetDef::InventoryList> inventoryLists;
 };
 
 #endif // LUAGUI_HPP_

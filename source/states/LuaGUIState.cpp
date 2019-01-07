@@ -16,8 +16,11 @@
 #include <gk/graphics/Color.hpp>
 
 #include "Config.hpp"
+#include "InventoryWidget.hpp"
 #include "LuaGUIState.hpp"
+#include "Player.hpp"
 #include "TextButton.hpp"
+#include "World.hpp"
 
 LuaGUIState::LuaGUIState(LuaGUI &gui, gk::ApplicationState *parent) : gk::ApplicationState(parent) {
 	// FIXME: Duplicated with HUD
@@ -37,12 +40,7 @@ LuaGUIState::LuaGUIState(LuaGUI &gui, gk::ApplicationState *parent) : gk::Applic
 
 	m_mainWidget.setScale(GUI_SCALE, GUI_SCALE);
 
-	for (auto &it : gui.buttons) {
-		auto *button = new TextButton(&m_mainWidget);
-		button->setText(it.text);
-		button->setCallback(it.on_click);
-		m_widgets.emplace_back(button);
-	}
+	loadGUI(gui);
 }
 
 void LuaGUIState::onEvent(const SDL_Event &event) {
@@ -80,5 +78,22 @@ void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 	for (auto &it : m_widgets)
 		target.draw(*it, states);
+}
+
+void LuaGUIState::loadGUI(LuaGUI &gui) {
+	for (auto &it : gui.buttons) {
+		auto *button = new TextButton(&m_mainWidget);
+		button->setPosition(it.x, it.y);
+		button->setCallback(it.on_click);
+		button->setText(it.text);
+		m_widgets.emplace_back(button);
+	}
+
+	for (auto &it : gui.inventoryLists) {
+		auto *inventoryWidget = new InventoryWidget(&m_mainWidget);
+		inventoryWidget->setPosition(it.x, it.y);
+		inventoryWidget->init(World::getInstance().getPlayer()->inventory(), it.offset, it.size);
+		m_widgets.emplace_back(inventoryWidget);
+	}
 }
 

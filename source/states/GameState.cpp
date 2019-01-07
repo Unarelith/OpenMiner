@@ -32,6 +32,8 @@
 GameState::GameState() {
 	m_camera.setAspectRatio((float)SCREEN_WIDTH / SCREEN_HEIGHT);
 
+	World::setInstance(m_world);
+
 	try {
 		auto &lua = ScriptEngine::getInstance().lua();
 		lua["player"] = &m_player;
