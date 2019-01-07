@@ -17,6 +17,7 @@
 #include <sol.hpp>
 
 #include <gk/core/IntTypes.hpp>
+#include <gk/core/Rect.hpp>
 
 namespace LuaWidgetDef {
 
@@ -25,6 +26,11 @@ struct Widget {
 
 	float x = 0;
 	float y = 0;
+};
+
+struct Image : public Widget {
+	std::string texture;
+	gk::FloatRect clipRect;
 };
 
 struct Button : public Widget {

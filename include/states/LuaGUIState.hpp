@@ -18,8 +18,10 @@
 #include <gk/gl/Shader.hpp>
 #include <gk/graphics/RectangleShape.hpp>
 
+#include "CraftingWidget.hpp"
 #include "LuaGUI.hpp"
-#include "Widget.hpp"
+#include "InventoryWidget.hpp"
+#include "MouseItemWidget.hpp"
 
 // FIXME: This class is almost a duplicate of InventoryState
 class LuaGUIState : public gk::ApplicationState {
@@ -38,11 +40,16 @@ class LuaGUIState : public gk::ApplicationState {
 		gk::Shader m_shader;
 		glm::mat4 m_orthoMatrix;
 
+		Widget m_mainWidget;
+
+		MouseItemWidget m_mouseItemWidget{&m_mainWidget};
+
+		std::vector<CraftingWidget> m_craftingWidgets;
+		std::vector<InventoryWidget> m_inventoryWidgets;
 		std::vector<std::unique_ptr<Widget>> m_widgets;
+		std::vector<std::unique_ptr<gk::IDrawable>> m_drawables;
 
 		gk::RectangleShape m_background;
-
-		Widget m_mainWidget;
 };
 
 #endif // LUAGUISTATE_HPP_

@@ -16,6 +16,29 @@
 #include "LuaGUI.hpp"
 #include "LuaGUIState.hpp"
 
+void LuaGUI::addImage(const sol::table &table) {
+	// FIXME: Duplicated below
+	float x = 0, y = 0;
+	sol::optional<sol::table> pos = table["pos"];
+	std::string name = table["name"].get<std::string>();
+	if (pos != sol::nullopt) {
+		x = pos.value()["x"];
+		y = pos.value()["y"];
+	}
+
+	gk::FloatRect clipRect;
+	std::string texture = table["texture"].get<std::string>();
+	sol::optional<sol::table> clipRectTable = table["clip"];
+	if (clipRectTable != sol::nullopt) {
+		clipRect.x = clipRectTable.value()["x"];
+		clipRect.y = clipRectTable.value()["y"];
+		clipRect.width = clipRectTable.value()["width"];
+		clipRect.height = clipRectTable.value()["height"];
+	}
+
+	images.emplace_back(LuaWidgetDef::Image{{name, x, y}, texture, clipRect});
+}
+
 void LuaGUI::addButton(const sol::table &table) {
 	// FIXME: Duplicated below
 	float x = 0, y = 0;

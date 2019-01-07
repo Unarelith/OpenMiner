@@ -103,10 +103,12 @@ mod:block {
 
 	on_block_activated = function(pos, player, world)
 		-- open_workbench(pos, player, world)
-		-- local data = world:getBlockData(position.x, position.y, position.z)
-		-- local inventoryState = ApplicationStateStack.getInstance():push<InventoryState>(&gk::ApplicationStateStack::getInstance().top());
-		-- inventoryState.setupWidget<WorkbenchWidget>(player.inventory(), data->inventory);
-		gui = LuaGUI.new()
+
+		local gui = LuaGUI.new()
+		local pos = {
+			x = SCREEN_WIDTH / GUI_SCALE / 2.0 - 176 / 2.0,
+			y = SCREEN_HEIGHT / GUI_SCALE / 2.0 - 166 / 2.0
+		}
 
 		gui:button {
 			name = "btn_hello",
@@ -120,7 +122,7 @@ mod:block {
 
 		gui:inventory {
 			name = "inv_main",
-			pos = {x = 176 + 7, y = 166 + 83},
+			pos = {x = pos.x + 7, y = pos.y + 83},
 
 			player = "player",
 			inventory = "main",
@@ -131,13 +133,29 @@ mod:block {
 
 		gui:inventory {
 			name = "inv_hotbar",
-			pos = {x = 176 + 7, y = 166 + 141},
+			pos = {x = pos.x + 7, y = pos.y + 141},
 
 			player = "player",
 			inventory = "main",
 			size = {x = 9, y = 1},
 			offset = 0,
 			count = 9,
+		}
+
+		-- gui:crafting {
+		-- 	name = "inv_crafting",
+		-- 	pos = {x = 176, y = 166},
+
+		-- 	player = "player",
+		-- 	inventory = "main",
+		-- }
+
+		gui:image {
+			name = "img_background",
+			pos = pos,
+
+			texture = "texture-workbench",
+			clip = {x = 0, y = 0, width = 176, height = 166},
 		}
 
 		gui:show()

@@ -1,5 +1,9 @@
 print("Hello from Lua!")
 
+SCREEN_WIDTH = 1600
+SCREEN_HEIGHT = 1050
+GUI_SCALE = 3
+
 mod = LuaMod.new("default")
 
 dofile("mods/blocks.lua")

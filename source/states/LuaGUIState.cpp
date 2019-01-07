@@ -47,6 +47,11 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 	for (auto &it : m_widgets)
 		it->onEvent(event);
 
+	for (auto &it : m_inventoryWidgets)
+		it.onMouseEvent(event, m_mouseItemWidget, false);
+
+	m_mouseItemWidget.onEvent(event);
+
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 		gk::Mouse::setCursorGrabbed(true);
 		gk::Mouse::setCursorVisible(false);
@@ -76,11 +81,26 @@ void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 	target.draw(m_background, states);
 
+	for (auto &it : m_drawables)
+		target.draw(*it, states);
+
 	for (auto &it : m_widgets)
 		target.draw(*it, states);
+
+	for (auto &it : m_inventoryWidgets)
+		target.draw(it, states);
+
+	target.draw(m_mouseItemWidget, states);
 }
 
 void LuaGUIState::loadGUI(LuaGUI &gui) {
+	for (auto &it : gui.images) {
+		auto *image = new gk::Image(it.texture);
+		image->setPosition(it.x, it.y);
+		image->setClipRect(it.clipRect.x, it.clipRect.y, it.clipRect.width, it.clipRect.height);
+		m_drawables.emplace_back(image);
+	}
+
 	for (auto &it : gui.buttons) {
 		auto *button = new TextButton(&m_mainWidget);
 		button->setPosition(it.x, it.y);
@@ -90,10 +110,9 @@ void LuaGUIState::loadGUI(LuaGUI &gui) {
 	}
 
 	for (auto &it : gui.inventoryLists) {
-		auto *inventoryWidget = new InventoryWidget(&m_mainWidget);
-		inventoryWidget->setPosition(it.x, it.y);
-		inventoryWidget->init(World::getInstance().getPlayer()->inventory(), it.offset, it.size);
-		m_widgets.emplace_back(inventoryWidget);
+		auto &inventoryWidget = m_inventoryWidgets.emplace_back(&m_mainWidget);
+		inventoryWidget.setPosition(it.x, it.y);
+		inventoryWidget.init(World::getInstance().getPlayer()->inventory(), it.offset, it.size);
 	}
 }
 

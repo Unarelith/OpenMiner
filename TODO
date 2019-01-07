@@ -23,8 +23,10 @@ TODO
 # GUI
 
 • DONE: Add a LuaGUI class to handle GUI from Lua
-• TODO: Add more GUI elements
-   ◦ TODO: `InventoryList`
+• WIP: Add more GUI elements
+   ◦ DONE: `InventoryWidget`
+   ◦ TODO: `CraftingWidget`
+   ◦ DONE: `Image`
 
 # Main menu
 

@@ -61,6 +61,7 @@ void ScriptEngine::initUsertypes() {
 	);
 
 	m_lua.new_usertype<LuaGUI>("LuaGUI",
+		"image",     &LuaGUI::addImage,
 		"button",    &LuaGUI::addButton,
 		"inventory", &LuaGUI::addInventory,
 		"show",      &LuaGUI::show

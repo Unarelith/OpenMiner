@@ -19,11 +19,13 @@
 // This class is meant to be used ONLY in Lua
 class LuaGUI {
 	public:
+		void addImage(const sol::table &table);
 		void addButton(const sol::table &table);
 		void addInventory(const sol::table &table);
 
 		void show();
 
+		std::vector<LuaWidgetDef::Image> images;
 		std::vector<LuaWidgetDef::Button> buttons;
 		std::vector<LuaWidgetDef::InventoryList> inventoryLists;
 };
