@@ -102,10 +102,10 @@ mod:block {
 	texture = 77,
 
 	on_block_activated = function(pos, player, world)
-		-- open_workbench(pos, player, world)
-
 		local gui = LuaGUI.new()
-		local pos = {
+
+		-- FIXME: Replace this by gui:set_size() and gui:set_centered()
+		local gui_pos = {
 			x = SCREEN_WIDTH / GUI_SCALE / 2.0 - 176 / 2.0,
 			y = SCREEN_HEIGHT / GUI_SCALE / 2.0 - 166 / 2.0
 		}
@@ -114,15 +114,15 @@ mod:block {
 			name = "btn_hello",
 			pos = {x = 0, y = 0},
 
-			text = "Hello",
+			text = "Test button",
 			on_click = function(self)
-				print("hello")
+				print("Test button pressed")
 			end,
 		}
 
 		gui:inventory {
 			name = "inv_main",
-			pos = {x = pos.x + 7, y = pos.y + 83},
+			pos = {x = gui_pos.x + 7, y = gui_pos.y + 83},
 
 			player = "player",
 			inventory = "main",
@@ -133,7 +133,7 @@ mod:block {
 
 		gui:inventory {
 			name = "inv_hotbar",
-			pos = {x = pos.x + 7, y = pos.y + 141},
+			pos = {x = gui_pos.x + 7, y = gui_pos.y + 141},
 
 			player = "player",
 			inventory = "main",
@@ -142,17 +142,18 @@ mod:block {
 			count = 9,
 		}
 
-		-- gui:crafting {
-		-- 	name = "inv_crafting",
-		-- 	pos = {x = 176, y = 166},
+		gui:crafting {
+			name = "inv_crafting",
+			pos = {x = gui_pos.x, y = gui_pos.y},
 
-		-- 	player = "player",
-		-- 	inventory = "main",
-		-- }
+			block = {x = pos.x, y = pos.y, z = pos.z},
+
+			offset = 0,
+		}
 
 		gui:image {
 			name = "img_background",
-			pos = pos,
+			pos = gui_pos,
 
 			texture = "texture-workbench",
 			clip = {x = 0, y = 0, width = 176, height = 166},

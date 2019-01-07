@@ -1,5 +1,6 @@
 print("Hello from Lua!")
 
+-- FIXME
 SCREEN_WIDTH = 1600
 SCREEN_HEIGHT = 1050
 GUI_SCALE = 3

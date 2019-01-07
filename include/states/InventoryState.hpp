@@ -21,7 +21,7 @@
 #include <gk/gl/Shader.hpp>
 
 #include "Config.hpp"
-#include "WorkbenchWidget.hpp"
+#include "Widget.hpp"
 
 class InventoryState : public gk::ApplicationState {
 	public:

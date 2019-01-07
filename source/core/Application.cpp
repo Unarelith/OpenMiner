@@ -38,27 +38,28 @@ void Application::init() {
 	m_resourceHandler.add<gk::Font>("font-default", "resources/fonts/default.ttf");
 
 	Registry::setInstance(m_registry);
+
 	m_scriptEngine.init();
 
 	m_stateStack.push<GameState>();
 }
 
 void Application::initOpenGL() {
+	// Enable transparency
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	// glBlendFunc(GL_ZERO, GL_SRC_COLOR);
-	// glBlendFunc(GL_ONE, GL_ONE);
-	// glBlendEquation(GL_FUNC_ADD);
-	// glEnable(GL_ALPHA_TEST);
 
+	// Enable depth and hide backside of faces
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glPolygonOffset(1, 1);
 
+	// Set best quality for mipmaps
 	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
 
-	glClearColor(0.196078, 0.6, 0.8, 1.0); // Skyblue
+	// Set clear color to skyblue
+	glClearColor(0.196078, 0.6, 0.8, 1.0);
 }
 

@@ -97,3 +97,14 @@ void LuaMod::registerSmeltingRecipe(const sol::table &table) {
 	Registry::getInstance().registerRecipe<SmeltingRecipe>(input, output);
 }
 
+void LuaMod::initUsertype(sol::state &lua) {
+	lua.new_usertype<LuaMod>("LuaMod",
+		sol::constructors<LuaMod(std::string)>(),
+		"id",              &LuaMod::id,
+		"block",           &LuaMod::registerBlock,
+		"item",            &LuaMod::registerItem,
+		"crafting_recipe", &LuaMod::registerCraftingRecipe,
+		"smelting_recipe", &LuaMod::registerSmeltingRecipe
+	);
+}
+

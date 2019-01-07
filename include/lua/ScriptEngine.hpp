@@ -33,7 +33,6 @@ class ScriptEngine {
 		static void setInstance(ScriptEngine *instance) { s_instance = instance; }
 
 	private:
-		static bool openWorkbench(const glm::ivec3 &position, Player &player, World &world);
 		static bool openFurnace(const glm::ivec3 &position, Player &player, World &world);
 		static void updateFurnace(const glm::ivec3 &position, Player &player, Chunk &chunk, World &world);
 

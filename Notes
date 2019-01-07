@@ -32,19 +32,27 @@ gui:show()
 ```
 ## HUD
 ```lua
-local hud = openminer:player():hud()
+local hud = LuaHUD.new()
+
+hud:hotbar {
+   pos = {x = 42, y = 84},
+   texture = "default_hotbar.png",
+   slots = 8,
+}
+
+openminer:player():set_hud(hud)
 ```
 ## Player inventory
-
-• `openminer:player():inventory()`
-• `openminer:player():inventory():add_stack(name, count=1)`
-
+```lua
+local player_inv = openminer:player():inventory()
+player_inv:add_stack(name, count = 1)
+```
 ## World
-
-• `openminer:get_block(pos)`
-• `openminer:get_meta(pos)`
-• `openminer:get_inventory(pos)`
-
+```lua
+openminer:get_block(pos)
+openminer:get_meta(pos)
+openminer:get_inventory(pos)
+```
                                      * * *
 
 # Old notes

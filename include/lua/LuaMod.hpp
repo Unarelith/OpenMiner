@@ -30,6 +30,8 @@ class LuaMod {
 
 		const std::string &id() const { return m_id; }
 
+		static void initUsertype(sol::state &lua);
+
 	private:
 		std::string m_id;
 };

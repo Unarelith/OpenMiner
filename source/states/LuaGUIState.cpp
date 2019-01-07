@@ -12,6 +12,7 @@
  * =====================================================================================
  */
 #include <gk/core/ApplicationStateStack.hpp>
+#include <gk/core/Debug.hpp>
 #include <gk/core/Mouse.hpp>
 #include <gk/graphics/Color.hpp>
 
@@ -44,14 +45,6 @@ LuaGUIState::LuaGUIState(LuaGUI &gui, gk::ApplicationState *parent) : gk::Applic
 }
 
 void LuaGUIState::onEvent(const SDL_Event &event) {
-	for (auto &it : m_widgets)
-		it->onEvent(event);
-
-	for (auto &it : m_inventoryWidgets)
-		it.onMouseEvent(event, m_mouseItemWidget, false);
-
-	m_mouseItemWidget.onEvent(event);
-
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 		gk::Mouse::setCursorGrabbed(true);
 		gk::Mouse::setCursorVisible(false);
@@ -59,6 +52,17 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 
 		m_stateStack->pop();
 	}
+
+	for (auto &it : m_widgets)
+		it->onEvent(event);
+
+	for (auto &it : m_inventoryWidgets)
+		it.onMouseEvent(event, m_mouseItemWidget, false);
+
+	for (auto &it : m_craftingWidgets)
+		it.onMouseEvent(event, m_mouseItemWidget);
+
+	m_mouseItemWidget.onEvent(event);
 }
 
 void LuaGUIState::update() {
@@ -67,6 +71,22 @@ void LuaGUIState::update() {
 
 	for (auto &it : m_widgets)
 		it->update();
+
+	for (auto &it : m_craftingWidgets) {
+		it.update();
+	}
+
+	const ItemWidget *currentItemWidget = nullptr;
+	for (auto &it : m_inventoryWidgets) {
+		if (!currentItemWidget)
+			currentItemWidget = it.currentItemWidget();
+	}
+	for (auto &it : m_craftingWidgets) {
+		if (!currentItemWidget)
+			currentItemWidget = it.currentItemWidget();
+	}
+
+	m_mouseItemWidget.update(currentItemWidget);
 }
 
 void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -90,18 +110,21 @@ void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	for (auto &it : m_inventoryWidgets)
 		target.draw(it, states);
 
+	for (auto &it : m_craftingWidgets)
+		target.draw(it, states);
+
 	target.draw(m_mouseItemWidget, states);
 }
 
 void LuaGUIState::loadGUI(LuaGUI &gui) {
-	for (auto &it : gui.images) {
+	for (auto &it : gui.imageList) {
 		auto *image = new gk::Image(it.texture);
 		image->setPosition(it.x, it.y);
 		image->setClipRect(it.clipRect.x, it.clipRect.y, it.clipRect.width, it.clipRect.height);
 		m_drawables.emplace_back(image);
 	}
 
-	for (auto &it : gui.buttons) {
+	for (auto &it : gui.textButtonList) {
 		auto *button = new TextButton(&m_mainWidget);
 		button->setPosition(it.x, it.y);
 		button->setCallback(it.on_click);
@@ -109,10 +132,21 @@ void LuaGUIState::loadGUI(LuaGUI &gui) {
 		m_widgets.emplace_back(button);
 	}
 
-	for (auto &it : gui.inventoryLists) {
+	for (auto &it : gui.inventoryWidgetList) {
 		auto &inventoryWidget = m_inventoryWidgets.emplace_back(&m_mainWidget);
 		inventoryWidget.setPosition(it.x, it.y);
-		inventoryWidget.init(World::getInstance().getPlayer()->inventory(), it.offset, it.size);
+		inventoryWidget.init(World::getInstance().getPlayer()->inventory(), it.offset, it.count);
+	}
+
+	for (auto &it : gui.craftingWidgetList) {
+		BlockData *data = World::getInstance().getBlockData(it.block.x, it.block.y, it.block.z);
+		if (data) {
+			auto &craftingWidget = m_craftingWidgets.emplace_back(data->inventory, &m_mainWidget);
+			craftingWidget.setPosition(it.x, it.y);
+		}
+		else {
+			DEBUG("ERROR: No inventory found at", it.block.x, it.block.y, it.block.z);
+		}
 	}
 }
 

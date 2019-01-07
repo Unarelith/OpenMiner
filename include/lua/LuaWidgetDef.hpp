@@ -18,6 +18,7 @@
 
 #include <gk/core/IntTypes.hpp>
 #include <gk/core/Rect.hpp>
+#include <gk/core/Vector3.hpp>
 
 namespace LuaWidgetDef {
 
@@ -33,12 +34,12 @@ struct Image : public Widget {
 	gk::FloatRect clipRect;
 };
 
-struct Button : public Widget {
+struct TextButton : public Widget {
 	std::string text;
 	sol::function on_click;
 };
 
-struct InventoryList : public Widget {
+struct InventoryWidget : public Widget {
 	std::string player;
 	std::string inventory;
 
@@ -46,7 +47,14 @@ struct InventoryList : public Widget {
 	float height = 0;
 
 	u16 offset = 0;
-	u16 size = 0;
+	u16 count = 0;
+};
+
+struct CraftingWidget : public Widget {
+	gk::Vector3i block;
+
+	u16 offset = 0;
+	u16 count = 9;
 };
 
 } // namespace LuaWidgetDef

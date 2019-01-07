@@ -23,10 +23,11 @@ TODO
 # GUI
 
 • DONE: Add a LuaGUI class to handle GUI from Lua
-• WIP: Add more GUI elements
+• DONE: Add more GUI elements
    ◦ DONE: `InventoryWidget`
-   ◦ TODO: `CraftingWidget`
+   ◦ DONE: `CraftingWidget`
    ◦ DONE: `Image`
+• TODO: Implement GUI elements requested by `Furnace` (`FurnaceWidget` first, then it’s components)
 
 # Main menu
 

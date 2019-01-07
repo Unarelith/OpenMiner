@@ -34,6 +34,12 @@ GameState::GameState() {
 
 	World::setInstance(m_world);
 
+	testLuaAPI();
+
+	initShaders();
+}
+
+void GameState::testLuaAPI() {
 	try {
 		auto &lua = ScriptEngine::getInstance().lua();
 		lua["player"] = &m_player;
@@ -42,8 +48,6 @@ GameState::GameState() {
 	catch (const sol::error &e) {
 		std::cerr << e.what() << std::endl;
 	}
-
-	initShaders();
 }
 
 void GameState::onEvent(const SDL_Event &event) {

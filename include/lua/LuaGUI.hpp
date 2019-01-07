@@ -14,20 +14,26 @@
 #ifndef LUAGUI_HPP_
 #define LUAGUI_HPP_
 
+#include <list>
+
 #include "LuaWidgetDef.hpp"
 
 // This class is meant to be used ONLY in Lua
 class LuaGUI {
 	public:
 		void addImage(const sol::table &table);
-		void addButton(const sol::table &table);
-		void addInventory(const sol::table &table);
+		void addTextButton(const sol::table &table);
+		void addInventoryWidget(const sol::table &table);
+		void addCraftingWidget(const sol::table &table);
 
 		void show();
 
-		std::vector<LuaWidgetDef::Image> images;
-		std::vector<LuaWidgetDef::Button> buttons;
-		std::vector<LuaWidgetDef::InventoryList> inventoryLists;
+		static void initUsertype(sol::state &lua);
+
+		std::list<LuaWidgetDef::Image> imageList;
+		std::list<LuaWidgetDef::TextButton> textButtonList;
+		std::list<LuaWidgetDef::InventoryWidget> inventoryWidgetList;
+		std::list<LuaWidgetDef::CraftingWidget> craftingWidgetList;
 };
 
 #endif // LUAGUI_HPP_

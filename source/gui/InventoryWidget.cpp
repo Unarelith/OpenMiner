@@ -16,8 +16,6 @@
 void InventoryWidget::init(Inventory &inventory, unsigned int offset, unsigned int size) {
 	m_itemWidgets.clear();
 
-	// for (u16 y = 0 ; y < inventory.height() ; ++y) {
-	// 	for (u16 x = 0 ; x < inventory.width() ; ++x) {
 	for (u16 i = 0 ; i < (size > 0 ? size : inventory.width() * inventory.height()) ; ++i) {
 		ItemWidget &widget = m_itemWidgets.emplace_back(inventory, (i + offset) % inventory.width(), (i + offset) / inventory.width(), this);
 		widget.update();
