@@ -26,8 +26,8 @@ TextButton::TextButton(Widget *parent) : Widget(200, 20, parent) {
 	m_disabledBackground.setClipRect(0, 46, 200, 20);
 }
 
-TextButton::TextButton(const Callback &callback, Widget *parent) : TextButton(parent) {
-	m_callback = callback;
+TextButton::TextButton(const CppCallback &callback, Widget *parent) : TextButton(parent) {
+	m_cppCallback = callback;
 }
 
 void TextButton::onEvent(const SDL_Event &event) {
@@ -39,9 +39,11 @@ void TextButton::onEvent(const SDL_Event &event) {
 		else if (!m_isHovered && m_text.color() != gk::Color::White)
 			m_text.setColor(gk::Color::White);
 	}
-	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT
-			&& m_isHovered && m_callback) {
-		m_callback(*this);
+	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && m_isHovered) {
+		if (m_cppCallback)
+			m_cppCallback(*this);
+		else if (m_luaCallback)
+			m_luaCallback(*this);
 	}
 }
 

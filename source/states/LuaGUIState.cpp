@@ -1,11 +1,11 @@
 /*
  * =====================================================================================
  *
- *       Filename:  InventoryState.cpp
+ *       Filename:  LuaGUIState.cpp
  *
  *    Description:
  *
- *        Created:  20/06/2018 23:13:50
+ *        Created:  07/01/2019 00:48:31
  *
  *         Author:  Quentin Bazin, <quent42340@gmail.com>
  *
@@ -13,16 +13,20 @@
  */
 #include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/Mouse.hpp>
+#include <gk/graphics/Color.hpp>
 
-#include "InventoryState.hpp"
+#include "Config.hpp"
+#include "LuaGUIState.hpp"
+#include "TextButton.hpp"
 
-InventoryState::InventoryState(ApplicationState *parent) : ApplicationState(parent) {
+LuaGUIState::LuaGUIState(LuaGUI &gui, gk::ApplicationState *parent) : gk::ApplicationState(parent) {
+	// FIXME: Duplicated with HUD
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
 	m_shader.linkProgram();
 
-	m_projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
+	m_orthoMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
 
 	gk::Mouse::setCursorGrabbed(false);
 	gk::Mouse::setCursorVisible(true);
@@ -30,11 +34,20 @@ InventoryState::InventoryState(ApplicationState *parent) : ApplicationState(pare
 
 	m_background.setColor(gk::Color{0, 0, 0, 127});
 	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	m_mainWidget.setScale(GUI_SCALE, GUI_SCALE);
+
+	for (auto &it : gui.buttons) {
+		auto *button = new TextButton(&m_mainWidget);
+		button->setText(it.text);
+		button->setCallback(it.on_click);
+		m_widgets.emplace_back(button);
+	}
 }
 
-void InventoryState::onEvent(const SDL_Event &event) {
-	// if (m_parent)
-	// 	m_parent->onEvent(event);
+void LuaGUIState::onEvent(const SDL_Event &event) {
+	for (auto &it : m_widgets)
+		it->onEvent(event);
 
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 		gk::Mouse::setCursorGrabbed(true);
@@ -43,29 +56,29 @@ void InventoryState::onEvent(const SDL_Event &event) {
 
 		m_stateStack->pop();
 	}
-
-	if (m_widget)
-		m_widget->onEvent(event);
 }
 
-void InventoryState::update() {
+void LuaGUIState::update() {
 	if (m_parent)
 		m_parent->update();
 
-	if (m_widget)
-		m_widget->update();
+	for (auto &it : m_widgets)
+		it->update();
 }
 
-void InventoryState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (m_parent)
 		target.draw(*m_parent, states);
 
-	states.transform *= getTransform();
-	states.projectionMatrix = m_projectionMatrix;
+	states.transform *= m_mainWidget.getTransform();
 	states.shader = &m_shader;
+	states.projectionMatrix = m_orthoMatrix;
+	states.viewMatrix = gk::Transform::Identity;
+	states.vertexAttributes = gk::VertexAttribute::Only2d;
+
 	target.draw(m_background, states);
 
-	if (m_widget)
-		target.draw(*m_widget, states);
+	for (auto &it : m_widgets)
+		target.draw(*it, states);
 }
 

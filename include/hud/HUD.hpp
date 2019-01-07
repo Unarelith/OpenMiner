@@ -32,7 +32,6 @@ class HUD : public gk::Transformable, public gk::IDrawable {
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		gk::Shader m_shader;
-
 		glm::mat4 m_orthoMatrix;
 
 		Hotbar m_hotbar;

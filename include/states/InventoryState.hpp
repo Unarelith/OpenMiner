@@ -44,7 +44,6 @@ class InventoryState : public gk::ApplicationState {
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		gk::Shader m_shader;
-
 		glm::mat4 m_projectionMatrix;
 
 		std::unique_ptr<Widget> m_widget;

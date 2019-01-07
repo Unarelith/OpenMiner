@@ -24,7 +24,7 @@ class MenuWidget : public Widget {
 
 		void onEvent(const SDL_Event &event) override;
 
-		TextButton &addButton(u16 x, u16 y, const std::string &text, const TextButton::Callback &callback);
+		TextButton &addButton(u16 x, u16 y, const std::string &text, const TextButton::CppCallback &callback);
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;

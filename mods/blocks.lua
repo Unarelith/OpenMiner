@@ -102,10 +102,20 @@ mod:block {
 	texture = 77,
 
 	on_block_activated = function(pos, player, world)
-		open_workbench(pos, player, world)
+		-- open_workbench(pos, player, world)
 		-- local data = world:getBlockData(position.x, position.y, position.z)
 		-- local inventoryState = ApplicationStateStack.getInstance():push<InventoryState>(&gk::ApplicationStateStack::getInstance().top());
 		-- inventoryState.setupWidget<WorkbenchWidget>(player.inventory(), data->inventory);
+		gui = LuaGUI.new()
+		gui:button {
+			name = "btn_hello",
+			pos = {x = 0, y = 0},
+			text = "Hello",
+			on_click = function(self)
+				print("hello")
+			end,
+		}
+		gui:show()
 	end,
 }
 
@@ -141,6 +151,7 @@ mod:block {
 	id = "flower",
 	name = "Flower",
 	texture = 150,
+	hardness = 0.05,
 	draw_type = 1,
 }
 

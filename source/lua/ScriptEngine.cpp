@@ -11,6 +11,7 @@
  *
  * =====================================================================================
  */
+#include "LuaGUI.hpp"
 #include "LuaMod.hpp"
 #include "Player.hpp"
 #include "Registry.hpp"
@@ -54,6 +55,12 @@ void ScriptEngine::initUsertypes() {
 		"item",            &LuaMod::registerItem,
 		"crafting_recipe", &LuaMod::registerCraftingRecipe,
 		"smelting_recipe", &LuaMod::registerSmeltingRecipe
+	);
+
+	m_lua.new_usertype<LuaGUI>("LuaGUI",
+		"button",    &LuaGUI::addButton,
+		"inventory", &LuaGUI::addInventory,
+		"show",      &LuaGUI::show
 	);
 }
 

@@ -1,6 +1,38 @@
 TODO
 
-# Engine
+# Code improvements
+
+• TODO: If possible, `Cube` should inherit from `ItemWidget` or `Widget`
+• TODO: Rename `Cube` to either `InventoryCube`, `CubeItemWidget` or `CubeWidget`
+• TODO: Unify cube coords in `BlockCursor`, `Cube`, `Chunk`
+
+# Refactorings
+
+• TODO: `Chunk::setBlock` does way too much things, fix this
+• TODO: Add a mesh system, either here or in `GameKit`
+   → Maybe this is the way to add custom vertex attributes while having default ones? Check 3dee
+
+# Lua API
+
+• TODO: New texture system to make things easier for Lua
+   ◦ TODO: Use a separate texture for each block
+   ◦ TODO: Since this may lower the perfs, optimize it
+   ◦ TODO: Load textures from Lua
+   ◦ TODO: Use names instead of ids in Lua
+
+# GUI
+
+• DONE: Add a LuaGUI class to handle GUI from Lua
+• TODO: Add more GUI elements
+   ◦ TODO: `InventoryList`
+
+# Main menu
+
+• TODO: Main menu
+• TODO: World loading/saving
+• TODO: World selection menu
+
+# Network
 
 • TODO: Client/server architecture
 
@@ -10,11 +42,11 @@ TODO
 
 # Chunk generation
 
+• TODO: Use the seed
 • TODO: Biomes
 
 # Graphics
 
-• WIP: Add new draw types
-   ◦ DONE: Flower-like
-   ◦ TODO: Nodeboxes
+• TODO: Add nodebox-like draw type
 
+> vim:ft=notes
