@@ -105,6 +105,27 @@ void LuaGUI::addCraftingWidget(const sol::table &table) {
 			block, offset, count});
 }
 
+void LuaGUI::addFurnaceWidget(const sol::table &table) {
+	// FIXME: Duplicated above
+	float x = 0, y = 0;
+	sol::optional<sol::table> pos = table["pos"];
+	std::string name = table["name"].get<std::string>();
+	if (pos != sol::nullopt) {
+		x = pos.value()["x"];
+		y = pos.value()["y"];
+	}
+
+	gk::Vector3i block;
+	sol::optional<sol::table> blockTable = table["block"];
+	if (blockTable != sol::nullopt) {
+		block.x = blockTable.value()["x"];
+		block.y = blockTable.value()["y"];
+		block.z = blockTable.value()["z"];
+	}
+
+	furnaceWidgetList.emplace_back(LuaWidgetDef::FurnaceWidget{{name, x, y}, block});
+}
+
 void LuaGUI::show() {
 	auto &stateStack = gk::ApplicationStateStack::getInstance();
 	stateStack.push<LuaGUIState>(*this, &stateStack.top());
@@ -116,6 +137,7 @@ void LuaGUI::initUsertype(sol::state &lua) {
 		"button",    &LuaGUI::addTextButton,
 		"inventory", &LuaGUI::addInventoryWidget,
 		"crafting",  &LuaGUI::addCraftingWidget,
+		"furnace",   &LuaGUI::addFurnaceWidget,
 		"show",      &LuaGUI::show
 	);
 }

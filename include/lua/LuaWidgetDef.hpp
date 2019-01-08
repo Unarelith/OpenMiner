@@ -57,6 +57,10 @@ struct CraftingWidget : public Widget {
 	u16 count = 9;
 };
 
+struct FurnaceWidget : public Widget {
+	gk::Vector3i block;
+};
+
 } // namespace LuaWidgetDef
 
 #endif // LUAWIDGETDEF_HPP_

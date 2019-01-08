@@ -13,12 +13,18 @@
  */
 #include "LuaCore.hpp"
 #include "Player.hpp"
+#include "Registry.hpp"
 #include "World.hpp"
+
+Registry *LuaCore::registry() {
+	return &Registry::getInstance();
+}
 
 void LuaCore::initUsertype(sol::state &lua) {
 	lua.new_usertype<LuaCore>("LuaCore",
-		"world",  &LuaCore::world,
-		"player", &LuaCore::player
+		"world",    &LuaCore::world,
+		"player",   &LuaCore::player,
+		"registry", &LuaCore::registry
 	);
 }
 

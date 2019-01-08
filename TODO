@@ -31,7 +31,9 @@ TODO
    ◦ DONE: `InventoryWidget`
    ◦ DONE: `CraftingWidget`
    ◦ DONE: `Image`
-• TODO: Implement GUI elements requested by `Furnace` (`FurnaceWidget` first, then it’s components)
+• WIP: Implement GUI elements requested by `Furnace`
+   ◦ DONE: `FurnaceWidget` first
+   ◦ TODO: Then its components
 
 # Main menu
 

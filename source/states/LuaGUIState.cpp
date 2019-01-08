@@ -17,6 +17,7 @@
 #include <gk/graphics/Color.hpp>
 
 #include "Config.hpp"
+#include "FurnaceWidget.hpp"
 #include "InventoryWidget.hpp"
 #include "LuaGUIState.hpp"
 #include "Player.hpp"
@@ -143,6 +144,18 @@ void LuaGUIState::loadGUI(LuaGUI &gui) {
 		if (data) {
 			auto &craftingWidget = m_craftingWidgets.emplace_back(data->inventory, &m_mainWidget);
 			craftingWidget.setPosition(it.x, it.y);
+		}
+		else {
+			DEBUG("ERROR: No inventory found at", it.block.x, it.block.y, it.block.z);
+		}
+	}
+
+	for (auto &it : gui.furnaceWidgetList) {
+		BlockData *data = World::getInstance().getBlockData(it.block.x, it.block.y, it.block.z);
+		if (data) {
+			auto *furnaceWidget = new FurnaceWidget(m_mouseItemWidget, World::getInstance().getPlayer()->inventory(), *data, &m_mainWidget);
+			furnaceWidget->setPosition(it.x, it.y);
+			m_widgets.emplace_back(furnaceWidget);
 		}
 		else {
 			DEBUG("ERROR: No inventory found at", it.block.x, it.block.y, it.block.z);

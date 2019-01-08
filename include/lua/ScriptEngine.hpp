@@ -33,9 +33,6 @@ class ScriptEngine {
 		static void setInstance(ScriptEngine *instance) { s_instance = instance; }
 
 	private:
-		static bool openFurnace(const glm::ivec3 &position, Player &player, World &world);
-		static void updateFurnace(const glm::ivec3 &position, Player &player, Chunk &chunk, World &world);
-
 		static ScriptEngine *s_instance;
 
 		sol::state m_lua;

@@ -11,6 +11,8 @@
  *
  * =====================================================================================
  */
+#include <iostream>
+
 #include "Block.hpp"
 #include "Player.hpp"
 #include "World.hpp"
@@ -27,15 +29,27 @@ Block::Block(u32 id, u32 textureID, const std::string &name, const std::string &
 }
 
 void Block::onTick(const glm::ivec3 &pos, Player &player, Chunk &chunk, World &world) const {
-	if (m_onTick.valid()) {
-		m_onTick(pos, player, chunk, world);
+	try {
+		if (m_onTick && m_onTickEnabled) {
+			m_onTick(pos, player, chunk, world);
+		}
+	}
+	catch (const sol::error &e) {
+		m_onTickEnabled = false;
+		std::cerr << e.what() << std::endl;
+		std::cerr << "Block stopped ticking at (" << pos.x << ", " << pos.y << ", " << pos.z << ")" << std::endl;
 	}
 }
 
 bool Block::onBlockActivated(const glm::ivec3 &pos, Player &player, World &world) const {
-	if (m_onBlockActivated.valid()) {
-		m_onBlockActivated(pos, player, world);
-		return true;
+	try {
+		if (m_onBlockActivated) {
+			m_onBlockActivated(pos, player, world);
+			return true;
+		}
+	}
+	catch (const sol::error &e) {
+		std::cerr << e.what() << std::endl;
 	}
 
 	return false;

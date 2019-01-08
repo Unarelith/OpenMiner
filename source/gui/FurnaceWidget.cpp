@@ -13,8 +13,8 @@
  */
 #include "FurnaceWidget.hpp"
 
-FurnaceWidget::FurnaceWidget(Inventory &playerInventory, BlockData &blockData, Widget *parent)
-	: Widget(176, 166, parent), m_playerInventory(playerInventory), m_blockData(blockData)
+FurnaceWidget::FurnaceWidget(MouseItemWidget &mouseItemWidget, Inventory &playerInventory, BlockData &blockData, Widget *parent)
+	: Widget(176, 166, parent), m_playerInventory(playerInventory), m_blockData(blockData), m_mouseItemWidget(mouseItemWidget)
 {
 	m_background.load("texture-furnace");
 	m_background.setClipRect(0, 0, 176, 166);
@@ -45,14 +45,12 @@ void FurnaceWidget::onEvent(const SDL_Event &event) {
 
 	if (!m_mouseItemWidget.stack().item().id() || m_mouseItemWidget.stack().item().isFuel())
 		m_fuelInventoryWidget.onMouseEvent(event, m_mouseItemWidget);
-
-	m_mouseItemWidget.onEvent(event);
 }
 
 void FurnaceWidget::update() {
-	u16 ticksRemaining = m_blockData.data & 0xffff;
-	u16 currentBurnTime = (m_blockData.data >> 16) & 0xffff;
-	u16 itemProgress = (m_blockData.data >> 32) & 0xffff;
+	u16 ticksRemaining = m_blockData.data & 0xfff;
+	u16 currentBurnTime = (m_blockData.data >> 12) & 0xfff;
+	u16 itemProgress = (m_blockData.data >> 24) & 0xff;
 
 	if (currentBurnTime) {
 		m_burnImage.setPosition(57, 37 + 14 - ticksRemaining * 14 / currentBurnTime, 0);
@@ -93,7 +91,5 @@ void FurnaceWidget::draw(gk::RenderTarget &target, gk::RenderStates states) cons
 
 	target.draw(m_burnImage, states);
 	target.draw(m_progressImage, states);
-
-	target.draw(m_mouseItemWidget, states);
 }
 

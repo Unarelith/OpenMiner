@@ -23,6 +23,7 @@
 #include "Config.hpp"
 #include "Widget.hpp"
 
+// FIXME: Old class used when widgets were defined from C++
 class InventoryState : public gk::ApplicationState {
 	public:
 		InventoryState(gk::ApplicationState *parent = nullptr);

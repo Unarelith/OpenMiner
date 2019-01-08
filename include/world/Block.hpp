@@ -102,8 +102,9 @@ class Block {
 
 		gk::FloatBox m_boundingBox{0, 0, 0, 1, 1, 1};
 
-		sol::function m_onBlockActivated;
-		sol::function m_onTick;
+		sol::unsafe_function m_onBlockActivated;
+		sol::unsafe_function m_onTick;
+		mutable bool m_onTickEnabled = true;
 
 		BlockDrawType m_drawType = BlockDrawType::Solid;
 };

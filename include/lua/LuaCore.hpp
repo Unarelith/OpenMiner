@@ -19,6 +19,7 @@
 #include <sol.hpp>
 
 class Player;
+class Registry;
 class World;
 
 class LuaCore {
@@ -28,6 +29,8 @@ class LuaCore {
 
 		Player *player() { return m_player; }
 		void setPlayer(Player &player) { m_player = &player; }
+
+		Registry *registry();
 
 		static void initUsertype(sol::state &lua);
 

@@ -7,6 +7,7 @@ GUI_SCALE = 3
 
 mod = LuaMod.new("default")
 
+dofile("mods/bit.lua") -- FIXME
 dofile("mods/blocks.lua")
 dofile("mods/items.lua")
 dofile("mods/recipes.lua")

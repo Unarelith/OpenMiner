@@ -19,7 +19,7 @@
 
 class FurnaceWidget : public Widget {
 	public:
-		FurnaceWidget(Inventory &playerInventory, BlockData &blockData, Widget *parent = nullptr);
+		FurnaceWidget(MouseItemWidget &mouseItemWidget, Inventory &playerInventory, BlockData &blockData, Widget *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -43,7 +43,7 @@ class FurnaceWidget : public Widget {
 		gk::Image m_burnImage{"texture-furnace"};
 		gk::Image m_progressImage{"texture-furnace"};
 
-		MouseItemWidget m_mouseItemWidget{this};
+		MouseItemWidget &m_mouseItemWidget;
 };
 
 #endif // FURNACEWIDGET_HPP_

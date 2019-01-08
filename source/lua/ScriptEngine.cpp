@@ -28,21 +28,63 @@ void ScriptEngine::init() {
 
 	// FIXME: Remove these lines when they're not needed anymore
 	m_lua["registry"] = &Registry::getInstance();
-	m_lua["open_furnace"] = &openFurnace;
-	m_lua["update_furnace"] = &updateFurnace;
 
-	m_lua.open_libraries(sol::lib::base);
+	m_lua.open_libraries(
+		sol::lib::base,
+		sol::lib::math,
+		sol::lib::table
+	);
+
 	m_lua.safe_script_file("mods/test.lua");
 }
 
 void ScriptEngine::initUsertypes() {
-	m_lua.new_usertype<World>("World");
+	m_lua.new_usertype<Registry>("Registry",
+		"get_recipe", &Registry::getRecipe
+	);
+
+	m_lua.new_usertype<World>("World",
+		"get_block", &World::getBlock,
+		"get_data", &World::getData,
+		"set_data", &World::setData,
+		"get_block_data", &World::getBlockData
+	);
+
+	m_lua.new_usertype<Chunk>("Chunk",
+		"get_block", &Chunk::getBlock,
+		"get_data", &Chunk::getData,
+		"get_block_data", &Chunk::getBlockData
+	);
+
+	m_lua.new_usertype<BlockData>("BlockData",
+		"inventory", &BlockData::inventory,
+		"data", &BlockData::data
+	);
 
 	m_lua.new_usertype<Player>("Player",
-		"inventory", &Player::inventory);
+		"inventory", &Player::inventory
+	);
 
 	m_lua.new_usertype<Inventory>("Inventory",
-		"add_stack", &Inventory::addStack
+		"add_stack", &Inventory::addStack,
+		"get_stack", &Inventory::getStack,
+		"set_stack", &Inventory::setStack
+	);
+
+	m_lua.new_usertype<Recipe>("Recipe",
+		"type", &Recipe::type,
+		"result", &Recipe::result
+	);
+
+	m_lua.new_usertype<ItemStack>("ItemStack",
+		"amount", &ItemStack::amount,
+		"item", &ItemStack::item
+	);
+
+	m_lua.new_usertype<Item>("Item",
+		"id", &Item::id,
+		"name", &Item::name,
+		"burn_time", &Item::burnTime
 	);
 
 	m_lua.new_usertype<glm::ivec3>("ivec3",
@@ -54,22 +96,5 @@ void ScriptEngine::initUsertypes() {
 	LuaCore::initUsertype(m_lua);
 	LuaMod::initUsertype(m_lua);
 	LuaGUI::initUsertype(m_lua);
-}
-
-// FIXME: All the code below will be removed once these blocks are fully implemented in Lua
-
-#include "BlockFurnace.hpp"
-#include "Chunk.hpp"
-#include "Player.hpp"
-#include "World.hpp"
-
-bool ScriptEngine::openFurnace(const glm::ivec3 &position, Player &player, World &world) {
-	BlockFurnace block;
-	return block.onBlockActivated(position, player, world);
-}
-
-void ScriptEngine::updateFurnace(const glm::ivec3 &position, Player &player, Chunk &chunk, World &world) {
-	BlockFurnace block;
-	return block.onTick(position, player, chunk, world);
 }
 
