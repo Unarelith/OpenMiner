@@ -2,34 +2,6 @@ Notes
 
 # Lua API integration
 
-• Easy way: global namespace
-
-## GUI
-```lua
-local gui = LuaGUI.new("test_gui")
-
-local button = gui:button {
-   name = "hello_btn",
-   pos = {x = 8, y = 2},
-   label = "Hello",
-}
-
-button.on_click = function(self)
-   print("lol")
-end
-
-local inv = openminer:player():inventory()
-gui:inventory {
-   name = "main_inv",
-   pos = {x = 8, y = 12}
-   player = openminer:player():name()
-   inventory = "main",
-   size = {x = 8, y = 3},
-   offset = 0,
-}
-
-gui:show()
-```
 ## HUD
 ```lua
 local hud = LuaHUD.new()
@@ -41,11 +13,6 @@ hud:hotbar {
 }
 
 openminer:player():set_hud(hud)
-```
-## Player inventory
-```lua
-local player_inv = openminer:player():inventory()
-player_inv:add_stack(name, count = 1)
 ```
 ## World
 ```lua

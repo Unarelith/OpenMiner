@@ -2,8 +2,7 @@
 
 [![Documentation](https://codedocs.xyz/Quent42340/OpenMiner.svg)](https://codedocs.xyz/Quent42340/OpenMiner/)
 [![License](https://img.shields.io/badge/license-LGPLv2.1%2B-blue.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
-
-### By Unarelith
+[![Discord](https://img.shields.io/discord/527527086756200458.svg?style=popout)](https://discord.gg/eN8k8wt)
 
 - OpenMiner is a Minecraft-like game engine.
 
@@ -34,6 +33,6 @@
 
 ## Previous versions
 
-- Here is the [commit](https://github.com/Quent42340/KubKraft/tree/8eba845421efff6ce941f8550ff79e6364970fd5) matching the end of the first version made in 2013.
-- And here is the [commit](https://github.com/Quent42340/KubKraft/tree/58c23a7e66404dab94e51998a179dc370c89ea06) matching the end of the rewrite made in 2014.
+- Here is the [commit](https://github.com/Quent42340/OpenMiner/tree/8eba845421efff6ce941f8550ff79e6364970fd5) matching the end of the first version made in 2013.
+- And here is the [commit](https://github.com/Quent42340/OpenMiner/tree/58c23a7e66404dab94e51998a179dc370c89ea06) matching the end of the rewrite made in 2014.
 
