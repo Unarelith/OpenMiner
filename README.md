@@ -36,3 +36,7 @@
 - Here is the [commit](https://github.com/Quent42340/OpenMiner/tree/8eba845421efff6ce941f8550ff79e6364970fd5) matching the end of the first version made in 2013.
 - And here is the [commit](https://github.com/Quent42340/OpenMiner/tree/58c23a7e66404dab94e51998a179dc370c89ea06) matching the end of the rewrite made in 2014.
 
+## Credits
+
+- MadPixel (Minecrafter font) [CC BY-ND]
+
