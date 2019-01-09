@@ -30,7 +30,8 @@ doc/html
 doc/latex
 
 # Binaries
-OpenMiner
+client/openminer
+server/openminer_server
 *.exe
 
 # Misc

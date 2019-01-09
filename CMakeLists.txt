@@ -3,45 +3,11 @@
 #------------------------------------------------------------------------------
 cmake_minimum_required(VERSION 3.1)
 
-project(OpenMiner VERSION 0.0.1 LANGUAGES CXX)
+project(openminer)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
-#------------------------------------------------------------------------------
-# Get source files
-#------------------------------------------------------------------------------
-file(GLOB_RECURSE SOURCE_FILES source/*.cpp external/*.cpp)
-file(GLOB_RECURSE HEADER_FILES include/*.hpp external/*.hpp)
-
-foreach(HEADER_FILE ${HEADER_FILES})
-	get_filename_component(HEADER_DIRECTORY ${HEADER_FILE} DIRECTORY)
-	include_directories(${HEADER_DIRECTORY})
-endforeach(HEADER_FILE)
-
-#------------------------------------------------------------------------------
-# Create executable target
-#------------------------------------------------------------------------------
-add_executable(${CMAKE_PROJECT_NAME} ${SOURCE_FILES})
-
-#------------------------------------------------------------------------------
-# Compiler flags
-#------------------------------------------------------------------------------
-target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -O3 -ffast-math)
-target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -g -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
-target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -DDEBUG_ENABLED)
-target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -DSOL_CHECK_ARGUMENTS
-	# -DSOL_SAFE_USERTYPE=1
-	# -DSOL_SAFE_REFERENCES=1
-	# -DSOL_SAFE_FUNCTION_CALLS=1
-	# -DSOL_SAFE_FUNCTION=1
-	# -DSOL_SAFE_NUMERICS=1
-	# -DSOL_SAFE_GETTER=1
-	# -DSOL_PRINT_ERRORS=1
-)
-
-target_compile_features(${CMAKE_PROJECT_NAME} PRIVATE cxx_std_17)
 
 #------------------------------------------------------------------------------
 # Packages
@@ -138,16 +104,9 @@ endif()
 include_directories(${SFML_INCLUDE_DIRS})
 
 #------------------------------------------------------------------------------
-# Link options
+# Subdirectories
 #------------------------------------------------------------------------------
-target_link_libraries(${CMAKE_PROJECT_NAME}
-                      ${LUA_LIBRARIES}
-                      ${GAMEKIT_LIBRARIES}
-                      ${TINYXML2_LIBRARIES}
-                      ${OPENGL_LIBRARIES}
-                      ${SDL2_LIBRARIES}
-                      ${SDL2IMAGE_LIBRARIES}
-                      ${SDL2MIXER_LIBRARIES}
-                      ${SDL2TTF_LIBRARIES}
-                      sfml-network)
+add_subdirectory(common)
+add_subdirectory(client)
+add_subdirectory(server)
 
