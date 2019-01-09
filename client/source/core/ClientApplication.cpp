@@ -1,11 +1,11 @@
 /*
  * =====================================================================================
  *
- *       Filename:  Application.cpp
+ *       Filename:  ClientApplication.cpp
  *
  *    Description:
  *
- *        Created:  14/12/2014 05:09:21
+ *        Created:  09/01/2019 19:33:52
  *
  *         Author:  Quentin Bazin, <quent42340@gmail.com>
  *
@@ -15,12 +15,12 @@
 #include <gk/core/Mouse.hpp>
 #include <gk/graphics/Font.hpp>
 
-#include "Application.hpp"
+#include "ClientApplication.hpp"
 #include "Config.hpp"
 #include "GameState.hpp"
 #include "TextureLoader.hpp"
 
-void Application::init() {
+void ClientApplication::init() {
 	gk::CoreApplication::init();
 
 	gk::GamePad::init(m_keyboardHandler);
@@ -44,7 +44,7 @@ void Application::init() {
 	m_stateStack.push<GameState>();
 }
 
-void Application::initOpenGL() {
+void ClientApplication::initOpenGL() {
 	// Enable transparency
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
