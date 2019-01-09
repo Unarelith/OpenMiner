@@ -13,12 +13,16 @@
  */
 #include "ServerApplication.hpp"
 
+ServerApplication::ServerApplication(int argc, char **argv) : gk::CoreApplication(argc, argv) {
+	m_loadSDL = false;
+}
+
 void ServerApplication::init() {
+	gk::CoreApplication::init();
+
 	m_server.init();
 	m_server.setRunning(true);
 	m_server.setGameStarted(false);
-
-	gk::CoreApplication::init();
 
 	Registry::setInstance(m_registry);
 
@@ -27,18 +31,14 @@ void ServerApplication::init() {
 
 void ServerApplication::mainLoop() {
 	while (m_server.isRunning()) {
-		handleEvents();
-
 		m_server.handleGameEvents();
 
-		if (m_server.hasGameStarted()) {
-			m_server.handleKeyState();
+		m_server.handleKeyState();
 
-			m_clock.updateGame([&] {
-			});
+		m_clock.updateGame([&] {
+		});
 
-			m_clock.waitForNextFrame();
-		}
+		m_clock.waitForNextFrame();
 	}
 }
 
