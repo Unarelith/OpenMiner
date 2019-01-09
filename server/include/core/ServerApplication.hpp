@@ -22,7 +22,7 @@
 
 class ServerApplication : public gk::CoreApplication {
 	public:
-		ServerApplication(int argc, char **argv) : gk::CoreApplication(argc, argv) {}
+		ServerApplication(int argc, char **argv);
 
 		void init() override;
 
