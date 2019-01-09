@@ -3,6 +3,7 @@
 .#*
 *~
 .ycm_extra_conf.py
+.vscode
 
 # Compiled files
 *.o
