@@ -9,8 +9,6 @@ mod = LuaMod.new("default")
 
 dofile("mods/bit.lua") -- FIXME
 dofile("mods/blocks.lua")
-dofile("mods/workbench.lua")
-dofile("mods/furnace.lua")
 dofile("mods/items.lua")
 dofile("mods/recipes.lua")
 

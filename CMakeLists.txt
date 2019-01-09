@@ -128,6 +128,16 @@ include_directories(${SDL2_INCLUDE_DIRS}
                     ${SDL2TTF_INCLUDE_DIRS})
 
 #------------------------------------------------------------------------------
+# - SFML network
+#------------------------------------------------------------------------------
+find_package(SFML COMPONENTS network)
+if(NOT SFML_FOUND)
+	message(FATAL_ERROR "SFML is needed to build the project. Please install it correctly.")
+endif()
+
+include_directories(${SFML_INCLUDE_DIRS})
+
+#------------------------------------------------------------------------------
 # Link options
 #------------------------------------------------------------------------------
 target_link_libraries(${CMAKE_PROJECT_NAME}
@@ -138,5 +148,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
                       ${SDL2_LIBRARIES}
                       ${SDL2IMAGE_LIBRARIES}
                       ${SDL2MIXER_LIBRARIES}
-                      ${SDL2TTF_LIBRARIES})
+                      ${SDL2TTF_LIBRARIES}
+                      sfml-network)
 
