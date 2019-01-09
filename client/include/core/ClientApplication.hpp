@@ -1,18 +1,18 @@
 /*
  * =====================================================================================
  *
- *       Filename:  Application.hpp
+ *       Filename:  ClientApplication.hpp
  *
  *    Description:
  *
- *        Created:  14/12/2014 05:09:11
+ *        Created:  09/01/2019 19:33:30
  *
  *         Author:  Quentin Bazin, <quent42340@gmail.com>
  *
  * =====================================================================================
  */
-#ifndef APPLICATION_HPP_
-#define APPLICATION_HPP_
+#ifndef CLIENTAPPLICATION_HPP_
+#define CLIENTAPPLICATION_HPP_
 
 #include <gk/core/CoreApplication.hpp>
 
@@ -20,9 +20,9 @@
 #include "Registry.hpp"
 #include "ScriptEngine.hpp"
 
-class Application : public gk::CoreApplication {
+class ClientApplication : public gk::CoreApplication {
 	public:
-		Application(int argc, char **argv) : gk::CoreApplication(argc, argv) {}
+		ClientApplication(int argc, char **argv) : gk::CoreApplication(argc, argv) {}
 
 		void init() override;
 
@@ -36,4 +36,4 @@ class Application : public gk::CoreApplication {
 		Registry m_registry;
 };
 
-#endif // APPLICATION_HPP_
+#endif // CLIENTAPPLICATION_HPP_

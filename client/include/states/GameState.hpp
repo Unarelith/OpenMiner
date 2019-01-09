@@ -19,6 +19,7 @@
 #include <gk/core/ApplicationState.hpp>
 #include <gk/gl/RenderTarget.hpp>
 
+#include "Client.hpp"
 #include "Config.hpp"
 #include "HUD.hpp"
 #include "LuaCore.hpp"
@@ -52,6 +53,8 @@ class GameState : public gk::ApplicationState {
 		HUD m_hud{m_player, m_world};
 
 		LuaCore m_luaCore;
+
+		Client m_client;
 };
 
 #endif // GAMESTATE_HPP_

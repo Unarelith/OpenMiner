@@ -18,6 +18,7 @@
 
 #include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/input/GamePad.hpp>
+#include <gk/core/Exception.hpp>
 #include <gk/core/Mouse.hpp>
 #include <gk/gl/OpenGL.hpp>
 #include <gk/core/GameClock.hpp>
@@ -30,6 +31,13 @@
 #include "ScriptEngine.hpp"
 
 GameState::GameState() {
+	try {
+		m_client.connect("localhost", 4242);
+	}
+	catch (const gk::Exception &e) {
+		std::cerr << "Error " << e.what() << std::endl;
+	}
+
 	m_camera.setAspectRatio((float)SCREEN_WIDTH / SCREEN_HEIGHT);
 
 	World::setInstance(m_world);
