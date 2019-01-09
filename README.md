@@ -28,8 +28,8 @@
 
 ## Discussion
 
-- IRC: irc.freenode.net `#openminer`
 - Discord: [join server](https://discord.gg/eN8k8wt)
+- IRC: irc.freenode.net `#openminer`
 
 ## Previous versions
 
