@@ -14,13 +14,13 @@
 #include "Network.hpp"
 #include "Server.hpp"
 
-void Server::init() {
-	if (m_udpSocket.bind(4242) != sf::Socket::Done)
+void Server::init(u16 port) {
+	if (m_udpSocket.bind(port) != sf::Socket::Done)
 		throw EXCEPTION("Network error: Bind failed");
 
 	m_udpSocket.setBlocking(false);
 
-	if (m_tcpListener.listen(4242) != sf::Socket::Done)
+	if (m_tcpListener.listen(port) != sf::Socket::Done)
 		throw EXCEPTION("Network error: Listen failed");
 
 	m_tcpListener.setBlocking(false);
