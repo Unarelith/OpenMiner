@@ -20,7 +20,7 @@ ServerApplication::ServerApplication(int argc, char **argv) : gk::CoreApplicatio
 void ServerApplication::init() {
 	gk::CoreApplication::init();
 
-	m_server.init();
+	m_server.init(4242);
 	m_server.setRunning(true);
 	m_server.setGameStarted(false);
 
@@ -36,6 +36,7 @@ void ServerApplication::mainLoop() {
 		m_server.handleKeyState();
 
 		m_clock.updateGame([&] {
+			// TODO
 		});
 
 		m_clock.waitForNextFrame();

@@ -22,7 +22,7 @@
 
 class Server {
 	public:
-		void init();
+		void init(u16 port = 4242);
 
 		void handleKeyState();
 
