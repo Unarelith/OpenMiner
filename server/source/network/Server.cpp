@@ -93,7 +93,7 @@ void Server::handleNewConnections() {
 			sf::Packet outPacket;
 			outPacket << Network::Command::ClientOk << client.id;
 			client.tcpSocket->send(outPacket);
-			client.tcpSocket->setBlocking(false);
+			// client.tcpSocket->setBlocking(false);
 
 			if (m_connectionCallback)
 				m_connectionCallback(client);

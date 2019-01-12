@@ -14,23 +14,31 @@
 #ifndef CLIENTWORLD_HPP_
 #define CLIENTWORLD_HPP_
 
+#include <memory>
+
 #include "ClientChunk.hpp"
 #include "Network.hpp"
-
-class Player;
 
 class ClientWorld : public gk::IDrawable {
 	public:
 		ClientWorld();
 
-		void update(Player &player);
+		void update();
 
 		void receiveChunkData(sf::Packet &packet);
+
+		ClientChunk *getChunk(int cx, int cy, int cz) const;
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		ClientChunk m_chunk;
+		const s32 m_width = 32;
+		const s32 m_height = 4;
+		const s32 m_depth = 32;
+
+		std::vector<std::unique_ptr<ClientChunk>> m_chunks;
+
+		gk::Texture &m_texture;
 };
 
 #endif // CLIENTWORLD_HPP_

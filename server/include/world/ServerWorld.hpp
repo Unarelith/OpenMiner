@@ -14,16 +14,30 @@
 #ifndef SERVERWORLD_HPP_
 #define SERVERWORLD_HPP_
 
+#include <memory>
+#include <vector>
+
 #include "ServerChunk.hpp"
 
 class Client;
 
 class ServerWorld {
 	public:
-		void sendChunkData(Client &client);
+		ServerWorld();
+
+		void update();
+
+		void sendWorldData(Client &client);
+		void sendChunkData(Client &client, ServerChunk *chunk);
+
+		ServerChunk *getChunk(int cx, int cy, int cz) const;
 
 	private:
-		ServerChunk m_chunk{0, 0, 0};
+		const s32 m_width = 32;
+		const s32 m_height = 4;
+		const s32 m_depth = 32;
+
+		std::vector<std::unique_ptr<ServerChunk>> m_chunks;
 };
 
 #endif // SERVERWORLD_HPP_
