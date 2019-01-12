@@ -47,20 +47,19 @@ GameState::GameState() : m_chunk(0, 0, 2, gk::ResourceHandler::getInstance().get
 
 	initShaders();
 
-	m_client.setCommandCallback(Network::Command::ChunkData, [](sf::Packet &packet) {
-		std::string str;
-		packet >> str;
-		std::cout << str << std::endl;
-	});
-
-	for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
-		for (u16 y = 0 ; y < CHUNK_HEIGHT ; ++y) {
-			for (u16 z = 0 ; z < CHUNK_DEPTH ; ++z) {
-				m_chunk.setBlock(x, y, z, (rand() % 2) * 2);
-				m_chunk.lightmap().addSunlight(x, y, z, 15);
+	m_client.setCommandCallback(Network::Command::ChunkData, [this](sf::Packet &packet) {
+		for (u16 z = 0 ; z < CHUNK_DEPTH ; ++z) {
+			for (u16 y = 0 ; y < CHUNK_HEIGHT ; ++y) {
+				for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
+					u16 block;
+					packet >> block;
+					m_chunk.setBlock(x, y, z, block);
+					m_chunk.lightmap().addSunlight(x, y, z, 15);
+				}
 			}
 		}
-	}
+	});
+
 }
 
 void GameState::testLuaAPI() {
