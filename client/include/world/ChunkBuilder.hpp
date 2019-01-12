@@ -39,7 +39,7 @@ class ChunkBuilder {
 		};
 
 	private:
-		void addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, u16 surroundingBlock);
+		void addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, const Block *block, const Block *surroundingBlock);
 		void addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Block *block);
 
 		gk::Vector3i getOffsetFromVertex(u8 i, u8 j);

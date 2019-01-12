@@ -53,18 +53,17 @@ GameState::GameState() {
 }
 
 void GameState::testLuaAPI() {
-	// FIXME
-	// m_luaCore.setPlayer(m_player);
+	m_luaCore.setPlayer(m_player);
 	// m_luaCore.setWorld(m_world);
-    //
-	// try {
-	// 	auto &lua = ScriptEngine::getInstance().lua();
-	// 	lua["openminer"] = &m_luaCore;
-	// 	lua.script("init()");
-	// }
-	// catch (const sol::error &e) {
-	// 	std::cerr << e.what() << std::endl;
-	// }
+
+	try {
+		auto &lua = ScriptEngine::getInstance().lua();
+		lua["openminer"] = &m_luaCore;
+		lua.script("init()");
+	}
+	catch (const sol::error &e) {
+		std::cerr << e.what() << std::endl;
+	}
 }
 
 void GameState::onEvent(const SDL_Event &event) {

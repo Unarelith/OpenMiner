@@ -73,37 +73,27 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 	for(u8 z = 0 ; z < CHUNK_DEPTH ; z++) {
 		for(u8 y = 0 ; y < CHUNK_HEIGHT ; y++) {
 			for(u8 x = 0 ; x < CHUNK_WIDTH ; x++) {
-				// FIXME
-				// const Block &block = Registry::getInstance().getBlock(chunk.getBlock(x, y, z));
-				// if(!block.id()) continue;
+				const Block &block = Registry::getInstance().getBlock(chunk.getBlock(x, y, z));
+				if(!block.id()) continue;
 				if (!chunk.getBlock(x, y, z)) continue;
 
-				// FIXME
-				// const Block *surroundingBlocks[6] = {
-				// 	&Registry::getInstance().getBlock(chunk.getBlock(x - 1, y, z)),
-				// 	&Registry::getInstance().getBlock(chunk.getBlock(x + 1, y, z)),
-				// 	&Registry::getInstance().getBlock(chunk.getBlock(x, y - 1, z)),
-				// 	&Registry::getInstance().getBlock(chunk.getBlock(x, y + 1, z)),
-				// 	&Registry::getInstance().getBlock(chunk.getBlock(x, y, z - 1)),
-				// 	&Registry::getInstance().getBlock(chunk.getBlock(x, y, z + 1)),
-				// };
-				const u16 surroundingBlocks[6] = {
-					chunk.getBlock(x - 1, y, z),
-					chunk.getBlock(x + 1, y, z),
-					chunk.getBlock(x, y - 1, z),
-					chunk.getBlock(x, y + 1, z),
-					chunk.getBlock(x, y, z - 1),
-					chunk.getBlock(x, y, z + 1),
+				const Block *surroundingBlocks[6] = {
+					&Registry::getInstance().getBlock(chunk.getBlock(x - 1, y, z)),
+					&Registry::getInstance().getBlock(chunk.getBlock(x + 1, y, z)),
+					&Registry::getInstance().getBlock(chunk.getBlock(x, y - 1, z)),
+					&Registry::getInstance().getBlock(chunk.getBlock(x, y + 1, z)),
+					&Registry::getInstance().getBlock(chunk.getBlock(x, y, z - 1)),
+					&Registry::getInstance().getBlock(chunk.getBlock(x, y, z + 1)),
 				};
 
-				// if (block.drawType() == BlockDrawType::Solid) {
+				if (block.drawType() == BlockDrawType::Solid) {
 					for(u8 i = 0 ; i < 6 ; i++) {
-						addFace(x, y, z, i, chunk, surroundingBlocks[i]); // FIXME // , &block, surroundingBlocks[i]);
+						addFace(x, y, z, i, chunk, &block, surroundingBlocks[i]);
 					}
-				// }
-				// else if (block.drawType() == BlockDrawType::XShape) {
-				// 	addCross(x, y, z, chunk, &block);
-				// }
+				}
+				else if (block.drawType() == BlockDrawType::XShape) {
+					addCross(x, y, z, chunk, &block);
+				}
 			}
 		}
 	}
@@ -124,32 +114,28 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 	return verticesCount;
 }
 
-void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, u16 surroundingBlock) {
+void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, const Block *block, const Block *surroundingBlock) {
 	// Skip hidden faces
-	// FIXME
-	// if(surroundingBlock && surroundingBlock->id() && surroundingBlock->drawType() == BlockDrawType::Solid
-	// && (surroundingBlock->isOpaque() || (block->id() == surroundingBlock->id() && block->id() != BlockType::Leaves && ((i != 2 && i != 3) || block->id() != BlockType::PlankSlab))))
-	// 	return;
-	if (surroundingBlock)
+	if(surroundingBlock && surroundingBlock->id() && surroundingBlock->drawType() == BlockDrawType::Solid
+	&& (surroundingBlock->isOpaque() || (block->id() == surroundingBlock->id() && block->id() != BlockType::Leaves && ((i != 2 && i != 3) || block->id() != BlockType::PlankSlab))))
 		return;
 
 	static glm::vec3 a, b, c, v1, v2, normal;
 
-	// const gk::FloatBox boundingBox = block->boundingBox();
+	const gk::FloatBox boundingBox = block->boundingBox();
 
 	// Three points of the face
-	// FIXME
-	a.x = cubeCoords[i * 12 + 0]; // * boundingBox.width  + boundingBox.x;
-	a.y = cubeCoords[i * 12 + 1]; // * boundingBox.height + boundingBox.y;
-	a.z = cubeCoords[i * 12 + 2]; // * boundingBox.depth  + boundingBox.z;
+	a.x = cubeCoords[i * 12 + 0] * boundingBox.width  + boundingBox.x;
+	a.y = cubeCoords[i * 12 + 1] * boundingBox.height + boundingBox.y;
+	a.z = cubeCoords[i * 12 + 2] * boundingBox.depth  + boundingBox.z;
 
-	b.x = cubeCoords[i * 12 + 3]; // * boundingBox.width  + boundingBox.x;
-	b.y = cubeCoords[i * 12 + 4]; // * boundingBox.height + boundingBox.y;
-	b.z = cubeCoords[i * 12 + 5]; // * boundingBox.depth  + boundingBox.z;
+	b.x = cubeCoords[i * 12 + 3] * boundingBox.width  + boundingBox.x;
+	b.y = cubeCoords[i * 12 + 4] * boundingBox.height + boundingBox.y;
+	b.z = cubeCoords[i * 12 + 5] * boundingBox.depth  + boundingBox.z;
 
-	c.x = cubeCoords[i * 12 + 6]; // * boundingBox.width  + boundingBox.x;
-	c.y = cubeCoords[i * 12 + 7]; // * boundingBox.height + boundingBox.y;
-	c.z = cubeCoords[i * 12 + 8]; // * boundingBox.depth  + boundingBox.z;
+	c.x = cubeCoords[i * 12 + 6] * boundingBox.width  + boundingBox.x;
+	c.y = cubeCoords[i * 12 + 7] * boundingBox.height + boundingBox.y;
+	c.z = cubeCoords[i * 12 + 8] * boundingBox.depth  + boundingBox.z;
 
 	// Computing two vectors
 	v1 = b - a;
@@ -158,9 +144,7 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, u16
 	// Computing face normal (already normalized because vertexCoords are normalized)
 	normal = glm::cross(v1, v2);
 
-	// FIXME
-	Block block{2, 38, "", ""};
-	const glm::vec4 &blockTexCoords = block.getTexCoords(i, chunk.getData(x, y, z));
+	const glm::vec4 &blockTexCoords = block->getTexCoords(i, chunk.getData(x, y, z));
 	float faceTexCoords[2 * 4] = {
 		blockTexCoords.x, blockTexCoords.w,
 		blockTexCoords.z, blockTexCoords.w,
@@ -213,7 +197,7 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, u16
 		else
 			vertices[j].ambientOcclusion = 5;
 
-		vertices[j].blockType = block.id();
+		vertices[j].blockType = block->id();
 	}
 
 	auto addVertex = [&](u8 j) {
