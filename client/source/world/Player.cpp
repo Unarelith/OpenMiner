@@ -16,9 +16,10 @@
 #include <gk/core/input/GamePad.hpp>
 #include <gk/core/Mouse.hpp>
 
+#include "BlockType.hpp"
+#include "ClientWorld.hpp"
 #include "GameKey.hpp"
 #include "Player.hpp"
-#include "World.hpp"
 
 Player *Player::s_instance = nullptr;
 
@@ -93,15 +94,15 @@ void Player::processInputs() {
 	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Down)) move(135.0f);
 }
 
-void Player::updatePosition() {
-	// FIXME
-	// m_velocity.y -= m_gravity; // Gravity
-    //
-	// if (m_velocity.y < -m_jumpSpeed) // Jump max accel
-	// 	m_velocity.y = -m_jumpSpeed;
+void Player::updatePosition(const ClientWorld &world) {
+	if (!Config::isFlyModeEnabled) {
+		m_velocity.y -= m_gravity; // Gravity
 
-	// FIXME
-	// checkCollisions(world);
+		if (m_velocity.y < -m_jumpSpeed) // Jump max accel
+			m_velocity.y = -m_jumpSpeed;
+	}
+
+	checkCollisions(world);
 
 	m_x += m_velocity.x;
 	m_y += m_velocity.y;
@@ -113,12 +114,14 @@ void Player::updatePosition() {
 		m_camera.setTargetPosition(pointTargetedX(), pointTargetedY(), pointTargetedZ());
 
 	m_velocity.x = 0;
-	m_velocity.y = 0; // FIXME
 	m_velocity.z = 0;
+
+	if (Config::isFlyModeEnabled)
+		m_velocity.y = 0;
 }
 
 // FIXME: Use AABB for more precision
-void Player::checkCollisions(const World &world) {
+void Player::checkCollisions(const ClientWorld &world) {
 	const float PLAYER_HEIGHT = 1.8;
 	float eyeheight = m_y + PLAYER_HEIGHT - 1.4;
 	// testPoint(world, glm::vec3(m_x, m_y, m_z), m_velocity);
@@ -132,12 +135,12 @@ void Player::checkCollisions(const World &world) {
 	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - 0.4, m_z + 0.2), m_velocity);
 }
 
-bool passable(const World &world, float x, float y, float z) {
+bool passable(const ClientWorld &world, float x, float y, float z) {
 	u32 block = world.getBlock(x, y, z);
 	return !block || block == 8 || block == BlockType::Flower;
 }
 
-void Player::testPoint(const World &world, glm::vec3 pos, glm::vec3 &speed) {
+void Player::testPoint(const ClientWorld &world, glm::vec3 pos, glm::vec3 &speed) {
 	// FIXME: Temporary fix, find the real problem!!!
 	if (pos.x < 0) --pos.x;
 	if (pos.y < 1) --pos.y;

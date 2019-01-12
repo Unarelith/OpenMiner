@@ -30,6 +30,7 @@ class SettingsMenuState : public gk::ApplicationState {
 
 	private:
 		void addMainButtons();
+		void addGameplayButtons();
 		void addGraphicsButtons();
 		void addInputButtons();
 

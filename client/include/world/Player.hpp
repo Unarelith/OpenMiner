@@ -30,7 +30,7 @@
 #define RADIANS_PER_DEGREES (M_PI / 180.0f)
 #endif
 
-class World;
+class ClientWorld;
 
 class Player {
 	public:
@@ -42,9 +42,9 @@ class Player {
 		void move(float direction);
 
 		void processInputs();
-		void updatePosition();
+		void updatePosition(const ClientWorld &world);
 
-		void checkCollisions(const World &world);
+		void checkCollisions(const ClientWorld &world);
 
 		float pointTargetedX() const { return m_x + cos(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES); }
 		float pointTargetedY() const { return m_y + sin(m_angleV * RADIANS_PER_DEGREES); }
@@ -62,7 +62,7 @@ class Player {
 		const gk::Camera &camera() { return m_camera; }
 
 	private:
-		void testPoint(const World &world, glm::vec3 pos, glm::vec3 &speed);
+		void testPoint(const ClientWorld &world, glm::vec3 pos, glm::vec3 &speed);
 
 		static Player *s_instance;
 
