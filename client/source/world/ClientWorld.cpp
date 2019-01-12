@@ -69,7 +69,7 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 
 		chunk->setInitialized(true);
 
-		std::cout << "Chunk at (" << cx << ", " << cy << ", " << cz << ") received" << std::endl;
+		// std::cout << "Chunk at (" << cx << ", " << cy << ", " << cz << ") received" << std::endl;
 	}
 }
 

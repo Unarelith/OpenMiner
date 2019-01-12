@@ -57,12 +57,10 @@ void ServerWorld::sendChunkData(Client &client, ServerChunk *chunk) {
 
 	sf::Packet packet;
 	packet << Network::Command::ChunkData;
-	packet << chunk->x();
-	packet << chunk->y();
-	packet << chunk->z();
-	for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
+	packet << chunk->x() << chunk->y() << chunk->z();
+	for (u16 z = 0 ; z < CHUNK_DEPTH ; ++z) {
 		for (u16 y = 0 ; y < CHUNK_HEIGHT ; ++y) {
-			for (u16 z = 0 ; z < CHUNK_DEPTH ; ++z) {
+			for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
 				packet << u16(chunk->data()[x][y][z]);
 			}
 		}
@@ -70,7 +68,7 @@ void ServerWorld::sendChunkData(Client &client, ServerChunk *chunk) {
 
 	client.tcpSocket->send(packet);
 
-	std::cout << "Chunk at (" << chunk->x() << "," << chunk->y() << ", " << chunk->z() << ") sent to client" << std::endl;
+	// std::cout << "Chunk at (" << chunk->x() << "," << chunk->y() << ", " << chunk->z() << ") sent to client" << std::endl;
 }
 
 ServerChunk *ServerWorld::getChunk(int cx, int cy, int cz) const {
