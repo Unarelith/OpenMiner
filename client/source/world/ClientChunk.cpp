@@ -24,7 +24,7 @@ ClientChunk::ClientChunk(s32 x, s32 y, s32 z, gk::Texture &texture) : m_texture(
 void ClientChunk::update() {
 	if (m_hasChanged) {
 		m_hasChanged = false;
-		// m_lightmap.updateLights();
+		m_lightmap.updateLights();
 
 		m_verticesCount = m_builder.buildChunk(*this, m_vbo);
 	}

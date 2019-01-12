@@ -20,7 +20,7 @@
 
 - Dependencies:
     - [CMake](http://www.cmake.org/download/)
-    - [GameKit](http://github.com/Quent42340/GameKit)
+    - [GameKit](http://github.com/Quent42340/GameKit) (requires `SDL2` + `tinyxml2`, will switch to `SFML` starting from 2.6)
     - [SFML](https://www.sfml-dev.org/) (only used for network)
     - [Lua](http://www.lua.org)
     - _Linux users: Check your distribution repositories for packages._
