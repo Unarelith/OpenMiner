@@ -14,11 +14,10 @@
 #include "Config.hpp"
 #include "HUD.hpp"
 
-HUD::HUD(Player &player) :
-//  FIXME
-//  : m_hotbar{player.inventory()},
-   // m_blockCursor(player, world),
-   m_debugOverlay(player)
+HUD::HUD(Player &player, ClientWorld &world)
+	: m_hotbar{player.inventory()},
+	m_blockCursor(player, world),
+	m_debugOverlay(player)
 {
 	setScale(GUI_SCALE, GUI_SCALE, 1);
 
@@ -30,44 +29,36 @@ HUD::HUD(Player &player) :
 
 	m_orthoMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
 
-	// FIXME
-	// m_hotbar.setPosition(SCREEN_WIDTH / getScale().x / 2 - m_hotbar.width() / 2, SCREEN_HEIGHT / getScale().y - m_hotbar.height(), 0);
+	m_hotbar.setPosition(SCREEN_WIDTH / getScale().x / 2 - m_hotbar.width() / 2, SCREEN_HEIGHT / getScale().y - m_hotbar.height(), 0);
 
-	// FIXME
-	// m_blockInfoWidget.setPosition(SCREEN_WIDTH / getScale().x / 2 - m_blockInfoWidget.width() / 2, 2, 0);
+	m_blockInfoWidget.setPosition(SCREEN_WIDTH / getScale().x / 2 - m_blockInfoWidget.width() / 2, 2, 0);
 }
 
 void HUD::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_F3)
 		m_isDebugOverlayVisible ^= 1;
 
-	// FIXME
-	// m_hotbar.onEvent(event);
-	// m_blockCursor.onEvent(event, m_hotbar);
+	m_hotbar.onEvent(event);
+	m_blockCursor.onEvent(event, m_hotbar);
 }
 
 void HUD::update() {
 	// FIXME: Shouldn't be called every tick
-	// FIXME
-	// m_hotbar.update();
+	m_hotbar.update();
 
-	// FIXME
-	// m_blockCursor.update(m_hotbar, false);
+	m_blockCursor.update(m_hotbar, false);
 
 	if (m_isDebugOverlayVisible)
 		m_debugOverlay.update();
 
-	// FIXME
-	// m_blockInfoWidget.update();
+	m_blockInfoWidget.update();
 
-	// FIXME
-	// if (m_blockCursor.currentBlock() != m_blockInfoWidget.currentBlock())
-	// 	m_blockInfoWidget.setCurrentBlock(m_blockCursor.currentBlock());
+	if (m_blockCursor.currentBlock() != m_blockInfoWidget.currentBlock())
+		m_blockInfoWidget.setCurrentBlock(m_blockCursor.currentBlock());
 }
 
 void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	// FIXME
-	// target.draw(m_blockCursor, states);
+	target.draw(m_blockCursor, states);
 
 	target.disableView();
 
@@ -81,9 +72,8 @@ void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (m_isDebugOverlayVisible)
 		target.draw(m_debugOverlay, states);
 
-	// FIXME
-	// target.draw(m_blockInfoWidget, states);
-	// target.draw(m_hotbar, states);
+	target.draw(m_blockInfoWidget, states);
+	target.draw(m_hotbar, states);
 
 	states.transform = gk::Transform::Identity;
 

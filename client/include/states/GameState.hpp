@@ -51,7 +51,7 @@ class GameState : public gk::ApplicationState {
 		gk::Camera m_camera{FOV, DIST_NEAR, DIST_FAR};
 		Player m_player{m_camera};
 
-		HUD m_hud{m_player};
+		HUD m_hud{m_player, m_world};
 
 		LuaCore m_luaCore;
 

@@ -40,8 +40,6 @@ GameState::GameState() {
 
 	m_camera.setAspectRatio((float)SCREEN_WIDTH / SCREEN_HEIGHT);
 
-	// World::setInstance(m_world);
-
 	testLuaAPI();
 
 	initShaders();
@@ -49,7 +47,6 @@ GameState::GameState() {
 	m_client.setCommandCallback(Network::Command::ChunkData, [this](sf::Packet &packet) {
 		m_world.receiveChunkData(packet);
 	});
-
 }
 
 void GameState::testLuaAPI() {
