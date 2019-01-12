@@ -11,6 +11,7 @@
  *
  * =====================================================================================
  */
+#include "Config.hpp"
 #include "Network.hpp"
 #include "ServerApplication.hpp"
 
@@ -22,11 +23,11 @@ void ServerApplication::init() {
 	gk::CoreApplication::init();
 
 	m_server.setConnectionCallback([](Client &client) {
-		DEBUG("lol");
-
 		sf::Packet packet;
 		packet << Network::Command::ChunkData;
-		packet << std::string{"hello"};
+		for (u64 i = 0 ; i < CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_DEPTH ; ++i)
+			packet << u16(rand() % 2);
+
 		client.tcpSocket->send(packet);
 	});
 
