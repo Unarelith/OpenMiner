@@ -11,6 +11,7 @@
  *
  * =====================================================================================
  */
+#include "Network.hpp"
 #include "ServerApplication.hpp"
 
 ServerApplication::ServerApplication(int argc, char **argv) : gk::CoreApplication(argc, argv) {
@@ -19,6 +20,15 @@ ServerApplication::ServerApplication(int argc, char **argv) : gk::CoreApplicatio
 
 void ServerApplication::init() {
 	gk::CoreApplication::init();
+
+	m_server.setConnectionCallback([](Client &client) {
+		DEBUG("lol");
+
+		sf::Packet packet;
+		packet << Network::Command::ChunkData;
+		packet << std::string{"hello"};
+		client.tcpSocket->send(packet);
+	});
 
 	m_server.init(4242);
 	m_server.setRunning(true);

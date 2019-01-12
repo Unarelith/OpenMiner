@@ -26,7 +26,7 @@
 #include "Network.hpp"
 
 class Client {
-	using CommandCallback = std::function<void()>;
+	using CommandCallback = std::function<void(sf::Packet &packet)>;
 
 	public:
 		void connect(sf::IpAddress serverAddress, u16 serverPort);
@@ -37,7 +37,7 @@ class Client {
 
 		void update(bool &hasGameStarted);
 
-		void addCommand(Network::Command command, const CommandCallback &callback);
+		void setCommandCallback(Network::Command command, const CommandCallback &callback);
 
 		bool isConnected() const { return m_isConnected; }
 

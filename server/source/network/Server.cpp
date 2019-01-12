@@ -88,14 +88,15 @@ void Server::handleNewConnections() {
 			packet >> address >> port;
 
 			Client &client = m_info.addClient(address, port, clientSocket);
-			// FIXME
-			// scene.addObject(PlayerFactory::create(20, 50 + 100 * client.id, client.id));
 			m_selector.add(*client.tcpSocket);
 
 			sf::Packet outPacket;
 			outPacket << Network::Command::ClientOk << client.id;
 			client.tcpSocket->send(outPacket);
 			client.tcpSocket->setBlocking(false);
+
+			if (m_connectionCallback)
+				m_connectionCallback(client);
 		}
 		else {
 			sf::Packet outPacket;

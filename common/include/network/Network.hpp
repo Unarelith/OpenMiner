@@ -31,6 +31,9 @@ namespace Network {
 
 		// Input commands
 		KeyState,          // <UDP> [NetworkCommand][u32 timestamp][u16 client id][u32 keycode][bool isPressed]...
+
+		// Chunk commands
+		ChunkData          // <TCP> [NetworkCommand][u16[][][]] (from Server only)
 	};
 
 	std::string commandToString(Command command);

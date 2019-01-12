@@ -92,12 +92,14 @@ void Client::update(bool &hasGameStarted) {
 		Network::Command command;
 		packet >> command;
 
-		std::cout << "UDP Message of type '" << Network::commandToString(command) << "' received from: " << senderAddress << ":" << senderPort << std::endl;
+		// std::cout << "UDP Message of type '" << Network::commandToString(command) << "' received from: " << senderAddress << ":" << senderPort << std::endl;
 	}
 
 	while (m_tcpSocket->receive(packet) == sf::Socket::Done) {
 		Network::Command command;
 		packet >> command;
+
+		// std::cout << "TCP Message of type '" << Network::commandToString(command) << "' received" << std::endl;
 
 		if (command == Network::Command::GameStart) {
 			hasGameStarted = true;
@@ -109,8 +111,12 @@ void Client::update(bool &hasGameStarted) {
 		else {
 			for (auto &it : m_commands)
 				if (command == it.first)
-					it.second();
+					it.second(packet);
 		}
 	}
+}
+
+void Client::setCommandCallback(Network::Command command, const CommandCallback &callback) {
+	m_commands[command] = callback;
 }
 
