@@ -21,7 +21,7 @@ void ServerApplication::init() {
 	gk::CoreApplication::init();
 
 	m_server.setConnectionCallback([this](Client &client) {
-		m_world.sendChunkData(client);
+		m_world.sendWorldData(client);
 	});
 
 	m_server.init(4242);
@@ -40,7 +40,7 @@ void ServerApplication::mainLoop() {
 		m_server.handleKeyState();
 
 		m_clock.updateGame([&] {
-			// TODO
+			m_world.update();
 		});
 
 		m_clock.waitForNextFrame();

@@ -23,6 +23,16 @@ class ServerChunk {
 	using DataArray = u32[CHUNK_WIDTH][CHUNK_HEIGHT][CHUNK_DEPTH];
 
 	public:
+		enum {
+			Left,
+			Right,
+			Front,
+			Back,
+			Bottom,
+			Top
+		};
+
+	public:
 		ServerChunk(s32 x, s32 y, s32 z);
 
 		void generate();

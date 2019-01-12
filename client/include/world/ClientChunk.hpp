@@ -49,7 +49,10 @@ class ClientChunk : public gk::IDrawable {
 		const ClientChunk *getSurroundingChunk(u8 i) const { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
 		void setSurroundingChunk(u8 i, ClientChunk *chunk) { if (i < 6) m_surroundingChunks[i] = chunk; }
 
+		bool isInitialized() { return m_isInitialized; }
+
 		void setChanged(bool hasChanged) { m_hasChanged = hasChanged; }
+		void setInitialized(bool isInitialized) { m_isInitialized = isInitialized; }
 
 		ChunkLightmap &lightmap() { return m_lightmap; }
 		const ChunkLightmap &lightmap() const { return m_lightmap; }
@@ -75,6 +78,7 @@ class ClientChunk : public gk::IDrawable {
 		ClientChunk *m_surroundingChunks[6]{nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 
 		bool m_hasChanged = false;
+		bool m_isInitialized = false;
 };
 
 #endif // CLIENTCHUNK_HPP_

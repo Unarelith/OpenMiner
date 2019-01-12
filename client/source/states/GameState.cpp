@@ -96,11 +96,7 @@ void GameState::onEvent(const SDL_Event &event) {
 }
 
 void GameState::update() {
-	gk::Shader::bind(&m_shader);
-	m_shader.setUniform("u_time", gk::GameClock::getTicks());
-	gk::Shader::bind(nullptr);
-
-	m_world.update(m_player);
+	m_world.update();
 
 	if (&m_stateStack->top() == this) {
 		m_player.processInputs();
@@ -132,6 +128,10 @@ void GameState::initShaders() {
 }
 
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	gk::Shader::bind(&m_shader);
+	m_shader.setUniform("u_time", gk::GameClock::getTicks());
+	gk::Shader::bind(nullptr);
+
 	states.shader = &m_shader;
 
 	target.setView(m_camera);

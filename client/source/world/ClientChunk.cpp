@@ -79,11 +79,12 @@ void ClientChunk::setData(int x, int y, int z, u16 data) {
 
 void ClientChunk::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	// if (m_verticesCount.at(layer) == 0) return;
+	if (m_verticesCount.at(ChunkBuilder::Layer::Solid) == 0) return;
 
-	states.transform = glm::translate(glm::mat4(1.0f),
-	                                  glm::vec3(m_x * CHUNK_WIDTH,
-	                                            m_y * CHUNK_HEIGHT,
-	                                            m_z * CHUNK_DEPTH));
+	// states.transform = glm::translate(glm::mat4(1.0f),
+	//                                   glm::vec3(m_x * CHUNK_WIDTH,
+	//                                             m_y * CHUNK_HEIGHT,
+	//                                             m_z * CHUNK_DEPTH));
 
 	states.texture = &m_texture;
 
