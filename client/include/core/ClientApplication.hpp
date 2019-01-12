@@ -16,6 +16,7 @@
 
 #include <gk/core/CoreApplication.hpp>
 
+#include "Client.hpp"
 #include "KeyboardHandler.hpp"
 #include "Registry.hpp"
 #include "ScriptEngine.hpp"
@@ -34,6 +35,8 @@ class ClientApplication : public gk::CoreApplication {
 		ScriptEngine m_scriptEngine;
 
 		Registry m_registry;
+
+		Client m_client;
 };
 
 #endif // CLIENTAPPLICATION_HPP_

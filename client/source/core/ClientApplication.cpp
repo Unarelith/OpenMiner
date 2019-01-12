@@ -19,6 +19,7 @@
 #include "Config.hpp"
 #include "GameState.hpp"
 #include "TextureLoader.hpp"
+#include "ServerLoadingState.hpp"
 
 void ClientApplication::init() {
 	gk::CoreApplication::init();
@@ -41,7 +42,8 @@ void ClientApplication::init() {
 
 	m_scriptEngine.init();
 
-	m_stateStack.push<GameState>();
+	// m_stateStack.push<GameState>(m_client);
+	m_stateStack.push<ServerLoadingState>(m_client);
 }
 
 void ClientApplication::initOpenGL() {
