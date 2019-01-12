@@ -58,6 +58,7 @@ class GameState : public gk::ApplicationState {
 		// LuaCore m_luaCore;
 
 		Client m_client;
+		bool m_hasGameStarted = false;
 };
 
 #endif // GAMESTATE_HPP_

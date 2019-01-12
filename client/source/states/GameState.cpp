@@ -47,6 +47,12 @@ GameState::GameState() : m_chunk(0, 0, 2, gk::ResourceHandler::getInstance().get
 
 	initShaders();
 
+	m_client.setCommandCallback(Network::Command::ChunkData, [](sf::Packet &packet) {
+		std::string str;
+		packet >> str;
+		std::cout << str << std::endl;
+	});
+
 	for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
 		for (u16 y = 0 ; y < CHUNK_HEIGHT ; ++y) {
 			for (u16 z = 0 ; z < CHUNK_DEPTH ; ++z) {
@@ -122,6 +128,8 @@ void GameState::update() {
 	m_hud.update();
 
 	m_chunk.update();
+
+	m_client.update(m_hasGameStarted);
 }
 
 void GameState::initShaders() {
