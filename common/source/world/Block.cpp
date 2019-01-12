@@ -14,7 +14,6 @@
 #include <iostream>
 
 #include "Block.hpp"
-#include "Player.hpp"
 #include "World.hpp"
 
 Block::Block(u32 id, u32 textureID, const std::string &name, const std::string &label) {
@@ -31,7 +30,8 @@ Block::Block(u32 id, u32 textureID, const std::string &name, const std::string &
 void Block::onTick(const glm::ivec3 &pos, Player &player, Chunk &chunk, World &world) const {
 	try {
 		if (m_onTick && m_onTickEnabled) {
-			m_onTick(pos, player, chunk, world);
+			// FIXME
+			// m_onTick(pos, player, chunk, world);
 		}
 	}
 	catch (const sol::error &e) {
@@ -44,7 +44,8 @@ void Block::onTick(const glm::ivec3 &pos, Player &player, Chunk &chunk, World &w
 bool Block::onBlockActivated(const glm::ivec3 &pos, Player &player, World &world) const {
 	try {
 		if (m_onBlockActivated) {
-			m_onBlockActivated(pos, player, world);
+			// FIXME
+			// m_onBlockActivated(pos, player, world);
 			return true;
 		}
 	}

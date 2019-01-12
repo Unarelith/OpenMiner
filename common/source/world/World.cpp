@@ -22,8 +22,6 @@
 u16 World::renderDistance = 8;
 bool World::isReloadRequested = false;
 
-World *World::s_instance = nullptr;
-
 World::World() : m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-blocks")) {
 	for(s32 z = 0 ; z < m_depth ; z++) {
 		for(s32 y = 0 ; y < m_height ; y++) {
@@ -52,9 +50,7 @@ World::World() : m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("
 	}
 }
 
-void World::update(Player &player) {
-	m_player = &player;
-
+void World::update() {
 	// FIXME
 	// for (auto &it : m_chunks) {
 	// 	if (isReloadRequested)

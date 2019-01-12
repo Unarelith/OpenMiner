@@ -133,33 +133,34 @@ void LuaGUIState::loadGUI(LuaGUI &gui) {
 		m_widgets.emplace_back(button);
 	}
 
-	for (auto &it : gui.inventoryWidgetList) {
-		auto &inventoryWidget = m_inventoryWidgets.emplace_back(&m_mainWidget);
-		inventoryWidget.setPosition(it.x, it.y);
-		inventoryWidget.init(World::getInstance().getPlayer()->inventory(), it.offset, it.count);
-	}
-
-	for (auto &it : gui.craftingWidgetList) {
-		BlockData *data = World::getInstance().getBlockData(it.block.x, it.block.y, it.block.z);
-		if (data) {
-			auto &craftingWidget = m_craftingWidgets.emplace_back(data->inventory, &m_mainWidget);
-			craftingWidget.setPosition(it.x, it.y);
-		}
-		else {
-			DEBUG("ERROR: No inventory found at", it.block.x, it.block.y, it.block.z);
-		}
-	}
-
-	for (auto &it : gui.furnaceWidgetList) {
-		BlockData *data = World::getInstance().getBlockData(it.block.x, it.block.y, it.block.z);
-		if (data) {
-			auto *furnaceWidget = new FurnaceWidget(m_mouseItemWidget, World::getInstance().getPlayer()->inventory(), *data, &m_mainWidget);
-			furnaceWidget->setPosition(it.x, it.y);
-			m_widgets.emplace_back(furnaceWidget);
-		}
-		else {
-			DEBUG("ERROR: No inventory found at", it.block.x, it.block.y, it.block.z);
-		}
-	}
+	// FIXME
+	// for (auto &it : gui.inventoryWidgetList) {
+	// 	auto &inventoryWidget = m_inventoryWidgets.emplace_back(&m_mainWidget);
+	// 	inventoryWidget.setPosition(it.x, it.y);
+	// 	inventoryWidget.init(World::getInstance().getPlayer()->inventory(), it.offset, it.count);
+	// }
+    //
+	// for (auto &it : gui.craftingWidgetList) {
+	// 	BlockData *data = World::getInstance().getBlockData(it.block.x, it.block.y, it.block.z);
+	// 	if (data) {
+	// 		auto &craftingWidget = m_craftingWidgets.emplace_back(data->inventory, &m_mainWidget);
+	// 		craftingWidget.setPosition(it.x, it.y);
+	// 	}
+	// 	else {
+	// 		DEBUG("ERROR: No inventory found at", it.block.x, it.block.y, it.block.z);
+	// 	}
+	// }
+    //
+	// for (auto &it : gui.furnaceWidgetList) {
+	// 	BlockData *data = World::getInstance().getBlockData(it.block.x, it.block.y, it.block.z);
+	// 	if (data) {
+	// 		auto *furnaceWidget = new FurnaceWidget(m_mouseItemWidget, World::getInstance().getPlayer()->inventory(), *data, &m_mainWidget);
+	// 		furnaceWidget->setPosition(it.x, it.y);
+	// 		m_widgets.emplace_back(furnaceWidget);
+	// 	}
+	// 	else {
+	// 		DEBUG("ERROR: No inventory found at", it.block.x, it.block.y, it.block.z);
+	// 	}
+	// }
 }
 
