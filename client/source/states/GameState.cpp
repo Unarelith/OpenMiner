@@ -16,12 +16,13 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/input/GamePad.hpp>
+#include <gk/core/ApplicationStateStack.hpp>
+#include <gk/core/GameClock.hpp>
 #include <gk/core/Exception.hpp>
 #include <gk/core/Mouse.hpp>
 #include <gk/gl/OpenGL.hpp>
-#include <gk/core/GameClock.hpp>
+#include <gk/resource/ResourceHandler.hpp>
 
 #include "GameKey.hpp"
 #include "GameState.hpp"
@@ -30,7 +31,7 @@
 #include "PlayerInventoryWidget.hpp"
 #include "ScriptEngine.hpp"
 
-GameState::GameState() {
+GameState::GameState() : m_chunk(0, 0, 2, gk::ResourceHandler::getInstance().get<gk::Texture>("texture-blocks")) {
 	try {
 		m_client.connect("localhost", 4242);
 	}
@@ -45,20 +46,30 @@ GameState::GameState() {
 	testLuaAPI();
 
 	initShaders();
+
+	for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
+		for (u16 y = 0 ; y < CHUNK_HEIGHT ; ++y) {
+			for (u16 z = 0 ; z < CHUNK_DEPTH ; ++z) {
+				m_chunk.setBlock(x, y, z, (rand() % 2) * 2);
+				m_chunk.lightmap().addSunlight(x, y, z, 15);
+			}
+		}
+	}
 }
 
 void GameState::testLuaAPI() {
-	m_luaCore.setPlayer(m_player);
-	m_luaCore.setWorld(m_world);
-
-	try {
-		auto &lua = ScriptEngine::getInstance().lua();
-		lua["openminer"] = &m_luaCore;
-		lua.script("init()");
-	}
-	catch (const sol::error &e) {
-		std::cerr << e.what() << std::endl;
-	}
+	// FIXME
+	// m_luaCore.setPlayer(m_player);
+	// m_luaCore.setWorld(m_world);
+    //
+	// try {
+	// 	auto &lua = ScriptEngine::getInstance().lua();
+	// 	lua["openminer"] = &m_luaCore;
+	// 	lua.script("init()");
+	// }
+	// catch (const sol::error &e) {
+	// 	std::cerr << e.what() << std::endl;
+	// }
 }
 
 void GameState::onEvent(const SDL_Event &event) {
@@ -106,8 +117,11 @@ void GameState::update() {
 	}
 
 	m_player.updatePosition(m_world);
+	m_skybox.update(m_player);
 
 	m_hud.update();
+
+	m_chunk.update();
 }
 
 void GameState::initShaders() {
@@ -125,8 +139,16 @@ void GameState::initShaders() {
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.shader = &m_shader;
 
+	// FIXME: Should be in World
+	gk::Shader::bind(states.shader);
+	states.shader->setUniform("u_renderDistance", World::renderDistance * CHUNK_WIDTH);
+	gk::Shader::bind(nullptr);
+
 	target.setView(m_camera);
-	target.draw(m_world, states);
+	target.draw(m_skybox, states);
+	// FIXME
+	// target.draw(m_world, states);
+	target.draw(m_chunk, states);
 	target.draw(m_hud, states);
 }
 

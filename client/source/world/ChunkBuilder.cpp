@@ -11,7 +11,7 @@
  *
  * =====================================================================================
  */
-#include "Chunk.hpp"
+#include "ClientChunk.hpp"
 #include "ChunkBuilder.hpp"
 #include "Registry.hpp"
 
@@ -66,33 +66,44 @@ static const float crossCoords[2 * 4 * 3] = {
 };
 
 
-std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Chunk &chunk, const std::array<gk::VertexBuffer, layers> &vbo) {
+std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const ClientChunk &chunk, const std::array<gk::VertexBuffer, layers> &vbo) {
 	for (u8 i = 0 ; i < layers ; ++i)
-		m_vertices[i].reserve(Chunk::width * Chunk::height * Chunk::depth * 6 * 4);
+		m_vertices[i].reserve(CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_DEPTH * 6 * 4);
 
-	for(u8 z = 0 ; z < Chunk::depth ; z++) {
-		for(u8 y = 0 ; y < Chunk::height ; y++) {
-			for(u8 x = 0 ; x < Chunk::width ; x++) {
-				const Block &block = Registry::getInstance().getBlock(chunk.getBlock(x, y, z));
-				if(!block.id()) continue;
+	for(u8 z = 0 ; z < CHUNK_DEPTH ; z++) {
+		for(u8 y = 0 ; y < CHUNK_HEIGHT ; y++) {
+			for(u8 x = 0 ; x < CHUNK_WIDTH ; x++) {
+				// FIXME
+				// const Block &block = Registry::getInstance().getBlock(chunk.getBlock(x, y, z));
+				// if(!block.id()) continue;
+				if (!chunk.getBlock(x, y, z)) continue;
 
-				const Block *surroundingBlocks[6] = {
-					&Registry::getInstance().getBlock(chunk.getBlock(x - 1, y, z)),
-					&Registry::getInstance().getBlock(chunk.getBlock(x + 1, y, z)),
-					&Registry::getInstance().getBlock(chunk.getBlock(x, y - 1, z)),
-					&Registry::getInstance().getBlock(chunk.getBlock(x, y + 1, z)),
-					&Registry::getInstance().getBlock(chunk.getBlock(x, y, z - 1)),
-					&Registry::getInstance().getBlock(chunk.getBlock(x, y, z + 1)),
+				// FIXME
+				// const Block *surroundingBlocks[6] = {
+				// 	&Registry::getInstance().getBlock(chunk.getBlock(x - 1, y, z)),
+				// 	&Registry::getInstance().getBlock(chunk.getBlock(x + 1, y, z)),
+				// 	&Registry::getInstance().getBlock(chunk.getBlock(x, y - 1, z)),
+				// 	&Registry::getInstance().getBlock(chunk.getBlock(x, y + 1, z)),
+				// 	&Registry::getInstance().getBlock(chunk.getBlock(x, y, z - 1)),
+				// 	&Registry::getInstance().getBlock(chunk.getBlock(x, y, z + 1)),
+				// };
+				const u16 surroundingBlocks[6] = {
+					chunk.getBlock(x - 1, y, z),
+					chunk.getBlock(x + 1, y, z),
+					chunk.getBlock(x, y - 1, z),
+					chunk.getBlock(x, y + 1, z),
+					chunk.getBlock(x, y, z - 1),
+					chunk.getBlock(x, y, z + 1),
 				};
 
-				if (block.drawType() == BlockDrawType::Solid) {
+				// if (block.drawType() == BlockDrawType::Solid) {
 					for(u8 i = 0 ; i < 6 ; i++) {
-						addFace(x, y, z, i, chunk, &block, surroundingBlocks[i]);
+						addFace(x, y, z, i, chunk, surroundingBlocks[i]); // FIXME // , &block, surroundingBlocks[i]);
 					}
-				}
-				else if (block.drawType() == BlockDrawType::XShape) {
-					addCross(x, y, z, chunk, &block);
-				}
+				// }
+				// else if (block.drawType() == BlockDrawType::XShape) {
+				// 	addCross(x, y, z, chunk, &block);
+				// }
 			}
 		}
 	}
@@ -113,28 +124,32 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Chu
 	return verticesCount;
 }
 
-void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Block *block, const Block *surroundingBlock) {
+void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, u16 surroundingBlock) {
 	// Skip hidden faces
-	if(surroundingBlock && surroundingBlock->id() && surroundingBlock->drawType() == BlockDrawType::Solid
-	&& (surroundingBlock->isOpaque() || (block->id() == surroundingBlock->id() && block->id() != BlockType::Leaves && ((i != 2 && i != 3) || block->id() != BlockType::PlankSlab))))
+	// FIXME
+	// if(surroundingBlock && surroundingBlock->id() && surroundingBlock->drawType() == BlockDrawType::Solid
+	// && (surroundingBlock->isOpaque() || (block->id() == surroundingBlock->id() && block->id() != BlockType::Leaves && ((i != 2 && i != 3) || block->id() != BlockType::PlankSlab))))
+	// 	return;
+	if (surroundingBlock)
 		return;
 
 	static glm::vec3 a, b, c, v1, v2, normal;
 
-	const gk::FloatBox boundingBox = block->boundingBox();
+	// const gk::FloatBox boundingBox = block->boundingBox();
 
 	// Three points of the face
-	a.x = cubeCoords[i * 12 + 0] * boundingBox.width  + boundingBox.x;
-	a.y = cubeCoords[i * 12 + 1] * boundingBox.height + boundingBox.y;
-	a.z = cubeCoords[i * 12 + 2] * boundingBox.depth  + boundingBox.z;
+	// FIXME
+	a.x = cubeCoords[i * 12 + 0]; // * boundingBox.width  + boundingBox.x;
+	a.y = cubeCoords[i * 12 + 1]; // * boundingBox.height + boundingBox.y;
+	a.z = cubeCoords[i * 12 + 2]; // * boundingBox.depth  + boundingBox.z;
 
-	b.x = cubeCoords[i * 12 + 3] * boundingBox.width  + boundingBox.x;
-	b.y = cubeCoords[i * 12 + 4] * boundingBox.height + boundingBox.y;
-	b.z = cubeCoords[i * 12 + 5] * boundingBox.depth  + boundingBox.z;
+	b.x = cubeCoords[i * 12 + 3]; // * boundingBox.width  + boundingBox.x;
+	b.y = cubeCoords[i * 12 + 4]; // * boundingBox.height + boundingBox.y;
+	b.z = cubeCoords[i * 12 + 5]; // * boundingBox.depth  + boundingBox.z;
 
-	c.x = cubeCoords[i * 12 + 6] * boundingBox.width  + boundingBox.x;
-	c.y = cubeCoords[i * 12 + 7] * boundingBox.height + boundingBox.y;
-	c.z = cubeCoords[i * 12 + 8] * boundingBox.depth  + boundingBox.z;
+	c.x = cubeCoords[i * 12 + 6]; // * boundingBox.width  + boundingBox.x;
+	c.y = cubeCoords[i * 12 + 7]; // * boundingBox.height + boundingBox.y;
+	c.z = cubeCoords[i * 12 + 8]; // * boundingBox.depth  + boundingBox.z;
 
 	// Computing two vectors
 	v1 = b - a;
@@ -143,7 +158,9 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 	// Computing face normal (already normalized because vertexCoords are normalized)
 	normal = glm::cross(v1, v2);
 
-	const glm::vec4 &blockTexCoords = block->getTexCoords(i, chunk.getData(x, y, z));
+	// FIXME
+	Block block{2, 38, "", ""};
+	const glm::vec4 &blockTexCoords = block.getTexCoords(i, chunk.getData(x, y, z));
 	float faceTexCoords[2 * 4] = {
 		blockTexCoords.x, blockTexCoords.w,
 		blockTexCoords.z, blockTexCoords.w,
@@ -154,9 +171,9 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 	// Store vertex information
 	gk::Vertex vertices[4];
 	for(u8 j = 0 ; j < 4 ; j++) {
-		vertices[j].coord3d[0] = x + cubeCoords[i * 12 + j * 3]     * boundingBox.width  + boundingBox.x;
-		vertices[j].coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1] * boundingBox.height + boundingBox.y;
-		vertices[j].coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2] * boundingBox.depth  + boundingBox.z;
+		vertices[j].coord3d[0] = x + cubeCoords[i * 12 + j * 3];     // * boundingBox.width  + boundingBox.x;
+		vertices[j].coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1]; // * boundingBox.height + boundingBox.y;
+		vertices[j].coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2]; // * boundingBox.depth  + boundingBox.z;
 		vertices[j].coord3d[3] = i;
 
 		vertices[j].normal[0] = normal.x;
@@ -196,15 +213,16 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 		else
 			vertices[j].ambientOcclusion = 5;
 
-		vertices[j].blockType = block->id();
+		vertices[j].blockType = block.id();
 	}
 
 	auto addVertex = [&](u8 j) {
-		if (block->id() == BlockType::Water)
-			m_vertices[Layer::Liquid].emplace_back(vertices[j]);
-		else if (block->id() == BlockType::Leaves)
-			m_vertices[Layer::Other].emplace_back(vertices[j]);
-		else
+		// FIXME
+		// if (block->id() == BlockType::Water)
+		// 	m_vertices[Layer::Liquid].emplace_back(vertices[j]);
+		// else if (block->id() == BlockType::Leaves)
+		// 	m_vertices[Layer::Other].emplace_back(vertices[j]);
+		// else
 			m_vertices[Layer::Solid].emplace_back(vertices[j]);
 	};
 
@@ -226,7 +244,7 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Blo
 	}
 }
 
-void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const Chunk &chunk, const Block *block) {
+void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Block *block) {
 	const glm::vec4 &blockTexCoords = block->getTexCoords(0, chunk.getData(x, y, z));
 	float faceTexCoords[2 * 4] = {
 		blockTexCoords.x, blockTexCoords.w,
@@ -293,7 +311,7 @@ gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) {
 	return offset;
 }
 
-u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk) {
+u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const ClientChunk &chunk) {
 	gk::Vector3i offset = getOffsetFromVertex(i, j);
 
 	u16 blocks[3] = {
@@ -312,7 +330,7 @@ u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &
 	return 3 - (side1 + side2 + corner);
 }
 
-float ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk) {
+float ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const ClientChunk &chunk) {
 	gk::Vector3i offset = getOffsetFromVertex(i, j);
 
 	// FIXME: Air blocks have a light level of 0

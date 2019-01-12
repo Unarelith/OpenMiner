@@ -51,8 +51,9 @@ void ScriptEngine::initUsertypes() {
 	);
 
 	m_lua.new_usertype<Chunk>("Chunk",
-		"get_block", &Chunk::getBlock,
-		"get_data", &Chunk::getData,
+		// FIXME
+		// "get_block", &Chunk::getBlock,
+		// "get_data", &Chunk::getData,
 		"get_block_data", &Chunk::getBlockData
 	);
 
