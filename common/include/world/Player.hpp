@@ -42,7 +42,7 @@ class Player {
 		void move(float direction);
 
 		void processInputs();
-		void updatePosition(const World &world);
+		void updatePosition();
 
 		void checkCollisions(const World &world);
 

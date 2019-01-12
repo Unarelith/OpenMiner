@@ -22,7 +22,6 @@
 #include <gk/core/Exception.hpp>
 #include <gk/core/Mouse.hpp>
 #include <gk/gl/OpenGL.hpp>
-#include <gk/resource/ResourceHandler.hpp>
 
 #include "GameKey.hpp"
 #include "GameState.hpp"
@@ -31,7 +30,7 @@
 #include "PlayerInventoryWidget.hpp"
 #include "ScriptEngine.hpp"
 
-GameState::GameState() : m_chunk(0, 0, 2, gk::ResourceHandler::getInstance().get<gk::Texture>("texture-blocks")) {
+GameState::GameState() {
 	try {
 		m_client.connect("localhost", 4242);
 	}
@@ -41,23 +40,14 @@ GameState::GameState() : m_chunk(0, 0, 2, gk::ResourceHandler::getInstance().get
 
 	m_camera.setAspectRatio((float)SCREEN_WIDTH / SCREEN_HEIGHT);
 
-	World::setInstance(m_world);
+	// World::setInstance(m_world);
 
 	testLuaAPI();
 
 	initShaders();
 
 	m_client.setCommandCallback(Network::Command::ChunkData, [this](sf::Packet &packet) {
-		for (u16 z = 0 ; z < CHUNK_DEPTH ; ++z) {
-			for (u16 y = 0 ; y < CHUNK_HEIGHT ; ++y) {
-				for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
-					u16 block;
-					packet >> block;
-					m_chunk.setBlock(x, y, z, block);
-					m_chunk.lightmap().addSunlight(x, y, z, 15);
-				}
-			}
-		}
+		m_world.receiveChunkData(packet);
 	});
 
 }
@@ -121,12 +111,10 @@ void GameState::update() {
 		}
 	}
 
-	m_player.updatePosition(m_world);
+	m_player.updatePosition();
 	m_skybox.update(m_player);
 
 	m_hud.update();
-
-	m_chunk.update();
 
 	m_client.update(m_hasGameStarted);
 }
@@ -146,16 +134,9 @@ void GameState::initShaders() {
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.shader = &m_shader;
 
-	// FIXME: Should be in World
-	gk::Shader::bind(states.shader);
-	states.shader->setUniform("u_renderDistance", World::renderDistance * CHUNK_WIDTH);
-	gk::Shader::bind(nullptr);
-
 	target.setView(m_camera);
 	target.draw(m_skybox, states);
-	// FIXME
-	// target.draw(m_world, states);
-	target.draw(m_chunk, states);
+	target.draw(m_world, states);
 	target.draw(m_hud, states);
 }
 

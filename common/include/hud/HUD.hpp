@@ -22,7 +22,7 @@
 
 class HUD : public gk::Transformable, public gk::IDrawable {
 	public:
-		HUD(Player &player, World &world);
+		HUD(Player &player);
 
 		void onEvent(const SDL_Event &event);
 

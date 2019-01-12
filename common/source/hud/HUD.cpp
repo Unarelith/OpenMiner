@@ -14,7 +14,7 @@
 #include "Config.hpp"
 #include "HUD.hpp"
 
-HUD::HUD(Player &player, World &world) :
+HUD::HUD(Player &player) :
 //  FIXME
 //  : m_hotbar{player.inventory()},
    // m_blockCursor(player, world),

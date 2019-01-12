@@ -93,7 +93,7 @@ void Player::processInputs() {
 	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Down)) move(135.0f);
 }
 
-void Player::updatePosition(const World &world) {
+void Player::updatePosition() {
 	// FIXME
 	// m_velocity.y -= m_gravity; // Gravity
     //

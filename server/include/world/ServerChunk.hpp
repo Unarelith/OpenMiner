@@ -16,6 +16,7 @@
 
 class ServerChunk {
 	public:
+		void generate();
 };
 
 #endif // SERVERCHUNK_HPP_
