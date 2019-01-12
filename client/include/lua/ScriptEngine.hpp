@@ -25,7 +25,6 @@ class World;
 class ScriptEngine {
 	public:
 		void init();
-		void initUsertypes();
 
 		sol::state &lua() { return m_lua; }
 
@@ -33,6 +32,8 @@ class ScriptEngine {
 		static void setInstance(ScriptEngine *instance) { s_instance = instance; }
 
 	private:
+		void initUsertypes();
+
 		static ScriptEngine *s_instance;
 
 		sol::state m_lua;

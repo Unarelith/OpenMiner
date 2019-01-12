@@ -53,8 +53,7 @@ class GameState : public gk::ApplicationState {
 
 		HUD m_hud{m_player};
 
-		// FIXME
-		// LuaCore m_luaCore;
+		LuaCore m_luaCore;
 
 		Client m_client;
 		bool m_hasGameStarted = false;

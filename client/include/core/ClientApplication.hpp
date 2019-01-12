@@ -18,7 +18,7 @@
 
 #include "KeyboardHandler.hpp"
 #include "Registry.hpp"
-// #include "ScriptEngine.hpp"
+#include "ScriptEngine.hpp"
 
 class ClientApplication : public gk::CoreApplication {
 	public:
@@ -31,7 +31,7 @@ class ClientApplication : public gk::CoreApplication {
 
 		KeyboardHandler m_keyboardHandler;
 
-		// ScriptEngine m_scriptEngine;
+		ScriptEngine m_scriptEngine;
 
 		Registry m_registry;
 };
