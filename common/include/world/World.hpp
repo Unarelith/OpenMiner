@@ -19,7 +19,7 @@
 #include <gk/gl/IDrawable.hpp>
 
 #include "Chunk.hpp"
-#include "TerrainGenerator.hpp"
+// #include "TerrainGenerator.hpp"
 
 class World : public gk::IDrawable {
 	public:
@@ -61,7 +61,7 @@ class World : public gk::IDrawable {
 
 		std::vector<std::unique_ptr<Chunk>> m_chunks;
 
-		TerrainGenerator m_terrainGenerator;
+		// TerrainGenerator m_terrainGenerator;
 };
 
 #endif // WORLD_HPP_

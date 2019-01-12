@@ -134,7 +134,8 @@ void World::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	}
 
 	if(ud < 1000) {
-		m_terrainGenerator.generate(*getChunk(ux, uy, uz));
+		// FIXME
+		// m_terrainGenerator.generate(*getChunk(ux, uy, uz));
 
 		// FIXME
 		// if(getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Left))   m_terrainGenerator.generate(*getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Left));

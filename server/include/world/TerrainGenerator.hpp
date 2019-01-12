@@ -14,14 +14,15 @@
 #ifndef TERRAINGENERATOR_HPP_
 #define TERRAINGENERATOR_HPP_
 
-class Chunk;
+class ServerChunk;
 
 class TerrainGenerator {
 	public:
-		void generate(Chunk &chunk) const;
+		void generate(ServerChunk &chunk) const;
 
-		void basicGeneration(Chunk &chunk) const;
-		void testCraftGeneration(Chunk &chunk) const;
+	private:
+		void basicGeneration(ServerChunk &chunk) const;
+		void testCraftGeneration(ServerChunk &chunk) const;
 
 		static float noise2d(float x, float y, int octaves, float persistence);
 		static float noise3d_abs(float x, float y, float z, int octaves, float persistence);

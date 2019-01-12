@@ -17,10 +17,17 @@
 #include "ServerWorld.hpp"
 
 void ServerWorld::sendChunkData(Client &client) {
+	m_chunk.generate();
+
 	sf::Packet packet;
 	packet << Network::Command::ChunkData;
-	for (u64 i = 0 ; i < CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_DEPTH ; ++i)
-		packet << u16(rand() % 2);
+	for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
+		for (u16 y = 0 ; y < CHUNK_HEIGHT ; ++y) {
+			for (u16 z = 0 ; z < CHUNK_DEPTH ; ++z) {
+				packet << u16(m_chunk.data()[x][y][z]);
+			}
+		}
+	}
 
 	client.tcpSocket->send(packet);
 }
