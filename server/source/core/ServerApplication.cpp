@@ -29,8 +29,6 @@ void ServerApplication::init() {
 	m_server.setGameStarted(false);
 
 	Registry::setInstance(m_registry);
-
-	// m_scriptEngine.init();
 }
 
 void ServerApplication::mainLoop() {
