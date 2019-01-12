@@ -1,18 +1,24 @@
 /*
  * =====================================================================================
  *
- *       Filename:  ServerChunk.cpp
+ *       Filename:  ServerWorld.hpp
  *
  *    Description:
  *
- *        Created:  12/01/2019 01:33:16
+ *        Created:  12/01/2019 14:02:07
  *
  *         Author:  Quentin Bazin, <quent42340@gmail.com>
  *
  * =====================================================================================
  */
-#include "ServerChunk.hpp"
+#ifndef SERVERWORLD_HPP_
+#define SERVERWORLD_HPP_
 
-void ServerChunk::generate() {
-}
+class Client;
 
+class ServerWorld {
+	public:
+		void sendChunkData(Client &client);
+};
+
+#endif // SERVERWORLD_HPP_

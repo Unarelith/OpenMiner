@@ -16,9 +16,9 @@
 
 #include <gk/core/CoreApplication.hpp>
 
-#include "NetworkInputHandler.hpp"
 #include "Registry.hpp"
 #include "Server.hpp"
+#include "ServerWorld.hpp"
 
 class ServerApplication : public gk::CoreApplication {
 	public:
@@ -30,6 +30,7 @@ class ServerApplication : public gk::CoreApplication {
 		void mainLoop() override;
 
 		Server m_server;
+		ServerWorld m_world;
 
 		Registry m_registry;
 };
