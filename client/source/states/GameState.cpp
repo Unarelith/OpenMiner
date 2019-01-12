@@ -106,7 +106,7 @@ void GameState::update() {
 		}
 	}
 
-	m_player.updatePosition();
+	m_player.updatePosition(m_world);
 	m_skybox.update(m_player);
 
 	m_hud.update();

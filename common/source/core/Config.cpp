@@ -15,6 +15,10 @@
 
 int GUI_SCALE = 3; // FIXME
 
+// Gameplay
+bool Config::isFlyModeEnabled = false;
+
+// Graphics
 bool Config::isSmoothLightingEnabled = true;
 bool Config::isAmbientOcclusionEnabled = true;
 bool Config::isWireframeModeEnabled = false;

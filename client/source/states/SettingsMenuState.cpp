@@ -48,17 +48,35 @@ void SettingsMenuState::update() {
 }
 
 void SettingsMenuState::addMainButtons() {
-	m_menuWidget.addButton(0, 0, "Graphics...", [this] (TextButton &) {
+	m_menuWidget.addButton(0, 0, "Gameplay...", [this] (TextButton &) {
+		m_menuWidget.reset(1, 8);
+		addGameplayButtons();
+	});
+
+	m_menuWidget.addButton(0, 1, "Graphics...", [this] (TextButton &) {
 		m_menuWidget.reset(1, 8);
 		addGraphicsButtons();
 	});
 
-	m_menuWidget.addButton(0, 1, "Input...", [this] (TextButton &) {
+	m_menuWidget.addButton(0, 2, "Input...", [this] (TextButton &) {
 		m_menuWidget.reset(1, 8);
 		addInputButtons();
 	});
 
 	m_menuWidget.addButton(0, 7, "Done", [this] (TextButton &) { m_stateStack->pop(); });
+}
+
+void SettingsMenuState::addGameplayButtons() {
+	m_menuWidget.addButton(0, 0, std::string("Fly Mode: ") + (Config::isFlyModeEnabled ? "ON" : "OFF"), [] (TextButton &button) {
+		Config::isFlyModeEnabled = !Config::isFlyModeEnabled;
+		button.setText(std::string("Fly Mode: ") + (Config::isFlyModeEnabled ? "ON" : "OFF"));
+		World::isReloadRequested = true;
+	});
+
+	m_menuWidget.addButton(0, 7, "Done", [this] (TextButton &) {
+		m_menuWidget.reset(1, 8);
+		addMainButtons();
+	});
 }
 
 void SettingsMenuState::addGraphicsButtons() {
