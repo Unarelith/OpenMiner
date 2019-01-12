@@ -17,7 +17,6 @@
 #include <gk/core/Exception.hpp>
 
 #include "Client.hpp"
-#include "Network.hpp"
 
 void Client::connect(sf::IpAddress serverAddress, u16 serverPort) {
 	m_serverAddress = serverAddress;
@@ -106,6 +105,11 @@ void Client::update(bool &hasGameStarted) {
 		else if (command == Network::Command::GameEnd) {
 			disconnect();
 			break;
+		}
+		else {
+			for (auto &it : m_commands)
+				if (command == it.first)
+					it.second();
 		}
 	}
 }
