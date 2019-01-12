@@ -17,12 +17,13 @@ ClientChunk::ClientChunk(s32 x, s32 y, s32 z, gk::Texture &texture) : m_texture(
 	m_x = x;
 	m_y = y;
 	m_z = z;
+
 	std::memset(m_data, 0, sizeof(m_data));
 }
 
 void ClientChunk::update() {
-	if (m_isChanged) {
-		m_isChanged = false;
+	if (m_hasChanged) {
+		m_hasChanged = false;
 		// m_lightmap.updateLights();
 
 		m_verticesCount = m_builder.buildChunk(*this, m_vbo);
@@ -59,7 +60,7 @@ void ClientChunk::setBlock(int x, int y, int z, u16 type) {
 
 	m_data[x][y][z] = type;
 
-	m_isChanged = true;
+	m_hasChanged = true;
 }
 
 void ClientChunk::setData(int x, int y, int z, u16 data) {
@@ -73,7 +74,7 @@ void ClientChunk::setData(int x, int y, int z, u16 data) {
 	m_data[x][y][z] &= 0xffff;
 	m_data[x][y][z] |= (data << 16);
 
-	m_isChanged = true;
+	m_hasChanged = true;
 }
 
 void ClientChunk::draw(gk::RenderTarget &target, gk::RenderStates states) const {
