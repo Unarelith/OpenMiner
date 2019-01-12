@@ -14,13 +14,20 @@
 #ifndef CLIENT_HPP_
 #define CLIENT_HPP_
 
+#include <functional>
+#include <unordered_map>
+
 #include <SFML/Network/TcpSocket.hpp>
 #include <SFML/Network/UdpSocket.hpp>
 
 #include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/Timer.hpp>
 
+#include "Network.hpp"
+
 class Client {
+	using CommandCallback = std::function<void()>;
+
 	public:
 		void connect(sf::IpAddress serverAddress, u16 serverPort);
 		void disconnect();
@@ -29,6 +36,8 @@ class Client {
 		void sendKeyState();
 
 		void update(bool &hasGameStarted);
+
+		void addCommand(Network::Command command, const CommandCallback &callback);
 
 		bool isConnected() const { return m_isConnected; }
 
@@ -47,6 +56,8 @@ class Client {
 		sf::UdpSocket m_socket;
 
 		gk::Timer m_keyUpdateTimer;
+
+		std::unordered_map<Network::Command, CommandCallback> m_commands;
 };
 
 #endif // CLIENT_HPP_
