@@ -16,15 +16,15 @@
 
 #include <gk/core/SDLHeaders.hpp>
 
+#include "ClientWorld.hpp"
 #include "Inventory.hpp"
 #include "Player.hpp"
-#include "World.hpp"
 
 class Hotbar;
 
 class BlockCursor : public gk::IDrawable {
 	public:
-		BlockCursor(Player &player, World &world)
+		BlockCursor(Player &player, ClientWorld &world)
 			: m_player(player), m_world(world) {}
 
 		void onEvent(const SDL_Event &event, const Hotbar &hotbar);
@@ -43,7 +43,7 @@ class BlockCursor : public gk::IDrawable {
 		glm::vec4 findSelectedBlock(bool useDepthBuffer) const;
 
 		Player &m_player;
-		World &m_world;
+		ClientWorld &m_world;
 
 		gk::VertexBuffer m_vbo;
 		gk::VertexBuffer m_animationVBO;

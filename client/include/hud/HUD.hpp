@@ -14,6 +14,8 @@
 #ifndef HUD_HPP_
 #define HUD_HPP_
 
+#include <gk/gl/Shader.hpp>
+
 #include "BlockCursor.hpp"
 #include "BlockInfoWidget.hpp"
 #include "Crosshair.hpp"
@@ -22,7 +24,7 @@
 
 class HUD : public gk::Transformable, public gk::IDrawable {
 	public:
-		HUD(Player &player);
+		HUD(Player &player, ClientWorld &world);
 
 		void onEvent(const SDL_Event &event);
 
@@ -34,16 +36,16 @@ class HUD : public gk::Transformable, public gk::IDrawable {
 		gk::Shader m_shader;
 		glm::mat4 m_orthoMatrix;
 
-		// Hotbar m_hotbar;
+		Hotbar m_hotbar;
 
 		glm::vec4 m_selectedBlock{0, 0, 0, -1};
-		// BlockCursor m_blockCursor;
+		BlockCursor m_blockCursor;
 		Crosshair m_crosshair;
 
 		DebugOverlay m_debugOverlay;
 		bool m_isDebugOverlayVisible = false;
 
-		// BlockInfoWidget m_blockInfoWidget;
+		BlockInfoWidget m_blockInfoWidget;
 };
 
 #endif // HUD_HPP_

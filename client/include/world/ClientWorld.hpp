@@ -28,7 +28,9 @@ class ClientWorld : public gk::IDrawable {
 		void receiveChunkData(sf::Packet &packet);
 
 		ClientChunk *getChunk(int cx, int cy, int cz) const;
+
 		u16 getBlock(int x, int y, int z) const;
+		void setBlock(int x, int y, int z, u16 id);
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;

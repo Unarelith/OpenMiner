@@ -71,7 +71,8 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 			const Block &block = Registry::getInstance().getBlock(blockId);
 			const Item &item = Registry::getInstance().getItem(hotbar.currentItem());
 
-			if (block.id() && !block.onBlockActivated({m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z}, m_player, m_world)
+			// FIXME
+			if (block.id()// && !block.onBlockActivated({m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z}, m_player, m_world)
 			    && hotbar.currentItem() && item.isBlock()) {
 				int face = m_selectedBlock.w;
 
