@@ -77,27 +77,20 @@ void ClientChunk::setData(int x, int y, int z, u16 data) {
 	m_hasChanged = true;
 }
 
-void ClientChunk::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	// if (m_verticesCount.at(layer) == 0) return;
-	if (m_verticesCount.at(ChunkBuilder::Layer::Solid) == 0) return;
-
-	// states.transform = glm::translate(glm::mat4(1.0f),
-	//                                   glm::vec3(m_x * CHUNK_WIDTH,
-	//                                             m_y * CHUNK_HEIGHT,
-	//                                             m_z * CHUNK_DEPTH));
+void ClientChunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u8 layer) const {
+	if (m_verticesCount.at(layer) == 0) return;
 
 	states.texture = &m_texture;
 
-	// if (layer == ChunkBuilder::Layer::Other)
-		// glDisable(GL_CULL_FACE);
-	// else
+	if (layer == ChunkBuilder::Layer::Other)
+		glDisable(GL_CULL_FACE);
+	else
 		glEnable(GL_CULL_FACE);
+
 	glEnable(GL_DEPTH_TEST);
 
 	if(Config::isWireframeModeEnabled) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	// target.draw(m_vbo.at(layer), GL_QUADS, 0, m_verticesCount.at(layer), states);
-	// target.draw(m_vbo.at(layer), GL_TRIANGLES, 0, m_verticesCount.at(layer), states);
-	target.draw(m_vbo.at(ChunkBuilder::Layer::Solid), GL_TRIANGLES, 0, m_verticesCount.at(ChunkBuilder::Layer::Solid), states);
+	target.draw(m_vbo.at(layer), GL_TRIANGLES, 0, m_verticesCount.at(layer), states);
 	if(Config::isWireframeModeEnabled) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 

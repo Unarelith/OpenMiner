@@ -164,17 +164,11 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	// 	getChunk(ux, uy, uz)->setInitialized(true);
 	// }
 
-	// FIXME
-	// for (u8 i = 0 ; i < ChunkBuilder::layers ; ++i) {
-	// 	for (auto &it : chunks) {
-	// 		states.transform = it.second;
-	// 		it.first->drawLayer(target, states, i);
-	// 	}
-	// }
-
-	for (auto &it : chunks) {
-		states.transform = it.second;
-		target.draw(*it.first, states);
+	for (u8 i = 0 ; i < ChunkBuilder::layers ; ++i) {
+		for (auto &it : chunks) {
+			states.transform = it.second;
+			it.first->drawLayer(target, states, i);
+		}
 	}
 }
 

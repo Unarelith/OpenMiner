@@ -20,7 +20,7 @@
 #include "ChunkLightmap.hpp"
 #include "Config.hpp"
 
-class ClientChunk : public gk::IDrawable {
+class ClientChunk {
 	public:
 		enum {
 			Left,
@@ -57,9 +57,9 @@ class ClientChunk : public gk::IDrawable {
 		ChunkLightmap &lightmap() { return m_lightmap; }
 		const ChunkLightmap &lightmap() const { return m_lightmap; }
 
-	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void drawLayer(gk::RenderTarget &target, gk::RenderStates states, u8 layer) const;
 
+	private:
 		s32 m_x;
 		s32 m_y;
 		s32 m_z;
