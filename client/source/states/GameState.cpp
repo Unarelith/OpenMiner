@@ -30,7 +30,7 @@
 #include "PlayerInventoryWidget.hpp"
 #include "ScriptEngine.hpp"
 
-GameState::GameState() {
+GameState::GameState(Client &client) : m_client(client) {
 	try {
 		m_client.connect("localhost", 4242);
 	}

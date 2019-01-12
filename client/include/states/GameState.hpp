@@ -30,7 +30,7 @@
 
 class GameState : public gk::ApplicationState {
 	public:
-		GameState();
+		GameState(Client &client);
 
 		void testLuaAPI();
 
@@ -55,7 +55,7 @@ class GameState : public gk::ApplicationState {
 
 		LuaCore m_luaCore;
 
-		Client m_client;
+		Client &m_client;
 		bool m_hasGameStarted = false;
 };
 
