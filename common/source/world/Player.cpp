@@ -94,12 +94,14 @@ void Player::processInputs() {
 }
 
 void Player::updatePosition(const World &world) {
-	m_velocity.y -= m_gravity; // Gravity
+	// FIXME
+	// m_velocity.y -= m_gravity; // Gravity
+    //
+	// if (m_velocity.y < -m_jumpSpeed) // Jump max accel
+	// 	m_velocity.y = -m_jumpSpeed;
 
-	if (m_velocity.y < -m_jumpSpeed) // Jump max accel
-		m_velocity.y = -m_jumpSpeed;
-
-	checkCollisions(world);
+	// FIXME
+	// checkCollisions(world);
 
 	m_x += m_velocity.x;
 	m_y += m_velocity.y;
@@ -111,6 +113,7 @@ void Player::updatePosition(const World &world) {
 		m_camera.setTargetPosition(pointTargetedX(), pointTargetedY(), pointTargetedZ());
 
 	m_velocity.x = 0;
+	m_velocity.y = 0; // FIXME
 	m_velocity.z = 0;
 }
 

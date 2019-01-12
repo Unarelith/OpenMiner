@@ -24,13 +24,13 @@
 #include <gk/gl/VertexBuffer.hpp>
 
 class Block;
-class Chunk;
+class ClientChunk;
 
 class ChunkBuilder {
 	public:
 		static constexpr u8 layers = 3;
 
-		std::array<std::size_t, layers> buildChunk(const Chunk &chunk, const std::array<gk::VertexBuffer, layers> &vbo);
+		std::array<std::size_t, layers> buildChunk(const ClientChunk &chunk, const std::array<gk::VertexBuffer, layers> &vbo);
 
 		enum Layer {
 			Solid,
@@ -39,18 +39,18 @@ class ChunkBuilder {
 		};
 
 	private:
-		void addFace(u8 x, u8 y, u8 z, u8 i, const Chunk &chunk, const Block *block, const Block *surroundingBlock);
-		void addCross(u8 x, u8 y, u8 z, const Chunk &chunk, const Block *block);
+		void addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, u16 surroundingBlock);
+		void addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Block *block);
 
 		gk::Vector3i getOffsetFromVertex(u8 i, u8 j);
-		u8 getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk);
+		u8 getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const ClientChunk &chunk);
 
 		enum class Light {
 			Sun,
 			Torch
 		};
 
-		float getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const Chunk &chunk);
+		float getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const ClientChunk &chunk);
 
 		std::array<std::vector<gk::Vertex>, layers> m_vertices;
 
@@ -62,7 +62,6 @@ class ChunkBuilder {
 			Front,
 			Back
 		};
-;
 };
 
 #endif // CHUNKBUILDER_HPP_

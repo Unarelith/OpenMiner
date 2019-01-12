@@ -20,6 +20,7 @@
 #include <gk/gl/RenderTarget.hpp>
 
 #include "Client.hpp"
+#include "ClientChunk.hpp"
 #include "Config.hpp"
 #include "HUD.hpp"
 #include "LuaCore.hpp"
@@ -46,13 +47,15 @@ class GameState : public gk::ApplicationState {
 
 		Skybox m_skybox;
 		World m_world;
+		ClientChunk m_chunk;
 
 		gk::Camera m_camera{FOV, DIST_NEAR, DIST_FAR};
 		Player m_player{m_camera};
 
 		HUD m_hud{m_player, m_world};
 
-		LuaCore m_luaCore;
+		// FIXME
+		// LuaCore m_luaCore;
 
 		Client m_client;
 };

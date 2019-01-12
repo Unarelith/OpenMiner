@@ -6,6 +6,7 @@ TODO
 
 # Code improvements
 
+• TODO: License headers
 • TODO: If possible, `Cube` should inherit from `ItemWidget` or `Widget`
 • TODO: Rename `Cube` to either `InventoryCube`, `CubeItemWidget` or `CubeWidget`
 • TODO: Unify cube coords in `BlockCursor`, `Cube`, `Chunk`

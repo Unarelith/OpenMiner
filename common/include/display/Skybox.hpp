@@ -14,16 +14,22 @@
 #ifndef SKYBOX_HPP_
 #define SKYBOX_HPP_
 
-#include <gk/gl/Shader.hpp>
+#include <gk/gl/IDrawable.hpp>
 #include <gk/gl/VertexBuffer.hpp>
 
-class Skybox {
+class Player;
+
+class Skybox : public gk::IDrawable {
 	public:
 		Skybox();
 
-		void draw(gk::Shader &shader);
+		void update(Player &player);
 
 	private:
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		gk::Vector3f m_playerPosition;
+
 		gk::VertexBuffer m_vbo;
 };
 

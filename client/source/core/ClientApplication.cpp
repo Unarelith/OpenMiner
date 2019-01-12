@@ -39,7 +39,7 @@ void ClientApplication::init() {
 
 	Registry::setInstance(m_registry);
 
-	m_scriptEngine.init();
+	// m_scriptEngine.init();
 
 	m_stateStack.push<GameState>();
 }

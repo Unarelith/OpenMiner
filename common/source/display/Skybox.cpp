@@ -16,45 +16,47 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <gk/gl/Vertex.hpp>
+
+#include "Config.hpp"
 #include "Player.hpp"
 #include "Skybox.hpp"
 #include "World.hpp"
 
+static const float cubeCoords[6 * 4 * 3] = {
+	0, 0, 1,
+	0, 0, 0,
+	0, 1, 0,
+	0, 1, 1,
+
+	1, 1, 1,
+	1, 1, 0,
+	1, 0, 0,
+	1, 0, 1,
+
+	0, 0, 1,
+	1, 0, 1,
+	1, 0, 0,
+	0, 0, 0,
+
+	0, 1, 0,
+	1, 1, 0,
+	1, 1, 1,
+	0, 1, 1,
+
+	0, 1, 1,
+	1, 1, 1,
+	1, 0, 1,
+	0, 0, 1,
+
+	0, 0, 0,
+	1, 0, 0,
+	1, 1, 0,
+	0, 1, 0,
+};
+
 Skybox::Skybox() {
-	const float cubeCoords[6 * 4 * 3] = {
-		0, 0, 1,
-		0, 0, 0,
-		0, 1, 0,
-		0, 1, 1,
-
-		1, 1, 1,
-		1, 1, 0,
-		1, 0, 0,
-		1, 0, 1,
-
-		0, 0, 1,
-		1, 0, 1,
-		1, 0, 0,
-		0, 0, 0,
-
-		0, 1, 0,
-		1, 1, 0,
-		1, 1, 1,
-		0, 1, 1,
-
-		0, 1, 1,
-		1, 1, 1,
-		1, 0, 1,
-		0, 0, 1,
-
-		0, 0, 0,
-		1, 0, 0,
-		1, 1, 0,
-		0, 1, 0,
-	};
-
-
-	float colors[3 * 4 * 6] = {
+	float colors[3 * 4] = {
 		//0.196078, 0.6, 0.8,
 		//0.196078, 0.6, 0.8,
 		//0.196078, 0.6, 0.8,
@@ -65,41 +67,41 @@ Skybox::Skybox() {
 		0.0, 0.0, 1.0
 	};
 
-	for(int i = 1 ; i < 6 ; i++) {
-		memcpy(&colors[3 * 4 * i], &colors[0], 3 * 4 * sizeof(float));
+
+	gk::Vertex vertices[24];
+	for (u8 i = 0 ; i < 24 ; ++i) {
+		vertices[i].coord3d[0] = cubeCoords[i * 3];
+		vertices[i].coord3d[1] = cubeCoords[i * 3 + 1];
+		vertices[i].coord3d[2] = cubeCoords[i * 3 + 2];
+		vertices[i].coord3d[3] = -1;
+
+		vertices[i].color[0] = colors[(i % 4) * 3];
+		vertices[i].color[1] = colors[(i % 4) * 3 + 1];
+		vertices[i].color[1] = colors[(i % 4) * 3 + 2];
 	}
 
 	gk::VertexBuffer::bind(&m_vbo);
-
-	m_vbo.setData(36 * 16 * 9 * sizeof(float), nullptr, GL_STATIC_DRAW);
-	m_vbo.updateData(0, 6 * 4 * 3 * sizeof(float), cubeCoords);
-	m_vbo.updateData(6 * 4 * 3 * sizeof(float), 6 * 4 * 3 * sizeof(float), colors);
-
+	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	gk::VertexBuffer::bind(nullptr);
 }
 
-void Skybox::draw(gk::Shader &shader) {
+void Skybox::update(Player &player) {
+	m_playerPosition = {player.x(), player.y(), player.z()};
+}
+
+void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f),
-	                        glm::vec3(Player::getInstance().x() - World::renderDistance * Chunk::width / 2,
-	                                  Player::getInstance().y() - World::renderDistance * Chunk::width / 2,
-	                                  Player::getInstance().z() - World::renderDistance * Chunk::width / 2));
-	modelMatrix *= glm::scale(glm::mat4(1.0), glm::vec3(World::renderDistance * Chunk::width));
+	                        glm::vec3(m_playerPosition.x - World::renderDistance * CHUNK_WIDTH / 2,
+	                                  m_playerPosition.y - World::renderDistance * CHUNK_WIDTH / 2,
+	                                  m_playerPosition.z - World::renderDistance * CHUNK_WIDTH / 2));
+	modelMatrix *= glm::scale(glm::mat4(1.0), glm::vec3(World::renderDistance * CHUNK_WIDTH));
 
-	shader.setUniform("u_modelMatrix", modelMatrix);
+	states.transform = modelMatrix;
 
-	gk::VertexBuffer::bind(&m_vbo);
+	glDisable(GL_CULL_FACE);
 
-	shader.enableVertexAttribArray("coord3d");
-	shader.enableVertexAttribArray("color");
-
-	glVertexAttribPointer(shader.attrib("coord3d"), 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glVertexAttribPointer(shader.attrib("color"), 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(3 * 4 * 6 * sizeof(float)));
-
-	glDrawArrays(GL_QUADS, 0, 4 * 6);
-
-	shader.disableVertexAttribArray("color");
-	shader.disableVertexAttribArray("coord3d");
-
-	gk::VertexBuffer::bind(nullptr);
+	if(Config::isWireframeModeEnabled) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	target.draw(m_vbo, GL_QUADS, 0, 4 * 6, states);
+	if(Config::isWireframeModeEnabled) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
