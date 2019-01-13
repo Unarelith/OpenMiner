@@ -50,10 +50,12 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 
 			// Land blocks
 			for(int y = 0 ; y < CHUNK_HEIGHT ; y++) {
+				// Wood planks layer
 				// if (y == 0 && chunk.y() == 0) {
 				// 	chunk.setBlock(x, y, z, 16);
 				// 	continue;
 				// }
+
 				// Are we above "ground" level?
 				if(y + chunk.y() * CHUNK_HEIGHT >= h) {
 					// if we are not yet up to sea level, fill with water blocks
@@ -68,6 +70,7 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 							h = (rand() & 0x3) + 3;
 							for(int i = 0 ; i < h ; i++) {
 								chunk.setBlock(x, y + i, z, BlockType::Wood);
+								chunk.lightmap().addSunlight(x, y + i, z, 15);
 							}
 
 							// Leaves
@@ -77,9 +80,8 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 										if(ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + h + iy, z + iz)) {
 											chunk.setBlock(x + ix, y + h + iy, z + iz, BlockType::Leaves);
 
-											// FIXME
 											// if (iy == 2)
-											// 	chunk.lightmap().addSunlight(x + ix, y + h + iy, z + iz, 15);
+											chunk.lightmap().addSunlight(x + ix, y + h + iy, z + iz, 15);
 										}
 									}
 								}
@@ -89,12 +91,10 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 							chunk.setBlock(x, y, z, BlockType::Flower);
 						}
 						else {
-							// FIXME
-							// chunk.lightmap().addSunlight(x, y - 1, z, 15);
+							chunk.lightmap().addSunlight(x, y - 1, z, 15);
 
 							// FIXME: Temporary fix for air blocks light level
-							// FIXME
-							// chunk.lightmap().addSunlight(x, y, z, 15);
+							chunk.lightmap().addSunlight(x, y, z, 15);
 						}
 						break;
 					}

@@ -59,10 +59,13 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 			for (u16 y = 0 ; y < CHUNK_HEIGHT ; ++y) {
 				for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
 					u16 block;
-					packet >> block;
+					u8 light;
 
-					chunk->setBlock(x, y, z, block);
-					chunk->lightmap().addSunlight(x, y, z, 15);
+					packet >> block >> light;
+
+					chunk->setBlock(x, y, z, block & 0xffff);
+					// chunk->setData(x, y, z, block >> 16);
+					chunk->lightmap().setLightData(x, y, z, light);
 				}
 			}
 		}
