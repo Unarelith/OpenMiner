@@ -1,7 +1,8 @@
 mod:block {
 	id = "furnace",
 	name = "Furnace",
-	texture = 164,
+	-- texture = 164, -- Vanilla
+	texture = 205, -- Faithful 32x
 
 	on_block_activated = function(pos, player, world)
 		-- FIXME: Replace this by gui:set_size() and gui:set_centered()

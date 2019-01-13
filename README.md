@@ -40,4 +40,5 @@
 ## Credits
 
 - MadPixel (Minecrafter font) [CC BY-ND]
+- xMrVizzy ([Faithful 32x](https://www.curseforge.com/minecraft/texture-packs/faithful-32x) texture pack)
 

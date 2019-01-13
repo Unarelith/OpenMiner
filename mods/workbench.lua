@@ -1,7 +1,8 @@
 mod:block {
 	id = "workbench",
 	name = "Workbench",
-	texture = 77,
+	-- texture = 77, -- Vanilla
+	texture = 115, -- Faithful 32x
 
 	on_block_activated = function(pos, player, world)
 		local gui = LuaGUI.new()
