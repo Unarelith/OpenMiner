@@ -22,18 +22,6 @@
 u16 World::renderDistance = 8;
 bool World::isReloadRequested = false;
 
-void World::update() {
-	// FIXME
-	// for (auto &it : m_chunks) {
-	// 	if (isReloadRequested)
-	// 		it->setChanged(true);
-    //
-	// 	it->update(player, *this);
-	// }
-
-	isReloadRequested = false;
-}
-
 BlockData *World::getBlockData(int x, int y, int z) {
 	int cx = (x + CHUNK_WIDTH * (m_width / 2)) / CHUNK_WIDTH;
 	int cy = (y + CHUNK_HEIGHT * (m_height / 2)) / CHUNK_HEIGHT;
