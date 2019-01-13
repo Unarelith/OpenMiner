@@ -3,6 +3,7 @@ TODO
 # Issues
 
 • TODO: `Workbench` and `Furnace` are not scaled correctly with lower GUI scale settings
+• TODO: Blocks can be accessed from outside the world (will need a refactoring)
 
 # Code improvements
 
@@ -13,6 +14,7 @@ TODO
 
 # Refactorings
 
+• TODO: Remove the ability of `Chunk` and `ChunkLightmap` to access surrounding chunk blocks
 • TODO: `Chunk::setBlock` does way too much things, fix this
 • TODO: Add a mesh system, either here or in `GameKit`
    → Maybe this is the way to add custom vertex attributes while having default ones? Check 3dee
