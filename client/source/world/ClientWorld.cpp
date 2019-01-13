@@ -45,8 +45,14 @@ ClientWorld::ClientWorld() : m_texture(gk::ResourceHandler::getInstance().get<gk
 }
 
 void ClientWorld::update() {
-	for (auto &it : m_chunks)
+	for (auto &it : m_chunks) {
+		if (World::isReloadRequested)
+			it->setChanged(true);
+
 		it->update();
+	}
+
+	World::isReloadRequested = false;
 }
 
 void ClientWorld::receiveChunkData(sf::Packet &packet) {
