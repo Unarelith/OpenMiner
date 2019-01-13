@@ -35,11 +35,11 @@ struct LightRemovalNode {
 	int value;
 };
 
-class ClientChunk;
+class Chunk;
 
 class ChunkLightmap {
 	public:
-		ChunkLightmap(ClientChunk *chunk);
+		ChunkLightmap(Chunk *chunk);
 
 		void addLight(int x, int y, int z, int val);
 		void addSunlight(int x, int y, int z, int val);
@@ -50,14 +50,19 @@ class ChunkLightmap {
 		void updateTorchlight();
 		void updateSunlight();
 
-		int getSunlight(int x, int y, int z) const;
-		int getTorchlight(int x, int y, int z) const;
+		u8 getSunlight(int x, int y, int z) const;
+		u8 getTorchlight(int x, int y, int z) const;
+		u8 getLightData(int x, int y, int z) const;
+
+		void setLightData(int x, int y, int z, u8 val);
 
 	private:
-		void setTorchlight(int x, int y, int z, int val);
-		void setSunlight(int x, int y, int z, int val);
+		void setTorchlight(int x, int y, int z, u8 val);
+		void setSunlight(int x, int y, int z, u8 val);
 
-		ClientChunk *m_chunk = nullptr;
+		void updateSurroundingChunks(int x, int y, int z);
+
+		Chunk *m_chunk = nullptr;
 
 		using LightMapArray = u8[CHUNK_WIDTH][CHUNK_HEIGHT][CHUNK_DEPTH];
 		LightMapArray m_lightMap;

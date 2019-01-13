@@ -62,6 +62,7 @@ void ServerWorld::sendChunkData(Client &client, ServerChunk *chunk) {
 		for (u16 y = 0 ; y < CHUNK_HEIGHT ; ++y) {
 			for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
 				packet << u16(chunk->data()[x][y][z]);
+				packet << chunk->lightmap().getLightData(x, y, z);
 			}
 		}
 	}

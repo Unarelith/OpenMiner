@@ -17,54 +17,26 @@
 #include <gk/core/IntTypes.hpp>
 
 #include "Config.hpp"
+#include "Chunk.hpp"
 #include "TerrainGenerator.hpp"
 
-class ServerChunk {
-	using DataArray = u32[CHUNK_WIDTH][CHUNK_HEIGHT][CHUNK_DEPTH];
-
+class ServerChunk : public Chunk {
 	public:
-		enum {
-			Left,
-			Right,
-			Front,
-			Back,
-			Bottom,
-			Top
-		};
+		ServerChunk(s32 x, s32 y, s32 z) : Chunk(x, y, z) {}
 
-	public:
-		ServerChunk(s32 x, s32 y, s32 z);
-
+		void update();
 		void generate();
 
-		u16 getBlock(int x, int y, int z) const;
-		u16 getData(int x, int y, int z) const;
-		void setBlock(int x, int y, int z, u16 type);
-		void setData(int x, int y, int z, u16 data);
-
-		s32 x() const { return m_x; }
-		s32 y() const { return m_y; }
-		s32 z() const { return m_z; }
-
-		ServerChunk *getSurroundingChunk(u8 i) { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
-		const ServerChunk *getSurroundingChunk(u8 i) const { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
-		void setSurroundingChunk(u8 i, ServerChunk *chunk) { if (i < 6) m_surroundingChunks[i] = chunk; }
+		bool isGenerated() const { return m_isGenerated; }
+		void setGenerated(bool isGenerated) { m_isGenerated = isGenerated; }
 
 		const DataArray &data() const { return m_data; }
 
 	private:
-		DataArray m_data;
-
-		s32 m_x;
-		s32 m_y;
-		s32 m_z;
-
 		bool m_hasChanged = false;
 		bool m_isGenerated = false;
 
 		TerrainGenerator m_terrainGenerator;
-
-		ServerChunk *m_surroundingChunks[6]{nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 };
 
 #endif // SERVERCHUNK_HPP_

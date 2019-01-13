@@ -26,8 +26,7 @@
 
 #include "Block.hpp"
 #include "BlockData.hpp"
-// #include "ChunkBuilder.hpp"
-// #include "ChunkLightmap.hpp"
+#include "ChunkLightmap.hpp"
 
 class Chunk : public gk::NonCopyable {
 	public:
@@ -41,69 +40,58 @@ class Chunk : public gk::NonCopyable {
 		};
 
 	public:
-		// Chunk(s32 x, s32 y, s32 z, gk::Texture &texture);
+		Chunk(s32 x, s32 y, s32 z);
 
-		void update(Player &player, World &world);
+		virtual void update() = 0;
 
-		// u16 getBlock(int x, int y, int z) const;
-		// u16 getData(int x, int y, int z) const;
-		// void setBlock(int x, int y, int z, u16 type);
-		// void setData(int x, int y, int z, u16 data);
+		u16 getBlock(int x, int y, int z) const;
+		u16 getData(int x, int y, int z) const;
+		void setBlock(int x, int y, int z, u16 type);
+		void setData(int x, int y, int z, u16 data);
 
-		BlockData *getBlockData(int x, int y, int z);
+		// BlockData *getBlockData(int x, int y, int z);
 
-		// s32 x() const { return m_x; }
-		// s32 y() const { return m_y; }
-		// s32 z() const { return m_z; }
+		s32 x() const { return m_x; }
+		s32 y() const { return m_y; }
+		s32 z() const { return m_z; }
 
-		// Chunk *getSurroundingChunk(u8 i) { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
-		// const Chunk *getSurroundingChunk(u8 i) const { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
-		// void setSurroundingChunk(u8 i, Chunk *chunk) { if (i < 6) m_surroundingChunks[i] = chunk; }
+		Chunk *getSurroundingChunk(u8 i) { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
+		const Chunk *getSurroundingChunk(u8 i) const { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
+		void setSurroundingChunk(u8 i, Chunk *chunk) { if (i < 6) m_surroundingChunks[i] = chunk; }
 
-		bool isGenerated() const { return m_isGenerated; }
 		bool isInitialized() const { return m_isInitialized; }
 
-		// void setChanged(bool isChanged) { m_isChanged = isChanged; }
-		void setGenerated(bool isGenerated) { m_isGenerated = isGenerated; }
+		void setChanged(bool hasChanged) { m_hasChanged = hasChanged; }
 		void setInitialized(bool isInitialized) { m_isInitialized = isInitialized; }
 
-		// ChunkLightmap &lightmap() { return m_lightmap; }
-		// const ChunkLightmap &lightmap() const { return m_lightmap; }
+		ChunkLightmap &lightmap() { return m_lightmap; }
+		const ChunkLightmap &lightmap() const { return m_lightmap; }
 
-		// static constexpr u8 width = CHUNK_WIDTH;
-		// static constexpr u8 height = CHUNK_HEIGHT;
-		// static constexpr u8 depth = CHUNK_DEPTH;
+		static constexpr u8 width = CHUNK_WIDTH;
+		static constexpr u8 height = CHUNK_HEIGHT;
+		static constexpr u8 depth = CHUNK_DEPTH;
 
-		void drawLayer(gk::RenderTarget &target, gk::RenderStates states, u16 layer) const;
+	protected:
+		// void updateNeighbours(int x, int y, int z);
 
-	private:
-		void updateNeighbours(int x, int y, int z);
+		s32 m_x;
+		s32 m_y;
+		s32 m_z;
 
-		// s32 m_x;
-		// s32 m_y;
-		// s32 m_z;
+		using DataArray = u32[Chunk::width][Chunk::height][Chunk::depth];
+		DataArray m_data;
 
-		// gk::Texture &m_texture;
+		ChunkLightmap m_lightmap{this};
 
-		// using DataArray = u32[Chunk::width][Chunk::height][Chunk::depth];
-		// DataArray m_data;
+		Chunk *m_surroundingChunks[6]{nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 
-		// ChunkBuilder m_builder;
-		// ChunkLightmap m_lightmap{this};
-
-		// std::array<gk::VertexBuffer, ChunkBuilder::layers> m_vbo;
-		// std::array<std::size_t, ChunkBuilder::layers> m_verticesCount;
-
-		// Chunk *m_surroundingChunks[6]{nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
-
-		// bool m_isChanged = false;
+		bool m_hasChanged = false;
 		bool m_isInitialized = false;
-		bool m_isGenerated = false;
 
-		u32 m_lastTick = 0;
-		std::unordered_map<std::size_t, const Block&> m_tickingBlocks;
-
-		std::unordered_map<gk::Vector3i, BlockData> m_blockData;
+		// u32 m_lastTick = 0;
+		// std::unordered_map<std::size_t, const Block&> m_tickingBlocks;
+        //
+		// std::unordered_map<gk::Vector3i, BlockData> m_blockData;
 };
 
 #endif // CHUNK_HPP_

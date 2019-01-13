@@ -13,11 +13,11 @@
  */
 #include <cstring>
 
-#include "ClientChunk.hpp"
+#include "Chunk.hpp"
 #include "ChunkLightmap.hpp"
 #include "Registry.hpp"
 
-ChunkLightmap::ChunkLightmap(ClientChunk *chunk) : m_chunk(chunk) {
+ChunkLightmap::ChunkLightmap(Chunk *chunk) : m_chunk(chunk) {
 	std::memset(m_lightMap, 0, sizeof(m_lightMap));
 }
 
@@ -151,7 +151,7 @@ void ChunkLightmap::updateSunlight() {
 	}
 }
 
-int ChunkLightmap::getSunlight(int x, int y, int z) const {
+u8 ChunkLightmap::getSunlight(int x, int y, int z) const {
 	if(x < 0)             return m_chunk->getSurroundingChunk(0) ? m_chunk->getSurroundingChunk(0)->lightmap().getSunlight(x + CHUNK_WIDTH, y, z) : 0;
 	if(x >= CHUNK_WIDTH)  return m_chunk->getSurroundingChunk(1) ? m_chunk->getSurroundingChunk(1)->lightmap().getSunlight(x - CHUNK_WIDTH, y, z) : 0;
 	if(y < 0)             return m_chunk->getSurroundingChunk(4) ? m_chunk->getSurroundingChunk(4)->lightmap().getSunlight(x, y + CHUNK_HEIGHT, z) : 0;
@@ -162,7 +162,7 @@ int ChunkLightmap::getSunlight(int x, int y, int z) const {
 	return (m_lightMap[x][y][z] >> 4) & 0xf;
 }
 
-int ChunkLightmap::getTorchlight(int x, int y, int z) const {
+u8 ChunkLightmap::getTorchlight(int x, int y, int z) const {
 	if(x < 0)             return m_chunk->getSurroundingChunk(0) ? m_chunk->getSurroundingChunk(0)->lightmap().getTorchlight(x + CHUNK_WIDTH, y, z) : 0;
 	if(x >= CHUNK_WIDTH)  return m_chunk->getSurroundingChunk(1) ? m_chunk->getSurroundingChunk(1)->lightmap().getTorchlight(x - CHUNK_WIDTH, y, z) : 0;
 	if(y < 0)             return m_chunk->getSurroundingChunk(4) ? m_chunk->getSurroundingChunk(4)->lightmap().getTorchlight(x, y + CHUNK_HEIGHT, z) : 0;
@@ -173,7 +173,33 @@ int ChunkLightmap::getTorchlight(int x, int y, int z) const {
 	return m_lightMap[x][y][z] & 0xf;
 }
 
-void ChunkLightmap::setSunlight(int x, int y, int z, int val) {
+u8 ChunkLightmap::getLightData(int x, int y, int z) const {
+	if(x < 0)             return m_chunk->getSurroundingChunk(0) ? m_chunk->getSurroundingChunk(0)->lightmap().getLightData(x + CHUNK_WIDTH, y, z) : 0;
+	if(x >= CHUNK_WIDTH)  return m_chunk->getSurroundingChunk(1) ? m_chunk->getSurroundingChunk(1)->lightmap().getLightData(x - CHUNK_WIDTH, y, z) : 0;
+	if(y < 0)             return m_chunk->getSurroundingChunk(4) ? m_chunk->getSurroundingChunk(4)->lightmap().getLightData(x, y + CHUNK_HEIGHT, z) : 0;
+	if(y >= CHUNK_HEIGHT) return m_chunk->getSurroundingChunk(5) ? m_chunk->getSurroundingChunk(5)->lightmap().getLightData(x, y - CHUNK_HEIGHT, z) : 0;
+	if(z < 0)             return m_chunk->getSurroundingChunk(2) ? m_chunk->getSurroundingChunk(2)->lightmap().getLightData(x, y, z + CHUNK_DEPTH) : 0;
+	if(z >= CHUNK_DEPTH)  return m_chunk->getSurroundingChunk(3) ? m_chunk->getSurroundingChunk(3)->lightmap().getLightData(x, y, z - CHUNK_DEPTH) : 0;
+
+	return m_lightMap[x][y][z];
+}
+
+void ChunkLightmap::setLightData(int x, int y, int z, u8 val) {
+	if(x < 0)             { if(m_chunk->getSurroundingChunk(0)) m_chunk->getSurroundingChunk(0)->lightmap().setLightData(x + CHUNK_WIDTH, y, z, val); return; }
+	if(x >= CHUNK_WIDTH)  { if(m_chunk->getSurroundingChunk(1)) m_chunk->getSurroundingChunk(1)->lightmap().setLightData(x - CHUNK_WIDTH, y, z, val); return; }
+	if(y < 0)             { if(m_chunk->getSurroundingChunk(4)) m_chunk->getSurroundingChunk(4)->lightmap().setLightData(x, y + CHUNK_HEIGHT, z, val); return; }
+	if(y >= CHUNK_HEIGHT) { if(m_chunk->getSurroundingChunk(5)) m_chunk->getSurroundingChunk(5)->lightmap().setLightData(x, y - CHUNK_HEIGHT, z, val); return; }
+	if(z < 0)             { if(m_chunk->getSurroundingChunk(2)) m_chunk->getSurroundingChunk(2)->lightmap().setLightData(x, y, z + CHUNK_DEPTH, val); return; }
+	if(z >= CHUNK_DEPTH)  { if(m_chunk->getSurroundingChunk(3)) m_chunk->getSurroundingChunk(3)->lightmap().setLightData(x, y, z - CHUNK_DEPTH, val); return; }
+
+	m_lightMap[x][y][z] = val;
+
+	m_chunk->setChanged(true);
+
+	updateSurroundingChunks(x, y, z);
+}
+
+void ChunkLightmap::setSunlight(int x, int y, int z, u8 val) {
 	if(x < 0)             { if(m_chunk->getSurroundingChunk(0)) m_chunk->getSurroundingChunk(0)->lightmap().setSunlight(x + CHUNK_WIDTH, y, z, val); return; }
 	if(x >= CHUNK_WIDTH)  { if(m_chunk->getSurroundingChunk(1)) m_chunk->getSurroundingChunk(1)->lightmap().setSunlight(x - CHUNK_WIDTH, y, z, val); return; }
 	if(y < 0)             { if(m_chunk->getSurroundingChunk(4)) m_chunk->getSurroundingChunk(4)->lightmap().setSunlight(x, y + CHUNK_HEIGHT, z, val); return; }
@@ -185,15 +211,10 @@ void ChunkLightmap::setSunlight(int x, int y, int z, int val) {
 
 	m_chunk->setChanged(true);
 
-	if(x == 0                && m_chunk->getSurroundingChunk(ClientChunk::Left))   { m_chunk->getSurroundingChunk(ClientChunk::Left)->setChanged(true); }
-	if(x == CHUNK_WIDTH - 1  && m_chunk->getSurroundingChunk(ClientChunk::Right))  { m_chunk->getSurroundingChunk(ClientChunk::Right)->setChanged(true); }
-	if(y == 0                && m_chunk->getSurroundingChunk(ClientChunk::Bottom)) { m_chunk->getSurroundingChunk(ClientChunk::Bottom)->setChanged(true); }
-	if(y == CHUNK_HEIGHT - 1 && m_chunk->getSurroundingChunk(ClientChunk::Top))    { m_chunk->getSurroundingChunk(ClientChunk::Top)->setChanged(true); }
-	if(z == 0                && m_chunk->getSurroundingChunk(ClientChunk::Front))  { m_chunk->getSurroundingChunk(ClientChunk::Front)->setChanged(true); }
-	if(z == CHUNK_DEPTH - 1  && m_chunk->getSurroundingChunk(ClientChunk::Back))   { m_chunk->getSurroundingChunk(ClientChunk::Back)->setChanged(true); }
+	updateSurroundingChunks(x, y, z);
 };
 
-void ChunkLightmap::setTorchlight(int x, int y, int z, int val) {
+void ChunkLightmap::setTorchlight(int x, int y, int z, u8 val) {
 	if(x < 0)             { if(m_chunk->getSurroundingChunk(0)) m_chunk->getSurroundingChunk(0)->lightmap().setTorchlight(x + CHUNK_WIDTH, y, z, val); return; }
 	if(x >= CHUNK_WIDTH)  { if(m_chunk->getSurroundingChunk(1)) m_chunk->getSurroundingChunk(1)->lightmap().setTorchlight(x - CHUNK_WIDTH, y, z, val); return; }
 	if(y < 0)             { if(m_chunk->getSurroundingChunk(4)) m_chunk->getSurroundingChunk(4)->lightmap().setTorchlight(x, y + CHUNK_HEIGHT, z, val); return; }
@@ -205,11 +226,15 @@ void ChunkLightmap::setTorchlight(int x, int y, int z, int val) {
 
 	m_chunk->setChanged(true);
 
-	if(x == 0                && m_chunk->getSurroundingChunk(ClientChunk::Left))   { m_chunk->getSurroundingChunk(ClientChunk::Left)->setChanged(true); }
-	if(x == CHUNK_WIDTH - 1  && m_chunk->getSurroundingChunk(ClientChunk::Right))  { m_chunk->getSurroundingChunk(ClientChunk::Right)->setChanged(true); }
-	if(y == 0                && m_chunk->getSurroundingChunk(ClientChunk::Bottom)) { m_chunk->getSurroundingChunk(ClientChunk::Bottom)->setChanged(true); }
-	if(y == CHUNK_HEIGHT - 1 && m_chunk->getSurroundingChunk(ClientChunk::Top))    { m_chunk->getSurroundingChunk(ClientChunk::Top)->setChanged(true); }
-	if(z == 0                && m_chunk->getSurroundingChunk(ClientChunk::Front))  { m_chunk->getSurroundingChunk(ClientChunk::Front)->setChanged(true); }
-	if(z == CHUNK_DEPTH - 1  && m_chunk->getSurroundingChunk(ClientChunk::Back))   { m_chunk->getSurroundingChunk(ClientChunk::Back)->setChanged(true); }
+	updateSurroundingChunks(x, y, z);
+}
+
+void ChunkLightmap::updateSurroundingChunks(int x, int y, int z) {
+	if(x == 0                && m_chunk->getSurroundingChunk(Chunk::Left))   { m_chunk->getSurroundingChunk(Chunk::Left)->setChanged(true); }
+	if(x == CHUNK_WIDTH - 1  && m_chunk->getSurroundingChunk(Chunk::Right))  { m_chunk->getSurroundingChunk(Chunk::Right)->setChanged(true); }
+	if(y == 0                && m_chunk->getSurroundingChunk(Chunk::Bottom)) { m_chunk->getSurroundingChunk(Chunk::Bottom)->setChanged(true); }
+	if(y == CHUNK_HEIGHT - 1 && m_chunk->getSurroundingChunk(Chunk::Top))    { m_chunk->getSurroundingChunk(Chunk::Top)->setChanged(true); }
+	if(z == 0                && m_chunk->getSurroundingChunk(Chunk::Front))  { m_chunk->getSurroundingChunk(Chunk::Front)->setChanged(true); }
+	if(z == CHUNK_DEPTH - 1  && m_chunk->getSurroundingChunk(Chunk::Back))   { m_chunk->getSurroundingChunk(Chunk::Back)->setChanged(true); }
 }
 
