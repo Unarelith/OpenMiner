@@ -257,6 +257,25 @@ void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Bl
 			vertices[j].texCoord[0] = faceTexCoords[j * 2];
 			vertices[j].texCoord[1] = faceTexCoords[j * 2 + 1];
 
+			// FIXME: Duplicated above
+			if (Config::isSmoothLightingEnabled) {
+				if (Config::isAmbientOcclusionEnabled)
+					vertices[j].lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
+				else
+					vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, chunk);
+
+				vertices[j].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, i, j, chunk);
+			}
+			else {
+				vertices[j].lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
+				vertices[j].lightValue[1] = chunk.lightmap().getTorchlight(x, y, z);
+			}
+
+			if (Config::isAmbientOcclusionEnabled)
+				vertices[j].ambientOcclusion = getAmbientOcclusion(x, y, z, i, j, chunk);
+			else
+				vertices[j].ambientOcclusion = 5;
+
 			vertices[j].blockType = block->id();
 		}
 
