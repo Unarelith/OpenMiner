@@ -174,24 +174,10 @@ u8 ChunkLightmap::getTorchlight(int x, int y, int z) const {
 }
 
 u8 ChunkLightmap::getLightData(int x, int y, int z) const {
-	if(x < 0)             return m_chunk->getSurroundingChunk(0) ? m_chunk->getSurroundingChunk(0)->lightmap().getLightData(x + CHUNK_WIDTH, y, z) : 0;
-	if(x >= CHUNK_WIDTH)  return m_chunk->getSurroundingChunk(1) ? m_chunk->getSurroundingChunk(1)->lightmap().getLightData(x - CHUNK_WIDTH, y, z) : 0;
-	if(y < 0)             return m_chunk->getSurroundingChunk(4) ? m_chunk->getSurroundingChunk(4)->lightmap().getLightData(x, y + CHUNK_HEIGHT, z) : 0;
-	if(y >= CHUNK_HEIGHT) return m_chunk->getSurroundingChunk(5) ? m_chunk->getSurroundingChunk(5)->lightmap().getLightData(x, y - CHUNK_HEIGHT, z) : 0;
-	if(z < 0)             return m_chunk->getSurroundingChunk(2) ? m_chunk->getSurroundingChunk(2)->lightmap().getLightData(x, y, z + CHUNK_DEPTH) : 0;
-	if(z >= CHUNK_DEPTH)  return m_chunk->getSurroundingChunk(3) ? m_chunk->getSurroundingChunk(3)->lightmap().getLightData(x, y, z - CHUNK_DEPTH) : 0;
-
 	return m_lightMap[x][y][z];
 }
 
 void ChunkLightmap::setLightData(int x, int y, int z, u8 val) {
-	if(x < 0)             { if(m_chunk->getSurroundingChunk(0)) m_chunk->getSurroundingChunk(0)->lightmap().setLightData(x + CHUNK_WIDTH, y, z, val); return; }
-	if(x >= CHUNK_WIDTH)  { if(m_chunk->getSurroundingChunk(1)) m_chunk->getSurroundingChunk(1)->lightmap().setLightData(x - CHUNK_WIDTH, y, z, val); return; }
-	if(y < 0)             { if(m_chunk->getSurroundingChunk(4)) m_chunk->getSurroundingChunk(4)->lightmap().setLightData(x, y + CHUNK_HEIGHT, z, val); return; }
-	if(y >= CHUNK_HEIGHT) { if(m_chunk->getSurroundingChunk(5)) m_chunk->getSurroundingChunk(5)->lightmap().setLightData(x, y - CHUNK_HEIGHT, z, val); return; }
-	if(z < 0)             { if(m_chunk->getSurroundingChunk(2)) m_chunk->getSurroundingChunk(2)->lightmap().setLightData(x, y, z + CHUNK_DEPTH, val); return; }
-	if(z >= CHUNK_DEPTH)  { if(m_chunk->getSurroundingChunk(3)) m_chunk->getSurroundingChunk(3)->lightmap().setLightData(x, y, z - CHUNK_DEPTH, val); return; }
-
 	m_lightMap[x][y][z] = val;
 
 	m_chunk->setChanged(true);

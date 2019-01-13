@@ -52,8 +52,8 @@ class ChunkLightmap {
 
 		u8 getSunlight(int x, int y, int z) const;
 		u8 getTorchlight(int x, int y, int z) const;
-		u8 getLightData(int x, int y, int z) const;
 
+		u8 getLightData(int x, int y, int z) const;
 		void setLightData(int x, int y, int z, u8 val);
 
 	private:
