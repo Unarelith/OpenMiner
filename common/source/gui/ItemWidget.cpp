@@ -27,10 +27,14 @@ ItemWidget::ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent)
 }
 
 void ItemWidget::update() {
+	const u16 tileSize = 32;
+
 	if (stack().item().isBlock())
 		m_cube.updateVertexBuffer(Registry::getInstance().getBlock(stack().item().id()));
-	else
-		m_image.setClipRect(stack().item().textureID() % 16 * 16, stack().item().textureID() / 16 * 16, 16, 16);
+	else {
+		m_image.setClipRect(stack().item().textureID() % 16 * tileSize, stack().item().textureID() / 16 * tileSize, tileSize, tileSize);
+		m_image.setScale(16.0f / tileSize, 16.0f / tileSize);
+	}
 
 	m_text.setText(std::to_string(stack().amount()));
 	m_text.setPosition(16 - 4 - 6 * floor(log10(stack().amount())), 16 - 6, 0);
