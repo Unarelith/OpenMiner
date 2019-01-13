@@ -16,6 +16,8 @@ a.out
 vgcore.*
 .gdb_history
 .valgrind_suppressions
+gmon.out
+gprof.txt
 
 # CMake temporary files
 CMakeFiles

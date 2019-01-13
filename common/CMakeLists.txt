@@ -1,13 +1,4 @@
 #------------------------------------------------------------------------------
-# CMakeLists.txt
-#------------------------------------------------------------------------------
-cmake_minimum_required(VERSION 2.8)
-
-project(openminer)
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-#------------------------------------------------------------------------------
 # Get source files
 #------------------------------------------------------------------------------
 file(GLOB_RECURSE SOURCE_FILES source/*.cpp)
@@ -26,7 +17,7 @@ add_library(${CMAKE_PROJECT_NAME}_common STATIC ${SOURCE_FILES})
 #------------------------------------------------------------------------------
 # Compiler flags
 #------------------------------------------------------------------------------
-target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -O3 -ffast-math)
+# target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -O3 -ffast-math)
 target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -g -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
 target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -DDEBUG_ENABLED)
 target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -DSOL_CHECK_ARGUMENTS

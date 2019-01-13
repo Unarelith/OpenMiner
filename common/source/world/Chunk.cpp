@@ -120,6 +120,19 @@ void Chunk::setData(int x, int y, int z, u16 data) {
 	m_hasChanged = true;
 }
 
+void Chunk::setBlockRaw(int x, int y, int z, u16 type) {
+	if(x < 0)              { if(m_surroundingChunks[0]) m_surroundingChunks[0]->setBlockRaw(x + Chunk::width, y, z, type); return; }
+	if(x >= Chunk::width)  { if(m_surroundingChunks[1]) m_surroundingChunks[1]->setBlockRaw(x - Chunk::width, y, z, type); return; }
+	if(y < 0)              { if(m_surroundingChunks[4]) m_surroundingChunks[4]->setBlockRaw(x, y + Chunk::height, z, type); return; }
+	if(y >= Chunk::height) { if(m_surroundingChunks[5]) m_surroundingChunks[5]->setBlockRaw(x, y - Chunk::height, z, type); return; }
+	if(z < 0)              { if(m_surroundingChunks[2]) m_surroundingChunks[2]->setBlockRaw(x, y, z + Chunk::depth, type); return; }
+	if(z >= Chunk::depth)  { if(m_surroundingChunks[3]) m_surroundingChunks[3]->setBlockRaw(x, y, z - Chunk::depth, type); return; }
+
+	m_data[x][y][z] = type;
+
+	m_hasChanged = true;
+}
+
 // FIXME
 // BlockData *Chunk::getBlockData(int x, int y, int z) {
 // 	if(x < 0)             return m_surroundingChunks[0] ? m_surroundingChunks[0]->getBlockData(x + CHUNK_WIDTH, y, z) : 0;
