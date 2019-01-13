@@ -1,13 +1,4 @@
 #------------------------------------------------------------------------------
-# CMakeLists.txt
-#------------------------------------------------------------------------------
-cmake_minimum_required(VERSION 2.8)
-
-project(openminer)
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-#------------------------------------------------------------------------------
 # Get source files
 #------------------------------------------------------------------------------
 file(GLOB_RECURSE SOURCE_FILES source/*.cpp)
@@ -41,6 +32,8 @@ target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -DSOL_CHECK_ARGUMENT
 )
 
 target_compile_features(${CMAKE_PROJECT_NAME}_server PRIVATE cxx_std_17)
+
+# target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -pg)
 
 #------------------------------------------------------------------------------
 # Link options

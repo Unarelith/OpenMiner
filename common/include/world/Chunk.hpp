@@ -49,6 +49,8 @@ class Chunk : public gk::NonCopyable {
 		void setBlock(int x, int y, int z, u16 type);
 		void setData(int x, int y, int z, u16 data);
 
+		void setBlockRaw(int x, int y, int z, u16 block);
+
 		// BlockData *getBlockData(int x, int y, int z);
 
 		s32 x() const { return m_x; }

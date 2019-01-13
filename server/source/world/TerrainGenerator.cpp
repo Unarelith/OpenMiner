@@ -31,9 +31,9 @@ void TerrainGenerator::basicGeneration(ServerChunk &chunk) const {
 
 			for(u8 y = 0 ; y < CHUNK_HEIGHT ; y++) {
 				if(y + chunk.y() * CHUNK_HEIGHT < h) {
-					chunk.setBlock(x, y, z, 1);
+					chunk.setBlockRaw(x, y, z, 1);
 				} else {
-					chunk.setBlock(x, y, z, 0);
+					chunk.setBlockRaw(x, y, z, 0);
 				}
 			}
 		}
@@ -52,7 +52,7 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 			for(int y = 0 ; y < CHUNK_HEIGHT ; y++) {
 				// Wood planks layer
 				// if (y == 0 && chunk.y() == 0) {
-				// 	chunk.setBlock(x, y, z, 16);
+				// 	chunk.setBlockRaw(x, y, z, 16);
 				// 	continue;
 				// }
 
@@ -60,7 +60,7 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 				if(y + chunk.y() * CHUNK_HEIGHT >= h) {
 					// if we are not yet up to sea level, fill with water blocks
 					if(y + chunk.y() * CHUNK_HEIGHT < SEALEVEL) {
-						chunk.setBlock(x, y, z, BlockType::Water);
+						chunk.setBlockRaw(x, y, z, BlockType::Water);
 						continue;
 					// Otherwise we are in the air
 					} else {
@@ -69,7 +69,8 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 							// Trunk
 							h = (rand() & 0x3) + 3;
 							for(int i = 0 ; i < h ; i++) {
-								chunk.setBlock(x, y + i, z, BlockType::Wood);
+								chunk.setBlockRaw(x, y + i, z, BlockType::Wood);
+
 								chunk.lightmap().addSunlight(x, y + i, z, 15);
 							}
 
@@ -78,9 +79,8 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 								for(int iy = -3 ; iy <= 3 ; iy++) {
 									for(int iz = -3 ; iz <= 3 ; iz++) {
 										if(ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + h + iy, z + iz)) {
-											chunk.setBlock(x + ix, y + h + iy, z + iz, BlockType::Leaves);
+											chunk.setBlockRaw(x + ix, y + h + iy, z + iz, BlockType::Leaves);
 
-											// if (iy == 2)
 											chunk.lightmap().addSunlight(x + ix, y + h + iy, z + iz, 15);
 										}
 									}
@@ -88,12 +88,10 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 							}
 						}
 						else if(chunk.getBlock(x, y - 1, z) == BlockType::Grass && (rand() & 0xff) == 0) {
-							chunk.setBlock(x, y, z, BlockType::Flower);
+							chunk.setBlockRaw(x, y, z, BlockType::Flower);
+							chunk.lightmap().addSunlight(x, y, z, 15);
 						}
 						else {
-							chunk.lightmap().addSunlight(x, y - 1, z, 15);
-
-							// FIXME: Temporary fix for air blocks light level
 							chunk.lightmap().addSunlight(x, y, z, 15);
 						}
 						break;
@@ -105,22 +103,24 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 
 				// Sand layer
 				if(n + r * 5 < 4) {
-					chunk.setBlock(x, y, z, BlockType::Sand);
+					chunk.setBlockRaw(x, y, z, BlockType::Sand);
 				}
 				// Dirt layer, but use grass blocks for the top
 				else if(n + r * 5 < 8) {
-					chunk.setBlock(x, y, z, (h < SEALEVEL || y + chunk.y() * CHUNK_HEIGHT < h - 1) ? BlockType::Dirt : BlockType::Grass);
+					chunk.setBlockRaw(x, y, z, (h < SEALEVEL || y + chunk.y() * CHUNK_HEIGHT < h - 1) ? BlockType::Dirt : BlockType::Grass);
 				}
 				// Rock layer
 				else if(r < 1.25) {
-					chunk.setBlock(x, y, z, BlockType::Stone);
+					chunk.setBlockRaw(x, y, z, BlockType::Stone);
 				// Sometimes, ores!
 				} else {
-					chunk.setBlock(x, y, z, BlockType::CoalOre);
+					chunk.setBlockRaw(x, y, z, BlockType::CoalOre);
 				}
 			}
 		}
 	}
+
+	chunk.lightmap().updateLights();
 }
 
 float TerrainGenerator::noise2d(float x, float y, int octaves, float persistence) {

@@ -173,10 +173,6 @@ u8 ChunkLightmap::getTorchlight(int x, int y, int z) const {
 	return m_lightMap[x][y][z] & 0xf;
 }
 
-u8 ChunkLightmap::getLightData(int x, int y, int z) const {
-	return m_lightMap[x][y][z];
-}
-
 void ChunkLightmap::setLightData(int x, int y, int z, u8 val) {
 	m_lightMap[x][y][z] = val;
 

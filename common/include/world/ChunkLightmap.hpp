@@ -50,15 +50,15 @@ class ChunkLightmap {
 		void updateTorchlight();
 		void updateSunlight();
 
+		u8 getLightData(int x, int y, int z) const { return m_lightMap[x][y][z]; }
 		u8 getSunlight(int x, int y, int z) const;
 		u8 getTorchlight(int x, int y, int z) const;
 
-		u8 getLightData(int x, int y, int z) const;
 		void setLightData(int x, int y, int z, u8 val);
+		void setSunlight(int x, int y, int z, u8 val);
 
 	private:
 		void setTorchlight(int x, int y, int z, u8 val);
-		void setSunlight(int x, int y, int z, u8 val);
 
 		void updateSurroundingChunks(int x, int y, int z);
 

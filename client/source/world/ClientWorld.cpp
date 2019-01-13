@@ -69,7 +69,7 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 
 					packet >> block >> light;
 
-					chunk->setBlock(x, y, z, block & 0xffff);
+					chunk->setBlockRaw(x, y, z, block & 0xffff);
 					// chunk->setData(x, y, z, block >> 16);
 					chunk->lightmap().setLightData(x, y, z, light);
 				}
