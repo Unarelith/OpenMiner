@@ -32,7 +32,7 @@ class Client {
 		void connect(sf::IpAddress serverAddress, u16 serverPort);
 		void disconnect();
 
-		void sendReady();
+		void send(sf::Packet &packet) { m_tcpSocket->send(packet); }
 		void sendKeyState();
 
 		void update(bool &hasGameStarted);
