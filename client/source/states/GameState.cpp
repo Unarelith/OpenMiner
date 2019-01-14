@@ -47,6 +47,12 @@ GameState::GameState(Client &client) : m_client(client) {
 	m_client.setCommandCallback(Network::Command::ChunkData, [this](sf::Packet &packet) {
 		m_world.receiveChunkData(packet);
 	});
+
+	m_client.setCommandCallback(Network::Command::GameStart, [](sf::Packet &) {
+		sf::Packet packet;
+		// TODO
+		m_client.send(packet);
+	});
 }
 
 void GameState::testLuaAPI() {

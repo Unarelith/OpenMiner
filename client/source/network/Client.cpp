@@ -57,12 +57,6 @@ void Client::disconnect() {
 	m_tcpSocket->send(packet);
 }
 
-void Client::sendReady() {
-	sf::Packet packet;
-	packet << Network::Command::ClientReady << m_id;
-	m_tcpSocket->send(packet);
-}
-
 void Client::sendKeyState() {
 	if (!m_keyUpdateTimer.isStarted())
 		m_keyUpdateTimer.start();
@@ -108,11 +102,10 @@ void Client::update(bool &hasGameStarted) {
 			disconnect();
 			break;
 		}
-		else {
-			for (auto &it : m_commands)
-				if (command == it.first)
-					it.second(packet);
-		}
+
+		for (auto &it : m_commands)
+			if (command == it.first)
+				it.second(packet);
 	}
 }
 
