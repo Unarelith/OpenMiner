@@ -109,7 +109,6 @@ void Server::handleNewConnections() {
 	}
 }
 
-// FIXME: Refactor this function
 void Server::handleClientMessages() {
 	bool areAllClientsReady = true;
 	for (size_t i = 0 ; i < m_info.clients().size() ; ++i) {

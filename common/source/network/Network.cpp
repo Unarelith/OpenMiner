@@ -28,6 +28,8 @@ std::string Network::commandToString(Network::Command command) {
 		{Network::Command::GameEnd,          "GameEnd"},
 		{Network::Command::KeyState,         "KeyState"},
 		{Network::Command::ChunkData,        "ChunkData"},
+		{Network::Command::PlayerPlaceBlock, "PlayerPlaceBlock"},
+		{Network::Command::PlayerDigBlock,   "PlayerDigBlock"},
 	};
 	return commandNames[command];
 }

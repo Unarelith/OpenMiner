@@ -33,9 +33,10 @@ class ServerWorld {
 		ServerChunk *getChunk(int cx, int cy, int cz) const;
 
 	private:
-		const s32 m_width = 32;
+		// FIXME: Duplicated with those in ClientWorld
+		const s32 m_width = 8;
 		const s32 m_height = 4;
-		const s32 m_depth = 32;
+		const s32 m_depth = 8;
 
 		std::vector<std::unique_ptr<ServerChunk>> m_chunks;
 };

@@ -33,7 +33,11 @@ namespace Network {
 		KeyState,          // <UDP> [NetworkCommand][u32 timestamp][u16 client id][u32 keycode][bool isPressed]...
 
 		// Chunk commands
-		ChunkData          // <TCP> [NetworkCommand][s32 sx, sy, sz][u16...] (from Server only)
+		ChunkData,         // <TCP> [NetworkCommand][s32 sx, sy, sz][u32...] (from Server only)
+
+		// Player commands
+		PlayerPlaceBlock,  // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Client only)
+		PlayerDigBlock,    // <TCP> [NetworkCommand][s32 x, y, z]
 	};
 
 	std::string commandToString(Command command);
