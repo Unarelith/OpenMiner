@@ -35,9 +35,10 @@ class ClientWorld : public gk::IDrawable {
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		const s32 m_width = 32;
+		// FIXME: Duplicated with those in ServerWorld
+		const s32 m_width = 8;
 		const s32 m_height = 4;
-		const s32 m_depth = 32;
+		const s32 m_depth = 8;
 
 		std::vector<std::unique_ptr<ClientChunk>> m_chunks;
 
