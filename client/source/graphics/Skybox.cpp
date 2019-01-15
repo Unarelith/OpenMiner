@@ -91,10 +91,10 @@ void Skybox::update(Player &player) {
 
 void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f),
-	                        glm::vec3(m_playerPosition.x - World::renderDistance * CHUNK_WIDTH / 2,
-	                                  m_playerPosition.y - World::renderDistance * CHUNK_WIDTH / 2,
-	                                  m_playerPosition.z - World::renderDistance * CHUNK_WIDTH / 2));
-	modelMatrix *= glm::scale(glm::mat4(1.0), glm::vec3(World::renderDistance * CHUNK_WIDTH));
+	                        glm::vec3(m_playerPosition.x - Config::renderDistance * CHUNK_WIDTH / 2,
+	                                  m_playerPosition.y - Config::renderDistance * CHUNK_WIDTH / 2,
+	                                  m_playerPosition.z - Config::renderDistance * CHUNK_WIDTH / 2));
+	modelMatrix *= glm::scale(glm::mat4(1.0), glm::vec3(Config::renderDistance * CHUNK_WIDTH));
 
 	states.transform = modelMatrix;
 

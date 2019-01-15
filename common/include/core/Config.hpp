@@ -14,6 +14,8 @@
 #ifndef CONFIG_HPP_
 #define CONFIG_HPP_
 
+#include <gk/core/IntTypes.hpp>
+
 namespace {
 	constexpr const char *APP_NAME = "OpenMiner";
 
@@ -42,6 +44,7 @@ namespace Config {
 	extern bool isSmoothLightingEnabled;
 	extern bool isAmbientOcclusionEnabled;
 	extern bool isWireframeModeEnabled;
+	extern u16 renderDistance;
 }
 
 #endif // CONFIG_HPP_

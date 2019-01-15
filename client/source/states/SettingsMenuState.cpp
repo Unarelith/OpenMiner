@@ -80,9 +80,9 @@ void SettingsMenuState::addGameplayButtons() {
 }
 
 void SettingsMenuState::addGraphicsButtons() {
-	m_menuWidget.addButton(0, 0, "Render Distance: " + std::to_string(World::renderDistance), [] (TextButton &button) {
-		World::renderDistance = std::max(4, (World::renderDistance + 2) % 16);
-		button.setText("Render Distance: " + std::to_string(World::renderDistance));
+	m_menuWidget.addButton(0, 0, "Render Distance: " + std::to_string(Config::renderDistance), [] (TextButton &button) {
+		Config::renderDistance = std::max(4, (Config::renderDistance + 2) % 16);
+		button.setText("Render Distance: " + std::to_string(Config::renderDistance));
 		World::isReloadRequested = true;
 	});
 

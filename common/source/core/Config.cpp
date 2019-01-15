@@ -22,4 +22,5 @@ bool Config::isFlyModeEnabled = false;
 bool Config::isSmoothLightingEnabled = true;
 bool Config::isAmbientOcclusionEnabled = true;
 bool Config::isWireframeModeEnabled = false;
+u16 Config::renderDistance = 8;
 

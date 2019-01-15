@@ -19,7 +19,6 @@
 #include "Config.hpp"
 #include "World.hpp"
 
-u16 World::renderDistance = 8;
 bool World::isReloadRequested = false;
 
 BlockData *World::getBlockData(int x, int y, int z) {
