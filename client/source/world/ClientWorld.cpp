@@ -127,7 +127,7 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	}
 
 	gk::Shader::bind(states.shader);
-	states.shader->setUniform("u_renderDistance", World::renderDistance * CHUNK_WIDTH);
+	states.shader->setUniform("u_renderDistance", Config::renderDistance * CHUNK_WIDTH);
 	gk::Shader::bind(nullptr);
 
 	// float ud = 1000.0;
@@ -147,7 +147,7 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		                 * states.transform.getMatrix()
 		                 * glm::vec4(CHUNK_WIDTH / 2, CHUNK_HEIGHT / 2, CHUNK_DEPTH / 2, 1);
 
-		if(glm::length(center) > (World::renderDistance + 1) * CHUNK_WIDTH) {
+		if(glm::length(center) > (Config::renderDistance + 1) * CHUNK_WIDTH) {
 			continue;
 		}
 

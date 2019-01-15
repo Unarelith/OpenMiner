@@ -48,9 +48,9 @@ GameState::GameState(Client &client) : m_client(client) {
 		m_world.receiveChunkData(packet);
 	});
 
-	m_client.setCommandCallback(Network::Command::GameStart, [](sf::Packet &) {
+	m_client.setCommandCallback(Network::Command::GameStart, [this](sf::Packet &) {
 		sf::Packet packet;
-		// TODO
+		// TODO: Request chunks now by sending Config::renderDistance
 		m_client.send(packet);
 	});
 }

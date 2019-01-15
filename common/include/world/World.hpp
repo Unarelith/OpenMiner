@@ -24,8 +24,6 @@ class World : public gk::IDrawable {
 	public:
 		BlockData *getBlockData(int x, int y, int z);
 
-		// Render distance in chunks
-		static u16 renderDistance;
 		static bool isReloadRequested;
 
 	private:
