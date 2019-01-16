@@ -6,6 +6,7 @@ TODO
 
 • TODO: `Workbench` and `Furnace` are not scaled correctly with lower GUI scale settings
 • TODO: Blocks can be accessed from outside the world (will need a refactoring)
+• TODO: Collisions are fucked up with blocks placed at `x = -1` from `x = 0`
 
 # Code improvements
 
