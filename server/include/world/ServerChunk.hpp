@@ -25,10 +25,9 @@ class ServerChunk : public Chunk {
 		ServerChunk(s32 x, s32 y, s32 z) : Chunk(x, y, z) {}
 
 		void update();
-		void generate();
 
 		bool isGenerated() const { return m_isGenerated; }
-		void setGenerated(bool isGenerated) { m_isGenerated = isGenerated; }
+		void setGenerated(bool isGenerated) { m_isGenerated = isGenerated; } // FIXME
 
 		const DataArray &data() const { return m_data; }
 

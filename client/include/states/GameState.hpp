@@ -51,12 +51,12 @@ class GameState : public gk::ApplicationState {
 		gk::Camera m_camera{FOV, DIST_NEAR, DIST_FAR};
 		Player m_player{m_camera};
 
-		HUD m_hud{m_player, m_world};
-
 		LuaCore m_luaCore;
 
 		Client &m_client;
 		bool m_hasGameStarted = false;
+
+		HUD m_hud{m_player, m_world, m_client};
 };
 
 #endif // GAMESTATE_HPP_

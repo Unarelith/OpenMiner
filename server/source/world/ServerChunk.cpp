@@ -27,14 +27,16 @@ void ServerChunk::update() {
 	// 		it.second.onTick(glm::ivec3{x + m_x * width, y + m_y * height, z + m_z * depth}, player, *this, world);
 	// 	}
 	// }
-}
 
-void ServerChunk::generate() {
-	if (m_isGenerated) return;
+	if (!m_isGenerated) {
+		m_terrainGenerator.generate(*this);
 
-	m_terrainGenerator.generate(*this);
+		m_isGenerated = true;
+		m_hasChanged = true;
+	}
 
-	m_isGenerated = true;
-	m_hasChanged = true;
+	if (m_hasChanged) {
+		m_lightmap.updateLights();
+	}
 }
 

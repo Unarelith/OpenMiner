@@ -53,6 +53,13 @@ GameState::GameState(Client &client) : m_client(client) {
 		// TODO: Request chunks now by sending Config::renderDistance
 		m_client.send(packet);
 	});
+
+	m_client.setCommandCallback(Network::Command::BlockUpdate, [this](sf::Packet &packet) {
+		s32 x, y, z;
+		u32 block;
+		packet >> x >> y >> z >> block;
+		m_world.setBlock(x, y, z, block);
+	});
 }
 
 void GameState::testLuaAPI() {

@@ -32,12 +32,12 @@ class Client {
 		void connect(sf::IpAddress serverAddress, u16 serverPort);
 		void disconnect();
 
-		void send(sf::Packet &packet) { m_tcpSocket->send(packet); }
+		void send(sf::Packet &packet);
 		void sendKeyState();
 
 		void update(bool &hasGameStarted);
 
-		void setCommandCallback(Network::Command command, const CommandCallback &callback);
+		void setCommandCallback(Network::Command command, const CommandCallback &callback) { m_commands[command] = callback; }
 
 		bool isConnected() const { return m_isConnected; }
 
