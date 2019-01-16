@@ -21,6 +21,14 @@
 #include "TextureLoader.hpp"
 #include "ServerLoadingState.hpp"
 
+using namespace std::literals::string_literals;
+
+ClientApplication::ClientApplication(int argc, char **argv) : gk::CoreApplication(argc, argv) {
+	if (argc == 3 && argv[1] == "--port"s) {
+		m_port = std::stoi(argv[2]);
+	}
+}
+
 void ClientApplication::init() {
 	gk::CoreApplication::init();
 
@@ -42,8 +50,8 @@ void ClientApplication::init() {
 
 	m_scriptEngine.init();
 
-	// m_stateStack.push<GameState>(m_client);
-	m_stateStack.push<ServerLoadingState>(m_client);
+	m_stateStack.push<GameState>(m_client, m_port);
+	// m_stateStack.push<ServerLoadingState>(m_client);
 }
 
 void ClientApplication::initOpenGL() {

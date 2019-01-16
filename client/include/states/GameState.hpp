@@ -30,7 +30,7 @@
 
 class GameState : public gk::ApplicationState {
 	public:
-		GameState(Client &client);
+		GameState(Client &client, int port = 4242);
 
 		void testLuaAPI();
 
