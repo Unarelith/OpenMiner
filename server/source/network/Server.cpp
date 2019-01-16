@@ -11,7 +11,6 @@
  *
  * =====================================================================================
  */
-#include "Network.hpp"
 #include "Server.hpp"
 
 void Server::init(u16 port) {
@@ -105,7 +104,7 @@ void Server::handleNewConnections() {
 		}
 	}
 	else {
-			std::cerr << "Warning: Connection accept failed." << std::endl;
+		std::cerr << "Warning: Connection accept failed." << std::endl;
 	}
 }
 
@@ -118,6 +117,8 @@ void Server::handleClientMessages() {
 			if (client.tcpSocket->receive(packet) == sf::Socket::Done) {
 				Network::Command command;
 				packet >> command;
+
+				// DEBUG("TCP message received:", Network::commandToString(command));
 
 				if (command == Network::Command::ClientDisconnect) {
 					// FIXME
@@ -140,6 +141,11 @@ void Server::handleClientMessages() {
 				else if (command == Network::Command::ClientReady) {
 					client.isReady = true;
 				}
+
+				if (m_isRunning)
+					for (auto &it : m_commands)
+						if (command == it.first)
+							it.second(packet);
 			}
 		}
 
@@ -150,11 +156,15 @@ void Server::handleClientMessages() {
 	if (areAllClientsReady) {
 		sf::Packet packet;
 		packet << Network::Command::GameStart;
-		for (Client &client : m_info.clients()) {
-			client.tcpSocket->send(packet);
-		}
+		sendToAllClients(packet);
 
 		m_hasGameStarted = true;
+	}
+}
+
+void Server::sendToAllClients(sf::Packet &packet) {
+	for (Client &client : m_info.clients()) {
+		client.tcpSocket->send(packet);
 	}
 }
 

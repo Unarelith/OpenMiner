@@ -19,6 +19,7 @@
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "BlockCursor.hpp"
+#include "Client.hpp"
 #include "Config.hpp"
 #include "Hotbar.hpp"
 #include "Registry.hpp"
@@ -74,11 +75,11 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 			// FIXME
 			if (block.id()// && !block.onBlockActivated({m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z}, m_player, m_world)
 			    && hotbar.currentItem() && item.isBlock()) {
-				int face = m_selectedBlock.w;
+				s8 face = m_selectedBlock.w;
 
-				int x = m_selectedBlock.x;
-				int y = m_selectedBlock.y;
-				int z = m_selectedBlock.z;
+				s32 x = m_selectedBlock.x;
+				s32 y = m_selectedBlock.y;
+				s32 z = m_selectedBlock.z;
 
 				if(face == 0) x++;
 				if(face == 3) x--;
@@ -88,6 +89,10 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 				if(face == 5) z--;
 
 				m_world.setBlock(x, y, z, hotbar.currentItem());
+
+				sf::Packet packet;
+				packet << Network::Command::PlayerPlaceBlock << x << y << z << u32(hotbar.currentItem());
+				m_client.send(packet);
 
 				const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
 				m_player.inventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().name() : "", currentStack.amount() - 1);

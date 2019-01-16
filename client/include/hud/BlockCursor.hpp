@@ -20,12 +20,13 @@
 #include "Inventory.hpp"
 #include "Player.hpp"
 
+class Client;
 class Hotbar;
 
 class BlockCursor : public gk::IDrawable {
 	public:
-		BlockCursor(Player &player, ClientWorld &world)
-			: m_player(player), m_world(world) {}
+		BlockCursor(Player &player, ClientWorld &world, Client &client)
+			: m_player(player), m_world(world), m_client(client) {}
 
 		void onEvent(const SDL_Event &event, const Hotbar &hotbar);
 
@@ -44,6 +45,7 @@ class BlockCursor : public gk::IDrawable {
 
 		Player &m_player;
 		ClientWorld &m_world;
+		Client &m_client;
 
 		gk::VertexBuffer m_vbo;
 		gk::VertexBuffer m_animationVBO;

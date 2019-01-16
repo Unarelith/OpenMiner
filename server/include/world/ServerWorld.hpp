@@ -32,6 +32,10 @@ class ServerWorld {
 
 		ServerChunk *getChunk(int cx, int cy, int cz) const;
 
+		// FIXME: Duplicated with ClientWorld
+		u16 getBlock(int x, int y, int z) const;
+		void setBlock(int x, int y, int z, u16 id);
+
 	private:
 		// FIXME: Duplicated with those in ClientWorld
 		const s32 m_width = 8;

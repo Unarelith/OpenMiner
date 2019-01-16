@@ -57,6 +57,13 @@ void Client::disconnect() {
 	m_tcpSocket->send(packet);
 }
 
+void Client::send(sf::Packet &packet) {
+	if (m_tcpSocket)
+		m_tcpSocket->send(packet);
+	else
+		throw EXCEPTION("Network error: Trying to send a packet without being connected");
+}
+
 void Client::sendKeyState() {
 	if (!m_keyUpdateTimer.isStarted())
 		m_keyUpdateTimer.start();
@@ -93,7 +100,7 @@ void Client::update(bool &hasGameStarted) {
 		Network::Command command;
 		packet >> command;
 
-		// std::cout << "TCP Message of type '" << Network::commandToString(command) << "' received" << std::endl;
+		// DEBUG("TCP message received:", Network::commandToString(command));
 
 		if (command == Network::Command::GameStart) {
 			hasGameStarted = true;
@@ -107,9 +114,5 @@ void Client::update(bool &hasGameStarted) {
 			if (command == it.first)
 				it.second(packet);
 	}
-}
-
-void Client::setCommandCallback(Network::Command command, const CommandCallback &callback) {
-	m_commands[command] = callback;
 }
 

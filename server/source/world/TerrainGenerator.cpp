@@ -119,8 +119,6 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 			}
 		}
 	}
-
-	chunk.lightmap().updateLights();
 }
 
 float TerrainGenerator::noise2d(float x, float y, int octaves, float persistence) {

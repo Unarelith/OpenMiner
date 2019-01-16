@@ -37,7 +37,10 @@ namespace Network {
 
 		// Player commands
 		PlayerPlaceBlock,  // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Client only)
-		PlayerDigBlock,    // <TCP> [NetworkCommand][s32 x, y, z]
+		PlayerDigBlock,    // <TCP> [NetworkCommand][s32 x, y, z]            (from Client only)
+
+		// Block commands
+		BlockUpdate,       // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Server only)
 	};
 
 	std::string commandToString(Command command);

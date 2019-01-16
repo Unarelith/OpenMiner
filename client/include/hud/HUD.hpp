@@ -24,7 +24,7 @@
 
 class HUD : public gk::Transformable, public gk::IDrawable {
 	public:
-		HUD(Player &player, ClientWorld &world);
+		HUD(Player &player, ClientWorld &world, Client &client);
 
 		void onEvent(const SDL_Event &event);
 
@@ -32,6 +32,8 @@ class HUD : public gk::Transformable, public gk::IDrawable {
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		Client &m_client;
 
 		gk::Shader m_shader;
 		glm::mat4 m_orthoMatrix;

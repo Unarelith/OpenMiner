@@ -27,6 +27,7 @@ class ClientWorld : public gk::IDrawable {
 
 		void receiveChunkData(sf::Packet &packet);
 
+		// FIXME: Duplicated with ServerWorld
 		ClientChunk *getChunk(int cx, int cy, int cz) const;
 
 		u16 getBlock(int x, int y, int z) const;

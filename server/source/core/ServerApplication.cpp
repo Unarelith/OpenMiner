@@ -20,15 +20,26 @@ ServerApplication::ServerApplication(int argc, char **argv) : gk::CoreApplicatio
 void ServerApplication::init() {
 	gk::CoreApplication::init();
 
-	m_server.setConnectionCallback([this](Client &client) {
-		m_world.sendWorldData(client);
-	});
+	Registry::setInstance(m_registry);
 
 	m_server.init(4242);
 	m_server.setRunning(true);
 	m_server.setGameStarted(false);
 
-	Registry::setInstance(m_registry);
+	m_server.setConnectionCallback([this](Client &client) {
+		m_world.sendWorldData(client);
+	});
+
+	m_server.setCommandCallback(Network::Command::PlayerPlaceBlock, [this](sf::Packet &packet) {
+		s32 x, y, z;
+		u32 block;
+		packet >> x >> y >> z >> block;
+		m_world.setBlock(x, y, z, block);
+
+		sf::Packet answer;
+		answer << Network::Command::BlockUpdate << x << y << z << block;
+		m_server.sendToAllClients(answer);
+	});
 }
 
 void ServerApplication::mainLoop() {

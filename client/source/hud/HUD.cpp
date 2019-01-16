@@ -14,9 +14,10 @@
 #include "Config.hpp"
 #include "HUD.hpp"
 
-HUD::HUD(Player &player, ClientWorld &world)
-	: m_hotbar{player.inventory()},
-	m_blockCursor(player, world),
+HUD::HUD(Player &player, ClientWorld &world, Client &client)
+	: m_client(client),
+	m_hotbar(player.inventory()),
+	m_blockCursor(player, world, client),
 	m_debugOverlay(player)
 {
 	setScale(GUI_SCALE, GUI_SCALE, 1);
