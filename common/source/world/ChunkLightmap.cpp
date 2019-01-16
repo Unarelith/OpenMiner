@@ -91,7 +91,7 @@ void ChunkLightmap::updateTorchlight() {
 				setTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, lightLevel - 1);
 
 				u16 block = m_chunk->getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z);
-				if (!block || !Registry::getInstance().getBlock(block).isOpaque()) {
+				if (!block/*  || !Registry::getInstance().getBlock(block).isOpaque() */) { // FIXME
 					m_lightBfsQueue.emplace(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 				}
 			}

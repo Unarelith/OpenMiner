@@ -89,13 +89,13 @@ void GameState::onEvent(const SDL_Event &event) {
 		m_stateStack->push<PauseMenuState>(this);
 	}
 	else if (event.type == SDL_WINDOWEVENT) {
-		if (event.window.event == SDL_WINDOWEVENT_LEAVE) {
+		if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
 			m_stateStack->push<PauseMenuState>(this);
 
 			gk::Mouse::setCursorGrabbed(false);
 			gk::Mouse::setCursorVisible(true);
 		}
-		else if (event.window.event == SDL_WINDOWEVENT_ENTER) {
+		else if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED) {
 			gk::Mouse::setCursorGrabbed(true);
 			gk::Mouse::setCursorVisible(false);
 		}
