@@ -13,7 +13,13 @@
  */
 #include "ServerApplication.hpp"
 
+using namespace std::literals::string_literals;
+
 ServerApplication::ServerApplication(int argc, char **argv) : gk::CoreApplication(argc, argv) {
+	if (argc == 3 && argv[1] == "--port"s) {
+		m_port = std::stoi(argv[2]);
+	}
+
 	m_loadSDL = false;
 }
 
@@ -22,7 +28,7 @@ void ServerApplication::init() {
 
 	Registry::setInstance(m_registry);
 
-	m_server.init(4242);
+	m_server.init(m_port);
 	m_server.setRunning(true);
 	m_server.setGameStarted(false);
 

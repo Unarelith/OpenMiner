@@ -33,6 +33,8 @@ class ServerApplication : public gk::CoreApplication {
 		ServerWorld m_world;
 
 		Registry m_registry;
+
+		int m_port = 4242;
 };
 
 #endif // SERVERAPPLICATION_HPP_

@@ -90,7 +90,8 @@ void ChunkLightmap::updateTorchlight() {
 			if (getTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= lightLevel) {
 				setTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, lightLevel - 1);
 
-				if (!Registry::getInstance().getBlock(m_chunk->getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z)).isOpaque()) {
+				u16 block = m_chunk->getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z);
+				if (!block || !Registry::getInstance().getBlock(block).isOpaque()) {
 					m_lightBfsQueue.emplace(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 				}
 			}
