@@ -23,7 +23,7 @@
 
 class ClientApplication : public gk::CoreApplication {
 	public:
-		ClientApplication(int argc, char **argv) : gk::CoreApplication(argc, argv) {}
+		ClientApplication(int argc, char **argv);
 
 		void init() override;
 
@@ -37,6 +37,7 @@ class ClientApplication : public gk::CoreApplication {
 		Registry m_registry;
 
 		Client m_client;
+		int m_port = 4242;
 };
 
 #endif // CLIENTAPPLICATION_HPP_

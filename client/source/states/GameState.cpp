@@ -30,9 +30,9 @@
 #include "PlayerInventoryWidget.hpp"
 #include "ScriptEngine.hpp"
 
-GameState::GameState(Client &client) : m_client(client) {
+GameState::GameState(Client &client, int port) : m_client(client) {
 	try {
-		m_client.connect("localhost", 4242);
+		m_client.connect("localhost", port);
 	}
 	catch (const gk::Exception &e) {
 		std::cerr << "Error " << e.what() << std::endl;
