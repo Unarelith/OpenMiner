@@ -130,6 +130,13 @@ void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
 		m_player.inventory().addStack(itemDrop.item().name(), itemDrop.amount());
 		m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
 		m_animationStart = gk::GameClock::getTicks();
+
+		sf::Packet packet;
+		packet << Network::Command::PlayerDigBlock
+		       << s32(m_selectedBlock.x)
+		       << s32(m_selectedBlock.y)
+		       << s32(m_selectedBlock.z);
+		m_client.send(packet);
 	}
 
 	if (m_selectedBlock.w != -1)

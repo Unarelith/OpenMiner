@@ -1,12 +1,19 @@
 TODO
 
+# General
+
 • TODO: Use Faithful 32x for buttons, backgrounds and font (or use Minecraftia for the latter)
+• TODO: Add updated screenshots
+   ◦ TODO: Nice view of the map with AO
+   ◦ TODO: Light in dark areas without AO
+   ◦ TODO: Furnace
 
 # Issues
 
 • TODO: `Workbench` and `Furnace` are not scaled correctly with lower GUI scale settings
 • TODO: Blocks can be accessed from outside the world (will need a refactoring)
 • TODO: Collisions are fucked up with blocks placed at `x = -1` from `x = 0`
+• TODO: Blocks can be placed inside the player (check for AABB?)
 
 # Code improvements
 

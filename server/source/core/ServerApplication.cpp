@@ -46,6 +46,16 @@ void ServerApplication::init() {
 		answer << Network::Command::BlockUpdate << x << y << z << block;
 		m_server.sendToAllClients(answer);
 	});
+
+	m_server.setCommandCallback(Network::Command::PlayerDigBlock, [this](sf::Packet &packet) {
+		s32 x, y, z;
+		packet >> x >> y >> z;
+		m_world.setBlock(x, y, z, 0);
+
+		sf::Packet answer;
+		answer << Network::Command::BlockUpdate << x << y << z << u32(0);
+		m_server.sendToAllClients(answer);
+	});
 }
 
 void ServerApplication::mainLoop() {
