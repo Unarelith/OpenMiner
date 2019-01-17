@@ -81,7 +81,7 @@ void Server::handleNewConnections() {
 		if (command != Network::Command::ClientConnect)
 			throw EXCEPTION("Network error: Expected 'ClientConnect' packet.");
 
-		if (!m_hasGameStarted && m_info.clients().size() < 5) {
+		if (m_info.clients().size() < 5) {
 			std::string address;
 			u16 port;
 			packet >> address >> port;
@@ -109,7 +109,6 @@ void Server::handleNewConnections() {
 }
 
 void Server::handleClientMessages() {
-	bool areAllClientsReady = true;
 	for (size_t i = 0 ; i < m_info.clients().size() ; ++i) {
 		Client &client = m_info.clients()[i];
 		if (m_selector.isReady(*client.tcpSocket)) {
@@ -135,11 +134,7 @@ void Server::handleClientMessages() {
 					if (m_info.clients().size() == 0) {
 						// m_tcpListener.close();
 						m_isRunning = false;
-						m_hasGameStarted = false;
 					}
-				}
-				else if (command == Network::Command::ClientReady) {
-					client.isReady = true;
 				}
 
 				if (m_isRunning)
@@ -148,17 +143,6 @@ void Server::handleClientMessages() {
 							it.second(packet);
 			}
 		}
-
-		if (!client.isReady)
-			areAllClientsReady = false;
-	}
-
-	if (areAllClientsReady) {
-		sf::Packet packet;
-		packet << Network::Command::GameStart;
-		sendToAllClients(packet);
-
-		m_hasGameStarted = true;
 	}
 }
 

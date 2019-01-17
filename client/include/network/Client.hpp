@@ -35,7 +35,7 @@ class Client {
 		void send(sf::Packet &packet);
 		void sendKeyState();
 
-		void update(bool &hasGameStarted);
+		void update();
 
 		void setCommandCallback(Network::Command command, const CommandCallback &callback) { m_commands[command] = callback; }
 

@@ -37,14 +37,12 @@ class Server {
 		void sendToAllClients(sf::Packet &packet);
 
 		bool isRunning() const { return m_isRunning; }
-		bool hasGameStarted() const { return m_hasGameStarted; }
 
 		ServerInfo &info() { return m_info; }
 
 		sf::UdpSocket &udpSocket() { return m_udpSocket; }
 
 		void setRunning(bool isRunning) { m_isRunning = isRunning; }
-		void setGameStarted(bool hasGameStarted) { m_hasGameStarted = hasGameStarted; }
 
 		void setConnectionCallback(const ConnectionCallback &callback) { m_connectionCallback = callback; }
 		void setCommandCallback(Network::Command command, const CommandCallback &callback) { m_commands[command] = callback; }
@@ -54,7 +52,6 @@ class Server {
 		void handleClientMessages();
 
 		bool m_isRunning = true;
-		bool m_hasGameStarted = false;
 
 		ServerInfo m_info;
 

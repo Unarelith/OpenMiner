@@ -54,7 +54,6 @@ class GameState : public gk::ApplicationState {
 		LuaCore m_luaCore;
 
 		Client &m_client;
-		bool m_hasGameStarted = false;
 
 		HUD m_hud{m_player, m_world, m_client};
 };

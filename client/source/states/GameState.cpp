@@ -48,12 +48,6 @@ GameState::GameState(Client &client, int port) : m_client(client) {
 		m_world.receiveChunkData(packet);
 	});
 
-	m_client.setCommandCallback(Network::Command::GameStart, [this](sf::Packet &) {
-		sf::Packet packet;
-		// TODO: Request chunks now by sending Config::renderDistance
-		m_client.send(packet);
-	});
-
 	m_client.setCommandCallback(Network::Command::BlockUpdate, [this](sf::Packet &packet) {
 		s32 x, y, z;
 		u32 block;
@@ -121,7 +115,7 @@ void GameState::update() {
 
 	m_hud.update();
 
-	m_client.update(m_hasGameStarted);
+	m_client.update();
 }
 
 void GameState::initShaders() {

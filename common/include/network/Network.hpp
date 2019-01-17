@@ -19,15 +19,10 @@
 namespace Network {
 	enum class Command {
 		// Client commands
-		ClientConnect,     // <TCP> [NetworkCommand][u16 udp port]
-		ClientOk,          // <TCP> [NetworkCommand][u16 client id]
-		ClientRefused,     // <TCP> [NetworkCommand]
-		ClientReady,       // <TCP> [NetworkCommand][u16 client id]
-		ClientDisconnect,  // <TCP> [NetworkCommand]
-
-		// Game commands
-		GameStart,         // <TCP> [NetworkCommand]
-		GameEnd,           // <TCP> [NetworkCommand]
+		ClientConnect,     // <TCP> [NetworkCommand][u16 udp port]           (from Client only)
+		ClientDisconnect,  // <TCP> [NetworkCommand]                         (from Client only)
+		ClientOk,          // <TCP> [NetworkCommand][u16 client id]          (from Server only)
+		ClientRefused,     // <TCP> [NetworkCommand]                         (from Server only)
 
 		// Input commands
 		KeyState,          // <UDP> [NetworkCommand][u32 timestamp][u16 client id][u32 keycode][bool isPressed]...
