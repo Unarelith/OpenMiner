@@ -85,7 +85,7 @@ void Client::sendKeyState() {
 	}
 }
 
-void Client::update(bool &hasGameStarted) {
+void Client::update() {
 	sf::Packet packet;
 	sf::IpAddress senderAddress;
 	u16 senderPort;
@@ -101,14 +101,6 @@ void Client::update(bool &hasGameStarted) {
 		packet >> command;
 
 		// DEBUG("TCP message received:", Network::commandToString(command));
-
-		if (command == Network::Command::GameStart) {
-			hasGameStarted = true;
-		}
-		else if (command == Network::Command::GameEnd) {
-			disconnect();
-			break;
-		}
 
 		for (auto &it : m_commands)
 			if (command == it.first)

@@ -30,7 +30,6 @@ void ServerApplication::init() {
 
 	m_server.init(m_port);
 	m_server.setRunning(true);
-	m_server.setGameStarted(false);
 
 	m_server.setConnectionCallback([this](Client &client) {
 		m_world.sendWorldData(client);
