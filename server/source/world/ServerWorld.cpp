@@ -49,11 +49,17 @@ void ServerWorld::update() {
 }
 
 void ServerWorld::sendWorldData(Client &client) {
-	for (auto &it : m_chunks)
-		sendChunkData(client, it.get());
+	for(s32 z = -m_depth / 8 ; z < m_depth / 8 ; z++) {
+		for(s32 y = -m_height / 8 ; y < m_height / 8 ; y++) {
+			for(s32 x = -m_width / 8 ; x < m_width / 8 ; x++) {
+				sendChunkData(client, getChunk(x, y, z));
+			}
+		}
+	}
 }
 
 void ServerWorld::sendChunkData(Client &client, ServerChunk *chunk) {
+	chunk->generate();
 	chunk->update();
 
 	sf::Packet packet;
@@ -71,6 +77,20 @@ void ServerWorld::sendChunkData(Client &client, ServerChunk *chunk) {
 	client.tcpSocket->send(packet);
 
 	// std::cout << "Chunk at (" << chunk->x() << "," << chunk->y() << ", " << chunk->z() << ") sent to client" << std::endl;
+}
+
+void ServerWorld::sendRequestedData(Client &client, int cx, int cy, int cz) {
+	ServerChunk *chunk = getChunk(cx, cy, cz);
+	if (chunk) {
+		sendChunkData(client, chunk);
+
+		if(chunk->getSurroundingChunk(Chunk::Left))   sendChunkData(client, (ServerChunk *)chunk->getSurroundingChunk(Chunk::Left));
+		if(chunk->getSurroundingChunk(Chunk::Right))  sendChunkData(client, (ServerChunk *)chunk->getSurroundingChunk(Chunk::Right));
+		if(chunk->getSurroundingChunk(Chunk::Bottom)) sendChunkData(client, (ServerChunk *)chunk->getSurroundingChunk(Chunk::Bottom));
+		if(chunk->getSurroundingChunk(Chunk::Top))    sendChunkData(client, (ServerChunk *)chunk->getSurroundingChunk(Chunk::Top));
+		if(chunk->getSurroundingChunk(Chunk::Front))  sendChunkData(client, (ServerChunk *)chunk->getSurroundingChunk(Chunk::Front));
+		if(chunk->getSurroundingChunk(Chunk::Back))   sendChunkData(client, (ServerChunk *)chunk->getSurroundingChunk(Chunk::Back));
+	}
 }
 
 ServerChunk *ServerWorld::getChunk(int cx, int cy, int cz) const {

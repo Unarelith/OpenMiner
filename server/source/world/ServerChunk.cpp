@@ -28,15 +28,17 @@ void ServerChunk::update() {
 	// 	}
 	// }
 
+	if (m_hasChanged) {
+		m_lightmap.updateLights();
+	}
+}
+
+void ServerChunk::generate() {
 	if (!m_isGenerated) {
 		m_terrainGenerator.generate(*this);
 
 		m_isGenerated = true;
 		m_hasChanged = true;
-	}
-
-	if (m_hasChanged) {
-		m_lightmap.updateLights();
 	}
 }
 

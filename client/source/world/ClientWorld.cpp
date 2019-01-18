@@ -14,11 +14,14 @@
 #include <gk/gl/Shader.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
-#include "Config.hpp"
+#include "Client.hpp"
 #include "ClientWorld.hpp"
 #include "World.hpp"
 
-ClientWorld::ClientWorld() : m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-blocks")) {
+ClientWorld::ClientWorld(Client &client)
+	: m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-blocks")),
+	  m_client(client)
+{
 	for(s32 z = 0 ; z < m_depth ; z++) {
 		for(s32 y = 0 ; y < m_height ; y++) {
 			for(s32 x = 0 ; x < m_width ; x++) {
@@ -130,10 +133,10 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	states.shader->setUniform("u_renderDistance", Config::renderDistance * CHUNK_WIDTH);
 	gk::Shader::bind(nullptr);
 
-	// float ud = 1000.0;
-	// int ux = 0;
-	// int uy = 0;
-	// int uz = 0;
+	float ud = 1000.0;
+	s32 ux = 0;
+	s32 uy = 0;
+	s32 uz = 0;
 
 	std::vector<std::pair<ClientChunk*, gk::Transform>> chunks;
 	for(auto &it : m_chunks) {
@@ -154,7 +157,7 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		// Is this chunk on the screen?
 		center = target.getView()->getTransform().getMatrix() * center;
 
-		// float d = glm::length(center);
+		float d = glm::length(center);
 		center.x /= center.w;
 		center.y /= center.w;
 
@@ -172,13 +175,12 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		// If this chunk is not initialized, skip it
 		if(!it->isInitialized()) {
 			// But if it is the closest to the camera, mark it for initialization
-			// FIXME
-			// if(d < ud) {
-			// 	ud = d;
-			// 	ux = it->x();
-			// 	uy = it->y();
-			// 	uz = it->z();
-			// }
+			if(d < ud) {
+				ud = d;
+				ux = it->x();
+				uy = it->y();
+				uz = it->z();
+			}
 
 			continue;
 		}
@@ -186,19 +188,12 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		chunks.emplace_back(&*it, states.transform);
 	}
 
-	// FIXME
-	// if(ud < 1000) {
-	// 	m_terrainGenerator.generate(*getChunk(ux, uy, uz));
-    //
-	// 	if(getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Left))   m_terrainGenerator.generate(*getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Left));
-	// 	if(getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Right))  m_terrainGenerator.generate(*getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Right));
-	// 	if(getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Bottom)) m_terrainGenerator.generate(*getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Bottom));
-	// 	if(getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Top))    m_terrainGenerator.generate(*getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Top));
-	// 	if(getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Front))  m_terrainGenerator.generate(*getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Front));
-	// 	if(getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Back))   m_terrainGenerator.generate(*getChunk(ux, uy, uz)->getSurroundingChunk(Chunk::Back));
-    //
-	// 	getChunk(ux, uy, uz)->setInitialized(true);
-	// }
+	if(ud < 1000) {
+		sf::Packet packet;
+		packet << Network::Command::ChunkRequest;
+		packet << ux << uy << uz;
+		m_client.send(packet);
+	}
 
 	for (u8 i = 0 ; i < ChunkBuilder::layers ; ++i) {
 		for (auto &it : chunks) {

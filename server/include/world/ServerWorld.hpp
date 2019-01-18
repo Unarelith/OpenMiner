@@ -29,6 +29,7 @@ class ServerWorld {
 
 		void sendWorldData(Client &client);
 		void sendChunkData(Client &client, ServerChunk *chunk);
+		void sendRequestedData(Client &client, int cx, int cy, int cz);
 
 		ServerChunk *getChunk(int cx, int cy, int cz) const;
 
@@ -38,9 +39,9 @@ class ServerWorld {
 
 	private:
 		// FIXME: Duplicated with those in ClientWorld
-		const s32 m_width = 8;
-		const s32 m_height = 4;
-		const s32 m_depth = 8;
+		const s32 m_width = 32;
+		const s32 m_height = 8;
+		const s32 m_depth = 32;
 
 		std::vector<std::unique_ptr<ServerChunk>> m_chunks;
 };

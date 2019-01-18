@@ -25,6 +25,8 @@ Chunk::Chunk(s32 x, s32 y, s32 z) {
 	m_z = z;
 
 	std::memset(m_data, 0, sizeof(m_data));
+	// FIXME: Which one is faster?
+	// std::fill(std::begin(m_data), std::end(m_data), 0);
 }
 
 u16 Chunk::getBlock(int x, int y, int z) const {

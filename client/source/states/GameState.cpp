@@ -54,6 +54,11 @@ GameState::GameState(Client &client, int port) : m_client(client) {
 		packet >> x >> y >> z >> block;
 		m_world.setBlock(x, y, z, block);
 	});
+
+	// sf::Packet packet;
+	// packet << Network::Command::ClientSettings;
+	// packet << Config::renderDistance;
+	// m_client.send(packet);
 }
 
 void GameState::testLuaAPI() {

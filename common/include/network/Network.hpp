@@ -28,7 +28,8 @@ namespace Network {
 		KeyState,          // <UDP> [NetworkCommand][u32 timestamp][u16 client id][u32 keycode][bool isPressed]...
 
 		// Chunk commands
-		ChunkData,         // <TCP> [NetworkCommand][s32 sx, sy, sz][u32...] (from Server only)
+		ChunkData,         // <TCP> [NetworkCommand][s32 cx, cy, cz][u32...] (from Server only)
+		ChunkRequest,      // <TCP> [NetworkCommand][s32 cx, cy, cz]         (from Client only)
 
 		// Player commands
 		PlayerPlaceBlock,  // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Client only)
