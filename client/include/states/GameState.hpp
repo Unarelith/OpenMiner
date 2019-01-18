@@ -46,7 +46,6 @@ class GameState : public gk::ApplicationState {
 		gk::Shader m_shader;
 
 		Skybox m_skybox;
-		ClientWorld m_world;
 
 		gk::Camera m_camera{FOV, DIST_NEAR, DIST_FAR};
 		Player m_player{m_camera};
@@ -56,6 +55,8 @@ class GameState : public gk::ApplicationState {
 		Client &m_client;
 
 		HUD m_hud{m_player, m_world, m_client};
+
+		ClientWorld m_world{m_client};
 };
 
 #endif // GAMESTATE_HPP_

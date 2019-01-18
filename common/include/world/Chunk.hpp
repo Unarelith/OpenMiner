@@ -73,6 +73,9 @@ class Chunk : public gk::NonCopyable {
 		static constexpr u8 height = CHUNK_HEIGHT;
 		static constexpr u8 depth = CHUNK_DEPTH;
 
+		using DataArray = u32[Chunk::width][Chunk::height][Chunk::depth];
+		const DataArray &data() const { return m_data; }
+
 	protected:
 		// void updateNeighbours(int x, int y, int z);
 
@@ -80,7 +83,6 @@ class Chunk : public gk::NonCopyable {
 		s32 m_y;
 		s32 m_z;
 
-		using DataArray = u32[Chunk::width][Chunk::height][Chunk::depth];
 		DataArray m_data;
 
 		ChunkLightmap m_lightmap{this};

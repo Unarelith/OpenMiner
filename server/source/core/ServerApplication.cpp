@@ -35,7 +35,18 @@ void ServerApplication::init() {
 		m_world.sendWorldData(client);
 	});
 
-	m_server.setCommandCallback(Network::Command::PlayerPlaceBlock, [this](sf::Packet &packet) {
+	// m_server.setCommandCallback(Network::Command::ClientSettings, [](sf::Packet &packet) {
+	// 	packet >> Config::renderDistance;
+	// });
+
+	m_server.setCommandCallback(Network::Command::ChunkRequest, [this](Client &client, sf::Packet &packet) {
+		s32 cx, cy, cz;
+		packet >> cx >> cy >> cz;
+
+		m_world.sendRequestedData(client, cx, cy, cz);
+	});
+
+	m_server.setCommandCallback(Network::Command::PlayerPlaceBlock, [this](Client &, sf::Packet &packet) {
 		s32 x, y, z;
 		u32 block;
 		packet >> x >> y >> z >> block;
@@ -46,7 +57,7 @@ void ServerApplication::init() {
 		m_server.sendToAllClients(answer);
 	});
 
-	m_server.setCommandCallback(Network::Command::PlayerDigBlock, [this](sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::PlayerDigBlock, [this](Client &, sf::Packet &packet) {
 		s32 x, y, z;
 		packet >> x >> y >> z;
 		m_world.setBlock(x, y, z, 0);

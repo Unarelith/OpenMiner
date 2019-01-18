@@ -120,14 +120,6 @@ void Server::handleClientMessages() {
 				// DEBUG("TCP message received:", Network::commandToString(command));
 
 				if (command == Network::Command::ClientDisconnect) {
-					// FIXME
-					// sf::Packet packet;
-					// packet << Network::Command::EntityDie << "Player" + std::to_string(client.id);
-					// for (Client &client : m_info.clients()) {
-					// 	client.tcpSocket->send(packet);
-					// }
-
-					--i;
 					m_selector.remove(*client.tcpSocket);
 					m_info.removeClient(client.id);
 
@@ -135,12 +127,14 @@ void Server::handleClientMessages() {
 						// m_tcpListener.close();
 						m_isRunning = false;
 					}
+
+					--i;
 				}
 
 				if (m_isRunning)
 					for (auto &it : m_commands)
 						if (command == it.first)
-							it.second(packet);
+							it.second(client, packet);
 			}
 		}
 	}

@@ -25,7 +25,7 @@
 
 class Server {
 	using ConnectionCallback = std::function<void(Client&)>;
-	using CommandCallback = std::function<void(sf::Packet &packet)>;
+	using CommandCallback = std::function<void(Client &, sf::Packet &packet)>;
 
 	public:
 		void init(u16 port = 4242);
