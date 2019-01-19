@@ -83,13 +83,6 @@ void ServerWorld::sendRequestedData(Client &client, int cx, int cy, int cz) {
 	ServerChunk *chunk = getChunk(cx, cy, cz);
 	if (chunk) {
 		sendChunkData(client, chunk);
-
-		if(chunk->getSurroundingChunk(Chunk::Left))   sendChunkData(client, (ServerChunk *)chunk->getSurroundingChunk(Chunk::Left));
-		if(chunk->getSurroundingChunk(Chunk::Right))  sendChunkData(client, (ServerChunk *)chunk->getSurroundingChunk(Chunk::Right));
-		if(chunk->getSurroundingChunk(Chunk::Bottom)) sendChunkData(client, (ServerChunk *)chunk->getSurroundingChunk(Chunk::Bottom));
-		if(chunk->getSurroundingChunk(Chunk::Top))    sendChunkData(client, (ServerChunk *)chunk->getSurroundingChunk(Chunk::Top));
-		if(chunk->getSurroundingChunk(Chunk::Front))  sendChunkData(client, (ServerChunk *)chunk->getSurroundingChunk(Chunk::Front));
-		if(chunk->getSurroundingChunk(Chunk::Back))   sendChunkData(client, (ServerChunk *)chunk->getSurroundingChunk(Chunk::Back));
 	}
 }
 

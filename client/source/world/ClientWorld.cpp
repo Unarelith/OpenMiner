@@ -81,6 +81,13 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 
 		chunk->setInitialized(true);
 
+		// if(chunk->getSurroundingChunk(Chunk::Left))   chunk->getSurroundingChunk(Chunk::Left)->setChanged(true);
+		// if(chunk->getSurroundingChunk(Chunk::Right))  chunk->getSurroundingChunk(Chunk::Right)->setChanged(true);
+		// if(chunk->getSurroundingChunk(Chunk::Bottom)) chunk->getSurroundingChunk(Chunk::Bottom)->setChanged(true);
+		// if(chunk->getSurroundingChunk(Chunk::Top))    chunk->getSurroundingChunk(Chunk::Top)->setChanged(true);
+		// if(chunk->getSurroundingChunk(Chunk::Front))  chunk->getSurroundingChunk(Chunk::Front)->setChanged(true);
+		// if(chunk->getSurroundingChunk(Chunk::Back))   chunk->getSurroundingChunk(Chunk::Back)->setChanged(true);
+
 		// std::cout << "Chunk at (" << cx << ", " << cy << ", " << cz << ") received" << std::endl;
 	}
 }

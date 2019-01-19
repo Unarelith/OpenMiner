@@ -18,7 +18,7 @@ add_library(${CMAKE_PROJECT_NAME}_common STATIC ${SOURCE_FILES})
 # Compiler flags
 #------------------------------------------------------------------------------
 # target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -O3 -ffast-math)
-target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -g -pg -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
+target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -g -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
 target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -DDEBUG_ENABLED)
 target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -DSOL_CHECK_ARGUMENTS
 	# -DSOL_SAFE_USERTYPE=1
@@ -31,4 +31,6 @@ target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -DSOL_CHECK_ARGUMENT
 )
 
 target_compile_features(${CMAKE_PROJECT_NAME}_common PRIVATE cxx_std_17)
+
+# target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -pg)
 
