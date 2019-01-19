@@ -33,8 +33,8 @@ target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -DSOL_CHECK_ARGUMENTS
 
 target_compile_features(${CMAKE_PROJECT_NAME} PRIVATE cxx_std_17)
 
-target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -pg)
-target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -pg)
+# target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -pg)
+# target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -pg)
 
 #------------------------------------------------------------------------------
 # Link options
