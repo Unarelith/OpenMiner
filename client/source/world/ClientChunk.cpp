@@ -23,7 +23,7 @@ void ClientChunk::update() {
 }
 
 void ClientChunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u8 layer) const {
-	if (m_verticesCount.at(layer) == 0) return;
+	if (m_verticesCount.size() <= layer || m_verticesCount.at(layer) == 0) return;
 
 	states.texture = &m_texture;
 

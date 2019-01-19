@@ -39,6 +39,7 @@ extern int GUI_SCALE; // FIXME
 namespace Config {
 	// Gameplay
 	extern bool isFlyModeEnabled;
+	extern bool isNoClipEnabled;
 
 	// Graphics
 	extern bool isSmoothLightingEnabled;

@@ -102,7 +102,8 @@ void Player::updatePosition(const ClientWorld &world) {
 			m_velocity.y = -m_jumpSpeed;
 	}
 
-	checkCollisions(world);
+	if (!Config::isNoClipEnabled)
+		checkCollisions(world);
 
 	m_x += m_velocity.x;
 	m_y += m_velocity.y;

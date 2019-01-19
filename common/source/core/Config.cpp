@@ -17,6 +17,7 @@ int GUI_SCALE = 3; // FIXME
 
 // Gameplay
 bool Config::isFlyModeEnabled = false;
+bool Config::isNoClipEnabled = false;
 
 // Graphics
 bool Config::isSmoothLightingEnabled = true;

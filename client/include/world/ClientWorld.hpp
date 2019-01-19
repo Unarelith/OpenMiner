@@ -40,7 +40,7 @@ class ClientWorld : public gk::IDrawable {
 
 		// FIXME: Duplicated with those in ServerWorld
 		const s32 m_width = 32;
-		const s32 m_height = 8;
+		const s32 m_height = 4;
 		const s32 m_depth = 32;
 
 		std::vector<std::unique_ptr<ClientChunk>> m_chunks;

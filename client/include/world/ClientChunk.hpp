@@ -34,8 +34,8 @@ class ClientChunk : public Chunk {
 
 		ChunkBuilder m_builder;
 
-		std::array<gk::VertexBuffer, ChunkBuilder::layers> m_vbo;
-		std::array<std::size_t, ChunkBuilder::layers> m_verticesCount;
+		std::array<gk::VertexBuffer, ChunkBuilder::layers> m_vbo{};
+		std::array<std::size_t, ChunkBuilder::layers> m_verticesCount{};
 };
 
 #endif // CLIENTCHUNK_HPP_
