@@ -67,11 +67,8 @@ void SettingsMenuState::addMainButtons() {
 }
 
 void SettingsMenuState::addGameplayButtons() {
-	m_menuWidget.addButton(0, 0, std::string("Fly Mode: ") + (Config::isFlyModeEnabled ? "ON" : "OFF"), [] (TextButton &button) {
-		Config::isFlyModeEnabled = !Config::isFlyModeEnabled;
-		button.setText(std::string("Fly Mode: ") + (Config::isFlyModeEnabled ? "ON" : "OFF"));
-		World::isReloadRequested = true;
-	});
+	addToggleButton(0, 0, "Fly Mode", Config::isFlyModeEnabled, false);
+	addToggleButton(0, 1, "No Clip", Config::isNoClipEnabled, false);
 
 	m_menuWidget.addButton(0, 7, "Done", [this] (TextButton &) {
 		m_menuWidget.reset(1, 8);
@@ -86,23 +83,9 @@ void SettingsMenuState::addGraphicsButtons() {
 		World::isReloadRequested = true;
 	});
 
-	m_menuWidget.addButton(0, 1, std::string("Smooth Lighting: ") + (Config::isSmoothLightingEnabled ? "ON" : "OFF"), [] (TextButton &button) {
-		Config::isSmoothLightingEnabled = !Config::isSmoothLightingEnabled;
-		button.setText(std::string("Smooth Lighting: ") + (Config::isSmoothLightingEnabled ? "ON" : "OFF"));
-		World::isReloadRequested = true;
-	});
-
-	m_menuWidget.addButton(0, 2, std::string("Ambient Occlusion: ") + (Config::isAmbientOcclusionEnabled ? "ON" : "OFF"), [] (TextButton &button) {
-		Config::isAmbientOcclusionEnabled = !Config::isAmbientOcclusionEnabled;
-		button.setText(std::string("Ambient Occlusion: ") + (Config::isAmbientOcclusionEnabled ? "ON" : "OFF"));
-		World::isReloadRequested = true;
-	});
-
-	m_menuWidget.addButton(0, 3, std::string("Wireframe Mode: ") + (Config::isWireframeModeEnabled ? "ON" : "OFF"), [] (TextButton &button) {
-		Config::isWireframeModeEnabled = !Config::isWireframeModeEnabled;
-		button.setText(std::string("Wireframe Mode: ") + (Config::isWireframeModeEnabled ? "ON" : "OFF"));
-		World::isReloadRequested = true;
-	});
+	addToggleButton(0, 1, "Smooth Lighting", Config::isSmoothLightingEnabled, true);
+	addToggleButton(0, 2, "Ambient Occlusion", Config::isAmbientOcclusionEnabled, true);
+	addToggleButton(0, 3, "Wireframe Mode", Config::isWireframeModeEnabled, false);
 
 	m_menuWidget.addButton(0, 4, "GUI Scale: " + std::to_string(GUI_SCALE), [] (TextButton &button) {
 		GUI_SCALE = 1 + (GUI_SCALE + 1) % 3;
@@ -124,6 +107,16 @@ void SettingsMenuState::addInputButtons() {
 	m_menuWidget.addButton(0, 7, "Done", [this] (TextButton &) {
 		m_menuWidget.reset(1, 8);
 		addMainButtons();
+	});
+}
+
+void SettingsMenuState::addToggleButton(u16 x, u16 y, const std::string &text, bool &configOption, bool worldReloadRequested) {
+	m_menuWidget.addButton(x, y, text + ": " + (configOption ? "ON" : "OFF"), [=, &configOption] (TextButton &button) {
+		configOption = !configOption;
+		button.setText(text + ": " + (configOption ? "ON" : "OFF"));
+
+		if (worldReloadRequested)
+			World::isReloadRequested = true;
 	});
 }
 
