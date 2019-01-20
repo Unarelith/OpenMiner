@@ -25,8 +25,9 @@
     - [SFML](https://www.sfml-dev.org/) (only used for network)
     - [Lua](http://www.lua.org)
     - _Linux users: Check your distribution repositories for packages._
-- Run `mkdir build && cd build` at the root of the game folder
-- Run `cmake .. && make`, wait (or use `-j8`), run the game and enjoy!
+- Run `cmake . && make -j8`
+- Run the server with `./server/openminer_server`
+- Run the client with `./client/openminer`
 
 ## Discussion
 
