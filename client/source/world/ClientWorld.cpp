@@ -11,6 +11,8 @@
  *
  * =====================================================================================
  */
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <gk/gl/Shader.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 

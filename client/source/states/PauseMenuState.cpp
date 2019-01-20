@@ -11,6 +11,8 @@
  *
  * =====================================================================================
  */
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/Mouse.hpp>
 

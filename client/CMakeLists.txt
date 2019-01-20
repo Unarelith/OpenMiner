@@ -21,6 +21,7 @@ add_dependencies(${CMAKE_PROJECT_NAME} ${CMAKE_PROJECT_NAME}_common)
 target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -O3 -ffast-math)
 target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -g -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
 target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -DDEBUG_ENABLED)
+target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -DGLM_FORCE_RADIANS)
 target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -DSOL_CHECK_ARGUMENTS
 	# -DSOL_SAFE_USERTYPE=1
 	# -DSOL_SAFE_REFERENCES=1
@@ -31,7 +32,8 @@ target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -DSOL_CHECK_ARGUMENTS
 	-DSOL_PRINT_ERRORS=1
 )
 
-target_compile_features(${CMAKE_PROJECT_NAME} PRIVATE cxx_std_17)
+target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -std=c++17)
+# target_compile_features(${CMAKE_PROJECT_NAME} PRIVATE cxx_std_17)
 
 # target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -pg)
 # target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -pg)
@@ -48,6 +50,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
                       ${TINYXML2_LIBRARIES}
                       ${GAMEKIT_LIBRARIES}
                       ${LUA_LIBRARIES}
-                      sfml-network
+                      sfml-network -ldl
                       ${CMAKE_PROJECT_NAME}_common)
 

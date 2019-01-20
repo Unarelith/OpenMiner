@@ -41,6 +41,7 @@ class Chunk : public gk::NonCopyable {
 
 	public:
 		Chunk(s32 x, s32 y, s32 z);
+		virtual ~Chunk() = default;
 
 		virtual void update() = 0;
 
