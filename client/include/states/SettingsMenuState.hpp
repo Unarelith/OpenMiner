@@ -18,6 +18,7 @@
 #include <gk/gl/Shader.hpp>
 #include <gk/graphics/RectangleShape.hpp>
 
+#include "GameKey.hpp"
 #include "MenuWidget.hpp"
 
 class SettingsMenuState : public gk::ApplicationState {
@@ -45,6 +46,9 @@ class SettingsMenuState : public gk::ApplicationState {
 		glm::mat4 m_projectionMatrix;
 
 		gk::RectangleShape m_background;
+
+		u8 m_currentKey = GameKey::Undefined;
+		TextButton *m_currentKeyButton = nullptr;
 };
 
 #endif // SETTINGSMENUSTATE_HPP_

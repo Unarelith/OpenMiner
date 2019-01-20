@@ -16,9 +16,11 @@
 #include <algorithm>
 
 #include <gk/core/ApplicationStateStack.hpp>
+#include <gk/core/input/GamePad.hpp>
 #include <gk/core/Mouse.hpp>
 
 #include "Config.hpp"
+#include "KeyboardHandler.hpp"
 #include "SettingsMenuState.hpp"
 #include "World.hpp"
 
@@ -43,6 +45,13 @@ void SettingsMenuState::onEvent(const SDL_Event &event) {
 
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 		m_stateStack->pop();
+	}
+	else if (m_currentKeyButton && event.type == SDL_KEYDOWN) {
+		KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
+		keyboardHandler->setKeycode(m_currentKey, event.key.keysym.sym);
+
+		m_currentKeyButton->setText(m_currentKeyButton->text() + keyboardHandler->getKeyName(m_currentKey));
+		m_currentKeyButton = nullptr;
 	}
 }
 
@@ -106,6 +115,30 @@ void SettingsMenuState::addGraphicsButtons() {
 }
 
 void SettingsMenuState::addInputButtons() {
+	std::vector<std::pair<u8, std::string>> keys = {
+		{GameKey::Up,        "Forward"},
+		{GameKey::Down,      "Back"},
+		{GameKey::Left,      "Left"},
+		{GameKey::Right,     "Right"},
+		{GameKey::Jump,      "Jump"},
+		{GameKey::Fly,       "Jetpack"},
+		// {GameKey::Sneak,     "Sneak"},
+		// {GameKey::Sprint,    "Sprint"},
+		// {GameKey::Dig,       "Dig"},
+		// {GameKey::Use,       "Use"},
+		{GameKey::Inventory, "Inventory"},
+	};
+
+	KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
+	int i = 0;
+	for (auto &it : keys) {
+		m_menuWidget.addButton(0, i++, it.second + ": " + keyboardHandler->getKeyName(it.first), [this, it] (TextButton &button) {
+			button.setText(it.second + ": ");
+			m_currentKey = it.first;
+			m_currentKeyButton = &button;
+		});
+	}
+
 	m_menuWidget.addButton(0, 7, "Done", [this] (TextButton &) {
 		m_menuWidget.reset(1, 8);
 		addMainButtons();

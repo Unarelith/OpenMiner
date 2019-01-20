@@ -25,6 +25,10 @@ class KeyboardHandler : public gk::InputHandler {
 
 		bool isKeyPressed(gk::GameKey key);
 
+		SDL_Keycode getKeyCode(gk::GameKey key) { return m_keys[key]; }
+		std::string getKeyName(gk::GameKey key) { return SDL_GetKeyName(m_keys[key]); }
+		void setKeycode(gk::GameKey key, SDL_Keycode keycode) { m_keys[key] = keycode; }
+
 	private:
 		std::map<gk::GameKey, SDL_Keycode> m_keys;
 };
