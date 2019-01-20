@@ -13,6 +13,8 @@
  */
 #include <gk/core/Exception.hpp>
 
+#include "CraftingRecipe.hpp"
+#include "SmeltingRecipe.hpp"
 #include "Registry.hpp"
 
 Registry *Registry::s_instance = nullptr;
@@ -64,6 +66,11 @@ void Registry::serialize(sf::Packet &packet) {
 			<< it.textureID() << it.isBlock() << it.isFuel()
 			<< it.burnTime() << it.miningSpeed() << it.harvestCapability();
 	}
+
+	for (auto &it : m_recipes) {
+		packet << u8((it->type() == "craft") ? DataType::CraftingRecipe : DataType::SmeltingRecipe);
+		it->serialize(packet);
+	}
 }
 
 void Registry::deserialize(sf::Packet &packet) {
@@ -95,7 +102,11 @@ void Registry::deserialize(sf::Packet &packet) {
 			item.setMiningSpeed(miningSpeed);
 			item.setBurnTime(burnTime);
 		}
-		else if (type == u8(DataType::Recipe)) {
+		else if (type == u8(DataType::CraftingRecipe)) {
+			registerRecipe<CraftingRecipe>()->deserialize(packet);
+		}
+		else if (type == u8(DataType::SmeltingRecipe)) {
+			registerRecipe<SmeltingRecipe>()->deserialize(packet);
 		}
 	}
 }

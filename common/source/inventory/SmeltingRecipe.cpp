@@ -17,6 +17,14 @@ SmeltingRecipe::SmeltingRecipe(const ItemStack &input, const ItemStack &output) 
 	m_input = input;
 }
 
+void SmeltingRecipe::serialize(sf::Packet &packet) {
+	packet << m_result << m_input;
+}
+
+void SmeltingRecipe::deserialize(sf::Packet &packet) {
+	packet >> m_result >> m_input;
+}
+
 bool SmeltingRecipe::isMatching(const Inventory &inventory) const {
 	return (inventory.getStack(0, 0).item().id() == m_input.item().id()
 	     && inventory.getStack(0, 0).amount() >= m_input.amount());

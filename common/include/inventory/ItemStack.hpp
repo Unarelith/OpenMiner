@@ -16,6 +16,8 @@
 
 #include "Item.hpp"
 
+namespace sf { class Packet; }
+
 class ItemStack {
 	public:
 		ItemStack() = default;
@@ -33,5 +35,8 @@ class ItemStack {
 
 		u16 m_amount = 0;
 };
+
+sf::Packet &operator<<(sf::Packet &packet, const ItemStack &itemStack);
+sf::Packet &operator>>(sf::Packet &packet, ItemStack &itemStack);
 
 #endif // ITEMSTACK_HPP_

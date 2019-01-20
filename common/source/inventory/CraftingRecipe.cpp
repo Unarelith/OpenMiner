@@ -16,6 +16,7 @@
 #include <gk/core/Exception.hpp>
 
 #include "CraftingRecipe.hpp"
+#include "Network.hpp"
 
 // FIXME: Try to handle recipes a bit more like minecraft
 //        - Pattern section | char[3][3]
@@ -26,6 +27,46 @@ CraftingRecipe::CraftingRecipe(const std::vector<std::string> &pattern, const st
 	m_keys = keys;
 
 	m_isShapeless = isShapeless;
+}
+
+void CraftingRecipe::serialize(sf::Packet &packet) {
+	packet << m_result << u8(m_pattern.size());
+	for (std::string &it : m_pattern)
+		packet << it;
+
+	packet << u8(m_keys.size());
+	for (auto &it : m_keys) {
+		packet << u8(it.first) << u8(it.second.size());
+		for (std::string &str : it.second) {
+			packet << str;
+		}
+	}
+}
+
+void CraftingRecipe::deserialize(sf::Packet &packet) {
+	u8 patternSize, keysSize;
+
+	packet >> m_result >> patternSize;
+	for (u8 i = 0 ; i < patternSize ; ++i) {
+		std::string str;
+		packet >> str;
+		m_pattern.emplace_back(str);
+	}
+
+	packet >> keysSize;
+	for (u8 i = 0 ; i < keysSize ; ++i) {
+		u8 key, itemsSize;
+		packet >> key >> itemsSize;
+
+		std::vector<std::string> items;
+		for (u8 j = 0 ; j < itemsSize ; ++j) {
+			std::string str;
+			packet >> str;
+			items.emplace_back(str);
+		}
+
+		m_keys.emplace(key, items);
+	}
 }
 
 bool CraftingRecipe::isMatching(const Inventory &inventory) const {

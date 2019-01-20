@@ -62,7 +62,8 @@ class Registry {
 		enum class DataType {
 			Block,
 			Item,
-			Recipe
+			CraftingRecipe,
+			SmeltingRecipe,
 		};
 };
 
