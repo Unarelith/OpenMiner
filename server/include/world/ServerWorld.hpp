@@ -19,7 +19,7 @@
 
 #include "ServerChunk.hpp"
 
-class Client;
+struct Client;
 
 class ServerWorld {
 	public:

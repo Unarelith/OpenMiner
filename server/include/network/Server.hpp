@@ -15,6 +15,7 @@
 #define SERVER_HPP_
 
 #include <functional>
+#include <unordered_map>
 
 #include <SFML/Network/SocketSelector.hpp>
 #include <SFML/Network/TcpListener.hpp>

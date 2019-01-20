@@ -13,7 +13,6 @@
  */
 #include <cstring>
 
-#define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <gk/gl/Vertex.hpp>

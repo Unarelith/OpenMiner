@@ -19,6 +19,7 @@
 class Recipe {
 	public:
 		Recipe(const std::string &type, const ItemStack &result) : m_type(type), m_result(result) {}
+		virtual ~Recipe() = default;
 
 		virtual bool isMatching(const Inventory &inventory) const = 0;
 

@@ -1,0 +1,59 @@
+os: linux
+dist: trusty
+language: cpp
+
+compiler:
+  - clang
+
+addons:
+    apt:
+        sources:
+            - ubuntu-toolchain-r-test
+        packages:
+            - libopenal-dev
+            - libjpeg-dev
+            - libudev-dev
+            - libxrandr-dev
+            - libfreetype6-dev
+            - libvorbis-dev
+            - libflac-dev
+            - libegl1-mesa-dev
+            - libgles2-mesa-dev
+            - libtinyxml2-dev
+            - libsdl2-dev
+            - libsdl2-image-dev
+            - libsdl2-mixer-dev
+            - libsdl2-ttf-dev
+            - g++-8
+            - libglm-dev
+            - cmake
+            - cxxtest
+            - liblua5.2-dev
+
+before_install:
+  - sudo cp /usr/include/lua5.2/* /usr/include/
+  - git clone git://github.com/SFML/SFML.git
+  - cd SFML
+  - cmake .
+  - make -j8
+  - sudo make install
+  - cd ..
+  - git clone git://github.com/Quent42340/GameKit.git
+  - cd GameKit
+  - cmake .
+  - make -j8
+  - sudo make install
+  - cd ..
+
+script:
+  - cmake .
+  - make -j8
+
+notifications:
+  email: false
+  # irc:
+  #   channels:
+  #     - "irc.freenode.net#openminer"
+  #   template:
+  #     - "%{repository}/%{branch} (%{commit} - %{author}): %{build_url}: %{message}"
+
