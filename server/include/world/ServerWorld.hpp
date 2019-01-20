@@ -39,9 +39,9 @@ class ServerWorld {
 
 	private:
 		// FIXME: Duplicated with those in ClientWorld
-		const s32 m_width = 32;
+		const s32 m_width = 64;
 		const s32 m_height = 4;
-		const s32 m_depth = 32;
+		const s32 m_depth = 64;
 
 		std::vector<std::unique_ptr<ServerChunk>> m_chunks;
 };

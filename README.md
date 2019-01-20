@@ -14,6 +14,7 @@
 - Movement: <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
 - Inventory: <kbd>E</kbd>
 - Jump: <kbd>Space</kbd>
+- Sprint: <kbd>Left Ctrl</kbd>
 - Jetpack: <kbd>X</kbd>
 - Exit: <kbd>Escape</kbd>
 

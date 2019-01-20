@@ -8,6 +8,7 @@
 	<Jump      key="Space"/>
 	<Fly       key="X"/>
 	<Sneak     key="Left Shift"/>
+	<Sprint    key="Left Ctrl"/>
 
 	<Dig       key="L"/>
 	<Use       key="M"/>

@@ -24,6 +24,7 @@ namespace GameKey {
 		Jump,
 		Fly,
 		Sneak,
+		Sprint,
 
 		Dig,
 		Use,
