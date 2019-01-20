@@ -92,6 +92,11 @@ void Player::processInputs() {
 	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Up))   move(45.0f);
 	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Down)) move(-135.0f);
 	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Down)) move(135.0f);
+
+	if (gk::GamePad::isKeyPressed(GameKey::Sprint)) {
+		m_velocity.x *= 1.5;
+		m_velocity.z *= 1.5;
+	}
 }
 
 void Player::updatePosition(const ClientWorld &world) {

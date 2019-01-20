@@ -43,6 +43,7 @@ KeyboardHandler::KeyboardHandler() {
 	addKey(GameKey::Jump,      "Jump");
 	addKey(GameKey::Fly,       "Fly");
 	addKey(GameKey::Sneak,     "Sneak");
+	addKey(GameKey::Sprint,    "Sprint");
 
 	addKey(GameKey::Dig,       "Dig");
 	addKey(GameKey::Use,       "Use");
