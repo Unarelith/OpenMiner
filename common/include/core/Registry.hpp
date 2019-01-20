@@ -20,7 +20,10 @@
 
 #include "Block.hpp"
 #include "Item.hpp"
+#include "Network.hpp"
 #include "Recipe.hpp"
+
+struct Client;
 
 class Registry {
 	public:
@@ -40,6 +43,9 @@ class Registry {
 
 		const Recipe *getRecipe(const Inventory &inventory) const;
 
+		void serialize(sf::Packet &packet);
+		void deserialize(sf::Packet &packet);
+
 		static Registry &getInstance() { return *s_instance; }
 		static void setInstance(Registry &instance) { s_instance = &instance; }
 
@@ -52,6 +58,12 @@ class Registry {
 
 		std::unordered_map<std::string, u32> m_blocksID;
 		std::unordered_map<std::string, u32> m_itemsID;
+
+		enum class DataType {
+			Block,
+			Item,
+			Recipe
+		};
 };
 
 #endif // REGISTRY_HPP_

@@ -14,19 +14,20 @@
 #ifndef LUAGUISTATE_HPP_
 #define LUAGUISTATE_HPP_
 
+#include <memory>
+
 #include <gk/core/ApplicationState.hpp>
 #include <gk/gl/Shader.hpp>
 #include <gk/graphics/RectangleShape.hpp>
 
 #include "CraftingWidget.hpp"
-#include "LuaGUI.hpp"
 #include "InventoryWidget.hpp"
 #include "MouseItemWidget.hpp"
 
 // FIXME: This class is almost a duplicate of InventoryState
 class LuaGUIState : public gk::ApplicationState {
 	public:
-		LuaGUIState(LuaGUI &gui, gk::ApplicationState *parent = nullptr);
+		LuaGUIState(/* LuaGUI &gui,  */gk::ApplicationState *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -35,7 +36,7 @@ class LuaGUIState : public gk::ApplicationState {
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		void loadGUI(LuaGUI &gui);
+		// void loadGUI(LuaGUI &gui);
 
 		gk::Shader m_shader;
 		glm::mat4 m_orthoMatrix;

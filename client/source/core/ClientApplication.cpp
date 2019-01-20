@@ -48,8 +48,6 @@ void ClientApplication::init() {
 
 	Registry::setInstance(m_registry);
 
-	m_scriptEngine.init();
-
 	m_stateStack.push<GameState>(m_client, m_port);
 	// m_stateStack.push<ServerLoadingState>(m_client);
 }

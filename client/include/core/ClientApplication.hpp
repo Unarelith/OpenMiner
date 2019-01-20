@@ -19,7 +19,6 @@
 #include "Client.hpp"
 #include "KeyboardHandler.hpp"
 #include "Registry.hpp"
-#include "ScriptEngine.hpp"
 
 class ClientApplication : public gk::CoreApplication {
 	public:
@@ -31,8 +30,6 @@ class ClientApplication : public gk::CoreApplication {
 		void initOpenGL();
 
 		KeyboardHandler m_keyboardHandler;
-
-		ScriptEngine m_scriptEngine;
 
 		Registry m_registry;
 

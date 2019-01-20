@@ -14,7 +14,6 @@
 #include "LuaCore.hpp"
 #include "LuaGUI.hpp"
 #include "LuaMod.hpp"
-#include "Player.hpp"
 #include "Registry.hpp"
 #include "ScriptEngine.hpp"
 #include "World.hpp"
@@ -61,9 +60,9 @@ void ScriptEngine::initUsertypes() {
 	// 	"data", &BlockData::data
 	// );
 
-	m_lua.new_usertype<Player>("Player",
-		"inventory", &Player::inventory
-	);
+	// m_lua.new_usertype<Player>("Player",
+	// 	"inventory", &Player::inventory
+	// );
 
 	m_lua.new_usertype<Inventory>("Inventory",
 		"add_stack", &Inventory::addStack,

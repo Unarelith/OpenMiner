@@ -24,15 +24,12 @@
 #include "ClientWorld.hpp"
 #include "Config.hpp"
 #include "HUD.hpp"
-#include "LuaCore.hpp"
 #include "Player.hpp"
 #include "Skybox.hpp"
 
 class GameState : public gk::ApplicationState {
 	public:
 		GameState(Client &client, int port = 4242);
-
-		void testLuaAPI();
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -50,13 +47,13 @@ class GameState : public gk::ApplicationState {
 		gk::Camera m_camera{FOV, DIST_NEAR, DIST_FAR};
 		Player m_player{m_camera};
 
-		LuaCore m_luaCore;
-
 		Client &m_client;
 
 		HUD m_hud{m_player, m_world, m_client};
 
 		ClientWorld m_world{m_client};
+
+		bool m_isRegistryInitialized = false;
 };
 
 #endif // GAMESTATE_HPP_

@@ -14,7 +14,7 @@
 #include <gk/core/ApplicationStateStack.hpp>
 
 #include "LuaGUI.hpp"
-#include "LuaGUIState.hpp"
+// #include "LuaGUIState.hpp"
 
 void LuaGUI::addImage(const sol::table &table) {
 	// FIXME: Duplicated below
@@ -127,8 +127,8 @@ void LuaGUI::addFurnaceWidget(const sol::table &table) {
 }
 
 void LuaGUI::show() {
-	auto &stateStack = gk::ApplicationStateStack::getInstance();
-	stateStack.push<LuaGUIState>(*this, &stateStack.top());
+	// auto &stateStack = gk::ApplicationStateStack::getInstance();
+	// stateStack.push<LuaGUIState>(*this, &stateStack.top());
 }
 
 void LuaGUI::initUsertype(sol::state &lua) {

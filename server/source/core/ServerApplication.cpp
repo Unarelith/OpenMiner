@@ -28,10 +28,28 @@ void ServerApplication::init() {
 
 	Registry::setInstance(m_registry);
 
+	m_scriptEngine.init();
+	// m_luaCore.setPlayer(m_player);
+	// m_luaCore.setWorld(m_world);
+
+	try {
+		m_scriptEngine.lua()["openminer"] = &m_luaCore;
+		// FIXME
+		// m_scriptEngine.lua().script("init()");
+	}
+	catch (const sol::error &e) {
+		std::cerr << e.what() << std::endl;
+	}
+
 	m_server.init(m_port);
 	m_server.setRunning(true);
 
 	m_server.setConnectionCallback([this](Client &client) {
+		sf::Packet packet;
+		packet << Network::Command::RegistryData;
+		m_registry.serialize(packet);
+		client.tcpSocket->send(packet);
+
 		m_world.sendWorldData(client);
 	});
 

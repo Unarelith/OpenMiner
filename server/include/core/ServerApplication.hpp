@@ -16,7 +16,9 @@
 
 #include <gk/core/CoreApplication.hpp>
 
+#include "LuaCore.hpp"
 #include "Registry.hpp"
+#include "ScriptEngine.hpp"
 #include "Server.hpp"
 #include "ServerWorld.hpp"
 
@@ -31,6 +33,9 @@ class ServerApplication : public gk::CoreApplication {
 
 		Server m_server;
 		ServerWorld m_world;
+
+		ScriptEngine m_scriptEngine;
+		LuaCore m_luaCore;
 
 		Registry m_registry;
 

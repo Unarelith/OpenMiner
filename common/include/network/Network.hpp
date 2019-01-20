@@ -37,6 +37,9 @@ namespace Network {
 
 		// Block commands
 		BlockUpdate,       // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Server only)
+
+		// Registry commands
+		RegistryData,      // <TCP> [NetworkCommand][Block block]            (from Server only)
 	};
 
 	std::string commandToString(Command command);

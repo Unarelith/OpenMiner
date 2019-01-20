@@ -27,21 +27,19 @@
 #include "InventoryState.hpp"
 #include "PauseMenuState.hpp"
 #include "PlayerInventoryWidget.hpp"
-#include "ScriptEngine.hpp"
+#include "Registry.hpp"
 
 GameState::GameState(Client &client, int port) : m_client(client) {
-	try {
-		m_client.connect("localhost", port);
-	}
-	catch (const gk::Exception &e) {
-		std::cerr << "Error " << e.what() << std::endl;
-	}
-
 	m_camera.setAspectRatio((float)SCREEN_WIDTH / SCREEN_HEIGHT);
 
-	testLuaAPI();
-
 	initShaders();
+
+	m_client.connect("localhost", port);
+
+	m_client.setCommandCallback(Network::Command::RegistryData, [this](sf::Packet &packet) {
+		Registry::getInstance().deserialize(packet);
+		m_isRegistryInitialized = true;
+	});
 
 	m_client.setCommandCallback(Network::Command::ChunkData, [this](sf::Packet &packet) {
 		m_world.receiveChunkData(packet);
@@ -58,20 +56,6 @@ GameState::GameState(Client &client, int port) : m_client(client) {
 	// packet << Network::Command::ClientSettings;
 	// packet << Config::renderDistance;
 	// m_client.send(packet);
-}
-
-void GameState::testLuaAPI() {
-	m_luaCore.setPlayer(m_player);
-	// m_luaCore.setWorld(m_world);
-
-	try {
-		auto &lua = ScriptEngine::getInstance().lua();
-		lua["openminer"] = &m_luaCore;
-		lua.script("init()");
-	}
-	catch (const sol::error &e) {
-		std::cerr << e.what() << std::endl;
-	}
 }
 
 void GameState::onEvent(const SDL_Event &event) {
@@ -99,25 +83,28 @@ void GameState::onEvent(const SDL_Event &event) {
 		}
 	}
 
-	m_hud.onEvent(event);
+	if (m_isRegistryInitialized)
+		m_hud.onEvent(event);
 }
 
 void GameState::update() {
 	m_world.update();
 
-	if (&m_stateStack->top() == this) {
-		m_player.processInputs();
+	if (m_isRegistryInitialized) {
+		if (&m_stateStack->top() == this) {
+			m_player.processInputs();
 
-		if (gk::GamePad::isKeyPressedOnce(GameKey::Inventory)) {
-			auto &inventoryState = m_stateStack->push<InventoryState>(this);
-			inventoryState.setupWidget<PlayerInventoryWidget>(m_player.inventory());
+			if (gk::GamePad::isKeyPressedOnce(GameKey::Inventory)) {
+				auto &inventoryState = m_stateStack->push<InventoryState>(this);
+				inventoryState.setupWidget<PlayerInventoryWidget>(m_player.inventory());
+			}
 		}
+
+		m_player.updatePosition(m_world);
+		m_skybox.update(m_player);
+
+		m_hud.update();
 	}
-
-	m_player.updatePosition(m_world);
-	m_skybox.update(m_player);
-
-	m_hud.update();
 
 	m_client.update();
 }
@@ -144,6 +131,8 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	target.setView(m_camera);
 	// target.draw(m_skybox, states);
 	target.draw(m_world, states);
-	target.draw(m_hud, states);
+
+	if (m_isRegistryInitialized)
+		target.draw(m_hud, states);
 }
 
