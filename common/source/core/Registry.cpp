@@ -56,15 +56,15 @@ const Recipe *Registry::getRecipe(const Inventory &inventory) const {
 }
 
 void Registry::serialize(sf::Packet &packet) {
-	for (auto &it : m_blocks) {
-		packet << u8(DataType::Block) << u32(it.id()) << it.name() << it.label() << u8(it.drawType())
-			<< it.textureID() << it.hardness() << it.harvestRequirements();
-	}
-
 	for (auto &it : m_items) {
 		packet << u8(DataType::Item) << it.id() << it.name() << it.label()
 			<< it.textureID() << it.isBlock() << it.isFuel()
 			<< it.burnTime() << it.miningSpeed() << it.harvestCapability();
+	}
+
+	for (auto &it : m_blocks) {
+		packet << u8(DataType::Block) << u32(it.id()) << it.name() << it.label() << u8(it.drawType())
+			<< it.textureID() << it.hardness() << it.harvestRequirements() << it.getItemDrop();
 	}
 
 	for (auto &it : m_recipes) {
@@ -81,20 +81,24 @@ void Registry::deserialize(sf::Packet &packet) {
 		packet >> type;
 		if (type == u8(DataType::Block)) {
 			u8 harvestRequirements, drawType;
+			ItemStack itemDrop;
 			float hardness;
-			packet >> id >> name >> label >> drawType >> textureID >> hardness >> harvestRequirements;
+			packet >> id >> name >> label >> drawType >> textureID >> hardness
+				>> harvestRequirements >> itemDrop;
 
 			auto &block = registerBlock(textureID, name, label);
 			block.setHarvestRequirements(harvestRequirements);
 			block.setHardness(hardness);
 			block.setDrawType(BlockDrawType(drawType));
+			block.setItemDrop(itemDrop.item().name(), itemDrop.amount());
 		}
 		else if (type == u8(DataType::Item)) {
 			bool isFuel, isBlock;
 			u8 harvestCapability;
 			float miningSpeed;
 			u16 burnTime;
-			packet >> id >> name >> label >> textureID >> isBlock >> isFuel >> burnTime >> miningSpeed >> harvestCapability;
+			packet >> id >> name >> label >> textureID >> isBlock >> isFuel
+				>> burnTime >> miningSpeed >> harvestCapability;
 
 			auto &item = registerItem(textureID, name, label);
 			item.setIsFuel(isFuel);
