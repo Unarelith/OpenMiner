@@ -7,7 +7,14 @@
 
 - OpenMiner is a Minecraft-like game engine.
 
-![](screenshot.png?raw=true)
+<details>
+ <summary>Screenshots</summary>
+
+ ![](screenshot1.png?raw=true)
+ ![](screenshot2.png?raw=true)
+ ![](screenshot3.png?raw=true)
+
+</details>
 
 ## Keys
 
@@ -43,5 +50,5 @@
 ## Credits
 
 - MadPixel (Minecrafter font) [CC BY-ND]
-- xMrVizzy ([Faithful 32x](https://www.curseforge.com/minecraft/texture-packs/faithful-32x) texture pack)
+- xMrVizzy ([Faithful 32x](https://www.curseforge.com/minecraft/texture-packs/faithful-32x) texture pack, will completely replace Vanilla textures)
 

@@ -255,6 +255,18 @@ mod:crafting_recipe {
 	keys = {['#'] = "default:planks"}
 }
 
+-- Glowstone
+mod:crafting_recipe {
+	result = {
+		id = "default:glowstone",
+		amount = 99
+	},
+
+	pattern = {"#"},
+
+	keys = {['#'] = "default:leaves"},
+}
+
 -- Iron Ingot
 mod:smelting_recipe {
 	input = {id = "default:ore_iron", amount = 1},
