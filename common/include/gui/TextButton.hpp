@@ -28,6 +28,7 @@ class TextButton : public Widget {
 	public:
 		using CppCallback = std::function<void(TextButton &)>;
 		using LuaCallback = sol::function;
+
 		TextButton(Widget *parent = nullptr);
 		TextButton(const CppCallback &callback, Widget *parent = nullptr);
 
@@ -35,8 +36,10 @@ class TextButton : public Widget {
 
 		const std::string &text() const { return m_text.text(); }
 		void setText(const std::string &text);
+
 		void setCallback(const CppCallback &callback) { m_cppCallback = callback; }
 		void setCallback(const LuaCallback &callback) { m_luaCallback = callback; }
+
 		void setEnabled(bool isEnabled) { m_isEnabled = isEnabled; }
 
 	private:

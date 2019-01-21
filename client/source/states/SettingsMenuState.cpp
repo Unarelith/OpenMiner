@@ -15,8 +15,9 @@
 
 #include <algorithm>
 
-#include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/input/GamePad.hpp>
+#include <gk/core/ApplicationStateStack.hpp>
+#include <gk/core/Debug.hpp>
 #include <gk/core/Mouse.hpp>
 
 #include "Config.hpp"
@@ -65,18 +66,17 @@ void SettingsMenuState::update() {
 }
 
 void SettingsMenuState::addMainButtons() {
-	m_menuWidget.addButton(0, 0, "Gameplay...", [this] (TextButton &) {
-		m_menuWidget.reset(1, 8);
+	m_menuWidget.reset(1, 8);
+
+	m_menuWidget.addButton("Gameplay...", [this] (TextButton &) {
 		addGameplayButtons();
 	});
 
-	m_menuWidget.addButton(0, 1, "Graphics...", [this] (TextButton &) {
-		m_menuWidget.reset(1, 8);
+	m_menuWidget.addButton("Graphics...", [this] (TextButton &) {
 		addGraphicsButtons();
 	});
 
-	m_menuWidget.addButton(0, 2, "Input...", [this] (TextButton &) {
-		m_menuWidget.reset(1, 8);
+	m_menuWidget.addButton("Input...", [this] (TextButton &) {
 		addInputButtons();
 	});
 
@@ -84,38 +84,40 @@ void SettingsMenuState::addMainButtons() {
 }
 
 void SettingsMenuState::addGameplayButtons() {
-	addToggleButton(0, 0, "Fly Mode", Config::isFlyModeEnabled, false);
-	addToggleButton(0, 1, "No Clip", Config::isNoClipEnabled, false);
+	m_menuWidget.reset(1, 8);
+
+	addToggleButton("Fly Mode", Config::isFlyModeEnabled, false);
+	addToggleButton("No Clip", Config::isNoClipEnabled, false);
 
 	m_doneButton.setCallback([this] (TextButton &) {
-		m_menuWidget.reset(1, 8);
 		addMainButtons();
 	});
 }
 
 void SettingsMenuState::addGraphicsButtons() {
-	m_menuWidget.addButton(0, 0, "Render Distance: " + std::to_string(Config::renderDistance), [] (TextButton &button) {
+	m_menuWidget.reset(1, 8);
+
+	m_menuWidget.addButton("Render Distance: " + std::to_string(Config::renderDistance), [] (TextButton &button) {
 		Config::renderDistance = std::max(4, (Config::renderDistance + 2) % 16);
 		button.setText("Render Distance: " + std::to_string(Config::renderDistance));
 		World::isReloadRequested = true;
 	});
 
-	addToggleButton(0, 1, "Smooth Lighting", Config::isSmoothLightingEnabled, true);
-	addToggleButton(0, 2, "Ambient Occlusion", Config::isAmbientOcclusionEnabled, true);
-	addToggleButton(0, 3, "Wireframe Mode", Config::isWireframeModeEnabled, false);
+	addToggleButton("Smooth Lighting", Config::isSmoothLightingEnabled, true);
+	addToggleButton("Ambient Occlusion", Config::isAmbientOcclusionEnabled, true);
+	addToggleButton("Wireframe Mode", Config::isWireframeModeEnabled, false);
 
-	m_menuWidget.addButton(0, 4, "GUI Scale: " + std::to_string(GUI_SCALE), [] (TextButton &button) {
+	m_menuWidget.addButton("GUI Scale: " + std::to_string(GUI_SCALE), [] (TextButton &button) {
 		GUI_SCALE = 1 + (GUI_SCALE + 1) % 3;
 		button.setText("GUI Scale: " + std::to_string(GUI_SCALE));
 		// FIXME: Fix decrease bug
 		//        Reload menus with new scaling
 	});
 
-	m_menuWidget.addButton(0, 5, "Fullscreen: OFF", [] (TextButton &) {}).setEnabled(false);
-	m_menuWidget.addButton(0, 6, "Use VSync: OFF", [] (TextButton &) {}).setEnabled(false);
+	m_menuWidget.addButton("Fullscreen: OFF", [] (TextButton &) {}).setEnabled(false);
+	m_menuWidget.addButton("Use VSync: OFF", [] (TextButton &) {}).setEnabled(false);
 
 	m_doneButton.setCallback([this] (TextButton &) {
-		m_menuWidget.reset(1, 8);
 		addMainButtons();
 	});
 }
@@ -123,22 +125,23 @@ void SettingsMenuState::addGraphicsButtons() {
 void SettingsMenuState::addInputButtons() {
 	std::vector<std::pair<u8, std::string>> keys = {
 		{GameKey::Up,        "Forward"},
-		{GameKey::Down,      "Back"},
 		{GameKey::Left,      "Left"},
+		{GameKey::Down,      "Back"},
 		{GameKey::Right,     "Right"},
 		{GameKey::Jump,      "Jump"},
 		{GameKey::Fly,       "Jetpack"},
-		// {GameKey::Sneak,     "Sneak"},
-		// {GameKey::Sprint,    "Sprint"},
+		{GameKey::Sneak,     "Sneak"},
+		{GameKey::Sprint,    "Sprint"},
 		// {GameKey::Dig,       "Dig"},
 		// {GameKey::Use,       "Use"},
 		{GameKey::Inventory, "Inventory"},
 	};
 
+	m_menuWidget.reset(2, 8);
+
 	KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
-	int i = 0;
 	for (auto &it : keys) {
-		m_menuWidget.addButton(0, i++, it.second + ": " + keyboardHandler->getKeyName(it.first), [this, it] (TextButton &button) {
+		m_menuWidget.addButton(it.second + ": " + keyboardHandler->getKeyName(it.first), [this, it] (TextButton &button) {
 			button.setText(it.second + ": ");
 			m_currentKey = it.first;
 			m_currentKeyButton = &button;
@@ -146,13 +149,12 @@ void SettingsMenuState::addInputButtons() {
 	}
 
 	m_doneButton.setCallback([this] (TextButton &) {
-		m_menuWidget.reset(1, 8);
 		addMainButtons();
 	});
 }
 
-void SettingsMenuState::addToggleButton(u16 x, u16 y, const std::string &text, bool &configOption, bool worldReloadRequested) {
-	m_menuWidget.addButton(x, y, text + ": " + (configOption ? "ON" : "OFF"), [=, &configOption] (TextButton &button) {
+void SettingsMenuState::addToggleButton(const std::string &text, bool &configOption, bool worldReloadRequested) {
+	m_menuWidget.addButton(text + ": " + (configOption ? "ON" : "OFF"), [=, &configOption] (TextButton &button) {
 		configOption = !configOption;
 		button.setText(text + ": " + (configOption ? "ON" : "OFF"));
 

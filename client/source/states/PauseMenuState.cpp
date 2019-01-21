@@ -36,9 +36,9 @@ PauseMenuState::PauseMenuState(gk::ApplicationState *parent) : ApplicationState(
 	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	m_menuWidget.setScale(GUI_SCALE, GUI_SCALE, 1);
-	m_menuWidget.addButton(0, 0, "Back to Game", [this] (TextButton &) { gk::Mouse::setCursorGrabbed(true); gk::Mouse::setCursorVisible(false); m_stateStack->pop(); });
-	m_menuWidget.addButton(0, 1, "Options...", [this] (TextButton &) { m_stateStack->push<SettingsMenuState>(m_parent); });
-	m_menuWidget.addButton(0, 2, "Exit", [this] (TextButton &) { while(!m_stateStack->empty()) m_stateStack->pop(); });
+	m_menuWidget.addButton("Back to Game", [this] (TextButton &) { gk::Mouse::setCursorGrabbed(true); gk::Mouse::setCursorVisible(false); m_stateStack->pop(); });
+	m_menuWidget.addButton("Options...", [this] (TextButton &) { m_stateStack->push<SettingsMenuState>(m_parent); });
+	m_menuWidget.addButton("Exit", [this] (TextButton &) { while(!m_stateStack->empty()) m_stateStack->pop(); });
 }
 
 void PauseMenuState::onEvent(const SDL_Event &event) {

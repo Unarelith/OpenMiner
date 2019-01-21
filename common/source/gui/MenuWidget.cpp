@@ -23,7 +23,7 @@ void MenuWidget::reset(u16 width, u16 height) {
 	m_height = height;
 
 	m_buttons.clear();
-	m_buttons.resize(m_width * m_height);
+	m_buttons.reserve(m_width * m_height);
 }
 
 void MenuWidget::onEvent(const SDL_Event &event) {
@@ -32,9 +32,11 @@ void MenuWidget::onEvent(const SDL_Event &event) {
 	}
 }
 
-TextButton &MenuWidget::addButton(u16 x, u16 y, const std::string &text, const TextButton::CppCallback &callback) {
-	TextButton &button = m_buttons.at(x + y);
-	button.setParent(this);
+TextButton &MenuWidget::addButton(const std::string &text, const TextButton::CppCallback &callback) {
+	int x = m_buttons.size() % m_width;
+	int y = m_buttons.size() / m_width;
+
+	TextButton &button = m_buttons.emplace_back(this);
 	button.setText(text);
 	button.setCallback(callback);
 	button.setPosition(SCREEN_WIDTH  / getScale().x / 2 - (m_width  * (button.width()  + s_horizontalSpacing) - s_horizontalSpacing) / 2 + x * (button.width() + s_horizontalSpacing),

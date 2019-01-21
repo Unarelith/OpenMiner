@@ -18,13 +18,14 @@
 
 class MenuWidget : public Widget {
 	public:
+		MenuWidget(Widget *parent = nullptr) : Widget(parent) {}
 		MenuWidget(u16 width, u16 height, Widget *parent = nullptr);
 
 		void reset(u16 width, u16 height);
 
 		void onEvent(const SDL_Event &event) override;
 
-		TextButton &addButton(u16 x, u16 y, const std::string &text, const TextButton::CppCallback &callback);
+		TextButton &addButton(const std::string &text, const TextButton::CppCallback &callback);
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
@@ -32,8 +33,8 @@ class MenuWidget : public Widget {
 		static constexpr u16 s_verticalSpacing = 5;
 		static constexpr u16 s_horizontalSpacing = 5;
 
-		u16 m_width;
-		u16 m_height;
+		u16 m_width = 1;
+		u16 m_height = 1;
 
 		std::vector<TextButton> m_buttons;
 };
