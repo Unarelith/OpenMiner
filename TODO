@@ -20,7 +20,7 @@ TODO
 
 # Refactorings
 
-• TODO: In `SettingsMenuState`, the “Done” button shouldn’t be part of the `Menu`
+• DONE: In `SettingsMenuState`, the “Done” button shouldn’t be part of the `Menu`
 • TODO: Remove the ability of `Chunk` and `ChunkLightmap` to access surrounding chunk blocks
 • TODO: `Chunk::setBlock` does way too much things, fix this
 • TODO: Add a mesh system, either here or in `GameKit`

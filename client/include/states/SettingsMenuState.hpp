@@ -16,6 +16,7 @@
 
 #include <gk/core/ApplicationState.hpp>
 #include <gk/gl/Shader.hpp>
+#include <gk/gl/View.hpp>
 #include <gk/graphics/RectangleShape.hpp>
 
 #include "GameKey.hpp"
@@ -39,13 +40,13 @@ class SettingsMenuState : public gk::ApplicationState {
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		MenuWidget m_menuWidget{1, 8};
-
 		gk::Shader m_shader;
-
-		glm::mat4 m_projectionMatrix;
+		gk::View m_view;
 
 		gk::RectangleShape m_background;
+
+		MenuWidget m_menuWidget{1, 8};
+		TextButton m_doneButton;
 
 		u8 m_currentKey = GameKey::Undefined;
 		TextButton *m_currentKeyButton = nullptr;

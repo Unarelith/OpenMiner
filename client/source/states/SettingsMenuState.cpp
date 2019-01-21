@@ -30,18 +30,24 @@ SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : Application
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
 	m_shader.linkProgram();
 
-	m_projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
+	m_view.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	m_view.setCenter(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 
 	m_background.setColor(gk::Color{0, 0, 0, 127});
 	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	m_menuWidget.setScale(GUI_SCALE, GUI_SCALE, 1);
 
+	m_doneButton.setPosition(SCREEN_WIDTH / 2 - m_doneButton.getGlobalBounds().width * GUI_SCALE / 2, SCREEN_HEIGHT - 291);
+	m_doneButton.setScale(GUI_SCALE, GUI_SCALE, 1);
+	m_doneButton.setText("Done");
+
 	addMainButtons();
 }
 
 void SettingsMenuState::onEvent(const SDL_Event &event) {
 	m_menuWidget.onEvent(event);
+	m_doneButton.onEvent(event);
 
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 		m_stateStack->pop();
@@ -74,14 +80,14 @@ void SettingsMenuState::addMainButtons() {
 		addInputButtons();
 	});
 
-	m_menuWidget.addButton(0, 7, "Done", [this] (TextButton &) { m_stateStack->pop(); });
+	m_doneButton.setCallback([this] (TextButton &) { m_stateStack->pop(); });
 }
 
 void SettingsMenuState::addGameplayButtons() {
 	addToggleButton(0, 0, "Fly Mode", Config::isFlyModeEnabled, false);
 	addToggleButton(0, 1, "No Clip", Config::isNoClipEnabled, false);
 
-	m_menuWidget.addButton(0, 7, "Done", [this] (TextButton &) {
+	m_doneButton.setCallback([this] (TextButton &) {
 		m_menuWidget.reset(1, 8);
 		addMainButtons();
 	});
@@ -108,7 +114,7 @@ void SettingsMenuState::addGraphicsButtons() {
 	m_menuWidget.addButton(0, 5, "Fullscreen: OFF", [] (TextButton &) {}).setEnabled(false);
 	m_menuWidget.addButton(0, 6, "Use VSync: OFF", [] (TextButton &) {}).setEnabled(false);
 
-	m_menuWidget.addButton(0, 7, "Done", [this] (TextButton &) {
+	m_doneButton.setCallback([this] (TextButton &) {
 		m_menuWidget.reset(1, 8);
 		addMainButtons();
 	});
@@ -139,7 +145,7 @@ void SettingsMenuState::addInputButtons() {
 		});
 	}
 
-	m_menuWidget.addButton(0, 7, "Done", [this] (TextButton &) {
+	m_doneButton.setCallback([this] (TextButton &) {
 		m_menuWidget.reset(1, 8);
 		addMainButtons();
 	});
@@ -159,14 +165,19 @@ void SettingsMenuState::draw(gk::RenderTarget &target, gk::RenderStates states) 
 	if (m_parent)
 		target.draw(*m_parent, states);
 
-	states.transform *= getTransform();
+	// states.transform *= getTransform();
 
-	states.projectionMatrix = m_projectionMatrix;
+	// states.projectionMatrix = m_projectionMatrix;
 
 	states.shader = &m_shader;
 	states.vertexAttributes = gk::VertexAttribute::Only2d;
 
+	target.setView(m_view);
+
 	target.draw(m_background, states);
 	target.draw(m_menuWidget, states);
+	target.draw(m_doneButton, states);
+
+	target.disableView();
 }
 
