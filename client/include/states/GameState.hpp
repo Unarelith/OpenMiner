@@ -29,7 +29,7 @@
 
 class GameState : public gk::ApplicationState {
 	public:
-		GameState(Client &client, int port = 4242);
+		GameState(Client &client, const std::string &host = "localhost", int port = 4242);
 
 		void onEvent(const SDL_Event &event) override;
 

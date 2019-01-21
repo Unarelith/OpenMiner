@@ -27,10 +27,13 @@ ClientApplication::ClientApplication(int argc, char **argv) : gk::CoreApplicatio
 }
 
 void ClientApplication::init() {
+	m_argumentParser.addArgument("host", {"-h", "--host", true});
 	m_argumentParser.addArgument("port", {"-p", "--port", true});
 
 	gk::CoreApplication::init();
 
+	if (m_argumentParser.getArgument("host").isFound)
+		m_host = m_argumentParser.getArgument("host").parameter;
 	if (m_argumentParser.getArgument("port").isFound)
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
 
@@ -50,7 +53,7 @@ void ClientApplication::init() {
 
 	Registry::setInstance(m_registry);
 
-	m_stateStack.push<GameState>(m_client, m_port);
+	m_stateStack.push<GameState>(m_client, m_host, m_port);
 	// m_stateStack.push<ServerLoadingState>(m_client);
 }
 

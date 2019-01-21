@@ -29,12 +29,12 @@
 #include "PlayerInventoryWidget.hpp"
 #include "Registry.hpp"
 
-GameState::GameState(Client &client, int port) : m_client(client) {
+GameState::GameState(Client &client, const std::string &host, int port) : m_client(client) {
 	m_camera.setAspectRatio((float)SCREEN_WIDTH / SCREEN_HEIGHT);
 
 	initShaders();
 
-	m_client.connect("localhost", port);
+	m_client.connect(host, port);
 
 	m_client.setCommandCallback(Network::Command::RegistryData, [this](sf::Packet &packet) {
 		Registry::getInstance().deserialize(packet);

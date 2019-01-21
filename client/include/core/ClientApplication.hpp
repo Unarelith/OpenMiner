@@ -34,6 +34,8 @@ class ClientApplication : public gk::CoreApplication {
 		Registry m_registry;
 
 		Client m_client;
+
+		std::string m_host = "localhost";
 		int m_port = 4242;
 };
 
