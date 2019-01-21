@@ -16,15 +16,16 @@
 using namespace std::literals::string_literals;
 
 ServerApplication::ServerApplication(int argc, char **argv) : gk::CoreApplication(argc, argv) {
-	if (argc == 3 && argv[1] == "--port"s) {
-		m_port = std::stoi(argv[2]);
-	}
-
 	m_loadSDL = false;
 }
 
 void ServerApplication::init() {
+	m_argumentParser.addArgument("port", {"-p", "--port", true});
+
 	gk::CoreApplication::init();
+
+	if (m_argumentParser.getArgument("port").isFound)
+		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
 
 	Registry::setInstance(m_registry);
 

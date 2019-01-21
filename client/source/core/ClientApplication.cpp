@@ -24,13 +24,15 @@
 using namespace std::literals::string_literals;
 
 ClientApplication::ClientApplication(int argc, char **argv) : gk::CoreApplication(argc, argv) {
-	if (argc == 3 && argv[1] == "--port"s) {
-		m_port = std::stoi(argv[2]);
-	}
 }
 
 void ClientApplication::init() {
+	m_argumentParser.addArgument("port", {"-p", "--port", true});
+
 	gk::CoreApplication::init();
+
+	if (m_argumentParser.getArgument("port").isFound)
+		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
 
 	gk::GamePad::init(m_keyboardHandler);
 
