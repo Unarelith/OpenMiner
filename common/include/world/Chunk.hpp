@@ -62,6 +62,7 @@ class Chunk : public gk::NonCopyable {
 		const Chunk *getSurroundingChunk(u8 i) const { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
 		void setSurroundingChunk(u8 i, Chunk *chunk) { if (i < 6) m_surroundingChunks[i] = chunk; }
 
+		bool hasChanged() const { return m_hasChanged; }
 		bool isInitialized() const { return m_isInitialized; }
 
 		void setChanged(bool hasChanged) { m_hasChanged = hasChanged; }

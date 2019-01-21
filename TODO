@@ -3,10 +3,6 @@ TODO
 # General
 
 • TODO: Use Faithful 32x for buttons, backgrounds and font (or use Minecraftia for the latter)
-• TODO: Add updated screenshots
-   ◦ TODO: Nice view of the map with AO
-   ◦ TODO: Light in dark areas without AO
-   ◦ TODO: Furnace
 
 # Issues
 
@@ -24,6 +20,7 @@ TODO
 
 # Refactorings
 
+• TODO: In `SettingsMenuState`, the “Done” button shouldn’t be part of the `Menu`
 • TODO: Remove the ability of `Chunk` and `ChunkLightmap` to access surrounding chunk blocks
 • TODO: `Chunk::setBlock` does way too much things, fix this
 • TODO: Add a mesh system, either here or in `GameKit`
@@ -48,7 +45,7 @@ TODO
    ◦ DONE: `FurnaceWidget` first
    ◦ TODO: Then its components
 
-# Main menu
+# Menus
 
 • TODO: Main menu
 • TODO: World loading/saving

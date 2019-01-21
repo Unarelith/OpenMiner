@@ -13,7 +13,7 @@
  */
 #include "Config.hpp"
 #include "Network.hpp"
-#include "ServerInfo.hpp"
+#include "Server.hpp"
 #include "ServerWorld.hpp"
 
 ServerWorld::ServerWorld() {
@@ -42,9 +42,16 @@ ServerWorld::ServerWorld() {
 	}
 }
 
-void ServerWorld::update() {
+void ServerWorld::update(Server &server) {
 	for (auto &it : m_chunks) {
 		it->update();
+
+		if (it->isGenerated() && !it->isSent()) {
+			for (auto &client : server.info().clients())
+				sendChunkData(client, it.get());
+			// DEBUG("Chunk updated at", it->x(), it->y(), it->z());
+			it->setSent(true);
+		}
 	}
 }
 
@@ -75,6 +82,7 @@ void ServerWorld::sendChunkData(Client &client, ServerChunk *chunk) {
 	}
 
 	client.tcpSocket->send(packet);
+	chunk->setSent(true);
 
 	// std::cout << "Chunk at (" << chunk->x() << "," << chunk->y() << ", " << chunk->z() << ") sent to client" << std::endl;
 }

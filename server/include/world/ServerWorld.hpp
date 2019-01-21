@@ -20,12 +20,13 @@
 #include "ServerChunk.hpp"
 
 struct Client;
+class Server;
 
 class ServerWorld {
 	public:
 		ServerWorld();
 
-		void update();
+		void update(Server &server);
 
 		void sendWorldData(Client &client);
 		void sendChunkData(Client &client, ServerChunk *chunk);

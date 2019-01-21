@@ -93,7 +93,7 @@ void ServerApplication::mainLoop() {
 		m_server.handleKeyState();
 
 		m_clock.updateGame([&] {
-			m_world.update();
+			m_world.update(m_server);
 		});
 
 		m_clock.waitForNextFrame();

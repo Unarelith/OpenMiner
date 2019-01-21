@@ -30,6 +30,8 @@ void ServerChunk::update() {
 
 	if (m_hasChanged) {
 		m_lightmap.updateLights();
+		m_hasChanged = false;
+		m_isSent = false;
 	}
 }
 
