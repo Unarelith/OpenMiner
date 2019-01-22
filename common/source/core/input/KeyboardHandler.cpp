@@ -26,9 +26,9 @@ KeyboardHandler::KeyboardHandler() {
 	// Reading keys from names as defined here: https://wiki.libsdl.org/SDL_Keycode
 	auto addKey = [&](gk::GameKey key, const char *name) {
 		tinyxml2::XMLElement *keyElement = keys->FirstChildElement(name);
-		m_keys[key] = SDL_GetKeyFromName(keyElement->Attribute("key"));
+		m_keys[key] = SDL_GetScancodeFromName(keyElement->Attribute("key"));
 
-		if(m_keys[key] == SDLK_UNKNOWN) {
+		if(m_keys[key] == SDL_SCANCODE_UNKNOWN) {
 			DEBUG("Key '", keyElement->Attribute("key"), "' not recognized");
 		}
 
@@ -53,7 +53,7 @@ KeyboardHandler::KeyboardHandler() {
 
 bool KeyboardHandler::isKeyPressed(gk::GameKey key) {
 	const u8 *keyboardState = SDL_GetKeyboardState(nullptr);
-	SDL_Scancode keyScancode = SDL_GetScancodeFromKey(m_keys[key]);
+	SDL_Scancode keyScancode = m_keys[key];
 
 	m_keysPressed[key] = keyboardState[keyScancode];
 

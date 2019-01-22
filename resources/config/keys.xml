@@ -1,8 +1,8 @@
 <!-- Key names are defined here: https://wiki.libsdl.org/SDL_Keycode -->
 <keys>
-	<Left      key="Q"/>
+	<Left      key="A"/>
 	<Right     key="D"/>
-	<Up        key="Z"/>
+	<Up        key="W"/>
 	<Down      key="S"/>
 
 	<Jump      key="Space"/>
