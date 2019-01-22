@@ -19,6 +19,7 @@
 
 #include "BlockCursor.hpp"
 #include "Client.hpp"
+#include "ClientPlayer.hpp"
 #include "Config.hpp"
 #include "Hotbar.hpp"
 #include "Registry.hpp"
@@ -136,6 +137,11 @@ void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
 		       << s32(m_selectedBlock.y)
 		       << s32(m_selectedBlock.z);
 		m_client.send(packet);
+
+		sf::Packet invPacket;
+		invPacket << Network::Command::PlayerInvUpdate;
+		m_player.serialize(invPacket);
+		m_client.send(invPacket);
 	}
 
 	if (m_selectedBlock.w != -1)

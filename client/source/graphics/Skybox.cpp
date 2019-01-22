@@ -17,8 +17,8 @@
 
 #include <gk/gl/Vertex.hpp>
 
+#include "ClientPlayer.hpp"
 #include "Config.hpp"
-#include "Player.hpp"
 #include "Skybox.hpp"
 #include "World.hpp"
 
@@ -84,7 +84,7 @@ Skybox::Skybox() {
 	gk::VertexBuffer::bind(nullptr);
 }
 
-void Skybox::update(Player &player) {
+void Skybox::update(ClientPlayer &player) {
 	m_playerPosition = {player.x(), player.y(), player.z()};
 }
 

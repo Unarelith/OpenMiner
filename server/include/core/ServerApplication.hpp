@@ -20,6 +20,7 @@
 #include "Registry.hpp"
 #include "ScriptEngine.hpp"
 #include "Server.hpp"
+#include "ServerPlayer.hpp"
 #include "ServerWorld.hpp"
 
 class ServerApplication : public gk::CoreApplication {
@@ -33,6 +34,7 @@ class ServerApplication : public gk::CoreApplication {
 
 		Server m_server;
 		ServerWorld m_world;
+		ServerPlayer m_player;
 
 		ScriptEngine m_scriptEngine;
 		LuaCore m_luaCore;

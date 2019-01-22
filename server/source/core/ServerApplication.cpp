@@ -30,7 +30,7 @@ void ServerApplication::init() {
 	Registry::setInstance(m_registry);
 
 	m_scriptEngine.init();
-	// m_luaCore.setPlayer(m_player);
+	m_luaCore.setPlayer(m_player);
 	// m_luaCore.setWorld(m_world);
 
 	try {
@@ -51,12 +51,17 @@ void ServerApplication::init() {
 		m_registry.serialize(packet);
 		client.tcpSocket->send(packet);
 
+		sf::Packet invPacket;
+		invPacket << Network::Command::PlayerInvUpdate;
+		m_player.serialize(invPacket);
+		client.tcpSocket->send(invPacket);
+
 		m_world.sendWorldData(client);
 	});
 
-	// m_server.setCommandCallback(Network::Command::ClientSettings, [](sf::Packet &packet) {
-	// 	packet >> Config::renderDistance;
-	// });
+	m_server.setCommandCallback(Network::Command::PlayerInvUpdate, [this](Client &, sf::Packet &packet) {
+		m_player.deserialize(packet);
+	});
 
 	m_server.setCommandCallback(Network::Command::ChunkRequest, [this](Client &client, sf::Packet &packet) {
 		s32 cx, cy, cz;

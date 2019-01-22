@@ -1,7 +1,7 @@
 /*
  * =====================================================================================
  *
- *       Filename:  Player.hpp
+ *       Filename:  ClientPlayer.hpp
  *
  *    Description:
  *
@@ -11,8 +11,8 @@
  *
  * =====================================================================================
  */
-#ifndef PLAYER_HPP_
-#define PLAYER_HPP_
+#ifndef CLIENTPLAYER_HPP_
+#define CLIENTPLAYER_HPP_
 
 #include <cmath>
 
@@ -20,7 +20,7 @@
 
 #include <gk/gl/Camera.hpp>
 
-#include "Inventory.hpp"
+#include "Player.hpp"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -32,9 +32,9 @@
 
 class ClientWorld;
 
-class Player {
+class ClientPlayer : public Player {
 	public:
-		Player(gk::Camera &camera);
+		ClientPlayer(gk::Camera &camera);
 
 		void turnH(float angle);
 		void turnV(float angle);
@@ -50,21 +50,19 @@ class Player {
 		float pointTargetedY() const { return m_y + sin(m_angleV * RADIANS_PER_DEGREES); }
 		float pointTargetedZ() const { return m_z + sin(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES) - 0.00001; }
 
-		static Player &getInstance() { return *s_instance; }
-		static void setInstance(Player *instance) { s_instance = instance; }
+		static ClientPlayer &getInstance() { return *s_instance; }
+		static void setInstance(ClientPlayer *instance) { s_instance = instance; }
 
 		float x() const { return m_x; }
 		float y() const { return m_y; }
 		float z() const { return m_z; }
-
-		Inventory &inventory() { return m_inventory; }
 
 		const gk::Camera &camera() { return m_camera; }
 
 	private:
 		void testPoint(const ClientWorld &world, glm::vec3 pos, glm::vec3 &speed);
 
-		static Player *s_instance;
+		static ClientPlayer *s_instance;
 
 		gk::Camera &m_camera;
 
@@ -80,8 +78,6 @@ class Player {
 
 		const float m_gravity = 0.001;
 		const float m_jumpSpeed = 0.06f;
-
-		Inventory m_inventory{9, 4};
 };
 
-#endif // PLAYER_HPP_
+#endif // CLIENTPLAYER_HPP_

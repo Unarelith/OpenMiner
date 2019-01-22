@@ -18,10 +18,6 @@
 
 #include <sol.hpp>
 
-class Chunk;
-class Player;
-class World;
-
 class ScriptEngine {
 	public:
 		void init();

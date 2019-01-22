@@ -16,7 +16,8 @@
 #include "LuaMod.hpp"
 #include "Registry.hpp"
 #include "ScriptEngine.hpp"
-#include "World.hpp"
+#include "ServerPlayer.hpp"
+#include "ServerWorld.hpp"
 
 ScriptEngine *ScriptEngine::s_instance = nullptr;
 
@@ -38,31 +39,31 @@ void ScriptEngine::init() {
 }
 
 void ScriptEngine::initUsertypes() {
-	// m_lua.new_usertype<Registry>("Registry",
-	// 	"get_recipe", &Registry::getRecipe
-	// );
+	m_lua.new_usertype<Registry>("Registry",
+		"get_recipe", &Registry::getRecipe
+	);
 
-	// m_lua.new_usertype<World>("World",
-	// 	"get_block", &World::getBlock,
-	// 	"get_data", &World::getData,
-	// 	"set_data", &World::setData,
-	// 	"get_block_data", &World::getBlockData
-	// );
+	m_lua.new_usertype<ServerWorld>("World",
+		"get_block", &ServerWorld::getBlock
+		// "get_data", &ServerWorld::getData,
+		// "set_data", &ServerWorld::setData,
+		// "get_block_data", &ServerWorld::getBlockData
+	);
 
-	// m_lua.new_usertype<Chunk>("Chunk",
-	// 	"get_block", &Chunk::getBlock,
-	// 	"get_data", &Chunk::getData,
-	// 	"get_block_data", &Chunk::getBlockData
-	// );
+	m_lua.new_usertype<ServerChunk>("Chunk",
+		"get_block", &Chunk::getBlock,
+		"get_data", &Chunk::getData
+		// "get_block_data", &Chunk::getBlockData
+	);
 
-	// m_lua.new_usertype<BlockData>("BlockData",
-	// 	"inventory", &BlockData::inventory,
-	// 	"data", &BlockData::data
-	// );
+	m_lua.new_usertype<BlockData>("BlockData",
+		"inventory", &BlockData::inventory,
+		"data", &BlockData::data
+	);
 
-	// m_lua.new_usertype<Player>("Player",
-	// 	"inventory", &Player::inventory
-	// );
+	m_lua.new_usertype<ServerPlayer>("Player",
+		"inventory", &ServerPlayer::inventory
+	);
 
 	m_lua.new_usertype<Inventory>("Inventory",
 		"add_stack", &Inventory::addStack,

@@ -16,18 +16,18 @@
 
 #include "Text.hpp"
 
-class Player;
+class ClientPlayer;
 
 class DebugOverlay : public gk::Transformable, public gk::IDrawable {
 	public:
-		DebugOverlay(const Player &player);
+		DebugOverlay(const ClientPlayer &player);
 
 		void update();
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		const Player &m_player;
+		const ClientPlayer &m_player;
 
 		Text m_versionText;
 		Text m_positionText;

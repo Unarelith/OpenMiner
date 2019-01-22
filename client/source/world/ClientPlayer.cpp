@@ -1,7 +1,7 @@
 /*
  * =====================================================================================
  *
- *       Filename:  Player.cpp
+ *       Filename:  ClientPlayer.cpp
  *
  *    Description:
  *
@@ -19,11 +19,11 @@
 #include "BlockType.hpp"
 #include "ClientWorld.hpp"
 #include "GameKey.hpp"
-#include "Player.hpp"
+#include "ClientPlayer.hpp"
 
-Player *Player::s_instance = nullptr;
+ClientPlayer *ClientPlayer::s_instance = nullptr;
 
-Player::Player(gk::Camera &camera) : m_camera(camera) {
+ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
 	m_x = 0;
 	m_y = 18;
 	m_z = 20;
@@ -35,7 +35,7 @@ Player::Player(gk::Camera &camera) : m_camera(camera) {
 	m_camera.setTargetPosition(pointTargetedX(), pointTargetedY(), pointTargetedZ());
 }
 
-void Player::turnH(float angle) {
+void ClientPlayer::turnH(float angle) {
 	m_angleH += angle;
 
 	while(m_angleH >= 180.0f) {
@@ -48,7 +48,7 @@ void Player::turnH(float angle) {
 	m_camera.setTargetPosition(pointTargetedX(), pointTargetedY(), pointTargetedZ());
 }
 
-void Player::turnV(float angle) {
+void ClientPlayer::turnV(float angle) {
 	m_angleV += angle;
 
 	if(89.9f < m_angleV) {
@@ -61,14 +61,14 @@ void Player::turnV(float angle) {
 	m_camera.setTargetPosition(pointTargetedX(), pointTargetedY(), pointTargetedZ());
 }
 
-void Player::move(float direction) {
+void ClientPlayer::move(float direction) {
 	direction += m_angleH;
 
 	m_velocity.x = 0.04f * cos(direction * RADIANS_PER_DEGREES);
 	m_velocity.z = 0.04f * sin(direction * RADIANS_PER_DEGREES);
 }
 
-void Player::processInputs() {
+void ClientPlayer::processInputs() {
 	if(gk::GamePad::isKeyPressed(GameKey::Jump) && !m_isJumping) {
 		m_isJumping = true;
 		m_velocity.y = m_jumpSpeed;
@@ -99,7 +99,7 @@ void Player::processInputs() {
 	}
 }
 
-void Player::updatePosition(const ClientWorld &world) {
+void ClientPlayer::updatePosition(const ClientWorld &world) {
 	if (!Config::isFlyModeEnabled) {
 		m_velocity.y -= m_gravity; // Gravity
 
@@ -127,14 +127,14 @@ void Player::updatePosition(const ClientWorld &world) {
 }
 
 // FIXME: Use AABB for more precision
-void Player::checkCollisions(const ClientWorld &world) {
-	const float PLAYER_HEIGHT = 1.8;
-	float eyeheight = m_y + PLAYER_HEIGHT - 1.4;
+void ClientPlayer::checkCollisions(const ClientWorld &world) {
+	const float CLIENTPLAYER_HEIGHT = 1.8;
+	float eyeheight = m_y + CLIENTPLAYER_HEIGHT - 1.4;
 	// testPoint(world, glm::vec3(m_x, m_y, m_z), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - CLIENTPLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - CLIENTPLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - CLIENTPLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - CLIENTPLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
 	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - 0.4, m_z - 0.2), m_velocity);
 	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - 0.4, m_z - 0.2), m_velocity);
 	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - 0.4, m_z + 0.2), m_velocity);
@@ -146,7 +146,7 @@ bool passable(const ClientWorld &world, float x, float y, float z) {
 	return !block || block == 8 || block == BlockType::Flower;
 }
 
-void Player::testPoint(const ClientWorld &world, glm::vec3 pos, glm::vec3 &speed) {
+void ClientPlayer::testPoint(const ClientWorld &world, glm::vec3 pos, glm::vec3 &speed) {
 	// FIXME: Temporary fix, find the real problem!!!
 	if (pos.x < 0) --pos.x;
 	if (pos.y < 1) --pos.y;

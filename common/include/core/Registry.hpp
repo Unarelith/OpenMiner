@@ -25,7 +25,7 @@
 
 struct Client;
 
-class Registry {
+class Registry : public ISerializable {
 	public:
 		Block &registerBlock(u32 textureID, const std::string &id, const std::string &name);
 		Item &registerItem(u32 textureID, const std::string &id, const std::string &name);
@@ -43,8 +43,8 @@ class Registry {
 
 		const Recipe *getRecipe(const Inventory &inventory) const;
 
-		void serialize(sf::Packet &packet);
-		void deserialize(sf::Packet &packet);
+		void serialize(sf::Packet &packet) override;
+		void deserialize(sf::Packet &packet) override;
 
 		static Registry &getInstance() { return *s_instance; }
 		static void setInstance(Registry &instance) { s_instance = &instance; }

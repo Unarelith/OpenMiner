@@ -13,11 +13,11 @@
  */
 #include <sstream>
 
+#include "ClientPlayer.hpp"
 #include "Config.hpp"
 #include "DebugOverlay.hpp"
-#include "Player.hpp"
 
-DebugOverlay::DebugOverlay(const Player &player) : m_player(player) {
+DebugOverlay::DebugOverlay(const ClientPlayer &player) : m_player(player) {
 	setPosition(4, 4, 0);
 
 	m_versionText.setText(APP_NAME + std::string(" v0.0.1"));

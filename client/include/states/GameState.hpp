@@ -21,10 +21,10 @@
 
 #include "Client.hpp"
 #include "ClientChunk.hpp"
+#include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "Config.hpp"
 #include "HUD.hpp"
-#include "Player.hpp"
 #include "Skybox.hpp"
 
 class GameState : public gk::ApplicationState {
@@ -45,7 +45,7 @@ class GameState : public gk::ApplicationState {
 		Skybox m_skybox;
 
 		gk::Camera m_camera{FOV, DIST_NEAR, DIST_FAR};
-		Player m_player{m_camera};
+		ClientPlayer m_player{m_camera};
 
 		Client &m_client;
 

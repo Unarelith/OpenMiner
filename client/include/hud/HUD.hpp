@@ -24,7 +24,7 @@
 
 class HUD : public gk::Transformable, public gk::IDrawable {
 	public:
-		HUD(Player &player, ClientWorld &world, Client &client);
+		HUD(ClientPlayer &player, ClientWorld &world, Client &client);
 
 		void onEvent(const SDL_Event &event);
 

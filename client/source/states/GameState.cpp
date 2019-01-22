@@ -52,6 +52,10 @@ GameState::GameState(Client &client, const std::string &host, int port) : m_clie
 		m_world.setBlock(x, y, z, block);
 	});
 
+	m_client.setCommandCallback(Network::Command::PlayerInvUpdate, [this](sf::Packet &packet) {
+		m_player.deserialize(packet);
+	});
+
 	// sf::Packet packet;
 	// packet << Network::Command::ClientSettings;
 	// packet << Config::renderDistance;

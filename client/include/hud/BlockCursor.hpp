@@ -18,14 +18,14 @@
 
 #include "ClientWorld.hpp"
 #include "Inventory.hpp"
-#include "Player.hpp"
 
 class Client;
+class ClientPlayer;
 class Hotbar;
 
 class BlockCursor : public gk::IDrawable {
 	public:
-		BlockCursor(Player &player, ClientWorld &world, Client &client)
+		BlockCursor(ClientPlayer &player, ClientWorld &world, Client &client)
 			: m_player(player), m_world(world), m_client(client) {}
 
 		void onEvent(const SDL_Event &event, const Hotbar &hotbar);
@@ -43,7 +43,7 @@ class BlockCursor : public gk::IDrawable {
 		float fract(float value) const;
 		glm::vec4 findSelectedBlock(bool useDepthBuffer) const;
 
-		Player &m_player;
+		ClientPlayer &m_player;
 		ClientWorld &m_world;
 		Client &m_client;
 

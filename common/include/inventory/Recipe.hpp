@@ -15,18 +15,16 @@
 #define RECIPE_HPP_
 
 #include "Inventory.hpp"
+#include "ISerializable.hpp"
 
 namespace sf { class Packet; }
 
-class Recipe {
+class Recipe : public ISerializable {
 	public:
 		Recipe(const std::string &type, const ItemStack &result = {}) : m_type(type), m_result(result) {}
 		virtual ~Recipe() = default;
 
 		virtual bool isMatching(const Inventory &inventory) const = 0;
-
-		virtual void serialize(sf::Packet &packet) = 0;
-		virtual void deserialize(sf::Packet &packet) = 0;
 
 		const std::string &type() const { return m_type; }
 

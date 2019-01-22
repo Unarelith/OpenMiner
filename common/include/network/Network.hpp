@@ -34,6 +34,7 @@ namespace Network {
 		// Player commands
 		PlayerPlaceBlock,  // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Client only)
 		PlayerDigBlock,    // <TCP> [NetworkCommand][s32 x, y, z]            (from Client only)
+		PlayerInvUpdate,   // <TCP> [NetworkCommand][[std::string item][u16 amount][u8 x][u8 y]...] (from Client only) [FIXME]
 
 		// Block commands
 		BlockUpdate,       // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Server only)

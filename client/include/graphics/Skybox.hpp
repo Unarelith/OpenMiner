@@ -17,13 +17,13 @@
 #include <gk/gl/IDrawable.hpp>
 #include <gk/gl/VertexBuffer.hpp>
 
-class Player;
+class ClientPlayer;
 
 class Skybox : public gk::IDrawable {
 	public:
 		Skybox();
 
-		void update(Player &player);
+		void update(ClientPlayer &player);
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;

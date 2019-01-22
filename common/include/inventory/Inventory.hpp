@@ -31,6 +31,8 @@ class Inventory {
 		u16 width() const { return m_width; }
 		u16 height() const { return m_height; }
 
+		const std::vector<ItemStack> &items() const { return m_items; }
+
 	private:
 		u16 m_width = 0;
 		u16 m_height = 0;

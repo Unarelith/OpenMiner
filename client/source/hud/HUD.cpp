@@ -13,10 +13,11 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "ClientPlayer.hpp"
 #include "Config.hpp"
 #include "HUD.hpp"
 
-HUD::HUD(Player &player, ClientWorld &world, Client &client)
+HUD::HUD(ClientPlayer &player, ClientWorld &world, Client &client)
 	: m_client(client),
 	m_hotbar(player.inventory()),
 	m_blockCursor(player, world, client),
