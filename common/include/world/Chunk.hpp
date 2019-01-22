@@ -19,7 +19,6 @@
 #include <vector>
 
 #include <gk/core/Vector3.hpp>
-#include <gk/gl/IDrawable.hpp>
 #include <gk/gl/Shader.hpp>
 #include <gk/gl/VertexBuffer.hpp>
 #include <gk/utils/NonCopyable.hpp>

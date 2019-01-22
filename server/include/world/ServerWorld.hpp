@@ -18,11 +18,12 @@
 #include <vector>
 
 #include "ServerChunk.hpp"
+#include "World.hpp"
 
 struct Client;
 class Server;
 
-class ServerWorld {
+class ServerWorld : public World {
 	public:
 		ServerWorld();
 
@@ -39,11 +40,6 @@ class ServerWorld {
 		void setBlock(int x, int y, int z, u16 id);
 
 	private:
-		// FIXME: Duplicated with those in ClientWorld
-		const s32 m_width = 64;
-		const s32 m_height = 4;
-		const s32 m_depth = 64;
-
 		std::vector<std::unique_ptr<ServerChunk>> m_chunks;
 };
 

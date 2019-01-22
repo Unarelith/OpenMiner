@@ -18,10 +18,11 @@
 
 #include "ClientChunk.hpp"
 #include "Network.hpp"
+#include "World.hpp"
 
 class Client;
 
-class ClientWorld : public gk::IDrawable {
+class ClientWorld : public World, public gk::IDrawable {
 	public:
 		ClientWorld(Client &client);
 
@@ -37,11 +38,6 @@ class ClientWorld : public gk::IDrawable {
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		// FIXME: Duplicated with those in ServerWorld
-		const s32 m_width = 64;
-		const s32 m_height = 4;
-		const s32 m_depth = 64;
 
 		std::vector<std::unique_ptr<ClientChunk>> m_chunks;
 

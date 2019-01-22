@@ -16,20 +16,18 @@
 
 #include <memory>
 
-#include <gk/gl/IDrawable.hpp>
-
 #include "Chunk.hpp"
 
-class World : public gk::IDrawable {
+class World {
 	public:
 		BlockData *getBlockData(int x, int y, int z);
 
 		static bool isReloadRequested;
 
-	private:
-		const s32 m_width = 32;
+	protected:
+		const s32 m_width = 64;
 		const s32 m_height = 4;
-		const s32 m_depth = 32;
+		const s32 m_depth = 64;
 };
 
 #endif // WORLD_HPP_

@@ -34,10 +34,11 @@ namespace Network {
 		// Player commands
 		PlayerPlaceBlock,  // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Client only)
 		PlayerDigBlock,    // <TCP> [NetworkCommand][s32 x, y, z]            (from Client only)
-		PlayerInvUpdate,   // <TCP> [NetworkCommand][[std::string item][u16 amount][u8 x][u8 y]...] (from Client only) [FIXME]
+		PlayerInvUpdate,   // <TCP> [NetworkCommand][[std::string item][u16 amount][u8 x][u8 y]...] (both) [FIXME]
 
 		// Block commands
 		BlockUpdate,       // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Server only)
+		BlockActivated,    // <TCP> [NetworkCommand][s32 x, y, z]            (from Client only)
 
 		// Registry commands
 		RegistryData,      // <TCP> [NetworkCommand][Block block]            (from Server only)
