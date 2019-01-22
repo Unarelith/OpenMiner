@@ -72,7 +72,15 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 			const Block &block = Registry::getInstance().getBlock(blockId);
 			const Item &item = Registry::getInstance().getItem(hotbar.currentItem());
 
-			// FIXME
+			if (block.id()) {
+				sf::Packet packet;
+				packet << Network::Command::BlockActivated << s32(m_selectedBlock.x) << s32(m_selectedBlock.y) << s32(m_selectedBlock.z);
+				m_client.send(packet);
+			}
+
+			// FIXME: Check if this block has a callback
+			//        ServerBlock should contain onBlockActivated
+			//        Block should contain hasBlockActivatedCallback
 			if (block.id()// && !block.onBlockActivated({m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z}, m_player, m_world)
 			    && hotbar.currentItem() && item.isBlock()) {
 				s8 face = m_selectedBlock.w;

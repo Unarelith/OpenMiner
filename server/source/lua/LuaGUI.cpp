@@ -127,6 +127,8 @@ void LuaGUI::addFurnaceWidget(const sol::table &table) {
 }
 
 void LuaGUI::show() {
+	// TODO: Send BlockGUIData packet, containing all the data stored in this class
+
 	// auto &stateStack = gk::ApplicationStateStack::getInstance();
 	// stateStack.push<LuaGUIState>(*this, &stateStack.top());
 }

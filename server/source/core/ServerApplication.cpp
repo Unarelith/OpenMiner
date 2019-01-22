@@ -51,6 +51,8 @@ void ServerApplication::init() {
 		m_registry.serialize(packet);
 		client.tcpSocket->send(packet);
 
+		m_player.inventory().addStack("default:workbench");
+
 		sf::Packet invPacket;
 		invPacket << Network::Command::PlayerInvUpdate;
 		m_player.serialize(invPacket);
@@ -89,6 +91,14 @@ void ServerApplication::init() {
 		sf::Packet answer;
 		answer << Network::Command::BlockUpdate << x << y << z << u32(0);
 		m_server.sendToAllClients(answer);
+	});
+
+	m_server.setCommandCallback(Network::Command::BlockActivated, [this](Client &, sf::Packet &packet) {
+		s32 x, y, z;
+		packet >> x >> y >> z;
+
+		u16 id = m_world.getBlock(x, y, z);
+		m_registry.getBlock(id).onBlockActivated({x, y, z}, m_player, m_world);
 	});
 }
 
