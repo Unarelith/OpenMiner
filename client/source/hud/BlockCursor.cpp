@@ -104,6 +104,12 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 
 				const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
 				m_player.inventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().name() : "", currentStack.amount() - 1);
+
+				// FIXME
+				sf::Packet invPacket;
+				invPacket << Network::Command::PlayerInvUpdate;
+				m_player.serialize(invPacket);
+				m_client.send(invPacket);
 			}
 		}
 	}
@@ -146,6 +152,7 @@ void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
 		       << s32(m_selectedBlock.z);
 		m_client.send(packet);
 
+		// FIXME
 		sf::Packet invPacket;
 		invPacket << Network::Command::PlayerInvUpdate;
 		m_player.serialize(invPacket);
