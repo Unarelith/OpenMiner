@@ -31,12 +31,11 @@ void ServerApplication::init() {
 
 	m_scriptEngine.init();
 	m_luaCore.setPlayer(m_player);
-	// m_luaCore.setWorld(m_world);
+	m_luaCore.setWorld(m_world);
 
 	try {
 		m_scriptEngine.lua()["openminer"] = &m_luaCore;
-		// FIXME
-		// m_scriptEngine.lua().script("init()");
+		m_scriptEngine.lua().script("init()");
 	}
 	catch (const sol::error &e) {
 		std::cerr << e.what() << std::endl;
@@ -50,8 +49,6 @@ void ServerApplication::init() {
 		packet << Network::Command::RegistryData;
 		m_registry.serialize(packet);
 		client.tcpSocket->send(packet);
-
-		m_player.inventory().addStack("default:workbench");
 
 		sf::Packet invPacket;
 		invPacket << Network::Command::PlayerInvUpdate;
