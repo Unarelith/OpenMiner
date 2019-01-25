@@ -25,8 +25,6 @@ Chunk::Chunk(s32 x, s32 y, s32 z) {
 	m_z = z;
 
 	std::memset(m_data, 0, sizeof(m_data));
-	// FIXME: Which one is faster?
-	// std::fill(std::begin(m_data), std::end(m_data), 0);
 }
 
 u16 Chunk::getBlock(int x, int y, int z) const {
@@ -49,7 +47,7 @@ u16 Chunk::getData(int x, int y, int z) const {
 	return (m_data[x][y][z] >> 16) & 0xffff;
 }
 
-// #include "Debug.hpp"
+#include <gk/core/Debug.hpp>
 
 void Chunk::setBlock(int x, int y, int z, u16 type) {
 	if(x < 0)              { if(m_surroundingChunks[0]) m_surroundingChunks[0]->setBlock(x + Chunk::width, y, z, type); return; }
@@ -58,6 +56,8 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 	if(y >= Chunk::height) { if(m_surroundingChunks[5]) m_surroundingChunks[5]->setBlock(x, y - Chunk::height, z, type); return; }
 	if(z < 0)              { if(m_surroundingChunks[2]) m_surroundingChunks[2]->setBlock(x, y, z + Chunk::depth, type); return; }
 	if(z >= Chunk::depth)  { if(m_surroundingChunks[3]) m_surroundingChunks[3]->setBlock(x, y, z - Chunk::depth, type); return; }
+
+	if (m_data[x][y][z] == type) return;
 
 	// FIXME
 	// const Block &block = Registry::getInstance().getBlock(type);
@@ -81,17 +81,18 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 		m_lightmap.removeSunlight(x, y, z);
 	}
 
-	// FIXME
-	// if (type == BlockType::Workbench)
-	// 	m_blockData.emplace(gk::Vector3i{x, y, z}, BlockData{3, 3});
-	// else if (type == BlockType::Furnace)
-	// 	m_blockData.emplace(gk::Vector3i{x, y, z}, BlockData{3, 1});
-    //
-	// if (m_data[x][y][z] == BlockType::Workbench || m_data[x][y][z] == BlockType::Furnace) {
-	// 	auto it = m_blockData.find(gk::Vector3i{x, y, z});
-	// 	if (it != m_blockData.end())
-	// 		m_blockData.erase(it);
-	// }
+	if (type == BlockType::Workbench) {
+		DEBUG("Adding inventory at", x, y, z);
+		m_blockData.emplace(gk::Vector3i{x, y, z}, BlockData{3, 3});
+	}
+	else if (type == BlockType::Furnace)
+		m_blockData.emplace(gk::Vector3i{x, y, z}, BlockData{3, 1});
+
+	if (m_data[x][y][z] == BlockType::Workbench || m_data[x][y][z] == BlockType::Furnace) {
+		auto it = m_blockData.find(gk::Vector3i{x, y, z});
+		if (it != m_blockData.end())
+			m_blockData.erase(it);
+	}
 
 	m_data[x][y][z] = type;
 
@@ -135,21 +136,20 @@ void Chunk::setBlockRaw(int x, int y, int z, u16 type) {
 	m_hasChanged = true;
 }
 
-// FIXME
-// BlockData *Chunk::getBlockData(int x, int y, int z) {
-// 	if(x < 0)             return m_surroundingChunks[0] ? m_surroundingChunks[0]->getBlockData(x + CHUNK_WIDTH, y, z) : 0;
-// 	if(x >= CHUNK_WIDTH)  return m_surroundingChunks[1] ? m_surroundingChunks[1]->getBlockData(x - CHUNK_WIDTH, y, z) : 0;
-// 	if(y < 0)             return m_surroundingChunks[4] ? m_surroundingChunks[4]->getBlockData(x, y + CHUNK_HEIGHT, z) : 0;
-// 	if(y >= CHUNK_HEIGHT) return m_surroundingChunks[5] ? m_surroundingChunks[5]->getBlockData(x, y - CHUNK_HEIGHT, z) : 0;
-// 	if(z < 0)             return m_surroundingChunks[2] ? m_surroundingChunks[2]->getBlockData(x, y, z + CHUNK_DEPTH) : 0;
-// 	if(z >= CHUNK_DEPTH)  return m_surroundingChunks[3] ? m_surroundingChunks[3]->getBlockData(x, y, z - CHUNK_DEPTH) : 0;
-//
-// 	auto it = m_blockData.find(gk::Vector3i{x, y, z});
-// 	if (it == m_blockData.end())
-// 		return nullptr;
-//
-// 	return &it->second;
-// }
+BlockData *Chunk::getBlockData(int x, int y, int z) {
+	if(x < 0)             return m_surroundingChunks[0] ? m_surroundingChunks[0]->getBlockData(x + CHUNK_WIDTH, y, z) : 0;
+	if(x >= CHUNK_WIDTH)  return m_surroundingChunks[1] ? m_surroundingChunks[1]->getBlockData(x - CHUNK_WIDTH, y, z) : 0;
+	if(y < 0)             return m_surroundingChunks[4] ? m_surroundingChunks[4]->getBlockData(x, y + CHUNK_HEIGHT, z) : 0;
+	if(y >= CHUNK_HEIGHT) return m_surroundingChunks[5] ? m_surroundingChunks[5]->getBlockData(x, y - CHUNK_HEIGHT, z) : 0;
+	if(z < 0)             return m_surroundingChunks[2] ? m_surroundingChunks[2]->getBlockData(x, y, z + CHUNK_DEPTH) : 0;
+	if(z >= CHUNK_DEPTH)  return m_surroundingChunks[3] ? m_surroundingChunks[3]->getBlockData(x, y, z - CHUNK_DEPTH) : 0;
+
+	auto it = m_blockData.find(gk::Vector3i{x, y, z});
+	if (it == m_blockData.end())
+		return nullptr;
+
+	return &it->second;
+}
 
 // FIXME
 // void Chunk::updateNeighbours(int x, int y, int z) {

@@ -33,11 +33,13 @@ class ServerWorld : public World {
 		void sendChunkData(Client &client, ServerChunk *chunk);
 		void sendRequestedData(Client &client, int cx, int cy, int cz);
 
+		// FIXME: Duplicated with ClientWorld
 		ServerChunk *getChunk(int cx, int cy, int cz) const;
+		BlockData *getBlockData(int x, int y, int z) const override;
 
 		// FIXME: Duplicated with ClientWorld
-		u16 getBlock(int x, int y, int z) const;
-		void setBlock(int x, int y, int z, u16 id);
+		u16 getBlock(int x, int y, int z) const override;
+		void setBlock(int x, int y, int z, u16 id) override;
 
 	private:
 		std::vector<std::unique_ptr<ServerChunk>> m_chunks;

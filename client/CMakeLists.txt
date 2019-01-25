@@ -50,6 +50,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
                       ${TINYXML2_LIBRARIES}
                       ${GAMEKIT_LIBRARIES}
                       ${LUA_LIBRARIES}
+                      sfml-system
                       sfml-network -ldl
                       ${CMAKE_PROJECT_NAME}_common)
 

@@ -32,9 +32,11 @@ class ClientWorld : public World, public gk::IDrawable {
 
 		// FIXME: Duplicated with ServerWorld
 		ClientChunk *getChunk(int cx, int cy, int cz) const;
+		BlockData *getBlockData(int x, int y, int z) const override;
 
-		u16 getBlock(int x, int y, int z) const;
-		void setBlock(int x, int y, int z, u16 id);
+		// FIXME: Duplicated with ServerWorld
+		u16 getBlock(int x, int y, int z) const override;
+		void setBlock(int x, int y, int z, u16 id) override;
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;

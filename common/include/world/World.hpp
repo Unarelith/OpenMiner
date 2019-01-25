@@ -20,7 +20,10 @@
 
 class World {
 	public:
-		BlockData *getBlockData(int x, int y, int z);
+		virtual BlockData *getBlockData(int x, int y, int z) const = 0;
+
+		virtual u16 getBlock(int x, int y, int z) const = 0;
+		virtual void setBlock(int x, int y, int z, u16 id) = 0;
 
 		static bool isReloadRequested;
 
