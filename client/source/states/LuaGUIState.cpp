@@ -18,15 +18,17 @@
 #include <gk/core/Mouse.hpp>
 #include <gk/graphics/Color.hpp>
 
+#include "ClientPlayer.hpp"
+#include "ClientWorld.hpp"
 #include "Config.hpp"
 #include "FurnaceWidget.hpp"
 #include "InventoryWidget.hpp"
 #include "LuaGUIState.hpp"
+#include "Network.hpp"
 #include "Player.hpp"
 #include "TextButton.hpp"
-#include "World.hpp"
 
-LuaGUIState::LuaGUIState(/* LuaGUI &gui,  */gk::ApplicationState *parent) : gk::ApplicationState(parent) {
+LuaGUIState::LuaGUIState(ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent) : gk::ApplicationState(parent) {
 	// FIXME: Duplicated with HUD
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
@@ -44,7 +46,8 @@ LuaGUIState::LuaGUIState(/* LuaGUI &gui,  */gk::ApplicationState *parent) : gk::
 
 	m_mainWidget.setScale(GUI_SCALE, GUI_SCALE);
 
-	// loadGUI(gui);
+	while (!packet.endOfPacket())
+		loadGUI(player, world, packet);
 }
 
 void LuaGUIState::onEvent(const SDL_Event &event) {
@@ -119,50 +122,66 @@ void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	target.draw(m_mouseItemWidget, states);
 }
 
-// void LuaGUIState::loadGUI(LuaGUI &gui) {
-// 	for (auto &it : gui.imageList) {
-// 		auto *image = new gk::Image(it.texture);
-// 		image->setPosition(it.x, it.y);
-// 		image->setClipRect(it.clipRect.x, it.clipRect.y, it.clipRect.width, it.clipRect.height);
-// 		m_drawables.emplace_back(image);
-// 	}
-//
-// 	for (auto &it : gui.textButtonList) {
-// 		auto *button = new TextButton(&m_mainWidget);
-// 		button->setPosition(it.x, it.y);
-// 		button->setCallback(it.on_click);
-// 		button->setText(it.text);
-// 		m_widgets.emplace_back(button);
-// 	}
-//
-// 	// FIXME
-// 	// for (auto &it : gui.inventoryWidgetList) {
-// 	// 	auto &inventoryWidget = m_inventoryWidgets.emplace_back(&m_mainWidget);
-// 	// 	inventoryWidget.setPosition(it.x, it.y);
-// 	// 	inventoryWidget.init(World::getInstance().getPlayer()->inventory(), it.offset, it.count);
-// 	// }
-//     //
-// 	// for (auto &it : gui.craftingWidgetList) {
-// 	// 	BlockData *data = World::getInstance().getBlockData(it.block.x, it.block.y, it.block.z);
-// 	// 	if (data) {
-// 	// 		auto &craftingWidget = m_craftingWidgets.emplace_back(data->inventory, &m_mainWidget);
-// 	// 		craftingWidget.setPosition(it.x, it.y);
-// 	// 	}
-// 	// 	else {
-// 	// 		DEBUG("ERROR: No inventory found at", it.block.x, it.block.y, it.block.z);
-// 	// 	}
-// 	// }
-//     //
-// 	// for (auto &it : gui.furnaceWidgetList) {
-// 	// 	BlockData *data = World::getInstance().getBlockData(it.block.x, it.block.y, it.block.z);
-// 	// 	if (data) {
-// 	// 		auto *furnaceWidget = new FurnaceWidget(m_mouseItemWidget, World::getInstance().getPlayer()->inventory(), *data, &m_mainWidget);
-// 	// 		furnaceWidget->setPosition(it.x, it.y);
-// 	// 		m_widgets.emplace_back(furnaceWidget);
-// 	// 	}
-// 	// 	else {
-// 	// 		DEBUG("ERROR: No inventory found at", it.block.x, it.block.y, it.block.z);
-// 	// 	}
-// 	// }
-// }
+void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &packet) {
+	u8 type;
+	std::string name;
+	float x, y;
+	packet >> type >> name >> x >> y;
+	if (type == 0) {
+		std::string texture;
+		gk::FloatRect clipRect;
+		packet >> texture >> clipRect.x >> clipRect.y >> clipRect.width >> clipRect.height;
+
+		auto *image = new gk::Image(texture);
+		image->setPosition(x, y);
+		image->setClipRect(clipRect.x, clipRect.y, clipRect.width, clipRect.height);
+		m_drawables.emplace_back(image);
+	}
+	else if (type == 1) {
+		std::string text;
+		packet >> text;
+
+		auto *button = new TextButton(&m_mainWidget);
+		button->setPosition(x, y);
+		// button->setCallback(it.on_click);
+		button->setText(text);
+		m_widgets.emplace_back(button);
+	}
+	else if (type == 2) {
+		std::string playerName, inventory;
+		float width, height;
+		u16 offset, count;
+		packet >> playerName >> inventory >> width >> height >> offset >> count;
+
+		auto &inventoryWidget = m_inventoryWidgets.emplace_back(&m_mainWidget);
+		inventoryWidget.setPosition(x, y);
+		inventoryWidget.init(player.inventory(), offset, count);
+	}
+	else if (type == 3) {
+		gk::Vector3i block;
+		u16 offset, count;
+		packet >> block.x >> block.y >> block.z >> offset >> count;
+		BlockData *data = world.getBlockData(block.x, block.y, block.z);
+		if (data) {
+			auto &craftingWidget = m_craftingWidgets.emplace_back(data->inventory, &m_mainWidget);
+			craftingWidget.setPosition(x, y);
+		}
+		else {
+			DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
+		}
+	}
+	else if (type == 4) {
+		gk::Vector3i block;
+		packet >> block.x >> block.y >> block.z;
+		BlockData *data = world.getBlockData(block.x, block.y, block.z);
+		if (data) {
+			auto *furnaceWidget = new FurnaceWidget(m_mouseItemWidget, player.inventory(), *data, &m_mainWidget);
+			furnaceWidget->setPosition(x, y);
+			m_widgets.emplace_back(furnaceWidget);
+		}
+		else {
+			DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
+		}
+	}
+}
 

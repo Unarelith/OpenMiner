@@ -16,6 +16,7 @@
 #include "CraftingRecipe.hpp"
 #include "LuaMod.hpp"
 #include "Registry.hpp"
+#include "ServerBlock.hpp"
 #include "SmeltingRecipe.hpp"
 
 void LuaMod::registerBlock(const sol::table &table) {
@@ -25,7 +26,7 @@ void LuaMod::registerBlock(const sol::table &table) {
 	sol::function onBlockActivated = table["on_block_activated"];
 	sol::function onTick = table["on_tick"];
 
-	Block &block = Registry::getInstance().registerBlock(textureID, id, name);
+	ServerBlock &block = Registry::getInstance().registerBlock<ServerBlock>(textureID, id, name);
 	block.setHarvestRequirements(table["harvest_requirements"].get_or(0));
 	block.setHardness(table["hardness"].get_or(1.0f));
 	block.setOnBlockActivated(onBlockActivated);

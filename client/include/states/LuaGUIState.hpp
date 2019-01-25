@@ -24,10 +24,13 @@
 #include "InventoryWidget.hpp"
 #include "MouseItemWidget.hpp"
 
+class ClientPlayer;
+class ClientWorld;
+
 // FIXME: This class is almost a duplicate of InventoryState
 class LuaGUIState : public gk::ApplicationState {
 	public:
-		LuaGUIState(/* LuaGUI &gui,  */gk::ApplicationState *parent = nullptr);
+		LuaGUIState(ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -36,7 +39,7 @@ class LuaGUIState : public gk::ApplicationState {
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		// void loadGUI(LuaGUI &gui);
+		void loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &packet);
 
 		gk::Shader m_shader;
 		glm::mat4 m_orthoMatrix;

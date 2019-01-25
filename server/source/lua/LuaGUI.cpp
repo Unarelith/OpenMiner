@@ -14,6 +14,7 @@
 #include <gk/core/ApplicationStateStack.hpp>
 
 #include "LuaGUI.hpp"
+#include "Network.hpp"
 // #include "LuaGUIState.hpp"
 
 void LuaGUI::addImage(const sol::table &table) {
@@ -36,7 +37,7 @@ void LuaGUI::addImage(const sol::table &table) {
 		clipRect.height = clipRectTable.value()["height"];
 	}
 
-	imageList.emplace_back(LuaWidgetDef::Image{{name, x, y}, texture, clipRect});
+	m_data.imageList.emplace_back(LuaWidgetDef::Image{{name, x, y}, texture, clipRect});
 }
 
 void LuaGUI::addTextButton(const sol::table &table) {
@@ -51,7 +52,7 @@ void LuaGUI::addTextButton(const sol::table &table) {
 
 	std::string text = table["text"].get<std::string>();
 	sol::function on_click = table["on_click"].get<sol::function>();
-	textButtonList.emplace_back(LuaWidgetDef::TextButton{{name, x, y}, text, on_click});
+	m_data.textButtonList.emplace_back(LuaWidgetDef::TextButton{{name, x, y}, text, on_click});
 }
 
 void LuaGUI::addInventoryWidget(const sol::table &table) {
@@ -76,7 +77,7 @@ void LuaGUI::addInventoryWidget(const sol::table &table) {
 		height = size.value()["y"];
 	}
 
-	inventoryWidgetList.emplace_back(LuaWidgetDef::InventoryWidget{{name, x, y},
+	m_data.inventoryWidgetList.emplace_back(LuaWidgetDef::InventoryWidget{{name, x, y},
 			player, inventory, width, height, offset, count});
 }
 
@@ -101,7 +102,7 @@ void LuaGUI::addCraftingWidget(const sol::table &table) {
 		block.z = blockTable.value()["z"];
 	}
 
-	craftingWidgetList.emplace_back(LuaWidgetDef::CraftingWidget{{name, x, y},
+	m_data.craftingWidgetList.emplace_back(LuaWidgetDef::CraftingWidget{{name, x, y},
 			block, offset, count});
 }
 
@@ -123,14 +124,25 @@ void LuaGUI::addFurnaceWidget(const sol::table &table) {
 		block.z = blockTable.value()["z"];
 	}
 
-	furnaceWidgetList.emplace_back(LuaWidgetDef::FurnaceWidget{{name, x, y}, block});
+	m_data.furnaceWidgetList.emplace_back(LuaWidgetDef::FurnaceWidget{{name, x, y}, block});
 }
 
-void LuaGUI::show() {
-	// TODO: Send BlockGUIData packet, containing all the data stored in this class
-
-	// auto &stateStack = gk::ApplicationStateStack::getInstance();
-	// stateStack.push<LuaGUIState>(*this, &stateStack.top());
+void LuaGUI::show(Client &client) {
+	sf::Packet packet;
+	packet << Network::Command::BlockGUIData;
+	for (auto &it : m_data.imageList)
+		packet << u8(0) << it.name << it.x << it.y << it.texture << it.clipRect.x << it.clipRect.y << it.clipRect.width << it.clipRect.height;
+	for (auto &it : m_data.textButtonList)
+		packet << u8(1) << it.name << it.x << it.y << it.text;
+	for (auto &it : m_data.inventoryWidgetList)
+		packet << u8(2) << it.name << it.x << it.y << it.player << it.inventory << it.width << it.height
+			<< it.offset << it.count;
+	for (auto &it : m_data.craftingWidgetList)
+		packet << u8(3) << it.name << it.x << it.y << it.block.x << it.block.y << it.block.z
+			<< it.offset << it.count;
+	for (auto &it : m_data.furnaceWidgetList)
+		packet << u8(4) << it.name << it.x << it.y << it.block.x << it.block.y << it.block.z;
+	client.tcpSocket->send(packet);
 }
 
 void LuaGUI::initUsertype(sol::state &lua) {

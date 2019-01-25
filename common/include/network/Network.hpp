@@ -39,6 +39,7 @@ namespace Network {
 		// Block commands
 		BlockUpdate,       // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Server only)
 		BlockActivated,    // <TCP> [NetworkCommand][s32 x, y, z]            (from Client only)
+		BlockGUIData,      // <TCP> [NetworkCommand][LuaGUIData data]        (from Server only)
 
 		// Registry commands
 		RegistryData,      // <TCP> [NetworkCommand][Block block]            (from Server only)

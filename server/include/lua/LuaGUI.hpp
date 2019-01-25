@@ -17,6 +17,23 @@
 #include <list>
 
 #include "LuaWidgetDef.hpp"
+#include "ServerInfo.hpp"
+
+struct LuaGUIData {
+	enum {
+		Image,
+		TextButton,
+		InventoryWidget,
+		CraftingWidget,
+		FurnaceWidget,
+	};
+
+	std::list<LuaWidgetDef::Image> imageList;
+	std::list<LuaWidgetDef::TextButton> textButtonList;
+	std::list<LuaWidgetDef::InventoryWidget> inventoryWidgetList;
+	std::list<LuaWidgetDef::CraftingWidget> craftingWidgetList;
+	std::list<LuaWidgetDef::FurnaceWidget> furnaceWidgetList;
+};
 
 // This class is meant to be used ONLY in Lua
 class LuaGUI {
@@ -27,15 +44,11 @@ class LuaGUI {
 		void addCraftingWidget(const sol::table &table);
 		void addFurnaceWidget(const sol::table &table);
 
-		void show();
+		void show(Client &client);
 
 		static void initUsertype(sol::state &lua);
 
-		std::list<LuaWidgetDef::Image> imageList;
-		std::list<LuaWidgetDef::TextButton> textButtonList;
-		std::list<LuaWidgetDef::InventoryWidget> inventoryWidgetList;
-		std::list<LuaWidgetDef::CraftingWidget> craftingWidgetList;
-		std::list<LuaWidgetDef::FurnaceWidget> furnaceWidgetList;
+		LuaGUIData m_data;
 };
 
 #endif // LUAGUI_HPP_

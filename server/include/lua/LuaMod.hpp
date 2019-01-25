@@ -16,8 +16,6 @@
 
 #include <sol.hpp>
 
-#include "Block.hpp"
-
 // This class is meant to be used ONLY in Lua
 class LuaMod {
 	public:

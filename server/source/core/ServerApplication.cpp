@@ -12,6 +12,7 @@
  * =====================================================================================
  */
 #include "ServerApplication.hpp"
+#include "ServerBlock.hpp"
 
 using namespace std::literals::string_literals;
 
@@ -90,12 +91,12 @@ void ServerApplication::init() {
 		m_server.sendToAllClients(answer);
 	});
 
-	m_server.setCommandCallback(Network::Command::BlockActivated, [this](Client &, sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::BlockActivated, [this](Client &client, sf::Packet &packet) {
 		s32 x, y, z;
 		packet >> x >> y >> z;
 
 		u16 id = m_world.getBlock(x, y, z);
-		m_registry.getBlock(id).onBlockActivated({x, y, z}, m_player, m_world);
+		((ServerBlock &)(m_registry.getBlock(id))).onBlockActivated({x, y, z}, m_player, m_world, client);
 	});
 }
 

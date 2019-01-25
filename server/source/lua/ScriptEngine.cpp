@@ -29,6 +29,8 @@ void ScriptEngine::init() {
 	// FIXME: Remove these lines when they're not needed anymore
 	m_lua["registry"] = &Registry::getInstance();
 
+	// Note: To be safe, don't add sol::lib::io and provide a better way to load/save data
+	//       With a feature like this, it would be way easier to add io restrictions
 	m_lua.open_libraries(
 		sol::lib::base,
 		sol::lib::math,

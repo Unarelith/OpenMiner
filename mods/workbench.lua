@@ -4,7 +4,7 @@ mod:block {
 	-- texture = 77, -- Vanilla
 	texture = 115, -- Faithful 32x
 
-	on_block_activated = function(pos, player, world)
+	on_block_activated = function(pos, player, world, client)
 		local gui = LuaGUI.new()
 
 		-- FIXME: Replace this by gui:set_size() and gui:set_centered()
@@ -62,6 +62,6 @@ mod:block {
 			clip = {x = 0, y = 0, width = 176, height = 166},
 		}
 
-		gui:show()
+		gui:show(client)
 	end,
 }

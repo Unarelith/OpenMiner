@@ -19,12 +19,6 @@
 
 Registry *Registry::s_instance = nullptr;
 
-Block &Registry::registerBlock(u32 textureID, const std::string &id, const std::string &name) {
-	u32 internalID = m_blocks.size();
-	m_blocksID.emplace(id, internalID);
-	return m_blocks.emplace_back(internalID, textureID, id, name);
-}
-
 Item &Registry::registerItem(u32 textureID, const std::string &id, const std::string &name) {
 	u32 internalID = m_items.size();
 	m_itemsID.emplace(id, internalID);
@@ -63,8 +57,8 @@ void Registry::serialize(sf::Packet &packet) {
 	}
 
 	for (auto &it : m_blocks) {
-		packet << u8(DataType::Block) << u32(it.id()) << it.name() << it.label() << u8(it.drawType())
-			<< it.textureID() << it.hardness() << it.harvestRequirements() << it.getItemDrop();
+		packet << u8(DataType::Block) << u32(it->id()) << it->name() << it->label() << u8(it->drawType())
+			<< it->textureID() << it->hardness() << it->harvestRequirements() << it->getItemDrop();
 	}
 
 	for (auto &it : m_recipes) {
@@ -86,7 +80,7 @@ void Registry::deserialize(sf::Packet &packet) {
 			packet >> id >> name >> label >> drawType >> textureID >> hardness
 				>> harvestRequirements >> itemDrop;
 
-			auto &block = registerBlock(textureID, name, label);
+			auto &block = registerBlock<Block>(textureID, name, label);
 			block.setHarvestRequirements(harvestRequirements);
 			block.setHardness(hardness);
 			block.setDrawType(BlockDrawType(drawType));

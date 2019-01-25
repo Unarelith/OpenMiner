@@ -4,20 +4,22 @@ mod:block {
 	-- texture = 164, -- Vanilla
 	texture = 205, -- Faithful 32x
 
-	on_block_activated = function(pos, player, world)
+	on_block_activated = function(pos, player, world, client)
+		local gui = LuaGUI.new()
+
 		-- FIXME: Replace this by gui:set_size() and gui:set_centered()
 		local gui_pos = {
 			x = SCREEN_WIDTH / GUI_SCALE / 2.0 - 176 / 2.0,
 			y = SCREEN_HEIGHT / GUI_SCALE / 2.0 - 166 / 2.0
 		}
 
-		local gui = LuaGUI.new()
 		gui:furnace {
 			name = "furnace",
 			pos = gui_pos,
 			block = {x = pos.x, y = pos.y, z = pos.z}
 		}
-		gui:show()
+
+		gui:show(client)
 	end,
 
 	on_tick = function(pos, player, chunk, world)

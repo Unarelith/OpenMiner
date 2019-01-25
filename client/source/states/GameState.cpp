@@ -25,6 +25,7 @@
 #include "GameKey.hpp"
 #include "GameState.hpp"
 #include "InventoryState.hpp"
+#include "LuaGUIState.hpp"
 #include "PauseMenuState.hpp"
 #include "PlayerInventoryWidget.hpp"
 #include "Registry.hpp"
@@ -54,6 +55,10 @@ GameState::GameState(Client &client, const std::string &host, int port) : m_clie
 
 	m_client.setCommandCallback(Network::Command::PlayerInvUpdate, [this](sf::Packet &packet) {
 		m_player.deserialize(packet);
+	});
+
+	m_client.setCommandCallback(Network::Command::BlockGUIData, [this](sf::Packet &packet) {
+		m_stateStack->push<LuaGUIState>(m_player, m_world, packet, this);
 	});
 
 	// sf::Packet packet;

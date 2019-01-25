@@ -28,33 +28,6 @@ Block::Block(u32 id, u32 textureID, const std::string &name, const std::string &
 	m_itemDropAmount = 1;
 }
 
-void Block::onTick(const glm::ivec3 &pos, Player &player, Chunk &chunk, World &world) const {
-	try {
-		if (m_onTick && m_onTickEnabled) {
-			m_onTick(pos, player, chunk, world);
-		}
-	}
-	catch (const sol::error &e) {
-		m_onTickEnabled = false;
-		std::cerr << e.what() << std::endl;
-		std::cerr << "Block stopped ticking at (" << pos.x << ", " << pos.y << ", " << pos.z << ")" << std::endl;
-	}
-}
-
-bool Block::onBlockActivated(const glm::ivec3 &pos, Player &player, World &world) const {
-	try {
-		if (m_onBlockActivated) {
-			m_onBlockActivated(pos, player, world);
-			return true;
-		}
-	}
-	catch (const sol::error &e) {
-		std::cerr << e.what() << std::endl;
-	}
-
-	return false;
-}
-
 // Vanilla
 // glm::vec4 Block::getTexCoords(int face, u16 blockData) const {
 // 	// 0 -> right
