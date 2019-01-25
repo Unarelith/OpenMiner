@@ -47,7 +47,7 @@ u16 Chunk::getData(int x, int y, int z) const {
 	return (m_data[x][y][z] >> 16) & 0xffff;
 }
 
-#include <gk/core/Debug.hpp>
+// #include <gk/core/Debug.hpp>
 
 void Chunk::setBlock(int x, int y, int z, u16 type) {
 	if(x < 0)              { if(m_surroundingChunks[0]) m_surroundingChunks[0]->setBlock(x + Chunk::width, y, z, type); return; }
@@ -81,8 +81,8 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 		m_lightmap.removeSunlight(x, y, z);
 	}
 
+	// FIXME: Duplicated below
 	if (type == BlockType::Workbench) {
-		DEBUG("Adding inventory at", x, y, z);
 		m_blockData.emplace(gk::Vector3i{x, y, z}, BlockData{3, 3});
 	}
 	else if (type == BlockType::Furnace)
@@ -130,6 +130,20 @@ void Chunk::setBlockRaw(int x, int y, int z, u16 type) {
 	if(y >= Chunk::height) { if(m_surroundingChunks[5]) m_surroundingChunks[5]->setBlockRaw(x, y - Chunk::height, z, type); return; }
 	if(z < 0)              { if(m_surroundingChunks[2]) m_surroundingChunks[2]->setBlockRaw(x, y, z + Chunk::depth, type); return; }
 	if(z >= Chunk::depth)  { if(m_surroundingChunks[3]) m_surroundingChunks[3]->setBlockRaw(x, y, z - Chunk::depth, type); return; }
+
+	if (m_data[x][y][z] == type) return;
+
+	if (type == BlockType::Workbench) {
+		m_blockData.emplace(gk::Vector3i{x, y, z}, BlockData{3, 3});
+	}
+	else if (type == BlockType::Furnace)
+		m_blockData.emplace(gk::Vector3i{x, y, z}, BlockData{3, 1});
+
+	if (m_data[x][y][z] == BlockType::Workbench || m_data[x][y][z] == BlockType::Furnace) {
+		auto it = m_blockData.find(gk::Vector3i{x, y, z});
+		if (it != m_blockData.end())
+			m_blockData.erase(it);
+	}
 
 	m_data[x][y][z] = type;
 
