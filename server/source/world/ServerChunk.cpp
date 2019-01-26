@@ -16,6 +16,7 @@
 #include <gk/core/GameClock.hpp>
 
 #include "Player.hpp"
+#include "Server.hpp"
 #include "ServerBlock.hpp"
 #include "ServerChunk.hpp"
 #include "World.hpp"
@@ -37,7 +38,7 @@ void ServerChunk::generate() {
 	}
 }
 
-void ServerChunk::tick(Player &player, World &world) {
+void ServerChunk::tick(Player &player, World &world, Server &server) {
 	if (!m_tickingBlocks.empty() && m_lastTick < gk::GameClock::getTicks() / 50) {
 		m_lastTick = gk::GameClock::getTicks() / 50;
 
@@ -45,7 +46,9 @@ void ServerChunk::tick(Player &player, World &world) {
 			int z = it.first / (width * height);
 			int y = (it.first - z * width * height) / width;
 			int x = (it.first - z * width * height) % width;
-			((ServerBlock &)it.second).onTick(glm::ivec3{x + m_x * width, y + m_y * height, z + m_z * depth}, player, *this, world);
+			((ServerBlock &)it.second).onTick(
+				glm::ivec3{x + m_x * width, y + m_y * height, z + m_z * depth},
+				player, *this, world, server);
 		}
 	}
 }

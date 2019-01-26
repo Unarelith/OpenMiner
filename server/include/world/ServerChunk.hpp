@@ -21,6 +21,7 @@
 #include "TerrainGenerator.hpp"
 
 class Player;
+class Server;
 class World;
 
 class ServerChunk : public Chunk {
@@ -29,7 +30,7 @@ class ServerChunk : public Chunk {
 
 		void update();
 		void generate();
-		void tick(Player &player, World &world);
+		void tick(Player &player, World &world, Server &server);
 
 		bool isGenerated() const { return m_isGenerated; }
 		void setGenerated(bool isGenerated) { m_isGenerated = isGenerated; }

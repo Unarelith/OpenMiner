@@ -45,7 +45,7 @@ ServerWorld::ServerWorld() {
 
 void ServerWorld::update(Server &server, ServerPlayer &player) {
 	for (auto &it : m_chunks) {
-		it->tick(player, *this);
+		it->tick(player, *this, server);
 		it->update();
 
 		if (it->isGenerated() && !it->isSent()) {

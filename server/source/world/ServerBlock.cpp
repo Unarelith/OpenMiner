@@ -14,13 +14,19 @@
 #include "Chunk.hpp"
 #include "Player.hpp"
 #include "ServerBlock.hpp"
-#include "ServerInfo.hpp"
+#include "Server.hpp"
 #include "World.hpp"
 
-void ServerBlock::onTick(const glm::ivec3 &pos, Player &player, Chunk &chunk, World &world) const {
+void ServerBlock::onTick(const glm::ivec3 &pos, Player &player, Chunk &chunk, World &world, Server &server) const {
 	try {
 		if (m_onTick && m_onTickEnabled) {
 			m_onTick(pos, player, chunk, world);
+
+			// FIXME: Send this every 0.5 second instead of once per tick
+			sf::Packet packet;
+			packet << Network::Command::BlockUpdate << s32(pos.x) << s32(pos.y) << s32(pos.z);
+			packet << u32(id() | ((data() & 0xffff) << 16));
+			server.sendToAllClients(packet);
 		}
 	}
 	catch (const sol::error &e) {

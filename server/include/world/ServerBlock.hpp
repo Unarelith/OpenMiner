@@ -17,13 +17,14 @@
 #include "Block.hpp"
 
 struct Client;
+class Server;
 
 class ServerBlock : public Block {
 	public:
 		ServerBlock(u32 id, u32 textureID, const std::string &name, const std::string &label)
 			: Block(id, textureID, name, label) {}
 
-		void onTick(const glm::ivec3 &, Player &, Chunk &, World &) const;
+		void onTick(const glm::ivec3 &, Player &, Chunk &, World &, Server &) const;
 		bool onBlockActivated(const glm::ivec3 &pos, Player &player, World &world, Client &client) const;
 
 		bool canUpdate() const { return m_onTick.valid(); }
