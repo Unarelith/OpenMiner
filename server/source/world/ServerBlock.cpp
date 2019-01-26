@@ -37,7 +37,6 @@ void ServerBlock::onTick(const glm::ivec3 &pos, Player &player, Chunk &chunk, Wo
 					packet2 << data->inventory;
 					server.sendToAllClients(packet2);
 					data->inventory.setChanged(false);
-					DEBUG("Sending inventory update", pos.x, pos.y, pos.z);
 				}
 			}
 		}
