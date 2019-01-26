@@ -42,10 +42,14 @@ void InventoryWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mous
 	}
 	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && m_currentItemWidget) {
 		mouseItemWidget.swapItems(*m_currentItemWidget, isReadOnly);
+
+		// TODO: Send inventory update packet
 	}
 	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT && m_currentItemWidget) {
 		if (!isReadOnly) {
 			mouseItemWidget.putItem(*m_currentItemWidget);
+
+			// TODO: Send inventory update packet
 		}
 	}
 }

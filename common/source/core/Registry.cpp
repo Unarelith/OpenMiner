@@ -81,9 +81,9 @@ void Registry::deserialize(sf::Packet &packet) {
 				>> harvestRequirements >> itemDrop;
 
 			auto &block = registerBlock<Block>(textureID, name, label);
-			block.setHarvestRequirements(harvestRequirements);
-			block.setHardness(hardness);
 			block.setDrawType(BlockDrawType(drawType));
+			block.setHardness(hardness);
+			block.setHarvestRequirements(harvestRequirements);
 			block.setItemDrop(itemDrop.item().name(), itemDrop.amount());
 		}
 		else if (type == u8(DataType::Item)) {
@@ -95,10 +95,11 @@ void Registry::deserialize(sf::Packet &packet) {
 				>> burnTime >> miningSpeed >> harvestCapability;
 
 			auto &item = registerItem(textureID, name, label);
-			item.setIsFuel(isFuel);
 			item.setIsBlock(isBlock);
-			item.setMiningSpeed(miningSpeed);
+			item.setIsFuel(isFuel);
 			item.setBurnTime(burnTime);
+			item.setMiningSpeed(miningSpeed);
+			item.setHarvestCapability(harvestCapability);
 		}
 		else if (type == u8(DataType::CraftingRecipe)) {
 			registerRecipe<CraftingRecipe>()->deserialize(packet);

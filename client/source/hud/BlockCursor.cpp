@@ -138,25 +138,28 @@ void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
 		m_animationStart = (m_animationStart) ? gk::GameClock::getTicks() : 0;
 
 	const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
-	float timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed());
-	if (m_animationStart && gk::GameClock::getTicks() > m_animationStart + timeToBreak * 1000) {
-		ItemStack itemDrop = m_currentBlock->getItemDrop();
-		m_player.inventory().addStack(itemDrop.item().name(), itemDrop.amount());
-		m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
-		m_animationStart = gk::GameClock::getTicks();
+	float timeToBreak = 0;
+	if (m_animationStart) {
+		timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed());
+		if (gk::GameClock::getTicks() > m_animationStart + timeToBreak * 1000) {
+			ItemStack itemDrop = m_currentBlock->getItemDrop();
+			m_player.inventory().addStack(itemDrop.item().name(), itemDrop.amount());
+			m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
+			m_animationStart = gk::GameClock::getTicks();
 
-		sf::Packet packet;
-		packet << Network::Command::PlayerDigBlock
-		       << s32(m_selectedBlock.x)
-		       << s32(m_selectedBlock.y)
-		       << s32(m_selectedBlock.z);
-		m_client.send(packet);
+			sf::Packet packet;
+			packet << Network::Command::PlayerDigBlock
+				   << s32(m_selectedBlock.x)
+				   << s32(m_selectedBlock.y)
+				   << s32(m_selectedBlock.z);
+			m_client.send(packet);
 
-		// FIXME
-		sf::Packet invPacket;
-		invPacket << Network::Command::PlayerInvUpdate;
-		m_player.serialize(invPacket);
-		m_client.send(invPacket);
+			// FIXME
+			sf::Packet invPacket;
+			invPacket << Network::Command::PlayerInvUpdate;
+			m_player.serialize(invPacket);
+			m_client.send(invPacket);
+		}
 	}
 
 	if (m_selectedBlock.w != -1)
