@@ -25,7 +25,7 @@ ClientPlayer *ClientPlayer::s_instance = nullptr;
 
 ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
 	m_x = 0;
-	m_y = 18;
+	m_y = 22;
 	m_z = 20;
 
 	m_angleH = 90.0;

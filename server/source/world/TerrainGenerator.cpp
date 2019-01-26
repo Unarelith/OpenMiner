@@ -17,6 +17,7 @@
 #include "BlockType.hpp"
 #include "ServerChunk.hpp"
 #include "TerrainGenerator.hpp"
+#include "World.hpp"
 
 void TerrainGenerator::generate(ServerChunk &chunk) const {
 	// basicGeneration(chunk);
@@ -41,21 +42,15 @@ void TerrainGenerator::basicGeneration(ServerChunk &chunk) const {
 }
 
 void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
+	srand(1337);
 	for(int z = 0 ; z < CHUNK_DEPTH ; z++) {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
 			// Land height
-			// float n = noise2d((x + chunk.x() * Chunk::width) / 256.0, (z + chunk.z() * Chunk::depth) / 256.0, 5, 0.8) * 4;
-			float n = noise2d((x / 2.0 + chunk.x() / 2.0 * CHUNK_WIDTH) / 256.0, (z / 2.0 + chunk.z() / 2.0 * CHUNK_DEPTH) / 256.0, 4, 0.8) * 4;
-			int h = n * 2;
+			float n = noise2d((x + chunk.x() * CHUNK_WIDTH) / 256.0, (z + chunk.z() * CHUNK_DEPTH) / 256.0, 4, 0.5) * 4;
+			float h = 10 + n * 2;
 
 			// Land blocks
 			for(int y = 0 ; y < CHUNK_HEIGHT ; y++) {
-				// Wood planks layer
-				// if (y == 0 && chunk.y() == 0) {
-				// 	chunk.setBlockRaw(x, y, z, 16);
-				// 	continue;
-				// }
-
 				// Are we above "ground" level?
 				if(y + chunk.y() * CHUNK_HEIGHT >= h) {
 					// if we are not yet up to sea level, fill with water blocks
@@ -65,7 +60,7 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 					// Otherwise we are in the air
 					} else {
 						// A tree!
-						if(chunk.getBlock(x, y - 1, z) == BlockType::Grass && (rand() & 0xff) == 0) {
+						if(chunk.getBlock(x, y - 1, z) == BlockType::Grass && (rand() % 256) == 0 && n < 4) {
 							// Trunk
 							h = (rand() & 0x3) + 3;
 							for(int i = 0 ; i < h ; i++) {
@@ -99,22 +94,38 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 				}
 
 				// Random value used to determine land type
-				float r = noise3d_abs((x / 2.0 + chunk.x() / 2.0 * CHUNK_WIDTH) / 16.0, (y / 2.0 + chunk.y() / 2.0 * CHUNK_HEIGHT) / 16.0, (z / 2.0 + chunk.z() / 2.0 * CHUNK_DEPTH) / 16.0, 2, 1);
+				float r = noise3d_abs((x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_HEIGHT) / 256.0 + 16, (z + chunk.z() * CHUNK_DEPTH) / 256.0, 5, 0.5) * 4;
 
 				// Sand layer
-				if(n + r * 5 < 4) {
+				if(n * 4 + r * 5 < 4) {
 					chunk.setBlockRaw(x, y, z, BlockType::Sand);
 				}
 				// Dirt layer, but use grass blocks for the top
-				else if(n + r * 5 < 8) {
-					chunk.setBlockRaw(x, y, z, (h < SEALEVEL || y + chunk.y() * CHUNK_HEIGHT < h - 1) ? BlockType::Dirt : BlockType::Grass);
+				else if(n + r * 5 < 6 * 8 && n * 10 + r * 5 > 30) {
+					chunk.setBlockRaw(x, y, z, (h < SEALEVEL - 5 || y + chunk.y() * CHUNK_HEIGHT < h - 1) ? BlockType::Dirt : BlockType::Grass);
 				}
-				// Rock layer
-				else if(r < 1.25) {
+				else {
 					chunk.setBlockRaw(x, y, z, BlockType::Stone);
-				// Sometimes, ores!
-				} else {
+				}
+
+				// Caves
+				float n2 = noise2d((x + chunk.x() * CHUNK_WIDTH) / 256.0, (z + chunk.z() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
+				float r2 = noise3d_abs((x + chunk.x() * CHUNK_WIDTH) / 512.0f, (y + chunk.y() * CHUNK_HEIGHT) / 512.0f, (z + chunk.z() * CHUNK_DEPTH) / 512.0f, 4, 0.1);
+				float r3 = noise3d_abs((x + chunk.x() * CHUNK_WIDTH) / 512.0f, (y + chunk.y() * CHUNK_HEIGHT) / 128.0f, (z + chunk.z() * CHUNK_DEPTH) / 512.0f, 4, 1);
+				float r4 = n2 * 5 + r2 * r3 * 20;
+				if (r4 > 6 && r4 < 8) {
+					chunk.setBlockRaw(x, y - 1, z, 0);
+					chunk.setBlockRaw(x, y, z, 0);
+					chunk.setBlockRaw(x, y + 1, z, 0);
+				}
+				else if (r < 0.3) {
 					chunk.setBlockRaw(x, y, z, BlockType::CoalOre);
+				}
+				else if (r > 0.3 && r < 0.5) {
+					chunk.setBlockRaw(x, y, z, BlockType::IronOre);
+				}
+				else if (r4 > 8.2 && r4 < 10) {
+					chunk.setBlockRaw(x, y, z, BlockType::Stone);
 				}
 			}
 		}
