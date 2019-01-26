@@ -14,7 +14,9 @@
 #include "CraftingWidget.hpp"
 #include "Registry.hpp"
 
-CraftingWidget::CraftingWidget(Inventory &craftingInventory, Widget *parent) : Widget(parent), m_craftingInventory{craftingInventory} {
+CraftingWidget::CraftingWidget(Client &client, Inventory &craftingInventory, Widget *parent)
+	: Widget(parent), m_client(client), m_craftingInventory(craftingInventory)
+{
 	m_craftingInventoryWidget.init(m_craftingInventory);
 	m_craftingInventoryWidget.setPosition(29, 16, 0);
 

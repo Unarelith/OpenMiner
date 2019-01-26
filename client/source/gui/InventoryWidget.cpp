@@ -11,9 +11,12 @@
  *
  * =====================================================================================
  */
+#include "Client.hpp"
 #include "InventoryWidget.hpp"
 
 void InventoryWidget::init(Inventory &inventory, unsigned int offset, unsigned int size) {
+	m_inventory = &inventory;
+
 	m_itemWidgets.clear();
 
 	for (u16 i = 0 ; i < (size > 0 ? size : inventory.width() * inventory.height()) ; ++i) {
@@ -29,6 +32,8 @@ void InventoryWidget::init(Inventory &inventory, unsigned int offset, unsigned i
 	m_inventoryHeight = inventory.height();
 }
 
+#include <gk/core/Debug.hpp>
+
 void InventoryWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly) {
 	if (event.type == SDL_MOUSEMOTION) {
 		m_currentItemWidget = nullptr;
@@ -43,13 +48,35 @@ void InventoryWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mous
 	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && m_currentItemWidget) {
 		mouseItemWidget.swapItems(*m_currentItemWidget, isReadOnly);
 
-		// TODO: Send inventory update packet
+		// FIXME: Duplicated below
+		sf::Packet packet;
+		if (m_inventory->inBlock()) {
+			packet << Network::Command::BlockInvUpdate;
+			packet << s32(m_inventory->blockPos().x) << s32(m_inventory->blockPos().y) << s32(m_inventory->blockPos().z);
+			packet << *m_inventory;
+		}
+		else {
+			packet << Network::Command::PlayerInvUpdate;
+			packet << *m_inventory;
+		}
+		m_client.send(packet);
 	}
 	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT && m_currentItemWidget) {
 		if (!isReadOnly) {
 			mouseItemWidget.putItem(*m_currentItemWidget);
 
-			// TODO: Send inventory update packet
+			// FIXME: Duplicated above
+			sf::Packet packet;
+			if (m_inventory->inBlock()) {
+				packet << Network::Command::BlockInvUpdate;
+				packet << s32(m_inventory->blockPos().x) << s32(m_inventory->blockPos().y) << s32(m_inventory->blockPos().z);
+				packet << *m_inventory;
+			}
+			else {
+				packet << Network::Command::PlayerInvUpdate;
+				packet << *m_inventory;
+			}
+			m_client.send(packet);
 		}
 	}
 }

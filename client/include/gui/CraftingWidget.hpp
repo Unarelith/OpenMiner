@@ -20,7 +20,7 @@ class Recipe;
 
 class CraftingWidget : public Widget {
 	public:
-		CraftingWidget(Inventory &craftingInventory, Widget *parent = nullptr);
+		CraftingWidget(Client &client, Inventory &craftingInventory, Widget *parent = nullptr);
 
 		void onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget);
 
@@ -32,11 +32,13 @@ class CraftingWidget : public Widget {
 		InventoryWidget &craftingResultInventoryWidget() { return m_craftingResultInventoryWidget; }
 
 	protected:
+		Client &m_client;
+
 		Inventory &m_craftingInventory;
-		InventoryWidget m_craftingInventoryWidget{this};
+		InventoryWidget m_craftingInventoryWidget{m_client, this};
 
 		Inventory m_craftingResultInventory{1, 1};
-		InventoryWidget m_craftingResultInventoryWidget{this};
+		InventoryWidget m_craftingResultInventoryWidget{m_client, this};
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;

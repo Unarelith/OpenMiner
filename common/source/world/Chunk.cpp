@@ -47,7 +47,7 @@ u16 Chunk::getData(int x, int y, int z) const {
 	return (m_data[x][y][z] >> 16) & 0xffff;
 }
 
-// #include <gk/core/Debug.hpp>
+#include <gk/core/Debug.hpp>
 
 void Chunk::setBlock(int x, int y, int z, u16 type) {
 	if(x < 0)              { if(m_surroundingChunks[0]) m_surroundingChunks[0]->setBlock(x + Chunk::width, y, z, type); return; }
@@ -81,14 +81,17 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 	}
 
 	// FIXME: Duplicated below
+	gk::Vector3i pos{x, y, z};
+	gk::Vector3i absolutePos{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_HEIGHT, z + m_z * CHUNK_DEPTH};
 	if (type == BlockType::Workbench) {
-		m_blockData.emplace(gk::Vector3i{x, y, z}, BlockData{3, 3});
+		m_blockData.emplace(pos, BlockData{absolutePos, 3, 3});
 	}
-	else if (type == BlockType::Furnace)
-		m_blockData.emplace(gk::Vector3i{x, y, z}, BlockData{3, 1});
+	else if (type == BlockType::Furnace) {
+		m_blockData.emplace(pos, BlockData{absolutePos, 3, 1});
+	}
 
 	if (m_data[x][y][z] == BlockType::Workbench || m_data[x][y][z] == BlockType::Furnace) {
-		auto it = m_blockData.find(gk::Vector3i{x, y, z});
+		auto it = m_blockData.find(pos);
 		if (it != m_blockData.end())
 			m_blockData.erase(it);
 	}
@@ -132,14 +135,16 @@ void Chunk::setBlockRaw(int x, int y, int z, u16 type) {
 
 	if (m_data[x][y][z] == type) return;
 
+	gk::Vector3i pos{x, y, z};
+	gk::Vector3i absolutePos{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_HEIGHT, z + m_z * CHUNK_DEPTH};
 	if (type == BlockType::Workbench) {
-		m_blockData.emplace(gk::Vector3i{x, y, z}, BlockData{3, 3});
+		m_blockData.emplace(pos, BlockData{absolutePos, 3, 3});
 	}
 	else if (type == BlockType::Furnace)
-		m_blockData.emplace(gk::Vector3i{x, y, z}, BlockData{3, 1});
+		m_blockData.emplace(pos, BlockData{absolutePos, 3, 1});
 
 	if (m_data[x][y][z] == BlockType::Workbench || m_data[x][y][z] == BlockType::Furnace) {
-		auto it = m_blockData.find(gk::Vector3i{x, y, z});
+		auto it = m_blockData.find(pos);
 		if (it != m_blockData.end())
 			m_blockData.erase(it);
 	}

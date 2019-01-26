@@ -13,8 +13,8 @@
  */
 #include "PlayerInventoryWidget.hpp"
 
-PlayerInventoryWidget::PlayerInventoryWidget(Inventory &playerInventory, Widget *parent)
-	: Widget(176, 166, parent), m_playerInventory(playerInventory)
+PlayerInventoryWidget::PlayerInventoryWidget(Client &client, Inventory &playerInventory, Widget *parent)
+	: Widget(176, 166, parent), m_client(client), m_playerInventory(playerInventory)
 {
 	m_background.load("texture-inventory");
 	m_background.setClipRect(0, 0, 176, 166);

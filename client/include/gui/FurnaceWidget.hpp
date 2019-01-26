@@ -19,7 +19,7 @@
 
 class FurnaceWidget : public Widget {
 	public:
-		FurnaceWidget(MouseItemWidget &mouseItemWidget, Inventory &playerInventory, BlockData &blockData, Widget *parent = nullptr);
+		FurnaceWidget(Client &client, MouseItemWidget &mouseItemWidget, Inventory &playerInventory, BlockData &blockData, Widget *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -28,15 +28,17 @@ class FurnaceWidget : public Widget {
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
+		Client &m_client;
+
 		gk::Image m_background;
 
 		Inventory &m_playerInventory;
-		InventoryWidget m_playerInventoryWidget{this};
-		InventoryWidget m_hotbarInventoryWidget{this};
+		InventoryWidget m_playerInventoryWidget{m_client, this};
+		InventoryWidget m_hotbarInventoryWidget{m_client, this};
 
-		InventoryWidget m_inputInventoryWidget{this};
-		InventoryWidget m_outputInventoryWidget{this};
-		InventoryWidget m_fuelInventoryWidget{this};
+		InventoryWidget m_inputInventoryWidget{m_client, this};
+		InventoryWidget m_outputInventoryWidget{m_client, this};
+		InventoryWidget m_fuelInventoryWidget{m_client, this};
 
 		BlockData &m_blockData;
 

@@ -16,6 +16,8 @@
 
 #include <vector>
 
+#include <gk/core/Vector3.hpp>
+
 #include "ItemStack.hpp"
 
 class Inventory {
@@ -33,11 +35,28 @@ class Inventory {
 
 		const std::vector<ItemStack> &items() const { return m_items; }
 
+		bool inBlock() const { return m_inBlock; }
+		void setInBlock(bool inBlock) { m_inBlock = inBlock; }
+
+		const gk::Vector3i &blockPos() const { return m_blockPos; }
+		void setBlockPos(const gk::Vector3i &blockPos) { m_blockPos = blockPos; }
+
+		bool hasChanged() const { return m_hasChanged; }
+		void setChanged(bool hasChanged) { m_hasChanged = hasChanged; }
+
 	private:
 		u16 m_width = 0;
 		u16 m_height = 0;
 
 		std::vector<ItemStack> m_items;
+
+		bool m_inBlock = false;
+		gk::Vector3i m_blockPos{0, 0, 0};
+
+		bool m_hasChanged = false; // Used to send inventory update packets
 };
+
+sf::Packet &operator<<(sf::Packet &packet, Inventory &inventory);
+sf::Packet &operator>>(sf::Packet &packet, Inventory &inventory);
 
 #endif // INVENTORY_HPP_

@@ -28,7 +28,9 @@
 #include "Player.hpp"
 #include "TextButton.hpp"
 
-LuaGUIState::LuaGUIState(ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent) : gk::ApplicationState(parent) {
+LuaGUIState::LuaGUIState(Client &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent)
+	: gk::ApplicationState(parent), m_client(client)
+{
 	// FIXME: Duplicated with HUD
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
@@ -153,7 +155,7 @@ void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &
 		u16 offset, count;
 		packet >> playerName >> inventory >> width >> height >> offset >> count;
 
-		auto &inventoryWidget = m_inventoryWidgets.emplace_back(&m_mainWidget);
+		auto &inventoryWidget = m_inventoryWidgets.emplace_back(m_client, &m_mainWidget);
 		inventoryWidget.setPosition(x, y);
 		inventoryWidget.init(player.inventory(), offset, count);
 	}
@@ -163,7 +165,7 @@ void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &
 		packet >> block.x >> block.y >> block.z >> offset >> count;
 		BlockData *data = world.getBlockData(block.x, block.y, block.z);
 		if (data) {
-			auto &craftingWidget = m_craftingWidgets.emplace_back(data->inventory, &m_mainWidget);
+			auto &craftingWidget = m_craftingWidgets.emplace_back(m_client, data->inventory, &m_mainWidget);
 			craftingWidget.setPosition(x, y);
 		}
 		else {
@@ -175,7 +177,7 @@ void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &
 		packet >> block.x >> block.y >> block.z;
 		BlockData *data = world.getBlockData(block.x, block.y, block.z);
 		if (data) {
-			auto *furnaceWidget = new FurnaceWidget(m_mouseItemWidget, player.inventory(), *data, &m_mainWidget);
+			auto *furnaceWidget = new FurnaceWidget(m_client, m_mouseItemWidget, player.inventory(), *data, &m_mainWidget);
 			furnaceWidget->setPosition(x, y);
 			m_widgets.emplace_back(furnaceWidget);
 		}

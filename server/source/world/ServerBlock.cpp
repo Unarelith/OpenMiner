@@ -23,10 +23,23 @@ void ServerBlock::onTick(const glm::ivec3 &pos, Player &player, Chunk &chunk, Wo
 			m_onTick(pos, player, chunk, world);
 
 			// FIXME: Send this every 0.5 second instead of once per tick
-			sf::Packet packet;
-			packet << Network::Command::BlockUpdate << s32(pos.x) << s32(pos.y) << s32(pos.z);
-			packet << u32(id() | ((data() & 0xffff) << 16));
-			server.sendToAllClients(packet);
+			BlockData *data = world.getBlockData(pos.x, pos.y, pos.z);
+			if (data) {
+				sf::Packet packet;
+				packet << Network::Command::BlockDataUpdate << s32(pos.x) << s32(pos.y) << s32(pos.z);
+				packet << data->data;
+				server.sendToAllClients(packet);
+
+				if (data->inventory.hasChanged()) {
+					sf::Packet packet2;
+					packet2 << Network::Command::BlockInvUpdate;
+					packet2 << s32(pos.x) << s32(pos.y) << s32(pos.z);
+					packet2 << data->inventory;
+					server.sendToAllClients(packet2);
+					data->inventory.setChanged(false);
+					DEBUG("Sending inventory update", pos.x, pos.y, pos.z);
+				}
+			}
 		}
 	}
 	catch (const sol::error &e) {

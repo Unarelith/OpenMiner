@@ -58,7 +58,27 @@ GameState::GameState(Client &client, const std::string &host, int port) : m_clie
 	});
 
 	m_client.setCommandCallback(Network::Command::BlockGUIData, [this](sf::Packet &packet) {
-		m_stateStack->push<LuaGUIState>(m_player, m_world, packet, this);
+		m_stateStack->push<LuaGUIState>(m_client, m_player, m_world, packet, this);
+	});
+
+	m_client.setCommandCallback(Network::Command::BlockInvUpdate, [this](sf::Packet &packet) {
+		gk::Vector3<s32> pos;
+		packet >> pos.x >> pos.y >> pos.z;
+
+		BlockData *data = m_world.getBlockData(pos.x, pos.y, pos.z);
+		if (data) {
+			packet >> data->inventory;
+		}
+	});
+
+	m_client.setCommandCallback(Network::Command::BlockDataUpdate, [this](sf::Packet &packet) {
+		gk::Vector3<s32> pos;
+		packet >> pos.x >> pos.y >> pos.z;
+
+		BlockData *data = m_world.getBlockData(pos.x, pos.y, pos.z);
+		if (data) {
+			packet >> data->data;
+		}
 	});
 
 	// sf::Packet packet;
@@ -105,7 +125,7 @@ void GameState::update() {
 
 			if (gk::GamePad::isKeyPressedOnce(GameKey::Inventory)) {
 				auto &inventoryState = m_stateStack->push<InventoryState>(this);
-				inventoryState.setupWidget<PlayerInventoryWidget>(m_player.inventory());
+				inventoryState.setupWidget<PlayerInventoryWidget>(m_client, m_player.inventory());
 			}
 		}
 

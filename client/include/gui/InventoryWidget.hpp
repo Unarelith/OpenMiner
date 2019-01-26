@@ -18,9 +18,12 @@
 
 #include "MouseItemWidget.hpp"
 
+class Client;
+
 class InventoryWidget : public Widget {
 	public:
-		InventoryWidget(Widget *parent = nullptr) : Widget(parent) {}
+		InventoryWidget(Client &client, Widget *parent = nullptr)
+			: Widget(parent), m_client(client) {}
 
 		void init(Inventory &inventory, unsigned int offset = 0, unsigned int size = 0);
 
@@ -30,6 +33,10 @@ class InventoryWidget : public Widget {
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		Client &m_client;
+
+		Inventory *m_inventory = nullptr;
 
 		u16 m_inventoryWidth = 0;
 		u16 m_inventoryHeight = 0;

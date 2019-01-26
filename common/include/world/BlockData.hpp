@@ -17,11 +17,14 @@
 #include "Inventory.hpp"
 
 struct BlockData {
-	BlockData(int width, int height) : inventory(width, height) {}
+	BlockData(const gk::Vector3i &pos, int width, int height) : inventory(width, height) {
+		inventory.setInBlock(true);
+		inventory.setBlockPos(pos);
+	}
 
 	Inventory inventory;
 
-	u64 data = 0;
+	u32 data = 0;
 };
 
 #endif // BLOCKDATA_HPP_

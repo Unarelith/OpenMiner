@@ -34,7 +34,7 @@ mod:block {
 		local current_burn_time = bit.band(bit.brshift(data.data, 12), 0xfff)
 		local item_progress = bit.band(bit.brshift(data.data, 24), 0xff)
 
-		-- print(tostring(ticks_remaining).." "..tostring(current_burn_time).." "..tostring(item_progress))
+		-- print(data.data);
 
 		local recipe = openminer:registry():get_recipe(data.inventory)
 		if recipe and recipe:type() ~= "smelt" then

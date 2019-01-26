@@ -98,6 +98,27 @@ void ServerApplication::init() {
 		u16 id = m_world.getBlock(x, y, z);
 		((ServerBlock &)(m_registry.getBlock(id))).onBlockActivated({x, y, z}, m_player, m_world, client);
 	});
+
+	m_server.setCommandCallback(Network::Command::BlockInvUpdate, [this](Client &, sf::Packet &packet) {
+		gk::Vector3<s32> pos;
+		packet >> pos.x >> pos.y >> pos.z;
+
+		BlockData *data = m_world.getBlockData(pos.x, pos.y, pos.z);
+		if (data)
+			packet >> data->inventory;
+		else
+			DEBUG("BlockInvUpdate: No block data found at", pos.x, pos.y, pos.z);
+	});
+
+	m_server.setCommandCallback(Network::Command::BlockDataUpdate, [this](Client &, sf::Packet &packet) {
+		gk::Vector3<s32> pos;
+		packet >> pos.x >> pos.y >> pos.z;
+
+		BlockData *data = m_world.getBlockData(pos.x, pos.y, pos.z);
+		if (data) {
+			packet >> data->data;
+		}
+	});
 }
 
 void ServerApplication::mainLoop() {
