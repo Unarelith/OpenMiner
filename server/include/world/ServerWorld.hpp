@@ -22,12 +22,13 @@
 
 struct Client;
 class Server;
+class ServerPlayer;
 
 class ServerWorld : public World {
 	public:
 		ServerWorld();
 
-		void update(Server &server);
+		void update(Server &server, ServerPlayer &player);
 
 		void sendWorldData(Client &client);
 		void sendChunkData(Client &client, ServerChunk *chunk);
@@ -40,6 +41,8 @@ class ServerWorld : public World {
 		// FIXME: Duplicated with ClientWorld
 		u16 getBlock(int x, int y, int z) const override;
 		void setBlock(int x, int y, int z, u16 id) override;
+		u16 getData(int x, int y, int z) const override;
+		void setData(int x, int y, int z, u16 id) override;
 
 	private:
 		std::vector<std::unique_ptr<ServerChunk>> m_chunks;

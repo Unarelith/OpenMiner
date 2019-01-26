@@ -20,15 +20,19 @@
 #include "Chunk.hpp"
 #include "TerrainGenerator.hpp"
 
+class Player;
+class World;
+
 class ServerChunk : public Chunk {
 	public:
 		ServerChunk(s32 x, s32 y, s32 z) : Chunk(x, y, z) {}
 
-		void update() override;
+		void update();
 		void generate();
+		void tick(Player &player, World &world);
 
 		bool isGenerated() const { return m_isGenerated; }
-		void setGenerated(bool isGenerated) { m_isGenerated = isGenerated; } // FIXME
+		void setGenerated(bool isGenerated) { m_isGenerated = isGenerated; }
 
 		bool isSent() const { return m_isSent; }
 		void setSent(bool isSent) { m_isSent = isSent; }

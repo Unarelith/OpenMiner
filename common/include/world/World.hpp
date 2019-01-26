@@ -24,6 +24,8 @@ class World {
 
 		virtual u16 getBlock(int x, int y, int z) const = 0;
 		virtual void setBlock(int x, int y, int z, u16 id) = 0;
+		virtual u16 getData(int x, int y, int z) const = 0;
+		virtual void setData(int x, int y, int z, u16 id) = 0;
 
 		static bool isReloadRequested;
 

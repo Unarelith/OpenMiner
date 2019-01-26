@@ -13,21 +13,14 @@
  */
 #include <cstring>
 
+#include <gk/core/GameClock.hpp>
+
+#include "Player.hpp"
+#include "ServerBlock.hpp"
 #include "ServerChunk.hpp"
+#include "World.hpp"
 
 void ServerChunk::update() {
-	// FIXME
-	// if (!m_tickingBlocks.empty() && m_lastTick < gk::GameClock::getTicks() / 50) {
-	// 	m_lastTick = gk::GameClock::getTicks() / 50;
-    //
-	// 	for (auto &it : m_tickingBlocks) {
-	// 		int z = it.first / (width * height);
-	// 		int y = (it.first - z * width * height) / width;
-	// 		int x = (it.first - z * width * height) % width;
-	// 		it.second.onTick(glm::ivec3{x + m_x * width, y + m_y * height, z + m_z * depth}, player, *this, world);
-	// 	}
-	// }
-
 	if (m_hasChanged) {
 		m_lightmap.updateLights();
 		m_hasChanged = false;
@@ -41,6 +34,19 @@ void ServerChunk::generate() {
 
 		m_isGenerated = true;
 		m_hasChanged = true;
+	}
+}
+
+void ServerChunk::tick(Player &player, World &world) {
+	if (!m_tickingBlocks.empty() && m_lastTick < gk::GameClock::getTicks() / 50) {
+		m_lastTick = gk::GameClock::getTicks() / 50;
+
+		for (auto &it : m_tickingBlocks) {
+			int z = it.first / (width * height);
+			int y = (it.first - z * width * height) / width;
+			int x = (it.first - z * width * height) % width;
+			((ServerBlock &)it.second).onTick(glm::ivec3{x + m_x * width, y + m_y * height, z + m_z * depth}, player, *this, world);
+		}
 	}
 }
 

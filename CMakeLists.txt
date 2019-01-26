@@ -96,7 +96,7 @@ include_directories(${SDL2_INCLUDE_DIRS}
 #------------------------------------------------------------------------------
 # - SFML network
 #------------------------------------------------------------------------------
-find_package(SFML COMPONENTS network)
+find_package(SFML COMPONENTS system network)
 if(NOT SFML_FOUND)
 	message(FATAL_ERROR "SFML is needed to build the project. Please install it correctly.")
 endif()

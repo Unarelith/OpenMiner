@@ -37,6 +37,8 @@ class ClientWorld : public World, public gk::IDrawable {
 		// FIXME: Duplicated with ServerWorld
 		u16 getBlock(int x, int y, int z) const override;
 		void setBlock(int x, int y, int z, u16 id) override;
+		u16 getData(int x, int y, int z) const override;
+		void setData(int x, int y, int z, u16 id) override;
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;

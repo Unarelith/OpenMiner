@@ -146,6 +146,33 @@ void ClientWorld::setBlock(int x, int y, int z, u16 id) {
 		chunk->setBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), id);
 }
 
+u16 ClientWorld::getData(int x, int y, int z) const {
+	int cx = (x + CHUNK_WIDTH * (m_width / 2)) / CHUNK_WIDTH;
+	int cy = (y + CHUNK_HEIGHT * (m_height / 2)) / CHUNK_HEIGHT;
+	int cz = (z + CHUNK_DEPTH * (m_depth / 2)) / CHUNK_DEPTH;
+
+	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
+		return 0;
+
+	ClientChunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
+	if (chunk)
+		return chunk->getData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1));
+	return 0;
+}
+
+void ClientWorld::setData(int x, int y, int z, u16 id) {
+	int cx = (x + CHUNK_WIDTH * (m_width / 2)) / CHUNK_WIDTH;
+	int cy = (y + CHUNK_HEIGHT * (m_height / 2)) / CHUNK_HEIGHT;
+	int cz = (z + CHUNK_DEPTH * (m_depth / 2)) / CHUNK_DEPTH;
+
+	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
+		return;
+
+	ClientChunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
+	if (chunk)
+		chunk->setData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), id);
+}
+
 void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (!target.getView()) {
 		DEBUG("ERROR: Trying to draw world without a camera");

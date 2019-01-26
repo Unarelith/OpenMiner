@@ -59,18 +59,17 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 
 	if (m_data[x][y][z] == type) return;
 
-	// FIXME
-	// const Block &block = Registry::getInstance().getBlock(type);
-	// // if (type == 8)
-	// // 	DEBUG("at (", m_x, m_y, m_z, ")", "(", x, y, z, ")", type, "is", block.canUpdate());
-	// if (block.canUpdate()) {
-	// 	m_tickingBlocks.emplace(x + y * width + z * width * height, block);
-	// }
-	// else {
-	// 	auto it = m_tickingBlocks.find(x + y * width + z * width * height);
-	// 	if (it != m_tickingBlocks.end())
-	// 		m_tickingBlocks.erase(it);
-	// }
+	const Block &block = Registry::getInstance().getBlock(type);
+	// if (type == 8)
+	// 	DEBUG("at (", m_x, m_y, m_z, ")", "(", x, y, z, ")", type, "is", block.canUpdate());
+	if (block.canUpdate()) {
+		m_tickingBlocks.emplace(x + y * width + z * width * height, block);
+	}
+	else {
+		auto it = m_tickingBlocks.find(x + y * width + z * width * height);
+		if (it != m_tickingBlocks.end())
+			m_tickingBlocks.erase(it);
+	}
 
 	if (type == BlockType::Glowstone)
 		m_lightmap.addLight(x, y, z, 14);

@@ -19,24 +19,24 @@
 #include <sol.hpp>
 
 class Registry;
-class ServerPlayer;
-class ServerWorld;
+class Player;
+class World;
 
 class LuaCore {
 	public:
-		ServerWorld *world() { return m_world; }
-		void setWorld(ServerWorld &world) { m_world = &world; }
+		World *world() { return m_world; }
+		void setWorld(World &world) { m_world = &world; }
 
-		ServerPlayer *player() { return m_player; }
-		void setPlayer(ServerPlayer &player) { m_player = &player; }
+		Player *player() { return m_player; }
+		void setPlayer(Player &player) { m_player = &player; }
 
 		Registry *registry();
 
 		static void initUsertype(sol::state &lua);
 
 	private:
-		ServerPlayer *m_player = nullptr;
-		ServerWorld *m_world = nullptr;
+		Player *m_player = nullptr;
+		World *m_world = nullptr;
 };
 
 #endif // LUACORE_HPP_

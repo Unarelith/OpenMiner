@@ -42,8 +42,6 @@ class Chunk : public gk::NonCopyable {
 		Chunk(s32 x, s32 y, s32 z);
 		virtual ~Chunk() = default;
 
-		virtual void update() = 0;
-
 		u16 getBlock(int x, int y, int z) const;
 		u16 getData(int x, int y, int z) const;
 		void setBlock(int x, int y, int z, u16 type);
@@ -93,8 +91,8 @@ class Chunk : public gk::NonCopyable {
 		bool m_hasChanged = false;
 		bool m_isInitialized = false;
 
-		// u32 m_lastTick = 0;
-		// std::unordered_map<std::size_t, const Block&> m_tickingBlocks;
+		u32 m_lastTick = 0;
+		std::unordered_map<std::size_t, const Block&> m_tickingBlocks;
 
 		std::unordered_map<gk::Vector3i, BlockData> m_blockData;
 };

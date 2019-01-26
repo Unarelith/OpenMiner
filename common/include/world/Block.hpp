@@ -72,8 +72,12 @@ class Block {
 		BlockDrawType drawType() const { return m_drawType; }
 		void setDrawType(BlockDrawType drawType) { m_drawType = drawType; }
 
+		bool canUpdate() const { return m_canUpdate; }
+
 	protected:
 		glm::vec4 getTexCoordsFromID(int textureID) const;
+
+		bool m_canUpdate = false;
 
 	private:
 		u32 m_id;

@@ -29,7 +29,7 @@ class ServerBlock : public Block {
 		bool canUpdate() const { return m_onTick.valid(); }
 
 		void setOnBlockActivated(const sol::function &function) { m_onBlockActivated = function; }
-		void setOnTick(const sol::function &function) { m_onTick = function; }
+		void setOnTick(const sol::function &function) { m_onTick = function; m_canUpdate = m_onTick.valid(); }
 
 	private:
 		sol::unsafe_function m_onBlockActivated;

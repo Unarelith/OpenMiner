@@ -107,7 +107,7 @@ void ServerApplication::mainLoop() {
 		m_server.handleKeyState();
 
 		m_clock.updateGame([&] {
-			m_world.update(m_server);
+			m_world.update(m_server, m_player);
 		});
 
 		m_clock.waitForNextFrame();
