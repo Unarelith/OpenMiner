@@ -51,6 +51,7 @@ GameState::GameState(Client &client, const std::string &host, int port) : m_clie
 		u32 block;
 		packet >> x >> y >> z >> block;
 		m_world.setBlock(x, y, z, block);
+		m_world.setData(x, y, z, block >> 16);
 	});
 
 	m_client.setCommandCallback(Network::Command::PlayerInvUpdate, [this](sf::Packet &packet) {
