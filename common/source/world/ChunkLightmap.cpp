@@ -115,7 +115,7 @@ void ChunkLightmap::updateSunlight() {
 
 		for (const LightNode &surroundingNode : surroundingNodes) {
 			int level = getSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z);
-			if (level != 0 && level < node.value) {
+			if ((level == 15 && surroundingNode.y == node.y - 1) || (level != 0 && level < node.value)) {
 				setSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, 0);
 
 				m_sunlightRemovalBfsQueue.emplace(surroundingNode.x, surroundingNode.y, surroundingNode.z, level);

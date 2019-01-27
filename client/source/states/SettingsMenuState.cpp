@@ -103,7 +103,8 @@ void SettingsMenuState::addGraphicsButtons() {
 		World::isReloadRequested = true;
 	});
 
-	addToggleButton("Smooth Lighting", Config::isSmoothLightingEnabled, true);
+	addToggleButton("Torch Smooth Lighting", Config::isTorchSmoothLightingEnabled, true);
+	addToggleButton("Sun Smooth Lighting", Config::isSunSmoothLightingEnabled, true);
 	addToggleButton("Ambient Occlusion", Config::isAmbientOcclusionEnabled, true);
 	addToggleButton("Wireframe Mode", Config::isWireframeModeEnabled, false);
 

@@ -172,25 +172,16 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, con
 		vertices[j].texCoord[0] = faceTexCoords[j * 2];
 		vertices[j].texCoord[1] = faceTexCoords[j * 2 + 1];
 
-		// int sunlight = chunk.lightmap().getSunlight(x, y, z);
-		// if ((i == 0 || i == 1 || i == 4 || i == 5) && sunlight > 2)
-		// 	vertices[j].lightValue[0] = sunlight - 2;
-		// if (i == 4 && sunlight > 3)
-		// 	vertices[j].lightValue[0] = sunlight - 3;
-		// else
-
-		if (Config::isSmoothLightingEnabled) {
-			if (Config::isAmbientOcclusionEnabled)
-				vertices[j].lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
-			else
-				vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, chunk);
-
-			vertices[j].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, i, j, chunk);
-		}
-		else {
+		// FIXME: Duplicated below
+		if (Config::isSunSmoothLightingEnabled)
+			vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, chunk);
+		else
 			vertices[j].lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
+
+		if (Config::isTorchSmoothLightingEnabled)
+			vertices[j].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, i, j, chunk);
+		else
 			vertices[j].lightValue[1] = chunk.lightmap().getTorchlight(x, y, z);
-		}
 
 		if (Config::isAmbientOcclusionEnabled)
 			vertices[j].ambientOcclusion = getAmbientOcclusion(x, y, z, i, j, chunk);
@@ -201,12 +192,11 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, con
 	}
 
 	auto addVertex = [&](u8 j) {
-		// FIXME
-		// if (block->id() == BlockType::Water)
-		// 	m_vertices[Layer::Liquid].emplace_back(vertices[j]);
-		// else if (block->id() == BlockType::Leaves)
-		// 	m_vertices[Layer::Other].emplace_back(vertices[j]);
-		// else
+		if (block->id() == BlockType::Water)
+			m_vertices[Layer::Liquid].emplace_back(vertices[j]);
+		else if (block->id() == BlockType::Leaves)
+			m_vertices[Layer::Other].emplace_back(vertices[j]);
+		else
 			m_vertices[Layer::Solid].emplace_back(vertices[j]);
 	};
 
@@ -258,18 +248,15 @@ void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Bl
 			vertices[j].texCoord[1] = faceTexCoords[j * 2 + 1];
 
 			// FIXME: Duplicated above
-			if (Config::isSmoothLightingEnabled) {
-				if (Config::isAmbientOcclusionEnabled)
-					vertices[j].lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
-				else
-					vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, chunk);
-
-				vertices[j].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, i, j, chunk);
-			}
-			else {
+			if (Config::isSunSmoothLightingEnabled)
+				vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, chunk);
+			else
 				vertices[j].lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
+
+			if (Config::isTorchSmoothLightingEnabled)
+				vertices[j].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, i, j, chunk);
+			else
 				vertices[j].lightValue[1] = chunk.lightmap().getTorchlight(x, y, z);
-			}
 
 			if (Config::isAmbientOcclusionEnabled)
 				vertices[j].ambientOcclusion = getAmbientOcclusion(x, y, z, i, j, chunk);

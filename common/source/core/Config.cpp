@@ -20,7 +20,8 @@ bool Config::isFlyModeEnabled = false;
 bool Config::isNoClipEnabled = false;
 
 // Graphics
-bool Config::isSmoothLightingEnabled = true;
+bool Config::isTorchSmoothLightingEnabled = true;
+bool Config::isSunSmoothLightingEnabled = true;
 bool Config::isAmbientOcclusionEnabled = true;
 bool Config::isWireframeModeEnabled = false;
 u16 Config::renderDistance = 8;
