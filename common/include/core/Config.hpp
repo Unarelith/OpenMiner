@@ -27,9 +27,13 @@ namespace {
 	constexpr float DIST_NEAR = 0.01f;
 	constexpr float DIST_FAR  = 1000.0f;
 
-	constexpr int CHUNK_WIDTH  = 16.0f;
-	constexpr int CHUNK_HEIGHT = 32.0f;
-	constexpr int CHUNK_DEPTH  = 16.0f;
+	constexpr int CHUNK_WIDTH  = 16;
+	constexpr int CHUNK_HEIGHT = 32;
+	constexpr int CHUNK_DEPTH  = 16;
+
+	constexpr int WORLD_WIDTH = 64;
+	constexpr int WORLD_HEIGHT = 4;
+	constexpr int WORLD_DEPTH = 64;
 
 	constexpr int SEALEVEL = 4;
 }

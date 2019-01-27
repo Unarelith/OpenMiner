@@ -30,9 +30,9 @@ class World {
 		static bool isReloadRequested;
 
 	protected:
-		const s32 m_width = 64;
-		const s32 m_height = 4;
-		const s32 m_depth = 64;
+		const s32 m_width = WORLD_WIDTH;
+		const s32 m_height = WORLD_HEIGHT;
+		const s32 m_depth = WORLD_DEPTH;
 };
 
 #endif // WORLD_HPP_
