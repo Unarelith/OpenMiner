@@ -7,14 +7,11 @@
 
 - OpenMiner is a Minecraft-like game engine.
 
-<details>
- <summary>Screenshots</summary>
+## Screenshots
 
- ![](screenshot1.png?raw=true)
- ![](screenshot2.png?raw=true)
- ![](screenshot3.png?raw=true)
-
-</details>
+![](screenshot1.png?raw=true)
+![](screenshot2.png?raw=true)
+![](screenshot3.png?raw=true)
 
 ## Keys
 
