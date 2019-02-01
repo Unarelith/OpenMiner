@@ -21,7 +21,7 @@ bool Config::isNoClipEnabled = false;
 
 // Graphics
 bool Config::isTorchSmoothLightingEnabled = true;
-bool Config::isSunSmoothLightingEnabled = true;
+bool Config::isSunSmoothLightingEnabled = false;
 bool Config::isAmbientOcclusionEnabled = true;
 bool Config::isWireframeModeEnabled = false;
 u16 Config::renderDistance = 8;
