@@ -28,14 +28,14 @@ uniform int u_time;
 
 void main() {
 	vec3 finalPos = coord3d.xyz;
-	if (blockType == 8) {
-		/* finalPos.y += sin((u_time / 1000.0 + mod(finalPos.x, 16)) * 1.75) / 10.0; */
-		/* finalPos.y += cos((u_time / 1000.0 + mod(finalPos.z, 16)) * 1.75) / 10.0; */
-		/* finalPos.y -= 0.25; */
-		/* finalPos.y -= 1.0 / 16.0; */
+	if (blockType == 8) { // Water
+		// finalPos.y += sin((u_time / 1000.0 + mod(finalPos.x, 16)) * 1.75) / 10.0;
+		// finalPos.y += cos((u_time / 1000.0 + mod(finalPos.z, 16)) * 1.75) / 10.0;
+		// finalPos.y -= 0.25;
+		// finalPos.y -= 1.0 / 16.0;
 		finalPos.y += sin(u_time / 1000.0) / 16.0 - 0.125;
 	}
-	else if (blockType == 4) {
+	else if (blockType == 4) { // Leaves
 		finalPos.xz += sin((u_time / 1000.0 + finalPos.x) * 2) / 30.0;
 		finalPos.xz += cos((u_time / 1000.0 + finalPos.z) * 2) / 30.0;
 	}
