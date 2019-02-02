@@ -200,6 +200,7 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, con
 			m_vertices[Layer::Solid].emplace_back(vertices[j]);
 	};
 
+	// Flipping quad to fix anisotropy issue
 	if (vertices[0].ambientOcclusion + vertices[2].ambientOcclusion >
 			vertices[1].ambientOcclusion + vertices[3].ambientOcclusion) {
 		addVertex(0);
@@ -301,6 +302,7 @@ gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) {
 	return offset;
 }
 
+// Based on this article: https://0fps.net/2013/07/03/ambient-occlusion-for-minecraft-like-worlds/
 u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const ClientChunk &chunk) {
 	gk::Vector3i offset = getOffsetFromVertex(i, j);
 

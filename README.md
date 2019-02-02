@@ -39,6 +39,55 @@
 - Discord: [join server](https://discord.gg/eN8k8wt)
 - IRC: irc.freenode.net `#openminer`
 
+## Project status
+
+This list is non exhaustive.
+
+### Terrain generation
+
+- [x] Basic terrain gen
+- [x] Trees
+- [x] Flowers
+- [ ] Tall grass
+- [ ] Biomes
+- [ ] Mountains
+- [ ] Cave tunnels
+
+### Lighting
+
+- [x] Basic lighting system
+- [x] Cheap ambient occlusion
+- [x] Smooth lighting
+- [ ] Sunlight downward propagation (possible but laggy)
+- [ ] Ability to block light (possible but causes weird AO effects)
+
+### Network
+
+- [x] World
+- [x] Custom GUI
+- [x] Inventories
+- [ ] Players
+
+### Lua API
+
+- [x] Register blocks/craft/items in the game
+- [x] Create custom GUI and show them to player when rightclicking a block
+
+### World
+
+- [x] Block ticking (Furnace)
+- [x] Mining speed/capability
+- [ ] World loading/saving
+- [ ] Block metadata (currently using a `u16` instead of the real thing)
+- [ ] Fluid propagation
+
+### Menus
+
+- [x] Pause menu
+- [x] Settings menu
+- [ ] Title screen
+- [ ] Server selection menu
+
 ## Previous versions
 
 - Here is the [commit](https://github.com/Quent42340/OpenMiner/tree/8eba845421efff6ce941f8550ff79e6364970fd5) matching the end of the first version made in 2013.
