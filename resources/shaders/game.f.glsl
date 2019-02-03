@@ -33,8 +33,10 @@ void main() {
 		/* 	color.a = 0.5; */
 	}
 	else if (v_blockID == 3) { // Grass
-		if (color.r == color.g && color.r == color.b)
+		if (color.r == color.g && color.r == color.b) {
 			color += vec4(-0.3, -0.1, -0.25, 0);
+			/* color += vec4(-0.4, -0.15, -0.3, 0); */
+		}
 	}
 
 	// Very cheap "transparency": don't draw pixels with a low alpha value

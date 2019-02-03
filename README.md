@@ -4,8 +4,25 @@
 [![Documentation](https://codedocs.xyz/Quent42340/OpenMiner.svg)](https://codedocs.xyz/Quent42340/OpenMiner/)
 [![License](https://img.shields.io/badge/license-LGPLv2.1%2B-blue.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
 [![Discord](https://img.shields.io/discord/527527086756200458.svg?style=popout)](https://discord.gg/eN8k8wt)
+[![Donate](https://img.shields.io/badge/donate-paypal-brightgreen.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66DH462V7TA6N&source=url)
 
-- OpenMiner is a Minecraft-like game engine.
+- [Wiki](#wiki)
+- [Project goal](#project-goal)
+- [Screenshots](#screenshots)
+- [Keys](#keys)
+- [How to compile](#how-to-compile)
+- [Discussion](#discussion)
+- [Project status](#project-status)
+- [Previous versions](#previous-versions)
+- [Credits](#credits)
+
+## Wiki
+
+- [Lua API Overview](https://github.com/Quent42340/OpenMiner/wiki/Lua-API-Overview)
+
+## Project goal
+
+The long-term goal of this project is to provide a viable alternative to Minecraft modding.
 
 ## Screenshots
 
