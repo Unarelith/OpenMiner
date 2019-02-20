@@ -31,7 +31,6 @@ if(NOT GAMEKIT_FOUND)
 endif()
 
 include_directories(${GAMEKIT_INCLUDE_DIRS})
-link_directories(${GAMEKIT_LIBRARY_DIRS})
 
 #------------------------------------------------------------------------------
 # - tinyxml2
@@ -42,7 +41,6 @@ if(NOT TINYXML2_FOUND)
 endif()
 
 include_directories(${TINYXML2_INCLUDE_DIRS})
-link_directories(${TINYXML2_LIBRARY_DIRS})
 
 #------------------------------------------------------------------------------
 # - OpenGL
