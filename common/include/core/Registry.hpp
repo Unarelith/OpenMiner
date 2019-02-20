@@ -31,14 +31,16 @@ class Registry : public ISerializable {
 		auto registerBlock(u32 textureID, const std::string &id, const std::string &name) -> typename std::enable_if<std::is_base_of<Block, T>::value, T&>::type {
 			u32 internalID = m_blocks.size();
 			m_blocksID.emplace(id, internalID);
-			return *static_cast<T*>(m_blocks.emplace_back(std::make_unique<T>(internalID, textureID, id, name)).get());
+			m_blocks.emplace_back(std::make_unique<T>(internalID, textureID, id, name));
+			return *static_cast<T*>(m_blocks.back().get());
 		}
 
 		Item &registerItem(u32 textureID, const std::string &id, const std::string &name);
 
 		template<typename T, typename... Args>
 		auto registerRecipe(Args &&...args) -> typename std::enable_if<std::is_base_of<Recipe, T>::value, Recipe*>::type {
-			return m_recipes.emplace_back(std::make_unique<T>(std::forward<Args>(args)...)).get();
+			m_recipes.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));
+			return m_recipes.back().get();
 		}
 
 		const Block &getBlock(std::size_t id) const { return *m_blocks.at(id).get(); }
