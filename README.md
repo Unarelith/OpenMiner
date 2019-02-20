@@ -42,6 +42,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 ## How to compile
 
 - Dependencies:
+    - A compiler with C++17 support (recommended: gcc 8.x or clang 5.x)
     - [CMake](http://www.cmake.org/download/)
     - [GameKit](http://github.com/Quent42340/GameKit) (requires `SDL2` + `tinyxml2`, will switch to `SFML` starting from 2.6)
     - [SFML](https://www.sfml-dev.org/) (only used for network)
