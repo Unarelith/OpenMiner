@@ -23,7 +23,7 @@
 #include "Network.hpp"
 #include "Recipe.hpp"
 
-struct Client;
+class Client;
 
 class Registry : public ISerializable {
 	public:

@@ -20,7 +20,7 @@
 #include "ServerChunk.hpp"
 #include "World.hpp"
 
-struct Client;
+class Client;
 class Server;
 class ServerPlayer;
 

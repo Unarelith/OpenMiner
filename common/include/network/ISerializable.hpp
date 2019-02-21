@@ -18,6 +18,8 @@ namespace sf { class Packet; }
 
 class ISerializable {
 	public:
+		virtual ~ISerializable() = default;
+
 		virtual void serialize(sf::Packet &packet) = 0;
 		virtual void deserialize(sf::Packet &packet) = 0;
 };

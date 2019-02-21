@@ -20,6 +20,8 @@
 
 class World {
 	public:
+		virtual ~World() = default;
+
 		virtual BlockData *getBlockData(int x, int y, int z) const = 0;
 
 		virtual u16 getBlock(int x, int y, int z) const = 0;

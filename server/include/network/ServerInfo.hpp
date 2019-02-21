@@ -24,21 +24,22 @@
 
 #include "NetworkInputHandler.hpp"
 
-struct Client {
-	Client(u16 _id, sf::IpAddress _address, u16 _port, const std::shared_ptr<sf::TcpSocket> &socket)
-		: id(_id), address(_address), port(_port), tcpSocket(socket) {}
+class Client {
+	public:
+		Client(u16 _id, sf::IpAddress _address, u16 _port, const std::shared_ptr<sf::TcpSocket> &socket)
+			: id(_id), address(_address), port(_port), tcpSocket(socket) {}
 
-	u16 id;
-	bool isReady = false;
+		u16 id;
+		bool isReady = false;
 
-	sf::IpAddress address;
-	u16 port;
+		sf::IpAddress address;
+		u16 port;
 
-	u32 previousKeyTimestamp = 0;
+		u32 previousKeyTimestamp = 0;
 
-	std::shared_ptr<sf::TcpSocket> tcpSocket;
+		std::shared_ptr<sf::TcpSocket> tcpSocket;
 
-	NetworkInputHandler inputHandler;
+		NetworkInputHandler inputHandler;
 };
 
 class ServerInfo {

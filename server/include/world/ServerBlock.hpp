@@ -16,7 +16,7 @@
 
 #include "Block.hpp"
 
-struct Client;
+class Client;
 class Server;
 
 class ServerBlock : public Block {
