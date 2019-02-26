@@ -19,7 +19,7 @@ if(NOT LUA_FOUND)
 	message(FATAL_ERROR "Lua is needed to build the project. Please install it correctly.")
 endif()
 
-include_directories(${LUA_INCLUDE_DIRS})
+include_directories(${LUA_INCLUDE_DIR})
 link_directories(${LUA_LIBRARY_DIRS})
 
 #------------------------------------------------------------------------------
@@ -30,7 +30,7 @@ if(NOT GAMEKIT_FOUND)
 	message(FATAL_ERROR "gamekit is needed to build the project. Please install it correctly.")
 endif()
 
-include_directories(${GAMEKIT_INCLUDE_DIRS})
+include_directories(${GAMEKIT_INCLUDE_DIR})
 
 #------------------------------------------------------------------------------
 # - tinyxml2
@@ -40,7 +40,7 @@ if(NOT TINYXML2_FOUND)
 	message(FATAL_ERROR "tinyxml2 is needed to build the project. Please install it correctly.")
 endif()
 
-include_directories(${TINYXML2_INCLUDE_DIRS})
+include_directories(${TINYXML2_INCLUDE_DIR})
 
 #------------------------------------------------------------------------------
 # - OpenGL
