@@ -20,7 +20,9 @@ void InventoryWidget::init(Inventory &inventory, unsigned int offset, unsigned i
 	m_itemWidgets.clear();
 
 	for (u16 i = 0 ; i < (size > 0 ? size : inventory.width() * inventory.height()) ; ++i) {
-		ItemWidget &widget = m_itemWidgets.emplace_back(inventory, (i + offset) % inventory.width(), (i + offset) / inventory.width(), this);
+		m_itemWidgets.emplace_back(inventory, (i + offset) % inventory.width(), (i + offset) / inventory.width(), this);
+
+		ItemWidget &widget = m_itemWidgets.back();
 		widget.update();
 		widget.setPosition((i % inventory.width()) * 18, (i / inventory.width()) * 18, 0);
 	}

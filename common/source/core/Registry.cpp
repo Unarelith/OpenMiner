@@ -22,7 +22,8 @@ Registry *Registry::s_instance = nullptr;
 Item &Registry::registerItem(u32 textureID, const std::string &id, const std::string &name) {
 	u32 internalID = m_items.size();
 	m_itemsID.emplace(id, internalID);
-	return m_items.emplace_back(internalID, textureID, id, name);
+	m_items.emplace_back(internalID, textureID, id, name);
+	return m_items.back();
 }
 
 const Block &Registry::getBlock(const std::string &id) {

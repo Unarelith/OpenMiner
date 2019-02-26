@@ -24,7 +24,9 @@ Hotbar::Hotbar(Inventory &inventory, Widget *parent) : Widget(182, 22, parent), 
 	m_cursor.setPosition(-1, -1, 0);
 
 	for (u16 i = 0 ; i < 9 ; ++i) {
-		ItemWidget &widget = m_items.emplace_back(m_inventory, i, 0);
+		m_items.emplace_back(m_inventory, i, 0);
+
+		ItemWidget &widget = m_items.back();
 		widget.setPosition(5 + 20 * i - 3, 2, 0);
 	}
 }

@@ -155,7 +155,9 @@ void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &
 		u16 offset, count;
 		packet >> playerName >> inventory >> width >> height >> offset >> count;
 
-		auto &inventoryWidget = m_inventoryWidgets.emplace_back(m_client, &m_mainWidget);
+		m_inventoryWidgets.emplace_back(m_client, &m_mainWidget);
+
+		auto &inventoryWidget = m_inventoryWidgets.back();
 		inventoryWidget.setPosition(x, y);
 		inventoryWidget.init(player.inventory(), offset, count);
 	}
@@ -165,7 +167,9 @@ void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &
 		packet >> block.x >> block.y >> block.z >> offset >> count;
 		BlockData *data = world.getBlockData(block.x, block.y, block.z);
 		if (data) {
-			auto &craftingWidget = m_craftingWidgets.emplace_back(m_client, data->inventory, &m_mainWidget);
+			m_craftingWidgets.emplace_back(m_client, data->inventory, &m_mainWidget);
+
+			auto &craftingWidget = m_craftingWidgets.back();
 			craftingWidget.setPosition(x, y);
 		}
 		else {

@@ -36,7 +36,9 @@ TextButton &MenuWidget::addButton(const std::string &text, const TextButton::Cpp
 	int x = m_buttons.size() % m_width;
 	int y = m_buttons.size() / m_width;
 
-	TextButton &button = m_buttons.emplace_back(this);
+	m_buttons.emplace_back(this);
+
+	TextButton &button = m_buttons.back();
 	button.setText(text);
 	button.setCallback(callback);
 	button.setPosition(SCREEN_WIDTH  / getScale().x / 2 - (m_width  * (button.width()  + s_horizontalSpacing) - s_horizontalSpacing) / 2 + x * (button.width() + s_horizontalSpacing),
