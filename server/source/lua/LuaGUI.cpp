@@ -37,7 +37,14 @@ void LuaGUI::addImage(const sol::table &table) {
 		clipRect.height = clipRectTable.value()["height"];
 	}
 
-	m_data.imageList.emplace_back(LuaWidgetDef::Image{{name, x, y}, texture, clipRect});
+	m_data.imageList.emplace_back(); // LuaWidgetDef::Image{{name, x, y}, texture, clipRect});
+
+	LuaWidgetDef::Image &image = m_data.imageList.back();
+	image.name = name;
+	image.x = x;
+	image.y = y;
+	image.texture = texture;
+	image.clipRect = clipRect;
 }
 
 void LuaGUI::addTextButton(const sol::table &table) {
@@ -52,7 +59,14 @@ void LuaGUI::addTextButton(const sol::table &table) {
 
 	std::string text = table["text"].get<std::string>();
 	sol::function on_click = table["on_click"].get<sol::function>();
-	m_data.textButtonList.emplace_back(LuaWidgetDef::TextButton{{name, x, y}, text, on_click});
+	m_data.textButtonList.emplace_back(); // LuaWidgetDef::TextButton{{name, x, y}, text, on_click});
+
+	LuaWidgetDef::TextButton &button = m_data.textButtonList.back();
+	button.name = name;
+	button.x = x;
+	button.y = y;
+	button.text = text;
+	button.on_click = on_click;
 }
 
 void LuaGUI::addInventoryWidget(const sol::table &table) {
@@ -77,8 +91,18 @@ void LuaGUI::addInventoryWidget(const sol::table &table) {
 		height = size.value()["y"];
 	}
 
-	m_data.inventoryWidgetList.emplace_back(LuaWidgetDef::InventoryWidget{{name, x, y},
-			player, inventory, width, height, offset, count});
+	m_data.inventoryWidgetList.emplace_back(); // LuaWidgetDef::InventoryWidget{{name, x, y}, player, inventory, width, height, offset, count});
+
+	LuaWidgetDef::InventoryWidget &inv = m_data.inventoryWidgetList.back();
+	inv.name = name;
+	inv.x = x;
+	inv.y = y;
+	inv.player = player;
+	inv.inventory = inventory;
+	inv.width = width;
+	inv.height = height;
+	inv.offset = offset;
+	inv.count = count;
 }
 
 void LuaGUI::addCraftingWidget(const sol::table &table) {
@@ -102,8 +126,15 @@ void LuaGUI::addCraftingWidget(const sol::table &table) {
 		block.z = blockTable.value()["z"];
 	}
 
-	m_data.craftingWidgetList.emplace_back(LuaWidgetDef::CraftingWidget{{name, x, y},
-			block, offset, count});
+	m_data.craftingWidgetList.emplace_back(); // LuaWidgetDef::CraftingWidget{{name, x, y}, block, offset, count});
+
+	LuaWidgetDef::CraftingWidget &craftingWidget = m_data.craftingWidgetList.back();
+	craftingWidget.name = name;
+	craftingWidget.x = x;
+	craftingWidget.y = y;
+	craftingWidget.block = block;
+	craftingWidget.offset = offset;
+	craftingWidget.count = count;
 }
 
 void LuaGUI::addFurnaceWidget(const sol::table &table) {
@@ -124,7 +155,13 @@ void LuaGUI::addFurnaceWidget(const sol::table &table) {
 		block.z = blockTable.value()["z"];
 	}
 
-	m_data.furnaceWidgetList.emplace_back(LuaWidgetDef::FurnaceWidget{{name, x, y}, block});
+	m_data.furnaceWidgetList.emplace_back(); // LuaWidgetDef::FurnaceWidget{{name, x, y}, block});
+
+	LuaWidgetDef::FurnaceWidget &furnaceWidget = m_data.furnaceWidgetList.back();
+	furnaceWidget.name = name;
+	furnaceWidget.x = x;
+	furnaceWidget.y = y;
+	furnaceWidget.block = block;
 }
 
 void LuaGUI::show(Client &client) {
