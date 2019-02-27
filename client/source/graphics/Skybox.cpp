@@ -15,6 +15,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <gk/gl/GLCheck.hpp>
 #include <gk/gl/Vertex.hpp>
 
 #include "ClientPlayer.hpp"
@@ -97,10 +98,10 @@ void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	states.transform = modelMatrix;
 
-	glDisable(GL_CULL_FACE);
+	glCheck(glDisable(GL_CULL_FACE));
 
-	if(Config::isWireframeModeEnabled) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 	target.draw(m_vbo, GL_QUADS, 0, 4 * 6, states);
-	if(Config::isWireframeModeEnabled) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 }
 

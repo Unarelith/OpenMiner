@@ -14,6 +14,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <gk/graphics/Color.hpp>
+#include <gk/gl/GLCheck.hpp>
 #include <gk/gl/Vertex.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
@@ -111,8 +112,8 @@ void Cube::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.texture = &m_texture;
 	states.vertexAttributes = gk::VertexAttribute::Only2d;
 
-	glDisable(GL_CULL_FACE);
-	glDisable(GL_DEPTH_TEST);
+	glCheck(glDisable(GL_CULL_FACE));
+	glCheck(glDisable(GL_DEPTH_TEST));
 
 	target.draw(m_vbo, GL_QUADS, 4 * 0, 4, states);
 	// target.draw(m_vbo, GL_QUADS, 4 * 1, 4, states);
@@ -121,8 +122,8 @@ void Cube::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	target.draw(m_vbo, GL_QUADS, 4 * 4, 4, states);
 	// target.draw(m_vbo, GL_QUADS, 4 * 5, 4, states);
 
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+	glCheck(glEnable(GL_DEPTH_TEST));
+	glCheck(glEnable(GL_CULL_FACE));
 
 }
 

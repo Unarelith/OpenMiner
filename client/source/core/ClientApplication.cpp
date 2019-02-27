@@ -13,6 +13,7 @@
  */
 #include <gk/core/input/GamePad.hpp>
 #include <gk/core/Mouse.hpp>
+#include <gk/gl/GLCheck.hpp>
 #include <gk/graphics/Font.hpp>
 
 #include "ClientApplication.hpp"
@@ -59,20 +60,20 @@ void ClientApplication::init() {
 
 void ClientApplication::initOpenGL() {
 	// Enable transparency
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glCheck(glEnable(GL_BLEND));
+	glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
 	// Enable depth and hide backside of faces
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+	glCheck(glEnable(GL_DEPTH_TEST));
+	glCheck(glEnable(GL_CULL_FACE));
 
-	glEnable(GL_POLYGON_OFFSET_FILL);
-	glPolygonOffset(1, 1);
+	glCheck(glEnable(GL_POLYGON_OFFSET_FILL));
+	glCheck(glPolygonOffset(1, 1));
 
 	// Set best quality for mipmaps
-	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+	glCheck(glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST));
 
 	// Set clear color to skyblue
-	glClearColor(0.196078, 0.6, 0.8, 1.0);
+	glCheck(glClearColor(0.196078, 0.6, 0.8, 1.0));
 }
 

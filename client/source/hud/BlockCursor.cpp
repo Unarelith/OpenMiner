@@ -13,6 +13,7 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <gk/gl/GLCheck.hpp>
 #include <gk/gl/Vertex.hpp>
 #include <gk/core/GameClock.hpp>
 #include <gk/resource/ResourceHandler.hpp>
@@ -223,22 +224,22 @@ void BlockCursor::updateAnimationVertexBuffer(const Block &block, int animationP
 void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (m_selectedBlock.w == -1) return;
 
-	glDisable(GL_POLYGON_OFFSET_FILL);
-	glDisable(GL_CULL_FACE);
+	glCheck(glDisable(GL_POLYGON_OFFSET_FILL));
+	glCheck(glDisable(GL_CULL_FACE));
 
 	states.transform.translate({m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z});
 
 	target.draw(m_vbo, GL_LINES, 0, 24, states);
 
 	if (m_animationStart > 0) {
-		glBlendFunc(GL_DST_COLOR, GL_ZERO);
+		glCheck(glBlendFunc(GL_DST_COLOR, GL_ZERO));
 		states.texture = &gk::ResourceHandler::getInstance().get<gk::Texture>("texture-block_destroy"); // FIXME
 		target.draw(m_animationVBO, GL_QUADS, 0, 24, states);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 	}
 
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_POLYGON_OFFSET_FILL);
+	glCheck(glEnable(GL_CULL_FACE));
+	glCheck(glEnable(GL_POLYGON_OFFSET_FILL));
 }
 
 // Not really GLSL fract(), but the absolute distance to the nearest integer value
@@ -265,7 +266,7 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 	if(useDepthBuffer) {
 		// At which voxel are we looking? First, find out coords of the center pixel
 		float depth;
-		glReadPixels(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+		glCheck(glReadPixels(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth));
 
 		glm::vec4 viewport = glm::vec4(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		glm::vec3 winCoord = glm::vec3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, depth);

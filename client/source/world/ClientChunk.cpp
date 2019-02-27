@@ -11,6 +11,8 @@
  *
  * =====================================================================================
  */
+#include <gk/gl/GLCheck.hpp>
+
 #include "ClientChunk.hpp"
 
 void ClientChunk::update() {
@@ -28,14 +30,14 @@ void ClientChunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u
 	states.texture = &m_texture;
 
 	if (layer == ChunkBuilder::Layer::Other)
-		glDisable(GL_CULL_FACE);
+		glCheck(glDisable(GL_CULL_FACE));
 	else
-		glEnable(GL_CULL_FACE);
+		glCheck(glEnable(GL_CULL_FACE));
 
-	glEnable(GL_DEPTH_TEST);
+	glCheck(glEnable(GL_DEPTH_TEST));
 
-	if(Config::isWireframeModeEnabled) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 	target.draw(m_vbo.at(layer), GL_TRIANGLES, 0, m_verticesCount.at(layer), states);
-	if(Config::isWireframeModeEnabled) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 }
 
