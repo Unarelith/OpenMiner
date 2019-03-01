@@ -20,19 +20,25 @@ vec4 light(vec4 color, vec3 lightColor, vec4 lightPosition, float ambientIntensi
 vec4 fog(vec4 color, float fogCoord, float fogStart, float fogEnd);
 
 void main() {
+	// Needed to prevent bad interpolation on some systems
+	// Refer to #23 for more informations
+	float blockID = floor(v_blockID + 0.5);
+	float blockFace = floor(v_blockFace + 0.5);
+	float lightCheck = floor(v_lightValue.x + 0.5);
+
 	// Discard if the pixel is too far away
-	if(v_blockID != -1 && v_dist > u_renderDistance) discard;
+	if(blockID != -1. && v_dist > u_renderDistance) discard;
 
 	vec4 color = getColor();
-	if (v_blockID == 8) { // Water
+	if (blockID == 8.) { // Water
 		color.a = 0.85;
 	}
-	else if (v_blockID == 4) { // Leaves
+	else if (blockID == 4.) { // Leaves
 		color += vec4(-0.5, -0.15, -0.4, 0);
 		/* if (v_dist > 20 && color.a == 0) */
 		/* 	color.a = 0.5; */
 	}
-	else if (v_blockID == 3) { // Grass
+	else if (blockID == 3.) { // Grass
 		if (color.r == color.g && color.r == color.b) {
 			color += vec4(-0.3, -0.1, -0.25, 0);
 			/* color += vec4(-0.4, -0.15, -0.3, 0); */
@@ -40,7 +46,7 @@ void main() {
 	}
 
 	// Very cheap "transparency": don't draw pixels with a low alpha value
-	if(color.a < 0.3 && v_blockID != -1) discard;
+	if(color.a < 0.3 && blockID != -1.) discard;
 
 	// FIXME: FINISH THIS WITH PROPER CODE AND SUN BASIC DISPLAY
 	// int maxTime = 5 * 1000;
@@ -49,18 +55,18 @@ void main() {
 	// color *= light(vec3(1.0, 1.0, 1.0), vec4(lightPosition, 1.0), 0.5, 0.5);
 
 	float minBrightness = 2.0 / 16.0;
-	if (v_lightValue.x != -1) {
+	if (lightCheck != -1.) {
 		float ambientIntensity = max(max(v_lightValue.x, v_lightValue.y) / 16.0, minBrightness);
 		float diffuseIntensity = max(v_lightValue.x, v_lightValue.y) / 32.0;
 
 		// Bottom
-		if (v_blockFace == 2)
+		if (blockFace == 2.)
 			ambientIntensity = max(ambientIntensity * 0.6, minBrightness);
 		// Left or Right
-		if (v_blockFace == 0 || v_blockFace == 1)
+		if (blockFace == 0. || blockFace == 1.)
 			ambientIntensity = max(ambientIntensity * 0.75, minBrightness);
 		// Front or Back
-		if (v_blockFace == 4 || v_blockFace == 5)
+		if (blockFace == 4. || blockFace == 5.)
 			ambientIntensity = max(ambientIntensity * 0.9, minBrightness);
 
 		color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
