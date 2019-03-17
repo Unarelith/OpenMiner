@@ -25,6 +25,7 @@
 #include "ClientWorld.hpp"
 #include "Config.hpp"
 #include "HUD.hpp"
+#include "PlayerBox.hpp"
 #include "Skybox.hpp"
 
 class GameState : public gk::ApplicationState {
@@ -56,6 +57,8 @@ class GameState : public gk::ApplicationState {
 		ClientWorld m_world{m_client};
 
 		bool m_isRegistryInitialized = false;
+
+		std::unordered_map<u16, PlayerBox> m_playerBoxes;
 };
 
 #endif // GAMESTATE_HPP_

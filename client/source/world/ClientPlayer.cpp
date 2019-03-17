@@ -17,9 +17,9 @@
 #include <gk/core/Mouse.hpp>
 
 #include "BlockType.hpp"
+#include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "GameKey.hpp"
-#include "ClientPlayer.hpp"
 
 ClientPlayer *ClientPlayer::s_instance = nullptr;
 

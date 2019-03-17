@@ -56,15 +56,24 @@ void ServerApplication::setupServerCallbacks() {
 		client.tcpSocket->send(packet);
 
 		sf::Packet invPacket;
-		invPacket << Network::Command::PlayerInvUpdate;
-		m_player.serialize(invPacket);
+		invPacket << Network::Command::PlayerInvUpdate << client.id;
+		invPacket << m_player.inventory();
 		client.tcpSocket->send(invPacket);
+
+		sf::Packet spawnPacket;
+		spawnPacket << Network::Command::PlayerSpawn << client.id;
+		spawnPacket << m_spawnPosition.x << m_spawnPosition.y << m_spawnPosition.z;
+		m_server.sendToAllClients(spawnPacket);
 
 		m_world.sendWorldData(client);
 	});
 
-	m_server.setCommandCallback(Network::Command::PlayerInvUpdate, [this](Client &, sf::Packet &packet) {
-		m_player.deserialize(packet);
+	m_server.setCommandCallback(Network::Command::PlayerInvUpdate, [this](Client &client, sf::Packet &packet) {
+		u16 clientId;
+		packet >> clientId;
+		if (clientId == client.id) {
+			packet >> m_player.inventory();
+		}
 	});
 
 	m_server.setCommandCallback(Network::Command::ChunkRequest, [this](Client &client, sf::Packet &packet) {

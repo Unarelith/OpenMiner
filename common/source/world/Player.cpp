@@ -15,10 +15,10 @@
 #include "Player.hpp"
 
 void Player::serialize(sf::Packet &packet) {
-	packet << m_inventory;
+	packet << m_x << m_y << m_inventory;
 }
 
 void Player::deserialize(sf::Packet &packet) {
-	packet >> m_inventory;
+	packet >> m_x >> m_y >> m_inventory;
 }
 

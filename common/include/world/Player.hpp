@@ -22,9 +22,15 @@ class Player : public ISerializable {
 		void serialize(sf::Packet &packet) override;
 		void deserialize(sf::Packet &packet) override;
 
+		s32 x() const { return m_x; }
+		s32 y() const { return m_y; }
+
 		Inventory &inventory() { return m_inventory; }
 
 	protected:
+		s32 m_x = 0;
+		s32 m_y = 0;
+
 		Inventory m_inventory{9, 4};
 };
 

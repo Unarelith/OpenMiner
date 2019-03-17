@@ -44,6 +44,8 @@ class ServerApplication : public gk::CoreApplication {
 		Registry m_registry;
 
 		int m_port = 4242;
+
+		gk::Vector3<s32> m_spawnPosition{0, 22, 20};
 };
 
 #endif // SERVERAPPLICATION_HPP_

@@ -35,6 +35,9 @@ GameState::GameState(Client &client, const std::string &host, int port) : m_clie
 
 	initShaders();
 
+	m_playerBoxes.emplace(0, PlayerBox{});
+	m_playerBoxes.at(0).setPosition(0, 22, 35);
+
 	m_client.connect(host, port);
 
 	setupClientCommandCallbacks();
@@ -59,7 +62,36 @@ void GameState::setupClientCommandCallbacks() {
 	});
 
 	m_client.setCommandCallback(Network::Command::PlayerInvUpdate, [this](sf::Packet &packet) {
-		m_player.deserialize(packet);
+		u16 clientId;
+		packet >> clientId;
+
+		if (clientId == m_client.id())
+			packet >> m_player.inventory();
+		else
+			packet >> m_playerBoxes.at(clientId).inventory();
+	});
+
+	m_client.setCommandCallback(Network::Command::PlayerPosUpdate, [this](sf::Packet &packet) {
+		s32 x, y, z;
+		u16 clientId;
+		packet >> clientId;
+		packet >> x >> y >> z;
+
+		if (clientId == m_client.id())
+			m_camera.setPosition(x, y, z);
+		else
+			m_playerBoxes.at(clientId).setPosition(x, y, z);
+	});
+
+	m_client.setCommandCallback(Network::Command::PlayerSpawn, [this](sf::Packet &packet) {
+		u16 clientId;
+		gk::Vector3<s32> pos;
+		packet >> clientId >> pos.x >> pos.y >> pos.z;
+
+		if (clientId != m_client.id()) {
+			m_playerBoxes.emplace(clientId, PlayerBox{});
+			m_playerBoxes.at(clientId).setPosition(pos.x, pos.y, pos.z);
+		}
 	});
 
 	m_client.setCommandCallback(Network::Command::BlockGUIData, [this](sf::Packet &packet) {
@@ -106,7 +138,8 @@ void GameState::onEvent(const SDL_Event &event) {
 	}
 	else if (event.type == SDL_WINDOWEVENT) {
 		if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
-			m_stateStack->push<PauseMenuState>(this);
+			// FIXME
+			// m_stateStack->push<PauseMenuState>(this);
 
 			gk::Mouse::setCursorGrabbed(false);
 			gk::Mouse::setCursorVisible(true);
@@ -165,6 +198,9 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	target.setView(m_camera);
 	// target.draw(m_skybox, states);
 	target.draw(m_world, states);
+
+	for (auto &it : m_playerBoxes)
+		target.draw(it.second, states);
 
 	if (m_isRegistryInitialized)
 		target.draw(m_hud, states);
