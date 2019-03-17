@@ -37,6 +37,10 @@ GameState::GameState(Client &client, const std::string &host, int port) : m_clie
 
 	m_client.connect(host, port);
 
+	setupClientCommandCallbacks();
+}
+
+void GameState::setupClientCommandCallbacks() {
 	m_client.setCommandCallback(Network::Command::RegistryData, [this](sf::Packet &packet) {
 		Registry::getInstance().deserialize(packet);
 		m_isRegistryInitialized = true;

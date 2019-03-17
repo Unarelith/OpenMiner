@@ -45,6 +45,10 @@ void ServerApplication::init() {
 	m_server.init(m_port);
 	m_server.setRunning(true);
 
+	setupServerCallbacks();
+}
+
+void ServerApplication::setupServerCallbacks() {
 	m_server.setConnectionCallback([this](Client &client) {
 		sf::Packet packet;
 		packet << Network::Command::RegistryData;

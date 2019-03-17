@@ -30,6 +30,8 @@ class ServerApplication : public gk::CoreApplication {
 		void init() override;
 
 	private:
+		void setupServerCallbacks();
+
 		void mainLoop() override;
 
 		Server m_server;
