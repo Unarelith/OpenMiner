@@ -21,6 +21,7 @@
 
 #include "Client.hpp"
 #include "ClientChunk.hpp"
+#include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "Config.hpp"
@@ -56,9 +57,9 @@ class GameState : public gk::ApplicationState {
 
 		ClientWorld m_world{m_client};
 
-		bool m_isRegistryInitialized = false;
-
 		std::unordered_map<u16, PlayerBox> m_playerBoxes;
+
+		ClientCommandHandler m_clientCommandHandler{m_client, m_world, m_player, m_camera, m_playerBoxes};
 };
 
 #endif // GAMESTATE_HPP_

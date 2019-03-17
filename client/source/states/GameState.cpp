@@ -40,88 +40,7 @@ GameState::GameState(Client &client, const std::string &host, int port) : m_clie
 
 	m_client.connect(host, port);
 
-	setupClientCommandCallbacks();
-}
-
-void GameState::setupClientCommandCallbacks() {
-	m_client.setCommandCallback(Network::Command::RegistryData, [this](sf::Packet &packet) {
-		Registry::getInstance().deserialize(packet);
-		m_isRegistryInitialized = true;
-	});
-
-	m_client.setCommandCallback(Network::Command::ChunkData, [this](sf::Packet &packet) {
-		m_world.receiveChunkData(packet);
-	});
-
-	m_client.setCommandCallback(Network::Command::BlockUpdate, [this](sf::Packet &packet) {
-		s32 x, y, z;
-		u32 block;
-		packet >> x >> y >> z >> block;
-		m_world.setBlock(x, y, z, block);
-		m_world.setData(x, y, z, block >> 16);
-	});
-
-	m_client.setCommandCallback(Network::Command::PlayerInvUpdate, [this](sf::Packet &packet) {
-		u16 clientId;
-		packet >> clientId;
-
-		if (clientId == m_client.id())
-			packet >> m_player.inventory();
-		else
-			packet >> m_playerBoxes.at(clientId).inventory();
-	});
-
-	m_client.setCommandCallback(Network::Command::PlayerPosUpdate, [this](sf::Packet &packet) {
-		s32 x, y, z;
-		u16 clientId;
-		packet >> clientId;
-		packet >> x >> y >> z;
-
-		if (clientId == m_client.id())
-			m_camera.setPosition(x, y, z);
-		else
-			m_playerBoxes.at(clientId).setPosition(x, y, z);
-	});
-
-	m_client.setCommandCallback(Network::Command::PlayerSpawn, [this](sf::Packet &packet) {
-		u16 clientId;
-		gk::Vector3<s32> pos;
-		packet >> clientId >> pos.x >> pos.y >> pos.z;
-
-		if (clientId != m_client.id()) {
-			m_playerBoxes.emplace(clientId, PlayerBox{});
-			m_playerBoxes.at(clientId).setPosition(pos.x, pos.y, pos.z);
-		}
-	});
-
-	m_client.setCommandCallback(Network::Command::BlockGUIData, [this](sf::Packet &packet) {
-		m_stateStack->push<LuaGUIState>(m_client, m_player, m_world, packet, this);
-	});
-
-	m_client.setCommandCallback(Network::Command::BlockInvUpdate, [this](sf::Packet &packet) {
-		gk::Vector3<s32> pos;
-		packet >> pos.x >> pos.y >> pos.z;
-
-		BlockData *data = m_world.getBlockData(pos.x, pos.y, pos.z);
-		if (data) {
-			packet >> data->inventory;
-		}
-	});
-
-	m_client.setCommandCallback(Network::Command::BlockDataUpdate, [this](sf::Packet &packet) {
-		gk::Vector3<s32> pos;
-		packet >> pos.x >> pos.y >> pos.z;
-
-		BlockData *data = m_world.getBlockData(pos.x, pos.y, pos.z);
-		if (data) {
-			packet >> data->data;
-		}
-	});
-
-	// sf::Packet packet;
-	// packet << Network::Command::ClientSettings;
-	// packet << Config::renderDistance;
-	// m_client.send(packet);
+	m_clientCommandHandler.setupCallbacks();
 }
 
 void GameState::onEvent(const SDL_Event &event) {
@@ -150,14 +69,14 @@ void GameState::onEvent(const SDL_Event &event) {
 		}
 	}
 
-	if (m_isRegistryInitialized)
+	if (m_clientCommandHandler.isRegistryInitialized())
 		m_hud.onEvent(event);
 }
 
 void GameState::update() {
 	m_world.update();
 
-	if (m_isRegistryInitialized) {
+	if (m_clientCommandHandler.isRegistryInitialized()) {
 		if (&m_stateStack->top() == this) {
 			m_player.processInputs();
 
@@ -202,7 +121,7 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	for (auto &it : m_playerBoxes)
 		target.draw(it.second, states);
 
-	if (m_isRegistryInitialized)
+	if (m_clientCommandHandler.isRegistryInitialized())
 		target.draw(m_hud, states);
 }
 

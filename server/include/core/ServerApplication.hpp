@@ -20,6 +20,7 @@
 #include "Registry.hpp"
 #include "ScriptEngine.hpp"
 #include "Server.hpp"
+#include "ServerCommandHandler.hpp"
 #include "ServerPlayer.hpp"
 #include "ServerWorld.hpp"
 
@@ -30,8 +31,6 @@ class ServerApplication : public gk::CoreApplication {
 		void init() override;
 
 	private:
-		void setupServerCallbacks();
-
 		void mainLoop() override;
 
 		Server m_server;
@@ -45,7 +44,7 @@ class ServerApplication : public gk::CoreApplication {
 
 		int m_port = 4242;
 
-		gk::Vector3<s32> m_spawnPosition{0, 22, 20};
+		ServerCommandHandler m_serverCommandHandler{m_server, m_world, m_player, m_registry};
 };
 
 #endif // SERVERAPPLICATION_HPP_
