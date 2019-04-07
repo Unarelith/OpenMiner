@@ -35,8 +35,8 @@ GameState::GameState(Client &client, const std::string &host, int port) : m_clie
 
 	initShaders();
 
-	m_playerBoxes.emplace(0, PlayerBox{});
-	m_playerBoxes.at(0).setPosition(0, 22, 35);
+	// m_playerBoxes.emplace(0, PlayerBox{});
+	// m_playerBoxes.at(0).setPosition(0, 22, 35);
 
 	m_client.connect(host, port);
 
@@ -87,7 +87,7 @@ void GameState::update() {
 		}
 
 		m_player.updatePosition(m_world);
-		m_skybox.update(m_player);
+		// m_skybox.update(m_player);
 
 		m_hud.update();
 	}

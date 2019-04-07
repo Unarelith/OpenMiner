@@ -24,12 +24,16 @@ class Player : public ISerializable {
 
 		s32 x() const { return m_x; }
 		s32 y() const { return m_y; }
+		s32 z() const { return m_z; }
 
 		Inventory &inventory() { return m_inventory; }
+
+		void setPosition(s32 x, s32 y, s32 z) { m_x = x; m_y = y; m_z = z; }
 
 	protected:
 		s32 m_x = 0;
 		s32 m_y = 0;
+		s32 m_z = 0;
 
 		Inventory m_inventory{9, 4};
 };

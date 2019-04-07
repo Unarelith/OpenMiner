@@ -38,6 +38,13 @@ void ServerCommandHandler::setupCallbacks() {
 		m_world.sendWorldData(client);
 	});
 
+	m_server.setCommandCallback(Network::Command::ChunkRequest, [this](Client &client, sf::Packet &packet) {
+		s32 cx, cy, cz;
+		packet >> cx >> cy >> cz;
+
+		m_world.sendRequestedData(client, cx, cy, cz);
+	});
+
 	m_server.setCommandCallback(Network::Command::PlayerInvUpdate, [this](Client &client, sf::Packet &packet) {
 		u16 clientId;
 		packet >> clientId;
@@ -46,11 +53,14 @@ void ServerCommandHandler::setupCallbacks() {
 		}
 	});
 
-	m_server.setCommandCallback(Network::Command::ChunkRequest, [this](Client &client, sf::Packet &packet) {
-		s32 cx, cy, cz;
-		packet >> cx >> cy >> cz;
+	m_server.setCommandCallback(Network::Command::PlayerPosUpdate, [this](Client &client, sf::Packet &packet) {
+		s32 x, y, z;
+		u16 clientId;
+		packet >> clientId;
+		packet >> x >> y >> z;
 
-		m_world.sendRequestedData(client, cx, cy, cz);
+		if (clientId == client.id)
+			m_player.setPosition(x, y, z);
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerPlaceBlock, [this](Client &, sf::Packet &packet) {
