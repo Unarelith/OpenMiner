@@ -58,7 +58,7 @@ void InventoryWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mous
 			packet << *m_inventory;
 		}
 		else {
-			packet << Network::Command::PlayerInvUpdate;
+			packet << Network::Command::PlayerInvUpdate << m_client.id();
 			packet << *m_inventory;
 		}
 		m_client.send(packet);
@@ -75,7 +75,7 @@ void InventoryWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mous
 				packet << *m_inventory;
 			}
 			else {
-				packet << Network::Command::PlayerInvUpdate;
+				packet << Network::Command::PlayerInvUpdate << m_client.id();
 				packet << *m_inventory;
 			}
 			m_client.send(packet);

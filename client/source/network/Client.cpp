@@ -102,9 +102,9 @@ void Client::update() {
 
 		// DEBUG("TCP message received:", Network::commandToString(command));
 
-		for (auto &it : m_commands)
-			if (command == it.first)
-				it.second(packet);
+		auto it = m_commands.find(command);
+		if (it != m_commands.end())
+			it->second(packet);
 	}
 }
 

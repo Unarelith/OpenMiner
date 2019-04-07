@@ -108,8 +108,8 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 
 				// FIXME
 				sf::Packet invPacket;
-				invPacket << Network::Command::PlayerInvUpdate;
-				m_player.serialize(invPacket);
+				invPacket << Network::Command::PlayerInvUpdate << m_client.id();
+				invPacket << m_player.inventory();
 				m_client.send(invPacket);
 			}
 		}
@@ -157,8 +157,8 @@ void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
 
 			// FIXME
 			sf::Packet invPacket;
-			invPacket << Network::Command::PlayerInvUpdate;
-			m_player.serialize(invPacket);
+			invPacket << Network::Command::PlayerInvUpdate << m_client.id();
+			invPacket << m_player.inventory();
 			m_client.send(invPacket);
 		}
 	}
