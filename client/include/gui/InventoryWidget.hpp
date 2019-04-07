@@ -34,6 +34,8 @@ class InventoryWidget : public Widget {
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
+		void sendUpdatePacket();
+
 		Client &m_client;
 
 		Inventory *m_inventory = nullptr;
