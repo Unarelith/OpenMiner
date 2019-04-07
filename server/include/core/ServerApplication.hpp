@@ -35,7 +35,7 @@ class ServerApplication : public gk::CoreApplication {
 
 		Server m_server;
 		ServerWorld m_world;
-		ServerPlayer m_player;
+		std::vector<ServerPlayer> m_players;
 
 		ScriptEngine m_scriptEngine;
 		LuaCore m_luaCore;
@@ -44,7 +44,7 @@ class ServerApplication : public gk::CoreApplication {
 
 		int m_port = 4242;
 
-		ServerCommandHandler m_serverCommandHandler{m_server, m_world, m_player, m_registry};
+		ServerCommandHandler m_serverCommandHandler{m_scriptEngine, m_server, m_world, m_players, m_registry};
 };
 
 #endif // SERVERAPPLICATION_HPP_

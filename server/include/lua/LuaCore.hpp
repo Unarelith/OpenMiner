@@ -19,7 +19,6 @@
 #include <sol.hpp>
 
 class Registry;
-class Player;
 class World;
 
 class LuaCore {
@@ -27,15 +26,11 @@ class LuaCore {
 		World *world() { return m_world; }
 		void setWorld(World &world) { m_world = &world; }
 
-		Player *player() { return m_player; }
-		void setPlayer(Player &player) { m_player = &player; }
-
 		Registry *registry();
 
 		static void initUsertype(sol::state &lua);
 
 	private:
-		Player *m_player = nullptr;
 		World *m_world = nullptr;
 };
 

@@ -14,13 +14,14 @@
 #include "Chunk.hpp"
 #include "Player.hpp"
 #include "ServerBlock.hpp"
+#include "ServerPlayer.hpp"
 #include "Server.hpp"
 #include "World.hpp"
 
-void ServerBlock::onTick(const glm::ivec3 &pos, Player &player, Chunk &chunk, World &world, Server &server) const {
+void ServerBlock::onTick(const glm::ivec3 &pos, std::vector<ServerPlayer> &players, Chunk &chunk, World &world, Server &server) const {
 	try {
 		if (m_onTick && m_onTickEnabled) {
-			m_onTick(pos, player, chunk, world);
+			m_onTick(pos, players, chunk, world);
 
 			// FIXME: Send this every 0.5 second instead of once per tick
 			u16 id = world.getBlock(pos.x, pos.y, pos.z);

@@ -57,7 +57,7 @@ void ClientCommandHandler::setupCallbacks() {
 		if (clientId == m_client.id())
 			m_camera.setPosition(x, y, z);
 		else
-			m_playerBoxes.at(clientId).setPosition(x, y, z);
+			((Player&)m_playerBoxes.at(clientId)).setPosition(x, y, z);
 	});
 
 	m_client.setCommandCallback(Network::Command::PlayerSpawn, [this](sf::Packet &packet) {
@@ -67,7 +67,7 @@ void ClientCommandHandler::setupCallbacks() {
 
 		if (clientId != m_client.id()) {
 			m_playerBoxes.emplace(clientId, PlayerBox{});
-			m_playerBoxes.at(clientId).setPosition(pos.x, pos.y, pos.z);
+			((Player&)m_playerBoxes.at(clientId)).setPosition(pos.x, pos.y, pos.z);
 		}
 	});
 

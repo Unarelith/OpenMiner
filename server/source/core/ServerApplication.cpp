@@ -31,12 +31,12 @@ void ServerApplication::init() {
 	Registry::setInstance(m_registry);
 
 	m_scriptEngine.init();
-	m_luaCore.setPlayer(m_player);
+	// m_luaCore.setPlayer(m_player); // FIXME
 	m_luaCore.setWorld(m_world);
 
 	try {
 		m_scriptEngine.lua()["openminer"] = &m_luaCore;
-		m_scriptEngine.lua().script("init()");
+		// m_scriptEngine.lua().script("init()");
 	}
 	catch (const sol::error &e) {
 		std::cerr << e.what() << std::endl;
@@ -55,7 +55,7 @@ void ServerApplication::mainLoop() {
 		m_server.handleKeyState();
 
 		m_clock.updateGame([&] {
-			m_world.update(m_server, m_player);
+			m_world.update(m_server, m_players);
 		});
 
 		m_clock.waitForNextFrame();

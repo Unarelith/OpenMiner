@@ -14,24 +14,29 @@
 #ifndef SERVERCOMMANDHANDLER_HPP_
 #define SERVERCOMMANDHANDLER_HPP_
 
+#include <vector>
+
 #include <gk/core/Vector3.hpp>
 
 class Registry;
+class ScriptEngine;
 class Server;
 class ServerPlayer;
 class ServerWorld;
 
 class ServerCommandHandler {
 	public:
-		ServerCommandHandler(Server &server, ServerWorld &world, ServerPlayer &player, Registry &registry)
-			: m_server(server), m_world(world), m_player(player), m_registry(registry) {}
+		ServerCommandHandler(ScriptEngine &scriptEngine, Server &server, ServerWorld &world, std::vector<ServerPlayer> &players, Registry &registry)
+			: m_scriptEngine(scriptEngine), m_server(server), m_world(world), m_players(players), m_registry(registry) {}
 
 		void setupCallbacks();
 
 	private:
+		ScriptEngine &m_scriptEngine;
+
 		Server &m_server;
 		ServerWorld &m_world;
-		ServerPlayer &m_player;
+		std::vector<ServerPlayer> &m_players;
 
 		Registry &m_registry;
 

@@ -67,6 +67,10 @@ void ScriptEngine::initUsertypes() {
 		"inventory", &Player::inventory
 	);
 
+	m_lua.new_usertype<ServerPlayer>("ServerPlayer",
+		sol::base_classes, sol::bases<Player>()
+	);
+
 	m_lua.new_usertype<Inventory>("Inventory",
 		"add_stack", &Inventory::addStack,
 		"get_stack", &Inventory::getStack,

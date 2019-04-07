@@ -43,9 +43,9 @@ ServerWorld::ServerWorld() {
 	}
 }
 
-void ServerWorld::update(Server &server, ServerPlayer &player) {
+void ServerWorld::update(Server &server, std::vector<ServerPlayer> &players) {
 	for (auto &it : m_chunks) {
-		it->tick(player, *this, server);
+		it->tick(players, *this, server);
 		it->update();
 
 		if (it->isGenerated() && !it->isSent()) {

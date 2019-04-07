@@ -38,7 +38,7 @@ void ServerChunk::generate() {
 	}
 }
 
-void ServerChunk::tick(Player &player, World &world, Server &server) {
+void ServerChunk::tick(std::vector<ServerPlayer> &players, World &world, Server &server) {
 	if (!m_tickingBlocks.empty() && m_lastTick < gk::GameClock::getTicks() / 50) {
 		m_lastTick = gk::GameClock::getTicks() / 50;
 
@@ -48,7 +48,7 @@ void ServerChunk::tick(Player &player, World &world, Server &server) {
 			int x = (it.first - z * width * height) % width;
 			((ServerBlock &)it.second).onTick(
 				glm::ivec3{x + m_x * width, y + m_y * height, z + m_z * depth},
-				player, *this, world, server);
+				players, *this, world, server);
 		}
 	}
 }

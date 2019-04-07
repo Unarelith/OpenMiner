@@ -12,8 +12,8 @@ dofile("mods/blocks.lua")
 dofile("mods/items.lua")
 dofile("mods/recipes.lua")
 
-function init()
-	local player_inv = openminer:player():inventory()
+function init(player)
+	local player_inv = player:inventory()
 
 	player_inv:add_stack("default:workbench", 1);
 	player_inv:add_stack("default:dirt", 64);

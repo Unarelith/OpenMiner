@@ -13,7 +13,6 @@
  */
 #include "LuaCore.hpp"
 #include "Registry.hpp"
-#include "Player.hpp"
 #include "World.hpp"
 
 Registry *LuaCore::registry() {
@@ -23,7 +22,6 @@ Registry *LuaCore::registry() {
 void LuaCore::initUsertype(sol::state &lua) {
 	lua.new_usertype<LuaCore>("LuaCore",
 		"world",    &LuaCore::world,
-		"player",   &LuaCore::player,
 		"registry", &LuaCore::registry
 	);
 }

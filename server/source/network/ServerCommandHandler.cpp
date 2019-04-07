@@ -12,6 +12,7 @@
  * =====================================================================================
  */
 #include "Registry.hpp"
+#include "ScriptEngine.hpp"
 #include "Server.hpp"
 #include "ServerBlock.hpp"
 #include "ServerPlayer.hpp"
@@ -25,9 +26,13 @@ void ServerCommandHandler::setupCallbacks() {
 		m_registry.serialize(packet);
 		client.tcpSocket->send(packet);
 
+		m_players.emplace_back();
+
+		m_scriptEngine.lua()["init"](m_players.back());
+
 		sf::Packet invPacket;
 		invPacket << Network::Command::PlayerInvUpdate << client.id;
-		invPacket << m_player.inventory();
+		invPacket << m_players.at(client.id).inventory();
 		client.tcpSocket->send(invPacket);
 
 		sf::Packet spawnPacket;
@@ -49,7 +54,7 @@ void ServerCommandHandler::setupCallbacks() {
 		u16 clientId;
 		packet >> clientId;
 		if (clientId == client.id) {
-			packet >> m_player.inventory();
+			packet >> m_players.at(client.id).inventory();
 		}
 	});
 
@@ -60,7 +65,7 @@ void ServerCommandHandler::setupCallbacks() {
 		packet >> x >> y >> z;
 
 		if (clientId == client.id)
-			m_player.setPosition(x, y, z);
+			m_players.at(client.id).setPosition(x, y, z);
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerPlaceBlock, [this](Client &, sf::Packet &packet) {
@@ -89,7 +94,7 @@ void ServerCommandHandler::setupCallbacks() {
 		packet >> x >> y >> z;
 
 		u16 id = m_world.getBlock(x, y, z);
-		((ServerBlock &)(m_registry.getBlock(id))).onBlockActivated({x, y, z}, m_player, m_world, client);
+		((ServerBlock &)(m_registry.getBlock(id))).onBlockActivated({x, y, z}, m_players.at(client.id), m_world, client);
 	});
 
 	m_server.setCommandCallback(Network::Command::BlockInvUpdate, [this](Client &, sf::Packet &packet) {

@@ -28,7 +28,7 @@ class ServerWorld : public World {
 	public:
 		ServerWorld();
 
-		void update(Server &server, ServerPlayer &player);
+		void update(Server &server, std::vector<ServerPlayer> &players);
 
 		void sendWorldData(Client &client);
 		void sendChunkData(Client &client, ServerChunk *chunk);

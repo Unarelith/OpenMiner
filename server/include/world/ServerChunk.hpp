@@ -20,7 +20,7 @@
 #include "Chunk.hpp"
 #include "TerrainGenerator.hpp"
 
-class Player;
+class ServerPlayer;
 class Server;
 class World;
 
@@ -30,7 +30,7 @@ class ServerChunk : public Chunk {
 
 		void update();
 		void generate();
-		void tick(Player &player, World &world, Server &server);
+		void tick(std::vector<ServerPlayer> &players, World &world, Server &server);
 
 		bool isGenerated() const { return m_isGenerated; }
 		void setGenerated(bool isGenerated) { m_isGenerated = isGenerated; }
