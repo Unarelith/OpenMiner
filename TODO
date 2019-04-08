@@ -21,10 +21,15 @@ TODO
 
 # Code improvements
 
-• TODO: License headers
+• DONE: Pass `ClientCommandHandler` instead of `Client` in the game (for example in `BlockCursor`)
+   → DONE: This will allow to send network commands via a single function
+   → DONE: The code won’t be replicated anymore
+   → DONE: Packages musn’t be send from another place than `ClientCommandHandler`
+• TODO: Use `ServerCommandHandler` instead of `Server` (cf. above)
 • TODO: If possible, `Cube` should inherit from `ItemWidget` or `Widget`
 • TODO: Rename `Cube` to either `InventoryCube`, `CubeItemWidget` or `CubeWidget`
 • TODO: Unify cube coords in `BlockCursor`, `Cube`, `Chunk`
+• TODO: License headers
 
 # Refactorings
 

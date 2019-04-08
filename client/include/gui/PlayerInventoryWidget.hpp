@@ -18,7 +18,7 @@
 
 class PlayerInventoryWidget : public Widget {
 	public:
-		PlayerInventoryWidget(Client &client, Inventory &playerInventory, Widget *parent = nullptr);
+		PlayerInventoryWidget(ClientCommandHandler &client, Inventory &playerInventory, Widget *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -27,7 +27,7 @@ class PlayerInventoryWidget : public Widget {
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		Client &m_client;
+		ClientCommandHandler &m_client;
 
 		gk::Image m_background;
 

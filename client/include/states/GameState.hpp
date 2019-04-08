@@ -53,13 +53,13 @@ class GameState : public gk::ApplicationState {
 
 		Client &m_client;
 
-		HUD m_hud{m_player, m_world, m_client};
-
-		ClientWorld m_world{m_client};
+		ClientWorld m_world;
 
 		std::unordered_map<u16, PlayerBox> m_playerBoxes;
 
 		ClientCommandHandler m_clientCommandHandler{m_client, m_world, m_player, m_camera, m_playerBoxes};
+
+		HUD m_hud{m_player, m_world, m_clientCommandHandler};
 };
 
 #endif // GAMESTATE_HPP_

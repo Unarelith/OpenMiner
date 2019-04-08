@@ -13,7 +13,7 @@
  */
 #include "PlayerInventoryWidget.hpp"
 
-PlayerInventoryWidget::PlayerInventoryWidget(Client &client, Inventory &playerInventory, Widget *parent)
+PlayerInventoryWidget::PlayerInventoryWidget(ClientCommandHandler &client, Inventory &playerInventory, Widget *parent)
 	: Widget(176, 166, parent), m_client(client), m_playerInventory(playerInventory)
 {
 	m_background.load("texture-inventory");

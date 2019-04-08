@@ -17,7 +17,7 @@
 #include "Config.hpp"
 #include "HUD.hpp"
 
-HUD::HUD(ClientPlayer &player, ClientWorld &world, Client &client)
+HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 	: m_client(client),
 	m_hotbar(player.inventory()),
 	m_blockCursor(player, world, client),

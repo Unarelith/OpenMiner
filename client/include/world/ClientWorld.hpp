@@ -20,11 +20,11 @@
 #include "Network.hpp"
 #include "World.hpp"
 
-class Client;
+class ClientCommandHandler;
 
 class ClientWorld : public World, public gk::IDrawable {
 	public:
-		ClientWorld(Client &client);
+		ClientWorld();
 
 		void update();
 
@@ -40,6 +40,8 @@ class ClientWorld : public World, public gk::IDrawable {
 		u16 getData(int x, int y, int z) const override;
 		void setData(int x, int y, int z, u16 id) override;
 
+		void setClient(ClientCommandHandler &client) { m_client = &client; }
+
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
@@ -47,7 +49,7 @@ class ClientWorld : public World, public gk::IDrawable {
 
 		gk::Texture &m_texture;
 
-		Client &m_client;
+		ClientCommandHandler *m_client = nullptr;
 };
 
 #endif // CLIENTWORLD_HPP_

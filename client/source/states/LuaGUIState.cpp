@@ -28,7 +28,7 @@
 #include "Player.hpp"
 #include "TextButton.hpp"
 
-LuaGUIState::LuaGUIState(Client &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent)
+LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent)
 	: gk::ApplicationState(parent), m_client(client)
 {
 	// FIXME: Duplicated with HUD

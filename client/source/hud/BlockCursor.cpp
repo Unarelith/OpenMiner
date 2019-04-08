@@ -19,7 +19,7 @@
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "BlockCursor.hpp"
-#include "Client.hpp"
+#include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "Config.hpp"
 #include "Hotbar.hpp"
@@ -74,9 +74,7 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 			const Item &item = Registry::getInstance().getItem(hotbar.currentItem());
 
 			if (block.id()) {
-				sf::Packet packet;
-				packet << Network::Command::BlockActivated << s32(m_selectedBlock.x) << s32(m_selectedBlock.y) << s32(m_selectedBlock.z);
-				m_client.send(packet);
+				m_client.sendBlockActivated(m_selectedBlock);
 			}
 
 			// FIXME: Check if this block has a callback
@@ -99,18 +97,12 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 
 				m_world.setBlock(x, y, z, hotbar.currentItem());
 
-				sf::Packet packet;
-				packet << Network::Command::PlayerPlaceBlock << x << y << z << u32(hotbar.currentItem());
-				m_client.send(packet);
+				m_client.sendPlayerPlaceBlock(x, y, z, hotbar.currentItem());
 
 				const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
 				m_player.inventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().name() : "", currentStack.amount() - 1);
 
-				// FIXME
-				sf::Packet invPacket;
-				invPacket << Network::Command::PlayerInvUpdate << m_client.id();
-				invPacket << m_player.inventory();
-				m_client.send(invPacket);
+				m_client.sendPlayerInvUpdate();
 			}
 		}
 	}
@@ -148,18 +140,8 @@ void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
 			m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
 			m_animationStart = gk::GameClock::getTicks();
 
-			sf::Packet packet;
-			packet << Network::Command::PlayerDigBlock
-				   << s32(m_selectedBlock.x)
-				   << s32(m_selectedBlock.y)
-				   << s32(m_selectedBlock.z);
-			m_client.send(packet);
-
-			// FIXME
-			sf::Packet invPacket;
-			invPacket << Network::Command::PlayerInvUpdate << m_client.id();
-			invPacket << m_player.inventory();
-			m_client.send(invPacket);
+			m_client.sendPlayerDigBlock(m_selectedBlock);
+			m_client.sendPlayerInvUpdate();
 		}
 	}
 

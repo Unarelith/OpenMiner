@@ -14,7 +14,7 @@
 #include "CraftingWidget.hpp"
 #include "Registry.hpp"
 
-CraftingWidget::CraftingWidget(Client &client, Inventory &craftingInventory, Widget *parent)
+CraftingWidget::CraftingWidget(ClientCommandHandler &client, Inventory &craftingInventory, Widget *parent)
 	: Widget(parent), m_client(client), m_craftingInventory(craftingInventory)
 {
 	m_craftingInventoryWidget.init(m_craftingInventory);

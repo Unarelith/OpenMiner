@@ -20,7 +20,7 @@ class Recipe;
 
 class CraftingWidget : public Widget {
 	public:
-		CraftingWidget(Client &client, Inventory &craftingInventory, Widget *parent = nullptr);
+		CraftingWidget(ClientCommandHandler &client, Inventory &craftingInventory, Widget *parent = nullptr);
 
 		void onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget);
 
@@ -32,7 +32,7 @@ class CraftingWidget : public Widget {
 		InventoryWidget &craftingResultInventoryWidget() { return m_craftingResultInventoryWidget; }
 
 	protected:
-		Client &m_client;
+		ClientCommandHandler &m_client;
 
 		Inventory &m_craftingInventory;
 		InventoryWidget m_craftingInventoryWidget{m_client, this};

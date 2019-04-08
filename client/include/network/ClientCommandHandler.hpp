@@ -31,6 +31,13 @@ class ClientCommandHandler {
 		ClientCommandHandler(Client &client, ClientWorld &world, ClientPlayer &player, gk::Camera &camera, std::unordered_map<u16, PlayerBox> &playerBoxes)
 			: m_client(client), m_world(world), m_player(player), m_camera(camera), m_playerBoxes(playerBoxes) {}
 
+		void sendPlayerInvUpdate();
+		void sendPlayerDigBlock(const glm::vec4 &selectedBlock);
+		void sendPlayerPlaceBlock(s32 x, s32 y, s32 z, u32 block);
+		void sendBlockActivated(const glm::vec4 &selectedBlock);
+		void sendBlockInvUpdate(Inventory &inventory);
+		void sendChunkRequest(s32 chunkX, s32 chunkY, s32 chunkZ);
+
 		void setupCallbacks();
 
 		bool isRegistryInitialized() const { return m_isRegistryInitialized; }

@@ -41,6 +41,8 @@ GameState::GameState(Client &client, const std::string &host, int port) : m_clie
 	m_client.connect(host, port);
 
 	m_clientCommandHandler.setupCallbacks();
+
+	m_world.setClient(m_clientCommandHandler);
 }
 
 void GameState::onEvent(const SDL_Event &event) {
@@ -82,7 +84,7 @@ void GameState::update() {
 
 			if (gk::GamePad::isKeyPressedOnce(GameKey::Inventory)) {
 				auto &inventoryState = m_stateStack->push<InventoryState>(this);
-				inventoryState.setupWidget<PlayerInventoryWidget>(m_client, m_player.inventory());
+				inventoryState.setupWidget<PlayerInventoryWidget>(m_clientCommandHandler, m_player.inventory());
 			}
 		}
 

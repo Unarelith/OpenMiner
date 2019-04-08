@@ -20,6 +20,54 @@
 #include "LuaGUIState.hpp"
 #include "Registry.hpp"
 
+void ClientCommandHandler::sendPlayerInvUpdate() {
+	sf::Packet invPacket;
+	invPacket << Network::Command::PlayerInvUpdate;
+	// FIXME: Sending client id shouldn't be necessary
+	invPacket << m_client.id();
+	invPacket << m_player.inventory();
+	m_client.send(invPacket);
+}
+
+void ClientCommandHandler::sendPlayerDigBlock(const glm::vec4 &selectedBlock) {
+	sf::Packet packet;
+	packet << Network::Command::PlayerDigBlock
+		<< s32(selectedBlock.x)
+		<< s32(selectedBlock.y)
+		<< s32(selectedBlock.z);
+	m_client.send(packet);
+}
+
+void ClientCommandHandler::sendPlayerPlaceBlock(s32 x, s32 y, s32 z, u32 block) {
+	sf::Packet packet;
+	packet << Network::Command::PlayerPlaceBlock << x << y << z << block;
+	m_client.send(packet);
+}
+
+void ClientCommandHandler::sendBlockActivated(const glm::vec4 &selectedBlock) {
+	sf::Packet packet;
+	packet << Network::Command::BlockActivated
+		<< s32(selectedBlock.x)
+		<< s32(selectedBlock.y)
+		<< s32(selectedBlock.z);
+	m_client.send(packet);
+}
+
+void ClientCommandHandler::sendBlockInvUpdate(Inventory &inventory) {
+	sf::Packet packet;
+	packet << Network::Command::BlockInvUpdate;
+	packet << s32(inventory.blockPos().x) << s32(inventory.blockPos().y) << s32(inventory.blockPos().z);
+	packet << inventory;
+	m_client.send(packet);
+}
+
+void ClientCommandHandler::sendChunkRequest(s32 chunkX, s32 chunkY, s32 chunkZ) {
+	sf::Packet packet;
+	packet << Network::Command::ChunkRequest;
+	packet << chunkX << chunkY << chunkZ;
+	m_client.send(packet);
+}
+
 void ClientCommandHandler::setupCallbacks() {
 	m_client.setCommandCallback(Network::Command::RegistryData, [this](sf::Packet &packet) {
 		Registry::getInstance().deserialize(packet);
@@ -57,7 +105,7 @@ void ClientCommandHandler::setupCallbacks() {
 		if (clientId == m_client.id())
 			m_camera.setPosition(x, y, z);
 		else
-			((Player&)m_playerBoxes.at(clientId)).setPosition(x, y, z);
+			m_playerBoxes.at(clientId).setPosition(x, y, z);
 	});
 
 	m_client.setCommandCallback(Network::Command::PlayerSpawn, [this](sf::Packet &packet) {
@@ -67,12 +115,12 @@ void ClientCommandHandler::setupCallbacks() {
 
 		if (clientId != m_client.id()) {
 			m_playerBoxes.emplace(clientId, PlayerBox{});
-			((Player&)m_playerBoxes.at(clientId)).setPosition(pos.x, pos.y, pos.z);
+			m_playerBoxes.at(clientId).setPosition(pos.x, pos.y, pos.z);
 		}
 	});
 
 	m_client.setCommandCallback(Network::Command::BlockGUIData, [this](sf::Packet &packet) {
-		gk::ApplicationStateStack::getInstance().push<LuaGUIState>(m_client, m_player, m_world, packet, &gk::ApplicationStateStack::getInstance().top());
+		gk::ApplicationStateStack::getInstance().push<LuaGUIState>(*this, m_player, m_world, packet, &gk::ApplicationStateStack::getInstance().top());
 	});
 
 	m_client.setCommandCallback(Network::Command::BlockInvUpdate, [this](sf::Packet &packet) {

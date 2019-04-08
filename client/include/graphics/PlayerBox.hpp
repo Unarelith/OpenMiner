@@ -24,6 +24,11 @@ class PlayerBox : public gk::IDrawable, public gk::Transformable, public Player 
 	public:
 		PlayerBox();
 
+		void setPosition(float x, float y, float z) {
+			gk::Transformable::setPosition(x, y, z);
+			Player::setPosition(x, y, z);
+		}
+
 	private:
 		void updateVertexBuffer();
 

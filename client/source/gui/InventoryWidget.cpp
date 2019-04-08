@@ -11,7 +11,7 @@
  *
  * =====================================================================================
  */
-#include "Client.hpp"
+#include "ClientCommandHandler.hpp"
 #include "InventoryWidget.hpp"
 
 void InventoryWidget::init(Inventory &inventory, unsigned int offset, unsigned int size) {
@@ -60,17 +60,12 @@ void InventoryWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mous
 }
 
 void InventoryWidget::sendUpdatePacket() {
-	sf::Packet packet;
 	if (m_inventory->inBlock()) {
-		packet << Network::Command::BlockInvUpdate;
-		packet << s32(m_inventory->blockPos().x) << s32(m_inventory->blockPos().y) << s32(m_inventory->blockPos().z);
-		packet << *m_inventory;
+		m_client.sendBlockInvUpdate(*m_inventory);
 	}
 	else {
-		packet << Network::Command::PlayerInvUpdate << m_client.id();
-		packet << *m_inventory;
+		m_client.sendPlayerInvUpdate();
 	}
-	m_client.send(packet);
 }
 
 void InventoryWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {

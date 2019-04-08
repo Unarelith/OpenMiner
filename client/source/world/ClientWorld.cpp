@@ -16,14 +16,11 @@
 #include <gk/gl/Shader.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
-#include "Client.hpp"
+#include "ClientCommandHandler.hpp"
 #include "ClientWorld.hpp"
 #include "World.hpp"
 
-ClientWorld::ClientWorld(Client &client)
-	: m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-blocks")),
-	  m_client(client)
-{
+ClientWorld::ClientWorld() : m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-blocks")) {
 	for(s32 z = 0 ; z < m_depth ; z++) {
 		for(s32 y = 0 ; y < m_height ; y++) {
 			for(s32 x = 0 ; x < m_width ; x++) {
@@ -239,10 +236,7 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	}
 
 	if(ud < 1000) {
-		sf::Packet packet;
-		packet << Network::Command::ChunkRequest;
-		packet << ux << uy << uz;
-		m_client.send(packet);
+		m_client->sendChunkRequest(ux, uy, uz);
 	}
 
 	for (u8 i = 0 ; i < ChunkBuilder::layers ; ++i) {

@@ -13,7 +13,7 @@
  */
 #include "FurnaceWidget.hpp"
 
-FurnaceWidget::FurnaceWidget(Client &client, MouseItemWidget &mouseItemWidget, Inventory &playerInventory, BlockData &blockData, Widget *parent)
+FurnaceWidget::FurnaceWidget(ClientCommandHandler &client, MouseItemWidget &mouseItemWidget, Inventory &playerInventory, BlockData &blockData, Widget *parent)
 	: Widget(176, 166, parent), m_client(client), m_playerInventory(playerInventory), m_blockData(blockData), m_mouseItemWidget(mouseItemWidget)
 {
 	m_background.load("texture-furnace");

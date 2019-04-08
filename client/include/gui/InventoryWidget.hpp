@@ -18,11 +18,11 @@
 
 #include "MouseItemWidget.hpp"
 
-class Client;
+class ClientCommandHandler;
 
 class InventoryWidget : public Widget {
 	public:
-		InventoryWidget(Client &client, Widget *parent = nullptr)
+		InventoryWidget(ClientCommandHandler &client, Widget *parent = nullptr)
 			: Widget(parent), m_client(client) {}
 
 		void init(Inventory &inventory, unsigned int offset = 0, unsigned int size = 0);
@@ -36,7 +36,7 @@ class InventoryWidget : public Widget {
 
 		void sendUpdatePacket();
 
-		Client &m_client;
+		ClientCommandHandler &m_client;
 
 		Inventory *m_inventory = nullptr;
 
