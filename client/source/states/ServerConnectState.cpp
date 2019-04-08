@@ -24,7 +24,7 @@ ServerConnectState::ServerConnectState() {
 	m_textInput.setCursor("_");
 
 	m_connectButton.setText("Connect");
-	m_connectButton.setPosition(SCREEN_WIDTH / 2 - m_connectButton.getGlobalBounds().width * GUI_SCALE / 2, SCREEN_HEIGHT - 291);
+	m_connectButton.setPosition(SCREEN_WIDTH / 2 - m_connectButton.getGlobalBounds().width * GUI_SCALE / 2, SCREEN_HEIGHT - 340);
 	m_connectButton.setScale(GUI_SCALE, GUI_SCALE, 1);
 	m_connectButton.setCallback([this](TextButton &) {
 		size_t sep = m_textInput.content().find_first_of(':');
@@ -41,12 +41,20 @@ ServerConnectState::ServerConnectState() {
 
 		m_stateStack->push<GameState>(host, port);
 	});
+
+	m_cancelButton.setText("Cancel");
+	m_cancelButton.setPosition(SCREEN_WIDTH / 2 - m_cancelButton.getGlobalBounds().width * GUI_SCALE / 2, SCREEN_HEIGHT - 261);
+	m_cancelButton.setScale(GUI_SCALE, GUI_SCALE, 1);
+	m_cancelButton.setCallback([this](TextButton &) {
+		m_stateStack->pop();
+	});
 }
 
 void ServerConnectState::onEvent(const SDL_Event &event) {
 	m_textInput.onEvent(event);
 
 	m_connectButton.onEvent(event);
+	m_cancelButton.onEvent(event);
 }
 
 void ServerConnectState::update() {
@@ -56,6 +64,8 @@ void ServerConnectState::draw(gk::RenderTarget &target, gk::RenderStates states)
 	prepareDraw(target, states);
 
 	target.draw(m_textInput, states);
+
 	target.draw(m_connectButton, states);
+	target.draw(m_cancelButton, states);
 }
 

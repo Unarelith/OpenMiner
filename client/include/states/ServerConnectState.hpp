@@ -33,6 +33,7 @@ class ServerConnectState : public InterfaceState {
 		gk::TextInput m_textInput;
 
 		TextButton m_connectButton;
+		TextButton m_cancelButton;
 };
 
 #endif // SERVERCONNECTSTATE_HPP_
