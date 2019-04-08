@@ -16,7 +16,7 @@
 
 namespace GameKey {
 	enum {
-		Undefined,
+		Undefined = -1,
 
 		Left,
 		Right,

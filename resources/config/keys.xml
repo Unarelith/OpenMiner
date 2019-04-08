@@ -1,17 +1,17 @@
 <!-- Key names are defined here: https://wiki.libsdl.org/SDL_Keycode -->
 <keys>
-	<Left      key="A"/>
-	<Right     key="D"/>
-	<Up        key="W"/>
-	<Down      key="S"/>
+	<key name="Left"      key="A"/>
+	<key name="Right"     key="D"/>
+	<key name="Up"        key="W"/>
+	<key name="Down"      key="S"/>
 
-	<Jump      key="Space"/>
-	<Fly       key="X"/>
-	<Sneak     key="Left Shift"/>
-	<Sprint    key="Left Ctrl"/>
+	<key name="Jump"      key="Space"/>
+	<key name="Fly"       key="X"/>
+	<key name="Sneak"     key="Left Shift"/>
+	<key name="Sprint"    key="Left Ctrl"/>
 
-	<Dig       key="L"/>
-	<Use       key="M"/>
+	<key name="Dig"       key="L"/>
+	<key name="Use"       key="M"/>
 
-	<Inventory key="E"/>
+	<key name="Inventory" key="E"/>
 </keys>

@@ -40,6 +40,7 @@ void ClientApplication::init() {
 	if (m_argumentParser.getArgument("port").isFound)
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
 
+	m_keyboardHandler.loadKeysFromFile("resources/config/keys.xml");
 	gk::GamePad::init(m_keyboardHandler);
 
 	createWindow(SCREEN_WIDTH, SCREEN_HEIGHT, APP_NAME);
@@ -53,8 +54,8 @@ void ClientApplication::init() {
 
 	Registry::setInstance(m_registry);
 
-	m_stateStack.push<TitleScreenState>();
-	// m_stateStack.push<GameState>(m_host, m_port);
+	// m_stateStack.push<TitleScreenState>();
+	m_stateStack.push<GameState>(m_host, m_port);
 	// m_stateStack.push<ServerLoadingState>(m_client);
 }
 

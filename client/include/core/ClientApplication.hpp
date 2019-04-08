@@ -15,8 +15,8 @@
 #define CLIENTAPPLICATION_HPP_
 
 #include <gk/core/CoreApplication.hpp>
+#include <gk/core/input/KeyboardHandler.hpp>
 
-#include "KeyboardHandler.hpp"
 #include "Registry.hpp"
 
 class ClientApplication : public gk::CoreApplication {
@@ -28,7 +28,7 @@ class ClientApplication : public gk::CoreApplication {
 	private:
 		void initOpenGL();
 
-		KeyboardHandler m_keyboardHandler;
+		gk::KeyboardHandler m_keyboardHandler;
 
 		Registry m_registry;
 
