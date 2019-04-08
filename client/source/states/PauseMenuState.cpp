@@ -19,6 +19,7 @@
 #include "Config.hpp"
 #include "PauseMenuState.hpp"
 #include "SettingsMenuState.hpp"
+#include "TitleScreenState.hpp"
 
 PauseMenuState::PauseMenuState(gk::ApplicationState *parent) : ApplicationState(parent) {
 	m_shader.createProgram();
@@ -38,6 +39,7 @@ PauseMenuState::PauseMenuState(gk::ApplicationState *parent) : ApplicationState(
 	m_menuWidget.setScale(GUI_SCALE, GUI_SCALE, 1);
 	m_menuWidget.addButton("Back to Game", [this] (TextButton &) { gk::Mouse::setCursorGrabbed(true); gk::Mouse::setCursorVisible(false); m_stateStack->pop(); });
 	m_menuWidget.addButton("Options...", [this] (TextButton &) { m_stateStack->push<SettingsMenuState>(m_parent); });
+	m_menuWidget.addButton("Title Screen", [this] (TextButton &) { m_stateStack->clear(); m_stateStack->push<TitleScreenState>(); });
 	m_menuWidget.addButton("Exit", [this] (TextButton &) { while(!m_stateStack->empty()) m_stateStack->pop(); });
 }
 

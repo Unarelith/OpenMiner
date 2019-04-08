@@ -31,7 +31,7 @@ class PauseMenuState : public gk::ApplicationState {
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		MenuWidget m_menuWidget{1, 3};
+		MenuWidget m_menuWidget{1, 4};
 
 		gk::Shader m_shader;
 
