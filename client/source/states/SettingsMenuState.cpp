@@ -162,7 +162,9 @@ void SettingsMenuState::draw(gk::RenderTarget &target, gk::RenderStates states) 
 
 	prepareDraw(target, states);
 
-	target.draw(m_background, states);
+	if (m_parent)
+		target.draw(m_background, states);
+
 	target.draw(m_menuWidget, states);
 	target.draw(m_doneButton, states);
 

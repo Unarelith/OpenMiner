@@ -72,8 +72,5 @@ void ClientApplication::initOpenGL() {
 
 	// Set best quality for mipmaps
 	glCheck(glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST));
-
-	// Set clear color to skyblue
-	glCheck(glClearColor(0.196078, 0.6, 0.8, 1.0));
 }
 

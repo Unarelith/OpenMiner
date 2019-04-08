@@ -104,7 +104,7 @@ This list is non exhaustive.
 - [x] Pause menu
 - [x] Settings menu
 - [x] Title screen
-- [ ] Server selection menu
+- [x] Server selection menu
 
 ## Previous versions
 

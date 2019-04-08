@@ -11,16 +11,20 @@
  *
  * =====================================================================================
  */
+#include <gk/core/ApplicationStateStack.hpp>
+
 #include "Config.hpp"
-#include "GameState.hpp"
+#include "ServerConnectState.hpp"
 #include "SettingsMenuState.hpp"
 #include "TitleScreenState.hpp"
 
 TitleScreenState::TitleScreenState() {
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+
 	m_menuWidget.setScale(GUI_SCALE, GUI_SCALE, 1);
 
 	m_menuWidget.addButton("Play", [this] (TextButton &) {
-		m_stateStack->push<GameState>();
+		m_stateStack->push<ServerConnectState>();
 	});
 
 	m_menuWidget.addButton("Options...", [this] (TextButton &) {

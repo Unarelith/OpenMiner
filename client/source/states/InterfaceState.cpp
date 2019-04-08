@@ -26,7 +26,7 @@ InterfaceState::InterfaceState(gk::ApplicationState *parent) : gk::ApplicationSt
 	// m_view.setCenter(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 }
 
-void InterfaceState::prepareDraw(gk::RenderTarget &target, gk::RenderStates &states) const {
+void InterfaceState::prepareDraw(gk::RenderTarget &, gk::RenderStates &states) const {
 	states.transform *= getTransform();
 	states.shader = &m_shader;
 	// states.vertexAttributes = gk::VertexAttribute::Only2d;

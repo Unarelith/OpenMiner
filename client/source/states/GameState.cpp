@@ -31,6 +31,9 @@
 #include "Registry.hpp"
 
 GameState::GameState(const std::string &host, int port) {
+	// Set clear color to skyblue
+	glClearColor(0.196078, 0.6, 0.8, 1.0);
+
 	m_camera.setAspectRatio((float)SCREEN_WIDTH / SCREEN_HEIGHT);
 
 	initShaders();
