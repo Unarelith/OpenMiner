@@ -16,7 +16,6 @@
 
 #include <gk/core/CoreApplication.hpp>
 
-#include "Client.hpp"
 #include "KeyboardHandler.hpp"
 #include "Registry.hpp"
 
@@ -32,8 +31,6 @@ class ClientApplication : public gk::CoreApplication {
 		KeyboardHandler m_keyboardHandler;
 
 		Registry m_registry;
-
-		Client m_client;
 
 		std::string m_host = "localhost";
 		int m_port = 4242;

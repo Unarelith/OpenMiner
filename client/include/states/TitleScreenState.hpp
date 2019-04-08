@@ -1,26 +1,29 @@
 /*
  * =====================================================================================
  *
- *       Filename:  ServerLoadingState.hpp
+ *       Filename:  TitleScreenState.hpp
  *
  *    Description:
  *
- *        Created:  12/01/2019 21:57:24
+ *        Created:  08/04/2019 17:59:56
  *
  *         Author:  Quentin Bazin, <quent42340@gmail.com>
  *
  * =====================================================================================
  */
-#ifndef SERVERLOADINGSTATE_HPP_
-#define SERVERLOADINGSTATE_HPP_
+#ifndef TITLESCREENSTATE_HPP_
+#define TITLESCREENSTATE_HPP_
 
 #include <gk/core/ApplicationState.hpp>
 #include <gk/gl/Shader.hpp>
-#include <gk/graphics/Text.hpp>
 
-class ServerLoadingState : public gk::ApplicationState {
+#include "MenuWidget.hpp"
+
+class TitleScreenState : public gk::ApplicationState {
 	public:
-		ServerLoadingState();
+		TitleScreenState();
+
+		void onEvent(const SDL_Event &event) override;
 
 		void update() override;
 
@@ -29,10 +32,9 @@ class ServerLoadingState : public gk::ApplicationState {
 
 		gk::Shader m_shader;
 
-		gk::Text m_text;
-		gk::Text m_textShadow;
+		glm::mat4 m_projectionMatrix;
 
-		mutable bool m_hasBeenDrawn = false;
+		MenuWidget m_menuWidget{1, 3};
 };
 
-#endif // SERVERLOADINGSTATE_HPP_
+#endif // TITLESCREENSTATE_HPP_

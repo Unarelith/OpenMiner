@@ -30,7 +30,7 @@
 
 class GameState : public gk::ApplicationState {
 	public:
-		GameState(Client &client, const std::string &host = "localhost", int port = 4242);
+		GameState(const std::string &host = "localhost", int port = 4242);
 
 		void setupClientCommandCallbacks();
 
@@ -48,7 +48,7 @@ class GameState : public gk::ApplicationState {
 		gk::Camera m_camera{FOV, DIST_NEAR, DIST_FAR};
 		ClientPlayer m_player{m_camera};
 
-		Client &m_client;
+		Client m_client;
 
 		ClientWorld m_world;
 

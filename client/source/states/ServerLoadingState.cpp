@@ -18,7 +18,7 @@
 #include "GameState.hpp"
 #include "ServerLoadingState.hpp"
 
-ServerLoadingState::ServerLoadingState(Client &client) : m_client(client) {
+ServerLoadingState::ServerLoadingState() {
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
@@ -39,7 +39,7 @@ ServerLoadingState::ServerLoadingState(Client &client) : m_client(client) {
 
 void ServerLoadingState::update() {
 	if (m_hasBeenDrawn)
-		m_stateStack->push<GameState>(m_client);
+		m_stateStack->push<GameState>();
 }
 
 void ServerLoadingState::draw(gk::RenderTarget &target, gk::RenderStates states) const {

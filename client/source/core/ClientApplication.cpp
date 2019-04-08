@@ -18,8 +18,10 @@
 
 #include "ClientApplication.hpp"
 #include "Config.hpp"
-#include "GameState.hpp"
 #include "TextureLoader.hpp"
+
+#include "GameState.hpp"
+#include "TitleScreenState.hpp"
 #include "ServerLoadingState.hpp"
 
 using namespace std::literals::string_literals;
@@ -46,15 +48,13 @@ void ClientApplication::init() {
 
 	initOpenGL();
 
-	gk::Mouse::setCursorVisible(false);
-	gk::Mouse::setCursorGrabbed(true);
-
 	m_resourceHandler.loadConfigFile<TextureLoader>("resources/config/textures.xml");
 	m_resourceHandler.add<gk::Font>("font-default", "resources/fonts/default.ttf");
 
 	Registry::setInstance(m_registry);
 
-	m_stateStack.push<GameState>(m_client, m_host, m_port);
+	m_stateStack.push<TitleScreenState>();
+	// m_stateStack.push<GameState>(m_host, m_port);
 	// m_stateStack.push<ServerLoadingState>(m_client);
 }
 

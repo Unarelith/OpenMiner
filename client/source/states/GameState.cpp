@@ -30,10 +30,13 @@
 #include "PlayerInventoryWidget.hpp"
 #include "Registry.hpp"
 
-GameState::GameState(Client &client, const std::string &host, int port) : m_client(client) {
+GameState::GameState(const std::string &host, int port) {
 	m_camera.setAspectRatio((float)SCREEN_WIDTH / SCREEN_HEIGHT);
 
 	initShaders();
+
+	gk::Mouse::setCursorVisible(false);
+	gk::Mouse::setCursorGrabbed(true);
 
 	// m_playerBoxes.emplace(0, PlayerBox{});
 	// m_playerBoxes.at(0).setPosition(0, 22, 35);
