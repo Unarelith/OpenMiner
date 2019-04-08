@@ -27,7 +27,6 @@
 #include "Config.hpp"
 #include "HUD.hpp"
 #include "PlayerBox.hpp"
-#include "Skybox.hpp"
 
 class GameState : public gk::ApplicationState {
 	public:
@@ -45,8 +44,6 @@ class GameState : public gk::ApplicationState {
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		gk::Shader m_shader;
-
-		// Skybox m_skybox;
 
 		gk::Camera m_camera{FOV, DIST_NEAR, DIST_FAR};
 		ClientPlayer m_player{m_camera};

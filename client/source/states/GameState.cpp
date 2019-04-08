@@ -90,7 +90,6 @@ void GameState::update() {
 		}
 
 		m_player.updatePosition(m_world);
-		// m_skybox.update(m_player);
 
 		m_hud.update();
 	}
@@ -122,7 +121,6 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.shader = &m_shader;
 
 	target.setView(m_camera);
-	// target.draw(m_skybox, states);
 	target.draw(m_world, states);
 
 	for (auto &it : m_playerBoxes)
