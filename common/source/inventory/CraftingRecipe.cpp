@@ -121,7 +121,7 @@ bool CraftingRecipe::checkMatch(const Inventory &inventory, int offsetX, int off
 				if (it == m_keys.end())
 					throw EXCEPTION("Recipe error: Invalid key char(", (int)m_pattern[y][x], ")'");
 
-				for (std::string item : it->second) {
+				for (const std::string &item : it->second) {
 					if (item == inventoryItem)
 						itemFound = true;
 				}

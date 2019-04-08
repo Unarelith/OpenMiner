@@ -84,7 +84,7 @@ This list is non exhaustive.
 - [x] World
 - [x] Custom GUI
 - [x] Inventories
-- [ ] Players
+- [x] Players
 
 ### Lua API
 

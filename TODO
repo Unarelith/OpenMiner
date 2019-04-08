@@ -1,19 +1,14 @@
 TODO
 
-# Multiplayer
-
-• DONE: Fix right click on blocks
-• DONE: Spltting a stack in the inventory causes a server crash
-• DONE: Player movement isn’t forwarded between clients
-• DONE: Server must send already connected players to new ones
-• TODO: Crafting doesn’t always work
-
 # General
 
 • TODO: Use Faithful 32x for buttons, backgrounds and font (or use Minecraftia for the latter)
 
 # Issues
 
+• DONE: Crafting doesn’t always work
+• TODO: A mix of pickaxe + axe recipes gives a pickaxe?!
+• TODO: Shapeless recipe code isn’t working
 • TODO: `Workbench` and `Furnace` are not scaled correctly with lower GUI scale settings
 • TODO: Blocks can be accessed from outside the world (will need a refactoring)
 • TODO: Collisions are fucked up with blocks placed at `x = -1` from `x = 0`
@@ -63,10 +58,6 @@ TODO
 • TODO: Main menu
 • TODO: World loading/saving
 • TODO: World selection menu
-
-# Network
-
-• DONE: Client/server architecture
 
 # World
 

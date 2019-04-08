@@ -24,10 +24,10 @@ class CraftingRecipe : public Recipe {
 		CraftingRecipe() : Recipe("craft") {}
 		CraftingRecipe(const std::vector<std::string> &pattern, const std::map<char, std::vector<std::string>> &keys, const ItemStack &result, bool isShapeless = false);
 
-		bool isMatching(const Inventory &inventory) const override;
-
 		void serialize(sf::Packet &packet) override;
 		void deserialize(sf::Packet &packet) override;
+
+		bool isMatching(const Inventory &inventory) const override;
 
 	private:
 		bool checkMatch(const Inventory &inventory, int offsetX, int offsetY) const;
@@ -35,7 +35,7 @@ class CraftingRecipe : public Recipe {
 		std::vector<std::string> m_pattern;
 		std::map<char, std::vector<std::string>> m_keys;
 
-		bool m_isShapeless;
+		bool m_isShapeless = false;
 };
 
 #endif // CRAFTINGRECIPE_HPP_
