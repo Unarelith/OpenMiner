@@ -63,7 +63,7 @@ void PlayerBox::updateVertexBuffer() {
 	gk::Vertex vertices[24];
 	for (u8 i = 0 ; i < 24 ; ++i) {
 		vertices[i].coord3d[0] = cubeCoords[i * 3];
-		vertices[i].coord3d[1] = cubeCoords[i * 3 + 1];
+		vertices[i].coord3d[1] = cubeCoords[i * 3 + 1] - 0.5;
 		vertices[i].coord3d[2] = cubeCoords[i * 3 + 2];
 		vertices[i].coord3d[3] = -1;
 

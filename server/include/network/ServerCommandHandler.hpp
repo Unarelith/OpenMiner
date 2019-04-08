@@ -14,7 +14,7 @@
 #ifndef SERVERCOMMANDHANDLER_HPP_
 #define SERVERCOMMANDHANDLER_HPP_
 
-#include <vector>
+#include <unordered_map>
 
 #include <gk/core/Vector3.hpp>
 
@@ -26,7 +26,7 @@ class ServerWorld;
 
 class ServerCommandHandler {
 	public:
-		ServerCommandHandler(ScriptEngine &scriptEngine, Server &server, ServerWorld &world, std::vector<ServerPlayer> &players, Registry &registry)
+		ServerCommandHandler(ScriptEngine &scriptEngine, Server &server, ServerWorld &world, std::unordered_map<u16, ServerPlayer> &players, Registry &registry)
 			: m_scriptEngine(scriptEngine), m_server(server), m_world(world), m_players(players), m_registry(registry) {}
 
 		void setupCallbacks();
@@ -36,7 +36,7 @@ class ServerCommandHandler {
 
 		Server &m_server;
 		ServerWorld &m_world;
-		std::vector<ServerPlayer> &m_players;
+		std::unordered_map<u16, ServerPlayer> &m_players;
 
 		Registry &m_registry;
 

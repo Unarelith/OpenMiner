@@ -18,7 +18,7 @@
 #include "Server.hpp"
 #include "World.hpp"
 
-void ServerBlock::onTick(const glm::ivec3 &pos, std::vector<ServerPlayer> &players, Chunk &chunk, World &world, Server &server) const {
+void ServerBlock::onTick(const glm::ivec3 &pos, std::unordered_map<u16, ServerPlayer> &players, Chunk &chunk, World &world, Server &server) const {
 	try {
 		if (m_onTick && m_onTickEnabled) {
 			m_onTick(pos, players, chunk, world);

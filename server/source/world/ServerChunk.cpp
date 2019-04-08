@@ -38,7 +38,7 @@ void ServerChunk::generate() {
 	}
 }
 
-void ServerChunk::tick(std::vector<ServerPlayer> &players, World &world, Server &server) {
+void ServerChunk::tick(std::unordered_map<u16, ServerPlayer> &players, World &world, Server &server) {
 	if (!m_tickingBlocks.empty() && m_lastTick < gk::GameClock::getTicks() / 50) {
 		m_lastTick = gk::GameClock::getTicks() / 50;
 

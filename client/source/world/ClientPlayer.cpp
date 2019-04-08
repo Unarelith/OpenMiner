@@ -115,6 +115,7 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 	m_z += m_velocity.z;
 
 	m_camera.setPosition(m_x, m_y, m_z);
+	Player::setPosition(m_x, m_y, m_z);
 
 	if (m_velocity.x != 0 || m_velocity.y != 0 || m_velocity.z != 0)
 		m_camera.setTargetPosition(pointTargetedX(), pointTargetedY(), pointTargetedZ());

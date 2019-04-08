@@ -48,14 +48,28 @@ void ServerApplication::init() {
 	m_serverCommandHandler.setupCallbacks();
 }
 
+void ServerApplication::update() {
+	m_world.update(m_server, m_players);
+
+	if (gk::GameClock::getTicks() % 1000 < 10) {
+		for (auto &it : m_players) {
+			sf::Packet packet;
+			packet << Network::Command::PlayerPosUpdate;
+			packet << it.first;
+			packet << it.second.x() << it.second.y() << it.second.z();
+			m_server.sendToAllClients(packet);
+		}
+	}
+}
+
 void ServerApplication::mainLoop() {
 	while (m_server.isRunning()) {
 		m_server.handleGameEvents();
 
 		m_server.handleKeyState();
 
-		m_clock.updateGame([&] {
-			m_world.update(m_server, m_players);
+		m_clock.updateGame([this] {
+			update();
 		});
 
 		m_clock.waitForNextFrame();

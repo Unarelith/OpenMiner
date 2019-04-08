@@ -26,9 +26,19 @@ void ServerCommandHandler::setupCallbacks() {
 		m_registry.serialize(packet);
 		client.tcpSocket->send(packet);
 
-		m_players.emplace_back();
+		for (auto &it : m_players) {
+			sf::Packet spawnPacket;
+			spawnPacket << Network::Command::PlayerSpawn << it.first;
+			spawnPacket << it.second.x() << it.second.y() << it.second.z();
+			client.tcpSocket->send(spawnPacket);
+		}
 
-		m_scriptEngine.lua()["init"](m_players.back());
+		m_players.emplace(client.id, ServerPlayer{});
+
+		auto &player = m_players.at(client.id);
+		player.setClientID(client.id);
+
+		m_scriptEngine.lua()["init"](player);
 
 		sf::Packet invPacket;
 		invPacket << Network::Command::PlayerInvUpdate << client.id;

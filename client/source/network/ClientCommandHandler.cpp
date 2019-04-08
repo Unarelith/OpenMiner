@@ -11,6 +11,7 @@
  *
  * =====================================================================================
  */
+#include <gk/core/Debug.hpp>
 #include <gk/gl/Camera.hpp>
 
 #include "Client.hpp"
@@ -27,6 +28,17 @@ void ClientCommandHandler::sendPlayerInvUpdate() {
 	invPacket << m_client.id();
 	invPacket << m_player.inventory();
 	m_client.send(invPacket);
+}
+
+void ClientCommandHandler::sendPlayerPosUpdate() {
+	sf::Packet packet;
+	packet << Network::Command::PlayerPosUpdate;
+	// FIXME: Sending client id shouldn't be necessary
+	packet << m_client.id();
+	packet << m_player.Player::x();
+	packet << m_player.Player::y();
+	packet << m_player.Player::z();
+	m_client.send(packet);
 }
 
 void ClientCommandHandler::sendPlayerDigBlock(const glm::vec4 &selectedBlock) {
@@ -102,10 +114,12 @@ void ClientCommandHandler::setupCallbacks() {
 		packet >> clientId;
 		packet >> x >> y >> z;
 
-		if (clientId == m_client.id())
-			m_camera.setPosition(x, y, z);
-		else
+		if (clientId != m_client.id())
 			m_playerBoxes.at(clientId).setPosition(x, y, z);
+		// else {
+		// 	m_camera.setPosition(x, y, z);
+		// 	m_player.setPosition(x, y, z);
+		// }
 	});
 
 	m_client.setCommandCallback(Network::Command::PlayerSpawn, [this](sf::Packet &packet) {
@@ -116,6 +130,7 @@ void ClientCommandHandler::setupCallbacks() {
 		if (clientId != m_client.id()) {
 			m_playerBoxes.emplace(clientId, PlayerBox{});
 			m_playerBoxes.at(clientId).setPosition(pos.x, pos.y, pos.z);
+			m_playerBoxes.at(clientId).setClientID(clientId);
 		}
 	});
 

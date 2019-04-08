@@ -43,6 +43,7 @@ GameState::GameState(Client &client, const std::string &host, int port) : m_clie
 	m_clientCommandHandler.setupCallbacks();
 
 	m_world.setClient(m_clientCommandHandler);
+	m_player.setClientID(m_client.id());
 }
 
 void GameState::onEvent(const SDL_Event &event) {
@@ -92,6 +93,10 @@ void GameState::update() {
 		// m_skybox.update(m_player);
 
 		m_hud.update();
+	}
+
+	if (gk::GameClock::getTicks() % 1000 < 10) {
+		m_clientCommandHandler.sendPlayerPosUpdate();
 	}
 
 	m_client.update();

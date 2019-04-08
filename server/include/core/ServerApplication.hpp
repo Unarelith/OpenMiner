@@ -31,11 +31,12 @@ class ServerApplication : public gk::CoreApplication {
 		void init() override;
 
 	private:
+		void update();
 		void mainLoop() override;
 
 		Server m_server;
 		ServerWorld m_world;
-		std::vector<ServerPlayer> m_players;
+		std::unordered_map<u16, ServerPlayer> m_players;
 
 		ScriptEngine m_scriptEngine;
 		LuaCore m_luaCore;

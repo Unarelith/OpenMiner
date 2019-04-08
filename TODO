@@ -4,9 +4,9 @@ TODO
 
 • DONE: Fix right click on blocks
 • DONE: Spltting a stack in the inventory causes a server crash
+• DONE: Player movement isn’t forwarded between clients
+• DONE: Server must send already connected players to new ones
 • TODO: Crafting doesn’t always work
-• TODO: Player movement isn’t forwarded between clients
-• TODO: Server must send already connected players to new ones
 
 # General
 

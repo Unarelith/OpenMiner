@@ -25,7 +25,7 @@ class ServerBlock : public Block {
 		ServerBlock(u32 id, u32 textureID, const std::string &name, const std::string &label)
 			: Block(id, textureID, name, label) {}
 
-		void onTick(const glm::ivec3 &, std::vector<ServerPlayer> &, Chunk &, World &, Server &) const;
+		void onTick(const glm::ivec3 &, std::unordered_map<u16, ServerPlayer> &, Chunk &, World &, Server &) const;
 		bool onBlockActivated(const glm::ivec3 &pos, Player &player, World &world, Client &client) const;
 
 		bool canUpdate() const { return m_onTick.valid(); }

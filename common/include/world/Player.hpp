@@ -28,12 +28,17 @@ class Player : public ISerializable {
 
 		Inventory &inventory() { return m_inventory; }
 
+		u16 clientID() const { return m_clientID; }
+
 		void setPosition(s32 x, s32 y, s32 z) { m_x = x; m_y = y; m_z = z; }
+		void setClientID(u16 clientID) { m_clientID = clientID; }
 
 	protected:
 		s32 m_x = 0;
 		s32 m_y = 0;
 		s32 m_z = 0;
+
+		u16 m_clientID = 0;
 
 		Inventory m_inventory{9, 4};
 };

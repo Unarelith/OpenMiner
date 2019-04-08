@@ -32,6 +32,7 @@ class ClientCommandHandler {
 			: m_client(client), m_world(world), m_player(player), m_camera(camera), m_playerBoxes(playerBoxes) {}
 
 		void sendPlayerInvUpdate();
+		void sendPlayerPosUpdate();
 		void sendPlayerDigBlock(const glm::vec4 &selectedBlock);
 		void sendPlayerPlaceBlock(s32 x, s32 y, s32 z, u32 block);
 		void sendBlockActivated(const glm::vec4 &selectedBlock);

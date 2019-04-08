@@ -43,7 +43,7 @@ ServerWorld::ServerWorld() {
 	}
 }
 
-void ServerWorld::update(Server &server, std::vector<ServerPlayer> &players) {
+void ServerWorld::update(Server &server, std::unordered_map<u16, ServerPlayer> &players) {
 	for (auto &it : m_chunks) {
 		it->tick(players, *this, server);
 		it->update();
