@@ -25,15 +25,7 @@
 #include "SettingsMenuState.hpp"
 #include "World.hpp"
 
-SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : ApplicationState(parent) {
-	m_shader.createProgram();
-	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
-	m_shader.linkProgram();
-
-	m_view.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-	m_view.setCenter(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-
+SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : InterfaceState(parent) {
 	m_background.setColor(gk::Color{0, 0, 0, 127});
 	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -168,14 +160,7 @@ void SettingsMenuState::draw(gk::RenderTarget &target, gk::RenderStates states) 
 	if (m_parent)
 		target.draw(*m_parent, states);
 
-	// states.transform *= getTransform();
-
-	// states.projectionMatrix = m_projectionMatrix;
-
-	states.shader = &m_shader;
-	states.vertexAttributes = gk::VertexAttribute::Only2d;
-
-	target.setView(m_view);
+	prepareDraw(target, states);
 
 	target.draw(m_background, states);
 	target.draw(m_menuWidget, states);

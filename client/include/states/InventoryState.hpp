@@ -16,15 +16,14 @@
 
 #include <memory>
 
-#include <gk/core/ApplicationState.hpp>
 #include <gk/graphics/RectangleShape.hpp>
-#include <gk/gl/Shader.hpp>
 
 #include "Config.hpp"
+#include "InterfaceState.hpp"
 #include "Widget.hpp"
 
 // FIXME: Old class used when widgets were defined from C++
-class InventoryState : public gk::ApplicationState {
+class InventoryState : public InterfaceState {
 	public:
 		InventoryState(gk::ApplicationState *parent = nullptr);
 
@@ -43,9 +42,6 @@ class InventoryState : public gk::ApplicationState {
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		gk::Shader m_shader;
-		glm::mat4 m_projectionMatrix;
 
 		std::unique_ptr<Widget> m_widget;
 

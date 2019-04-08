@@ -14,13 +14,12 @@
 #ifndef PAUSEMENUSTATE_HPP_
 #define PAUSEMENUSTATE_HPP_
 
-#include <gk/core/ApplicationState.hpp>
-#include <gk/gl/Shader.hpp>
 #include <gk/graphics/RectangleShape.hpp>
 
+#include "InterfaceState.hpp"
 #include "MenuWidget.hpp"
 
-class PauseMenuState : public gk::ApplicationState {
+class PauseMenuState : public InterfaceState {
 	public:
 		PauseMenuState(gk::ApplicationState *parent = nullptr);
 
@@ -32,10 +31,6 @@ class PauseMenuState : public gk::ApplicationState {
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		MenuWidget m_menuWidget{1, 4};
-
-		gk::Shader m_shader;
-
-		glm::mat4 m_projectionMatrix;
 
 		gk::RectangleShape m_background;
 };

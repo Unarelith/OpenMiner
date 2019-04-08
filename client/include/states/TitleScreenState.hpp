@@ -14,12 +14,10 @@
 #ifndef TITLESCREENSTATE_HPP_
 #define TITLESCREENSTATE_HPP_
 
-#include <gk/core/ApplicationState.hpp>
-#include <gk/gl/Shader.hpp>
-
+#include "InterfaceState.hpp"
 #include "MenuWidget.hpp"
 
-class TitleScreenState : public gk::ApplicationState {
+class TitleScreenState : public InterfaceState {
 	public:
 		TitleScreenState();
 
@@ -29,10 +27,6 @@ class TitleScreenState : public gk::ApplicationState {
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		gk::Shader m_shader;
-
-		glm::mat4 m_projectionMatrix;
 
 		MenuWidget m_menuWidget{1, 3};
 };

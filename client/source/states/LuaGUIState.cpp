@@ -29,16 +29,8 @@
 #include "TextButton.hpp"
 
 LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent)
-	: gk::ApplicationState(parent), m_client(client)
+	: InterfaceState(parent), m_client(client)
 {
-	// FIXME: Duplicated with HUD
-	m_shader.createProgram();
-	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
-	m_shader.linkProgram();
-
-	m_orthoMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
-
 	gk::Mouse::setCursorGrabbed(false);
 	gk::Mouse::setCursorVisible(true);
 	gk::Mouse::resetToWindowCenter();
@@ -101,11 +93,10 @@ void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	if (m_parent)
 		target.draw(*m_parent, states);
 
+	prepareDraw(target, states);
+
 	states.transform *= m_mainWidget.getTransform();
-	states.shader = &m_shader;
-	states.projectionMatrix = m_orthoMatrix;
 	states.viewMatrix = gk::Transform::Identity;
-	states.vertexAttributes = gk::VertexAttribute::Only2d;
 
 	target.draw(m_background, states);
 

@@ -14,15 +14,13 @@
 #ifndef SETTINGSMENUSTATE_HPP_
 #define SETTINGSMENUSTATE_HPP_
 
-#include <gk/core/ApplicationState.hpp>
-#include <gk/gl/Shader.hpp>
-#include <gk/gl/View.hpp>
 #include <gk/graphics/RectangleShape.hpp>
 
 #include "GameKey.hpp"
+#include "InterfaceState.hpp"
 #include "MenuWidget.hpp"
 
-class SettingsMenuState : public gk::ApplicationState {
+class SettingsMenuState : public InterfaceState {
 	public:
 		SettingsMenuState(gk::ApplicationState *parent = nullptr);
 
@@ -39,9 +37,6 @@ class SettingsMenuState : public gk::ApplicationState {
 		void addToggleButton(const std::string &text, bool &configOption, bool worldReloadRequested = false);
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		gk::Shader m_shader;
-		gk::View m_view;
 
 		gk::RectangleShape m_background;
 

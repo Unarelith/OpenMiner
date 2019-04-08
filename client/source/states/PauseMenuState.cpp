@@ -21,14 +21,7 @@
 #include "SettingsMenuState.hpp"
 #include "TitleScreenState.hpp"
 
-PauseMenuState::PauseMenuState(gk::ApplicationState *parent) : ApplicationState(parent) {
-	m_shader.createProgram();
-	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
-	m_shader.linkProgram();
-
-	m_projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
-
+PauseMenuState::PauseMenuState(gk::ApplicationState *parent) : InterfaceState(parent) {
 	gk::Mouse::setCursorGrabbed(false);
 	gk::Mouse::setCursorVisible(true);
 	gk::Mouse::resetToWindowCenter();
@@ -62,12 +55,7 @@ void PauseMenuState::draw(gk::RenderTarget &target, gk::RenderStates states) con
 	if (m_parent)
 		target.draw(*m_parent, states);
 
-	states.transform *= getTransform();
-
-	states.projectionMatrix = m_projectionMatrix;
-
-	states.shader = &m_shader;
-	states.vertexAttributes = gk::VertexAttribute::Only2d;
+	prepareDraw(target, states);
 
 	target.draw(m_background, states);
 	target.draw(m_menuWidget, states);

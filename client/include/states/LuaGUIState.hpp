@@ -16,11 +16,10 @@
 
 #include <memory>
 
-#include <gk/core/ApplicationState.hpp>
-#include <gk/gl/Shader.hpp>
 #include <gk/graphics/RectangleShape.hpp>
 
 #include "CraftingWidget.hpp"
+#include "InterfaceState.hpp"
 #include "InventoryWidget.hpp"
 #include "MouseItemWidget.hpp"
 
@@ -28,7 +27,7 @@ class ClientPlayer;
 class ClientWorld;
 
 // FIXME: This class is almost a duplicate of InventoryState
-class LuaGUIState : public gk::ApplicationState {
+class LuaGUIState : public InterfaceState {
 	public:
 		LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent = nullptr);
 
@@ -42,9 +41,6 @@ class LuaGUIState : public gk::ApplicationState {
 		void loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &packet);
 
 		ClientCommandHandler &m_client;
-
-		gk::Shader m_shader;
-		glm::mat4 m_orthoMatrix;
 
 		Widget m_mainWidget;
 

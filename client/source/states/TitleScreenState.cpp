@@ -17,13 +17,6 @@
 #include "TitleScreenState.hpp"
 
 TitleScreenState::TitleScreenState() {
-	m_shader.createProgram();
-	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
-	m_shader.linkProgram();
-
-	m_projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
-
 	m_menuWidget.setScale(GUI_SCALE, GUI_SCALE, 1);
 
 	m_menuWidget.addButton("Play", [this] (TextButton &) {
@@ -47,12 +40,7 @@ void TitleScreenState::update() {
 }
 
 void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	states.transform *= getTransform();
-
-	states.projectionMatrix = m_projectionMatrix;
-
-	states.shader = &m_shader;
-	states.vertexAttributes = gk::VertexAttribute::Only2d;
+	prepareDraw(target, states);
 
 	target.draw(m_menuWidget, states);
 }
