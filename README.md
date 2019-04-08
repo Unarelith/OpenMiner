@@ -103,7 +103,7 @@ This list is non exhaustive.
 
 - [x] Pause menu
 - [x] Settings menu
-- [ ] Title screen
+- [x] Title screen
 - [ ] Server selection menu
 
 ## Previous versions
