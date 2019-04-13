@@ -22,7 +22,7 @@
 
 class ClientCommandHandler;
 
-class ClientWorld : public World, public gk::IDrawable {
+class ClientWorld : public World, public gk::Drawable {
 	public:
 		ClientWorld();
 

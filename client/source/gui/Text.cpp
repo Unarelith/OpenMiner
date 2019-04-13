@@ -64,8 +64,8 @@ void Text::updateTextSprites() {
 //        this piece of code to make it look good
 //        I'll remove it later anyway
 void Text::updateCharWidth() {
-	const int width = m_texture.width();
-	const int height = m_texture.height();
+	const int width = m_texture.getSize().x;
+	const int height = m_texture.getSize().y;
 	unsigned int data[width * height];
 
 	gk::Texture::bind(&m_texture);

@@ -22,7 +22,7 @@
 #include "DebugOverlay.hpp"
 #include "Hotbar.hpp"
 
-class HUD : public gk::Transformable, public gk::IDrawable {
+class HUD : public gk::Transformable, public gk::Drawable {
 	public:
 		HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client);
 

@@ -14,13 +14,13 @@
 #ifndef PLAYERBOX_HPP_
 #define PLAYERBOX_HPP_
 
-#include <gk/gl/IDrawable.hpp>
+#include <gk/gl/Drawable.hpp>
 #include <gk/gl/VertexBuffer.hpp>
 #include <gk/gl/Transformable.hpp>
 
 #include "Player.hpp"
 
-class PlayerBox : public gk::IDrawable, public gk::Transformable, public Player {
+class PlayerBox : public gk::Drawable, public gk::Transformable, public Player {
 	public:
 		PlayerBox();
 

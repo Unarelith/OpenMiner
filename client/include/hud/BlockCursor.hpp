@@ -23,7 +23,7 @@ class ClientCommandHandler;
 class ClientPlayer;
 class Hotbar;
 
-class BlockCursor : public gk::IDrawable {
+class BlockCursor : public gk::Drawable {
 	public:
 		BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 			: m_player(player), m_world(world), m_client(client) {}

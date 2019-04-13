@@ -23,7 +23,7 @@ InventoryState::InventoryState(gk::ApplicationState *parent) : InterfaceState(pa
 	gk::Mouse::setCursorVisible(true);
 	gk::Mouse::resetToWindowCenter();
 
-	m_background.setColor(gk::Color{0, 0, 0, 127});
+	m_background.setFillColor(gk::Color{0, 0, 0, 127});
 	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 

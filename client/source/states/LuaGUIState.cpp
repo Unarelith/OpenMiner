@@ -35,7 +35,7 @@ LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, Cli
 	gk::Mouse::setCursorVisible(true);
 	gk::Mouse::resetToWindowCenter();
 
-	m_background.setColor(gk::Color{0, 0, 0, 127});
+	m_background.setFillColor(gk::Color{0, 0, 0, 127});
 	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	m_mainWidget.setScale(GUI_SCALE, GUI_SCALE);

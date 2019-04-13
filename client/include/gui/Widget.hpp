@@ -16,10 +16,10 @@
 
 #include <gk/core/Rect.hpp>
 #include <gk/core/SDLHeaders.hpp>
-#include <gk/gl/IDrawable.hpp>
+#include <gk/gl/Drawable.hpp>
 #include <gk/gl/Transformable.hpp>
 
-class Widget : public gk::IDrawable, public gk::Transformable {
+class Widget : public gk::Drawable, public gk::Transformable {
 	public:
 		Widget(Widget *parent = nullptr) : m_parent(parent) {}
 		Widget(unsigned int width, unsigned int height, Widget *parent = nullptr)

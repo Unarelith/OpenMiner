@@ -18,7 +18,7 @@
 
 class ClientPlayer;
 
-class DebugOverlay : public gk::Transformable, public gk::IDrawable {
+class DebugOverlay : public gk::Transformable, public gk::Drawable {
 	public:
 		DebugOverlay(const ClientPlayer &player);
 

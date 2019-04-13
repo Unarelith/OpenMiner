@@ -26,7 +26,7 @@
 #include "World.hpp"
 
 SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : InterfaceState(parent) {
-	m_background.setColor(gk::Color{0, 0, 0, 127});
+	m_background.setFillColor(gk::Color{0, 0, 0, 127});
 	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	m_menuWidget.setScale(GUI_SCALE, GUI_SCALE, 1);

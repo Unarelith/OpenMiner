@@ -26,13 +26,13 @@ ServerLoadingState::ServerLoadingState() {
 
 	m_text.setFont(gk::ResourceHandler::getInstance().get<gk::Font>("font-default"));
 	m_text.setCharacterSize(8 * 6);
-	m_text.setText("Loading world...");
+	m_text.setString("Loading world...");
 	m_text.setColor(gk::Color::White);
 	m_text.setPosition(SCREEN_WIDTH / 2.0 - m_text.getLocalBounds().width / 2.0, 200);
 
 	m_textShadow.setFont(gk::ResourceHandler::getInstance().get<gk::Font>("font-default"));
 	m_textShadow.setCharacterSize(8 * 6);
-	m_textShadow.setText(m_text.text());
+	m_textShadow.setString(m_text.string());
 	m_textShadow.setColor(gk::Color{70, 70, 70, 255});
 	m_textShadow.setPosition(m_text.getPosition().x + 6, m_text.getPosition().y + 6);
 }

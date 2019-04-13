@@ -18,7 +18,7 @@
 
 #include <gk/graphics/Sprite.hpp>
 
-class Text : public gk::IDrawable, public gk::Transformable {
+class Text : public gk::Drawable, public gk::Transformable {
 	public:
 		Text();
 

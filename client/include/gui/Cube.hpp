@@ -14,13 +14,13 @@
 #ifndef CUBE_HPP_
 #define CUBE_HPP_
 
-#include <gk/gl/IDrawable.hpp>
+#include <gk/gl/Drawable.hpp>
 #include <gk/gl/Transformable.hpp>
 #include <gk/gl/VertexBuffer.hpp>
 
 class Block;
 
-class Cube : public gk::IDrawable, public gk::Transformable {
+class Cube : public gk::Drawable, public gk::Transformable {
 	public:
 		Cube(float size = 1.0f);
 

@@ -22,9 +22,9 @@ Crosshair::Crosshair() {
 	m_vShape1.setSize(0.0002 * xFactor, 0.001 * yFactor - m_hShape.height() / 2);
 	m_vShape2.setSize(0.0002 * xFactor, 0.001 * yFactor - m_hShape.height() / 2);
 
-	m_hShape.setColor(gk::Color{200, 200, 200, 180});
-	m_vShape1.setColor(gk::Color{200, 200, 200, 180});
-	m_vShape2.setColor(gk::Color{200, 200, 200, 180});
+	m_hShape.setFillColor(gk::Color{200, 200, 200, 180});
+	m_vShape1.setFillColor(gk::Color{200, 200, 200, 180});
+	m_vShape2.setFillColor(gk::Color{200, 200, 200, 180});
 
 	m_hShape.setPosition(SCREEN_WIDTH / 2 - m_hShape.width() / 2, SCREEN_HEIGHT / 2 - m_hShape.height() / 2, 0);
 	m_vShape1.setPosition(SCREEN_WIDTH / 2 - m_vShape1.width() / 2, SCREEN_HEIGHT / 2 - m_hShape.height() / 2 - m_vShape1.height(), 0);

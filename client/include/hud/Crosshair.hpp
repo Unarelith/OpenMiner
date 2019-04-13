@@ -16,7 +16,7 @@
 
 #include <gk/graphics/RectangleShape.hpp>
 
-class Crosshair : public gk::IDrawable {
+class Crosshair : public gk::Drawable {
 	public:
 		Crosshair();
 
