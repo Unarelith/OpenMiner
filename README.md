@@ -1,6 +1,6 @@
 # OpenMiner
 
-[![Build Status](https://travis-ci.com/Quent42340/OpenMiner.svg?branch=master)](https://travis-ci.com/Quent42340/OpenMiner)
+[![Build Status](https://travis-ci.com/Unarelith/OpenMiner.svg?branch=master)](https://travis-ci.com/Unarelith/OpenMiner)
 [![Documentation](https://codedocs.xyz/Quent42340/OpenMiner.svg)](https://codedocs.xyz/Quent42340/OpenMiner/)
 [![License](https://img.shields.io/badge/license-LGPLv2.1%2B-blue.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
 [![Discord](https://img.shields.io/discord/527527086756200458.svg?style=popout)](https://discord.gg/eN8k8wt)
@@ -18,7 +18,7 @@
 
 ## Wiki
 
-- [Lua API Overview](https://github.com/Quent42340/OpenMiner/wiki/Lua-API-Overview)
+- [Lua API Overview](https://github.com/Unarelith/OpenMiner/wiki/Lua-API-Overview)
 
 ## Project goal
 
@@ -44,7 +44,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 - Dependencies:
     - A compiler with C++14 support
     - [CMake](http://www.cmake.org/download/)
-    - [GameKit](http://github.com/Quent42340/GameKit) (requires `SDL2` + `tinyxml2`, will switch to `SFML` starting from 2.6)
+    - [GameKit](http://github.com/Unarelith/GameKit) (requires `SDL2` + `tinyxml2`, will switch to `SFML` starting from 2.6)
     - [SFML](https://www.sfml-dev.org/) (only used for network)
     - [Lua](http://www.lua.org)
     - _Linux users: Check your distribution repositories for packages._
@@ -108,8 +108,8 @@ This list is non exhaustive.
 
 ## Previous versions
 
-- Here is the [commit](https://github.com/Quent42340/OpenMiner/tree/8eba845421efff6ce941f8550ff79e6364970fd5) matching the end of the first version made in 2013.
-- And here is the [commit](https://github.com/Quent42340/OpenMiner/tree/58c23a7e66404dab94e51998a179dc370c89ea06) matching the end of the rewrite made in 2014.
+- Here is the [commit](https://github.com/Unarelith/OpenMiner/tree/8eba845421efff6ce941f8550ff79e6364970fd5) matching the end of the first version made in 2013.
+- And here is the [commit](https://github.com/Unarelith/OpenMiner/tree/58c23a7e66404dab94e51998a179dc370c89ea06) matching the end of the rewrite made in 2014.
 
 ## Credits
 
