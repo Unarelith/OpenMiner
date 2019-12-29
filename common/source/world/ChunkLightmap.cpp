@@ -88,12 +88,11 @@ void ChunkLightmap::updateTorchlight() {
 		int lightLevel = getTorchlight(node.x, node.y, node.z);
 		for (const LightNode &surroundingNode : surroundingNodes) {
 			if (getTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= lightLevel) {
-				// FIXME: Putting this line in the next condition allows to block torchlight
-				//        But it causes really weird AO effects
-				setTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, lightLevel - 1);
-
 				u16 block = m_chunk->getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z);
-				if (!block || block == BlockType::Water || block == BlockType::Glass || block == BlockType::Flower/* || !Registry::getInstance().getBlock(block).isOpaque() */) { // FIXME
+				if (!block || block == BlockType::Water || block == BlockType::Glass || block == BlockType::Flower
+				/* || !Registry::getInstance().getBlock(block).isOpaque() */) { // FIXME
+					setTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, lightLevel - 1);
+
 					m_lightBfsQueue.emplace(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 				}
 			}

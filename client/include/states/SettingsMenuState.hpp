@@ -34,7 +34,7 @@ class SettingsMenuState : public InterfaceState {
 		void addGraphicsButtons();
 		void addInputButtons();
 
-		void addToggleButton(const std::string &text, bool &configOption, bool worldReloadRequested = false);
+		TextButton &addToggleButton(const std::string &text, bool &configOption, bool worldReloadRequested = false);
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 

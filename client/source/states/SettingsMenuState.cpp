@@ -97,7 +97,7 @@ void SettingsMenuState::addGraphicsButtons() {
 
 	addToggleButton("Torch Smooth Lighting", Config::isTorchSmoothLightingEnabled, true);
 	addToggleButton("Sun Smooth Lighting", Config::isSunSmoothLightingEnabled, true);
-	addToggleButton("Ambient Occlusion", Config::isAmbientOcclusionEnabled, true);
+	addToggleButton("Ambient Occlusion", Config::isAmbientOcclusionEnabled, true).setEnabled(false);
 	addToggleButton("Wireframe Mode", Config::isWireframeModeEnabled, false);
 
 	m_menuWidget.addButton("GUI Scale: " + std::to_string(GUI_SCALE), [] (TextButton &button) {
@@ -146,8 +146,8 @@ void SettingsMenuState::addInputButtons() {
 	});
 }
 
-void SettingsMenuState::addToggleButton(const std::string &text, bool &configOption, bool worldReloadRequested) {
-	m_menuWidget.addButton(text + ": " + (configOption ? "ON" : "OFF"), [=, &configOption] (TextButton &button) {
+TextButton &SettingsMenuState::addToggleButton(const std::string &text, bool &configOption, bool worldReloadRequested) {
+	return m_menuWidget.addButton(text + ": " + (configOption ? "ON" : "OFF"), [=, &configOption] (TextButton &button) {
 		configOption = !configOption;
 		button.setText(text + ": " + (configOption ? "ON" : "OFF"));
 

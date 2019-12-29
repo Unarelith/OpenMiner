@@ -39,7 +39,7 @@ void TextButton::onEvent(const SDL_Event &event) {
 		else if (!m_isHovered && m_text.color() != gk::Color::White)
 			m_text.setColor(gk::Color::White);
 	}
-	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && m_isHovered) {
+	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && m_isHovered && m_isEnabled) {
 		if (m_cppCallback)
 			m_cppCallback(*this);
 		else if (m_luaCallback)

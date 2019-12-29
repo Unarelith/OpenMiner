@@ -77,18 +77,18 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 				if(!block.id()) continue;
 				if (!chunk.getBlock(x, y, z)) continue;
 
-				const Block *surroundingBlocks[6] = {
-					&Registry::getInstance().getBlock(chunk.getBlock(x - 1, y, z)),
-					&Registry::getInstance().getBlock(chunk.getBlock(x + 1, y, z)),
-					&Registry::getInstance().getBlock(chunk.getBlock(x, y - 1, z)),
-					&Registry::getInstance().getBlock(chunk.getBlock(x, y + 1, z)),
-					&Registry::getInstance().getBlock(chunk.getBlock(x, y, z - 1)),
-					&Registry::getInstance().getBlock(chunk.getBlock(x, y, z + 1)),
+				const int surroundingBlocksPos[6][3] = {
+					{x - 1, y, z},
+					{x + 1, y, z},
+					{x, y - 1, z},
+					{x, y + 1, z},
+					{x, y, z - 1},
+					{x, y, z + 1},
 				};
 
 				if (block.drawType() == BlockDrawType::Solid) {
 					for(u8 i = 0 ; i < 6 ; i++) {
-						addFace(x, y, z, i, chunk, &block, surroundingBlocks[i]);
+						addFace(x, y, z, i, chunk, &block, surroundingBlocksPos[i]);
 					}
 				}
 				else if (block.drawType() == BlockDrawType::XShape) {
@@ -114,7 +114,11 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 	return verticesCount;
 }
 
-void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, const Block *block, const Block *surroundingBlock) {
+void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, const Block *block, const int surroundingBlockPos[3]) {
+	// Get surrounding block for that face
+	u16 surroundingBlockID = chunk.getBlock(surroundingBlockPos[0], surroundingBlockPos[1], surroundingBlockPos[2]);
+	const Block *surroundingBlock = &Registry::getInstance().getBlock(surroundingBlockID);
+
 	// Skip hidden faces
 	if(surroundingBlock && surroundingBlock->id() && surroundingBlock->drawType() == BlockDrawType::Solid
 	&& (surroundingBlock->isOpaque() || (block->id() == surroundingBlock->id() && block->id() != BlockType::Leaves && ((i != 2 && i != 3) || block->id() != BlockType::PlankSlab))))
@@ -174,14 +178,15 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, con
 
 		// FIXME: Duplicated below
 		if (Config::isSunSmoothLightingEnabled)
-			vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, chunk);
+			vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, normal, chunk);
 		else
 			vertices[j].lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
 
 		if (Config::isTorchSmoothLightingEnabled)
-			vertices[j].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, i, j, chunk);
+			vertices[j].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, i, j, normal, chunk);
 		else
-			vertices[j].lightValue[1] = chunk.lightmap().getTorchlight(x, y, z);
+			vertices[j].lightValue[1] = chunk.lightmap().getTorchlight(
+					surroundingBlockPos[0], surroundingBlockPos[1], surroundingBlockPos[2]);
 
 		if (Config::isAmbientOcclusionEnabled)
 			vertices[j].ambientOcclusion = getAmbientOcclusion(x, y, z, i, j, chunk);
@@ -228,6 +233,8 @@ void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Bl
 		blockTexCoords.x, blockTexCoords.y,
 	};
 
+	static glm::vec3 normal{0, 0, 0};
+
 	for (int i = 0 ; i < 2 ; ++i) {
 		gk::Vertex vertices[4];
 		for (int j = 0 ; j < 4 ; ++j) {
@@ -236,9 +243,9 @@ void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Bl
 			vertices[j].coord3d[2] = z + crossCoords[i * 12 + j * 3 + 2];
 			vertices[j].coord3d[3] = i;
 
-			vertices[j].normal[0] = 0;
-			vertices[j].normal[1] = 0;
-			vertices[j].normal[2] = 0;
+			vertices[j].normal[0] = normal.x;
+			vertices[j].normal[1] = normal.y;
+			vertices[j].normal[2] = normal.z;
 
 			vertices[j].color[0] = 1.0;
 			vertices[j].color[1] = 1.0;
@@ -250,12 +257,12 @@ void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Bl
 
 			// FIXME: Duplicated above
 			if (Config::isSunSmoothLightingEnabled)
-				vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, chunk);
+				vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, normal, chunk);
 			else
 				vertices[j].lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
 
 			if (Config::isTorchSmoothLightingEnabled)
-				vertices[j].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, i, j, chunk);
+				vertices[j].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, i, j, normal, chunk);
 			else
 				vertices[j].lightValue[1] = chunk.lightmap().getTorchlight(x, y, z);
 
@@ -276,7 +283,7 @@ void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Bl
 	}
 }
 
-gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) {
+gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) const {
 	gk::Vector3i offset;
 	offset.x = (
 			(i == 0) ||
@@ -297,7 +304,7 @@ gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) {
 			(i == 0 && (j == 0 || j == 1)) ||
 			(i == 1 && (j == 0 || j == 1)) ||
 			(i == 4 && (j == 0 || j == 1)) ||
-			(i == 5 && (j == 0 || j == 1))) ? 0 : 1;
+			(i == 5 && (j == 0 || j == 1))) ? -1 : 1;
 
 	return offset;
 }
@@ -322,8 +329,14 @@ u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const ClientC
 	return 3 - (side1 + side2 + corner);
 }
 
-float ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const ClientChunk &chunk) {
+float ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const glm::vec3 &normal, const ClientChunk &chunk) {
 	gk::Vector3i offset = getOffsetFromVertex(i, j);
+
+	gk::Vector3i minOffset{
+		(normal.x != 0) ? offset.x : 0,
+		(normal.y != 0) ? offset.y : 0,
+		(normal.z != 0) ? offset.z : 0
+	};
 
 	// FIXME: Air blocks have a light level of 0
 	if (light == Light::Sun)
@@ -332,9 +345,9 @@ float ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j,
 		      + chunk.lightmap().getSunlight(x,            y + offset.y, z + offset.z)
 		      + chunk.lightmap().getSunlight(x + offset.x, y + offset.y, z + offset.z)) / 4.0f;
 	else
-		return (chunk.lightmap().getTorchlight(x,            y + offset.y, z)
-		      + chunk.lightmap().getTorchlight(x + offset.x, y + offset.y, z)
-		      + chunk.lightmap().getTorchlight(x,            y + offset.y, z + offset.z)
-		      + chunk.lightmap().getTorchlight(x + offset.x, y + offset.y, z + offset.z)) / 4.0f;
+		return (chunk.lightmap().getTorchlight(x + minOffset.x, y + offset.y,    z + minOffset.z)
+		      + chunk.lightmap().getTorchlight(x + offset.x,    y + minOffset.y, z + minOffset.z)
+		      + chunk.lightmap().getTorchlight(x + minOffset.x, y + minOffset.y, z + offset.z)
+		      + chunk.lightmap().getTorchlight(x + offset.x,    y + offset.y,    z + offset.z)) / 4.0f;
 }
 
