@@ -10,6 +10,7 @@ TODO
 
 • DONE: Crafting doesn’t always work
 • DONE: A mix of pickaxe + axe recipes gives a pickaxe?!
+• DONE: Lighting doesn’t propagate between chunks
 • TODO: Shapeless recipe code isn’t working
 • TODO: `Workbench` and `Furnace` are not scaled correctly with lower GUI scale settings
    ◦ TODO: Send client screen size and GUI scale to server
