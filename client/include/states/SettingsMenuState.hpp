@@ -29,6 +29,8 @@ class SettingsMenuState : public InterfaceState {
 		void update() override;
 
 	private:
+		void doneButtonAction();
+
 		void addMainButtons();
 		void addGameplayButtons();
 		void addGraphicsButtons();
@@ -45,6 +47,15 @@ class SettingsMenuState : public InterfaceState {
 
 		u8 m_currentKey = GameKey::Undefined;
 		TextButton *m_currentKeyButton = nullptr;
+
+		enum class MenuState {
+			Main,
+			Gameplay,
+			Graphics,
+			Input
+		};
+
+		MenuState m_state = MenuState::Main;
 };
 
 #endif // SETTINGSMENUSTATE_HPP_

@@ -13,7 +13,7 @@
 - [How to compile](#how-to-compile)
 - [Discussion](#discussion)
 - [Project status](#project-status)
-- [Previous versions](#previous-versions)
+- [Previous attempts](#previous-attempts)
 - [Credits](#credits)
 
 ## Wiki

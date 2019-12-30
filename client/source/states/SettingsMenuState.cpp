@@ -34,6 +34,9 @@ SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : InterfaceSt
 	m_doneButton.setPosition(SCREEN_WIDTH / 2 - m_doneButton.getGlobalBounds().width * GUI_SCALE / 2, SCREEN_HEIGHT - 291);
 	m_doneButton.setScale(GUI_SCALE, GUI_SCALE, 1);
 	m_doneButton.setText("Done");
+	m_doneButton.setCallback([this] (TextButton &) {
+		doneButtonAction();
+	});
 
 	addMainButtons();
 }
@@ -43,7 +46,7 @@ void SettingsMenuState::onEvent(const SDL_Event &event) {
 	m_doneButton.onEvent(event);
 
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-		m_stateStack->pop();
+		doneButtonAction();
 	}
 	else if (m_currentKeyButton && event.type == SDL_KEYDOWN) {
 		gk::KeyboardHandler *keyboardHandler = (gk::KeyboardHandler *)gk::GamePad::getInputHandler();
@@ -57,22 +60,32 @@ void SettingsMenuState::onEvent(const SDL_Event &event) {
 void SettingsMenuState::update() {
 }
 
+void SettingsMenuState::doneButtonAction() {
+	if (m_state != MenuState::Main) {
+		m_state = MenuState::Main;
+		addMainButtons();
+	} else {
+		m_stateStack->pop();
+	}
+}
+
 void SettingsMenuState::addMainButtons() {
 	m_menuWidget.reset(1, 8);
 
 	m_menuWidget.addButton("Gameplay...", [this] (TextButton &) {
+		m_state = MenuState::Gameplay;
 		addGameplayButtons();
 	});
 
 	m_menuWidget.addButton("Graphics...", [this] (TextButton &) {
+		m_state = MenuState::Graphics;
 		addGraphicsButtons();
 	});
 
 	m_menuWidget.addButton("Input...", [this] (TextButton &) {
+		m_state = MenuState::Input;
 		addInputButtons();
 	});
-
-	m_doneButton.setCallback([this] (TextButton &) { m_stateStack->pop(); });
 }
 
 void SettingsMenuState::addGameplayButtons() {
@@ -80,10 +93,6 @@ void SettingsMenuState::addGameplayButtons() {
 
 	addToggleButton("Fly Mode", Config::isFlyModeEnabled, false);
 	addToggleButton("No Clip", Config::isNoClipEnabled, false);
-
-	m_doneButton.setCallback([this] (TextButton &) {
-		addMainButtons();
-	});
 }
 
 void SettingsMenuState::addGraphicsButtons() {
@@ -107,10 +116,6 @@ void SettingsMenuState::addGraphicsButtons() {
 
 	m_menuWidget.addButton("Fullscreen: OFF", [] (TextButton &) {}).setEnabled(false);
 	m_menuWidget.addButton("Use VSync: OFF", [] (TextButton &) {}).setEnabled(false);
-
-	m_doneButton.setCallback([this] (TextButton &) {
-		addMainButtons();
-	});
 }
 
 void SettingsMenuState::addInputButtons() {
@@ -138,10 +143,6 @@ void SettingsMenuState::addInputButtons() {
 			m_currentKeyButton = &button;
 		});
 	}
-
-	m_doneButton.setCallback([this] (TextButton &) {
-		addMainButtons();
-	});
 }
 
 TextButton &SettingsMenuState::addToggleButton(const std::string &text, bool &configOption, bool worldReloadRequested) {
