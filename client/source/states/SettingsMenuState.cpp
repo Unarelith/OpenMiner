@@ -103,8 +103,6 @@ void SettingsMenuState::addGraphicsButtons() {
 	m_menuWidget.addButton("GUI Scale: " + std::to_string(GUI_SCALE), [] (TextButton &button) {
 		GUI_SCALE = 1 + (GUI_SCALE + 1) % 3;
 		button.setText("GUI Scale: " + std::to_string(GUI_SCALE));
-		// FIXME: Fix decrease bug
-		//        Reload menus with new scaling
 	});
 
 	m_menuWidget.addButton("Fullscreen: OFF", [] (TextButton &) {}).setEnabled(false);

@@ -3,6 +3,8 @@ TODO
 # General
 
 • TODO: Use Faithful 32x for buttons, backgrounds and font (or use Minecraftia for the latter)
+• TODO: Add a texture pack system
+   ◦ TODO: It should be able to accept any type of texture resolution
 
 # Issues
 
@@ -10,6 +12,10 @@ TODO
 • DONE: A mix of pickaxe + axe recipes gives a pickaxe?!
 • TODO: Shapeless recipe code isn’t working
 • TODO: `Workbench` and `Furnace` are not scaled correctly with lower GUI scale settings
+   ◦ TODO: Send client screen size and GUI scale to server
+• TODO: `Hotbar` doesn’t update when GUI scale is changed
+• TODO: `SettingsMenuState` should update scaling when the setting is changed
+• TODO: Pressing `Esc` key in `SettingsMenuState` should just quit the category, not the state
 • TODO: Blocks can be accessed from outside the world (will need a refactoring)
 • TODO: Collisions are fucked up with blocks placed at `x = -1` from `x = 0`
 • TODO: Blocks can be placed inside the player (check for AABB?)
