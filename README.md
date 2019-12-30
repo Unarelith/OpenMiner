@@ -76,8 +76,8 @@ This list is non exhaustive.
 - [x] Basic lighting system
 - [x] Cheap ambient occlusion
 - [x] Smooth lighting
-- [ ] Sunlight downward propagation (possible but laggy)
-- [ ] Ability to block light (possible but causes weird AO effects)
+- [x] Sunlight downward propagation ~(possible but laggy)~
+- [x] Ability to block light ~(possible but causes weird AO effects)~
 
 ### Network
 

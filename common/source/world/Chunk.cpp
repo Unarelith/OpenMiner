@@ -47,8 +47,6 @@ u16 Chunk::getData(int x, int y, int z) const {
 	return (m_data[x][y][z] >> 16) & 0xffff;
 }
 
-#include <gk/core/Debug.hpp>
-
 void Chunk::setBlock(int x, int y, int z, u16 type) {
 	if(x < 0)              { if(m_surroundingChunks[0]) m_surroundingChunks[0]->setBlock(x + Chunk::width, y, z, type); return; }
 	if(x >= Chunk::width)  { if(m_surroundingChunks[1]) m_surroundingChunks[1]->setBlock(x - Chunk::width, y, z, type); return; }

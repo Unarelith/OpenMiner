@@ -142,14 +142,14 @@ void ChunkLightmap::updateSunlight() {
 		int sunlightLevel = getSunlight(node.x, node.y, node.z);
 		for (const LightNode &surroundingNode : surroundingNodes) {
 			if (getSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= sunlightLevel) {
-				// FIXME: This causes weird effects without smooth lighting
-				// if (sunlightLevel == 15 && surroundingNode.y == node.y - 1)
-				// 	setSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel);
-				// else
-					setSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel - 1);
-
 				u16 block = m_chunk->getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z);
-				if (!block || block == BlockType::Water || block == BlockType::Glass || block == BlockType::Flower/* || !Registry::getInstance().getBlock(block).isOpaque() */) { // FIXME
+				if (!block || block == BlockType::Water || block == BlockType::Glass || block == BlockType::Flower
+				/* || !Registry::getInstance().getBlock(block).isOpaque() */) { // FIXME
+					if (sunlightLevel == 15 && surroundingNode.y == node.y - 1)
+						setSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel);
+					else
+						setSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel - 1);
+
 					m_sunlightBfsQueue.emplace(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 				}
 			}

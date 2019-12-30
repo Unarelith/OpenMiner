@@ -180,7 +180,8 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, con
 		if (Config::isSunSmoothLightingEnabled)
 			vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, normal, chunk);
 		else
-			vertices[j].lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
+			vertices[j].lightValue[0] = chunk.lightmap().getSunlight(
+					surroundingBlockPos[0], surroundingBlockPos[1], surroundingBlockPos[2]);
 
 		if (Config::isTorchSmoothLightingEnabled)
 			vertices[j].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, i, j, normal, chunk);
@@ -310,6 +311,7 @@ gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) const {
 }
 
 // Based on this article: https://0fps.net/2013/07/03/ambient-occlusion-for-minecraft-like-worlds/
+// FIXME: Not used anymore, but can be added as an option when smooth lighting is disabled though
 u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const ClientChunk &chunk) {
 	gk::Vector3i offset = getOffsetFromVertex(i, j);
 
@@ -340,10 +342,10 @@ float ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j,
 
 	// FIXME: Air blocks have a light level of 0
 	if (light == Light::Sun)
-		return (chunk.lightmap().getSunlight(x,            y + offset.y, z)
-		      + chunk.lightmap().getSunlight(x + offset.x, y + offset.y, z)
-		      + chunk.lightmap().getSunlight(x,            y + offset.y, z + offset.z)
-		      + chunk.lightmap().getSunlight(x + offset.x, y + offset.y, z + offset.z)) / 4.0f;
+		return (chunk.lightmap().getSunlight(x + minOffset.x, y + offset.y,    z + minOffset.z)
+		      + chunk.lightmap().getSunlight(x + offset.x,    y + minOffset.y, z + minOffset.z)
+		      + chunk.lightmap().getSunlight(x + minOffset.x, y + minOffset.y, z + offset.z)
+		      + chunk.lightmap().getSunlight(x + offset.x,    y + offset.y,    z + offset.z)) / 4.0f;
 	else
 		return (chunk.lightmap().getTorchlight(x + minOffset.x, y + offset.y,    z + minOffset.z)
 		      + chunk.lightmap().getTorchlight(x + offset.x,    y + minOffset.y, z + minOffset.z)
