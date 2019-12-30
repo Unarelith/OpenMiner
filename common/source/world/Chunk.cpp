@@ -167,6 +167,16 @@ BlockData *Chunk::getBlockData(int x, int y, int z) {
 	return &it->second;
 }
 
+Chunk *Chunk::getSurroundingChunk(u8 i) {
+	return (i > 5 || !m_surroundingChunks[i] || !m_surroundingChunks[i]->isInitialized())
+		? nullptr : m_surroundingChunks[i];
+}
+
+const Chunk *Chunk::getSurroundingChunk(u8 i) const {
+	return (i > 5 || !m_surroundingChunks[i] || !m_surroundingChunks[i]->isInitialized())
+		? nullptr : m_surroundingChunks[i];
+}
+
 // FIXME
 // void Chunk::updateNeighbours(int x, int y, int z) {
 // 	int neighbours[7][3] = {

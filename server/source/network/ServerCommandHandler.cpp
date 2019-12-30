@@ -26,6 +26,7 @@ void ServerCommandHandler::setupCallbacks() {
 		m_registry.serialize(packet);
 		client.tcpSocket->send(packet);
 
+		// FIXME: Duplicated below, why?
 		for (auto &it : m_players) {
 			sf::Packet spawnPacket;
 			spawnPacket << Network::Command::PlayerSpawn << it.first;
@@ -45,6 +46,7 @@ void ServerCommandHandler::setupCallbacks() {
 		invPacket << m_players.at(client.id).inventory();
 		client.tcpSocket->send(invPacket);
 
+		// FIXME: Duplicated above, why?
 		sf::Packet spawnPacket;
 		spawnPacket << Network::Command::PlayerSpawn << client.id;
 		spawnPacket << m_spawnPosition.x << m_spawnPosition.y << m_spawnPosition.z;

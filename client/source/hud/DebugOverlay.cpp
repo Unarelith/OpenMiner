@@ -32,6 +32,10 @@ void DebugOverlay::update() {
 	stream << "x: " << floorf(m_player.x()) << " | ";
 	stream << "y: " << floorf(m_player.y()) << " | ";
 	stream << "z: " << floorf(m_player.z());
+	stream << '\n';
+	stream << "cx: " << floorf(m_player.x() / CHUNK_WIDTH) << " | ";
+	stream << "cy: " << floorf(m_player.y() / CHUNK_HEIGHT) << " | ";
+	stream << "cz: " << floorf(m_player.z() / CHUNK_DEPTH);
 
 	m_positionText.setText(stream.str());
 }

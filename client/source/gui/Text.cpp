@@ -34,21 +34,37 @@ void Text::updateTextSprites() {
 	m_textSprites.clear();
 
 	int x = 0;
+	int y = 0;
+	int maxX = 0;
 	gk::Color color = gk::Color{70, 70, 70, 255};
 	for(char c : m_text) {
+		if (c == '\n') {
+			y += 9;
+			x = 0;
+			continue;
+		}
+
 		gk::Sprite sprite{"texture-font", 8, 8};
 		sprite.setCurrentFrame(c);
-		sprite.setPosition(x + 1, 1, 0);
+		sprite.setPosition(x + 1, y + 1, 0);
 		sprite.setColor(color);
 		m_textSprites.emplace_back(std::move(sprite));
 		x += m_charWidth[(u8)c];
 	}
 	x = 0;
+	y = 0;
 	color = m_color;
 	for(char c : m_text) {
+		if (c == '\n') {
+			maxX = std::max(x, maxX);
+			y += 9;
+			x = 0;
+			continue;
+		}
+
 		gk::Sprite sprite{"texture-font", 8, 8};
 		sprite.setCurrentFrame(c);
-		sprite.setPosition(x, 0, 0);
+		sprite.setPosition(x, y, 0);
 		if (c == '[')
 			color = Color::Blue;
 		sprite.setColor(color);
@@ -56,8 +72,8 @@ void Text::updateTextSprites() {
 		x += m_charWidth[(u8)c];
 	}
 
-	m_size.x = x;
-	m_size.y = 8;
+	m_size.x = std::max(x, maxX);
+	m_size.y = 8 + y * 9;
 }
 
 // FIXME: Since I use the font from Minecraft assets, I needed to use
