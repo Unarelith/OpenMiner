@@ -7,7 +7,7 @@ TODO
 # Issues
 
 • DONE: Crafting doesn’t always work
-• TODO: A mix of pickaxe + axe recipes gives a pickaxe?!
+• DONE: A mix of pickaxe + axe recipes gives a pickaxe?!
 • TODO: Shapeless recipe code isn’t working
 • TODO: `Workbench` and `Furnace` are not scaled correctly with lower GUI scale settings
 • TODO: Blocks can be accessed from outside the world (will need a refactoring)

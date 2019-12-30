@@ -1,10 +1,4 @@
 mod:block {
-	id = "",
-	name = "Air",
-	texture = 0,
-}
-
-mod:block {
 	id = "dirt",
 	name = "Dirt",
 	-- texture = 37, -- Vanilla

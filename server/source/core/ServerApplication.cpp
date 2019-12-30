@@ -29,6 +29,8 @@ void ServerApplication::init() {
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
 
 	Registry::setInstance(m_registry);
+	m_registry.registerBlock<ServerBlock>(0, "", "Air");
+	m_registry.registerItem(0, "", "Air").setIsBlock(true);
 
 	m_scriptEngine.init();
 	// m_luaCore.setPlayer(m_player); // FIXME
