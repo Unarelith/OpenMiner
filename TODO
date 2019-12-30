@@ -15,13 +15,15 @@ TODO
 • DONE: Lighting doesn’t propagate between chunks
 • DONE: Pressing `Esc` key in `SettingsMenuState` should just quit the category, not the state
 • TODO: Shapeless recipe code isn’t working
-• TODO: `Workbench` and `Furnace` are not scaled correctly with lower GUI scale settings
-   ◦ TODO: Send client screen size and GUI scale to server
-• TODO: `Hotbar` doesn’t update when GUI scale is changed
-• TODO: `SettingsMenuState` should update scaling when the setting is changed
+• TODO: GUI scale issues
+   ◦ TODO: `HUD` doesn’t update when GUI scale is changed
+   ◦ TODO: `SettingsMenuState` should update scaling when the setting is changed
+   ◦ TODO: `Workbench` and `Furnace` are not scaled correctly with lower GUI scale settings
+      ◦ TODO: Send client screen size and GUI scale to server
 • TODO: Blocks can be accessed from outside the world (will need a refactoring)
 • TODO: Collisions are fucked up with blocks placed at `x = -1` from `x = 0`
 • TODO: Blocks can be placed inside the player (check for AABB?)
+• TODO: Sometimes it’s possible to aim between two blocks and right-clicking will replace one
 
 # Code improvements
 
@@ -42,6 +44,7 @@ TODO
 • TODO: `Chunk::setBlock` does way too much things, fix this
 • TODO: Add a mesh system, either here or in `GameKit`
    → Maybe this is the way to add custom vertex attributes while having default ones? Check 3dee
+   → Or maybe it would be better to use a VAO in `GameKit`
 
 # Lua API
 
@@ -61,6 +64,7 @@ TODO
 • WIP: Implement GUI elements requested by `Furnace`
    ◦ DONE: `FurnaceWidget` first
    ◦ TODO: Then its components
+• TODO: Handle custom size crafting table (try with 5x5 for example)
 
 # Menus
 

@@ -21,6 +21,20 @@ Text::Text() : m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("te
 	updateCharWidth();
 }
 
+void Text::setText(const std::string &text) {
+	if (m_text != text) {
+		m_text = text;
+		updateTextSprites();
+	}
+}
+
+void Text::setColor(const gk::Color &color) {
+	if (m_color != color) {
+		m_color = color;
+		updateTextSprites();
+	}
+}
+
 void Text::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
