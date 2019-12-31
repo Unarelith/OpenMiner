@@ -31,16 +31,21 @@ ClientWorld::ClientWorld() : m_texture(gk::ResourceHandler::getInstance().get<gk
 		}
 	}
 
-	for(s32 z = -m_depth / 2 ; z < m_depth / 2 ; z++) {
-		for(s32 y = -m_height / 2 ; y < m_height / 2 ; y++) {
-			for(s32 x = -m_width / 2 ; x < m_width / 2 ; x++) {
-				ClientChunk *chunk = getChunk(x, y, z);
-				if(x > -m_width / 2)      chunk->setSurroundingChunk(ClientChunk::Left,   getChunk(x - 1, y, z));
-				if(x <  m_width / 2 - 1)  chunk->setSurroundingChunk(ClientChunk::Right,  getChunk(x + 1, y, z));
-				if(y > -m_height / 2)     chunk->setSurroundingChunk(ClientChunk::Bottom, getChunk(x, y - 1, z));
-				if(y <  m_height / 2 - 1) chunk->setSurroundingChunk(ClientChunk::Top,    getChunk(x, y + 1, z));
-				if(z > -m_depth / 2)      chunk->setSurroundingChunk(ClientChunk::Front,  getChunk(x, y, z - 1));
-				if(z <  m_depth / 2 - 1)  chunk->setSurroundingChunk(ClientChunk::Back,   getChunk(x, y, z + 1));
+	// FIXME: Duplicated with ServerWorld
+	for(s32 z = 0 ; z < m_depth ; ++z) {
+		for(s32 y = 0 ; y < m_height ; ++y) {
+			for(s32 x = 0 ; x < m_width ; ++x) {
+				s32 cx = x - m_width / 2;
+				s32 cy = y - m_height / 2;
+				s32 cz = z - m_depth / 2;
+
+				Chunk *chunk = getChunk(cx, cy, cz);
+				if(cx > -m_width / 2)      chunk->setSurroundingChunk(Chunk::Left,   getChunk(cx - 1, cy, cz));
+				if(cx <  m_width / 2 - 1)  chunk->setSurroundingChunk(Chunk::Right,  getChunk(cx + 1, cy, cz));
+				if(cy > -m_height / 2)     chunk->setSurroundingChunk(Chunk::Bottom, getChunk(cx, cy - 1, cz));
+				if(cy <  m_height / 2 - 1) chunk->setSurroundingChunk(Chunk::Top,    getChunk(cx, cy + 1, cz));
+				if(cz > -m_depth / 2)      chunk->setSurroundingChunk(Chunk::Front,  getChunk(cx, cy, cz - 1));
+				if(cz <  m_depth / 2 - 1)  chunk->setSurroundingChunk(Chunk::Back,   getChunk(cx, cy, cz + 1));
 			}
 		}
 	}

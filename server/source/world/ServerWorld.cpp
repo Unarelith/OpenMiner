@@ -28,16 +28,21 @@ ServerWorld::ServerWorld() {
 		}
 	}
 
-	for(s32 z = -m_depth / 2 ; z < m_depth / 2 ; z++) {
-		for(s32 y = -m_height / 2 ; y < m_height / 2 ; y++) {
-			for(s32 x = -m_width / 2 ; x < m_width / 2 ; x++) {
-				ServerChunk *chunk = getChunk(x, y, z);
-				if(x > -m_width / 2)      chunk->setSurroundingChunk(ServerChunk::Left,   getChunk(x - 1, y, z));
-				if(x <  m_width / 2 - 1)  chunk->setSurroundingChunk(ServerChunk::Right,  getChunk(x + 1, y, z));
-				if(y > -m_height / 2)     chunk->setSurroundingChunk(ServerChunk::Bottom, getChunk(x, y - 1, z));
-				if(y <  m_height / 2 - 1) chunk->setSurroundingChunk(ServerChunk::Top,    getChunk(x, y + 1, z));
-				if(z > -m_depth / 2)      chunk->setSurroundingChunk(ServerChunk::Front,  getChunk(x, y, z - 1));
-				if(z <  m_depth / 2 - 1)  chunk->setSurroundingChunk(ServerChunk::Back,   getChunk(x, y, z + 1));
+	// FIXME: Duplicated with ClientWorld
+	for(s32 z = 0 ; z < m_depth ; ++z) {
+		for(s32 y = 0 ; y < m_height ; ++y) {
+			for(s32 x = 0 ; x < m_width ; ++x) {
+				s32 cx = x - m_width / 2;
+				s32 cy = y - m_height / 2;
+				s32 cz = z - m_depth / 2;
+
+				Chunk *chunk = getChunk(cx, cy, cz);
+				if(cx > -m_width / 2)      chunk->setSurroundingChunk(Chunk::Left,   getChunk(cx - 1, cy, cz));
+				if(cx <  m_width / 2 - 1)  chunk->setSurroundingChunk(Chunk::Right,  getChunk(cx + 1, cy, cz));
+				if(cy > -m_height / 2)     chunk->setSurroundingChunk(Chunk::Bottom, getChunk(cx, cy - 1, cz));
+				if(cy <  m_height / 2 - 1) chunk->setSurroundingChunk(Chunk::Top,    getChunk(cx, cy + 1, cz));
+				if(cz > -m_depth / 2)      chunk->setSurroundingChunk(Chunk::Front,  getChunk(cx, cy, cz - 1));
+				if(cz <  m_depth / 2 - 1)  chunk->setSurroundingChunk(Chunk::Back,   getChunk(cx, cy, cz + 1));
 			}
 		}
 	}
@@ -87,7 +92,7 @@ void ServerWorld::sendChunkData(Client &client, ServerChunk *chunk) {
 	client.tcpSocket->send(packet);
 	chunk->setSent(true);
 
-	// std::cout << "Chunk at (" << chunk->x() << "," << chunk->y() << ", " << chunk->z() << ") sent to client" << std::endl;
+	// std::cout << "Chunk at (" << chunk->x() << ", " << chunk->y() << ", " << chunk->z() << ") sent to client" << std::endl;
 }
 
 void ServerWorld::sendRequestedData(Client &client, int cx, int cy, int cz) {

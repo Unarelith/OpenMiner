@@ -44,6 +44,7 @@ void TerrainGenerator::basicGeneration(ServerChunk &chunk) const {
 
 void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 	srand(1337);
+	Chunk *topChunk = chunk.getSurroundingChunk(Chunk::Top);
 	for(int z = 0 ; z < CHUNK_DEPTH ; z++) {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
 			// Land height
@@ -120,6 +121,13 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 					}
 					else if (r4 > 8.2 && r4 < 10) {
 						chunk.setBlockRaw(x, y, z, BlockType::Stone);
+					}
+				}
+
+				if (topChunk) {
+					int sunlightLevel = topChunk->lightmap().getSunlight(x, 0, z);
+					if (sunlightLevel) {
+						chunk.lightmap().addSunlight(x, CHUNK_HEIGHT - 1, z, sunlightLevel);
 					}
 				}
 			}

@@ -126,6 +126,7 @@ void ChunkLightmap::updateSunlight() {
 			}
 		}
 	}
+
 	while (!m_sunlightBfsQueue.empty()) {
 		LightNode node = m_sunlightBfsQueue.front();
 		m_sunlightBfsQueue.pop();

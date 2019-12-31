@@ -14,9 +14,12 @@ TODO
 • DONE: A mix of pickaxe + axe recipes gives a pickaxe?!
 • DONE: Lighting doesn’t propagate between chunks
 • DONE: Pressing `Esc` key in `SettingsMenuState` should just quit the category, not the state
-• TODO: Sunlight doesn’t propagate correctly
-• TODO: Trees should block light
-• TODO: When loading chunks with smooth lighting enabled, they have black borders
+• TODO: Lighting issues
+   ◦ TODO: Sunlight doesn’t propagate correctly
+   ◦ TODO: Flower lighting is weird
+   ◦ TODO: Trees should block light
+   ◦ TODO: When loading chunks with smooth lighting enabled, they have black borders
+• TODO: Chunks are sent too many times to client on login
 • TODO: Shapeless recipe code isn’t working
 • TODO: GUI scale issues
    ◦ TODO: `HUD` doesn’t update when GUI scale is changed
