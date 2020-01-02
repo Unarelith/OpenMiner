@@ -34,5 +34,5 @@ target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -DSOL_CHECK_ARGUMENT
 target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -std=c++14)
 # target_compile_features(${CMAKE_PROJECT_NAME}_common PRIVATE cxx_std_17)
 
-# target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -pg)
+# target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -pg)
 

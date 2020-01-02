@@ -46,6 +46,8 @@ class ServerWorld : public World {
 
 	private:
 		std::vector<std::unique_ptr<ServerChunk>> m_chunks;
+
+		u32 m_lastTick = 0;
 };
 
 #endif // SERVERWORLD_HPP_

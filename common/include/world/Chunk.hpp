@@ -91,7 +91,6 @@ class Chunk : public gk::NonCopyable {
 		bool m_hasChanged = false;
 		bool m_isInitialized = false;
 
-		u32 m_lastTick = 0;
 		std::unordered_map<std::size_t, const Block&> m_tickingBlocks;
 
 		std::unordered_map<gk::Vector3i, BlockData> m_blockData;

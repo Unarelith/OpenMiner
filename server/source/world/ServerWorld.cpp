@@ -11,6 +11,8 @@
  *
  * =====================================================================================
  */
+#include <gk/core/GameClock.hpp>
+
 #include "Config.hpp"
 #include "Network.hpp"
 #include "Server.hpp"
@@ -49,15 +51,20 @@ ServerWorld::ServerWorld() {
 }
 
 void ServerWorld::update(Server &server, std::unordered_map<u16, ServerPlayer> &players) {
-	for (auto &it : m_chunks) {
-		it->tick(players, *this, server);
-		it->update();
+	if (m_lastTick < gk::GameClock::getTicks() / 50) {
+		m_lastTick = gk::GameClock::getTicks() / 50;
 
-		if (it->isGenerated() && !it->isSent()) {
-			for (auto &client : server.info().clients())
-				sendChunkData(client, it.get());
-			// DEBUG("Chunk updated at", it->x(), it->y(), it->z());
-			it->setSent(true);
+		for (auto &it : m_chunks) {
+			it->tick(players, *this, server);
+
+			it->update();
+
+			if (it->isGenerated() && !it->isSent()) {
+				for (auto &client : server.info().clients())
+					sendChunkData(client, it.get());
+				// DEBUG("Chunk updated at", it->x(), it->y(), it->z());
+				it->setSent(true);
+			}
 		}
 	}
 }

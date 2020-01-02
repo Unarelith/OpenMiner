@@ -11,10 +11,6 @@
  *
  * =====================================================================================
  */
-#include <cstring>
-
-#include <gk/core/GameClock.hpp>
-
 #include "Player.hpp"
 #include "Server.hpp"
 #include "ServerBlock.hpp"
@@ -39,9 +35,7 @@ void ServerChunk::generate() {
 }
 
 void ServerChunk::tick(std::unordered_map<u16, ServerPlayer> &players, World &world, Server &server) {
-	if (!m_tickingBlocks.empty() && m_lastTick < gk::GameClock::getTicks() / 50) {
-		m_lastTick = gk::GameClock::getTicks() / 50;
-
+	if (!m_tickingBlocks.empty()) {
 		for (auto &it : m_tickingBlocks) {
 			int z = it.first / (width * height);
 			int y = (it.first - z * width * height) / width;
