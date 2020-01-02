@@ -160,6 +160,8 @@ void ChunkLightmap::updateSunlight() {
 				/* || !Registry::getInstance().getBlock(block).isOpaque() */) { // FIXME
 					if (sunlightLevel == 15 && surroundingNode.y == node.y - 1)
 						setSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel);
+					else if (sunlightLevel == 15 && surroundingNode.y == node.y + 1)
+						continue;
 					else
 						setSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel - 1);
 
