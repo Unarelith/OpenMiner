@@ -21,6 +21,7 @@ class TerrainGenerator {
 		void generate(ServerChunk &chunk) const;
 
 	private:
+		void lightTestGeneration(ServerChunk &chunk) const;
 		void basicGeneration(ServerChunk &chunk) const;
 		void testCraftGeneration(ServerChunk &chunk) const;
 

@@ -63,6 +63,7 @@ void ServerWorld::update(Server &server, std::unordered_map<u16, ServerPlayer> &
 }
 
 void ServerWorld::sendWorldData(Client &client) {
+	// DEBUG("Sending world data...")
 	for(s32 z = -m_depth / 8 ; z < m_depth / 8 ; z++) {
 		for(s32 y = -m_height / 8 ; y < m_height / 8 ; y++) {
 			for(s32 x = -m_width / 8 ; x < m_width / 8 ; x++) {
@@ -70,6 +71,7 @@ void ServerWorld::sendWorldData(Client &client) {
 			}
 		}
 	}
+	// DEBUG("Done sending world data")
 }
 
 void ServerWorld::sendChunkData(Client &client, ServerChunk *chunk) {

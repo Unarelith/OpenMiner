@@ -20,8 +20,42 @@
 #include "World.hpp"
 
 void TerrainGenerator::generate(ServerChunk &chunk) const {
+	// lightTestGeneration(chunk);
 	// basicGeneration(chunk);
 	testCraftGeneration(chunk);
+}
+
+void TerrainGenerator::lightTestGeneration(ServerChunk &chunk) const {
+	for(u8 y = 0 ; y < CHUNK_HEIGHT ; y++) {
+		for(u8 z = 0 ; z < CHUNK_DEPTH ; z++) {
+			for(u8 x = 0 ; x < CHUNK_WIDTH ; x++) {
+				if (y == 4)
+					chunk.setBlockRaw(x, y, z, BlockType::Stone);
+				else if (y == 10 && (z > 4 || chunk.z() != 0))
+					chunk.setBlockRaw(x, y, z, BlockType::Stone);
+			}
+		}
+	}
+
+	if (chunk.y() == 0) {
+		for(u8 z = 0 ; z < CHUNK_DEPTH ; z++) {
+			for(u8 x = 0 ; x < CHUNK_WIDTH ; x++) {
+				chunk.lightmap().addSunlight(x, 31, z, 15);
+			}
+		}
+	}
+
+	// Chunk *topChunk = chunk.getSurroundingChunk(Chunk::Top);
+	// if (topChunk) {
+	// 	for(u8 z = 0 ; z < CHUNK_DEPTH ; z++) {
+	// 		for(u8 x = 0 ; x < CHUNK_WIDTH ; x++) {
+	// 			int sunlightLevel = topChunk->lightmap().getSunlight(x, 0, z);
+	// 			if (sunlightLevel) {
+	// 				chunk.lightmap().addSunlight(x, CHUNK_HEIGHT - 1, z, sunlightLevel);
+	// 			}
+	// 		}
+	// 	}
+	// }
 }
 
 void TerrainGenerator::basicGeneration(ServerChunk &chunk) const {

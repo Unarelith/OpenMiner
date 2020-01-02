@@ -127,6 +127,7 @@ void ChunkLightmap::updateSunlight() {
 		}
 	}
 
+	std::queue<LightNode> m_unloadedChunkSunlight;
 	while (!m_sunlightBfsQueue.empty()) {
 		LightNode node = m_sunlightBfsQueue.front();
 		m_sunlightBfsQueue.pop();
@@ -142,6 +143,17 @@ void ChunkLightmap::updateSunlight() {
 
 		int sunlightLevel = getSunlight(node.x, node.y, node.z);
 		for (const LightNode &surroundingNode : surroundingNodes) {
+			if((surroundingNode.x < 0 && m_chunk->getSurroundingChunkPtr(0) && !m_chunk->getSurroundingChunkPtr(0)->isInitialized())
+			|| (surroundingNode.x >= CHUNK_WIDTH && m_chunk->getSurroundingChunkPtr(1) && !m_chunk->getSurroundingChunkPtr(1)->isInitialized())
+			|| (surroundingNode.y < 0 && m_chunk->getSurroundingChunkPtr(4) && !m_chunk->getSurroundingChunkPtr(4)->isInitialized())
+			|| (surroundingNode.y >= CHUNK_HEIGHT && m_chunk->getSurroundingChunkPtr(5) && !m_chunk->getSurroundingChunkPtr(5)->isInitialized())
+			|| (surroundingNode.z < 0 && m_chunk->getSurroundingChunkPtr(2) && !m_chunk->getSurroundingChunkPtr(2)->isInitialized())
+			|| (surroundingNode.z >= CHUNK_DEPTH && m_chunk->getSurroundingChunkPtr(3) && !m_chunk->getSurroundingChunkPtr(3)->isInitialized())) {
+				m_unloadedChunkSunlight.emplace(node.x, node.y, node.z);
+				continue;
+			}
+
+
 			if (getSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= sunlightLevel) {
 				u16 block = m_chunk->getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 				if (!block || block == BlockType::Water || block == BlockType::Glass || block == BlockType::Flower
@@ -155,6 +167,11 @@ void ChunkLightmap::updateSunlight() {
 				}
 			}
 		}
+	}
+
+	while (!m_unloadedChunkSunlight.empty()) {
+		m_sunlightBfsQueue.emplace(m_unloadedChunkSunlight.front());
+		m_unloadedChunkSunlight.pop();
 	}
 }
 

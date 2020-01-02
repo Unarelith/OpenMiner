@@ -240,8 +240,10 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		chunks.emplace_back(&*it, states.transform);
 	}
 
-	if(ud < 1000) {
+	ClientChunk *chunk = getChunk(ux, uy, uz);
+	if(ud < 1000 && chunk && !chunk->hasBeenRequested()) {
 		m_client->sendChunkRequest(ux, uy, uz);
+		chunk->setHasBeenRequested(true);
 	}
 
 	for (u8 i = 0 ; i < ChunkBuilder::layers ; ++i) {

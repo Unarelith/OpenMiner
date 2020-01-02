@@ -15,7 +15,7 @@ TODO
 • DONE: Lighting doesn’t propagate between chunks
 • DONE: Pressing `Esc` key in `SettingsMenuState` should just quit the category, not the state
 • TODO: Lighting issues
-   ◦ TODO: Sunlight doesn’t propagate correctly
+   ◦ DONE: Sunlight doesn’t propagate correctly
    ◦ TODO: Flower lighting is weird
    ◦ TODO: Trees should block light
    ◦ TODO: When loading chunks with smooth lighting enabled, they have black borders

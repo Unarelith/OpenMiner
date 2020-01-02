@@ -172,9 +172,8 @@ Chunk *Chunk::getSurroundingChunk(u8 i) {
 		? nullptr : m_surroundingChunks[i];
 }
 
-const Chunk *Chunk::getSurroundingChunk(u8 i) const {
-	return (i > 5 || !m_surroundingChunks[i] || !m_surroundingChunks[i]->isInitialized())
-		? nullptr : m_surroundingChunks[i];
+Chunk *Chunk::getSurroundingChunkPtr(u8 i) {
+	return (i > 5) ? nullptr : m_surroundingChunks[i];
 }
 
 // FIXME
