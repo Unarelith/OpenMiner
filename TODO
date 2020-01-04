@@ -14,12 +14,13 @@ TODO
 • DONE: A mix of pickaxe + axe recipes gives a pickaxe?!
 • DONE: Lighting doesn’t propagate between chunks
 • DONE: Pressing `Esc` key in `SettingsMenuState` should just quit the category, not the state
+• DONE: Chunks are sent too many times to client on login
 • TODO: Lighting issues
    ◦ DONE: Sunlight doesn’t propagate correctly
    ◦ DONE: When loading chunks with smooth lighting enabled, they have black borders
    ◦ DONE: Flower lighting is weird
    ◦ TODO: Trees should block light
-• TODO: Chunks are sent too many times to client on login
+• TODO: `ServerWorld::sendWorldData` is useless and should be replaced by `sendSpawnData`
 • TODO: Shapeless recipe code isn’t working
 • TODO: GUI scale issues
    ◦ TODO: `HUD` doesn’t update when GUI scale is changed
