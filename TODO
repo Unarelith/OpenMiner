@@ -16,9 +16,9 @@ TODO
 • DONE: Pressing `Esc` key in `SettingsMenuState` should just quit the category, not the state
 • TODO: Lighting issues
    ◦ DONE: Sunlight doesn’t propagate correctly
+   ◦ DONE: When loading chunks with smooth lighting enabled, they have black borders
    ◦ TODO: Flower lighting is weird
    ◦ TODO: Trees should block light
-   ◦ TODO: When loading chunks with smooth lighting enabled, they have black borders
 • TODO: Chunks are sent too many times to client on login
 • TODO: Shapeless recipe code isn’t working
 • TODO: GUI scale issues
