@@ -114,7 +114,7 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 	return verticesCount;
 }
 
-void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, const Block *block, const int surroundingBlockPos[3]) {
+inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, const Block *block, const int surroundingBlockPos[3]) {
 	// Get surrounding block for that face
 	u16 surroundingBlockID = chunk.getBlock(surroundingBlockPos[0], surroundingBlockPos[1], surroundingBlockPos[2]);
 	const Block *surroundingBlock = &Registry::getInstance().getBlock(surroundingBlockID);
@@ -227,7 +227,7 @@ void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, con
 	}
 }
 
-void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Block *block) {
+inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Block *block) {
 	const glm::vec4 &blockTexCoords = block->getTexCoords(0, chunk.getData(x, y, z));
 	float faceTexCoords[2 * 4] = {
 		blockTexCoords.x, blockTexCoords.w,
@@ -286,7 +286,7 @@ void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Bl
 	}
 }
 
-gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) const {
+inline gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) const {
 	gk::Vector3i offset;
 	offset.x = (
 			(i == 0) ||
@@ -314,7 +314,7 @@ gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) const {
 
 // Based on this article: https://0fps.net/2013/07/03/ambient-occlusion-for-minecraft-like-worlds/
 // FIXME: Not used anymore, but can be added as an option when smooth lighting is disabled though
-u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const ClientChunk &chunk) {
+inline u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const ClientChunk &chunk) {
 	gk::Vector3i offset = getOffsetFromVertex(i, j);
 
 	u16 blocks[3] = {
@@ -333,7 +333,7 @@ u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const ClientC
 	return 3 - (side1 + side2 + corner);
 }
 
-float ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const glm::vec3 &normal, const ClientChunk &chunk) {
+inline float ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const glm::vec3 &normal, const ClientChunk &chunk) {
 	gk::Vector3i offset = getOffsetFromVertex(i, j);
 
 	gk::Vector3i minOffset{

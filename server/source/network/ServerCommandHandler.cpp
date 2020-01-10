@@ -53,7 +53,7 @@ void ServerCommandHandler::setupCallbacks() {
 		spawnPacket << m_spawnPosition.x << m_spawnPosition.y << m_spawnPosition.z;
 		m_server.sendToAllClients(spawnPacket);
 
-		m_world.sendWorldData(client);
+		// m_world.sendWorldData(client);
 
 		sf::Packet worldSentPacket;
 		worldSentPacket << Network::Command::WorldSent;
