@@ -47,6 +47,9 @@ namespace Network {
 
 		// Registry commands
 		RegistryData,      // <TCP> [NetworkCommand][Block block]            (from Server only)
+
+		// World commands
+		WorldSent,         // <TCP> [NetworkCommand]                         (from Server only)
 	};
 
 	std::string commandToString(Command command);

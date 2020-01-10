@@ -18,9 +18,11 @@
 #include <gk/gl/Shader.hpp>
 #include <gk/graphics/Text.hpp>
 
+#include "GameState.hpp"
+
 class ServerLoadingState : public gk::ApplicationState {
 	public:
-		ServerLoadingState();
+		ServerLoadingState(GameState &game);
 
 		void update() override;
 
@@ -32,7 +34,9 @@ class ServerLoadingState : public gk::ApplicationState {
 		gk::Text m_text;
 		gk::Text m_textShadow;
 
-		mutable bool m_hasBeenDrawn = false;
+		GameState &m_game;
+
+		bool m_isWorldSent = false;
 };
 
 #endif // SERVERLOADINGSTATE_HPP_

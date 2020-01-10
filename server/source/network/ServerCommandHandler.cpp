@@ -27,6 +27,7 @@ void ServerCommandHandler::setupCallbacks() {
 		client.tcpSocket->send(packet);
 
 		// FIXME: Duplicated below, why?
+		// Here the new client is not part of m_players though
 		for (auto &it : m_players) {
 			sf::Packet spawnPacket;
 			spawnPacket << Network::Command::PlayerSpawn << it.first;
@@ -53,6 +54,10 @@ void ServerCommandHandler::setupCallbacks() {
 		m_server.sendToAllClients(spawnPacket);
 
 		m_world.sendWorldData(client);
+
+		sf::Packet worldSentPacket;
+		worldSentPacket << Network::Command::WorldSent;
+		client.tcpSocket->send(worldSentPacket);
 	});
 
 	m_server.setCommandCallback(Network::Command::ChunkRequest, [this](Client &client, sf::Packet &packet) {

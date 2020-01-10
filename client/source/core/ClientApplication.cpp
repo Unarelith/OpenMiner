@@ -21,8 +21,8 @@
 #include "TextureLoader.hpp"
 
 #include "GameState.hpp"
-#include "TitleScreenState.hpp"
 #include "ServerLoadingState.hpp"
+#include "TitleScreenState.hpp"
 
 using namespace std::literals::string_literals;
 
@@ -55,8 +55,8 @@ void ClientApplication::init() {
 	Registry::setInstance(m_registry);
 
 	// m_stateStack.push<TitleScreenState>();
-	m_stateStack.push<GameState>(m_host, m_port);
-	// m_stateStack.push<ServerLoadingState>(m_client);
+	auto &game = m_stateStack.push<GameState>(m_host, m_port);
+	m_stateStack.push<ServerLoadingState>(game);
 }
 
 void ClientApplication::initOpenGL() {

@@ -15,6 +15,7 @@
 
 #include "GameState.hpp"
 #include "ServerConnectState.hpp"
+#include "ServerLoadingState.hpp"
 
 ServerConnectState::ServerConnectState() {
 	m_textInput.setContent("localhost:4242");
@@ -39,7 +40,8 @@ ServerConnectState::ServerConnectState() {
 			std::cerr << "Error: Invalid server address." << std::endl;
 		}
 
-		m_stateStack->push<GameState>(host, port);
+		auto &game = m_stateStack->push<GameState>(host, port);
+		m_stateStack->push<ServerLoadingState>(game);
 	});
 
 	m_cancelButton.setText("Cancel");

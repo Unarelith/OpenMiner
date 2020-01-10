@@ -12,13 +12,14 @@
  * =====================================================================================
  */
 #include <gk/core/ApplicationStateStack.hpp>
+#include <gk/core/Mouse.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "Config.hpp"
 #include "GameState.hpp"
 #include "ServerLoadingState.hpp"
 
-ServerLoadingState::ServerLoadingState() {
+ServerLoadingState::ServerLoadingState(GameState &game) : m_game(game) {
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
@@ -35,11 +36,24 @@ ServerLoadingState::ServerLoadingState() {
 	m_textShadow.setString(m_text.string());
 	m_textShadow.setColor(gk::Color{70, 70, 70, 255});
 	m_textShadow.setPosition(m_text.getPosition().x + 6, m_text.getPosition().y + 6);
+
+	m_game.client().setCommandCallback(Network::Command::WorldSent, [this] (sf::Packet &) {
+		m_isWorldSent = true;
+	});
+
+	gk::Mouse::setCursorVisible(true);
+	gk::Mouse::setCursorGrabbed(false);
 }
 
 void ServerLoadingState::update() {
-	if (m_hasBeenDrawn)
-		m_stateStack->push<GameState>();
+	m_game.client().update();
+
+	if (m_isWorldSent) {
+		m_stateStack->pop();
+
+		gk::Mouse::setCursorVisible(false);
+		gk::Mouse::setCursorGrabbed(true);
+	}
 }
 
 void ServerLoadingState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -47,7 +61,5 @@ void ServerLoadingState::draw(gk::RenderTarget &target, gk::RenderStates states)
 	target.setView(target.getDefaultView());
 	target.draw(m_textShadow, states);
 	target.draw(m_text, states);
-
-	m_hasBeenDrawn = true;
 }
 

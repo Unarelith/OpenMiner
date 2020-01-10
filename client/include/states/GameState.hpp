@@ -30,11 +30,13 @@
 
 class GameState : public gk::ApplicationState {
 	public:
-		GameState(const std::string &host = "localhost", int port = 4242);
+		GameState(const std::string &host, int port);
 
 		void onEvent(const SDL_Event &event) override;
 
 		void update() override;
+
+		Client &client() { return m_client; }
 
 	private:
 		void initShaders();
