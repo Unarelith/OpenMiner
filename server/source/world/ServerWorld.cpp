@@ -20,34 +20,6 @@
 #include "ServerWorld.hpp"
 
 ServerWorld::ServerWorld() {
-	for(s32 z = 0 ; z < m_depth ; z++) {
-		for(s32 y = 0 ; y < m_height ; y++) {
-			for(s32 x = 0 ; x < m_width ; x++) {
-				m_chunks.emplace_back(new ServerChunk(x - m_width / 2,
-				                                      y - m_height / 2,
-				                                      z - m_depth / 2));
-			}
-		}
-	}
-
-	// FIXME: Duplicated with ClientWorld
-	for(s32 z = 0 ; z < m_depth ; ++z) {
-		for(s32 y = 0 ; y < m_height ; ++y) {
-			for(s32 x = 0 ; x < m_width ; ++x) {
-				s32 cx = x - m_width / 2;
-				s32 cy = y - m_height / 2;
-				s32 cz = z - m_depth / 2;
-
-				Chunk *chunk = getChunk(cx, cy, cz);
-				if(cx > -m_width / 2)      chunk->setSurroundingChunk(Chunk::Left,   getChunk(cx - 1, cy, cz));
-				if(cx <  m_width / 2 - 1)  chunk->setSurroundingChunk(Chunk::Right,  getChunk(cx + 1, cy, cz));
-				if(cy > -m_height / 2)     chunk->setSurroundingChunk(Chunk::Bottom, getChunk(cx, cy - 1, cz));
-				if(cy <  m_height / 2 - 1) chunk->setSurroundingChunk(Chunk::Top,    getChunk(cx, cy + 1, cz));
-				if(cz > -m_depth / 2)      chunk->setSurroundingChunk(Chunk::Front,  getChunk(cx, cy, cz - 1));
-				if(cz <  m_depth / 2 - 1)  chunk->setSurroundingChunk(Chunk::Back,   getChunk(cx, cy, cz + 1));
-			}
-		}
-	}
 }
 
 void ServerWorld::update(Server &server, std::unordered_map<u16, ServerPlayer> &players) {
@@ -55,33 +27,23 @@ void ServerWorld::update(Server &server, std::unordered_map<u16, ServerPlayer> &
 		m_lastTick = gk::GameClock::getTicks() / 50;
 
 		for (auto &it : m_chunks) {
-			it->tick(players, *this, server);
+			it.second->tick(players, *this, server);
 
-			it->update();
+			it.second->update();
 
-			if (it->isGenerated() && !it->isSent()) {
+			if (it.second->isGenerated() && !it.second->isSent()) {
 				for (auto &client : server.info().clients())
-					sendChunkData(client, it.get());
+					sendChunkData(client, it.second.get());
 				// DEBUG("Chunk updated at", it->x(), it->y(), it->z());
-				it->setSent(true);
+				it.second->setSent(true);
 			}
 		}
 	}
-}
-
-void ServerWorld::sendWorldData(Client &client) {
-	// DEBUG("Sending world data...")
-	for(s32 z = -4 ; z < 4 ; z++) {
-		for(s32 x = -4 ; x < 4 ; x++) {
-			for(s32 y = -m_height / 2 ; y < m_height / 2 ; y++) {
-				sendChunkData(client, getChunk(x, y, z));
-			}
-		}
-	}
-	// DEBUG("Done sending world data")
 }
 
 void ServerWorld::sendChunkData(Client &client, ServerChunk *chunk) {
+	if (!chunk) return;
+
 	chunk->generate();
 	chunk->update();
 	chunk->setInitialized(true);
@@ -101,92 +63,62 @@ void ServerWorld::sendChunkData(Client &client, ServerChunk *chunk) {
 	client.tcpSocket->send(packet);
 	chunk->setSent(true);
 
-	// std::cout << "Chunk at (" << chunk->x() << ", " << chunk->y() << ", " << chunk->z() << ") sent to client" << std::endl;
+	std::cout << "Chunk at (" << chunk->x() << ", " << chunk->y() << ", " << chunk->z() << ") sent to client" << std::endl;
 }
 
 void ServerWorld::sendRequestedData(Client &client, int cx, int cy, int cz) {
+	std::cout << "Chunk at (" << cx << ", " << cy << ", " << cz << ") requested" << std::endl;
+
 	ServerChunk *chunk = getChunk(cx, cy, cz);
-	if (chunk) {
-		sendChunkData(client, chunk);
+	if (!chunk) {
+		auto it = m_chunks.emplace(gk::Vector3i(cx, cy, cz), new ServerChunk(cx, cy, cz));
+		chunk = it.first->second.get();
 	}
+
+	sendChunkData(client, chunk);
 }
 
 ServerChunk *ServerWorld::getChunk(int cx, int cy, int cz) const {
-	cx += m_width / 2;
-	cy += m_height / 2;
-	cz += m_depth / 2;
-
-	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
+	auto it = m_chunks.find({cx, cy, cz});
+	if (it == m_chunks.end())
 		return nullptr;
 
-	return m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
+	return it->second.get();
 }
 
 BlockData *ServerWorld::getBlockData(int x, int y, int z) const {
-	int cx = (x + CHUNK_WIDTH * (m_width / 2)) / CHUNK_WIDTH;
-	int cy = (y + CHUNK_HEIGHT * (m_height / 2)) / CHUNK_HEIGHT;
-	int cz = (z + CHUNK_DEPTH * (m_depth / 2)) / CHUNK_DEPTH;
-
-	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
-		return 0;
-
-	Chunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
+	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
 	if (chunk)
 		return chunk->getBlockData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1));
-	return 0;
+
+	return nullptr;
 }
 
 u16 ServerWorld::getBlock(int x, int y, int z) const {
-	int cx = (x + CHUNK_WIDTH * (m_width / 2)) / CHUNK_WIDTH;
-	int cy = (y + CHUNK_HEIGHT * (m_height / 2)) / CHUNK_HEIGHT;
-	int cz = (z + CHUNK_DEPTH * (m_depth / 2)) / CHUNK_DEPTH;
-
-	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
-		return 0;
-
-	ServerChunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
+	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
 	if (chunk)
 		return chunk->getBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1));
+
 	return 0;
 }
 
-void ServerWorld::setBlock(int x, int y, int z, u16 id) {
-	int cx = (x + CHUNK_WIDTH * (m_width / 2)) / CHUNK_WIDTH;
-	int cy = (y + CHUNK_HEIGHT * (m_height / 2)) / CHUNK_HEIGHT;
-	int cz = (z + CHUNK_DEPTH * (m_depth / 2)) / CHUNK_DEPTH;
-
-	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
-		return;
-
-	ServerChunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
+void ServerWorld::setBlock(int x, int y, int z, u16 id) const {
+	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
 	if (chunk)
 		chunk->setBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), id);
 }
 
 u16 ServerWorld::getData(int x, int y, int z) const {
-	int cx = (x + CHUNK_WIDTH * (m_width / 2)) / CHUNK_WIDTH;
-	int cy = (y + CHUNK_HEIGHT * (m_height / 2)) / CHUNK_HEIGHT;
-	int cz = (z + CHUNK_DEPTH * (m_depth / 2)) / CHUNK_DEPTH;
-
-	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
-		return 0;
-
-	ServerChunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
+	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
 	if (chunk)
 		return chunk->getData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1));
+
 	return 0;
 }
 
-void ServerWorld::setData(int x, int y, int z, u16 id) {
-	int cx = (x + CHUNK_WIDTH * (m_width / 2)) / CHUNK_WIDTH;
-	int cy = (y + CHUNK_HEIGHT * (m_height / 2)) / CHUNK_HEIGHT;
-	int cz = (z + CHUNK_DEPTH * (m_depth / 2)) / CHUNK_DEPTH;
-
-	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
-		return;
-
-	ServerChunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
+void ServerWorld::setData(int x, int y, int z, u16 id) const {
+	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
 	if (chunk)
-		chunk->setData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), id);
+		chunk->setBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), id);
 }
 
