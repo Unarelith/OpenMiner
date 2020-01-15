@@ -14,8 +14,7 @@
 #ifndef SERVERWORLD_HPP_
 #define SERVERWORLD_HPP_
 
-#include <memory>
-#include <vector>
+#include <unordered_map>
 
 #include "ServerChunk.hpp"
 #include "World.hpp"
@@ -30,7 +29,6 @@ class ServerWorld : public World {
 
 		void update(Server &server, std::unordered_map<u16, ServerPlayer> &players);
 
-		void sendWorldData(Client &client);
 		void sendChunkData(Client &client, ServerChunk *chunk);
 		void sendRequestedData(Client &client, int cx, int cy, int cz);
 
@@ -40,12 +38,12 @@ class ServerWorld : public World {
 
 		// FIXME: Duplicated with ClientWorld
 		u16 getBlock(int x, int y, int z) const override;
-		void setBlock(int x, int y, int z, u16 id) override;
+		void setBlock(int x, int y, int z, u16 id) const override;
 		u16 getData(int x, int y, int z) const override;
-		void setData(int x, int y, int z, u16 id) override;
+		void setData(int x, int y, int z, u16 id) const override;
 
 	private:
-		std::vector<std::unique_ptr<ServerChunk>> m_chunks;
+		std::unordered_map<gk::Vector3i, std::unique_ptr<ServerChunk>> m_chunks;
 
 		u32 m_lastTick = 0;
 };

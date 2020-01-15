@@ -14,7 +14,7 @@
 #ifndef CLIENTWORLD_HPP_
 #define CLIENTWORLD_HPP_
 
-#include <memory>
+#include <unordered_map>
 
 #include "ClientChunk.hpp"
 #include "Network.hpp"
@@ -36,16 +36,16 @@ class ClientWorld : public World, public gk::Drawable {
 
 		// FIXME: Duplicated with ServerWorld
 		u16 getBlock(int x, int y, int z) const override;
-		void setBlock(int x, int y, int z, u16 id) override;
+		void setBlock(int x, int y, int z, u16 id) const override;
 		u16 getData(int x, int y, int z) const override;
-		void setData(int x, int y, int z, u16 id) override;
+		void setData(int x, int y, int z, u16 id) const override;
 
 		void setClient(ClientCommandHandler &client) { m_client = &client; }
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		std::vector<std::unique_ptr<ClientChunk>> m_chunks;
+		mutable std::unordered_map<gk::Vector3i, std::unique_ptr<ClientChunk>> m_chunks;
 
 		gk::Texture &m_texture;
 

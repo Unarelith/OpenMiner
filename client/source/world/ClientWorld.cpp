@@ -21,42 +21,14 @@
 #include "World.hpp"
 
 ClientWorld::ClientWorld() : m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-blocks")) {
-	for(s32 z = 0 ; z < m_depth ; z++) {
-		for(s32 y = 0 ; y < m_height ; y++) {
-			for(s32 x = 0 ; x < m_width ; x++) {
-				m_chunks.emplace_back(new ClientChunk(x - m_width / 2,
-				                                      y - m_height / 2,
-				                                      z - m_depth / 2, m_texture));
-			}
-		}
-	}
-
-	// FIXME: Duplicated with ServerWorld
-	for(s32 z = 0 ; z < m_depth ; ++z) {
-		for(s32 y = 0 ; y < m_height ; ++y) {
-			for(s32 x = 0 ; x < m_width ; ++x) {
-				s32 cx = x - m_width / 2;
-				s32 cy = y - m_height / 2;
-				s32 cz = z - m_depth / 2;
-
-				Chunk *chunk = getChunk(cx, cy, cz);
-				if(cx > -m_width / 2)      chunk->setSurroundingChunk(Chunk::Left,   getChunk(cx - 1, cy, cz));
-				if(cx <  m_width / 2 - 1)  chunk->setSurroundingChunk(Chunk::Right,  getChunk(cx + 1, cy, cz));
-				if(cy > -m_height / 2)     chunk->setSurroundingChunk(Chunk::Bottom, getChunk(cx, cy - 1, cz));
-				if(cy <  m_height / 2 - 1) chunk->setSurroundingChunk(Chunk::Top,    getChunk(cx, cy + 1, cz));
-				if(cz > -m_depth / 2)      chunk->setSurroundingChunk(Chunk::Front,  getChunk(cx, cy, cz - 1));
-				if(cz <  m_depth / 2 - 1)  chunk->setSurroundingChunk(Chunk::Back,   getChunk(cx, cy, cz + 1));
-			}
-		}
-	}
 }
 
 void ClientWorld::update() {
 	for (auto &it : m_chunks) {
 		if (World::isReloadRequested)
-			it->setChanged(true);
+			it.second->setChanged(true);
 
-		it->update();
+		it.second->update();
 	}
 
 	World::isReloadRequested = false;
@@ -97,82 +69,47 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 }
 
 ClientChunk *ClientWorld::getChunk(int cx, int cy, int cz) const {
-	cx += m_width / 2;
-	cy += m_height / 2;
-	cz += m_depth / 2;
-
-	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
+	auto it = m_chunks.find({cx, cy, cz});
+	if (it == m_chunks.end())
 		return nullptr;
 
-	return m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
+	return it->second.get();
 }
 
 BlockData *ClientWorld::getBlockData(int x, int y, int z) const {
-	int cx = (x + CHUNK_WIDTH * (m_width / 2)) / CHUNK_WIDTH;
-	int cy = (y + CHUNK_HEIGHT * (m_height / 2)) / CHUNK_HEIGHT;
-	int cz = (z + CHUNK_DEPTH * (m_depth / 2)) / CHUNK_DEPTH;
-
-	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
-		return 0;
-
-	Chunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
+	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
 	if (chunk)
 		return chunk->getBlockData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1));
-	return 0;
+
+	return nullptr;
 }
 
 u16 ClientWorld::getBlock(int x, int y, int z) const {
-	int cx = (x + CHUNK_WIDTH * (m_width / 2)) / CHUNK_WIDTH;
-	int cy = (y + CHUNK_HEIGHT * (m_height / 2)) / CHUNK_HEIGHT;
-	int cz = (z + CHUNK_DEPTH * (m_depth / 2)) / CHUNK_DEPTH;
-
-	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
-		return 0;
-
-	ClientChunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
+	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
 	if (chunk)
 		return chunk->getBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1));
+
 	return 0;
 }
 
-void ClientWorld::setBlock(int x, int y, int z, u16 id) {
-	int cx = (x + CHUNK_WIDTH * (m_width / 2)) / CHUNK_WIDTH;
-	int cy = (y + CHUNK_HEIGHT * (m_height / 2)) / CHUNK_HEIGHT;
-	int cz = (z + CHUNK_DEPTH * (m_depth / 2)) / CHUNK_DEPTH;
-
-	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
-		return;
-
-	ClientChunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
+void ClientWorld::setBlock(int x, int y, int z, u16 id) const {
+	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
 	if (chunk)
 		chunk->setBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), id);
 }
 
 u16 ClientWorld::getData(int x, int y, int z) const {
-	int cx = (x + CHUNK_WIDTH * (m_width / 2)) / CHUNK_WIDTH;
-	int cy = (y + CHUNK_HEIGHT * (m_height / 2)) / CHUNK_HEIGHT;
-	int cz = (z + CHUNK_DEPTH * (m_depth / 2)) / CHUNK_DEPTH;
-
-	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
-		return 0;
-
-	ClientChunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
+	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
 	if (chunk)
 		return chunk->getData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1));
+
 	return 0;
 }
 
-void ClientWorld::setData(int x, int y, int z, u16 id) {
-	int cx = (x + CHUNK_WIDTH * (m_width / 2)) / CHUNK_WIDTH;
-	int cy = (y + CHUNK_HEIGHT * (m_height / 2)) / CHUNK_HEIGHT;
-	int cz = (z + CHUNK_DEPTH * (m_depth / 2)) / CHUNK_DEPTH;
-
-	if (cx < 0 || cx >= m_width || cy < 0 || cy >= m_height || cz < 0 || cz >= m_depth)
-		return;
-
-	ClientChunk *chunk = m_chunks.at(cx + cy * m_width + cz * m_width * m_height).get();
+void ClientWorld::setData(int x, int y, int z, u16 id) const {
+	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
 	if (chunk)
-		chunk->setData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), id);
+		chunk->setBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), id);
 }
 
 void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -193,9 +130,9 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	std::vector<std::pair<ClientChunk*, gk::Transform>> chunks;
 	for(auto &it : m_chunks) {
 		states.transform = glm::translate(glm::mat4(1.0f),
-		                                  glm::vec3(it->x() * CHUNK_WIDTH,
-		                                            it->y() * CHUNK_HEIGHT,
-		                                            it->z() * CHUNK_DEPTH));
+		                                  glm::vec3(it.second->x() * CHUNK_WIDTH,
+		                                            it.second->y() * CHUNK_HEIGHT,
+		                                            it.second->z() * CHUNK_DEPTH));
 
 		// Is the chunk close enough?
 		glm::vec4 center = target.getView()->getViewTransform().getMatrix()
@@ -225,25 +162,29 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		}
 
 		// If this chunk is not initialized, skip it
-		if(!it->isInitialized()) {
+		if(!it.second->isInitialized()) {
 			// But if it is the closest to the camera, mark it for initialization
 			if(d < ud) {
 				ud = d;
-				ux = it->x();
-				uy = it->y();
-				uz = it->z();
+				ux = it.second->x();
+				uy = it.second->y();
+				uz = it.second->z();
 			}
 
 			continue;
 		}
 
-		chunks.emplace_back(&*it, states.transform);
+		chunks.emplace_back(it.second.get(), states.transform);
 	}
 
 	ClientChunk *chunk = getChunk(ux, uy, uz);
-	if(ud < 1000 && chunk && !chunk->hasBeenRequested()) {
+	if(ud <= 1000 && (!chunk || !chunk->hasBeenRequested())) {
+		auto it = m_chunks.emplace(gk::Vector3i(ux, uy, uz), new ClientChunk(ux, uy, uz, m_texture));
+		it.first->second->setHasBeenRequested(true);
+
 		m_client->sendChunkRequest(ux, uy, uz);
-		chunk->setHasBeenRequested(true);
+
+		DEBUG("Chunk requested at", ux, uy, uz);
 	}
 
 	for (u8 i = 0 ; i < ChunkBuilder::layers ; ++i) {

@@ -31,10 +31,6 @@ namespace {
 	constexpr int CHUNK_HEIGHT = 32;
 	constexpr int CHUNK_DEPTH  = 16;
 
-	constexpr int WORLD_WIDTH = 64;
-	constexpr int WORLD_HEIGHT = 4;
-	constexpr int WORLD_DEPTH = 64;
-
 	constexpr int SEALEVEL = 4;
 }
 
