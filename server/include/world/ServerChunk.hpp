@@ -28,8 +28,8 @@ class ServerChunk : public Chunk {
 	public:
 		ServerChunk(s32 x, s32 y, s32 z) : Chunk(x, y, z) {}
 
-		void update();
 		void generate();
+		void updateLights();
 		void tick(std::unordered_map<u16, ServerPlayer> &players, World &world, Server &server);
 
 		bool isGenerated() const { return m_isGenerated; }
