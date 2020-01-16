@@ -167,13 +167,13 @@ BlockData *Chunk::getBlockData(int x, int y, int z) {
 	return &it->second;
 }
 
-Chunk *Chunk::getSurroundingChunk(u8 i) {
-	return (i > 5 || !m_surroundingChunks[i] || !m_surroundingChunks[i]->isInitialized())
-		? nullptr : m_surroundingChunks[i];
-}
-
-Chunk *Chunk::getSurroundingChunkPtr(u8 i) {
-	return (i > 5) ? nullptr : m_surroundingChunks[i];
+bool Chunk::areAllNeighboursLoaded() const {
+	return m_surroundingChunks[Chunk::Left]
+		&& m_surroundingChunks[Chunk::Right]
+		&& m_surroundingChunks[Chunk::Front]
+		&& m_surroundingChunks[Chunk::Back]
+		&& m_surroundingChunks[Chunk::Bottom]
+		&& m_surroundingChunks[Chunk::Top];
 }
 
 // FIXME

@@ -117,7 +117,6 @@ void ServerWorld::sendChunkData(Client &client, ServerChunk *chunk) {
 
 	chunk->generate();
 	chunk->update();
-	chunk->setInitialized(true);
 
 	sf::Packet packet;
 	packet << Network::Command::ChunkData;

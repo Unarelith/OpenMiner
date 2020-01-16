@@ -55,15 +55,13 @@ class Chunk : public gk::NonCopyable {
 		s32 y() const { return m_y; }
 		s32 z() const { return m_z; }
 
-		Chunk *getSurroundingChunk(u8 i);
-		Chunk *getSurroundingChunkPtr(u8 i);
+		Chunk *getSurroundingChunk(u8 i) { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
 		void setSurroundingChunk(u8 i, Chunk *chunk) { if (i < 6) m_surroundingChunks[i] = chunk; }
 
-		bool hasChanged() const { return m_hasChanged; }
-		bool isInitialized() const { return m_isInitialized; }
+		bool areAllNeighboursLoaded() const;
 
+		bool hasChanged() const { return m_hasChanged; }
 		void setChanged(bool hasChanged) { m_hasChanged = hasChanged; }
-		void setInitialized(bool isInitialized) { m_isInitialized = isInitialized; }
 
 		ChunkLightmap &lightmap() { return m_lightmap; }
 		const ChunkLightmap &lightmap() const { return m_lightmap; }

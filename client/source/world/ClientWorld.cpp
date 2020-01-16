@@ -28,7 +28,8 @@ void ClientWorld::update() {
 		if (World::isReloadRequested)
 			it.second->setChanged(true);
 
-		it.second->update();
+		if (it.second->areAllNeighboursLoaded())
+			it.second->update();
 	}
 
 	World::isReloadRequested = false;
@@ -59,8 +60,6 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 		}
 	}
 
-	chunk->setInitialized(true);
-
 	gk::Vector3i surroundingChunks[6] = {
 		{chunk->x() - 1, chunk->y(),     chunk->z()},
 		{chunk->x() + 1, chunk->y(),     chunk->z()},
@@ -75,16 +74,8 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 		if (neighbour) {
 			chunk->setSurroundingChunk(i, neighbour);
 			neighbour->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, chunk);
-			neighbour->setChanged(true);
 		}
 	}
-
-	// if(chunk->getSurroundingChunk(Chunk::Left))   chunk->getSurroundingChunk(Chunk::Left)->setChanged(true);
-	// if(chunk->getSurroundingChunk(Chunk::Right))  chunk->getSurroundingChunk(Chunk::Right)->setChanged(true);
-	// if(chunk->getSurroundingChunk(Chunk::Bottom)) chunk->getSurroundingChunk(Chunk::Bottom)->setChanged(true);
-	// if(chunk->getSurroundingChunk(Chunk::Top))    chunk->getSurroundingChunk(Chunk::Top)->setChanged(true);
-	// if(chunk->getSurroundingChunk(Chunk::Front))  chunk->getSurroundingChunk(Chunk::Front)->setChanged(true);
-	// if(chunk->getSurroundingChunk(Chunk::Back))   chunk->getSurroundingChunk(Chunk::Back)->setChanged(true);
 
 	// std::cout << "Chunk at (" << cx << ", " << cy << ", " << cz << ") received" << std::endl;
 }
@@ -142,12 +133,10 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 			continue;
 		}
 
-		// If this chunk is not initialized, skip it
-		if(!it.second->isInitialized()) {
-			continue;
+		// Only draw the chunk if all its neighbours are loaded
+		if (it.second->areAllNeighboursLoaded()) {
+			chunks.emplace_back(it.second.get(), states.transform);
 		}
-
-		chunks.emplace_back(it.second.get(), states.transform);
 	}
 
 	for (u8 i = 0 ; i < ChunkBuilder::layers ; ++i) {
