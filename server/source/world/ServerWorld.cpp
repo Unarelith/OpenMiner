@@ -29,7 +29,7 @@ void ServerWorld::update(Server &server, std::unordered_map<u16, ServerPlayer> &
 		for (auto &it : m_chunks) {
 			it.second->tick(players, *this, server);
 
-			it.second->update();
+			it.second->updateLights();
 
 			if (it.second->isGenerated() && !it.second->isSent()) {
 				for (auto &client : server.info().clients())
@@ -116,7 +116,7 @@ void ServerWorld::sendChunkData(Client &client, ServerChunk *chunk) {
 	if (!chunk) return;
 
 	chunk->generate();
-	chunk->update();
+	chunk->updateLights();
 
 	sf::Packet packet;
 	packet << Network::Command::ChunkData;
