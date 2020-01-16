@@ -51,15 +51,17 @@ void ServerWorld::sendSpawnData(Client &client, ServerPlayer &player) {
 	auto it = m_chunks.emplace(gk::Vector3i{pcx, pcy, pcz}, new ServerChunk(pcx, pcy, pcz));
 	ServerChunk *chunk = it.first->second.get();
 
-	// Send the chunk to the client
-	sendChunkData(client, chunk);
-
 	// Load surrounding chunks, starting from the one we generated above
-	std::queue<ServerChunk *> chunks;
+	std::queue<ServerChunk*> chunks;
 	chunks.emplace(chunk);
 	while (!chunks.empty()) {
 		ServerChunk *chunk = chunks.front();
 		chunks.pop();
+
+		// Send the chunk to the client
+		sendChunkData(client, chunk);
+
+		DEBUG("Processing chunk in queue at", chunk->x(), chunk->y(), chunk->z());
 
 		gk::Vector3i surroundingChunks[6] = {
 			{chunk->x() - 1, chunk->y(),     chunk->z()},
@@ -71,6 +73,11 @@ void ServerWorld::sendSpawnData(Client &client, ServerPlayer &player) {
 		};
 
 		for (u8 i = 0 ; i < 6 ; ++i) {
+			// Check if this neighbour already exists, if yes then skip it
+			Chunk *neighbour = getChunk(surroundingChunks[i].x, surroundingChunks[i].y, surroundingChunks[i].z);
+			if (neighbour)
+				continue;
+
 			// Create our neighbour
 			auto it = m_chunks.emplace(
 				gk::Vector3i{
@@ -85,8 +92,10 @@ void ServerWorld::sendSpawnData(Client &client, ServerPlayer &player) {
 				}
 			);
 
+			// Get the created neighbour
+			neighbour = it.first->second.get();
+
 			// Assign surrounding chunk pointers
-			ServerChunk *neighbour = it.first->second.get();
 			chunk->setSurroundingChunk(i, neighbour);
 			neighbour->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, chunk);
 
@@ -98,7 +107,7 @@ void ServerWorld::sendSpawnData(Client &client, ServerPlayer &player) {
 
 			// If the chunk is close enough, add it to the queue
 			if (distance < Config::renderDistance)
-				chunks.emplace(neighbour);
+				chunks.emplace((ServerChunk *)neighbour);
 		}
 	}
 }

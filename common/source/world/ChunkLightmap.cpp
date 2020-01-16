@@ -143,12 +143,12 @@ void ChunkLightmap::updateSunlight() {
 
 		int sunlightLevel = getSunlight(node.x, node.y, node.z);
 		for (const LightNode &surroundingNode : surroundingNodes) {
-			if((surroundingNode.x < 0 && m_chunk->getSurroundingChunkPtr(0) && !m_chunk->getSurroundingChunkPtr(0)->isInitialized())
-			|| (surroundingNode.x >= CHUNK_WIDTH && m_chunk->getSurroundingChunkPtr(1) && !m_chunk->getSurroundingChunkPtr(1)->isInitialized())
-			|| (surroundingNode.y < 0 && m_chunk->getSurroundingChunkPtr(4) && !m_chunk->getSurroundingChunkPtr(4)->isInitialized())
-			|| (surroundingNode.y >= CHUNK_HEIGHT && m_chunk->getSurroundingChunkPtr(5) && !m_chunk->getSurroundingChunkPtr(5)->isInitialized())
-			|| (surroundingNode.z < 0 && m_chunk->getSurroundingChunkPtr(2) && !m_chunk->getSurroundingChunkPtr(2)->isInitialized())
-			|| (surroundingNode.z >= CHUNK_DEPTH && m_chunk->getSurroundingChunkPtr(3) && !m_chunk->getSurroundingChunkPtr(3)->isInitialized())) {
+			if((surroundingNode.x < 0             && !m_chunk->getSurroundingChunkPtr(0))
+			|| (surroundingNode.x >= CHUNK_WIDTH  && !m_chunk->getSurroundingChunkPtr(1))
+			|| (surroundingNode.y < 0             && !m_chunk->getSurroundingChunkPtr(4))
+			|| (surroundingNode.y >= CHUNK_HEIGHT && !m_chunk->getSurroundingChunkPtr(5))
+			|| (surroundingNode.z < 0             && !m_chunk->getSurroundingChunkPtr(2))
+			|| (surroundingNode.z >= CHUNK_DEPTH  && !m_chunk->getSurroundingChunkPtr(3))) {
 				m_unloadedChunkSunlight.emplace(node.x, node.y, node.z);
 				continue;
 			}
