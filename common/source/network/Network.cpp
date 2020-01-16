@@ -27,7 +27,6 @@ std::string Network::commandToString(Network::Command command) {
 		{Network::Command::KeyState,         "KeyState"},
 
 		{Network::Command::ChunkData,        "ChunkData"},
-		{Network::Command::ChunkRequest,     "ChunkRequest"},
 
 		{Network::Command::PlayerPlaceBlock, "PlayerPlaceBlock"},
 		{Network::Command::PlayerDigBlock,   "PlayerDigBlock"},
@@ -42,8 +41,6 @@ std::string Network::commandToString(Network::Command command) {
 		{Network::Command::BlockDataUpdate,  "BlockDataUpdate"},
 
 		{Network::Command::RegistryData,     "RegistryData"},
-
-		{Network::Command::WorldSent,        "WorldSent"},
 	};
 	return commandNames[command];
 }

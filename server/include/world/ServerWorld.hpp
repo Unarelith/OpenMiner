@@ -31,7 +31,6 @@ class ServerWorld : public World {
 
 		void sendSpawnData(Client &client, ServerPlayer &player);
 		void sendChunkData(Client &client, ServerChunk *chunk);
-		void sendRequestedData(Client &client, int cx, int cy, int cz);
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
 

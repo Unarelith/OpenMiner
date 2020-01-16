@@ -29,7 +29,6 @@ namespace Network {
 
 		// Chunk commands
 		ChunkData,         // <TCP> [NetworkCommand][s32 cx, cy, cz][u32...] (from Server only)
-		ChunkRequest,      // <TCP> [NetworkCommand][s32 cx, cy, cz]         (from Client only)
 
 		// Player commands
 		PlayerPlaceBlock,  // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Client only)
@@ -47,9 +46,6 @@ namespace Network {
 
 		// Registry commands
 		RegistryData,      // <TCP> [NetworkCommand][Block block]            (from Server only)
-
-		// World commands
-		WorldSent,         // <TCP> [NetworkCommand]                         (from Server only)
 	};
 
 	std::string commandToString(Command command);

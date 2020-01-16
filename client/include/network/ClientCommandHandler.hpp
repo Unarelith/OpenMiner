@@ -37,7 +37,6 @@ class ClientCommandHandler {
 		void sendPlayerPlaceBlock(s32 x, s32 y, s32 z, u32 block);
 		void sendBlockActivated(const glm::vec4 &selectedBlock);
 		void sendBlockInvUpdate(Inventory &inventory);
-		void sendChunkRequest(s32 chunkX, s32 chunkY, s32 chunkZ);
 
 		void setupCallbacks();
 
