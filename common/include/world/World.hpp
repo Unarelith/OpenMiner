@@ -23,6 +23,8 @@ class World {
 		virtual ~World() = default;
 
 		virtual Chunk *getChunk(int cx, int cy, int cz) const = 0;
+		Chunk *getChunkAtBlockPos(int x, int y, int z) const;
+
 		BlockData *getBlockData(int x, int y, int z) const;
 
 		u16 getBlock(int x, int y, int z) const;

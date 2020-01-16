@@ -143,12 +143,12 @@ void ChunkLightmap::updateSunlight() {
 
 		int sunlightLevel = getSunlight(node.x, node.y, node.z);
 		for (const LightNode &surroundingNode : surroundingNodes) {
-			if((surroundingNode.x < 0             && !m_chunk->getSurroundingChunkPtr(0))
-			|| (surroundingNode.x >= CHUNK_WIDTH  && !m_chunk->getSurroundingChunkPtr(1))
-			|| (surroundingNode.y < 0             && !m_chunk->getSurroundingChunkPtr(4))
-			|| (surroundingNode.y >= CHUNK_HEIGHT && !m_chunk->getSurroundingChunkPtr(5))
-			|| (surroundingNode.z < 0             && !m_chunk->getSurroundingChunkPtr(2))
-			|| (surroundingNode.z >= CHUNK_DEPTH  && !m_chunk->getSurroundingChunkPtr(3))) {
+			if((surroundingNode.x < 0             && !m_chunk->getSurroundingChunk(0))
+			|| (surroundingNode.x >= CHUNK_WIDTH  && !m_chunk->getSurroundingChunk(1))
+			|| (surroundingNode.y < 0             && !m_chunk->getSurroundingChunk(4))
+			|| (surroundingNode.y >= CHUNK_HEIGHT && !m_chunk->getSurroundingChunk(5))
+			|| (surroundingNode.z < 0             && !m_chunk->getSurroundingChunk(2))
+			|| (surroundingNode.z >= CHUNK_DEPTH  && !m_chunk->getSurroundingChunk(3))) {
 				m_unloadedChunkSunlight.emplace(node.x, node.y, node.z);
 				continue;
 			}

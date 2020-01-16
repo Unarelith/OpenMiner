@@ -16,7 +16,7 @@
 #include "ClientChunk.hpp"
 
 void ClientChunk::update() {
-	if (m_isInitialized && m_hasChanged) {
+	if (m_hasChanged) {
 		m_hasChanged = false;
 		m_lightmap.updateLights();
 

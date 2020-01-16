@@ -101,7 +101,7 @@ void ClientPlayer::processInputs() {
 }
 
 void ClientPlayer::updatePosition(const ClientWorld &world) {
-	if (!Config::isFlyModeEnabled) {
+	if (!Config::isFlyModeEnabled && world.getChunkAtBlockPos(m_x, m_y - 0.2, m_z)) {
 		m_velocity.y -= m_gravity; // Gravity
 
 		if (m_velocity.y < -m_jumpSpeed) // Jump max accel
@@ -130,13 +130,13 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 
 // FIXME: Use AABB for more precision
 void ClientPlayer::checkCollisions(const ClientWorld &world) {
-	const float CLIENTPLAYER_HEIGHT = 1.8;
-	float eyeheight = m_y + CLIENTPLAYER_HEIGHT - 1.4;
+	const float PLAYER_HEIGHT = 1.8;
+	float eyeheight = m_y + PLAYER_HEIGHT - 1.4;
 	// testPoint(world, glm::vec3(m_x, m_y, m_z), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - CLIENTPLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - CLIENTPLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - CLIENTPLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - CLIENTPLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
+	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
 	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - 0.4, m_z - 0.2), m_velocity);
 	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - 0.4, m_z - 0.2), m_velocity);
 	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - 0.4, m_z + 0.2), m_velocity);
