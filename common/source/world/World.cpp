@@ -21,7 +21,12 @@
 bool World::isReloadRequested = false;
 
 BlockData *World::getBlockData(int x, int y, int z) const {
-	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
+	Chunk *chunk = getChunk(
+		std::floor((float)x / CHUNK_WIDTH),
+		std::floor((float)y / CHUNK_HEIGHT),
+		std::floor((float)z / CHUNK_DEPTH)
+	);
+
 	if (chunk)
 		return chunk->getBlockData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1));
 
@@ -29,7 +34,12 @@ BlockData *World::getBlockData(int x, int y, int z) const {
 }
 
 u16 World::getBlock(int x, int y, int z) const {
-	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
+	Chunk *chunk = getChunk(
+		std::floor((float)x / CHUNK_WIDTH),
+		std::floor((float)y / CHUNK_HEIGHT),
+		std::floor((float)z / CHUNK_DEPTH)
+	);
+
 	if (chunk)
 		return chunk->getBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1));
 
@@ -37,13 +47,23 @@ u16 World::getBlock(int x, int y, int z) const {
 }
 
 void World::setBlock(int x, int y, int z, u16 id) const {
-	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
+	Chunk *chunk = getChunk(
+		std::floor((float)x / CHUNK_WIDTH),
+		std::floor((float)y / CHUNK_HEIGHT),
+		std::floor((float)z / CHUNK_DEPTH)
+	);
+
 	if (chunk)
 		chunk->setBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), id);
 }
 
 u16 World::getData(int x, int y, int z) const {
-	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
+	Chunk *chunk = getChunk(
+		std::floor((float)x / CHUNK_WIDTH),
+		std::floor((float)y / CHUNK_HEIGHT),
+		std::floor((float)z / CHUNK_DEPTH)
+	);
+
 	if (chunk)
 		return chunk->getData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1));
 
@@ -51,7 +71,12 @@ u16 World::getData(int x, int y, int z) const {
 }
 
 void World::setData(int x, int y, int z, u16 id) const {
-	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
+	Chunk *chunk = getChunk(
+		std::floor((float)x / CHUNK_WIDTH),
+		std::floor((float)y / CHUNK_HEIGHT),
+		std::floor((float)z / CHUNK_DEPTH)
+	);
+
 	if (chunk)
 		chunk->setBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), id);
 }
