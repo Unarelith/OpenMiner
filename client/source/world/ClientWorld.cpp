@@ -61,6 +61,24 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 
 	chunk->setInitialized(true);
 
+	gk::Vector3i surroundingChunks[6] = {
+		{chunk->x() - 1, chunk->y(),     chunk->z()},
+		{chunk->x() + 1, chunk->y(),     chunk->z()},
+		{chunk->x(),     chunk->y(),     chunk->z() - 1},
+		{chunk->x(),     chunk->y(),     chunk->z() + 1},
+		{chunk->x(),     chunk->y() - 1, chunk->z()},
+		{chunk->x(),     chunk->y() + 1, chunk->z()},
+	};
+
+	for (u8 i = 0 ; i < 6 ; ++i) {
+		Chunk *neighbour = getChunk(surroundingChunks[i].x, surroundingChunks[i].y, surroundingChunks[i].z);
+		if (neighbour) {
+			chunk->setSurroundingChunk(i, neighbour);
+			neighbour->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, chunk);
+			neighbour->setChanged(true);
+		}
+	}
+
 	// if(chunk->getSurroundingChunk(Chunk::Left))   chunk->getSurroundingChunk(Chunk::Left)->setChanged(true);
 	// if(chunk->getSurroundingChunk(Chunk::Right))  chunk->getSurroundingChunk(Chunk::Right)->setChanged(true);
 	// if(chunk->getSurroundingChunk(Chunk::Bottom)) chunk->getSurroundingChunk(Chunk::Bottom)->setChanged(true);
