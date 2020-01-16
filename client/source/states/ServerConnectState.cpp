@@ -40,8 +40,10 @@ ServerConnectState::ServerConnectState() {
 			std::cerr << "Error: Invalid server address." << std::endl;
 		}
 
-		auto &game = m_stateStack->push<GameState>(host, port);
-		m_stateStack->push<ServerLoadingState>(game);
+		m_stateStack->push<GameState>(host, port);
+
+		// auto &game = m_stateStack->push<GameState>(host, port);
+		// m_stateStack->push<ServerLoadingState>(game);
 	});
 
 	m_cancelButton.setText("Cancel");

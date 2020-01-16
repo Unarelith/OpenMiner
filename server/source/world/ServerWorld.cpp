@@ -136,18 +136,6 @@ void ServerWorld::sendChunkData(Client &client, ServerChunk *chunk) {
 	std::cout << "Chunk at (" << chunk->x() << ", " << chunk->y() << ", " << chunk->z() << ") sent to client" << std::endl;
 }
 
-void ServerWorld::sendRequestedData(Client &client, int cx, int cy, int cz) {
-	std::cout << "Chunk at (" << cx << ", " << cy << ", " << cz << ") requested" << std::endl;
-
-	Chunk *chunk = getChunk(cx, cy, cz);
-	if (!chunk) {
-		auto it = m_chunks.emplace(gk::Vector3i(cx, cy, cz), new ServerChunk(cx, cy, cz));
-		chunk = it.first->second.get();
-	}
-
-	sendChunkData(client, (ServerChunk *)chunk);
-}
-
 Chunk *ServerWorld::getChunk(int cx, int cy, int cz) const {
 	auto it = m_chunks.find({cx, cy, cz});
 	if (it == m_chunks.end())

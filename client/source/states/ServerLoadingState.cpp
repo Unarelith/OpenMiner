@@ -37,10 +37,6 @@ ServerLoadingState::ServerLoadingState(GameState &game) : m_game(game) {
 	m_textShadow.setColor(gk::Color{70, 70, 70, 255});
 	m_textShadow.setPosition(m_text.getPosition().x + 6, m_text.getPosition().y + 6);
 
-	m_game.client().setCommandCallback(Network::Command::WorldSent, [this] (sf::Packet &) {
-		m_isWorldSent = true;
-	});
-
 	gk::Mouse::setCursorVisible(true);
 	gk::Mouse::setCursorGrabbed(false);
 }
