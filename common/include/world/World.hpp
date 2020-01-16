@@ -22,12 +22,13 @@ class World {
 	public:
 		virtual ~World() = default;
 
-		virtual BlockData *getBlockData(int x, int y, int z) const = 0;
+		virtual Chunk *getChunk(int cx, int cy, int cz) const = 0;
+		BlockData *getBlockData(int x, int y, int z) const;
 
-		virtual u16 getBlock(int x, int y, int z) const = 0;
-		virtual void setBlock(int x, int y, int z, u16 id) const = 0;
-		virtual u16 getData(int x, int y, int z) const = 0;
-		virtual void setData(int x, int y, int z, u16 id) const = 0;
+		u16 getBlock(int x, int y, int z) const;
+		void setBlock(int x, int y, int z, u16 id) const;
+		u16 getData(int x, int y, int z) const;
+		void setData(int x, int y, int z, u16 id) const;
 
 		static bool isReloadRequested;
 };

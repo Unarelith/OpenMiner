@@ -41,6 +41,68 @@ void ServerWorld::update(Server &server, std::unordered_map<u16, ServerPlayer> &
 	}
 }
 
+void ServerWorld::sendSpawnData(Client &client, ServerPlayer &player) {
+	// Player chunk pos
+	int pcx = std::floor(player.x() / CHUNK_WIDTH);
+	int pcy = std::floor(player.y() / CHUNK_HEIGHT);
+	int pcz = std::floor(player.z() / CHUNK_DEPTH);
+
+	// Create a chunk at the current player position
+	auto it = m_chunks.emplace(gk::Vector3i{pcx, pcy, pcz}, new ServerChunk(pcx, pcy, pcz));
+	ServerChunk *chunk = it.first->second.get();
+
+	// Send the chunk to the client
+	sendChunkData(client, chunk);
+
+	// Load surrounding chunks, starting from the one we generated above
+	std::queue<ServerChunk *> chunks;
+	chunks.emplace(chunk);
+	while (!chunks.empty()) {
+		ServerChunk *chunk = chunks.front();
+		chunks.pop();
+
+		gk::Vector3i surroundingChunks[6] = {
+			{chunk->x() - 1, chunk->y(),     chunk->z()},
+			{chunk->x() + 1, chunk->y(),     chunk->z()},
+			{chunk->x(),     chunk->y(),     chunk->z() - 1},
+			{chunk->x(),     chunk->y(),     chunk->z() + 1},
+			{chunk->x(),     chunk->y() - 1, chunk->z()},
+			{chunk->x(),     chunk->y() + 1, chunk->z()},
+		};
+
+		for (u8 i = 0 ; i < 6 ; ++i) {
+			// Create our neighbour
+			auto it = m_chunks.emplace(
+				gk::Vector3i{
+					surroundingChunks[i].x,
+					surroundingChunks[i].y,
+					surroundingChunks[i].z
+				},
+				new ServerChunk{
+					surroundingChunks[i].x,
+					surroundingChunks[i].y,
+					surroundingChunks[i].z
+				}
+			);
+
+			// Assign surrounding chunk pointers
+			ServerChunk *neighbour = it.first->second.get();
+			chunk->setSurroundingChunk(i, neighbour);
+			neighbour->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, chunk);
+
+			// Compute distance to player chunk
+			int dx = std::abs(surroundingChunks[i].x - pcx);
+			int dy = std::abs(surroundingChunks[i].y - pcy);
+			int dz = std::abs(surroundingChunks[i].z - pcz);
+			int distance = std::max(dx, std::max(dy, dz));
+
+			// If the chunk is close enough, add it to the queue
+			if (distance < Config::renderDistance)
+				chunks.emplace(neighbour);
+		}
+	}
+}
+
 void ServerWorld::sendChunkData(Client &client, ServerChunk *chunk) {
 	if (!chunk) return;
 
@@ -69,56 +131,20 @@ void ServerWorld::sendChunkData(Client &client, ServerChunk *chunk) {
 void ServerWorld::sendRequestedData(Client &client, int cx, int cy, int cz) {
 	std::cout << "Chunk at (" << cx << ", " << cy << ", " << cz << ") requested" << std::endl;
 
-	ServerChunk *chunk = getChunk(cx, cy, cz);
+	Chunk *chunk = getChunk(cx, cy, cz);
 	if (!chunk) {
 		auto it = m_chunks.emplace(gk::Vector3i(cx, cy, cz), new ServerChunk(cx, cy, cz));
 		chunk = it.first->second.get();
 	}
 
-	sendChunkData(client, chunk);
+	sendChunkData(client, (ServerChunk *)chunk);
 }
 
-ServerChunk *ServerWorld::getChunk(int cx, int cy, int cz) const {
+Chunk *ServerWorld::getChunk(int cx, int cy, int cz) const {
 	auto it = m_chunks.find({cx, cy, cz});
 	if (it == m_chunks.end())
 		return nullptr;
 
 	return it->second.get();
-}
-
-BlockData *ServerWorld::getBlockData(int x, int y, int z) const {
-	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
-	if (chunk)
-		return chunk->getBlockData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1));
-
-	return nullptr;
-}
-
-u16 ServerWorld::getBlock(int x, int y, int z) const {
-	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
-	if (chunk)
-		return chunk->getBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1));
-
-	return 0;
-}
-
-void ServerWorld::setBlock(int x, int y, int z, u16 id) const {
-	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
-	if (chunk)
-		chunk->setBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), id);
-}
-
-u16 ServerWorld::getData(int x, int y, int z) const {
-	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
-	if (chunk)
-		return chunk->getData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1));
-
-	return 0;
-}
-
-void ServerWorld::setData(int x, int y, int z, u16 id) const {
-	Chunk *chunk = getChunk(x / CHUNK_WIDTH, y / CHUNK_HEIGHT, z / CHUNK_DEPTH);
-	if (chunk)
-		chunk->setBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), id);
 }
 

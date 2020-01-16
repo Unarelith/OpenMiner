@@ -55,8 +55,11 @@ void ClientApplication::init() {
 	Registry::setInstance(m_registry);
 
 	// m_stateStack.push<TitleScreenState>();
-	auto &game = m_stateStack.push<GameState>(m_host, m_port);
-	m_stateStack.push<ServerLoadingState>(game);
+
+	m_stateStack.push<GameState>(m_host, m_port);
+
+	// auto &game = m_stateStack.push<GameState>(m_host, m_port);
+	// m_stateStack.push<ServerLoadingState>(game);
 }
 
 void ClientApplication::initOpenGL() {
