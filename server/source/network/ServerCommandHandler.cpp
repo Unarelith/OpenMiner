@@ -53,11 +53,12 @@ void ServerCommandHandler::setupCallbacks() {
 		spawnPacket << m_spawnPosition.x << m_spawnPosition.y << m_spawnPosition.z;
 		m_server.sendToAllClients(spawnPacket);
 
-		// m_world.sendWorldData(client); // FIXME
+		// FIXME: Temporarily useless
+		// sf::Packet worldSentPacket;
+		// worldSentPacket << Network::Command::WorldSent;
+		// client.tcpSocket->send(worldSentPacket);
 
-		sf::Packet worldSentPacket;
-		worldSentPacket << Network::Command::WorldSent;
-		client.tcpSocket->send(worldSentPacket);
+		m_world.sendSpawnData(client, player);
 	});
 
 	m_server.setCommandCallback(Network::Command::ChunkRequest, [this](Client &client, sf::Packet &packet) {
