@@ -40,7 +40,6 @@ class HUD : public gk::Transformable, public gk::Drawable {
 
 		Hotbar m_hotbar;
 
-		glm::vec4 m_selectedBlock{0, 0, 0, -1};
 		BlockCursor m_blockCursor;
 		Crosshair m_crosshair;
 

@@ -342,7 +342,6 @@ inline float ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i
 		(normal.z != 0) ? offset.z : 0
 	};
 
-	// FIXME: Air blocks have a light level of 0
 	if (light == Light::Sun)
 		return (chunk.lightmap().getSunlight(x + minOffset.x, y + offset.y,    z + minOffset.z)
 		      + chunk.lightmap().getSunlight(x + offset.x,    y + minOffset.y, z + minOffset.z)

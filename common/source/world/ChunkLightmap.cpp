@@ -13,6 +13,8 @@
  */
 #include <cstring>
 
+#include <gk/core/Debug.hpp>
+
 #include "Chunk.hpp"
 #include "ChunkLightmap.hpp"
 #include "Registry.hpp"
@@ -85,7 +87,7 @@ void ChunkLightmap::updateTorchlight() {
 			{node.x,     node.y,     node.z + 1},
 		};
 
-		int lightLevel = getTorchlight(node.x, node.y, node.z);
+		u8 lightLevel = getTorchlight(node.x, node.y, node.z);
 		for (const LightNode &surroundingNode : surroundingNodes) {
 			if (getTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= lightLevel) {
 				u16 block = m_chunk->getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z);
@@ -127,7 +129,6 @@ void ChunkLightmap::updateSunlight() {
 		}
 	}
 
-	std::queue<LightNode> m_unloadedChunkSunlight;
 	while (!m_sunlightBfsQueue.empty()) {
 		LightNode node = m_sunlightBfsQueue.front();
 		m_sunlightBfsQueue.pop();
@@ -141,23 +142,31 @@ void ChunkLightmap::updateSunlight() {
 			{node.x,     node.y,     node.z + 1},
 		};
 
-		int sunlightLevel = getSunlight(node.x, node.y, node.z);
+		u8 sunlightLevel = getSunlight(node.x, node.y, node.z);
+
+		// if (m_chunk->x() == -1 && m_chunk->y() == 0 && m_chunk->z() == -1 && node.y == 6 && node.x == 15 && node.z == 11)
+		// 	DEBUG("Sunlight at", node.x, node.y, node.z, "is", (int)sunlightLevel);
+
+		int globalNodeX = node.x + m_chunk->x() * CHUNK_WIDTH;
+		int globalNodeY = node.y + m_chunk->y() * CHUNK_HEIGHT;
+		int globalNodeZ = node.z + m_chunk->z() * CHUNK_DEPTH;
+		if (globalNodeX == -1 && globalNodeY == 6 && globalNodeZ == -5) {
+			DEBUG("Sunlight at", globalNodeX, globalNodeY, globalNodeZ, "is", (int)sunlightLevel);
+			DEBUG("Propagated from chunk", m_chunk->x(), m_chunk->y(), m_chunk->z(), "at pos", node.x, node.y, node.z);
+		}
+
 		for (const LightNode &surroundingNode : surroundingNodes) {
-			if((surroundingNode.x < 0             && !m_chunk->getSurroundingChunk(0))
-			|| (surroundingNode.x >= CHUNK_WIDTH  && !m_chunk->getSurroundingChunk(1))
-			|| (surroundingNode.y < 0             && !m_chunk->getSurroundingChunk(4))
-			|| (surroundingNode.y >= CHUNK_HEIGHT && !m_chunk->getSurroundingChunk(5))
-			|| (surroundingNode.z < 0             && !m_chunk->getSurroundingChunk(2))
-			|| (surroundingNode.z >= CHUNK_DEPTH  && !m_chunk->getSurroundingChunk(3))) {
-				m_unloadedChunkSunlight.emplace(node.x, node.y, node.z);
-				continue;
-			}
-
-
-			if (getSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= sunlightLevel) {
+			if (getSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= sunlightLevel
+			|| (sunlightLevel == 15 && surroundingNode.y == node.y - 1)) {
 				u16 block = m_chunk->getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 				if (!block || block == BlockType::Water || block == BlockType::Glass || block == BlockType::Flower
 				/* || !Registry::getInstance().getBlock(block).isOpaque() */) { // FIXME
+
+					if (m_chunk->x() == 0 && m_chunk->y() == 0 && m_chunk->z() == 0 && surroundingNode.x == -1 && surroundingNode.y == 6 && surroundingNode.z == -5) {
+						DEBUG("wut, propagating light into block type", block);
+						DEBUG("is chunk initialized?", m_chunk->getSurroundingChunk(Chunk::Left));
+					}
+
 					if (sunlightLevel == 15 && surroundingNode.y == node.y - 1)
 						setSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel);
 					else if (sunlightLevel == 15 && surroundingNode.y == node.y + 1)
@@ -169,11 +178,6 @@ void ChunkLightmap::updateSunlight() {
 				}
 			}
 		}
-	}
-
-	while (!m_unloadedChunkSunlight.empty()) {
-		m_sunlightBfsQueue.emplace(m_unloadedChunkSunlight.front());
-		m_unloadedChunkSunlight.pop();
 	}
 }
 
@@ -207,6 +211,8 @@ void ChunkLightmap::setLightData(int x, int y, int z, u8 val) {
 	updateSurroundingChunks(x, y, z);
 }
 
+// #include <gk/core/Debug.hpp> // FIXME
+
 void ChunkLightmap::setSunlight(int x, int y, int z, u8 val) {
 	if(x < 0)             { if(m_chunk->getSurroundingChunk(0)) m_chunk->getSurroundingChunk(0)->lightmap().setSunlight(x + CHUNK_WIDTH, y, z, val); return; }
 	if(x >= CHUNK_WIDTH)  { if(m_chunk->getSurroundingChunk(1)) m_chunk->getSurroundingChunk(1)->lightmap().setSunlight(x - CHUNK_WIDTH, y, z, val); return; }
@@ -220,6 +226,10 @@ void ChunkLightmap::setSunlight(int x, int y, int z, u8 val) {
 	m_chunk->setChanged(true);
 
 	updateSurroundingChunks(x, y, z);
+
+	// if (m_chunk->x() == 1 && m_chunk->z() == 0 && x == 0 && z == 14)
+	// if (m_chunk->x() == 1 && m_chunk->z() == 0 && y == 20 && z == 14)
+	// 	DEBUG("In chunk", m_chunk->x(), m_chunk->y(), m_chunk->z(), "setting sunlight at block", x, y, z, "to", (int)val);
 };
 
 void ChunkLightmap::setTorchlight(int x, int y, int z, u8 val) {

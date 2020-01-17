@@ -27,15 +27,19 @@ void BlockInfoWidget::update() {
 	m_itemWidget.update();
 }
 
-void BlockInfoWidget::setCurrentBlock(const Block *block) {
+void BlockInfoWidget::setCurrentBlock(const Block *block, const glm::vec4 &selectedBlock) {
 	m_currentBlock = block;
+	m_selectedBlock = selectedBlock;
 
 	if (!m_currentBlock)
 		m_isVisible = false;
 	else {
 		m_isVisible = true;
 
-		m_text.setText(block->label());
+		m_text.setText(block->label() + "\n"
+				+ std::to_string((int)selectedBlock.x) + ", "
+				+ std::to_string((int)selectedBlock.y) + ", "
+				+ std::to_string((int)selectedBlock.z));
 		m_itemWidget.setStack(block->name(), 1);
 	}
 }
