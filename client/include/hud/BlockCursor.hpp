@@ -33,6 +33,7 @@ class BlockCursor : public gk::Drawable {
 		void update(const Hotbar &hotbar, bool useDepthBuffer);
 
 		const Block *currentBlock() const { return m_currentBlock; }
+		const glm::vec4 &selectedBlock() const { return m_selectedBlock; }
 
 	private:
 		void updateVertexBuffer(const Block &block);

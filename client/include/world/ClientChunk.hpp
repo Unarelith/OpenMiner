@@ -30,9 +30,6 @@ class ClientChunk : public Chunk {
 
 		void drawLayer(gk::RenderTarget &target, gk::RenderStates states, u8 layer) const;
 
-		bool hasBeenRequested() const { return m_hasBeenRequested; }
-		void setHasBeenRequested(bool hasBeenRequested) { m_hasBeenRequested = hasBeenRequested; }
-
 	private:
 		gk::Texture &m_texture;
 
@@ -40,8 +37,6 @@ class ClientChunk : public Chunk {
 
 		std::array<gk::VertexBuffer, ChunkBuilder::layers> m_vbo{};
 		std::array<std::size_t, ChunkBuilder::layers> m_verticesCount{};
-
-		bool m_hasBeenRequested = false;
 };
 
 #endif // CLIENTCHUNK_HPP_

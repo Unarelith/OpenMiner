@@ -39,7 +39,7 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 	s32 cx, cy, cz;
 	packet >> cx >> cy >> cz;
 
-	Chunk *chunk = getChunk(cx, cy, cz);
+	ClientChunk *chunk = (ClientChunk *)getChunk(cx, cy, cz);
 	if (!chunk) {
 		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ClientChunk(cx, cy, cz, m_texture));
 		chunk = it.first->second.get();
@@ -56,6 +56,9 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 				chunk->setBlockRaw(x, y, z, block & 0xffff);
 				// chunk->setData(x, y, z, block >> 16);
 				chunk->lightmap().setLightData(x, y, z, light);
+
+				if (chunk->x() == -1 && chunk->y() == 0 && chunk->z() == -1 && y == 6 && x == 15 && z == 11)
+					DEBUG("At", x, y, z, "light is", (int)(light >> 4), "and block type is", block);
 			}
 		}
 	}
@@ -134,9 +137,8 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		}
 
 		// Only draw the chunk if all its neighbours are loaded
-		if (it.second->areAllNeighboursLoaded()) {
+		if (it.second->areAllNeighboursLoaded())
 			chunks.emplace_back(it.second.get(), states.transform);
-		}
 	}
 
 	for (u8 i = 0 ; i < ChunkBuilder::layers ; ++i) {
