@@ -13,8 +13,6 @@
  */
 #include <gk/gl/GLCheck.hpp>
 
-// #include <gk/core/Debug.hpp> // FIXME
-
 #include "ClientChunk.hpp"
 
 void ClientChunk::update() {
@@ -23,8 +21,6 @@ void ClientChunk::update() {
 		m_lightmap.updateLights();
 
 		m_verticesCount = m_builder.buildChunk(*this, m_vbo);
-
-		// DEBUG("Chunk updated at", m_x, m_y, m_z);
 	}
 }
 

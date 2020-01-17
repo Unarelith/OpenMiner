@@ -13,8 +13,6 @@
  */
 #include <glm/gtc/noise.hpp>
 
-#include <gk/core/Debug.hpp> // FIXME
-
 #include "Config.hpp"
 #include "BlockType.hpp"
 #include "ServerChunk.hpp"
@@ -96,24 +94,24 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 						chunk.setBlockRaw(x, y, z, BlockType::Water);
 					}
 					// Otherwise we are in the air, so try to make a tree
-					// else if(chunk.getBlock(x, y - 1, z) == BlockType::Grass && (rand() % 256) == 0 && n < 4) {
-					// 	// Trunk
-					// 	h = (rand() & 0x3) + 3;
-					// 	for(int i = 0 ; i < h ; i++) {
-					// 		chunk.setBlockRaw(x, y + i, z, BlockType::Wood);
-					// 	}
-                    //
-					// 	// Leaves
-					// 	for(int ix = -3 ; ix <= 3 ; ix++) {
-					// 		for(int iy = -3 ; iy <= 3 ; iy++) {
-					// 			for(int iz = -3 ; iz <= 3 ; iz++) {
-					// 				if(ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + h + iy, z + iz)) {
-					// 					chunk.setBlockRaw(x + ix, y + h + iy, z + iz, BlockType::Leaves);
-					// 				}
-					// 			}
-					// 		}
-					// 	}
-					// }
+					else if(chunk.getBlock(x, y - 1, z) == BlockType::Grass && (rand() % 256) == 0 && n < 4) {
+						// Trunk
+						h = (rand() & 0x3) + 3;
+						for(int i = 0 ; i < h ; i++) {
+							chunk.setBlockRaw(x, y + i, z, BlockType::Wood);
+						}
+
+						// Leaves
+						for(int ix = -3 ; ix <= 3 ; ix++) {
+							for(int iy = -3 ; iy <= 3 ; iy++) {
+								for(int iz = -3 ; iz <= 3 ; iz++) {
+									if(ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + h + iy, z + iz)) {
+										chunk.setBlockRaw(x + ix, y + h + iy, z + iz, BlockType::Leaves);
+									}
+								}
+							}
+						}
+					}
 					// Or a flower
 					else if(chunk.getBlock(x, y - 1, z) == BlockType::Grass && (rand() & 0xff) == 0) {
 						chunk.setBlockRaw(x, y, z, BlockType::Flower);
@@ -129,12 +127,6 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 
 					// Sand layer
 					if(n * 4 + r * 5 < 4) {
-						int globalNodeX = x + chunk.x() * CHUNK_WIDTH;
-						int globalNodeY = y + chunk.y() * CHUNK_HEIGHT;
-						int globalNodeZ = z + chunk.z() * CHUNK_DEPTH;
-						if (globalNodeX == -1 && globalNodeY == 6 && globalNodeZ == -5) {
-							DEBUG("Mais wtf");
-						}
 						chunk.setBlockRaw(x, y, z, BlockType::Sand);
 					}
 					// Dirt layer, but use grass blocks for the top
@@ -146,24 +138,24 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 					}
 
 					// Caves
-					// float n2 = noise2d((x + chunk.x() * CHUNK_WIDTH) / 256.0, (z + chunk.z() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
-					// float r2 = noise3d_abs((x + chunk.x() * CHUNK_WIDTH) / 512.0f, (y + chunk.y() * CHUNK_HEIGHT) / 512.0f, (z + chunk.z() * CHUNK_DEPTH) / 512.0f, 4, 0.1);
-					// float r3 = noise3d_abs((x + chunk.x() * CHUNK_WIDTH) / 512.0f, (y + chunk.y() * CHUNK_HEIGHT) / 128.0f, (z + chunk.z() * CHUNK_DEPTH) / 512.0f, 4, 1);
-					// float r4 = n2 * 5 + r2 * r3 * 20;
-					// if (r4 > 6 && r4 < 8) {
-					// 	chunk.setBlockRaw(x, y - 1, z, 0);
-					// 	chunk.setBlockRaw(x, y, z, 0);
-					// 	chunk.setBlockRaw(x, y + 1, z, 0);
-					// }
-					// else if (r < 0.3) {
-					// 	chunk.setBlockRaw(x, y, z, BlockType::CoalOre);
-					// }
-					// else if (r > 0.3 && r < 0.5) {
-					// 	chunk.setBlockRaw(x, y, z, BlockType::IronOre);
-					// }
-					// else if (r4 > 8.2 && r4 < 10) {
-					// 	chunk.setBlockRaw(x, y, z, BlockType::Stone);
-					// }
+					float n2 = noise2d((x + chunk.x() * CHUNK_WIDTH) / 256.0, (z + chunk.z() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
+					float r2 = noise3d_abs((x + chunk.x() * CHUNK_WIDTH) / 512.0f, (y + chunk.y() * CHUNK_HEIGHT) / 512.0f, (z + chunk.z() * CHUNK_DEPTH) / 512.0f, 4, 0.1);
+					float r3 = noise3d_abs((x + chunk.x() * CHUNK_WIDTH) / 512.0f, (y + chunk.y() * CHUNK_HEIGHT) / 128.0f, (z + chunk.z() * CHUNK_DEPTH) / 512.0f, 4, 1);
+					float r4 = n2 * 5 + r2 * r3 * 20;
+					if (r4 > 6 && r4 < 8) {
+						chunk.setBlockRaw(x, y - 1, z, 0);
+						chunk.setBlockRaw(x, y, z, 0);
+						chunk.setBlockRaw(x, y + 1, z, 0);
+					}
+					else if (r < 0.3) {
+						chunk.setBlockRaw(x, y, z, BlockType::CoalOre);
+					}
+					else if (r > 0.3 && r < 0.5) {
+						chunk.setBlockRaw(x, y, z, BlockType::IronOre);
+					}
+					else if (r4 > 8.2 && r4 < 10) {
+						chunk.setBlockRaw(x, y, z, BlockType::Stone);
+					}
 				}
 
 				if (topChunk) {

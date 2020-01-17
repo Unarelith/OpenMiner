@@ -41,9 +41,9 @@ class ChunkLightmap {
 	public:
 		ChunkLightmap(Chunk *chunk);
 
-		void addLight(int x, int y, int z, int val);
+		void addTorchlight(int x, int y, int z, int val);
 		void addSunlight(int x, int y, int z, int val);
-		void removeLight(int x, int y, int z);
+		void removeTorchlight(int x, int y, int z);
 		void removeSunlight(int x, int y, int z);
 
 		void updateLights();
