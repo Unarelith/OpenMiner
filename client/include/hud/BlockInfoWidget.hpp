@@ -23,9 +23,7 @@ class BlockInfoWidget : public Widget {
 		void update() override;
 
 		const Block *currentBlock() const { return m_currentBlock; }
-		void setCurrentBlock(const Block *block, const glm::vec4 &selectedBlock);
-
-		const glm::vec4 selectedBlock() const { return m_selectedBlock; }
+		void setCurrentBlock(const Block *block);
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
@@ -39,7 +37,6 @@ class BlockInfoWidget : public Widget {
 		bool m_isVisible = false;
 
 		const Block *m_currentBlock = nullptr;
-		glm::vec4 m_selectedBlock{0, 0, 0, 0};
 };
 
 #endif // BLOCKINFOWIDGET_HPP_

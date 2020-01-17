@@ -57,8 +57,8 @@ void HUD::update() {
 
 	m_blockInfoWidget.update();
 
-	if (m_blockCursor.selectedBlock() != m_blockInfoWidget.selectedBlock())
-		m_blockInfoWidget.setCurrentBlock(m_blockCursor.currentBlock(), m_blockCursor.selectedBlock());
+	if (m_blockCursor.currentBlock() != m_blockInfoWidget.currentBlock())
+		m_blockInfoWidget.setCurrentBlock(m_blockCursor.currentBlock());
 }
 
 void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
