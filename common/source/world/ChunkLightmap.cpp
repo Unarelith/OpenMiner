@@ -23,24 +23,52 @@ ChunkLightmap::ChunkLightmap(Chunk *chunk) : m_chunk(chunk) {
 	std::memset(m_lightMap, 0, sizeof(m_lightMap));
 }
 
-void ChunkLightmap::addLight(int x, int y, int z, int val) {
+void ChunkLightmap::addTorchlight(int x, int y, int z, int val) {
+	if(x < 0)             { if(m_chunk->getSurroundingChunk(0)) m_chunk->getSurroundingChunk(0)->lightmap().addTorchlight(x + CHUNK_WIDTH, y, z, val); return; }
+	if(x >= CHUNK_WIDTH)  { if(m_chunk->getSurroundingChunk(1)) m_chunk->getSurroundingChunk(1)->lightmap().addTorchlight(x - CHUNK_WIDTH, y, z, val); return; }
+	if(y < 0)             { if(m_chunk->getSurroundingChunk(4)) m_chunk->getSurroundingChunk(4)->lightmap().addTorchlight(x, y + CHUNK_HEIGHT, z, val); return; }
+	if(y >= CHUNK_HEIGHT) { if(m_chunk->getSurroundingChunk(5)) m_chunk->getSurroundingChunk(5)->lightmap().addTorchlight(x, y - CHUNK_HEIGHT, z, val); return; }
+	if(z < 0)             { if(m_chunk->getSurroundingChunk(2)) m_chunk->getSurroundingChunk(2)->lightmap().addTorchlight(x, y, z + CHUNK_DEPTH, val); return; }
+	if(z >= CHUNK_DEPTH)  { if(m_chunk->getSurroundingChunk(3)) m_chunk->getSurroundingChunk(3)->lightmap().addTorchlight(x, y, z - CHUNK_DEPTH, val); return; }
+
 	setTorchlight(x, y, z, val);
 	m_lightBfsQueue.emplace(x, y, z);
 }
 
 void ChunkLightmap::addSunlight(int x, int y, int z, int val) {
+	if(x < 0)             { if(m_chunk->getSurroundingChunk(0)) m_chunk->getSurroundingChunk(0)->lightmap().addSunlight(x + CHUNK_WIDTH, y, z, val); return; }
+	if(x >= CHUNK_WIDTH)  { if(m_chunk->getSurroundingChunk(1)) m_chunk->getSurroundingChunk(1)->lightmap().addSunlight(x - CHUNK_WIDTH, y, z, val); return; }
+	if(y < 0)             { if(m_chunk->getSurroundingChunk(4)) m_chunk->getSurroundingChunk(4)->lightmap().addSunlight(x, y + CHUNK_HEIGHT, z, val); return; }
+	if(y >= CHUNK_HEIGHT) { if(m_chunk->getSurroundingChunk(5)) m_chunk->getSurroundingChunk(5)->lightmap().addSunlight(x, y - CHUNK_HEIGHT, z, val); return; }
+	if(z < 0)             { if(m_chunk->getSurroundingChunk(2)) m_chunk->getSurroundingChunk(2)->lightmap().addSunlight(x, y, z + CHUNK_DEPTH, val); return; }
+	if(z >= CHUNK_DEPTH)  { if(m_chunk->getSurroundingChunk(3)) m_chunk->getSurroundingChunk(3)->lightmap().addSunlight(x, y, z - CHUNK_DEPTH, val); return; }
+
 	setSunlight(x, y, z, val);
 	m_sunlightBfsQueue.emplace(x, y, z);
 }
 
-void ChunkLightmap::removeLight(int x, int y, int z) {
+void ChunkLightmap::removeTorchlight(int x, int y, int z) {
+	if(x < 0)             { if(m_chunk->getSurroundingChunk(0)) m_chunk->getSurroundingChunk(0)->lightmap().removeTorchlight(x + CHUNK_WIDTH, y, z); return; }
+	if(x >= CHUNK_WIDTH)  { if(m_chunk->getSurroundingChunk(1)) m_chunk->getSurroundingChunk(1)->lightmap().removeTorchlight(x - CHUNK_WIDTH, y, z); return; }
+	if(y < 0)             { if(m_chunk->getSurroundingChunk(4)) m_chunk->getSurroundingChunk(4)->lightmap().removeTorchlight(x, y + CHUNK_HEIGHT, z); return; }
+	if(y >= CHUNK_HEIGHT) { if(m_chunk->getSurroundingChunk(5)) m_chunk->getSurroundingChunk(5)->lightmap().removeTorchlight(x, y - CHUNK_HEIGHT, z); return; }
+	if(z < 0)             { if(m_chunk->getSurroundingChunk(2)) m_chunk->getSurroundingChunk(2)->lightmap().removeTorchlight(x, y, z + CHUNK_DEPTH); return; }
+	if(z >= CHUNK_DEPTH)  { if(m_chunk->getSurroundingChunk(3)) m_chunk->getSurroundingChunk(3)->lightmap().removeTorchlight(x, y, z - CHUNK_DEPTH); return; }
+
 	m_lightRemovalBfsQueue.emplace(x, y, z, getTorchlight(x, y, z));
-	setTorchlight(x, y, z, 0);
+	setTorchlight(x, y, z, 0); // FIXME
 }
 
 void ChunkLightmap::removeSunlight(int x, int y, int z) {
+	if(x < 0)             { if(m_chunk->getSurroundingChunk(0)) m_chunk->getSurroundingChunk(0)->lightmap().removeSunlight(x + CHUNK_WIDTH, y, z); return; }
+	if(x >= CHUNK_WIDTH)  { if(m_chunk->getSurroundingChunk(1)) m_chunk->getSurroundingChunk(1)->lightmap().removeSunlight(x - CHUNK_WIDTH, y, z); return; }
+	if(y < 0)             { if(m_chunk->getSurroundingChunk(4)) m_chunk->getSurroundingChunk(4)->lightmap().removeSunlight(x, y + CHUNK_HEIGHT, z); return; }
+	if(y >= CHUNK_HEIGHT) { if(m_chunk->getSurroundingChunk(5)) m_chunk->getSurroundingChunk(5)->lightmap().removeSunlight(x, y - CHUNK_HEIGHT, z); return; }
+	if(z < 0)             { if(m_chunk->getSurroundingChunk(2)) m_chunk->getSurroundingChunk(2)->lightmap().removeSunlight(x, y, z + CHUNK_DEPTH); return; }
+	if(z >= CHUNK_DEPTH)  { if(m_chunk->getSurroundingChunk(3)) m_chunk->getSurroundingChunk(3)->lightmap().removeSunlight(x, y, z - CHUNK_DEPTH); return; }
+
 	m_sunlightRemovalBfsQueue.emplace(x, y, z, getSunlight(x, y, z));
-	setSunlight(x, y, z, 0);
+	setSunlight(x, y, z, 0); // FIXME
 }
 
 void ChunkLightmap::updateLights() {
@@ -53,7 +81,15 @@ void ChunkLightmap::updateTorchlight() {
 		LightRemovalNode node = m_lightRemovalBfsQueue.front();
 		m_lightRemovalBfsQueue.pop();
 
-		LightNode surroundingNodes[6] = {
+		// If this block is opaque, don't propagate the light
+		u16 block = m_chunk->getBlock(node.x, node.y, node.z);
+		if (!(!block || block == BlockType::Water || block == BlockType::Glass || block == BlockType::Flower
+		/* || !Registry::getInstance().getBlock(block).isOpaque() */)) { // FIXME
+			setTorchlight(node.x, node.y, node.z, 0);
+			continue;
+		}
+
+		gk::Vector3i surroundingNodes[6] = {
 			{node.x - 1, node.y,     node.z},
 			{node.x + 1, node.y,     node.z},
 			{node.x,     node.y - 1, node.z},
@@ -62,7 +98,7 @@ void ChunkLightmap::updateTorchlight() {
 			{node.x,     node.y,     node.z + 1},
 		};
 
-		for (const LightNode &surroundingNode : surroundingNodes) {
+		for (const gk::Vector3i &surroundingNode : surroundingNodes) {
 			int level = getTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 			if (level != 0 && level < node.value) {
 				setTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, 0);
@@ -78,7 +114,7 @@ void ChunkLightmap::updateTorchlight() {
 		LightNode node = m_lightBfsQueue.front();
 		m_lightBfsQueue.pop();
 
-		LightNode surroundingNodes[6] = {
+		gk::Vector3i surroundingNodes[6] = {
 			{node.x - 1, node.y,     node.z},
 			{node.x + 1, node.y,     node.z},
 			{node.x,     node.y - 1, node.z},
@@ -88,14 +124,12 @@ void ChunkLightmap::updateTorchlight() {
 		};
 
 		u8 lightLevel = getTorchlight(node.x, node.y, node.z);
-		for (const LightNode &surroundingNode : surroundingNodes) {
+		for (const gk::Vector3i &surroundingNode : surroundingNodes) {
 			if (getTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= lightLevel) {
 				u16 block = m_chunk->getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 				if (!block || block == BlockType::Water || block == BlockType::Glass || block == BlockType::Flower
 				/* || !Registry::getInstance().getBlock(block).isOpaque() */) { // FIXME
-					setTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, lightLevel - 1);
-
-					m_lightBfsQueue.emplace(surroundingNode.x, surroundingNode.y, surroundingNode.z);
+					addTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, lightLevel - 1);
 				}
 			}
 		}
@@ -107,7 +141,7 @@ void ChunkLightmap::updateSunlight() {
 		LightRemovalNode node = m_sunlightRemovalBfsQueue.front();
 		m_sunlightRemovalBfsQueue.pop();
 
-		LightNode surroundingNodes[6] = {
+		gk::Vector3i surroundingNodes[6] = {
 			{node.x - 1, node.y,     node.z},
 			{node.x + 1, node.y,     node.z},
 			{node.x,     node.y - 1, node.z},
@@ -116,7 +150,7 @@ void ChunkLightmap::updateSunlight() {
 			{node.x,     node.y,     node.z + 1},
 		};
 
-		for (const LightNode &surroundingNode : surroundingNodes) {
+		for (const gk::Vector3i &surroundingNode : surroundingNodes) {
 			int level = getSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 			if ((level == 15 && surroundingNode.y == node.y - 1) || (level != 0 && level < node.value)) {
 				setSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, 0);
@@ -133,7 +167,15 @@ void ChunkLightmap::updateSunlight() {
 		LightNode node = m_sunlightBfsQueue.front();
 		m_sunlightBfsQueue.pop();
 
-		LightNode surroundingNodes[6] = {
+		// If this block is opaque, don't propagate the light
+		u16 block = m_chunk->getBlock(node.x, node.y, node.z);
+		if (!(!block || block == BlockType::Water || block == BlockType::Glass || block == BlockType::Flower
+		/* || !Registry::getInstance().getBlock(block).isOpaque() */)) { // FIXME
+			setSunlight(node.x, node.y, node.z, 0);
+			continue;
+		}
+
+		gk::Vector3i surroundingNodes[6] = {
 			{node.x - 1, node.y,     node.z},
 			{node.x + 1, node.y,     node.z},
 			{node.x,     node.y - 1, node.z},
@@ -143,38 +185,19 @@ void ChunkLightmap::updateSunlight() {
 		};
 
 		u8 sunlightLevel = getSunlight(node.x, node.y, node.z);
-
-		// if (m_chunk->x() == -1 && m_chunk->y() == 0 && m_chunk->z() == -1 && node.y == 6 && node.x == 15 && node.z == 11)
-		// 	DEBUG("Sunlight at", node.x, node.y, node.z, "is", (int)sunlightLevel);
-
-		int globalNodeX = node.x + m_chunk->x() * CHUNK_WIDTH;
-		int globalNodeY = node.y + m_chunk->y() * CHUNK_HEIGHT;
-		int globalNodeZ = node.z + m_chunk->z() * CHUNK_DEPTH;
-		if (globalNodeX == -1 && globalNodeY == 6 && globalNodeZ == -5) {
-			DEBUG("Sunlight at", globalNodeX, globalNodeY, globalNodeZ, "is", (int)sunlightLevel);
-			DEBUG("Propagated from chunk", m_chunk->x(), m_chunk->y(), m_chunk->z(), "at pos", node.x, node.y, node.z);
-		}
-
-		for (const LightNode &surroundingNode : surroundingNodes) {
+		for (const gk::Vector3i &surroundingNode : surroundingNodes) {
 			if (getSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= sunlightLevel
 			|| (sunlightLevel == 15 && surroundingNode.y == node.y - 1)) {
 				u16 block = m_chunk->getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 				if (!block || block == BlockType::Water || block == BlockType::Glass || block == BlockType::Flower
 				/* || !Registry::getInstance().getBlock(block).isOpaque() */) { // FIXME
 
-					if (m_chunk->x() == 0 && m_chunk->y() == 0 && m_chunk->z() == 0 && surroundingNode.x == -1 && surroundingNode.y == 6 && surroundingNode.z == -5) {
-						DEBUG("wut, propagating light into block type", block);
-						DEBUG("is chunk initialized?", m_chunk->getSurroundingChunk(Chunk::Left));
-					}
-
 					if (sunlightLevel == 15 && surroundingNode.y == node.y - 1)
-						setSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel);
+						addSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel);
 					else if (sunlightLevel == 15 && surroundingNode.y == node.y + 1)
 						continue;
 					else
-						setSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel - 1);
-
-					m_sunlightBfsQueue.emplace(surroundingNode.x, surroundingNode.y, surroundingNode.z);
+						addSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel - 1);
 				}
 			}
 		}

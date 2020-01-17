@@ -56,9 +56,6 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 				chunk->setBlockRaw(x, y, z, block & 0xffff);
 				// chunk->setData(x, y, z, block >> 16);
 				chunk->lightmap().setLightData(x, y, z, light);
-
-				if (chunk->x() == -1 && chunk->y() == 0 && chunk->z() == -1 && y == 6 && x == 15 && z == 11)
-					DEBUG("At", x, y, z, "light is", (int)(light >> 4), "and block type is", block);
 			}
 		}
 	}
