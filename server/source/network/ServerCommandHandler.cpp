@@ -39,6 +39,7 @@ void ServerCommandHandler::setupCallbacks() {
 
 		auto &player = m_players.at(client.id);
 		player.setClientID(client.id);
+		player.setPosition(m_spawnPosition.x, m_spawnPosition.y, m_spawnPosition.z);
 
 		m_scriptEngine.lua()["init"](player);
 

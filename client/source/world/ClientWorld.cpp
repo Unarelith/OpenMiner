@@ -45,9 +45,9 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 		chunk = it.first->second.get();
 	}
 
-	for (u16 z = 0 ; z < CHUNK_DEPTH ; ++z) {
+	for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
 		for (u16 y = 0 ; y < CHUNK_HEIGHT ; ++y) {
-			for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
+			for (u16 z = 0 ; z < CHUNK_DEPTH ; ++z) {
 				u16 block;
 				u8 light;
 

@@ -30,12 +30,12 @@
 class Chunk : public gk::NonCopyable {
 	public:
 		enum {
-			Left,
-			Right,
-			Front,
-			Back,
-			Bottom,
-			Top
+			Left,    // cx - 1
+			Right,   // cx + 1
+			Front,   // cz - 1
+			Back,    // cz + 1
+			Bottom,  // cy - 1
+			Top      // cy + 1
 		};
 
 	public:
