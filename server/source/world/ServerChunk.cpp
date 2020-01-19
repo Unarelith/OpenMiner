@@ -22,14 +22,11 @@ void ServerChunk::generate() {
 		m_terrainGenerator.generate(*this);
 
 		m_isGenerated = true;
-		m_hasChanged = true;
 	}
 }
 
 void ServerChunk::updateLights() {
-	if (m_hasChanged) {
-		m_lightmap.updateLights();
-		m_hasChanged = false;
+	if (m_lightmap.updateLights()) {
 		m_isSent = false;
 	}
 }
