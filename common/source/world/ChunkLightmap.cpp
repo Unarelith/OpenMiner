@@ -32,7 +32,7 @@ void ChunkLightmap::addTorchlight(int x, int y, int z, int val) {
 	if(z >= CHUNK_DEPTH)  { if(m_chunk->getSurroundingChunk(3)) m_chunk->getSurroundingChunk(3)->lightmap().addTorchlight(x, y, z - CHUNK_DEPTH, val); return; }
 
 	setTorchlight(x, y, z, val);
-	m_lightBfsQueue.emplace(x, y, z);
+	m_torchlightBfsQueue.emplace(x, y, z);
 }
 
 void ChunkLightmap::addSunlight(int x, int y, int z, int val) {
@@ -55,7 +55,7 @@ void ChunkLightmap::removeTorchlight(int x, int y, int z) {
 	if(z < 0)             { if(m_chunk->getSurroundingChunk(2)) m_chunk->getSurroundingChunk(2)->lightmap().removeTorchlight(x, y, z + CHUNK_DEPTH); return; }
 	if(z >= CHUNK_DEPTH)  { if(m_chunk->getSurroundingChunk(3)) m_chunk->getSurroundingChunk(3)->lightmap().removeTorchlight(x, y, z - CHUNK_DEPTH); return; }
 
-	m_lightRemovalBfsQueue.emplace(x, y, z, getTorchlight(x, y, z));
+	m_torchlightRemovalBfsQueue.emplace(x, y, z, getTorchlight(x, y, z));
 	setTorchlight(x, y, z, 0); // FIXME
 }
 
@@ -71,23 +71,19 @@ void ChunkLightmap::removeSunlight(int x, int y, int z) {
 	setSunlight(x, y, z, 0); // FIXME
 }
 
-void ChunkLightmap::updateLights() {
-	updateTorchlight();
-	updateSunlight();
+bool ChunkLightmap::updateLights() {
+	bool torchlightUpdated = updateTorchlight();
+	bool sunlightUpdated = updateSunlight();
+
+	return torchlightUpdated || sunlightUpdated;
 }
 
-void ChunkLightmap::updateTorchlight() {
-	while (!m_lightRemovalBfsQueue.empty()) {
-		LightRemovalNode node = m_lightRemovalBfsQueue.front();
-		m_lightRemovalBfsQueue.pop();
+bool ChunkLightmap::updateTorchlight() {
+	bool lightUpdated = false;
 
-		// If this block is opaque, don't propagate the light
-		u16 block = m_chunk->getBlock(node.x, node.y, node.z);
-		if (!(!block || block == BlockType::Water || block == BlockType::Glass || block == BlockType::Flower
-		/* || !Registry::getInstance().getBlock(block).isOpaque() */)) { // FIXME
-			setTorchlight(node.x, node.y, node.z, 0);
-			continue;
-		}
+	while (!m_torchlightRemovalBfsQueue.empty()) {
+		LightRemovalNode node = m_torchlightRemovalBfsQueue.front();
+		m_torchlightRemovalBfsQueue.pop();
 
 		gk::Vector3i surroundingNodes[6] = {
 			{node.x - 1, node.y,     node.z},
@@ -103,16 +99,35 @@ void ChunkLightmap::updateTorchlight() {
 			if (level != 0 && level < node.value) {
 				setTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, 0);
 
-				m_lightRemovalBfsQueue.emplace(surroundingNode.x, surroundingNode.y, surroundingNode.z, level);
+				m_torchlightRemovalBfsQueue.emplace(surroundingNode.x, surroundingNode.y, surroundingNode.z, level);
+
+				lightUpdated = true;
 			}
 			else if (level >= node.value) {
-				m_lightBfsQueue.emplace(surroundingNode.x, surroundingNode.y, surroundingNode.z);
+				m_torchlightBfsQueue.emplace(surroundingNode.x, surroundingNode.y, surroundingNode.z);
+
+				lightUpdated = true;
 			}
 		}
 	}
-	while (!m_lightBfsQueue.empty()) {
-		LightNode node = m_lightBfsQueue.front();
-		m_lightBfsQueue.pop();
+
+	while (!m_torchlightBfsQueue.empty()) {
+		LightNode node = m_torchlightBfsQueue.front();
+		m_torchlightBfsQueue.pop();
+
+		// FIXME: This doesn't check if the block is an actual light source
+		//        so if this block is a light source, it'll just remove the light
+
+		// If this block is opaque, don't propagate the light
+		// u16 block = m_chunk->getBlock(node.x, node.y, node.z);
+		// if (!(!block || block == BlockType::Water || block == BlockType::Glass || block == BlockType::Flower
+		// /* || !Registry::getInstance().getBlock(block).isOpaque() */)) { // FIXME
+		// 	setTorchlight(node.x, node.y, node.z, 0);
+        //
+		// 	lightUpdated = true; // FIXME
+        //
+		// 	continue;
+		// }
 
 		gk::Vector3i surroundingNodes[6] = {
 			{node.x - 1, node.y,     node.z},
@@ -130,13 +145,19 @@ void ChunkLightmap::updateTorchlight() {
 				if (!block || block == BlockType::Water || block == BlockType::Glass || block == BlockType::Flower
 				/* || !Registry::getInstance().getBlock(block).isOpaque() */) { // FIXME
 					addTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, lightLevel - 1);
+
+					lightUpdated = true;
 				}
 			}
 		}
 	}
+
+	return lightUpdated;
 }
 
-void ChunkLightmap::updateSunlight() {
+bool ChunkLightmap::updateSunlight() {
+	bool lightUpdated = false;
+
 	while (!m_sunlightRemovalBfsQueue.empty()) {
 		LightRemovalNode node = m_sunlightRemovalBfsQueue.front();
 		m_sunlightRemovalBfsQueue.pop();
@@ -156,9 +177,13 @@ void ChunkLightmap::updateSunlight() {
 				setSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, 0);
 
 				m_sunlightRemovalBfsQueue.emplace(surroundingNode.x, surroundingNode.y, surroundingNode.z, level);
+
+				lightUpdated = true;
 			}
 			else if (level >= node.value) {
 				m_sunlightBfsQueue.emplace(surroundingNode.x, surroundingNode.y, surroundingNode.z);
+
+				lightUpdated = true;
 			}
 		}
 	}
@@ -172,6 +197,11 @@ void ChunkLightmap::updateSunlight() {
 		if (!(!block || block == BlockType::Water || block == BlockType::Glass || block == BlockType::Flower
 		/* || !Registry::getInstance().getBlock(block).isOpaque() */)) { // FIXME
 			setSunlight(node.x, node.y, node.z, 0);
+
+			// FIXME: This only reverts an addSunlight that added light in a non-generated chunk
+			//        I should avoid setting the sunlight rather than reverting it
+			lightUpdated = true;
+
 			continue;
 		}
 
@@ -186,22 +216,33 @@ void ChunkLightmap::updateSunlight() {
 
 		u8 sunlightLevel = getSunlight(node.x, node.y, node.z);
 		for (const gk::Vector3i &surroundingNode : surroundingNodes) {
-			if (getSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= sunlightLevel
-			|| (sunlightLevel == 15 && surroundingNode.y == node.y - 1)) {
+			u8 neighbourSunlightLevel = getSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z);
+			if (neighbourSunlightLevel + 2 <= sunlightLevel
+			|| (sunlightLevel == 15 && neighbourSunlightLevel != 15 && surroundingNode.y == node.y - 1)) {
 				u16 block = m_chunk->getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 				if (!block || block == BlockType::Water || block == BlockType::Glass || block == BlockType::Flower
 				/* || !Registry::getInstance().getBlock(block).isOpaque() */) { // FIXME
 
-					if (sunlightLevel == 15 && surroundingNode.y == node.y - 1)
+					if (sunlightLevel == 15 && surroundingNode.y == node.y - 1) {
 						addSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel);
+
+						lightUpdated = true;
+					}
 					else if (sunlightLevel == 15 && surroundingNode.y == node.y + 1)
 						continue;
-					else
+					else {
 						addSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel - 1);
+
+						// FIXME: If addSunlight changes something in a surrounding chunk
+						//        then this flag should be set on this other chunk
+						lightUpdated = true;
+					}
 				}
 			}
 		}
 	}
+
+	return lightUpdated;
 }
 
 u8 ChunkLightmap::getSunlight(int x, int y, int z) const {
@@ -234,8 +275,6 @@ void ChunkLightmap::setLightData(int x, int y, int z, u8 val) {
 	updateSurroundingChunks(x, y, z);
 }
 
-// #include <gk/core/Debug.hpp> // FIXME
-
 void ChunkLightmap::setSunlight(int x, int y, int z, u8 val) {
 	if(x < 0)             { if(m_chunk->getSurroundingChunk(0)) m_chunk->getSurroundingChunk(0)->lightmap().setSunlight(x + CHUNK_WIDTH, y, z, val); return; }
 	if(x >= CHUNK_WIDTH)  { if(m_chunk->getSurroundingChunk(1)) m_chunk->getSurroundingChunk(1)->lightmap().setSunlight(x - CHUNK_WIDTH, y, z, val); return; }
@@ -249,10 +288,6 @@ void ChunkLightmap::setSunlight(int x, int y, int z, u8 val) {
 	m_chunk->setChanged(true);
 
 	updateSurroundingChunks(x, y, z);
-
-	// if (m_chunk->x() == 1 && m_chunk->z() == 0 && x == 0 && z == 14)
-	// if (m_chunk->x() == 1 && m_chunk->z() == 0 && y == 20 && z == 14)
-	// 	DEBUG("In chunk", m_chunk->x(), m_chunk->y(), m_chunk->z(), "setting sunlight at block", x, y, z, "to", (int)val);
 };
 
 void ChunkLightmap::setTorchlight(int x, int y, int z, u8 val) {

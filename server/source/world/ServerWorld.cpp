@@ -61,6 +61,8 @@ void ServerWorld::sendSpawnData(Client &client, ServerPlayer &player) {
 
 		// If the chunk is already generated, update lights and send it
 		if (chunk->isGenerated()) {
+			// DEBUG("Updating lights in chunk at", chunk->x(), chunk->y(), chunk->z());
+
 			chunk->updateLights();
 
 			if (!chunk->isSent())
