@@ -36,7 +36,7 @@ class ServerWorld : public World {
 
 	private:
 		std::unordered_map<gk::Vector3i, std::unique_ptr<ServerChunk>> m_chunks;
-		std::unordered_map<u16, std::queue<ServerChunk *>> m_chunkQueues;
+		std::unordered_map<u16, std::pair<std::queue<ServerChunk *>, u8>> m_chunkQueues;
 
 		u32 m_lastTick = 0;
 };
