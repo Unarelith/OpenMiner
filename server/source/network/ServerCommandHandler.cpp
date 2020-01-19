@@ -35,10 +35,9 @@ void ServerCommandHandler::setupCallbacks() {
 			client.tcpSocket->send(spawnPacket);
 		}
 
-		m_players.emplace(client.id, ServerPlayer{});
+		m_players.emplace(client.id, client);
 
 		auto &player = m_players.at(client.id);
-		player.setClientID(client.id);
 		player.setPosition(m_spawnPosition.x, m_spawnPosition.y, m_spawnPosition.z);
 
 		m_scriptEngine.lua()["init"](player);
@@ -54,7 +53,7 @@ void ServerCommandHandler::setupCallbacks() {
 		spawnPacket << m_spawnPosition.x << m_spawnPosition.y << m_spawnPosition.z;
 		m_server.sendToAllClients(spawnPacket);
 
-		m_world.sendSpawnData(client, player);
+		// m_world.sendSpawnData(client, player);
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerInvUpdate, [this](Client &client, sf::Packet &packet) {

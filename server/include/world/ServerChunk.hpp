@@ -38,9 +38,13 @@ class ServerChunk : public Chunk {
 		bool isSent() const { return m_isSent; }
 		void setSent(bool isSent) { m_isSent = isSent; }
 
+		bool isLightGenerated() const { return m_isLightGenerated; }
+		void setLightGenerated(bool isLightGenerated) { m_isLightGenerated = isLightGenerated; }
+
 	private:
 		bool m_isSent = false;
 		bool m_isGenerated = false;
+		bool m_isLightGenerated = false;
 
 		TerrainGenerator m_terrainGenerator;
 };
