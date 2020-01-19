@@ -15,9 +15,16 @@
 #define SERVERPLAYER_HPP_
 
 #include "Player.hpp"
+#include "ServerInfo.hpp"
 
 class ServerPlayer : public Player {
 	public:
+		ServerPlayer(Client &client);
+
+		const Client &client() const { return m_client; }
+
+	private:
+		Client &m_client;
 };
 
 #endif // SERVERPLAYER_HPP_
