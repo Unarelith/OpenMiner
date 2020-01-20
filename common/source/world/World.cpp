@@ -58,8 +58,8 @@ u16 World::getData(int x, int y, int z) const {
 	return 0;
 }
 
-void World::setData(int x, int y, int z, u16 id) const {
+void World::setData(int x, int y, int z, u16 data) const {
 	Chunk *chunk = getChunkAtBlockPos(x, y, z);
 	if (chunk)
-		chunk->setBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), id);
+		chunk->setData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), data);
 }

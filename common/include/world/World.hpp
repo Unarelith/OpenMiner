@@ -30,7 +30,7 @@ class World {
 		u16 getBlock(int x, int y, int z) const;
 		void setBlock(int x, int y, int z, u16 id) const;
 		u16 getData(int x, int y, int z) const;
-		void setData(int x, int y, int z, u16 id) const;
+		void setData(int x, int y, int z, u16 data) const;
 
 		static bool isReloadRequested;
 };
