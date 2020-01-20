@@ -253,9 +253,6 @@ u8 ChunkLightmap::getSunlight(int x, int y, int z) const {
 	if(z < 0)             return m_chunk->getSurroundingChunk(2) ? m_chunk->getSurroundingChunk(2)->lightmap().getSunlight(x, y, z + CHUNK_DEPTH) : 15;
 	if(z >= CHUNK_DEPTH)  return m_chunk->getSurroundingChunk(3) ? m_chunk->getSurroundingChunk(3)->lightmap().getSunlight(x, y, z - CHUNK_DEPTH) : 15;
 
-	if (!m_chunk->isInitialized())
-		return 15;
-
 	return (m_lightMap[x][y][z] >> 4) & 0xf;
 }
 
@@ -266,9 +263,6 @@ u8 ChunkLightmap::getTorchlight(int x, int y, int z) const {
 	if(y >= CHUNK_HEIGHT) return m_chunk->getSurroundingChunk(5) ? m_chunk->getSurroundingChunk(5)->lightmap().getTorchlight(x, y - CHUNK_HEIGHT, z) : 0;
 	if(z < 0)             return m_chunk->getSurroundingChunk(2) ? m_chunk->getSurroundingChunk(2)->lightmap().getTorchlight(x, y, z + CHUNK_DEPTH) : 0;
 	if(z >= CHUNK_DEPTH)  return m_chunk->getSurroundingChunk(3) ? m_chunk->getSurroundingChunk(3)->lightmap().getTorchlight(x, y, z - CHUNK_DEPTH) : 0;
-
-	if (!m_chunk->isInitialized())
-		return 15;
 
 	return m_lightMap[x][y][z] & 0xf;
 }

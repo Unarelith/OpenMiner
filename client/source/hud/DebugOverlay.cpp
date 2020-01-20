@@ -28,14 +28,22 @@ DebugOverlay::DebugOverlay(const ClientPlayer &player) : m_player(player) {
 }
 
 void DebugOverlay::update() {
+	s32 pcx = std::floor(m_player.x() / CHUNK_WIDTH);
+	s32 pcy = std::floor(m_player.y() / CHUNK_HEIGHT);
+	s32 pcz = std::floor(m_player.z() / CHUNK_DEPTH);
+
 	std::stringstream stream;
-	stream << "x: " << floorf(m_player.x()) << " | ";
-	stream << "y: " << floorf(m_player.y()) << " | ";
-	stream << "z: " << floorf(m_player.z());
+	stream << "x: " << std::floor(m_player.x()) << " | ";
+	stream << "y: " << std::floor(m_player.y()) << " | ";
+	stream << "z: " << std::floor(m_player.z());
 	stream << '\n';
-	stream << "cx: " << floorf(m_player.x() / CHUNK_WIDTH) << " | ";
-	stream << "cy: " << floorf(m_player.y() / CHUNK_HEIGHT) << " | ";
-	stream << "cz: " << floorf(m_player.z() / CHUNK_DEPTH);
+	stream << "rx: " << int(std::floor(m_player.x()) + std::abs(pcx) * CHUNK_WIDTH) % CHUNK_WIDTH << " | ";
+	stream << "ry: " << int(std::floor(m_player.y()) + std::abs(pcy) * CHUNK_HEIGHT) % CHUNK_HEIGHT  << " | ";
+	stream << "rz: " << int(std::floor(m_player.z()) + std::abs(pcz) * CHUNK_DEPTH) % CHUNK_DEPTH;
+	stream << '\n';
+	stream << "cx: " << pcx << " | ";
+	stream << "cy: " << pcy << " | ";
+	stream << "cz: " << pcz;
 
 	m_positionText.setText(stream.str());
 }

@@ -36,7 +36,7 @@ void ServerWorld::update(Server &server, std::unordered_map<u16, ServerPlayer> &
 				for (auto &client : server.info().clients())
 					sendChunkData(client, it.second.get());
 
-				// DEBUG("Chunk updated at", it.second->x(), it.second->y(), it.second->z());
+				DEBUG("Chunk updated at", it.second->x(), it.second->y(), it.second->z());
 			}
 		}
 	}

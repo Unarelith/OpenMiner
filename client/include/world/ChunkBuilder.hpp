@@ -50,7 +50,7 @@ class ChunkBuilder {
 			Torch
 		};
 
-		float getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const glm::vec3 &normal, const ClientChunk &chunk);
+		u8 getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const glm::vec3 &normal, const ClientChunk &chunk);
 
 		std::array<std::vector<gk::Vertex>, layers> m_vertices;
 
