@@ -333,7 +333,21 @@ inline u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const 
 	return 3 - (side1 + side2 + corner);
 }
 
-inline float ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const glm::vec3 &normal, const ClientChunk &chunk) {
+inline u8 ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const glm::vec3 &normal, const ClientChunk &chunk) {
+	std::function<s8(const Chunk *chunk, s8, s8, s8)> getLight = [&](const Chunk *chunk, s8 x, s8 y, s8 z) -> s8 {
+		if(x < 0)             return chunk->getSurroundingChunk(0)->isInitialized() ? getLight(chunk->getSurroundingChunk(0), x + CHUNK_WIDTH, y, z) : -1;
+		if(x >= CHUNK_WIDTH)  return chunk->getSurroundingChunk(1)->isInitialized() ? getLight(chunk->getSurroundingChunk(1), x - CHUNK_WIDTH, y, z) : -1;
+		if(y < 0)             return chunk->getSurroundingChunk(4)->isInitialized() ? getLight(chunk->getSurroundingChunk(4), x, y + CHUNK_HEIGHT, z) : -1;
+		if(y >= CHUNK_HEIGHT) return chunk->getSurroundingChunk(5)->isInitialized() ? getLight(chunk->getSurroundingChunk(5), x, y - CHUNK_HEIGHT, z) : -1;
+		if(z < 0)             return chunk->getSurroundingChunk(2)->isInitialized() ? getLight(chunk->getSurroundingChunk(2), x, y, z + CHUNK_DEPTH) : -1;
+		if(z >= CHUNK_DEPTH)  return chunk->getSurroundingChunk(3)->isInitialized() ? getLight(chunk->getSurroundingChunk(3), x, y, z - CHUNK_DEPTH) : -1;
+
+		if (light == Light::Sun)
+			return chunk->isInitialized() ? chunk->lightmap().getSunlight(x, y, z) : -1;
+		else
+			return chunk->isInitialized() ? chunk->lightmap().getTorchlight(x, y, z) : -1;
+	};
+
 	gk::Vector3i offset = getOffsetFromVertex(i, j);
 
 	gk::Vector3i minOffset{
@@ -342,15 +356,30 @@ inline float ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i
 		(normal.z != 0) ? offset.z : 0
 	};
 
-	if (light == Light::Sun)
-		return (chunk.lightmap().getSunlight(x + minOffset.x, y + offset.y,    z + minOffset.z)
-		      + chunk.lightmap().getSunlight(x + offset.x,    y + minOffset.y, z + minOffset.z)
-		      + chunk.lightmap().getSunlight(x + minOffset.x, y + minOffset.y, z + offset.z)
-		      + chunk.lightmap().getSunlight(x + offset.x,    y + offset.y,    z + offset.z)) / 4.0f;
+	// Get light values for surrounding nodes
+	s8 lightValues[4] = {
+		getLight(&chunk, x + minOffset.x, y + offset.y,    z + minOffset.z),
+		getLight(&chunk, x + offset.x,    y + minOffset.y, z + minOffset.z),
+		getLight(&chunk, x + minOffset.x, y + minOffset.y, z + offset.z),
+		getLight(&chunk, x + offset.x,    y + offset.y,    z + offset.z),
+	};
+
+	u8 count = 0, total = 0;
+	for (u8 i = 0 ; i < 4 ; ++i) {
+		// Fix light approximation
+		// if (i == 3 && lightValues[i] > lightValues[0] && !lightValues[1] && !lightValues[2])
+		// 	continue;
+
+		// If the chunk is initialized, add the light value to the total
+		if (lightValues[i] != -1) {
+			total += lightValues[i];
+			++count;
+		}
+	}
+
+	if (count)
+		return total / count;
 	else
-		return (chunk.lightmap().getTorchlight(x + minOffset.x, y + offset.y,    z + minOffset.z)
-		      + chunk.lightmap().getTorchlight(x + offset.x,    y + minOffset.y, z + minOffset.z)
-		      + chunk.lightmap().getTorchlight(x + minOffset.x, y + minOffset.y, z + offset.z)
-		      + chunk.lightmap().getTorchlight(x + offset.x,    y + offset.y,    z + offset.z)) / 4.0f;
+		return 0;
 }
 

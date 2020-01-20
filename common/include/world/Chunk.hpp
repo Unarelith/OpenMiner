@@ -56,6 +56,7 @@ class Chunk : public gk::NonCopyable {
 		s32 z() const { return m_z; }
 
 		Chunk *getSurroundingChunk(u8 i) { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
+		const Chunk *getSurroundingChunk(u8 i) const { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
 		void setSurroundingChunk(u8 i, Chunk *chunk) { if (i < 6) m_surroundingChunks[i] = chunk; }
 
 		bool areAllNeighboursLoaded() const;

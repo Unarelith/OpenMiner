@@ -16,9 +16,8 @@
 #include "ClientChunk.hpp"
 
 void ClientChunk::update() {
-	if (m_hasChanged) {
+	if (m_lightmap.updateLights() || m_hasChanged) {
 		m_hasChanged = false;
-		m_lightmap.updateLights();
 
 		m_verticesCount = m_builder.buildChunk(*this, m_vbo);
 	}
