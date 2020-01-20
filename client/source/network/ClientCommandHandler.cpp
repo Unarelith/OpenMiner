@@ -73,6 +73,13 @@ void ClientCommandHandler::sendBlockInvUpdate(Inventory &inventory) {
 	m_client.send(packet);
 }
 
+void ClientCommandHandler::sendChunkRequest(s32 chunkX, s32 chunkY, s32 chunkZ) {
+	sf::Packet packet;
+	packet << Network::Command::ChunkRequest;
+	packet << chunkX << chunkY << chunkZ;
+	m_client.send(packet);
+}
+
 void ClientCommandHandler::setupCallbacks() {
 	m_client.setCommandCallback(Network::Command::RegistryData, [this](sf::Packet &packet) {
 		Registry::getInstance().deserialize(packet);
@@ -125,6 +132,8 @@ void ClientCommandHandler::setupCallbacks() {
 			m_playerBoxes.at(clientId).setPosition(pos.x, pos.y, pos.z);
 			m_playerBoxes.at(clientId).setClientID(clientId);
 		}
+
+		m_world.init(pos.x, pos.y, pos.z);
 	});
 
 	m_client.setCommandCallback(Network::Command::BlockGUIData, [this](sf::Packet &packet) {

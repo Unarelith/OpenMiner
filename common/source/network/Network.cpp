@@ -27,6 +27,7 @@ std::string Network::commandToString(Network::Command command) {
 		{Network::Command::KeyState,         "KeyState"},
 
 		{Network::Command::ChunkData,        "ChunkData"},
+		{Network::Command::ChunkRequest,     "ChunkRequest"},
 
 		{Network::Command::PlayerPlaceBlock, "PlayerPlaceBlock"},
 		{Network::Command::PlayerDigBlock,   "PlayerDigBlock"},

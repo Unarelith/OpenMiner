@@ -32,19 +32,11 @@ class ServerChunk : public Chunk {
 		void updateLights();
 		void tick(std::unordered_map<u16, ServerPlayer> &players, World &world, Server &server);
 
-		bool isGenerated() const { return m_isGenerated; }
-		void setGenerated(bool isGenerated) { m_isGenerated = isGenerated; }
-
 		bool isSent() const { return m_isSent; }
 		void setSent(bool isSent) { m_isSent = isSent; }
 
-		bool isLightGenerated() const { return m_isLightGenerated; }
-		void setLightGenerated(bool isLightGenerated) { m_isLightGenerated = isLightGenerated; }
-
 	private:
 		bool m_isSent = false;
-		bool m_isGenerated = false;
-		bool m_isLightGenerated = false;
 
 		TerrainGenerator m_terrainGenerator;
 };
