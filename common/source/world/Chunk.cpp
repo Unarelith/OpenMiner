@@ -176,6 +176,15 @@ bool Chunk::areAllNeighboursLoaded() const {
 		&& m_surroundingChunks[Chunk::Top];
 }
 
+bool Chunk::areAllNeighboursInitialized() const {
+	return m_surroundingChunks[Chunk::Left]   && m_surroundingChunks[Chunk::Left]->isInitialized()
+		&& m_surroundingChunks[Chunk::Right]  && m_surroundingChunks[Chunk::Right]->isInitialized()
+		&& m_surroundingChunks[Chunk::Front]  && m_surroundingChunks[Chunk::Front]->isInitialized()
+		&& m_surroundingChunks[Chunk::Back]   && m_surroundingChunks[Chunk::Back]->isInitialized()
+		&& m_surroundingChunks[Chunk::Bottom] && m_surroundingChunks[Chunk::Bottom]->isInitialized()
+		&& m_surroundingChunks[Chunk::Top]    && m_surroundingChunks[Chunk::Top]->isInitialized();
+}
+
 // FIXME
 // void Chunk::updateNeighbours(int x, int y, int z) {
 // 	int neighbours[7][3] = {

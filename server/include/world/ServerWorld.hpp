@@ -29,14 +29,15 @@ class ServerWorld : public World {
 
 		void update(Server &server, std::unordered_map<u16, ServerPlayer> &players);
 
-		void sendChunks(const ServerPlayer &player);
+		void createChunkNeighbours(ServerChunk *chunk);
 		void sendChunkData(const Client &client, ServerChunk *chunk);
+		void sendRequestedData(Client &client, s32 cx, s32 cy, s32 cz);
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
 
 	private:
 		std::unordered_map<gk::Vector3i, std::unique_ptr<ServerChunk>> m_chunks;
-		std::unordered_map<u16, std::pair<std::queue<ServerChunk *>, u8>> m_chunkQueues;
+		std::unordered_map<u16, std::queue<ServerChunk *>> m_chunkQueues;
 
 		u32 m_lastTick = 0;
 };

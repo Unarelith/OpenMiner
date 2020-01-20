@@ -101,7 +101,8 @@ void ClientPlayer::processInputs() {
 }
 
 void ClientPlayer::updatePosition(const ClientWorld &world) {
-	if (!Config::isFlyModeEnabled && world.getChunkAtBlockPos(m_x, m_y - 0.2, m_z)) {
+	ClientChunk *chunk = (ClientChunk *)world.getChunkAtBlockPos(m_x, m_y - 0.2, m_z);
+	if (!Config::isFlyModeEnabled && chunk && chunk->isInitialized()) {
 		m_velocity.y -= m_gravity; // Gravity
 
 		if (m_velocity.y < -m_jumpSpeed) // Jump max accel

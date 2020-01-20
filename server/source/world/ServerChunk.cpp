@@ -18,10 +18,10 @@
 #include "World.hpp"
 
 void ServerChunk::generate() {
-	if (!m_isGenerated) {
+	if (!m_isInitialized) {
 		m_terrainGenerator.generate(*this);
 
-		m_isGenerated = true;
+		m_isInitialized = true;
 	}
 }
 

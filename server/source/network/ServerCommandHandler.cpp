@@ -56,6 +56,13 @@ void ServerCommandHandler::setupCallbacks() {
 		// m_world.sendSpawnData(client, player);
 	});
 
+	m_server.setCommandCallback(Network::Command::ChunkRequest, [this](Client &client, sf::Packet &packet) {
+		s32 cx, cy, cz;
+		packet >> cx >> cy >> cz;
+
+		m_world.sendRequestedData(client, cx, cy, cz);
+	});
+
 	m_server.setCommandCallback(Network::Command::PlayerInvUpdate, [this](Client &client, sf::Packet &packet) {
 		u16 clientId;
 		packet >> clientId;

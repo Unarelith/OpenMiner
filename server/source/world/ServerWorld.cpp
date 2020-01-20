@@ -26,17 +26,13 @@ void ServerWorld::update(Server &server, std::unordered_map<u16, ServerPlayer> &
 	if (m_lastTick < gk::GameClock::getTicks() / 50) {
 		m_lastTick = gk::GameClock::getTicks() / 50;
 
-		for (auto &it : players) {
-			sendChunks(it.second);
-		}
-
 		for (auto &it : m_chunks) {
 			it.second->tick(players, *this, server);
 
-			if (it.second->isLightGenerated())
+			if (it.second->areAllNeighboursInitialized())
 				it.second->updateLights();
 
-			if (it.second->isGenerated() && !it.second->isSent()) {
+			if (it.second->isInitialized() && !it.second->isSent()) {
 				for (auto &client : server.info().clients())
 					sendChunkData(client, it.second.get());
 
@@ -46,121 +42,47 @@ void ServerWorld::update(Server &server, std::unordered_map<u16, ServerPlayer> &
 	}
 }
 
-void ServerWorld::sendChunks(const ServerPlayer &player) {
-	// Player chunk pos
-	int pcx = std::floor(player.x() / CHUNK_WIDTH);
-	int pcy = std::floor(player.y() / CHUNK_HEIGHT);
-	int pcz = std::floor(player.z() / CHUNK_DEPTH);
+void ServerWorld::createChunkNeighbours(ServerChunk *chunk) {
+	gk::Vector3i surroundingChunks[6] = {
+		{chunk->x() - 1, chunk->y(),     chunk->z()},
+		{chunk->x() + 1, chunk->y(),     chunk->z()},
+		{chunk->x(),     chunk->y(),     chunk->z() - 1},
+		{chunk->x(),     chunk->y(),     chunk->z() + 1},
+		{chunk->x(),     chunk->y() - 1, chunk->z()},
+		{chunk->x(),     chunk->y() + 1, chunk->z()},
+	};
 
-	std::queue<ServerChunk *> *chunkQueue;
-	u8 *currentDistance;
-
-	auto it = m_chunkQueues.find(player.clientID());
-	if (it == m_chunkQueues.end()) {
-		auto it = m_chunkQueues.emplace(player.clientID(), std::make_pair(std::queue<ServerChunk *>{}, 1));
-		chunkQueue = &it.first->second.first;
-		currentDistance = &it.first->second.second;
-	}
-	else {
-		chunkQueue = &it->second.first;
-		currentDistance = &it->second.second;
-	}
-
-	// Create a chunk at the current player position if it doesn't exist
-	ServerChunk *chunk = (ServerChunk *)getChunk(pcx, pcy, pcz);
-	if (!chunk) {
-		auto it = m_chunks.emplace(gk::Vector3i{pcx, pcy, pcz}, new ServerChunk(pcx, pcy, pcz));
-		chunk = it.first->second.get();
-
-		// DEBUG("Creating chunk at", chunk->x(), chunk->y(), chunk->z());
-	}
-
-	// Add the chunk to the queue
-	chunkQueue->emplace(chunk);
-
-	// Load surrounding chunks, 4 at a time
-	u8 chunksSent = 0;
-	while (chunksSent < 4 && !chunkQueue->empty()) {
-		ServerChunk *chunk = chunkQueue->front();
-		chunkQueue->pop();
-
-		// If the chunk is already generated, update lights and send it
-		if (chunk->isGenerated()) {
-			// DEBUG("Updating lights in chunk at", chunk->x(), chunk->y(), chunk->z());
-
-			chunk->updateLights();
-			chunk->setLightGenerated(true);
-
-			sendChunkData(player.client(), chunk);
-		}
-
-		// DEBUG("Processing chunk in queue at", chunk->x(), chunk->y(), chunk->z());
-
-		gk::Vector3i surroundingChunks[6] = {
-			{chunk->x() - 1, chunk->y(),     chunk->z()},
-			{chunk->x() + 1, chunk->y(),     chunk->z()},
-			{chunk->x(),     chunk->y(),     chunk->z() - 1},
-			{chunk->x(),     chunk->y(),     chunk->z() + 1},
-			{chunk->x(),     chunk->y() - 1, chunk->z()},
-			{chunk->x(),     chunk->y() + 1, chunk->z()},
-		};
-
-		for (u8 i = 0 ; i < 6 ; ++i) {
-			// Check if this neighbour already exists, if yes then skip it
-			ServerChunk *neighbour = (ServerChunk *)getChunk(surroundingChunks[i].x, surroundingChunks[i].y, surroundingChunks[i].z);
-			if (!neighbour) {
-				// Create our neighbour
-				auto it = m_chunks.emplace(
-					gk::Vector3i{
-						surroundingChunks[i].x,
-						surroundingChunks[i].y,
-						surroundingChunks[i].z
-					},
-					new ServerChunk{
-						surroundingChunks[i].x,
-						surroundingChunks[i].y,
-						surroundingChunks[i].z
-					}
-				);
-
-				// Get the created neighbour
-				neighbour = it.first->second.get();
-			}
-
-			// DEBUG("Creating chunk at", neighbour->x(), neighbour->y(), neighbour->z());
-
+	for (u8 i = 0 ; i < 6 ; ++i) {
+		// Check if this neighbour already exists, if yes then skip it
+		ServerChunk *neighbour = (ServerChunk *)getChunk(surroundingChunks[i].x, surroundingChunks[i].y, surroundingChunks[i].z);
+		if (neighbour) {
 			// Assign surrounding chunk pointers
 			chunk->setSurroundingChunk(i, neighbour);
 			neighbour->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, chunk);
 
-			// Compute distance to player chunk
-			int dx = std::abs(surroundingChunks[i].x - pcx);
-			int dy = std::abs(surroundingChunks[i].y - pcy);
-			int dz = std::abs(surroundingChunks[i].z - pcz);
-			int distance = std::max(dx, std::max(dy, dz)); // FIXME
+			continue;
+		}
 
-			// If the chunk is close enough, add it to the queue
-			if (distance <= *currentDistance || (!chunk->isGenerated() && distance < Config::renderDistance))
-				chunkQueue->emplace(neighbour);
-			else {
-				++(*currentDistance);
-				if (*currentDistance >= Config::renderDistance)
-					*currentDistance = 1;
+		// Create our neighbour
+		auto it = m_chunks.emplace(
+			gk::Vector3i{
+				surroundingChunks[i].x,
+				surroundingChunks[i].y,
+				surroundingChunks[i].z
+			},
+			new ServerChunk{
+				surroundingChunks[i].x,
+				surroundingChunks[i].y,
+				surroundingChunks[i].z
 			}
-		}
+		);
 
-		// DEBUG("Generating chunk at", chunk->x(), chunk->y(), chunk->z());
+		// Get the created neighbour
+		neighbour = it.first->second.get();
 
-		// All neighbours are created, so generate the chunk, propagate the light and send it
-		if (!chunk->isGenerated()) {
-			chunk->generate();
-			chunk->updateLights();
-			sendChunkData(player.client(), chunk);
-
-			chunkQueue->emplace(chunk);
-		}
-
-		++chunksSent;
+		// Assign surrounding chunk pointers
+		chunk->setSurroundingChunk(i, neighbour);
+		neighbour->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, chunk);
 	}
 }
 
@@ -181,6 +103,23 @@ void ServerWorld::sendChunkData(const Client &client, ServerChunk *chunk) {
 	chunk->setSent(true);
 
 	// std::cout << "Chunk at (" << chunk->x() << ", " << chunk->y() << ", " << chunk->z() << ") sent to client" << std::endl;
+}
+
+void ServerWorld::sendRequestedData(Client &client, int cx, int cy, int cz) {
+	ServerChunk *chunk = (ServerChunk *)getChunk(cx, cy, cz);
+	if (!chunk) {
+		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ServerChunk(cx, cy, cz));
+		chunk = it.first->second.get();
+
+		// Create our neighbours so that we can generate and process lights correctly
+		createChunkNeighbours(chunk);
+	}
+
+	// Generate and update lights
+	chunk->generate();
+	chunk->updateLights();
+
+	sendChunkData(client, chunk);
 }
 
 Chunk *ServerWorld::getChunk(int cx, int cy, int cz) const {

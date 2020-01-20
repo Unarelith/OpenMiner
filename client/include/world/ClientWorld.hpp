@@ -26,7 +26,9 @@ class ClientWorld : public World, public gk::Drawable {
 	public:
 		ClientWorld();
 
+		void init(float playerX, float playerY, float playerZ);
 		void update();
+		void sendChunkRequests();
 
 		void receiveChunkData(sf::Packet &packet);
 
@@ -35,6 +37,8 @@ class ClientWorld : public World, public gk::Drawable {
 		void setClient(ClientCommandHandler &client) { m_client = &client; }
 
 	private:
+		void createChunkNeighbours(ClientChunk *chunk);
+
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		std::unordered_map<gk::Vector3i, std::unique_ptr<ClientChunk>> m_chunks;
@@ -42,6 +46,11 @@ class ClientWorld : public World, public gk::Drawable {
 		gk::Texture &m_texture;
 
 		ClientCommandHandler *m_client = nullptr;
+
+		mutable float m_ud;
+		mutable s32 m_ux;
+		mutable s32 m_uy;
+		mutable s32 m_uz;
 };
 
 #endif // CLIENTWORLD_HPP_
