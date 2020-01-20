@@ -17,10 +17,11 @@
 #include "Text.hpp"
 
 class ClientPlayer;
+class ClientWorld;
 
 class DebugOverlay : public gk::Transformable, public gk::Drawable {
 	public:
-		DebugOverlay(const ClientPlayer &player);
+		DebugOverlay(const ClientPlayer &player, const ClientWorld &world);
 
 		void update();
 
@@ -28,6 +29,7 @@ class DebugOverlay : public gk::Transformable, public gk::Drawable {
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		const ClientPlayer &m_player;
+		const ClientWorld &m_world;
 
 		Text m_versionText;
 		Text m_positionText;

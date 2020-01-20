@@ -34,6 +34,7 @@ void ClientWorld::init(float playerX, float playerY, float playerZ) {
 }
 
 void ClientWorld::update() {
+	// Update loaded chunks
 	for (auto &it : m_chunks) {
 		if (World::isReloadRequested)
 			it.second->setChanged(true);
@@ -158,7 +159,8 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		                 * glm::vec4(CHUNK_WIDTH / 2, CHUNK_HEIGHT / 2, CHUNK_DEPTH / 2, 1);
 
 		// Nope, too far, don't render it
-		if(glm::length(center) > Config::renderDistance * CHUNK_WIDTH) {
+		if(glm::length(center) > (Config::renderDistance + 1) * CHUNK_WIDTH) {
+			// FIXME: Remove chunks here
 			continue;
 		}
 

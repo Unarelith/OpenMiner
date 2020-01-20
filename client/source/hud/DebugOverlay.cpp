@@ -14,10 +14,13 @@
 #include <sstream>
 
 #include "ClientPlayer.hpp"
+#include "ClientWorld.hpp"
 #include "Config.hpp"
 #include "DebugOverlay.hpp"
 
-DebugOverlay::DebugOverlay(const ClientPlayer &player) : m_player(player) {
+DebugOverlay::DebugOverlay(const ClientPlayer &player, const ClientWorld &world)
+	: m_player(player), m_world(world)
+{
 	setPosition(4, 4, 0);
 
 	m_versionText.setText(APP_NAME + std::string(" v0.0.1"));
@@ -44,6 +47,8 @@ void DebugOverlay::update() {
 	stream << "cx: " << pcx << " | ";
 	stream << "cy: " << pcy << " | ";
 	stream << "cz: " << pcz;
+	stream << '\n';
+	stream << "Loaded chunks: " << m_world.loadedChunkCount();
 
 	m_positionText.setText(stream.str());
 }

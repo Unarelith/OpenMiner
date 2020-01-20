@@ -36,6 +36,8 @@ class ClientWorld : public World, public gk::Drawable {
 
 		void setClient(ClientCommandHandler &client) { m_client = &client; }
 
+		std::size_t loadedChunkCount() const { return m_chunks.size(); }
+
 	private:
 		void createChunkNeighbours(ClientChunk *chunk);
 
