@@ -47,7 +47,7 @@ class ClientWorld : public World, public gk::Drawable {
 
 		ClientCommandHandler *m_client = nullptr;
 
-		mutable float m_ud;
+		mutable float m_ud = 1000;
 		mutable s32 m_ux;
 		mutable s32 m_uy;
 		mutable s32 m_uz;
