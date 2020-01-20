@@ -21,7 +21,7 @@ HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 	: m_client(client),
 	m_hotbar(player.inventory()),
 	m_blockCursor(player, world, client),
-	m_debugOverlay(player)
+	m_debugOverlay(player, world)
 {
 	setScale(GUI_SCALE, GUI_SCALE, 1);
 
