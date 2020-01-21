@@ -40,3 +40,12 @@ void ClientChunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u
 	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 }
 
+bool ClientChunk::areAllNeighboursTooFar() const {
+	return (!m_surroundingChunks[Chunk::Left]   || ((ClientChunk *)m_surroundingChunks[Chunk::Left])->isTooFar())
+		&& (!m_surroundingChunks[Chunk::Right]  || ((ClientChunk *)m_surroundingChunks[Chunk::Right])->isTooFar())
+		&& (!m_surroundingChunks[Chunk::Front]  || ((ClientChunk *)m_surroundingChunks[Chunk::Front])->isTooFar())
+		&& (!m_surroundingChunks[Chunk::Back]   || ((ClientChunk *)m_surroundingChunks[Chunk::Back])->isTooFar())
+		&& (!m_surroundingChunks[Chunk::Bottom] || ((ClientChunk *)m_surroundingChunks[Chunk::Bottom])->isTooFar())
+		&& (!m_surroundingChunks[Chunk::Top]    || ((ClientChunk *)m_surroundingChunks[Chunk::Top])->isTooFar());
+}
+

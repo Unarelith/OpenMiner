@@ -23,6 +23,8 @@
 class ClientCommandHandler;
 
 class ClientWorld : public World, public gk::Drawable {
+	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ClientChunk>>;
+
 	public:
 		ClientWorld();
 
@@ -31,6 +33,7 @@ class ClientWorld : public World, public gk::Drawable {
 		void sendChunkRequests();
 
 		void receiveChunkData(sf::Packet &packet);
+		void removeChunk(ChunkMap::iterator &it);
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
 
@@ -43,7 +46,7 @@ class ClientWorld : public World, public gk::Drawable {
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		std::unordered_map<gk::Vector3i, std::unique_ptr<ClientChunk>> m_chunks;
+		ChunkMap m_chunks;
 
 		gk::Texture &m_texture;
 
