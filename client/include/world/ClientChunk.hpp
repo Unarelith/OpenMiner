@@ -33,6 +33,11 @@ class ClientChunk : public Chunk {
 		bool hasBeenRequested() const { return m_hasBeenRequested; }
 		void setHasBeenRequested(bool hasBeenRequested) { m_hasBeenRequested = hasBeenRequested; }
 
+		bool isTooFar() const { return m_isTooFar; }
+		void setTooFar(bool isTooFar) { m_isTooFar = isTooFar; }
+
+		bool areAllNeighboursTooFar() const;
+
 	private:
 		gk::Texture &m_texture;
 
@@ -42,6 +47,7 @@ class ClientChunk : public Chunk {
 		std::array<std::size_t, ChunkBuilder::layers> m_verticesCount{};
 
 		bool m_hasBeenRequested = false;
+		bool m_isTooFar = false;
 };
 
 #endif // CLIENTCHUNK_HPP_

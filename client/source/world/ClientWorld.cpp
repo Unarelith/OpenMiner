@@ -35,11 +35,20 @@ void ClientWorld::init(float playerX, float playerY, float playerZ) {
 
 void ClientWorld::update() {
 	// Update loaded chunks
-	for (auto &it : m_chunks) {
-		if (World::isReloadRequested)
-			it.second->setChanged(true);
+	for (auto it = m_chunks.begin() ; it != m_chunks.end() ;) {
+		// If chunk is too far, remove it
+		if (it->second->isTooFar() && (it->second->isInitialized() || it->second->areAllNeighboursTooFar())) {
+			removeChunk(it);
+		}
+		// Otherwise, update the chunk
+		else {
+			if (World::isReloadRequested)
+				it->second->setChanged(true);
 
-		it.second->update();
+			it->second->update();
+
+			++it;
+		}
 	}
 
 	World::isReloadRequested = false;
@@ -93,6 +102,28 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 	chunk->setInitialized(true);
 
 	// std::cout << "Chunk at (" << cx << ", " << cy << ", " << cz << ") received" << std::endl;
+}
+
+void ClientWorld::removeChunk(ChunkMap::iterator &it) {
+	ClientChunk *surroundingChunks[6] = {
+		(ClientChunk *)it->second->getSurroundingChunk(0),
+		(ClientChunk *)it->second->getSurroundingChunk(1),
+		(ClientChunk *)it->second->getSurroundingChunk(2),
+		(ClientChunk *)it->second->getSurroundingChunk(3),
+		(ClientChunk *)it->second->getSurroundingChunk(4),
+		(ClientChunk *)it->second->getSurroundingChunk(5)
+	};
+
+	it = m_chunks.erase(it);
+
+	for (u8 i = 0 ; i < 6 ; ++i) {
+		if (surroundingChunks[i]) {
+			surroundingChunks[i]->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, nullptr);
+
+			if (!surroundingChunks[i]->isTooFar())
+				createChunkNeighbours(surroundingChunks[i]);
+		}
+	}
 }
 
 Chunk *ClientWorld::getChunk(int cx, int cy, int cz) const {
@@ -160,9 +191,11 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 		// Nope, too far, don't render it
 		if(glm::length(center) > (Config::renderDistance + 1) * CHUNK_WIDTH) {
-			// FIXME: Remove chunks here
+			it.second->setTooFar(true);
 			continue;
 		}
+
+		it.second->setTooFar(false);
 
 		// Is this chunk on the screen?
 		center = target.getView()->getTransform().getMatrix() * center;
@@ -195,7 +228,6 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 			continue;
 		}
 
-		// Only draw the chunk if all its neighbours are initialized
 		chunks.emplace_back(it.second.get(), states.transform);
 	}
 
