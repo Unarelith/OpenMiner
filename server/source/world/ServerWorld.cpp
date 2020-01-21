@@ -29,14 +29,14 @@ void ServerWorld::update(Server &server, std::unordered_map<u16, ServerPlayer> &
 		for (auto &it : m_chunks) {
 			it.second->tick(players, *this, server);
 
-			if (it.second->areAllNeighboursInitialized())
+			if (it.second->areAllNeighboursLoaded())
 				it.second->updateLights();
 
 			if (it.second->isInitialized() && !it.second->isSent()) {
 				for (auto &client : server.info().clients())
 					sendChunkData(client, it.second.get());
 
-				DEBUG("Chunk updated at", it.second->x(), it.second->y(), it.second->z());
+				// DEBUG("Chunk updated at", it.second->x(), it.second->y(), it.second->z());
 			}
 		}
 	}

@@ -158,7 +158,7 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 					}
 				}
 
-				if (topChunk) {
+				if (topChunk && topChunk->isInitialized()) {
 					int sunlightLevel = topChunk->lightmap().getSunlight(x, 0, z);
 					if (sunlightLevel) {
 						chunk.lightmap().addSunlight(x, CHUNK_HEIGHT - 1, z, sunlightLevel);
