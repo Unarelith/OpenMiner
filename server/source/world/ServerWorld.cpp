@@ -110,10 +110,10 @@ void ServerWorld::sendRequestedData(Client &client, int cx, int cy, int cz) {
 	if (!chunk) {
 		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ServerChunk(cx, cy, cz));
 		chunk = it.first->second.get();
-
-		// Create our neighbours so that we can generate and process lights correctly
-		createChunkNeighbours(chunk);
 	}
+
+	// Create our neighbours so that we can generate and process lights correctly
+	createChunkNeighbours(chunk);
 
 	// Generate and update lights
 	chunk->generate();
