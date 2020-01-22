@@ -21,8 +21,6 @@ add_dependencies(${CMAKE_PROJECT_NAME} ${CMAKE_PROJECT_NAME}_common)
 if (NOT MSVC)
 	target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -O3 -ffast-math)
 	target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -g -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
-#else ()
-#target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE /O2)
 endif ()
 
 target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -DDEBUG_ENABLED)
@@ -37,10 +35,11 @@ target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -DSOL_CHECK_ARGUMENTS
 	-DSOL_PRINT_ERRORS=1
 )
 
-set(CMAKE_CXX_STANDARD 14)
+if(MINGW)
+	target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -static-libstdc++ -static-libgcc)
+endif()
 
-# target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -std=c++14)
-# target_compile_features(${CMAKE_PROJECT_NAME} PRIVATE cxx_std_17)
+set(CMAKE_CXX_STANDARD 14)
 
 # target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -pg)
 # target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -pg)
@@ -53,6 +52,7 @@ if (UNIX)
 endif ()
 
 target_link_libraries(${CMAKE_PROJECT_NAME}
+                      ${GAMEKIT_LIBRARIES}
                       ${OPENGL_LIBRARIES}
                       ${SDL2_LIBRARIES}
                       ${SDL2_IMAGE_LIBRARIES}
@@ -60,10 +60,9 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
                       ${SDL2_TTF_LIBRARIES}
                       ${TINYXML2_LIBRARIES}
                       ${GLEW_LIBRARIES}
-                      ${GAMEKIT_LIBRARIES}
                       ${LUA_LIBRARIES}
                       sfml-system
                       sfml-network
-					  ${UNIX_LIBS}
+                      ${UNIX_LIBS}
                       ${CMAKE_PROJECT_NAME}_common)
 
