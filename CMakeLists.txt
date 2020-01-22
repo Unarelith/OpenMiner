@@ -9,8 +9,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2")
 
-if (MSVC)
-	set(MSVC_LIBRARIES_PATH "C:/Libraries")
+if (WIN32)
+	set(WIN_LIBRARIES_PATH "C:/Libraries")
 endif ()
 
 #------------------------------------------------------------------------------
@@ -18,8 +18,8 @@ endif ()
 #------------------------------------------------------------------------------
 # - Lua
 #------------------------------------------------------------------------------
-if (MSVC)
-	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${MSVC_LIBRARIES_PATH}/lua)
+if (WIN32)
+	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${WIN_LIBRARIES_PATH}/lua)
 endif ()
 
 find_package(Lua REQUIRED)
@@ -34,8 +34,8 @@ link_directories(${LUA_LIBRARY_DIRS})
 #------------------------------------------------------------------------------
 # - gamekit
 #------------------------------------------------------------------------------
-if (MSVC)
-	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${MSVC_LIBRARIES_PATH}/gamekit)
+if (WIN32)
+	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${WIN_LIBRARIES_PATH}/gamekit)
 endif ()
 
 find_package(GameKit REQUIRED)
@@ -49,8 +49,8 @@ include_directories(${GAMEKIT_INCLUDE_DIR})
 #------------------------------------------------------------------------------
 # - tinyxml2
 #------------------------------------------------------------------------------
-if (MSVC)
-	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${MSVC_LIBRARIES_PATH}/tinyxml2)
+if (WIN32)
+	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${WIN_LIBRARIES_PATH}/tinyxml2)
 endif ()
 
 find_package(TinyXml2 REQUIRED)
@@ -66,8 +66,8 @@ include_directories(${TINYXML2_INCLUDE_DIRS})
 #------------------------------------------------------------------------------
 set(OpenGL_GL_PREFERENCE "LEGACY")
 
-if (MSVC)
-	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${MSVC_LIBRARIES_PATH}/glm)
+if (WIN32)
+	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${WIN_LIBRARIES_PATH}/glm)
 endif ()
 
 find_package(OpenGL REQUIRED)
@@ -86,11 +86,11 @@ include_directories(${GLM_INCLUDE_DIRS})
 #------------------------------------------------------------------------------
 # - SDL2, SDL2_image, SDL2_mixer
 #------------------------------------------------------------------------------
-if (MSVC)
-	set(SDL2_PATH       ${MSVC_LIBRARIES_PATH}/SDL2       CACHE BOOL "" FORCE)
-	set(SDL2_IMAGE_PATH ${MSVC_LIBRARIES_PATH}/SDL2_image CACHE BOOL "" FORCE)
-	set(SDL2_MIXER_PATH ${MSVC_LIBRARIES_PATH}/SDL2_mixer CACHE BOOL "" FORCE)
-	set(SDL2_TTF_PATH   ${MSVC_LIBRARIES_PATH}/SDL2_ttf   CACHE BOOL "" FORCE)
+if (WIN32)
+	set(SDL2_PATH       ${WIN_LIBRARIES_PATH}/SDL2       CACHE BOOL "" FORCE)
+	set(SDL2_IMAGE_PATH ${WIN_LIBRARIES_PATH}/SDL2_image CACHE BOOL "" FORCE)
+	set(SDL2_MIXER_PATH ${WIN_LIBRARIES_PATH}/SDL2_mixer CACHE BOOL "" FORCE)
+	set(SDL2_TTF_PATH   ${WIN_LIBRARIES_PATH}/SDL2_ttf   CACHE BOOL "" FORCE)
 endif ()
 
 find_package(SDL2 REQUIRED)
@@ -122,8 +122,8 @@ include_directories(${SDL2_INCLUDE_DIRS}
 #------------------------------------------------------------------------------
 # - SFML network
 #------------------------------------------------------------------------------
-if (MSVC)
-	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${MSVC_LIBRARIES_PATH}/SFML)
+if (WIN32)
+	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${WIN_LIBRARIES_PATH}/SFML)
 endif ()
 
 find_package(SFML COMPONENTS system network)
@@ -137,8 +137,8 @@ include_directories(${SFML_INCLUDE_DIRS})
 #------------------------------------------------------------------------------
 # - GLEW
 #------------------------------------------------------------------------------
-if (MSVC)
-	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${MSVC_LIBRARIES_PATH}/glew)
+if (WIN32)
+	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${WIN_LIBRARIES_PATH}/glew)
 
 	find_package(GLEW REQUIRED)
 
@@ -155,4 +155,3 @@ endif ()
 add_subdirectory(common)
 add_subdirectory(client)
 add_subdirectory(server)
-
