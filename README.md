@@ -29,6 +29,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 ![](screenshot1.png?raw=true)
 ![](screenshot2.png?raw=true)
 ![](screenshot3.png?raw=true)
+![](screenshot4.png?raw=true)
 
 ## Keys
 
@@ -38,6 +39,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 - Sprint: <kbd>Ctrl</kbd>
 - Jetpack: <kbd>X</kbd>
 - Exit: <kbd>Escape</kbd>
+- Debug: <kbd>F3</kbd>
 
 ## How to compile
 
