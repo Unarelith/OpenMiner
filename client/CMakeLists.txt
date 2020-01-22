@@ -48,6 +48,10 @@ set(CMAKE_CXX_STANDARD 14)
 #------------------------------------------------------------------------------
 # Link options
 #------------------------------------------------------------------------------
+if (UNIX)
+	set (UNIX_LIBS -ldl)
+endif ()
+
 target_link_libraries(${CMAKE_PROJECT_NAME}
                       ${OPENGL_LIBRARIES}
                       ${SDL2_LIBRARIES}
@@ -55,10 +59,11 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
                       ${SDL2_MIXER_LIBRARIES}
                       ${SDL2_TTF_LIBRARIES}
                       ${TINYXML2_LIBRARIES}
-		      ${GLEW_LIBRARIES}
+                      ${GLEW_LIBRARIES}
                       ${GAMEKIT_LIBRARIES}
                       ${LUA_LIBRARIES}
                       sfml-system
-                      sfml-network -ldl
+                      sfml-network
+					  ${UNIX_LIBS}
                       ${CMAKE_PROJECT_NAME}_common)
 
