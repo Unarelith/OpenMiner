@@ -31,12 +31,18 @@ Makefile
 *.sln
 *.vcxproj
 *.vcxproj.filters
+*.vcxproj.user
 openminer.dir
 openminer_common.dir
 openminer_client.dir
 openminer_server.dir
 Win32
+Debug
 Release
+RelWithDebInfo
+
+# Visual Studio
+.vs
 
 # Doxygen generated files
 doc/html
@@ -46,6 +52,7 @@ doc/latex
 client/openminer
 server/openminer_server
 *.exe
+*.dll
 
 # Misc
 *.zip
