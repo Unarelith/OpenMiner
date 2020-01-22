@@ -26,16 +26,16 @@ Item &Registry::registerItem(u32 textureID, const std::string &id, const std::st
 	return m_items.back();
 }
 
-const Block &Registry::getBlock(const std::string &id) {
-	if (id.empty()) return getBlock((int)0);
+const Block &Registry::getBlockFromStringID(const std::string &id) {
+	if (id.empty()) return getBlock(0);
 	auto it = m_blocksID.find(id);
 	if (it == m_blocksID.end())
 		throw EXCEPTION("Unknown block:", id);
 	return getBlock(it->second);
 }
 
-const Item &Registry::getItem(const std::string &id) {
-	if (id.empty()) return getItem((int)0);
+const Item &Registry::getItemFromStringID(const std::string &id) {
+	if (id.empty()) return getItem(0);
 	auto it = m_itemsID.find(id);
 	if (it == m_itemsID.end())
 		throw EXCEPTION("Unknown item:", id);

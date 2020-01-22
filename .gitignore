@@ -27,6 +27,17 @@ cmake_install.cmake
 compile_commands.json
 Makefile
 
+# CMake temporary files on Windows
+*.sln
+*.vcxproj
+*.vcxproj.filters
+openminer.dir
+openminer_common.dir
+openminer_client.dir
+openminer_server.dir
+Win32
+Release
+
 # Doxygen generated files
 doc/html
 doc/latex

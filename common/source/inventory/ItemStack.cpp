@@ -15,7 +15,7 @@
 #include "Registry.hpp"
 
 const Item &ItemStack::item() const {
-	return Registry::getInstance().getItem(m_name);
+	return Registry::getInstance().getItemFromStringID(m_name);
 }
 
 sf::Packet &operator<<(sf::Packet &packet, const ItemStack &itemStack) {

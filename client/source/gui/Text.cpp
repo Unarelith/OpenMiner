@@ -96,10 +96,10 @@ void Text::updateTextSprites() {
 void Text::updateCharWidth() {
 	const int width = m_texture.getSize().x;
 	const int height = m_texture.getSize().y;
-	unsigned int data[width * height];
+	unsigned int *data = new unsigned int[width * height];
 
 	gk::Texture::bind(&m_texture);
-	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, &data);
+	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, data);
 	gk::Texture::bind(nullptr);
 
 	const int charMaxHeight = height / 16;
@@ -135,5 +135,7 @@ void Text::updateCharWidth() {
 		++l1;
 		m_charWidth[i] = 0.5f + l1 * (8.0f / charMaxWidth) + 1;
 	}
+
+	delete[] data;
 }
 

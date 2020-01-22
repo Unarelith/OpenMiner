@@ -7,14 +7,23 @@ project(openminer)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2")
+
+if (MSVC)
+	set(MSVC_LIBRARIES_PATH "C:/Libraries")
+endif ()
 
 #------------------------------------------------------------------------------
 # Packages
 #------------------------------------------------------------------------------
 # - Lua
 #------------------------------------------------------------------------------
+if (MSVC)
+	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${MSVC_LIBRARIES_PATH}/lua)
+endif ()
+
 find_package(Lua REQUIRED)
+
 if(NOT LUA_FOUND)
 	message(FATAL_ERROR "Lua is needed to build the project. Please install it correctly.")
 endif()
@@ -25,7 +34,12 @@ link_directories(${LUA_LIBRARY_DIRS})
 #------------------------------------------------------------------------------
 # - gamekit
 #------------------------------------------------------------------------------
+if (MSVC)
+	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${MSVC_LIBRARIES_PATH}/gamekit)
+endif ()
+
 find_package(GameKit REQUIRED)
+
 if(NOT GAMEKIT_FOUND)
 	message(FATAL_ERROR "gamekit is needed to build the project. Please install it correctly.")
 endif()
@@ -35,17 +49,26 @@ include_directories(${GAMEKIT_INCLUDE_DIR})
 #------------------------------------------------------------------------------
 # - tinyxml2
 #------------------------------------------------------------------------------
+if (MSVC)
+	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${MSVC_LIBRARIES_PATH}/tinyxml2)
+endif ()
+
 find_package(TinyXml2 REQUIRED)
+
 if(NOT TINYXML2_FOUND)
 	message(FATAL_ERROR "tinyxml2 is needed to build the project. Please install it correctly.")
 endif()
 
-include_directories(${TINYXML2_INCLUDE_DIR})
+include_directories(${TINYXML2_INCLUDE_DIRS})
 
 #------------------------------------------------------------------------------
 # - OpenGL
 #------------------------------------------------------------------------------
 set(OpenGL_GL_PREFERENCE "LEGACY")
+
+if (MSVC)
+	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${MSVC_LIBRARIES_PATH}/glm)
+endif ()
 
 find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
@@ -63,43 +86,68 @@ include_directories(${GLM_INCLUDE_DIRS})
 #------------------------------------------------------------------------------
 # - SDL2, SDL2_image, SDL2_mixer
 #------------------------------------------------------------------------------
-include(FindPkgConfig)
+if (MSVC)
+	set(SDL2_PATH       ${MSVC_LIBRARIES_PATH}/SDL2       CACHE BOOL "" FORCE)
+	set(SDL2_IMAGE_PATH ${MSVC_LIBRARIES_PATH}/SDL2_image CACHE BOOL "" FORCE)
+	set(SDL2_MIXER_PATH ${MSVC_LIBRARIES_PATH}/SDL2_mixer CACHE BOOL "" FORCE)
+	set(SDL2_TTF_PATH   ${MSVC_LIBRARIES_PATH}/SDL2_ttf   CACHE BOOL "" FORCE)
+endif ()
 
-pkg_search_module(SDL2 REQUIRED sdl2)
-pkg_search_module(SDL2IMAGE REQUIRED SDL2_image)
-pkg_search_module(SDL2MIXER REQUIRED SDL2_mixer)
-pkg_search_module(SDL2TTF REQUIRED SDL2_ttf)
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_mixer REQUIRED)
+find_package(SDL2_ttf REQUIRED)
 
 if(NOT SDL2_FOUND)
 	message(FATAL_ERROR "SDL2 not found!")
 endif(NOT SDL2_FOUND)
 
-if(NOT SDL2IMAGE_FOUND)
+if(NOT SDL2_IMAGE_FOUND)
 	message(FATAL_ERROR "SDL2_image not found!")
-endif(NOT SDL2IMAGE_FOUND)
+endif(NOT SDL2_IMAGE_FOUND)
 
-if(NOT SDL2MIXER_FOUND)
+if(NOT SDL2_MIXER_FOUND)
 	message(FATAL_ERROR "SDL2_mixer not found!")
-endif(NOT SDL2MIXER_FOUND)
+endif(NOT SDL2_MIXER_FOUND)
 
-if(NOT SDL2TTF_FOUND)
+if(NOT SDL2_TTF_FOUND)
 	message(FATAL_ERROR "SDL2_ttf not found!")
-endif(NOT SDL2TTF_FOUND)
+endif(NOT SDL2_TTF_FOUND)
 
 include_directories(${SDL2_INCLUDE_DIRS}
-                    ${SDL2IMAGE_INCLUDE_DIRS}
-                    ${SDL2MIXER_INCLUDE_DIRS}
-                    ${SDL2TTF_INCLUDE_DIRS})
+                    ${SDL2_IMAGE_INCLUDE_DIRS}
+                    ${SDL2_MIXER_INCLUDE_DIRS}
+                    ${SDL2_TTF_INCLUDE_DIRS})
 
 #------------------------------------------------------------------------------
 # - SFML network
 #------------------------------------------------------------------------------
+if (MSVC)
+	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${MSVC_LIBRARIES_PATH}/SFML)
+endif ()
+
 find_package(SFML COMPONENTS system network)
+
 if(NOT SFML_FOUND)
 	message(FATAL_ERROR "SFML is needed to build the project. Please install it correctly.")
 endif()
 
 include_directories(${SFML_INCLUDE_DIRS})
+
+#------------------------------------------------------------------------------
+# - GLEW
+#------------------------------------------------------------------------------
+if (MSVC)
+	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${MSVC_LIBRARIES_PATH}/glew)
+
+	find_package(GLEW REQUIRED)
+
+	if(NOT GLEW_FOUND)
+		message(FATAL_ERROR "GLEW not found!")
+	endif(NOT GLEW_FOUND)
+
+	include_directories(${GLEW_INCLUDE_DIRS})
+endif ()
 
 #------------------------------------------------------------------------------
 # Subdirectories

@@ -46,8 +46,8 @@ class Registry : public ISerializable {
 		const Block &getBlock(std::size_t id) const { return *m_blocks.at(id).get(); }
 		const Item &getItem(std::size_t id) const { return m_items.at(id); }
 
-		const Block &getBlock(const std::string &id);
-		const Item &getItem(const std::string &id);
+		const Block &getBlockFromStringID(const std::string &id);
+		const Item &getItemFromStringID(const std::string &id);
 
 		const Recipe *getRecipe(const Inventory &inventory) const;
 

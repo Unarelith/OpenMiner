@@ -18,8 +18,13 @@ add_dependencies(${CMAKE_PROJECT_NAME}_server ${CMAKE_PROJECT_NAME}_common)
 #------------------------------------------------------------------------------
 # Compiler flags
 #------------------------------------------------------------------------------
-target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -O3 -ffast-math)
-target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -g -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
+if (NOT MSVC)
+	target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -O3 -ffast-math)
+	target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -g -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
+else ()
+	target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE /O2)
+endif ()
+
 target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -DDEBUG_ENABLED)
 target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -DGLM_FORCE_RADIANS)
 target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -DSOL_CHECK_ARGUMENTS
@@ -32,7 +37,9 @@ target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -DSOL_CHECK_ARGUMENT
 	-DSOL_PRINT_ERRORS=1
 )
 
-target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -std=c++14)
+set(CMAKE_CXX_STANDARD 14)
+
+# target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -std=c++14)
 # target_compile_features(${CMAKE_PROJECT_NAME}_server PRIVATE cxx_std_17)
 
 # target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -pg)
@@ -44,10 +51,11 @@ target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -std=c++14)
 target_link_libraries(${CMAKE_PROJECT_NAME}_server
                       ${OPENGL_LIBRARIES}
                       ${SDL2_LIBRARIES}
-                      ${SDL2IMAGE_LIBRARIES}
-                      ${SDL2MIXER_LIBRARIES}
-                      ${SDL2TTF_LIBRARIES}
+                      ${SDL2_IMAGE_LIBRARIES}
+                      ${SDL2_MIXER_LIBRARIES}
+                      ${SDL2_TTF_LIBRARIES}
                       ${TINYXML2_LIBRARIES}
+		      ${GLEW_LIBRARIES}
                       ${GAMEKIT_LIBRARIES}
                       ${LUA_LIBRARIES}
                       sfml-system
