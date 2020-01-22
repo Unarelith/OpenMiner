@@ -14,6 +14,7 @@
 #ifndef LUAGUISTATE_HPP_
 #define LUAGUISTATE_HPP_
 
+#include <deque>
 #include <memory>
 
 #include <gk/graphics/RectangleShape.hpp>
@@ -46,8 +47,8 @@ class LuaGUIState : public InterfaceState {
 
 		MouseItemWidget m_mouseItemWidget{&m_mainWidget};
 
-		std::vector<CraftingWidget> m_craftingWidgets;
-		std::vector<InventoryWidget> m_inventoryWidgets;
+		std::deque<CraftingWidget> m_craftingWidgets;
+		std::deque<InventoryWidget> m_inventoryWidgets;
 		std::vector<std::unique_ptr<Widget>> m_widgets;
 		std::vector<std::unique_ptr<gk::Drawable>> m_drawables;
 
