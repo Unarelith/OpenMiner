@@ -6,30 +6,19 @@
 [![Discord](https://img.shields.io/discord/527527086756200458.svg?style=popout)](https://discord.gg/eN8k8wt)
 [![Donate](https://img.shields.io/badge/donate-paypal-brightgreen.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66DH462V7TA6N&source=url)
 
-- [Wiki](#wiki)
 - [Project goal](#project-goal)
-- [Screenshots](#screenshots)
 - [Keys](#keys)
+- [Wiki](#wiki)
 - [How to compile](#how-to-compile)
 - [Discussion](#discussion)
+- [Screenshots](#screenshots)
 - [Project status](#project-status)
 - [Previous attempts](#previous-attempts)
 - [Credits](#credits)
 
-## Wiki
-
-- [Lua API Overview](https://github.com/Unarelith/OpenMiner/wiki/Lua-API-Overview)
-
 ## Project goal
 
 The long-term goal of this project is to provide a viable alternative to Minecraft modding.
-
-## Screenshots
-
-![](screenshot1.png?raw=true)
-![](screenshot2.png?raw=true)
-![](screenshot3.png?raw=true)
-![](screenshot4.png?raw=true)
 
 ## Keys
 
@@ -40,6 +29,10 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 - Jetpack: <kbd>X</kbd>
 - Exit: <kbd>Escape</kbd>
 - Debug: <kbd>F3</kbd>
+
+## Wiki
+
+- [Lua API Overview](https://github.com/Unarelith/OpenMiner/wiki/Lua-API-Overview)
 
 ## How to compile
 
@@ -65,6 +58,13 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 
 - Discord: [join server](https://discord.gg/eN8k8wt)
 - IRC: irc.freenode.net `#openminer`
+
+## Screenshots
+
+![](screenshot1.png?raw=true)
+![](screenshot2.png?raw=true)
+![](screenshot3.png?raw=true)
+![](screenshot4.png?raw=true)
 
 ## Project status
 
