@@ -43,6 +43,8 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 
 ## How to compile
 
+### Using Linux
+
 - Dependencies:
     - A compiler with C++14 support
     - [CMake](http://www.cmake.org/download/)
@@ -53,6 +55,11 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 - Run `cmake . && make -j8`
 - Run the server with `./server/openminer_server`
 - Run the client with `./client/openminer`
+
+### Using Windows
+
+- [Wiki: Compiling on Windows using CMake and MinGW-w64](https://github.com/Unarelith/OpenMiner/wiki/Compiling-on-Windows-with-MinGW-w64)
+- [Wiki: Compiling on Windows using CMake and Visual Studio 2017](https://github.com/Unarelith/OpenMiner/wiki/Compiling-on-Windows-with-Visual-Studio-2017)
 
 ## Discussion
 
