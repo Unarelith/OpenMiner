@@ -24,7 +24,7 @@ namespace {
 
 	constexpr float FOV = 45.0f;
 
-	constexpr float DIST_NEAR = 0.01f;
+	constexpr float DIST_NEAR = 0.6f;
 	constexpr float DIST_FAR  = 1000.0f;
 
 	constexpr int CHUNK_WIDTH  = 16;
