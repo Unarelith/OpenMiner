@@ -31,7 +31,7 @@ Cube::Cube(float size) : m_texture(gk::ResourceHandler::getInstance().get<gk::Te
 	m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(-45.0f), glm::vec3{0, 1, 0});
 }
 
-void Cube::updateVertexBuffer(const Block &block) const {
+void Cube::updateVertexBuffer(const Block &block) {
 	gk::Vertex vertices[6 * 4] = {
 		// Left
 		{{0, 0, 0, 2}},
@@ -99,9 +99,13 @@ void Cube::updateVertexBuffer(const Block &block) const {
 	gk::VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	gk::VertexBuffer::bind(nullptr);
+
+	m_isVboInitialized = true;
 }
 
 void Cube::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	if (!m_isVboInitialized) return;
+
 	states.transform *= m_modelMatrix;
 	states.transform *= getTransform();
 

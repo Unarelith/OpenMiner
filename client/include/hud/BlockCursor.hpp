@@ -51,7 +51,7 @@ class BlockCursor : public gk::Drawable {
 		gk::VertexBuffer m_animationVBO;
 
 		unsigned int m_animationStart = 0;
-		glm::vec4 m_selectedBlock{0, 0, 0, 0};
+		glm::vec4 m_selectedBlock{0, 0, 0, -1};
 		const Block *m_currentBlock = nullptr;
 };
 

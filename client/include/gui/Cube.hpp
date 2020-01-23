@@ -24,7 +24,7 @@ class Cube : public gk::Drawable, public gk::Transformable {
 	public:
 		Cube(float size = 1.0f);
 
-		void updateVertexBuffer(const Block &block) const;
+		void updateVertexBuffer(const Block &block);
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
@@ -34,6 +34,7 @@ class Cube : public gk::Drawable, public gk::Transformable {
 		const gk::Texture &m_texture;
 
 		gk::VertexBuffer m_vbo;
+		bool m_isVboInitialized = false;
 
 		glm::mat4 m_modelMatrix{1};
 };

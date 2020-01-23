@@ -36,7 +36,7 @@ target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -DSOL_CHECK_ARGUMENT
 )
 
 if(MINGW)
-	target_link_options(${CMAKE_PROJECT_NAME}_server PRIVATE -static-libstdc++ -static-libgcc)
+	target_link_options(${CMAKE_PROJECT_NAME}_server PRIVATE -static-libstdc++ -static-libgcc -mconsole)
 endif()
 
 set(CMAKE_CXX_STANDARD 14)
