@@ -39,7 +39,11 @@ if(MINGW)
 	target_link_options(${CMAKE_PROJECT_NAME}_server PRIVATE -static-libstdc++ -static-libgcc -mconsole)
 endif()
 
-set(CMAKE_CXX_STANDARD 14)
+if(MSVC)
+	set(CMAKE_CXX_STANDARD 14)
+else()
+	target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -std=c++14)
+endif()
 
 # target_compile_options(${CMAKE_PROJECT_NAME}_server PRIVATE -pg)
 # target_link_options(${CMAKE_PROJECT_NAME}_server PRIVATE -pg)
@@ -59,7 +63,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}_server
                       ${SDL2_MIXER_LIBRARIES}
                       ${SDL2_TTF_LIBRARIES}
                       ${TINYXML2_LIBRARIES}
-		      ${GLEW_LIBRARIES}
+                      ${GLEW_LIBRARIES}
                       ${LUA_LIBRARIES}
                       sfml-system
                       sfml-network

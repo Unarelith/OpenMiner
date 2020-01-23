@@ -34,7 +34,11 @@ target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -DSOL_CHECK_ARGUMENT
 	-DSOL_PRINT_ERRORS=1
 )
 
-set(CMAKE_CXX_STANDARD 14)
+if(MSVC)
+	set(CMAKE_CXX_STANDARD 14)
+else()
+	target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -std=c++14)
+endif()
 
 # target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -pg)
 

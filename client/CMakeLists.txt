@@ -39,7 +39,11 @@ if(MINGW)
 	target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -static-libstdc++ -static-libgcc -mconsole)
 endif()
 
-set(CMAKE_CXX_STANDARD 14)
+if(MSVC)
+	set(CMAKE_CXX_STANDARD 14)
+else()
+	target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -std=c++14)
+endif()
 
 # target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -pg)
 # target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -pg)
