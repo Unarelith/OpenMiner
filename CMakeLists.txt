@@ -86,16 +86,16 @@ include_directories(${GLM_INCLUDE_DIRS})
 #------------------------------------------------------------------------------
 # - SDL2, SDL2_image, SDL2_mixer
 #------------------------------------------------------------------------------
-if (WIN32)
-	set(SDL2_PATH       ${WIN_LIBRARIES_PATH}/SDL2/i686-w64-mingw32       CACHE BOOL "" FORCE)
-	set(SDL2_IMAGE_PATH ${WIN_LIBRARIES_PATH}/SDL2_image/i686-w64-mingw32 CACHE BOOL "" FORCE)
-	set(SDL2_MIXER_PATH ${WIN_LIBRARIES_PATH}/SDL2_mixer/i686-w64-mingw32 CACHE BOOL "" FORCE)
-	set(SDL2_TTF_PATH   ${WIN_LIBRARIES_PATH}/SDL2_ttf/i686-w64-mingw32   CACHE BOOL "" FORCE)
-elseif (MSVC)
+if (MSVC)
 	set(SDL2_PATH       ${WIN_LIBRARIES_PATH}/SDL2       CACHE BOOL "" FORCE)
 	set(SDL2_IMAGE_PATH ${WIN_LIBRARIES_PATH}/SDL2_image CACHE BOOL "" FORCE)
 	set(SDL2_MIXER_PATH ${WIN_LIBRARIES_PATH}/SDL2_mixer CACHE BOOL "" FORCE)
 	set(SDL2_TTF_PATH   ${WIN_LIBRARIES_PATH}/SDL2_ttf   CACHE BOOL "" FORCE)
+elseif (WIN32)
+	set(SDL2_PATH       ${WIN_LIBRARIES_PATH}/SDL2/i686-w64-mingw32       CACHE BOOL "" FORCE)
+	set(SDL2_IMAGE_PATH ${WIN_LIBRARIES_PATH}/SDL2_image/i686-w64-mingw32 CACHE BOOL "" FORCE)
+	set(SDL2_MIXER_PATH ${WIN_LIBRARIES_PATH}/SDL2_mixer/i686-w64-mingw32 CACHE BOOL "" FORCE)
+	set(SDL2_TTF_PATH   ${WIN_LIBRARIES_PATH}/SDL2_ttf/i686-w64-mingw32   CACHE BOOL "" FORCE)
 endif ()
 
 find_package(SDL2 REQUIRED)
