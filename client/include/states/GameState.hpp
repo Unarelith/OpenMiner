@@ -45,7 +45,7 @@ class GameState : public gk::ApplicationState {
 
 		gk::Shader m_shader;
 
-		gk::Camera m_camera{FOV, DIST_NEAR, DIST_FAR};
+		gk::Camera m_camera{70.0f, DIST_NEAR, DIST_FAR};
 		ClientPlayer m_player{m_camera};
 
 		Client m_client;

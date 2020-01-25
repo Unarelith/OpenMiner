@@ -85,6 +85,9 @@ void GameState::onEvent(const SDL_Event &event) {
 void GameState::update() {
 	m_world.update();
 
+	if (m_camera.getFieldOfView() != Config::cameraFOV)
+		m_camera.setFieldOfView(Config::cameraFOV);
+
 	if (m_clientCommandHandler.isRegistryInitialized()) {
 		if (&m_stateStack->top() == this) {
 			m_player.processInputs();
