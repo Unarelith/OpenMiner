@@ -39,7 +39,7 @@ void Client::connect(sf::IpAddress serverAddress, u16 serverPort) {
 	Network::Command command;
 	answer >> command;
 	if (command == Network::Command::ClientRefused)
-		throw EXCEPTION("Server error: You can't join an already started game."); // FIXME
+		throw EXCEPTION("Server error: Connection refused. Server probably reached max player amount.");
 
 	if (command != Network::Command::ClientOk)
 		throw EXCEPTION("Network error: Expected 'ClientOk' packet.");

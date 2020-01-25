@@ -19,9 +19,11 @@
 #include "InterfaceState.hpp"
 #include "MenuWidget.hpp"
 
+class Client;
+
 class PauseMenuState : public InterfaceState {
 	public:
-		PauseMenuState(gk::ApplicationState *parent = nullptr);
+		PauseMenuState(Client &client, gk::ApplicationState *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -33,6 +35,8 @@ class PauseMenuState : public InterfaceState {
 		MenuWidget m_menuWidget{1, 4};
 
 		gk::RectangleShape m_background;
+
+		Client &m_client;
 };
 
 #endif // PAUSEMENUSTATE_HPP_
