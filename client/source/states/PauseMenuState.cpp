@@ -37,14 +37,14 @@ PauseMenuState::PauseMenuState(Client &client, gk::ApplicationState *parent)
 	m_menuWidget.addButton("Options...", [this] (TextButton &) { m_stateStack->push<SettingsMenuState>(m_parent); });
 
 	m_menuWidget.addButton("Title Screen", [this] (TextButton &) {
-		m_client.disconnect();
+		// m_client.disconnect();
 
 		m_stateStack->clear();
 		m_stateStack->push<TitleScreenState>();
 	});
 
 	m_menuWidget.addButton("Exit", [this] (TextButton &) {
-		m_client.disconnect();
+		// m_client.disconnect();
 
 		while(!m_stateStack->empty())
 			m_stateStack->pop();

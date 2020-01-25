@@ -24,9 +24,13 @@ class TerrainGenerator {
 		void lightTestGeneration(ServerChunk &chunk) const;
 		void basicGeneration(ServerChunk &chunk) const;
 		void testCraftGeneration(ServerChunk &chunk) const;
+		void newGeneration(ServerChunk &chunk) const;
 
 		static float noise2d(float x, float y, int octaves, float persistence);
 		static float noise3d_abs(float x, float y, float z, int octaves, float persistence);
+
+		static float newNoise2d(float x, float y, int octaves, float persistence);
+		static float newNoise3d_abs(float x, float y, float z, int octaves, float persistence);
 };
 
 #endif // TERRAINGENERATOR_HPP_

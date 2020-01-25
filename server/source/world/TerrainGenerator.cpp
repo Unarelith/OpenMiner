@@ -16,6 +16,7 @@
 #include "Config.hpp"
 #include "BlockType.hpp"
 #include "ServerChunk.hpp"
+#include "SimplexNoise.hpp"
 #include "TerrainGenerator.hpp"
 #include "World.hpp"
 
@@ -23,6 +24,7 @@ void TerrainGenerator::generate(ServerChunk &chunk) const {
 	// lightTestGeneration(chunk);
 	// basicGeneration(chunk);
 	testCraftGeneration(chunk);
+	// newGeneration(chunk);
 }
 
 void TerrainGenerator::lightTestGeneration(ServerChunk &chunk) const {
@@ -88,7 +90,7 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 			// Land blocks
 			for(int y = 0 ; y < CHUNK_HEIGHT ; y++) {
 				// Are we above "ground" level?
-				if(y + chunk.y() * CHUNK_HEIGHT >= h) {
+				if(y + chunk.y() * CHUNK_HEIGHT > h) {
 					// If we are not yet up to sea level, fill with water blocks
 					if(y + chunk.y() * CHUNK_HEIGHT < SEALEVEL) {
 						chunk.setBlockRaw(x, y, z, BlockType::Water);
@@ -169,13 +171,80 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 	}
 }
 
+void TerrainGenerator::newGeneration(ServerChunk &chunk) const {
+	srand(1337);
+	Chunk *topChunk = chunk.getSurroundingChunk(Chunk::Top);
+	for(int z = 0 ; z < CHUNK_DEPTH ; z++) {
+		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
+			// Land height
+			float n = newNoise2d((x + chunk.x() * CHUNK_WIDTH) / 256.0, (z + chunk.z() * CHUNK_DEPTH) / 256.0, 4, 0.5) * 4;
+			float h = 10 + n * 2;
+
+			// Land blocks
+			for(int y = 0 ; y < CHUNK_HEIGHT ; y++) {
+				// Are we above "ground" level?
+				if(y + chunk.y() * CHUNK_HEIGHT > h) {
+					// If we are not yet up to sea level, fill with water blocks
+					if(y + chunk.y() * CHUNK_HEIGHT < SEALEVEL) {
+						chunk.setBlockRaw(x, y, z, BlockType::Water);
+					}
+					// Otherwise we are in the air, so try to make a tree
+					else if(chunk.getBlock(x, y - 1, z) == BlockType::Grass && (rand() % 256) == 0 && n < 4) {
+						// Trunk
+						h = (rand() & 0x3) + 3;
+						for(int i = 0 ; i < h ; i++) {
+							chunk.setBlockRaw(x, y + i, z, BlockType::Wood);
+						}
+
+						// Leaves
+						for(int ix = -3 ; ix <= 3 ; ix++) {
+							for(int iy = -3 ; iy <= 3 ; iy++) {
+								for(int iz = -3 ; iz <= 3 ; iz++) {
+									if(ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + h + iy, z + iz)) {
+										chunk.setBlockRaw(x + ix, y + h + iy, z + iz, BlockType::Leaves);
+									}
+								}
+							}
+						}
+					}
+					// Or a flower
+					else if(chunk.getBlock(x, y - 1, z) == BlockType::Grass && (rand() & 0xff) == 0) {
+						chunk.setBlockRaw(x, y, z, BlockType::Flower);
+					}
+					// If we are on the top block of the chunk, add sunlight
+					else if (y == CHUNK_HEIGHT - 1) {
+						chunk.lightmap().addSunlight(x, y, z, 15);
+					}
+				}
+				else {
+					if (y + chunk.y() * CHUNK_HEIGHT >= h - 1 && y + chunk.y() * CHUNK_HEIGHT > SEALEVEL - 1)
+						chunk.setBlockRaw(x, y, z, BlockType::Grass);
+					else if (y + chunk.y() * CHUNK_HEIGHT <= SEALEVEL - 1 && h < SEALEVEL && y + chunk.y() * CHUNK_HEIGHT > h - 3)
+						chunk.setBlockRaw(x, y, z, BlockType::Sand);
+					else if (y + chunk.y() * CHUNK_HEIGHT > h - 3)
+						chunk.setBlockRaw(x, y, z, BlockType::Dirt);
+					else
+						chunk.setBlockRaw(x, y, z, BlockType::Stone);
+				}
+
+				if (topChunk && topChunk->isInitialized()) {
+					int sunlightLevel = topChunk->lightmap().getSunlight(x, 0, z);
+					if (sunlightLevel) {
+						chunk.lightmap().addSunlight(x, CHUNK_HEIGHT - 1, z, sunlightLevel);
+					}
+				}
+			}
+		}
+	}
+}
+
 float TerrainGenerator::noise2d(float x, float y, int octaves, float persistence) {
 	float sum = 0;
 	float strength = 1.0;
 	float scale = 1.0;
 
 	for(int i = 0 ; i < octaves ; i++) {
-		sum += strength * glm::simplex(glm::vec2(x, y) * scale);
+		sum += strength * glm::simplex(glm::vec2{x, y} * scale);
 		scale *= 2.0;
 		strength *= persistence;
 	}
@@ -189,7 +258,35 @@ float TerrainGenerator::noise3d_abs(float x, float y, float z, int octaves, floa
 	float scale = 1.0;
 
 	for(int i = 0 ; i < octaves ; i++) {
-		sum += strength * fabs(glm::simplex(glm::vec3(x, y, z) * scale));
+		sum += strength * fabs(glm::simplex(glm::vec3{x, y, z} * scale));
+		scale *= 2.0;
+		strength *= persistence;
+	}
+
+	return sum;
+}
+
+float TerrainGenerator::newNoise2d(float x, float y, int octaves, float persistence) {
+	float sum = 0;
+	float strength = 1.0;
+	float scale = 1.0;
+
+	for(int i = 0 ; i < octaves ; i++) {
+		sum += strength * SimplexNoise::noise(x * scale, y * scale);
+		scale *= 2.0;
+		strength *= persistence;
+	}
+
+	return sum;
+}
+
+float TerrainGenerator::newNoise3d_abs(float x, float y, float z, int octaves, float persistence) {
+	float sum = 0;
+	float strength = 1.0;
+	float scale = 1.0;
+
+	for(int i = 0 ; i < octaves ; i++) {
+		sum += strength * fabs(SimplexNoise::noise(x * scale, y * scale, z * scale));
 		scale *= 2.0;
 		strength *= persistence;
 	}
