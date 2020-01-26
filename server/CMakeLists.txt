@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------
 # Get source files
 #------------------------------------------------------------------------------
-file(GLOB_RECURSE SOURCE_FILES source/*.cpp)
+file(GLOB_RECURSE SOURCE_FILES source/*.cpp ../external/*.cpp)
 file(GLOB_RECURSE HEADER_FILES include/*.hpp ../common/*.hpp ../external/*.hpp)
 
 foreach(HEADER_FILE ${HEADER_FILES})
