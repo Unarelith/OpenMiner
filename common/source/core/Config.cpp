@@ -26,4 +26,5 @@ bool Config::isAmbientOcclusionEnabled = false;
 bool Config::isWireframeModeEnabled = false;
 u16 Config::renderDistance = 8;
 float Config::cameraFOV = 70.0f;
+u8 Config::mouseSensitivity = 8;
 

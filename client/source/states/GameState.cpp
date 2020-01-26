@@ -55,8 +55,8 @@ GameState::GameState(const std::string &host, int port) {
 void GameState::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_MOUSEMOTION) {
 		if(SCREEN_WIDTH / 2 != event.motion.x || SCREEN_HEIGHT / 2 != event.motion.y) {
-			m_player.turnH(event.motion.xrel * 0.06);
-			m_player.turnV(-event.motion.yrel * 0.06);
+			m_player.turnH(event.motion.xrel * 0.01 * Config::mouseSensitivity);
+			m_player.turnV(-event.motion.yrel * 0.01 * Config::mouseSensitivity);
 
 			gk::Mouse::resetToWindowCenter();
 		}

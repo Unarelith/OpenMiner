@@ -143,6 +143,11 @@ void SettingsMenuState::addInputButtons() {
 			m_currentKeyButton = &button;
 		});
 	}
+
+	m_menuWidget.addButton("Mouse sensitivity: " + std::to_string(Config::mouseSensitivity), [] (TextButton &button) {
+		Config::mouseSensitivity = std::max(2, (Config::mouseSensitivity + 2) % 14);
+		button.setText("Mouse sensitivity: " + std::to_string(Config::mouseSensitivity));
+	});
 }
 
 TextButton &SettingsMenuState::addToggleButton(const std::string &text, bool &configOption, bool worldReloadRequested) {

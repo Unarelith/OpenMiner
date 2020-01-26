@@ -46,6 +46,7 @@ namespace Config {
 	extern bool isWireframeModeEnabled;
 	extern u16 renderDistance;
 	extern float cameraFOV;
+	extern u8 mouseSensitivity;
 }
 
 #endif // CONFIG_HPP_
