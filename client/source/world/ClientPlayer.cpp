@@ -25,7 +25,7 @@ ClientPlayer *ClientPlayer::s_instance = nullptr;
 
 ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
 	// FIXME: Warning: Duplicated in ServerCommandHandler.hpp
-	m_x = 10;
+	m_x = 12;
 	m_y = 18;
 	m_z = 12;
 
