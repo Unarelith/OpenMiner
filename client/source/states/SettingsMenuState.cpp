@@ -26,9 +26,6 @@
 #include "World.hpp"
 
 SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : InterfaceState(parent) {
-	m_background.setFillColor(gk::Color{0, 0, 0, 127});
-	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
 	m_menuWidget.setScale(GUI_SCALE, GUI_SCALE, 1);
 
 	m_doneButton.setPosition(SCREEN_WIDTH / 2 - m_doneButton.getGlobalBounds().width * GUI_SCALE / 2, SCREEN_HEIGHT - 291);
@@ -42,18 +39,29 @@ SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : InterfaceSt
 }
 
 void SettingsMenuState::onEvent(const SDL_Event &event) {
-	m_menuWidget.onEvent(event);
-	m_doneButton.onEvent(event);
+	InterfaceState::onEvent(event);
 
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-		doneButtonAction();
+	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+		m_doneButton.setPosition(SCREEN_WIDTH / 2 - m_doneButton.getGlobalBounds().width / 2, SCREEN_HEIGHT - 291);
+
+		if (&m_stateStack->top() != this)
+			m_menuWidget.onEvent(event);
 	}
-	else if (m_currentKeyButton && event.type == SDL_KEYDOWN) {
-		gk::KeyboardHandler *keyboardHandler = (gk::KeyboardHandler *)gk::GamePad::getInputHandler();
-		keyboardHandler->setKeycode(m_currentKey, event.key.keysym.sym);
 
-		m_currentKeyButton->setText(m_currentKeyButton->text() + keyboardHandler->getKeyName(m_currentKey));
-		m_currentKeyButton = nullptr;
+	if (&m_stateStack->top() == this) {
+		m_menuWidget.onEvent(event);
+		m_doneButton.onEvent(event);
+
+		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+			doneButtonAction();
+		}
+		else if (m_currentKeyButton && event.type == SDL_KEYDOWN) {
+			gk::KeyboardHandler *keyboardHandler = (gk::KeyboardHandler *)gk::GamePad::getInputHandler();
+			keyboardHandler->setKeycode(m_currentKey, event.key.keysym.sym);
+
+			m_currentKeyButton->setText(m_currentKeyButton->text() + keyboardHandler->getKeyName(m_currentKey));
+			m_currentKeyButton = nullptr;
+		}
 	}
 }
 
@@ -114,8 +122,8 @@ void SettingsMenuState::addGraphicsButtons() {
 		button.setText("GUI Scale: " + std::to_string(GUI_SCALE));
 	});
 
-	m_menuWidget.addButton("Fullscreen: OFF", [] (TextButton &) {}).setEnabled(false);
-	m_menuWidget.addButton("Use VSync: OFF", [] (TextButton &) {}).setEnabled(false);
+	addToggleButton("Fullscreen", Config::isFullscreenModeEnabled, false);
+	m_menuWidget.addButton("Use VSync: ON", [] (TextButton &) {}).setEnabled(false);
 }
 
 void SettingsMenuState::addInputButtons() {
@@ -165,9 +173,6 @@ void SettingsMenuState::draw(gk::RenderTarget &target, gk::RenderStates states) 
 		target.draw(*m_parent, states);
 
 	prepareDraw(target, states);
-
-	if (m_parent)
-		target.draw(m_background, states);
 
 	target.draw(m_menuWidget, states);
 	target.draw(m_doneButton, states);

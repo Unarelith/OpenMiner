@@ -51,8 +51,6 @@ class LuaGUIState : public InterfaceState {
 		std::deque<InventoryWidget> m_inventoryWidgets;
 		std::vector<std::unique_ptr<Widget>> m_widgets;
 		std::vector<std::unique_ptr<gk::Drawable>> m_drawables;
-
-		gk::RectangleShape m_background;
 };
 
 #endif // LUAGUISTATE_HPP_

@@ -34,8 +34,6 @@ class PauseMenuState : public InterfaceState {
 
 		MenuWidget m_menuWidget{1, 4};
 
-		gk::RectangleShape m_background;
-
 		Client &m_client;
 };
 

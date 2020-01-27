@@ -27,8 +27,16 @@ void MenuWidget::reset(u16 width, u16 height) {
 }
 
 void MenuWidget::onEvent(const SDL_Event &event) {
-	for (TextButton &button : m_buttons) {
-		button.onEvent(event);
+	for (std::size_t i = 0 ; i < m_buttons.size() ; ++i) {
+		m_buttons.at(i).onEvent(event);
+
+		if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+			int x = i % m_width;
+			int y = i / m_width;
+
+			m_buttons.at(i).setPosition(SCREEN_WIDTH  / getScale().x / 2 - (m_width  * (m_buttons.at(i).width()  + s_horizontalSpacing) - s_horizontalSpacing) / 2 + x * (m_buttons.at(i).width() + s_horizontalSpacing),
+			                            SCREEN_HEIGHT / getScale().y / 2 - (m_height * (m_buttons.at(i).height() + s_verticalSpacing)   - s_verticalSpacing)   / 2 + y * (m_buttons.at(i).height() + s_verticalSpacing), 0);
+		}
 	}
 }
 

@@ -26,6 +26,8 @@ class ClientApplication : public gk::CoreApplication {
 		void init() override;
 
 	private:
+		void handleEvents() override;
+
 		void initOpenGL();
 
 		gk::KeyboardHandler m_keyboardHandler;

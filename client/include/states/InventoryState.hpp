@@ -44,8 +44,6 @@ class InventoryState : public InterfaceState {
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		std::unique_ptr<Widget> m_widget;
-
-		gk::RectangleShape m_background;
 };
 
 #endif // INVENTORYSTATE_HPP_

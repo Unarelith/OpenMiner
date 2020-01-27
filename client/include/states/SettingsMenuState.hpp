@@ -40,8 +40,6 @@ class SettingsMenuState : public InterfaceState {
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		gk::RectangleShape m_background;
-
 		MenuWidget m_menuWidget;
 		TextButton m_doneButton;
 

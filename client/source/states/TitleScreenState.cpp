@@ -37,6 +37,8 @@ TitleScreenState::TitleScreenState() {
 }
 
 void TitleScreenState::onEvent(const SDL_Event &event) {
+	InterfaceState::onEvent(event);
+
 	m_menuWidget.onEvent(event);
 }
 

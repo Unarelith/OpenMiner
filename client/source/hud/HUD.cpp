@@ -31,11 +31,17 @@ HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
 	m_shader.linkProgram();
 
+	setup();
+}
+
+void HUD::setup() {
 	m_orthoMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
 
 	m_hotbar.setPosition(SCREEN_WIDTH / getScale().x / 2 - m_hotbar.width() / 2, SCREEN_HEIGHT / getScale().y - m_hotbar.height(), 0);
 
 	m_blockInfoWidget.setPosition(SCREEN_WIDTH / getScale().x / 2 - m_blockInfoWidget.width() / 2, 2, 0);
+
+	m_crosshair.setup();
 }
 
 void HUD::onEvent(const SDL_Event &event) {

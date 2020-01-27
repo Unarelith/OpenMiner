@@ -35,9 +35,6 @@ LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, Cli
 	gk::Mouse::setCursorVisible(true);
 	gk::Mouse::resetToWindowCenter();
 
-	m_background.setFillColor(gk::Color{0, 0, 0, 127});
-	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
 	m_mainWidget.setScale(GUI_SCALE, GUI_SCALE);
 
 	while (!packet.endOfPacket())
@@ -45,6 +42,8 @@ LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, Cli
 }
 
 void LuaGUIState::onEvent(const SDL_Event &event) {
+	InterfaceState::onEvent(event);
+
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 		gk::Mouse::setCursorGrabbed(true);
 		gk::Mouse::setCursorVisible(false);
@@ -97,8 +96,6 @@ void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 	states.transform *= m_mainWidget.getTransform();
 	states.viewMatrix = gk::Transform::Identity;
-
-	target.draw(m_background, states);
 
 	for (auto &it : m_drawables)
 		target.draw(*it, states);

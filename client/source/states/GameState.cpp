@@ -53,33 +53,43 @@ GameState::GameState(const std::string &host, int port) {
 }
 
 void GameState::onEvent(const SDL_Event &event) {
-	if (event.type == SDL_MOUSEMOTION) {
-		if(SCREEN_WIDTH / 2 != event.motion.x || SCREEN_HEIGHT / 2 != event.motion.y) {
-			m_player.turnH(event.motion.xrel * 0.01 * Config::mouseSensitivity);
-			m_player.turnV(-event.motion.yrel * 0.01 * Config::mouseSensitivity);
+	if (&m_stateStack->top() == this) {
+		if (event.type == SDL_MOUSEMOTION) {
+			if(SCREEN_WIDTH / 2 != event.motion.x || SCREEN_HEIGHT / 2 != event.motion.y) {
+				m_player.turnH(event.motion.xrel * 0.01 * Config::mouseSensitivity);
+				m_player.turnV(-event.motion.yrel * 0.01 * Config::mouseSensitivity);
 
-			gk::Mouse::resetToWindowCenter();
+				gk::Mouse::resetToWindowCenter();
+			}
 		}
-	}
-	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE && &m_stateStack->top() == this) {
-		m_stateStack->push<PauseMenuState>(m_client, this);
-	}
-	else if (event.type == SDL_WINDOWEVENT) {
-		if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
-			// FIXME
-			// m_stateStack->push<PauseMenuState>(this);
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+			m_stateStack->push<PauseMenuState>(m_client, this);
+		}
+		else if (event.type == SDL_WINDOWEVENT) {
+			if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
+				// FIXME
+				// m_stateStack->push<PauseMenuState>(this);
 
-			gk::Mouse::setCursorGrabbed(false);
-			gk::Mouse::setCursorVisible(true);
+				gk::Mouse::setCursorGrabbed(false);
+				gk::Mouse::setCursorVisible(true);
+			}
+			else if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED) {
+				gk::Mouse::setCursorGrabbed(true);
+				gk::Mouse::setCursorVisible(false);
+			}
 		}
-		else if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED) {
-			gk::Mouse::setCursorGrabbed(true);
-			gk::Mouse::setCursorVisible(false);
-		}
+
+		if (m_clientCommandHandler.isRegistryInitialized())
+			m_hud.onEvent(event);
 	}
 
-	if (m_clientCommandHandler.isRegistryInitialized())
-		m_hud.onEvent(event);
+	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+		SCREEN_WIDTH = event.window.data1;
+		SCREEN_HEIGHT = event.window.data2;
+
+		m_camera.setAspectRatio((float)SCREEN_WIDTH / SCREEN_HEIGHT);
+		m_hud.setup();
+	}
 }
 
 void GameState::update() {

@@ -22,14 +22,17 @@ InventoryState::InventoryState(gk::ApplicationState *parent) : InterfaceState(pa
 	gk::Mouse::setCursorGrabbed(false);
 	gk::Mouse::setCursorVisible(true);
 	gk::Mouse::resetToWindowCenter();
-
-	m_background.setFillColor(gk::Color{0, 0, 0, 127});
-	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 void InventoryState::onEvent(const SDL_Event &event) {
-	// if (m_parent)
-	// 	m_parent->onEvent(event);
+	InterfaceState::onEvent(event);
+
+	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+		if (m_widget) {
+			m_widget->setPosition(SCREEN_WIDTH  / 2.0 - m_widget->getGlobalBounds().width  / 2.0,
+			                      SCREEN_HEIGHT / 2.0 - m_widget->getGlobalBounds().height / 2.0, 0);
+		}
+	}
 
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 		gk::Mouse::setCursorGrabbed(true);
@@ -56,8 +59,6 @@ void InventoryState::draw(gk::RenderTarget &target, gk::RenderStates states) con
 		target.draw(*m_parent, states);
 
 	prepareDraw(target, states);
-
-	target.draw(m_background, states);
 
 	if (m_widget)
 		target.draw(*m_widget, states);

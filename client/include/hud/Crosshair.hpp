@@ -20,6 +20,8 @@ class Crosshair : public gk::Drawable {
 	public:
 		Crosshair();
 
+		void setup();
+
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 

@@ -26,6 +26,8 @@ class HUD : public gk::Transformable, public gk::Drawable {
 	public:
 		HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client);
 
+		void setup();
+
 		void onEvent(const SDL_Event &event);
 
 		void update();

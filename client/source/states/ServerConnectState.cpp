@@ -55,6 +55,14 @@ ServerConnectState::ServerConnectState() {
 }
 
 void ServerConnectState::onEvent(const SDL_Event &event) {
+	InterfaceState::onEvent(event);
+
+	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+		m_textInput.setPosition(SCREEN_WIDTH / 2 - m_textInput.getSize().x / 2, SCREEN_HEIGHT / 2 - m_textInput.getSize().y / 2);
+		m_connectButton.setPosition(SCREEN_WIDTH / 2 - m_connectButton.getGlobalBounds().width / 2, SCREEN_HEIGHT - 340);
+		m_cancelButton.setPosition(SCREEN_WIDTH / 2 - m_cancelButton.getGlobalBounds().width / 2, SCREEN_HEIGHT - 261);
+	}
+
 	m_textInput.onEvent(event);
 
 	m_connectButton.onEvent(event);

@@ -15,6 +15,10 @@
 #include "Crosshair.hpp"
 
 Crosshair::Crosshair() {
+	setup();
+}
+
+void Crosshair::setup() {
 	float xFactor = SCREEN_WIDTH * SCREEN_HEIGHT / 100;
 	float yFactor = SCREEN_HEIGHT * SCREEN_WIDTH / 100;
 

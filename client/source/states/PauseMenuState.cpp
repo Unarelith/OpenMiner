@@ -29,12 +29,18 @@ PauseMenuState::PauseMenuState(Client &client, gk::ApplicationState *parent)
 	gk::Mouse::setCursorVisible(true);
 	gk::Mouse::resetToWindowCenter();
 
-	m_background.setFillColor(gk::Color{0, 0, 0, 127});
-	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
 	m_menuWidget.setScale(GUI_SCALE, GUI_SCALE, 1);
-	m_menuWidget.addButton("Back to Game", [this] (TextButton &) { gk::Mouse::setCursorGrabbed(true); gk::Mouse::setCursorVisible(false); m_stateStack->pop(); });
-	m_menuWidget.addButton("Options...", [this] (TextButton &) { m_stateStack->push<SettingsMenuState>(m_parent); });
+
+	m_menuWidget.addButton("Back to Game", [this] (TextButton &) {
+		gk::Mouse::setCursorGrabbed(true);
+		gk::Mouse::setCursorVisible(false);
+
+		m_stateStack->pop();
+	});
+
+	m_menuWidget.addButton("Options...", [this] (TextButton &) {
+		m_stateStack->push<SettingsMenuState>(this);
+	});
 
 	m_menuWidget.addButton("Title Screen", [this] (TextButton &) {
 		// m_client.disconnect();
@@ -52,14 +58,23 @@ PauseMenuState::PauseMenuState(Client &client, gk::ApplicationState *parent)
 }
 
 void PauseMenuState::onEvent(const SDL_Event &event) {
-	m_menuWidget.onEvent(event);
+	InterfaceState::onEvent(event);
 
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-		gk::Mouse::setCursorGrabbed(true);
-		gk::Mouse::setCursorVisible(false);
-		gk::Mouse::resetToWindowCenter();
+	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+		if (&m_stateStack->top() != this)
+			m_menuWidget.onEvent(event);
+	}
 
-		m_stateStack->pop();
+	if (&m_stateStack->top() == this) {
+		m_menuWidget.onEvent(event);
+
+		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+			gk::Mouse::setCursorGrabbed(true);
+			gk::Mouse::setCursorVisible(false);
+			gk::Mouse::resetToWindowCenter();
+
+			m_stateStack->pop();
+		}
 	}
 }
 
@@ -70,9 +85,10 @@ void PauseMenuState::draw(gk::RenderTarget &target, gk::RenderStates states) con
 	if (m_parent)
 		target.draw(*m_parent, states);
 
-	prepareDraw(target, states);
+	if (&m_stateStack->top() == this) {
+		prepareDraw(target, states);
 
-	target.draw(m_background, states);
-	target.draw(m_menuWidget, states);
+		target.draw(m_menuWidget, states);
+	}
 }
 

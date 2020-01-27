@@ -62,6 +62,15 @@ void ClientApplication::init() {
 	// m_stateStack.push<ServerLoadingState>(game);
 }
 
+void ClientApplication::handleEvents() {
+	gk::CoreApplication::handleEvents();
+
+	if ((Config::isFullscreenModeEnabled && m_window.getWindowMode() != gk::Window::Mode::Fullscreen)
+	|| (!Config::isFullscreenModeEnabled && m_window.getWindowMode() != gk::Window::Mode::Windowed)) {
+		m_window.setWindowMode(Config::isFullscreenModeEnabled ? gk::Window::Mode::Fullscreen : gk::Window::Mode::Windowed);
+	}
+}
+
 void ClientApplication::initOpenGL() {
 	// Enable transparency
 	glCheck(glEnable(GL_BLEND));

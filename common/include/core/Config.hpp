@@ -19,9 +19,6 @@
 namespace {
 	constexpr const char *APP_NAME = "OpenMiner";
 
-	constexpr float SCREEN_WIDTH  = 1600;
-	constexpr float SCREEN_HEIGHT = 1050;
-
 	constexpr float DIST_NEAR = 0.1f;
 	constexpr float DIST_FAR  = 1000.0f;
 
@@ -32,7 +29,12 @@ namespace {
 	constexpr int SEALEVEL = 4;
 }
 
-extern int GUI_SCALE; // FIXME
+// FIXME
+extern float SCREEN_WIDTH;
+extern float SCREEN_HEIGHT;
+
+// FIXME
+extern int GUI_SCALE;
 
 namespace Config {
 	// Gameplay
@@ -40,12 +42,15 @@ namespace Config {
 	extern bool isNoClipEnabled;
 
 	// Graphics
+	extern u16 renderDistance;
 	extern bool isTorchSmoothLightingEnabled;
 	extern bool isSunSmoothLightingEnabled;
 	extern bool isAmbientOcclusionEnabled;
 	extern bool isWireframeModeEnabled;
-	extern u16 renderDistance;
+	extern bool isFullscreenModeEnabled;
 	extern float cameraFOV;
+
+	// Input
 	extern u8 mouseSensitivity;
 }
 
