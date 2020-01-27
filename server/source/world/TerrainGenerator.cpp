@@ -58,6 +58,16 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 	noise.SetFrequency(1 / 256.0f);
 	noise.SetFractalOctaves(4);
 
+	FastNoise caveRigid;
+	caveRigid.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
+	caveRigid.SetFractalType(FastNoise::FractalType::RigidMulti);
+	caveRigid.SetFractalOctaves(1);
+	caveRigid.SetFrequency(1 / 64.0f);
+
+	FastNoise caveSimplex;
+	caveSimplex.SetNoiseType(FastNoise::NoiseType::Simplex);
+	caveSimplex.SetFrequency(1 / 256.0f);
+
 	srand(chunk.x() + chunk.y() + chunk.z() + 1337);
 	Chunk *topChunk = chunk.getSurroundingChunk(Chunk::Top);
 	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
@@ -123,15 +133,32 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 						chunk.setBlockRaw(x, y, z, m_stoneBlockID);
 
 					// Caves
-					float n2 = noise2d(-(x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
-					float r2 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 512.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 0.1);
-					float r3 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 128.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 1);
-					float r4 = n2 * 5 + r2 * r3 * 20;
-					if (r4 > 6 && r4 < 8 && h > SEALEVEL) {
-						chunk.setBlockRaw(x, y, z - 1, 0);
+					// float n2 = noise2d(-(x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
+					// float r2 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 512.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 0.1);
+					// float r3 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 128.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 1);
+					// float r4 = n2 * 5 + r2 * r3 * 20;
+					// if (r4 > 6 && r4 < 8 && h > SEALEVEL) {
+					// 	chunk.setBlockRaw(x, y, z - 1, 0);
+					// 	chunk.setBlockRaw(x, y, z, 0);
+					// 	chunk.setBlockRaw(x, y, z + 1, 0);
+					// }
+
+					static const int maxCaveSize = 8;
+					static const int maxCaveY = 60 - maxCaveSize;
+
+					float simplex = (caveSimplex.GetNoise(x + chunk.x() * CHUNK_WIDTH, z + chunk.z() * CHUNK_DEPTH) * 0.5f + 0.5f) * maxCaveY;
+
+					float rigid = caveRigid.GetNoise(x + chunk.x() * CHUNK_WIDTH, z + chunk.z() * CHUNK_DEPTH);
+					if (y + chunk.y() * CHUNK_HEIGHT > simplex && y + chunk.y() * CHUNK_HEIGHT < simplex + rigid * maxCaveSize && rigid > 0.8)
 						chunk.setBlockRaw(x, y, z, 0);
-						chunk.setBlockRaw(x, y, z + 1, 0);
-					}
+
+					// if (y + chunk.y() * CHUNK_HEIGHT > simplex && y + chunk.y() * CHUNK_HEIGHT < simplex + rigid)
+					// 	chunk.setBlockRaw(x, y, z, 0);
+
+					// float rigid = pow(caveRigid.GetNoise(x + chunk.x() * CHUNK_WIDTH, z + chunk.z() * CHUNK_DEPTH),50.f) * maxCaveSize;
+					// rigid = std::max(rigid - 2, 0.f);
+					// if (y + chunk.y() * CHUNK_HEIGHT > simplex && y + chunk.y() * CHUNK_HEIGHT < simplex + rigid)
+					// 	chunk.setBlockRaw(x, y, z, 0);
 				}
 
 				if (topChunk && topChunk->isInitialized()) {
