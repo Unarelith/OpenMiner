@@ -81,6 +81,8 @@ void PlayerBox::updateVertexBuffer() {
 void PlayerBox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
+	states.vertexAttributes = gk::VertexAttribute::Coord3d | gk::VertexAttribute::Color;
+
 	target.draw(m_vbo, GL_QUADS, 0, 24, states);
 }
 
