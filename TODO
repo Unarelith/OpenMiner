@@ -20,7 +20,8 @@ TODO
    ◦ DONE: When loading chunks with smooth lighting enabled, they have black borders
    ◦ DONE: Flower lighting is weird
    ◦ TODO: Trees should block light
-• TODO: `ServerWorld::sendWorldData` is useless and should be replaced by `sendSpawnData`
+• DONE: Reset breaking timer when right-clicking a block
+• DONE: Reset breaking timer when switching items
 • TODO: Shapeless recipe code isn’t working
 • TODO: GUI scale issues
    ◦ TODO: `HUD` doesn’t update when GUI scale is changed

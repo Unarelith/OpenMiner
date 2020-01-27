@@ -67,8 +67,12 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
 			m_animationStart = gk::GameClock::getTicks();
+			m_currentTool = &m_player.inventory().getStack(hotbar.cursorPos(), 0);
 		}
 		else if (event.button.button == SDL_BUTTON_RIGHT) {
+			if (m_animationStart != 0)
+				m_animationStart = 0;
+
 			u32 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
 			const Block &block = Registry::getInstance().getBlock(blockId);
 			const Item &item = Registry::getInstance().getItem(hotbar.currentItem());
@@ -133,15 +137,22 @@ void BlockCursor::update(const Hotbar &hotbar, bool useDepthBuffer) {
 	const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
 	float timeToBreak = 0;
 	if (m_animationStart) {
-		timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed());
-		if (gk::GameClock::getTicks() > m_animationStart + timeToBreak * 1000) {
-			ItemStack itemDrop = m_currentBlock->getItemDrop();
-			m_player.inventory().addStack(itemDrop.item().name(), itemDrop.amount());
-			m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
+		if (m_currentTool->item().id() != currentStack.item().id()) {
 			m_animationStart = gk::GameClock::getTicks();
+			m_currentTool = &currentStack;
+		}
+		else {
+			timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed());
 
-			m_client.sendPlayerDigBlock(m_selectedBlock);
-			m_client.sendPlayerInvUpdate();
+			if (gk::GameClock::getTicks() > m_animationStart + timeToBreak * 1000) {
+				ItemStack itemDrop = m_currentBlock->getItemDrop();
+				m_player.inventory().addStack(itemDrop.item().name(), itemDrop.amount());
+				m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
+				m_animationStart = gk::GameClock::getTicks();
+
+				m_client.sendPlayerDigBlock(m_selectedBlock);
+				m_client.sendPlayerInvUpdate();
+			}
 		}
 	}
 

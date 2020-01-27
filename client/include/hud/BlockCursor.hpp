@@ -53,6 +53,7 @@ class BlockCursor : public gk::Drawable {
 		unsigned int m_animationStart = 0;
 		glm::vec4 m_selectedBlock{0, 0, 0, -1};
 		const Block *m_currentBlock = nullptr;
+		const ItemStack *m_currentTool = nullptr;
 };
 
 #endif // BLOCKCURSOR_HPP_
