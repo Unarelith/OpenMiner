@@ -60,7 +60,7 @@ class ClientPlayer : public Player {
 		const gk::Camera &camera() { return m_camera; }
 
 	private:
-		void testPoint(const ClientWorld &world, glm::vec3 pos, glm::vec3 &speed);
+		void testPoint(const ClientWorld &world, float x, float y, float z, glm::vec3 &speed);
 
 		static ClientPlayer *s_instance;
 
@@ -78,6 +78,8 @@ class ClientPlayer : public Player {
 
 		const float m_gravity = 0.001;
 		const float m_jumpSpeed = 0.06f;
+
+		gk::FloatBox m_hitbox;
 };
 
 #endif // CLIENTPLAYER_HPP_

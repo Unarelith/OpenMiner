@@ -32,6 +32,8 @@ ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
 	m_angleH = -90.0;
 	m_angleV = 0.01;
 
+	m_hitbox = gk::FloatBox{-0.2, -1.8, -0.2, 0.4, 1.8, 0.4};
+
 	m_camera.setPosition(m_x, m_y, m_z);
 	m_camera.setTargetPosition(pointTargetedX(), pointTargetedY(), pointTargetedZ());
 }
@@ -134,19 +136,17 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 		m_velocity.y = 0;
 }
 
-// FIXME: Use AABB for more precision
 void ClientPlayer::checkCollisions(const ClientWorld &world) {
-	const float PLAYER_HEIGHT = 1.8;
-	float eyeheight = m_y + PLAYER_HEIGHT - 1.4;
-	// testPoint(world, glm::vec3(m_x, m_y, m_z), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z + 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - 0.4, m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - 0.4, m_z - 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x - 0.2, eyeheight - 0.4, m_z + 0.2), m_velocity);
-	testPoint(world, glm::vec3(m_x + 0.2, eyeheight - 0.4, m_z + 0.2), m_velocity);
+	for (float x = m_x + m_hitbox.x ; x <= m_x + m_hitbox.x + m_hitbox.width + 0.1f ; x += 0.2f) {
+		for (float y = m_y + m_hitbox.y ; y <= m_y + m_hitbox.y + m_hitbox.height + 0.1f ; y += 0.9f) {
+			for (float z = m_z + m_hitbox.z ; z <= m_z + m_hitbox.z + m_hitbox.depth + 0.1f ; z += 0.2f) {
+				if (x == m_x + m_hitbox.x || x == m_x + m_hitbox.x + m_hitbox.width
+				 || y == m_y + m_hitbox.y || y == m_y + m_hitbox.y + m_hitbox.height
+				 || z == m_z + m_hitbox.z || z == m_z + m_hitbox.z + m_hitbox.depth)
+					testPoint(world, x, y, z, m_velocity);
+			}
+		}
+	}
 }
 
 bool passable(const ClientWorld &world, float x, float y, float z) {
@@ -154,15 +154,15 @@ bool passable(const ClientWorld &world, float x, float y, float z) {
 	return !block || block == 8 || block == BlockType::Flower;
 }
 
-void ClientPlayer::testPoint(const ClientWorld &world, glm::vec3 pos, glm::vec3 &speed) {
+void ClientPlayer::testPoint(const ClientWorld &world, float x, float y, float z, glm::vec3 &speed) {
 	// FIXME: Temporary fix, find the real problem!!!
-	if (pos.x < 0) --pos.x;
-	if (pos.y < 1) --pos.y;
-	if (pos.z < 0) --pos.z;
+	if (x < 0) --x;
+	if (y < 1) --y;
+	if (z < 0) --z;
 
-	if(!passable(world, pos.x + speed.x, pos.y, pos.z)) speed.x = 0;
-	if(!passable(world, pos.x, pos.y, pos.z + speed.z)) speed.z = 0;
-	if(!passable(world, pos.x, pos.y + speed.y, pos.z)) {
+	if(!passable(world, x + speed.x, y, z)) speed.x = 0;
+	if(!passable(world, x, y, z + speed.z)) speed.z = 0;
+	if(!passable(world, x, y + speed.y, z)) {
 		if(speed.y < 0 && m_isJumping) m_isJumping = false;
 		speed.y = 0;
 	}
