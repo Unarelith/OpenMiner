@@ -49,6 +49,8 @@ class HUD : public gk::Transformable, public gk::Drawable {
 		bool m_isDebugOverlayVisible = false;
 
 		BlockInfoWidget m_blockInfoWidget;
+
+		Text m_fpsText;
 };
 
 #endif // HUD_HPP_

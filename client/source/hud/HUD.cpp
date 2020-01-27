@@ -13,6 +13,8 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <gk/core/GameClock.hpp>
+
 #include "ClientPlayer.hpp"
 #include "Config.hpp"
 #include "HUD.hpp"
@@ -41,6 +43,8 @@ void HUD::setup() {
 
 	m_blockInfoWidget.setPosition(SCREEN_WIDTH / getScale().x / 2 - m_blockInfoWidget.width() / 2, 2, 0);
 
+	m_fpsText.setPosition(SCREEN_WIDTH / getScale().x - 36, 2);
+
 	m_crosshair.setup();
 }
 
@@ -55,6 +59,8 @@ void HUD::onEvent(const SDL_Event &event) {
 void HUD::update() {
 	// FIXME: Shouldn't be called every tick
 	m_hotbar.update();
+
+	m_fpsText.setText(std::to_string(gk::GameClock::getFpsAverage()) + " FPS");
 
 	m_blockCursor.update(m_hotbar, false);
 
@@ -84,6 +90,7 @@ void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	target.draw(m_blockInfoWidget, states);
 	target.draw(m_hotbar, states);
+	target.draw(m_fpsText, states);
 
 	states.transform = gk::Transform::Identity;
 
