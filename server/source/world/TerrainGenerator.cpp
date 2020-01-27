@@ -143,19 +143,22 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 					// 	chunk.setBlockRaw(x, y, z + 1, 0);
 					// }
 
-					static const int maxCaveSize = 8;
-					static const int maxCaveY = 60 - maxCaveSize;
-
-					float simplex = (caveSimplex.GetNoise(x + chunk.x() * CHUNK_WIDTH, z + chunk.z() * CHUNK_DEPTH) * 0.5f + 0.5f) * maxCaveY;
-
-					float rigid = caveRigid.GetNoise(x + chunk.x() * CHUNK_WIDTH, z + chunk.z() * CHUNK_DEPTH);
-					if (y + chunk.y() * CHUNK_HEIGHT > simplex && y + chunk.y() * CHUNK_HEIGHT < simplex + rigid * maxCaveSize && rigid > 0.8)
-						chunk.setBlockRaw(x, y, z, 0);
+					// static const int maxCaveSize = 8;
+					// static const int maxCaveY = 60 - maxCaveSize;
+                    //
+					// float rigid = caveRigid.GetNoise(x + chunk.x() * CHUNK_WIDTH, z + chunk.z() * CHUNK_DEPTH);
+					// float simplex = std::abs(caveSimplex.GetNoise(x + chunk.x() * CHUNK_WIDTH, rigid * maxCaveSize, z + chunk.z() * CHUNK_DEPTH)) * maxCaveY / 2.0f;
+                    //
+					// if (y + chunk.y() * CHUNK_HEIGHT > simplex && y + chunk.y() * CHUNK_HEIGHT < simplex + rigid * maxCaveSize && rigid > 0.8) {
+					// 	float simplex2 = std::abs(caveSimplex.GetNoise((1 - rigid) * maxCaveSize, y + chunk.y() * CHUNK_HEIGHT - simplex));
+					// 	if (simplex2 < 0.05)
+					// 		chunk.setBlockRaw(x, y, z, 0);
+					// }
 
 					// if (y + chunk.y() * CHUNK_HEIGHT > simplex && y + chunk.y() * CHUNK_HEIGHT < simplex + rigid)
 					// 	chunk.setBlockRaw(x, y, z, 0);
 
-					// float rigid = pow(caveRigid.GetNoise(x + chunk.x() * CHUNK_WIDTH, z + chunk.z() * CHUNK_DEPTH),50.f) * maxCaveSize;
+					// float rigid = pow(caveRigid.GetNoise(x + chunk.x() * CHUNK_WIDTH, z + chunk.z() * CHUNK_DEPTH),8.f) * maxCaveSize;
 					// rigid = std::max(rigid - 2, 0.f);
 					// if (y + chunk.y() * CHUNK_HEIGHT > simplex && y + chunk.y() * CHUNK_HEIGHT < simplex + rigid)
 					// 	chunk.setBlockRaw(x, y, z, 0);
@@ -165,6 +168,57 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 					int sunlightLevel = topChunk->lightmap().getSunlight(x, y, 0);
 					if (sunlightLevel) {
 						chunk.lightmap().addSunlight(x, y, CHUNK_HEIGHT - 1, sunlightLevel);
+					}
+				}
+			}
+		}
+	}
+
+	auto randomFloat = []{ return rand() % 64 / 64.0f; };
+
+	float height = CHUNK_HEIGHT * 3;
+
+	gk::Vector3i cavePos{rand() % CHUNK_WIDTH, rand() % CHUNK_HEIGHT, rand() % CHUNK_DEPTH};
+	int caveLength = randomFloat() * randomFloat() * 200.0f;
+
+	float theta = randomFloat() * M_PI * 2.0f;
+	float deltaTheta = 0.0f;
+
+	float phi = randomFloat() * M_PI * 2.0f;
+	float deltaPhi = 0.0f;
+
+	float caveRadius = randomFloat() * randomFloat();
+
+	for (int len = 0 ; len < caveLength ; ++len) {
+		cavePos.x += std::sin(theta) * std::cos(phi);
+		cavePos.z += std::cos(theta) * std::cos(phi);
+		cavePos.y += std::sin(phi);
+
+		theta += deltaTheta * 0.2f;
+		deltaTheta = deltaTheta * 0.9f + randomFloat() - randomFloat();
+
+		phi = phi * 0.5f + deltaPhi * 0.25f;
+		deltaPhi = deltaPhi * 0.75f + randomFloat() - randomFloat();
+
+		if (randomFloat() >= 0.25f) {
+			gk::Vector3i centerPos;
+			centerPos.x = cavePos.x + ((rand() % 4) - 2) * 0.2f;
+			centerPos.y = cavePos.y + ((rand() % 4) - 2) * 0.2f;
+			centerPos.z = cavePos.z + ((rand() % 4) - 2) * 0.2f;
+
+			float radius = (height - centerPos.y) / height;
+			radius = 1.2f + (radius * 3.5f + 1.0f) * caveRadius;
+			radius *= std::sin(len * M_PI / caveLength);
+
+			gk::Vector3f begin{centerPos.x - radius, centerPos.y - radius, centerPos.z - radius};
+			gk::Vector3f end{centerPos.x + radius, centerPos.y + radius, centerPos.z + radius};
+			float radiusSq = radius * radius;
+			gk::Vector3i d;
+			for (int yy = begin.y ; yy <= end.y ; ++yy) { d.y = yy - centerPos.y;
+				for (int zz = begin.z ; zz <= end.z ; ++zz) { d.z = zz - centerPos.z;
+					for (int xx = begin.x ; xx <= end.x ; ++xx) { d.x = xx - centerPos.x;
+						if (d.x * d.x + 2 * d.y * d.y + d.z * d.z < radiusSq)
+							chunk.setBlockRaw(xx, yy, zz, 0);
 					}
 				}
 			}
