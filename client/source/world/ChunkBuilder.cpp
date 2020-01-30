@@ -150,7 +150,7 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 	normal = glm::cross(v1, v2);
 
 	// const glm::vec4 &blockTexCoords = block->getTexCoords(i, chunk.getData(x, y, z));
-	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->textureFilename());
+	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->tiles().get(0));
 	float faceTexCoords[2 * 4] = {
 		blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.height,
 		blockTexCoords.x + blockTexCoords.width, blockTexCoords.y + blockTexCoords.height,
@@ -231,7 +231,7 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 
 inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Block *block) {
 	// const glm::vec4 &blockTexCoords = block->getTexCoords(0, chunk.getData(x, y, z));
-	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->textureFilename());
+	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->tiles().get(0));
 	float faceTexCoords[2 * 4] = {
 		blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.height,
 		blockTexCoords.x + blockTexCoords.width, blockTexCoords.y + blockTexCoords.height,

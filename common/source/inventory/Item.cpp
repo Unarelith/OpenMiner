@@ -11,13 +11,29 @@
  *
  * =====================================================================================
  */
+#include <SFML/Network/Packet.hpp>
+
 #include "Item.hpp"
 
-Item::Item(u32 id, const std::string &textureFilename, const std::string &name, const std::string &label) {
+Item::Item(u32 id, const TilesDef &tiles, const std::string &name, const std::string &label) {
 	m_id = id;
-	m_textureFilename = textureFilename;
+	m_tiles = tiles;
 
 	m_name = name;
 	m_label = label;
+}
+
+void Item::serialize(sf::Packet &packet) {
+	packet << m_id << m_name << m_label << m_isBlock << m_isFuel
+		<< m_burnTime << m_miningSpeed << m_harvestCapability;
+
+	m_tiles.serialize(packet);
+}
+
+void Item::deserialize(sf::Packet &packet) {
+	packet >> m_id >> m_name >> m_label >> m_isBlock >> m_isFuel
+		>> m_burnTime >> m_miningSpeed >> m_harvestCapability;
+
+	m_tiles.deserialize(packet);
 }
 

@@ -50,7 +50,7 @@ void ItemWidget::updateImage() {
 		m_image.setClipRect(0, 0, 0, 0);
 	}
 
-	gk::FloatRect clipRect = m_textureAtlas.getTexCoords(stack().item().textureFilename(), false);
+	gk::FloatRect clipRect = m_textureAtlas.getTexCoords(stack().item().tiles().get(0), false);
 	m_image.setClipRect(clipRect.x, clipRect.y, clipRect.width, clipRect.height);
 	m_image.setScale(16.0f / clipRect.width, 16.0f / clipRect.height);
 

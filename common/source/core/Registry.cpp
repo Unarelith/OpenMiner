@@ -19,10 +19,20 @@
 
 Registry *Registry::s_instance = nullptr;
 
-Item &Registry::registerItem(const std::string &textureFilename, const std::string &id, const std::string &name) {
+Item &Registry::registerItem(const TilesDef &tiles, const std::string &id, const std::string &name) {
 	u32 internalID = m_items.size();
 	m_itemsID.emplace(id, internalID);
-	m_items.emplace_back(internalID, textureFilename, id, name);
+	m_items.emplace_back(internalID, tiles, id, name);
+	return m_items.back();
+}
+
+Item &Registry::registerSerializedItem(sf::Packet &packet) {
+	m_items.emplace_back();
+	m_items.back().deserialize(packet);
+
+	u32 internalID = m_items.size() - 1;
+	m_itemsID.emplace(m_items.back().name(), internalID);
+
 	return m_items.back();
 }
 
@@ -52,14 +62,13 @@ const Recipe *Registry::getRecipe(const Inventory &inventory) const {
 
 void Registry::serialize(sf::Packet &packet) {
 	for (auto &it : m_items) {
-		packet << u8(DataType::Item) << it.id() << it.name() << it.label()
-			<< it.textureFilename() << it.isBlock() << it.isFuel()
-			<< it.burnTime() << it.miningSpeed() << it.harvestCapability();
+		packet << u8(DataType::Item);
+		it.serialize(packet);
 	}
 
 	for (auto &it : m_blocks) {
-		packet << u8(DataType::Block) << u32(it->id()) << it->name() << it->label() << u8(it->drawType())
-			<< it->textureFilename() << it->hardness() << it->harvestRequirements() << it->getItemDrop();
+		packet << u8(DataType::Block);
+		it->serialize(packet);
 	}
 
 	for (auto &it : m_recipes) {
@@ -69,38 +78,14 @@ void Registry::serialize(sf::Packet &packet) {
 }
 
 void Registry::deserialize(sf::Packet &packet) {
-	u8 type;
-	u32 id;
-	std::string textureFilename, name, label;
 	while (!packet.endOfPacket()) {
+		u8 type;
 		packet >> type;
 		if (type == u8(DataType::Block)) {
-			u8 harvestRequirements, drawType;
-			ItemStack itemDrop;
-			float hardness;
-			packet >> id >> name >> label >> drawType >> textureFilename >> hardness
-				>> harvestRequirements >> itemDrop;
-
-			auto &block = registerBlock<Block>(textureFilename, name, label);
-			block.setDrawType(BlockDrawType(drawType));
-			block.setHardness(hardness);
-			block.setHarvestRequirements(harvestRequirements);
-			block.setItemDrop(itemDrop.item().name(), itemDrop.amount());
+			registerSerializedBlock<Block>(packet);
 		}
 		else if (type == u8(DataType::Item)) {
-			bool isFuel, isBlock;
-			u8 harvestCapability;
-			float miningSpeed;
-			u16 burnTime;
-			packet >> id >> name >> label >> textureFilename >> isBlock >> isFuel
-				>> burnTime >> miningSpeed >> harvestCapability;
-
-			auto &item = registerItem(textureFilename, name, label);
-			item.setIsBlock(isBlock);
-			item.setIsFuel(isFuel);
-			item.setBurnTime(burnTime);
-			item.setMiningSpeed(miningSpeed);
-			item.setHarvestCapability(harvestCapability);
+			registerSerializedItem(packet);
 		}
 		else if (type == u8(DataType::CraftingRecipe)) {
 			registerRecipe<CraftingRecipe>()->deserialize(packet);

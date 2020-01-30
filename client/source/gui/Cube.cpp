@@ -33,6 +33,8 @@ Cube::Cube(float size) : m_textureAtlas(gk::ResourceHandler::getInstance().get<T
 }
 
 void Cube::updateVertexBuffer(const Block &block) {
+	if (!block.id()) return;
+
 	gk::Vertex vertices[6 * 4] = {
 		// Left
 		{{0, 0, 0, 2}},
@@ -72,7 +74,7 @@ void Cube::updateVertexBuffer(const Block &block) {
 	};
 
 	for (u8 i = 0 ; i < 6 ; ++i) {
-		const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block.textureFilename()); // block.getTexCoords(i, 0);
+		const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block.tiles().get(0)); // block.getTexCoords(i, 0);
 		float faceTexCoords[2 * 4] = {
 			blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.height,
 			blockTexCoords.x + blockTexCoords.width, blockTexCoords.y + blockTexCoords.height,

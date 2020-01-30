@@ -3,7 +3,7 @@ mod:block {
 	name = "Furnace",
 	-- texture = 164, -- Vanilla
 	-- texture = 205, -- Faithful 32x
-	texture = "furnace_front.png",
+	tiles = "furnace_front.png",
 
 	on_block_activated = function(pos, player, world, client)
 		local gui = LuaGUI.new()
