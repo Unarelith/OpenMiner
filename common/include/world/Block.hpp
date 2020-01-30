@@ -52,6 +52,8 @@ class Block : public ISerializable {
 		const std::string &label() const { return m_label; }
 		void setLabel(const std::string &label) { m_label = label; }
 
+		std::string modName() const { return m_name.substr(0, m_name.find_first_of(":")); }
+
 		s8 selectedFace() const { return m_selectedFace; }
 		void setSelected(bool isSelected, s8 face) { m_isSelected = isSelected; m_selectedFace = face; }
 
