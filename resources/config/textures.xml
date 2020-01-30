@@ -1,10 +1,8 @@
 <textures>
 	<texture name="block_destroy"    path="resources/textures/block_destroy.png" />
-	<texture name="blocks"           path="resources/textures/blocks.png" />
 	<texture name="font"             path="resources/textures/font.png" />
 	<texture name="furnace"          path="resources/textures/furnace.png" />
 	<texture name="inventory"        path="resources/textures/inventory.png" />
-	<texture name="items"            path="resources/textures/items.png" />
 	<texture name="toasts"           path="resources/textures/toasts.png" />
 	<texture name="widgets"          path="resources/textures/widgets.png" />
 	<texture name="workbench"        path="resources/textures/workbench.png" />
