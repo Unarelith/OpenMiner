@@ -69,6 +69,9 @@ void main() {
 		// Front or Back
 		if (blockFace == 4. || blockFace == 5.)
 			ambientIntensity = max(ambientIntensity * 0.9, minBrightness);
+		// Flowers
+		if (blockFace == 6.)
+			ambientIntensity = max(ambientIntensity * 0.9, minBrightness);
 
 		color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
 

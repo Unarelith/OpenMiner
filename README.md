@@ -98,7 +98,7 @@ This list is non exhaustive.
 ### Lua API
 
 - [x] Register blocks/craft/items in the game
-- [x] Create custom GUI and show them to player when rightclicking a block
+- [x] Create custom GUI and show them to player when right-clicking a block
 
 ### World
 
