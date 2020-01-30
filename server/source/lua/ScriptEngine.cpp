@@ -37,7 +37,7 @@ void ScriptEngine::init() {
 		sol::lib::table
 	);
 
-	m_lua.safe_script_file("mods/test.lua");
+	m_lua.safe_script_file("mods/default/init.lua");
 }
 
 void ScriptEngine::initUsertypes() {

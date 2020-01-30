@@ -33,6 +33,8 @@ class Item : public ISerializable {
 		const std::string &name() const { return m_name; }
 		const std::string &label() const { return m_label; }
 
+		std::string modName() const { return m_name.substr(0, m_name.find_first_of(":")); }
+
 		u32 id() const { return m_id; }
 		const TilesDef &tiles() const { return m_tiles; }
 

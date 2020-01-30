@@ -90,8 +90,8 @@ mod:block {
 	tiles = "glowstone.png"
 }
 
-dofile("mods/workbench.lua")
-dofile("mods/furnace.lua")
+dofile("mods/default/workbench.lua")
+dofile("mods/default/furnace.lua")
 
 mod:block {
 	id = "iron_ore",
