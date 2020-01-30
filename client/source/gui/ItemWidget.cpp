@@ -11,29 +11,32 @@
  *
  * =====================================================================================
  */
+#include <gk/resource/ResourceHandler.hpp>
+
 #include "ItemWidget.hpp"
 #include "Registry.hpp"
+#include "TextureAtlas.hpp"
 
 ItemWidget::ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent)
-	: Widget(18, 18, parent), m_inventory(inventory), m_x(x), m_y(y)
+	: Widget(18, 18, parent), m_inventory(inventory), m_x(x), m_y(y),
+	m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
 	m_cube.setPosition(-12.7, -14.6, 0);
 	// m_cube.setPosition(8.5, 14, 0);
 	// m_cube.setRotation(-172, glm::vec3{0.42, -0.2, 1});
 
-	m_image.load("texture-items");
+	m_image.load(m_textureAtlas.texture());
 	m_image.setPosition(1, 1, 0);
 	m_image.setClipRect(0, 0, 0, 0);
 }
 
 void ItemWidget::update() {
-	const u16 tileSize = 32;
-
 	if (stack().item().isBlock())
 		m_cube.updateVertexBuffer(Registry::getInstance().getBlock(stack().item().id()));
 	else {
-		m_image.setClipRect(stack().item().textureID() % 16 * tileSize, stack().item().textureID() / 16 * tileSize, tileSize, tileSize);
-		m_image.setScale(16.0f / tileSize, 16.0f / tileSize);
+		gk::FloatRect clipRect = m_textureAtlas.getTexCoords(stack().item().textureFilename(), false);
+		m_image.setClipRect(clipRect.x, clipRect.y, clipRect.width, clipRect.height);
+		m_image.setScale(16.0f / clipRect.width, 16.0f / clipRect.height);
 	}
 
 	m_text.setText(std::to_string(stack().amount()));

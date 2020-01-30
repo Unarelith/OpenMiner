@@ -13,9 +13,9 @@
  */
 #include "Item.hpp"
 
-Item::Item(u32 id, u32 textureID, const std::string &name, const std::string &label) {
+Item::Item(u32 id, const std::string &textureFilename, const std::string &name, const std::string &label) {
 	m_id = id;
-	m_textureID = textureID;
+	m_textureFilename = textureFilename;
 
 	m_name = name;
 	m_label = label;

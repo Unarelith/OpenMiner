@@ -19,6 +19,7 @@
 #include <gk/gl/VertexBuffer.hpp>
 
 class Block;
+class TextureAtlas;
 
 class Cube : public gk::Drawable, public gk::Transformable {
 	public:
@@ -31,7 +32,7 @@ class Cube : public gk::Drawable, public gk::Transformable {
 
 		float m_size = 1.0f;
 
-		const gk::Texture &m_texture;
+		const TextureAtlas &m_textureAtlas;
 
 		gk::VertexBuffer m_vbo;
 		bool m_isVboInitialized = false;

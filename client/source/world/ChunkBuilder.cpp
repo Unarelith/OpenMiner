@@ -14,6 +14,7 @@
 #include "ClientChunk.hpp"
 #include "ChunkBuilder.hpp"
 #include "Registry.hpp"
+#include "TextureAtlas.hpp"
 
 static const float cubeCoords[6 * 4 * 3] = {
 	// Left
@@ -148,12 +149,13 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 	// Computing face normal (already normalized because vertexCoords are normalized)
 	normal = glm::cross(v1, v2);
 
-	const glm::vec4 &blockTexCoords = block->getTexCoords(i, chunk.getData(x, y, z));
+	// const glm::vec4 &blockTexCoords = block->getTexCoords(i, chunk.getData(x, y, z));
+	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->textureFilename());
 	float faceTexCoords[2 * 4] = {
-		blockTexCoords.x, blockTexCoords.w,
-		blockTexCoords.z, blockTexCoords.w,
-		blockTexCoords.z, blockTexCoords.y,
-		blockTexCoords.x, blockTexCoords.y
+		blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.height,
+		blockTexCoords.x + blockTexCoords.width, blockTexCoords.y + blockTexCoords.height,
+		blockTexCoords.x + blockTexCoords.width, blockTexCoords.y,
+		blockTexCoords.x,                        blockTexCoords.y
 	};
 
 	// Store vertex information
@@ -228,12 +230,13 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 }
 
 inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Block *block) {
-	const glm::vec4 &blockTexCoords = block->getTexCoords(0, chunk.getData(x, y, z));
+	// const glm::vec4 &blockTexCoords = block->getTexCoords(0, chunk.getData(x, y, z));
+	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->textureFilename());
 	float faceTexCoords[2 * 4] = {
-		blockTexCoords.x, blockTexCoords.w,
-		blockTexCoords.z, blockTexCoords.w,
-		blockTexCoords.z, blockTexCoords.y,
-		blockTexCoords.x, blockTexCoords.y,
+		blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.height,
+		blockTexCoords.x + blockTexCoords.width, blockTexCoords.y + blockTexCoords.height,
+		blockTexCoords.x + blockTexCoords.width, blockTexCoords.y,
+		blockTexCoords.x,                        blockTexCoords.y
 	};
 
 	static glm::vec3 normal{0, 0, 0};

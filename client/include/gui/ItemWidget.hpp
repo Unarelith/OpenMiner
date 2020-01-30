@@ -39,6 +39,8 @@ class ItemWidget : public Widget {
 		unsigned int m_x = 0;
 		unsigned int m_y = 0;
 
+		TextureAtlas &m_textureAtlas;
+
 		gk::Image m_image;
 		Text m_text;
 

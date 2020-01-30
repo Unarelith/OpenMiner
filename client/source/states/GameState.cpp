@@ -21,6 +21,7 @@
 #include <gk/core/Exception.hpp>
 #include <gk/core/Mouse.hpp>
 #include <gk/gl/OpenGL.hpp>
+#include <gk/resource/ResourceHandler.hpp>
 
 #include "GameKey.hpp"
 #include "GameState.hpp"
@@ -29,10 +30,13 @@
 #include "PauseMenuState.hpp"
 #include "PlayerInventoryWidget.hpp"
 #include "Registry.hpp"
+#include "TextureAtlas.hpp"
 
 GameState::GameState(const std::string &host, int port) {
 	// Set clear color to skyblue
 	glClearColor(0.196078, 0.6, 0.8, 1.0);
+
+	m_textureAtlas = &gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks");
 
 	m_camera.setAspectRatio((float)SCREEN_WIDTH / SCREEN_HEIGHT);
 
@@ -99,18 +103,23 @@ void GameState::update() {
 		m_camera.setFieldOfView(Config::cameraFOV);
 
 	if (m_clientCommandHandler.isRegistryInitialized()) {
-		if (&m_stateStack->top() == this) {
-			m_player.processInputs();
+		if (m_textureAtlas->isReady()) {
+			if (&m_stateStack->top() == this) {
+				m_player.processInputs();
 
-			if (gk::GamePad::isKeyPressedOnce(GameKey::Inventory)) {
-				auto &inventoryState = m_stateStack->push<InventoryState>(this);
-				inventoryState.setupWidget<PlayerInventoryWidget>(m_clientCommandHandler, m_player.inventory());
+				if (gk::GamePad::isKeyPressedOnce(GameKey::Inventory)) {
+					auto &inventoryState = m_stateStack->push<InventoryState>(this);
+					inventoryState.setupWidget<PlayerInventoryWidget>(m_clientCommandHandler, m_player.inventory());
+				}
 			}
+
+			m_player.updatePosition(m_world);
+
+			m_hud.update();
 		}
-
-		m_player.updatePosition(m_world);
-
-		m_hud.update();
+		else {
+			m_textureAtlas->loadFromRegistry();
+		}
 	}
 
 	if (gk::GameClock::getTicks() % 1000 < 10) {

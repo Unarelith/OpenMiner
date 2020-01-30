@@ -18,6 +18,7 @@
 
 #include "ClientApplication.hpp"
 #include "Config.hpp"
+#include "TextureAtlas.hpp"
 #include "TextureLoader.hpp"
 
 #include "GameState.hpp"
@@ -51,6 +52,7 @@ void ClientApplication::init() {
 
 	m_resourceHandler.loadConfigFile<TextureLoader>("resources/config/textures.xml");
 	m_resourceHandler.add<gk::Font>("font-default", "resources/fonts/default.ttf");
+	m_resourceHandler.add<TextureAtlas>("atlas-blocks");
 
 	Registry::setInstance(m_registry);
 
