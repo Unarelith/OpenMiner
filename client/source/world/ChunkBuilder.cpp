@@ -247,7 +247,7 @@ inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, c
 			vertices[j].coord3d[0] = x + crossCoords[i * 12 + j * 3];
 			vertices[j].coord3d[1] = y + crossCoords[i * 12 + j * 3 + 1];
 			vertices[j].coord3d[2] = z + crossCoords[i * 12 + j * 3 + 2];
-			vertices[j].coord3d[3] = i;
+			vertices[j].coord3d[3] = 6;
 
 			vertices[j].normal[0] = normal.x;
 			vertices[j].normal[1] = normal.y;

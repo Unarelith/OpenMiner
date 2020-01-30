@@ -2,10 +2,10 @@ TODO
 
 # General
 
+• DONE: Add a texture pack system
+   ◦ DONE: It should be able to accept any type of texture resolution
+• DONE: Add fullscreen, and handle window resize
 • TODO: Use Faithful 32x for buttons, backgrounds and font (or use Minecraftia for the latter)
-• TODO: Add a texture pack system
-   ◦ TODO: It should be able to accept any type of texture resolution
-• TODO: Add fullscreen, resolution options and handle window resize
 • TODO: Include server code in the client for singleplayer games
 
 # Issues
@@ -56,11 +56,11 @@ TODO
 
 # Lua API
 
-• TODO: New texture system to make things easier for Lua
-   ◦ TODO: Use a separate texture for each block
-   ◦ TODO: Since this may lower the perfs, optimize it
-   ◦ TODO: Load textures from Lua
-   ◦ TODO: Use names instead of ids in Lua
+• DONE: New texture system to make things easier for Lua
+   ◦ DONE: Use a separate texture for each block
+   ◦ DONE: Since this may lower the perfs, optimize it
+   ◦ DONE: Load textures from Lua
+   ◦ DONE: Use names instead of ids in Lua
 
 # GUI
 
