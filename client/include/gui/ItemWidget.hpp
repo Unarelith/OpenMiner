@@ -26,6 +26,7 @@ class ItemWidget : public Widget {
 		ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent = nullptr);
 
 		void update() override;
+		void updateImage();
 
 		const ItemStack &stack() const { return m_inventory.getStack(m_x, m_y); }
 		void setStack(const std::string &name, unsigned int amount = 1);
@@ -45,6 +46,8 @@ class ItemWidget : public Widget {
 		Text m_text;
 
 		Cube m_cube{10};
+
+		bool m_isImage = false;
 };
 
 #endif // ITEMWIDGET_HPP_
