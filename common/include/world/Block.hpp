@@ -23,6 +23,8 @@
 
 #include "BlockType.hpp"
 #include "ItemStack.hpp"
+#include "ISerializable.hpp"
+#include "TilesDef.hpp"
 
 class Chunk;
 class Player;
@@ -33,16 +35,20 @@ enum class BlockDrawType {
 	XShape = 1,
 };
 
-class Block {
+class Block : public ISerializable {
 	public:
-		Block(u32 id, const std::string &textureFilename, const std::string &name, const std::string &label);
+		Block() = default;
+		Block(u32 id, const TilesDef &tiles, const std::string &name, const std::string &label);
 		virtual ~Block() = default;
 
 		// virtual glm::vec4 getTexCoords(int face, u16 blockData) const;
 
+		void serialize(sf::Packet &packet) override;
+		void deserialize(sf::Packet &packet) override;
+
 		u16 id() const { return m_id & 0xffff; }
 		u16 data() const { return (m_id >> 16) & 0xffff; }
-		const std::string &textureFilename() const { return m_textureFilename; }
+		const TilesDef &tiles() const { return m_tiles; }
 
 		const std::string &name() const { return m_name; }
 		const std::string &label() const { return m_label; }
@@ -80,8 +86,8 @@ class Block {
 		bool m_canUpdate = false;
 
 	private:
-		u32 m_id;
-		std::string m_textureFilename;
+		u32 m_id = 0;
+		TilesDef m_tiles;
 
 		std::string m_name;
 		std::string m_label;

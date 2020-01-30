@@ -20,13 +20,18 @@
 #include "SmeltingRecipe.hpp"
 
 void LuaMod::registerBlock(const sol::table &table) {
-	std::string textureFilename = table["texture"].get<std::string>();
+	TilesDef tiles;
+	if (table["tiles"].get_type() == sol::type::table)
+		tiles.textureFilenames = table["tiles"].get<std::vector<std::string>>();
+	else
+		tiles.textureFilenames.emplace_back(table["tiles"].get<std::string>());
+
 	std::string id = m_id + ":" + table["id"].get<std::string>();
 	std::string name = table["name"].get<std::string>();
 	sol::function onBlockActivated = table["on_block_activated"];
 	sol::function onTick = table["on_tick"];
 
-	ServerBlock &block = Registry::getInstance().registerBlock<ServerBlock>(textureFilename, id, name);
+	ServerBlock &block = Registry::getInstance().registerBlock<ServerBlock>(tiles, id, name);
 	block.setHarvestRequirements(table["harvest_requirements"].get_or(0));
 	block.setHardness(table["hardness"].get_or(1.0f));
 	block.setOnBlockActivated(onBlockActivated);
@@ -44,15 +49,20 @@ void LuaMod::registerBlock(const sol::table &table) {
 		block.setItemDrop(dropID, dropAmount);
 	}
 
-	Registry::getInstance().registerItem(block.textureFilename(), id, name).setIsBlock(true);
+	Registry::getInstance().registerItem(block.tiles(), id, name).setIsBlock(true);
 }
 
 void LuaMod::registerItem(const sol::table &table) {
-	std::string textureFilename = table["texture"].get<std::string>();
+	TilesDef tiles;
+	if (table["tiles"].get_type() == sol::type::table)
+		tiles.textureFilenames = table["tiles"].get<std::vector<std::string>>();
+	else
+		tiles.textureFilenames.emplace_back(table["tiles"].get<std::string>());
+
 	std::string id = table["id"].get<std::string>();
 	std::string name = table["name"].get<std::string>();
 
-	Item &item = Registry::getInstance().registerItem(textureFilename, id, name);
+	Item &item = Registry::getInstance().registerItem(tiles, id, name);
 	item.setIsFuel(table["is_fuel"].get_or(false));
 	item.setBurnTime(table["burn_time"].get_or(0));
 	item.setHarvestCapability(table["harvest_capability"].get_or(0));

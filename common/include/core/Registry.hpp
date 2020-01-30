@@ -25,15 +25,27 @@
 
 class Registry : public ISerializable {
 	public:
-		template<typename T, typename... Args>
-		auto registerBlock(const std::string &textureFilename, const std::string &id, const std::string &name) -> typename std::enable_if<std::is_base_of<Block, T>::value, T&>::type {
+		template<typename T>
+		auto registerBlock(const TilesDef &tiles, const std::string &id, const std::string &name) -> typename std::enable_if<std::is_base_of<Block, T>::value, T&>::type {
 			u32 internalID = m_blocks.size();
 			m_blocksID.emplace(id, internalID);
-			m_blocks.emplace_back(std::make_unique<T>(internalID, textureFilename, id, name));
+			m_blocks.emplace_back(std::make_unique<T>(internalID, tiles, id, name));
 			return *static_cast<T*>(m_blocks.back().get());
 		}
 
-		Item &registerItem(const std::string &textureFilename, const std::string &id, const std::string &name);
+		template<typename T>
+		auto registerSerializedBlock(sf::Packet &packet) -> typename std::enable_if<std::is_base_of<Block, T>::value, T&>::type {
+			m_blocks.emplace_back(std::make_unique<T>());
+			m_blocks.back()->deserialize(packet);
+
+			u32 internalID = m_blocks.size() - 1;
+			m_blocksID.emplace(m_blocks.back()->name(), internalID);
+
+			return *static_cast<T*>(m_blocks.back().get());
+		}
+
+		Item &registerItem(const TilesDef &tiles, const std::string &id, const std::string &name);
+		Item &registerSerializedItem(sf::Packet &packet);
 
 		template<typename T, typename... Args>
 		auto registerRecipe(Args &&...args) -> typename std::enable_if<std::is_base_of<Recipe, T>::value, Recipe*>::type {

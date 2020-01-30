@@ -90,13 +90,17 @@ void TextureAtlas::packTextures() {
 
 void TextureAtlas::loadFromRegistry() {
 	for (auto &block : Registry::getInstance().blocks()) {
-		if (!block->textureFilename().empty())
-			addFile("resources/textures/faithful32/blocks/", block->textureFilename());
+		const TilesDef &tiles = block->tiles();
+		for (auto &textureFilename : tiles.textureFilenames)
+			addFile("resources/textures/faithful32/blocks/", textureFilename);
 	}
 
 	for (auto &item : Registry::getInstance().items()) {
-		if (!item.textureFilename().empty() && !item.isBlock())
-			addFile("resources/textures/faithful32/items/", item.textureFilename());
+		if (!item.isBlock()) {
+			const TilesDef &tiles = item.tiles();
+			for (auto &textureFilename : tiles.textureFilenames)
+				addFile("resources/textures/faithful32/items/", textureFilename);
+		}
 	}
 
 	packTextures();
