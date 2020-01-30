@@ -2,7 +2,8 @@ mod:block {
 	id = "workbench",
 	name = "Workbench",
 	-- texture = 77, -- Vanilla
-	texture = 115, -- Faithful 32x
+	-- texture = 115, -- Faithful 32x
+	texture = "crafting_table_top.png",
 
 	on_block_activated = function(pos, player, world, client)
 		local gui = LuaGUI.new()

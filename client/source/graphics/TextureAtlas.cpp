@@ -13,40 +13,39 @@
  */
 #include <gk/core/Exception.hpp>
 
+#include "Registry.hpp"
 #include "TextureAtlas.hpp"
 
-void TextureAtlas::addFile(const std::string &filename) {
-	SurfacePtr surface{IMG_Load(filename.c_str()), &SDL_FreeSurface};
-	if(!surface) {
-		throw EXCEPTION("Failed to load texture:", filename);
-	}
+void TextureAtlas::addFile(const std::string &path, const std::string &filename) {
+	auto it = m_textureMap.find(filename);
+	if (it != m_textureMap.end())
+		return;
 
-	auto it = m_textures.find(filename);
-	if (it != m_textures.end()) {
-		throw EXCEPTION("Texture already exists in atlas:", filename);
-	}
+	SurfacePtr surface{IMG_Load((path + filename).c_str()), &SDL_FreeSurface};
+	if(!surface)
+		throw EXCEPTION("Failed to load texture:", path + filename);
 
-	if (!m_width && !m_height) {
-		m_width = surface->w;
-		m_height = surface->h;
-	}
-	else if (m_width != surface->w || m_height != surface->h) {
-		throw EXCEPTION("Texture size unexpected for", filename + ". Got", surface->w, surface->w, "instead of", m_width, m_height);
-	}
+	if (!m_tileSize)
+		m_tileSize = surface->w;
 
-	m_textures.emplace(filename, std::move(surface));
+	if (m_tileSize != surface->w || m_tileSize != surface->h)
+		throw EXCEPTION("Texture size unexpected for", path + filename + ". Got", surface->w, surface->w, "instead of", m_tileSize, m_tileSize);
+
+	m_textureMap.emplace(filename, m_textures.size());
+	m_textures.emplace_back(std::move(surface));
 }
 
 void TextureAtlas::packTextures() {
-	if (!m_width && !m_height) {
+	if (!m_tileSize)
 		throw EXCEPTION("Cannot pack zero-sized textures!");
-	}
+
+	SurfacePtr atlas{nullptr, &SDL_FreeSurface};
 
 	// Max amount of textures on one line
 	const u16 atlasWidth = 16;
 
 	// Max amount of textures on one column
-	const u16 atlasHeight = m_textures.size() / atlasWidth;
+	const u16 atlasHeight = std::ceil((float)m_textures.size() / atlasWidth);
 
 	Uint32 rmask, gmask, bmask, amask;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
@@ -61,41 +60,77 @@ void TextureAtlas::packTextures() {
 	amask = 0xff000000;
 #endif
 
-	m_atlas.reset(SDL_CreateRGBSurface(0, atlasWidth * m_width, atlasHeight * m_height, 32, rmask, gmask, bmask, amask));
-	if (!m_atlas) {
+	atlas.reset(SDL_CreateRGBSurface(0, atlasWidth * m_tileSize, atlasHeight * m_tileSize, 32, rmask, gmask, bmask, amask));
+	if (!atlas) {
 		throw EXCEPTION("Failed to create surface:", SDL_GetError());
 	}
 
 	u16 i = 0;
 	for (auto &it : m_textures) {
 		SDL_Rect outRect;
-		outRect.x = (i % atlasWidth) * m_width;
-		outRect.y = (i / atlasWidth) * m_height;
-		outRect.w = m_width;
-		outRect.h = m_height;
+		outRect.x = (i % atlasWidth) * m_tileSize;
+		outRect.y = (i / atlasWidth) * m_tileSize;
+		outRect.w = m_tileSize;
+		outRect.h = m_tileSize;
 
-		SDL_BlitSurface(it.second.get(), nullptr, m_atlas.get(), &outRect);
-
-		m_textureMap.emplace(it.first, i);
+		SDL_BlitSurface(it.get(), nullptr, atlas.get(), &outRect);
 
 		++i;
 	}
 
 	m_textures.clear();
+
+	m_isReady = true;
+
+	if (IMG_SavePNG(atlas.get(), "test_atlas.png") < 0)
+		throw EXCEPTION("Failed to save texture to: test_altas.png. Reason:", SDL_GetError());
+
+	m_texture.loadFromSurface(atlas.get());
 }
 
-void TextureAtlas::saveToFile(const std::string &filename) {
-	if (IMG_SavePNG(m_atlas.get(), filename.c_str()) < 0) {
-		throw EXCEPTION("Failed to save texture to:", filename + ". Reason:", SDL_GetError());
+void TextureAtlas::loadFromRegistry() {
+	for (auto &block : Registry::getInstance().blocks()) {
+		if (!block->textureFilename().empty())
+			addFile("resources/textures/faithful32/blocks/", block->textureFilename());
 	}
+
+	for (auto &item : Registry::getInstance().items()) {
+		if (!item.textureFilename().empty() && !item.isBlock())
+			addFile("resources/textures/faithful32/items/", item.textureFilename());
+	}
+
+	packTextures();
 }
 
-u16 TextureAtlas::getTextureID(const std::string &filename) {
+u16 TextureAtlas::getTextureID(const std::string &filename) const {
 	auto it = m_textureMap.find(filename);
 	if (it == m_textureMap.end()) {
 		throw EXCEPTION("Unable to find texture in atlas:", filename);
 	}
 
 	return it->second;
+}
+
+gk::FloatRect TextureAtlas::getTexCoords(const std::string &filename, bool normalized) const {
+	if (filename.empty()) return gk::FloatRect{0, 0, 0, 0};
+
+	if (!m_isReady)
+		throw EXCEPTION("Can't get texture coordinates from empty atlas");
+
+	u16 textureID = getTextureID(filename);
+
+	float textureX = (textureID % (m_texture.getSize().x / m_tileSize)) * m_tileSize;
+	float textureY = (textureID / (m_texture.getSize().x / m_tileSize)) * m_tileSize;
+
+	if (normalized)
+		return gk::FloatRect{textureX / m_texture.getSize().x,
+							 textureY / m_texture.getSize().y,
+							 (float)m_tileSize / m_texture.getSize().x,
+							 (float)m_tileSize / m_texture.getSize().y};
+	else
+		return gk::FloatRect{textureX,
+							 textureY,
+							 (float)m_tileSize,
+							 (float)m_tileSize};
 }
 

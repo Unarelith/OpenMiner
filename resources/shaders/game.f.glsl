@@ -32,6 +32,7 @@ void main() {
 	vec4 color = getColor();
 	if (blockID == 8.) { // Water
 		color.a = 0.85;
+		color += vec4(-0.8, -0.4, 0.2, 0);
 	}
 	else if (blockID == 4.) { // Leaves
 		color += vec4(-0.5, -0.15, -0.4, 0);

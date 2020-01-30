@@ -35,14 +35,14 @@ enum class BlockDrawType {
 
 class Block {
 	public:
-		Block(u32 id, u32 textureID, const std::string &name, const std::string &label);
+		Block(u32 id, const std::string &textureFilename, const std::string &name, const std::string &label);
 		virtual ~Block() = default;
 
-		virtual glm::vec4 getTexCoords(int face, u16 blockData) const;
+		// virtual glm::vec4 getTexCoords(int face, u16 blockData) const;
 
 		u16 id() const { return m_id & 0xffff; }
 		u16 data() const { return (m_id >> 16) & 0xffff; }
-		u32 textureID() const { return m_textureID; }
+		const std::string &textureFilename() const { return m_textureFilename; }
 
 		const std::string &name() const { return m_name; }
 		const std::string &label() const { return m_label; }
@@ -81,7 +81,7 @@ class Block {
 
 	private:
 		u32 m_id;
-		u32 m_textureID;
+		std::string m_textureFilename;
 
 		std::string m_name;
 		std::string m_label;

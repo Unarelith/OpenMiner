@@ -25,9 +25,12 @@
 
 class Block;
 class ClientChunk;
+class TextureAtlas;
 
 class ChunkBuilder {
 	public:
+		ChunkBuilder(TextureAtlas &textureAtlas) : m_textureAtlas(textureAtlas) {}
+
 		static constexpr u8 layers = 3;
 
 		std::array<std::size_t, layers> buildChunk(const ClientChunk &chunk, const std::array<gk::VertexBuffer, layers> &vbo);
@@ -62,6 +65,8 @@ class ChunkBuilder {
 			Front,
 			Back
 		};
+
+		TextureAtlas &m_textureAtlas;
 };
 
 #endif // CHUNKBUILDER_HPP_

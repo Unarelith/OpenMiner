@@ -14,6 +14,7 @@
 #include <gk/gl/GLCheck.hpp>
 
 #include "ClientChunk.hpp"
+#include "TextureAtlas.hpp"
 
 void ClientChunk::update() {
 	if (m_lightmap.updateLights() || m_hasChanged) {
@@ -26,7 +27,7 @@ void ClientChunk::update() {
 void ClientChunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u8 layer) const {
 	if (m_verticesCount.size() <= layer || m_verticesCount.at(layer) == 0) return;
 
-	states.texture = &m_texture;
+	states.texture = &m_textureAtlas.texture();
 
 	if (layer == ChunkBuilder::Layer::Other)
 		glCheck(glDisable(GL_CULL_FACE));

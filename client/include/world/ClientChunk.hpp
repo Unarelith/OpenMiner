@@ -21,10 +21,12 @@
 #include "ChunkBuilder.hpp"
 #include "Config.hpp"
 
+class TextureAtlas;
+
 class ClientChunk : public Chunk {
 	public:
-		ClientChunk(s32 x, s32 y, s32 z, gk::Texture &texture)
-			: Chunk(x, y, z), m_texture(texture) {}
+		ClientChunk(s32 x, s32 y, s32 z, TextureAtlas &textureAtlas)
+			: Chunk(x, y, z), m_textureAtlas(textureAtlas), m_builder{textureAtlas} {}
 
 		void update();
 
@@ -39,7 +41,7 @@ class ClientChunk : public Chunk {
 		bool areAllNeighboursTooFar() const;
 
 	private:
-		gk::Texture &m_texture;
+		TextureAtlas &m_textureAtlas;
 
 		ChunkBuilder m_builder;
 

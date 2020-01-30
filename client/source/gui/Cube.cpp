@@ -21,8 +21,9 @@
 #include "Block.hpp"
 #include "Config.hpp"
 #include "Cube.hpp"
+#include "TextureAtlas.hpp"
 
-Cube::Cube(float size) : m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-blocks")) {
+Cube::Cube(float size) : m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks")) {
 	m_size = size;
 
 	// FIXME: Using Transform may be better here
@@ -71,12 +72,12 @@ void Cube::updateVertexBuffer(const Block &block) {
 	};
 
 	for (u8 i = 0 ; i < 6 ; ++i) {
-		const glm::vec4 &blockTexCoords = block.getTexCoords(i, 0);
+		const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block.textureFilename()); // block.getTexCoords(i, 0);
 		float faceTexCoords[2 * 4] = {
-			blockTexCoords.x, blockTexCoords.w,
-			blockTexCoords.z, blockTexCoords.w,
-			blockTexCoords.z, blockTexCoords.y,
-			blockTexCoords.x, blockTexCoords.y
+			blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.height,
+			blockTexCoords.x + blockTexCoords.width, blockTexCoords.y + blockTexCoords.height,
+			blockTexCoords.x + blockTexCoords.width, blockTexCoords.y,
+			blockTexCoords.x,                        blockTexCoords.y
 		};
 		for(u8 j = 0 ; j < 4 ; j++) {
 			vertices[j + i * 4].texCoord[0] = faceTexCoords[j * 2];
@@ -113,7 +114,7 @@ void Cube::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	states.projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f, -40.0f, DIST_FAR);
 
-	states.texture = &m_texture;
+	states.texture = &m_textureAtlas.texture();
 	states.vertexAttributes = gk::VertexAttribute::Only2d;
 
 	glCheck(glDisable(GL_CULL_FACE));

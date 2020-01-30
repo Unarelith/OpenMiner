@@ -22,13 +22,13 @@
 
 class Item {
 	public:
-		Item(u32 id, u32 textureID, const std::string &name, const std::string &label);
+		Item(u32 id, const std::string &textureFilename, const std::string &name, const std::string &label);
 
 		const std::string &name() const { return m_name; }
 		const std::string &label() const { return m_label; }
 
 		u32 id() const { return m_id; }
-		u32 textureID() const { return m_textureID; }
+		const std::string &textureFilename() const { return m_textureFilename; }
 
 		bool isBlock() const { return m_isBlock; }
 		void setIsBlock(bool isBlock) { m_isBlock = isBlock; }
@@ -53,7 +53,7 @@ class Item {
 
 	private:
 		u32 m_id = 0;
-		u32 m_textureID = 0;
+		std::string m_textureFilename;
 
 		std::string m_name;
 		std::string m_label;

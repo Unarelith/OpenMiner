@@ -23,17 +23,17 @@ function init(player)
 	player_inv:add_stack("default:glowstone", 64);
 	player_inv:add_stack("default:furnace", 1);
 	player_inv:add_stack("default:slab_planks", 64);
-	player_inv:add_stack("default:pickaxe_stone", 1);
+	player_inv:add_stack("default:stone_pickaxe", 1);
 
 	player_inv:add_stack("default:wood", 64);
 	player_inv:add_stack("default:planks", 64);
 	player_inv:add_stack("default:cobblestone", 64);
 	player_inv:add_stack("default:stick", 64);
-	player_inv:add_stack("default:axe_stone", 1);
-	player_inv:add_stack("default:hoe_stone", 1);
-	player_inv:add_stack("default:pickaxe_stone", 1);
-	player_inv:add_stack("default:shovel_stone", 1);
-	player_inv:add_stack("default:ore_iron", 64);
+	player_inv:add_stack("default:stone_axe", 1);
+	player_inv:add_stack("default:stone_hoe", 1);
+	player_inv:add_stack("default:stone_pickaxe", 1);
+	player_inv:add_stack("default:stone_shovel", 1);
+	player_inv:add_stack("default:iron_ore", 64);
 	player_inv:add_stack("default:coal", 64);
 end
 

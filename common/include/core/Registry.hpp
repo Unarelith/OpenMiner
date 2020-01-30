@@ -23,19 +23,17 @@
 #include "Network.hpp"
 #include "Recipe.hpp"
 
-class Client;
-
 class Registry : public ISerializable {
 	public:
 		template<typename T, typename... Args>
-		auto registerBlock(u32 textureID, const std::string &id, const std::string &name) -> typename std::enable_if<std::is_base_of<Block, T>::value, T&>::type {
+		auto registerBlock(const std::string &textureFilename, const std::string &id, const std::string &name) -> typename std::enable_if<std::is_base_of<Block, T>::value, T&>::type {
 			u32 internalID = m_blocks.size();
 			m_blocksID.emplace(id, internalID);
-			m_blocks.emplace_back(std::make_unique<T>(internalID, textureID, id, name));
+			m_blocks.emplace_back(std::make_unique<T>(internalID, textureFilename, id, name));
 			return *static_cast<T*>(m_blocks.back().get());
 		}
 
-		Item &registerItem(u32 textureID, const std::string &id, const std::string &name);
+		Item &registerItem(const std::string &textureFilename, const std::string &id, const std::string &name);
 
 		template<typename T, typename... Args>
 		auto registerRecipe(Args &&...args) -> typename std::enable_if<std::is_base_of<Recipe, T>::value, Recipe*>::type {
@@ -53,6 +51,9 @@ class Registry : public ISerializable {
 
 		void serialize(sf::Packet &packet) override;
 		void deserialize(sf::Packet &packet) override;
+
+		const std::vector<std::unique_ptr<Block>> &blocks() const { return m_blocks; }
+		const std::vector<Item> &items() const { return m_items; }
 
 		static Registry &getInstance() { return *s_instance; }
 		static void setInstance(Registry &instance) { s_instance = &instance; }

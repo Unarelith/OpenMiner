@@ -28,6 +28,8 @@
 #include "HUD.hpp"
 #include "PlayerBox.hpp"
 
+class TextureAtlas;
+
 class GameState : public gk::ApplicationState {
 	public:
 		GameState(const std::string &host, int port);
@@ -57,6 +59,8 @@ class GameState : public gk::ApplicationState {
 		ClientCommandHandler m_clientCommandHandler{m_client, m_world, m_player, m_camera, m_playerBoxes};
 
 		HUD m_hud{m_player, m_world, m_clientCommandHandler};
+
+		TextureAtlas *m_textureAtlas = nullptr;
 };
 
 #endif // GAMESTATE_HPP_
