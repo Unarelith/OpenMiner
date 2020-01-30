@@ -1,9 +1,7 @@
 mod:block {
 	id = "workbench",
 	name = "Workbench",
-	-- texture = 77, -- Vanilla
-	-- texture = 115, -- Faithful 32x
-	tiles = "crafting_table_top.png",
+	tiles = {"crafting_table_top.png", "crafting_table_top.png", "crafting_table_front.png", "crafting_table_side.png"},
 
 	on_block_activated = function(pos, player, world, client)
 		local gui = LuaGUI.new()
@@ -59,7 +57,7 @@ mod:block {
 			name = "img_background",
 			pos = gui_pos,
 
-			tiles = "texture-workbench",
+			texture = "texture-workbench",
 			clip = {x = 0, y = 0, width = 176, height = 166},
 		}
 

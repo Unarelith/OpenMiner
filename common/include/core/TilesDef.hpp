@@ -23,30 +23,27 @@
 
 #include "ISerializable.hpp"
 
-struct TilesDef : public ISerializable {
-	TilesDef() = default;
-	TilesDef(const std::vector<std::string> &textureFilenames_)
-		: textureFilenames(textureFilenames_) {}
+enum BlockFace : u8 {
+	Top    = 0,
+	Bottom = 1,
+	Left   = 2,
+	Right  = 3,
+	Front  = 4,
+	Back   = 5
+};
 
-	const std::string &get(u8 id) const { return textureFilenames.at(id); }
+class TilesDef : public ISerializable {
+	public:
+		TilesDef() = default;
+		TilesDef(const std::vector<std::string> &textureFilenames_)
+			: textureFilenames(textureFilenames_) {}
 
-	void serialize(sf::Packet &packet) override {
-		packet << (u8)textureFilenames.size();
-		for (std::string &it : textureFilenames)
-			packet << it;
-	}
+		const std::string &getTextureForFace(u8 face) const;
 
-	void deserialize(sf::Packet &packet) override {
-		u8 textureFilenamesSize = 0;
-		packet >> textureFilenamesSize;
-		for (u8 i = 0 ; i < textureFilenamesSize ; ++i) {
-			std::string str;
-			packet >> str;
-			textureFilenames.emplace_back(str);
-		}
-	}
+		void serialize(sf::Packet &packet) override;
+		void deserialize(sf::Packet &packet) override;
 
-	std::vector<std::string> textureFilenames;
+		std::vector<std::string> textureFilenames;
 };
 
 #endif // TILESDEF_HPP_

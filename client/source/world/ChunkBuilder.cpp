@@ -17,6 +17,18 @@
 #include "TextureAtlas.hpp"
 
 static const float cubeCoords[6 * 4 * 3] = {
+	// Top
+	0, 1, 1,
+	1, 1, 1,
+	1, 1, 0,
+	0, 1, 0,
+
+	// Bottom
+	0, 0, 0,
+	1, 0, 0,
+	1, 0, 1,
+	0, 0, 1,
+
 	// Left
 	0, 0, 0,
 	0, 0, 1,
@@ -28,18 +40,6 @@ static const float cubeCoords[6 * 4 * 3] = {
 	1, 0, 0,
 	1, 1, 0,
 	1, 1, 1,
-
-	// Bottom
-	0, 0, 0,
-	1, 0, 0,
-	1, 0, 1,
-	0, 0, 1,
-
-	// Top
-	0, 1, 1,
-	1, 1, 1,
-	1, 1, 0,
-	0, 1, 0,
 
 	// Front
 	1, 0, 0,
@@ -79,10 +79,10 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 				if (!chunk.getBlock(x, y, z)) continue;
 
 				const int surroundingBlocksPos[6][3] = {
+					{x, y + 1, z},
+					{x, y - 1, z},
 					{x - 1, y, z},
 					{x + 1, y, z},
-					{x, y - 1, z},
-					{x, y + 1, z},
 					{x, y, z - 1},
 					{x, y, z + 1},
 				};
@@ -150,7 +150,7 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 	normal = glm::cross(v1, v2);
 
 	// const glm::vec4 &blockTexCoords = block->getTexCoords(i, chunk.getData(x, y, z));
-	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->tiles().get(0));
+	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->tiles().getTextureForFace(i));
 	float faceTexCoords[2 * 4] = {
 		blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.height,
 		blockTexCoords.x + blockTexCoords.width, blockTexCoords.y + blockTexCoords.height,
@@ -231,7 +231,7 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 
 inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Block *block) {
 	// const glm::vec4 &blockTexCoords = block->getTexCoords(0, chunk.getData(x, y, z));
-	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->tiles().get(0));
+	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->tiles().getTextureForFace(0));
 	float faceTexCoords[2 * 4] = {
 		blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.height,
 		blockTexCoords.x + blockTexCoords.width, blockTexCoords.y + blockTexCoords.height,
@@ -292,25 +292,25 @@ inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, c
 inline gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) const {
 	gk::Vector3i offset;
 	offset.x = (
-			(i == 0) ||
-			(i == 2 && (j == 0 || j == 3)) ||
-			(i == 3 && (j == 0 || j == 3)) ||
-			(i == 4 && (j == 1 || j == 2)) ||
-			(i == 5 && (j == 0 || j == 3))) ? -1 : 1;
+			(i == BlockFace::Left) ||
+			(i == BlockFace::Bottom && (j == 0 || j == 3)) ||
+			(i == BlockFace::Top    && (j == 0 || j == 3)) ||
+			(i == BlockFace::Front  && (j == 1 || j == 2)) ||
+			(i == BlockFace::Back   && (j == 0 || j == 3))) ? -1 : 1;
 
 	offset.z = (
-			(i == 4) ||
-			(i == 0 && (j == 0 || j == 3)) ||
-			(i == 1 && (j == 1 || j == 2)) ||
-			(i == 2 && (j == 0 || j == 1)) ||
-			(i == 3 && (j == 2 || j == 3))) ? -1 : 1;
+			(i == BlockFace::Front) ||
+			(i == BlockFace::Left   && (j == 0 || j == 3)) ||
+			(i == BlockFace::Right  && (j == 1 || j == 2)) ||
+			(i == BlockFace::Bottom && (j == 0 || j == 1)) ||
+			(i == BlockFace::Top    && (j == 2 || j == 3))) ? -1 : 1;
 
 	offset.y = (
-			(i == 2) ||
-			(i == 0 && (j == 0 || j == 1)) ||
-			(i == 1 && (j == 0 || j == 1)) ||
-			(i == 4 && (j == 0 || j == 1)) ||
-			(i == 5 && (j == 0 || j == 1))) ? -1 : 1;
+			(i == BlockFace::Bottom) ||
+			(i == BlockFace::Left  && (j == 0 || j == 1)) ||
+			(i == BlockFace::Right && (j == 0 || j == 1)) ||
+			(i == BlockFace::Front && (j == 0 || j == 1)) ||
+			(i == BlockFace::Back  && (j == 0 || j == 1))) ? -1 : 1;
 
 	return offset;
 }

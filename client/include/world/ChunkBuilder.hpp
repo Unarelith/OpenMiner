@@ -57,15 +57,6 @@ class ChunkBuilder {
 
 		std::array<std::vector<gk::Vertex>, layers> m_vertices;
 
-		enum Face {
-			Left,
-			Right,
-			Bottom,
-			Top,
-			Front,
-			Back
-		};
-
 		TextureAtlas &m_textureAtlas;
 };
 
