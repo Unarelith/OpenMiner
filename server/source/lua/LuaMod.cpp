@@ -21,8 +21,10 @@
 
 void LuaMod::registerBlock(const sol::table &table) {
 	TilesDef tiles;
-	if (table["tiles"].get_type() == sol::type::table)
-		tiles.textureFilenames = table["tiles"].get<std::vector<std::string>>();
+	if (table["tiles"].get_type() == sol::type::table) {
+		sol::as_table_t<std::vector<std::string>> t = table["tiles"];
+		tiles.textureFilenames = t.source;
+	}
 	else
 		tiles.textureFilenames.emplace_back(table["tiles"].get<std::string>());
 
@@ -54,8 +56,10 @@ void LuaMod::registerBlock(const sol::table &table) {
 
 void LuaMod::registerItem(const sol::table &table) {
 	TilesDef tiles;
-	if (table["tiles"].get_type() == sol::type::table)
-		tiles.textureFilenames = table["tiles"].get<std::vector<std::string>>();
+	if (table["tiles"].get_type() == sol::type::table) {
+		sol::as_table_t<std::vector<std::string>> t = table["tiles"];
+		tiles.textureFilenames = t.source;
+	}
 	else
 		tiles.textureFilenames.emplace_back(table["tiles"].get<std::string>());
 

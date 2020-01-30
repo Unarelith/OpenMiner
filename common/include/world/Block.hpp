@@ -41,8 +41,6 @@ class Block : public ISerializable {
 		Block(u32 id, const TilesDef &tiles, const std::string &name, const std::string &label);
 		virtual ~Block() = default;
 
-		// virtual glm::vec4 getTexCoords(int face, u16 blockData) const;
-
 		void serialize(sf::Packet &packet) override;
 		void deserialize(sf::Packet &packet) override;
 

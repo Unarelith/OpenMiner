@@ -36,6 +36,18 @@ void Cube::updateVertexBuffer(const Block &block) {
 	if (!block.id()) return;
 
 	gk::Vertex vertices[6 * 4] = {
+		// Top
+		{{m_size, m_size, 0, 3}},
+		{{0, m_size, 0, 3}},
+		{{0, m_size, m_size, 3}},
+		{{m_size, m_size, m_size, 3}},
+
+		// Bottom
+		{{0, 0, 0, -1}},
+		{{m_size, 0, 0, -1}},
+		{{m_size, 0, m_size, -1}},
+		{{0, 0, m_size, -1}},
+
 		// Left
 		{{0, 0, 0, 2}},
 		{{0, 0, m_size, 2}},
@@ -47,18 +59,6 @@ void Cube::updateVertexBuffer(const Block &block) {
 		{{m_size, 0, 0, -1}},
 		{{m_size, m_size, 0, -1}},
 		{{m_size, m_size, m_size, -1}},
-
-		// Bottom
-		{{0, 0, 0, -1}},
-		{{m_size, 0, 0, -1}},
-		{{m_size, 0, m_size, -1}},
-		{{0, 0, m_size, -1}},
-
-		// Top
-		{{m_size, m_size, 0, 3}},
-		{{0, m_size, 0, 3}},
-		{{0, m_size, m_size, 3}},
-		{{m_size, m_size, m_size, 3}},
 
 		// Front
 		{{m_size, 0, 0, 4}},
@@ -74,7 +74,7 @@ void Cube::updateVertexBuffer(const Block &block) {
 	};
 
 	for (u8 i = 0 ; i < 6 ; ++i) {
-		const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block.tiles().get(0)); // block.getTexCoords(i, 0);
+		const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block.tiles().getTextureForFace(i)); // block.getTexCoords(i, 0);
 		float faceTexCoords[2 * 4] = {
 			blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.height,
 			blockTexCoords.x + blockTexCoords.width, blockTexCoords.y + blockTexCoords.height,
@@ -124,8 +124,8 @@ void Cube::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	target.draw(m_vbo, GL_QUADS, 4 * 0, 4, states);
 	// target.draw(m_vbo, GL_QUADS, 4 * 1, 4, states);
-	// target.draw(m_vbo, GL_QUADS, 4 * 2, 4, states);
-	target.draw(m_vbo, GL_QUADS, 4 * 3, 4, states);
+	target.draw(m_vbo, GL_QUADS, 4 * 2, 4, states);
+	// target.draw(m_vbo, GL_QUADS, 4 * 3, 4, states);
 	target.draw(m_vbo, GL_QUADS, 4 * 4, 4, states);
 	// target.draw(m_vbo, GL_QUADS, 4 * 5, 4, states);
 
