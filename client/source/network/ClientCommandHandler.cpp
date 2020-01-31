@@ -154,9 +154,18 @@ void ClientCommandHandler::setupCallbacks() {
 		gk::Vector3<s32> pos;
 		packet >> pos.x >> pos.y >> pos.z;
 
-		BlockData *data = m_world.getBlockData(pos.x, pos.y, pos.z);
-		if (data) {
-			packet >> data->data >> data->useAltTiles;
+		Chunk *chunk = m_world.getChunkAtBlockPos(pos.x, pos.y, pos.z);
+		if (chunk) {
+			BlockData *data = chunk->getBlockData(pos.x & (CHUNK_WIDTH - 1), pos.y & (CHUNK_HEIGHT - 1), pos.z & (CHUNK_DEPTH - 1));
+			if (data) {
+				bool useAltTiles;
+				packet >> data->data >> useAltTiles;
+
+				if (data->useAltTiles != useAltTiles) {
+					chunk->setChanged(true);
+					data->useAltTiles = useAltTiles;
+				}
+			}
 		}
 	});
 }

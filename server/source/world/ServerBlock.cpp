@@ -24,14 +24,14 @@ void ServerBlock::onTick(const glm::ivec3 &pos, std::unordered_map<u16, ServerPl
 			m_onTick(pos, players, chunk, world);
 
 			// FIXME: Send this every 0.5 second instead of once per tick
-			u16 id = world.getBlock(pos.x, pos.y, pos.z);
-			u16 data = world.getData(pos.x, pos.y, pos.z);
+			// u16 id = world.getBlock(pos.x, pos.y, pos.z);
+			// u16 data = world.getData(pos.x, pos.y, pos.z);
 			BlockData *blockData = world.getBlockData(pos.x, pos.y, pos.z);
 			if (blockData) {
-				sf::Packet packet;
-				packet << Network::Command::BlockUpdate << s32(pos.x) << s32(pos.y) << s32(pos.z)
-					<< (id | (data << 16));
-				server.sendToAllClients(packet);
+				// sf::Packet packet;
+				// packet << Network::Command::BlockUpdate << s32(pos.x) << s32(pos.y) << s32(pos.z)
+				// 	<< (id | (data << 16));
+				// server.sendToAllClients(packet);
 
 				sf::Packet packet1;
 				packet1 << Network::Command::BlockDataUpdate << s32(pos.x) << s32(pos.y) << s32(pos.z);
