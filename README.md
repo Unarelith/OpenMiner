@@ -11,8 +11,8 @@
 - [Wiki](#wiki)
 - [How to compile](#how-to-compile)
 - [Discussion](#discussion)
-- [Screenshots](#screenshots)
 - [Project status](#project-status)
+- [Screenshots](#screenshots)
 - [Previous attempts](#previous-attempts)
 - [Credits](#credits)
 
@@ -57,7 +57,35 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 ## Discussion
 
 - Discord: [join server](https://discord.gg/eN8k8wt)
-- IRC: irc.freenode.net `#openminer`
+
+## Project status
+
+This list is non exhaustive.
+
+### Implemented features
+
+- Menus (title screen, server selection, pause menu, settings menu)
+- Basic worldgen (lakes, trees, flowers, pseudo-caves)
+- Infinite world in X/Y/Z axis
+- Lighting system with smooth lighting
+- Networking
+- Lua API
+	- Block/item/recipe definition
+	- Custom GUI creation
+- Special blocks (workbench, furnace)
+
+### Missing features
+
+- Texture pack system
+- World loading/saving
+- Advanced block metadata
+- Particle system
+- Fluid propagation
+- Player model display (currently displaying an ugly box)
+- Day/night cycle with sun/moon display
+- Real worldgen (seed-based, biomes, cave tunnels)
+- Entities (block drops, mobs, etc...)
+- Clouds
 
 ## Screenshots
 
@@ -66,59 +94,12 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 ![](screenshot3.png?raw=true)
 ![](screenshot4.png?raw=true)
 
-## Project status
-
-This list is non exhaustive.
-
-### Terrain generation
-
-- [x] Basic terrain gen
-- [x] Trees
-- [x] Flowers
-- [ ] Tall grass
-- [ ] Biomes
-- [ ] Mountains
-- [ ] Cave tunnels
-
-### Lighting
-
-- [x] Basic lighting system
-- [x] Cheap ambient occlusion
-- [x] Smooth lighting
-- [x] Sunlight downward propagation ~(possible but laggy)~
-- [x] Ability to block light ~(possible but causes weird AO effects)~
-
-### Network
-
-- [x] World
-- [x] Custom GUI
-- [x] Inventories
-- [x] Players
-
-### Lua API
-
-- [x] Register blocks/craft/items in the game
-- [x] Create custom GUI and show them to player when right-clicking a block
-
-### World
-
-- [x] Block ticking (Furnace)
-- [x] Mining speed/capability
-- [ ] World loading/saving
-- [ ] Block metadata (currently using a `u16` instead of the real thing)
-- [ ] Fluid propagation
-
-### Menus
-
-- [x] Pause menu
-- [x] Settings menu
-- [x] Title screen
-- [x] Server selection menu
-
 ## Previous attempts
 
 - Here is the [commit](https://github.com/Unarelith/OpenMiner/tree/8eba845421efff6ce941f8550ff79e6364970fd5) matching the end of the first attempt made in 2013.
 - And here is the [commit](https://github.com/Unarelith/OpenMiner/tree/58c23a7e66404dab94e51998a179dc370c89ea06) matching the end of the second attempt made in 2014.
+
+You can find an history of the project [here](https://github.com/Unarelith/OpenMiner/wiki/History-of-OpenMiner).
 
 ## Credits
 
