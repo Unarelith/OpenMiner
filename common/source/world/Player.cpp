@@ -14,7 +14,7 @@
 #include "Network.hpp"
 #include "Player.hpp"
 
-void Player::serialize(sf::Packet &packet) {
+void Player::serialize(sf::Packet &packet) const {
 	packet << m_x << m_y << m_z << m_inventory;
 }
 

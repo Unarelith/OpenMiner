@@ -21,7 +21,7 @@ class SmeltingRecipe : public Recipe {
 		SmeltingRecipe() : Recipe("smelt") {}
 		SmeltingRecipe(const ItemStack &input, const ItemStack &output);
 
-		void serialize(sf::Packet &packet) override;
+		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
 		bool isMatching(const Inventory &inventory) const override;

@@ -2,6 +2,7 @@ mod:block {
 	id = "furnace",
 	name = "Furnace",
 	tiles = {"furnace_top.png", "furnace_top.png", "furnace_front.png", "furnace_side.png"},
+	alt_tiles = {"", "", "furnace_front_on.png", ""},
 
 	on_block_activated = function(pos, player, world, client)
 		local gui = LuaGUI.new()
@@ -44,7 +45,8 @@ mod:block {
 			data.inventory:set_stack(2, 0, fuel_stack:item():name(), fuel_stack:amount() - 1)
 			ticks_remaining = fuel_stack:item():burn_time()
 			current_burn_time = fuel_stack:item():burn_time()
-			world:set_data(pos.x, pos.y, pos.z, 1)
+			data.useAltTiles = true;
+			-- world:set_data(pos.x, pos.y, pos.z, 1)
 		elseif ticks_remaining > 0 then
 			ticks_remaining = ticks_remaining - 1
 
@@ -56,7 +58,8 @@ mod:block {
 			end
 		elseif ticks_remaining == 0 then
 			current_burn_time = 0
-			world:set_data(pos.x, pos.y, pos.z, 0)
+			data.useAltTiles = false;
+			-- world:set_data(pos.x, pos.y, pos.z, 0)
 		end
 
 		if item_progress >= 200 and recipe then

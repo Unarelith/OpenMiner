@@ -17,7 +17,7 @@ SmeltingRecipe::SmeltingRecipe(const ItemStack &input, const ItemStack &output) 
 	m_input = input;
 }
 
-void SmeltingRecipe::serialize(sf::Packet &packet) {
+void SmeltingRecipe::serialize(sf::Packet &packet) const {
 	packet << m_result << m_input;
 }
 

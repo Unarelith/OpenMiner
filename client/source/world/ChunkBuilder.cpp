@@ -149,8 +149,8 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 	// Computing face normal (already normalized because vertexCoords are normalized)
 	normal = glm::cross(v1, v2);
 
-	// const glm::vec4 &blockTexCoords = block->getTexCoords(i, chunk.getData(x, y, z));
-	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->tiles().getTextureForFace(i));
+	const BlockData *blockData = chunk.getBlockData(x, y, z);
+	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->tiles().getTextureForFace(i, blockData ? blockData->useAltTiles : false));
 	float faceTexCoords[2 * 4] = {
 		blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.height,
 		blockTexCoords.x + blockTexCoords.width, blockTexCoords.y + blockTexCoords.height,
@@ -178,7 +178,6 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 		vertices[j].texCoord[0] = faceTexCoords[j * 2];
 		vertices[j].texCoord[1] = faceTexCoords[j * 2 + 1];
 
-		// FIXME: Duplicated below
 		if (Config::isSunSmoothLightingEnabled)
 			vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, normal, chunk);
 		else
@@ -186,7 +185,6 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 					surroundingBlockPos[0], surroundingBlockPos[1], surroundingBlockPos[2]);
 
 		int torchlight = chunk.lightmap().getTorchlight(x, y, z);
-
 		if (Config::isTorchSmoothLightingEnabled && torchlight == 0)
 			vertices[j].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, i, j, normal, chunk);
 		else
@@ -230,7 +228,6 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 }
 
 inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Block *block) {
-	// const glm::vec4 &blockTexCoords = block->getTexCoords(0, chunk.getData(x, y, z));
 	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->tiles().getTextureForFace(0));
 	float faceTexCoords[2 * 4] = {
 		blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.height,
@@ -261,21 +258,10 @@ inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, c
 			vertices[j].texCoord[0] = faceTexCoords[j * 2];
 			vertices[j].texCoord[1] = faceTexCoords[j * 2 + 1];
 
-			// FIXME: Duplicated above
-			// if (Config::isSunSmoothLightingEnabled)
-			// 	vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, normal, chunk);
-			// else
-				vertices[j].lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
+			vertices[j].lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
+			vertices[j].lightValue[1] = chunk.lightmap().getTorchlight(x, y, z);
 
-			// if (Config::isTorchSmoothLightingEnabled)
-			// 	vertices[j].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, i, j, normal, chunk);
-			// else
-				vertices[j].lightValue[1] = chunk.lightmap().getTorchlight(x, y, z);
-
-			// if (Config::isAmbientOcclusionEnabled)
-			// 	vertices[j].ambientOcclusion = getAmbientOcclusion(x, y, z, i, j, chunk);
-			// else
-				vertices[j].ambientOcclusion = 5;
+			vertices[j].ambientOcclusion = 5;
 
 			vertices[j].blockType = block->id();
 		}

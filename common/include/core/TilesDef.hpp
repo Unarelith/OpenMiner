@@ -21,6 +21,8 @@
 
 #include <gk/core/IntTypes.hpp>
 
+#include <sol.hpp>
+
 #include "ISerializable.hpp"
 
 enum BlockFace : u8 {
@@ -35,15 +37,16 @@ enum BlockFace : u8 {
 class TilesDef : public ISerializable {
 	public:
 		TilesDef() = default;
-		TilesDef(const std::vector<std::string> &textureFilenames_)
-			: textureFilenames(textureFilenames_) {}
 
-		const std::string &getTextureForFace(u8 face) const;
+		const std::string &getTextureForFace(u8 face, bool useAltTiles = false) const;
 
-		void serialize(sf::Packet &packet) override;
+		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
+		void loadFromLuaTable(const sol::table &table);
+
 		std::vector<std::string> textureFilenames;
+		std::vector<std::string> altTextureFilenames;
 };
 
 #endif // TILESDEF_HPP_

@@ -41,7 +41,7 @@ class Block : public ISerializable {
 		Block(u32 id, const TilesDef &tiles, const std::string &name, const std::string &label);
 		virtual ~Block() = default;
 
-		void serialize(sf::Packet &packet) override;
+		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
 		u16 id() const { return m_id & 0xffff; }

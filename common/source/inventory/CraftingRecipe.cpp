@@ -29,15 +29,15 @@ CraftingRecipe::CraftingRecipe(const std::vector<std::string> &pattern, const st
 	m_isShapeless = isShapeless;
 }
 
-void CraftingRecipe::serialize(sf::Packet &packet) {
+void CraftingRecipe::serialize(sf::Packet &packet) const {
 	packet << m_result << u8(m_pattern.size());
-	for (std::string &it : m_pattern)
+	for (const std::string &it : m_pattern)
 		packet << it;
 
 	packet << u8(m_keys.size());
 	for (auto &it : m_keys) {
 		packet << u8(it.first) << u8(it.second.size());
-		for (std::string &str : it.second) {
+		for (const std::string &str : it.second) {
 			packet << str;
 		}
 	}

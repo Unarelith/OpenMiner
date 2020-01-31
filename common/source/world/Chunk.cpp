@@ -82,10 +82,10 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 	gk::Vector3i pos{x, y, z};
 	gk::Vector3i absolutePos{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_HEIGHT, z + m_z * CHUNK_DEPTH};
 	if (type == BlockType::Workbench) {
-		m_blockData.emplace(pos, BlockData{absolutePos, 3, 3});
+		m_blockData.emplace(pos, new BlockData{absolutePos, 3, 3});
 	}
 	else if (type == BlockType::Furnace) {
-		m_blockData.emplace(pos, BlockData{absolutePos, 3, 1});
+		m_blockData.emplace(pos, new BlockData{absolutePos, 3, 1});
 	}
 
 	if (m_data[x][y][z] == BlockType::Workbench || m_data[x][y][z] == BlockType::Furnace) {
@@ -136,10 +136,10 @@ void Chunk::setBlockRaw(int x, int y, int z, u16 type) {
 	gk::Vector3i pos{x, y, z};
 	gk::Vector3i absolutePos{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_HEIGHT, z + m_z * CHUNK_DEPTH};
 	if (type == BlockType::Workbench) {
-		m_blockData.emplace(pos, BlockData{absolutePos, 3, 3});
+		m_blockData.emplace(pos, new BlockData{absolutePos, 3, 3});
 	}
 	else if (type == BlockType::Furnace)
-		m_blockData.emplace(pos, BlockData{absolutePos, 3, 1});
+		m_blockData.emplace(pos, new BlockData{absolutePos, 3, 1});
 
 	if (m_data[x][y][z] == BlockType::Workbench || m_data[x][y][z] == BlockType::Furnace) {
 		auto it = m_blockData.find(pos);
@@ -152,7 +152,7 @@ void Chunk::setBlockRaw(int x, int y, int z, u16 type) {
 	m_hasChanged = true;
 }
 
-BlockData *Chunk::getBlockData(int x, int y, int z) {
+BlockData *Chunk::getBlockData(int x, int y, int z) const {
 	if(x < 0)             return m_surroundingChunks[0] ? m_surroundingChunks[0]->getBlockData(x + CHUNK_WIDTH, y, z) : 0;
 	if(x >= CHUNK_WIDTH)  return m_surroundingChunks[1] ? m_surroundingChunks[1]->getBlockData(x - CHUNK_WIDTH, y, z) : 0;
 	if(y < 0)             return m_surroundingChunks[4] ? m_surroundingChunks[4]->getBlockData(x, y + CHUNK_HEIGHT, z) : 0;
@@ -164,7 +164,7 @@ BlockData *Chunk::getBlockData(int x, int y, int z) {
 	if (it == m_blockData.end())
 		return nullptr;
 
-	return &it->second;
+	return it->second.get();
 }
 
 bool Chunk::areAllNeighboursLoaded() const {

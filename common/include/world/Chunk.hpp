@@ -49,7 +49,7 @@ class Chunk : public gk::NonCopyable {
 
 		void setBlockRaw(int x, int y, int z, u16 block);
 
-		BlockData *getBlockData(int x, int y, int z);
+		BlockData *getBlockData(int x, int y, int z) const;
 
 		s32 x() const { return m_x; }
 		s32 y() const { return m_y; }
@@ -96,7 +96,7 @@ class Chunk : public gk::NonCopyable {
 
 		std::unordered_map<std::size_t, const Block&> m_tickingBlocks;
 
-		std::unordered_map<gk::Vector3i, BlockData> m_blockData;
+		std::unordered_map<gk::Vector3i, std::unique_ptr<BlockData>> m_blockData;
 };
 
 #endif // CHUNK_HPP_
