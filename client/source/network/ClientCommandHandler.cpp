@@ -156,7 +156,7 @@ void ClientCommandHandler::setupCallbacks() {
 
 		BlockData *data = m_world.getBlockData(pos.x, pos.y, pos.z);
 		if (data) {
-			packet >> data->data;
+			packet >> data->data >> data->useAltTiles;
 		}
 	});
 }
