@@ -35,7 +35,7 @@ void ServerBlock::onTick(const glm::ivec3 &pos, std::unordered_map<u16, ServerPl
 
 				sf::Packet packet1;
 				packet1 << Network::Command::BlockDataUpdate << s32(pos.x) << s32(pos.y) << s32(pos.z);
-				packet1 << blockData->data;
+				packet1 << blockData->data << blockData->useAltTiles;
 				server.sendToAllClients(packet1);
 
 				if (blockData->inventory.hasChanged()) {

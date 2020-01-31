@@ -43,11 +43,11 @@ const std::string &TilesDef::getTextureForFace(u8 face, bool useAltTiles) const 
 }
 
 void TilesDef::serialize(sf::Packet &packet) const {
-	packet << textureFilenames; // << altTextureFilenames;
+	packet << textureFilenames << altTextureFilenames;
 }
 
 void TilesDef::deserialize(sf::Packet &packet) {
-	packet >> textureFilenames; // >> altTextureFilenames;
+	packet >> textureFilenames >> altTextureFilenames;
 }
 
 void TilesDef::loadFromLuaTable(const sol::table &table) {
