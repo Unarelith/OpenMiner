@@ -23,17 +23,13 @@ Item::Item(u32 id, const TilesDef &tiles, const std::string &name, const std::st
 	m_label = label;
 }
 
-void Item::serialize(sf::Packet &packet) {
+void Item::serialize(sf::Packet &packet) const {
 	packet << m_id << m_name << m_label << m_isBlock << m_isFuel
-		<< m_burnTime << m_miningSpeed << m_harvestCapability;
-
-	m_tiles.serialize(packet);
+		<< m_burnTime << m_miningSpeed << m_harvestCapability << m_tiles;
 }
 
 void Item::deserialize(sf::Packet &packet) {
 	packet >> m_id >> m_name >> m_label >> m_isBlock >> m_isFuel
-		>> m_burnTime >> m_miningSpeed >> m_harvestCapability;
-
-	m_tiles.deserialize(packet);
+		>> m_burnTime >> m_miningSpeed >> m_harvestCapability >> m_tiles;
 }
 

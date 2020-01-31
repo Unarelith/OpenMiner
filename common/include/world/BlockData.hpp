@@ -25,6 +25,8 @@ struct BlockData {
 	Inventory inventory;
 
 	u32 data = 0;
+
+	bool useAltTiles = false;
 };
 
 #endif // BLOCKDATA_HPP_

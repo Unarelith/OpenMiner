@@ -34,33 +34,31 @@ void Inventory::addStack(const std::string &name, u16 amount) {
 	}
 }
 
-sf::Packet &operator<<(sf::Packet &packet, Inventory &inventory) {
-	packet << u8(inventory.inBlock())
-		<< s32(inventory.blockPos().x) << s32(inventory.blockPos().y) << s32(inventory.blockPos().z);
+void Inventory::serialize(sf::Packet &packet) const {
+	packet << u8(m_inBlock)
+		<< s32(m_blockPos.x) << s32(m_blockPos.y) << s32(m_blockPos.z);
 
 	int i = 0;
-	for (auto &it : inventory.items()) {
+	for (auto &it : m_items) {
 		packet << it.item().name() << it.amount()
-			<< u8(i % inventory.width()) << u8(i / inventory.width());
+			<< u8(i % m_width) << u8(i / m_width);
 		++i;
 	}
-	return packet;
 }
 
-sf::Packet &operator>>(sf::Packet &packet, Inventory &inventory) {
+void Inventory::deserialize(sf::Packet &packet) {
 	u8 inBlock;
 	s32 bx, by, bz;
 	packet >> inBlock >> bx >> by >> bz;
-	inventory.setInBlock(inBlock);
-	inventory.setBlockPos({bx, by, bz});
+	m_inBlock = inBlock;
+	m_blockPos = gk::Vector3i{bx, by, bz};
 
 	std::string name;
 	u16 amount;
 	u8 x, y;
 	while (!packet.endOfPacket()) {
 		packet >> name >> amount >> x >> y;
-		inventory.setStack(x, y, name, amount);
+		setStack(x, y, name, amount);
 	}
-	return packet;
 }
 

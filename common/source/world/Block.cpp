@@ -30,11 +30,9 @@ Block::Block(u32 id, const TilesDef &tiles, const std::string &name, const std::
 	m_itemDropAmount = 1;
 }
 
-void Block::serialize(sf::Packet &packet) {
+void Block::serialize(sf::Packet &packet) const {
 	packet << u32(m_id) << m_name << m_label << u8(m_drawType)
-		<< m_hardness << m_harvestRequirements << m_itemDrop << m_itemDropAmount;
-
-	m_tiles.serialize(packet);
+		<< m_hardness << m_harvestRequirements << m_itemDrop << m_itemDropAmount << m_tiles;
 }
 
 void Block::deserialize(sf::Packet &packet) {
@@ -42,9 +40,7 @@ void Block::deserialize(sf::Packet &packet) {
 	u8 drawType;
 
 	packet >> id >> m_name >> m_label >> drawType >> m_hardness
-		>> m_harvestRequirements >> m_itemDrop >> m_itemDropAmount;
-
-	m_tiles.deserialize(packet);
+		>> m_harvestRequirements >> m_itemDrop >> m_itemDropAmount >> m_tiles;
 
 	m_id = id;
 	m_drawType = BlockDrawType(drawType);

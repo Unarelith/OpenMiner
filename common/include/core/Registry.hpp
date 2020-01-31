@@ -61,7 +61,7 @@ class Registry : public ISerializable {
 
 		const Recipe *getRecipe(const Inventory &inventory) const;
 
-		void serialize(sf::Packet &packet) override;
+		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
 		const std::vector<std::unique_ptr<Block>> &blocks() const { return m_blocks; }

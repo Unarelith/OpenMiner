@@ -20,8 +20,11 @@ class ISerializable {
 	public:
 		virtual ~ISerializable() = default;
 
-		virtual void serialize(sf::Packet &packet) = 0;
+		virtual void serialize(sf::Packet &packet) const = 0;
 		virtual void deserialize(sf::Packet &packet) = 0;
 };
+
+sf::Packet &operator<<(sf::Packet &packet, const ISerializable &s);
+sf::Packet &operator>>(sf::Packet &packet, ISerializable &s);
 
 #endif // ISERIALIZABLE_HPP_

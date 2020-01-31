@@ -24,7 +24,7 @@ class CraftingRecipe : public Recipe {
 		CraftingRecipe() : Recipe("craft") {}
 		CraftingRecipe(const std::vector<std::string> &pattern, const std::map<char, std::vector<std::string>> &keys, const ItemStack &result, bool isShapeless = false);
 
-		void serialize(sf::Packet &packet) override;
+		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
 		bool isMatching(const Inventory &inventory) const override;

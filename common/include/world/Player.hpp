@@ -19,7 +19,7 @@
 
 class Player : public ISerializable {
 	public:
-		void serialize(sf::Packet &packet) override;
+		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
 		s32 x() const { return m_x; }

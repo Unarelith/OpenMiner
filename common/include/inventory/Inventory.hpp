@@ -19,8 +19,9 @@
 #include <gk/core/Vector3.hpp>
 
 #include "ItemStack.hpp"
+#include "ISerializable.hpp"
 
-class Inventory {
+class Inventory : public ISerializable {
 	public:
 		Inventory(u16 width, u16 height)
 			: m_width(width), m_height(height) { m_items.resize(width * height); }
@@ -29,6 +30,9 @@ class Inventory {
 		ItemStack &getStackRef(u16 x, u16 y) { return m_items.at(x + y * m_width); }
 		void setStack(u16 x, u16 y, const std::string &name, u16 amount = 1);
 		void addStack(const std::string &name, u16 amount = 1);
+
+		void serialize(sf::Packet &packet) const override;
+		void deserialize(sf::Packet &packet) override;
 
 		u16 width() const { return m_width; }
 		u16 height() const { return m_height; }
@@ -55,8 +59,5 @@ class Inventory {
 
 		bool m_hasChanged = false; // Used to send inventory update packets
 };
-
-sf::Packet &operator<<(sf::Packet &packet, Inventory &inventory);
-sf::Packet &operator>>(sf::Packet &packet, Inventory &inventory);
 
 #endif // INVENTORY_HPP_

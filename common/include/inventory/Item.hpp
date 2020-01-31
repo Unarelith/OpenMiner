@@ -27,7 +27,7 @@ class Item : public ISerializable {
 		Item() = default;
 		Item(u32 id, const TilesDef &tiles, const std::string &name, const std::string &label);
 
-		void serialize(sf::Packet &packet) override;
+		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
 		const std::string &name() const { return m_name; }

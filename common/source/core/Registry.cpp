@@ -60,20 +60,18 @@ const Recipe *Registry::getRecipe(const Inventory &inventory) const {
 	return nullptr;
 }
 
-void Registry::serialize(sf::Packet &packet) {
+void Registry::serialize(sf::Packet &packet) const {
 	for (auto &it : m_items) {
-		packet << u8(DataType::Item);
-		it.serialize(packet);
+		packet << u8(DataType::Item) << it;
 	}
 
 	for (auto &it : m_blocks) {
-		packet << u8(DataType::Block);
-		it->serialize(packet);
+		packet << u8(DataType::Block) << *it;
 	}
 
 	for (auto &it : m_recipes) {
-		packet << u8((it->type() == "craft") ? DataType::CraftingRecipe : DataType::SmeltingRecipe);
-		it->serialize(packet);
+		packet << u8((it->type() == "craft") ? DataType::CraftingRecipe : DataType::SmeltingRecipe)
+			<< *it;
 	}
 }
 
