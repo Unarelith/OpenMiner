@@ -17,7 +17,7 @@
 #include "TilesDef.hpp"
 
 const std::string &TilesDef::getTextureForFace(u8 face, bool useAltTiles) const {
-	u8 size = (!useAltTiles) ? textureFilenames.size() : altTextureFilenames.size();
+	u8 size = (!useAltTiles) ? m_textureFilenames.size() : m_altTextureFilenames.size();
 	if (size == 0)
 		throw EXCEPTION("Trying to get texture from empty tiles definition");
 
@@ -35,36 +35,36 @@ const std::string &TilesDef::getTextureForFace(u8 face, bool useAltTiles) const 
 		outFace = BlockFace::Front;
 
 	if (!useAltTiles)
-		return textureFilenames.at(outFace);
+		return m_textureFilenames.at(outFace);
 	else {
-		const std::string &filename = altTextureFilenames.at(outFace);
+		const std::string &filename = m_altTextureFilenames.at(outFace);
 		return (!filename.empty()) ? filename : getTextureForFace(face, false);
 	}
 }
 
 void TilesDef::serialize(sf::Packet &packet) const {
-	packet << textureFilenames << altTextureFilenames;
+	packet << m_textureFilenames << m_altTextureFilenames;
 }
 
 void TilesDef::deserialize(sf::Packet &packet) {
-	packet >> textureFilenames >> altTextureFilenames;
+	packet >> m_textureFilenames >> m_altTextureFilenames;
 }
 
 void TilesDef::loadFromLuaTable(const sol::table &table) {
 	if (table["tiles"].get_type() == sol::type::table) {
 		sol::as_table_t<std::vector<std::string>> t = table["tiles"];
-		textureFilenames = t.source;
+		m_textureFilenames = t.source;
 	}
 	else
-		textureFilenames.emplace_back(table["tiles"].get<std::string>());
+		m_textureFilenames.emplace_back(table["tiles"].get<std::string>());
 
 	if (table["alt_tiles"].get_type() != sol::type::none) {
 		if (table["alt_tiles"].get_type() == sol::type::table) {
 			sol::as_table_t<std::vector<std::string>> t = table["alt_tiles"];
-			altTextureFilenames = t.source;
+			m_altTextureFilenames = t.source;
 		}
 		else
-			altTextureFilenames.emplace_back(table["alt_tiles"].get<std::string>());
+			m_altTextureFilenames.emplace_back(table["alt_tiles"].get<std::string>());
 	}
 }
 

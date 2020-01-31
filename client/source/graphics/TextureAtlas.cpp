@@ -93,18 +93,18 @@ void TextureAtlas::packTextures() {
 void TextureAtlas::loadFromRegistry() {
 	for (auto &block : Registry::getInstance().blocks()) {
 		const TilesDef &tiles = block->tiles();
-		for (auto &textureFilename : tiles.textureFilenames)
+		for (auto &textureFilename : tiles.textureFilenames())
 			addFile("mods/" + block->modName() + "/textures/blocks/", textureFilename);
-		for (auto &textureFilename : tiles.altTextureFilenames)
+		for (auto &textureFilename : tiles.altTextureFilenames())
 			addFile("mods/" + block->modName() + "/textures/blocks/", textureFilename);
 	}
 
 	for (auto &item : Registry::getInstance().items()) {
 		if (!item.isBlock()) {
 			const TilesDef &tiles = item.tiles();
-			for (auto &textureFilename : tiles.textureFilenames)
+			for (auto &textureFilename : tiles.textureFilenames())
 				addFile("mods/" + item.modName() + "/textures/items/", textureFilename);
-			for (auto &textureFilename : tiles.altTextureFilenames)
+			for (auto &textureFilename : tiles.altTextureFilenames())
 				addFile("mods/" + item.modName() + "/textures/items/", textureFilename);
 		}
 	}

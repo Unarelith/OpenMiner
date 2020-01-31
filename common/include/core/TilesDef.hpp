@@ -45,8 +45,12 @@ class TilesDef : public ISerializable {
 
 		void loadFromLuaTable(const sol::table &table);
 
-		std::vector<std::string> textureFilenames;
-		std::vector<std::string> altTextureFilenames;
+		const std::vector<std::string> &textureFilenames() const { return m_textureFilenames; };
+		const std::vector<std::string> &altTextureFilenames() const { return m_altTextureFilenames; }
+
+	private:
+		std::vector<std::string> m_textureFilenames;
+		std::vector<std::string> m_altTextureFilenames;
 };
 
 #endif // TILESDEF_HPP_
