@@ -29,6 +29,8 @@ void ServerApplication::init() {
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
 
 	Registry::setInstance(m_registry);
+
+	// The id "_:air" is used in CraftingRecipe, update it there if it changes
 	m_registry.registerBlock<ServerBlock>({}, "_:air", "Air");
 	m_registry.registerItem({}, "_:air", "Air").setIsBlock(true);
 
