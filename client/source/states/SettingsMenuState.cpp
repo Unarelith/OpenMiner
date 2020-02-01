@@ -114,7 +114,7 @@ void SettingsMenuState::addGraphicsButtons() {
 
 	addToggleButton("Torch Smooth Lighting", Config::isTorchSmoothLightingEnabled, true);
 	addToggleButton("Sun Smooth Lighting", Config::isSunSmoothLightingEnabled, true);
-	addToggleButton("Ambient Occlusion", Config::isAmbientOcclusionEnabled, true).setEnabled(false);
+	addToggleButton("Ambient Occlusion", Config::isAmbientOcclusionEnabled, false);
 	addToggleButton("Wireframe Mode", Config::isWireframeModeEnabled, false);
 
 	m_menuWidget.addButton("GUI Scale: " + std::to_string(GUI_SCALE), [] (TextButton &button) {

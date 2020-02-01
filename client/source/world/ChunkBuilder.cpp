@@ -191,15 +191,15 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 			vertices[j].lightValue[1] = chunk.lightmap().getTorchlight(
 				surroundingBlockPos[0], surroundingBlockPos[1], surroundingBlockPos[2]);
 
-		if (Config::isAmbientOcclusionEnabled)
-			vertices[j].ambientOcclusion = getAmbientOcclusion(x, y, z, i, j, chunk);
-		else
-			vertices[j].ambientOcclusion = 5;
+		vertices[j].ambientOcclusion = getAmbientOcclusion(x, y, z, i, j, chunk);
 
 		vertices[j].blockType = block->id();
 	}
 
 	auto addVertex = [&](u8 j) {
+		if (!Config::isAmbientOcclusionEnabled)
+			vertices[j].ambientOcclusion = 5;
+
 		if (block->id() == BlockType::Water)
 			m_vertices[Layer::Liquid].emplace_back(vertices[j]);
 		else if (block->id() == BlockType::Leaves)
@@ -213,17 +213,17 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 			vertices[1].ambientOcclusion + vertices[3].ambientOcclusion) {
 		addVertex(0);
 		addVertex(1);
-		addVertex(3);
-		addVertex(3);
-		addVertex(1);
 		addVertex(2);
+		addVertex(2);
+		addVertex(3);
+		addVertex(0);
 	} else {
 		addVertex(0);
 		addVertex(1);
-		addVertex(2);
-		addVertex(2);
 		addVertex(3);
-		addVertex(0);
+		addVertex(3);
+		addVertex(1);
+		addVertex(2);
 	}
 }
 
