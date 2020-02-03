@@ -88,7 +88,7 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 				};
 
 				if (block.drawType() == BlockDrawType::Solid
-				 || block.drawType() == BlockDrawType::AllFaces
+				 || block.drawType() == BlockDrawType::Leaves
 				 || block.drawType() == BlockDrawType::Liquid
 				 || block.drawType() == BlockDrawType::Glass) {
 					for(u8 i = 0 ; i < 6 ; i++) {

@@ -31,11 +31,11 @@ class Player;
 class World;
 
 enum class BlockDrawType {
-	Solid    = 0,
-	XShape   = 1,
-	AllFaces = 2,
-	Liquid   = 3,
-	Glass    = 4,
+	Solid   = 0,
+	XShape  = 1,
+	Leaves  = 2,
+	Liquid  = 3,
+	Glass   = 4,
 };
 
 class Block : public ISerializable {
