@@ -46,6 +46,8 @@ void ServerApplication::init() {
 		std::cerr << e.what() << std::endl;
 	}
 
+	m_scriptEngine.lua().safe_script_file("mods/default/init.lua");
+
 	m_server.init(m_port);
 	m_server.setRunning(true);
 

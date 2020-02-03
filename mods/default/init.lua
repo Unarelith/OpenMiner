@@ -12,6 +12,17 @@ dofile("mods/default/blocks.lua")
 dofile("mods/default/items.lua")
 dofile("mods/default/recipes.lua")
 
+openminer:world():terrain_generator():set_blocks({
+	dirt = "default:dirt",
+	grass = "default:grass",
+	stone = "default:stone",
+	log = "default:wood",
+	leaves = "default:leaves",
+	flower = "default:flower",
+	water = "default:water",
+	sand = "default:sand"
+})
+
 function init(player)
 	local player_inv = player:inventory()
 
