@@ -17,7 +17,10 @@
 CraftingWidget::CraftingWidget(ClientCommandHandler &client, Inventory &craftingInventory, Widget *parent)
 	: Widget(parent), m_client(client), m_craftingInventory(craftingInventory)
 {
-	m_craftingInventoryWidget.init(m_craftingInventory);
+}
+
+void CraftingWidget::init(unsigned int offset, unsigned int size) {
+	m_craftingInventoryWidget.init(m_craftingInventory, offset, size * size);
 	m_craftingInventoryWidget.setPosition(29, 16, 0);
 
 	m_craftingResultInventoryWidget.init(m_craftingResultInventory);

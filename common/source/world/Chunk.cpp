@@ -78,25 +78,7 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 		m_lightmap.removeSunlight(x, y, z);
 	}
 
-	// FIXME: Duplicated below
-	gk::Vector3i pos{x, y, z};
-	gk::Vector3i absolutePos{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_HEIGHT, z + m_z * CHUNK_DEPTH};
-	if (type == BlockType::Workbench) {
-		m_blockData.emplace(pos, new BlockData{absolutePos, 3, 3});
-	}
-	else if (type == BlockType::Furnace) {
-		m_blockData.emplace(pos, new BlockData{absolutePos, 3, 1});
-	}
-
-	if (m_data[x][y][z] == BlockType::Workbench || m_data[x][y][z] == BlockType::Furnace) {
-		auto it = m_blockData.find(pos);
-		if (it != m_blockData.end())
-			m_blockData.erase(it);
-	}
-
-	m_data[x][y][z] = type;
-
-	m_hasChanged = true;
+	setBlockRaw(x, y, z, type);
 
 	// FIXME
 	// updateNeighbours(x, y, z);

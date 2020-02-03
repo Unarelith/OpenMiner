@@ -115,8 +115,8 @@ void LuaGUI::addCraftingWidget(const sol::table &table) {
 		y = pos.value()["y"];
 	}
 
-	u16 offset = table["offset"].get<u16>();
-	u16 count = table["count"].get_or<u16>(9);
+	u16 offset = table["offset"].get_or<u16>(0);
+	u16 size = table["size"].get_or<u16>(3);
 
 	gk::Vector3i block;
 	sol::optional<sol::table> blockTable = table["block"];
@@ -134,7 +134,7 @@ void LuaGUI::addCraftingWidget(const sol::table &table) {
 	craftingWidget.y = y;
 	craftingWidget.block = block;
 	craftingWidget.offset = offset;
-	craftingWidget.count = count;
+	craftingWidget.size = size;
 }
 
 void LuaGUI::addFurnaceWidget(const sol::table &table) {
@@ -176,7 +176,7 @@ void LuaGUI::show(Client &client) {
 			<< it.offset << it.count;
 	for (auto &it : m_data.craftingWidgetList)
 		packet << u8(3) << it.name << it.x << it.y << it.block.x << it.block.y << it.block.z
-			<< it.offset << it.count;
+			<< it.offset << it.size;
 	for (auto &it : m_data.furnaceWidgetList)
 		packet << u8(4) << it.name << it.x << it.y << it.block.x << it.block.y << it.block.z;
 	client.tcpSocket->send(packet);

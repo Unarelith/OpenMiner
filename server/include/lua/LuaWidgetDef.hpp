@@ -54,7 +54,7 @@ struct CraftingWidget : public Widget {
 	gk::Vector3i block;
 
 	u16 offset = 0;
-	u16 count = 9;
+	u16 size = 3;
 };
 
 struct FurnaceWidget : public Widget {

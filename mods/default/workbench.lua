@@ -50,7 +50,8 @@ mod:block {
 
 			block = {x = pos.x, y = pos.y, z = pos.z},
 
-			offset = 0,
+			-- offset = 0,
+			-- size = 4
 		}
 
 		gui:image {

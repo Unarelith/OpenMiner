@@ -70,3 +70,14 @@ bool ServerBlock::onBlockActivated(const glm::ivec3 &pos, Player &player, World 
 	return false;
 }
 
+void ServerBlock::onBlockPlaced(const glm::ivec3 &pos, World &world) {
+	try {
+		if (m_onBlockPlaced) {
+			m_onBlockPlaced(pos, world);
+		}
+	}
+	catch (const sol::error &e) {
+		std::cerr << e.what() << std::endl;
+	}
+}
+

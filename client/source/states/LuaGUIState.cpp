@@ -151,13 +151,14 @@ void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &
 	}
 	else if (type == 3) {
 		gk::Vector3i block;
-		u16 offset, count;
-		packet >> block.x >> block.y >> block.z >> offset >> count;
+		u16 offset, size;
+		packet >> block.x >> block.y >> block.z >> offset >> size;
 		BlockData *data = world.getBlockData(block.x, block.y, block.z);
 		if (data) {
 			m_craftingWidgets.emplace_back(m_client, data->inventory, &m_mainWidget);
 
 			auto &craftingWidget = m_craftingWidgets.back();
+			craftingWidget.init(offset, size);
 			craftingWidget.setPosition(x, y);
 		}
 		else {

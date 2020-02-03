@@ -27,6 +27,7 @@ class ServerBlock : public Block {
 
 		void onTick(const glm::ivec3 &, std::unordered_map<u16, ServerPlayer> &, Chunk &, World &, Server &) const;
 		bool onBlockActivated(const glm::ivec3 &pos, Player &player, World &world, Client &client) const;
+		void onBlockPlaced(const glm::ivec3 &pos, World &world);
 
 		bool canUpdate() const { return m_onTick.valid(); }
 
@@ -36,6 +37,7 @@ class ServerBlock : public Block {
 	private:
 		sol::unsafe_function m_onBlockActivated;
 		sol::unsafe_function m_onTick;
+		sol::unsafe_function m_onBlockPlaced;
 		mutable bool m_onTickEnabled = true;
 };
 

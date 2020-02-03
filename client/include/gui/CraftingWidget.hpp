@@ -22,6 +22,8 @@ class CraftingWidget : public Widget {
 	public:
 		CraftingWidget(ClientCommandHandler &client, Inventory &craftingInventory, Widget *parent = nullptr);
 
+		void init(unsigned int offset = 0, unsigned int size = 3);
+
 		void onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget);
 
 		void update() override;
