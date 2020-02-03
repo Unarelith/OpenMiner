@@ -122,7 +122,7 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 
 	// Skip hidden faces
 	if(surroundingBlock && surroundingBlock->id() && surroundingBlock->drawType() == BlockDrawType::Solid
-	&& (surroundingBlock->isOpaque() || (block->id() == surroundingBlock->id() && block->id() != BlockType::Leaves && ((i != 2 && i != 3) || block->id()))))
+	&& (surroundingBlock->isOpaque() || (block->id() == surroundingBlock->id() && block->id() != BlockType::Leaves)))
 		return;
 
 	static glm::vec3 a, b, c, v1, v2, normal;
