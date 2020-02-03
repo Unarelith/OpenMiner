@@ -38,7 +38,7 @@ class ChunkBuilder {
 		enum Layer {
 			Solid,
 			Liquid,
-			Other,
+			Flora,
 		};
 
 	private:

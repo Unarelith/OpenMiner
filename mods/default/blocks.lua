@@ -58,7 +58,8 @@ mod:block {
 mod:block {
 	id = "water",
 	name = "Water",
-	tiles = "water.png"
+	tiles = "water.png",
+	draw_type = 3 -- FIXME: Use string instead
 }
 
 mod:block {

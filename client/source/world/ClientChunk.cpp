@@ -29,7 +29,11 @@ void ClientChunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u
 
 	states.texture = &m_textureAtlas.texture();
 
-	glCheck(glEnable(GL_CULL_FACE));
+	if (layer == ChunkBuilder::Layer::Flora)
+		glCheck(glDisable(GL_CULL_FACE));
+	else
+		glCheck(glEnable(GL_CULL_FACE));
+
 	glCheck(glEnable(GL_DEPTH_TEST));
 
 	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
