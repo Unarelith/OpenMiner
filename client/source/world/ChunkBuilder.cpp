@@ -87,7 +87,9 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 					{x, y, z + 1},
 				};
 
-				if (block.drawType() == BlockDrawType::Solid || block.drawType() == BlockDrawType::AllFaces) {
+				if (block.drawType() == BlockDrawType::Solid
+				 || block.drawType() == BlockDrawType::AllFaces
+				 || block.drawType() == BlockDrawType::Liquid) {
 					for(u8 i = 0 ; i < 6 ; i++) {
 						addFace(x, y, z, i, chunk, &block, surroundingBlocksPos[i]);
 					}
@@ -121,8 +123,9 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 	const Block *surroundingBlock = &Registry::getInstance().getBlock(surroundingBlockID);
 
 	// Skip hidden faces
-	if(surroundingBlock && surroundingBlock->id() && surroundingBlock->drawType() == BlockDrawType::Solid
-	&& (surroundingBlock->isOpaque() || block->drawType() != BlockDrawType::AllFaces))
+	if (surroundingBlock && surroundingBlock->id()
+	&& ((block->drawType() == BlockDrawType::Solid && surroundingBlock->drawType() == BlockDrawType::Solid && surroundingBlock->isOpaque())
+	 || (block->id() == surroundingBlock->id() && block->drawType() == BlockDrawType::Liquid)))
 		return;
 
 	static glm::vec3 a, b, c, v1, v2, normal;
@@ -200,10 +203,8 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 		if (!Config::isAmbientOcclusionEnabled)
 			vertices[j].ambientOcclusion = 5;
 
-		if (block->id() == BlockType::Water)
+		if (block->drawType() == BlockDrawType::Liquid)
 			m_vertices[Layer::Liquid].emplace_back(vertices[j]);
-		else if (block->id() == BlockType::Leaves)
-			m_vertices[Layer::Other].emplace_back(vertices[j]);
 		else
 			m_vertices[Layer::Solid].emplace_back(vertices[j]);
 	};
@@ -266,12 +267,12 @@ inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, c
 			vertices[j].blockType = block->id();
 		}
 
-		m_vertices[Layer::Other].emplace_back(vertices[0]);
-		m_vertices[Layer::Other].emplace_back(vertices[1]);
-		m_vertices[Layer::Other].emplace_back(vertices[3]);
-		m_vertices[Layer::Other].emplace_back(vertices[3]);
-		m_vertices[Layer::Other].emplace_back(vertices[1]);
-		m_vertices[Layer::Other].emplace_back(vertices[2]);
+		m_vertices[Layer::Flora].emplace_back(vertices[0]);
+		m_vertices[Layer::Flora].emplace_back(vertices[1]);
+		m_vertices[Layer::Flora].emplace_back(vertices[3]);
+		m_vertices[Layer::Flora].emplace_back(vertices[3]);
+		m_vertices[Layer::Flora].emplace_back(vertices[1]);
+		m_vertices[Layer::Flora].emplace_back(vertices[2]);
 	}
 }
 
