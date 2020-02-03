@@ -16,10 +16,10 @@
 #include <gk/core/input/GamePad.hpp>
 #include <gk/core/Mouse.hpp>
 
-#include "BlockType.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "GameKey.hpp"
+#include "Registry.hpp"
 
 ClientPlayer *ClientPlayer::s_instance = nullptr;
 
@@ -150,8 +150,9 @@ void ClientPlayer::checkCollisions(const ClientWorld &world) {
 }
 
 bool passable(const ClientWorld &world, float x, float y, float z) {
-	u32 block = world.getBlock(x, y, z);
-	return !block || block == 8 || block == BlockType::Flower;
+	u32 blockID = world.getBlock(x, y, z);
+	const Block &block = Registry::getInstance().getBlock(blockID);
+	return !blockID || block.drawType() == BlockDrawType::Liquid || block.drawType() == BlockDrawType::XShape;
 }
 
 void ClientPlayer::testPoint(const ClientWorld &world, float x, float y, float z, glm::vec3 &speed) {
