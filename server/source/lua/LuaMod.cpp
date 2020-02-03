@@ -46,6 +46,7 @@ void LuaMod::registerBlock(const sol::table &table) {
 		});
 	}
 
+	// FIXME: Use string instead
 	sol::optional<BlockDrawType> drawType = table["draw_type"];
 	if (drawType != sol::nullopt) {
 		block.setDrawType(drawType.value());

@@ -31,8 +31,9 @@ class Player;
 class World;
 
 enum class BlockDrawType {
-	Solid  = 0,
-	XShape = 1,
+	Solid    = 0,
+	XShape   = 1,
+	AllFaces = 2,
 };
 
 class Block : public ISerializable {
@@ -57,7 +58,7 @@ class Block : public ISerializable {
 		s8 selectedFace() const { return m_selectedFace; }
 		void setSelected(bool isSelected, s8 face) { m_isSelected = isSelected; m_selectedFace = face; }
 
-		bool isOpaque() const { return m_id != 0 && m_id != 4 && m_id != 8 && m_id != 9 && m_id != 16 && m_drawType != BlockDrawType::XShape; }
+		bool isOpaque() const { return m_id != 0 && m_id != BlockType::Leaves && m_id != BlockType::Water && m_id != BlockType::Glass && m_drawType != BlockDrawType::XShape; }
 
 		ItemStack getItemDrop() const { return ItemStack{m_itemDrop, m_itemDropAmount}; };
 		void setItemDrop(const std::string &itemDrop, u16 itemDropAmount = 1) { m_itemDrop = itemDrop; m_itemDropAmount = itemDropAmount; }
