@@ -35,6 +35,7 @@ enum class BlockDrawType {
 	XShape   = 1,
 	AllFaces = 2,
 	Liquid   = 3,
+	Glass    = 4,
 };
 
 class Block : public ISerializable {

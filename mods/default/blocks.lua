@@ -65,7 +65,8 @@ mod:block {
 mod:block {
 	id = "glass",
 	name = "Glass",
-	tiles = "glass.png"
+	tiles = "glass.png",
+	draw_type = 4 -- FIXME: Use string instead
 }
 
 mod:block {
