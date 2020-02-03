@@ -121,7 +121,7 @@ bool ChunkLightmap::updateTorchlight() {
 		// If this block is opaque, don't propagate the light
 		// u16 block = m_chunk->getBlock(node.x, node.y, node.z);
 		// const Block &block = Registry::getInstance().getBlock(blockID);
-		// if (block.isOpaque() || block.drawType() == BlockDrawType::Leaves) {
+		// if (block.isOpaque()) {
 		// 	setTorchlight(node.x, node.y, node.z, 0);
         //
 		// 	lightUpdated = true; // FIXME
@@ -143,7 +143,7 @@ bool ChunkLightmap::updateTorchlight() {
 			if (getTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= lightLevel) {
 				u16 blockID = m_chunk->getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 				const Block &block = Registry::getInstance().getBlock(blockID);
-				if (!block.isOpaque() && block.drawType() != BlockDrawType::Leaves) {
+				if (!block.isOpaque()) {
 					addTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, lightLevel - 1);
 
 					lightUpdated = true;
@@ -195,7 +195,7 @@ bool ChunkLightmap::updateSunlight() {
 		// If this block is opaque, don't propagate the light
 		u16 blockID = m_chunk->getBlock(node.x, node.y, node.z);
 		const Block &block = Registry::getInstance().getBlock(blockID);
-		if (block.isOpaque() || block.drawType() == BlockDrawType::Leaves) {
+		if (block.isOpaque()) {
 			setSunlight(node.x, node.y, node.z, 0);
 
 			// FIXME: This only reverts an addSunlight that added light in a non-generated chunk
@@ -221,7 +221,7 @@ bool ChunkLightmap::updateSunlight() {
 			|| (sunlightLevel == 15 && neighbourSunlightLevel != 15 && surroundingNode.y == node.y - 1)) {
 				u16 blockID = m_chunk->getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 				const Block &block = Registry::getInstance().getBlock(blockID);
-				if (!block.isOpaque() && block.drawType() != BlockDrawType::Leaves) {
+				if (!block.isOpaque()) {
 					if (sunlightLevel == 15 && surroundingNode.y == node.y - 1 && (!blockID || block.drawType() == BlockDrawType::Glass)) {
 						addSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel);
 

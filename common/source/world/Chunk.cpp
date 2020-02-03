@@ -15,6 +15,7 @@
 
 #include <gk/core/GameClock.hpp>
 
+#include "BlockType.hpp"
 #include "Chunk.hpp"
 #include "Config.hpp"
 #include "Registry.hpp"

@@ -309,8 +309,9 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 			mz = floorf(testPos.z);
 
 			// If we find a block that is not air, we are done
-			u32 block = m_world.getBlock(mx, my, mz);
-			if(block && block != BlockType::Water) break;
+			u32 blockID = m_world.getBlock(mx, my, mz);
+			const Block &block = Registry::getInstance().getBlock(blockID);
+			if(blockID && block.drawType() != BlockDrawType::Liquid) break;
 		}
 
 		// Find out which face of the block we are looking at
@@ -327,8 +328,9 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 	}
 
 	// If we are looking at air, disable the cursor
-	u32 block = m_world.getBlock(mx, my, mz);
-	if(!block || block == BlockType::Water) {
+	u32 blockID = m_world.getBlock(mx, my, mz);
+	const Block &block = Registry::getInstance().getBlock(blockID);
+	if(!blockID || block.drawType() == BlockDrawType::Liquid) {
 		face = -1;
 	}
 
