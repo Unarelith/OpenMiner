@@ -12,7 +12,7 @@
  * =====================================================================================
  */
 #include "Config.hpp"
-#include "BlockType.hpp"
+#include "Registry.hpp"
 #include "ServerChunk.hpp"
 #include "TerrainGenerator.hpp"
 #include "World.hpp"
@@ -29,14 +29,25 @@ void TerrainGenerator::generate(ServerChunk &chunk) const {
 	// fastNoiseGeneration(chunk);
 }
 
+void TerrainGenerator::setBlocksFromLuaTable(const sol::table &table) {
+	m_dirtBlockID   = Registry::getInstance().getBlockFromStringID(table["dirt"].get<std::string>()).id();
+	m_grassBlockID  = Registry::getInstance().getBlockFromStringID(table["grass"].get<std::string>()).id();
+	m_stoneBlockID  = Registry::getInstance().getBlockFromStringID(table["stone"].get<std::string>()).id();
+	m_logBlockID    = Registry::getInstance().getBlockFromStringID(table["log"].get<std::string>()).id();
+	m_leavesBlockID = Registry::getInstance().getBlockFromStringID(table["leaves"].get<std::string>()).id();
+	m_flowerBlockID = Registry::getInstance().getBlockFromStringID(table["flower"].get<std::string>()).id();
+	m_waterBlockID  = Registry::getInstance().getBlockFromStringID(table["water"].get<std::string>()).id();
+	m_sandBlockID   = Registry::getInstance().getBlockFromStringID(table["sand"].get<std::string>()).id();
+}
+
 void TerrainGenerator::lightTestGeneration(ServerChunk &chunk) const {
 	for(u8 y = 0 ; y < CHUNK_HEIGHT ; y++) {
 		for(u8 z = 0 ; z < CHUNK_DEPTH ; z++) {
 			for(u8 x = 0 ; x < CHUNK_WIDTH ; x++) {
 				if (y == 4)
-					chunk.setBlockRaw(x, y, z, BlockType::Stone);
+					chunk.setBlockRaw(x, y, z, m_stoneBlockID);
 				else if (y == 10 && (z > 4 || chunk.z() != 0))
-					chunk.setBlockRaw(x, y, z, BlockType::Stone);
+					chunk.setBlockRaw(x, y, z, m_stoneBlockID);
 			}
 		}
 	}
@@ -95,14 +106,14 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 				if(y + chunk.y() * CHUNK_HEIGHT > h) {
 					// If we are not yet up to sea level, fill with water blocks
 					if(y + chunk.y() * CHUNK_HEIGHT < SEALEVEL) {
-						chunk.setBlockRaw(x, y, z, BlockType::Water);
+						chunk.setBlockRaw(x, y, z, m_waterBlockID);
 					}
 					// Otherwise we are in the air, so try to make a tree
-					else if(chunk.getBlock(x, y - 1, z) == BlockType::Grass && (rand() % 256) == 0 && n < 4) {
+					else if(chunk.getBlock(x, y - 1, z) == m_grassBlockID && (rand() % 256) == 0 && n < 4) {
 						// Trunk
 						h = (rand() & 0x3) + 3;
 						for(int i = 0 ; i < h ; i++) {
-							chunk.setBlockRaw(x, y + i, z, BlockType::Wood);
+							chunk.setBlockRaw(x, y + i, z, m_logBlockID);
 						}
 
 						// Leaves
@@ -110,15 +121,15 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 							for(int iy = -3 ; iy <= 3 ; iy++) {
 								for(int iz = -3 ; iz <= 3 ; iz++) {
 									if(ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + h + iy, z + iz)) {
-										chunk.setBlockRaw(x + ix, y + h + iy, z + iz, BlockType::Leaves);
+										chunk.setBlockRaw(x + ix, y + h + iy, z + iz, m_leavesBlockID);
 									}
 								}
 							}
 						}
 					}
 					// Or a flower
-					else if(chunk.getBlock(x, y - 1, z) == BlockType::Grass && (rand() & 0xff) == 0) {
-						chunk.setBlockRaw(x, y, z, BlockType::Flower);
+					else if(chunk.getBlock(x, y - 1, z) == m_grassBlockID && (rand() & 0xff) == 0) {
+						chunk.setBlockRaw(x, y, z, m_flowerBlockID);
 					}
 					// If we are on the top block of the chunk, add sunlight
 					else if (y == CHUNK_HEIGHT - 1) {
@@ -131,23 +142,23 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
                     //
 					// // Sand layer
 					// if(n * 4 + r * 5 < 4) {
-					// 	chunk.setBlockRaw(x, y, z, BlockType::Sand);
+					// 	chunk.setBlockRaw(x, y, z, m_sandBlockID);
 					// }
 					// // Dirt layer, but use grass blocks for the top
 					// else if(n + r * 5 < 6 * 8 && n * 10 + r * 5 > 30) {
-					// 	chunk.setBlockRaw(x, y, z, (h < SEALEVEL - 5 || y + chunk.y() * CHUNK_HEIGHT < h - 1) ? BlockType::Dirt : BlockType::Grass);
+					// 	chunk.setBlockRaw(x, y, z, (h < SEALEVEL - 5 || y + chunk.y() * CHUNK_HEIGHT < h - 1) ? m_dirtBlockID : m_grassBlockID);
 					// }
 					// else {
-					// 	chunk.setBlockRaw(x, y, z, BlockType::Stone);
+					// 	chunk.setBlockRaw(x, y, z, m_stoneBlockID);
 					// }
 					if (y + chunk.y() * CHUNK_HEIGHT >= h - 1 && y + chunk.y() * CHUNK_HEIGHT > SEALEVEL - 1)
-						chunk.setBlockRaw(x, y, z, BlockType::Grass);
+						chunk.setBlockRaw(x, y, z, m_grassBlockID);
 					else if (y + chunk.y() * CHUNK_HEIGHT <= SEALEVEL - 1 && h < SEALEVEL && y + chunk.y() * CHUNK_HEIGHT > h - 3)
-						chunk.setBlockRaw(x, y, z, BlockType::Sand);
+						chunk.setBlockRaw(x, y, z, m_sandBlockID);
 					else if (y + chunk.y() * CHUNK_HEIGHT > h - 3)
-						chunk.setBlockRaw(x, y, z, BlockType::Dirt);
+						chunk.setBlockRaw(x, y, z, m_dirtBlockID);
 					else
-						chunk.setBlockRaw(x, y, z, BlockType::Stone);
+						chunk.setBlockRaw(x, y, z, m_stoneBlockID);
 
 					// Caves
 					float n2 = noise2d((x + chunk.x() * CHUNK_WIDTH) / 256.0, (z + chunk.z() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
@@ -159,15 +170,6 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 						chunk.setBlockRaw(x, y, z, 0);
 						chunk.setBlockRaw(x, y + 1, z, 0);
 					}
-					// else if (r < 0.3) {
-					// 	chunk.setBlockRaw(x, y, z, BlockType::CoalOre);
-					// }
-					// else if (r > 0.3 && r < 0.5) {
-					// 	chunk.setBlockRaw(x, y, z, BlockType::IronOre);
-					// }
-					// else if (r4 > 8.2 && r4 < 10) {
-					// 	chunk.setBlockRaw(x, y, z, BlockType::Stone);
-					// }
 				}
 
 				if (topChunk && topChunk->isInitialized()) {
@@ -196,14 +198,14 @@ void TerrainGenerator::simplexGeneration(ServerChunk &chunk) const {
 				if(y + chunk.y() * CHUNK_HEIGHT > h) {
 					// If we are not yet up to sea level, fill with water blocks
 					if(y + chunk.y() * CHUNK_HEIGHT < SEALEVEL) {
-						chunk.setBlockRaw(x, y, z, BlockType::Water);
+						chunk.setBlockRaw(x, y, z, m_waterBlockID);
 					}
 					// Otherwise we are in the air, so try to make a tree
-					else if(chunk.getBlock(x, y - 1, z) == BlockType::Grass && (rand() % 256) == 0 && n < 4) {
+					else if(chunk.getBlock(x, y - 1, z) == m_grassBlockID && (rand() % 256) == 0 && n < 4) {
 						// Trunk
 						h = (rand() & 0x3) + 3;
 						for(int i = 0 ; i < h ; i++) {
-							chunk.setBlockRaw(x, y + i, z, BlockType::Wood);
+							chunk.setBlockRaw(x, y + i, z, m_logBlockID);
 						}
 
 						// Leaves
@@ -211,15 +213,15 @@ void TerrainGenerator::simplexGeneration(ServerChunk &chunk) const {
 							for(int iy = -3 ; iy <= 3 ; iy++) {
 								for(int iz = -3 ; iz <= 3 ; iz++) {
 									if(ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + h + iy, z + iz)) {
-										chunk.setBlockRaw(x + ix, y + h + iy, z + iz, BlockType::Leaves);
+										chunk.setBlockRaw(x + ix, y + h + iy, z + iz, m_leavesBlockID);
 									}
 								}
 							}
 						}
 					}
 					// Or a flower
-					else if(chunk.getBlock(x, y - 1, z) == BlockType::Grass && (rand() & 0xff) == 0) {
-						chunk.setBlockRaw(x, y, z, BlockType::Flower);
+					else if(chunk.getBlock(x, y - 1, z) == m_grassBlockID && (rand() & 0xff) == 0) {
+						chunk.setBlockRaw(x, y, z, m_flowerBlockID);
 					}
 					// If we are on the top block of the chunk, add sunlight
 					else if (y == CHUNK_HEIGHT - 1) {
@@ -228,13 +230,13 @@ void TerrainGenerator::simplexGeneration(ServerChunk &chunk) const {
 				}
 				else {
 					if (y + chunk.y() * CHUNK_HEIGHT >= h - 1 && y + chunk.y() * CHUNK_HEIGHT > SEALEVEL - 1)
-						chunk.setBlockRaw(x, y, z, BlockType::Grass);
+						chunk.setBlockRaw(x, y, z, m_grassBlockID);
 					else if (y + chunk.y() * CHUNK_HEIGHT <= SEALEVEL - 1 && h < SEALEVEL && y + chunk.y() * CHUNK_HEIGHT > h - 3)
-						chunk.setBlockRaw(x, y, z, BlockType::Sand);
+						chunk.setBlockRaw(x, y, z, m_sandBlockID);
 					else if (y + chunk.y() * CHUNK_HEIGHT > h - 3)
-						chunk.setBlockRaw(x, y, z, BlockType::Dirt);
+						chunk.setBlockRaw(x, y, z, m_dirtBlockID);
 					else
-						chunk.setBlockRaw(x, y, z, BlockType::Stone);
+						chunk.setBlockRaw(x, y, z, m_stoneBlockID);
 				}
 
 				if (topChunk && topChunk->isInitialized()) {
@@ -269,14 +271,14 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 				if(y + chunk.y() * CHUNK_HEIGHT > h) {
 					// If we are not yet up to sea level, fill with water blocks
 					if(y + chunk.y() * CHUNK_HEIGHT < SEALEVEL) {
-						chunk.setBlockRaw(x, y, z, BlockType::Water);
+						chunk.setBlockRaw(x, y, z, m_waterBlockID);
 					}
 					// Otherwise we are in the air, so try to make a tree
-					else if(chunk.getBlock(x, y - 1, z) == BlockType::Grass && (rand() % 256) == 0 && n < 1) {
+					else if(chunk.getBlock(x, y - 1, z) == m_grassBlockID && (rand() % 256) == 0 && n < 1) {
 						// Trunk
 						h = (rand() & 0x3) + 3;
 						for(int i = 0 ; i < h ; i++) {
-							chunk.setBlockRaw(x, y + i, z, BlockType::Wood);
+							chunk.setBlockRaw(x, y + i, z, m_logBlockID);
 						}
 
 						// Leaves
@@ -284,15 +286,15 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 							for(int iy = -3 ; iy <= 3 ; iy++) {
 								for(int iz = -3 ; iz <= 3 ; iz++) {
 									if(ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + h + iy, z + iz)) {
-										chunk.setBlockRaw(x + ix, y + h + iy, z + iz, BlockType::Leaves);
+										chunk.setBlockRaw(x + ix, y + h + iy, z + iz, m_leavesBlockID);
 									}
 								}
 							}
 						}
 					}
 					// Or a flower
-					else if(chunk.getBlock(x, y - 1, z) == BlockType::Grass && (rand() & 0xff) == 0) {
-						chunk.setBlockRaw(x, y, z, BlockType::Flower);
+					else if(chunk.getBlock(x, y - 1, z) == m_grassBlockID && (rand() & 0xff) == 0) {
+						chunk.setBlockRaw(x, y, z, m_flowerBlockID);
 					}
 					// If we are on the top block of the chunk, add sunlight
 					else if (y == CHUNK_HEIGHT - 1) {
@@ -301,13 +303,13 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 				}
 				else {
 					if (y + chunk.y() * CHUNK_HEIGHT >= h - 1 && y + chunk.y() * CHUNK_HEIGHT > SEALEVEL - 1)
-						chunk.setBlockRaw(x, y, z, BlockType::Grass);
+						chunk.setBlockRaw(x, y, z, m_grassBlockID);
 					else if (y + chunk.y() * CHUNK_HEIGHT <= SEALEVEL - 1 && h < SEALEVEL && y + chunk.y() * CHUNK_HEIGHT > h - 3)
-						chunk.setBlockRaw(x, y, z, BlockType::Sand);
+						chunk.setBlockRaw(x, y, z, m_sandBlockID);
 					else if (y + chunk.y() * CHUNK_HEIGHT > h - 3)
-						chunk.setBlockRaw(x, y, z, BlockType::Dirt);
+						chunk.setBlockRaw(x, y, z, m_dirtBlockID);
 					else
-						chunk.setBlockRaw(x, y, z, BlockType::Stone);
+						chunk.setBlockRaw(x, y, z, m_stoneBlockID);
 				}
 
 				if (topChunk && topChunk->isInitialized()) {

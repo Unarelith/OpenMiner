@@ -36,6 +36,8 @@ class ServerWorld : public World {
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
 
+		TerrainGenerator &terrainGenerator() { return m_terrainGenerator; }
+
 	private:
 		std::unordered_map<gk::Vector3i, std::unique_ptr<ServerChunk>> m_chunks;
 		std::unordered_map<u16, std::queue<ServerChunk *>> m_chunkQueues;

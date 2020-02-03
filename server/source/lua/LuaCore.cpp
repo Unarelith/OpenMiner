@@ -13,7 +13,7 @@
  */
 #include "LuaCore.hpp"
 #include "Registry.hpp"
-#include "World.hpp"
+#include "ServerWorld.hpp"
 
 Registry *LuaCore::registry() {
 	return &Registry::getInstance();

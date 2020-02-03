@@ -26,9 +26,6 @@ void ScriptEngine::init() {
 
 	initUsertypes();
 
-	// FIXME: Remove these lines when they're not needed anymore
-	m_lua["registry"] = &Registry::getInstance();
-
 	// Note: To be safe, don't add sol::lib::io and provide a better way to load/save data
 	//       With a feature like this, it would be way easier to add io restrictions
 	m_lua.open_libraries(
@@ -36,8 +33,6 @@ void ScriptEngine::init() {
 		sol::lib::math,
 		sol::lib::table
 	);
-
-	m_lua.safe_script_file("mods/default/init.lua");
 }
 
 void ScriptEngine::initUsertypes() {
@@ -50,6 +45,15 @@ void ScriptEngine::initUsertypes() {
 		"get_data", &World::getData,
 		"set_data", &World::setData,
 		"get_block_data", &World::getBlockData
+	);
+
+	m_lua.new_usertype<ServerWorld>("ServerWorld",
+		sol::base_classes, sol::bases<World>(),
+		"terrain_generator", &ServerWorld::terrainGenerator
+	);
+
+	m_lua.new_usertype<TerrainGenerator>("TerrainGenerator",
+		"set_blocks", &TerrainGenerator::setBlocksFromLuaTable
 	);
 
 	m_lua.new_usertype<Chunk>("Chunk",
