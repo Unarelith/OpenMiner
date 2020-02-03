@@ -28,6 +28,7 @@ mod:block {
 	tiles = "oak_leaves.png",
 	hardness = 0.5,
 	draw_type = 2, -- FIXME: Use string instead
+	-- is_opaque = false, -- FIXME
 }
 
 mod:block {
@@ -59,14 +60,16 @@ mod:block {
 	id = "water",
 	name = "Water",
 	tiles = "water.png",
-	draw_type = 3 -- FIXME: Use string instead
+	draw_type = 3, -- FIXME: Use string instead
+	is_opaque = false,
 }
 
 mod:block {
 	id = "glass",
 	name = "Glass",
 	tiles = "glass.png",
-	draw_type = 4 -- FIXME: Use string instead
+	draw_type = 4, -- FIXME: Use string instead
+	is_opaque = false,
 }
 
 mod:block {

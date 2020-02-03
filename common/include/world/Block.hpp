@@ -21,7 +21,6 @@
 #include <gk/core/Box.hpp>
 #include <gk/core/IntTypes.hpp>
 
-#include "BlockType.hpp"
 #include "ItemStack.hpp"
 #include "ISerializable.hpp"
 #include "TilesDef.hpp"
@@ -60,7 +59,8 @@ class Block : public ISerializable {
 		s8 selectedFace() const { return m_selectedFace; }
 		void setSelected(bool isSelected, s8 face) { m_isSelected = isSelected; m_selectedFace = face; }
 
-		bool isOpaque() const { return m_id != 0 && m_id != BlockType::Leaves && m_id != BlockType::Water && m_id != BlockType::Glass && m_drawType != BlockDrawType::XShape; }
+		bool isOpaque() const { return m_id != 0 && m_isOpaque && m_drawType != BlockDrawType::XShape; }
+		void setOpaque(bool isOpaque) { m_isOpaque = isOpaque; }
 
 		ItemStack getItemDrop() const { return ItemStack{m_itemDrop, m_itemDropAmount}; };
 		void setItemDrop(const std::string &itemDrop, u16 itemDropAmount = 1) { m_itemDrop = itemDrop; m_itemDropAmount = itemDropAmount; }
@@ -107,6 +107,8 @@ class Block : public ISerializable {
 		gk::FloatBox m_boundingBox{0, 0, 0, 1, 1, 1};
 
 		BlockDrawType m_drawType = BlockDrawType::Solid;
+
+		bool m_isOpaque = true;
 };
 
 #endif // BLOCK_HPP_
