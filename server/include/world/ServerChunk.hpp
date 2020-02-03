@@ -18,7 +18,6 @@
 
 #include "Config.hpp"
 #include "Chunk.hpp"
-#include "TerrainGenerator.hpp"
 
 class ServerPlayer;
 class Server;
@@ -28,7 +27,6 @@ class ServerChunk : public Chunk {
 	public:
 		ServerChunk(s32 x, s32 y, s32 z) : Chunk(x, y, z) {}
 
-		void generate();
 		void updateLights();
 		void tick(std::unordered_map<u16, ServerPlayer> &players, World &world, Server &server);
 
@@ -37,8 +35,6 @@ class ServerChunk : public Chunk {
 
 	private:
 		bool m_isSent = false;
-
-		TerrainGenerator m_terrainGenerator;
 };
 
 #endif // SERVERCHUNK_HPP_

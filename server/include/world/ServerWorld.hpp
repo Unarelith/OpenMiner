@@ -17,6 +17,7 @@
 #include <unordered_map>
 
 #include "ServerChunk.hpp"
+#include "TerrainGenerator.hpp"
 #include "World.hpp"
 
 class Client;
@@ -40,6 +41,8 @@ class ServerWorld : public World {
 		std::unordered_map<u16, std::queue<ServerChunk *>> m_chunkQueues;
 
 		u32 m_lastTick = 0;
+
+		TerrainGenerator m_terrainGenerator;
 };
 
 #endif // SERVERWORLD_HPP_

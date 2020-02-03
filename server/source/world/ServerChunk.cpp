@@ -17,14 +17,6 @@
 #include "ServerChunk.hpp"
 #include "World.hpp"
 
-void ServerChunk::generate() {
-	if (!m_isInitialized) {
-		m_terrainGenerator.generate(*this);
-
-		m_isInitialized = true;
-	}
-}
-
 void ServerChunk::updateLights() {
 	if (m_lightmap.updateLights()) {
 		m_isSent = false;
