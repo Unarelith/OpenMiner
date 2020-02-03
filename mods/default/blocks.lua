@@ -27,6 +27,7 @@ mod:block {
 	name = "Leaves",
 	tiles = "oak_leaves.png",
 	hardness = 0.5,
+	draw_type = 2, -- FIXME: Use string instead
 }
 
 mod:block {
@@ -106,7 +107,7 @@ mod:block {
 	name = "Flower",
 	tiles = "dandelion.png",
 	hardness = 0.05,
-	draw_type = 1,
+	draw_type = 1, -- FIXME: Use string instead
 	bounding_box = {0.25, 0.0, 0.25, 0.5, 0.5, 0.5},
 }
 

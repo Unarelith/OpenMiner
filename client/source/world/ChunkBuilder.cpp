@@ -87,7 +87,7 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 					{x, y, z + 1},
 				};
 
-				if (block.drawType() == BlockDrawType::Solid) {
+				if (block.drawType() == BlockDrawType::Solid || block.drawType() == BlockDrawType::AllFaces) {
 					for(u8 i = 0 ; i < 6 ; i++) {
 						addFace(x, y, z, i, chunk, &block, surroundingBlocksPos[i]);
 					}
@@ -122,7 +122,7 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 
 	// Skip hidden faces
 	if(surroundingBlock && surroundingBlock->id() && surroundingBlock->drawType() == BlockDrawType::Solid
-	&& (surroundingBlock->isOpaque() || (block->id() == surroundingBlock->id() && block->id() != BlockType::Leaves)))
+	&& (surroundingBlock->isOpaque() || block->drawType() != BlockDrawType::AllFaces))
 		return;
 
 	static glm::vec3 a, b, c, v1, v2, normal;
