@@ -83,6 +83,9 @@ class Block : public ISerializable {
 
 		bool canUpdate() const { return m_canUpdate; }
 
+		bool isLightSource() const { return m_isLightSource; }
+		void setLightSource(bool isLightSource) { m_isLightSource = isLightSource; }
+
 	protected:
 		glm::vec4 getTexCoordsFromID(int textureID) const;
 
@@ -109,6 +112,8 @@ class Block : public ISerializable {
 		BlockDrawType m_drawType = BlockDrawType::Solid;
 
 		bool m_isOpaque = true;
+
+		bool m_isLightSource = false;
 };
 
 #endif // BLOCK_HPP_

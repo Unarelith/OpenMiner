@@ -93,7 +93,8 @@ mod:block {
 mod:block {
 	id = "glowstone",
 	name = "Glowstone",
-	tiles = "glowstone.png"
+	tiles = "glowstone.png",
+	is_light_source = true
 }
 
 dofile("mods/default/workbench.lua")
