@@ -32,6 +32,7 @@ void LuaMod::registerBlock(const sol::table &table) {
 	block.setHarvestRequirements(table["harvest_requirements"].get_or(0));
 	block.setHardness(table["hardness"].get_or(1.0f));
 	block.setOpaque(table["is_opaque"].get_or(true));
+	block.setLightSource(table["is_light_source"].get_or(false));
 	block.setOnBlockActivated(onBlockActivated);
 	block.setOnTick(onTick);
 
