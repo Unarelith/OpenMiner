@@ -115,8 +115,13 @@ void ServerWorld::sendRequestedData(Client &client, int cx, int cy, int cz) {
 	// Create our neighbours so that we can generate and process lights correctly
 	createChunkNeighbours(chunk);
 
-	// Generate and update lights
-	chunk->generate();
+	// Generate our chunk
+	if (!chunk->isInitialized()) {
+		m_terrainGenerator.generate(*chunk);
+
+		chunk->setInitialized(true);
+	}
+
 	chunk->updateLights();
 
 	sendChunkData(client, chunk);
