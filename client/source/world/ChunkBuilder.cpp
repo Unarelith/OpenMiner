@@ -302,19 +302,16 @@ inline gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) const {
 }
 
 // Based on this article: https://0fps.net/2013/07/03/ambient-occlusion-for-minecraft-like-worlds/
-// FIXME: Not used anymore, but can be added as an option when smooth lighting is disabled though
 inline u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const ClientChunk &chunk) {
 	gk::Vector3i offset = getOffsetFromVertex(i, j);
 
-	u16 blocks[3] = {
-		chunk.getBlock(x + offset.x, y + offset.y, z),
-		chunk.getBlock(x,            y + offset.y, z + offset.z),
-		chunk.getBlock(x + offset.x, y + offset.y, z + offset.z)
-	};
+	const Block &block0 = Registry::getInstance().getBlock(chunk.getBlock(x + offset.x, y + offset.y, z));
+	const Block &block1 = Registry::getInstance().getBlock(chunk.getBlock(x,            y + offset.y, z + offset.z));
+	const Block &block2 = Registry::getInstance().getBlock(chunk.getBlock(x + offset.x, y + offset.y, z + offset.z));
 
-	bool side1  = blocks[0] != 0 && blocks[0] != BlockType::Flower;
-	bool side2  = blocks[1] != 0 && blocks[1] != BlockType::Flower;
-	bool corner = blocks[2] != 0 && blocks[2] != BlockType::Flower;
+	bool side1  = block0.id() != 0 && block0.drawType() != BlockDrawType::XShape;
+	bool side2  = block1.id() != 0 && block1.drawType() != BlockDrawType::XShape;
+	bool corner = block2.id() != 0 && block2.drawType() != BlockDrawType::XShape;
 
 	if (side1 && side2)
 		return 0;
