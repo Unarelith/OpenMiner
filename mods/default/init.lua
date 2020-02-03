@@ -22,7 +22,6 @@ function init(player)
 	player_inv:add_stack("default:glass", 64);
 	player_inv:add_stack("default:glowstone", 64);
 	player_inv:add_stack("default:furnace", 1);
-	player_inv:add_stack("default:slab_planks", 64);
 	player_inv:add_stack("default:stone_pickaxe", 1);
 
 	player_inv:add_stack("default:wood", 64);

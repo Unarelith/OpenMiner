@@ -242,29 +242,16 @@ mod:crafting_recipe {
 	keys = {["#"] = "default:cobblestone"}
 }
 
-
--- Plank Slab
-mod:crafting_recipe {
-	result = {
-		id = "default:slab_planks",
-		amount = 6
-	},
-
-	pattern = {"###"},
-
-	keys = {['#'] = "default:planks"}
-}
-
 -- Glowstone
 mod:crafting_recipe {
 	result = {
 		id = "default:glowstone",
-		amount = 99
+		amount = 1
 	},
 
 	pattern = {"#"},
 
-	keys = {['#'] = "default:leaves"},
+	keys = {['#'] = "default:cobblestone"},
 }
 
 -- Iron Ingot

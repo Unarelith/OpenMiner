@@ -34,6 +34,18 @@ void LuaMod::registerBlock(const sol::table &table) {
 	block.setOnBlockActivated(onBlockActivated);
 	block.setOnTick(onTick);
 
+	sol::optional<sol::table> boundingBox = table["bounding_box"];
+	if (boundingBox != sol::nullopt) {
+		block.setBoundingBox(gk::FloatBox{
+			boundingBox.value().get<float>(1),
+			boundingBox.value().get<float>(2),
+			boundingBox.value().get<float>(3),
+			boundingBox.value().get<float>(4),
+			boundingBox.value().get<float>(5),
+			boundingBox.value().get<float>(6),
+		});
+	}
+
 	sol::optional<BlockDrawType> drawType = table["draw_type"];
 	if (drawType != sol::nullopt) {
 		block.setDrawType(drawType.value());

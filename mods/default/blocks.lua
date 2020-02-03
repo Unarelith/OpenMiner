@@ -102,16 +102,11 @@ mod:block {
 }
 
 mod:block {
-	id = "slab_planks",
-	name = "Plank Slab",
-	tiles = "oak_planks.png",
-}
-
-mod:block {
 	id = "flower",
 	name = "Flower",
 	tiles = "dandelion.png",
 	hardness = 0.05,
 	draw_type = 1,
+	bounding_box = {0.25, 0.0, 0.25, 0.5, 0.5, 0.5},
 }
 
