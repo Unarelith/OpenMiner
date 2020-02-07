@@ -44,7 +44,8 @@ void ScriptEngine::initUsertypes() {
 		"get_block", &World::getBlock,
 		"get_data", &World::getData,
 		"set_data", &World::setData,
-		"get_block_data", &World::getBlockData
+		"get_block_data", &World::getBlockData,
+		"add_block_data", &World::addBlockData
 	);
 
 	m_lua.new_usertype<ServerWorld>("ServerWorld",
@@ -59,7 +60,8 @@ void ScriptEngine::initUsertypes() {
 	m_lua.new_usertype<Chunk>("Chunk",
 		"get_block", &Chunk::getBlock,
 		"get_data", &Chunk::getData,
-		"get_block_data", &Chunk::getBlockData
+		"get_block_data", &Chunk::getBlockData,
+		"add_block_data", &Chunk::addBlockData
 	);
 
 	m_lua.new_usertype<BlockData>("BlockData",

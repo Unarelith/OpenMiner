@@ -145,9 +145,11 @@ void ClientCommandHandler::setupCallbacks() {
 		packet >> pos.x >> pos.y >> pos.z;
 
 		BlockData *data = m_world.getBlockData(pos.x, pos.y, pos.z);
-		if (data) {
+		if (!data)
+			data = m_world.addBlockData(pos.x, pos.y, pos.z);
+
+		if (data)
 			packet >> data->inventory;
-		}
 	});
 
 	m_client.setCommandCallback(Network::Command::BlockDataUpdate, [this](sf::Packet &packet) {
@@ -157,6 +159,9 @@ void ClientCommandHandler::setupCallbacks() {
 		Chunk *chunk = m_world.getChunkAtBlockPos(pos.x, pos.y, pos.z);
 		if (chunk) {
 			BlockData *data = chunk->getBlockData(pos.x & (CHUNK_WIDTH - 1), pos.y & (CHUNK_HEIGHT - 1), pos.z & (CHUNK_DEPTH - 1));
+			if (!data)
+				data = m_world.addBlockData(pos.x, pos.y, pos.z);
+
 			if (data) {
 				bool useAltTiles;
 				packet >> data->data >> useAltTiles;

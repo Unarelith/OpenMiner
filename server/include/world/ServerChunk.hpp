@@ -21,13 +21,14 @@
 
 class ServerPlayer;
 class Server;
-class World;
 
 class ServerChunk : public Chunk {
 	public:
-		ServerChunk(s32 x, s32 y, s32 z) : Chunk(x, y, z) {}
+		ServerChunk(s32 x, s32 y, s32 z, World &world) : Chunk(x, y, z, world) {}
 
 		void updateLights();
+
+		void onBlockPlaced(int x, int y, int z, const Block &block) const;
 		void tick(std::unordered_map<u16, ServerPlayer> &players, World &world, Server &server);
 
 		bool isSent() const { return m_isSent; }

@@ -15,12 +15,11 @@
 
 #include <gk/core/GameClock.hpp>
 
-#include "BlockType.hpp"
 #include "Chunk.hpp"
 #include "Config.hpp"
 #include "Registry.hpp"
 
-Chunk::Chunk(s32 x, s32 y, s32 z) {
+Chunk::Chunk(s32 x, s32 y, s32 z, World &world) : m_world(world) {
 	m_x = x;
 	m_y = y;
 	m_z = z;
@@ -75,6 +74,8 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 		m_lightmap.removeSunlight(x, y, z);
 	}
 
+	onBlockPlaced(x, y, z, block);
+
 	setBlockRaw(x, y, z, type);
 
 	// FIXME
@@ -112,16 +113,8 @@ void Chunk::setBlockRaw(int x, int y, int z, u16 type) {
 
 	if (m_data[x][y][z] == type) return;
 
-	gk::Vector3i pos{x, y, z};
-	gk::Vector3i absolutePos{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_HEIGHT, z + m_z * CHUNK_DEPTH};
-	if (type == BlockType::Workbench) {
-		m_blockData.emplace(pos, new BlockData{absolutePos, 3, 3});
-	}
-	else if (type == BlockType::Furnace)
-		m_blockData.emplace(pos, new BlockData{absolutePos, 3, 1});
-
-	if (m_data[x][y][z] == BlockType::Workbench || m_data[x][y][z] == BlockType::Furnace) {
-		auto it = m_blockData.find(pos);
+	if (type == 0) {
+		auto it = m_blockData.find(gk::Vector3i{x, y, z});
 		if (it != m_blockData.end())
 			m_blockData.erase(it);
 	}
@@ -139,9 +132,31 @@ BlockData *Chunk::getBlockData(int x, int y, int z) const {
 	if(z < 0)             return m_surroundingChunks[2] ? m_surroundingChunks[2]->getBlockData(x, y, z + CHUNK_DEPTH) : 0;
 	if(z >= CHUNK_DEPTH)  return m_surroundingChunks[3] ? m_surroundingChunks[3]->getBlockData(x, y, z - CHUNK_DEPTH) : 0;
 
-	auto it = m_blockData.find(gk::Vector3i{x, y, z});
-	if (it == m_blockData.end())
+	gk::Vector3i pos{x, y, z};
+	auto it = m_blockData.find(pos);
+	if (it == m_blockData.end()) {
 		return nullptr;
+	}
+
+	return it->second.get();
+}
+
+BlockData *Chunk::addBlockData(int x, int y, int z, int inventoryWidth, int inventoryHeight) {
+	if(x < 0)             return m_surroundingChunks[0] ? m_surroundingChunks[0]->addBlockData(x + CHUNK_WIDTH, y, z) : 0;
+	if(x >= CHUNK_WIDTH)  return m_surroundingChunks[1] ? m_surroundingChunks[1]->addBlockData(x - CHUNK_WIDTH, y, z) : 0;
+	if(y < 0)             return m_surroundingChunks[4] ? m_surroundingChunks[4]->addBlockData(x, y + CHUNK_HEIGHT, z) : 0;
+	if(y >= CHUNK_HEIGHT) return m_surroundingChunks[5] ? m_surroundingChunks[5]->addBlockData(x, y - CHUNK_HEIGHT, z) : 0;
+	if(z < 0)             return m_surroundingChunks[2] ? m_surroundingChunks[2]->addBlockData(x, y, z + CHUNK_DEPTH) : 0;
+	if(z >= CHUNK_DEPTH)  return m_surroundingChunks[3] ? m_surroundingChunks[3]->addBlockData(x, y, z - CHUNK_DEPTH) : 0;
+
+	gk::Vector3i pos{x, y, z};
+	auto it = m_blockData.find(pos);
+	if (it == m_blockData.end()) {
+		gk::Vector3i absolutePos{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_HEIGHT, z + m_z * CHUNK_DEPTH};
+		BlockData *data = new BlockData{absolutePos, inventoryWidth, inventoryHeight};
+		m_blockData.emplace(pos, data);
+		return data;
+	}
 
 	return it->second.get();
 }
