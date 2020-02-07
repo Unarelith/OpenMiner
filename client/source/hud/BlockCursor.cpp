@@ -13,6 +13,7 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <gk/core/input/GamePad.hpp>
 #include <gk/gl/GLCheck.hpp>
 #include <gk/gl/Vertex.hpp>
 #include <gk/core/GameClock.hpp>
@@ -22,6 +23,7 @@
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "Config.hpp"
+#include "GameKey.hpp"
 #include "Hotbar.hpp"
 #include "Registry.hpp"
 
@@ -77,15 +79,13 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 			const Block &block = Registry::getInstance().getBlock(blockId);
 			const Item &item = Registry::getInstance().getItem(hotbar.currentItem());
 
-			if (block.id()) {
+			bool blockActivationSent = false;
+			if (block.id() && block.canBeActivated() && !gk::GamePad::isKeyPressed(GameKey::Sneak)) {
 				m_client.sendBlockActivated(m_selectedBlock);
+				blockActivationSent = true;
 			}
 
-			// FIXME: Check if this block has a callback
-			//        ServerBlock should contain onBlockActivated
-			//        Block should contain hasBlockActivatedCallback
-			if (block.id()// && !block.onBlockActivated({m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z}, m_player, m_world)
-			    && hotbar.currentItem() && item.isBlock()) {
+			if (block.id() && !blockActivationSent && hotbar.currentItem() && item.isBlock()) {
 				s8 face = m_selectedBlock.w;
 
 				s32 x = m_selectedBlock.x;

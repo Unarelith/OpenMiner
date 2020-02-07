@@ -82,6 +82,7 @@ class Block : public ISerializable {
 		void setDrawType(BlockDrawType drawType) { m_drawType = drawType; }
 
 		bool canUpdate() const { return m_canUpdate; }
+		bool canBeActivated() const { return m_canBeActivated; }
 
 		bool isLightSource() const { return m_isLightSource; }
 		void setLightSource(bool isLightSource) { m_isLightSource = isLightSource; }
@@ -90,6 +91,7 @@ class Block : public ISerializable {
 		glm::vec4 getTexCoordsFromID(int textureID) const;
 
 		bool m_canUpdate = false;
+		bool m_canBeActivated = false;
 
 	private:
 		u32 m_id = 0;

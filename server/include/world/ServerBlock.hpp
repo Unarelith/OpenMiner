@@ -31,7 +31,7 @@ class ServerBlock : public Block {
 
 		bool canUpdate() const { return m_onTick.valid(); }
 
-		void setOnBlockActivated(const sol::function &function) { m_onBlockActivated = function; }
+		void setOnBlockActivated(const sol::function &function) { m_onBlockActivated = function; m_canBeActivated = m_onBlockActivated.valid(); }
 		void setOnTick(const sol::function &function) { m_onTick = function; m_canUpdate = m_onTick.valid(); }
 		void setOnBlockPlaced(const sol::function &function) { m_onBlockPlaced = function; }
 
