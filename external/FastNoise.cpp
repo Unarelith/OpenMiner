@@ -183,7 +183,7 @@ const FN_DECIMAL CELL_3D_Z[] =
 
 static int FastFloor(FN_DECIMAL f) { return (f >= 0 ? (int)f : (int)f - 1); }
 static int FastRound(FN_DECIMAL f) { return (f >= 0) ? (int)(f + FN_DECIMAL(0.5)) : (int)(f - FN_DECIMAL(0.5)); }
-static int FastAbs(int i) { return abs(i); }
+// static int FastAbs(int i) { return abs(i); }
 static FN_DECIMAL FastAbs(FN_DECIMAL f) { return fabs(f); }
 static FN_DECIMAL Lerp(FN_DECIMAL a, FN_DECIMAL b, FN_DECIMAL t) { return a + t * (b - a); }
 static FN_DECIMAL InterpHermiteFunc(FN_DECIMAL t) { return t*t*(3 - 2 * t); }
@@ -389,7 +389,8 @@ FN_DECIMAL FastNoise::GetNoise(FN_DECIMAL x, FN_DECIMAL y, FN_DECIMAL z) const
 			return SingleCellular2Edge(x, y, z);
 		}
 	case WhiteNoise:
-		return GetWhiteNoise(x, y, z);
+		return 0;
+	// 	return GetWhiteNoise(x, y, z);
 	case Cubic:
 		return SingleCubic(0, x, y, z);
 	case CubicFractal:
@@ -402,9 +403,11 @@ FN_DECIMAL FastNoise::GetNoise(FN_DECIMAL x, FN_DECIMAL y, FN_DECIMAL z) const
 		case RigidMulti:
 			return SingleCubicFractalRigidMulti(x, y, z);
 		}
+		break;
 	default:
 		return 0;
 	}
+	return 0;
 }
 
 FN_DECIMAL FastNoise::GetNoise(FN_DECIMAL x, FN_DECIMAL y) const
@@ -426,6 +429,7 @@ FN_DECIMAL FastNoise::GetNoise(FN_DECIMAL x, FN_DECIMAL y) const
 		case RigidMulti:
 			return SingleValueFractalRigidMulti(x, y);
 		}
+		break;
 	case Perlin:
 		return SinglePerlin(0, x, y);
 	case PerlinFractal:
@@ -438,6 +442,7 @@ FN_DECIMAL FastNoise::GetNoise(FN_DECIMAL x, FN_DECIMAL y) const
 		case RigidMulti:
 			return SinglePerlinFractalRigidMulti(x, y);
 		}
+		break;
 	case Simplex:
 		return SingleSimplex(0, x, y);
 	case SimplexFractal:
@@ -450,6 +455,7 @@ FN_DECIMAL FastNoise::GetNoise(FN_DECIMAL x, FN_DECIMAL y) const
 		case RigidMulti:
 			return SingleSimplexFractalRigidMulti(x, y);
 		}
+		break;
 	case Cellular:
 		switch (m_cellularReturnType)
 		{
@@ -461,7 +467,8 @@ FN_DECIMAL FastNoise::GetNoise(FN_DECIMAL x, FN_DECIMAL y) const
 			return SingleCellular2Edge(x, y);
 		}
 	case WhiteNoise:
-		return GetWhiteNoise(x, y);
+		return 0;
+	// 	return GetWhiteNoise(x, y);
 	case Cubic:
 		return SingleCubic(0, x, y);
 	case CubicFractal:
@@ -479,29 +486,29 @@ FN_DECIMAL FastNoise::GetNoise(FN_DECIMAL x, FN_DECIMAL y) const
 }
 
 // White Noise
-FN_DECIMAL FastNoise::GetWhiteNoise(FN_DECIMAL x, FN_DECIMAL y, FN_DECIMAL z, FN_DECIMAL w) const
-{
-	return ValCoord4D(m_seed,
-		*reinterpret_cast<int*>(&x) ^ (*reinterpret_cast<int*>(&x) >> 16),
-		*reinterpret_cast<int*>(&y) ^ (*reinterpret_cast<int*>(&y) >> 16),
-		*reinterpret_cast<int*>(&z) ^ (*reinterpret_cast<int*>(&z) >> 16),
-		*reinterpret_cast<int*>(&w) ^ (*reinterpret_cast<int*>(&w) >> 16));
-}
-
-FN_DECIMAL FastNoise::GetWhiteNoise(FN_DECIMAL x, FN_DECIMAL y, FN_DECIMAL z) const
-{
-	return ValCoord3D(m_seed,
-		*reinterpret_cast<int*>(&x) ^ (*reinterpret_cast<int*>(&x) >> 16),
-		*reinterpret_cast<int*>(&y) ^ (*reinterpret_cast<int*>(&y) >> 16),
-		*reinterpret_cast<int*>(&z) ^ (*reinterpret_cast<int*>(&z) >> 16));
-}
-
-FN_DECIMAL FastNoise::GetWhiteNoise(FN_DECIMAL x, FN_DECIMAL y) const
-{
-	return ValCoord2D(m_seed,
-		*reinterpret_cast<int*>(&x) ^ (*reinterpret_cast<int*>(&x) >> 16),
-		*reinterpret_cast<int*>(&y) ^ (*reinterpret_cast<int*>(&y) >> 16));
-}
+// FN_DECIMAL FastNoise::GetWhiteNoise(FN_DECIMAL x, FN_DECIMAL y, FN_DECIMAL z, FN_DECIMAL w) const
+// {
+// 	return ValCoord4D(m_seed,
+// 		*reinterpret_cast<int*>(&x) ^ (*reinterpret_cast<int*>(&x) >> 16),
+// 		*reinterpret_cast<int*>(&y) ^ (*reinterpret_cast<int*>(&y) >> 16),
+// 		*reinterpret_cast<int*>(&z) ^ (*reinterpret_cast<int*>(&z) >> 16),
+// 		*reinterpret_cast<int*>(&w) ^ (*reinterpret_cast<int*>(&w) >> 16));
+// }
+//
+// FN_DECIMAL FastNoise::GetWhiteNoise(FN_DECIMAL x, FN_DECIMAL y, FN_DECIMAL z) const
+// {
+// 	return ValCoord3D(m_seed,
+// 		*reinterpret_cast<int*>(&x) ^ (*reinterpret_cast<int*>(&x) >> 16),
+// 		*reinterpret_cast<int*>(&y) ^ (*reinterpret_cast<int*>(&y) >> 16),
+// 		*reinterpret_cast<int*>(&z) ^ (*reinterpret_cast<int*>(&z) >> 16));
+// }
+//
+// FN_DECIMAL FastNoise::GetWhiteNoise(FN_DECIMAL x, FN_DECIMAL y) const
+// {
+// 	return ValCoord2D(m_seed,
+// 		*reinterpret_cast<int*>(&x) ^ (*reinterpret_cast<int*>(&x) >> 16),
+// 		*reinterpret_cast<int*>(&y) ^ (*reinterpret_cast<int*>(&y) >> 16));
+// }
 
 FN_DECIMAL FastNoise::GetWhiteNoiseInt(int x, int y, int z, int w) const
 {
@@ -609,7 +616,7 @@ FN_DECIMAL FastNoise::SingleValue(unsigned char offset, FN_DECIMAL x, FN_DECIMAL
 	int y1 = y0 + 1;
 	int z1 = z0 + 1;
 
-	FN_DECIMAL xs, ys, zs;
+	FN_DECIMAL xs = 0, ys = 0, zs = 0;
 	switch (m_interp)
 	{
 	case Linear:
@@ -723,7 +730,7 @@ FN_DECIMAL FastNoise::SingleValue(unsigned char offset, FN_DECIMAL x, FN_DECIMAL
 	int x1 = x0 + 1;
 	int y1 = y0 + 1;
 
-	FN_DECIMAL xs, ys;
+	FN_DECIMAL xs = 0, ys = 0;
 	switch (m_interp)
 	{
 	case Linear:
@@ -837,7 +844,7 @@ FN_DECIMAL FastNoise::SinglePerlin(unsigned char offset, FN_DECIMAL x, FN_DECIMA
 	int y1 = y0 + 1;
 	int z1 = z0 + 1;
 
-	FN_DECIMAL xs, ys, zs;
+	FN_DECIMAL xs = 0, ys = 0, zs = 0;
 	switch (m_interp)
 	{
 	case Linear:
@@ -959,7 +966,7 @@ FN_DECIMAL FastNoise::SinglePerlin(unsigned char offset, FN_DECIMAL x, FN_DECIMA
 	int x1 = x0 + 1;
 	int y1 = y0 + 1;
 
-	FN_DECIMAL xs, ys;
+	FN_DECIMAL xs = 0, ys = 0;
 	switch (m_interp)
 	{
 	case Linear:
@@ -1696,7 +1703,7 @@ FN_DECIMAL FastNoise::SingleCellular(FN_DECIMAL x, FN_DECIMAL y, FN_DECIMAL z) c
 	int zr = FastRound(z);
 
 	FN_DECIMAL distance = 999999;
-	int xc, yc, zc;
+	int xc = 0, yc = 0, zc = 0;
 
 	switch (m_cellularDistanceFunction)
 	{
@@ -1920,7 +1927,7 @@ FN_DECIMAL FastNoise::SingleCellular(FN_DECIMAL x, FN_DECIMAL y) const
 	int yr = FastRound(y);
 
 	FN_DECIMAL distance = 999999;
-	int xc, yc;
+	int xc = 0, yc = 0;
 
 	switch (m_cellularDistanceFunction)
 	{
@@ -2126,7 +2133,7 @@ void FastNoise::SingleGradientPerturb(unsigned char offset, FN_DECIMAL warpAmp, 
 	int y1 = y0 + 1;
 	int z1 = z0 + 1;
 
-	FN_DECIMAL xs, ys, zs;
+	FN_DECIMAL xs = 0, ys = 0, zs = 0;
 	switch (m_interp)
 	{
 	default:
@@ -2215,7 +2222,7 @@ void FastNoise::SingleGradientPerturb(unsigned char offset, FN_DECIMAL warpAmp, 
 	int x1 = x0 + 1;
 	int y1 = y0 + 1;
 
-	FN_DECIMAL xs, ys;
+	FN_DECIMAL xs = 0, ys = 0;
 	switch (m_interp)
 	{
 	default:
