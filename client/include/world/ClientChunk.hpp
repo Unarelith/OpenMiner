@@ -25,8 +25,8 @@ class TextureAtlas;
 
 class ClientChunk : public Chunk {
 	public:
-		ClientChunk(s32 x, s32 y, s32 z, TextureAtlas &textureAtlas)
-			: Chunk(x, y, z), m_textureAtlas(textureAtlas), m_builder{textureAtlas} {}
+		ClientChunk(s32 x, s32 y, s32 z, World &world, TextureAtlas &textureAtlas)
+			: Chunk(x, y, z, world), m_textureAtlas(textureAtlas), m_builder{textureAtlas} {}
 
 		void update();
 

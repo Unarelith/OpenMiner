@@ -3,6 +3,10 @@ mod:block {
 	name = "Workbench",
 	tiles = {"crafting_table_top.png", "crafting_table_top.png", "crafting_table_front.png", "crafting_table_side.png"},
 
+	on_block_placed = function(pos, world)
+		world:add_block_data(pos.x, pos.y, pos.z, 3, 3)
+	end,
+
 	on_block_activated = function(pos, player, world, client)
 		local gui = LuaGUI.new()
 
@@ -49,9 +53,6 @@ mod:block {
 			pos = {x = gui_pos.x, y = gui_pos.y},
 
 			block = {x = pos.x, y = pos.y, z = pos.z},
-
-			-- offset = 0,
-			-- size = 4
 		}
 
 		gui:image {

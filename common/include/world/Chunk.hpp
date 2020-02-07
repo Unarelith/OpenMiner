@@ -27,6 +27,8 @@
 #include "BlockData.hpp"
 #include "ChunkLightmap.hpp"
 
+class World;
+
 class Chunk : public gk::NonCopyable {
 	public:
 		enum {
@@ -39,7 +41,7 @@ class Chunk : public gk::NonCopyable {
 		};
 
 	public:
-		Chunk(s32 x, s32 y, s32 z);
+		Chunk(s32 x, s32 y, s32 z, World &world);
 		virtual ~Chunk() = default;
 
 		u16 getBlock(int x, int y, int z) const;
@@ -49,7 +51,10 @@ class Chunk : public gk::NonCopyable {
 
 		void setBlockRaw(int x, int y, int z, u16 block);
 
+		virtual void onBlockPlaced(int, int, int, const Block &) const {}
+
 		BlockData *getBlockData(int x, int y, int z) const;
+		BlockData *addBlockData(int x, int y, int z, int inventoryWidth = 0, int inventoryHeight = 0);
 
 		s32 x() const { return m_x; }
 		s32 y() const { return m_y; }
@@ -84,6 +89,8 @@ class Chunk : public gk::NonCopyable {
 		s32 m_x;
 		s32 m_y;
 		s32 m_z;
+
+		World &m_world;
 
 		DataArray m_data;
 

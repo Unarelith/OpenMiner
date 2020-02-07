@@ -4,6 +4,10 @@ mod:block {
 	tiles = {"furnace_top.png", "furnace_top.png", "furnace_front.png", "furnace_side.png"},
 	alt_tiles = {"", "", "furnace_front_on.png", ""},
 
+	on_block_placed = function(pos, world)
+		world:add_block_data(pos.x, pos.y, pos.z, 3, 1)
+	end,
+
 	on_block_activated = function(pos, player, world, client)
 		local gui = LuaGUI.new()
 

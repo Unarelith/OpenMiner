@@ -27,12 +27,13 @@ class ServerBlock : public Block {
 
 		void onTick(const glm::ivec3 &, std::unordered_map<u16, ServerPlayer> &, Chunk &, World &, Server &) const;
 		bool onBlockActivated(const glm::ivec3 &pos, Player &player, World &world, Client &client) const;
-		void onBlockPlaced(const glm::ivec3 &pos, World &world);
+		void onBlockPlaced(const glm::ivec3 &pos, World &world) const;
 
 		bool canUpdate() const { return m_onTick.valid(); }
 
 		void setOnBlockActivated(const sol::function &function) { m_onBlockActivated = function; }
 		void setOnTick(const sol::function &function) { m_onTick = function; m_canUpdate = m_onTick.valid(); }
+		void setOnBlockPlaced(const sol::function &function) { m_onBlockPlaced = function; }
 
 	private:
 		sol::unsafe_function m_onBlockActivated;

@@ -36,6 +36,14 @@ BlockData *World::getBlockData(int x, int y, int z) const {
 	return nullptr;
 }
 
+BlockData *World::addBlockData(int x, int y, int z, int inventoryWidth, int inventoryHeight) const {
+	Chunk *chunk = getChunkAtBlockPos(x, y, z);
+	if (chunk)
+		return chunk->addBlockData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), inventoryWidth, inventoryHeight);
+
+	return nullptr;
+}
+
 u16 World::getBlock(int x, int y, int z) const {
 	Chunk *chunk = getChunkAtBlockPos(x, y, z);
 	if (chunk)

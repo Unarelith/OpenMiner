@@ -35,6 +35,7 @@ void LuaMod::registerBlock(const sol::table &table) {
 	block.setLightSource(table["is_light_source"].get_or(false));
 	block.setOnBlockActivated(onBlockActivated);
 	block.setOnTick(onTick);
+	block.setOnBlockPlaced(table["on_block_placed"]);
 
 	sol::optional<sol::table> boundingBox = table["bounding_box"];
 	if (boundingBox != sol::nullopt) {

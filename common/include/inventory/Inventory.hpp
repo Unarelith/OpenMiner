@@ -36,6 +36,7 @@ class Inventory : public ISerializable {
 
 		u16 width() const { return m_width; }
 		u16 height() const { return m_height; }
+		void resize(u16 width, u16 height) { m_width = width; m_height = height; m_items.resize(width * height); }
 
 		const std::vector<ItemStack> &items() const { return m_items; }
 

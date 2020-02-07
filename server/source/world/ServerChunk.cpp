@@ -23,6 +23,11 @@ void ServerChunk::updateLights() {
 	}
 }
 
+void ServerChunk::onBlockPlaced(int x, int y, int z, const Block &block) const {
+	const ServerBlock &serverBlock = (ServerBlock &)block;
+	serverBlock.onBlockPlaced(glm::ivec3{x, y, z}, m_world);
+}
+
 void ServerChunk::tick(std::unordered_map<u16, ServerPlayer> &players, World &world, Server &server) {
 	if (!m_tickingBlocks.empty()) {
 		for (auto &it : m_tickingBlocks) {

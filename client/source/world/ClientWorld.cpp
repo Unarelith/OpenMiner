@@ -31,7 +31,7 @@ void ClientWorld::init(float playerX, float playerY, float playerZ) {
 	int pcy = std::floor(playerY / CHUNK_HEIGHT);
 	int pcz = std::floor(playerZ / CHUNK_DEPTH);
 
-	m_chunks.emplace(gk::Vector3i{pcx, pcy, pcz}, new ClientChunk(pcx, pcy, pcz, m_textureAtlas));
+	m_chunks.emplace(gk::Vector3i{pcx, pcy, pcz}, new ClientChunk(pcx, pcy, pcz, *this, m_textureAtlas));
 }
 
 void ClientWorld::update() {
@@ -78,7 +78,7 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 	// Get the chunk from the map or create it if it doesn't exist
 	ClientChunk *chunk = (ClientChunk *)getChunk(cx, cy, cz);
 	if (!chunk) {
-		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ClientChunk(cx, cy, cz, m_textureAtlas));
+		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ClientChunk(cx, cy, cz, *this, m_textureAtlas));
 		chunk = it.first->second.get();
 	}
 
@@ -154,7 +154,7 @@ void ClientWorld::createChunkNeighbours(ClientChunk *chunk) {
 
 		ClientChunk *neighbour = (ClientChunk *)getChunk(scx, scy, scz);
 		if (!neighbour) {
-			auto it = m_chunks.emplace(gk::Vector3i{scx, scy, scz}, new ClientChunk(scx, scy, scz, m_textureAtlas));
+			auto it = m_chunks.emplace(gk::Vector3i{scx, scy, scz}, new ClientChunk(scx, scy, scz, *this, m_textureAtlas));
 			neighbour = it.first->second.get();
 		}
 

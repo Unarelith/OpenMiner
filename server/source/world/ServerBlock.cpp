@@ -70,7 +70,7 @@ bool ServerBlock::onBlockActivated(const glm::ivec3 &pos, Player &player, World 
 	return false;
 }
 
-void ServerBlock::onBlockPlaced(const glm::ivec3 &pos, World &world) {
+void ServerBlock::onBlockPlaced(const glm::ivec3 &pos, World &world) const {
 	try {
 		if (m_onBlockPlaced) {
 			m_onBlockPlaced(pos, world);

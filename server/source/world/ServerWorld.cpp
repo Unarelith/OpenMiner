@@ -73,7 +73,8 @@ void ServerWorld::createChunkNeighbours(ServerChunk *chunk) {
 			new ServerChunk{
 				surroundingChunks[i].x,
 				surroundingChunks[i].y,
-				surroundingChunks[i].z
+				surroundingChunks[i].z,
+				*this
 			}
 		);
 
@@ -95,6 +96,20 @@ void ServerWorld::sendChunkData(const Client &client, ServerChunk *chunk) {
 			for (u16 z = 0 ; z < CHUNK_DEPTH ; ++z) {
 				packet << u16(chunk->data()[x][y][z]);
 				packet << chunk->lightmap().getLightData(x, y, z);
+
+				BlockData *blockData = chunk->getBlockData(x, y, z);
+				if (blockData) {
+					sf::Packet packet1;
+					packet1 << Network::Command::BlockDataUpdate << s32(x) << s32(y) << s32(z);
+					packet1 << blockData->data << blockData->useAltTiles;
+					client.tcpSocket->send(packet1);
+
+					sf::Packet packet2;
+					packet2 << Network::Command::BlockInvUpdate;
+					packet2 << s32(x) << s32(y) << s32(z);
+					packet2 << blockData->inventory;
+					client.tcpSocket->send(packet2);
+				}
 			}
 		}
 	}
@@ -108,7 +123,7 @@ void ServerWorld::sendChunkData(const Client &client, ServerChunk *chunk) {
 void ServerWorld::sendRequestedData(Client &client, int cx, int cy, int cz) {
 	ServerChunk *chunk = (ServerChunk *)getChunk(cx, cy, cz);
 	if (!chunk) {
-		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ServerChunk(cx, cy, cz));
+		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ServerChunk(cx, cy, cz, *this));
 		chunk = it.first->second.get();
 	}
 
