@@ -84,8 +84,6 @@ class Chunk : public gk::NonCopyable {
 		const DataArray &data() const { return m_data; }
 
 	protected:
-		// void updateNeighbours(int x, int y, int z);
-
 		s32 m_x;
 		s32 m_y;
 		s32 m_z;

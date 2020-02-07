@@ -78,9 +78,6 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 
 	setBlockRaw(x, y, z, type);
 
-	// FIXME
-	// updateNeighbours(x, y, z);
-
 	if(x == 0          && m_surroundingChunks[Left])   { m_surroundingChunks[Left]->m_hasChanged = true; }
 	if(x == width - 1  && m_surroundingChunks[Right])  { m_surroundingChunks[Right]->m_hasChanged = true; }
 	if(y == 0          && m_surroundingChunks[Bottom]) { m_surroundingChunks[Bottom]->m_hasChanged = true; }
@@ -178,27 +175,4 @@ bool Chunk::areAllNeighboursInitialized() const {
 		&& m_surroundingChunks[Chunk::Bottom] && m_surroundingChunks[Chunk::Bottom]->isInitialized()
 		&& m_surroundingChunks[Chunk::Top]    && m_surroundingChunks[Chunk::Top]->isInitialized();
 }
-
-// FIXME
-// void Chunk::updateNeighbours(int x, int y, int z) {
-// 	int neighbours[7][3] = {
-// 		{x, y, z},
-// 		{x - 1, y, z},
-// 		{x + 1, y, z},
-// 		{x, y - 1, z},
-// 		{x, y + 1, z},
-// 		{x, y, z - 1},
-// 		{x, y, z + 1},
-// 	};
-//
-// 	for (u32 i = 0 ; i < 7 ; ++i) {
-// 		u32 blockID = getBlock(neighbours[i][0], neighbours[i][1], neighbours[i][2]);
-// 		if (blockID) {
-// 			const Block &block = Registry::getInstance().getBlock(blockID);
-// 			block.onNeighbourUpdate(glm::vec3{x, y, z},
-// 			                        glm::vec3{neighbours[i][0], neighbours[i][1], neighbours[i][2]},
-// 			                        *this);
-// 		}
-// 	}
-// }
 

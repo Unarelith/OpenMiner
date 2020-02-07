@@ -27,7 +27,6 @@ HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 {
 	setScale(GUI_SCALE, GUI_SCALE, 1);
 
-	// FIXME: Duplicated with LuaGUI
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
