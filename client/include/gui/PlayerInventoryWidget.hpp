@@ -18,7 +18,7 @@
 
 class PlayerInventoryWidget : public Widget {
 	public:
-		PlayerInventoryWidget(ClientCommandHandler &client, Inventory &playerInventory, Widget *parent = nullptr);
+		PlayerInventoryWidget(ClientCommandHandler &client, MouseItemWidget &mouseItemWidget, Inventory &playerInventory, Widget *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -29,6 +29,8 @@ class PlayerInventoryWidget : public Widget {
 
 		ClientCommandHandler &m_client;
 
+		MouseItemWidget &m_mouseItemWidget;
+
 		gk::Image m_background;
 
 		Inventory m_craftingInventory{2, 2};
@@ -37,8 +39,6 @@ class PlayerInventoryWidget : public Widget {
 		Inventory &m_playerInventory;
 		InventoryWidget m_playerInventoryWidget{m_client, this};
 		InventoryWidget m_hotbarInventoryWidget{m_client, this};
-
-		MouseItemWidget m_mouseItemWidget{this};
 };
 
 #endif // PLAYERINVENTORYWIDGET_HPP_

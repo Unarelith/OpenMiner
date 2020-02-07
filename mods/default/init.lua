@@ -46,3 +46,20 @@ function init(player)
 	player_inv:add_stack("default:coal", 64);
 end
 
+function show_inventory(client)
+	local gui = LuaGUI.new()
+
+	-- FIXME: Replace this by gui:set_size() and gui:set_centered()
+	local gui_pos = {
+		x = SCREEN_WIDTH / GUI_SCALE / 2.0 - 176 / 2.0,
+		y = SCREEN_HEIGHT / GUI_SCALE / 2.0 - 166 / 2.0
+	}
+
+	gui:player_inventory {
+		name = "inventory",
+		pos = gui_pos,
+	}
+
+	gui:show(client)
+end
+

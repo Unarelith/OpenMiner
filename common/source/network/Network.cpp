@@ -34,6 +34,7 @@ std::string Network::commandToString(Network::Command command) {
 		{Network::Command::PlayerInvUpdate,  "PlayerInvUpdate"},
 		{Network::Command::PlayerPosUpdate,  "PlayerPosUpdate"},
 		{Network::Command::PlayerSpawn,      "PlayerSpawn"},
+		{Network::Command::PlayerInventory,  "PlayerInventory"},
 
 		{Network::Command::BlockUpdate,      "BlockUpdate"},
 		{Network::Command::BlockActivated,   "BlockActivated"},

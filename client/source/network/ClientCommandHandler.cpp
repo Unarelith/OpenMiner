@@ -56,6 +56,12 @@ void ClientCommandHandler::sendPlayerPlaceBlock(s32 x, s32 y, s32 z, u32 block) 
 	m_client.send(packet);
 }
 
+void ClientCommandHandler::sendPlayerInventoryRequest() {
+	sf::Packet packet;
+	packet << Network::Command::PlayerInventory;
+	m_client.send(packet);
+}
+
 void ClientCommandHandler::sendBlockActivated(const glm::vec4 &selectedBlock) {
 	sf::Packet packet;
 	packet << Network::Command::BlockActivated

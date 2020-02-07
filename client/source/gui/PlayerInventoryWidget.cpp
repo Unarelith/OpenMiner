@@ -13,8 +13,8 @@
  */
 #include "PlayerInventoryWidget.hpp"
 
-PlayerInventoryWidget::PlayerInventoryWidget(ClientCommandHandler &client, Inventory &playerInventory, Widget *parent)
-	: Widget(176, 166, parent), m_client(client), m_playerInventory(playerInventory)
+PlayerInventoryWidget::PlayerInventoryWidget(ClientCommandHandler &client, MouseItemWidget &mouseItemWidget, Inventory &playerInventory, Widget *parent)
+	: Widget(176, 166, parent), m_client(client), m_mouseItemWidget(mouseItemWidget), m_playerInventory(playerInventory)
 {
 	m_background.load("texture-inventory");
 	m_background.setClipRect(0, 0, 176, 166);
@@ -26,6 +26,7 @@ PlayerInventoryWidget::PlayerInventoryWidget(ClientCommandHandler &client, Inven
 	m_hotbarInventoryWidget.setPosition(7, 141, 0);
 
 	m_craftingWidget.craftingInventoryWidget().setPosition(97, 17, 0);
+	m_craftingWidget.craftingInventoryWidget().init(m_craftingInventory, 0, 4);
 	m_craftingWidget.craftingResultInventoryWidget().setPosition(153, 27, 0);
 }
 
@@ -34,8 +35,6 @@ void PlayerInventoryWidget::onEvent(const SDL_Event &event) {
 
 	m_playerInventoryWidget.onMouseEvent(event, m_mouseItemWidget);
 	m_hotbarInventoryWidget.onMouseEvent(event, m_mouseItemWidget);
-
-	m_mouseItemWidget.onEvent(event);
 }
 
 void PlayerInventoryWidget::update() {
@@ -59,7 +58,5 @@ void PlayerInventoryWidget::draw(gk::RenderTarget &target, gk::RenderStates stat
 
 	target.draw(m_playerInventoryWidget, states);
 	target.draw(m_hotbarInventoryWidget, states);
-
-	target.draw(m_mouseItemWidget, states);
 }
 

@@ -102,6 +102,10 @@ void ServerCommandHandler::setupCallbacks() {
 		m_server.sendToAllClients(answer);
 	});
 
+	m_server.setCommandCallback(Network::Command::PlayerInventory, [this](Client &client, sf::Packet &) {
+		m_scriptEngine.lua()["show_inventory"](client);
+	});
+
 	m_server.setCommandCallback(Network::Command::BlockActivated, [this](Client &client, sf::Packet &packet) {
 		s32 x, y, z;
 		packet >> x >> y >> z;

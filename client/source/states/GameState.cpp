@@ -25,7 +25,6 @@
 
 #include "GameKey.hpp"
 #include "GameState.hpp"
-#include "InventoryState.hpp"
 #include "LuaGUIState.hpp"
 #include "PauseMenuState.hpp"
 #include "PlayerInventoryWidget.hpp"
@@ -108,8 +107,7 @@ void GameState::update() {
 				m_player.processInputs();
 
 				if (gk::GamePad::isKeyPressedOnce(GameKey::Inventory)) {
-					auto &inventoryState = m_stateStack->push<InventoryState>(this);
-					inventoryState.setupWidget<PlayerInventoryWidget>(m_clientCommandHandler, m_player.inventory());
+					m_clientCommandHandler.sendPlayerInventoryRequest();
 				}
 			}
 

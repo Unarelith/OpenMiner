@@ -14,8 +14,8 @@
 #include <gk/core/ApplicationStateStack.hpp>
 
 #include "LuaGUI.hpp"
+#include "LuaWidget.hpp"
 #include "Network.hpp"
-// #include "LuaGUIState.hpp"
 
 void LuaGUI::addImage(const sol::table &table) {
 	// FIXME: Duplicated below
@@ -164,21 +164,43 @@ void LuaGUI::addFurnaceWidget(const sol::table &table) {
 	furnaceWidget.block = block;
 }
 
+void LuaGUI::addPlayerInventoryWidget(const sol::table &table) {
+	// FIXME: Duplicated above
+	float x = 0, y = 0;
+	sol::optional<sol::table> pos = table["pos"];
+	std::string name = table["name"].get<std::string>();
+	if (pos != sol::nullopt) {
+		x = pos.value()["x"];
+		y = pos.value()["y"];
+	}
+
+	m_data.playerInventoryWidgetList.emplace_back();
+
+	LuaWidgetDef::Widget &widget = m_data.playerInventoryWidgetList.back();
+	widget.name = name;
+	widget.x = x;
+	widget.y = y;
+}
+
 void LuaGUI::show(Client &client) {
 	sf::Packet packet;
 	packet << Network::Command::BlockGUIData;
 	for (auto &it : m_data.imageList)
-		packet << u8(0) << it.name << it.x << it.y << it.texture << it.clipRect.x << it.clipRect.y << it.clipRect.width << it.clipRect.height;
+		packet << u8(LuaWidget::Image)
+			<< it.name << it.x << it.y << it.texture << it.clipRect.x << it.clipRect.y << it.clipRect.width << it.clipRect.height;
 	for (auto &it : m_data.textButtonList)
-		packet << u8(1) << it.name << it.x << it.y << it.text;
+		packet << u8(LuaWidget::TextButton) << it.name << it.x << it.y << it.text;
 	for (auto &it : m_data.inventoryWidgetList)
-		packet << u8(2) << it.name << it.x << it.y << it.player << it.inventory << it.width << it.height
-			<< it.offset << it.count;
+		packet << u8(LuaWidget::InventoryWidget) << it.name << it.x << it.y
+			<< it.player << it.inventory << it.width << it.height << it.offset << it.count;
 	for (auto &it : m_data.craftingWidgetList)
-		packet << u8(3) << it.name << it.x << it.y << it.block.x << it.block.y << it.block.z
-			<< it.offset << it.size;
+		packet << u8(LuaWidget::CraftingWidget) << it.name << it.x << it.y
+			<< it.block.x << it.block.y << it.block.z << it.offset << it.size;
 	for (auto &it : m_data.furnaceWidgetList)
-		packet << u8(4) << it.name << it.x << it.y << it.block.x << it.block.y << it.block.z;
+		packet << u8(LuaWidget::FurnaceWidget) << it.name << it.x << it.y
+			<< it.block.x << it.block.y << it.block.z;
+	for (auto &it : m_data.playerInventoryWidgetList)
+		packet << u8(LuaWidget::PlayerInventoryWidget) << it.name << it.x << it.y;
 	client.tcpSocket->send(packet);
 }
 
@@ -189,6 +211,7 @@ void LuaGUI::initUsertype(sol::state &lua) {
 		"inventory", &LuaGUI::addInventoryWidget,
 		"crafting",  &LuaGUI::addCraftingWidget,
 		"furnace",   &LuaGUI::addFurnaceWidget,
+		"player_inventory", &LuaGUI::addPlayerInventoryWidget,
 		"show",      &LuaGUI::show
 	);
 }

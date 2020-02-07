@@ -37,6 +37,7 @@ namespace Network {
 		PlayerInvUpdate,   // <TCP> [NetworkCommand][u16 client id][[std::string item][u16 amount][u8 x, y]...] (both) [FIXME]
 		PlayerPosUpdate,   // <TCP> [NetworkCommand][u16 client id][s32 x, y, z] (both) // FIXME
 		PlayerSpawn,       // <TCP> [NetworkCommand][u16 client id][s32 x, y, z]            (from Server only)
+		PlayerInventory,   // <TCP> [NetworkCommand]                         (from Client only)
 
 		// Block commands
 		BlockUpdate,       // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Server only)
