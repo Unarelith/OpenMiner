@@ -2,31 +2,17 @@ TODO
 
 # General
 
-• DONE: Add a texture pack system
-   ◦ DONE: It should be able to accept any type of texture resolution
-• DONE: Add fullscreen, and handle window resize
 • TODO: Use Faithful 32x for buttons, backgrounds and font (or use Minecraftia for the latter)
 • TODO: Include server code in the client for singleplayer games
 
 # Issues
 
-• DONE: Crafting doesn’t always work
-• DONE: A mix of pickaxe + axe recipes gives a pickaxe?!
-• DONE: Lighting doesn’t propagate between chunks
-• DONE: Pressing `Esc` key in `SettingsMenuState` should just quit the category, not the state
-• DONE: Chunks are sent too many times to client on login
-• TODO: Lighting issues
-   ◦ DONE: Sunlight doesn’t propagate correctly
-   ◦ DONE: When loading chunks with smooth lighting enabled, they have black borders
-   ◦ DONE: Flower lighting is weird
-   ◦ TODO: Trees should block light
-• DONE: Reset breaking timer when right-clicking a block
-• DONE: Reset breaking timer when switching items
+◦ TODO: Trees should block light
 • TODO: Shapeless recipe code isn’t working
 • TODO: GUI scale issues
    ◦ TODO: `HUD` doesn’t update when GUI scale is changed
    ◦ TODO: `SettingsMenuState` should update scaling when the setting is changed
-   ◦ TODO: `Workbench` and `Furnace` are not scaled correctly with lower GUI scale settings
+   ◦ TODO: All Lua-defined GUI are not scaled correctly with lower GUI scale settings
       ◦ TODO: Send client screen size and GUI scale to server
 • TODO: Blocks can be accessed from outside the world (will need a refactoring)
 • TODO: Collisions are fucked up with blocks placed at `x = -1` from `x = 0`
@@ -39,50 +25,31 @@ TODO
    → DONE: This will allow to send network commands via a single function
    → DONE: The code won’t be replicated anymore
    → DONE: Packages musn’t be send from another place than `ClientCommandHandler`
-• DONE: License headers
 • TODO: Use `ServerCommandHandler` instead of `Server` (cf. above)
 • TODO: If possible, `Cube` should inherit from `ItemWidget` or `Widget`
 • TODO: Rename `Cube` to either `InventoryCube`, `CubeItemWidget` or `CubeWidget`
-• TODO: Unify cube coords in `BlockCursor`, `Cube`, `Chunk`
+• TODO: Unify cube coords in `BlockCursor`, `Cube`, `ChunkBuilder`
 
 # Refactorings
 
-• DONE: In `SettingsMenuState`, the “Done” button shouldn’t be part of the `Menu`
-• TODO: Remove the ability of `Chunk` and `ChunkLightmap` to access surrounding chunk blocks
-• TODO: `Chunk::setBlock` does way too much things, fix this
 • TODO: Add a mesh system, either here or in `GameKit`
    → Maybe this is the way to add custom vertex attributes while having default ones? Check 3dee
    → Or maybe it would be better to use a VAO in `GameKit`
 
-# Lua API
-
-• DONE: New texture system to make things easier for Lua
-   ◦ DONE: Use a separate texture for each block
-   ◦ DONE: Since this may lower the perfs, optimize it
-   ◦ DONE: Load textures from Lua
-   ◦ DONE: Use names instead of ids in Lua
-
 # GUI
 
-• DONE: Add a LuaGUI class to handle GUI from Lua
-• DONE: Add more GUI elements
-   ◦ DONE: `InventoryWidget`
-   ◦ DONE: `CraftingWidget`
-   ◦ DONE: `Image`
-• WIP: Implement GUI elements requested by `Furnace`
-   ◦ DONE: `FurnaceWidget` first
-   ◦ TODO: Then its components
-• TODO: Handle custom size crafting table (try with 5x5 for example)
+• TODO: Implement `FurnaceWidget` completely in Lua
+   ◦ TODO: Add a `ProgressBarWidget` and find how to make it communicate between client and server
+   ◦ TODO: Remove `BlockMetadata::get` which is only required by `FurnaceWidget`
+• TODO: Implement `PlayerInventoryWidget` completely in Lua
 
 # Menus
 
-• DONE: Main menu
 • TODO: World loading/saving
 • TODO: World selection menu
 
 # World
 
-• DONE: Block metadata
 • TODO: Day/night cycle
 
 # Chunk generation
