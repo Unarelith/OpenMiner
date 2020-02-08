@@ -87,7 +87,7 @@ void LuaGUIState::update() {
 			currentItemWidget = it.currentItemWidget();
 	}
 
-	if (m_widgets.size() != 1) // FIXME
+	if (m_inventoryWidgets.size() != 0) // FIXME
 		m_mouseItemWidget.update(currentItemWidget);
 }
 

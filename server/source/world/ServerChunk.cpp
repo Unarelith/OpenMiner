@@ -25,7 +25,7 @@ void ServerChunk::updateLights() {
 
 void ServerChunk::onBlockPlaced(int x, int y, int z, const Block &block) const {
 	const ServerBlock &serverBlock = (ServerBlock &)block;
-	serverBlock.onBlockPlaced(glm::ivec3{x, y, z}, m_world);
+	serverBlock.onBlockPlaced(glm::ivec3{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_HEIGHT, z + m_z * CHUNK_DEPTH}, m_world);
 }
 
 void ServerChunk::tick(std::unordered_map<u16, ServerPlayer> &players, World &world, Server &server) {

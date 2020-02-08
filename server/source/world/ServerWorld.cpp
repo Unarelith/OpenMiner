@@ -99,14 +99,18 @@ void ServerWorld::sendChunkData(const Client &client, ServerChunk *chunk) {
 
 				BlockData *blockData = chunk->getBlockData(x, y, z);
 				if (blockData) {
+					s32 globalX = x + chunk->x() * CHUNK_WIDTH;
+					s32 globalY = y + chunk->y() * CHUNK_HEIGHT;
+					s32 globalZ = z + chunk->z() * CHUNK_DEPTH;
+
 					sf::Packet packet1;
-					packet1 << Network::Command::BlockDataUpdate << s32(x) << s32(y) << s32(z);
+					packet1 << Network::Command::BlockDataUpdate << globalX << globalY << globalZ;
 					packet1 << blockData->data << blockData->useAltTiles;
 					client.tcpSocket->send(packet1);
 
 					sf::Packet packet2;
 					packet2 << Network::Command::BlockInvUpdate;
-					packet2 << s32(x) << s32(y) << s32(z);
+					packet2 << globalX << globalY << globalZ;
 					packet2 << blockData->inventory;
 					client.tcpSocket->send(packet2);
 				}

@@ -27,7 +27,6 @@
 class ClientPlayer;
 class ClientWorld;
 
-// FIXME: This class is almost a duplicate of InventoryState
 class LuaGUIState : public InterfaceState {
 	public:
 		LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent = nullptr);
