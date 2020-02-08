@@ -14,6 +14,7 @@
 #ifndef BLOCKDATA_HPP_
 #define BLOCKDATA_HPP_
 
+#include "BlockMetadata.hpp"
 #include "Inventory.hpp"
 
 struct BlockData {
@@ -24,7 +25,7 @@ struct BlockData {
 
 	Inventory inventory;
 
-	u32 data = 0;
+	BlockMetadata meta;
 
 	bool useAltTiles = false;
 };

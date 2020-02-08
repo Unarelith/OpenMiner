@@ -105,7 +105,7 @@ void ServerWorld::sendChunkData(const Client &client, ServerChunk *chunk) {
 
 					sf::Packet packet1;
 					packet1 << Network::Command::BlockDataUpdate << globalX << globalY << globalZ;
-					packet1 << blockData->data << blockData->useAltTiles;
+					packet1 << blockData->meta << blockData->useAltTiles;
 					client.tcpSocket->send(packet1);
 
 					sf::Packet packet2;

@@ -34,9 +34,9 @@ mod:block {
 		local output_stack = data.inventory:get_stack(1, 0)
 		local fuel_stack = data.inventory:get_stack(2, 0)
 
-		local ticks_remaining = bit.band(data.data, 0xfff)
-		local current_burn_time = bit.band(bit.brshift(data.data, 12), 0xfff)
-		local item_progress = bit.band(bit.brshift(data.data, 24), 0xff)
+		local ticks_remaining = data.meta:get_int("ticks_remaining") or 0
+		local current_burn_time = data.meta:get_int("current_burn_time") or 0
+		local item_progress = data.meta:get_int("item_progress") or 0
 
 		local recipe = openminer:registry():get_recipe(data.inventory)
 		if recipe and recipe:type() ~= "smelt" then
@@ -72,8 +72,8 @@ mod:block {
 			data.inventory:set_stack(1, 0, recipe:result():item():name(), output_stack:amount() + recipe:result():amount())
 		end
 
-		local a = bit.blshift(bit.band(current_burn_time, 0xfff), 12)
-		local b = bit.blshift(bit.band(item_progress, 0xff), 24)
-		data.data = bit.band(ticks_remaining, 0xfff) + a + b
+		data.meta:set_int("ticks_remaining", ticks_remaining);
+		data.meta:set_int("current_burn_time", current_burn_time);
+		data.meta:set_int("item_progress", item_progress);
 	end,
 }

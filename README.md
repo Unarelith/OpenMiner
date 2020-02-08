@@ -73,12 +73,12 @@ This list is non exhaustive.
 	- Block/item/recipe definition
 	- Custom GUI creation
 - Special blocks (workbench, furnace)
+- Block metadata
 
 ### Missing features
 
 - Texture pack system
 - World loading/saving
-- Advanced block metadata
 - Particle system
 - Fluid propagation
 - Player model display (currently displaying an ugly box)

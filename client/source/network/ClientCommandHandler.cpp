@@ -170,7 +170,7 @@ void ClientCommandHandler::setupCallbacks() {
 
 			if (data) {
 				bool useAltTiles;
-				packet >> data->data >> useAltTiles;
+				packet >> data->meta >> useAltTiles;
 
 				if (data->useAltTiles != useAltTiles) {
 					chunk->setChanged(true);

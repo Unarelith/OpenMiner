@@ -11,6 +11,7 @@
  *
  * =====================================================================================
  */
+#include "BlockMetadata.hpp"
 #include "LuaCore.hpp"
 #include "LuaGUI.hpp"
 #include "LuaMod.hpp"
@@ -66,7 +67,7 @@ void ScriptEngine::initUsertypes() {
 
 	m_lua.new_usertype<BlockData>("BlockData",
 		"inventory", &BlockData::inventory,
-		"data", &BlockData::data,
+		"meta", &BlockData::meta,
 		"useAltTiles", &BlockData::useAltTiles
 	);
 
@@ -104,6 +105,14 @@ void ScriptEngine::initUsertypes() {
 		"x", &glm::ivec3::x,
 		"y", &glm::ivec3::y,
 		"z", &glm::ivec3::z
+	);
+
+	m_lua.new_usertype<BlockMetadata>("BlockMetadata",
+		"get_string", &BlockMetadata::getLuaObject<std::string>,
+		"set_string", &BlockMetadata::setString,
+
+		"get_int", &BlockMetadata::getLuaObject<int>,
+		"set_int", &BlockMetadata::setInt
 	);
 
 	LuaCore::initUsertype(m_lua);

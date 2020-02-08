@@ -48,9 +48,9 @@ void FurnaceWidget::onEvent(const SDL_Event &event) {
 }
 
 void FurnaceWidget::update() {
-	u16 ticksRemaining = m_blockData.data & 0xfff;
-	u16 currentBurnTime = (m_blockData.data >> 12) & 0xfff;
-	u16 itemProgress = (m_blockData.data >> 24) & 0xff;
+	u16 ticksRemaining = m_blockData.meta.get<int>("ticks_remaining");
+	u16 currentBurnTime = m_blockData.meta.get<int>("current_burn_time");
+	u16 itemProgress = m_blockData.meta.get<int>("item_progress");
 
 	if (currentBurnTime) {
 		m_burnImage.setPosition(57, 37 + 14 - ticksRemaining * 14 / currentBurnTime, 0);
