@@ -27,15 +27,9 @@
 #include "CraftingRecipe.hpp"
 #include "Network.hpp"
 
-// FIXME: Try to handle recipes a bit more like minecraft
-//        - Pattern section | char[3][3]
-//        - Key section     | map<char, vector<ItemType>>
-//        - Result section  | ItemStack
-CraftingRecipe::CraftingRecipe(const std::vector<std::string> &pattern, const std::map<char, std::vector<std::string>> &keys, const ItemStack &result, bool isShapeless) : Recipe("craft", result) {
+CraftingRecipe::CraftingRecipe(const std::vector<std::string> &pattern, const std::map<char, std::vector<std::string>> &keys, const ItemStack &result) : Recipe("craft", result) {
 	m_pattern = pattern;
 	m_keys = keys;
-
-	m_isShapeless = isShapeless;
 }
 
 void CraftingRecipe::serialize(sf::Packet &packet) const {
@@ -82,35 +76,16 @@ bool CraftingRecipe::isMatching(const Inventory &inventory) const {
 	if (inventory.height() < m_pattern.size())
 		return false;
 
-	if (!m_isShapeless) {
-		for (u16 y = 0 ; y < inventory.height() - m_pattern.size() + 1 ; ++y) {
-			if (inventory.width() < m_pattern.at(0).size())
-				return false;
+	for (u16 y = 0 ; y < inventory.height() - m_pattern.size() + 1 ; ++y) {
+		if (inventory.width() < m_pattern.at(0).size())
+			return false;
 
-			for (u16 x = 0 ; x < inventory.width() - m_pattern.at(0).size() + 1 ; ++x)
-				if (checkMatch(inventory, x, y))
-					return true;
-		}
-		return false;
+		for (u16 x = 0 ; x < inventory.width() - m_pattern.at(0).size() + 1 ; ++x)
+			if (checkMatch(inventory, x, y))
+				return true;
 	}
-	else {
-		// std::array<bool, 9> match{false, false, false, false, false, false, false, false, false};
-		// for (u32 id : m_recipe) {
-		// 	bool matched = false;
-		// 	for (u16 i = 0 ; i < 9 ; ++i) {
-		// 		if (inventory.getStack(i % 3, i / 3).item().id() == id && !match[i]) {
-		// 			match[i] = true;
-		// 			matched = true;
-		// 			break;
-		// 		}
-		// 	}
-        //
-		// 	if (!matched)
-		// 		return false;
-		// }
-		// return true;
-		return false; // FIXME
-	}
+
+	return false;
 }
 
 bool CraftingRecipe::checkMatch(const Inventory &inventory, int offsetX, int offsetY) const {

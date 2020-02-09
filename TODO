@@ -8,7 +8,6 @@ TODO
 # Issues
 
 ◦ TODO: Trees should block light
-• TODO: Shapeless recipe code isn’t working
 • TODO: GUI scale issues
    ◦ TODO: `HUD` doesn’t update when GUI scale is changed
    ◦ TODO: `SettingsMenuState` should update scaling when the setting is changed

@@ -31,7 +31,7 @@
 class CraftingRecipe : public Recipe {
 	public:
 		CraftingRecipe() : Recipe("craft") {}
-		CraftingRecipe(const std::vector<std::string> &pattern, const std::map<char, std::vector<std::string>> &keys, const ItemStack &result, bool isShapeless = false);
+		CraftingRecipe(const std::vector<std::string> &pattern, const std::map<char, std::vector<std::string>> &keys, const ItemStack &result);
 
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
@@ -43,8 +43,6 @@ class CraftingRecipe : public Recipe {
 
 		std::vector<std::string> m_pattern;
 		std::map<char, std::vector<std::string>> m_keys;
-
-		bool m_isShapeless = false;
 };
 
 #endif // CRAFTINGRECIPE_HPP_
