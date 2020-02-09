@@ -110,6 +110,7 @@ void GameState::update() {
 	if (m_camera.getFieldOfView() != Config::cameraFOV)
 		m_camera.setFieldOfView(Config::cameraFOV);
 
+	// FIXME: Registry init and TextureAtlas building should be done during loading phase
 	if (m_clientCommandHandler.isRegistryInitialized()) {
 		if (m_textureAtlas->isReady()) {
 			if (&m_stateStack->top() == this) {

@@ -3,7 +3,10 @@ TODO
 # General
 
 • TODO: Use Faithful 32x for buttons, backgrounds and font (or use Minecraftia for the latter)
+   → Will require a fully-featured texture pack system
+   → It’s better to do this feature as a big PR
 • TODO: Include server code in the client for singleplayer games
+   → This will require some refactoring, it’s better to do this in a big PR
 
 # Issues
 
@@ -20,11 +23,8 @@ TODO
 
 # Code improvements
 
-• DONE: Pass `ClientCommandHandler` instead of `Client` in the game (for example in `BlockCursor`)
-   → DONE: This will allow to send network commands via a single function
-   → DONE: The code won’t be replicated anymore
-   → DONE: Packages musn’t be send from another place than `ClientCommandHandler`
-• TODO: Use `ServerCommandHandler` instead of `Server` (cf. above)
+• TODO: Use `ServerCommandHandler` for `BlockDataUpdate` and `BlockInvUpdate`
+   → Currently this packet sending is duplicated between `ServerWorld` and `ServerBlock`
 • TODO: If possible, `Cube` should inherit from `ItemWidget` or `Widget`
 • TODO: Rename `Cube` to either `InventoryCube`, `CubeItemWidget` or `CubeWidget`
 • TODO: Unify cube coords in `BlockCursor`, `Cube`, `ChunkBuilder`
