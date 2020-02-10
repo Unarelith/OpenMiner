@@ -23,10 +23,16 @@
 #ifndef TERRAINGENERATOR_HPP_
 #define TERRAINGENERATOR_HPP_
 
+#include <gk/core/IntTypes.hpp>
+
+#include <sol.hpp>
+
 class ServerChunk;
 
 class TerrainGenerator {
 	public:
+		TerrainGenerator();
+
 		void generate(ServerChunk &chunk) const;
 
 		void setBlocksFromLuaTable(const sol::table &table);
