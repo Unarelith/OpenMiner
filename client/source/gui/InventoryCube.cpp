@@ -29,10 +29,10 @@
 
 #include "Block.hpp"
 #include "Config.hpp"
-#include "Cube.hpp"
+#include "InventoryCube.hpp"
 #include "TextureAtlas.hpp"
 
-Cube::Cube(float size) : m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks")) {
+InventoryCube::InventoryCube(float size) : m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks")) {
 	m_size = size;
 
 	// FIXME: Using Transform may be better here
@@ -41,7 +41,7 @@ Cube::Cube(float size) : m_textureAtlas(gk::ResourceHandler::getInstance().get<T
 	m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(-45.0f), glm::vec3{0, 1, 0});
 }
 
-void Cube::updateVertexBuffer(const Block &block) {
+void InventoryCube::updateVertexBuffer(const Block &block) {
 	if (!block.id()) return;
 
 	gk::Vertex vertices[6 * 4] = {
@@ -115,7 +115,7 @@ void Cube::updateVertexBuffer(const Block &block) {
 	m_isVboInitialized = true;
 }
 
-void Cube::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void InventoryCube::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (!m_isVboInitialized) return;
 
 	states.transform *= m_modelMatrix;

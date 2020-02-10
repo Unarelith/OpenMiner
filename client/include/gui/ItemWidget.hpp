@@ -25,8 +25,8 @@
 
 #include <gk/graphics/Image.hpp>
 
-#include "Cube.hpp"
 #include "Inventory.hpp"
+#include "InventoryCube.hpp"
 #include "Text.hpp"
 #include "Widget.hpp"
 
@@ -54,7 +54,7 @@ class ItemWidget : public Widget {
 		gk::Image m_image;
 		Text m_text;
 
-		Cube m_cube{10};
+		InventoryCube m_cube{10};
 
 		bool m_isImage = false;
 };

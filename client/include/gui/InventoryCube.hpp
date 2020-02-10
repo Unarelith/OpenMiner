@@ -20,8 +20,8 @@
  *
  * =====================================================================================
  */
-#ifndef CUBE_HPP_
-#define CUBE_HPP_
+#ifndef INVENTORYCUBE_HPP_
+#define INVENTORYCUBE_HPP_
 
 #include <gk/gl/Drawable.hpp>
 #include <gk/gl/Transformable.hpp>
@@ -30,9 +30,9 @@
 class Block;
 class TextureAtlas;
 
-class Cube : public gk::Drawable, public gk::Transformable {
+class InventoryCube : public gk::Drawable, public gk::Transformable {
 	public:
-		Cube(float size = 1.0f);
+		InventoryCube(float size = 1.0f);
 
 		void updateVertexBuffer(const Block &block);
 
@@ -49,4 +49,4 @@ class Cube : public gk::Drawable, public gk::Transformable {
 		glm::mat4 m_modelMatrix{1};
 };
 
-#endif // CUBE_HPP_
+#endif // INVENTORYCUBE_HPP_
