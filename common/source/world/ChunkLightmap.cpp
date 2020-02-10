@@ -231,7 +231,7 @@ bool ChunkLightmap::updateSunlight() {
 				u16 blockID = m_chunk->getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 				const Block &block = Registry::getInstance().getBlock(blockID);
 				if (!block.isOpaque()) {
-					if (sunlightLevel == 15 && surroundingNode.y == node.y - 1 && (!blockID || block.drawType() == BlockDrawType::Glass)) {
+					if (sunlightLevel == 15 && surroundingNode.y == node.y - 1 && (!blockID || block.drawType() == BlockDrawType::Glass || block.drawType() == BlockDrawType::XShape)) {
 						addSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel);
 
 						lightUpdated = true;
