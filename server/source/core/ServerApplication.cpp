@@ -61,18 +61,16 @@ void ServerApplication::init() {
 	m_server.setRunning(true);
 
 	m_serverCommandHandler.setupCallbacks();
+
+	m_world.setServer(&m_serverCommandHandler);
 }
 
 void ServerApplication::update() {
-	m_world.update(m_server, m_players);
+	m_world.update(m_players);
 
 	if (gk::GameClock::getTicks() % 1000 < 10) {
 		for (auto &it : m_players) {
-			sf::Packet packet;
-			packet << Network::Command::PlayerPosUpdate;
-			packet << it.first;
-			packet << it.second.x() << it.second.y() << it.second.z();
-			m_server.sendToAllClients(packet);
+			m_serverCommandHandler.sendPlayerPosUpdate(it.first, it.second);
 		}
 	}
 }

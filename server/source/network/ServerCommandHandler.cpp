@@ -20,6 +20,7 @@
  *
  * =====================================================================================
  */
+#include "BlockData.hpp"
 #include "Registry.hpp"
 #include "ScriptEngine.hpp"
 #include "Server.hpp"
@@ -27,6 +28,39 @@
 #include "ServerPlayer.hpp"
 #include "ServerWorld.hpp"
 #include "ServerCommandHandler.hpp"
+
+void ServerCommandHandler::sendBlockDataUpdate(s32 x, s32 y, s32 z, const BlockData *blockData, const Client *client) const {
+	sf::Packet packet;
+	packet << Network::Command::BlockDataUpdate << x << y << z
+		<< blockData->meta << blockData->useAltTiles;
+
+	if (!client)
+		m_server.sendToAllClients(packet);
+	else
+		client->tcpSocket->send(packet);
+}
+
+void ServerCommandHandler::sendBlockInvUpdate(s32 x, s32 y, s32 z, const Inventory &inventory, const Client *client) const {
+	sf::Packet packet;
+	packet << Network::Command::BlockInvUpdate << x << y << z << inventory;
+
+	if (!client)
+		m_server.sendToAllClients(packet);
+	else
+		client->tcpSocket->send(packet);
+}
+
+void ServerCommandHandler::sendPlayerPosUpdate(u16 clientID, const ServerPlayer &player, const Client *client) const {
+	sf::Packet packet;
+	packet << Network::Command::PlayerPosUpdate;
+	packet << clientID;
+	packet << player.x() << player.y() << player.z();
+
+	if (!client)
+		m_server.sendToAllClients(packet);
+	else
+		client->tcpSocket->send(packet);
+}
 
 void ServerCommandHandler::setupCallbacks() {
 	m_server.setConnectionCallback([this](Client &client) {

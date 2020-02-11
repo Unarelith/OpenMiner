@@ -25,24 +25,22 @@
 #include "Config.hpp"
 #include "Network.hpp"
 #include "Server.hpp"
+#include "ServerCommandHandler.hpp"
 #include "ServerPlayer.hpp"
 #include "ServerWorld.hpp"
 
-ServerWorld::ServerWorld() {
-}
-
-void ServerWorld::update(Server &server, std::unordered_map<u16, ServerPlayer> &players) {
+void ServerWorld::update(std::unordered_map<u16, ServerPlayer> &players) {
 	if (m_lastTick < gk::GameClock::getTicks() / 50) {
 		m_lastTick = gk::GameClock::getTicks() / 50;
 
 		for (auto &it : m_chunks) {
-			it.second->tick(players, *this, server);
+			it.second->tick(players, *this, *m_server);
 
 			if (it.second->areAllNeighboursLoaded())
 				it.second->updateLights();
 
 			if (it.second->isInitialized() && !it.second->isSent()) {
-				for (auto &client : server.info().clients())
+				for (auto &client : m_server->server().info().clients())
 					sendChunkData(client, it.second.get());
 
 				// DEBUG("Chunk updated at", it.second->x(), it.second->y(), it.second->z());
@@ -112,16 +110,8 @@ void ServerWorld::sendChunkData(const Client &client, ServerChunk *chunk) {
 					s32 globalY = y + chunk->y() * CHUNK_HEIGHT;
 					s32 globalZ = z + chunk->z() * CHUNK_DEPTH;
 
-					sf::Packet packet1;
-					packet1 << Network::Command::BlockDataUpdate << globalX << globalY << globalZ;
-					packet1 << blockData->meta << blockData->useAltTiles;
-					client.tcpSocket->send(packet1);
-
-					sf::Packet packet2;
-					packet2 << Network::Command::BlockInvUpdate;
-					packet2 << globalX << globalY << globalZ;
-					packet2 << blockData->inventory;
-					client.tcpSocket->send(packet2);
+					m_server->sendBlockDataUpdate(globalX, globalY, globalZ, blockData, &client);
+					m_server->sendBlockInvUpdate(globalX, globalY, globalZ, blockData->inventory, &client);
 				}
 			}
 		}

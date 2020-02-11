@@ -26,7 +26,7 @@
 #include "Block.hpp"
 
 class Client;
-class Server;
+class ServerCommandHandler;
 class ServerPlayer;
 
 class ServerBlock : public Block {
@@ -34,7 +34,7 @@ class ServerBlock : public Block {
 		ServerBlock(u32 id, const TilesDef &tiles, const std::string &name, const std::string &label)
 			: Block(id, tiles, name, label) {}
 
-		void onTick(const glm::ivec3 &, std::unordered_map<u16, ServerPlayer> &, Chunk &, World &, Server &) const;
+		void onTick(const glm::ivec3 &, std::unordered_map<u16, ServerPlayer> &, Chunk &, World &, ServerCommandHandler &) const;
 		bool onBlockActivated(const glm::ivec3 &pos, Player &player, World &world, Client &client) const;
 		void onBlockPlaced(const glm::ivec3 &pos, World &world) const;
 

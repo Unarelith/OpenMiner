@@ -30,14 +30,14 @@
 #include "World.hpp"
 
 class Client;
-class Server;
+class ServerCommandHandler;
 class ServerPlayer;
 
 class ServerWorld : public World {
 	public:
-		ServerWorld();
+		ServerWorld() = default;
 
-		void update(Server &server, std::unordered_map<u16, ServerPlayer> &players);
+		void update(std::unordered_map<u16, ServerPlayer> &players);
 
 		void createChunkNeighbours(ServerChunk *chunk);
 		void sendChunkData(const Client &client, ServerChunk *chunk);
@@ -47,6 +47,8 @@ class ServerWorld : public World {
 
 		TerrainGenerator &terrainGenerator() { return m_terrainGenerator; }
 
+		void setServer(ServerCommandHandler *server) { m_server = server; }
+
 	private:
 		std::unordered_map<gk::Vector3i, std::unique_ptr<ServerChunk>> m_chunks;
 		std::unordered_map<u16, std::queue<ServerChunk *>> m_chunkQueues;
@@ -54,6 +56,8 @@ class ServerWorld : public World {
 		u32 m_lastTick = 0;
 
 		TerrainGenerator m_terrainGenerator;
+
+		ServerCommandHandler *m_server = nullptr;
 };
 
 #endif // SERVERWORLD_HPP_

@@ -23,8 +23,6 @@ TODO
 
 # Code improvements
 
-• TODO: Use `ServerCommandHandler` for `BlockDataUpdate` and `BlockInvUpdate`
-   → Currently this packet sending is duplicated between `ServerWorld` and `ServerBlock`
 • TODO: If possible, `Cube` should inherit from `ItemWidget` or `Widget`
 • TODO: Unify cube coords in `BlockCursor`, `Cube`, `ChunkBuilder`
 

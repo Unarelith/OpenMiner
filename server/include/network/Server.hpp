@@ -48,7 +48,7 @@ class Server {
 
 		bool isRunning() const { return m_isRunning; }
 
-		ServerInfo &info() { return m_info; }
+		const ServerInfo &info() const { return m_info; }
 
 		sf::UdpSocket &udpSocket() { return m_udpSocket; }
 
