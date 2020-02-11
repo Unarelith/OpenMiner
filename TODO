@@ -21,11 +21,6 @@ TODO
 • TODO: Blocks can be placed inside the player (check for AABB?)
 • TODO: Sometimes it’s possible to aim between two blocks and right-clicking will replace one
 
-# Code improvements
-
-• TODO: If possible, `Cube` should inherit from `ItemWidget` or `Widget`
-• TODO: Unify cube coords in `BlockCursor`, `Cube`, `ChunkBuilder`
-
 # Refactorings
 
 • TODO: Add a mesh system, either here or in `GameKit`

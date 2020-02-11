@@ -38,7 +38,7 @@ void ClientChunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u
 
 	states.texture = &m_textureAtlas.texture();
 
-	if (layer == ChunkBuilder::Layer::Flora)
+	if (layer == ChunkBuilder::Layer::Flora || (layer == ChunkBuilder::Layer::Liquid && areAllNeighboursInitialized()))
 		glCheck(glDisable(GL_CULL_FACE));
 	else
 		glCheck(glEnable(GL_CULL_FACE));
