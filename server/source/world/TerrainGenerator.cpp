@@ -107,6 +107,7 @@ void TerrainGenerator::basicGeneration(ServerChunk &chunk) const {
 void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 	srand(chunk.x() + chunk.y() + chunk.z() + 1337);
 	Chunk *topChunk = chunk.getSurroundingChunk(Chunk::Top);
+
 	for(int z = 0 ; z < CHUNK_DEPTH ; z++) {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
 			// Land height
@@ -124,7 +125,7 @@ void TerrainGenerator::testCraftGeneration(ServerChunk &chunk) const {
 					// Otherwise we are in the air, so try to make a tree
 					else if(chunk.getBlock(x, y - 1, z) == m_grassBlockID && (rand() % 64) == 0 && n < 4) {
 						// Trunk
-						h = (rand() & 0x3) + 3;
+						int h = (rand() & 3) + 3;
 						for(int i = 0 ; i < h ; i++) {
 							chunk.setBlockRaw(x, y + i, z, m_logBlockID);
 						}
