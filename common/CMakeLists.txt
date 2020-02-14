@@ -1,4 +1,9 @@
 #------------------------------------------------------------------------------
+# Set project name
+#------------------------------------------------------------------------------
+set(PROJECT_NAME ${CMAKE_PROJECT_NAME}_common)
+
+#------------------------------------------------------------------------------
 # Get source files
 #------------------------------------------------------------------------------
 file(GLOB_RECURSE SOURCE_FILES source/*.cpp)
@@ -12,35 +17,22 @@ endforeach(HEADER_FILE)
 #------------------------------------------------------------------------------
 # Add library
 #------------------------------------------------------------------------------
-add_library(${CMAKE_PROJECT_NAME}_common STATIC ${SOURCE_FILES})
+add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
 #------------------------------------------------------------------------------
 # Compiler flags
 #------------------------------------------------------------------------------
 if (NOT MSVC)
-	target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -O3 -ffast-math)
-	target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -g -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
+	target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CONFIG:DEBUG>:${DEBUG_GCC_FLAGS}>")
+	target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CONFIG:RELEASE>:${RELEASE_GCC_FLAGS}>")
+	target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CONFIG:RELWITHDEBINFO>:${RELWITHDEB_GCC_FLAGS}>")
 endif ()
 
-target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -DDEBUG_ENABLED)
-target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -DGLM_FORCE_RADIANS)
-target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -DSOL_CHECK_ARGUMENTS
-	# -DSOL_SAFE_USERTYPE=1
-	# -DSOL_SAFE_REFERENCES=1
-	# -DSOL_SAFE_FUNCTION_CALLS=1
-	# -DSOL_SAFE_FUNCTION=1
-	# -DSOL_SAFE_NUMERICS=1
-	# -DSOL_SAFE_GETTER=1
-	-DSOL_PRINT_ERRORS=1
-)
+target_compile_options(${PROJECT_NAME} PRIVATE -DDEBUG_ENABLED)
+target_compile_options(${PROJECT_NAME} PRIVATE -DGLM_FORCE_RADIANS)
+target_compile_options(${PROJECT_NAME} PRIVATE -DSOL_CHECK_ARGUMENTS -DSOL_PRINT_ERRORS=0)
 
-if(MSVC)
-	set(CMAKE_CXX_STANDARD 14)
-else()
-	target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -std=c++14)
-endif()
+# target_compile_options(${PROJECT_NAME} PRIVATE -pg)
 
-# target_compile_options(${CMAKE_PROJECT_NAME}_common PRIVATE -pg)
-
-target_link_libraries(${CMAKE_PROJECT_NAME}_common sfml-system sfml-network)
+target_link_libraries(${PROJECT_NAME} sfml-system sfml-network)
 

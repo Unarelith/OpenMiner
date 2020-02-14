@@ -14,6 +14,28 @@ if (WIN32)
 endif ()
 
 #------------------------------------------------------------------------------
+# Compiler flags
+#------------------------------------------------------------------------------
+set(DEBUG_GCC_FLAGS -g -Og -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
+set(RELEASE_GCC_FLAGS -O3 -ffast-math)
+set(RELWITHDEB_GCC_FLAGS -g -O3 -ffast-math -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
+
+set(CMAKE_CXX_STANDARD 14)
+
+#------------------------------------------------------------------------------
+# Setting default build type
+#------------------------------------------------------------------------------
+set(DEFAULT_BUILD_TYPE RelWithDebInfo)
+
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+	message(STATUS "Setting build type to '${DEFAULT_BUILD_TYPE}' as none was specified.")
+	set(CMAKE_BUILD_TYPE "${DEFAULT_BUILD_TYPE}" CACHE STRING "Choose the type of build." FORCE)
+
+	# Set the possible values of build type for cmake-gui
+	set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
+
+#------------------------------------------------------------------------------
 # Packages
 #------------------------------------------------------------------------------
 # - Lua

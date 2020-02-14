@@ -61,7 +61,7 @@ class Server {
 		void handleNewConnections();
 		void handleClientMessages();
 
-		bool m_isRunning = true;
+		bool m_isRunning = false;
 
 		ServerInfo m_info;
 

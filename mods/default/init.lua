@@ -21,8 +21,6 @@
 -- =====================================================================================
 --
 
-print("Hello from Lua!")
-
 -- FIXME
 SCREEN_WIDTH = 1600
 SCREEN_HEIGHT = 1050
@@ -84,4 +82,3 @@ function show_inventory(client)
 
 	gui:show(client)
 end
-

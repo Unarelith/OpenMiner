@@ -49,13 +49,12 @@ void ServerApplication::init() {
 
 	try {
 		m_scriptEngine.lua()["openminer"] = &m_luaCore;
-		// m_scriptEngine.lua().script("init()");
+		m_scriptEngine.lua().safe_script_file("mods/default/init.lua");
 	}
 	catch (const sol::error &e) {
 		std::cerr << e.what() << std::endl;
+		return;
 	}
-
-	m_scriptEngine.lua().safe_script_file("mods/default/init.lua");
 
 	m_server.init(m_port);
 	m_server.setRunning(true);
@@ -63,6 +62,8 @@ void ServerApplication::init() {
 	m_serverCommandHandler.setupCallbacks();
 
 	m_world.setServer(&m_serverCommandHandler);
+
+	std::cout << "Server is running on localhost:" << m_port << std::endl;
 }
 
 void ServerApplication::update() {
