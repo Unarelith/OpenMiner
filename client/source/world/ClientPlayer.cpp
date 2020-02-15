@@ -43,7 +43,7 @@ ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
 
 	m_hitbox = gk::FloatBox{-0.2, -1.8, -0.2, 0.4, 1.8, 0.4};
 
-	m_camera.setPosition(m_x, m_y, m_z);
+	m_camera.setPosition(m_x, m_y - 0.1, m_z);
 	m_camera.setTargetPosition(pointTargetedX(), pointTargetedY(), pointTargetedZ());
 }
 
@@ -132,7 +132,7 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 	m_y += m_velocity.y;
 	m_z += m_velocity.z;
 
-	m_camera.setPosition(m_x, m_y, m_z);
+	m_camera.setPosition(m_x, m_y - 0.1, m_z);
 	Player::setPosition(m_x, m_y, m_z);
 
 	if (m_velocity.x != 0 || m_velocity.y != 0 || m_velocity.z != 0)
