@@ -256,13 +256,13 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 	int mx, my, mz;
 	int face = -1;
 
-	glm::vec3 lookAt{m_player.pointTargetedX() - m_player.x(),
-	                 m_player.pointTargetedY() - m_player.y(),
-	                 m_player.pointTargetedZ() - m_player.z()};
+	glm::vec3 lookAt{m_player.pointTargetedX() - m_player.camera().getPosition().x,
+	                 m_player.pointTargetedY() - m_player.camera().getPosition().y,
+	                 m_player.pointTargetedZ() - m_player.camera().getPosition().z};
 
-	glm::vec3 position{m_player.x(),
-	                   m_player.y(),
-	                   m_player.z()};
+	glm::vec3 position{m_player.camera().getPosition().x,
+	                   m_player.camera().getPosition().y,
+	                   m_player.camera().getPosition().z};
 
 	// FIXME: Add max distance
 	if(useDepthBuffer) {
