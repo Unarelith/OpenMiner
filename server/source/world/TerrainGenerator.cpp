@@ -86,6 +86,9 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 								for(int iz = -3 ; iz <= 3 ; iz++) {
 									if(ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + h + iy, z + iz)) {
 										chunk.setBlockRaw(x + ix, y + h + iy, z + iz, m_leavesBlockID);
+
+										// FIXME: This is a temporary fix for the second part of #41
+										chunk.lightmap().setSunlight(x + ix, y + h + iy, z + iz, 0);
 									}
 								}
 							}

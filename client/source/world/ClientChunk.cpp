@@ -26,8 +26,7 @@
 #include "TextureAtlas.hpp"
 
 void ClientChunk::update() {
-	bool lightUpdated = m_lightmap.updateLights();
-	if (lightUpdated || m_hasChanged || m_hasLightChanged) {
+	if (m_lightmap.updateLights() || m_hasChanged || m_hasLightChanged) {
 		m_hasChanged = false;
 		m_hasLightChanged = false;
 
