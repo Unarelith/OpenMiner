@@ -276,11 +276,13 @@ u8 ChunkLightmap::getTorchlight(int x, int y, int z) const {
 }
 
 void ChunkLightmap::setLightData(int x, int y, int z, u8 val) {
-	m_lightMap[x][y][z] = val;
+	if (m_lightMap[x][y][z] != val) {
+		m_lightMap[x][y][z] = val;
 
-	m_chunk->setLightChanged(true);
+		m_chunk->setLightChanged(true);
 
-	updateSurroundingChunks(x, y, z);
+		updateSurroundingChunks(x, y, z);
+	}
 }
 
 void ChunkLightmap::setSunlight(int x, int y, int z, u8 val) {
@@ -291,11 +293,13 @@ void ChunkLightmap::setSunlight(int x, int y, int z, u8 val) {
 	if(z < 0)             { if(m_chunk->getSurroundingChunk(2)) m_chunk->getSurroundingChunk(2)->lightmap().setSunlight(x, y, z + CHUNK_DEPTH, val); return; }
 	if(z >= CHUNK_DEPTH)  { if(m_chunk->getSurroundingChunk(3)) m_chunk->getSurroundingChunk(3)->lightmap().setSunlight(x, y, z - CHUNK_DEPTH, val); return; }
 
-	m_lightMap[x][y][z] = (m_lightMap[x][y][z] & 0xf) | (val << 4);
+	if ((m_lightMap[x][y][z] & 0xf0) != (val << 4)) {
+		m_lightMap[x][y][z] = (m_lightMap[x][y][z] & 0xf) | (val << 4);
 
-	m_chunk->setLightChanged(true);
+		m_chunk->setLightChanged(true);
 
-	updateSurroundingChunks(x, y, z);
+		updateSurroundingChunks(x, y, z);
+	}
 };
 
 void ChunkLightmap::setTorchlight(int x, int y, int z, u8 val) {
@@ -306,11 +310,13 @@ void ChunkLightmap::setTorchlight(int x, int y, int z, u8 val) {
 	if(z < 0)             { if(m_chunk->getSurroundingChunk(2)) m_chunk->getSurroundingChunk(2)->lightmap().setTorchlight(x, y, z + CHUNK_DEPTH, val); return; }
 	if(z >= CHUNK_DEPTH)  { if(m_chunk->getSurroundingChunk(3)) m_chunk->getSurroundingChunk(3)->lightmap().setTorchlight(x, y, z - CHUNK_DEPTH, val); return; }
 
-	m_lightMap[x][y][z] = (m_lightMap[x][y][z] & 0xf0) | val;
+	if ((m_lightMap[x][y][z] & 0xf) != val << 4) {
+		m_lightMap[x][y][z] = (m_lightMap[x][y][z] & 0xf0) | val;
 
-	m_chunk->setLightChanged(true);
+		m_chunk->setLightChanged(true);
 
-	updateSurroundingChunks(x, y, z);
+		updateSurroundingChunks(x, y, z);
+	}
 }
 
 void ChunkLightmap::updateSurroundingChunks(int x, int y, int z) {

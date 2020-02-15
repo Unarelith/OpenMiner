@@ -55,7 +55,8 @@ void ClientWorld::update() {
 			if (World::isReloadRequested)
 				it->second->setChanged(true);
 
-			it->second->update();
+			if (it->second->areAllNeighboursInitialized())
+				it->second->update();
 
 			++it;
 		}
@@ -109,9 +110,19 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 		}
 	}
 
+	if (!chunk->isInitialized()) {
+		chunk->getSurroundingChunk(0)->setChanged(true);
+		chunk->getSurroundingChunk(1)->setChanged(true);
+		chunk->getSurroundingChunk(2)->setChanged(true);
+		chunk->getSurroundingChunk(3)->setChanged(true);
+		chunk->getSurroundingChunk(4)->setChanged(true);
+		chunk->getSurroundingChunk(5)->setChanged(true);
+	}
+
 	chunk->setInitialized(true);
 
-	// std::cout << "Chunk at (" << cx << ", " << cy << ", " << cz << ") received" << std::endl;
+	// if (cx == 2 && cy == 0 && cz == 1)
+	// 	std::cout << "Chunk at (" << cx << ", " << cy << ", " << cz << ") received" << std::endl;
 }
 
 void ClientWorld::removeChunk(ChunkMap::iterator &it) {
