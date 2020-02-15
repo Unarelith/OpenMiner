@@ -51,10 +51,10 @@ void ServerBlock::onTick(const glm::ivec3 &pos, std::unordered_map<u16, ServerPl
 	}
 }
 
-bool ServerBlock::onBlockActivated(const glm::ivec3 &pos, Player &player, World &world, Client &client) const {
+bool ServerBlock::onBlockActivated(const glm::ivec3 &pos, Player &player, World &world, Client &client, u16 screenWidth, u16 screenHeight, u8 guiScale) const {
 	try {
 		if (m_onBlockActivated) {
-			m_onBlockActivated(pos, player, world, client);
+			m_onBlockActivated(pos, player, world, client, screenWidth, screenHeight, guiScale);
 			return true;
 		}
 	}

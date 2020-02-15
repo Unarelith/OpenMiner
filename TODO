@@ -14,8 +14,8 @@ TODO
 • TODO: GUI scale issues
    ◦ TODO: `HUD` doesn’t update when GUI scale is changed
    ◦ TODO: `SettingsMenuState` should update scaling when the setting is changed
-   ◦ TODO: All Lua-defined GUI are not scaled correctly with lower GUI scale settings
-      ◦ TODO: Send client screen size and GUI scale to server
+   ◦ DONE: All Lua-defined GUI are not scaled correctly with lower GUI scale settings
+      ◦ DONE: Send client screen size and GUI scale to server
 • TODO: Blocks can be accessed from outside the world (will need a refactoring)
 • TODO: Collisions are fucked up with blocks placed at `x = -1` from `x = 0`
 • TODO: Blocks can be placed inside the player (check for AABB?)

@@ -213,15 +213,8 @@ void LuaGUI::show(Client &client) {
 	client.tcpSocket->send(packet);
 }
 
-#include "Config.hpp" // FIXME
-
 void LuaGUI::initUsertype(sol::state &lua) {
 	lua.new_usertype<LuaGUI>("LuaGUI",
-		// FIXME: These variables should be renamed and put somewhere else
-		"SCREEN_WIDTH", sol::var(std::ref(SCREEN_WIDTH)),
-		"SCREEN_HEIGHT", sol::var(std::ref(SCREEN_HEIGHT)),
-		"GUI_SCALE", sol::var(std::ref(GUI_SCALE)),
-
 		"image",     &LuaGUI::addImage,
 		"button",    &LuaGUI::addTextButton,
 		"inventory", &LuaGUI::addInventoryWidget,

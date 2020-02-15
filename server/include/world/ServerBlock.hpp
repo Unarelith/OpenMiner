@@ -35,7 +35,7 @@ class ServerBlock : public Block {
 			: Block(id, tiles, name, label) {}
 
 		void onTick(const glm::ivec3 &, std::unordered_map<u16, ServerPlayer> &, Chunk &, World &, ServerCommandHandler &) const;
-		bool onBlockActivated(const glm::ivec3 &pos, Player &player, World &world, Client &client) const;
+		bool onBlockActivated(const glm::ivec3 &pos, Player &player, World &world, Client &client, u16 screenWidth, u16 screenHeight, u8 guiScale) const;
 		void onBlockPlaced(const glm::ivec3 &pos, World &world) const;
 
 		bool canUpdate() const { return m_onTick.valid(); }

@@ -146,16 +146,22 @@ void ServerCommandHandler::setupCallbacks() {
 		m_server.sendToAllClients(answer);
 	});
 
-	m_server.setCommandCallback(Network::Command::PlayerInventory, [this](Client &client, sf::Packet &) {
-		m_scriptEngine.lua()["show_inventory"](client);
+	m_server.setCommandCallback(Network::Command::PlayerInventory, [this](Client &client, sf::Packet &packet) {
+		u16 screenWidth, screenHeight;
+		u8 guiScale;
+		packet >> screenWidth >> screenHeight >> guiScale;
+
+		m_scriptEngine.lua()["show_inventory"](client, screenWidth, screenHeight, guiScale);
 	});
 
 	m_server.setCommandCallback(Network::Command::BlockActivated, [this](Client &client, sf::Packet &packet) {
 		s32 x, y, z;
-		packet >> x >> y >> z;
+		u16 screenWidth, screenHeight;
+		u8 guiScale;
+		packet >> x >> y >> z >> screenWidth >> screenHeight >> guiScale;
 
 		u16 id = m_world.getBlock(x, y, z);
-		((ServerBlock &)(m_registry.getBlock(id))).onBlockActivated({x, y, z}, m_players.at(client.id), m_world, client);
+		((ServerBlock &)(m_registry.getBlock(id))).onBlockActivated({x, y, z}, m_players.at(client.id), m_world, client, screenWidth, screenHeight, guiScale);
 	});
 
 	m_server.setCommandCallback(Network::Command::BlockInvUpdate, [this](Client &, sf::Packet &packet) {

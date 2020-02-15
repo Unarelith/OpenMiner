@@ -31,13 +31,13 @@ mod:block {
 		world:add_block_data(pos.x, pos.y, pos.z, 3, 1)
 	end,
 
-	on_block_activated = function(pos, player, world, client)
+	on_block_activated = function(pos, player, world, client, screen_width, screen_height, gui_scale)
 		local gui = LuaGUI.new()
 
 		-- FIXME: Replace this by gui:set_size() and gui:set_centered()
 		local gui_pos = {
-			x = gui.SCREEN_WIDTH / gui.GUI_SCALE / 2.0 - 176 / 2.0,
-			y = gui.SCREEN_HEIGHT / gui.GUI_SCALE / 2.0 - 166 / 2.0
+			x = screen_width / gui_scale / 2.0 - 176 / 2.0,
+			y = screen_height / gui_scale / 2.0 - 166 / 2.0
 		}
 
 		gui:furnace {
