@@ -20,7 +20,7 @@
  *
  * =====================================================================================
  */
-#include "Config.hpp"
+#include "EngineConfig.hpp"
 #include "Registry.hpp"
 #include "ServerChunk.hpp"
 #include "TerrainGenerator.hpp"

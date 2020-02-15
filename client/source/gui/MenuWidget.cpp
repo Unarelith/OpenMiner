@@ -43,8 +43,8 @@ void MenuWidget::onEvent(const SDL_Event &event) {
 			int x = i % m_width;
 			int y = i / m_width;
 
-			m_buttons.at(i).setPosition(SCREEN_WIDTH  / getScale().x / 2 - (m_width  * (m_buttons.at(i).width()  + s_horizontalSpacing) - s_horizontalSpacing) / 2 + x * (m_buttons.at(i).width() + s_horizontalSpacing),
-			                            SCREEN_HEIGHT / getScale().y / 2 - (m_height * (m_buttons.at(i).height() + s_verticalSpacing)   - s_verticalSpacing)   / 2 + y * (m_buttons.at(i).height() + s_verticalSpacing), 0);
+			m_buttons.at(i).setPosition(Config::screenWidth  / getScale().x / 2.0f - (m_width  * (m_buttons.at(i).width()  + s_horizontalSpacing) - s_horizontalSpacing) / 2 + x * (m_buttons.at(i).width() + s_horizontalSpacing),
+			                            Config::screenHeight / getScale().y / 2.0f - (m_height * (m_buttons.at(i).height() + s_verticalSpacing)   - s_verticalSpacing)   / 2 + y * (m_buttons.at(i).height() + s_verticalSpacing), 0);
 		}
 	}
 }
@@ -58,8 +58,8 @@ TextButton &MenuWidget::addButton(const std::string &text, const TextButton::Cpp
 	TextButton &button = m_buttons.back();
 	button.setText(text);
 	button.setCallback(callback);
-	button.setPosition(SCREEN_WIDTH  / getScale().x / 2 - (m_width  * (button.width()  + s_horizontalSpacing) - s_horizontalSpacing) / 2 + x * (button.width() + s_horizontalSpacing),
-	                   SCREEN_HEIGHT / getScale().y / 2 - (m_height * (button.height() + s_verticalSpacing)   - s_verticalSpacing)   / 2 + y * (button.height() + s_verticalSpacing), 0);
+	button.setPosition(Config::screenWidth  / getScale().x / 2.0f - (m_width  * (button.width()  + s_horizontalSpacing) - s_horizontalSpacing) / 2 + x * (button.width() + s_horizontalSpacing),
+	                   Config::screenHeight / getScale().y / 2.0f - (m_height * (button.height() + s_verticalSpacing)   - s_verticalSpacing)   / 2 + y * (button.height() + s_verticalSpacing), 0);
 	return button;
 }
 

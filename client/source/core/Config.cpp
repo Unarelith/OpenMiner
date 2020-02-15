@@ -20,46 +20,24 @@
  *
  * =====================================================================================
  */
-#ifndef CONFIG_HPP_
-#define CONFIG_HPP_
+#include "Config.hpp"
 
-#include <gk/core/IntTypes.hpp>
+// Gameplay
+bool Config::isFlyModeEnabled = false;
+bool Config::isNoClipEnabled = false;
 
-namespace {
-	constexpr const char *APP_NAME = "OpenMiner";
+// Graphics
+u16 Config::renderDistance = 8;
+bool Config::isTorchSmoothLightingEnabled = true;
+bool Config::isSunSmoothLightingEnabled = true;
+bool Config::isAmbientOcclusionEnabled = false;
+bool Config::isWireframeModeEnabled = false;
+bool Config::isFullscreenModeEnabled = false;
+float Config::cameraFOV = 70.0f;
+u16 Config::screenWidth = 1600;
+u16 Config::screenHeight = 1050;
+u8 Config::guiScale = 3;
 
-	constexpr float DIST_NEAR = 0.1f;
-	constexpr float DIST_FAR  = 1000.0f;
+// Input
+u8 Config::mouseSensitivity = 8;
 
-	constexpr int CHUNK_WIDTH  = 16;
-	constexpr int CHUNK_HEIGHT = 32;
-	constexpr int CHUNK_DEPTH  = 16;
-
-	constexpr int SEALEVEL = 4;
-}
-
-// FIXME: These variables should be renamed
-extern float SCREEN_WIDTH;
-extern float SCREEN_HEIGHT;
-
-extern int GUI_SCALE;
-
-namespace Config {
-	// Gameplay
-	extern bool isFlyModeEnabled;
-	extern bool isNoClipEnabled;
-
-	// Graphics
-	extern u16 renderDistance;
-	extern bool isTorchSmoothLightingEnabled;
-	extern bool isSunSmoothLightingEnabled;
-	extern bool isAmbientOcclusionEnabled;
-	extern bool isWireframeModeEnabled;
-	extern bool isFullscreenModeEnabled;
-	extern float cameraFOV;
-
-	// Input
-	extern u8 mouseSensitivity;
-}
-
-#endif // CONFIG_HPP_

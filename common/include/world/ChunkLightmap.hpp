@@ -27,7 +27,7 @@
 
 #include <gk/core/IntTypes.hpp>
 
-#include "Config.hpp"
+#include "EngineConfig.hpp"
 
 struct LightNode {
 	LightNode(int _x, int _y, int _z) : x(_x), y(_y), z(_z) {}

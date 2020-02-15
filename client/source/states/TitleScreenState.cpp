@@ -30,7 +30,7 @@
 TitleScreenState::TitleScreenState() {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 
-	m_menuWidget.setScale(GUI_SCALE, GUI_SCALE, 1);
+	m_menuWidget.setScale(Config::guiScale, Config::guiScale, 1);
 
 	m_menuWidget.addButton("Play", [this] (TextButton &) {
 		m_stateStack->push<ServerConnectState>();

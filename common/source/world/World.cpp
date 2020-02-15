@@ -24,7 +24,7 @@
 
 #include <gk/resource/ResourceHandler.hpp>
 
-#include "Config.hpp"
+#include "EngineConfig.hpp"
 #include "World.hpp"
 
 bool World::isReloadRequested = false;

@@ -68,7 +68,7 @@ void ClientCommandHandler::sendPlayerPlaceBlock(s32 x, s32 y, s32 z, u32 block) 
 void ClientCommandHandler::sendPlayerInventoryRequest() {
 	sf::Packet packet;
 	packet << Network::Command::PlayerInventory
-		<< u16(SCREEN_WIDTH) << u16(SCREEN_HEIGHT) << u8(GUI_SCALE);
+		<< u16(Config::screenWidth) << u16(Config::screenHeight) << u8(Config::guiScale);
 	m_client.send(packet);
 }
 
@@ -78,7 +78,7 @@ void ClientCommandHandler::sendBlockActivated(const glm::vec4 &selectedBlock) {
 		<< s32(selectedBlock.x)
 		<< s32(selectedBlock.y)
 		<< s32(selectedBlock.z)
-		<< u16(SCREEN_WIDTH) << u16(SCREEN_HEIGHT) << u8(GUI_SCALE);
+		<< u16(Config::screenWidth) << u16(Config::screenHeight) << u8(Config::guiScale);
 	m_client.send(packet);
 }
 

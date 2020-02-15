@@ -38,7 +38,7 @@ PauseMenuState::PauseMenuState(gk::ApplicationState *parent)
 	gk::Mouse::setCursorVisible(true);
 	gk::Mouse::resetToWindowCenter();
 
-	m_menuWidget.setScale(GUI_SCALE, GUI_SCALE, 1);
+	m_menuWidget.setScale(Config::guiScale, Config::guiScale, 1);
 
 	m_menuWidget.addButton("Back to Game", [this] (TextButton &) {
 		gk::Mouse::setCursorGrabbed(true);

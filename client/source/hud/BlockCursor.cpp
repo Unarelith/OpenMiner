@@ -268,10 +268,10 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 	if(useDepthBuffer) {
 		// At which voxel are we looking? First, find out coords of the center pixel
 		float depth;
-		glCheck(glReadPixels(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth));
+		glCheck(glReadPixels(Config::screenWidth / 2.0f, Config::screenHeight / 2.0f, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth));
 
-		glm::vec4 viewport = glm::vec4(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-		glm::vec3 winCoord = glm::vec3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, depth);
+		glm::vec4 viewport = glm::vec4(0, 0, Config::screenWidth, Config::screenHeight);
+		glm::vec3 winCoord = glm::vec3(Config::screenWidth / 2.0f, Config::screenHeight / 2.0f, depth);
 		glm::vec3 objCoord = glm::unProject(winCoord,
 				m_player.camera().getViewTransform().getMatrix(),
 				m_player.camera().getTransform().getMatrix(), viewport);

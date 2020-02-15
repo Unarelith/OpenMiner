@@ -29,6 +29,7 @@
 
 #include "Block.hpp"
 #include "Config.hpp"
+#include "EngineConfig.hpp"
 #include "InventoryCube.hpp"
 #include "TextureAtlas.hpp"
 
@@ -123,7 +124,7 @@ void InventoryCube::draw(gk::RenderTarget &target, gk::RenderStates states) cons
 
 	states.viewMatrix = gk::Transform::Identity;
 
-	states.projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f, -40.0f, DIST_FAR);
+	states.projectionMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f, -40.0f, DIST_FAR);
 
 	states.texture = &m_textureAtlas.texture();
 	states.vertexAttributes = gk::VertexAttribute::Only2d;

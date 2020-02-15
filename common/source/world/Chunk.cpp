@@ -25,7 +25,7 @@
 #include <gk/core/GameClock.hpp>
 
 #include "Chunk.hpp"
-#include "Config.hpp"
+#include "EngineConfig.hpp"
 #include "Registry.hpp"
 
 Chunk::Chunk(s32 x, s32 y, s32 z, World &world) : m_world(world) {

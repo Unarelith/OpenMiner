@@ -46,7 +46,7 @@ LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, Cli
 	gk::Mouse::setCursorVisible(true);
 	gk::Mouse::resetToWindowCenter();
 
-	m_mainWidget.setScale(GUI_SCALE, GUI_SCALE);
+	m_mainWidget.setScale(Config::guiScale, Config::guiScale);
 
 	while (!packet.endOfPacket())
 		loadGUI(player, world, packet);

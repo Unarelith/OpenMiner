@@ -22,7 +22,7 @@
  */
 #include <gk/core/GameClock.hpp>
 
-#include "Config.hpp"
+#include "EngineConfig.hpp"
 #include "Network.hpp"
 #include "Server.hpp"
 #include "ServerCommandHandler.hpp"

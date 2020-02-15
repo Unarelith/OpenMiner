@@ -33,7 +33,7 @@ HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 	m_blockCursor(player, world, client),
 	m_debugOverlay(player, world)
 {
-	setScale(GUI_SCALE, GUI_SCALE, 1);
+	setScale(Config::guiScale, Config::guiScale, 1);
 
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
@@ -44,13 +44,13 @@ HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 }
 
 void HUD::setup() {
-	m_orthoMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
+	m_orthoMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f);
 
-	m_hotbar.setPosition(SCREEN_WIDTH / getScale().x / 2 - m_hotbar.width() / 2, SCREEN_HEIGHT / getScale().y - m_hotbar.height(), 0);
+	m_hotbar.setPosition(Config::screenWidth / getScale().x / 2 - m_hotbar.width() / 2, Config::screenHeight / getScale().y - m_hotbar.height(), 0);
 
-	m_blockInfoWidget.setPosition(SCREEN_WIDTH / getScale().x / 2 - m_blockInfoWidget.width() / 2, 2, 0);
+	m_blockInfoWidget.setPosition(Config::screenWidth / getScale().x / 2 - m_blockInfoWidget.width() / 2, 2, 0);
 
-	m_fpsText.setPosition(SCREEN_WIDTH / getScale().x - 36, 2);
+	m_fpsText.setPosition(Config::screenWidth / getScale().x - 36, 2);
 
 	m_crosshair.setup();
 }

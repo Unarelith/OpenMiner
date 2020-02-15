@@ -46,7 +46,7 @@ GameState::GameState(const std::string &host, int port) {
 
 	m_textureAtlas = &gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks");
 
-	m_camera.setAspectRatio((float)SCREEN_WIDTH / SCREEN_HEIGHT);
+	m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
 
 	initShaders();
 
@@ -67,7 +67,7 @@ GameState::GameState(const std::string &host, int port) {
 void GameState::onEvent(const SDL_Event &event) {
 	if (&m_stateStack->top() == this) {
 		if (event.type == SDL_MOUSEMOTION) {
-			if(SCREEN_WIDTH / 2 != event.motion.x || SCREEN_HEIGHT / 2 != event.motion.y) {
+			if(Config::screenWidth / 2.0f != event.motion.x || Config::screenHeight / 2.0f != event.motion.y) {
 				m_player.turnH(event.motion.xrel * 0.01 * Config::mouseSensitivity);
 				m_player.turnV(-event.motion.yrel * 0.01 * Config::mouseSensitivity);
 
@@ -96,10 +96,10 @@ void GameState::onEvent(const SDL_Event &event) {
 	}
 
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-		SCREEN_WIDTH = event.window.data1;
-		SCREEN_HEIGHT = event.window.data2;
+		Config::screenWidth = event.window.data1;
+		Config::screenHeight = event.window.data2;
 
-		m_camera.setAspectRatio((float)SCREEN_WIDTH / SCREEN_HEIGHT);
+		m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
 		m_hud.setup();
 	}
 }

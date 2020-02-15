@@ -53,7 +53,7 @@ void ClientApplication::init() {
 	m_keyboardHandler.loadKeysFromFile("resources/config/keys.xml");
 	gk::GamePad::init(m_keyboardHandler);
 
-	createWindow(SCREEN_WIDTH, SCREEN_HEIGHT, APP_NAME);
+	createWindow(Config::screenWidth, Config::screenHeight, APP_NAME);
 	m_window.setVerticalSyncEnabled(true);
 	m_window.disableView();
 
@@ -81,8 +81,8 @@ void ClientApplication::handleEvents() {
 		m_window.setWindowMode(Config::isFullscreenModeEnabled ? gk::Window::Mode::Fullscreen : gk::Window::Mode::Windowed);
 	}
 
-	if (SCREEN_WIDTH != m_window.getSize().x || SCREEN_HEIGHT != m_window.getSize().y) {
-		m_window.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	if (Config::screenWidth != m_window.getSize().x || Config::screenHeight != m_window.getSize().y) {
+		m_window.resize(Config::screenWidth, Config::screenHeight);
 	}
 }
 

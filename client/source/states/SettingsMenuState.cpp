@@ -35,10 +35,10 @@
 #include "World.hpp"
 
 SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : InterfaceState(parent) {
-	m_menuWidget.setScale(GUI_SCALE, GUI_SCALE, 1);
+	m_menuWidget.setScale(Config::guiScale, Config::guiScale, 1);
 
-	m_doneButton.setPosition(SCREEN_WIDTH / 2 - m_doneButton.getGlobalBounds().width * GUI_SCALE / 2, SCREEN_HEIGHT - 291);
-	m_doneButton.setScale(GUI_SCALE, GUI_SCALE, 1);
+	m_doneButton.setPosition(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().width * Config::guiScale / 2.0f, Config::screenHeight - 291);
+	m_doneButton.setScale(Config::guiScale, Config::guiScale, 1);
 	m_doneButton.setText("Done");
 	m_doneButton.setCallback([this] (TextButton &) {
 		doneButtonAction();
@@ -51,7 +51,7 @@ void SettingsMenuState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-		m_doneButton.setPosition(SCREEN_WIDTH / 2 - m_doneButton.getGlobalBounds().width / 2, SCREEN_HEIGHT - 291);
+		m_doneButton.setPosition(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().width / 2.0f, Config::screenHeight - 291);
 
 		if (&m_stateStack->top() != this)
 			m_menuWidget.onEvent(event);
@@ -127,30 +127,30 @@ void SettingsMenuState::addGraphicsButtons() {
 	addToggleButton("Sun Smooth Lighting", Config::isSunSmoothLightingEnabled, true);
 	addToggleButton("Ambient Occlusion", Config::isAmbientOcclusionEnabled, false);
 
-	m_menuWidget.addButton("GUI Scale: " + std::to_string(GUI_SCALE), [] (TextButton &button) {
-		GUI_SCALE = 1 + (GUI_SCALE + 1) % 3;
-		button.setText("GUI Scale: " + std::to_string(GUI_SCALE));
+	m_menuWidget.addButton("GUI Scale: " + std::to_string(Config::guiScale), [] (TextButton &button) {
+		Config::guiScale = 1 + (Config::guiScale + 1) % 3;
+		button.setText("GUI Scale: " + std::to_string(Config::guiScale));
 	});
 
 	addToggleButton("Fullscreen", Config::isFullscreenModeEnabled, false);
-	m_menuWidget.addButton("Resolution: " + std::to_string((int)SCREEN_WIDTH) + "x" + std::to_string((int)SCREEN_HEIGHT), [] (TextButton &button) {
+	m_menuWidget.addButton("Resolution: " + std::to_string(Config::screenWidth) + "x" + std::to_string(Config::screenHeight), [] (TextButton &button) {
 		if (Config::isFullscreenModeEnabled) return;
 
 		// FIXME: Find a better way to do this
-		if (SCREEN_WIDTH == 1600 && SCREEN_HEIGHT == 1050) {
-			SCREEN_WIDTH = 1280;
-			SCREEN_HEIGHT = 720;
+		if (Config::screenWidth == 1600 && Config::screenHeight == 1050) {
+			Config::screenWidth = 1280;
+			Config::screenHeight = 720;
 		}
-		else if (SCREEN_WIDTH == 1280 && SCREEN_HEIGHT == 720) {
-			SCREEN_WIDTH = 1920;
-			SCREEN_HEIGHT = 1080;
+		else if (Config::screenWidth == 1280 && Config::screenHeight == 720) {
+			Config::screenWidth = 1920;
+			Config::screenHeight = 1080;
 		}
 		else {
-			SCREEN_WIDTH = 1600;
-			SCREEN_HEIGHT = 1050;
+			Config::screenWidth = 1600;
+			Config::screenHeight = 1050;
 		}
 
-		button.setText("Resolution: " + std::to_string((int)SCREEN_WIDTH) + "x" + std::to_string((int)SCREEN_HEIGHT));
+		button.setText("Resolution: " + std::to_string(Config::screenWidth) + "x" + std::to_string(Config::screenHeight));
 	});
 
 	m_menuWidget.addButton("Use VSync: ON", [] (TextButton &) {}).setEnabled(false);

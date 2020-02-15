@@ -20,30 +20,21 @@
  *
  * =====================================================================================
  */
-#ifndef SERVERCHUNK_HPP_
-#define SERVERCHUNK_HPP_
+#ifndef ENGINECONFIG_HPP_
+#define ENGINECONFIG_HPP_
 
-#include <gk/core/IntTypes.hpp>
+namespace {
+	// FIXME: Only used in Client
+	constexpr const char *APP_NAME = "OpenMiner";
 
-#include "Chunk.hpp"
+	constexpr float DIST_NEAR = 0.1f;
+	constexpr float DIST_FAR  = 1000.0f;
 
-class ServerCommandHandler;
-class ServerPlayer;
+	constexpr int CHUNK_WIDTH  = 16;
+	constexpr int CHUNK_HEIGHT = 32;
+	constexpr int CHUNK_DEPTH  = 16;
 
-class ServerChunk : public Chunk {
-	public:
-		ServerChunk(s32 x, s32 y, s32 z, World &world) : Chunk(x, y, z, world) {}
+	constexpr int SEALEVEL = 4;
+}
 
-		void updateLights();
-
-		void onBlockPlaced(int x, int y, int z, const Block &block) const;
-		void tick(std::unordered_map<u16, ServerPlayer> &players, World &world, ServerCommandHandler &server);
-
-		bool isSent() const { return m_isSent; }
-		void setSent(bool isSent) { m_isSent = isSent; }
-
-	private:
-		bool m_isSent = false;
-};
-
-#endif // SERVERCHUNK_HPP_
+#endif // ENGINECONFIG_HPP_

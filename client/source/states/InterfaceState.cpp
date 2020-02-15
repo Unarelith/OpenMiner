@@ -37,12 +37,12 @@ InterfaceState::InterfaceState(gk::ApplicationState *parent) : gk::ApplicationSt
 }
 
 void InterfaceState::setup() {
-	m_projectionMatrix = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f);
+	m_projectionMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f);
 
-	m_background.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	m_background.setSize(Config::screenWidth, Config::screenHeight);
 
-	// m_view.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-	// m_view.setCenter(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+	// m_view.setSize(Config::screenWidth, Config::screenHeight);
+	// m_view.setCenter(Config::screenWidth / 2.0f, Config::screenHeight / 2.0f);
 }
 
 void InterfaceState::onEvent(const SDL_Event &event) {
@@ -50,8 +50,8 @@ void InterfaceState::onEvent(const SDL_Event &event) {
 		if (m_parent)
 			m_parent->onEvent(event);
 		else {
-			SCREEN_WIDTH = event.window.data1;
-			SCREEN_HEIGHT = event.window.data2;
+			Config::screenWidth = event.window.data1;
+			Config::screenHeight = event.window.data2;
 		}
 
 		setup();

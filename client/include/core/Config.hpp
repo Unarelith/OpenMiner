@@ -20,27 +20,30 @@
  *
  * =====================================================================================
  */
-#include "Config.hpp"
+#ifndef CONFIG_HPP_
+#define CONFIG_HPP_
 
-// FIXME: These variables should be renamed
-float SCREEN_WIDTH = 1600;
-float SCREEN_HEIGHT = 1050;
+#include <gk/core/IntTypes.hpp>
 
-int GUI_SCALE = 3;
+namespace Config {
+	// Gameplay
+	extern bool isFlyModeEnabled;
+	extern bool isNoClipEnabled;
 
-// Gameplay
-bool Config::isFlyModeEnabled = false;
-bool Config::isNoClipEnabled = false;
+	// Graphics
+	extern u16 renderDistance;
+	extern bool isTorchSmoothLightingEnabled;
+	extern bool isSunSmoothLightingEnabled;
+	extern bool isAmbientOcclusionEnabled;
+	extern bool isWireframeModeEnabled;
+	extern bool isFullscreenModeEnabled;
+	extern float cameraFOV;
+	extern u16 screenWidth;
+	extern u16 screenHeight;
+	extern u8 guiScale;
 
-// Graphics
-u16 Config::renderDistance = 8;
-bool Config::isTorchSmoothLightingEnabled = true;
-bool Config::isSunSmoothLightingEnabled = true;
-bool Config::isAmbientOcclusionEnabled = false;
-bool Config::isWireframeModeEnabled = false;
-bool Config::isFullscreenModeEnabled = false;
-float Config::cameraFOV = 70.0f;
+	// Input
+	extern u8 mouseSensitivity;
+}
 
-// Input
-u8 Config::mouseSensitivity = 8;
-
+#endif // CONFIG_HPP_
