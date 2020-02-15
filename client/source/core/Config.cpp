@@ -41,3 +41,40 @@ u8 Config::guiScale = 3;
 // Input
 u8 Config::mouseSensitivity = 8;
 
+#include <iostream>
+
+#include <gk/core/Filesystem.hpp>
+
+#include <sol.hpp>
+
+void Config::loadConfigFromFile(const char *file) {
+	if (gk::Filesystem::fileExists(file)) {
+		sol::state lua;
+
+		try {
+			lua.safe_script_file(file);
+
+			isFlyModeEnabled = lua["isFlyModeEnabled"].get_or(isFlyModeEnabled);
+			isNoClipEnabled = lua["isNoClipEnabled"].get_or(isNoClipEnabled);
+
+			renderDistance = lua["renderDistance"].get_or(renderDistance);
+			isTorchSmoothLightingEnabled = lua["isTorchSmoothLightingEnabled"].get_or(isTorchSmoothLightingEnabled);
+			isSunSmoothLightingEnabled = lua["isSunSmoothLightingEnabled"].get_or(isSunSmoothLightingEnabled);
+			isAmbientOcclusionEnabled = lua["isAmbientOcclusionEnabled"].get_or(isAmbientOcclusionEnabled);
+			isWireframeModeEnabled = lua["isWireframeModeEnabled"].get_or(isWireframeModeEnabled);
+			isFullscreenModeEnabled = lua["isFullscreenModeEnabled"].get_or(isFullscreenModeEnabled);
+			cameraFOV = lua["cameraFOV"].get_or(cameraFOV);
+			screenWidth = lua["screenWidth"].get_or(screenWidth);
+			screenHeight = lua["screenHeight"].get_or(screenHeight);
+			guiScale = lua["guiScale"].get_or(guiScale);
+
+			mouseSensitivity = lua["mouseSensitivity"].get_or(mouseSensitivity);
+
+			std::cout << "Config file loaded successfully" << std::endl;
+		}
+		catch (sol::error &e) {
+			std::cerr << e.what() << std::endl;
+		}
+	}
+}
+

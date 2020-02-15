@@ -44,6 +44,8 @@ namespace Config {
 
 	// Input
 	extern u8 mouseSensitivity;
+
+	void loadConfigFromFile(const char *file);
 }
 
 #endif // CONFIG_HPP_
