@@ -20,12 +20,6 @@
 --
 -- =====================================================================================
 --
-
--- FIXME
-SCREEN_WIDTH = 1600
-SCREEN_HEIGHT = 1050
-GUI_SCALE = 3
-
 mod = LuaMod.new("default")
 
 dofile("mods/default/blocks.lua")
@@ -71,8 +65,8 @@ function show_inventory(client)
 
 	-- FIXME: Replace this by gui:set_size() and gui:set_centered()
 	local gui_pos = {
-		x = SCREEN_WIDTH / GUI_SCALE / 2.0 - 176 / 2.0,
-		y = SCREEN_HEIGHT / GUI_SCALE / 2.0 - 166 / 2.0
+		x = gui.SCREEN_WIDTH / gui.GUI_SCALE / 2.0 - 176 / 2.0,
+		y = gui.SCREEN_HEIGHT / gui.GUI_SCALE / 2.0 - 166 / 2.0
 	}
 
 	gui:player_inventory {

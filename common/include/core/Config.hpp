@@ -38,11 +38,10 @@ namespace {
 	constexpr int SEALEVEL = 4;
 }
 
-// FIXME
+// FIXME: These variables should be renamed
 extern float SCREEN_WIDTH;
 extern float SCREEN_HEIGHT;
 
-// FIXME
 extern int GUI_SCALE;
 
 namespace Config {

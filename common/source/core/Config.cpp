@@ -22,11 +22,10 @@
  */
 #include "Config.hpp"
 
-// FIXME
+// FIXME: These variables should be renamed
 float SCREEN_WIDTH = 1600;
 float SCREEN_HEIGHT = 1050;
 
-// FIXME
 int GUI_SCALE = 3;
 
 // Gameplay

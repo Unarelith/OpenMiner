@@ -83,6 +83,7 @@ void ServerCommandHandler::setupCallbacks() {
 		auto &player = m_players.at(client.id);
 		player.setPosition(m_spawnPosition.x, m_spawnPosition.y, m_spawnPosition.z);
 
+		// FIXME: Find a better way to give starting items
 		m_scriptEngine.lua()["init"](player);
 
 		sf::Packet invPacket;
