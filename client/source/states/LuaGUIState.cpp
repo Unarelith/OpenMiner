@@ -97,7 +97,7 @@ void LuaGUIState::update() {
 	}
 
 	if (m_inventoryWidgets.size() != 0) // FIXME
-		m_mouseItemWidget.update(currentItemWidget);
+		m_mouseItemWidget.updateCurrentItem(currentItemWidget);
 }
 
 void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const {

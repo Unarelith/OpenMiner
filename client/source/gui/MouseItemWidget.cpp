@@ -42,7 +42,7 @@ void MouseItemWidget::onEvent(const SDL_Event &event) {
 	}
 }
 
-void MouseItemWidget::update(const ItemWidget *currentItemWidget) {
+void MouseItemWidget::updateCurrentItem(const ItemWidget *currentItemWidget) {
 	if (currentItemWidget) {
 		m_currentItemWidget = (currentItemWidget->stack().item().id()) ? currentItemWidget : nullptr;
 		m_tooltipText.setText(currentItemWidget->stack().item().label() + " [" + std::to_string(currentItemWidget->stack().item().id()) + "]");

@@ -37,8 +37,8 @@ class ClientWorld;
 
 class ClientCommandHandler {
 	public:
-		ClientCommandHandler(Client &client, ClientWorld &world, ClientPlayer &player, gk::Camera &camera, std::unordered_map<u16, PlayerBox> &playerBoxes)
-			: m_client(client), m_world(world), m_player(player), m_camera(camera), m_playerBoxes(playerBoxes) {}
+		ClientCommandHandler(Client &client, ClientWorld &world, ClientPlayer &player, std::unordered_map<u16, PlayerBox> &playerBoxes)
+			: m_client(client), m_world(world), m_player(player), m_playerBoxes(playerBoxes) {}
 
 		void sendPlayerInvUpdate();
 		void sendPlayerPosUpdate();
@@ -57,7 +57,6 @@ class ClientCommandHandler {
 		Client &m_client;
 		ClientWorld &m_world;
 		ClientPlayer &m_player;
-		gk::Camera &m_camera;
 
 		std::unordered_map<u16, PlayerBox> &m_playerBoxes;
 

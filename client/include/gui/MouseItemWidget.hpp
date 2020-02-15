@@ -34,7 +34,7 @@ class MouseItemWidget : public ItemWidget {
 
 		void onEvent(const SDL_Event &event) override;
 
-		void update(const ItemWidget *currentItemWidget);
+		void updateCurrentItem(const ItemWidget *currentItemWidget);
 
 		void swapItems(ItemWidget &widget, bool isReadOnly = false);
 		void putItem(ItemWidget &widget);

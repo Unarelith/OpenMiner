@@ -31,8 +31,8 @@
 #include "SettingsMenuState.hpp"
 #include "TitleScreenState.hpp"
 
-PauseMenuState::PauseMenuState(Client &client, gk::ApplicationState *parent)
-	: InterfaceState(parent), m_client(client)
+PauseMenuState::PauseMenuState(gk::ApplicationState *parent)
+	: InterfaceState(parent)
 {
 	gk::Mouse::setCursorGrabbed(false);
 	gk::Mouse::setCursorVisible(true);

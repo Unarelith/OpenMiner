@@ -81,9 +81,9 @@ void FurnaceWidget::update() {
 	 || (currentItemWidget = m_inputInventoryWidget.currentItemWidget())
 	 || (currentItemWidget = m_outputInventoryWidget.currentItemWidget())
 	 || (currentItemWidget = m_fuelInventoryWidget.currentItemWidget()))
-		m_mouseItemWidget.update(currentItemWidget);
+		m_mouseItemWidget.updateCurrentItem(currentItemWidget);
 	else
-		m_mouseItemWidget.update(nullptr);
+		m_mouseItemWidget.updateCurrentItem(nullptr);
 }
 
 void FurnaceWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {

@@ -75,7 +75,7 @@ void GameState::onEvent(const SDL_Event &event) {
 			}
 		}
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-			m_stateStack->push<PauseMenuState>(m_client, this);
+			m_stateStack->push<PauseMenuState>(this);
 		}
 		else if (event.type == SDL_WINDOWEVENT) {
 			if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {

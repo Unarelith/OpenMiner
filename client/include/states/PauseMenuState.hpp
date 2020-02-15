@@ -32,7 +32,7 @@ class Client;
 
 class PauseMenuState : public InterfaceState {
 	public:
-		PauseMenuState(Client &client, gk::ApplicationState *parent = nullptr);
+		PauseMenuState(gk::ApplicationState *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -42,8 +42,6 @@ class PauseMenuState : public InterfaceState {
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		MenuWidget m_menuWidget{1, 4};
-
-		Client &m_client;
 };
 
 #endif // PAUSEMENUSTATE_HPP_

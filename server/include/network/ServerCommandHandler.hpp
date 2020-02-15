@@ -27,7 +27,8 @@
 
 #include <gk/core/Vector3.hpp>
 
-class BlockData;
+struct BlockData;
+
 class Client;
 class Inventory;
 class Registry;

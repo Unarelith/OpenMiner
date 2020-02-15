@@ -53,9 +53,9 @@ void PlayerInventoryWidget::update() {
 	if ((currentItemWidget = m_playerInventoryWidget.currentItemWidget())
 	 || (currentItemWidget = m_hotbarInventoryWidget.currentItemWidget())
 	 || (currentItemWidget = m_craftingWidget.currentItemWidget()))
-		m_mouseItemWidget.update(currentItemWidget);
+		m_mouseItemWidget.updateCurrentItem(currentItemWidget);
 	else
-		m_mouseItemWidget.update(nullptr);
+		m_mouseItemWidget.updateCurrentItem(nullptr);
 }
 
 void PlayerInventoryWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {
