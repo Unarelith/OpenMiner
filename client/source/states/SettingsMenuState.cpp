@@ -113,7 +113,7 @@ void SettingsMenuState::addGameplayButtons() {
 }
 
 void SettingsMenuState::addGraphicsButtons() {
-	m_menuWidget.reset(1, 8);
+	m_menuWidget.reset(2, 8);
 
 	m_menuWidget.addButton("Render Distance: " + std::to_string(Config::renderDistance), [] (TextButton &button) {
 		Config::renderDistance = std::max(4, (Config::renderDistance + 2) % 16);
@@ -121,10 +121,11 @@ void SettingsMenuState::addGraphicsButtons() {
 		World::isReloadRequested = true;
 	});
 
+	addToggleButton("Wireframe Mode", Config::isWireframeModeEnabled, false);
+
 	addToggleButton("Torch Smooth Lighting", Config::isTorchSmoothLightingEnabled, true);
 	addToggleButton("Sun Smooth Lighting", Config::isSunSmoothLightingEnabled, true);
 	addToggleButton("Ambient Occlusion", Config::isAmbientOcclusionEnabled, false);
-	addToggleButton("Wireframe Mode", Config::isWireframeModeEnabled, false);
 
 	m_menuWidget.addButton("GUI Scale: " + std::to_string(GUI_SCALE), [] (TextButton &button) {
 		GUI_SCALE = 1 + (GUI_SCALE + 1) % 3;
@@ -132,6 +133,26 @@ void SettingsMenuState::addGraphicsButtons() {
 	});
 
 	addToggleButton("Fullscreen", Config::isFullscreenModeEnabled, false);
+	m_menuWidget.addButton("Resolution: " + std::to_string((int)SCREEN_WIDTH) + "x" + std::to_string((int)SCREEN_HEIGHT), [] (TextButton &button) {
+		if (Config::isFullscreenModeEnabled) return;
+
+		// FIXME: Find a better way to do this
+		if (SCREEN_WIDTH == 1600 && SCREEN_HEIGHT == 1050) {
+			SCREEN_WIDTH = 1280;
+			SCREEN_HEIGHT = 720;
+		}
+		else if (SCREEN_WIDTH == 1280 && SCREEN_HEIGHT == 720) {
+			SCREEN_WIDTH = 1920;
+			SCREEN_HEIGHT = 1080;
+		}
+		else {
+			SCREEN_WIDTH = 1600;
+			SCREEN_HEIGHT = 1050;
+		}
+
+		button.setText("Resolution: " + std::to_string((int)SCREEN_WIDTH) + "x" + std::to_string((int)SCREEN_HEIGHT));
+	});
+
 	m_menuWidget.addButton("Use VSync: ON", [] (TextButton &) {}).setEnabled(false);
 }
 

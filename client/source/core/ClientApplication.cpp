@@ -80,6 +80,10 @@ void ClientApplication::handleEvents() {
 	|| (!Config::isFullscreenModeEnabled && m_window.getWindowMode() != gk::Window::Mode::Windowed)) {
 		m_window.setWindowMode(Config::isFullscreenModeEnabled ? gk::Window::Mode::Fullscreen : gk::Window::Mode::Windowed);
 	}
+
+	if (SCREEN_WIDTH != m_window.getSize().x || SCREEN_HEIGHT != m_window.getSize().y) {
+		m_window.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	}
 }
 
 void ClientApplication::initOpenGL() {
