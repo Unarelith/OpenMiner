@@ -79,6 +79,9 @@ class Chunk : public gk::NonCopyable {
 		bool hasChanged() const { return m_hasChanged; }
 		void setChanged(bool hasChanged) { m_hasChanged = hasChanged; }
 
+		bool hasLightChanged() const { return m_hasLightChanged; }
+		void setLightChanged(bool hasLightChanged) { m_hasLightChanged = hasLightChanged; }
+
 		bool isInitialized() const { return m_isInitialized; }
 		void setInitialized(bool isInitialized) { m_isInitialized = isInitialized; }
 
@@ -106,6 +109,7 @@ class Chunk : public gk::NonCopyable {
 		Chunk *m_surroundingChunks[6]{nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 
 		bool m_hasChanged = false;
+		bool m_hasLightChanged = false;
 		bool m_isInitialized = false;
 
 		std::unordered_map<std::size_t, const Block&> m_tickingBlocks;

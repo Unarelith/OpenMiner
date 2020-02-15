@@ -27,8 +27,9 @@
 #include "World.hpp"
 
 void ServerChunk::updateLights() {
-	if (m_lightmap.updateLights()) {
+	if (m_lightmap.updateLights() || m_hasChanged) {
 		m_isSent = false;
+		m_hasChanged = false;
 	}
 }
 

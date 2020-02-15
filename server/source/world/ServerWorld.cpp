@@ -119,6 +119,7 @@ void ServerWorld::sendChunkData(const Client &client, ServerChunk *chunk) {
 
 	client.tcpSocket->send(packet);
 	chunk->setSent(true);
+	chunk->setChanged(false);
 
 	// std::cout << "Chunk at (" << chunk->x() << ", " << chunk->y() << ", " << chunk->z() << ") sent to client" << std::endl;
 }

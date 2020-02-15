@@ -26,8 +26,9 @@
 #include "TextureAtlas.hpp"
 
 void ClientChunk::update() {
-	if (m_lightmap.updateLights() || m_hasChanged) {
+	if (m_lightmap.updateLights() || m_hasChanged || m_hasLightChanged) {
 		m_hasChanged = false;
+		m_hasLightChanged = false;
 
 		m_verticesCount = m_builder.buildChunk(*this, m_vbo);
 	}

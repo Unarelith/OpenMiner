@@ -278,7 +278,7 @@ u8 ChunkLightmap::getTorchlight(int x, int y, int z) const {
 void ChunkLightmap::setLightData(int x, int y, int z, u8 val) {
 	m_lightMap[x][y][z] = val;
 
-	m_chunk->setChanged(true);
+	m_chunk->setLightChanged(true);
 
 	updateSurroundingChunks(x, y, z);
 }
@@ -293,7 +293,7 @@ void ChunkLightmap::setSunlight(int x, int y, int z, u8 val) {
 
 	m_lightMap[x][y][z] = (m_lightMap[x][y][z] & 0xf) | (val << 4);
 
-	m_chunk->setChanged(true);
+	m_chunk->setLightChanged(true);
 
 	updateSurroundingChunks(x, y, z);
 };
@@ -308,17 +308,17 @@ void ChunkLightmap::setTorchlight(int x, int y, int z, u8 val) {
 
 	m_lightMap[x][y][z] = (m_lightMap[x][y][z] & 0xf0) | val;
 
-	m_chunk->setChanged(true);
+	m_chunk->setLightChanged(true);
 
 	updateSurroundingChunks(x, y, z);
 }
 
 void ChunkLightmap::updateSurroundingChunks(int x, int y, int z) {
-	if(x == 0                && m_chunk->getSurroundingChunk(Chunk::Left))   { m_chunk->getSurroundingChunk(Chunk::Left)->setChanged(true); }
-	if(x == CHUNK_WIDTH - 1  && m_chunk->getSurroundingChunk(Chunk::Right))  { m_chunk->getSurroundingChunk(Chunk::Right)->setChanged(true); }
-	if(y == 0                && m_chunk->getSurroundingChunk(Chunk::Bottom)) { m_chunk->getSurroundingChunk(Chunk::Bottom)->setChanged(true); }
-	if(y == CHUNK_HEIGHT - 1 && m_chunk->getSurroundingChunk(Chunk::Top))    { m_chunk->getSurroundingChunk(Chunk::Top)->setChanged(true); }
-	if(z == 0                && m_chunk->getSurroundingChunk(Chunk::Front))  { m_chunk->getSurroundingChunk(Chunk::Front)->setChanged(true); }
-	if(z == CHUNK_DEPTH - 1  && m_chunk->getSurroundingChunk(Chunk::Back))   { m_chunk->getSurroundingChunk(Chunk::Back)->setChanged(true); }
+	if(x == 0                && m_chunk->getSurroundingChunk(Chunk::Left))   { m_chunk->getSurroundingChunk(Chunk::Left)->setLightChanged(true); }
+	if(x == CHUNK_WIDTH - 1  && m_chunk->getSurroundingChunk(Chunk::Right))  { m_chunk->getSurroundingChunk(Chunk::Right)->setLightChanged(true); }
+	if(y == 0                && m_chunk->getSurroundingChunk(Chunk::Bottom)) { m_chunk->getSurroundingChunk(Chunk::Bottom)->setLightChanged(true); }
+	if(y == CHUNK_HEIGHT - 1 && m_chunk->getSurroundingChunk(Chunk::Top))    { m_chunk->getSurroundingChunk(Chunk::Top)->setLightChanged(true); }
+	if(z == 0                && m_chunk->getSurroundingChunk(Chunk::Front))  { m_chunk->getSurroundingChunk(Chunk::Front)->setLightChanged(true); }
+	if(z == CHUNK_DEPTH - 1  && m_chunk->getSurroundingChunk(Chunk::Back))   { m_chunk->getSurroundingChunk(Chunk::Back)->setLightChanged(true); }
 }
 
