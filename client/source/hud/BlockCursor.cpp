@@ -252,20 +252,150 @@ float BlockCursor::fract(float value) const {
 	else return f;
 }
 
+enum Axis {
+	AXIS_X,
+	AXIS_Y,
+	AXIS_Z
+};
+
+static inline glm::dvec3 intersectAxisPlane(const Axis axis, const double coord,
+							const glm::dvec3 &position,
+							const glm::dvec3 &direction) {
+	glm::dvec3 result;
+	const double t = axis == AXIS_X ? (coord - position.x) / direction.x
+				   : axis == AXIS_Y ? (coord - position.y) / direction.y
+									: (coord - position.z) / direction.z;
+	result.x = axis == AXIS_X ? coord : position.x + t * direction.x;
+	result.y = axis == AXIS_Y ? coord : position.y + t * direction.y;
+	result.z = axis == AXIS_Z ? coord : position.z + t * direction.z;
+	return result;
+}
+
+static inline void recordHit(const glm::dvec3 &position,
+							 const glm::dvec3 &isect,
+							 const Axis axis,
+							 const bool neg,
+							 const int_fast32_t nx,
+							 const int_fast32_t ny,
+							 const int_fast32_t nz,
+							 int_fast32_t &bestX,
+							 int_fast32_t &bestY,
+							 int_fast32_t &bestZ,
+							 int_fast8_t &bestFace,
+							 double &bestDepth,
+							 bool &hit) {
+	// Check if we have a record
+	double depth = glm::distance(position, isect);
+	if (bestFace == -1 || depth < bestDepth) {
+		// Yep, register it
+		bestFace = axis == AXIS_X ? (neg ? 0 : 3)
+				 : axis == AXIS_Y ? (neg ? 1 : 4)
+								  : (neg ? 2 : 5);
+		bestDepth = depth;
+		bestX = nx;
+		bestY = ny;
+		bestZ = nz;
+	}
+	hit = true;
+}
+
+static inline void rayCastToAxis(const Axis axis, const glm::dvec3 &position,
+								 const glm::dvec3 &lookAt,
+								 const double maxReach,
+								 int_fast32_t &bestX, int_fast32_t &bestY,
+								 int_fast32_t &bestZ,
+								 int_fast8_t &bestFace, double &bestDepth,
+								 const ClientWorld &world) {
+	int_fast8_t dir;
+	int_fast32_t firstNodeRow, lastNodeRow;
+	glm::dvec3 isect;
+	double posCoord, lookAtCoord;
+
+	// The line that starts at 'position' and goes in the direction
+	// of 'lookAt' with length 'maxReach' crosses several nodes in
+	// the X direction at integer positions. Determine the first and
+	// last such positions.
+	switch(axis) {
+		case AXIS_X:
+			posCoord = position.x;
+			lookAtCoord = lookAt.x;
+			break;
+		case AXIS_Y:
+			posCoord = position.y;
+			lookAtCoord = lookAt.y;
+			break;
+		default:
+			posCoord = position.z;
+			lookAtCoord = lookAt.z;
+			break;
+	}
+	firstNodeRow = int_fast32_t(floor(posCoord));
+	lastNodeRow = int_fast32_t(floor(posCoord + lookAtCoord * maxReach));
+
+	dir = (lookAtCoord > 0.) - (lookAtCoord < 0.);
+	if (!dir) {
+		// Can't cross any planes if it doesn't change in this axis
+		return;
+	}
+
+	for(int_fast32_t nodeRow = firstNodeRow + dir;
+			dir > 0 ? (nodeRow <= lastNodeRow) : (nodeRow >= lastNodeRow); nodeRow += dir) {
+		int_fast32_t nx, ny, nz;
+
+		isect = intersectAxisPlane(axis, double(nodeRow + (dir < 0)), position, lookAt);
+
+		nx = axis == AXIS_X ? nodeRow : floor(isect.x);
+		ny = axis == AXIS_Y ? nodeRow : floor(isect.y);
+		nz = axis == AXIS_Z ? nodeRow : floor(isect.z);
+		u32 blockID = world.getBlock(nx, ny, nz);
+
+		const Block &block = Registry::getInstance().getBlock(blockID);
+		if(blockID && block.drawType() != BlockDrawType::Liquid) {
+			// Check bounding box; this should loop over all selection boxes
+			// when they are implemented
+			gk::FloatBox selBox = block.boundingBox();
+			selBox.x += double(nx);
+			selBox.y += double(ny);
+			selBox.z += double(nz);
+
+			bool hit = false;
+
+			// Check if we hit any of the sides of the inner box
+			isect = intersectAxisPlane(AXIS_X, (lookAt.x < 0. ? selBox.x + selBox.width : selBox.x), position, lookAt);
+			if (selBox.y <= isect.y && isect.y <= selBox.y + selBox.height
+					&& selBox.z <= isect.z && isect.z <= selBox.z + selBox.depth)
+				recordHit(position, isect, AXIS_X, lookAt.x < 0., nx, ny, nz, bestX, bestY, bestZ, bestFace, bestDepth, hit);
+
+			isect = intersectAxisPlane(AXIS_Y, (lookAt.y < 0. ? selBox.y + selBox.height : selBox.y), position, lookAt);
+			if (selBox.x <= isect.x && isect.x <= selBox.x + selBox.width
+					&& selBox.z <= isect.z && isect.z <= selBox.z + selBox.depth)
+				recordHit(position, isect, AXIS_Y, lookAt.y < 0., nx, ny, nz, bestX, bestY, bestZ, bestFace, bestDepth, hit);
+
+			isect = intersectAxisPlane(AXIS_Z, (lookAt.z < 0. ? selBox.z + selBox.depth : selBox.z), position, lookAt);
+			if (selBox.x <= isect.x && isect.x <= selBox.x + selBox.width
+					&& selBox.y <= isect.y && isect.y <= selBox.y + selBox.height)
+				recordHit(position, isect, AXIS_Z, lookAt.z < 0., nx, ny, nz, bestX, bestY, bestZ, bestFace, bestDepth, hit);
+
+			if (hit)
+				break;  // no need to check deeper
+		}
+	}
+}
+
 glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
-	int mx, my, mz;
-	int face = -1;
+	int_fast32_t mx, my, mz;
+	int_fast32_t face = -1;
 
-	glm::vec3 lookAt{m_player.pointTargetedX() - m_player.camera().getPosition().x,
-	                 m_player.pointTargetedY() - m_player.camera().getPosition().y,
-	                 m_player.pointTargetedZ() - m_player.camera().getPosition().z};
+	glm::dvec3 lookAt{m_player.pointTargetedX() - m_player.camera().getPosition().x,
+	                  m_player.pointTargetedY() - m_player.camera().getPosition().y,
+	                  m_player.pointTargetedZ() - m_player.camera().getPosition().z};
 
-	glm::vec3 position{m_player.camera().getPosition().x,
-	                   m_player.camera().getPosition().y,
-	                   m_player.camera().getPosition().z};
+	glm::dvec3 position{m_player.camera().getPosition().x,
+	                    m_player.camera().getPosition().y,
+	                    m_player.camera().getPosition().z};
 
-	// FIXME: Add max distance
 	if(useDepthBuffer) {
+		// FIXME: Add max distance
 		// At which voxel are we looking? First, find out coords of the center pixel
 		float depth;
 		glCheck(glReadPixels(Config::screenWidth / 2.0f, Config::screenHeight / 2.0f, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth));
@@ -303,44 +433,32 @@ glm::vec4 BlockCursor::findSelectedBlock(bool useDepthBuffer) const {
 		if(face == 0 && lookAt.x > 0) face += 3;
 		if(face == 1 && lookAt.y > 0) face += 3;
 		if(face == 2 && lookAt.z > 0) face += 3;
-	} else {
-		// Very naive ray casting algorithm to find out which block we are looking at
-		glm::vec3 testPos = position;
-		glm::vec3 prevPos = position;
 
-		for(int i = 0 ; i < 100 ; i++) {
-			// Advance from our current position to the direction we are looking at, in small steps
-			prevPos = testPos;
-			testPos += lookAt * 0.1f;
-
-			mx = floorf(testPos.x);
-			my = floorf(testPos.y);
-			mz = floorf(testPos.z);
-
-			// If we find a block that is not air, we are done
-			u32 blockID = m_world.getBlock(mx, my, mz);
-			const Block &block = Registry::getInstance().getBlock(blockID);
-			if(blockID && block.drawType() != BlockDrawType::Liquid) break;
+		// If we are looking at air, disable the cursor
+		u32 blockID = m_world.getBlock(mx, my, mz);
+		const Block &block = Registry::getInstance().getBlock(blockID);
+		if(!blockID || block.drawType() == BlockDrawType::Liquid) {
+			face = -1;
 		}
 
-		// Find out which face of the block we are looking at
-		int px = floorf(prevPos.x);
-		int py = floorf(prevPos.y);
-		int pz = floorf(prevPos.z);
+	} else {
+		// Ray casting algorithm to find out which block we are looking at
 
-		if(px > mx) face = 0;
-		else if(px < mx) face = 3;
-		else if(py > my) face = 1;
-		else if(py < my) face = 4;
-		else if(pz > mz) face = 2;
-		else if(pz < mz) face = 5;
-	}
+		const double maxReach = 10.;
+		double bestDepth;
+		int_fast8_t bestFace = -1;
+		int_fast32_t bestX = 0, bestY = 0, bestZ = 0;
 
-	// If we are looking at air, disable the cursor
-	u32 blockID = m_world.getBlock(mx, my, mz);
-	const Block &block = Registry::getInstance().getBlock(blockID);
-	if(!blockID || block.drawType() == BlockDrawType::Liquid) {
-		face = -1;
+		glm::dvec3 lookAtN = glm::normalize(lookAt);
+
+		rayCastToAxis(AXIS_X, position, lookAtN, maxReach, bestX, bestY, bestZ, bestFace, bestDepth, m_world);
+		rayCastToAxis(AXIS_Y, position, lookAtN, maxReach, bestX, bestY, bestZ, bestFace, bestDepth, m_world);
+		rayCastToAxis(AXIS_Z, position, lookAtN, maxReach, bestX, bestY, bestZ, bestFace, bestDepth, m_world);
+
+		mx = bestX;
+		my = bestY;
+		mz = bestZ;
+		face = bestFace;
 	}
 
 	return {mx, my, mz, face};
