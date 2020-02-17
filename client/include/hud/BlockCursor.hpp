@@ -39,7 +39,7 @@ class BlockCursor : public gk::Drawable {
 
 		void onEvent(const SDL_Event &event, const Hotbar &hotbar);
 
-		void update(const Hotbar &hotbar, bool useDepthBuffer);
+		void update(const Hotbar &hotbar);
 
 		const Block *currentBlock() const { return m_currentBlock; }
 
@@ -49,8 +49,7 @@ class BlockCursor : public gk::Drawable {
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		float fract(float value) const;
-		glm::vec4 findSelectedBlock(bool useDepthBuffer) const;
+		glm::vec4 findSelectedBlock() const;
 
 		ClientPlayer &m_player;
 		ClientWorld &m_world;

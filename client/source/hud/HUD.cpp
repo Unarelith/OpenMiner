@@ -69,7 +69,7 @@ void HUD::update() {
 
 	m_fpsText.setText(std::to_string(gk::GameClock::getFpsAverage()) + " FPS");
 
-	m_blockCursor.update(m_hotbar, false);
+	m_blockCursor.update(m_hotbar);
 
 	if (m_isDebugOverlayVisible)
 		m_debugOverlay.update();
