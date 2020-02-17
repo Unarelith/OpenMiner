@@ -49,7 +49,7 @@ class BlockCursor : public gk::Drawable {
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		glm::vec4 findSelectedBlock() const;
+		glm::ivec4 findSelectedBlock() const;
 
 		ClientPlayer &m_player;
 		ClientWorld &m_world;
@@ -59,7 +59,7 @@ class BlockCursor : public gk::Drawable {
 		gk::VertexBuffer m_animationVBO;
 
 		unsigned int m_animationStart = 0;
-		glm::vec4 m_selectedBlock{0, 0, 0, -1};
+		glm::ivec4 m_selectedBlock{0, 0, 0, -1};
 		const Block *m_currentBlock = nullptr;
 		const ItemStack *m_currentTool = nullptr;
 };

@@ -50,7 +50,7 @@ void ClientCommandHandler::sendPlayerPosUpdate() {
 	m_client.send(packet);
 }
 
-void ClientCommandHandler::sendPlayerDigBlock(const glm::vec4 &selectedBlock) {
+void ClientCommandHandler::sendPlayerDigBlock(const glm::ivec4 &selectedBlock) {
 	sf::Packet packet;
 	packet << Network::Command::PlayerDigBlock
 		<< s32(selectedBlock.x)
@@ -72,7 +72,7 @@ void ClientCommandHandler::sendPlayerInventoryRequest() {
 	m_client.send(packet);
 }
 
-void ClientCommandHandler::sendBlockActivated(const glm::vec4 &selectedBlock) {
+void ClientCommandHandler::sendBlockActivated(const glm::ivec4 &selectedBlock) {
 	sf::Packet packet;
 	packet << Network::Command::BlockActivated
 		<< s32(selectedBlock.x)

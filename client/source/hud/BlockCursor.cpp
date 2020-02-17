@@ -133,7 +133,7 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 
 void BlockCursor::update(const Hotbar &hotbar) {
 	bool selectedBlockChanged = false;
-	glm::vec4 selectedBlock = findSelectedBlock();
+	glm::ivec4 selectedBlock = findSelectedBlock();
 	if (selectedBlock.x != m_selectedBlock.x || selectedBlock.y != m_selectedBlock.y || selectedBlock.z != m_selectedBlock.z)
 		selectedBlockChanged = true;
 
@@ -234,7 +234,7 @@ void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	glCheck(glDisable(GL_POLYGON_OFFSET_FILL));
 	glCheck(glDisable(GL_CULL_FACE));
 
-	states.transform.translate({m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z});
+	states.transform.translate(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
 
 	target.draw(m_vbo, GL_LINES, 0, 24, states);
 
@@ -249,7 +249,7 @@ void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	glCheck(glEnable(GL_POLYGON_OFFSET_FILL));
 }
 
-glm::vec4 BlockCursor::findSelectedBlock() const {
+glm::ivec4 BlockCursor::findSelectedBlock() const {
 	glm::dvec3 lookAt{m_player.pointTargetedX() - m_player.camera().getPosition().x,
 	                  m_player.pointTargetedY() - m_player.camera().getPosition().y,
 	                  m_player.pointTargetedZ() - m_player.camera().getPosition().z};
@@ -270,6 +270,6 @@ glm::vec4 BlockCursor::findSelectedBlock() const {
 	BlockCursorRaycast::rayCastToAxis(AXIS_Y, position, lookAtN, maxReach, bestX, bestY, bestZ, bestFace, bestDepth, m_world);
 	BlockCursorRaycast::rayCastToAxis(AXIS_Z, position, lookAtN, maxReach, bestX, bestY, bestZ, bestFace, bestDepth, m_world);
 
-	return {bestX, bestY, bestZ, bestFace};
+	return glm::ivec4{bestX, bestY, bestZ, bestFace};
 }
 
