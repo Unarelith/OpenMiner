@@ -109,14 +109,18 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 				if(face == 2) z++;
 				if(face == 5) z--;
 
-				m_world.setBlock(x, y, z, hotbar.currentItem());
+				u32 blockId = m_world.getBlock(x, y, z);
+				const Block &block = Registry::getInstance().getBlock(blockId);
+				if (!blockId || block.drawType() == BlockDrawType::Liquid) {
+					m_world.setBlock(x, y, z, hotbar.currentItem());
 
-				m_client.sendPlayerPlaceBlock(x, y, z, hotbar.currentItem());
+					m_client.sendPlayerPlaceBlock(x, y, z, hotbar.currentItem());
 
-				const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
-				m_player.inventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().name() : "", currentStack.amount() - 1);
+					const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
+					m_player.inventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().name() : "", currentStack.amount() - 1);
 
-				m_client.sendPlayerInvUpdate();
+					m_client.sendPlayerInvUpdate();
+				}
 			}
 		}
 	}
