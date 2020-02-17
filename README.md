@@ -58,6 +58,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 ## Discussion
 
 - Discord: [join server](https://discord.gg/eN8k8wt)
+- IRC: irc.freenode.net `#openminer`
 
 ## Project status
 
