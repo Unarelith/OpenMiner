@@ -65,9 +65,6 @@ class Block : public ISerializable {
 
 		std::string modName() const { return m_name.substr(0, m_name.find_first_of(":")); }
 
-		s8 selectedFace() const { return m_selectedFace; }
-		void setSelected(bool isSelected, s8 face) { m_isSelected = isSelected; m_selectedFace = face; }
-
 		bool isOpaque() const { return m_id != 0 && m_isOpaque && m_drawType != BlockDrawType::XShape; }
 		void setOpaque(bool isOpaque) { m_isOpaque = isOpaque; }
 
@@ -108,9 +105,6 @@ class Block : public ISerializable {
 
 		std::string m_name;
 		std::string m_label;
-
-		bool m_isSelected = false;
-		s8 m_selectedFace = -1;
 
 		std::string m_itemDrop;
 		u16 m_itemDropAmount;
