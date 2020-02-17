@@ -30,17 +30,17 @@ namespace sf { class Packet; }
 class ItemStack {
 	public:
 		ItemStack() = default;
-		ItemStack(const std::string &name, u16 amount = 1)
-			: m_name(name), m_amount(amount) {}
+		ItemStack(const std::string &stringID, u16 amount = 1)
+			: m_stringID(stringID), m_amount(amount) {}
 
 		const Item &item() const;
-		void setItem(const std::string &name) { m_name = name; }
+		void setItem(const std::string &stringID) { m_stringID = stringID; }
 
 		u16 amount() const { return m_amount; }
 		void setAmount(u16 amount) { m_amount = amount; }
 
 	private:
-		std::string m_name;
+		std::string m_stringID;
 
 		u16 m_amount = 0;
 };

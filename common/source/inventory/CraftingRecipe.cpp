@@ -96,7 +96,7 @@ bool CraftingRecipe::checkMatch(const Inventory &inventory, int offsetX, int off
 		for (x = 0 ; x < m_pattern[y].size() ; ++x) {
 			itemFound = false;
 
-			std::string inventoryItem = inventory.getStack(offsetX + x, offsetY + y).item().name();
+			std::string inventoryItem = inventory.getStack(offsetX + x, offsetY + y).item().stringID();
 			if (m_pattern[y][x] == ' ') {
 				itemFound = (inventoryItem.empty() || inventoryItem == "_:air");
 			}

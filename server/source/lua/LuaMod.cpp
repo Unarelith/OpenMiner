@@ -32,12 +32,12 @@ void LuaMod::registerBlock(const sol::table &table) {
 	TilesDef tiles;
 	tiles.loadFromLuaTable(table);
 
-	std::string id = m_id + ":" + table["id"].get<std::string>();
-	std::string name = table["name"].get<std::string>();
+	std::string stringID = m_id + ":" + table["id"].get<std::string>();
+	std::string label = table["name"].get<std::string>();
 	sol::function onBlockActivated = table["on_block_activated"];
 	sol::function onTick = table["on_tick"];
 
-	ServerBlock &block = Registry::getInstance().registerBlock<ServerBlock>(tiles, id, name);
+	ServerBlock &block = Registry::getInstance().registerBlock<ServerBlock>(tiles, stringID, label);
 	block.setHarvestRequirements(table["harvest_requirements"].get_or(0));
 	block.setHardness(table["hardness"].get_or(1.0f));
 	block.setOpaque(table["is_opaque"].get_or(true));
@@ -71,17 +71,17 @@ void LuaMod::registerBlock(const sol::table &table) {
 		block.setItemDrop(dropID, dropAmount);
 	}
 
-	Registry::getInstance().registerItem(block.tiles(), id, name).setIsBlock(true);
+	Registry::getInstance().registerItem(block.tiles(), stringID, label).setIsBlock(true);
 }
 
 void LuaMod::registerItem(const sol::table &table) {
 	TilesDef tiles;
 	tiles.loadFromLuaTable(table);
 
-	std::string id = table["id"].get<std::string>();
-	std::string name = table["name"].get<std::string>();
+	std::string stringID = table["id"].get<std::string>();
+	std::string label = table["name"].get<std::string>();
 
-	Item &item = Registry::getInstance().registerItem(tiles, id, name);
+	Item &item = Registry::getInstance().registerItem(tiles, stringID, label);
 	item.setIsFuel(table["is_fuel"].get_or(false));
 	item.setBurnTime(table["burn_time"].get_or(0));
 	item.setHarvestCapability(table["harvest_capability"].get_or(0));

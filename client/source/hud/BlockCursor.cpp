@@ -117,7 +117,7 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 					m_client.sendPlayerPlaceBlock(x, y, z, hotbar.currentItem());
 
 					const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
-					m_player.inventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().name() : "", currentStack.amount() - 1);
+					m_player.inventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().stringID() : "", currentStack.amount() - 1);
 
 					m_client.sendPlayerInvUpdate();
 				}
@@ -160,7 +160,7 @@ void BlockCursor::update(const Hotbar &hotbar) {
 
 			if (gk::GameClock::getTicks() > m_animationStart + timeToBreak * 1000) {
 				ItemStack itemDrop = m_currentBlock->getItemDrop();
-				m_player.inventory().addStack(itemDrop.item().name(), itemDrop.amount());
+				m_player.inventory().addStack(itemDrop.item().stringID(), itemDrop.amount());
 				m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
 				m_animationStart = gk::GameClock::getTicks();
 

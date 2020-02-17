@@ -28,19 +28,19 @@
 #include "Player.hpp"
 #include "World.hpp"
 
-Block::Block(u32 id, const TilesDef &tiles, const std::string &name, const std::string &label) {
+Block::Block(u32 id, const TilesDef &tiles, const std::string &stringID, const std::string &label) {
 	m_id = id;
 	m_tiles = tiles;
 
-	m_name = name;
+	m_stringID = stringID;
 	m_label = label;
 
-	m_itemDrop = name;
+	m_itemDrop = stringID;
 	m_itemDropAmount = 1;
 }
 
 void Block::serialize(sf::Packet &packet) const {
-	packet << u32(m_id) << m_name << m_label << u8(m_drawType)
+	packet << u32(m_id) << m_stringID << m_label << u8(m_drawType)
 		<< m_hardness << m_harvestRequirements << m_itemDrop << m_itemDropAmount << m_tiles
 		<< m_boundingBox.x << m_boundingBox.y << m_boundingBox.z
 		<< m_boundingBox.width << m_boundingBox.height << m_boundingBox.depth
@@ -51,7 +51,7 @@ void Block::deserialize(sf::Packet &packet) {
 	u32 id;
 	u8 drawType;
 
-	packet >> id >> m_name >> m_label >> drawType >> m_hardness
+	packet >> id >> m_stringID >> m_label >> drawType >> m_hardness
 		>> m_harvestRequirements >> m_itemDrop >> m_itemDropAmount >> m_tiles
 		>> m_boundingBox.x >> m_boundingBox.y >> m_boundingBox.z
 		>> m_boundingBox.width >> m_boundingBox.height >> m_boundingBox.depth

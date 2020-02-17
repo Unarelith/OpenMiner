@@ -24,18 +24,18 @@
 #include "Registry.hpp"
 
 const Item &ItemStack::item() const {
-	return Registry::getInstance().getItemFromStringID(m_name);
+	return Registry::getInstance().getItemFromStringID(m_stringID);
 }
 
 sf::Packet &operator<<(sf::Packet &packet, const ItemStack &itemStack) {
-	return packet << itemStack.item().name() << itemStack.amount();
+	return packet << itemStack.item().stringID() << itemStack.amount();
 }
 
 sf::Packet &operator>>(sf::Packet &packet, ItemStack &itemStack) {
-	std::string name;
+	std::string stringID;
 	u16 amount;
-	packet >> name >> amount;
-	itemStack.setItem(name);
+	packet >> stringID >> amount;
+	itemStack.setItem(stringID);
 	itemStack.setAmount(amount);
 	return packet;
 }

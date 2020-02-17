@@ -106,7 +106,7 @@ void ScriptEngine::initUsertypes() {
 
 	m_lua.new_usertype<Item>("Item",
 		"id", &Item::id,
-		"name", &Item::name,
+		"stringID", &Item::stringID,
 		"burn_time", &Item::burnTime
 	);
 

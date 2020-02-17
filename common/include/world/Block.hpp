@@ -49,7 +49,7 @@ enum class BlockDrawType {
 class Block : public ISerializable {
 	public:
 		Block() = default;
-		Block(u32 id, const TilesDef &tiles, const std::string &name, const std::string &label);
+		Block(u32 id, const TilesDef &tiles, const std::string &stringID, const std::string &label);
 		virtual ~Block() = default;
 
 		void serialize(sf::Packet &packet) const override;
@@ -59,11 +59,11 @@ class Block : public ISerializable {
 		u16 data() const { return (m_id >> 16) & 0xffff; }
 		const TilesDef &tiles() const { return m_tiles; }
 
-		const std::string &name() const { return m_name; }
+		const std::string &stringID() const { return m_stringID; }
 		const std::string &label() const { return m_label; }
 		void setLabel(const std::string &label) { m_label = label; }
 
-		std::string modName() const { return m_name.substr(0, m_name.find_first_of(":")); }
+		std::string modName() const { return m_stringID.substr(0, m_stringID.find_first_of(":")); }
 
 		bool isOpaque() const { return m_id != 0 && m_isOpaque && m_drawType != BlockDrawType::XShape; }
 		void setOpaque(bool isOpaque) { m_isOpaque = isOpaque; }
@@ -103,7 +103,7 @@ class Block : public ISerializable {
 		u32 m_id = 0;
 		TilesDef m_tiles;
 
-		std::string m_name;
+		std::string m_stringID;
 		std::string m_label;
 
 		std::string m_itemDrop;

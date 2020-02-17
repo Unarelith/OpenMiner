@@ -23,20 +23,20 @@
 #include "Inventory.hpp"
 #include "Network.hpp"
 
-void Inventory::setStack(u16 x, u16 y, const std::string &name, u16 amount) {
-	m_items.at(x + y * m_width) = ItemStack(name, amount);
+void Inventory::setStack(u16 x, u16 y, const std::string &stringID, u16 amount) {
+	m_items.at(x + y * m_width) = ItemStack(stringID, amount);
 	m_hasChanged = true;
 }
 
-void Inventory::addStack(const std::string &name, u16 amount) {
+void Inventory::addStack(const std::string &stringID, u16 amount) {
 	for (std::size_t i = 0 ; i < m_items.size() ; ++i) {
 		if (m_items[i].item().id() == 0) {
-			m_items[i] = ItemStack(name, amount);
+			m_items[i] = ItemStack(stringID, amount);
 			m_hasChanged = true;
 			break;
 		}
-		else if (m_items[i].item().name() == name) {
-			m_items[i] = ItemStack(name, m_items[i].amount() + amount);
+		else if (m_items[i].item().stringID() == stringID) {
+			m_items[i] = ItemStack(stringID, m_items[i].amount() + amount);
 			m_hasChanged = true;
 			break;
 		}
@@ -49,7 +49,7 @@ void Inventory::serialize(sf::Packet &packet) const {
 
 	int i = 0;
 	for (auto &it : m_items) {
-		packet << it.item().name() << it.amount()
+		packet << it.item().stringID() << it.amount()
 			<< u8(i % m_width) << u8(i / m_width);
 		++i;
 	}

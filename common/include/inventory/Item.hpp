@@ -34,15 +34,15 @@
 class Item : public ISerializable {
 	public:
 		Item() = default;
-		Item(u32 id, const TilesDef &tiles, const std::string &name, const std::string &label);
+		Item(u32 id, const TilesDef &tiles, const std::string &stringID, const std::string &label);
 
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
-		const std::string &name() const { return m_name; }
+		const std::string &stringID() const { return m_stringID; }
 		const std::string &label() const { return m_label; }
 
-		std::string modName() const { return m_name.substr(0, m_name.find_first_of(":")); }
+		std::string modName() const { return m_stringID.substr(0, m_stringID.find_first_of(":")); }
 
 		u32 id() const { return m_id; }
 		const TilesDef &tiles() const { return m_tiles; }
@@ -72,7 +72,7 @@ class Item : public ISerializable {
 		u32 m_id = 0;
 		TilesDef m_tiles;
 
-		std::string m_name;
+		std::string m_stringID;
 		std::string m_label;
 
 		u8 m_harvestCapability = 0;

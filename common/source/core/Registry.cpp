@@ -28,10 +28,10 @@
 
 Registry *Registry::s_instance = nullptr;
 
-Item &Registry::registerItem(const TilesDef &tiles, const std::string &id, const std::string &name) {
-	u32 internalID = m_items.size();
-	m_itemsID.emplace(id, internalID);
-	m_items.emplace_back(internalID, tiles, id, name);
+Item &Registry::registerItem(const TilesDef &tiles, const std::string &stringID, const std::string &label) {
+	u32 id = m_items.size();
+	m_itemsID.emplace(stringID, id);
+	m_items.emplace_back(id, tiles, stringID, label);
 	return m_items.back();
 }
 
@@ -39,25 +39,25 @@ Item &Registry::registerSerializedItem(sf::Packet &packet) {
 	m_items.emplace_back();
 	m_items.back().deserialize(packet);
 
-	u32 internalID = m_items.size() - 1;
-	m_itemsID.emplace(m_items.back().name(), internalID);
+	u32 id = m_items.size() - 1;
+	m_itemsID.emplace(m_items.back().stringID(), id);
 
 	return m_items.back();
 }
 
-const Block &Registry::getBlockFromStringID(const std::string &id) {
-	if (id.empty()) return getBlock(0);
-	auto it = m_blocksID.find(id);
+const Block &Registry::getBlockFromStringID(const std::string &stringID) {
+	if (stringID.empty()) return getBlock(0);
+	auto it = m_blocksID.find(stringID);
 	if (it == m_blocksID.end())
-		throw EXCEPTION("Unknown block:", id);
+		throw EXCEPTION("Unknown block:", stringID);
 	return getBlock(it->second);
 }
 
-const Item &Registry::getItemFromStringID(const std::string &id) {
-	if (id.empty()) return getItem(0);
-	auto it = m_itemsID.find(id);
+const Item &Registry::getItemFromStringID(const std::string &stringID) {
+	if (stringID.empty()) return getItem(0);
+	auto it = m_itemsID.find(stringID);
 	if (it == m_itemsID.end())
-		throw EXCEPTION("Unknown item:", id);
+		throw EXCEPTION("Unknown item:", stringID);
 	return getItem(it->second);
 }
 

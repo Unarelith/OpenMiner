@@ -69,7 +69,7 @@ mod:block {
 		if ticks_remaining == 0 and recipe and fuel_stack:amount() > 0 and
 				(output_stack:item():id() == 0 or output_stack:amount() == 0
 				or output_stack:item():id() == recipe:result():item():id()) then
-			data.inventory:set_stack(2, 0, fuel_stack:item():name(), fuel_stack:amount() - 1)
+			data.inventory:set_stack(2, 0, fuel_stack:item():stringID(), fuel_stack:amount() - 1)
 			ticks_remaining = fuel_stack:item():burn_time()
 			current_burn_time = fuel_stack:item():burn_time()
 			data.useAltTiles = true;
@@ -91,8 +91,8 @@ mod:block {
 
 		if item_progress >= 200 and recipe then
 			item_progress = 0;
-			data.inventory:set_stack(0, 0, (input_stack:amount() - 1 > 0) and input_stack:item():name() or "", input_stack:amount() - 1)
-			data.inventory:set_stack(1, 0, recipe:result():item():name(), output_stack:amount() + recipe:result():amount())
+			data.inventory:set_stack(0, 0, (input_stack:amount() - 1 > 0) and input_stack:item():stringID() or "", input_stack:amount() - 1)
+			data.inventory:set_stack(1, 0, recipe:result():item():stringID(), output_stack:amount() + recipe:result():amount())
 		end
 
 		data.meta:set_int("ticks_remaining", ticks_remaining);

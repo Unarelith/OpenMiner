@@ -37,8 +37,8 @@ class Inventory : public ISerializable {
 
 		const ItemStack &getStack(u16 x, u16 y) const { return m_items.at(x + y * m_width); }
 		ItemStack &getStackRef(u16 x, u16 y) { return m_items.at(x + y * m_width); }
-		void setStack(u16 x, u16 y, const std::string &name, u16 amount = 1);
-		void addStack(const std::string &name, u16 amount = 1);
+		void setStack(u16 x, u16 y, const std::string &stringID, u16 amount = 1);
+		void addStack(const std::string &stringID, u16 amount = 1);
 
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;

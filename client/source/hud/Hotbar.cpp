@@ -53,7 +53,7 @@ void Hotbar::update() {
 			widget.setPosition(5 + 20 * i - 3, 2, 0);
 		}
 
-		m_items[i].setStack(m_inventory.getStack(i, 0).item().name(), m_inventory.getStack(i, 0).amount());
+		m_items[i].setStack(m_inventory.getStack(i, 0).item().stringID(), m_inventory.getStack(i, 0).amount());
 	}
 }
 
