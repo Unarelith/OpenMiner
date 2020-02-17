@@ -35,7 +35,7 @@ ClientPlayer *ClientPlayer::s_instance = nullptr;
 ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
 	// FIXME: Warning: Duplicated in ServerCommandHandler.hpp
 	m_x = 12;
-	m_y = 18;
+	m_y = 20;
 	m_z = 12;
 
 	m_angleH = -90.0;
@@ -146,6 +146,19 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 }
 
 void ClientPlayer::checkCollisions(const ClientWorld &world) {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || defined(__ANDROID__)
+	const float PLAYER_HEIGHT = 1.8;
+	float eyeheight = m_y + PLAYER_HEIGHT - 1.4;
+	// testPoint(world, glm::vec3(m_x, m_y, m_z), m_velocity);
+	testPoint(world, m_x - 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z - 0.2, m_velocity);
+	testPoint(world, m_x + 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z - 0.2, m_velocity);
+	testPoint(world, m_x - 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z + 0.2, m_velocity);
+	testPoint(world, m_x + 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_z + 0.2, m_velocity);
+	testPoint(world, m_x - 0.2, eyeheight - 0.4, m_z - 0.2, m_velocity);
+	testPoint(world, m_x + 0.2, eyeheight - 0.4, m_z - 0.2, m_velocity);
+	testPoint(world, m_x - 0.2, eyeheight - 0.4, m_z + 0.2, m_velocity);
+	testPoint(world, m_x + 0.2, eyeheight - 0.4, m_z + 0.2, m_velocity);
+#else
 	for (float x = m_x + m_hitbox.x ; x <= m_x + m_hitbox.x + m_hitbox.width + 0.1f ; x += 0.2f) {
 		for (float y = m_y + m_hitbox.y ; y <= m_y + m_hitbox.y + m_hitbox.height + 0.1f ; y += 0.9f) {
 			for (float z = m_z + m_hitbox.z ; z <= m_z + m_hitbox.z + m_hitbox.depth + 0.1f ; z += 0.2f) {
@@ -156,6 +169,7 @@ void ClientPlayer::checkCollisions(const ClientWorld &world) {
 			}
 		}
 	}
+#endif
 }
 
 bool passable(const ClientWorld &world, float x, float y, float z) {
