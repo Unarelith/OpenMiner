@@ -101,7 +101,7 @@ void BlockCursorRaycast::rayCastToAxis(const Axis axis, const glm::dvec3 &positi
 			break;
 	}
 
-	int_fast32_t firstNodeRow = int_fast32_t(floor(posCoord));
+	int_fast32_t firstNodeRow = lookAtCoord < 0. ? int_fast32_t(floor(posCoord)) : int_fast32_t(ceil(posCoord)) - 1;
 	int_fast32_t lastNodeRow = int_fast32_t(floor(posCoord + lookAtCoord * maxReach));
 
 	int_fast8_t dir = (lookAtCoord > 0.) - (lookAtCoord < 0.);

@@ -250,19 +250,49 @@ void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 }
 
 glm::ivec4 BlockCursor::findSelectedBlock() const {
-	glm::dvec3 lookAt{m_player.pointTargetedX() - m_player.camera().getPosition().x,
-	                  m_player.pointTargetedY() - m_player.camera().getPosition().y,
-	                  m_player.pointTargetedZ() - m_player.camera().getPosition().z};
-
 	glm::dvec3 position{m_player.camera().getPosition().x,
 	                    m_player.camera().getPosition().y,
 	                    m_player.camera().getPosition().z};
+
+	int_fast32_t bestX = int_fast32_t(floor(position.x));
+	int_fast32_t bestY = int_fast32_t(floor(position.y));
+	int_fast32_t bestZ = int_fast32_t(floor(position.z));
+
+	// Deal with a degenerate case: camera in the middle of a block
+	uint_fast32_t blockID = m_world.getBlock(bestX, bestY, bestZ);
+	const Block &block = Registry::getInstance().getBlock(blockID);
+	if(blockID && block.drawType() != BlockDrawType::Liquid) {
+		// We're inside a node, therefore there's no face, but we still need
+		// to return a valid block. We use face 6 for that. For rightclicks,
+		// it should attempt to place the block on the same node clicked, and
+		// fail because it's already occupied. For digs, it should just dig
+		// the node.
+		return glm::ivec4{bestX, bestY, bestZ, 6};
+	}
+
+	// Still the degenerate case, but this time for the sub-case where
+	// the coordinates of the player are exact integers, thus lying exactly
+	// between two faces (or four, if it's in a corner). In this situation,
+	// the raycasting algorithm allows us to get rid of all blocks except for
+	// the one in the northwest corner. Deal with that case here.
+	// NOTE: We don't deal with height because it's unlikely that the
+	// camera ends up being at an integer position.
+	if(double(bestX) == position.x && double(bestZ) == position.z) {
+		blockID = m_world.getBlock(bestX - 1, bestY, bestZ - 1);
+		const Block &block = Registry::getInstance().getBlock(blockID);
+		if(blockID && block.drawType() != BlockDrawType::Liquid) {
+			return glm::ivec4{bestX - 1, bestY, bestZ - 1, 6};
+		}
+	}
+
+	glm::dvec3 lookAt{m_player.pointTargetedX() - m_player.camera().getPosition().x,
+	                  m_player.pointTargetedY() - m_player.camera().getPosition().y,
+	                  m_player.pointTargetedZ() - m_player.camera().getPosition().z};
 
 	// Ray casting algorithm to find out which block we are looking at
 	const double maxReach = 10.;
 	double bestDepth;
 	int_fast8_t bestFace = -1;
-	int_fast32_t bestX = 0, bestY = 0, bestZ = 0;
 
 	glm::dvec3 lookAtN = glm::normalize(lookAt);
 
