@@ -59,8 +59,6 @@ class ClientPlayer : public Player {
 		float pointTargetedY() const { return m_y + sin(m_angleV * RADIANS_PER_DEGREES); }
 		float pointTargetedZ() const { return m_z + sin(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES) - 0.00001; }
 
-		const gk::FloatBox &hitbox() const { return m_hitbox; }
-
 		static ClientPlayer &getInstance() { return *s_instance; }
 		static void setInstance(ClientPlayer *instance) { s_instance = instance; }
 
@@ -89,8 +87,6 @@ class ClientPlayer : public Player {
 
 		const float m_gravity = 0.001;
 		const float m_jumpSpeed = 0.06f;
-
-		gk::FloatBox m_hitbox;
 };
 
 #endif // CLIENTPLAYER_HPP_

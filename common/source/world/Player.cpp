@@ -23,6 +23,10 @@
 #include "Network.hpp"
 #include "Player.hpp"
 
+Player::Player() {
+	m_hitbox = gk::FloatBox{-0.2, -1.8, -0.2, 0.4, 1.8, 0.4};
+}
+
 void Player::serialize(sf::Packet &packet) const {
 	packet << m_x << m_y << m_z << m_inventory;
 }

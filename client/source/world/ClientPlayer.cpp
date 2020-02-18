@@ -41,8 +41,6 @@ ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
 	m_angleH = -90.0;
 	m_angleV = 0.01;
 
-	m_hitbox = gk::FloatBox{-0.2, -1.8, -0.2, 0.4, 1.8, 0.4};
-
 	m_camera.setPosition(m_x, m_y - 0.1, m_z);
 	m_camera.setTargetPosition(pointTargetedX(), pointTargetedY(), pointTargetedZ());
 }

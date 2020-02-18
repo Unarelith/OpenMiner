@@ -23,11 +23,15 @@
 #ifndef PLAYER_HPP_
 #define PLAYER_HPP_
 
+#include <gk/core/Box.hpp>
+
 #include "Inventory.hpp"
 #include "ISerializable.hpp"
 
 class Player : public ISerializable {
 	public:
+		Player();
+
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
@@ -42,6 +46,8 @@ class Player : public ISerializable {
 		void setPosition(s32 x, s32 y, s32 z) { m_x = x; m_y = y; m_z = z; }
 		void setClientID(u16 clientID) { m_clientID = clientID; }
 
+		const gk::FloatBox &hitbox() const { return m_hitbox; }
+
 	protected:
 		s32 m_x = 0;
 		s32 m_y = 0;
@@ -50,6 +56,8 @@ class Player : public ISerializable {
 		u16 m_clientID = 0;
 
 		Inventory m_inventory{9, 4};
+
+		gk::FloatBox m_hitbox;
 };
 
 #endif // PLAYER_HPP_

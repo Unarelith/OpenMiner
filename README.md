@@ -68,9 +68,9 @@ This list is non exhaustive.
 
 - Menus (title screen, server selection, pause menu, settings menu)
 - Basic worldgen (lakes, trees, flowers, pseudo-caves)
-- Infinite world in X/Y/Z axis
+- Infinite world in X/Y/Z axis (#25)
 - Lighting system with smooth lighting
-- Networking
+- Networking (#20)
 - Lua API
 	- Block/item/recipe definition
 	- Custom GUI creation
@@ -79,15 +79,15 @@ This list is non exhaustive.
 
 ### Missing features
 
-- Texture pack system
-- World loading/saving
+- Texture pack system (#34)
+- World loading/saving (#26)
 - Particle system
 - Fluid propagation
 - Player model display (currently displaying an ugly box)
 - Day/night cycle with sun/moon display
 - Real worldgen (seed-based, biomes, cave tunnels)
 - Entities (block drops, mobs, etc...)
-- Clouds
+- Clouds (#52)
 
 ## Screenshots
 
