@@ -67,7 +67,11 @@ GameState::GameState(const std::string &host, int port)
 
 	m_world.setClient(m_clientCommandHandler);
 	m_player.setClientID(m_client.id());
+
 	m_world.setCamera(m_player.camera());
+
+	m_cloudRenderer.initCloudMap();
+	m_cloudRenderer.initVertexBuffer();
 }
 
 void GameState::onEvent(const SDL_Event &event) {
@@ -173,6 +177,7 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	target.setView(m_camera);
 	target.draw(m_world, states);
+	target.draw(m_cloudRenderer, states);
 
 	for (auto &it : m_playerBoxes)
 		if (it.second.dimension() == m_player.dimension())

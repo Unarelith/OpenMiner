@@ -37,6 +37,7 @@
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
+#include "CloudRenderer.hpp"
 #include "Config.hpp"
 #include "HUD.hpp"
 #include "PlayerBox.hpp"
@@ -79,6 +80,8 @@ class GameState : public gk::ApplicationState {
 		HUD m_hud{m_player, m_world, m_clientCommandHandler};
 
 		TextureAtlas &m_textureAtlas;
+
+		CloudRenderer m_cloudRenderer;
 };
 
 #endif // GAMESTATE_HPP_
