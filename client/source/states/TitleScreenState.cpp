@@ -37,7 +37,7 @@ TitleScreenState::TitleScreenState() {
 	});
 
 	m_menuWidget.addButton("Options...", [this] (TextButton &) {
-		m_stateStack->push<SettingsMenuState>();
+		m_stateStack->push<SettingsMenuState>(this);
 	});
 
 	m_menuWidget.addButton("Exit", [this] (TextButton &) {
@@ -55,8 +55,10 @@ void TitleScreenState::update() {
 }
 
 void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	prepareDraw(target, states);
+	if (&m_stateStack->top() == this) {
+		prepareDraw(target, states);
 
-	target.draw(m_menuWidget, states);
+		target.draw(m_menuWidget, states);
+	}
 }
 
