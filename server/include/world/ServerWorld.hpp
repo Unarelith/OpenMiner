@@ -34,6 +34,8 @@ class ServerCommandHandler;
 class ServerPlayer;
 
 class ServerWorld : public World {
+	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ServerChunk>>;
+
 	public:
 		ServerWorld() = default;
 
@@ -50,8 +52,7 @@ class ServerWorld : public World {
 		void setServer(ServerCommandHandler *server) { m_server = server; }
 
 	private:
-		std::unordered_map<gk::Vector3i, std::unique_ptr<ServerChunk>> m_chunks;
-		std::unordered_map<u16, std::queue<ServerChunk *>> m_chunkQueues;
+		ChunkMap m_chunks;
 
 		u32 m_lastTick = 0;
 
