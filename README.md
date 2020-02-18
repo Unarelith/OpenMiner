@@ -68,9 +68,9 @@ This list is non exhaustive.
 
 - Menus (title screen, server selection, pause menu, settings menu)
 - Basic worldgen (lakes, trees, flowers, pseudo-caves)
-- Infinite world in X/Y/Z axis (#25)
+- Infinite world in X/Y/Z axis ([#25](https://github.com/Unarelith/OpenMiner/pull/25))
 - Lighting system with smooth lighting
-- Networking (#20)
+- Networking ([#20](https://github.com/Unarelith/OpenMiner/pull/20))
 - Lua API
 	- Block/item/recipe definition
 	- Custom GUI creation
@@ -79,15 +79,15 @@ This list is non exhaustive.
 
 ### Missing features
 
-- Texture pack system (#34)
-- World loading/saving (#26)
+- Texture pack system ([#34](https://github.com/Unarelith/OpenMiner/issues/34))
+- World loading/saving ([#26](https://github.com/Unarelith/OpenMiner/issues/26))
 - Particle system
 - Fluid propagation
 - Player model display (currently displaying an ugly box)
 - Day/night cycle with sun/moon display
 - Real worldgen (seed-based, biomes, cave tunnels)
 - Entities (block drops, mobs, etc...)
-- Clouds (#52)
+- Clouds ([#52](https://github.com/Unarelith/OpenMiner/pull/52))
 
 ## Screenshots
 
