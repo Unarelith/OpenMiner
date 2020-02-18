@@ -109,17 +109,24 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 				if(face == 2) z++;
 				if(face == 5) z--;
 
+				// First, we check if the new block is not replacing another block
 				u32 blockId = m_world.getBlock(x, y, z);
 				const Block &block = Registry::getInstance().getBlock(blockId);
 				if (!blockId || block.drawType() == BlockDrawType::Liquid) {
-					m_world.setBlock(x, y, z, hotbar.currentItem());
+					// Second, we check if the new block is not inside the player
+					const Block &newBlock = Registry::getInstance().getBlock(hotbar.currentItem());
+					gk::FloatBox boundingBox = newBlock.boundingBox() + gk::Vector3i{x, y, z};
+					gk::FloatBox playerBoundingBox = m_player.hitbox() + gk::Vector3f{m_player.x(), m_player.y(), m_player.z()};
+					if (!boundingBox.intersects(playerBoundingBox)) {
+						m_world.setBlock(x, y, z, hotbar.currentItem());
 
-					m_client.sendPlayerPlaceBlock(x, y, z, hotbar.currentItem());
+						m_client.sendPlayerPlaceBlock(x, y, z, hotbar.currentItem());
 
-					const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
-					m_player.inventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().stringID() : "", currentStack.amount() - 1);
+						const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
+						m_player.inventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().stringID() : "", currentStack.amount() - 1);
 
-					m_client.sendPlayerInvUpdate();
+						m_client.sendPlayerInvUpdate();
+					}
 				}
 			}
 		}

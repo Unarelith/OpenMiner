@@ -59,6 +59,8 @@ class ClientPlayer : public Player {
 		float pointTargetedY() const { return m_y + sin(m_angleV * RADIANS_PER_DEGREES); }
 		float pointTargetedZ() const { return m_z + sin(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES) - 0.00001; }
 
+		const gk::FloatBox &hitbox() const { return m_hitbox; }
+
 		static ClientPlayer &getInstance() { return *s_instance; }
 		static void setInstance(ClientPlayer *instance) { s_instance = instance; }
 
