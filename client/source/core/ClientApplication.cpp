@@ -88,6 +88,11 @@ void ClientApplication::handleEvents() {
 	}
 }
 
+void ClientApplication::onEvent(const SDL_Event &event) {
+	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_F11)
+		Config::isFullscreenModeEnabled ^= 1;
+}
+
 void ClientApplication::initOpenGL() {
 	// Enable transparency
 	glCheck(glEnable(GL_BLEND));

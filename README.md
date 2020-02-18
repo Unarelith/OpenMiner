@@ -29,6 +29,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 - Jetpack: <kbd>X</kbd>
 - Exit: <kbd>Escape</kbd>
 - Debug: <kbd>F3</kbd>
+- Fullscreen: <kbd>F11</kbd>
 
 ## Wiki
 
