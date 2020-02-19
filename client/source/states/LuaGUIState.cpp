@@ -132,11 +132,11 @@ void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &
 	if (type == LuaWidget::Image) {
 		std::string texture;
 		gk::FloatRect clipRect;
-		packet >> texture >> clipRect.x >> clipRect.y >> clipRect.width >> clipRect.height;
+		packet >> texture >> clipRect.position.x >> clipRect.position.y >> clipRect.size.x >> clipRect.size.y;
 
 		auto *image = new gk::Image(texture);
 		image->setPosition(x, y);
-		image->setClipRect(clipRect.x, clipRect.y, clipRect.width, clipRect.height);
+		image->setClipRect(clipRect.position.x, clipRect.position.y, clipRect.size.x, clipRect.size.y);
 		m_drawables.emplace_back(image);
 	}
 	else if (type == LuaWidget::TextButton) {

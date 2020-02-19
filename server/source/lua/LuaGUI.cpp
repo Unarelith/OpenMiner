@@ -40,10 +40,10 @@ void LuaGUI::addImage(const sol::table &table) {
 	std::string texture = table["texture"].get<std::string>();
 	sol::optional<sol::table> clipRectTable = table["clip"];
 	if (clipRectTable != sol::nullopt) {
-		clipRect.x = clipRectTable.value()["x"];
-		clipRect.y = clipRectTable.value()["y"];
-		clipRect.width = clipRectTable.value()["width"];
-		clipRect.height = clipRectTable.value()["height"];
+		clipRect.position.x = clipRectTable.value()["x"];
+		clipRect.position.y = clipRectTable.value()["y"];
+		clipRect.size.x = clipRectTable.value()["width"];
+		clipRect.size.y = clipRectTable.value()["height"];
 	}
 
 	m_data.imageList.emplace_back(); // LuaWidgetDef::Image{{name, x, y}, texture, clipRect});
@@ -196,7 +196,7 @@ void LuaGUI::show(Client &client) {
 	packet << Network::Command::BlockGUIData;
 	for (auto &it : m_data.imageList)
 		packet << u8(LuaWidget::Image)
-			<< it.name << it.x << it.y << it.texture << it.clipRect.x << it.clipRect.y << it.clipRect.width << it.clipRect.height;
+			<< it.name << it.x << it.y << it.texture << it.clipRect.position.x << it.clipRect.position.y << it.clipRect.size.x << it.clipRect.size.y;
 	for (auto &it : m_data.textButtonList)
 		packet << u8(LuaWidget::TextButton) << it.name << it.x << it.y << it.text;
 	for (auto &it : m_data.inventoryWidgetList)

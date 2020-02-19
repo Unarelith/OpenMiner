@@ -166,18 +166,18 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 	const BlockData *blockData = chunk.getBlockData(x, y, z);
 	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->tiles().getTextureForFace(i, blockData ? blockData->useAltTiles : false));
 	float faceTexCoords[2 * 4] = {
-		blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.height,
-		blockTexCoords.x + blockTexCoords.width, blockTexCoords.y + blockTexCoords.height,
-		blockTexCoords.x + blockTexCoords.width, blockTexCoords.y,
-		blockTexCoords.x,                        blockTexCoords.y
+		blockTexCoords.position.x,                         blockTexCoords.position.y + blockTexCoords.size.y,
+		blockTexCoords.position.x + blockTexCoords.size.x, blockTexCoords.position.y + blockTexCoords.size.y,
+		blockTexCoords.position.x + blockTexCoords.size.x, blockTexCoords.position.y,
+		blockTexCoords.position.x,                         blockTexCoords.position.y
 	};
 
 	// Store vertex information
 	gk::Vertex vertices[4];
 	for(u8 j = 0 ; j < 4 ; j++) {
-		vertices[j].coord3d[0] = x + cubeCoords[i * 12 + j * 3];     // * boundingBox.width  + boundingBox.x;
-		vertices[j].coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1]; // * boundingBox.height + boundingBox.y;
-		vertices[j].coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2]; // * boundingBox.depth  + boundingBox.z;
+		vertices[j].coord3d[0] = x + cubeCoords[i * 12 + j * 3];     // * boundingBox.size.x + boundingBox.position.x;
+		vertices[j].coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1]; // * boundingBox.size.y + boundingBox.position.y;
+		vertices[j].coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2]; // * boundingBox.size.z + boundingBox.position.z;
 		vertices[j].coord3d[3] = i;
 
 		vertices[j].normal[0] = normal.x;
@@ -241,10 +241,10 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Block *block) {
 	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->tiles().getTextureForFace(0));
 	float faceTexCoords[2 * 4] = {
-		blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.height,
-		blockTexCoords.x + blockTexCoords.width, blockTexCoords.y + blockTexCoords.height,
-		blockTexCoords.x + blockTexCoords.width, blockTexCoords.y,
-		blockTexCoords.x,                        blockTexCoords.y
+		blockTexCoords.position.x,                         blockTexCoords.position.y + blockTexCoords.size.y,
+		blockTexCoords.position.x + blockTexCoords.size.x, blockTexCoords.position.y + blockTexCoords.size.y,
+		blockTexCoords.position.x + blockTexCoords.size.x, blockTexCoords.position.y,
+		blockTexCoords.position.x,                         blockTexCoords.position.y
 	};
 
 	static glm::vec3 normal{0, 0, 0};

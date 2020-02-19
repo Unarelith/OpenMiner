@@ -86,10 +86,10 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 	for (u8 i = 0 ; i < 6 ; ++i) {
 		const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block.tiles().getTextureForFace(i)); // block.getTexCoords(i, 0);
 		float faceTexCoords[2 * 4] = {
-			blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.height,
-			blockTexCoords.x + blockTexCoords.width, blockTexCoords.y + blockTexCoords.height,
-			blockTexCoords.x + blockTexCoords.width, blockTexCoords.y,
-			blockTexCoords.x,                        blockTexCoords.y
+			blockTexCoords.position.x,                         blockTexCoords.position.y + blockTexCoords.size.y,
+			blockTexCoords.position.x + blockTexCoords.size.x, blockTexCoords.position.y + blockTexCoords.size.y,
+			blockTexCoords.position.x + blockTexCoords.size.x, blockTexCoords.position.y,
+			blockTexCoords.position.x,                         blockTexCoords.position.y
 		};
 
 		for(u8 j = 0 ; j < 4 ; j++) {

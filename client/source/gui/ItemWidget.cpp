@@ -60,8 +60,8 @@ void ItemWidget::updateImage(const Block *block) {
 	}
 
 	gk::FloatRect clipRect = m_textureAtlas.getTexCoords(stack().item().tiles().getTextureForFace(0), false);
-	m_image.setClipRect(clipRect.x, clipRect.y, clipRect.width, clipRect.height);
-	m_image.setScale(16.0f / clipRect.width, 16.0f / clipRect.height);
+	m_image.setClipRect(clipRect.position.x, clipRect.position.y, clipRect.size.x, clipRect.size.y);
+	m_image.setScale(16.0f / clipRect.size.x, 16.0f / clipRect.size.y);
 
 	if (block)
 		m_image.setColor(block->colorMultiplier());
