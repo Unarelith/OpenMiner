@@ -144,3 +144,12 @@ mod:block {
 	bounding_box = {0.25, 0.0, 0.25, 0.5, 0.5, 0.5},
 }
 
+mod:block {
+	id = "tallgrass",
+	name = "Tall Grass",
+	tiles = "grass.png",
+	color_multiplier = {129, 191, 91, 255},
+	hardness = 0.05,
+	draw_type = 1, -- FIXME: Use string instead
+}
+

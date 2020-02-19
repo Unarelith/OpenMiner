@@ -43,7 +43,7 @@ void ItemWidget::update() {
 			m_isImage = false;
 		}
 		else
-			updateImage();
+			updateImage(&block);
 	}
 	else
 		updateImage();
@@ -52,7 +52,7 @@ void ItemWidget::update() {
 	m_text.setPosition(16 - 4 - 6 * floor(log10(stack().amount())), 16 - 6, 0);
 }
 
-void ItemWidget::updateImage() {
+void ItemWidget::updateImage(const Block *block) {
 	if (m_image.width() == 0) {
 		m_image.load(m_textureAtlas.texture());
 		m_image.setPosition(1, 1, 0);
@@ -62,6 +62,9 @@ void ItemWidget::updateImage() {
 	gk::FloatRect clipRect = m_textureAtlas.getTexCoords(stack().item().tiles().getTextureForFace(0), false);
 	m_image.setClipRect(clipRect.x, clipRect.y, clipRect.width, clipRect.height);
 	m_image.setScale(16.0f / clipRect.width, 16.0f / clipRect.height);
+
+	if (block)
+		m_image.setColor(block->colorMultiplier());
 
 	m_isImage = true;
 }

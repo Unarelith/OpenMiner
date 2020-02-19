@@ -37,14 +37,15 @@ void TerrainGenerator::generate(ServerChunk &chunk) const {
 }
 
 void TerrainGenerator::setBlocksFromLuaTable(const sol::table &table) {
-	m_dirtBlockID   = Registry::getInstance().getBlockFromStringID(table["dirt"].get<std::string>()).id();
-	m_grassBlockID  = Registry::getInstance().getBlockFromStringID(table["grass"].get<std::string>()).id();
-	m_stoneBlockID  = Registry::getInstance().getBlockFromStringID(table["stone"].get<std::string>()).id();
-	m_logBlockID    = Registry::getInstance().getBlockFromStringID(table["log"].get<std::string>()).id();
-	m_leavesBlockID = Registry::getInstance().getBlockFromStringID(table["leaves"].get<std::string>()).id();
-	m_flowerBlockID = Registry::getInstance().getBlockFromStringID(table["flower"].get<std::string>()).id();
-	m_waterBlockID  = Registry::getInstance().getBlockFromStringID(table["water"].get<std::string>()).id();
-	m_sandBlockID   = Registry::getInstance().getBlockFromStringID(table["sand"].get<std::string>()).id();
+	m_dirtBlockID      = Registry::getInstance().getBlockFromStringID(table["dirt"].get<std::string>()).id();
+	m_grassBlockID     = Registry::getInstance().getBlockFromStringID(table["grass"].get<std::string>()).id();
+	m_stoneBlockID     = Registry::getInstance().getBlockFromStringID(table["stone"].get<std::string>()).id();
+	m_logBlockID       = Registry::getInstance().getBlockFromStringID(table["log"].get<std::string>()).id();
+	m_leavesBlockID    = Registry::getInstance().getBlockFromStringID(table["leaves"].get<std::string>()).id();
+	m_flowerBlockID    = Registry::getInstance().getBlockFromStringID(table["flower"].get<std::string>()).id();
+	m_waterBlockID     = Registry::getInstance().getBlockFromStringID(table["water"].get<std::string>()).id();
+	m_sandBlockID      = Registry::getInstance().getBlockFromStringID(table["sand"].get<std::string>()).id();
+	m_tallgrassBlockID = Registry::getInstance().getBlockFromStringID(table["tallgrass"].get<std::string>()).id();
 }
 
 void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
@@ -93,6 +94,10 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 								}
 							}
 						}
+					}
+					// Or tallgrass
+					else if(chunk.getBlock(x, y - 1, z) == m_grassBlockID && (rand() % 32) == 0) {
+						chunk.setBlockRaw(x, y, z, m_tallgrassBlockID);
 					}
 					// Or a flower
 					else if(chunk.getBlock(x, y - 1, z) == m_grassBlockID && (rand() & 0xff) == 0) {

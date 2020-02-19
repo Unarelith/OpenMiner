@@ -51,6 +51,7 @@ class TerrainGenerator {
 		u16 m_flowerBlockID = 0;
 		u16 m_waterBlockID = 0;
 		u16 m_sandBlockID = 0;
+		u16 m_tallgrassBlockID = 0;
 };
 
 #endif // TERRAINGENERATOR_HPP_

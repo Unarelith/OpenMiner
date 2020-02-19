@@ -34,7 +34,8 @@ openminer:world():terrain_generator():set_blocks({
 	leaves = "default:leaves",
 	flower = "default:flower",
 	water = "default:water",
-	sand = "default:sand"
+	sand = "default:sand",
+	tallgrass = "default:tallgrass"
 })
 
 function init(player)

@@ -35,7 +35,7 @@ class ItemWidget : public Widget {
 		ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent = nullptr);
 
 		void update() override;
-		void updateImage();
+		void updateImage(const Block *block = nullptr);
 
 		const ItemStack &stack() const { return m_inventory.getStack(m_x, m_y); }
 		void setStack(const std::string &name, unsigned int amount = 1);
