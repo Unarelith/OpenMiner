@@ -144,17 +144,17 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 	const gk::FloatBox boundingBox = block->boundingBox();
 
 	// Three points of the face
-	a.x = cubeCoords[i * 12 + 0] * boundingBox.width  + boundingBox.x;
-	a.y = cubeCoords[i * 12 + 1] * boundingBox.height + boundingBox.y;
-	a.z = cubeCoords[i * 12 + 2] * boundingBox.depth  + boundingBox.z;
+	a.x = cubeCoords[i * 12 + 0] * boundingBox.size.x + boundingBox.position.x;
+	a.y = cubeCoords[i * 12 + 1] * boundingBox.size.y + boundingBox.position.y;
+	a.z = cubeCoords[i * 12 + 2] * boundingBox.size.z + boundingBox.position.z;
 
-	b.x = cubeCoords[i * 12 + 3] * boundingBox.width  + boundingBox.x;
-	b.y = cubeCoords[i * 12 + 4] * boundingBox.height + boundingBox.y;
-	b.z = cubeCoords[i * 12 + 5] * boundingBox.depth  + boundingBox.z;
+	b.x = cubeCoords[i * 12 + 3] * boundingBox.size.x + boundingBox.position.x;
+	b.y = cubeCoords[i * 12 + 4] * boundingBox.size.y + boundingBox.position.y;
+	b.z = cubeCoords[i * 12 + 5] * boundingBox.size.z + boundingBox.position.z;
 
-	c.x = cubeCoords[i * 12 + 6] * boundingBox.width  + boundingBox.x;
-	c.y = cubeCoords[i * 12 + 7] * boundingBox.height + boundingBox.y;
-	c.z = cubeCoords[i * 12 + 8] * boundingBox.depth  + boundingBox.z;
+	c.x = cubeCoords[i * 12 + 6] * boundingBox.size.x + boundingBox.position.x;
+	c.y = cubeCoords[i * 12 + 7] * boundingBox.size.y + boundingBox.position.y;
+	c.z = cubeCoords[i * 12 + 8] * boundingBox.size.z + boundingBox.position.z;
 
 	// Computing two vectors
 	v1 = b - a;

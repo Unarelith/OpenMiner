@@ -157,12 +157,12 @@ void ClientPlayer::checkCollisions(const ClientWorld &world) {
 	testPoint(world, m_x - 0.2, eyeheight - 0.4, m_z + 0.2, m_velocity);
 	testPoint(world, m_x + 0.2, eyeheight - 0.4, m_z + 0.2, m_velocity);
 #else
-	for (float x = m_x + m_hitbox.x ; x <= m_x + m_hitbox.x + m_hitbox.width + 0.1f ; x += 0.2f) {
-		for (float y = m_y + m_hitbox.y ; y <= m_y + m_hitbox.y + m_hitbox.height + 0.1f ; y += 0.9f) {
-			for (float z = m_z + m_hitbox.z ; z <= m_z + m_hitbox.z + m_hitbox.depth + 0.1f ; z += 0.2f) {
-				if (x == m_x + m_hitbox.x || x == m_x + m_hitbox.x + m_hitbox.width
-				 || y == m_y + m_hitbox.y || y == m_y + m_hitbox.y + m_hitbox.height
-				 || z == m_z + m_hitbox.z || z == m_z + m_hitbox.z + m_hitbox.depth)
+	for (float x = m_x + m_hitbox.position.x ; x <= m_x + m_hitbox.position.x + m_hitbox.size.x + 0.1f ; x += 0.2f) {
+		for (float y = m_y + m_hitbox.position.y ; y <= m_y + m_hitbox.position.y + m_hitbox.size.y + 0.1f ; y += 0.9f) {
+			for (float z = m_z + m_hitbox.position.z ; z <= m_z + m_hitbox.position.z + m_hitbox.size.z + 0.1f ; z += 0.2f) {
+				if (x == m_x + m_hitbox.position.x || x == m_x + m_hitbox.position.x + m_hitbox.size.x
+				 || y == m_y + m_hitbox.position.y || y == m_y + m_hitbox.position.y + m_hitbox.size.y
+				 || z == m_z + m_hitbox.position.z || z == m_z + m_hitbox.position.z + m_hitbox.size.z)
 					testPoint(world, x, y, z, m_velocity);
 			}
 		}

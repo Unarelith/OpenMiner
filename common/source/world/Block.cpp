@@ -42,8 +42,8 @@ Block::Block(u32 id, const TilesDef &tiles, const std::string &stringID, const s
 void Block::serialize(sf::Packet &packet) const {
 	packet << u32(m_id) << m_stringID << m_label << u8(m_drawType)
 		<< m_hardness << m_harvestRequirements << m_itemDrop << m_itemDropAmount << m_tiles
-		<< m_boundingBox.x << m_boundingBox.y << m_boundingBox.z
-		<< m_boundingBox.width << m_boundingBox.height << m_boundingBox.depth
+		<< m_boundingBox.position.x << m_boundingBox.position.y << m_boundingBox.position.z
+		<< m_boundingBox.size.x << m_boundingBox.size.y << m_boundingBox.size.z
 		<< m_isLightSource << m_canUpdate << m_canBeActivated
 		<< m_colorMultiplier.r << m_colorMultiplier.g << m_colorMultiplier.b << m_colorMultiplier.a;
 }
@@ -54,8 +54,8 @@ void Block::deserialize(sf::Packet &packet) {
 
 	packet >> id >> m_stringID >> m_label >> drawType >> m_hardness
 		>> m_harvestRequirements >> m_itemDrop >> m_itemDropAmount >> m_tiles
-		>> m_boundingBox.x >> m_boundingBox.y >> m_boundingBox.z
-		>> m_boundingBox.width >> m_boundingBox.height >> m_boundingBox.depth
+		>> m_boundingBox.position.x >> m_boundingBox.position.y >> m_boundingBox.position.z
+		>> m_boundingBox.size.x >> m_boundingBox.size.y >> m_boundingBox.size.z
 		>> m_isLightSource >> m_canUpdate >> m_canBeActivated
 		>> m_colorMultiplier.r >> m_colorMultiplier.g >> m_colorMultiplier.b >> m_colorMultiplier.a;
 
