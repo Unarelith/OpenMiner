@@ -150,9 +150,10 @@ void GameState::initShaders() {
 }
 
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	gk::Shader::bind(&m_shader);
-	m_shader.setUniform("u_time", gk::GameClock::getTicks());
-	gk::Shader::bind(nullptr);
+	// FIXME: This uniform is not used anymore since water/leaves effects are disabled
+	// gk::Shader::bind(&m_shader);
+	// m_shader.setUniform("u_time", gk::GameClock::getTicks());
+	// gk::Shader::bind(nullptr);
 
 	states.shader = &m_shader;
 

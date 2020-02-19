@@ -91,22 +91,21 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 			blockTexCoords.x + blockTexCoords.width, blockTexCoords.y,
 			blockTexCoords.x,                        blockTexCoords.y
 		};
-		for(u8 j = 0 ; j < 4 ; j++) {
-			vertices[j + i * 4].texCoord[0] = faceTexCoords[j * 2];
-			vertices[j + i * 4].texCoord[1] = faceTexCoords[j * 2 + 1];
 
+		for(u8 j = 0 ; j < 4 ; j++) {
 			vertices[j + i * 4].coord3d[0] = vertices[j + i * 4].coord3d[0] * block.boundingBox().width  + block.boundingBox().x;
 			vertices[j + i * 4].coord3d[1] = vertices[j + i * 4].coord3d[1] * block.boundingBox().height + block.boundingBox().y;
 			vertices[j + i * 4].coord3d[2] = vertices[j + i * 4].coord3d[2] * block.boundingBox().depth  + block.boundingBox().z;
-		}
-	}
 
-	gk::Color color = gk::Color::White;
-	for (u8 i = 0 ; i < 6 * 4 ; ++i) {
-		vertices[i].color[0] = color.r;
-		vertices[i].color[1] = color.g;
-		vertices[i].color[2] = color.b;
-		vertices[i].color[3] = color.a;
+			vertices[j + i * 4].texCoord[0] = faceTexCoords[j * 2];
+			vertices[j + i * 4].texCoord[1] = faceTexCoords[j * 2 + 1];
+
+			const gk::Color &colorMultiplier = block.colorMultiplier();
+			vertices[j + i * 4].color[0] = colorMultiplier.r;
+			vertices[j + i * 4].color[1] = colorMultiplier.g;
+			vertices[j + i * 4].color[2] = colorMultiplier.b;
+			vertices[j + i * 4].color[3] = colorMultiplier.a;
+		}
 	}
 
 	gk::VertexBuffer::bind(&m_vbo);

@@ -1,11 +1,11 @@
 #version 120
 
 varying vec4 v_coord3d;
+varying vec4 v_color;
 varying vec2 v_lightValue;
 varying float v_ambientOcclusion;
 
 varying float v_blockFace;
-varying float v_blockID;
 varying float v_dist;
 
 uniform int u_renderDistance;
@@ -22,32 +22,20 @@ vec4 fog(vec4 color, float fogCoord, float fogStart, float fogEnd);
 void main() {
 	// Needed to prevent bad interpolation on some systems
 	// Refer to #23 for more informations
-	float blockID = floor(v_blockID + 0.5);
 	float blockFace = floor(v_blockFace + 0.5);
 	float lightCheck = floor(v_lightValue.x + 0.5);
 
 	// Discard if the pixel is too far away
-	if(blockID != -1. && v_dist > u_renderDistance) discard;
+	if(v_blockFace != -1. && v_dist > u_renderDistance) discard;
 
+	// Get current pixel color and apply multiplier on grayscale textures
 	vec4 color = getColor();
-	if (blockID == 8.) { // Water
-		color.a = 0.85;
-		color += vec4(-0.8, -0.4, 0.2, 0);
-	}
-	else if (blockID == 4.) { // Leaves
-		color += vec4(-0.5, -0.15, -0.4, 0);
-		/* if (v_dist > 20 && color.a == 0) */
-		/* 	color.a = 0.5; */
-	}
-	else if (blockID == 3.) { // Grass
-		if (color.r == color.g && color.r == color.b) {
-			color += vec4(-0.3, -0.1, -0.25, 0);
-			/* color += vec4(-0.4, -0.15, -0.3, 0); */
-		}
+	if (v_blockFace != -1 && color != v_color && color.r == color.g && color.g == color.b) {
+		color *= v_color;
 	}
 
 	// Very cheap "transparency": don't draw pixels with a low alpha value
-	if(color.a < 0.3 && blockID != -1.) discard;
+	if(color.a < 0.3 && v_blockFace != -1.) discard;
 
 	// FIXME: FINISH THIS WITH PROPER CODE AND SUN BASIC DISPLAY
 	// int maxTime = 5 * 1000;

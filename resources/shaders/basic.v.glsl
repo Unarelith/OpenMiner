@@ -1,12 +1,12 @@
 #version 120
 
-attribute vec4 color;
 attribute vec4 coord3d;
 attribute vec2 texCoord;
+attribute vec4 color;
 
-varying vec4 v_color;
 varying vec4 v_coord3d;
 varying vec2 v_texCoord;
+varying vec4 v_color;
 varying float v_faceValue;
 
 uniform mat4 u_modelMatrix;

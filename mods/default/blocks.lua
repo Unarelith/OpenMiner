@@ -39,6 +39,8 @@ mod:block {
 	id = "grass",
 	name = "Grass",
 	tiles = {"grass_block_top.png", "dirt.png", "grass_block_side.png"},
+	color_multiplier = {129, 191, 91, 255},
+
 	item_drop = {
 		id = mod:id()..":dirt",
 		amount = 1
@@ -49,6 +51,7 @@ mod:block {
 	id = "leaves",
 	name = "Leaves",
 	tiles = "oak_leaves.png",
+	color_multiplier = {106, 173, 51, 255},
 	hardness = 0.5,
 	draw_type = 2, -- FIXME: Use string instead
 	-- is_opaque = false, -- FIXME
@@ -83,6 +86,7 @@ mod:block {
 	id = "water",
 	name = "Water",
 	tiles = "water.png",
+	color_multiplier = {51, 115, 255, 217},
 	draw_type = 3, -- FIXME: Use string instead
 	is_opaque = false,
 }

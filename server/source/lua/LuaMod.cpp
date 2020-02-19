@@ -71,6 +71,16 @@ void LuaMod::registerBlock(const sol::table &table) {
 		block.setItemDrop(dropID, dropAmount);
 	}
 
+	sol::optional<sol::table> colorMultiplier = table["color_multiplier"];
+	if (colorMultiplier != sol::nullopt) {
+		block.setColorMultiplier(gk::Color{
+			colorMultiplier.value().get<u8>(1),
+			colorMultiplier.value().get<u8>(2),
+			colorMultiplier.value().get<u8>(3),
+			colorMultiplier.value().get<u8>(4)
+		});
+	}
+
 	Registry::getInstance().registerItem(block.tiles(), stringID, label).setIsBlock(true);
 }
 

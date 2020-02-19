@@ -29,6 +29,7 @@
 
 #include <gk/core/Box.hpp>
 #include <gk/core/IntTypes.hpp>
+#include <gk/graphics/Color.hpp>
 
 #include "ItemStack.hpp"
 #include "ISerializable.hpp"
@@ -93,6 +94,9 @@ class Block : public ISerializable {
 		bool isLightSource() const { return m_isLightSource; }
 		void setLightSource(bool isLightSource) { m_isLightSource = isLightSource; }
 
+		const gk::Color &colorMultiplier() const { return m_colorMultiplier; }
+		void setColorMultiplier(const gk::Color &colorMultiplier) { m_colorMultiplier = colorMultiplier; }
+
 	protected:
 		glm::vec4 getTexCoordsFromID(int textureID) const;
 
@@ -119,6 +123,8 @@ class Block : public ISerializable {
 		bool m_isOpaque = true;
 
 		bool m_isLightSource = false;
+
+		gk::Color m_colorMultiplier = gk::Color::White;
 };
 
 #endif // BLOCK_HPP_

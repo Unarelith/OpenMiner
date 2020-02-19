@@ -184,10 +184,11 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 		vertices[j].normal[1] = normal.y;
 		vertices[j].normal[2] = normal.z;
 
-		vertices[j].color[0] = 1.0;
-		vertices[j].color[1] = 1.0;
-		vertices[j].color[2] = 1.0;
-		vertices[j].color[3] = 1.0;
+		const gk::Color colorMultiplier = block->colorMultiplier();
+		vertices[j].color[0] = colorMultiplier.r;
+		vertices[j].color[1] = colorMultiplier.g;
+		vertices[j].color[2] = colorMultiplier.b;
+		vertices[j].color[3] = colorMultiplier.a;
 
 		vertices[j].texCoord[0] = faceTexCoords[j * 2];
 		vertices[j].texCoord[1] = faceTexCoords[j * 2 + 1];
@@ -206,8 +207,6 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 				surroundingBlockPos[0], surroundingBlockPos[1], surroundingBlockPos[2]);
 
 		vertices[j].ambientOcclusion = getAmbientOcclusion(x, y, z, i, j, chunk);
-
-		vertices[j].blockType = block->id();
 	}
 
 	auto addVertex = [&](u8 j) {
@@ -262,10 +261,11 @@ inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, c
 			vertices[j].normal[1] = normal.y;
 			vertices[j].normal[2] = normal.z;
 
-			vertices[j].color[0] = 1.0;
-			vertices[j].color[1] = 1.0;
-			vertices[j].color[2] = 1.0;
-			vertices[j].color[3] = 1.0;
+			const gk::Color colorMultiplier = block->colorMultiplier();
+			vertices[j].color[0] = colorMultiplier.r;
+			vertices[j].color[1] = colorMultiplier.g;
+			vertices[j].color[2] = colorMultiplier.b;
+			vertices[j].color[3] = colorMultiplier.a;
 
 			vertices[j].texCoord[0] = faceTexCoords[j * 2];
 			vertices[j].texCoord[1] = faceTexCoords[j * 2 + 1];
@@ -274,8 +274,6 @@ inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, c
 			vertices[j].lightValue[1] = chunk.lightmap().getTorchlight(x, y, z);
 
 			vertices[j].ambientOcclusion = 5;
-
-			vertices[j].blockType = block->id();
 		}
 
 		m_vertices[Layer::Flora].emplace_back(vertices[0]);
