@@ -189,9 +189,9 @@ void BlockCursor::update(const Hotbar &hotbar) {
 void BlockCursor::updateVertexBuffer(const Block &block) {
 	gk::Vertex vertices[24];
 	for (u8 i = 0 ; i < 24 ; ++i) {
-		vertices[i].coord3d[0] = cubeCoords[i * 3]     * block.boundingBox().size.x + block.boundingBox().position.x;
-		vertices[i].coord3d[1] = cubeCoords[i * 3 + 1] * block.boundingBox().size.y + block.boundingBox().position.y;
-		vertices[i].coord3d[2] = cubeCoords[i * 3 + 2] * block.boundingBox().size.z + block.boundingBox().position.z;
+		vertices[i].coord3d[0] = cubeCoords[i * 3]     * block.boundingBox().sizeX + block.boundingBox().x;
+		vertices[i].coord3d[1] = cubeCoords[i * 3 + 1] * block.boundingBox().sizeY + block.boundingBox().y;
+		vertices[i].coord3d[2] = cubeCoords[i * 3 + 2] * block.boundingBox().sizeZ + block.boundingBox().z;
 		vertices[i].coord3d[3] = -1;
 	}
 
@@ -203,9 +203,9 @@ void BlockCursor::updateVertexBuffer(const Block &block) {
 void BlockCursor::updateAnimationVertexBuffer(const Block &block, int animationPos) {
 	gk::Vertex vertices[24];
 	for (u8 i = 0 ; i < 24 ; ++i) {
-		vertices[i].coord3d[0] = cubeCoords[i * 3]     * block.boundingBox().size.x + block.boundingBox().position.x;
-		vertices[i].coord3d[1] = cubeCoords[i * 3 + 1] * block.boundingBox().size.y + block.boundingBox().position.y;
-		vertices[i].coord3d[2] = cubeCoords[i * 3 + 2] * block.boundingBox().size.z + block.boundingBox().position.z;
+		vertices[i].coord3d[0] = cubeCoords[i * 3]     * block.boundingBox().sizeX + block.boundingBox().x;
+		vertices[i].coord3d[1] = cubeCoords[i * 3 + 1] * block.boundingBox().sizeY + block.boundingBox().y;
+		vertices[i].coord3d[2] = cubeCoords[i * 3 + 2] * block.boundingBox().sizeZ + block.boundingBox().z;
 		vertices[i].coord3d[3] = -1;
 	}
 

@@ -37,7 +37,7 @@
 SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : InterfaceState(parent) {
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale, 1);
 
-	m_doneButton.setPosition(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().size.x * Config::guiScale / 2.0f, Config::screenHeight - 291);
+	m_doneButton.setPosition(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().sizeX * Config::guiScale / 2.0f, Config::screenHeight - 291);
 	m_doneButton.setScale(Config::guiScale, Config::guiScale, 1);
 	m_doneButton.setText("Done");
 	m_doneButton.setCallback([this] (TextButton &) {
@@ -51,7 +51,7 @@ void SettingsMenuState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-		m_doneButton.setPosition(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().size.x / 2.0f, Config::screenHeight - 291);
+		m_doneButton.setPosition(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().sizeX / 2.0f, Config::screenHeight - 291);
 
 		if (&m_stateStack->top() != this)
 			m_menuWidget.onEvent(event);

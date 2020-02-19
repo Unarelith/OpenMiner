@@ -144,17 +144,17 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 	const gk::FloatBox boundingBox = block->boundingBox();
 
 	// Three points of the face
-	a.x = cubeCoords[i * 12 + 0] * boundingBox.size.x + boundingBox.position.x;
-	a.y = cubeCoords[i * 12 + 1] * boundingBox.size.y + boundingBox.position.y;
-	a.z = cubeCoords[i * 12 + 2] * boundingBox.size.z + boundingBox.position.z;
+	a.x = cubeCoords[i * 12 + 0] * boundingBox.sizeX + boundingBox.x;
+	a.y = cubeCoords[i * 12 + 1] * boundingBox.sizeY + boundingBox.y;
+	a.z = cubeCoords[i * 12 + 2] * boundingBox.sizeZ + boundingBox.z;
 
-	b.x = cubeCoords[i * 12 + 3] * boundingBox.size.x + boundingBox.position.x;
-	b.y = cubeCoords[i * 12 + 4] * boundingBox.size.y + boundingBox.position.y;
-	b.z = cubeCoords[i * 12 + 5] * boundingBox.size.z + boundingBox.position.z;
+	b.x = cubeCoords[i * 12 + 3] * boundingBox.sizeX + boundingBox.x;
+	b.y = cubeCoords[i * 12 + 4] * boundingBox.sizeY + boundingBox.y;
+	b.z = cubeCoords[i * 12 + 5] * boundingBox.sizeZ + boundingBox.z;
 
-	c.x = cubeCoords[i * 12 + 6] * boundingBox.size.x + boundingBox.position.x;
-	c.y = cubeCoords[i * 12 + 7] * boundingBox.size.y + boundingBox.position.y;
-	c.z = cubeCoords[i * 12 + 8] * boundingBox.size.z + boundingBox.position.z;
+	c.x = cubeCoords[i * 12 + 6] * boundingBox.sizeX + boundingBox.x;
+	c.y = cubeCoords[i * 12 + 7] * boundingBox.sizeY + boundingBox.y;
+	c.z = cubeCoords[i * 12 + 8] * boundingBox.sizeZ + boundingBox.z;
 
 	// Computing two vectors
 	v1 = b - a;
@@ -166,18 +166,18 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 	const BlockData *blockData = chunk.getBlockData(x, y, z);
 	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->tiles().getTextureForFace(i, blockData ? blockData->useAltTiles : false));
 	float faceTexCoords[2 * 4] = {
-		blockTexCoords.position.x,                         blockTexCoords.position.y + blockTexCoords.size.y,
-		blockTexCoords.position.x + blockTexCoords.size.x, blockTexCoords.position.y + blockTexCoords.size.y,
-		blockTexCoords.position.x + blockTexCoords.size.x, blockTexCoords.position.y,
-		blockTexCoords.position.x,                         blockTexCoords.position.y
+		blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.sizeY,
+		blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y + blockTexCoords.sizeY,
+		blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y,
+		blockTexCoords.x,                        blockTexCoords.y
 	};
 
 	// Store vertex information
 	gk::Vertex vertices[4];
 	for(u8 j = 0 ; j < 4 ; j++) {
-		vertices[j].coord3d[0] = x + cubeCoords[i * 12 + j * 3];     // * boundingBox.size.x + boundingBox.position.x;
-		vertices[j].coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1]; // * boundingBox.size.y + boundingBox.position.y;
-		vertices[j].coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2]; // * boundingBox.size.z + boundingBox.position.z;
+		vertices[j].coord3d[0] = x + cubeCoords[i * 12 + j * 3];     // * boundingBox.sizeX + boundingBox.x;
+		vertices[j].coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1]; // * boundingBox.sizeY + boundingBox.y;
+		vertices[j].coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2]; // * boundingBox.sizeZ + boundingBox.z;
 		vertices[j].coord3d[3] = i;
 
 		vertices[j].normal[0] = normal.x;
@@ -241,10 +241,10 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Block *block) {
 	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->tiles().getTextureForFace(0));
 	float faceTexCoords[2 * 4] = {
-		blockTexCoords.position.x,                         blockTexCoords.position.y + blockTexCoords.size.y,
-		blockTexCoords.position.x + blockTexCoords.size.x, blockTexCoords.position.y + blockTexCoords.size.y,
-		blockTexCoords.position.x + blockTexCoords.size.x, blockTexCoords.position.y,
-		blockTexCoords.position.x,                         blockTexCoords.position.y
+		blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.sizeY,
+		blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y + blockTexCoords.sizeY,
+		blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y,
+		blockTexCoords.x,                        blockTexCoords.y
 	};
 
 	static glm::vec3 normal{0, 0, 0};

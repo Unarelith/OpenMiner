@@ -31,14 +31,14 @@ gk::FloatRect Widget::getGlobalBounds() const {
 
 	const Widget *widget = this;
 	while (widget) {
-		aabb.position.x *= widget->getScale().x;
-		aabb.position.y *= widget->getScale().y;
+		aabb.x *= widget->getScale().x;
+		aabb.y *= widget->getScale().y;
 
-		aabb.position.x += widget->getPosition().x;
-		aabb.position.y += widget->getPosition().y;
+		aabb.x += widget->getPosition().x;
+		aabb.y += widget->getPosition().y;
 
-		aabb.size.x *= widget->getScale().x;
-		aabb.size.y *= widget->getScale().y;
+		aabb.sizeX *= widget->getScale().x;
+		aabb.sizeY *= widget->getScale().y;
 
 		widget = widget->m_parent;
 	}

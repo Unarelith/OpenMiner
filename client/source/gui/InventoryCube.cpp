@@ -86,16 +86,16 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 	for (u8 i = 0 ; i < 6 ; ++i) {
 		const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block.tiles().getTextureForFace(i)); // block.getTexCoords(i, 0);
 		float faceTexCoords[2 * 4] = {
-			blockTexCoords.position.x,                         blockTexCoords.position.y + blockTexCoords.size.y,
-			blockTexCoords.position.x + blockTexCoords.size.x, blockTexCoords.position.y + blockTexCoords.size.y,
-			blockTexCoords.position.x + blockTexCoords.size.x, blockTexCoords.position.y,
-			blockTexCoords.position.x,                         blockTexCoords.position.y
+			blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.sizeY,
+			blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y + blockTexCoords.sizeY,
+			blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y,
+			blockTexCoords.x,                        blockTexCoords.y
 		};
 
 		for(u8 j = 0 ; j < 4 ; j++) {
-			vertices[j + i * 4].coord3d[0] = vertices[j + i * 4].coord3d[0] * block.boundingBox().size.x + block.boundingBox().position.x;
-			vertices[j + i * 4].coord3d[1] = vertices[j + i * 4].coord3d[1] * block.boundingBox().size.y + block.boundingBox().position.y;
-			vertices[j + i * 4].coord3d[2] = vertices[j + i * 4].coord3d[2] * block.boundingBox().size.z + block.boundingBox().position.z;
+			vertices[j + i * 4].coord3d[0] = vertices[j + i * 4].coord3d[0] * block.boundingBox().sizeX + block.boundingBox().x;
+			vertices[j + i * 4].coord3d[1] = vertices[j + i * 4].coord3d[1] * block.boundingBox().sizeY + block.boundingBox().y;
+			vertices[j + i * 4].coord3d[2] = vertices[j + i * 4].coord3d[2] * block.boundingBox().sizeZ + block.boundingBox().z;
 
 			vertices[j + i * 4].texCoord[0] = faceTexCoords[j * 2];
 			vertices[j + i * 4].texCoord[1] = faceTexCoords[j * 2 + 1];

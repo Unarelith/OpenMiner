@@ -34,7 +34,7 @@ ServerConnectState::ServerConnectState() {
 	m_textInput.setCursor("_");
 
 	m_connectButton.setText("Connect");
-	m_connectButton.setPosition(Config::screenWidth / 2.0f - m_connectButton.getGlobalBounds().size.x * Config::guiScale / 2.0f, Config::screenHeight - 340);
+	m_connectButton.setPosition(Config::screenWidth / 2.0f - m_connectButton.getGlobalBounds().sizeX * Config::guiScale / 2.0f, Config::screenHeight - 340);
 	m_connectButton.setScale(Config::guiScale, Config::guiScale, 1);
 	m_connectButton.setCallback([this](TextButton &) {
 		size_t sep = m_textInput.content().find_first_of(':');
@@ -56,7 +56,7 @@ ServerConnectState::ServerConnectState() {
 	});
 
 	m_cancelButton.setText("Cancel");
-	m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().size.x * Config::guiScale / 2.0f, Config::screenHeight - 261);
+	m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX * Config::guiScale / 2.0f, Config::screenHeight - 261);
 	m_cancelButton.setScale(Config::guiScale, Config::guiScale, 1);
 	m_cancelButton.setCallback([this](TextButton &) {
 		m_stateStack->pop();
@@ -68,8 +68,8 @@ void ServerConnectState::onEvent(const SDL_Event &event) {
 
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 		m_textInput.setPosition(Config::screenWidth / 2.0f - m_textInput.getSize().x / 2, Config::screenHeight / 2.0f - m_textInput.getSize().y / 2);
-		m_connectButton.setPosition(Config::screenWidth / 2.0f - m_connectButton.getGlobalBounds().size.x / 2, Config::screenHeight - 340);
-		m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().size.x / 2, Config::screenHeight - 261);
+		m_connectButton.setPosition(Config::screenWidth / 2.0f - m_connectButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 340);
+		m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 261);
 	}
 
 	m_textInput.onEvent(event);

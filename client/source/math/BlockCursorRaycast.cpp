@@ -130,19 +130,19 @@ void BlockCursorRaycast::rayCastToAxis(const Axis axis, const glm::dvec3 &positi
 			bool hit = false;
 
 			// Check if we hit any of the sides of the inner box
-			isect = intersectAxisPlane(AXIS_X, (lookAt.x < 0. ? selBox.position.x + selBox.size.x : selBox.position.x), position, lookAt);
-			if (selBox.position.y <= isect.y && isect.y <= selBox.position.y + selBox.size.y
-			 && selBox.position.z <= isect.z && isect.z <= selBox.position.z + selBox.size.z)
+			isect = intersectAxisPlane(AXIS_X, (lookAt.x < 0. ? selBox.x + selBox.sizeX : selBox.x), position, lookAt);
+			if (selBox.y <= isect.y && isect.y <= selBox.y + selBox.sizeY
+			 && selBox.z <= isect.z && isect.z <= selBox.z + selBox.sizeZ)
 				recordHit(position, isect, AXIS_X, lookAt.x < 0., nx, ny, nz, bestX, bestY, bestZ, bestFace, bestDepth, hit);
 
-			isect = intersectAxisPlane(AXIS_Y, (lookAt.y < 0. ? selBox.position.y + selBox.size.y : selBox.position.y), position, lookAt);
-			if (selBox.position.x <= isect.x && isect.x <= selBox.position.x + selBox.size.x
-			 && selBox.position.z <= isect.z && isect.z <= selBox.position.z + selBox.size.z)
+			isect = intersectAxisPlane(AXIS_Y, (lookAt.y < 0. ? selBox.y + selBox.sizeY : selBox.y), position, lookAt);
+			if (selBox.x <= isect.x && isect.x <= selBox.x + selBox.sizeX
+			 && selBox.z <= isect.z && isect.z <= selBox.z + selBox.sizeZ)
 				recordHit(position, isect, AXIS_Y, lookAt.y < 0., nx, ny, nz, bestX, bestY, bestZ, bestFace, bestDepth, hit);
 
-			isect = intersectAxisPlane(AXIS_Z, (lookAt.z < 0. ? selBox.position.z + selBox.size.z : selBox.position.z), position, lookAt);
-			if (selBox.position.x <= isect.x && isect.x <= selBox.position.x + selBox.size.x
-			 && selBox.position.y <= isect.y && isect.y <= selBox.position.y + selBox.size.y)
+			isect = intersectAxisPlane(AXIS_Z, (lookAt.z < 0. ? selBox.z + selBox.sizeZ : selBox.z), position, lookAt);
+			if (selBox.x <= isect.x && isect.x <= selBox.x + selBox.sizeX
+			 && selBox.y <= isect.y && isect.y <= selBox.y + selBox.sizeY)
 				recordHit(position, isect, AXIS_Z, lookAt.z < 0., nx, ny, nz, bestX, bestY, bestZ, bestFace, bestDepth, hit);
 
 			if (hit)

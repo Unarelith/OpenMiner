@@ -38,7 +38,7 @@ ServerLoadingState::ServerLoadingState(GameState &game) : m_game(game) {
 	m_text.setCharacterSize(8 * 6);
 	m_text.setString("Loading world...");
 	m_text.setColor(gk::Color::White);
-	m_text.setPosition(Config::screenWidth / 2.0f - m_text.getLocalBounds().size.x / 2.0f, 200);
+	m_text.setPosition(Config::screenWidth / 2.0f - m_text.getLocalBounds().sizeX / 2.0f, 200);
 
 	m_textShadow.setFont(gk::ResourceHandler::getInstance().get<gk::Font>("font-default"));
 	m_textShadow.setCharacterSize(8 * 6);
