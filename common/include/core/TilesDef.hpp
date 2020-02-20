@@ -37,10 +37,10 @@
 enum BlockFace : u8 {
 	Top    = 0,
 	Bottom = 1,
-	Left   = 2,
-	Right  = 3,
-	Front  = 4,
-	Back   = 5
+	West   = 2,
+	East   = 3,
+	South  = 4,
+	North  = 5
 };
 
 class TilesDef : public ISerializable {

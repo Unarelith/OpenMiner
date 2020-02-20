@@ -32,15 +32,15 @@ bool World::isReloadRequested = false;
 Chunk *World::getChunkAtBlockPos(int x, int y, int z) const {
 	return getChunk(
 		std::floor((float)x / CHUNK_WIDTH),
-		std::floor((float)y / CHUNK_HEIGHT),
-		std::floor((float)z / CHUNK_DEPTH)
+		std::floor((float)y / CHUNK_DEPTH),
+		std::floor((float)z / CHUNK_HEIGHT)
 	);
 }
 
 BlockData *World::getBlockData(int x, int y, int z) const {
 	Chunk *chunk = getChunkAtBlockPos(x, y, z);
 	if (chunk)
-		return chunk->getBlockData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1));
+		return chunk->getBlockData(x & (CHUNK_WIDTH - 1), y & (CHUNK_DEPTH - 1), z & (CHUNK_HEIGHT - 1));
 
 	return nullptr;
 }
@@ -48,7 +48,7 @@ BlockData *World::getBlockData(int x, int y, int z) const {
 BlockData *World::addBlockData(int x, int y, int z, int inventoryWidth, int inventoryHeight) const {
 	Chunk *chunk = getChunkAtBlockPos(x, y, z);
 	if (chunk)
-		return chunk->addBlockData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), inventoryWidth, inventoryHeight);
+		return chunk->addBlockData(x & (CHUNK_WIDTH - 1), y & (CHUNK_DEPTH - 1), z & (CHUNK_HEIGHT - 1), inventoryWidth, inventoryHeight);
 
 	return nullptr;
 }
@@ -56,7 +56,7 @@ BlockData *World::addBlockData(int x, int y, int z, int inventoryWidth, int inve
 u16 World::getBlock(int x, int y, int z) const {
 	Chunk *chunk = getChunkAtBlockPos(x, y, z);
 	if (chunk)
-		return chunk->getBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1));
+		return chunk->getBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_DEPTH - 1), z & (CHUNK_HEIGHT - 1));
 
 	return 0;
 }
@@ -64,13 +64,13 @@ u16 World::getBlock(int x, int y, int z) const {
 void World::setBlock(int x, int y, int z, u16 id) const {
 	Chunk *chunk = getChunkAtBlockPos(x, y, z);
 	if (chunk)
-		chunk->setBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), id);
+		chunk->setBlock(x & (CHUNK_WIDTH - 1), y & (CHUNK_DEPTH - 1), z & (CHUNK_HEIGHT - 1), id);
 }
 
 u16 World::getData(int x, int y, int z) const {
 	Chunk *chunk = getChunkAtBlockPos(x, y, z);
 	if (chunk)
-		return chunk->getData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1));
+		return chunk->getData(x & (CHUNK_WIDTH - 1), y & (CHUNK_DEPTH - 1), z & (CHUNK_HEIGHT - 1));
 
 	return 0;
 }
@@ -78,5 +78,5 @@ u16 World::getData(int x, int y, int z) const {
 void World::setData(int x, int y, int z, u16 data) const {
 	Chunk *chunk = getChunkAtBlockPos(x, y, z);
 	if (chunk)
-		chunk->setData(x & (CHUNK_WIDTH - 1), y & (CHUNK_HEIGHT - 1), z & (CHUNK_DEPTH - 1), data);
+		chunk->setData(x & (CHUNK_WIDTH - 1), y & (CHUNK_DEPTH - 1), z & (CHUNK_HEIGHT - 1), data);
 }

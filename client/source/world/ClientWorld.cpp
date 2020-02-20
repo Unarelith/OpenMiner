@@ -37,8 +37,8 @@ ClientWorld::ClientWorld() :
 
 void ClientWorld::init(float playerX, float playerY, float playerZ) {
 	int pcx = std::floor(playerX / CHUNK_WIDTH);
-	int pcy = std::floor(playerY / CHUNK_HEIGHT);
-	int pcz = std::floor(playerZ / CHUNK_DEPTH);
+	int pcy = std::floor(playerY / CHUNK_DEPTH);
+	int pcz = std::floor(playerZ / CHUNK_HEIGHT);
 
 	m_chunks.emplace(gk::Vector3i{pcx, pcy, pcz}, new ClientChunk(pcx, pcy, pcz, *this, m_textureAtlas));
 }
@@ -95,9 +95,9 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 	createChunkNeighbours(chunk);
 
 	// Receive chunk data
-	for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
-		for (u16 y = 0 ; y < CHUNK_HEIGHT ; ++y) {
-			for (u16 z = 0 ; z < CHUNK_DEPTH ; ++z) {
+	for (u16 z = 0 ; z < CHUNK_HEIGHT ; ++z) {
+		for (u16 y = 0 ; y < CHUNK_DEPTH ; ++y) {
+			for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
 				u16 block;
 				u8 light;
 
@@ -159,10 +159,10 @@ void ClientWorld::createChunkNeighbours(ClientChunk *chunk) {
 	gk::Vector3i surroundingChunks[6] = {
 		{chunk->x() - 1, chunk->y(),     chunk->z()},
 		{chunk->x() + 1, chunk->y(),     chunk->z()},
-		{chunk->x(),     chunk->y(),     chunk->z() - 1},
-		{chunk->x(),     chunk->y(),     chunk->z() + 1},
 		{chunk->x(),     chunk->y() - 1, chunk->z()},
 		{chunk->x(),     chunk->y() + 1, chunk->z()},
+		{chunk->x(),     chunk->y(),     chunk->z() - 1},
+		{chunk->x(),     chunk->y(),     chunk->z() + 1},
 	};
 
 	// Create entries in the map for surrounding chunks
@@ -202,13 +202,13 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	for(auto &it : m_chunks) {
 		states.transform = glm::translate(glm::mat4(1.0f),
 		                                  glm::vec3(it.second->x() * CHUNK_WIDTH,
-		                                            it.second->y() * CHUNK_HEIGHT,
-		                                            it.second->z() * CHUNK_DEPTH));
+		                                            it.second->y() * CHUNK_DEPTH,
+		                                            it.second->z() * CHUNK_HEIGHT));
 
 		// Is the chunk close enough?
 		glm::vec4 center = target.getView()->getViewTransform().getMatrix()
 		                 * states.transform.getMatrix()
-		                 * glm::vec4(CHUNK_WIDTH / 2, CHUNK_HEIGHT / 2, CHUNK_DEPTH / 2, 1);
+		                 * glm::vec4(CHUNK_WIDTH / 2, CHUNK_DEPTH / 2, CHUNK_HEIGHT / 2, 1);
 
 		// Nope, too far, don't render it
 		if(glm::length(center) > (Config::renderDistance + 1) * CHUNK_WIDTH) {
@@ -226,7 +226,10 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		center.y /= center.w;
 
 		// If it is behind the camera, don't bother drawing it
-		if(center.z < -CHUNK_HEIGHT / 2) {
+		// Our screen coordinates are X right, Y up, and for a right-handed
+		// coordinate system, depth must be negative Z, so anything with a
+		// positive Z is behind the camera.
+		if(center.z > CHUNK_HEIGHT / 2) {
 			continue;
 		}
 

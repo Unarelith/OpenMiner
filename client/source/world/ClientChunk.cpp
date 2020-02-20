@@ -52,10 +52,10 @@ void ClientChunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u
 }
 
 bool ClientChunk::areAllNeighboursTooFar() const {
-	return (!m_surroundingChunks[Chunk::Left]   || ((ClientChunk *)m_surroundingChunks[Chunk::Left])->isTooFar())
-		&& (!m_surroundingChunks[Chunk::Right]  || ((ClientChunk *)m_surroundingChunks[Chunk::Right])->isTooFar())
-		&& (!m_surroundingChunks[Chunk::Front]  || ((ClientChunk *)m_surroundingChunks[Chunk::Front])->isTooFar())
-		&& (!m_surroundingChunks[Chunk::Back]   || ((ClientChunk *)m_surroundingChunks[Chunk::Back])->isTooFar())
+	return (!m_surroundingChunks[Chunk::West]   || ((ClientChunk *)m_surroundingChunks[Chunk::West])->isTooFar())
+		&& (!m_surroundingChunks[Chunk::East]   || ((ClientChunk *)m_surroundingChunks[Chunk::East])->isTooFar())
+		&& (!m_surroundingChunks[Chunk::South]  || ((ClientChunk *)m_surroundingChunks[Chunk::South])->isTooFar())
+		&& (!m_surroundingChunks[Chunk::North]  || ((ClientChunk *)m_surroundingChunks[Chunk::North])->isTooFar())
 		&& (!m_surroundingChunks[Chunk::Bottom] || ((ClientChunk *)m_surroundingChunks[Chunk::Bottom])->isTooFar())
 		&& (!m_surroundingChunks[Chunk::Top]    || ((ClientChunk *)m_surroundingChunks[Chunk::Top])->isTooFar());
 }

@@ -98,17 +98,17 @@ void ServerWorld::sendChunkData(const Client &client, ServerChunk *chunk) {
 	sf::Packet packet;
 	packet << Network::Command::ChunkData;
 	packet << chunk->x() << chunk->y() << chunk->z();
-	for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
-		for (u16 y = 0 ; y < CHUNK_HEIGHT ; ++y) {
-			for (u16 z = 0 ; z < CHUNK_DEPTH ; ++z) {
-				packet << u16(chunk->data()[x][y][z]);
+	for (u16 z = 0 ; z < CHUNK_HEIGHT ; ++z) {
+		for (u16 y = 0 ; y < CHUNK_DEPTH ; ++y) {
+			for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
+				packet << u16(chunk->data()[z][y][x]);
 				packet << chunk->lightmap().getLightData(x, y, z);
 
 				BlockData *blockData = chunk->getBlockData(x, y, z);
 				if (blockData) {
 					s32 globalX = x + chunk->x() * CHUNK_WIDTH;
-					s32 globalY = y + chunk->y() * CHUNK_HEIGHT;
-					s32 globalZ = z + chunk->z() * CHUNK_DEPTH;
+					s32 globalY = y + chunk->y() * CHUNK_DEPTH;
+					s32 globalZ = z + chunk->z() * CHUNK_HEIGHT;
 
 					m_server->sendBlockDataUpdate(globalX, globalY, globalZ, blockData, &client);
 					m_server->sendBlockInvUpdate(globalX, globalY, globalZ, blockData->inventory, &client);

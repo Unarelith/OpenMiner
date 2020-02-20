@@ -59,7 +59,7 @@ class ChunkLightmap {
 		bool updateTorchlight();
 		bool updateSunlight();
 
-		u8 getLightData(int x, int y, int z) const { return m_lightMap[x][y][z]; }
+		u8 getLightData(int x, int y, int z) const { return m_lightMap[z][y][x]; }
 		u8 getSunlight(int x, int y, int z) const;
 		u8 getTorchlight(int x, int y, int z) const;
 
@@ -73,7 +73,7 @@ class ChunkLightmap {
 
 		Chunk *m_chunk = nullptr;
 
-		using LightMapArray = u8[CHUNK_WIDTH][CHUNK_HEIGHT][CHUNK_DEPTH];
+		using LightMapArray = u8[CHUNK_HEIGHT][CHUNK_DEPTH][CHUNK_WIDTH];
 		LightMapArray m_lightMap;
 
 		std::queue<LightNode> m_torchlightBfsQueue;

@@ -37,11 +37,11 @@ const std::string &TilesDef::getTextureForFace(u8 face, bool useAltTiles) const 
 	else if (size == 2)
 		outFace = (face == BlockFace::Top || face == BlockFace::Bottom) ? 0 : 1;
 	else if (size == 3 && face >= size)
-		outFace = BlockFace::Left;
+		outFace = BlockFace::West;
 	else if (size == 4 && face >= size)
-		outFace = BlockFace::Right;
+		outFace = BlockFace::East;
 	else if (size == 5 && face >= size)
-		outFace = BlockFace::Front;
+		outFace = BlockFace::South;
 
 	if (!useAltTiles)
 		return m_textureFilenames.at(outFace);

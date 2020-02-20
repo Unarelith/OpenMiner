@@ -41,12 +41,12 @@ class World;
 class Chunk : public gk::NonCopyable {
 	public:
 		enum {
-			Left,    // cx - 1
-			Right,   // cx + 1
-			Front,   // cz - 1
-			Back,    // cz + 1
-			Bottom,  // cy - 1
-			Top      // cy + 1
+			West,    // cx - 1
+			East,    // cx + 1
+			South,   // cy - 1
+			North,   // cy + 1
+			Bottom,  // cz - 1
+			Top      // cz + 1
 		};
 
 	public:
@@ -89,10 +89,11 @@ class Chunk : public gk::NonCopyable {
 		const ChunkLightmap &lightmap() const { return m_lightmap; }
 
 		static constexpr u8 width = CHUNK_WIDTH;
-		static constexpr u8 height = CHUNK_HEIGHT;
 		static constexpr u8 depth = CHUNK_DEPTH;
+		static constexpr u8 height = CHUNK_HEIGHT;
 
-		using DataArray = u32[Chunk::width][Chunk::height][Chunk::depth];
+		// Placing horizontal slices together may help with cache locality and compressibility
+		using DataArray = u32[Chunk::height][Chunk::depth][Chunk::width];
 		const DataArray &data() const { return m_data; }
 
 	protected:

@@ -28,72 +28,72 @@
 static const float cubeCoords[6 * 4 * 3] = {
 	// Top
 	0, 1, 1,
+	0, 0, 1,
+	1, 0, 1,
 	1, 1, 1,
-	1, 1, 0,
-	0, 1, 0,
 
 	// Bottom
 	0, 0, 0,
+	0, 1, 0,
+	1, 1, 0,
 	1, 0, 0,
-	1, 0, 1,
-	0, 0, 1,
 
-	// Left
+	// West
 	0, 0, 0,
 	0, 0, 1,
 	0, 1, 1,
 	0, 1, 0,
 
-	// Right
-	1, 0, 1,
-	1, 0, 0,
+	// East
 	1, 1, 0,
 	1, 1, 1,
-
-	// Front
+	1, 0, 1,
 	1, 0, 0,
-	0, 0, 0,
-	0, 1, 0,
-	1, 1, 0,
 
-	// Back
+	// South
+	1, 0, 0,
+	1, 0, 1,
 	0, 0, 1,
-	1, 0, 1,
-	1, 1, 1,
+	0, 0, 0,
+
+	// North
+	0, 1, 0,
 	0, 1, 1,
+	1, 1, 1,
+	1, 1, 0,
 };
 
 static const float crossCoords[2 * 4 * 3] = {
 	0, 0, 0,
-	1, 0, 1,
-	1, 1, 1,
-	0, 1, 0,
-
 	0, 0, 1,
-	1, 0, 0,
+	1, 1, 1,
 	1, 1, 0,
+
+	0, 1, 0,
 	0, 1, 1,
+	1, 0, 1,
+	1, 0, 0,
 };
 
 
 std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const ClientChunk &chunk, const std::array<gk::VertexBuffer, layers> &vbo) {
 	for (u8 i = 0 ; i < layers ; ++i)
-		m_vertices[i].reserve(CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_DEPTH * 6 * 4);
+		m_vertices[i].reserve(CHUNK_WIDTH * CHUNK_DEPTH * CHUNK_HEIGHT * 6 * 4);
 
-	for(u8 z = 0 ; z < CHUNK_DEPTH ; z++) {
-		for(u8 y = 0 ; y < CHUNK_HEIGHT ; y++) {
+	for(u8 z = 0 ; z < CHUNK_HEIGHT ; z++) {
+		for(u8 y = 0 ; y < CHUNK_DEPTH ; y++) {
 			for(u8 x = 0 ; x < CHUNK_WIDTH ; x++) {
 				const Block &block = Registry::getInstance().getBlock(chunk.getBlock(x, y, z));
 				if(!block.id()) continue;
 				if (!chunk.getBlock(x, y, z)) continue;
 
 				const int surroundingBlocksPos[6][3] = {
-					{x, y + 1, z},
-					{x, y - 1, z},
+					{x, y, z + 1},
+					{x, y, z - 1},
 					{x - 1, y, z},
 					{x + 1, y, z},
-					{x, y, z - 1},
-					{x, y, z + 1},
+					{x, y - 1, z},
+					{x, y + 1, z},
 				};
 
 				if (block.drawType() == BlockDrawType::Solid
@@ -288,25 +288,25 @@ inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, c
 inline gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) const {
 	gk::Vector3i offset;
 	offset.x = (
-			(i == BlockFace::Left) ||
+			(i == BlockFace::West) ||
 			(i == BlockFace::Bottom && (j == 0 || j == 3)) ||
 			(i == BlockFace::Top    && (j == 0 || j == 3)) ||
-			(i == BlockFace::Front  && (j == 1 || j == 2)) ||
-			(i == BlockFace::Back   && (j == 0 || j == 3))) ? -1 : 1;
+			(i == BlockFace::South  && (j == 1 || j == 2)) ||
+			(i == BlockFace::North  && (j == 0 || j == 3))) ? -1 : 1;
 
-	offset.z = (
-			(i == BlockFace::Front) ||
-			(i == BlockFace::Left   && (j == 0 || j == 3)) ||
-			(i == BlockFace::Right  && (j == 1 || j == 2)) ||
+	offset.y = (
+			(i == BlockFace::South) ||
+			(i == BlockFace::West   && (j == 0 || j == 3)) ||
+			(i == BlockFace::East   && (j == 1 || j == 2)) ||
 			(i == BlockFace::Bottom && (j == 0 || j == 1)) ||
 			(i == BlockFace::Top    && (j == 2 || j == 3))) ? -1 : 1;
 
-	offset.y = (
+	offset.z = (
 			(i == BlockFace::Bottom) ||
-			(i == BlockFace::Left  && (j == 0 || j == 1)) ||
-			(i == BlockFace::Right && (j == 0 || j == 1)) ||
-			(i == BlockFace::Front && (j == 0 || j == 1)) ||
-			(i == BlockFace::Back  && (j == 0 || j == 1))) ? -1 : 1;
+			(i == BlockFace::West   && (j == 0 || j == 1)) ||
+			(i == BlockFace::East   && (j == 0 || j == 1)) ||
+			(i == BlockFace::South  && (j == 0 || j == 1)) ||
+			(i == BlockFace::North  && (j == 0 || j == 1))) ? -1 : 1;
 
 	return offset;
 }
@@ -315,7 +315,7 @@ inline gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) const {
 inline u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const ClientChunk &chunk) {
 	gk::Vector3i offset = getOffsetFromVertex(i, j);
 
-	const Block &block0 = Registry::getInstance().getBlock(chunk.getBlock(x + offset.x, y + offset.y, z));
+	const Block &block0 = Registry::getInstance().getBlock(chunk.getBlock(x + offset.x, y,            z + offset.z));
 	const Block &block1 = Registry::getInstance().getBlock(chunk.getBlock(x,            y + offset.y, z + offset.z));
 	const Block &block2 = Registry::getInstance().getBlock(chunk.getBlock(x + offset.x, y + offset.y, z + offset.z));
 
@@ -333,10 +333,10 @@ inline u8 ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u
 	std::function<s8(const Chunk *chunk, s8, s8, s8)> getLight = [&](const Chunk *chunk, s8 x, s8 y, s8 z) -> s8 {
 		if(x < 0)             return chunk->getSurroundingChunk(0) && chunk->getSurroundingChunk(0)->isInitialized() ? getLight(chunk->getSurroundingChunk(0), x + CHUNK_WIDTH, y, z) : -1;
 		if(x >= CHUNK_WIDTH)  return chunk->getSurroundingChunk(1) && chunk->getSurroundingChunk(1)->isInitialized() ? getLight(chunk->getSurroundingChunk(1), x - CHUNK_WIDTH, y, z) : -1;
-		if(y < 0)             return chunk->getSurroundingChunk(4) && chunk->getSurroundingChunk(4)->isInitialized() ? getLight(chunk->getSurroundingChunk(4), x, y + CHUNK_HEIGHT, z) : -1;
-		if(y >= CHUNK_HEIGHT) return chunk->getSurroundingChunk(5) && chunk->getSurroundingChunk(5)->isInitialized() ? getLight(chunk->getSurroundingChunk(5), x, y - CHUNK_HEIGHT, z) : -1;
-		if(z < 0)             return chunk->getSurroundingChunk(2) && chunk->getSurroundingChunk(2)->isInitialized() ? getLight(chunk->getSurroundingChunk(2), x, y, z + CHUNK_DEPTH) : -1;
-		if(z >= CHUNK_DEPTH)  return chunk->getSurroundingChunk(3) && chunk->getSurroundingChunk(3)->isInitialized() ? getLight(chunk->getSurroundingChunk(3), x, y, z - CHUNK_DEPTH) : -1;
+		if(y < 0)             return chunk->getSurroundingChunk(2) && chunk->getSurroundingChunk(2)->isInitialized() ? getLight(chunk->getSurroundingChunk(2), x, y + CHUNK_DEPTH, z) : -1;
+		if(y >= CHUNK_DEPTH)  return chunk->getSurroundingChunk(3) && chunk->getSurroundingChunk(3)->isInitialized() ? getLight(chunk->getSurroundingChunk(3), x, y - CHUNK_DEPTH, z) : -1;
+		if(z < 0)             return chunk->getSurroundingChunk(4) && chunk->getSurroundingChunk(4)->isInitialized() ? getLight(chunk->getSurroundingChunk(4), x, y, z + CHUNK_HEIGHT) : -1;
+		if(z >= CHUNK_HEIGHT) return chunk->getSurroundingChunk(5) && chunk->getSurroundingChunk(5)->isInitialized() ? getLight(chunk->getSurroundingChunk(5), x, y, z - CHUNK_HEIGHT) : -1;
 
 		if (light == Light::Sun)
 			return chunk->isInitialized() ? chunk->lightmap().getSunlight(x, y, z) : -1;
@@ -354,9 +354,9 @@ inline u8 ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u
 
 	// Get light values for surrounding nodes
 	s8 lightValues[4] = {
-		getLight(&chunk, x + minOffset.x, y + offset.y,    z + minOffset.z),
-		getLight(&chunk, x + offset.x,    y + minOffset.y, z + minOffset.z),
 		getLight(&chunk, x + minOffset.x, y + minOffset.y, z + offset.z),
+		getLight(&chunk, x + offset.x,    y + minOffset.y, z + minOffset.z),
+		getLight(&chunk, x + minOffset.x, y + offset.y,    z + minOffset.z),
 		getLight(&chunk, x + offset.x,    y + offset.y,    z + offset.z),
 	};
 
