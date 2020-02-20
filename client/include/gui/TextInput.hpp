@@ -34,15 +34,19 @@ class TextInput : public gk::Drawable, public gk::Transformable {
 
 		void onEvent(const SDL_Event &event);
 
+		void setBackgroundColor(const gk::Color &color) { m_background.setFillColor(color); }
+		void setBackgroundSize(unsigned int width, unsigned int height) { m_background.setSize(width, height); }
+
+		void setPadding(int x, int y) { m_text.setPosition(x, y); }
+
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		Text m_text;
 		std::string m_content;
+		char m_cursor = '_';
 
 		u16 m_characterLimit = 0;
-
-		char m_cursor = '_';
 
 		gk::RectangleShape m_background;
 };

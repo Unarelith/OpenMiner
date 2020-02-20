@@ -67,7 +67,7 @@ void InterfaceState::prepareDraw(gk::RenderTarget &target, gk::RenderStates &sta
 
 	// target.setView(m_view);
 
-	if (m_parent)
+	if (m_parent && m_drawBackground)
 		target.draw(m_background, states);
 }
 

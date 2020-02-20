@@ -20,6 +20,8 @@
  *
  * =====================================================================================
  */
+#include <gk/resource/ResourceHandler.hpp>
+
 #include "TextInput.hpp"
 
 TextInput::TextInput() {
@@ -48,7 +50,7 @@ void TextInput::onEvent(const SDL_Event &event) {
 void TextInput::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
-	target.draw(m_text, states);
 	target.draw(m_background, states);
+	target.draw(m_text, states);
 }
 

@@ -31,7 +31,12 @@ ChatState::ChatState(gk::ApplicationState *parent) : InterfaceState(parent) {
 	gk::Mouse::setCursorVisible(true);
 	gk::Mouse::resetToWindowCenter();
 
+	m_drawBackground = false;
+
 	m_textInput.setScale(Config::guiScale, Config::guiScale);
+	m_textInput.setBackgroundColor(gk::Color{0, 0, 0, 127});
+	m_textInput.setBackgroundSize(200, 10);
+	m_textInput.setPadding(1, 1);
 }
 
 void ChatState::onEvent(const SDL_Event &event) {
