@@ -141,7 +141,7 @@ mod:block {
 	tiles = "dandelion.png",
 	hardness = 0.05,
 	draw_type = 1, -- FIXME: Use string instead
-	bounding_box = {0.25, 0.0, 0.25, 0.5, 0.5, 0.5},
+	bounding_box = {0.25, 0.25, 0.0, 0.5, 0.5, 0.5},
 }
 
 mod:block {

@@ -56,8 +56,8 @@ class ClientPlayer : public Player {
 		void checkCollisions(const ClientWorld &world);
 
 		float pointTargetedX() const { return m_x + cos(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES); }
-		float pointTargetedY() const { return m_y + sin(m_angleV * RADIANS_PER_DEGREES); }
-		float pointTargetedZ() const { return m_z + sin(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES) - 0.00001; }
+		float pointTargetedY() const { return m_y + sin(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES) - 0.00001; }
+		float pointTargetedZ() const { return m_z + sin(m_angleV * RADIANS_PER_DEGREES); }
 
 		static ClientPlayer &getInstance() { return *s_instance; }
 		static void setInstance(ClientPlayer *instance) { s_instance = instance; }
