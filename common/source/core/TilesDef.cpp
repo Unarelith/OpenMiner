@@ -30,23 +30,26 @@ const std::string &TilesDef::getTextureForFace(u8 face, bool useAltTiles) const 
 	if (size == 0)
 		throw EXCEPTION("Trying to get texture from empty tiles definition");
 
-	u8 outFace = face;
+	static constexpr int nSizes = 6, nFaces = 6;
+	// Determine which indices correspond to each face, depending on how many
+	// textures were specified
+	static constexpr u8 faceToIndex[nSizes][nFaces] = {
+		// Same order as enum BlockFace in TilesDef.hpp,
+		// namely: Top, Bottom, West, East, South, North
+		{ 0, 0, 0, 0, 0, 0, }, // for size = 1
+		{ 0, 0, 1, 1, 1, 1, }, // for size = 2
+		{ 0, 1, 2, 2, 2, 2, }, // for size = 3
+		{ 0, 1, 2, 3, 3, 3, }, // for size = 4
+		{ 0, 1, 2, 3, 4, 4, }, // for size = 5
+		{ 0, 1, 2, 3, 4, 5, }, // for size = 6
+	};
 
-	if (size == 1)
-		outFace = BlockFace::Top;
-	else if (size == 2)
-		outFace = (face == BlockFace::Top || face == BlockFace::Bottom) ? 0 : 1;
-	else if (size == 3 && face >= size)
-		outFace = BlockFace::West;
-	else if (size == 4 && face >= size)
-		outFace = BlockFace::East;
-	else if (size == 5 && face >= size)
-		outFace = BlockFace::South;
+	u8 index = faceToIndex[size <= nSizes ? size - 1 : nSizes - 1][face];
 
 	if (!useAltTiles)
-		return m_textureFilenames.at(outFace);
+		return m_textureFilenames.at(index);
 	else {
-		const std::string &filename = m_altTextureFilenames.at(outFace);
+		const std::string &filename = m_altTextureFilenames.at(index);
 		return (!filename.empty()) ? filename : getTextureForFace(face, false);
 	}
 }
