@@ -32,6 +32,7 @@
 #include <gk/gl/OpenGL.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
+#include "ChatState.hpp"
 #include "GameKey.hpp"
 #include "GameState.hpp"
 #include "LuaGUIState.hpp"
@@ -77,6 +78,10 @@ void GameState::onEvent(const SDL_Event &event) {
 		}
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 			m_stateStack->push<PauseMenuState>(this);
+		}
+		// FIXME: Use GamePad/GameKey instead of a hardcoded keycode
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_t) {
+			m_stateStack->push<ChatState>(this);
 		}
 		else if (event.type == SDL_WINDOWEVENT) {
 			if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
