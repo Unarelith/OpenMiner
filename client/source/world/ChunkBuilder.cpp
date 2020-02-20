@@ -28,18 +28,6 @@
 static const float cubeCoords[6 * 4 * 3] = {
 	// Same order as enum BlockFace in TilesDef.hpp
 
-	// Top
-	1, 1, 1,
-	0, 1, 1,
-	0, 0, 1,
-	1, 0, 1,
-
-	// Bottom
-	1, 0, 0,
-	0, 0, 0,
-	0, 1, 0,
-	1, 1, 0,
-
 	// West
 	0, 1, 0,
 	0, 0, 0,
@@ -63,6 +51,18 @@ static const float cubeCoords[6 * 4 * 3] = {
 	0, 1, 0,
 	0, 1, 1,
 	1, 1, 1,
+
+	// Bottom
+	1, 0, 0,
+	0, 0, 0,
+	0, 1, 0,
+	1, 1, 0,
+
+	// Top
+	1, 1, 1,
+	0, 1, 1,
+	0, 0, 1,
+	1, 0, 1,
 };
 
 static const float crossCoords[2 * 4 * 3] = {
@@ -91,12 +91,12 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 
 				const int surroundingBlocksPos[6][3] = {
 					// Same order as enum BlockFace in TilesDef.hpp
-					{x, y, z + 1},
-					{x, y, z - 1},
 					{x - 1, y, z},
 					{x + 1, y, z},
 					{x, y - 1, z},
 					{x, y + 1, z},
+					{x, y, z - 1},
+					{x, y, z + 1},
 				};
 
 				if (block.drawType() == BlockDrawType::Solid

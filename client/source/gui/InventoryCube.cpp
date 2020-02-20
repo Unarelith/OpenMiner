@@ -47,22 +47,6 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 
 	// Same order as enum BlockFace in TilesDef.hpp
 	gk::Vertex vertices[6][4] = {
-		// Top
-		{
-			{{m_size, m_size, 0, 3}},
-			{{0, m_size, 0, 3}},
-			{{0, m_size, m_size, 3}},
-			{{m_size, m_size, m_size, 3}},
-		},
-
-		// Bottom
-		{
-			{{0, 0, 0, -1}},
-			{{m_size, 0, 0, -1}},
-			{{m_size, 0, m_size, -1}},
-			{{0, 0, m_size, -1}},
-		},
-
 		// West
 		{
 			{{0, 0, 0, 2}},
@@ -93,6 +77,22 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 			{{m_size, 0, m_size, -1}},
 			{{m_size, m_size, m_size, -1}},
 			{{0, m_size, m_size, -1}},
+		},
+
+		// Bottom
+		{
+			{{0, 0, 0, -1}},
+			{{m_size, 0, 0, -1}},
+			{{m_size, 0, m_size, -1}},
+			{{0, 0, m_size, -1}},
+		},
+
+		// Top
+		{
+			{{m_size, m_size, 0, 3}},
+			{{0, m_size, 0, 3}},
+			{{0, m_size, m_size, 3}},
+			{{m_size, m_size, m_size, 3}},
 		},
 	};
 
@@ -144,11 +144,11 @@ void InventoryCube::draw(gk::RenderTarget &target, gk::RenderStates states) cons
 	glCheck(glDisable(GL_CULL_FACE));
 	glCheck(glDisable(GL_DEPTH_TEST));
 
-	target.draw(m_vbo, GL_QUADS, 4 * 0, 4, states);
+	target.draw(m_vbo, GL_QUADS, 4 * BlockFace::Top, 4, states);
 	// target.draw(m_vbo, GL_QUADS, 4 * 1, 4, states);
-	target.draw(m_vbo, GL_QUADS, 4 * 2, 4, states);
+	target.draw(m_vbo, GL_QUADS, 4 * BlockFace::West, 4, states);
 	// target.draw(m_vbo, GL_QUADS, 4 * 3, 4, states);
-	target.draw(m_vbo, GL_QUADS, 4 * 4, 4, states);
+	target.draw(m_vbo, GL_QUADS, 4 * BlockFace::South, 4, states);
 	// target.draw(m_vbo, GL_QUADS, 4 * 5, 4, states);
 
 	glCheck(glEnable(GL_DEPTH_TEST));

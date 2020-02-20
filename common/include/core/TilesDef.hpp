@@ -35,12 +35,12 @@
 #include "ISerializable.hpp"
 
 enum BlockFace : u8 {
-	Top    = 0,
-	Bottom = 1,
-	West   = 2,
-	East   = 3,
-	South  = 4,
-	North  = 5
+	West   = 0,
+	East   = 1,
+	South  = 2,
+	North  = 3,
+	Bottom = 4,
+	Top    = 5,
 };
 
 class TilesDef : public ISerializable {
