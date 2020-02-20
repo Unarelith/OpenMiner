@@ -27,52 +27,52 @@
 
 static const float cubeCoords[6 * 4 * 3] = {
 	// Top
+	1, 1, 1,
 	0, 1, 1,
 	0, 0, 1,
 	1, 0, 1,
-	1, 1, 1,
 
 	// Bottom
+	1, 0, 0,
 	0, 0, 0,
 	0, 1, 0,
 	1, 1, 0,
-	1, 0, 0,
 
 	// West
+	0, 1, 0,
 	0, 0, 0,
 	0, 0, 1,
 	0, 1, 1,
-	0, 1, 0,
 
 	// East
+	1, 0, 0,
 	1, 1, 0,
 	1, 1, 1,
 	1, 0, 1,
-	1, 0, 0,
 
 	// South
+	0, 0, 0,
 	1, 0, 0,
 	1, 0, 1,
 	0, 0, 1,
-	0, 0, 0,
 
 	// North
+	1, 1, 0,
 	0, 1, 0,
 	0, 1, 1,
 	1, 1, 1,
-	1, 1, 0,
 };
 
 static const float crossCoords[2 * 4 * 3] = {
+	1, 1, 0,
 	0, 0, 0,
 	0, 0, 1,
 	1, 1, 1,
-	1, 1, 0,
 
+	1, 0, 0,
 	0, 1, 0,
 	0, 1, 1,
 	1, 0, 1,
-	1, 0, 0,
 };
 
 
@@ -289,15 +289,15 @@ inline gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) const {
 	gk::Vector3i offset;
 	offset.x = (
 			(i == BlockFace::West) ||
-			(i == BlockFace::Bottom && (j == 0 || j == 3)) ||
-			(i == BlockFace::Top    && (j == 0 || j == 3)) ||
-			(i == BlockFace::South  && (j == 1 || j == 2)) ||
-			(i == BlockFace::North  && (j == 0 || j == 3))) ? -1 : 1;
+			(i == BlockFace::Bottom && (j == 1 || j == 2)) ||
+			(i == BlockFace::Top    && (j == 1 || j == 2)) ||
+			(i == BlockFace::South  && (j == 0 || j == 3)) ||
+			(i == BlockFace::North  && (j == 1 || j == 2))) ? -1 : 1;
 
 	offset.y = (
 			(i == BlockFace::South) ||
-			(i == BlockFace::West   && (j == 0 || j == 3)) ||
-			(i == BlockFace::East   && (j == 1 || j == 2)) ||
+			(i == BlockFace::West   && (j == 1 || j == 2)) ||
+			(i == BlockFace::East   && (j == 0 || j == 3)) ||
 			(i == BlockFace::Bottom && (j == 0 || j == 1)) ||
 			(i == BlockFace::Top    && (j == 2 || j == 3))) ? -1 : 1;
 
