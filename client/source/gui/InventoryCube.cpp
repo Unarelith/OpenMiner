@@ -45,42 +45,55 @@ InventoryCube::InventoryCube(float size) : m_textureAtlas(gk::ResourceHandler::g
 void InventoryCube::updateVertexBuffer(const Block &block) {
 	if (!block.id()) return;
 
-	gk::Vertex vertices[6 * 4] = {
+	// Same order as enum BlockFace in TilesDef.hpp
+	gk::Vertex vertices[6][4] = {
 		// Top
-		{{m_size, m_size, 0, 3}},
-		{{0, m_size, 0, 3}},
-		{{0, m_size, m_size, 3}},
-		{{m_size, m_size, m_size, 3}},
+		{
+			{{m_size, m_size, 0, 3}},
+			{{0, m_size, 0, 3}},
+			{{0, m_size, m_size, 3}},
+			{{m_size, m_size, m_size, 3}},
+		},
 
 		// Bottom
-		{{0, 0, 0, -1}},
-		{{m_size, 0, 0, -1}},
-		{{m_size, 0, m_size, -1}},
-		{{0, 0, m_size, -1}},
+		{
+			{{0, 0, 0, -1}},
+			{{m_size, 0, 0, -1}},
+			{{m_size, 0, m_size, -1}},
+			{{0, 0, m_size, -1}},
+		},
 
-		// Left
-		{{0, 0, 0, 2}},
-		{{0, 0, m_size, 2}},
-		{{0, m_size, m_size, 2}},
-		{{0, m_size, 0, 2}},
+		// West
+		{
+			{{0, 0, 0, 2}},
+			{{0, 0, m_size, 2}},
+			{{0, m_size, m_size, 2}},
+			{{0, m_size, 0, 2}},
+		},
 
-		// Right
-		{{m_size, 0, m_size, -1}},
-		{{m_size, 0, 0, -1}},
-		{{m_size, m_size, 0, -1}},
-		{{m_size, m_size, m_size, -1}},
+		// East
+		{
+			{{m_size, 0, m_size, -1}},
+			{{m_size, 0, 0, -1}},
+			{{m_size, m_size, 0, -1}},
+			{{m_size, m_size, m_size, -1}},
+		},
 
-		// Front
-		{{m_size, 0, 0, 4}},
-		{{0, 0, 0, 4}},
-		{{0, m_size, 0, 4}},
-		{{m_size, m_size, 0, 4}},
+		// South
+		{
+			{{m_size, 0, 0, 4}},
+			{{0, 0, 0, 4}},
+			{{0, m_size, 0, 4}},
+			{{m_size, m_size, 0, 4}},
+		},
 
-		// Back
-		{{0, 0, m_size, -1}},
-		{{m_size, 0, m_size, -1}},
-		{{m_size, m_size, m_size, -1}},
-		{{0, m_size, m_size, -1}},
+		// North
+		{
+			{{0, 0, m_size, -1}},
+			{{m_size, 0, m_size, -1}},
+			{{m_size, m_size, m_size, -1}},
+			{{0, m_size, m_size, -1}},
+		},
 	};
 
 	for (u8 i = 0 ; i < 6 ; ++i) {
@@ -93,18 +106,18 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 		};
 
 		for(u8 j = 0 ; j < 4 ; j++) {
-			vertices[j + i * 4].coord3d[0] = vertices[j + i * 4].coord3d[0] * block.boundingBox().sizeX + block.boundingBox().x;
-			vertices[j + i * 4].coord3d[1] = vertices[j + i * 4].coord3d[1] * block.boundingBox().sizeY + block.boundingBox().y;
-			vertices[j + i * 4].coord3d[2] = vertices[j + i * 4].coord3d[2] * block.boundingBox().sizeZ + block.boundingBox().z;
+			vertices[i][j].coord3d[0] = vertices[i][j].coord3d[0] * block.boundingBox().sizeX + block.boundingBox().x;
+			vertices[i][j].coord3d[1] = vertices[i][j].coord3d[1] * block.boundingBox().sizeY + block.boundingBox().y;
+			vertices[i][j].coord3d[2] = vertices[i][j].coord3d[2] * block.boundingBox().sizeZ + block.boundingBox().z;
 
-			vertices[j + i * 4].texCoord[0] = faceTexCoords[j * 2];
-			vertices[j + i * 4].texCoord[1] = faceTexCoords[j * 2 + 1];
+			vertices[i][j].texCoord[0] = faceTexCoords[j * 2];
+			vertices[i][j].texCoord[1] = faceTexCoords[j * 2 + 1];
 
 			const gk::Color &colorMultiplier = block.colorMultiplier();
-			vertices[j + i * 4].color[0] = colorMultiplier.r;
-			vertices[j + i * 4].color[1] = colorMultiplier.g;
-			vertices[j + i * 4].color[2] = colorMultiplier.b;
-			vertices[j + i * 4].color[3] = colorMultiplier.a;
+			vertices[i][j].color[0] = colorMultiplier.r;
+			vertices[i][j].color[1] = colorMultiplier.g;
+			vertices[i][j].color[2] = colorMultiplier.b;
+			vertices[i][j].color[3] = colorMultiplier.a;
 		}
 	}
 

@@ -26,6 +26,8 @@
 #include "TextureAtlas.hpp"
 
 static const float cubeCoords[6 * 4 * 3] = {
+	// Same order as enum BlockFace in TilesDef.hpp
+
 	// Top
 	1, 1, 1,
 	0, 1, 1,
@@ -88,6 +90,7 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 				if (!chunk.getBlock(x, y, z)) continue;
 
 				const int surroundingBlocksPos[6][3] = {
+					// Same order as enum BlockFace in TilesDef.hpp
 					{x, y, z + 1},
 					{x, y, z - 1},
 					{x - 1, y, z},
