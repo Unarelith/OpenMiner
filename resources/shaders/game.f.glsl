@@ -57,9 +57,6 @@ void main() {
 		// South or North
 		if (blockFace == 2. || blockFace == 3.)
 			ambientIntensity = max(ambientIntensity * 0.9, minBrightness);
-		// Flowers
-		if (blockFace == 6.)
-			ambientIntensity = max(ambientIntensity * 0.9, minBrightness);
 
 		color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
 
