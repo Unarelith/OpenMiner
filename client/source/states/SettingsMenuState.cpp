@@ -170,6 +170,7 @@ void SettingsMenuState::addInputButtons() {
 		// {GameKey::Use,       "Use"},
 		{GameKey::Inventory, "Inventory"},
 		{GameKey::Chat,      "Chat"},
+		{GameKey::Command,   "Command"},
 	};
 
 	m_menuWidget.reset(2, 8);

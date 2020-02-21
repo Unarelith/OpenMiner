@@ -28,7 +28,7 @@
 #include "ClientCommandHandler.hpp"
 #include "Config.hpp"
 
-ChatState::ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, gk::ApplicationState *parent)
+ChatState::ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, bool addSlash, gk::ApplicationState *parent)
 	: InterfaceState(parent), m_clientCommandHandler(clientCommandHandler), m_chat(chat)
 {
 	gk::Mouse::setCursorGrabbed(false);
@@ -42,6 +42,9 @@ ChatState::ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, gk:
 	m_textInput.setPadding(1, 1);
 
 	updateTextInputGeometry();
+
+	if (addSlash)
+		m_textInput.setText("/");
 
 	m_chat.setMessageVisibility(true);
 }

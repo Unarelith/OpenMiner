@@ -34,6 +34,7 @@ class TextInput : public gk::Drawable, public gk::Transformable {
 		void onEvent(const SDL_Event &event);
 
 		const std::string &text() const { return m_content; }
+		void setText(const std::string &text) { m_content = text; m_text.setText(m_content + m_cursor); }
 
 		void setBackgroundColor(const gk::Color &color) { m_text.setBackgroundColor(color); }
 		void setBackgroundSize(unsigned int width, unsigned int height) { m_text.setBackgroundSize(width, height); }

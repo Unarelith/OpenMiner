@@ -85,8 +85,11 @@ void GameState::onEvent(const SDL_Event &event) {
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 			m_stateStack->push<PauseMenuState>(m_client, this);
 		}
-		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == keyboardHandler->getKeyCode(GameKey::Chat)) {
-			m_stateStack->push<ChatState>(m_clientCommandHandler, m_hud.chat(), this);
+		else if (event.type == SDL_KEYDOWN
+		&& (event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Chat)
+		 || event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Command)))
+		{
+			m_stateStack->push<ChatState>(m_clientCommandHandler, m_hud.chat(), event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Command), this);
 		}
 		else if (event.type == SDL_WINDOWEVENT) {
 			if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {

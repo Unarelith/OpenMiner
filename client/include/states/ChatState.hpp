@@ -31,7 +31,7 @@ class Chat;
 
 class ChatState : public InterfaceState {
 	public:
-		ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, gk::ApplicationState *parent = nullptr);
+		ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, bool addSlash, gk::ApplicationState *parent = nullptr);
 
 		void updateTextInputGeometry();
 
