@@ -20,47 +20,21 @@
  *
  * =====================================================================================
  */
-#ifndef HUD_HPP_
-#define HUD_HPP_
+#ifndef CHAT_HPP_
+#define CHAT_HPP_
 
-#include <gk/gl/Shader.hpp>
+#include "Text.hpp"
 
-#include "BlockCursor.hpp"
-#include "BlockInfoWidget.hpp"
-#include "Chat.hpp"
-#include "Crosshair.hpp"
-#include "DebugOverlay.hpp"
-#include "Hotbar.hpp"
+class Client;
 
-class HUD : public gk::Transformable, public gk::Drawable {
+class Chat : public gk::Drawable, public gk::Transformable {
 	public:
-		HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client);
-
-		void setup();
-
-		void onEvent(const SDL_Event &event);
-
-		void update();
+		Chat(Client &client);
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		gk::Shader m_shader;
-		glm::mat4 m_orthoMatrix;
-
-		Hotbar m_hotbar;
-
-		BlockCursor m_blockCursor;
-		Crosshair m_crosshair;
-
-		DebugOverlay m_debugOverlay;
-		bool m_isDebugOverlayVisible = false;
-
-		BlockInfoWidget m_blockInfoWidget;
-
-		Text m_fpsText;
-
-		Chat m_chat;
+		std::vector<Text> m_chatMessages;
 };
 
-#endif // HUD_HPP_
+#endif // CHAT_HPP_

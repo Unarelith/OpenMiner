@@ -66,7 +66,12 @@ void ChatState::onEvent(const SDL_Event &event) {
 	}
 
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RETURN) {
-		m_clientCommandHandler.sendChatMessage(m_textInput.text());
+		if (!m_textInput.text().empty())
+			m_clientCommandHandler.sendChatMessage(m_textInput.text());
+
+		gk::Mouse::setCursorGrabbed(true);
+		gk::Mouse::setCursorVisible(false);
+		gk::Mouse::resetToWindowCenter();
 
 		m_stateStack->pop();
 	}

@@ -186,11 +186,11 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::ChatMessage, [this](Client &, sf::Packet &packet) {
-		u16 id;
-		std::string message;
-		packet >> id >> message;
+		// u16 id;
+		// std::string message;
+		// packet >> id >> message;
 
-		DEBUG("Chat message received:", message);
+		m_server.sendToAllClients(packet);
 	});
 }
 

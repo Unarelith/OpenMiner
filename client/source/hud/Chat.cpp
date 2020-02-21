@@ -20,47 +20,29 @@
  *
  * =====================================================================================
  */
-#ifndef HUD_HPP_
-#define HUD_HPP_
-
-#include <gk/gl/Shader.hpp>
-
-#include "BlockCursor.hpp"
-#include "BlockInfoWidget.hpp"
 #include "Chat.hpp"
-#include "Crosshair.hpp"
-#include "DebugOverlay.hpp"
-#include "Hotbar.hpp"
+#include "Client.hpp"
 
-class HUD : public gk::Transformable, public gk::Drawable {
-	public:
-		HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client);
+Chat::Chat(Client &client) {
+	setPosition(2, 2);
 
-		void setup();
+	client.setCommandCallback(Network::Command::ChatMessage, [this](sf::Packet &packet) {
+		m_chatMessages.emplace_back();
 
-		void onEvent(const SDL_Event &event);
+		u16 clientID;
+		std::string message;
+		packet >> clientID >> message;
 
-		void update();
+		Text &text = m_chatMessages.back();
+		text.setText("<" + std::to_string(clientID) + "> " + message);
+		text.setPosition(0, 10 * (m_chatMessages.size() - 1));
+	});
+}
 
-	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+void Chat::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	states.transform *= getTransform();
 
-		gk::Shader m_shader;
-		glm::mat4 m_orthoMatrix;
+	for (auto &it : m_chatMessages)
+		target.draw(it, states);
+}
 
-		Hotbar m_hotbar;
-
-		BlockCursor m_blockCursor;
-		Crosshair m_crosshair;
-
-		DebugOverlay m_debugOverlay;
-		bool m_isDebugOverlayVisible = false;
-
-		BlockInfoWidget m_blockInfoWidget;
-
-		Text m_fpsText;
-
-		Chat m_chat;
-};
-
-#endif // HUD_HPP_

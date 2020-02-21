@@ -52,6 +52,8 @@ class ClientCommandHandler {
 
 		void setupCallbacks();
 
+		Client &client() { return m_client; }
+
 		bool isRegistryInitialized() const { return m_isRegistryInitialized; }
 
 	private:
