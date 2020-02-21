@@ -26,9 +26,11 @@
 #include "InterfaceState.hpp"
 #include "TextInput.hpp"
 
+class ClientCommandHandler;
+
 class ChatState : public InterfaceState {
 	public:
-		ChatState(gk::ApplicationState *parent = nullptr);
+		ChatState(ClientCommandHandler &clientCommandHandler, gk::ApplicationState *parent = nullptr);
 
 		void updateTextInputGeometry();
 
@@ -40,6 +42,8 @@ class ChatState : public InterfaceState {
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		TextInput m_textInput;
+
+		ClientCommandHandler &m_clientCommandHandler;
 };
 
 #endif // CHATSTATE_HPP_

@@ -25,8 +25,11 @@
 
 #include "Config.hpp"
 #include "ChatState.hpp"
+#include "ClientCommandHandler.hpp"
 
-ChatState::ChatState(gk::ApplicationState *parent) : InterfaceState(parent) {
+ChatState::ChatState(ClientCommandHandler &clientCommandHandler, gk::ApplicationState *parent)
+	: InterfaceState(parent), m_clientCommandHandler(clientCommandHandler)
+{
 	gk::Mouse::setCursorGrabbed(false);
 	gk::Mouse::setCursorVisible(true);
 	gk::Mouse::resetToWindowCenter();
@@ -58,6 +61,12 @@ void ChatState::onEvent(const SDL_Event &event) {
 		gk::Mouse::setCursorGrabbed(true);
 		gk::Mouse::setCursorVisible(false);
 		gk::Mouse::resetToWindowCenter();
+
+		m_stateStack->pop();
+	}
+
+	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RETURN) {
+		m_clientCommandHandler.sendChatMessage(m_textInput.text());
 
 		m_stateStack->pop();
 	}

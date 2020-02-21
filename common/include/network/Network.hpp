@@ -57,6 +57,9 @@ namespace Network {
 
 		// Registry commands
 		RegistryData     = 18, // <TCP> [NetworkCommand][Block block]            (from Server only)
+
+		// Chat commands
+		ChatMessage      = 19, // <TCP> [NetworkCommand][u16 client id][std::string message] (both)
 	};
 
 	std::string commandToString(Command command);

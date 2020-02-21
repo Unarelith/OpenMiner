@@ -97,6 +97,15 @@ void ClientCommandHandler::sendChunkRequest(s32 chunkX, s32 chunkY, s32 chunkZ) 
 	m_client.send(packet);
 }
 
+void ClientCommandHandler::sendChatMessage(const std::string &message) {
+	sf::Packet packet;
+	packet << Network::Command::ChatMessage;
+	// FIXME: Sending client id shouldn't be necessary
+	packet << m_client.id();
+	packet << message;
+	m_client.send(packet);
+}
+
 void ClientCommandHandler::setupCallbacks() {
 	m_client.setCommandCallback(Network::Command::RegistryData, [this](sf::Packet &packet) {
 		Registry::getInstance().deserialize(packet);

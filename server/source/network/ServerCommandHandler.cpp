@@ -184,5 +184,13 @@ void ServerCommandHandler::setupCallbacks() {
 			packet >> data->meta >> data->useAltTiles;
 		}
 	});
+
+	m_server.setCommandCallback(Network::Command::ChatMessage, [this](Client &, sf::Packet &packet) {
+		u16 id;
+		std::string message;
+		packet >> id >> message;
+
+		DEBUG("Chat message received:", message);
+	});
 }
 
