@@ -68,6 +68,9 @@ GameState::GameState(const std::string &host, int port) {
 }
 
 void GameState::onEvent(const SDL_Event &event) {
+	if (event.type == SDL_QUIT)
+		m_client.disconnect();
+
 	if (&m_stateStack->top() == this) {
 		gk::KeyboardHandler *keyboardHandler = (gk::KeyboardHandler *)gk::GamePad::getInputHandler();
 
@@ -80,7 +83,7 @@ void GameState::onEvent(const SDL_Event &event) {
 			}
 		}
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-			m_stateStack->push<PauseMenuState>(this);
+			m_stateStack->push<PauseMenuState>(m_client, this);
 		}
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == keyboardHandler->getKeyCode(GameKey::Chat)) {
 			m_stateStack->push<ChatState>(m_clientCommandHandler, m_hud.chat(), this);
@@ -88,7 +91,7 @@ void GameState::onEvent(const SDL_Event &event) {
 		else if (event.type == SDL_WINDOWEVENT) {
 			if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
 				// FIXME
-				// m_stateStack->push<PauseMenuState>(this);
+				// m_stateStack->push<PauseMenuState>(m_client, this);
 
 				gk::Mouse::setCursorGrabbed(false);
 				gk::Mouse::setCursorVisible(true);

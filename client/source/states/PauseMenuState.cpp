@@ -31,8 +31,8 @@
 #include "SettingsMenuState.hpp"
 #include "TitleScreenState.hpp"
 
-PauseMenuState::PauseMenuState(gk::ApplicationState *parent)
-	: InterfaceState(parent)
+PauseMenuState::PauseMenuState(Client &client, gk::ApplicationState *parent)
+	: InterfaceState(parent), m_client(client)
 {
 	gk::Mouse::setCursorGrabbed(false);
 	gk::Mouse::setCursorVisible(true);
@@ -52,14 +52,14 @@ PauseMenuState::PauseMenuState(gk::ApplicationState *parent)
 	});
 
 	m_menuWidget.addButton("Title Screen", [this] (TextButton &) {
-		// m_client.disconnect();
+		m_client.disconnect();
 
 		m_stateStack->clear();
 		m_stateStack->push<TitleScreenState>();
 	});
 
 	m_menuWidget.addButton("Exit", [this] (TextButton &) {
-		// m_client.disconnect();
+		m_client.disconnect();
 
 		while(!m_stateStack->empty())
 			m_stateStack->pop();

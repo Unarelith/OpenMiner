@@ -64,6 +64,8 @@ void Client::disconnect() {
 	sf::Packet packet;
 	packet << Network::Command::ClientDisconnect;
 	m_tcpSocket->send(packet);
+
+	m_tcpSocket->disconnect();
 }
 
 void Client::send(sf::Packet &packet) {
