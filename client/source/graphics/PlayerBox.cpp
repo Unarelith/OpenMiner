@@ -25,37 +25,37 @@
 #include "PlayerBox.hpp"
 
 static const float cubeCoords[6 * 4 * 3] = {
-	// Left
+	// West
 	0, 0, 0,
 	0, 0, 1,
 	0, 1, 1,
 	0, 1, 0,
 
-	// Right
+	// East
 	1, 0, 1,
 	1, 0, 0,
 	1, 1, 0,
 	1, 1, 1,
+
+	// South
+	0, 0, 0,
+	1, 0, 0,
+	1, 0, 1,
+	0, 0, 1,
+
+	// North
+	0, 1, 1,
+	1, 1, 1,
+	1, 1, 0,
+	0, 1, 0,
 
 	// Bottom
-	0, 0, 0,
 	1, 0, 0,
-	1, 0, 1,
-	0, 0, 1,
+	0, 0, 0,
+	0, 1, 0,
+	1, 1, 0,
 
 	// Top
-	0, 1, 1,
-	1, 1, 1,
-	1, 1, 0,
-	0, 1, 0,
-
-	// Front
-	1, 0, 0,
-	0, 0, 0,
-	0, 1, 0,
-	1, 1, 0,
-
-	// Back
 	0, 0, 1,
 	1, 0, 1,
 	1, 1, 1,
@@ -63,7 +63,7 @@ static const float cubeCoords[6 * 4 * 3] = {
 };
 
 PlayerBox::PlayerBox() {
-	setScale(1, 2, 1);
+	setScale(1, 1, 2);
 
 	updateVertexBuffer();
 }
@@ -72,8 +72,8 @@ void PlayerBox::updateVertexBuffer() {
 	gk::Vertex vertices[24];
 	for (u8 i = 0 ; i < 24 ; ++i) {
 		vertices[i].coord3d[0] = cubeCoords[i * 3];
-		vertices[i].coord3d[1] = cubeCoords[i * 3 + 1] - 0.5;
-		vertices[i].coord3d[2] = cubeCoords[i * 3 + 2];
+		vertices[i].coord3d[1] = cubeCoords[i * 3 + 1];
+		vertices[i].coord3d[2] = cubeCoords[i * 3 + 2] - 0.5;
 		vertices[i].coord3d[3] = -1;
 
 		vertices[i].color[0] = 0.3f;
