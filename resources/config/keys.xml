@@ -14,4 +14,5 @@
 	<key name="Use"       key="M"/>
 
 	<key name="Inventory" key="E"/>
+	<key name="Chat"      key="T"/>
 </keys>

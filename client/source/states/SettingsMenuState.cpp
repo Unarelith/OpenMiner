@@ -169,6 +169,7 @@ void SettingsMenuState::addInputButtons() {
 		// {GameKey::Dig,       "Dig"},
 		// {GameKey::Use,       "Use"},
 		{GameKey::Inventory, "Inventory"},
+		{GameKey::Chat,      "Chat"},
 	};
 
 	m_menuWidget.reset(2, 8);

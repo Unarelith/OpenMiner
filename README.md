@@ -24,6 +24,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 
 - Movement: <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
 - Inventory: <kbd>E</kbd>
+- Chat: <kbd>T</kbd>
 - Jump: <kbd>Space</kbd>
 - Sprint: <kbd>Ctrl</kbd>
 - Jetpack: <kbd>X</kbd>
@@ -72,6 +73,7 @@ This list is non exhaustive.
 - Infinite world in X/Y/Z axis ([#25](https://github.com/Unarelith/OpenMiner/pull/25))
 - Lighting system with smooth lighting
 - Networking ([#20](https://github.com/Unarelith/OpenMiner/pull/20))
+- Chat system with support for commands ([#57](https://github.com/Unarelith/OpenMiner/pull/57))
 - Lua API
 	- Block/item/recipe definition
 	- Custom GUI creation

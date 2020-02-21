@@ -29,6 +29,7 @@
 #include <gk/core/GameClock.hpp>
 #include <gk/core/Exception.hpp>
 #include <gk/core/Mouse.hpp>
+#include <gk/core/input/KeyboardHandler.hpp>
 #include <gk/gl/OpenGL.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
@@ -68,6 +69,8 @@ GameState::GameState(const std::string &host, int port) {
 
 void GameState::onEvent(const SDL_Event &event) {
 	if (&m_stateStack->top() == this) {
+		gk::KeyboardHandler *keyboardHandler = (gk::KeyboardHandler *)gk::GamePad::getInputHandler();
+
 		if (event.type == SDL_MOUSEMOTION) {
 			if(Config::screenWidth / 2.0f != event.motion.x || Config::screenHeight / 2.0f != event.motion.y) {
 				m_player.turnH(event.motion.xrel * -0.01 * Config::mouseSensitivity);
@@ -79,8 +82,7 @@ void GameState::onEvent(const SDL_Event &event) {
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 			m_stateStack->push<PauseMenuState>(this);
 		}
-		// FIXME: Use GamePad/GameKey instead of a hardcoded keycode
-		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_t) {
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == keyboardHandler->getKeyCode(GameKey::Chat)) {
 			m_stateStack->push<ChatState>(m_clientCommandHandler, m_hud.chat(), this);
 		}
 		else if (event.type == SDL_WINDOWEVENT) {

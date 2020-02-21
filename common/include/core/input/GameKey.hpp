@@ -41,6 +41,7 @@ namespace GameKey {
 		Use,
 
 		Inventory,
+		Chat,
 	};
 }
 
