@@ -49,13 +49,13 @@ void main() {
 		float diffuseIntensity = max(v_lightValue.x, v_lightValue.y) / 32.0;
 
 		// Bottom
-		if (blockFace == 1.)
+		if (blockFace == 4.)
 			ambientIntensity = max(ambientIntensity * 0.6, minBrightness);
-		// Left or Right
-		if (blockFace == 2. || blockFace == 3.)
+		// West or East
+		if (blockFace == 0. || blockFace == 1.)
 			ambientIntensity = max(ambientIntensity * 0.75, minBrightness);
-		// Front or Back
-		if (blockFace == 4. || blockFace == 5.)
+		// South or North
+		if (blockFace == 2. || blockFace == 3.)
 			ambientIntensity = max(ambientIntensity * 0.9, minBrightness);
 		// Flowers
 		if (blockFace == 6.)
