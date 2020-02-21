@@ -203,8 +203,11 @@ void ServerCommandHandler::setupCallbacks() {
 		std::string message;
 		packet >> clientID >> message;
 
-		if (message[0] != '/') {
-			sendChatMessage(clientID, message);
+		if (message[0] != '/' || (message.length() > 1 && message[1] == '/')) {
+			if (message[0] == '/' && message.length() > 1 && message[1] == '/')
+				sendChatMessage(clientID, message.substr(1));
+			else
+				sendChatMessage(clientID, message);
 		}
 		// FIXME: Do a proper implementation later
 		else {
@@ -234,6 +237,10 @@ void ServerCommandHandler::setupCallbacks() {
 
 						sendChatMessage(0, "Teleported to " + std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(z), &client);
 					}
+				}
+				else {
+					sendChatMessage(0, "Unrecognized command: " + command.at(0));
+					sendChatMessage(0, "Available commands are: tp");
 				}
 			}
 		}
