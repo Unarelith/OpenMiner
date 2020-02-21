@@ -26,6 +26,8 @@
 
 TextInput::TextInput() {
 	m_background.setFillColor(gk::Color::Transparent);
+
+	m_text.setText(std::string{m_cursor});
 }
 
 void TextInput::onEvent(const SDL_Event &event) {

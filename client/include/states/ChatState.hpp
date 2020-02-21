@@ -30,6 +30,8 @@ class ChatState : public InterfaceState {
 	public:
 		ChatState(gk::ApplicationState *parent = nullptr);
 
+		void updateTextInputGeometry();
+
 		void onEvent(const SDL_Event &event) override;
 
 		void update() override;

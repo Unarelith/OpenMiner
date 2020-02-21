@@ -33,16 +33,26 @@ ChatState::ChatState(gk::ApplicationState *parent) : InterfaceState(parent) {
 
 	m_drawBackground = false;
 
+	updateTextInputGeometry();
+
 	m_textInput.setScale(Config::guiScale, Config::guiScale);
 	m_textInput.setBackgroundColor(gk::Color{0, 0, 0, 127});
-	m_textInput.setBackgroundSize(200, 10);
 	m_textInput.setPadding(1, 1);
+}
+
+void ChatState::updateTextInputGeometry() {
+	m_textInput.setPosition(4, Config::screenHeight - 35);
+	m_textInput.setBackgroundSize(Config::screenWidth / Config::guiScale - 4, 10);
 }
 
 void ChatState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
 	m_textInput.onEvent(event);
+
+	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+		updateTextInputGeometry();
+	}
 
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 		gk::Mouse::setCursorGrabbed(true);
