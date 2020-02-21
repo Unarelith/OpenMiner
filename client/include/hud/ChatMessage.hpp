@@ -20,24 +20,27 @@
  *
  * =====================================================================================
  */
-#include "ServerInfo.hpp"
+#ifndef CHATMESSAGE_HPP_
+#define CHATMESSAGE_HPP_
 
-Client &ServerInfo::addClient(sf::IpAddress address, u16 port, const std::shared_ptr<sf::TcpSocket> &socket) {
-	m_clients.emplace_back(m_clients.size() + 1, address, port, socket);
-	return m_clients.back();
-}
+#include "Text.hpp"
 
-Client *ServerInfo::getClient(u16 id) {
-	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (Client &client) { return client.id == id; });
-	if (it == m_clients.end())
-		return nullptr;
+class ChatMessage : public gk::Drawable, public gk::Transformable {
+	public:
+		ChatMessage(u16 clientID, const std::string &message, u32 posY);
 
-	return &*it;
-}
+		void setVisible(bool isVisible) { m_isVisible = isVisible; }
 
-void ServerInfo::removeClient(u16 id) {
-	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (Client &client) { return client.id == id; });
-	if (it != m_clients.end())
-		m_clients.erase(it);
-}
+		const Text &text() const { return m_text; }
 
+	private:
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		Text m_text;
+
+		gk::Timer m_timer;
+
+		bool m_isVisible = false;
+};
+
+#endif // CHATMESSAGE_HPP_

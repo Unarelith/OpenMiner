@@ -37,6 +37,8 @@ class InterfaceState : public gk::ApplicationState {
 
 		void prepareDraw(gk::RenderTarget &target, gk::RenderStates &states) const;
 
+		bool m_drawBackground = true;
+
 	private:
 		gk::Shader m_shader;
 		// gk::View m_view;

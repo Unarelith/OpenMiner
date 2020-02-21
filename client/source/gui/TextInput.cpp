@@ -20,24 +20,36 @@
  *
  * =====================================================================================
  */
-#include "ServerInfo.hpp"
+#include <gk/resource/ResourceHandler.hpp>
 
-Client &ServerInfo::addClient(sf::IpAddress address, u16 port, const std::shared_ptr<sf::TcpSocket> &socket) {
-	m_clients.emplace_back(m_clients.size() + 1, address, port, socket);
-	return m_clients.back();
+#include "TextInput.hpp"
+
+TextInput::TextInput() {
+	m_text.setText(std::string{m_cursor});
 }
 
-Client *ServerInfo::getClient(u16 id) {
-	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (Client &client) { return client.id == id; });
-	if (it == m_clients.end())
-		return nullptr;
+void TextInput::onEvent(const SDL_Event &event) {
+	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_BACKSPACE && !m_content.empty()) {
+		m_content.erase(m_content.begin() + m_content.length() - 1);
 
-	return &*it;
+		m_text.setText(m_content + m_cursor);
+	}
+
+  	if (event.type == SDL_TEXTINPUT) {
+		std::string text = event.text.text;
+		for (char c : text) {
+			if (isprint(c) && (!m_characterLimit || m_content.size() < m_characterLimit)) {
+				m_content += c;
+			}
+
+			m_text.setText(m_content + m_cursor);
+		}
+	}
 }
 
-void ServerInfo::removeClient(u16 id) {
-	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (Client &client) { return client.id == id; });
-	if (it != m_clients.end())
-		m_clients.erase(it);
+void TextInput::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	states.transform *= getTransform();
+
+	target.draw(m_text, states);
 }
 

@@ -27,6 +27,8 @@
 #include "Text.hpp"
 
 Text::Text() : m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-font")) {
+	m_background.setFillColor(gk::Color::Transparent);
+
 	updateCharWidth();
 }
 
@@ -47,6 +49,10 @@ void Text::setColor(const gk::Color &color) {
 void Text::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
+	target.draw(m_background, states);
+
+	states.transform.translate(m_padding.x, m_padding.y);
+
 	for(const gk::Sprite &sprite : m_textSprites) {
 		target.draw(sprite, states);
 	}
@@ -56,12 +62,12 @@ void Text::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 void Text::updateTextSprites() {
 	m_textSprites.clear();
 
-	int x = 0;
-	int y = 0;
-	int maxX = 0;
+	unsigned int x = 0;
+	unsigned int y = 0;
+	unsigned int maxX = 0;
 	gk::Color color = gk::Color{70, 70, 70, 255};
 	for(char c : m_text) {
-		if (c == '\n') {
+		if (c == '\n' || (m_maxLineLength && x + m_charWidth[(u8)c] >= m_maxLineLength)) {
 			y += 9;
 			x = 0;
 			continue;
@@ -78,7 +84,7 @@ void Text::updateTextSprites() {
 	y = 0;
 	color = m_color;
 	for(char c : m_text) {
-		if (c == '\n') {
+		if (c == '\n' || (m_maxLineLength && x + m_charWidth[(u8)c] >= m_maxLineLength)) {
 			maxX = std::max(x, maxX);
 			y += 9;
 			x = 0;
@@ -96,7 +102,12 @@ void Text::updateTextSprites() {
 	}
 
 	m_size.x = std::max(x, maxX);
-	m_size.y = 8 + y * 9;
+	m_size.y = y + 9;
+
+	unsigned int backgroundX = std::max<int>(m_background.getSize().x, m_size.x + m_padding.x);
+	unsigned int backgroundY = std::max<int>(m_background.getSize().y, m_size.y + m_padding.y);
+
+	m_background.setSize(backgroundX, backgroundY);
 }
 
 // FIXME: Since I use the font from Minecraft assets, I needed to use

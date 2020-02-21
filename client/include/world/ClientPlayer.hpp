@@ -66,6 +66,8 @@ class ClientPlayer : public Player {
 		float y() const { return m_y; }
 		float z() const { return m_z; }
 
+		void setPosition(float x, float y, float z);
+
 		const gk::Camera &camera() { return m_camera; }
 
 	private:

@@ -50,11 +50,24 @@ void ServerCommandHandler::sendBlockInvUpdate(s32 x, s32 y, s32 z, const Invento
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendPlayerPosUpdate(u16 clientID, const ServerPlayer &player, const Client *client) const {
+void ServerCommandHandler::sendPlayerPosUpdate(u16 clientID, bool isTeleportation, const Client *client) const {
+	const ServerPlayer &player = m_players.at(clientID);
+
 	sf::Packet packet;
 	packet << Network::Command::PlayerPosUpdate;
 	packet << clientID;
 	packet << player.x() << player.y() << player.z();
+	packet << isTeleportation;
+
+	if (!client)
+		m_server.sendToAllClients(packet);
+	else
+		client->tcpSocket->send(packet);
+}
+
+void ServerCommandHandler::sendChatMessage(u16 clientID, const std::string &message, const Client *client) const {
+	sf::Packet packet;
+	packet << Network::Command::ChatMessage << clientID << message;
 
 	if (!client)
 		m_server.sendToAllClients(packet);
@@ -182,6 +195,47 @@ void ServerCommandHandler::setupCallbacks() {
 		BlockData *data = m_world.getBlockData(pos.x, pos.y, pos.z);
 		if (data) {
 			packet >> data->meta >> data->useAltTiles;
+		}
+	});
+
+	m_server.setCommandCallback(Network::Command::ChatMessage, [this](Client &client, sf::Packet &packet) {
+		u16 clientID;
+		std::string message;
+		packet >> clientID >> message;
+
+		if (message[0] != '/') {
+			sendChatMessage(clientID, message);
+		}
+		// FIXME: Do a proper implementation later
+		else {
+			std::stringstream sstream;
+			sstream << message.substr(1);
+
+			std::vector<std::string> command;
+			std::string line;
+			while (std::getline(sstream, line, ' ')) {
+				command.emplace_back(line);
+			}
+
+			if (!command.empty()) {
+				if (command.at(0) == "tp") {
+					if (command.size() != 4) {
+						// FIXME: ID 0 should be server messages
+						sendChatMessage(0, "Usage: /tp x y z", &client);
+					}
+					else {
+						s32 x = std::stoi(command.at(1));
+						s32 y = std::stoi(command.at(2));
+						s32 z = std::stoi(command.at(3));
+
+						m_players.at(clientID).setPosition(x, y, z);
+
+						sendPlayerPosUpdate(clientID, true);
+
+						sendChatMessage(0, "Teleported to " + std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(z), &client);
+					}
+				}
+			}
 		}
 	});
 }

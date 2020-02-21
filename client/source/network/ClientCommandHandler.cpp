@@ -47,6 +47,7 @@ void ClientCommandHandler::sendPlayerPosUpdate() {
 	packet << m_player.Player::x();
 	packet << m_player.Player::y();
 	packet << m_player.Player::z();
+	packet << false;
 	m_client.send(packet);
 }
 
@@ -97,6 +98,15 @@ void ClientCommandHandler::sendChunkRequest(s32 chunkX, s32 chunkY, s32 chunkZ) 
 	m_client.send(packet);
 }
 
+void ClientCommandHandler::sendChatMessage(const std::string &message) {
+	sf::Packet packet;
+	packet << Network::Command::ChatMessage;
+	// FIXME: Sending client id shouldn't be necessary
+	packet << m_client.id();
+	packet << message;
+	m_client.send(packet);
+}
+
 void ClientCommandHandler::setupCallbacks() {
 	m_client.setCommandCallback(Network::Command::RegistryData, [this](sf::Packet &packet) {
 		Registry::getInstance().deserialize(packet);
@@ -128,15 +138,16 @@ void ClientCommandHandler::setupCallbacks() {
 	m_client.setCommandCallback(Network::Command::PlayerPosUpdate, [this](sf::Packet &packet) {
 		s32 x, y, z;
 		u16 clientId;
+		bool isTeleportation;
 		packet >> clientId;
 		packet >> x >> y >> z;
+		packet >> isTeleportation;
 
 		if (clientId != m_client.id())
 			m_playerBoxes.at(clientId).setPosition(x, y, z);
-		// else {
-		// 	m_camera.setPosition(x, y, z);
-		// 	m_player.setPosition(x, y, z);
-		// }
+		else if (isTeleportation) {
+			m_player.setPosition(x, y, z);
+		}
 	});
 
 	m_client.setCommandCallback(Network::Command::PlayerSpawn, [this](sf::Packet &packet) {

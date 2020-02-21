@@ -20,24 +20,34 @@
  *
  * =====================================================================================
  */
-#include "ServerInfo.hpp"
+#ifndef TEXTINPUT_HPP_
+#define TEXTINPUT_HPP_
 
-Client &ServerInfo::addClient(sf::IpAddress address, u16 port, const std::shared_ptr<sf::TcpSocket> &socket) {
-	m_clients.emplace_back(m_clients.size() + 1, address, port, socket);
-	return m_clients.back();
-}
+#include <gk/core/SDLHeaders.hpp>
 
-Client *ServerInfo::getClient(u16 id) {
-	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (Client &client) { return client.id == id; });
-	if (it == m_clients.end())
-		return nullptr;
+#include "Text.hpp"
 
-	return &*it;
-}
+class TextInput : public gk::Drawable, public gk::Transformable {
+	public:
+		TextInput();
 
-void ServerInfo::removeClient(u16 id) {
-	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (Client &client) { return client.id == id; });
-	if (it != m_clients.end())
-		m_clients.erase(it);
-}
+		void onEvent(const SDL_Event &event);
 
+		const std::string &text() const { return m_content; }
+
+		void setBackgroundColor(const gk::Color &color) { m_text.setBackgroundColor(color); }
+		void setBackgroundSize(unsigned int width, unsigned int height) { m_text.setBackgroundSize(width, height); }
+
+		void setPadding(int x, int y) { m_text.setPadding(x, y); }
+
+	private:
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		Text m_text;
+		std::string m_content;
+		char m_cursor = '_';
+
+		u16 m_characterLimit = 0;
+};
+
+#endif // TEXTINPUT_HPP_

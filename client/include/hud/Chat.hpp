@@ -20,24 +20,27 @@
  *
  * =====================================================================================
  */
-#include "ServerInfo.hpp"
+#ifndef CHAT_HPP_
+#define CHAT_HPP_
 
-Client &ServerInfo::addClient(sf::IpAddress address, u16 port, const std::shared_ptr<sf::TcpSocket> &socket) {
-	m_clients.emplace_back(m_clients.size() + 1, address, port, socket);
-	return m_clients.back();
-}
+#include <deque>
 
-Client *ServerInfo::getClient(u16 id) {
-	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (Client &client) { return client.id == id; });
-	if (it == m_clients.end())
-		return nullptr;
+#include "ChatMessage.hpp"
 
-	return &*it;
-}
+class Client;
 
-void ServerInfo::removeClient(u16 id) {
-	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (Client &client) { return client.id == id; });
-	if (it != m_clients.end())
-		m_clients.erase(it);
-}
+class Chat : public gk::Drawable, public gk::Transformable {
+	public:
+		Chat(Client &client);
 
+		void setMessageVisibility(bool areMessagesVisible);
+
+	private:
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		std::deque<ChatMessage> m_chatMessages;
+
+		u32 m_posY = 0;
+};
+
+#endif // CHAT_HPP_

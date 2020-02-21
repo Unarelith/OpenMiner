@@ -24,6 +24,7 @@
 
 #include <gk/core/GameClock.hpp>
 
+#include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "Config.hpp"
 #include "HUD.hpp"
@@ -31,7 +32,8 @@
 HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 	: m_hotbar(player.inventory()),
 	m_blockCursor(player, world, client),
-	m_debugOverlay(player, world)
+	m_debugOverlay(player, world),
+	m_chat(client.client())
 {
 	setScale(Config::guiScale, Config::guiScale, 1);
 
@@ -98,6 +100,7 @@ void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	target.draw(m_blockInfoWidget, states);
 	target.draw(m_hotbar, states);
 	target.draw(m_fpsText, states);
+	target.draw(m_chat, states);
 
 	states.transform = gk::Transform::Identity;
 

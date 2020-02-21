@@ -27,6 +27,7 @@
 
 #include "BlockCursor.hpp"
 #include "BlockInfoWidget.hpp"
+#include "Chat.hpp"
 #include "Crosshair.hpp"
 #include "DebugOverlay.hpp"
 #include "Hotbar.hpp"
@@ -40,6 +41,8 @@ class HUD : public gk::Transformable, public gk::Drawable {
 		void onEvent(const SDL_Event &event);
 
 		void update();
+
+		Chat &chat() { return m_chat; }
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
@@ -58,6 +61,8 @@ class HUD : public gk::Transformable, public gk::Drawable {
 		BlockInfoWidget m_blockInfoWidget;
 
 		Text m_fpsText;
+
+		Chat m_chat;
 };
 
 #endif // HUD_HPP_

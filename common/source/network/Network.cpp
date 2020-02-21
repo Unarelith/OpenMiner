@@ -52,6 +52,8 @@ std::string Network::commandToString(Network::Command command) {
 		{Network::Command::BlockDataUpdate,  "BlockDataUpdate"},
 
 		{Network::Command::RegistryData,     "RegistryData"},
+
+		{Network::Command::ChatMessage,      "ChatMessage"}
 	};
 	return commandNames[command];
 }

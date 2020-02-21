@@ -20,24 +20,33 @@
  *
  * =====================================================================================
  */
-#include "ServerInfo.hpp"
+#ifndef CHATSTATE_HPP_
+#define CHATSTATE_HPP_
 
-Client &ServerInfo::addClient(sf::IpAddress address, u16 port, const std::shared_ptr<sf::TcpSocket> &socket) {
-	m_clients.emplace_back(m_clients.size() + 1, address, port, socket);
-	return m_clients.back();
-}
+#include "InterfaceState.hpp"
+#include "TextInput.hpp"
 
-Client *ServerInfo::getClient(u16 id) {
-	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (Client &client) { return client.id == id; });
-	if (it == m_clients.end())
-		return nullptr;
+class ClientCommandHandler;
+class Chat;
 
-	return &*it;
-}
+class ChatState : public InterfaceState {
+	public:
+		ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, gk::ApplicationState *parent = nullptr);
 
-void ServerInfo::removeClient(u16 id) {
-	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (Client &client) { return client.id == id; });
-	if (it != m_clients.end())
-		m_clients.erase(it);
-}
+		void updateTextInputGeometry();
 
+		void onEvent(const SDL_Event &event) override;
+
+		void update() override;
+
+	private:
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		TextInput m_textInput;
+
+		ClientCommandHandler &m_clientCommandHandler;
+
+		Chat &m_chat;
+};
+
+#endif // CHATSTATE_HPP_

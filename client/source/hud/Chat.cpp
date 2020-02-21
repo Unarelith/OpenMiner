@@ -20,24 +20,35 @@
  *
  * =====================================================================================
  */
-#include "ServerInfo.hpp"
+#include "Chat.hpp"
+#include "Client.hpp"
+#include "Config.hpp"
 
-Client &ServerInfo::addClient(sf::IpAddress address, u16 port, const std::shared_ptr<sf::TcpSocket> &socket) {
-	m_clients.emplace_back(m_clients.size() + 1, address, port, socket);
-	return m_clients.back();
+Chat::Chat(Client &client) {
+	setPosition(2, Config::screenHeight / Config::guiScale - 50);
+
+	client.setCommandCallback(Network::Command::ChatMessage, [this](sf::Packet &packet) {
+		u16 clientID;
+		std::string message;
+		packet >> clientID >> message;
+
+		m_chatMessages.emplace_back(clientID, message, m_posY);
+
+		m_posY += m_chatMessages.back().text().getSize().y + 1;
+
+		move(0, -m_chatMessages.back().text().getSize().y - 1);
+	});
 }
 
-Client *ServerInfo::getClient(u16 id) {
-	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (Client &client) { return client.id == id; });
-	if (it == m_clients.end())
-		return nullptr;
-
-	return &*it;
+void Chat::setMessageVisibility(bool areMessagesVisible) {
+	for (auto &it : m_chatMessages)
+		it.setVisible(areMessagesVisible);
 }
 
-void ServerInfo::removeClient(u16 id) {
-	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (Client &client) { return client.id == id; });
-	if (it != m_clients.end())
-		m_clients.erase(it);
+void Chat::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	states.transform *= getTransform();
+
+	for (auto &it : m_chatMessages)
+		target.draw(it, states);
 }
 

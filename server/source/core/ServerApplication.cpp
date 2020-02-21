@@ -71,7 +71,7 @@ void ServerApplication::update() {
 
 	if (gk::GameClock::getTicks() % 1000 < 10) {
 		for (auto &it : m_players) {
-			m_serverCommandHandler.sendPlayerPosUpdate(it.first, it.second);
+			m_serverCommandHandler.sendPlayerPosUpdate(it.first);
 		}
 	}
 }

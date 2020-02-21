@@ -48,8 +48,11 @@ class ClientCommandHandler {
 		void sendBlockActivated(const glm::ivec4 &selectedBlock);
 		void sendBlockInvUpdate(Inventory &inventory);
 		void sendChunkRequest(s32 chunkX, s32 chunkY, s32 chunkZ);
+		void sendChatMessage(const std::string &message);
 
 		void setupCallbacks();
+
+		Client &client() { return m_client; }
 
 		bool isRegistryInitialized() const { return m_isRegistryInitialized; }
 

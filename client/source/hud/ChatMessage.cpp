@@ -20,24 +20,26 @@
  *
  * =====================================================================================
  */
-#include "ServerInfo.hpp"
+#include "ChatMessage.hpp"
 
-Client &ServerInfo::addClient(sf::IpAddress address, u16 port, const std::shared_ptr<sf::TcpSocket> &socket) {
-	m_clients.emplace_back(m_clients.size() + 1, address, port, socket);
-	return m_clients.back();
+ChatMessage::ChatMessage(u16 clientID, const std::string &message, u32 posY) {
+	if (clientID > 0)
+		m_text.setText("<Client " + std::to_string(clientID) + "> " + message);
+	else
+		m_text.setText(message);
+
+	m_text.setPosition(0, posY);
+	m_text.setBackgroundColor(gk::Color{0, 0, 0, 127});
+	m_text.setBackgroundSize(300, 10);
+	m_text.setMaxLineLength(300);
+	m_text.setPadding(1, 1);
+
+	m_timer.reset();
+	m_timer.start();
 }
 
-Client *ServerInfo::getClient(u16 id) {
-	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (Client &client) { return client.id == id; });
-	if (it == m_clients.end())
-		return nullptr;
-
-	return &*it;
-}
-
-void ServerInfo::removeClient(u16 id) {
-	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (Client &client) { return client.id == id; });
-	if (it != m_clients.end())
-		m_clients.erase(it);
+void ChatMessage::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	if (m_timer.time() <= 10000 || m_isVisible)
+		target.draw(m_text, states);
 }
 
