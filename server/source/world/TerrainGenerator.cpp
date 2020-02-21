@@ -59,7 +59,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
 			// Land height
-			float n = noise.GetNoise(x + chunk.x() * CHUNK_WIDTH, y + chunk.y() * CHUNK_DEPTH);
+			float n = noise.GetNoise(-x - chunk.x() * CHUNK_WIDTH, y + chunk.y() * CHUNK_DEPTH);
 			float h = 10 + n * 20;
 
 			// float n = noise2d((x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 4, 0.5) * 4;
@@ -119,9 +119,9 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 						chunk.setBlockRaw(x, y, z, m_stoneBlockID);
 
 					// Caves
-					float n2 = noise2d((x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
-					float r2 = noise3d_abs((x + chunk.x() * CHUNK_WIDTH) / 512.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 512.0f, 4, 0.1);
-					float r3 = noise3d_abs((x + chunk.x() * CHUNK_WIDTH) / 512.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 128.0f, 4, 1);
+					float n2 = noise2d(-(x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
+					float r2 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 512.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 0.1);
+					float r3 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 128.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 1);
 					float r4 = n2 * 5 + r2 * r3 * 20;
 					if (r4 > 6 && r4 < 8 && h > SEALEVEL) {
 						chunk.setBlockRaw(x, y, z - 1, 0);
