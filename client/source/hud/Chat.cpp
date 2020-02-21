@@ -22,6 +22,7 @@
  */
 #include "Chat.hpp"
 #include "Client.hpp"
+#include "Config.hpp"
 
 Chat::Chat(Client &client) {
 	setPosition(2, 2);
@@ -34,8 +35,11 @@ Chat::Chat(Client &client) {
 		packet >> clientID >> message;
 
 		Text &text = m_chatMessages.back();
-		text.setText("<" + std::to_string(clientID) + "> " + message);
+		text.setText("<Client " + std::to_string(clientID) + "> " + message);
 		text.setPosition(0, 10 * (m_chatMessages.size() - 1));
+		text.setBackgroundColor(gk::Color{0, 0, 0, 127});
+		text.setBackgroundSize(200, 10);
+		text.setPadding(1, 1);
 	});
 }
 

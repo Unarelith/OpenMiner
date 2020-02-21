@@ -27,6 +27,8 @@
 #include "Text.hpp"
 
 Text::Text() : m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-font")) {
+	m_background.setFillColor(gk::Color::Transparent);
+
 	updateCharWidth();
 }
 
@@ -46,6 +48,10 @@ void Text::setColor(const gk::Color &color) {
 
 void Text::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
+
+	target.draw(m_background, states);
+
+	states.transform.translate(m_padding.x, m_padding.y);
 
 	for(const gk::Sprite &sprite : m_textSprites) {
 		target.draw(sprite, states);

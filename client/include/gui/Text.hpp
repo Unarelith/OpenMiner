@@ -25,6 +25,7 @@
 
 #include <string>
 
+#include <gk/graphics/RectangleShape.hpp>
 #include <gk/graphics/Sprite.hpp>
 
 class Text : public gk::Drawable, public gk::Transformable {
@@ -38,6 +39,11 @@ class Text : public gk::Drawable, public gk::Transformable {
 		void setColor(const gk::Color &color);
 
 		const gk::Vector2i &getSize() const { return m_size; }
+
+		void setBackgroundColor(const gk::Color &color) { m_background.setFillColor(color); }
+		void setBackgroundSize(unsigned int width, unsigned int height) { m_background.setSize(width, height); }
+
+		void setPadding(int x, int y) { m_padding.x = x; m_padding.y = y; }
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
@@ -54,8 +60,11 @@ class Text : public gk::Drawable, public gk::Transformable {
 		gk::VertexBuffer m_vbo;
 
 		gk::Vector2i m_size;
+		gk::Vector2i m_padding{0, 0};
 
 		gk::Color m_color = gk::Color::White;
+
+		gk::RectangleShape m_background;
 };
 
 #endif // TEXT_HPP_

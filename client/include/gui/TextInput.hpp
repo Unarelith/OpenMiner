@@ -24,7 +24,6 @@
 #define TEXTINPUT_HPP_
 
 #include <gk/core/SDLHeaders.hpp>
-#include <gk/graphics/RectangleShape.hpp>
 
 #include "Text.hpp"
 
@@ -36,10 +35,10 @@ class TextInput : public gk::Drawable, public gk::Transformable {
 
 		const std::string &text() const { return m_content; }
 
-		void setBackgroundColor(const gk::Color &color) { m_background.setFillColor(color); }
-		void setBackgroundSize(unsigned int width, unsigned int height) { m_background.setSize(width, height); }
+		void setBackgroundColor(const gk::Color &color) { m_text.setBackgroundColor(color); }
+		void setBackgroundSize(unsigned int width, unsigned int height) { m_text.setBackgroundSize(width, height); }
 
-		void setPadding(int x, int y) { m_text.setPosition(x, y); }
+		void setPadding(int x, int y) { m_text.setPadding(x, y); }
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
@@ -49,8 +48,6 @@ class TextInput : public gk::Drawable, public gk::Transformable {
 		char m_cursor = '_';
 
 		u16 m_characterLimit = 0;
-
-		gk::RectangleShape m_background;
 };
 
 #endif // TEXTINPUT_HPP_

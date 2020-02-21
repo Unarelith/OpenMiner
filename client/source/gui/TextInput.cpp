@@ -25,8 +25,6 @@
 #include "TextInput.hpp"
 
 TextInput::TextInput() {
-	m_background.setFillColor(gk::Color::Transparent);
-
 	m_text.setText(std::string{m_cursor});
 }
 
@@ -52,7 +50,6 @@ void TextInput::onEvent(const SDL_Event &event) {
 void TextInput::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
-	target.draw(m_background, states);
 	target.draw(m_text, states);
 }
 
