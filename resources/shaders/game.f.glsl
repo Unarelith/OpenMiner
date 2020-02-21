@@ -26,16 +26,16 @@ void main() {
 	float lightCheck = floor(v_lightValue.x + 0.5);
 
 	// Discard if the pixel is too far away
-	if(v_blockFace != -1. && v_dist > u_renderDistance) discard;
+	if(blockFace != -1. && v_dist > u_renderDistance) discard;
 
 	// Get current pixel color and apply multiplier on grayscale textures
 	vec4 color = getColor();
-	if (v_blockFace != -1 && color != v_color && color.r == color.g && color.g == color.b) {
+	if (blockFace != -1 && color != v_color && color.r == color.g && color.g == color.b) {
 		color *= v_color;
 	}
 
 	// Very cheap "transparency": don't draw pixels with a low alpha value
-	if(color.a < 0.3 && v_blockFace != -1.) discard;
+	if(color.a < 0.3 && blockFace != -1.) discard;
 
 	// FIXME: FINISH THIS WITH PROPER CODE AND SUN BASIC DISPLAY
 	// int maxTime = 5 * 1000;
