@@ -143,6 +143,15 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 		m_velocity.z = 0;
 }
 
+void ClientPlayer::setPosition(float x, float y, float z) {
+	m_x = x;
+	m_y = y;
+	m_z = z;
+
+	Player::setPosition(x, y, z);
+	m_camera.setPosition(x, y, z - 0.1);
+}
+
 void ClientPlayer::checkCollisions(const ClientWorld &world) {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || defined(__ANDROID__)
 	const float PLAYER_HEIGHT = 1.8;

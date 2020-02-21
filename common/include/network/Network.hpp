@@ -44,7 +44,7 @@ namespace Network {
 		PlayerPlaceBlock = 7,  // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Client only)
 		PlayerDigBlock   = 8,  // <TCP> [NetworkCommand][s32 x, y, z]            (from Client only)
 		PlayerInvUpdate  = 9,  // <TCP> [NetworkCommand][u16 client id][[std::string item][u16 amount][u8 x, y]...] (both) [FIXME]
-		PlayerPosUpdate  = 10, // <TCP> [NetworkCommand][u16 client id][s32 x, y, z] (both) // FIXME
+		PlayerPosUpdate  = 10, // <TCP> [NetworkCommand][u16 client id][s32 x, y, z][bool isTeleportation] (both) // FIXME
 		PlayerSpawn      = 11, // <TCP> [NetworkCommand][u16 client id][s32 x, y, z]            (from Server only)
 		PlayerInventory  = 12, // <TCP> [NetworkCommand][u16 screenWidth, screenHeight][u8 guiScale] (from Client only)
 

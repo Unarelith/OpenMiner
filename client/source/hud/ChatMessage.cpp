@@ -23,7 +23,11 @@
 #include "ChatMessage.hpp"
 
 ChatMessage::ChatMessage(u16 clientID, const std::string &message, u32 posY) {
-	m_text.setText("<Client " + std::to_string(clientID) + "> " + message);
+	if (clientID > 0)
+		m_text.setText("<Client " + std::to_string(clientID) + "> " + message);
+	else
+		m_text.setText(message);
+
 	m_text.setPosition(0, posY);
 	m_text.setBackgroundColor(gk::Color{0, 0, 0, 127});
 	m_text.setBackgroundSize(300, 10);

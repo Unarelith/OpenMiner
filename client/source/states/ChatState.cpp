@@ -37,17 +37,17 @@ ChatState::ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, gk:
 
 	m_drawBackground = false;
 
-	updateTextInputGeometry();
-
 	m_textInput.setScale(Config::guiScale, Config::guiScale);
 	m_textInput.setBackgroundColor(gk::Color{0, 0, 0, 127});
 	m_textInput.setPadding(1, 1);
+
+	updateTextInputGeometry();
 
 	m_chat.setMessageVisibility(true);
 }
 
 void ChatState::updateTextInputGeometry() {
-	m_textInput.setPosition(4, Config::screenHeight - 35);
+	m_textInput.setPosition(4, Config::screenHeight - 12 * Config::guiScale);
 	m_textInput.setBackgroundSize(Config::screenWidth / Config::guiScale - 4, 10);
 }
 

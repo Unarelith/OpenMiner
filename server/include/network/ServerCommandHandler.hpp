@@ -44,7 +44,8 @@ class ServerCommandHandler {
 
 		void sendBlockDataUpdate(s32 x, s32 y, s32 z, const BlockData *blockData, const Client *client = nullptr) const;
 		void sendBlockInvUpdate(s32 x, s32 y, s32 z, const Inventory &inventory, const Client *client = nullptr) const;
-		void sendPlayerPosUpdate(u16 clientID, const ServerPlayer &player, const Client *client = nullptr) const;
+		void sendPlayerPosUpdate(u16 clientID, bool isTeleportation = false, const Client *client = nullptr) const;
+		void sendChatMessage(u16 clientID, const std::string &message, const Client *client = nullptr) const;
 
 		void setupCallbacks();
 
