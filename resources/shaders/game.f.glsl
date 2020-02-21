@@ -48,6 +48,7 @@ void main() {
 		float ambientIntensity = max(max(v_lightValue.x, v_lightValue.y) / 16.0, minBrightness);
 		float diffuseIntensity = max(v_lightValue.x, v_lightValue.y) / 32.0;
 
+		// These numbers should be in sync with enum BlockFace in TilesDef.hpp
 		// Bottom
 		if (blockFace == 4.)
 			ambientIntensity = max(ambientIntensity * 0.6, minBrightness);
