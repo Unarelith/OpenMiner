@@ -82,9 +82,9 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 						}
 
 						// Leaves
-						for(int ix = -3 ; ix <= 3 ; ix++) {
+						for(int iz = -3 ; iz <= 3 ; iz++) {
 							for(int iy = -3 ; iy <= 3 ; iy++) {
-								for(int iz = -3 ; iz <= 3 ; iz++) {
+								for(int ix = -3 ; ix <= 3 ; ix++) {
 									if(ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + iy, z + h + iz)) {
 										chunk.setBlockRaw(x + ix, y + iy, z + h + iz, m_leavesBlockID);
 

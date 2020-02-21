@@ -53,10 +53,10 @@ void ServerWorld::createChunkNeighbours(ServerChunk *chunk) {
 	gk::Vector3i surroundingChunks[6] = {
 		{chunk->x() - 1, chunk->y(),     chunk->z()},
 		{chunk->x() + 1, chunk->y(),     chunk->z()},
-		{chunk->x(),     chunk->y(),     chunk->z() - 1},
-		{chunk->x(),     chunk->y(),     chunk->z() + 1},
 		{chunk->x(),     chunk->y() - 1, chunk->z()},
 		{chunk->x(),     chunk->y() + 1, chunk->z()},
+		{chunk->x(),     chunk->y(),     chunk->z() - 1},
+		{chunk->x(),     chunk->y(),     chunk->z() + 1},
 	};
 
 	for (u8 i = 0 ; i < 6 ; ++i) {
