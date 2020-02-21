@@ -23,7 +23,9 @@
 #ifndef CHAT_HPP_
 #define CHAT_HPP_
 
-#include "Text.hpp"
+#include <deque>
+
+#include "ChatMessage.hpp"
 
 class Client;
 
@@ -31,10 +33,12 @@ class Chat : public gk::Drawable, public gk::Transformable {
 	public:
 		Chat(Client &client);
 
+		void setMessageVisibility(bool areMessagesVisible);
+
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		std::vector<Text> m_chatMessages;
+		std::deque<ChatMessage> m_chatMessages;
 };
 
 #endif // CHAT_HPP_

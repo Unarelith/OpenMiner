@@ -20,33 +20,21 @@
  *
  * =====================================================================================
  */
-#ifndef CHATSTATE_HPP_
-#define CHATSTATE_HPP_
+#include "ChatMessage.hpp"
 
-#include "InterfaceState.hpp"
-#include "TextInput.hpp"
+ChatMessage::ChatMessage(u16 clientID, const std::string &message, u32 messageCount) {
+	m_text.setText("<Client " + std::to_string(clientID) + "> " + message);
+	m_text.setPosition(0, 10 * messageCount);
+	m_text.setBackgroundColor(gk::Color{0, 0, 0, 127});
+	m_text.setBackgroundSize(300, 10);
+	m_text.setPadding(1, 1);
 
-class ClientCommandHandler;
-class Chat;
+	m_timer.reset();
+	m_timer.start();
+}
 
-class ChatState : public InterfaceState {
-	public:
-		ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, gk::ApplicationState *parent = nullptr);
+void ChatMessage::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	if (m_timer.time() <= 5000 || m_isVisible)
+		target.draw(m_text, states);
+}
 
-		void updateTextInputGeometry();
-
-		void onEvent(const SDL_Event &event) override;
-
-		void update() override;
-
-	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		TextInput m_textInput;
-
-		ClientCommandHandler &m_clientCommandHandler;
-
-		Chat &m_chat;
-};
-
-#endif // CHATSTATE_HPP_

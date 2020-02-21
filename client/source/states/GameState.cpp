@@ -81,7 +81,7 @@ void GameState::onEvent(const SDL_Event &event) {
 		}
 		// FIXME: Use GamePad/GameKey instead of a hardcoded keycode
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_t) {
-			m_stateStack->push<ChatState>(m_clientCommandHandler, this);
+			m_stateStack->push<ChatState>(m_clientCommandHandler, m_hud.chat(), this);
 		}
 		else if (event.type == SDL_WINDOWEVENT) {
 			if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {

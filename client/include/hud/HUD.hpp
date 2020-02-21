@@ -42,6 +42,8 @@ class HUD : public gk::Transformable, public gk::Drawable {
 
 		void update();
 
+		Chat &chat() { return m_chat; }
+
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 

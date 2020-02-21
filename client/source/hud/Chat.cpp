@@ -25,22 +25,22 @@
 #include "Config.hpp"
 
 Chat::Chat(Client &client) {
-	setPosition(2, 2);
+	setPosition(2, Config::screenHeight / Config::guiScale - 50);
 
 	client.setCommandCallback(Network::Command::ChatMessage, [this](sf::Packet &packet) {
-		m_chatMessages.emplace_back();
-
 		u16 clientID;
 		std::string message;
 		packet >> clientID >> message;
 
-		Text &text = m_chatMessages.back();
-		text.setText("<Client " + std::to_string(clientID) + "> " + message);
-		text.setPosition(0, 10 * (m_chatMessages.size() - 1));
-		text.setBackgroundColor(gk::Color{0, 0, 0, 127});
-		text.setBackgroundSize(200, 10);
-		text.setPadding(1, 1);
+		m_chatMessages.emplace_back(clientID, message, m_chatMessages.size());
+
+		move(0, -10);
 	});
+}
+
+void Chat::setMessageVisibility(bool areMessagesVisible) {
+	for (auto &it : m_chatMessages)
+		it.setVisible(areMessagesVisible);
 }
 
 void Chat::draw(gk::RenderTarget &target, gk::RenderStates states) const {

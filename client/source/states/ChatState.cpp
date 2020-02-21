@@ -23,12 +23,13 @@
 #include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/Mouse.hpp>
 
-#include "Config.hpp"
+#include "Chat.hpp"
 #include "ChatState.hpp"
 #include "ClientCommandHandler.hpp"
+#include "Config.hpp"
 
-ChatState::ChatState(ClientCommandHandler &clientCommandHandler, gk::ApplicationState *parent)
-	: InterfaceState(parent), m_clientCommandHandler(clientCommandHandler)
+ChatState::ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, gk::ApplicationState *parent)
+	: InterfaceState(parent), m_clientCommandHandler(clientCommandHandler), m_chat(chat)
 {
 	gk::Mouse::setCursorGrabbed(false);
 	gk::Mouse::setCursorVisible(true);
@@ -41,6 +42,8 @@ ChatState::ChatState(ClientCommandHandler &clientCommandHandler, gk::Application
 	m_textInput.setScale(Config::guiScale, Config::guiScale);
 	m_textInput.setBackgroundColor(gk::Color{0, 0, 0, 127});
 	m_textInput.setPadding(1, 1);
+
+	m_chat.setMessageVisibility(true);
 }
 
 void ChatState::updateTextInputGeometry() {
@@ -62,6 +65,8 @@ void ChatState::onEvent(const SDL_Event &event) {
 		gk::Mouse::setCursorVisible(false);
 		gk::Mouse::resetToWindowCenter();
 
+		m_chat.setMessageVisibility(false);
+
 		m_stateStack->pop();
 	}
 
@@ -72,6 +77,8 @@ void ChatState::onEvent(const SDL_Event &event) {
 		gk::Mouse::setCursorGrabbed(true);
 		gk::Mouse::setCursorVisible(false);
 		gk::Mouse::resetToWindowCenter();
+
+		m_chat.setMessageVisibility(false);
 
 		m_stateStack->pop();
 	}

@@ -20,33 +20,25 @@
  *
  * =====================================================================================
  */
-#ifndef CHATSTATE_HPP_
-#define CHATSTATE_HPP_
+#ifndef CHATMESSAGE_HPP_
+#define CHATMESSAGE_HPP_
 
-#include "InterfaceState.hpp"
-#include "TextInput.hpp"
+#include "Text.hpp"
 
-class ClientCommandHandler;
-class Chat;
-
-class ChatState : public InterfaceState {
+class ChatMessage : public gk::Drawable, public gk::Transformable {
 	public:
-		ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, gk::ApplicationState *parent = nullptr);
+		ChatMessage(u16 clientID, const std::string &message, u32 messageCount);
 
-		void updateTextInputGeometry();
-
-		void onEvent(const SDL_Event &event) override;
-
-		void update() override;
+		void setVisible(bool isVisible) { m_isVisible = isVisible; }
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		TextInput m_textInput;
+		Text m_text;
 
-		ClientCommandHandler &m_clientCommandHandler;
+		gk::Timer m_timer;
 
-		Chat &m_chat;
+		bool m_isVisible = false;
 };
 
-#endif // CHATSTATE_HPP_
+#endif // CHATMESSAGE_HPP_
