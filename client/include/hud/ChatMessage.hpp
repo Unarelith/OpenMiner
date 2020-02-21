@@ -27,9 +27,11 @@
 
 class ChatMessage : public gk::Drawable, public gk::Transformable {
 	public:
-		ChatMessage(u16 clientID, const std::string &message, u32 messageCount);
+		ChatMessage(u16 clientID, const std::string &message, u32 posY);
 
 		void setVisible(bool isVisible) { m_isVisible = isVisible; }
+
+		const Text &text() const { return m_text; }
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;

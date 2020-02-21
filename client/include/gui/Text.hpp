@@ -43,7 +43,9 @@ class Text : public gk::Drawable, public gk::Transformable {
 		void setBackgroundColor(const gk::Color &color) { m_background.setFillColor(color); }
 		void setBackgroundSize(unsigned int width, unsigned int height) { m_background.setSize(width, height); }
 
-		void setPadding(int x, int y) { m_padding.x = x; m_padding.y = y; }
+		void setPadding(int x, int y) { m_padding.x = x; m_padding.y = y; updateTextSprites(); }
+
+		void setMaxLineLength(unsigned int maxLineLength) { m_maxLineLength = maxLineLength; updateTextSprites(); }
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
@@ -65,6 +67,8 @@ class Text : public gk::Drawable, public gk::Transformable {
 		gk::Color m_color = gk::Color::White;
 
 		gk::RectangleShape m_background;
+
+		unsigned int m_maxLineLength = 0;
 };
 
 #endif // TEXT_HPP_

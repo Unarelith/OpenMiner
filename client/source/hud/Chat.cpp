@@ -32,9 +32,11 @@ Chat::Chat(Client &client) {
 		std::string message;
 		packet >> clientID >> message;
 
-		m_chatMessages.emplace_back(clientID, message, m_chatMessages.size());
+		m_chatMessages.emplace_back(clientID, message, m_posY);
 
-		move(0, -10);
+		m_posY += m_chatMessages.back().text().getSize().y + 1;
+
+		move(0, -m_chatMessages.back().text().getSize().y - 1);
 	});
 }
 

@@ -39,6 +39,8 @@ class Chat : public gk::Drawable, public gk::Transformable {
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		std::deque<ChatMessage> m_chatMessages;
+
+		u32 m_posY = 0;
 };
 
 #endif // CHAT_HPP_

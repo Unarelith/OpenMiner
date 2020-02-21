@@ -22,11 +22,12 @@
  */
 #include "ChatMessage.hpp"
 
-ChatMessage::ChatMessage(u16 clientID, const std::string &message, u32 messageCount) {
+ChatMessage::ChatMessage(u16 clientID, const std::string &message, u32 posY) {
 	m_text.setText("<Client " + std::to_string(clientID) + "> " + message);
-	m_text.setPosition(0, 10 * messageCount);
+	m_text.setPosition(0, posY);
 	m_text.setBackgroundColor(gk::Color{0, 0, 0, 127});
 	m_text.setBackgroundSize(300, 10);
+	m_text.setMaxLineLength(300);
 	m_text.setPadding(1, 1);
 
 	m_timer.reset();
@@ -34,7 +35,7 @@ ChatMessage::ChatMessage(u16 clientID, const std::string &message, u32 messageCo
 }
 
 void ChatMessage::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	if (m_timer.time() <= 5000 || m_isVisible)
+	if (m_timer.time() <= 10000 || m_isVisible)
 		target.draw(m_text, states);
 }
 
