@@ -34,8 +34,8 @@ namespace LuaWidgetDef {
 struct Widget {
 	std::string name;
 
-	float x = 0;
-	float y = 0;
+	s32 x = 0;
+	s32 y = 0;
 };
 
 struct Image : public Widget {

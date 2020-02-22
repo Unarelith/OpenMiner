@@ -38,7 +38,6 @@
 #include "GameState.hpp"
 #include "LuaGUIState.hpp"
 #include "PauseMenuState.hpp"
-#include "PlayerInventoryWidget.hpp"
 #include "Registry.hpp"
 #include "TextureAtlas.hpp"
 

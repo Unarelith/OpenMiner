@@ -173,7 +173,7 @@ void LuaGUI::addFurnaceWidget(const sol::table &table) {
 	furnaceWidget.block = block;
 }
 
-void LuaGUI::addPlayerInventoryWidget(const sol::table &table) {
+void LuaGUI::addPlayerCraftingWidget(const sol::table &table) {
 	// FIXME: Duplicated above
 	float x = 0, y = 0;
 	sol::optional<sol::table> pos = table["pos"];
@@ -183,9 +183,9 @@ void LuaGUI::addPlayerInventoryWidget(const sol::table &table) {
 		y = pos.value()["y"];
 	}
 
-	m_data.playerInventoryWidgetList.emplace_back();
+	m_data.playerCraftingWidgetList.emplace_back();
 
-	LuaWidgetDef::Widget &widget = m_data.playerInventoryWidgetList.back();
+	LuaWidgetDef::Widget &widget = m_data.playerCraftingWidgetList.back();
 	widget.name = name;
 	widget.x = x;
 	widget.y = y;
@@ -208,8 +208,8 @@ void LuaGUI::show(Client &client) {
 	for (auto &it : m_data.furnaceWidgetList)
 		packet << u8(LuaWidget::FurnaceWidget) << it.name << it.x << it.y
 			<< it.block.x << it.block.y << it.block.z;
-	for (auto &it : m_data.playerInventoryWidgetList)
-		packet << u8(LuaWidget::PlayerInventoryWidget) << it.name << it.x << it.y;
+	for (auto &it : m_data.playerCraftingWidgetList)
+		packet << u8(LuaWidget::PlayerCraftingWidget) << it.name << it.x << it.y;
 	client.tcpSocket->send(packet);
 }
 
@@ -220,7 +220,7 @@ void LuaGUI::initUsertype(sol::state &lua) {
 		"inventory", &LuaGUI::addInventoryWidget,
 		"crafting",  &LuaGUI::addCraftingWidget,
 		"furnace",   &LuaGUI::addFurnaceWidget,
-		"player_inventory", &LuaGUI::addPlayerInventoryWidget,
+		"player_crafting", &LuaGUI::addPlayerCraftingWidget,
 		"show",      &LuaGUI::show
 	);
 }

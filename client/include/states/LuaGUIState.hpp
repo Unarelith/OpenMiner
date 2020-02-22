@@ -32,6 +32,7 @@
 #include "InterfaceState.hpp"
 #include "InventoryWidget.hpp"
 #include "MouseItemWidget.hpp"
+#include "PlayerCraftingWidget.hpp"
 
 class ClientPlayer;
 class ClientWorld;
@@ -59,6 +60,9 @@ class LuaGUIState : public InterfaceState {
 		std::deque<InventoryWidget> m_inventoryWidgets;
 		std::vector<std::unique_ptr<Widget>> m_widgets;
 		std::vector<std::unique_ptr<gk::Drawable>> m_drawables;
+
+		// FIXME: Temporary
+		std::unique_ptr<PlayerCraftingWidget> m_playerCraftingWidget{nullptr};
 };
 
 #endif // LUAGUISTATE_HPP_

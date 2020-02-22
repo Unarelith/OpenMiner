@@ -36,7 +36,7 @@
 #include "LuaWidget.hpp"
 #include "Network.hpp"
 #include "Player.hpp"
-#include "PlayerInventoryWidget.hpp"
+#include "PlayerCraftingWidget.hpp"
 #include "TextButton.hpp"
 
 LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent)
@@ -72,6 +72,10 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 	for (auto &it : m_craftingWidgets)
 		it.onMouseEvent(event, m_mouseItemWidget);
 
+	// FIXME: Temporary
+	if (m_playerCraftingWidget)
+		m_playerCraftingWidget->onMouseEvent(event, m_mouseItemWidget);
+
 	m_mouseItemWidget.onEvent(event);
 }
 
@@ -86,6 +90,10 @@ void LuaGUIState::update() {
 		it.update();
 	}
 
+	// FIXME: Temporary
+	if (m_playerCraftingWidget)
+		m_playerCraftingWidget->update();
+
 	const ItemWidget *currentItemWidget = nullptr;
 	for (auto &it : m_inventoryWidgets) {
 		if (!currentItemWidget)
@@ -95,6 +103,10 @@ void LuaGUIState::update() {
 		if (!currentItemWidget)
 			currentItemWidget = it.currentItemWidget();
 	}
+
+	// FIXME: Temporary
+	if (!currentItemWidget && m_playerCraftingWidget)
+		currentItemWidget = m_playerCraftingWidget->currentItemWidget();
 
 	if (m_inventoryWidgets.size() != 0) // FIXME
 		m_mouseItemWidget.updateCurrentItem(currentItemWidget);
@@ -121,13 +133,17 @@ void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	for (auto &it : m_craftingWidgets)
 		target.draw(it, states);
 
+	// FIXME: Temporary
+	if (m_playerCraftingWidget)
+		target.draw(*m_playerCraftingWidget, states);
+
 	target.draw(m_mouseItemWidget, states);
 }
 
 void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &packet) {
 	u8 type;
 	std::string name;
-	float x, y;
+	s32 x, y;
 	packet >> type >> name >> x >> y;
 	if (type == LuaWidget::Image) {
 		std::string texture;
@@ -190,10 +206,10 @@ void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &
 			DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
 		}
 	}
-	else if (type == LuaWidget::PlayerInventoryWidget) {
-		auto *widget = new PlayerInventoryWidget(m_client, m_mouseItemWidget, player.inventory(), &m_mainWidget);
-		widget->setPosition(x, y);
-		m_widgets.emplace_back(widget);
+	// FIXME: Temporary
+	else if (type == LuaWidget::PlayerCraftingWidget) {
+		m_playerCraftingWidget.reset(new PlayerCraftingWidget(m_client, &m_mainWidget));
+		m_playerCraftingWidget->setPosition(x, y);
 	}
 }
 

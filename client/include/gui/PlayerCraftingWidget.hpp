@@ -20,34 +20,17 @@
  *
  * =====================================================================================
  */
-#ifndef PLAYERINVENTORYWIDGET_HPP_
-#define PLAYERINVENTORYWIDGET_HPP_
+#ifndef PLAYERCRAFTINGWIDGET_HPP_
+#define PLAYERCRAFTINGWIDGET_HPP_
 
 #include "CraftingWidget.hpp"
 
-class PlayerInventoryWidget : public Widget {
+class PlayerCraftingWidget : public CraftingWidget {
 	public:
-		PlayerInventoryWidget(ClientCommandHandler &client, MouseItemWidget &mouseItemWidget, Inventory &playerInventory, Widget *parent = nullptr);
-
-		void onEvent(const SDL_Event &event) override;
-
-		void update() override;
+		PlayerCraftingWidget(ClientCommandHandler &client, Widget *parent = nullptr);
 
 	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		ClientCommandHandler &m_client;
-
-		MouseItemWidget &m_mouseItemWidget;
-
-		gk::Image m_background;
-
 		Inventory m_craftingInventory{2, 2};
-		CraftingWidget m_craftingWidget{m_client, m_craftingInventory, this};
-
-		Inventory &m_playerInventory;
-		InventoryWidget m_playerInventoryWidget{m_client, this};
-		InventoryWidget m_hotbarInventoryWidget{m_client, this};
 };
 
-#endif // PLAYERINVENTORYWIDGET_HPP_
+#endif // PLAYERCRAFTINGWIDGET_HPP_

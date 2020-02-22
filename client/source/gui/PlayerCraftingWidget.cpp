@@ -20,38 +20,12 @@
  *
  * =====================================================================================
  */
-#ifndef LUAGUI_HPP_
-#define LUAGUI_HPP_
+#include "PlayerCraftingWidget.hpp"
 
-#include <list>
+PlayerCraftingWidget::PlayerCraftingWidget(ClientCommandHandler &client, Widget *parent)
+	: CraftingWidget(client, m_craftingInventory, parent)
+{
+	craftingInventoryWidget().init(m_craftingInventory, 0, 4);
+	craftingResultInventoryWidget().setPosition(56, 10, 0);
+}
 
-#include "LuaWidgetDef.hpp"
-#include "ServerInfo.hpp"
-
-struct LuaGUIData {
-	std::list<LuaWidgetDef::Image> imageList;
-	std::list<LuaWidgetDef::TextButton> textButtonList;
-	std::list<LuaWidgetDef::InventoryWidget> inventoryWidgetList;
-	std::list<LuaWidgetDef::CraftingWidget> craftingWidgetList;
-	std::list<LuaWidgetDef::FurnaceWidget> furnaceWidgetList;
-	std::list<LuaWidgetDef::Widget> playerCraftingWidgetList;
-};
-
-// This class is meant to be used ONLY in Lua
-class LuaGUI {
-	public:
-		void addImage(const sol::table &table);
-		void addTextButton(const sol::table &table);
-		void addInventoryWidget(const sol::table &table);
-		void addCraftingWidget(const sol::table &table);
-		void addFurnaceWidget(const sol::table &table);
-		void addPlayerCraftingWidget(const sol::table &table);
-
-		void show(Client &client);
-
-		static void initUsertype(sol::state &lua);
-
-		LuaGUIData m_data;
-};
-
-#endif // LUAGUI_HPP_

@@ -10,16 +10,16 @@ TODO
 
 # Issues
 
-◦ TODO: Trees should block light
+• DONE: Blocks can be placed inside the player (check for AABB?)
+• DONE: Sometimes it’s possible to aim between two blocks and right-clicking will replace one
 • TODO: GUI scale issues
    ◦ TODO: `HUD` doesn’t update when GUI scale is changed
    ◦ TODO: `SettingsMenuState` should update scaling when the setting is changed
    ◦ DONE: All Lua-defined GUI are not scaled correctly with lower GUI scale settings
       ◦ DONE: Send client screen size and GUI scale to server
+◦ TODO: Trees should block light
 • TODO: Blocks can be accessed from outside the world (will need a refactoring)
 • TODO: Collisions are fucked up with blocks placed at `x = -1` from `x = 0`
-• TODO: Blocks can be placed inside the player (check for AABB?)
-• TODO: Sometimes it’s possible to aim between two blocks and right-clicking will replace one
 
 # Refactorings
 
@@ -29,10 +29,11 @@ TODO
 
 # GUI
 
+• DONE: Implement `PlayerInventoryWidget` completely in Lua
+• TODO: Implement `PlayerCraftingWidget` completely in Lua
 • TODO: Implement `FurnaceWidget` completely in Lua
    ◦ TODO: Add a `ProgressBarWidget` and find how to make it communicate between client and server
    ◦ TODO: Remove `BlockMetadata::get` which is only required by `FurnaceWidget`
-• TODO: Implement `PlayerInventoryWidget` completely in Lua
 
 # Menus
 

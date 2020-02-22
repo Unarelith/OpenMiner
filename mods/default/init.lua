@@ -70,9 +70,39 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 		y = screen_height / gui_scale / 2.0 - 166 / 2.0
 	}
 
-	gui:player_inventory {
-		name = "inventory",
+	gui:image {
+		name = "img_background",
 		pos = gui_pos,
+
+		texture = "texture-inventory",
+		clip = {x = 0, y = 0, width = 176, height = 166},
+	}
+
+	gui:inventory {
+		name = "inv_main",
+		pos = {x = gui_pos.x + 7, y = gui_pos.y + 83},
+
+		player = "player",
+		inventory = "main",
+		size = {x = 9, y = 3},
+		offset = 9,
+		count = 9 * 3,
+	}
+
+	gui:inventory {
+		name = "inv_hotbar",
+		pos = {x = gui_pos.x + 7, y = gui_pos.y + 141},
+
+		player = "player",
+		inventory = "main",
+		size = {x = 9, y = 1},
+		offset = 0,
+		count = 9,
+	}
+
+	gui:player_crafting {
+		name = "inv_crafting",
+		pos = {x = gui_pos.x + 97, y = gui_pos.y + 17},
 	}
 
 	gui:show(client)
