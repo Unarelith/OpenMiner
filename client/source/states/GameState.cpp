@@ -64,6 +64,7 @@ GameState::GameState(const std::string &host, int port) {
 
 	m_world.setClient(m_clientCommandHandler);
 	m_player.setClientID(m_client.id());
+	m_world.setCamera(m_player.camera());
 }
 
 void GameState::onEvent(const SDL_Event &event) {

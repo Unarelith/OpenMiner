@@ -21,6 +21,7 @@
  * =====================================================================================
  */
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/norm.hpp>
 
 #include <gk/gl/Shader.hpp>
 #include <gk/resource/ResourceHandler.hpp>
@@ -62,7 +63,7 @@ void ClientWorld::update() {
 
 void ClientWorld::sendChunkRequests() {
 	// If we have a chunk marked for initialization
-	if (m_ud < 1000) {
+	if (m_ud < 1000000.0) {
 		ClientChunk *chunk = (ClientChunk *)getChunk(m_ux, m_uy, m_uz);
 		if(chunk && !chunk->hasBeenRequested()) {
 			// Send a chunk request to the server
@@ -188,7 +189,7 @@ void ClientWorld::createChunkNeighbours(ClientChunk *chunk) {
 }
 
 void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	if (!target.getView()) {
+	if (!target.getView() || !m_camera) {
 		DEBUG("ERROR: Trying to draw world without a camera");
 		return;
 	}
@@ -197,21 +198,40 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	states.shader->setUniform("u_renderDistance", Config::renderDistance * CHUNK_WIDTH);
 	gk::Shader::bind(nullptr);
 
-	m_ud = 1000.0;
+	m_ud = 1000000.0;
 	m_ux = 0;
 	m_uy = 0;
 	m_uz = 0;
 
+	// Changing the values sent to the GPU to double precision is suicidal,
+	// performance wise, if possible at all. Therefore we want to keep the
+	// GL rendering numbers in single precision format. But that introduces
+	// an issue at larger coordinates, because the precision of floats
+	// quickly degrades as the numbers grow, with a random wobbling being
+	// very noticeable at e.g. coordinates >= 65536 or so, and the waving
+	// leaves effect being very jerky in conparison with the effect near the
+	// origin.
+	//
+	// To gain rendering precision, we subtract the camera position from the
+	// coordinates of the models to be rendered, to make them all small in
+	// relation to the camera, prior to converting them to floats. Then the
+	// camera itself is moved to (0, 0, 0) for rendering purposes. Now the
+	// vertex coordinates passed to the renderer are all small, and single
+	// precision floats suffice for the drawing.
+
+	gk::Vector3d cameraPos(m_camera->getPosition());
+	m_camera->setPosition(0, 0, 0);  // Temporarily move the camera to the origin
+
 	std::vector<std::pair<ClientChunk*, gk::Transform>> chunks;
 	for(auto &it : m_chunks) {
-		states.transform = glm::translate(glm::mat4(1.0f),
-		                                  glm::vec3(it.second->x() * CHUNK_WIDTH,
-		                                            it.second->y() * CHUNK_DEPTH,
-		                                            it.second->z() * CHUNK_HEIGHT));
+		gk::Transform tf = glm::translate(glm::mat4(1.0f),
+		                                  glm::vec3(it.second->x() * CHUNK_WIDTH  - cameraPos.x,
+		                                            it.second->y() * CHUNK_DEPTH  - cameraPos.y,
+		                                            it.second->z() * CHUNK_HEIGHT - cameraPos.z));
 
 		// Is the chunk close enough?
 		glm::vec4 center = target.getView()->getViewTransform().getMatrix()
-		                 * states.transform.getMatrix()
+		                 * tf.getMatrix()
 		                 * glm::vec4(CHUNK_WIDTH / 2, CHUNK_DEPTH / 2, CHUNK_HEIGHT / 2, 1);
 
 		// Nope, too far, don't render it
@@ -223,7 +243,7 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		it.second->setTooFar(false);
 
 		// Is this chunk's centre on the screen?
-		float d = glm::length(center);
+		float d = glm::length2(center);
 		center.x /= center.w;
 		center.y /= center.w;
 
@@ -231,7 +251,7 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		// Our screen coordinates are +X right, +Y up, and for a right-handed
 		// coordinate system, depth must be negative Z, so anything with a
 		// positive Z is behind the camera.
-		if(center.z > CHUNK_HEIGHT / 2) {
+		if (center.z > CHUNK_MAXSIZE / 2) {
 			continue;
 		}
 
@@ -255,7 +275,7 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 			continue;
 		}
 
-		chunks.emplace_back(it.second.get(), states.transform);
+		chunks.emplace_back(it.second.get(), tf);
 	}
 
 	for (u8 i = 0 ; i < ChunkBuilder::layers ; ++i) {
@@ -264,5 +284,7 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 			it.first->drawLayer(target, states, i);
 		}
 	}
+
+	m_camera->setPosition(cameraPos);  // Restore the camera to its original position
 }
 

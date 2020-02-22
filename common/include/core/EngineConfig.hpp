@@ -34,6 +34,8 @@ namespace {
 	constexpr int CHUNK_DEPTH  = 16;
 	constexpr int CHUNK_HEIGHT = 32;
 
+	constexpr int CHUNK_MAXSIZE = CHUNK_WIDTH > CHUNK_DEPTH ? (CHUNK_HEIGHT > CHUNK_WIDTH ? CHUNK_HEIGHT : CHUNK_WIDTH) : (CHUNK_HEIGHT > CHUNK_DEPTH ? CHUNK_HEIGHT : CHUNK_DEPTH);
+
 	// Several parts of the code use & (CHUNK_xxx - 1) assuming they are powers of 2
 	static_assert((CHUNK_WIDTH  & (CHUNK_WIDTH  - 1)) == 0, "CHUNK_WIDTH is not a power of 2");
 	static_assert((CHUNK_DEPTH  & (CHUNK_DEPTH  - 1)) == 0, "CHUNK_DEPTH is not a power of 2");

@@ -25,6 +25,8 @@
 
 #include <unordered_map>
 
+#include <gk/gl/Camera.hpp>
+
 #include "ClientChunk.hpp"
 #include "Network.hpp"
 #include "World.hpp"
@@ -48,6 +50,7 @@ class ClientWorld : public World, public gk::Drawable {
 		Chunk *getChunk(int cx, int cy, int cz) const override;
 
 		void setClient(ClientCommandHandler &client) { m_client = &client; }
+		void setCamera(gk::Camera &camera) { m_camera = &camera; }
 
 		std::size_t loadedChunkCount() const { return m_chunks.size(); }
 
@@ -61,6 +64,7 @@ class ClientWorld : public World, public gk::Drawable {
 		TextureAtlas &m_textureAtlas;
 
 		ClientCommandHandler *m_client = nullptr;
+		gk::Camera *m_camera = nullptr;
 
 		mutable float m_ud = 1000;
 		mutable s32 m_ux;

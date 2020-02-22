@@ -241,7 +241,9 @@ void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	glCheck(glDisable(GL_POLYGON_OFFSET_FILL));
 	glCheck(glDisable(GL_CULL_FACE));
 
-	states.transform.translate(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
+	// Subtract the camera position - see comment in ClientWorld::draw()
+	gk::Vector3d cameraPosition = m_player.camera().getPosition();
+	states.transform.translate(m_selectedBlock.x - cameraPosition.x, m_selectedBlock.y - cameraPosition.y, m_selectedBlock.z - cameraPosition.z);
 
 	target.draw(m_vbo, GL_LINES, 0, 24, states);
 
