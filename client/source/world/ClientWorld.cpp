@@ -222,22 +222,24 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 		it.second->setTooFar(false);
 
-		// Is this chunk on the screen?
-		center = target.getView()->getTransform().getMatrix() * center;
-
+		// Is this chunk's centre on the screen?
 		float d = glm::length(center);
 		center.x /= center.w;
 		center.y /= center.w;
 
-		// If it is behind the camera, don't bother drawing it
-		if(center.z < -CHUNK_HEIGHT / 2) {
+		// If it is behind the camera, don't bother drawing it.
+		// Our screen coordinates are +X right, +Y up, and for a right-handed
+		// coordinate system, depth must be negative Z, so anything with a
+		// positive Z is behind the camera.
+		if(center.z > CHUNK_HEIGHT / 2) {
 			continue;
 		}
 
 		// If it is outside the screen, don't bother drawing it
-		if(fabsf(center.x) > 1 + fabsf(CHUNK_HEIGHT * 2 / center.w)
-		|| fabsf(center.y) > 1 + fabsf(CHUNK_HEIGHT * 2 / center.w)) {
-			continue;
+		if (fabsf(center.x) > 1 + fabsf(CHUNK_HEIGHT * 2 / center.w)
+		 || fabsf(center.y) > 1 + fabsf(CHUNK_HEIGHT * 2 / center.w)) {
+			// FIXME: Disable this test; one that considers all eight corners of the chunk is needed instead.
+			//continue;
 		}
 
 		// If this chunk is not initialized, skip it
