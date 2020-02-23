@@ -35,8 +35,8 @@ mod:block {
 
 		-- FIXME: Replace this by gui:set_size() and gui:set_centered()
 		local gui_pos = {
-			x = screen_width / gui_scale / 2.0 - 176 / 2.0,
-			y = screen_height / gui_scale / 2.0 - 166 / 2.0
+			x = math.floor(screen_width / gui_scale / 2.0 - 176 / 2.0 + 0.5),
+			y = math.floor(screen_height / gui_scale / 2.0 - 166 / 2.0 + 0.5)
 		}
 
 		gui:button {
@@ -73,7 +73,8 @@ mod:block {
 
 		gui:crafting {
 			name = "inv_crafting",
-			pos = {x = gui_pos.x, y = gui_pos.y},
+			pos = {x = gui_pos.x + 29, y = gui_pos.y + 16},
+			result_pos = {x = gui_pos.x + 123, y = gui_pos.y + 34},
 
 			block = {x = pos.x, y = pos.y, z = pos.z},
 		}

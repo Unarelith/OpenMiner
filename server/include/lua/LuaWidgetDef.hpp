@@ -64,10 +64,18 @@ struct CraftingWidget : public Widget {
 
 	u16 offset = 0;
 	u16 size = 3;
+
+	s32 resultX = 0;
+	s32 resultY = 0;
 };
 
 struct FurnaceWidget : public Widget {
 	gk::Vector3i block;
+};
+
+struct PlayerCraftingWidget : public Widget {
+	s32 resultX = 0;
+	s32 resultY = 0;
 };
 
 } // namespace LuaWidgetDef

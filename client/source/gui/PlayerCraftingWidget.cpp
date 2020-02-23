@@ -26,6 +26,5 @@ PlayerCraftingWidget::PlayerCraftingWidget(ClientCommandHandler &client, Widget 
 	: CraftingWidget(client, m_craftingInventory, parent)
 {
 	craftingInventoryWidget().init(m_craftingInventory, 0, 4);
-	craftingResultInventoryWidget().setPosition(56, 10, 0);
 }
 

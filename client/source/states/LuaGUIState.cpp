@@ -180,14 +180,16 @@ void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &
 	else if (type == LuaWidget::CraftingWidget) {
 		gk::Vector3i block;
 		u16 offset, size;
-		packet >> block.x >> block.y >> block.z >> offset >> size;
+		s32 resultX, resultY;
+		packet >> block.x >> block.y >> block.z >> offset >> size >> resultX >> resultY;
 		BlockData *data = world.getBlockData(block.x, block.y, block.z);
 		if (data) {
 			m_craftingWidgets.emplace_back(m_client, data->inventory, &m_mainWidget);
 
 			auto &craftingWidget = m_craftingWidgets.back();
 			craftingWidget.init(offset, size);
-			craftingWidget.setPosition(x, y);
+			craftingWidget.craftingInventoryWidget().setPosition(x, y);
+			craftingWidget.craftingResultInventoryWidget().setPosition(resultX, resultY);
 		}
 		else {
 			DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
@@ -208,8 +210,12 @@ void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &
 	}
 	// FIXME: Temporary
 	else if (type == LuaWidget::PlayerCraftingWidget) {
+		s32 resultX, resultY;
+		packet >> resultX >> resultY;
+
 		m_playerCraftingWidget.reset(new PlayerCraftingWidget(m_client, &m_mainWidget));
-		m_playerCraftingWidget->setPosition(x, y);
+		m_playerCraftingWidget->craftingInventoryWidget().setPosition(x, y);
+		m_playerCraftingWidget->craftingResultInventoryWidget().setPosition(resultX, resultY);
 	}
 }
 

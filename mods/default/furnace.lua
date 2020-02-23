@@ -36,8 +36,8 @@ mod:block {
 
 		-- FIXME: Replace this by gui:set_size() and gui:set_centered()
 		local gui_pos = {
-			x = screen_width / gui_scale / 2.0 - 176 / 2.0,
-			y = screen_height / gui_scale / 2.0 - 166 / 2.0
+			x = math.floor(screen_width / gui_scale / 2.0 - 176 / 2.0 + 0.5),
+			y = math.floor(screen_height / gui_scale / 2.0 - 166 / 2.0 + 0.5)
 		}
 
 		gui:furnace {

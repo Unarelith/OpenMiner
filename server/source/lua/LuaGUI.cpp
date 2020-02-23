@@ -28,7 +28,7 @@
 
 void LuaGUI::addImage(const sol::table &table) {
 	// FIXME: Duplicated below
-	float x = 0, y = 0;
+	s32 x = 0, y = 0;
 	sol::optional<sol::table> pos = table["pos"];
 	std::string name = table["name"].get<std::string>();
 	if (pos != sol::nullopt) {
@@ -58,7 +58,7 @@ void LuaGUI::addImage(const sol::table &table) {
 
 void LuaGUI::addTextButton(const sol::table &table) {
 	// FIXME: Duplicated below
-	float x = 0, y = 0;
+	s32 x = 0, y = 0;
 	sol::optional<sol::table> pos = table["pos"];
 	std::string name = table["name"].get<std::string>();
 	if (pos != sol::nullopt) {
@@ -80,7 +80,7 @@ void LuaGUI::addTextButton(const sol::table &table) {
 
 void LuaGUI::addInventoryWidget(const sol::table &table) {
 	// FIXME: Duplicated above
-	float x = 0, y = 0;
+	s32 x = 0, y = 0;
 	sol::optional<sol::table> pos = table["pos"];
 	std::string name = table["name"].get<std::string>();
 	if (pos != sol::nullopt) {
@@ -116,7 +116,7 @@ void LuaGUI::addInventoryWidget(const sol::table &table) {
 
 void LuaGUI::addCraftingWidget(const sol::table &table) {
 	// FIXME: Duplicated above
-	float x = 0, y = 0;
+	s32 x = 0, y = 0;
 	sol::optional<sol::table> pos = table["pos"];
 	std::string name = table["name"].get<std::string>();
 	if (pos != sol::nullopt) {
@@ -135,6 +135,13 @@ void LuaGUI::addCraftingWidget(const sol::table &table) {
 		block.z = blockTable.value()["z"];
 	}
 
+	float resultX = 0, resultY = 0;
+	sol::optional<sol::table> resultPosTable = table["result_pos"];
+	if (resultPosTable != sol::nullopt) {
+		resultX = resultPosTable.value()["x"];
+		resultY = resultPosTable.value()["y"];
+	}
+
 	m_data.craftingWidgetList.emplace_back(); // LuaWidgetDef::CraftingWidget{{name, x, y}, block, offset, count});
 
 	LuaWidgetDef::CraftingWidget &craftingWidget = m_data.craftingWidgetList.back();
@@ -144,11 +151,13 @@ void LuaGUI::addCraftingWidget(const sol::table &table) {
 	craftingWidget.block = block;
 	craftingWidget.offset = offset;
 	craftingWidget.size = size;
+	craftingWidget.resultX = resultX;
+	craftingWidget.resultY = resultY;
 }
 
 void LuaGUI::addFurnaceWidget(const sol::table &table) {
 	// FIXME: Duplicated above
-	float x = 0, y = 0;
+	s32 x = 0, y = 0;
 	sol::optional<sol::table> pos = table["pos"];
 	std::string name = table["name"].get<std::string>();
 	if (pos != sol::nullopt) {
@@ -175,7 +184,7 @@ void LuaGUI::addFurnaceWidget(const sol::table &table) {
 
 void LuaGUI::addPlayerCraftingWidget(const sol::table &table) {
 	// FIXME: Duplicated above
-	float x = 0, y = 0;
+	s32 x = 0, y = 0;
 	sol::optional<sol::table> pos = table["pos"];
 	std::string name = table["name"].get<std::string>();
 	if (pos != sol::nullopt) {
@@ -183,12 +192,21 @@ void LuaGUI::addPlayerCraftingWidget(const sol::table &table) {
 		y = pos.value()["y"];
 	}
 
+	s32 resultX = 0, resultY = 0;
+	sol::optional<sol::table> resultPosTable = table["result_pos"];
+	if (resultPosTable != sol::nullopt) {
+		resultX = resultPosTable.value()["x"];
+		resultY = resultPosTable.value()["y"];
+	}
+
 	m_data.playerCraftingWidgetList.emplace_back();
 
-	LuaWidgetDef::Widget &widget = m_data.playerCraftingWidgetList.back();
+	LuaWidgetDef::PlayerCraftingWidget &widget = m_data.playerCraftingWidgetList.back();
 	widget.name = name;
 	widget.x = x;
 	widget.y = y;
+	widget.resultX = resultX;
+	widget.resultY = resultY;
 }
 
 void LuaGUI::show(Client &client) {
@@ -204,12 +222,12 @@ void LuaGUI::show(Client &client) {
 			<< it.player << it.inventory << it.width << it.height << it.offset << it.count;
 	for (auto &it : m_data.craftingWidgetList)
 		packet << u8(LuaWidget::CraftingWidget) << it.name << it.x << it.y
-			<< it.block.x << it.block.y << it.block.z << it.offset << it.size;
+			<< it.block.x << it.block.y << it.block.z << it.offset << it.size << it.resultX << it.resultY;
 	for (auto &it : m_data.furnaceWidgetList)
 		packet << u8(LuaWidget::FurnaceWidget) << it.name << it.x << it.y
 			<< it.block.x << it.block.y << it.block.z;
 	for (auto &it : m_data.playerCraftingWidgetList)
-		packet << u8(LuaWidget::PlayerCraftingWidget) << it.name << it.x << it.y;
+		packet << u8(LuaWidget::PlayerCraftingWidget) << it.name << it.x << it.y << it.resultX << it.resultY;
 	client.tcpSocket->send(packet);
 }
 

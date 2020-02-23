@@ -30,10 +30,10 @@ CraftingWidget::CraftingWidget(ClientCommandHandler &client, Inventory &crafting
 
 void CraftingWidget::init(unsigned int offset, unsigned int size) {
 	m_craftingInventoryWidget.init(m_craftingInventory, offset, size * size);
-	m_craftingInventoryWidget.setPosition(29, 16, 0);
+	// m_craftingInventoryWidget.setPosition(29, 16, 0);
 
 	m_craftingResultInventoryWidget.init(m_craftingResultInventory);
-	m_craftingResultInventoryWidget.setPosition(123, 34, 0);
+	// m_craftingResultInventoryWidget.setPosition(123, 34, 0);
 }
 
 void CraftingWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget) {

@@ -34,7 +34,7 @@ struct LuaGUIData {
 	std::list<LuaWidgetDef::InventoryWidget> inventoryWidgetList;
 	std::list<LuaWidgetDef::CraftingWidget> craftingWidgetList;
 	std::list<LuaWidgetDef::FurnaceWidget> furnaceWidgetList;
-	std::list<LuaWidgetDef::Widget> playerCraftingWidgetList;
+	std::list<LuaWidgetDef::PlayerCraftingWidget> playerCraftingWidgetList;
 };
 
 // This class is meant to be used ONLY in Lua
