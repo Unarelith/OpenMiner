@@ -31,9 +31,9 @@ bool World::isReloadRequested = false;
 
 Chunk *World::getChunkAtBlockPos(int x, int y, int z) const {
 	return getChunk(
-		std::floor((float)x / CHUNK_WIDTH),
-		std::floor((float)y / CHUNK_DEPTH),
-		std::floor((float)z / CHUNK_HEIGHT)
+		(x & -CHUNK_WIDTH)  / CHUNK_WIDTH,
+		(y & -CHUNK_DEPTH)  / CHUNK_DEPTH,
+		(z & -CHUNK_HEIGHT) / CHUNK_HEIGHT
 	);
 }
 
