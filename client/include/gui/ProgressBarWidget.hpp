@@ -20,42 +20,43 @@
  *
  * =====================================================================================
  */
-#ifndef FURNACEWIDGET_HPP_
-#define FURNACEWIDGET_HPP_
+#ifndef PROGRESSBARWIDGET_HPP_
+#define PROGRESSBARWIDGET_HPP_
+
+#include <gk/graphics/Image.hpp>
 
 #include "BlockData.hpp"
-#include "InventoryWidget.hpp"
-#include "ProgressBarWidget.hpp"
+#include "Widget.hpp"
 
-class FurnaceWidget : public Widget {
+enum class ProgressBarType {
+	ItemProcess,
+	BurnProcess
+};
+
+class ProgressBarWidget : public Widget {
 	public:
-		FurnaceWidget(ClientCommandHandler &client, MouseItemWidget &mouseItemWidget, Inventory &playerInventory, BlockData &blockData, Widget *parent = nullptr);
+		ProgressBarWidget(const std::string &texture, BlockData &blockData, ProgressBarType type, Widget *parent = nullptr);
 
-		void onEvent(const SDL_Event &event) override;
+		void init(const gk::IntRect &clipRect, const gk::Vector2i &position, const std::string &meta, unsigned int maxMetaValue);
+		void init(const gk::IntRect &clipRect, const gk::Vector2i &position, const std::string &meta, const std::string &maxMeta);
 
 		void update() override;
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		ClientCommandHandler &m_client;
-
-		gk::Image m_background;
-
-		Inventory &m_playerInventory;
-		InventoryWidget m_playerInventoryWidget{m_client, this};
-		InventoryWidget m_hotbarInventoryWidget{m_client, this};
-
-		InventoryWidget m_inputInventoryWidget{m_client, this};
-		InventoryWidget m_outputInventoryWidget{m_client, this};
-		InventoryWidget m_fuelInventoryWidget{m_client, this};
-
 		BlockData &m_blockData;
 
-		MouseItemWidget &m_mouseItemWidget;
+		gk::IntRect m_clipRect;
+		gk::Vector2i m_position;
 
-		ProgressBarWidget m_progressBar;
-		ProgressBarWidget m_burnBar;
+		std::string m_meta;
+		std::string m_maxMeta;
+		unsigned int m_maxMetaValue = 0;
+
+		gk::Image m_image;
+
+		ProgressBarType m_type;
 };
 
-#endif // FURNACEWIDGET_HPP_
+#endif // PROGRESSBARWIDGET_HPP_

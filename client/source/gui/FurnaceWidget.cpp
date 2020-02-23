@@ -23,7 +23,10 @@
 #include "FurnaceWidget.hpp"
 
 FurnaceWidget::FurnaceWidget(ClientCommandHandler &client, MouseItemWidget &mouseItemWidget, Inventory &playerInventory, BlockData &blockData, Widget *parent)
-	: Widget(176, 166, parent), m_client(client), m_playerInventory(playerInventory), m_blockData(blockData), m_mouseItemWidget(mouseItemWidget)
+	: Widget(176, 166, parent), m_client(client), m_playerInventory(playerInventory),
+	m_blockData(blockData), m_mouseItemWidget(mouseItemWidget),
+	m_progressBar("texture-furnace", blockData, ProgressBarType::ItemProcess, this),
+	m_burnBar("texture-furnace", blockData, ProgressBarType::BurnProcess, this)
 {
 	m_background.load("texture-furnace");
 	m_background.setClipRect(0, 0, 176, 166);
@@ -38,11 +41,8 @@ FurnaceWidget::FurnaceWidget(ClientCommandHandler &client, MouseItemWidget &mous
 	m_outputInventoryWidget.setPosition(115, 34, 0);
 	m_fuelInventoryWidget.setPosition(55, 52, 0);
 
-	m_burnImage.setClipRect(176, 0, 14, 14);
-	m_burnImage.setPosition(57, 37, 0);
-
-	m_progressImage.setClipRect(176, 14, 24, 17);
-	m_progressImage.setPosition(80, 35, 0);
+	m_progressBar.init(gk::IntRect{176, 14, 24, 17}, gk::Vector2i{80, 35}, "item_progress", 200);
+	m_burnBar.init(gk::IntRect{176, 0, 14, 14}, gk::Vector2i{57, 37}, "ticks_remaining", "current_burn_time");
 }
 
 void FurnaceWidget::onEvent(const SDL_Event &event) {
@@ -57,19 +57,8 @@ void FurnaceWidget::onEvent(const SDL_Event &event) {
 }
 
 void FurnaceWidget::update() {
-	u16 ticksRemaining = m_blockData.meta.get<int>("ticks_remaining");
-	u16 currentBurnTime = m_blockData.meta.get<int>("current_burn_time");
-	u16 itemProgress = m_blockData.meta.get<int>("item_progress");
-
-	if (currentBurnTime) {
-		m_burnImage.setPosition(57, 37 + 14 - ticksRemaining * 14 / currentBurnTime, 0);
-		m_burnImage.setClipRect(176, 14 - ticksRemaining * 14 / currentBurnTime, 14, ticksRemaining * 14 / currentBurnTime);
-	}
-	else {
-		m_burnImage.setClipRect(0, 0, 0, 0);
-	}
-
-	m_progressImage.setClipRect(176, 14, itemProgress * 24 / 200, 17);
+	m_progressBar.update();
+	m_burnBar.update();
 
 	m_inputInventoryWidget.init(m_blockData.inventory, 0, 1);
 	m_outputInventoryWidget.init(m_blockData.inventory, 1, 1);
@@ -98,7 +87,10 @@ void FurnaceWidget::draw(gk::RenderTarget &target, gk::RenderStates states) cons
 	target.draw(m_outputInventoryWidget, states);
 	target.draw(m_fuelInventoryWidget, states);
 
-	target.draw(m_burnImage, states);
-	target.draw(m_progressImage, states);
+	// target.draw(m_burnImage, states);
+	// target.draw(m_progressImage, states);
+
+	target.draw(m_progressBar, states);
+	target.draw(m_burnBar, states);
 }
 
