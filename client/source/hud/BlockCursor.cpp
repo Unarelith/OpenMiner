@@ -268,7 +268,7 @@ glm::ivec4 BlockCursor::findSelectedBlock() const {
 	// Deal with a degenerate case: camera in the middle of a block
 	uint_fast32_t blockID = m_world.getBlock(bestX, bestY, bestZ);
 	const Block &block = Registry::getInstance().getBlock(blockID);
-	if(blockID && block.drawType() != BlockDrawType::Liquid) {
+	if (blockID && block.drawType() != BlockDrawType::Liquid) {
 		// We're inside a node, therefore there's no face, but we still need
 		// to return a valid block. We use face 6 for that. For rightclicks,
 		// it should attempt to place the block on the same node clicked, and
@@ -279,16 +279,18 @@ glm::ivec4 BlockCursor::findSelectedBlock() const {
 
 	// Still the degenerate case, but this time for the sub-case where
 	// the coordinates of the player are exact integers, thus lying exactly
-	// between two faces (or four, if it's in a corner). In this situation,
-	// the raycasting algorithm allows us to get rid of all blocks except for
-	// the one in the northwest corner. Deal with that case here.
-	// NOTE: We don't deal with height because it's unlikely that the
+	// between two faces (or four, if it's in a corner). Deal with that case
+	// here. NOTE: We don't deal with height because it's unlikely that the
 	// camera ends up being at an integer position.
-	if(double(bestX) == position.x && double(bestZ) == position.z) {
-		blockID = m_world.getBlock(bestX - 1, bestY, bestZ - 1);
-		const Block &block = Registry::getInstance().getBlock(blockID);
-		if(blockID && block.drawType() != BlockDrawType::Liquid) {
-			return glm::ivec4{bestX - 1, bestY, bestZ - 1, 6};
+	if (double(bestX) == position.x && double(bestY) == position.y) {
+		for (int y = -1; y <= 0; y++) {
+			for (int x = -1; x <= 0; x++) {
+				blockID = m_world.getBlock(bestX + x, bestY + y, bestZ);
+				const Block &block = Registry::getInstance().getBlock(blockID);
+				if (blockID && block.drawType() != BlockDrawType::Liquid) {
+					return glm::ivec4{bestX + x, bestY + y, bestZ, 6};
+				}
+			}
 		}
 	}
 
