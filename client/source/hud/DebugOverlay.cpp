@@ -40,22 +40,22 @@ DebugOverlay::DebugOverlay(const ClientPlayer &player, const ClientWorld &world)
 }
 
 void DebugOverlay::update() {
-	s32 pcx = std::floor(m_player.x() / CHUNK_WIDTH);
-	s32 pcy = std::floor(m_player.y() / CHUNK_DEPTH);
-	s32 pcz = std::floor(m_player.z() / CHUNK_HEIGHT);
+	s32 px = std::floor(m_player.x());
+	s32 py = std::floor(m_player.y());
+	s32 pz = std::floor(m_player.z());
 
 	std::stringstream stream;
-	stream << "x: " << std::floor(m_player.x()) << " | ";
-	stream << "y: " << std::floor(m_player.y()) << " | ";
-	stream << "z: " << std::floor(m_player.z());
+	stream << "x: " << px << " | ";
+	stream << "y: " << py << " | ";
+	stream << "z: " << pz;
 	stream << '\n';
-	stream << "rx: " << int(std::floor(m_player.x()) + std::abs(pcx) * CHUNK_WIDTH) % CHUNK_WIDTH << " | ";
-	stream << "ry: " << int(std::floor(m_player.y()) + std::abs(pcy) * CHUNK_DEPTH) % CHUNK_DEPTH  << " | ";
-	stream << "rz: " << int(std::floor(m_player.z()) + std::abs(pcz) * CHUNK_HEIGHT) % CHUNK_HEIGHT;
+	stream << "rx: " << px % CHUNK_WIDTH << " | ";
+	stream << "ry: " << py % CHUNK_DEPTH << " | ";
+	stream << "rz: " << pz % CHUNK_HEIGHT;
 	stream << '\n';
-	stream << "cx: " << pcx << " | ";
-	stream << "cy: " << pcy << " | ";
-	stream << "cz: " << pcz;
+	stream << "cx: " << (px & -CHUNK_WIDTH)  / CHUNK_WIDTH << " | ";
+	stream << "cy: " << (py & -CHUNK_DEPTH)  / CHUNK_DEPTH << " | ";
+	stream << "cz: " << (pz & -CHUNK_HEIGHT) / CHUNK_HEIGHT;
 	stream << '\n';
 	stream << "Loaded chunks: " << m_world.loadedChunkCount();
 
