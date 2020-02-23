@@ -100,10 +100,13 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 		count = 9,
 	}
 
-	gui:player_crafting {
+	gui:crafting {
 		name = "inv_crafting",
 		pos = {x = gui_pos.x + 97, y = gui_pos.y + 17},
 		result_pos = {x = gui_pos.x + 97 + 56, y = gui_pos.y + 17 + 10},
+
+		inventory = "temp",
+		size = 2,
 	}
 
 	gui:show(client)

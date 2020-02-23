@@ -76,6 +76,7 @@ mod:block {
 			pos = {x = gui_pos.x + 29, y = gui_pos.y + 16},
 			result_pos = {x = gui_pos.x + 123, y = gui_pos.y + 34},
 
+			inventory = "block",
 			block = {x = pos.x, y = pos.y, z = pos.z},
 		}
 

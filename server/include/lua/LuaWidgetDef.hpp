@@ -60,10 +60,12 @@ struct InventoryWidget : public Widget {
 };
 
 struct CraftingWidget : public Widget {
-	gk::Vector3i block;
+	std::string inventory;
 
-	u16 offset = 0;
-	u16 size = 3;
+	gk::Vector3i block; // inventory == "block"
+
+	u16 offset = 0; // inventory == "block"
+	u16 size = 3; // inventory == "temp" or "block"
 
 	s32 resultX = 0;
 	s32 resultY = 0;
@@ -71,11 +73,6 @@ struct CraftingWidget : public Widget {
 
 struct FurnaceWidget : public Widget {
 	gk::Vector3i block;
-};
-
-struct PlayerCraftingWidget : public Widget {
-	s32 resultX = 0;
-	s32 resultY = 0;
 };
 
 } // namespace LuaWidgetDef

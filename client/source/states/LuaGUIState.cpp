@@ -36,7 +36,6 @@
 #include "LuaWidget.hpp"
 #include "Network.hpp"
 #include "Player.hpp"
-#include "PlayerCraftingWidget.hpp"
 #include "TextButton.hpp"
 
 LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent)
@@ -72,10 +71,6 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 	for (auto &it : m_craftingWidgets)
 		it.onMouseEvent(event, m_mouseItemWidget);
 
-	// FIXME: Temporary
-	if (m_playerCraftingWidget)
-		m_playerCraftingWidget->onMouseEvent(event, m_mouseItemWidget);
-
 	m_mouseItemWidget.onEvent(event);
 }
 
@@ -90,10 +85,6 @@ void LuaGUIState::update() {
 		it.update();
 	}
 
-	// FIXME: Temporary
-	if (m_playerCraftingWidget)
-		m_playerCraftingWidget->update();
-
 	const ItemWidget *currentItemWidget = nullptr;
 	for (auto &it : m_inventoryWidgets) {
 		if (!currentItemWidget)
@@ -103,10 +94,6 @@ void LuaGUIState::update() {
 		if (!currentItemWidget)
 			currentItemWidget = it.currentItemWidget();
 	}
-
-	// FIXME: Temporary
-	if (!currentItemWidget && m_playerCraftingWidget)
-		currentItemWidget = m_playerCraftingWidget->currentItemWidget();
 
 	if (m_inventoryWidgets.size() != 0) // FIXME
 		m_mouseItemWidget.updateCurrentItem(currentItemWidget);
@@ -132,10 +119,6 @@ void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 	for (auto &it : m_craftingWidgets)
 		target.draw(it, states);
-
-	// FIXME: Temporary
-	if (m_playerCraftingWidget)
-		target.draw(*m_playerCraftingWidget, states);
 
 	target.draw(m_mouseItemWidget, states);
 }
@@ -178,13 +161,29 @@ void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &
 		inventoryWidget.init(player.inventory(), offset, count);
 	}
 	else if (type == LuaWidget::CraftingWidget) {
+		std::string inventory;
 		gk::Vector3i block;
 		u16 offset, size;
 		s32 resultX, resultY;
-		packet >> block.x >> block.y >> block.z >> offset >> size >> resultX >> resultY;
-		BlockData *data = world.getBlockData(block.x, block.y, block.z);
-		if (data) {
-			m_craftingWidgets.emplace_back(m_client, data->inventory, &m_mainWidget);
+		packet >> inventory >> block.x >> block.y >> block.z >> offset >> size >> resultX >> resultY;
+
+		Inventory *craftingInventory = nullptr;
+		if (inventory == "block") {
+			BlockData *data = world.getBlockData(block.x, block.y, block.z);
+			if (!data) {
+				DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
+				return;
+			}
+
+			craftingInventory = &data->inventory;
+		}
+		else if (inventory == "temp") {
+			craftingInventory = &m_inventory;
+			m_inventory.resize(size, size);
+		}
+
+		if (craftingInventory) {
+			m_craftingWidgets.emplace_back(m_client, *craftingInventory, &m_mainWidget);
 
 			auto &craftingWidget = m_craftingWidgets.back();
 			craftingWidget.init(offset, size);
@@ -192,7 +191,7 @@ void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &
 			craftingWidget.craftingResultInventoryWidget().setPosition(resultX, resultY);
 		}
 		else {
-			DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
+			DEBUG("ERROR: Crafting inventory is invalid");
 		}
 	}
 	else if (type == LuaWidget::FurnaceWidget) {
@@ -207,15 +206,6 @@ void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &
 		else {
 			DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
 		}
-	}
-	// FIXME: Temporary
-	else if (type == LuaWidget::PlayerCraftingWidget) {
-		s32 resultX, resultY;
-		packet >> resultX >> resultY;
-
-		m_playerCraftingWidget.reset(new PlayerCraftingWidget(m_client, &m_mainWidget));
-		m_playerCraftingWidget->craftingInventoryWidget().setPosition(x, y);
-		m_playerCraftingWidget->craftingResultInventoryWidget().setPosition(resultX, resultY);
 	}
 }
 

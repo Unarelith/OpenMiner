@@ -34,7 +34,6 @@ struct LuaGUIData {
 	std::list<LuaWidgetDef::InventoryWidget> inventoryWidgetList;
 	std::list<LuaWidgetDef::CraftingWidget> craftingWidgetList;
 	std::list<LuaWidgetDef::FurnaceWidget> furnaceWidgetList;
-	std::list<LuaWidgetDef::PlayerCraftingWidget> playerCraftingWidgetList;
 };
 
 // This class is meant to be used ONLY in Lua
@@ -45,7 +44,6 @@ class LuaGUI {
 		void addInventoryWidget(const sol::table &table);
 		void addCraftingWidget(const sol::table &table);
 		void addFurnaceWidget(const sol::table &table);
-		void addPlayerCraftingWidget(const sol::table &table);
 
 		void show(Client &client);
 

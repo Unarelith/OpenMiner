@@ -30,7 +30,7 @@ TODO
 # GUI
 
 • DONE: Implement `PlayerInventoryWidget` completely in Lua
-• TODO: Implement `PlayerCraftingWidget` completely in Lua
+• DONE: Implement `PlayerCraftingWidget` completely in Lua
 • TODO: Implement `FurnaceWidget` completely in Lua
    ◦ TODO: Add a `ProgressBarWidget` and find how to make it communicate between client and server
    ◦ TODO: Remove `BlockMetadata::get` which is only required by `FurnaceWidget`

@@ -32,7 +32,6 @@ namespace LuaWidget {
 		InventoryWidget = 2,
 		CraftingWidget  = 3,
 		FurnaceWidget   = 4,
-		PlayerCraftingWidget = 5, // FIXME: Temporary
 	};
 }
 

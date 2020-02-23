@@ -32,6 +32,7 @@
 
 class Inventory : public ISerializable {
 	public:
+		Inventory() = default;
 		Inventory(u16 width, u16 height)
 			: m_width(width), m_height(height) { m_items.resize(width * height); }
 

@@ -124,18 +124,29 @@ void LuaGUI::addCraftingWidget(const sol::table &table) {
 		y = pos.value()["y"];
 	}
 
-	u16 offset = table["offset"].get_or<u16>(0);
-	u16 size = table["size"].get_or<u16>(3);
-
 	gk::Vector3i block;
-	sol::optional<sol::table> blockTable = table["block"];
-	if (blockTable != sol::nullopt) {
-		block.x = blockTable.value()["x"];
-		block.y = blockTable.value()["y"];
-		block.z = blockTable.value()["z"];
+	u16 offset = 0, size = 3;
+
+	std::string inventory = table["inventory"].get<std::string>();
+	if (inventory == "block") {
+		sol::optional<sol::table> blockTable = table["block"];
+		if (blockTable != sol::nullopt) {
+			block.x = blockTable.value()["x"];
+			block.y = blockTable.value()["y"];
+			block.z = blockTable.value()["z"];
+		}
+
+		offset = table["offset"].get_or<u16>(0);
+		size = table["size"].get_or<u16>(3);
+	}
+	else if (inventory == "temp") {
+		size = table["size"].get_or<u16>(3);
+	}
+	else {
+		DEBUG("ERROR: Inventory '" + inventory + "' is not valid");
 	}
 
-	float resultX = 0, resultY = 0;
+	s32 resultX = 0, resultY = 0;
 	sol::optional<sol::table> resultPosTable = table["result_pos"];
 	if (resultPosTable != sol::nullopt) {
 		resultX = resultPosTable.value()["x"];
@@ -148,6 +159,7 @@ void LuaGUI::addCraftingWidget(const sol::table &table) {
 	craftingWidget.name = name;
 	craftingWidget.x = x;
 	craftingWidget.y = y;
+	craftingWidget.inventory = inventory;
 	craftingWidget.block = block;
 	craftingWidget.offset = offset;
 	craftingWidget.size = size;
@@ -182,33 +194,6 @@ void LuaGUI::addFurnaceWidget(const sol::table &table) {
 	furnaceWidget.block = block;
 }
 
-void LuaGUI::addPlayerCraftingWidget(const sol::table &table) {
-	// FIXME: Duplicated above
-	s32 x = 0, y = 0;
-	sol::optional<sol::table> pos = table["pos"];
-	std::string name = table["name"].get<std::string>();
-	if (pos != sol::nullopt) {
-		x = pos.value()["x"];
-		y = pos.value()["y"];
-	}
-
-	s32 resultX = 0, resultY = 0;
-	sol::optional<sol::table> resultPosTable = table["result_pos"];
-	if (resultPosTable != sol::nullopt) {
-		resultX = resultPosTable.value()["x"];
-		resultY = resultPosTable.value()["y"];
-	}
-
-	m_data.playerCraftingWidgetList.emplace_back();
-
-	LuaWidgetDef::PlayerCraftingWidget &widget = m_data.playerCraftingWidgetList.back();
-	widget.name = name;
-	widget.x = x;
-	widget.y = y;
-	widget.resultX = resultX;
-	widget.resultY = resultY;
-}
-
 void LuaGUI::show(Client &client) {
 	sf::Packet packet;
 	packet << Network::Command::BlockGUIData;
@@ -221,13 +206,11 @@ void LuaGUI::show(Client &client) {
 		packet << u8(LuaWidget::InventoryWidget) << it.name << it.x << it.y
 			<< it.player << it.inventory << it.width << it.height << it.offset << it.count;
 	for (auto &it : m_data.craftingWidgetList)
-		packet << u8(LuaWidget::CraftingWidget) << it.name << it.x << it.y
+		packet << u8(LuaWidget::CraftingWidget) << it.name << it.x << it.y << it.inventory
 			<< it.block.x << it.block.y << it.block.z << it.offset << it.size << it.resultX << it.resultY;
 	for (auto &it : m_data.furnaceWidgetList)
 		packet << u8(LuaWidget::FurnaceWidget) << it.name << it.x << it.y
 			<< it.block.x << it.block.y << it.block.z;
-	for (auto &it : m_data.playerCraftingWidgetList)
-		packet << u8(LuaWidget::PlayerCraftingWidget) << it.name << it.x << it.y << it.resultX << it.resultY;
 	client.tcpSocket->send(packet);
 }
 
@@ -238,7 +221,6 @@ void LuaGUI::initUsertype(sol::state &lua) {
 		"inventory", &LuaGUI::addInventoryWidget,
 		"crafting",  &LuaGUI::addCraftingWidget,
 		"furnace",   &LuaGUI::addFurnaceWidget,
-		"player_crafting", &LuaGUI::addPlayerCraftingWidget,
 		"show",      &LuaGUI::show
 	);
 }
