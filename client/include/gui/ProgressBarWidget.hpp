@@ -28,17 +28,17 @@
 #include "BlockData.hpp"
 #include "Widget.hpp"
 
-enum class ProgressBarType {
-	ItemProcess,
-	BurnProcess
+enum class ProgressBarType : u8 {
+	ItemProcess = 0,
+	BurnProcess = 1
 };
 
 class ProgressBarWidget : public Widget {
 	public:
 		ProgressBarWidget(const std::string &texture, BlockData &blockData, ProgressBarType type, Widget *parent = nullptr);
 
-		void init(const gk::IntRect &clipRect, const gk::Vector2i &position, const std::string &meta, unsigned int maxMetaValue);
-		void init(const gk::IntRect &clipRect, const gk::Vector2i &position, const std::string &meta, const std::string &maxMeta);
+		void init(const gk::FloatRect &clipRect, const gk::Vector2i &position, const std::string &meta, unsigned int maxMetaValue);
+		void init(const gk::FloatRect &clipRect, const gk::Vector2i &position, const std::string &meta, const std::string &maxMeta);
 
 		void update() override;
 
@@ -47,7 +47,7 @@ class ProgressBarWidget : public Widget {
 
 		BlockData &m_blockData;
 
-		gk::IntRect m_clipRect;
+		gk::FloatRect m_clipRect;
 		gk::Vector2i m_position;
 
 		std::string m_meta;

@@ -39,22 +39,13 @@ mod:block {
 			y = math.floor(screen_height / gui_scale / 2.0 - 166 / 2.0 + 0.5)
 		}
 
-		gui:button {
-			name = "btn_test",
-			pos = {x = 0, y = 0},
-
-			text = "Test button",
-			on_click = function(self)
-				print("Test button pressed")
-			end,
-		}
-
 		gui:inventory {
 			name = "inv_main",
 			pos = {x = gui_pos.x + 7, y = gui_pos.y + 83},
 
+			inventory = "player",
 			player = "player",
-			inventory = "main",
+			inventory_name = "main",
 			size = {x = 9, y = 3},
 			offset = 9,
 			count = 9 * 3,
@@ -64,8 +55,9 @@ mod:block {
 			name = "inv_hotbar",
 			pos = {x = gui_pos.x + 7, y = gui_pos.y + 141},
 
+			inventory = "player",
 			player = "player",
-			inventory = "main",
+			inventory_name = "main",
 			size = {x = 9, y = 1},
 			offset = 0,
 			count = 9,

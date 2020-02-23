@@ -49,8 +49,12 @@ struct TextButton : public Widget {
 };
 
 struct InventoryWidget : public Widget {
-	std::string player;
 	std::string inventory;
+
+	std::string player; // inventory == "player"
+	std::string inventory_name; // inventory == "player"
+
+	gk::Vector3i block; // inventory == "block"
 
 	float width = 0;
 	float height = 0;
@@ -71,8 +75,18 @@ struct CraftingWidget : public Widget {
 	s32 resultY = 0;
 };
 
-struct FurnaceWidget : public Widget {
+struct ProgressBarWidget : public Widget {
+	u8 type = 0;
+
 	gk::Vector3i block;
+
+	// NOTE: maxMeta and maxValue can't be used together
+	std::string meta;
+	std::string maxMeta;
+	u32 maxValue = 0;
+
+	std::string texture;
+	gk::FloatRect clipRect;
 };
 
 } // namespace LuaWidgetDef

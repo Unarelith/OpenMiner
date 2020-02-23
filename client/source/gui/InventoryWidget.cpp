@@ -68,6 +68,11 @@ void InventoryWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mous
 	}
 }
 
+void InventoryWidget::update() {
+	for (auto &it : m_itemWidgets)
+		it.update();
+}
+
 void InventoryWidget::sendUpdatePacket() {
 	if (m_inventory->inBlock()) {
 		m_client.sendBlockInvUpdate(*m_inventory);

@@ -28,7 +28,7 @@ ProgressBarWidget::ProgressBarWidget(const std::string &texture, BlockData &bloc
 	m_type = type;
 }
 
-void ProgressBarWidget::init(const gk::IntRect &clipRect, const gk::Vector2i &position, const std::string &meta, unsigned int maxMetaValue) {
+void ProgressBarWidget::init(const gk::FloatRect &clipRect, const gk::Vector2i &position, const std::string &meta, unsigned int maxMetaValue) {
 	m_clipRect = clipRect;
 	m_position = position;
 
@@ -39,7 +39,7 @@ void ProgressBarWidget::init(const gk::IntRect &clipRect, const gk::Vector2i &po
 	m_maxMetaValue = maxMetaValue;
 }
 
-void ProgressBarWidget::init(const gk::IntRect &clipRect, const gk::Vector2i &position, const std::string &meta, const std::string &maxMeta) {
+void ProgressBarWidget::init(const gk::FloatRect &clipRect, const gk::Vector2i &position, const std::string &meta, const std::string &maxMeta) {
 	m_clipRect = clipRect;
 	m_position = position;
 

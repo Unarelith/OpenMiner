@@ -27,11 +27,11 @@
 
 namespace LuaWidget {
 	enum : u8 {
-		Image           = 0,
-		TextButton      = 1,
-		InventoryWidget = 2,
-		CraftingWidget  = 3,
-		FurnaceWidget   = 4,
+		Image             = 0,
+		TextButton        = 1,
+		InventoryWidget   = 2,
+		CraftingWidget    = 3,
+		ProgressBarWidget = 4,
 	};
 }
 

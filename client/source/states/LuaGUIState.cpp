@@ -30,12 +30,12 @@
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "Config.hpp"
-#include "FurnaceWidget.hpp"
 #include "InventoryWidget.hpp"
 #include "LuaGUIState.hpp"
 #include "LuaWidget.hpp"
 #include "Network.hpp"
 #include "Player.hpp"
+#include "ProgressBarWidget.hpp"
 #include "TextButton.hpp"
 
 LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent)
@@ -82,6 +82,10 @@ void LuaGUIState::update() {
 		it->update();
 
 	for (auto &it : m_craftingWidgets) {
+		it.update();
+	}
+
+	for (auto &it : m_inventoryWidgets) {
 		it.update();
 	}
 
@@ -149,18 +153,64 @@ void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &
 		m_widgets.emplace_back(button);
 	}
 	else if (type == LuaWidget::InventoryWidget) {
-		std::string playerName, inventory;
+		std::string inventory, playerName, inventory_name;
+		gk::Vector3i block;
 		float width, height;
 		u16 offset, count;
-		packet >> playerName >> inventory >> width >> height >> offset >> count;
+		packet >> inventory >> playerName >> inventory_name
+			>> block.x >> block.y >> block.z
+			>> width >> height >> offset >> count;
 
-		m_inventoryWidgets.emplace_back(m_client, &m_mainWidget);
+		Inventory *widgetInventory = nullptr;
+		if (inventory == "player") {
+			widgetInventory = &player.inventory();
+		}
+		else if (inventory == "block") {
+			BlockData *data = world.getBlockData(block.x, block.y, block.z);
+			if (!data) {
+				DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
+				return;
+			}
 
-		auto &inventoryWidget = m_inventoryWidgets.back();
-		inventoryWidget.setPosition(x, y);
-		inventoryWidget.init(player.inventory(), offset, count);
+			widgetInventory = &data->inventory;
+		}
+
+		if (widgetInventory) {
+			m_inventoryWidgets.emplace_back(m_client, &m_mainWidget);
+
+			auto &inventoryWidget = m_inventoryWidgets.back();
+			inventoryWidget.setPosition(x, y);
+			inventoryWidget.init(*widgetInventory, offset, count);
+		}
+		else {
+			DEBUG("ERROR: Widget inventory is invalid");
+		}
 	}
-	else if (type == LuaWidget::CraftingWidget) {
+	else if (type == LuaWidget::ProgressBarWidget) {
+		u8 type;
+		gk::Vector3i block;
+		std::string meta, maxMeta;
+		u32 maxValue;
+		std::string texture;
+		gk::FloatRect clipRect;
+		packet >> type >> block.x >> block.y >> block.z >> meta >> maxMeta >> maxValue >> texture
+			>> clipRect.x >> clipRect.y >> clipRect.sizeX >> clipRect.sizeY;
+
+		BlockData *data = world.getBlockData(block.x, block.y, block.z);
+		if (!data) {
+			DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
+			return;
+		}
+
+		ProgressBarWidget *widget = new ProgressBarWidget(texture, *data, ProgressBarType(type));
+		if (!maxMeta.empty())
+			widget->init(clipRect, gk::Vector2i{x, y}, meta, maxMeta);
+		else
+			widget->init(clipRect, gk::Vector2i{x, y}, meta, maxValue);
+
+		m_widgets.emplace_back(widget);
+	}
+	else if (type == LuaWidget::CraftingWidget) { // FIXME
 		std::string inventory;
 		gk::Vector3i block;
 		u16 offset, size;
@@ -192,19 +242,6 @@ void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &
 		}
 		else {
 			DEBUG("ERROR: Crafting inventory is invalid");
-		}
-	}
-	else if (type == LuaWidget::FurnaceWidget) {
-		gk::Vector3i block;
-		packet >> block.x >> block.y >> block.z;
-		BlockData *data = world.getBlockData(block.x, block.y, block.z);
-		if (data) {
-			auto *furnaceWidget = new FurnaceWidget(m_client, m_mouseItemWidget, player.inventory(), *data, &m_mainWidget);
-			furnaceWidget->setPosition(x, y);
-			m_widgets.emplace_back(furnaceWidget);
-		}
-		else {
-			DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
 		}
 	}
 }

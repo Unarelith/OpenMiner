@@ -38,6 +38,8 @@ class InventoryWidget : public Widget {
 
 		void onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly = false);
 
+		void update() override;
+
 		const ItemWidget *currentItemWidget() const { return m_currentItemWidget; }
 
 	private:

@@ -40,10 +40,104 @@ mod:block {
 			y = math.floor(screen_height / gui_scale / 2.0 - 166 / 2.0 + 0.5)
 		}
 
-		gui:furnace {
-			name = "furnace",
+		gui:progress_bar {
+			name = "bar_process",
+			pos = {x = gui_pos.x + 80, y = gui_pos.y + 35},
+
+			type = 0, -- FIXME: Use string for that
+
+			block = {x = pos.x, y = pos.y, z = pos.z},
+
+			meta = "item_progress",
+			max_value = 200,
+
+			texture = "texture-furnace",
+			clip = {x = 176, y = 14, width = 24, height = 17},
+		}
+
+		gui:progress_bar {
+			name = "bar_burn",
+			pos = {x = gui_pos.x + 57, y = gui_pos.y + 37},
+
+			type = 1, -- FIXME: Use string for that
+
+			block = {x = pos.x, y = pos.y, z = pos.z},
+
+			meta = "ticks_remaining",
+			max_meta = "current_burn_time",
+
+			texture = "texture-furnace",
+			clip = {x = 176, y = 0, width = 14, height = 14},
+		}
+
+		gui:inventory {
+			name = "inv_input",
+			pos = {x = gui_pos.x + 55, y = gui_pos.y + 16},
+
+			inventory = "block",
+			block = {x = pos.x, y = pos.y, z = pos.z},
+
+			size = {x = 1, y = 1},
+			offset = 0,
+			count = 1,
+		}
+
+		gui:inventory {
+			name = "inv_output",
+			pos = {x = gui_pos.x + 115, y = gui_pos.y + 34},
+
+			inventory = "block",
+			block = {x = pos.x, y = pos.y, z = pos.z},
+
+			size = {x = 1, y = 1},
+			offset = 1,
+			count = 1,
+		}
+
+		gui:inventory {
+			name = "inv_fuel",
+			pos = {x = gui_pos.x + 55, y = gui_pos.y + 52},
+
+			inventory = "block",
+			block = {x = pos.x, y = pos.y, z = pos.z},
+
+			size = {x = 1, y = 1},
+			offset = 2,
+			count = 1,
+		}
+
+		gui:inventory {
+			name = "inv_main",
+			pos = {x = gui_pos.x + 7, y = gui_pos.y + 83},
+
+			inventory = "player",
+			player = "player",
+			inventory_name = "main",
+
+			size = {x = 9, y = 3},
+			offset = 9,
+			count = 9 * 3,
+		}
+
+		gui:inventory {
+			name = "inv_hotbar",
+			pos = {x = gui_pos.x + 7, y = gui_pos.y + 141},
+
+			inventory = "player",
+			player = "player",
+			inventory_name = "main",
+
+			size = {x = 9, y = 1},
+			offset = 0,
+			count = 9,
+		}
+
+		gui:image {
+			name = "img_background",
 			pos = gui_pos,
-			block = {x = pos.x, y = pos.y, z = pos.z}
+
+			texture = "texture-furnace",
+			clip = {x = 0, y = 0, width = 176, height = 166},
 		}
 
 		gui:show(client)

@@ -31,7 +31,7 @@ TODO
 
 • DONE: Implement `PlayerInventoryWidget` completely in Lua
 • DONE: Implement `PlayerCraftingWidget` completely in Lua
-• WIP: Implement `FurnaceWidget` completely in Lua
+• DONE: Implement `FurnaceWidget` completely in Lua
    ◦ DONE: Add a `ProgressBarWidget`
 
 # Menus
