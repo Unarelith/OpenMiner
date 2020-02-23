@@ -219,8 +219,8 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	// vertex coordinates passed to the renderer are all small, and single
 	// precision floats suffice for the drawing.
 
-	gk::Vector3d cameraPos(m_camera->getPosition());
-	m_camera->setPosition(0, 0, 0);  // Temporarily move the camera to the origin
+	gk::Vector3d cameraPos(m_camera->getDPosition());
+	m_camera->setDPosition(0, 0, 0);  // Temporarily move the camera to the origin
 
 	std::vector<std::pair<ClientChunk*, gk::Transform>> chunks;
 	for(auto &it : m_chunks) {
@@ -285,6 +285,6 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		}
 	}
 
-	m_camera->setPosition(cameraPos);  // Restore the camera to its original position
+	m_camera->setDPosition(cameraPos);  // Restore the camera to its original position
 }
 

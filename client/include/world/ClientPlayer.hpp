@@ -45,50 +45,50 @@ class ClientPlayer : public Player {
 	public:
 		ClientPlayer(gk::Camera &camera);
 
-		void turnH(float angle);
-		void turnV(float angle);
+		void turnH(double angle);
+		void turnV(double angle);
 
-		void move(float direction);
+		void move(double direction);
 
 		void processInputs();
 		void updatePosition(const ClientWorld &world);
 
 		void checkCollisions(const ClientWorld &world);
 
-		float pointTargetedX() const { return m_x + cos(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES); }
-		float pointTargetedY() const { return m_y + sin(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES) - 0.00001; }
-		float pointTargetedZ() const { return m_z + sin(m_angleV * RADIANS_PER_DEGREES); }
+		double dirTargetedX() const { return cos(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES); }
+		double dirTargetedY() const { return sin(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES) - 0.00001; }
+		double dirTargetedZ() const { return sin(m_angleV * RADIANS_PER_DEGREES); }
 
 		static ClientPlayer &getInstance() { return *s_instance; }
 		static void setInstance(ClientPlayer *instance) { s_instance = instance; }
 
-		float x() const { return m_x; }
-		float y() const { return m_y; }
-		float z() const { return m_z; }
+		double x() const { return m_x; }
+		double y() const { return m_y; }
+		double z() const { return m_z; }
 
-		void setPosition(float x, float y, float z);
+		void setPosition(double x, double y, double z);
 
 		gk::Camera &camera() { return m_camera; }
 
 	private:
-		void testPoint(const ClientWorld &world, float x, float y, float z, glm::vec3 &speed);
+		void testPoint(const ClientWorld &world, double x, double y, double z, glm::dvec3 &vel);
 
 		static ClientPlayer *s_instance;
 
 		gk::Camera &m_camera;
 
-		float m_x;
-		float m_y;
-		float m_z;
+		double m_x;
+		double m_y;
+		double m_z;
 
-		float m_angleH;
-		float m_angleV;
+		double m_angleH;
+		double m_angleV;
 
-		glm::vec3 m_velocity{0};
+		glm::dvec3 m_velocity{0};
 		bool m_isJumping = false;
 
-		const float m_gravity = 0.001;
-		const float m_jumpSpeed = 0.06f;
+		const double m_gravity = 0.001;
+		const double m_jumpSpeed = 0.06f;
 };
 
 #endif // CLIENTPLAYER_HPP_

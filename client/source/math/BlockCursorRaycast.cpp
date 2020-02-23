@@ -125,7 +125,7 @@ void BlockCursorRaycast::rayCastToAxis(const Axis axis, const glm::dvec3 &positi
 		if(blockID && block.drawType() != BlockDrawType::Liquid) {
 			// Check bounding box; this should loop over all selection boxes
 			// when they are implemented
-			gk::DoubleBox selBox = block.boundingBox() + gk::Vector3d(double(nx), double(ny), double(nz));
+			gk::DoubleBox selBox = block.boundingBox() + gk::Vector3d{double(nx), double(ny), double(nz)};
 
 			bool hit = false;
 

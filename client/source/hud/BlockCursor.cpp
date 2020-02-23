@@ -115,8 +115,8 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 				if (!blockId || block.drawType() == BlockDrawType::Liquid) {
 					// Second, we check if the new block is not inside the player
 					const Block &newBlock = Registry::getInstance().getBlock(hotbar.currentItem());
-					gk::FloatBox boundingBox = newBlock.boundingBox() + gk::Vector3i{x, y, z};
-					gk::FloatBox playerBoundingBox = m_player.hitbox() + gk::Vector3f{m_player.x(), m_player.y(), m_player.z()};
+					gk::FloatBox boundingBox = newBlock.boundingBox() + gk::Vector3f(x - m_player.x(), y - m_player.y(), z - m_player.z());
+					gk::FloatBox playerBoundingBox = m_player.hitbox();
 					if (!boundingBox.intersects(playerBoundingBox)) {
 						m_world.setBlock(x, y, z, hotbar.currentItem());
 
@@ -242,7 +242,7 @@ void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	glCheck(glDisable(GL_CULL_FACE));
 
 	// Subtract the camera position - see comment in ClientWorld::draw()
-	gk::Vector3d cameraPosition = m_player.camera().getPosition();
+	gk::Vector3d cameraPosition = m_player.camera().getDPosition();
 	states.transform.translate(m_selectedBlock.x - cameraPosition.x, m_selectedBlock.y - cameraPosition.y, m_selectedBlock.z - cameraPosition.z);
 
 	target.draw(m_vbo, GL_LINES, 0, 24, states);
@@ -259,9 +259,9 @@ void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 }
 
 glm::ivec4 BlockCursor::findSelectedBlock() const {
-	glm::dvec3 position{m_player.camera().getPosition().x,
-	                    m_player.camera().getPosition().y,
-	                    m_player.camera().getPosition().z};
+	glm::dvec3 position{m_player.camera().getDPosition().x,
+	                    m_player.camera().getDPosition().y,
+	                    m_player.camera().getDPosition().z};
 
 	int_fast32_t bestX = int_fast32_t(floor(position.x));
 	int_fast32_t bestY = int_fast32_t(floor(position.y));
@@ -296,9 +296,7 @@ glm::ivec4 BlockCursor::findSelectedBlock() const {
 		}
 	}
 
-	glm::dvec3 lookAt{m_player.pointTargetedX() - m_player.camera().getPosition().x,
-	                  m_player.pointTargetedY() - m_player.camera().getPosition().y,
-	                  m_player.pointTargetedZ() - m_player.camera().getPosition().z};
+	glm::dvec3 lookAt{m_player.dirTargetedX(), m_player.dirTargetedY(), m_player.dirTargetedZ()};
 
 	// Ray casting algorithm to find out which block we are looking at
 	const double maxReach = 10.;
