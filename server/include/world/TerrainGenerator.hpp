@@ -40,8 +40,8 @@ class TerrainGenerator {
 	private:
 		void fastNoiseGeneration(ServerChunk &chunk) const;
 
-		static float noise2d(float x, float y, int octaves, float persistence);
-		static float noise3d_abs(float x, float y, float z, int octaves, float persistence);
+		static float noise2d(double x, double y, int octaves, float persistence);
+		static float noise3d_abs(double x, double y, double z, int octaves, float persistence);
 
 		u16 m_dirtBlockID = 0;
 		u16 m_grassBlockID = 0;

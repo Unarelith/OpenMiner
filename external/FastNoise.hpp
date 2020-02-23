@@ -32,7 +32,8 @@
 #define FASTNOISE_H
 
 // Uncomment the line below to use doubles throughout FastNoise instead of floats
-//#define FN_USE_DOUBLES
+// OpenMiner needs it!
+#define FN_USE_DOUBLES
 
 #define FN_CELLULAR_INDEX_MAX 3
 

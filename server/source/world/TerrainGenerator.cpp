@@ -59,11 +59,11 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
 			// Land height
-			float n = noise.GetNoise(-x - chunk.x() * CHUNK_WIDTH, y + chunk.y() * CHUNK_DEPTH);
-			float h = 10 + n * 20;
+			double n = noise.GetNoise(-x - chunk.x() * CHUNK_WIDTH, y + chunk.y() * CHUNK_DEPTH);
+			double h = 10 + n * 20;
 
-			// float n = noise2d((x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 4, 0.5) * 4;
-			// float h = 10 + n * 2;
+			// double n = noise2d((x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 4, 0.5) * 4;
+			// double h = 10 + n * 2;
 
 			// Land blocks
 			for(int z = 0 ; z < CHUNK_HEIGHT ; z++) {
@@ -141,7 +141,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 	}
 }
 
-float TerrainGenerator::noise2d(float x, float y, int octaves, float persistence) {
+float TerrainGenerator::noise2d(double x, double y, int octaves, float persistence) {
 	float sum = 0;
 	float strength = 1.0;
 	float scale = 1.0;
@@ -155,13 +155,13 @@ float TerrainGenerator::noise2d(float x, float y, int octaves, float persistence
 	return sum;
 }
 
-float TerrainGenerator::noise3d_abs(float x, float y, float z, int octaves, float persistence) {
+float TerrainGenerator::noise3d_abs(double x, double y, double z, int octaves, float persistence) {
 	float sum = 0;
 	float strength = 1.0;
 	float scale = 1.0;
 
 	for(int i = 0 ; i < octaves ; i++) {
-		sum += strength * fabs(glm::simplex(glm::vec3{x, y, z} * scale));
+		sum += strength * fabsf(glm::simplex(glm::vec3{x, y, z} * scale));
 		scale *= 2.0;
 		strength *= persistence;
 	}
