@@ -93,8 +93,7 @@ void GameState::onEvent(const SDL_Event &event) {
 		}
 		else if (event.type == SDL_WINDOWEVENT) {
 			if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
-				// FIXME
-				// m_stateStack->push<PauseMenuState>(m_client, this);
+				m_stateStack->push<PauseMenuState>(m_client, this);
 
 				gk::Mouse::setCursorGrabbed(false);
 				gk::Mouse::setCursorVisible(true);
