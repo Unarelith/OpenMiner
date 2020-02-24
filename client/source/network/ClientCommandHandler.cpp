@@ -160,8 +160,6 @@ void ClientCommandHandler::setupCallbacks() {
 			m_playerBoxes.at(clientId).setPosition(pos.x, pos.y, pos.z);
 			m_playerBoxes.at(clientId).setClientID(clientId);
 		}
-
-		m_world.init(pos.x, pos.y, pos.z);
 	});
 
 	m_client.setCommandCallback(Network::Command::BlockGUIData, [this](sf::Packet &packet) {

@@ -38,9 +38,9 @@ class ClientWorld : public World, public gk::Drawable {
 	public:
 		ClientWorld();
 
-		void init(float playerX, float playerY, float playerZ);
 		void update();
 		void sendChunkRequests();
+		void checkPlayerChunk(double playerX, double playerY, double playerZ);
 
 		void receiveChunkData(sf::Packet &packet);
 		void removeChunk(ChunkMap::iterator &it);

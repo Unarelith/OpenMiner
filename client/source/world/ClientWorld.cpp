@@ -26,6 +26,7 @@
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "ClientCommandHandler.hpp"
+#include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "TextureAtlas.hpp"
 #include "World.hpp"
@@ -33,14 +34,6 @@
 ClientWorld::ClientWorld() :
 	m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
-}
-
-void ClientWorld::init(float playerX, float playerY, float playerZ) {
-	int pcx = std::floor(playerX / CHUNK_WIDTH);
-	int pcy = std::floor(playerY / CHUNK_DEPTH);
-	int pcz = std::floor(playerZ / CHUNK_HEIGHT);
-
-	m_chunks.emplace(gk::Vector3i{pcx, pcy, pcz}, new ClientChunk(pcx, pcy, pcz, *this, m_textureAtlas));
 }
 
 void ClientWorld::update() {
@@ -78,6 +71,17 @@ void ClientWorld::sendChunkRequests() {
 
 			// std::cout << "Chunk at (" << m_ux << ", " << m_uy << ", " << m_uz << ") requested" << std::endl;
 		}
+	}
+}
+
+void ClientWorld::checkPlayerChunk(double playerX, double playerY, double playerZ) {
+	int pcx = std::floor(playerX / CHUNK_WIDTH);
+	int pcy = std::floor(playerY / CHUNK_DEPTH);
+	int pcz = std::floor(playerZ / CHUNK_HEIGHT);
+
+	ClientChunk *chunk = (ClientChunk *)getChunk(pcx, pcy, pcz);
+	if (!chunk) {
+		m_chunks.emplace(gk::Vector3i{pcx, pcy, pcz}, new ClientChunk(pcx, pcy, pcz, *this, m_textureAtlas));
 	}
 }
 
