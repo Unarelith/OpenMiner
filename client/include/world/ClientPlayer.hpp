@@ -46,7 +46,7 @@ class ClientPlayer : public Player {
 		ClientPlayer(gk::Camera &camera);
 
 		void turnH(double angle);
-		void turnV(double angle);
+		void turnViewV(double angle);
 
 		void move(double direction);
 
@@ -55,9 +55,9 @@ class ClientPlayer : public Player {
 
 		void checkCollisions(const ClientWorld &world);
 
-		double dirTargetedX() const { return cos(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES); }
-		double dirTargetedY() const { return sin(m_angleH * RADIANS_PER_DEGREES) * cos(m_angleV * RADIANS_PER_DEGREES) - 0.00001; }
-		double dirTargetedZ() const { return sin(m_angleV * RADIANS_PER_DEGREES); }
+		double dirTargetedX() const { return m_forwardDir.x; }
+		double dirTargetedY() const { return m_forwardDir.y; }
+		double dirTargetedZ() const { return m_forwardDir.z; }
 
 		static ClientPlayer &getInstance() { return *s_instance; }
 		static void setInstance(ClientPlayer *instance) { s_instance = instance; }
@@ -66,12 +66,18 @@ class ClientPlayer : public Player {
 		double y() const { return m_y; }
 		double z() const { return m_z; }
 
+		double cameraYaw()   const { return m_viewAngleH; }
+		double cameraPitch() const { return m_viewAngleV; }
+		double cameraRoll()  const { return m_viewAngleRoll; }
+
 		void setPosition(double x, double y, double z);
+		void setCameraRoll(double angle) { m_viewAngleRoll = angle; updateDir(); };
 
 		gk::Camera &camera() { return m_camera; }
 
 	private:
 		void testPoint(const ClientWorld &world, double x, double y, double z, glm::dvec3 &vel);
+		void updateDir();
 
 		static ClientPlayer *s_instance;
 
@@ -81,8 +87,12 @@ class ClientPlayer : public Player {
 		double m_y;
 		double m_z;
 
-		double m_angleH;
-		double m_angleV;
+		double m_viewAngleH;
+		double m_viewAngleV;
+		double m_viewAngleRoll;
+		// TODO: Add model transform
+
+		gk::Vector3d m_forwardDir;
 
 		glm::dvec3 m_velocity{0};
 		bool m_isJumping = false;

@@ -38,41 +38,45 @@ ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
 	m_y = 14;
 	m_z = 20;
 
-	m_angleH = -90.0;
-	m_angleV = 0.01;
+	m_viewAngleH = 90.;
+	m_viewAngleV = 0.01;
+	m_viewAngleRoll = 0.;
+
+	updateDir();
 
 	m_camera.setDPosition(m_x, m_y, m_z - 0.1);
-	m_camera.setDirection(dirTargetedX(), dirTargetedY(), dirTargetedZ());
 }
 
 void ClientPlayer::turnH(double angle) {
-	m_angleH += angle;
+	m_viewAngleH = (m_viewAngleH + angle >= -180. && m_viewAngleH + angle < 0.) ?
+		m_viewAngleH + angle : fmod(m_viewAngleH + angle, 360.);
 
-	while(m_angleH >= 180.0) {
-		m_angleH -= 360.0;
-	}
-	while(m_angleH < -180.0) {
-		m_angleH += 360.0;
-	}
+	if (m_viewAngleH >= 180.) m_viewAngleH -= 360.;
 
-	m_camera.setDirection(dirTargetedX(), dirTargetedY(), dirTargetedZ());
+	updateDir();
 }
 
-void ClientPlayer::turnV(double angle) {
-	m_angleV += angle;
+void ClientPlayer::turnViewV(double angle) {
+	m_viewAngleV = std::max(std::min(m_viewAngleV + angle, 90.), -90.);
 
-	if(89.9 < m_angleV) {
-		m_angleV = 89.9;
-	}
-	else if(-89.9 > m_angleV) {
-		m_angleV = -89.9;
-	}
+	updateDir();
+}
 
-	m_camera.setDirection(dirTargetedX(), dirTargetedY(), dirTargetedZ());
+void ClientPlayer::updateDir() {
+	double ch = cos(m_viewAngleH * RADIANS_PER_DEGREES);
+	double sh = sin(m_viewAngleH * RADIANS_PER_DEGREES);
+	double cv = cos(m_viewAngleV * RADIANS_PER_DEGREES);
+	double sv = sin(m_viewAngleV * RADIANS_PER_DEGREES);
+	double cr = cos(m_viewAngleRoll * RADIANS_PER_DEGREES);
+	double sr = sin(m_viewAngleRoll * RADIANS_PER_DEGREES);
+
+	m_forwardDir = gk::Vector3d{ch * cv, sh * cv, sv};
+	m_camera.setDirection(m_forwardDir);
+	m_camera.setUpVector(gk::Vector3d{sh * sr - ch * sv * cr, -ch * sr - sh * sv * cr, cv * cr});
 }
 
 void ClientPlayer::move(double direction) {
-	direction += m_angleH;
+	direction += m_viewAngleH;
 
 	m_velocity.x = 0.04 * cos(direction * RADIANS_PER_DEGREES);
 	m_velocity.y = 0.04 * sin(direction * RADIANS_PER_DEGREES);

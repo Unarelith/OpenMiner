@@ -47,7 +47,6 @@ GameState::GameState(const std::string &host, int port) {
 
 	m_textureAtlas = &gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks");
 
-	m_camera.setUpVector(gk::Vector3d{0., 0., 1.});
 	m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
 
 	initShaders();
@@ -77,7 +76,7 @@ void GameState::onEvent(const SDL_Event &event) {
 		if (event.type == SDL_MOUSEMOTION) {
 			if(Config::screenWidth / 2.0f != event.motion.x || Config::screenHeight / 2.0f != event.motion.y) {
 				m_player.turnH(event.motion.xrel * -0.01 * Config::mouseSensitivity);
-				m_player.turnV(event.motion.yrel * -0.01 * Config::mouseSensitivity);
+				m_player.turnViewV(event.motion.yrel * -0.01 * Config::mouseSensitivity);
 
 				gk::Mouse::resetToWindowCenter();
 			}
