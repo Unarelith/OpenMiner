@@ -94,6 +94,11 @@ void SettingsMenuState::addMainButtons() {
 		addGameplayButtons();
 	});
 
+	m_menuWidget.addButton("Interface...", [this] (TextButton &) {
+		m_state = MenuState::Gameplay;
+		addInterfaceButtons();
+	});
+
 	m_menuWidget.addButton("Graphics...", [this] (TextButton &) {
 		m_state = MenuState::Graphics;
 		addGraphicsButtons();
@@ -110,6 +115,12 @@ void SettingsMenuState::addGameplayButtons() {
 
 	addToggleButton("Fly Mode", Config::isFlyModeEnabled, false);
 	addToggleButton("No Clip", Config::isNoClipEnabled, false);
+}
+
+void SettingsMenuState::addInterfaceButtons() {
+	m_menuWidget.reset(1, 8);
+
+	addToggleButton("Show block info", Config::isBlockInfoWidgetEnabled, false);
 }
 
 void SettingsMenuState::addGraphicsButtons() {

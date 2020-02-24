@@ -30,6 +30,9 @@ namespace Config {
 	extern bool isFlyModeEnabled;
 	extern bool isNoClipEnabled;
 
+	// Interface
+	extern bool isBlockInfoWidgetEnabled;
+
 	// Graphics
 	extern u16 renderDistance;
 	extern bool isTorchSmoothLightingEnabled;

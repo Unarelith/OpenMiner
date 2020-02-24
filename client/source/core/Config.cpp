@@ -26,6 +26,9 @@
 bool Config::isFlyModeEnabled = false;
 bool Config::isNoClipEnabled = false;
 
+// Interface
+bool Config::isBlockInfoWidgetEnabled = true;
+
 // Graphics
 u16 Config::renderDistance = 8;
 bool Config::isTorchSmoothLightingEnabled = true;
@@ -56,6 +59,8 @@ void Config::loadConfigFromFile(const char *file) {
 
 			isFlyModeEnabled = lua["isFlyModeEnabled"].get_or(isFlyModeEnabled);
 			isNoClipEnabled = lua["isNoClipEnabled"].get_or(isNoClipEnabled);
+
+			isBlockInfoWidgetEnabled = lua["isBlockInfoWidgetEnabled"].get_or(isBlockInfoWidgetEnabled);
 
 			renderDistance = lua["renderDistance"].get_or(renderDistance);
 			isTorchSmoothLightingEnabled = lua["isTorchSmoothLightingEnabled"].get_or(isTorchSmoothLightingEnabled);

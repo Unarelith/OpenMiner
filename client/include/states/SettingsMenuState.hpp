@@ -42,6 +42,7 @@ class SettingsMenuState : public InterfaceState {
 
 		void addMainButtons();
 		void addGameplayButtons();
+		void addInterfaceButtons();
 		void addGraphicsButtons();
 		void addInputButtons();
 

@@ -76,10 +76,12 @@ void HUD::update() {
 	if (m_isDebugOverlayVisible)
 		m_debugOverlay.update();
 
-	m_blockInfoWidget.update();
+	if (Config::isBlockInfoWidgetEnabled) {
+		m_blockInfoWidget.update();
 
-	if (m_blockCursor.currentBlock() != m_blockInfoWidget.currentBlock())
-		m_blockInfoWidget.setCurrentBlock(m_blockCursor.currentBlock());
+		if (m_blockCursor.currentBlock() != m_blockInfoWidget.currentBlock())
+			m_blockInfoWidget.setCurrentBlock(m_blockCursor.currentBlock());
+	}
 }
 
 void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -97,7 +99,9 @@ void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (m_isDebugOverlayVisible)
 		target.draw(m_debugOverlay, states);
 
-	target.draw(m_blockInfoWidget, states);
+	if (Config::isBlockInfoWidgetEnabled)
+		target.draw(m_blockInfoWidget, states);
+
 	target.draw(m_hotbar, states);
 	target.draw(m_fpsText, states);
 	target.draw(m_chat, states);
