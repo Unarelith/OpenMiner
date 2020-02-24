@@ -38,7 +38,7 @@ ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
 	m_y = 14;
 	m_z = 20;
 
-	m_viewAngleH = 90.;
+	m_viewAngleH = -90.;
 	m_viewAngleV = 0.01;
 	m_viewAngleRoll = 0.;
 
