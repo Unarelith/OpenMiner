@@ -164,7 +164,7 @@ void SettingsMenuState::addGraphicsButtons() {
 		button.setText("Resolution: " + std::to_string(Config::screenWidth) + "x" + std::to_string(Config::screenHeight));
 	});
 
-	m_menuWidget.addButton("Use VSync: ON", [] (TextButton &) {}).setEnabled(false);
+	addToggleButton("Use VSync", Config::isVerticalSyncEnabled, false);
 }
 
 void SettingsMenuState::addInputButtons() {

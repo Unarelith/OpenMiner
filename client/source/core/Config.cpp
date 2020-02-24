@@ -36,6 +36,7 @@ bool Config::isSunSmoothLightingEnabled = true;
 bool Config::isAmbientOcclusionEnabled = false;
 bool Config::isWireframeModeEnabled = false;
 bool Config::isFullscreenModeEnabled = false;
+bool Config::isVerticalSyncEnabled = true;
 float Config::cameraFOV = 70.0f;
 u16 Config::screenWidth = 1600;
 u16 Config::screenHeight = 1050;
@@ -68,6 +69,7 @@ void Config::loadConfigFromFile(const char *file) {
 			isAmbientOcclusionEnabled = lua["isAmbientOcclusionEnabled"].get_or(isAmbientOcclusionEnabled);
 			isWireframeModeEnabled = lua["isWireframeModeEnabled"].get_or(isWireframeModeEnabled);
 			isFullscreenModeEnabled = lua["isFullscreenModeEnabled"].get_or(isFullscreenModeEnabled);
+			isVerticalSyncEnabled = lua["isVerticalSyncEnabled"].get_or(isVerticalSyncEnabled);
 			cameraFOV = lua["cameraFOV"].get_or(cameraFOV);
 			screenWidth = lua["screenWidth"].get_or(screenWidth);
 			screenHeight = lua["screenHeight"].get_or(screenHeight);

@@ -40,6 +40,7 @@ namespace Config {
 	extern bool isAmbientOcclusionEnabled;
 	extern bool isWireframeModeEnabled;
 	extern bool isFullscreenModeEnabled;
+	extern bool isVerticalSyncEnabled;
 	extern float cameraFOV;
 	extern u16 screenWidth;
 	extern u16 screenHeight;

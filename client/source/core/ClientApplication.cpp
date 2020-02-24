@@ -56,7 +56,7 @@ void ClientApplication::init() {
 	gk::GamePad::init(m_keyboardHandler);
 
 	createWindow(Config::screenWidth, Config::screenHeight, APP_NAME);
-	m_window.setVerticalSyncEnabled(true);
+	m_window.setVerticalSyncEnabled(Config::isVerticalSyncEnabled);
 	m_window.disableView();
 
 	initOpenGL();
@@ -86,6 +86,9 @@ void ClientApplication::handleEvents() {
 	if (Config::screenWidth != m_window.getSize().x || Config::screenHeight != m_window.getSize().y) {
 		m_window.resize(Config::screenWidth, Config::screenHeight);
 	}
+
+	if (Config::isVerticalSyncEnabled != m_window.isVerticalSyncEnabled())
+		m_window.setVerticalSyncEnabled(Config::isVerticalSyncEnabled);
 }
 
 void ClientApplication::onEvent(const SDL_Event &event) {
