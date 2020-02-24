@@ -113,6 +113,10 @@ void ServerCommandHandler::setupCallbacks() {
 		// m_world.sendSpawnData(client, player);
 	});
 
+	m_server.setCommandCallback(Network::Command::ClientDisconnect, [this](Client &client, sf::Packet &) {
+		m_players.erase(client.id);
+	});
+
 	m_server.setCommandCallback(Network::Command::ChunkRequest, [this](Client &client, sf::Packet &packet) {
 		s32 cx, cy, cz;
 		packet >> cx >> cy >> cz;

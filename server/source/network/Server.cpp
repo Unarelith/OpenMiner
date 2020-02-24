@@ -128,22 +128,24 @@ void Server::handleClientMessages() {
 
 				// DEBUG("TCP message received:", Network::commandToString(command));
 
-				if (command == Network::Command::ClientDisconnect) {
-					m_selector.remove(*client.tcpSocket);
-					m_info.removeClient(client.id);
-
-					// if (m_info.clients().size() == 0) {
-					// 	// m_tcpListener.close();
-					// 	m_isRunning = false;
-					// }
-
-					--i;
-				}
-
-				if (m_isRunning)
-					for (auto &it : m_commands)
+				if (m_isRunning) {
+					for (auto &it : m_commands) {
 						if (command == it.first)
 							it.second(client, packet);
+
+						if (command == Network::Command::ClientDisconnect) {
+							m_selector.remove(*client.tcpSocket);
+							m_info.removeClient(client.id);
+
+							// if (m_info.clients().size() == 0) {
+							// 	// m_tcpListener.close();
+							// 	m_isRunning = false;
+							// }
+
+							--i;
+						}
+					}
+				}
 			}
 		}
 	}
