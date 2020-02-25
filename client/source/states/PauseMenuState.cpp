@@ -91,9 +91,6 @@ void PauseMenuState::onEvent(const SDL_Event &event) {
 	}
 }
 
-void PauseMenuState::update() {
-}
-
 void PauseMenuState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (m_parent)
 		target.draw(*m_parent, states);

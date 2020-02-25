@@ -78,9 +78,6 @@ void SettingsMenuState::onEvent(const SDL_Event &event) {
 	}
 }
 
-void SettingsMenuState::update() {
-}
-
 void SettingsMenuState::doneButtonAction() {
 	if (m_state != MenuState::Main) {
 		m_state = MenuState::Main;

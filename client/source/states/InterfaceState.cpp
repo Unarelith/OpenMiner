@@ -62,6 +62,11 @@ void InterfaceState::onEvent(const SDL_Event &event) {
 	}
 }
 
+void InterfaceState::update() {
+	if (m_parent)
+		m_parent->update();
+}
+
 void InterfaceState::prepareDraw(gk::RenderTarget &target, gk::RenderStates &states) const {
 	states.transform *= getTransform();
 	states.shader = &m_shader;

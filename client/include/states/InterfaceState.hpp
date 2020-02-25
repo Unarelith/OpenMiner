@@ -39,6 +39,8 @@ class InterfaceState : public gk::ApplicationState {
 		void setup();
 		void onEvent(const SDL_Event &event) override;
 
+		void update() override;
+
 		void prepareDraw(gk::RenderTarget &target, gk::RenderStates &states) const;
 
 		bool m_drawBackground = true;

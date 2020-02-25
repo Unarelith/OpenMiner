@@ -79,8 +79,7 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 }
 
 void LuaGUIState::update() {
-	if (m_parent)
-		m_parent->update();
+	InterfaceState::update();
 
 	for (auto &it : m_widgets)
 		it->update();

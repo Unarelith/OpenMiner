@@ -91,9 +91,6 @@ void ChatState::onEvent(const SDL_Event &event) {
 	}
 }
 
-void ChatState::update() {
-}
-
 void ChatState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (m_parent)
 		target.draw(*m_parent, states);

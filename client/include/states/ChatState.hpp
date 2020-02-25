@@ -41,8 +41,6 @@ class ChatState : public InterfaceState {
 
 		void onEvent(const SDL_Event &event) override;
 
-		void update() override;
-
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
