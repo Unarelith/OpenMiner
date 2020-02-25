@@ -61,7 +61,7 @@ void SettingsMenuState::onEvent(const SDL_Event &event) {
 			m_menuWidget.onEvent(event);
 	}
 
-	if (&m_stateStack->top() == this) {
+	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
 		m_menuWidget.onEvent(event);
 		m_doneButton.onEvent(event);
 

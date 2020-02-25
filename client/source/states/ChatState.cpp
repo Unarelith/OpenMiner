@@ -74,7 +74,8 @@ void ChatState::onEvent(const SDL_Event &event) {
 
 		m_chat.setMessageVisibility(false);
 
-		m_stateStack->pop();
+		if (!m_stateStack->empty())
+			m_stateStack->pop();
 	}
 
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RETURN) {
@@ -87,7 +88,8 @@ void ChatState::onEvent(const SDL_Event &event) {
 
 		m_chat.setMessageVisibility(false);
 
-		m_stateStack->pop();
+		if (!m_stateStack->empty())
+			m_stateStack->pop();
 	}
 }
 

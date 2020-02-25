@@ -71,10 +71,13 @@ GameState::GameState(const std::string &host, int port) {
 }
 
 void GameState::onEvent(const SDL_Event &event) {
-	if (event.type == SDL_QUIT)
+	if (event.type == SDL_QUIT) {
 		m_client.disconnect();
 
-	if (&m_stateStack->top() == this) {
+		m_stateStack->clear();
+	}
+
+	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
 		gk::KeyboardHandler *keyboardHandler = (gk::KeyboardHandler *)gk::GamePad::getInputHandler();
 
 		if (event.type == SDL_MOUSEMOTION) {
@@ -130,7 +133,7 @@ void GameState::update() {
 	// FIXME: Registry init and TextureAtlas building should be done during loading phase
 	if (m_clientCommandHandler.isRegistryInitialized()) {
 		if (m_textureAtlas->isReady()) {
-			if (&m_stateStack->top() == this) {
+			if (!m_stateStack->empty() && &m_stateStack->top() == this) {
 				m_player.processInputs();
 
 				if (gk::GamePad::isKeyPressedOnce(GameKey::Inventory)) {

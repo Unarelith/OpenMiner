@@ -26,6 +26,8 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <gk/core/ApplicationStateStack.hpp>
+
 #include "Config.hpp"
 #include "InterfaceState.hpp"
 
@@ -50,10 +52,15 @@ void InterfaceState::setup() {
 }
 
 void InterfaceState::onEvent(const SDL_Event &event) {
+	if (m_parent) {
+		m_parent->onEvent(event);
+	}
+	else if (event.type == SDL_QUIT) {
+		m_stateStack->clear();
+	}
+
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-		if (m_parent)
-			m_parent->onEvent(event);
-		else {
+		if (!m_parent) {
 			Config::screenWidth = event.window.data1;
 			Config::screenHeight = event.window.data2;
 		}
