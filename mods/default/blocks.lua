@@ -182,3 +182,267 @@ mod:block {
 		amount = 4
 	}
 }
+
+mod:block {
+	id = "terracotta",
+	name = "Terracotta",
+	tiles = "terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "white_terracotta",
+	name = "White Terracotta",
+	tiles = "white_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "orange_terracotta",
+	name = "Orange Terracotta",
+	tiles = "orange_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "magenta_terracotta",
+	name = "Magenta Terracotta",
+	tiles = "magenta_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "light_blue_terracotta",
+	name = "Light Blue Terracotta",
+	tiles = "light_blue_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "yellow_terracotta",
+	name = "Yellow Terracotta",
+	tiles = "yellow_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "lime_terracotta",
+	name = "Lime Terracotta",
+	tiles = "lime_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "pink_terracotta",
+	name = "Pink Terracotta",
+	tiles = "pink_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "gray_terracotta",
+	name = "Gray Terracotta",
+	tiles = "gray_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "light_gray_terracotta",
+	name = "Light Gray Terracotta",
+	tiles = "light_gray_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "cyan_terracotta",
+	name = "Cyan Terracotta",
+	tiles = "cyan_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "purple_terracotta",
+	name = "Purple Terracotta",
+	tiles = "purple_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "blue_terracotta",
+	name = "Blue Terracotta",
+	tiles = "blue_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "brown_terracotta",
+	name = "Brown Terracotta",
+	tiles = "brown_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "green_terracotta",
+	name = "Green Terracotta",
+	tiles = "green_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "red_terracotta",
+	name = "Red Terracotta",
+	tiles = "red_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "black_terracotta",
+	name = "Black Terracotta",
+	tiles = "black_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "white_glazed_terracotta",
+	name = "White Glazed Terracotta",
+	tiles = "white_glazed_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "orange_glazed_terracotta",
+	name = "Orange Glazed Terracotta",
+	tiles = "orange_glazed_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "magenta_glazed_terracotta",
+	name = "Magenta Glazed Terracotta",
+	tiles = "magenta_glazed_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "light_blue_glazed_terracotta",
+	name = "Light Blue Glazed Terracotta",
+	tiles = "light_blue_glazed_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "yellow_glazed_terracotta",
+	name = "Yellow Glazed Terracotta",
+	tiles = "yellow_glazed_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "lime_glazed_terracotta",
+	name = "Lime Glazed Terracotta",
+	tiles = "lime_glazed_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "pink_glazed_terracotta",
+	name = "Pink Glazed Terracotta",
+	tiles = "pink_glazed_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "gray_glazed_terracotta",
+	name = "Gray Glazed Terracotta",
+	tiles = "gray_glazed_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "light_gray_glazed_terracotta",
+	name = "Light Gray Glazed Terracotta",
+	tiles = "light_gray_glazed_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "cyan_glazed_terracotta",
+	name = "Cyan Glazed Terracotta",
+	tiles = "cyan_glazed_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "purple_glazed_terracotta",
+	name = "Purple Glazed Terracotta",
+	tiles = "purple_glazed_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "blue_glazed_terracotta",
+	name = "Blue Glazed Terracotta",
+	tiles = "blue_glazed_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "brown_glazed_terracotta",
+	name = "Brown Glazed Terracotta",
+	tiles = "brown_glazed_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "green_glazed_terracotta",
+	name = "Green Glazed Terracotta",
+	tiles = "green_glazed_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "red_glazed_terracotta",
+	name = "Red Glazed Terracotta",
+	tiles = "red_glazed_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "black_glazed_terracotta",
+	name = "Black Glazed Terracotta",
+	tiles = "black_glazed_terracotta.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
