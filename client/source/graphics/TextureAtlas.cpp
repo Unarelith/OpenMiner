@@ -37,8 +37,10 @@ void TextureAtlas::addFile(const std::string &path, const std::string &filename)
 		return;
 
 	SurfacePtr surface{IMG_Load((path + filename).c_str()), &SDL_FreeSurface};
-	if(!surface)
-		throw EXCEPTION("Failed to load texture:", path + filename);
+	if(!surface) {
+		DEBUG("WARNING: Failed to load texture:", path + filename);
+		return;
+	}
 
 	if (!m_tileSize)
 		m_tileSize = surface->w;
@@ -104,6 +106,8 @@ void TextureAtlas::packTextures() {
 }
 
 void TextureAtlas::loadFromRegistry() {
+	addFile("mods/default/textures/blocks/", "undefined.png");
+
 	for (auto &block : Registry::getInstance().blocks()) {
 		const TilesDef &tiles = block->tiles();
 		for (auto &textureFilename : tiles.textureFilenames())
@@ -128,7 +132,7 @@ void TextureAtlas::loadFromRegistry() {
 u16 TextureAtlas::getTextureID(const std::string &filename) const {
 	auto it = m_textureMap.find(filename);
 	if (it == m_textureMap.end()) {
-		throw EXCEPTION("Unable to find texture in atlas:", filename);
+		return 0;
 	}
 
 	return it->second;
