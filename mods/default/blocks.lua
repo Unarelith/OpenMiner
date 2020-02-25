@@ -104,7 +104,7 @@ mod:block {
 }
 
 mod:block {
-	id = "ore_coal",
+	id = "coal_ore",
 	name = "Coal Ore",
 	tiles = "coal_ore.png",
 	hardness = 3,
@@ -157,3 +157,28 @@ mod:block {
 	draw_type = 1, -- FIXME: Use string instead
 }
 
+mod:block {
+	id = "stone_bricks",
+	name = "Stone Bricks",
+	tiles = "stone_bricks.png",
+	hardness = 2,
+	harvest_requirements = 1,
+}
+
+mod:block {
+	id = "bricks",
+	name = "Bricks",
+	tiles = "bricks.png",
+	hardness = 2,
+	harvest_requirements = 1,
+}
+
+mod:block {
+	id = "clay",
+	name = "Clay",
+	tiles = "clay.png",
+	item_drop = {
+		id = mod:id()..":clay_ball",
+		amount = 4
+	}
+}

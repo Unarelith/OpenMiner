@@ -63,6 +63,7 @@ function init(player)
 	player_inv:add_stack("default:stone_shovel", 1);
 	player_inv:add_stack("default:iron_ore", 64);
 	player_inv:add_stack("default:coal", 64);
+	player_inv:add_stack("default:clay", 64);
 end
 
 function show_inventory(client, screen_width, screen_height, gui_scale)
