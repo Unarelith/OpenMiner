@@ -43,7 +43,7 @@
 #include "TextButton.hpp"
 
 LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent)
-	: InterfaceState(parent), m_client(client)
+	: InterfaceState(parent), m_client(client), m_player(player), m_world(world)
 {
 	gk::Mouse::setCursorGrabbed(false);
 	gk::Mouse::setCursorVisible(true);
@@ -52,7 +52,7 @@ LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, Cli
 	m_mainWidget.setScale(Config::guiScale, Config::guiScale);
 
 	while (!packet.endOfPacket())
-		loadGUI(player, world, packet);
+		loadGUI(packet);
 }
 
 void LuaGUIState::onEvent(const SDL_Event &event) {
@@ -103,8 +103,7 @@ void LuaGUIState::update() {
 			currentItemWidget = it.currentItemWidget();
 	}
 
-	if (m_inventoryWidgets.size() != 0) // FIXME
-		m_mouseItemWidget.updateCurrentItem(currentItemWidget);
+	m_mouseItemWidget.updateCurrentItem(currentItemWidget);
 }
 
 void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -131,122 +130,138 @@ void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	target.draw(m_mouseItemWidget, states);
 }
 
-void LuaGUIState::loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &packet) {
+void LuaGUIState::loadGUI(sf::Packet &packet) {
 	u8 type;
 	std::string name;
 	s32 x, y;
 	packet >> type >> name >> x >> y;
-	if (type == LuaWidget::Image) {
-		std::string texture;
-		gk::FloatRect clipRect;
-		packet >> texture >> clipRect.x >> clipRect.y >> clipRect.sizeX >> clipRect.sizeY;
 
-		auto *image = new gk::Image(texture);
-		image->setPosition(x, y);
-		image->setClipRect(clipRect.x, clipRect.y, clipRect.sizeX, clipRect.sizeY);
-		m_drawables.emplace_back(image);
+	if (type == LuaWidget::Image)
+		loadImage(name, x, y, packet);
+	else if (type == LuaWidget::TextButton)
+		loadTextButton(name, x, y, packet);
+	else if (type == LuaWidget::InventoryWidget)
+		loadInventoryWidget(name, x, y, packet);
+	else if (type == LuaWidget::ProgressBarWidget)
+		loadProgressBarWidget(name, x, y, packet);
+	else if (type == LuaWidget::CraftingWidget)
+		loadCraftingWidget(name, x, y, packet);
+}
+
+void LuaGUIState::loadImage(const std::string &, s32 x, s32 y, sf::Packet &packet) {
+	std::string texture;
+	gk::FloatRect clipRect;
+	packet >> texture >> clipRect.x >> clipRect.y >> clipRect.sizeX >> clipRect.sizeY;
+
+	auto *image = new gk::Image(texture);
+	image->setPosition(x, y);
+	image->setClipRect(clipRect.x, clipRect.y, clipRect.sizeX, clipRect.sizeY);
+	m_drawables.emplace_back(image);
+}
+
+void LuaGUIState::loadTextButton(const std::string &, s32 x, s32 y, sf::Packet &packet) {
+	std::string text;
+	packet >> text;
+
+	auto *button = new TextButton(&m_mainWidget);
+	button->setPosition(x, y);
+	// button->setCallback(it.on_click);
+	button->setText(text);
+	m_widgets.emplace_back(button);
+}
+
+void LuaGUIState::loadInventoryWidget(const std::string &, s32 x, s32 y, sf::Packet &packet) {
+	std::string inventory, playerName, inventory_name;
+	gk::Vector3i block;
+	float width, height;
+	u16 offset, count;
+	packet >> inventory >> playerName >> inventory_name
+		>> block.x >> block.y >> block.z
+		>> width >> height >> offset >> count;
+
+	Inventory *widgetInventory = nullptr;
+	if (inventory == "player") {
+		widgetInventory = &m_player.inventory();
 	}
-	else if (type == LuaWidget::TextButton) {
-		std::string text;
-		packet >> text;
-
-		auto *button = new TextButton(&m_mainWidget);
-		button->setPosition(x, y);
-		// button->setCallback(it.on_click);
-		button->setText(text);
-		m_widgets.emplace_back(button);
-	}
-	else if (type == LuaWidget::InventoryWidget) {
-		std::string inventory, playerName, inventory_name;
-		gk::Vector3i block;
-		float width, height;
-		u16 offset, count;
-		packet >> inventory >> playerName >> inventory_name
-			>> block.x >> block.y >> block.z
-			>> width >> height >> offset >> count;
-
-		Inventory *widgetInventory = nullptr;
-		if (inventory == "player") {
-			widgetInventory = &player.inventory();
-		}
-		else if (inventory == "block") {
-			BlockData *data = world.getBlockData(block.x, block.y, block.z);
-			if (!data) {
-				DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
-				return;
-			}
-
-			widgetInventory = &data->inventory;
-		}
-
-		if (widgetInventory) {
-			m_inventoryWidgets.emplace_back(m_client, &m_mainWidget);
-
-			auto &inventoryWidget = m_inventoryWidgets.back();
-			inventoryWidget.setPosition(x, y);
-			inventoryWidget.init(*widgetInventory, offset, count);
-		}
-		else {
-			DEBUG("ERROR: Widget inventory is invalid");
-		}
-	}
-	else if (type == LuaWidget::ProgressBarWidget) {
-		u8 type;
-		gk::Vector3i block;
-		std::string meta, maxMeta;
-		u32 maxValue;
-		std::string texture;
-		gk::FloatRect clipRect;
-		packet >> type >> block.x >> block.y >> block.z >> meta >> maxMeta >> maxValue >> texture
-			>> clipRect.x >> clipRect.y >> clipRect.sizeX >> clipRect.sizeY;
-
-		BlockData *data = world.getBlockData(block.x, block.y, block.z);
+	else if (inventory == "block") {
+		BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
 		if (!data) {
 			DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
 			return;
 		}
 
-		ProgressBarWidget *widget = new ProgressBarWidget(texture, *data, ProgressBarType(type));
-		if (!maxMeta.empty())
-			widget->init(clipRect, gk::Vector2i{x, y}, meta, maxMeta);
-		else
-			widget->init(clipRect, gk::Vector2i{x, y}, meta, maxValue);
-
-		m_widgets.emplace_back(widget);
+		widgetInventory = &data->inventory;
 	}
-	else if (type == LuaWidget::CraftingWidget) { // FIXME
-		std::string inventory;
-		gk::Vector3i block;
-		u16 offset, size;
-		s32 resultX, resultY;
-		packet >> inventory >> block.x >> block.y >> block.z >> offset >> size >> resultX >> resultY;
 
-		Inventory *craftingInventory = nullptr;
-		if (inventory == "block") {
-			BlockData *data = world.getBlockData(block.x, block.y, block.z);
-			if (!data) {
-				DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
-				return;
-			}
+	if (widgetInventory) {
+		m_inventoryWidgets.emplace_back(m_client, &m_mainWidget);
 
-			craftingInventory = &data->inventory;
-		}
-		else if (inventory == "temp") {
-			craftingInventory = &m_inventory;
-			m_inventory.resize(size, size);
-		}
-
-		if (craftingInventory) {
-			m_craftingWidgets.emplace_back(m_client, *craftingInventory, &m_mainWidget);
-
-			auto &craftingWidget = m_craftingWidgets.back();
-			craftingWidget.init(offset, size);
-			craftingWidget.craftingInventoryWidget().setPosition(x, y);
-			craftingWidget.craftingResultInventoryWidget().setPosition(resultX, resultY);
-		}
-		else {
-			DEBUG("ERROR: Crafting inventory is invalid");
-		}
+		auto &inventoryWidget = m_inventoryWidgets.back();
+		inventoryWidget.setPosition(x, y);
+		inventoryWidget.init(*widgetInventory, offset, count);
 	}
+	else {
+		DEBUG("ERROR: Widget inventory is invalid");
+	}
+}
+
+void LuaGUIState::loadCraftingWidget(const std::string &, s32 x, s32 y, sf::Packet &packet) {
+	std::string inventory;
+	gk::Vector3i block;
+	u16 offset, size;
+	s32 resultX, resultY;
+	packet >> inventory >> block.x >> block.y >> block.z >> offset >> size >> resultX >> resultY;
+
+	Inventory *craftingInventory = nullptr;
+	if (inventory == "block") {
+		BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
+		if (!data) {
+			DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
+			return;
+		}
+
+		craftingInventory = &data->inventory;
+	}
+	else if (inventory == "temp") {
+		craftingInventory = &m_inventory;
+		m_inventory.resize(size, size);
+	}
+
+	if (craftingInventory) {
+		m_craftingWidgets.emplace_back(m_client, *craftingInventory, &m_mainWidget);
+
+		auto &craftingWidget = m_craftingWidgets.back();
+		craftingWidget.init(offset, size);
+		craftingWidget.craftingInventoryWidget().setPosition(x, y);
+		craftingWidget.craftingResultInventoryWidget().setPosition(resultX, resultY);
+	}
+	else {
+		DEBUG("ERROR: Crafting inventory is invalid");
+	}
+}
+
+void LuaGUIState::loadProgressBarWidget(const std::string &, s32 x, s32 y, sf::Packet &packet) {
+	u8 type;
+	gk::Vector3i block;
+	std::string meta, maxMeta;
+	u32 maxValue;
+	std::string texture;
+	gk::FloatRect clipRect;
+	packet >> type >> block.x >> block.y >> block.z >> meta >> maxMeta >> maxValue >> texture
+		>> clipRect.x >> clipRect.y >> clipRect.sizeX >> clipRect.sizeY;
+
+	BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
+	if (!data) {
+		DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
+		return;
+	}
+
+	ProgressBarWidget *widget = new ProgressBarWidget(texture, *data, ProgressBarType(type));
+	if (!maxMeta.empty())
+		widget->init(clipRect, gk::Vector2i{x, y}, meta, maxMeta);
+	else
+		widget->init(clipRect, gk::Vector2i{x, y}, meta, maxValue);
+
+	m_widgets.emplace_back(widget);
 }
 

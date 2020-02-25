@@ -252,7 +252,8 @@ void LuaGUI::show(Client &client) {
 
 	for (auto &it : m_data.imageList)
 		packet << u8(LuaWidget::Image)
-			<< it.name << it.x << it.y << it.texture << it.clipRect.x << it.clipRect.y << it.clipRect.sizeX << it.clipRect.sizeY;
+			<< it.name << it.x << it.y << it.texture
+			<< it.clipRect.x << it.clipRect.y << it.clipRect.sizeX << it.clipRect.sizeY;
 
 	for (auto &it : m_data.textButtonList)
 		packet << u8(LuaWidget::TextButton) << it.name << it.x << it.y << it.text;
@@ -265,12 +266,14 @@ void LuaGUI::show(Client &client) {
 
 	for (auto &it : m_data.craftingWidgetList)
 		packet << u8(LuaWidget::CraftingWidget) << it.name << it.x << it.y << it.inventory
-			<< it.block.x << it.block.y << it.block.z << it.offset << it.size << it.resultX << it.resultY;
+			<< it.block.x << it.block.y << it.block.z << it.offset << it.size
+			<< it.resultX << it.resultY;
 
 	for (auto &it : m_data.progressBarWidgetList)
 		packet << u8(LuaWidget::ProgressBarWidget) << it.name << it.x << it.y << it.type
 			<< it.block.x << it.block.y << it.block.z << it.meta << it.maxMeta << it.maxValue
-			<< it.texture << it.clipRect.x << it.clipRect.y << it.clipRect.sizeX << it.clipRect.sizeY;
+			<< it.texture << it.clipRect.x << it.clipRect.y
+			<< it.clipRect.sizeX << it.clipRect.sizeY;
 
 	client.tcpSocket->send(packet);
 }

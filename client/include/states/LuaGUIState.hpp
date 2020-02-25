@@ -51,7 +51,12 @@ class LuaGUIState : public InterfaceState {
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		void loadGUI(ClientPlayer &player, ClientWorld &world, sf::Packet &packet);
+		void loadGUI(sf::Packet &packet);
+		void loadImage(const std::string &name, s32 x, s32 y, sf::Packet &packet);
+		void loadTextButton(const std::string &name, s32 x, s32 y, sf::Packet &packet);
+		void loadInventoryWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet);
+		void loadCraftingWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet);
+		void loadProgressBarWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet);
 
 		ClientCommandHandler &m_client;
 
@@ -65,6 +70,9 @@ class LuaGUIState : public InterfaceState {
 		std::vector<std::unique_ptr<gk::Drawable>> m_drawables;
 
 		Inventory m_inventory;
+
+		ClientPlayer &m_player;
+		ClientWorld &m_world;
 };
 
 #endif // LUAGUISTATE_HPP_
