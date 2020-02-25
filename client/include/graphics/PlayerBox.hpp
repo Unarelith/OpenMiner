@@ -34,9 +34,13 @@
 
 #include "Player.hpp"
 
-class PlayerBox : public gk::Drawable, public Player {
+class PlayerBox : public gk::Drawable, public gk::Transformable, public Player {
 	public:
 		PlayerBox(const gk::Camera &camera);
+
+		void setPosition(s32 x, s32 y, s32 z) {
+			Player::setPosition(x, y, z);
+		}
 
 	private:
 		void updateVertexBuffer();
