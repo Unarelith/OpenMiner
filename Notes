@@ -20,6 +20,42 @@ openminer:get_block(pos)
 openminer:get_meta(pos)
 openminer:get_inventory(pos)
 ```
+
+## Biome definition
+
+```lua
+mod:biome {
+   name = "grassland",
+
+   top_block = "default:grass",
+   ground_block = "default:dirt",
+   deep_block = "default:stone",
+   beach_block = "default:sand",
+   liquid_block = "default:water",
+
+   tree = {
+      type = "basic", -- only one type of tree to start
+
+      leaf_block = "default:leaves",
+      log_block = "default:log",
+   },
+
+   flora = {
+      {
+         block = "default:tallgrass",
+         spawns_on = "default:grass",
+         probability = 0.25 -- this in the range 0..1
+      },
+
+      {
+         block = "default:flower",
+         spawns_on = "default:grass",
+         probability = 0.1
+      }
+   }
+}
+```
+
                                      * * *
 
 # Old notes
