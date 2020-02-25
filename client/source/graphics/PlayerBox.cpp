@@ -66,9 +66,7 @@ static const float cubeCoords[6 * 4 * 3] = {
 	0, 1, 1,
 };
 
-PlayerBox::PlayerBox() {
-	setScale(1, 1, 2);
-
+PlayerBox::PlayerBox(const gk::Camera &camera) : m_camera(camera) {
 	updateVertexBuffer();
 }
 
@@ -77,7 +75,7 @@ void PlayerBox::updateVertexBuffer() {
 	for (u8 i = 0 ; i < 24 ; ++i) {
 		vertices[i].coord3d[0] = cubeCoords[i * 3];
 		vertices[i].coord3d[1] = cubeCoords[i * 3 + 1];
-		vertices[i].coord3d[2] = cubeCoords[i * 3 + 2] - 0.5;
+		vertices[i].coord3d[2] = cubeCoords[i * 3 + 2] * 2 - 1;
 		vertices[i].coord3d[3] = -1;
 
 		vertices[i].color[0] = 0.3f;
@@ -92,7 +90,9 @@ void PlayerBox::updateVertexBuffer() {
 }
 
 void PlayerBox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	states.transform *= getTransform();
+	// Subtract the camera position - see comment in ClientWorld::draw()
+	gk::Vector3d cameraPosition = m_camera.getDPosition();
+	states.transform.translate(m_x - cameraPosition.x, m_y - cameraPosition.y, m_z - cameraPosition.z);
 
 	target.draw(m_vbo, GL_QUADS, 0, 24, states);
 }
