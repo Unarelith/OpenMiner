@@ -92,7 +92,7 @@ void LuaMod::registerItem(const sol::table &table) {
 	TilesDef tiles;
 	tiles.loadFromLuaTable(table);
 
-	std::string stringID = table["id"].get<std::string>();
+	std::string stringID = m_id + ":" + table["id"].get<std::string>();
 	std::string label = table["name"].get<std::string>();
 
 	Item &item = Registry::getInstance().registerItem(tiles, stringID, label);

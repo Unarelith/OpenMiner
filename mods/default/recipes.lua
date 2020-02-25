@@ -305,3 +305,34 @@ mod:smelting_recipe {
 	output = {id = "default:charcoal", amount = 1}
 }
 
+-- Brick
+mod:smelting_recipe {
+	input = {id = "default:clay_ball", amount = 1},
+	output = {id = "default:brick", amount = 1}
+}
+
+-- Bricks
+mod:crafting_recipe {
+	result = {
+		id = "default:bricks",
+		amount = 1
+	},
+	pattern = {
+		"##",
+		"##"
+	},
+	keys = {["#"] = "default:brick"}
+}
+
+-- Stone Bricks
+mod:crafting_recipe {
+	result = {
+		id = "default:stone_bricks",
+		amount = 1
+	},
+	pattern = {
+		"##",
+		"##"
+	},
+	keys = {["#"] = "default:stone"}
+}
