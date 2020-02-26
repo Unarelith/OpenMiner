@@ -134,15 +134,7 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 		m_velocity.y *= 0.75;
 	}
 
-	m_x += m_velocity.x;
-	m_y += m_velocity.y;
-	m_z += m_velocity.z;
-
-	m_camera.setDPosition(m_x, m_y, m_z - 0.1);
-	Player::setPosition(m_x, m_y, m_z);
-
-	if (m_velocity.x != 0 || m_velocity.y != 0 || m_velocity.z != 0)
-		m_camera.setDirection(dirTargetedX(), dirTargetedY(), dirTargetedZ());
+	setPosition(m_x + m_velocity.x, m_y + m_velocity.y, m_z + m_velocity.z);
 
 	m_velocity.x = 0;
 	m_velocity.y = 0;
