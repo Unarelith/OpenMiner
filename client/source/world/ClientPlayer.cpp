@@ -120,11 +120,17 @@ void ClientPlayer::processInputs() {
 
 void ClientPlayer::updatePosition(const ClientWorld &world) {
 	ClientChunk *chunk = (ClientChunk *)world.getChunkAtBlockPos(m_x, m_y, m_z);
-	if (!Config::isFlyModeEnabled && chunk && chunk->isInitialized()) {
-		m_velocity.z -= m_gravity; // Gravity
+	if (chunk && chunk->isInitialized()) {
+		if (!Config::isFlyModeEnabled) {
+			m_velocity.z -= m_gravity; // Gravity
 
-		if (m_velocity.z < -m_jumpSpeed) // Jump max accel
-			m_velocity.z = -m_jumpSpeed;
+			if (m_velocity.z < -m_jumpSpeed) // Limit max vertical speed to jump speed
+				m_velocity.z = -m_jumpSpeed;
+		}
+	}
+	else {
+		// Block player until the chunk loads
+		m_velocity = glm::dvec3{0, 0, 0};
 	}
 
 	if (!Config::isNoClipEnabled)
