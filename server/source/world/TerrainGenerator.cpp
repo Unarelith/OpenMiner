@@ -58,17 +58,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 	noise.SetFrequency(1 / 256.0f);
 	noise.SetFractalOctaves(4);
 
-	FastNoise caveRigid;
-	caveRigid.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
-	caveRigid.SetFractalType(FastNoise::FractalType::RigidMulti);
-	caveRigid.SetFractalOctaves(1);
-	caveRigid.SetFrequency(1 / 64.0f);
-
-	FastNoise caveSimplex;
-	caveSimplex.SetNoiseType(FastNoise::NoiseType::Simplex);
-	caveSimplex.SetFrequency(1 / 256.0f);
-
-	srand(chunk.x() + chunk.y() + chunk.z() + 1337);
+	srand(chunk.x() + chunk.y() * CHUNK_DEPTH + chunk.z() * CHUNK_DEPTH * CHUNK_HEIGHT + 1337);
 	Chunk *topChunk = chunk.getSurroundingChunk(Chunk::Top);
 	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
@@ -142,26 +132,6 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 					// 	chunk.setBlockRaw(x, y, z, 0);
 					// 	chunk.setBlockRaw(x, y, z + 1, 0);
 					// }
-
-					// static const int maxCaveSize = 8;
-					// static const int maxCaveY = 60 - maxCaveSize;
-                    //
-					// float rigid = caveRigid.GetNoise(x + chunk.x() * CHUNK_WIDTH, z + chunk.z() * CHUNK_DEPTH);
-					// float simplex = std::abs(caveSimplex.GetNoise(x + chunk.x() * CHUNK_WIDTH, rigid * maxCaveSize, z + chunk.z() * CHUNK_DEPTH)) * maxCaveY / 2.0f;
-                    //
-					// if (y + chunk.y() * CHUNK_HEIGHT > simplex && y + chunk.y() * CHUNK_HEIGHT < simplex + rigid * maxCaveSize && rigid > 0.8) {
-					// 	float simplex2 = std::abs(caveSimplex.GetNoise((1 - rigid) * maxCaveSize, y + chunk.y() * CHUNK_HEIGHT - simplex));
-					// 	if (simplex2 < 0.05)
-					// 		chunk.setBlockRaw(x, y, z, 0);
-					// }
-
-					// if (y + chunk.y() * CHUNK_HEIGHT > simplex && y + chunk.y() * CHUNK_HEIGHT < simplex + rigid)
-					// 	chunk.setBlockRaw(x, y, z, 0);
-
-					// float rigid = pow(caveRigid.GetNoise(x + chunk.x() * CHUNK_WIDTH, z + chunk.z() * CHUNK_DEPTH),8.f) * maxCaveSize;
-					// rigid = std::max(rigid - 2, 0.f);
-					// if (y + chunk.y() * CHUNK_HEIGHT > simplex && y + chunk.y() * CHUNK_HEIGHT < simplex + rigid)
-					// 	chunk.setBlockRaw(x, y, z, 0);
 				}
 
 				if (topChunk && topChunk->isInitialized()) {
@@ -174,11 +144,11 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 		}
 	}
 
-	auto randomFloat = []{ return rand() % 64 / 64.0f; };
+	auto randomFloat = []{ return rand() % 512 / 512.0f; };
 
-	float height = CHUNK_HEIGHT * 3;
+	float height = CHUNK_HEIGHT;
 
-	gk::Vector3i cavePos{rand() % CHUNK_WIDTH, rand() % CHUNK_HEIGHT, rand() % CHUNK_DEPTH};
+	gk::Vector3i cavePos{rand() % CHUNK_WIDTH, rand() % CHUNK_DEPTH, rand() % CHUNK_HEIGHT};
 	int caveLength = randomFloat() * randomFloat() * 200.0f;
 
 	float theta = randomFloat() * M_PI * 2.0f;
@@ -191,8 +161,8 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 
 	for (int len = 0 ; len < caveLength ; ++len) {
 		cavePos.x += std::sin(theta) * std::cos(phi);
-		cavePos.z += std::cos(theta) * std::cos(phi);
-		cavePos.y += std::sin(phi);
+		cavePos.y += std::cos(theta) * std::cos(phi);
+		cavePos.z += std::sin(phi);
 
 		theta += deltaTheta * 0.2f;
 		deltaTheta = deltaTheta * 0.9f + randomFloat() - randomFloat();
@@ -214,10 +184,10 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 			gk::Vector3f end{centerPos.x + radius, centerPos.y + radius, centerPos.z + radius};
 			float radiusSq = radius * radius;
 			gk::Vector3i d;
-			for (int yy = begin.y ; yy <= end.y ; ++yy) { d.y = yy - centerPos.y;
-				for (int zz = begin.z ; zz <= end.z ; ++zz) { d.z = zz - centerPos.z;
+			for (int zz = begin.z ; zz <= end.z ; ++zz) { d.z = zz - centerPos.z;
+				for (int yy = begin.y ; yy <= end.y ; ++yy) { d.y = yy - centerPos.y;
 					for (int xx = begin.x ; xx <= end.x ; ++xx) { d.x = xx - centerPos.x;
-						if (d.x * d.x + 2 * d.y * d.y + d.z * d.z < radiusSq)
+						if (d.x * d.x + d.y * d.y + 2 * d.z * d.z < radiusSq)
 							chunk.setBlockRaw(xx, yy, zz, 0);
 					}
 				}

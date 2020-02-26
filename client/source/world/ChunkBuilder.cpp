@@ -201,7 +201,8 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 		vertices[j].texCoord[1] = faceTexCoords[j * 2 + 1];
 
 		if (Config::isSunSmoothLightingEnabled && block->drawType() != BlockDrawType::Liquid)
-			vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, normal, chunk);
+			// vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, normal, chunk);
+			vertices[j].lightValue[0] = 15;
 		else
 			vertices[j].lightValue[0] = chunk.lightmap().getSunlight(
 					surroundingBlockPos[0], surroundingBlockPos[1], surroundingBlockPos[2]);
