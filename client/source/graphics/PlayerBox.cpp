@@ -28,56 +28,56 @@
 
 #include "PlayerBox.hpp"
 
-static const float cubeCoords[6 * 4 * 3] = {
+constexpr int NUM_QUADS = 6;
+
+static const float modelCoords[NUM_QUADS * 4 * 3] = {
 	// West
-	0, 0, 0,
-	0, 0, 1,
-	0, 1, 1,
-	0, 1, 0,
+	-0.3125f, -0.3125f, 0.f,
+	-0.3125f, -0.3125f, 1.75f,
+	-0.3125f,  0.3125f, 1.75f,
+	-0.3125f,  0.3125f, 0.f,
 
 	// East
-	1, 0, 1,
-	1, 0, 0,
-	1, 1, 0,
-	1, 1, 1,
+	 0.3125f, -0.3125f, 1.75f,
+	 0.3125f, -0.3125f, 0.f,
+	 0.3125f,  0.3125f, 0.f,
+	 0.3125f,  0.3125f, 1.75f,
 
 	// South
-	0, 0, 0,
-	1, 0, 0,
-	1, 0, 1,
-	0, 0, 1,
+	-0.3125f, -0.3125f, 0.f,
+	 0.3125f, -0.3125f, 0.f,
+	 0.3125f, -0.3125f, 1.75f,
+	-0.3125f, -0.3125f, 1.75f,
 
 	// North
-	0, 1, 1,
-	1, 1, 1,
-	1, 1, 0,
-	0, 1, 0,
+	-0.3125f,  0.3125f, 1.75f,
+	 0.3125f,  0.3125f, 1.75f,
+	 0.3125f,  0.3125f, 0.f,
+	-0.3125f,  0.3125f, 0.f,
 
 	// Bottom
-	1, 0, 0,
-	0, 0, 0,
-	0, 1, 0,
-	1, 1, 0,
+	 0.3125f, -0.3125f, 0.f,
+	-0.3125f, -0.3125f, 0.f,
+	-0.3125f,  0.3125f, 0.f,
+	 0.3125f,  0.3125f, 0.f,
 
 	// Top
-	0, 0, 1,
-	1, 0, 1,
-	1, 1, 1,
-	0, 1, 1,
+	-0.3125f, -0.3125f, 1.75f,
+	 0.3125f, -0.3125f, 1.75f,
+	 0.3125f,  0.3125f, 1.75f,
+	-0.3125f,  0.3125f, 1.75f,
 };
 
 PlayerBox::PlayerBox(const gk::Camera &camera) : m_camera(camera) {
 	updateVertexBuffer();
-
-	setScale(1, 1, 2);
 }
 
 void PlayerBox::updateVertexBuffer() {
-	gk::Vertex vertices[24];
-	for (u8 i = 0 ; i < 24 ; ++i) {
-		vertices[i].coord3d[0] = cubeCoords[i * 3];
-		vertices[i].coord3d[1] = cubeCoords[i * 3 + 1];
-		vertices[i].coord3d[2] = cubeCoords[i * 3 + 2] - 0.5;
+	gk::Vertex vertices[NUM_QUADS * 4];
+	for (u8 i = 0 ; i < NUM_QUADS * 4 ; ++i) {
+		vertices[i].coord3d[0] = modelCoords[i * 3];
+		vertices[i].coord3d[1] = modelCoords[i * 3 + 1];
+		vertices[i].coord3d[2] = modelCoords[i * 3 + 2];
 		vertices[i].coord3d[3] = -1;
 
 		vertices[i].color[0] = 0.3f;
@@ -98,6 +98,6 @@ void PlayerBox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	states.transform *= getTransform();
 
-	target.draw(m_vbo, GL_QUADS, 0, 24, states);
+	target.draw(m_vbo, GL_QUADS, 0, NUM_QUADS * 4, states);
 }
 
