@@ -94,9 +94,10 @@ class ClientPlayer : public Player {
 		double m_viewAngleH;
 		double m_viewAngleV;
 		double m_viewAngleRoll;
-		// TODO: Add model transform
 
 		gk::Vector3d m_forwardDir;
+
+		gk::Vector3d m_cameraLocalPos;
 
 		glm::dvec3 m_velocity{0};
 		bool m_isJumping = false;

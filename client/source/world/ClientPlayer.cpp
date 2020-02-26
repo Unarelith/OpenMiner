@@ -41,6 +41,7 @@ ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
 	m_x = 14;
 	m_y = 14;
 	m_z = 18;
+	m_cameraLocalPos = gk::Vector3d{0., 0., 1.625};
 
 	m_viewAngleH = -90.;
 	m_viewAngleV = 0.01;
@@ -48,7 +49,7 @@ ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
 
 	updateDir();
 
-	m_camera.setDPosition(m_x, m_y, m_z - 0.1);
+	m_camera.setDPosition(m_x + m_cameraLocalPos.x, m_y + m_cameraLocalPos.y, m_z + m_cameraLocalPos.z);
 }
 
 void ClientPlayer::turnH(double angle) {
@@ -149,7 +150,9 @@ void ClientPlayer::setPosition(double x, double y, double z) {
 	m_z = z;
 
 	Player::setPosition(x, y, z);
-	m_camera.setDPosition(x, y, z - 0.1);
+
+	gk::Vector3d camPos = m_cameraLocalPos;
+	m_camera.setDPosition(m_x + camPos.x, m_y + camPos.y, m_z + camPos.z);
 }
 
 void ClientPlayer::checkCollisions(const ClientWorld &world) {
