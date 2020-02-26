@@ -65,7 +65,7 @@ class ServerCommandHandler {
 		Registry &m_registry;
 
 		// FIXME: Warning: Duplicated in ClientPlayer.cpp
-		gk::Vector3<s32> m_spawnPosition{14, 14, 20};
+		gk::Vector3<s32> m_spawnPosition{14, 14, 18};
 };
 
 #endif // SERVERCOMMANDHANDLER_HPP_

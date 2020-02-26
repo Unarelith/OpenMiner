@@ -40,7 +40,7 @@ ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
 	// FIXME: Warning: Duplicated in ServerCommandHandler.hpp
 	m_x = 14;
 	m_y = 14;
-	m_z = 20;
+	m_z = 18;
 
 	m_viewAngleH = -90.;
 	m_viewAngleV = 0.01;
@@ -118,7 +118,7 @@ void ClientPlayer::processInputs() {
 }
 
 void ClientPlayer::updatePosition(const ClientWorld &world) {
-	ClientChunk *chunk = (ClientChunk *)world.getChunkAtBlockPos(m_x, m_y, m_z - 0.2);
+	ClientChunk *chunk = (ClientChunk *)world.getChunkAtBlockPos(m_x, m_y, m_z);
 	if (!Config::isFlyModeEnabled && chunk && chunk->isInitialized()) {
 		m_velocity.z -= m_gravity; // Gravity
 

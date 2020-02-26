@@ -28,7 +28,7 @@
 #include "Player.hpp"
 
 Player::Player() {
-	m_hitbox = gk::FloatBox{-0.2, -0.2, -1.8, 0.4, 0.4, 1.8};
+	m_hitbox = gk::FloatBox{-0.3125, -0.3125, 0, 0.625, 0.625, 1.75};
 }
 
 void Player::serialize(sf::Packet &packet) const {
