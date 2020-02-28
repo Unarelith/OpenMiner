@@ -242,8 +242,8 @@ bool ChunkLightmap::updateSunlight() {
 					}
 					else if (sunlightLevel == 15 && surroundingNode.z == node.z + 1)
 						continue;
-					else {
-						addSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel - 1);
+					else if (block.getTransparency() != 0) {
+						addSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, std::max<int>(sunlightLevel - block.getTransparency(), 0));
 
 						// FIXME: If addSunlight changes something in a surrounding chunk
 						//        then this flag should be set on this other chunk

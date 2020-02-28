@@ -58,7 +58,8 @@ mod:block {
 	color_multiplier = {106, 173, 51, 255},
 	hardness = 0.5,
 	draw_type = 2, -- FIXME: Use string instead
-	-- is_opaque = false, -- FIXME
+	is_opaque = false,
+	transparency = 6
 }
 
 mod:block {

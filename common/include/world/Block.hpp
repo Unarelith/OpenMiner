@@ -98,6 +98,13 @@ class Block : public ISerializable {
 		bool isLightSource() const { return m_isLightSource; }
 		void setLightSource(bool isLightSource) { m_isLightSource = isLightSource; }
 
+		// Used in the lighting engine
+		// 0 is opaque (and undefined behviour
+		// 1 is normal transparency
+		// 2 is a little bit more opaque, and so on
+		unsigned int getTransparency() const { return m_transparency; }
+		void setTransparency(unsigned int transparency) { m_transparency = transparency; }
+
 		const gk::Color &colorMultiplier() const { return m_colorMultiplier; }
 		void setColorMultiplier(const gk::Color &colorMultiplier) { m_colorMultiplier = colorMultiplier; }
 
@@ -124,8 +131,8 @@ class Block : public ISerializable {
 
 		BlockDrawType m_drawType = BlockDrawType::Solid;
 
+		unsigned int m_transparency = 1;
 		bool m_isOpaque = true;
-
 		bool m_isLightSource = false;
 
 		gk::Color m_colorMultiplier = gk::Color::White;
