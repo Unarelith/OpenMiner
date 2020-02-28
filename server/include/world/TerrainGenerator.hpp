@@ -44,6 +44,7 @@ class TerrainGenerator {
 	private:
 		void fastNoiseGeneration(ServerChunk &chunk) const;
 
+		void oreFloodFill(ServerChunk &chunk, double x, double y, double z, u16 toReplace, u16 replaceWith, int depth) const;
 		static float noise2d(double x, double y, int octaves, float persistence);
 		static float noise3d_abs(double x, double y, double z, int octaves, float persistence);
 
@@ -56,6 +57,7 @@ class TerrainGenerator {
 		u16 m_waterBlockID = 0;
 		u16 m_sandBlockID = 0;
 		u16 m_tallgrassBlockID = 0;
+		u16 m_oreIronBlockID = 0;
 };
 
 #endif // TERRAINGENERATOR_HPP_
