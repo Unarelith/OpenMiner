@@ -6,4 +6,5 @@
 	<texture name="toasts"           path="resources/textures/toasts.png" />
 	<texture name="widgets"          path="resources/textures/widgets.png" />
 	<texture name="workbench"        path="resources/textures/workbench.png" />
+	<texture name="player"           path="resources/textures/player.png" />
 </textures>

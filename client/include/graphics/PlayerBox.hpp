@@ -31,6 +31,7 @@
 #include <gk/gl/Drawable.hpp>
 #include <gk/gl/VertexBuffer.hpp>
 #include <gk/gl/Transformable.hpp>
+#include <gk/gl/Texture.hpp>
 
 #include "Player.hpp"
 
@@ -50,6 +51,8 @@ class PlayerBox : public gk::Drawable, public gk::Transformable, public Player {
 		gk::VertexBuffer m_vbo;
 
 		const gk::Camera &m_camera;
+
+		gk::Texture &m_texture;
 };
 
 #endif // PLAYERBOX_HPP_
