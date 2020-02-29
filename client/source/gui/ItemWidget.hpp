@@ -44,6 +44,9 @@ class ItemWidget : public Widget {
 		const ItemStack &stack() const { return m_inventory.getStack(m_x, m_y); }
 		void setStack(const std::string &name, unsigned int amount = 1);
 
+		unsigned int x() const { return m_x; }
+		unsigned int y() const { return m_y; }
+
 	protected:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 

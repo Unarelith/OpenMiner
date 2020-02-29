@@ -31,7 +31,7 @@
 
 class Recipe;
 
-class CraftingWidget : public Widget {
+class CraftingWidget : public AbstractInventoryWidget {
 	public:
 		CraftingWidget(ClientCommandHandler &client, Inventory &craftingInventory, Widget *parent = nullptr);
 
@@ -41,22 +41,26 @@ class CraftingWidget : public Widget {
 
 		void update() override;
 
+		void sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) override;
+		bool receiveItemStack(const ItemWidget *itemStack) override;
+
 		const ItemWidget *currentItemWidget() const { return m_craftingResultInventoryWidget.currentItemWidget() ? m_craftingResultInventoryWidget.currentItemWidget() : m_craftingInventoryWidget.currentItemWidget(); }
 
 		InventoryWidget &craftingInventoryWidget() { return m_craftingInventoryWidget; }
 		InventoryWidget &craftingResultInventoryWidget() { return m_craftingResultInventoryWidget; }
 
-	protected:
-		ClientCommandHandler &m_client;
-
-		Inventory &m_craftingInventory;
-		InventoryWidget m_craftingInventoryWidget{m_client, this};
-
-		Inventory m_craftingResultInventory{1, 1};
-		InventoryWidget m_craftingResultInventoryWidget{m_client, this};
-
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		ClientCommandHandler &m_client;
+
+		InventoryWidget *m_currentInventoryWidget = nullptr;
+
+		Inventory &m_craftingInventory;
+		InventoryWidget m_craftingInventoryWidget{m_client};
+
+		Inventory m_craftingResultInventory{1, 1};
+		InventoryWidget m_craftingResultInventoryWidget{m_client};
 
 		const Recipe *m_recipe = nullptr;
 };

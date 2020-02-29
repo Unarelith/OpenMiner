@@ -24,34 +24,23 @@
  *
  * =====================================================================================
  */
-#ifndef GK_GAMEKEY_HPP_
-#define GK_GAMEKEY_HPP_
+#ifndef ABSTRACTINVENTORYWIDGET_HPP_
+#define ABSTRACTINVENTORYWIDGET_HPP_
 
-namespace GameKey {
-	enum {
-		Undefined = -1,
+#include "ItemWidget.hpp"
 
-		Left,
-		Right,
-		Up,
-		Down,
+class AbstractInventoryWidget : public Widget {
+	public:
+		AbstractInventoryWidget(Widget *parent) : Widget(parent) {}
 
-		Jump,
-		Fly,
-		Sneak,
-		Sprint,
+		virtual void sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) = 0;
+		virtual bool receiveItemStack(const ItemWidget *itemStack) = 0;
 
-		Dig,
-		Use,
+		const std::string &shiftDestination() const { return m_shiftDestination; }
+		void setShiftDestination(const std::string &shiftDestination) { m_shiftDestination = shiftDestination; }
 
-		Inventory,
-		CreativeWindow,
+	private:
+		std::string m_shiftDestination;
+};
 
-		Chat,
-		Command,
-
-		Shift,
-	};
-}
-
-#endif // GK_GAMEKEY_HPP_
+#endif // ABSTRACTINVENTORYWIDGET_HPP_

@@ -32,19 +32,25 @@ void Inventory::setStack(u16 x, u16 y, const std::string &stringID, u16 amount) 
 	m_hasChanged = true;
 }
 
-void Inventory::addStack(const std::string &stringID, u16 amount) {
+bool Inventory::addStack(const std::string &stringID, u16 amount) {
 	for (std::size_t i = 0 ; i < m_items.size() ; ++i) {
 		if (m_items[i].item().id() == 0) {
 			m_items[i] = ItemStack(stringID, amount);
 			m_hasChanged = true;
-			break;
+			return true;
 		}
 		else if (m_items[i].item().stringID() == stringID) {
 			m_items[i] = ItemStack(stringID, m_items[i].amount() + amount);
 			m_hasChanged = true;
-			break;
+			return true;
 		}
 	}
+
+	return false;
+}
+
+void Inventory::clearStack(u16 x, u16 y) {
+	setStack(x, y, "_:air", 0);
 }
 
 void Inventory::serialize(sf::Packet &packet) const {

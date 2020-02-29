@@ -53,6 +53,8 @@ mod:block {
 			size = {x = 9, y = 3},
 			offset = 9,
 			count = 9 * 3,
+
+			shift_destination = "inv_crafting",
 		}
 
 		gui:inventory {
@@ -65,6 +67,8 @@ mod:block {
 			size = {x = 9, y = 1},
 			offset = 0,
 			count = 9,
+
+			shift_destination = "inv_crafting",
 		}
 
 		gui:crafting {
@@ -74,6 +78,8 @@ mod:block {
 
 			inventory = "block",
 			block = {x = pos.x, y = pos.y, z = pos.z},
+
+			shift_destination = "inv_main",
 		}
 
 		gui:image {

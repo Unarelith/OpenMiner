@@ -45,7 +45,7 @@ class Widget : public gk::Drawable, public gk::Transformable {
 
 		gk::FloatRect getGlobalBounds() const;
 
-		const Widget *parent() { return m_parent; }
+		const Widget *parent() const { return m_parent; }
 		void setParent(Widget *parent) { m_parent = parent; }
 
 		unsigned int width() const { return m_width; }

@@ -70,7 +70,7 @@ class ClientWorld : public World, public gk::Drawable {
 		ClientCommandHandler *m_client = nullptr;
 		gk::Camera *m_camera = nullptr;
 
-		mutable float m_ud = 1000;
+		mutable float m_ud = 1000000.0;
 		mutable s32 m_ux;
 		mutable s32 m_uy;
 		mutable s32 m_uz;

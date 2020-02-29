@@ -28,21 +28,24 @@
 #include "Registry.hpp"
 
 CraftingWidget::CraftingWidget(ClientCommandHandler &client, Inventory &craftingInventory, Widget *parent)
-	: Widget(parent), m_client(client), m_craftingInventory(craftingInventory)
+	: AbstractInventoryWidget(parent), m_client(client), m_craftingInventory(craftingInventory)
 {
 }
 
 void CraftingWidget::init(unsigned int offset, unsigned int size) {
 	m_craftingInventoryWidget.init(m_craftingInventory, offset, size * size);
-	// m_craftingInventoryWidget.setPosition(29, 16, 0);
-
 	m_craftingResultInventoryWidget.init(m_craftingResultInventory);
-	// m_craftingResultInventoryWidget.setPosition(123, 34, 0);
+
+	m_craftingInventoryWidget.setParent(this);
+	m_craftingResultInventoryWidget.setParent(this);
 }
 
 void CraftingWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget) {
 	m_craftingInventoryWidget.onMouseEvent(event, mouseItemWidget);
 	m_craftingResultInventoryWidget.onMouseEvent(event, mouseItemWidget, true);
+
+	m_currentInventoryWidget = m_craftingResultInventoryWidget.currentItemWidget()
+		? &m_craftingResultInventoryWidget : &m_craftingInventoryWidget;
 
 	if (m_recipe && !m_craftingResultInventory.getStack(0, 0).item().id()) {
 		for (u8 x = 0 ; x < m_craftingInventory.width() ; ++x) {
@@ -75,6 +78,25 @@ void CraftingWidget::update() {
 
 		m_craftingResultInventoryWidget.init(m_craftingResultInventory);
 	}
+}
+
+void CraftingWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) {
+	if (m_currentInventoryWidget && dest->receiveItemStack(itemStack)) {
+		m_currentInventoryWidget->inventory()->clearStack(itemStack->x(), itemStack->y());
+		m_currentInventoryWidget->update();
+		m_currentInventoryWidget->sendUpdatePacket();
+	}
+}
+
+bool CraftingWidget::receiveItemStack(const ItemWidget *itemStack) {
+	bool stackAdded = m_craftingInventory.addStack(itemStack->stack().item().stringID(), itemStack->stack().amount());
+
+	if (stackAdded) {
+		m_craftingInventoryWidget.update();
+		m_craftingInventoryWidget.sendUpdatePacket();
+	}
+
+	return stackAdded;
 }
 
 void CraftingWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {

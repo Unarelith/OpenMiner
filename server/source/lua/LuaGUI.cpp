@@ -116,6 +116,8 @@ void LuaGUI::addInventoryWidget(const sol::table &table) {
 		DEBUG("ERROR: Inventory source '" + inventory + "' is not valid");
 	}
 
+	std::string shiftDestination = table["shift_destination"].get_or<std::string>("");
+
 	u16 offset = table["offset"].get<u16>();
 	u16 count = table["count"].get<u16>();
 
@@ -136,6 +138,7 @@ void LuaGUI::addInventoryWidget(const sol::table &table) {
 	inv.player = player;
 	inv.inventory_name = inventory_name;
 	inv.block = block;
+	inv.shiftDestination = shiftDestination;
 	inv.width = width;
 	inv.height = height;
 	inv.offset = offset;
@@ -174,6 +177,8 @@ void LuaGUI::addCraftingWidget(const sol::table &table) {
 		DEBUG("ERROR: Inventory source '" + inventory + "' is not valid");
 	}
 
+	std::string shiftDestination = table["shift_destination"].get_or<std::string>("");
+
 	s32 resultX = 0, resultY = 0;
 	sol::optional<sol::table> resultPosTable = table["result_pos"];
 	if (resultPosTable != sol::nullopt) {
@@ -191,6 +196,7 @@ void LuaGUI::addCraftingWidget(const sol::table &table) {
 	craftingWidget.block = block;
 	craftingWidget.offset = offset;
 	craftingWidget.size = size;
+	craftingWidget.shiftDestination = shiftDestination;
 	craftingWidget.resultX = resultX;
 	craftingWidget.resultY = resultY;
 }
@@ -290,13 +296,13 @@ void LuaGUI::show(Client &client) {
 	for (auto &it : m_data.inventoryWidgetList)
 		packet << u8(LuaWidget::InventoryWidget) << it.name << it.x << it.y
 			<< it.inventory << it.player << it.inventory_name
-			<< it.block.x << it.block.y << it.block.z
+			<< it.block.x << it.block.y << it.block.z << it.shiftDestination
 			<< it.width << it.height << it.offset << it.count;
 
 	for (auto &it : m_data.craftingWidgetList)
 		packet << u8(LuaWidget::CraftingWidget) << it.name << it.x << it.y << it.inventory
 			<< it.block.x << it.block.y << it.block.z << it.offset << it.size
-			<< it.resultX << it.resultY;
+			<< it.shiftDestination << it.resultX << it.resultY;
 
 	for (auto &it : m_data.progressBarWidgetList)
 		packet << u8(LuaWidget::ProgressBarWidget) << it.name << it.x << it.y << it.type

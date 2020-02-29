@@ -84,6 +84,8 @@ mod:block {
 			size = {x = 1, y = 1},
 			offset = 0,
 			count = 1,
+
+			shift_destination = "inv_main",
 		}
 
 		gui:inventory {
@@ -96,6 +98,8 @@ mod:block {
 			size = {x = 1, y = 1},
 			offset = 1,
 			count = 1,
+
+			shift_destination = "inv_main",
 		}
 
 		gui:inventory {
@@ -108,6 +112,8 @@ mod:block {
 			size = {x = 1, y = 1},
 			offset = 2,
 			count = 1,
+
+			shift_destination = "inv_main",
 		}
 
 		gui:inventory {
@@ -121,6 +127,8 @@ mod:block {
 			size = {x = 9, y = 3},
 			offset = 9,
 			count = 9 * 3,
+
+			shift_destination = "inv_input",
 		}
 
 		gui:inventory {
@@ -134,6 +142,8 @@ mod:block {
 			size = {x = 9, y = 1},
 			offset = 0,
 			count = 9,
+
+			shift_destination = "inv_input",
 		}
 
 		gui:image {

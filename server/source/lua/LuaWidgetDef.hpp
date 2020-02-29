@@ -60,6 +60,8 @@ struct InventoryWidget : public Widget {
 
 	gk::Vector3i block; // inventory == "block"
 
+	std::string shiftDestination;
+
 	u16 width = 0;
 	u16 height = 0;
 
@@ -74,6 +76,8 @@ struct CraftingWidget : public Widget {
 
 	u16 offset = 0; // inventory == "block"
 	u16 size = 3; // inventory == "temp" or "block"
+
+	std::string shiftDestination;
 
 	s32 resultX = 0;
 	s32 resultY = 0;

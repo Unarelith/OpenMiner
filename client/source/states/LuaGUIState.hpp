@@ -64,9 +64,10 @@ class LuaGUIState : public InterfaceState {
 		Widget m_mainWidget;
 
 		MouseItemWidget m_mouseItemWidget{&m_mainWidget};
+		AbstractInventoryWidget *m_currentInventoryWidget = nullptr;
 
-		std::deque<CraftingWidget> m_craftingWidgets;
-		std::deque<InventoryWidget> m_inventoryWidgets;
+		std::unordered_map<std::string, CraftingWidget> m_craftingWidgets;
+		std::unordered_map<std::string, InventoryWidget> m_inventoryWidgets;
 		std::vector<std::unique_ptr<Widget>> m_widgets;
 		std::vector<std::unique_ptr<gk::Drawable>> m_drawables;
 		std::unordered_map<std::string, Inventory> m_inventories;

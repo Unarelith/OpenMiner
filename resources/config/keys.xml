@@ -18,4 +18,6 @@
 
 	<key name="Chat"           scancode="T" />
 	<key name="Command"        scancode="Keypad /" />
+
+	<key name="Shift"          scancode="Left Shift" />
 </keys>

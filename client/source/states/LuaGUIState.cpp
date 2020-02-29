@@ -28,12 +28,14 @@
 
 #include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/Debug.hpp>
+#include <gk/core/input/GamePad.hpp>
 #include <gk/core/Mouse.hpp>
 #include <gk/graphics/Color.hpp>
 
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "Config.hpp"
+#include "GameKey.hpp"
 #include "InventoryWidget.hpp"
 #include "LuaGUIState.hpp"
 #include "LuaWidget.hpp"
@@ -69,13 +71,37 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 	for (auto &it : m_widgets)
 		it->onEvent(event);
 
-	for (auto &it : m_inventoryWidgets)
-		it.onMouseEvent(event, m_mouseItemWidget, false);
+	if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT
+	 && m_currentInventoryWidget && !m_currentInventoryWidget->shiftDestination().empty()
+	 && m_mouseItemWidget.currentItemWidget() && gk::GamePad::isKeyPressed(GameKey::Shift)) {
+		AbstractInventoryWidget *dest = nullptr;
 
-	for (auto &it : m_craftingWidgets)
-		it.onMouseEvent(event, m_mouseItemWidget);
+		auto it = m_craftingWidgets.find(m_currentInventoryWidget->shiftDestination());
+		if (it != m_craftingWidgets.end())
+			dest = &it->second;
 
-	m_mouseItemWidget.onEvent(event);
+		if (!dest) {
+			auto it = m_inventoryWidgets.find(m_currentInventoryWidget->shiftDestination());
+			if (it != m_inventoryWidgets.end())
+				dest = &it->second;
+		}
+
+		if (!dest) {
+			DEBUG("ERROR: Destination not found: '" + m_currentInventoryWidget->shiftDestination() + "'");
+			return;
+		}
+
+		m_currentInventoryWidget->sendItemStackToDest(m_mouseItemWidget.currentItemWidget(), dest);
+	}
+	else {
+		for (auto &it : m_inventoryWidgets)
+			it.second.onMouseEvent(event, m_mouseItemWidget, false);
+
+		for (auto &it : m_craftingWidgets)
+			it.second.onMouseEvent(event, m_mouseItemWidget);
+
+		m_mouseItemWidget.onEvent(event);
+	}
 }
 
 void LuaGUIState::update() {
@@ -85,21 +111,24 @@ void LuaGUIState::update() {
 		it->update();
 
 	for (auto &it : m_craftingWidgets) {
-		it.update();
+		it.second.update();
 	}
 
 	for (auto &it : m_inventoryWidgets) {
-		it.update();
+		it.second.update();
 	}
 
 	const ItemWidget *currentItemWidget = nullptr;
+	m_currentInventoryWidget = nullptr;
 	for (auto &it : m_inventoryWidgets) {
-		if (!currentItemWidget)
-			currentItemWidget = it.currentItemWidget();
+		if (!currentItemWidget && ((currentItemWidget = it.second.currentItemWidget()))) {
+			m_currentInventoryWidget = &it.second;
+		}
 	}
 	for (auto &it : m_craftingWidgets) {
-		if (!currentItemWidget)
-			currentItemWidget = it.currentItemWidget();
+		if (!currentItemWidget && ((currentItemWidget = it.second.currentItemWidget()))) {
+			m_currentInventoryWidget = &it.second;
+		}
 	}
 
 	m_mouseItemWidget.updateCurrentItem(currentItemWidget);
@@ -121,10 +150,10 @@ void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		target.draw(*it, states);
 
 	for (auto &it : m_inventoryWidgets)
-		target.draw(it, states);
+		target.draw(it.second, states);
 
 	for (auto &it : m_craftingWidgets)
-		target.draw(it, states);
+		target.draw(it.second, states);
 
 	target.draw(m_mouseItemWidget, states);
 }
@@ -175,12 +204,12 @@ void LuaGUIState::loadTextButton(const std::string &, s32 x, s32 y, sf::Packet &
 }
 
 void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet) {
-	std::string inventory, playerName, inventory_name;
+	std::string inventory, playerName, inventory_name, shiftDestination;
 	gk::Vector3i block;
 	u16 width, height;
 	u16 offset, count;
 	packet >> inventory >> playerName >> inventory_name
-		>> block.x >> block.y >> block.z
+		>> block.x >> block.y >> block.z >> shiftDestination
 		>> width >> height >> offset >> count;
 
 	Inventory *widgetInventory = nullptr;
@@ -211,23 +240,25 @@ void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf:
 	}
 
 	if (widgetInventory) {
-		m_inventoryWidgets.emplace_back(m_client, &m_mainWidget);
+		m_inventoryWidgets.emplace(name, InventoryWidget{m_client, &m_mainWidget});
 
-		auto &inventoryWidget = m_inventoryWidgets.back();
+		auto &inventoryWidget = m_inventoryWidgets.at(name);
 		inventoryWidget.setPosition(x, y);
 		inventoryWidget.init(*widgetInventory, offset, count);
+		inventoryWidget.setShiftDestination(shiftDestination);
 	}
 	else {
 		DEBUG("ERROR: Inventory widget '" + name + "' is invalid");
 	}
 }
 
-void LuaGUIState::loadCraftingWidget(const std::string &, s32 x, s32 y, sf::Packet &packet) {
-	std::string inventory;
+void LuaGUIState::loadCraftingWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet) {
+	std::string inventory, shiftDestination;
 	gk::Vector3i block;
 	u16 offset, size;
 	s32 resultX, resultY;
-	packet >> inventory >> block.x >> block.y >> block.z >> offset >> size >> resultX >> resultY;
+	packet >> inventory >> block.x >> block.y >> block.z >> offset >> size
+		>> shiftDestination >> resultX >> resultY;
 
 	Inventory *craftingInventory = nullptr;
 	if (inventory == "block") {
@@ -245,12 +276,13 @@ void LuaGUIState::loadCraftingWidget(const std::string &, s32 x, s32 y, sf::Pack
 	}
 
 	if (craftingInventory) {
-		m_craftingWidgets.emplace_back(m_client, *craftingInventory, &m_mainWidget);
+		m_craftingWidgets.emplace(name, CraftingWidget{m_client, *craftingInventory, &m_mainWidget});
 
-		auto &craftingWidget = m_craftingWidgets.back();
+		auto &craftingWidget = m_craftingWidgets.at(name);
 		craftingWidget.init(offset, size);
 		craftingWidget.craftingInventoryWidget().setPosition(x, y);
 		craftingWidget.craftingResultInventoryWidget().setPosition(resultX, resultY);
+		craftingWidget.setShiftDestination(shiftDestination);
 	}
 	else {
 		DEBUG("ERROR: Crafting inventory is invalid");

@@ -83,6 +83,23 @@ void InventoryWidget::update() {
 		it.update();
 }
 
+void InventoryWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) {
+	if (dest->receiveItemStack(itemStack)) {
+		m_inventory->clearStack(itemStack->x(), itemStack->y());
+		update();
+		sendUpdatePacket();
+	}
+}
+
+bool InventoryWidget::receiveItemStack(const ItemWidget *itemStack) {
+	bool stackAdded = m_inventory->addStack(itemStack->stack().item().stringID(), itemStack->stack().amount());
+
+	if (stackAdded)
+		sendUpdatePacket();
+
+	return stackAdded;
+}
+
 void InventoryWidget::sendUpdatePacket() {
 	if (m_inventory->inBlock()) {
 		m_client.sendBlockInvUpdate(*m_inventory);

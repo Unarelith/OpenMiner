@@ -29,14 +29,15 @@
 
 #include <gk/graphics/RectangleShape.hpp>
 
+#include "AbstractInventoryWidget.hpp"
 #include "MouseItemWidget.hpp"
 
 class ClientCommandHandler;
 
-class InventoryWidget : public Widget {
+class InventoryWidget : public AbstractInventoryWidget {
 	public:
 		InventoryWidget(ClientCommandHandler &client, Widget *parent = nullptr)
-			: Widget(parent), m_client(client) {}
+			: AbstractInventoryWidget(parent), m_client(client) {}
 
 		void init(Inventory &inventory, unsigned int offset = 0, unsigned int size = 0);
 
@@ -44,12 +45,17 @@ class InventoryWidget : public Widget {
 
 		void update() override;
 
+		void sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) override;
+		bool receiveItemStack(const ItemWidget *itemStack) override;
+
+		void sendUpdatePacket();
+
+		Inventory *inventory() { return m_inventory; }
+
 		const ItemWidget *currentItemWidget() const { return m_currentItemWidget; }
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		void sendUpdatePacket();
 
 		ClientCommandHandler &m_client;
 
