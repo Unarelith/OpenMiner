@@ -215,6 +215,292 @@ mod:crafting_recipe {
 	}
 }
 
+
+-- Gold Axe
+mod:crafting_recipe {
+	result = {
+		id = "default:golden_axe",
+		amount = 1
+	},
+
+	pattern = {
+		"##",
+		"#|",
+		" |"
+	},
+
+	keys = {
+		['#'] = "default:gold_ingot",
+		['|'] = "default:stick",
+	}
+}
+
+-- Gold Hoe
+mod:crafting_recipe {
+	result = {
+		id = "default:golden_hoe",
+		amount = 1
+	},
+
+	pattern = {
+		"##",
+		" |",
+		" |"
+	},
+
+	keys = {
+		['#'] = "default:gold_ingot",
+		['|'] = "default:stick",
+	}
+}
+
+-- Gold Pickaxe
+mod:crafting_recipe {
+	result = {
+		id = "default:golden_pickaxe",
+		amount = 1
+	},
+
+	pattern = {
+		"###",
+		" | ",
+		" | "
+	},
+
+	keys = {
+		['#'] = "default:gold_ingot",
+		['|'] = "default:stick",
+	}
+}
+
+-- Gold Shovel
+mod:crafting_recipe {
+	result = {
+		id = "default:golden_shovel",
+		amount = 1
+	},
+
+	pattern = {
+		"#",
+		"|",
+		"|"
+	},
+
+	keys = {
+		['#'] = "default:gold_ingot",
+		['|'] = "default:stick",
+	}
+}
+
+-- Gold Sword
+mod:crafting_recipe {
+	result = {
+		id = "default:golden_sword",
+		amount = 1
+	},
+
+	pattern = {
+		"#",
+		"#",
+		"|"
+	},
+
+	keys = {
+		['#'] = "default:gold_ingot",
+		['|'] = "default:stick",
+	}
+}
+
+-- Iron Axe
+mod:crafting_recipe {
+	result = {
+		id = "default:iron_axe",
+		amount = 1
+	},
+
+	pattern = {
+		"##",
+		"#|",
+		" |"
+	},
+
+	keys = {
+		['#'] = "default:iron_ingot",
+		['|'] = "default:stick",
+	}
+}
+
+-- Iron Hoe
+mod:crafting_recipe {
+	result = {
+		id = "default:iron_hoe",
+		amount = 1
+	},
+
+	pattern = {
+		"##",
+		" |",
+		" |"
+	},
+
+	keys = {
+		['#'] = "default:iron_ingot",
+		['|'] = "default:stick",
+	}
+}
+
+-- Iron Pickaxe
+mod:crafting_recipe {
+	result = {
+		id = "default:iron_pickaxe",
+		amount = 1
+	},
+
+	pattern = {
+		"###",
+		" | ",
+		" | "
+	},
+
+	keys = {
+		['#'] = "default:iron_ingot",
+		['|'] = "default:stick",
+	}
+}
+
+-- Iron Shovel
+mod:crafting_recipe {
+	result = {
+		id = "default:iron_shovel",
+		amount = 1
+	},
+
+	pattern = {
+		"#",
+		"|",
+		"|"
+	},
+
+	keys = {
+		['#'] = "default:iron_ingot",
+		['|'] = "default:stick",
+	}
+}
+
+-- Iron Sword
+mod:crafting_recipe {
+	result = {
+		id = "default:iron_sword",
+		amount = 1
+	},
+
+	pattern = {
+		"#",
+		"#",
+		"|"
+	},
+
+	keys = {
+		['#'] = "default:iron_ingot",
+		['|'] = "default:stick",
+	}
+}
+
+-- Diamond Axe
+mod:crafting_recipe {
+	result = {
+		id = "default:diamond_axe",
+		amount = 1
+	},
+
+	pattern = {
+		"##",
+		"#|",
+		" |"
+	},
+
+	keys = {
+		['#'] = "default:diamond",
+		['|'] = "default:stick",
+	}
+}
+
+-- Diamond Hoe
+mod:crafting_recipe {
+	result = {
+		id = "default:diamond_hoe",
+		amount = 1
+	},
+
+	pattern = {
+		"##",
+		" |",
+		" |"
+	},
+
+	keys = {
+		['#'] = "default:diamond",
+		['|'] = "default:stick",
+	}
+}
+
+-- Diamond Pickaxe
+mod:crafting_recipe {
+	result = {
+		id = "default:diamond_pickaxe",
+		amount = 1
+	},
+
+	pattern = {
+		"###",
+		" | ",
+		" | "
+	},
+
+	keys = {
+		['#'] = "default:diamond",
+		['|'] = "default:stick",
+	}
+}
+
+-- Diamond Shovel
+mod:crafting_recipe {
+	result = {
+		id = "default:diamond_shovel",
+		amount = 1
+	},
+
+	pattern = {
+		"#",
+		"|",
+		"|"
+	},
+
+	keys = {
+		['#'] = "default:diamond",
+		['|'] = "default:stick",
+	}
+}
+
+-- Diamond Sword
+mod:crafting_recipe {
+	result = {
+		id = "default:diamond_sword",
+		amount = 1
+	},
+
+	pattern = {
+		"#",
+		"#",
+		"|"
+	},
+
+	keys = {
+		['#'] = "default:diamond",
+		['|'] = "default:stick",
+	}
+}
+
 -- Stick
 mod:crafting_recipe {
 	result = {
