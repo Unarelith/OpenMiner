@@ -50,6 +50,7 @@ void TerrainGenerator::setBlocksFromLuaTable(const sol::table &table) {
 	m_waterBlockID     = Registry::getInstance().getBlockFromStringID(table["water"].get<std::string>()).id();
 	m_sandBlockID      = Registry::getInstance().getBlockFromStringID(table["sand"].get<std::string>()).id();
 	m_tallgrassBlockID = Registry::getInstance().getBlockFromStringID(table["tallgrass"].get<std::string>()).id();
+	m_ironOreBlockID   = Registry::getInstance().getBlockFromStringID(table["iron_ore"].get<std::string>()).id();
 }
 
 void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
@@ -119,6 +120,8 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 						chunk.setBlockRaw(x, y, z, m_sandBlockID);
 					else if (z + chunk.z() * CHUNK_HEIGHT > h - 3)
 						chunk.setBlockRaw(x, y, z, m_dirtBlockID);
+					else if ((rand() % 4096) == 0)
+						oreFloodFill(chunk, x, y, z, m_stoneBlockID, m_ironOreBlockID, 2);
 					else
 						chunk.setBlockRaw(x, y, z, m_stoneBlockID);
 
@@ -143,6 +146,37 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 			}
 		}
 	}
+}
+
+void TerrainGenerator::oreFloodFill(ServerChunk &chunk, double x, double y, double z, u16 toReplace, u16 replaceWith, int depth) const {
+	if (depth < 0) return;
+	if (chunk.getBlock(x, y, z) == replaceWith) return;
+	if (chunk.getBlock(x, y, z) == toReplace)
+		chunk.setBlockRaw(x, y, z, replaceWith);
+
+	oreFloodFill(chunk, x + 1, y, z, toReplace, replaceWith, depth - 1);
+	oreFloodFill(chunk, x - 1, y, z, toReplace, replaceWith, depth - 1);
+	oreFloodFill(chunk, x, y + 1, z, toReplace, replaceWith, depth - 1);
+	oreFloodFill(chunk, x, y - 1, z, toReplace, replaceWith, depth - 1);
+	oreFloodFill(chunk, x, y, z + 1, toReplace, replaceWith, depth - 1);
+	oreFloodFill(chunk, x, y, z - 1, toReplace, replaceWith, depth - 1);
+
+	if (rand() % 15 == 0)
+		oreFloodFill(chunk, x + 1, y + 1, z + 1, toReplace, replaceWith, depth - 1);
+	if (rand() % 15 == 0)
+		oreFloodFill(chunk, x + 1, y + 1, z - 1, toReplace, replaceWith, depth - 1);
+	if (rand() % 15 == 0)
+		oreFloodFill(chunk, x + 1, y - 1, z + 1, toReplace, replaceWith, depth - 1);
+	if (rand() % 15 == 0)
+		oreFloodFill(chunk, x + 1, y - 1, z - 1, toReplace, replaceWith, depth - 1);
+	if (rand() % 15 == 0)
+		oreFloodFill(chunk, x - 1, y + 1, z + 1, toReplace, replaceWith, depth - 1);
+	if (rand() % 15 == 0)
+		oreFloodFill(chunk, x - 1, y + 1, z - 1, toReplace, replaceWith, depth - 1);
+	if (rand() % 15 == 0)
+		oreFloodFill(chunk, x - 1, y - 1, z + 1, toReplace, replaceWith, depth - 1);
+	if (rand() % 15 == 0)
+		oreFloodFill(chunk, x - 1, y - 1, z - 1, toReplace, replaceWith, depth - 1);
 }
 
 float TerrainGenerator::noise2d(double x, double y, int octaves, float persistence) {
@@ -172,4 +206,3 @@ float TerrainGenerator::noise3d_abs(double x, double y, double z, int octaves, f
 
 	return sum;
 }
-
