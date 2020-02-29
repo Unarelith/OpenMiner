@@ -29,6 +29,7 @@
 
 #include <list>
 
+#include "Inventory.hpp"
 #include "LuaWidgetDef.hpp"
 #include "ServerInfo.hpp"
 
@@ -38,6 +39,7 @@ struct LuaGUIData {
 	std::list<LuaWidgetDef::InventoryWidget> inventoryWidgetList;
 	std::list<LuaWidgetDef::CraftingWidget> craftingWidgetList;
 	std::list<LuaWidgetDef::ProgressBarWidget> progressBarWidgetList;
+	std::list<Inventory> inventoryList;
 };
 
 // This class is meant to be used ONLY in Lua
@@ -48,6 +50,7 @@ class LuaGUI {
 		void addInventoryWidget(const sol::table &table);
 		void addCraftingWidget(const sol::table &table);
 		void addProgressBarWidget(const sol::table &table);
+		void addInventory(const sol::table &table);
 
 		void show(Client &client);
 

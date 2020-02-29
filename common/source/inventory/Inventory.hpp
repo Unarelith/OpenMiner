@@ -37,8 +37,8 @@
 class Inventory : public ISerializable {
 	public:
 		Inventory() = default;
-		Inventory(u16 width, u16 height)
-			: m_width(width), m_height(height) { m_items.resize(width * height); }
+		Inventory(u16 width, u16 height, const std::string &name = "")
+			: m_name(name), m_width(width), m_height(height) { m_items.resize(width * height); }
 
 		const ItemStack &getStack(u16 x, u16 y) const { return m_items.at(x + y * m_width); }
 		ItemStack &getStackRef(u16 x, u16 y) { return m_items.at(x + y * m_width); }
@@ -47,6 +47,8 @@ class Inventory : public ISerializable {
 
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
+
+		const std::string &name() const { return m_name; }
 
 		u16 width() const { return m_width; }
 		u16 height() const { return m_height; }
@@ -63,7 +65,12 @@ class Inventory : public ISerializable {
 		bool hasChanged() const { return m_hasChanged; }
 		void setChanged(bool hasChanged) { m_hasChanged = hasChanged; }
 
+		bool isUnlimited() const { return m_isUnlimited; }
+		void setUnlimited(bool isUnlimited) { m_isUnlimited = isUnlimited; }
+
 	private:
+		std::string m_name;
+
 		u16 m_width = 0;
 		u16 m_height = 0;
 
@@ -73,6 +80,7 @@ class Inventory : public ISerializable {
 		gk::Vector3i m_blockPos{0, 0, 0};
 
 		bool m_hasChanged = false; // Used to send inventory update packets
+		bool m_isUnlimited = false;
 };
 
 #endif // INVENTORY_HPP_

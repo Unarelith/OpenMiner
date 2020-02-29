@@ -45,6 +45,8 @@ namespace GameKey {
 		Use,
 
 		Inventory,
+		CreativeWindow,
+
 		Chat,
 		Command,
 	};

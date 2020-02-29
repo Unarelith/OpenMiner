@@ -48,8 +48,11 @@ void Inventory::addStack(const std::string &stringID, u16 amount) {
 }
 
 void Inventory::serialize(sf::Packet &packet) const {
-	packet << m_width << m_height << u8(m_inBlock)
-		<< s32(m_blockPos.x) << s32(m_blockPos.y) << s32(m_blockPos.z);
+	packet << m_width << m_height << m_name << u8(m_inBlock)
+		<< s32(m_blockPos.x) << s32(m_blockPos.y) << s32(m_blockPos.z)
+		<< m_isUnlimited;
+
+	packet << u16(m_items.size());
 
 	int i = 0;
 	for (auto &it : m_items) {
@@ -62,19 +65,24 @@ void Inventory::serialize(sf::Packet &packet) const {
 void Inventory::deserialize(sf::Packet &packet) {
 	u8 inBlock;
 	s32 bx, by, bz;
-	packet >> m_width >> m_height >> inBlock >> bx >> by >> bz;
+	packet >> m_width >> m_height >> m_name >> inBlock >> bx >> by >> bz >> m_isUnlimited;
+
 	m_inBlock = inBlock;
 	m_blockPos = gk::Vector3i{bx, by, bz};
 
 	if (m_items.size() != m_width * m_height)
 		m_items.resize(m_width * m_height);
 
+	u16 itemListSize, i = 0;
+	packet >> itemListSize;
+
 	std::string name;
 	u16 amount;
 	u8 x, y;
-	while (!packet.endOfPacket()) {
+	while (i < itemListSize) {
 		packet >> name >> amount >> x >> y;
 		setStack(x, y, name, amount);
+		++i;
 	}
 }
 

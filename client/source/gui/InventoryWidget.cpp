@@ -59,13 +59,19 @@ void InventoryWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mous
 		}
 	}
 	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && m_currentItemWidget) {
-		mouseItemWidget.swapItems(*m_currentItemWidget, isReadOnly);
+		if (m_inventory && !m_inventory->isUnlimited())
+			mouseItemWidget.swapItems(*m_currentItemWidget, isReadOnly);
+		else if (m_inventory && mouseItemWidget.getStack().amount() == 0 && m_currentItemWidget->stack().amount() != 0)
+			mouseItemWidget.setStack(m_currentItemWidget->stack().item().stringID(), 64);
 
 		sendUpdatePacket();
 	}
 	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT && m_currentItemWidget) {
 		if (!isReadOnly) {
-			mouseItemWidget.putItem(*m_currentItemWidget);
+			if (m_inventory && !m_inventory->isUnlimited())
+				mouseItemWidget.putItem(*m_currentItemWidget);
+			else if (m_inventory && mouseItemWidget.getStack().amount() == 0 && m_currentItemWidget->stack().amount() != 0)
+				mouseItemWidget.setStack(m_currentItemWidget->stack().item().stringID(), 1);
 
 			sendUpdatePacket();
 		}

@@ -132,8 +132,11 @@ void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 void LuaGUIState::loadGUI(sf::Packet &packet) {
 	u8 type;
 	std::string name;
+	packet >> type >> name;
+
 	s32 x, y;
-	packet >> type >> name >> x >> y;
+	if (type != LuaWidget::Inventory)
+		packet >> x >> y;
 
 	if (type == LuaWidget::Image)
 		loadImage(name, x, y, packet);
@@ -145,6 +148,8 @@ void LuaGUIState::loadGUI(sf::Packet &packet) {
 		loadProgressBarWidget(name, x, y, packet);
 	else if (type == LuaWidget::CraftingWidget)
 		loadCraftingWidget(name, x, y, packet);
+	else if (type == LuaWidget::Inventory)
+		loadInventory(name, packet);
 }
 
 void LuaGUIState::loadImage(const std::string &, s32 x, s32 y, sf::Packet &packet) {
@@ -169,10 +174,10 @@ void LuaGUIState::loadTextButton(const std::string &, s32 x, s32 y, sf::Packet &
 	m_widgets.emplace_back(button);
 }
 
-void LuaGUIState::loadInventoryWidget(const std::string &, s32 x, s32 y, sf::Packet &packet) {
+void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet) {
 	std::string inventory, playerName, inventory_name;
 	gk::Vector3i block;
-	float width, height;
+	u16 width, height;
 	u16 offset, count;
 	packet >> inventory >> playerName >> inventory_name
 		>> block.x >> block.y >> block.z
@@ -191,6 +196,19 @@ void LuaGUIState::loadInventoryWidget(const std::string &, s32 x, s32 y, sf::Pac
 
 		widgetInventory = &data->inventory;
 	}
+	else if (inventory == "temp") {
+		if (inventory_name.empty()) {
+			m_inventories.emplace("_temp", Inventory{width, height});
+			widgetInventory = &m_inventories.at("_temp");
+		}
+		else {
+			auto it = m_inventories.find(inventory_name);
+			if (it == m_inventories.end())
+				DEBUG("ERROR: Unable to find inventory '" + inventory_name + "' for widget '" + name + "'");
+
+			widgetInventory = &it->second;
+		}
+	}
 
 	if (widgetInventory) {
 		m_inventoryWidgets.emplace_back(m_client, &m_mainWidget);
@@ -200,7 +218,7 @@ void LuaGUIState::loadInventoryWidget(const std::string &, s32 x, s32 y, sf::Pac
 		inventoryWidget.init(*widgetInventory, offset, count);
 	}
 	else {
-		DEBUG("ERROR: Widget inventory is invalid");
+		DEBUG("ERROR: Inventory widget '" + name + "' is invalid");
 	}
 }
 
@@ -216,14 +234,14 @@ void LuaGUIState::loadCraftingWidget(const std::string &, s32 x, s32 y, sf::Pack
 		BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
 		if (!data) {
 			DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
-			return;
 		}
-
-		craftingInventory = &data->inventory;
+		else {
+			craftingInventory = &data->inventory;
+		}
 	}
 	else if (inventory == "temp") {
-		craftingInventory = &m_inventory;
-		m_inventory.resize(size, size);
+		m_inventories.emplace("_temp", Inventory{size, size});
+		craftingInventory = &m_inventories.at("_temp");
 	}
 
 	if (craftingInventory) {
@@ -262,5 +280,11 @@ void LuaGUIState::loadProgressBarWidget(const std::string &, s32 x, s32 y, sf::P
 		widget->init(clipRect, gk::Vector2i{x, y}, meta, maxValue);
 
 	m_widgets.emplace_back(widget);
+}
+
+void LuaGUIState::loadInventory(const std::string &name, sf::Packet &packet) {
+	m_inventories.emplace(name, Inventory{});
+
+	packet >> m_inventories.at(name);
 }
 

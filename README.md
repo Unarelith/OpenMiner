@@ -24,6 +24,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 
 - Movement: <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
 - Inventory: <kbd>E</kbd>
+- Creative window: <kbd>H</kbd>
 - Chat: <kbd>T</kbd>
 - Jump: <kbd>Space</kbd>
 - Sprint: <kbd>Ctrl</kbd>

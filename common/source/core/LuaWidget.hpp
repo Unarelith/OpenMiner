@@ -36,6 +36,7 @@ namespace LuaWidget {
 		InventoryWidget   = 2,
 		CraftingWidget    = 3,
 		ProgressBarWidget = 4,
+		Inventory         = 5,
 	};
 }
 

@@ -175,6 +175,14 @@ void ServerCommandHandler::setupCallbacks() {
 		m_scriptEngine.lua()["show_inventory"](client, screenWidth, screenHeight, guiScale);
 	});
 
+	m_server.setCommandCallback(Network::Command::PlayerCreativeWindow, [this](Client &client, sf::Packet &packet) {
+		u16 screenWidth, screenHeight;
+		u8 guiScale;
+		packet >> screenWidth >> screenHeight >> guiScale;
+
+		m_scriptEngine.lua()["show_creative_window"](client, screenWidth, screenHeight, guiScale);
+	});
+
 	m_server.setCommandCallback(Network::Command::BlockActivated, [this](Client &client, sf::Packet &packet) {
 		s32 x, y, z;
 		u16 screenWidth, screenHeight;

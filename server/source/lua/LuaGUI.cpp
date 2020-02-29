@@ -29,6 +29,7 @@
 #include "LuaGUI.hpp"
 #include "LuaWidget.hpp"
 #include "Network.hpp"
+#include "Registry.hpp"
 
 void LuaGUI::addImage(const sol::table &table) {
 	// FIXME: Duplicated below
@@ -108,6 +109,9 @@ void LuaGUI::addInventoryWidget(const sol::table &table) {
 			block.z = blockTable.value()["z"];
 		}
 	}
+	else if (inventory == "temp") {
+		inventory_name = table["inventory_name"].get_or<std::string>("");
+	}
 	else {
 		DEBUG("ERROR: Inventory source '" + inventory + "' is not valid");
 	}
@@ -115,7 +119,7 @@ void LuaGUI::addInventoryWidget(const sol::table &table) {
 	u16 offset = table["offset"].get<u16>();
 	u16 count = table["count"].get<u16>();
 
-	float width = 0, height = 0;
+	u16 width = 0, height = 0;
 	sol::optional<sol::table> size = table["size"];
 	if (size != sol::nullopt) {
 		width = size.value()["x"];
@@ -246,9 +250,34 @@ void LuaGUI::addProgressBarWidget(const sol::table &table) {
 	progressBarWidget.clipRect = clipRect;
 }
 
+void LuaGUI::addInventory(const sol::table &table) {
+	std::string name = table["name"].get<std::string>();
+
+	u16 width = table["width"].get<u16>();
+	u16 height = table["height"].get<u16>();
+
+	m_data.inventoryList.emplace_back(width, height, name);
+
+	Inventory &inventory = m_data.inventoryList.back();
+	inventory.setUnlimited(table["is_unlimited"].get_or(false));
+
+	sol::optional<sol::table> itemsTable = table["items"];
+	if (itemsTable != sol::nullopt) {
+		for (auto &it : itemsTable.value()) {
+			std::string stringID = it.second.as<sol::table>()[1].get<std::string>();
+			u16 amount = it.second.as<sol::table>()[2].get_or<u16>(1);
+
+			inventory.addStack(stringID, amount);
+		}
+	}
+}
+
 void LuaGUI::show(Client &client) {
 	sf::Packet packet;
 	packet << Network::Command::BlockGUIData;
+
+	for (auto &it : m_data.inventoryList)
+		packet << u8(LuaWidget::Inventory) << it.name() << it;
 
 	for (auto &it : m_data.imageList)
 		packet << u8(LuaWidget::Image)
@@ -280,13 +309,14 @@ void LuaGUI::show(Client &client) {
 
 void LuaGUI::initUsertype(sol::state &lua) {
 	lua.new_usertype<LuaGUI>("LuaGUI",
-		"image",        &LuaGUI::addImage,
-		"button",       &LuaGUI::addTextButton,
-		"inventory",    &LuaGUI::addInventoryWidget,
-		"crafting",     &LuaGUI::addCraftingWidget,
-		"progress_bar", &LuaGUI::addProgressBarWidget,
+		"image",          &LuaGUI::addImage,
+		"button",         &LuaGUI::addTextButton,
+		"inventory",      &LuaGUI::addInventoryWidget,
+		"crafting",       &LuaGUI::addCraftingWidget,
+		"progress_bar",   &LuaGUI::addProgressBarWidget,
+		"inventory_data", &LuaGUI::addInventory,
 
-		"show",         &LuaGUI::show
+		"show",           &LuaGUI::show
 	);
 }
 

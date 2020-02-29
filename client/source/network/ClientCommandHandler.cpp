@@ -77,6 +77,13 @@ void ClientCommandHandler::sendPlayerInventoryRequest() {
 	m_client.send(packet);
 }
 
+void ClientCommandHandler::sendPlayerCreativeWindowRequest() {
+	sf::Packet packet;
+	packet << Network::Command::PlayerCreativeWindow
+		<< u16(Config::screenWidth) << u16(Config::screenHeight) << u8(Config::guiScale);
+	m_client.send(packet);
+}
+
 void ClientCommandHandler::sendBlockActivated(const glm::ivec4 &selectedBlock) {
 	sf::Packet packet;
 	packet << Network::Command::BlockActivated

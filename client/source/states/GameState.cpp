@@ -139,6 +139,9 @@ void GameState::update() {
 				if (gk::GamePad::isKeyPressedOnce(GameKey::Inventory)) {
 					m_clientCommandHandler.sendPlayerInventoryRequest();
 				}
+				else if (gk::GamePad::isKeyPressedOnce(GameKey::CreativeWindow)) {
+					m_clientCommandHandler.sendPlayerCreativeWindowRequest();
+				}
 			}
 
 			m_player.updatePosition(m_world);

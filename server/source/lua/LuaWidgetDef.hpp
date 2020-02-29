@@ -56,12 +56,12 @@ struct InventoryWidget : public Widget {
 	std::string inventory;
 
 	std::string player; // inventory == "player"
-	std::string inventory_name; // inventory == "player"
+	std::string inventory_name; // inventory == "player" || inventory == "temp"
 
 	gk::Vector3i block; // inventory == "block"
 
-	float width = 0;
-	float height = 0;
+	u16 width = 0;
+	u16 height = 0;
 
 	u16 offset = 0;
 	u16 count = 0;

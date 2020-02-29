@@ -122,3 +122,115 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 
 	gui:show(client)
 end
+
+function show_creative_window(client, screen_width, screen_height, gui_scale)
+	local gui = LuaGUI.new()
+
+	-- FIXME: Replace this by gui:set_size() and gui:set_centered()
+	local gui_pos = {
+		x = math.floor(screen_width / gui_scale / 2.0 - 195 / 2.0 + 0.5),
+		y = math.floor(screen_height / gui_scale / 2.0 - 136 / 2.0 + 0.5)
+	}
+
+	gui:image {
+		name = "img_background",
+		pos = gui_pos,
+
+		texture = "texture-creative_window",
+		clip = {x = 0, y = 0, width = 195, height = 136},
+	}
+
+	gui:inventory_data {
+		name = "inv_data",
+
+		width = 9,
+		height = 5,
+
+		items = {
+			-- Blocks
+			{"default:dirt"},
+			{"default:cobblestone"},
+			{"default:grass"},
+			{"default:leaves"},
+			{"default:wood"},
+			{"default:stone"},
+			{"default:sand"},
+			{"default:water"},
+			{"default:glass"},
+			{"default:coal_ore"},
+			{"default:planks"},
+			{"default:glowstone"},
+			{"default:workbench"},
+			{"default:furnace"},
+			{"default:iron_ore"},
+			{"default:flower"},
+			{"default:tallgrass"},
+			{"default:stone_bricks"},
+			{"default:bricks"},
+			{"default:clay"},
+
+			-- Items
+			{"default:stick"},
+			-- {"default:stone_axe"},
+			-- {"default:stone_hoe"},
+			-- {"default:stone_pickaxe"},
+			-- {"default:stone_shovel"},
+			-- {"default:stone_sword"},
+			{"default:coal"},
+			{"default:iron_ingot"},
+			{"default:charcoal"},
+			-- {"default:wooden_axe"},
+			-- {"default:wooden_hoe"},
+			-- {"default:wooden_pickaxe"},
+			-- {"default:wooden_shovel"},
+			-- {"default:wooden_sword"},
+			{"default:brick"},
+			{"default:clay_ball"},
+			{"default:diamond"},
+			{"default:gold_ingot"},
+			-- {"default:iron_pickaxe"},
+			-- {"default:iron_sword"},
+			-- {"default:iron_axe"},
+			-- {"default:iron_hoe"},
+			-- {"default:iron_shovel"},
+			-- {"default:diamond_pickaxe"},
+			-- {"default:diamond_sword"},
+			-- {"default:diamond_axe"},
+			-- {"default:diamond_hoe"},
+			-- {"default:diamond_shovel"},
+			-- {"default:golden_pickaxe"},
+			-- {"default:golden_sword"},
+			-- {"default:golden_axe"},
+			-- {"default:golden_hoe"},
+			-- {"default:golden_shovel"},
+		},
+
+		is_unlimited = true,
+	}
+
+	gui:inventory {
+		name = "inv_creative_items",
+		pos = {x = gui_pos.x + 8, y = gui_pos.y + 17},
+
+		inventory = "temp",
+		inventory_name = "inv_data",
+		size = {x = 9, y = 5},
+
+		offset = 0,
+		count = 9 * 5,
+	}
+
+	gui:inventory {
+		name = "inv_hotbar",
+		pos = {x = gui_pos.x + 8, y = gui_pos.y + 111},
+
+		inventory = "player",
+		player = "player",
+		inventory_name = "main",
+		size = {x = 9, y = 1},
+		offset = 0,
+		count = 9,
+	}
+
+	gui:show(client);
+end

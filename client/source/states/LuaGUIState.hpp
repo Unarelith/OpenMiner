@@ -57,6 +57,7 @@ class LuaGUIState : public InterfaceState {
 		void loadInventoryWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet);
 		void loadCraftingWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet);
 		void loadProgressBarWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet);
+		void loadInventory(const std::string &name, sf::Packet &packet);
 
 		ClientCommandHandler &m_client;
 
@@ -68,8 +69,7 @@ class LuaGUIState : public InterfaceState {
 		std::deque<InventoryWidget> m_inventoryWidgets;
 		std::vector<std::unique_ptr<Widget>> m_widgets;
 		std::vector<std::unique_ptr<gk::Drawable>> m_drawables;
-
-		Inventory m_inventory;
+		std::unordered_map<std::string, Inventory> m_inventories;
 
 		ClientPlayer &m_player;
 		ClientWorld &m_world;

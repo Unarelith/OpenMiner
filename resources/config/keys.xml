@@ -1,19 +1,21 @@
 <!-- Key names are defined here: https://wiki.libsdl.org/SDL_Keycode -->
 <keys>
-	<key name="Left"      scancode="A" />
-	<key name="Right"     scancode="D" />
-	<key name="Up"        scancode="W" />
-	<key name="Down"      scancode="S" />
+	<key name="Left"           scancode="A" />
+	<key name="Right"          scancode="D" />
+	<key name="Up"             scancode="W" />
+	<key name="Down"           scancode="S" />
 
-	<key name="Jump"      scancode="Space" />
-	<key name="Fly"       scancode="X" />
-	<key name="Sneak"     scancode="Left Shift" />
-	<key name="Sprint"    scancode="Left Ctrl" />
+	<key name="Jump"           scancode="Space" />
+	<key name="Fly"            scancode="X" />
+	<key name="Sneak"          scancode="Left Shift" />
+	<key name="Sprint"         scancode="Left Ctrl" />
 
-	<key name="Dig"       scancode="L" />
-	<key name="Use"       scancode="M" />
+	<key name="Dig"            scancode="L" />
+	<key name="Use"            scancode="M" />
 
-	<key name="Inventory" scancode="E" />
-	<key name="Chat"      scancode="T" />
-	<key name="Command"   scancode="Keypad /" />
+	<key name="Inventory"      scancode="E" />
+	<key name="CreativeWindow" scancode="H" />
+
+	<key name="Chat"           scancode="T" />
+	<key name="Command"        scancode="Keypad /" />
 </keys>
