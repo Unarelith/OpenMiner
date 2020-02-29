@@ -170,19 +170,20 @@ void SettingsMenuState::addGraphicsButtons() {
 
 void SettingsMenuState::addInputButtons() {
 	std::vector<std::pair<u8, std::string>> keys = {
-		{GameKey::Up,        "Forward"},
-		{GameKey::Left,      "Left"},
-		{GameKey::Down,      "Back"},
-		{GameKey::Right,     "Right"},
-		{GameKey::Jump,      "Jump"},
-		{GameKey::Fly,       "Jetpack"},
-		{GameKey::Sneak,     "Sneak"},
-		{GameKey::Sprint,    "Sprint"},
-		// {GameKey::Dig,       "Dig"},
-		// {GameKey::Use,       "Use"},
-		{GameKey::Inventory, "Inventory"},
-		{GameKey::Chat,      "Chat"},
-		{GameKey::Command,   "Command"},
+		{GameKey::Up,             "Forward"},
+		{GameKey::Left,           "Left"},
+		{GameKey::Down,           "Back"},
+		{GameKey::Right,          "Right"},
+		{GameKey::Jump,           "Jump"},
+		{GameKey::Fly,            "Jetpack"},
+		{GameKey::Sneak,          "Sneak"},
+		{GameKey::Sprint,         "Sprint"},
+		// {GameKey::Dig,            "Dig"},
+		// {GameKey::Use,            "Use"},
+		{GameKey::Inventory,      "Inventory"},
+		{GameKey::CreativeWindow, "Creative window"},
+		{GameKey::Chat,           "Chat"},
+		{GameKey::Command,        "Command"},
 	};
 
 	m_menuWidget.reset(2, 8);

@@ -221,7 +221,6 @@ mod:item {
 	harvest_capability = 2
 }
 
-
 mod:item {
 	id = "golden_pickaxe",
 	name = "Golden Pickaxe",
