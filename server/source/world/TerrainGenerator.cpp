@@ -120,10 +120,11 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 						chunk.setBlockRaw(x, y, z, m_sandBlockID);
 					else if (z + chunk.z() * CHUNK_HEIGHT > h - 3)
 						chunk.setBlockRaw(x, y, z, m_dirtBlockID);
-					else if ((rand() % 4096) == 0)
-						oreFloodFill(chunk, x, y, z, m_stoneBlockID, m_ironOreBlockID, 2);
 					else
 						chunk.setBlockRaw(x, y, z, m_stoneBlockID);
+
+					if ((rand() % 4096) == 0)
+						oreFloodFill(chunk, x, y, z, m_stoneBlockID, m_ironOreBlockID, 2);
 
 					// Caves
 					float n2 = noise2d(-(x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
