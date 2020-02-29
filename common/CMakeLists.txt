@@ -7,7 +7,7 @@ set(PROJECT_NAME ${CMAKE_PROJECT_NAME}_common)
 # Get source files
 #------------------------------------------------------------------------------
 file(GLOB_RECURSE SOURCE_FILES source/*.cpp)
-file(GLOB_RECURSE HEADER_FILES include/*.hpp ../external/*.hpp)
+file(GLOB_RECURSE HEADER_FILES source/*.hpp ../external/*.hpp)
 
 foreach(HEADER_FILE ${HEADER_FILES})
 	get_filename_component(HEADER_DIRECTORY ${HEADER_FILE} DIRECTORY)
