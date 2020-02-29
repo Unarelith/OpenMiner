@@ -58,7 +58,20 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 	noise.SetFrequency(1 / 256.0f);
 	noise.SetFractalOctaves(4);
 
-	srand(chunk.x() + chunk.y() * CHUNK_DEPTH + chunk.z() * CHUNK_DEPTH * CHUNK_HEIGHT + 1337);
+	FastNoise cave1;
+	cave1.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
+	cave1.SetFrequency(1);
+	cave1.SetFractalOctaves(1);
+	cave1.SetSeed(1337);
+
+	FastNoise cave2;
+	cave2.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
+	cave2.SetFrequency(1);
+	cave1.SetFractalOctaves(1);
+	cave2.SetSeed(1338);
+
+	srand(chunk.x() + chunk.y() + chunk.z() + 1337);
+
 	Chunk *topChunk = chunk.getSurroundingChunk(Chunk::Top);
 	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
@@ -132,6 +145,12 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 					// 	chunk.setBlockRaw(x, y, z, 0);
 					// 	chunk.setBlockRaw(x, y, z + 1, 0);
 					// }
+
+					float c1 = cave1.GetNoise((x + chunk.x() * CHUNK_WIDTH) / 70.0, (y + chunk.y() * CHUNK_DEPTH) / 70.0, (z + chunk.z() * CHUNK_HEIGHT) / 50.0);
+					float c2 = cave2.GetNoise((x + chunk.x() * CHUNK_WIDTH) / 70.0, (y + chunk.y() * CHUNK_DEPTH) / 70.0, (z + chunk.z() * CHUNK_HEIGHT) / 50.0);
+					float d = c1 * c1 + c2 * c2;
+					if (d < 0.02)
+						chunk.setBlockRaw(x, y, z, 0);
 				}
 
 				if (topChunk && topChunk->isInitialized()) {
