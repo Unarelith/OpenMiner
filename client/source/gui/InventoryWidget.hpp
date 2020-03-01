@@ -39,7 +39,7 @@ class InventoryWidget : public AbstractInventoryWidget {
 		InventoryWidget(ClientCommandHandler &client, Widget *parent = nullptr)
 			: AbstractInventoryWidget(parent), m_client(client) {}
 
-		void init(Inventory &inventory, unsigned int offset = 0, unsigned int size = 0);
+		void init(Inventory &inventory, u16 offset = 0, u16 size = 0);
 
 		void onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly = false);
 
@@ -63,6 +63,9 @@ class InventoryWidget : public AbstractInventoryWidget {
 
 		u16 m_inventoryWidth = 0;
 		u16 m_inventoryHeight = 0;
+
+		u16 m_offset = 0;
+		u16 m_size = 0;
 
 		std::vector<ItemWidget> m_itemWidgets;
 		ItemWidget *m_currentItemWidget = nullptr;

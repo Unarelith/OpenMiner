@@ -93,7 +93,7 @@ void ScriptEngine::initUsertypes() {
 	);
 
 	m_lua.new_usertype<Inventory>("Inventory",
-		"add_stack", &Inventory::addStack,
+		"add_stack", sol::overload(&Inventory::addStack, &Inventory::addStack2),
 		"get_stack", &Inventory::getStack,
 		"set_stack", &Inventory::setStack
 	);

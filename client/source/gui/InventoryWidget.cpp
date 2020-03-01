@@ -27,12 +27,15 @@
 #include "ClientCommandHandler.hpp"
 #include "InventoryWidget.hpp"
 
-void InventoryWidget::init(Inventory &inventory, unsigned int offset, unsigned int size) {
+void InventoryWidget::init(Inventory &inventory, u16 offset, u16 size) {
 	m_inventory = &inventory;
 
 	m_itemWidgets.clear();
 
-	for (u16 i = 0 ; i < (size > 0 ? size : inventory.width() * inventory.height()) ; ++i) {
+	m_offset = offset;
+	m_size = size > 0 ? size : inventory.width() * inventory.height();
+
+	for (u16 i = 0 ; i < m_size ; ++i) {
 		m_itemWidgets.emplace_back(inventory, (i + offset) % inventory.width(), (i + offset) / inventory.width(), this);
 
 		ItemWidget &widget = m_itemWidgets.back();
@@ -92,7 +95,7 @@ void InventoryWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractI
 }
 
 bool InventoryWidget::receiveItemStack(const ItemWidget *itemStack) {
-	bool stackAdded = m_inventory->addStack(itemStack->stack().item().stringID(), itemStack->stack().amount());
+	bool stackAdded = m_inventory->addStack(itemStack->stack().item().stringID(), itemStack->stack().amount(), m_offset, m_size);
 
 	if (stackAdded)
 		sendUpdatePacket();

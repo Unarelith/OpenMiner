@@ -32,8 +32,8 @@ void Inventory::setStack(u16 x, u16 y, const std::string &stringID, u16 amount) 
 	m_hasChanged = true;
 }
 
-bool Inventory::addStack(const std::string &stringID, u16 amount) {
-	for (std::size_t i = 0 ; i < m_items.size() ; ++i) {
+bool Inventory::addStack(const std::string &stringID, u16 amount, u16 offset, u16 size) {
+	for (std::size_t i = offset ; i < (size ? offset + size : m_items.size()) ; ++i) {
 		if (m_items[i].item().id() == 0) {
 			m_items[i] = ItemStack(stringID, amount);
 			m_hasChanged = true;
@@ -47,6 +47,11 @@ bool Inventory::addStack(const std::string &stringID, u16 amount) {
 	}
 
 	return false;
+}
+
+// NOTE: This fonction is only used by Lua since default parameters don't work properly
+bool Inventory::addStack2(const std::string &stringID, u16 amount) {
+	return addStack(stringID, amount, 0, 0);
 }
 
 void Inventory::clearStack(u16 x, u16 y) {

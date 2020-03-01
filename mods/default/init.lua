@@ -97,6 +97,8 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 		size = {x = 9, y = 3},
 		offset = 9,
 		count = 9 * 3,
+
+		shift_destination = "inv_hotbar",
 	}
 
 	gui:inventory {
@@ -109,6 +111,8 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 		size = {x = 9, y = 1},
 		offset = 0,
 		count = 9,
+
+		shift_destination = "inv_main",
 	}
 
 	gui:crafting {
