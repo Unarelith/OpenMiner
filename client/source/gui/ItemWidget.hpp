@@ -47,6 +47,9 @@ class ItemWidget : public Widget {
 		unsigned int x() const { return m_x; }
 		unsigned int y() const { return m_y; }
 
+		bool hasChanged() const { return m_hasChanged; }
+		void setChanged(bool hasChanged) { m_hasChanged = hasChanged; }
+
 	protected:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
@@ -64,6 +67,8 @@ class ItemWidget : public Widget {
 		InventoryCube m_cube{10};
 
 		bool m_isImage = false;
+
+		bool m_hasChanged = false;
 };
 
 #endif // ITEMWIDGET_HPP_

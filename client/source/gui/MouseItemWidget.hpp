@@ -32,17 +32,24 @@
 #include "ItemWidget.hpp"
 #include "Text.hpp"
 
+class InventoryWidget;
+
 class MouseItemWidget : public ItemWidget {
 	public:
 		MouseItemWidget(Widget *parent);
 
 		void onEvent(const SDL_Event &event) override;
 
+		void leftClickBehaviour();
+		void rightClickBehaviour();
+
 		const ItemWidget *currentItemWidget() const { return m_currentItemWidget; }
-		void updateCurrentItem(const ItemWidget *currentItemWidget);
+		void updateCurrentItem(ItemWidget *currentItemWidget);
 
 		void swapItems(ItemWidget &widget, bool isReadOnly = false);
 		void putItem(ItemWidget &widget);
+
+		void setCurrentInventoryWidget(InventoryWidget *inventoryWidget) { m_currentInventoryWidget = inventoryWidget; }
 
 		const ItemStack &getStack() const { return m_inventory.getStack(0, 0); }
 
@@ -53,11 +60,17 @@ class MouseItemWidget : public ItemWidget {
 
 		Inventory m_inventory{1, 1};
 
-		const ItemWidget *m_currentItemWidget = nullptr;
+		ItemWidget *m_currentItemWidget = nullptr;
+		InventoryWidget *m_currentInventoryWidget = nullptr;
 
 		gk::Sprite m_tooltipBackground{"texture-toasts", 160, 32};
 		Text m_tooltipText;
 		Text m_tooltipInfoText;
+
+		bool m_isDragging = false;
+		bool m_isLeftClickDrag = false;
+		std::unordered_map<ItemWidget *, ItemStack> m_draggedSlots;
+		ItemStack m_draggedStack;
 };
 
 #endif // MOUSEITEMWIDGET_HPP_

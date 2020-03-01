@@ -36,12 +36,12 @@ class ClientCommandHandler;
 
 class InventoryWidget : public AbstractInventoryWidget {
 	public:
-		InventoryWidget(ClientCommandHandler &client, Widget *parent = nullptr)
-			: AbstractInventoryWidget(parent), m_client(client) {}
+		InventoryWidget(ClientCommandHandler &client, bool isReadOnly = false, Widget *parent = nullptr)
+			: AbstractInventoryWidget(parent), m_client(client), m_isReadOnly(isReadOnly) {}
 
 		void init(Inventory &inventory, u16 offset = 0, u16 size = 0);
 
-		void onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly = false);
+		void onEvent(const SDL_Event &event) override;
 
 		void update() override;
 
@@ -50,9 +50,11 @@ class InventoryWidget : public AbstractInventoryWidget {
 
 		void sendUpdatePacket();
 
-		Inventory *inventory() { return m_inventory; }
+		Inventory *inventory() const { return m_inventory; }
 
-		const ItemWidget *currentItemWidget() const { return m_currentItemWidget; }
+		bool isReadOnly() const { return m_isReadOnly; }
+
+		ItemWidget *currentItemWidget() const { return m_currentItemWidget; }
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
@@ -66,6 +68,8 @@ class InventoryWidget : public AbstractInventoryWidget {
 
 		u16 m_offset = 0;
 		u16 m_size = 0;
+
+		bool m_isReadOnly = false;
 
 		std::vector<ItemWidget> m_itemWidgets;
 		ItemWidget *m_currentItemWidget = nullptr;

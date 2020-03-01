@@ -38,11 +38,14 @@ void CraftingWidget::init(unsigned int offset, unsigned int size) {
 
 	m_craftingInventoryWidget.setParent(this);
 	m_craftingResultInventoryWidget.setParent(this);
+
+	m_craftingInventoryWidget.setShiftDestination(m_shiftDestination);
+	m_craftingResultInventoryWidget.setShiftDestination(m_shiftDestination);
 }
 
-void CraftingWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget) {
-	m_craftingInventoryWidget.onMouseEvent(event, mouseItemWidget);
-	m_craftingResultInventoryWidget.onMouseEvent(event, mouseItemWidget, true);
+void CraftingWidget::onEvent(const SDL_Event &event) {
+	m_craftingInventoryWidget.onEvent(event);
+	m_craftingResultInventoryWidget.onEvent(event);
 
 	m_currentInventoryWidget = m_craftingResultInventoryWidget.currentItemWidget()
 		? &m_craftingResultInventoryWidget : &m_craftingInventoryWidget;
@@ -81,11 +84,8 @@ void CraftingWidget::update() {
 }
 
 bool CraftingWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) {
-	if (m_currentInventoryWidget && dest->receiveItemStack(itemStack)) {
-		m_currentInventoryWidget->inventory()->clearStack(itemStack->x(), itemStack->y());
-		m_currentInventoryWidget->update();
-		m_currentInventoryWidget->sendUpdatePacket();
-		return true;
+	if (m_currentInventoryWidget) {
+		return m_currentInventoryWidget->sendItemStackToDest(itemStack, dest);
 	}
 
 	return false;

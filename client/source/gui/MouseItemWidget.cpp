@@ -24,6 +24,7 @@
  *
  * =====================================================================================
  */
+#include "InventoryWidget.hpp"
 #include "MouseItemWidget.hpp"
 
 MouseItemWidget::MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0, parent) {
@@ -39,15 +40,103 @@ MouseItemWidget::MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0,
 void MouseItemWidget::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_MOUSEMOTION) {
 		updatePosition(event.motion.x, event.motion.y);
-	}
 
+		if (m_isDragging) {
+			for (auto &it : m_draggedSlots) {
+				u16 splitAmount;
+				if (m_isLeftClickDrag)
+					splitAmount = m_draggedStack.amount() / m_draggedSlots.size();
+				else
+					splitAmount = 1;
+
+				it.first->setStack(m_draggedStack.item().stringID(), it.second.amount() + splitAmount);
+				it.first->update();
+			}
+
+			if (m_isLeftClickDrag)
+				setStack(m_draggedStack.item().stringID(), m_draggedStack.amount() % m_draggedSlots.size());
+			else
+				setStack(m_draggedStack.item().stringID(), m_draggedStack.amount() - m_draggedSlots.size());
+		}
+	}
 	else if (event.type == SDL_MOUSEBUTTONDOWN) {
 		updatePosition(event.button.x, event.button.y);
+
+		if (getStack().amount() == 0) {
+			if (event.button.button == SDL_BUTTON_LEFT) {
+				leftClickBehaviour();
+			}
+			else if (event.button.button == SDL_BUTTON_RIGHT) {
+				rightClickBehaviour();
+			}
+
+			m_isDragging = false;
+		}
+		else {
+			m_isDragging = true;
+			m_isLeftClickDrag = event.button.button == SDL_BUTTON_LEFT;
+			m_draggedStack = getStack();
+
+			if (m_currentItemWidget && (m_currentItemWidget->stack().amount() == 0 || m_currentItemWidget->stack().item().stringID() == m_draggedStack.item().stringID()))
+				m_draggedSlots[m_currentItemWidget] = m_currentItemWidget->stack();
+		}
+	}
+	else if (event.type == SDL_MOUSEBUTTONUP) {
+		updatePosition(event.button.x, event.button.y);
+
+		if (m_isDragging && m_draggedSlots.size() == 1) {
+			if (event.button.button == SDL_BUTTON_LEFT) {
+				leftClickBehaviour();
+			}
+			else if (event.button.button == SDL_BUTTON_RIGHT) {
+				rightClickBehaviour();
+			}
+		}
+
+		m_isDragging = false;
+
+		for (auto &it : m_draggedSlots)
+			it.first->setChanged(true);
+
+		m_draggedSlots.clear();
 	}
 }
 
-void MouseItemWidget::updateCurrentItem(const ItemWidget *currentItemWidget) {
+void MouseItemWidget::leftClickBehaviour() {
+	if (m_currentInventoryWidget && m_currentInventoryWidget->currentItemWidget() && m_currentInventoryWidget->inventory()) {
+		ItemWidget *currentItemWidget = m_currentInventoryWidget->currentItemWidget();
+		if (!m_currentInventoryWidget->inventory()->isUnlimited())
+			swapItems(*currentItemWidget, m_currentInventoryWidget->isReadOnly());
+		else if (getStack().amount() == 0 && currentItemWidget->stack().amount() != 0)
+			setStack(currentItemWidget->stack().item().stringID(), 64);
+
+		m_currentInventoryWidget->sendUpdatePacket();
+	}
+}
+
+void MouseItemWidget::rightClickBehaviour() {
+	if (m_currentInventoryWidget && m_currentInventoryWidget->currentItemWidget() && m_currentInventoryWidget->inventory()) {
+		if (!m_currentInventoryWidget->isReadOnly()) {
+			ItemWidget *currentItemWidget = m_currentInventoryWidget->currentItemWidget();
+			if (!m_currentInventoryWidget->inventory()->isUnlimited())
+				putItem(*currentItemWidget);
+			else if (getStack().amount() == 0 && currentItemWidget->stack().amount() != 0)
+				setStack(currentItemWidget->stack().item().stringID(), 1);
+
+			m_currentInventoryWidget->sendUpdatePacket();
+		}
+	}
+}
+
+void MouseItemWidget::updateCurrentItem(ItemWidget *currentItemWidget) {
 	if (currentItemWidget) {
+		if (m_isDragging && (currentItemWidget->stack().amount() == 0 || currentItemWidget->stack().item().stringID() == m_draggedStack.item().stringID())) {
+			auto it = m_draggedSlots.find(currentItemWidget);
+			if (it == m_draggedSlots.end()) {
+				m_draggedSlots.emplace(std::make_pair(currentItemWidget, currentItemWidget->stack()));
+			}
+		}
+
 		m_currentItemWidget = (currentItemWidget->stack().item().id()) ? currentItemWidget : nullptr;
 		m_tooltipText.setText(currentItemWidget->stack().item().label() + " [" + std::to_string(currentItemWidget->stack().item().id()) + "]");
 
@@ -101,7 +190,8 @@ void MouseItemWidget::putItem(ItemWidget &widget) {
 }
 
 void MouseItemWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	ItemWidget::draw(target, states);
+	if (getStack().amount() > 0)
+		ItemWidget::draw(target, states);
 
 	states.transform *= getTransform();
 

@@ -98,10 +98,10 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 	}
 	else {
 		for (auto &it : m_inventoryWidgets)
-			it.second.onMouseEvent(event, m_mouseItemWidget, false);
+			it.second.onEvent(event);
 
 		for (auto &it : m_craftingWidgets)
-			it.second.onMouseEvent(event, m_mouseItemWidget);
+			it.second.onEvent(event);
 
 		m_mouseItemWidget.onEvent(event);
 	}
@@ -121,7 +121,7 @@ void LuaGUIState::update() {
 		it.second.update();
 	}
 
-	const ItemWidget *currentItemWidget = nullptr;
+	ItemWidget *currentItemWidget = nullptr;
 	m_currentInventoryWidget = nullptr;
 	for (auto &it : m_inventoryWidgets) {
 		if (!currentItemWidget && ((currentItemWidget = it.second.currentItemWidget()))) {
@@ -130,11 +130,12 @@ void LuaGUIState::update() {
 	}
 	for (auto &it : m_craftingWidgets) {
 		if (!currentItemWidget && ((currentItemWidget = it.second.currentItemWidget()))) {
-			m_currentInventoryWidget = &it.second;
+			m_currentInventoryWidget = it.second.currentInventoryWidget();
 		}
 	}
 
 	m_mouseItemWidget.updateCurrentItem(currentItemWidget);
+	m_mouseItemWidget.setCurrentInventoryWidget(m_currentInventoryWidget);
 }
 
 void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -243,7 +244,7 @@ void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf:
 	}
 
 	if (widgetInventory) {
-		m_inventoryWidgets.emplace(name, InventoryWidget{m_client, &m_mainWidget});
+		m_inventoryWidgets.emplace(name, InventoryWidget{m_client, false, &m_mainWidget});
 
 		auto &inventoryWidget = m_inventoryWidgets.at(name);
 		inventoryWidget.setPosition(x, y);
@@ -282,10 +283,10 @@ void LuaGUIState::loadCraftingWidget(const std::string &name, s32 x, s32 y, sf::
 		m_craftingWidgets.emplace(name, CraftingWidget{m_client, *craftingInventory, &m_mainWidget});
 
 		auto &craftingWidget = m_craftingWidgets.at(name);
+		craftingWidget.setShiftDestination(shiftDestination);
 		craftingWidget.init(offset, size);
 		craftingWidget.craftingInventoryWidget().setPosition(x, y);
 		craftingWidget.craftingResultInventoryWidget().setPosition(resultX, resultY);
-		craftingWidget.setShiftDestination(shiftDestination);
 	}
 	else {
 		DEBUG("ERROR: Crafting inventory is invalid");

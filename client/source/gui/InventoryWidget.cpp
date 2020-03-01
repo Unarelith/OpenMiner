@@ -50,7 +50,7 @@ void InventoryWidget::init(Inventory &inventory, u16 offset, u16 size) {
 	m_inventoryHeight = inventory.height();
 }
 
-void InventoryWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget, bool isReadOnly) {
+void InventoryWidget::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_MOUSEMOTION) {
 		m_currentItemWidget = nullptr;
 		for (std::size_t i = 0 ; i < m_itemWidgets.size() ; ++i) {
@@ -61,34 +61,24 @@ void InventoryWidget::onMouseEvent(const SDL_Event &event, MouseItemWidget &mous
 			}
 		}
 	}
-	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && m_currentItemWidget) {
-		if (m_inventory && !m_inventory->isUnlimited())
-			mouseItemWidget.swapItems(*m_currentItemWidget, isReadOnly);
-		else if (m_inventory && mouseItemWidget.getStack().amount() == 0 && m_currentItemWidget->stack().amount() != 0)
-			mouseItemWidget.setStack(m_currentItemWidget->stack().item().stringID(), 64);
-
-		sendUpdatePacket();
-	}
-	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT && m_currentItemWidget) {
-		if (!isReadOnly) {
-			if (m_inventory && !m_inventory->isUnlimited())
-				mouseItemWidget.putItem(*m_currentItemWidget);
-			else if (m_inventory && mouseItemWidget.getStack().amount() == 0 && m_currentItemWidget->stack().amount() != 0)
-				mouseItemWidget.setStack(m_currentItemWidget->stack().item().stringID(), 1);
-
-			sendUpdatePacket();
-		}
-	}
 }
 
 void InventoryWidget::update() {
-	for (auto &it : m_itemWidgets)
+	bool hasChanged = false;
+
+	for (auto &it : m_itemWidgets) {
 		it.update();
+
+		hasChanged = hasChanged || it.hasChanged();
+		it.setChanged(false);
+	}
+
+	if (hasChanged)
+		sendUpdatePacket();
 }
 
 bool InventoryWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) {
 	if (dest->receiveItemStack(itemStack)) {
-		m_inventory->clearStack(itemStack->x(), itemStack->y());
 		update();
 		sendUpdatePacket();
 		return true;
@@ -98,10 +88,15 @@ bool InventoryWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractI
 }
 
 bool InventoryWidget::receiveItemStack(const ItemWidget *itemStack) {
-	bool stackAdded = m_inventory->addStack(itemStack->stack().item().stringID(), itemStack->stack().amount(), m_offset, m_size);
+	ItemStack stack = itemStack->stack();
+	m_inventory->clearStack(itemStack->x(), itemStack->y());
+
+	bool stackAdded = m_inventory->addStack(stack.item().stringID(), stack.amount(), m_offset, m_size);
 
 	if (stackAdded)
 		sendUpdatePacket();
+	else
+		m_inventory->setStack(itemStack->x(), itemStack->y(), stack.item().stringID(), stack.amount());
 
 	return stackAdded;
 }

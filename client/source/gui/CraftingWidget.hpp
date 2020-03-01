@@ -37,14 +37,15 @@ class CraftingWidget : public AbstractInventoryWidget {
 
 		void init(unsigned int offset = 0, unsigned int size = 3);
 
-		void onMouseEvent(const SDL_Event &event, MouseItemWidget &mouseItemWidget);
+		void onEvent(const SDL_Event &event) override;
 
 		void update() override;
 
 		bool sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) override;
 		bool receiveItemStack(const ItemWidget *itemStack) override;
 
-		const ItemWidget *currentItemWidget() const { return m_craftingResultInventoryWidget.currentItemWidget() ? m_craftingResultInventoryWidget.currentItemWidget() : m_craftingInventoryWidget.currentItemWidget(); }
+		ItemWidget *currentItemWidget() const { return m_craftingResultInventoryWidget.currentItemWidget() ? m_craftingResultInventoryWidget.currentItemWidget() : m_craftingInventoryWidget.currentItemWidget(); }
+		InventoryWidget *currentInventoryWidget() const { return m_currentInventoryWidget; }
 
 		InventoryWidget &craftingInventoryWidget() { return m_craftingInventoryWidget; }
 		InventoryWidget &craftingResultInventoryWidget() { return m_craftingResultInventoryWidget; }
@@ -60,7 +61,7 @@ class CraftingWidget : public AbstractInventoryWidget {
 		InventoryWidget m_craftingInventoryWidget{m_client};
 
 		Inventory m_craftingResultInventory{1, 1};
-		InventoryWidget m_craftingResultInventoryWidget{m_client};
+		InventoryWidget m_craftingResultInventoryWidget{m_client, true};
 
 		const Recipe *m_recipe = nullptr;
 };

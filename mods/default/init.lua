@@ -98,7 +98,7 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 		offset = 9,
 		count = 9 * 3,
 
-		shift_destination = "inv_hotbar",
+		shift_destination = "inv_hotbar,inv_main",
 	}
 
 	gui:inventory {
@@ -112,7 +112,7 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 		offset = 0,
 		count = 9,
 
-		shift_destination = "inv_main",
+		shift_destination = "inv_main,inv_hotbar",
 	}
 
 	gui:crafting {

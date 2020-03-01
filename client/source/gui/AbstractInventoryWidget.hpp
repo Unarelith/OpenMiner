@@ -38,8 +38,9 @@ class AbstractInventoryWidget : public Widget {
 
 		const std::vector<std::string> &shiftDestination() const { return m_shiftDestination; }
 		void setShiftDestination(const std::string &shiftDestination);
+		void setShiftDestination(const std::vector<std::string> &shiftDestination) { m_shiftDestination = shiftDestination; }
 
-	private:
+	protected:
 		std::vector<std::string> m_shiftDestination;
 };
 
