@@ -91,7 +91,7 @@ bool CraftingWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractIn
 	return false;
 }
 
-bool CraftingWidget::receiveItemStack(const ItemWidget *itemStack) {
+bool CraftingWidget::receiveItemStack(const ItemWidget *itemStack, AbstractInventoryWidget *) {
 	bool stackAdded = m_craftingInventory.addStack(itemStack->stack().item().stringID(), itemStack->stack().amount());
 
 	if (stackAdded) {

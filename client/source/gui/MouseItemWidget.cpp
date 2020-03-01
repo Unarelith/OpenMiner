@@ -40,24 +40,6 @@ MouseItemWidget::MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0,
 void MouseItemWidget::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_MOUSEMOTION) {
 		updatePosition(event.motion.x, event.motion.y);
-
-		if (m_isDragging) {
-			for (auto &it : m_draggedSlots) {
-				u16 splitAmount;
-				if (m_isLeftClickDrag)
-					splitAmount = m_draggedStack.amount() / m_draggedSlots.size();
-				else
-					splitAmount = 1;
-
-				it.first->setStack(m_draggedStack.item().stringID(), it.second.amount() + splitAmount);
-				it.first->update();
-			}
-
-			if (m_isLeftClickDrag)
-				setStack(m_draggedStack.item().stringID(), m_draggedStack.amount() % m_draggedSlots.size());
-			else
-				setStack(m_draggedStack.item().stringID(), m_draggedStack.amount() - m_draggedSlots.size());
-		}
 	}
 	else if (event.type == SDL_MOUSEBUTTONDOWN) {
 		updatePosition(event.button.x, event.button.y);
@@ -76,15 +58,18 @@ void MouseItemWidget::onEvent(const SDL_Event &event) {
 			m_isDragging = true;
 			m_isLeftClickDrag = event.button.button == SDL_BUTTON_LEFT;
 			m_draggedStack = getStack();
+			m_dragOrigin = nullptr;
 
-			if (m_currentItemWidget && (m_currentItemWidget->stack().amount() == 0 || m_currentItemWidget->stack().item().stringID() == m_draggedStack.item().stringID()))
+			if (m_currentItemWidget && (m_currentItemWidget->stack().amount() == 0 || m_currentItemWidget->stack().item().stringID() == m_draggedStack.item().stringID())) {
+				m_dragOrigin = m_currentItemWidget;
 				m_draggedSlots[m_currentItemWidget] = m_currentItemWidget->stack();
+			}
 		}
 	}
 	else if (event.type == SDL_MOUSEBUTTONUP) {
 		updatePosition(event.button.x, event.button.y);
 
-		if (m_isDragging && m_draggedSlots.size() == 1) {
+		if (m_isDragging && m_draggedSlots.size() <= 1) {
 			if (event.button.button == SDL_BUTTON_LEFT) {
 				leftClickBehaviour();
 			}
@@ -130,10 +115,47 @@ void MouseItemWidget::rightClickBehaviour() {
 
 void MouseItemWidget::updateCurrentItem(ItemWidget *currentItemWidget) {
 	if (currentItemWidget) {
-		if (m_isDragging && (currentItemWidget->stack().amount() == 0 || currentItemWidget->stack().item().stringID() == m_draggedStack.item().stringID())) {
-			auto it = m_draggedSlots.find(currentItemWidget);
-			if (it == m_draggedSlots.end()) {
-				m_draggedSlots.emplace(std::make_pair(currentItemWidget, currentItemWidget->stack()));
+		if (m_isDragging && currentItemWidget != m_currentItemWidget) {
+			if (currentItemWidget->stack().amount() == 0 || currentItemWidget->stack().item().stringID() == m_draggedStack.item().stringID()) {
+				auto it = m_draggedSlots.find(currentItemWidget);
+				if (it == m_draggedSlots.end()) {
+					if (m_draggedSlots.empty())
+						m_dragOrigin = currentItemWidget;
+
+					m_draggedSlots.emplace(std::make_pair(currentItemWidget, currentItemWidget->stack()));
+				}
+			}
+
+			if (m_draggedSlots.size() > 1) {
+				if (m_isLeftClickDrag) {
+					for (auto &it : m_draggedSlots) {
+						u16 splitAmount = m_draggedStack.amount() / m_draggedSlots.size();
+
+						if (splitAmount > 0) {
+							it.first->setStack(m_draggedStack.item().stringID(), it.second.amount() + splitAmount);
+							it.first->update();
+						}
+					}
+
+					u16 remainingAmount = (m_draggedStack.amount() == 1) ? 0 : m_draggedStack.amount() % m_draggedSlots.size();
+
+					setStack(remainingAmount ? m_draggedStack.item().stringID() : "_:air", remainingAmount);
+				}
+				else if (m_draggedStack.amount() > 0 && (currentItemWidget->stack().amount() == 0 || currentItemWidget->stack().item().stringID() == m_draggedStack.item().stringID())) {
+					if (m_dragOrigin) {
+						m_dragOrigin->setStack(m_draggedStack.item().stringID(), m_dragOrigin->stack().amount() + 1);
+
+						m_draggedStack.setAmount(m_draggedStack.amount() - 1);
+						setStack(m_draggedStack.amount() ? m_draggedStack.item().stringID() : "_:air", m_draggedStack.amount());
+
+						m_dragOrigin = nullptr;
+					}
+
+					currentItemWidget->setStack(m_draggedStack.item().stringID(), currentItemWidget->stack().amount() + 1);
+
+					m_draggedStack.setAmount(m_draggedStack.amount() - 1);
+					setStack(m_draggedStack.amount() ? m_draggedStack.item().stringID() : "_:air", m_draggedStack.amount());
+				}
 			}
 		}
 

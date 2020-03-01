@@ -69,6 +69,7 @@ class MouseItemWidget : public ItemWidget {
 
 		bool m_isDragging = false;
 		bool m_isLeftClickDrag = false;
+		ItemWidget *m_dragOrigin = nullptr;
 		std::unordered_map<ItemWidget *, ItemStack> m_draggedSlots;
 		ItemStack m_draggedStack;
 };

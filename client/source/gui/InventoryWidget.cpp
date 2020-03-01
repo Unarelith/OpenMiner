@@ -78,7 +78,10 @@ void InventoryWidget::update() {
 }
 
 bool InventoryWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) {
-	if (dest->receiveItemStack(itemStack)) {
+	if (dest->receiveItemStack(itemStack, this)) {
+		if (dest != this)
+			m_inventory->clearStack(itemStack->x(), itemStack->y());
+
 		update();
 		sendUpdatePacket();
 		return true;
@@ -87,9 +90,10 @@ bool InventoryWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractI
 	return false;
 }
 
-bool InventoryWidget::receiveItemStack(const ItemWidget *itemStack) {
+bool InventoryWidget::receiveItemStack(const ItemWidget *itemStack, AbstractInventoryWidget *src) {
 	ItemStack stack = itemStack->stack();
-	m_inventory->clearStack(itemStack->x(), itemStack->y());
+	if (src == this)
+		m_inventory->clearStack(itemStack->x(), itemStack->y());
 
 	bool stackAdded = m_inventory->addStack(stack.item().stringID(), stack.amount(), m_offset, m_size);
 
