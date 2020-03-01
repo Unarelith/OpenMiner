@@ -70,16 +70,16 @@ void ClientPlayer::turnViewV(double angle) {
 
 u8 ClientPlayer::getDirection() const {
 	if (m_viewAngleH >= -45. && m_viewAngleH <= 45.) {
-		return West;
-	}
-	else if (m_viewAngleH >= -135. && m_viewAngleH <= -45.) {
-		return North;
-	}
-	else if (m_viewAngleH <= -135. || m_viewAngleH >= 135.) {
 		return East;
 	}
-	else {
+	else if (m_viewAngleH >= -135. && m_viewAngleH <= -45.) {
 		return South;
+	}
+	else if (m_viewAngleH <= -135. || m_viewAngleH >= 135.) {
+		return West;
+	}
+	else {
+		return North;
 	}
 }
 
