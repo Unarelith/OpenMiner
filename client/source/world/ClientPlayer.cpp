@@ -162,44 +162,30 @@ void ClientPlayer::setPosition(double x, double y, double z) {
 }
 
 void ClientPlayer::checkCollisions(const ClientWorld &world) {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || defined(__ANDROID__)
-	const double PLAYER_HEIGHT = 1.8;
-	double eyeheight = m_z + PLAYER_HEIGHT - 1.4;
-	// testPoint(world, glm::dvec3(m_x, m_y, m_z), m_velocity);
-	testPoint(world, m_x - 0.2, m_y - 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_velocity);
-	testPoint(world, m_x + 0.2, m_y - 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_velocity);
-	testPoint(world, m_x - 0.2, m_y + 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_velocity);
-	testPoint(world, m_x + 0.2, m_y + 0.2, eyeheight - PLAYER_HEIGHT - 0.4, m_velocity);
-	testPoint(world, m_x - 0.2, m_y - 0.2, eyeheight - 0.4, m_velocity);
-	testPoint(world, m_x + 0.2, m_y - 0.2, eyeheight - 0.4, m_velocity);
-	testPoint(world, m_x - 0.2, m_y + 0.2, eyeheight - 0.4, m_velocity);
-	testPoint(world, m_x + 0.2, m_y + 0.2, eyeheight - 0.4, m_velocity);
-#else
-	for (double z = m_z + m_hitbox.z ; z <= m_z + (m_hitbox.z + m_hitbox.sizeZ) + 0.1 ; z += 0.9) {
-		for (double y = m_y + m_hitbox.y ; y <= m_y + (m_hitbox.y + m_hitbox.sizeY) + 0.1 ; y += 0.2) {
-			for (double x = m_x + m_hitbox.x ; x <= m_x + (m_hitbox.x + m_hitbox.sizeX) + 0.1 ; x += 0.2) {
-				if (x == m_x + m_hitbox.x || x == m_x + (m_hitbox.x + m_hitbox.sizeX)
-				 || y == m_y + m_hitbox.y || y == m_y + (m_hitbox.y + m_hitbox.sizeY)
-				 || z == m_z + m_hitbox.z || z == m_z + (m_hitbox.z + m_hitbox.sizeZ))
-					testPoint(world, x, y, z, m_velocity);
+	gk::Vector3d corner{m_x + m_hitbox.x, m_y + m_hitbox.y, m_z + m_hitbox.z};
+
+	constexpr int numPointsPerEdge = 3;
+	constexpr int lastPoint = numPointsPerEdge - 1;
+
+	for (int z = 0; z <= lastPoint; z++) {
+		for (int y = 0; y <= lastPoint; y++) {
+			for (int x = 0; x <= lastPoint; x++) {
+				if (x == 0 || x == lastPoint || y == 0 || y == lastPoint || z == 0 || z == lastPoint)
+					testPoint(world, corner.x + m_hitbox.sizeX * ((double)x / lastPoint),
+					          corner.y + m_hitbox.sizeY * ((double)y / lastPoint),
+					          corner.z + m_hitbox.sizeZ * ((double)z / lastPoint), m_velocity);
 			}
 		}
 	}
-#endif
 }
 
 bool passable(const ClientWorld &world, double x, double y, double z) {
-	u32 blockID = world.getBlock(x, y, z);
+	u32 blockID = world.getBlock(floor(x), floor(y), floor(z));
 	const Block &block = Registry::getInstance().getBlock(blockID);
 	return !blockID || block.drawType() == BlockDrawType::Liquid || block.drawType() == BlockDrawType::XShape;
 }
 
 void ClientPlayer::testPoint(const ClientWorld &world, double x, double y, double z, glm::dvec3 &vel) {
-	// FIXME: Temporary fix, find the real problem!!!
-	if (x < 1) --x;
-	if (y < 1) --y;
-	if (z < 1) --z;
-
 	if(!passable(world, x + vel.x, y, z)) vel.x = 0;
 	if(!passable(world, x, y + vel.y, z)) vel.y = 0;
 	if(!passable(world, x, y, z + vel.z)) {
