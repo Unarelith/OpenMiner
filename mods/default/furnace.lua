@@ -175,6 +175,7 @@ mod:block {
 		end
 
 		if ticks_remaining == 0 and recipe and fuel_stack:amount() > 0 and
+				fuel_stack:item():is_fuel() and
 				(output_stack:item():id() == 0 or output_stack:amount() == 0
 				or output_stack:item():id() == recipe:result():item():id()) then
 			data.inventory:set_stack(2, 0, fuel_stack:item():stringID(), fuel_stack:amount() - 1)

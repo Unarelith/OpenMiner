@@ -99,7 +99,7 @@ bool InventoryWidget::receiveItemStack(const ItemWidget *itemStack, AbstractInve
 
 	if (stackAdded)
 		sendUpdatePacket();
-	else
+	else if (src == this)
 		m_inventory->setStack(itemStack->x(), itemStack->y(), stack.item().stringID(), stack.amount());
 
 	return stackAdded;
