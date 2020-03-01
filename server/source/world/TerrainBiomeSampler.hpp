@@ -24,28 +24,24 @@
  *
  * =====================================================================================
  */
-#ifndef LUAMOD_HPP_
-#define LUAMOD_HPP_
+#ifndef TERRAINBIOMESAMPLER_HPP_
+#define TERRAINBIOMESAMPLER_HPP_
 
-#include <sol.hpp>
+#include <gk/core/IntTypes.hpp>
+#include "FastNoise.hpp"
+#include "Biome.hpp"
 
-// This class is meant to be used ONLY in Lua
-class LuaMod {
-	public:
-		LuaMod(const std::string &id) : m_id(id) {}
+class TerrainBiomeSampler {
+public:
+	TerrainBiomeSampler(); // TODO should eventually take a worldtype
+	~TerrainBiomeSampler();
 
-		void registerBlock(const sol::table &table);
-		void registerItem(const sol::table &table);
-		void registerCraftingRecipe(const sol::table &table);
-		void registerSmeltingRecipe(const sol::table &table);
-		void registerBiome(const sol::table &table);
+	u16 getBiomeIndexAt(s32 x, s32 y) const;
+	//std::vector<WeightedIndex> getWeightedBiomeIndicesAt(double x, double y);
 
-		const std::string &id() const { return m_id; }
-
-		static void initUsertype(sol::state &lua);
-
-	private:
-		std::string m_id;
+private:
+	u8 nBiomeParams = 2; // TODO should be defined in the worldtype
+	FastNoise* paramNoisesPtr;
 };
 
-#endif // LUAMOD_HPP_
+#endif // TERRAINBIOMESAMPLER_HPP_

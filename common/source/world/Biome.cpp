@@ -24,28 +24,20 @@
  *
  * =====================================================================================
  */
-#ifndef LUAMOD_HPP_
-#define LUAMOD_HPP_
+#include "Biome.hpp"
+#include <SFML/Network/Packet.hpp>
+#include "NetworkUtils.hpp"
 
-#include <sol.hpp>
+Biome::Biome(u32 id, const std::string &stringID, const std::string &label) {
+	m_id = id;
+	std::string m_stringID;
+	std::string m_label;
+}
 
-// This class is meant to be used ONLY in Lua
-class LuaMod {
-	public:
-		LuaMod(const std::string &id) : m_id(id) {}
+void Biome::serialize(sf::Packet &packet) const {
+	packet << u32(m_id) << m_stringID << m_label << m_params << m_topBlock << m_groundBlock << m_beachBlock << m_liquidBlock;
+}
 
-		void registerBlock(const sol::table &table);
-		void registerItem(const sol::table &table);
-		void registerCraftingRecipe(const sol::table &table);
-		void registerSmeltingRecipe(const sol::table &table);
-		void registerBiome(const sol::table &table);
-
-		const std::string &id() const { return m_id; }
-
-		static void initUsertype(sol::state &lua);
-
-	private:
-		std::string m_id;
-};
-
-#endif // LUAMOD_HPP_
+void Biome::deserialize(sf::Packet &packet) {
+	packet >> m_id >> m_stringID >> m_label >> m_params >> m_topBlock >> m_groundBlock >> m_beachBlock >> m_liquidBlock;
+}

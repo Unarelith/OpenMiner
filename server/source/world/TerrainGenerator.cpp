@@ -63,6 +63,10 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 	Chunk *topChunk = chunk.getSurroundingChunk(Chunk::Top);
 	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
+
+			u16 biomeIndex = biomeSampler.getBiomeIndexAt(x + chunk.x() * CHUNK_WIDTH, y + chunk.y() * CHUNK_DEPTH);
+			auto &biome = Registry::getInstance().getBiome(biomeIndex);
+
 			// Land height
 			double n = noise.GetNoise(-x - chunk.x() * CHUNK_WIDTH, y + chunk.y() * CHUNK_DEPTH);
 			double h = 10 + n * 20;
@@ -115,27 +119,16 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 				}
 				else {
 					if (z + chunk.z() * CHUNK_HEIGHT >= h - 1 && z + chunk.z() * CHUNK_HEIGHT > SEALEVEL - 1)
-						chunk.setBlockRaw(x, y, z, m_grassBlockID);
+						chunk.setBlockRaw(x, y, z, biome.getTopBlock());
 					else if (z + chunk.z() * CHUNK_HEIGHT <= SEALEVEL - 1 && h < SEALEVEL && z + chunk.z() * CHUNK_HEIGHT > h - 3)
-						chunk.setBlockRaw(x, y, z, m_sandBlockID);
+						chunk.setBlockRaw(x, y, z, biome.getBeachBlock());
 					else if (z + chunk.z() * CHUNK_HEIGHT > h - 3)
-						chunk.setBlockRaw(x, y, z, m_dirtBlockID);
+						chunk.setBlockRaw(x, y, z, biome.getGroundBlock());
 					else
 						chunk.setBlockRaw(x, y, z, m_stoneBlockID);
 
 					if ((rand() % 4096) == 0)
 						oreFloodFill(chunk, x, y, z, m_stoneBlockID, m_ironOreBlockID, 2);
-
-					// Caves
-					float n2 = noise2d(-(x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
-					float r2 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 512.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 0.1);
-					float r3 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 128.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 1);
-					float r4 = n2 * 5 + r2 * r3 * 20;
-					if (r4 > 6 && r4 < 8 && h > SEALEVEL) {
-						chunk.setBlockRaw(x, y, z - 1, 0);
-						chunk.setBlockRaw(x, y, z, 0);
-						chunk.setBlockRaw(x, y, z + 1, 0);
-					}
 				}
 
 				if (topChunk && topChunk->isInitialized()) {
