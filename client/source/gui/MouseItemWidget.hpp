@@ -43,6 +43,10 @@ class MouseItemWidget : public ItemWidget {
 		void leftClickBehaviour();
 		void rightClickBehaviour();
 
+		void startDragging(bool isLeftClickDrag);
+		void stopDragging();
+		void draggingBehaviour(ItemWidget *newItemWidget);
+
 		const ItemWidget *currentItemWidget() const { return m_currentItemWidget; }
 		void updateCurrentItem(ItemWidget *currentItemWidget);
 
