@@ -124,7 +124,15 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 					if (!boundingBox.intersects(playerBoundingBox)) {
 						m_world.setBlock(x, y, z, hotbar.currentItem());
 
-						m_client.sendPlayerPlaceBlock(x, y, z, hotbar.currentItem());
+						u32 block = hotbar.currentItem();
+						if (newBlock.isRotatable()) {
+							u16 data = m_player.getOppositeDirection() & 0x3;
+							m_world.setData(x, y, z, data);
+
+							block |= data << 16;
+						}
+
+						m_client.sendPlayerPlaceBlock(x, y, z, block);
 
 						const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
 						m_player.inventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().stringID() : "", currentStack.amount() - 1);

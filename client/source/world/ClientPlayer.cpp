@@ -83,6 +83,11 @@ u8 ClientPlayer::getDirection() const {
 	}
 }
 
+u8 ClientPlayer::getOppositeDirection() const {
+	u8 direction = getDirection();
+	return (direction % 2 == 0) ? direction + 1 : direction - 1;
+}
+
 void ClientPlayer::updateDir() {
 	double ch = cos(m_viewAngleH * RADIANS_PER_DEGREES);
 	double sh = sin(m_viewAngleH * RADIANS_PER_DEGREES);

@@ -107,13 +107,13 @@ void ClientWorld::receiveChunkData(sf::Packet &packet) {
 	for (u16 z = 0 ; z < CHUNK_HEIGHT ; ++z) {
 		for (u16 y = 0 ; y < CHUNK_DEPTH ; ++y) {
 			for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
-				u16 block;
+				u32 block;
 				u8 light;
 
 				packet >> block >> light;
 
 				chunk->setBlockRaw(x, y, z, block & 0xffff);
-				// chunk->setData(x, y, z, block >> 16);
+				chunk->setData(x, y, z, block >> 16);
 				chunk->lightmap().setLightData(x, y, z, light);
 			}
 		}
@@ -213,7 +213,7 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	// an issue at larger coordinates, because the precision of floats
 	// quickly degrades as the numbers grow, with a random wobbling being
 	// very noticeable at e.g. coordinates >= 65536 or so, and the waving
-	// leaves effect being very jerky in conparison with the effect near the
+	// leaves effect being very jerky in comparison with the effect near the
 	// origin.
 	//
 	// To gain rendering precision, we subtract the camera position from the

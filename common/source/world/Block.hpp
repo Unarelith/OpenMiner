@@ -101,6 +101,9 @@ class Block : public ISerializable {
 		const gk::Color &colorMultiplier() const { return m_colorMultiplier; }
 		void setColorMultiplier(const gk::Color &colorMultiplier) { m_colorMultiplier = colorMultiplier; }
 
+		bool isRotatable() const { return m_isRotatable; }
+		void setRotatable(bool isRotatable) { m_isRotatable = isRotatable; }
+
 	protected:
 		glm::vec4 getTexCoordsFromID(int textureID) const;
 
@@ -129,6 +132,8 @@ class Block : public ISerializable {
 		bool m_isLightSource = false;
 
 		gk::Color m_colorMultiplier = gk::Color::White;
+
+		bool m_isRotatable = false;
 };
 
 #endif // BLOCK_HPP_

@@ -49,7 +49,8 @@ void Block::serialize(sf::Packet &packet) const {
 		<< m_boundingBox.x << m_boundingBox.y << m_boundingBox.z
 		<< m_boundingBox.sizeX << m_boundingBox.sizeY << m_boundingBox.sizeZ
 		<< m_isLightSource << m_canUpdate << m_canBeActivated
-		<< m_colorMultiplier.r << m_colorMultiplier.g << m_colorMultiplier.b << m_colorMultiplier.a;
+		<< m_colorMultiplier.r << m_colorMultiplier.g << m_colorMultiplier.b << m_colorMultiplier.a
+		<< m_isRotatable;
 }
 
 void Block::deserialize(sf::Packet &packet) {
@@ -61,7 +62,8 @@ void Block::deserialize(sf::Packet &packet) {
 		>> m_boundingBox.x >> m_boundingBox.y >> m_boundingBox.z
 		>> m_boundingBox.sizeX >> m_boundingBox.sizeY >> m_boundingBox.sizeZ
 		>> m_isLightSource >> m_canUpdate >> m_canBeActivated
-		>> m_colorMultiplier.r >> m_colorMultiplier.g >> m_colorMultiplier.b >> m_colorMultiplier.a;
+		>> m_colorMultiplier.r >> m_colorMultiplier.g >> m_colorMultiplier.b >> m_colorMultiplier.a
+		>> m_isRotatable;
 
 	m_id = id;
 	m_drawType = BlockDrawType(drawType);

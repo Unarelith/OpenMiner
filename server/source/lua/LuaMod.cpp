@@ -49,6 +49,7 @@ void LuaMod::registerBlock(const sol::table &table) {
 	block.setOnBlockActivated(onBlockActivated);
 	block.setOnTick(onTick);
 	block.setOnBlockPlaced(table["on_block_placed"]);
+	block.setRotatable(table["is_rotatable"].get_or(false));
 
 	sol::optional<sol::table> boundingBox = table["bounding_box"];
 	if (boundingBox != sol::nullopt) {

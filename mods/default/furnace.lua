@@ -30,6 +30,7 @@ mod:block {
 	name = "Furnace",
 	tiles = {"furnace_top.png", "furnace_top.png", "furnace_front.png", "furnace_side.png"},
 	alt_tiles = {"", "", "furnace_front_on.png", ""},
+	is_rotatable = true,
 
 	on_block_placed = function(pos, world)
 		world:add_block_data(pos.x, pos.y, pos.z, 3, 1)

@@ -40,12 +40,12 @@ const std::string &TilesDef::getTextureForFace(u8 face, bool useAltTiles) const 
 	static constexpr u8 faceToIndex[nSizes][nFaces] = {
 		// Same order as enum BlockFace in TilesDef.hpp,
 		// namely: West, East, South, North, Bottom, Top
-		{ 0, 0, 0, 0, 0, 0, }, // for size = 1
-		{ 1, 1, 1, 1, 0, 0, }, // for size = 2
-		{ 2, 2, 2, 2, 1, 0, }, // for size = 3
-		{ 2, 3, 3, 3, 1, 0, }, // for size = 4
-		{ 2, 3, 4, 4, 1, 0, }, // for size = 5
-		{ 2, 3, 4, 5, 1, 0, }, // for size = 6
+		{0, 0, 0, 0, 0, 0}, // for size = 1
+		{1, 1, 1, 1, 0, 0}, // for size = 2
+		{2, 2, 2, 2, 1, 0}, // for size = 3
+		{2, 3, 3, 3, 1, 0}, // for size = 4
+		{2, 3, 4, 4, 1, 0}, // for size = 5
+		{2, 3, 4, 5, 1, 0}, // for size = 6
 	};
 
 	u8 index = faceToIndex[size <= nSizes ? size - 1 : nSizes - 1][face];

@@ -64,7 +64,7 @@ void DebugOverlay::update() {
 	stream << "cy: " << (py & -CHUNK_DEPTH)  / CHUNK_DEPTH << " | ";
 	stream << "cz: " << (pz & -CHUNK_HEIGHT) / CHUNK_HEIGHT;
 	stream << '\n';
-	stream << "dir: " << direction << " (" << m_player.viewAngleH() << ")";
+	stream << "dir: " << direction << " (" << m_player.cameraYaw() << ")";
 	stream << '\n';
 	stream << "Loaded chunks: " << m_world.loadedChunkCount();
 

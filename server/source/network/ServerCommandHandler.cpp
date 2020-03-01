@@ -150,7 +150,8 @@ void ServerCommandHandler::setupCallbacks() {
 		s32 x, y, z;
 		u32 block;
 		packet >> x >> y >> z >> block;
-		m_world.setBlock(x, y, z, block);
+		m_world.setBlock(x, y, z, block & 0xffff);
+		m_world.setData(x, y, z, block >> 16);
 
 		sf::Packet answer;
 		answer << Network::Command::BlockUpdate << x << y << z << block;

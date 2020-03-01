@@ -53,8 +53,9 @@ class ClientPlayer : public Player {
 		void turnViewV(double angle);
 
 		// West, East, South, North
+		// Same order as enum BlockFace in TilesDef.hpp
 		u8 getDirection() const;
-		double viewAngleH() const { return m_viewAngleH; }
+		u8 getOppositeDirection() const;
 
 		void move(double direction);
 

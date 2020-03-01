@@ -29,9 +29,8 @@
 #include "Registry.hpp"
 #include "TextureAtlas.hpp"
 
+// Same order as enum BlockFace in TilesDef.hpp
 static const float cubeCoords[6 * 4 * 3] = {
-	// Same order as enum BlockFace in TilesDef.hpp
-
 	// West
 	0, 1, 0,
 	0, 0, 0,
@@ -170,8 +169,25 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 	// Computing face normal (already normalized because vertexCoords are normalized)
 	normal = glm::cross(v1, v2);
 
+	u8 faceID = i;
+	if (block->isRotatable()) {
+		u8 orientation = chunk.getData(x, y, z) & 0x3;
+		if (faceID < 4) {
+			u8 faceToAngle[4] = {0, 2, 1, 3};
+			u8 angleToFace[4] = {BlockFace::West, BlockFace::South, BlockFace::East, BlockFace::North};
+
+			if (orientation == BlockFace::South)
+				faceID = angleToFace[(faceToAngle[faceID] + 1) % 4];
+			else if (orientation == BlockFace::West) // FIXME: Find why East and West are inverted
+				faceID = angleToFace[(faceToAngle[faceID] + 2) % 4];
+			else if (orientation == BlockFace::North)
+				faceID = angleToFace[(faceToAngle[faceID] + 3) % 4];
+		}
+	}
+
 	const BlockData *blockData = chunk.getBlockData(x, y, z);
-	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->tiles().getTextureForFace(i, blockData ? blockData->useAltTiles : false));
+	const std::string &texture = block->tiles().getTextureForFace(faceID, blockData ? blockData->useAltTiles : false);
+	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(texture);
 	float faceTexCoords[2 * 4] = {
 		blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.sizeY,
 		blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y + blockTexCoords.sizeY,
