@@ -45,7 +45,7 @@ class InventoryWidget : public AbstractInventoryWidget {
 
 		void update() override;
 
-		void sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) override;
+		bool sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) override;
 		bool receiveItemStack(const ItemWidget *itemStack) override;
 
 		void sendUpdatePacket();

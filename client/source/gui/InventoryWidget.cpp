@@ -86,12 +86,15 @@ void InventoryWidget::update() {
 		it.update();
 }
 
-void InventoryWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) {
+bool InventoryWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) {
 	if (dest->receiveItemStack(itemStack)) {
 		m_inventory->clearStack(itemStack->x(), itemStack->y());
 		update();
 		sendUpdatePacket();
+		return true;
 	}
+
+	return false;
 }
 
 bool InventoryWidget::receiveItemStack(const ItemWidget *itemStack) {

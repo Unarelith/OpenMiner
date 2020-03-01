@@ -80,12 +80,15 @@ void CraftingWidget::update() {
 	}
 }
 
-void CraftingWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) {
+bool CraftingWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) {
 	if (m_currentInventoryWidget && dest->receiveItemStack(itemStack)) {
 		m_currentInventoryWidget->inventory()->clearStack(itemStack->x(), itemStack->y());
 		m_currentInventoryWidget->update();
 		m_currentInventoryWidget->sendUpdatePacket();
+		return true;
 	}
+
+	return false;
 }
 
 bool CraftingWidget::receiveItemStack(const ItemWidget *itemStack) {

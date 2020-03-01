@@ -123,7 +123,7 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 		inventory = "temp",
 		size = 2,
 
-		shift_destination = "inv_main",
+		shift_destination = "inv_main,inv_hotbar",
 	}
 
 	gui:show(client)

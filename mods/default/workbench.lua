@@ -79,7 +79,7 @@ mod:block {
 			inventory = "block",
 			block = {x = pos.x, y = pos.y, z = pos.z},
 
-			shift_destination = "inv_main",
+			shift_destination = "inv_main,inv_hotbar",
 		}
 
 		gui:image {

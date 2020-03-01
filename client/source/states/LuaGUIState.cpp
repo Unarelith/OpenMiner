@@ -74,24 +74,27 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT
 	 && m_currentInventoryWidget && !m_currentInventoryWidget->shiftDestination().empty()
 	 && m_mouseItemWidget.currentItemWidget() && gk::GamePad::isKeyPressed(GameKey::Shift)) {
-		AbstractInventoryWidget *dest = nullptr;
+		for (const std::string &shiftDestination : m_currentInventoryWidget->shiftDestination()) {
+			AbstractInventoryWidget *dest = nullptr;
 
-		auto it = m_craftingWidgets.find(m_currentInventoryWidget->shiftDestination());
-		if (it != m_craftingWidgets.end())
-			dest = &it->second;
-
-		if (!dest) {
-			auto it = m_inventoryWidgets.find(m_currentInventoryWidget->shiftDestination());
-			if (it != m_inventoryWidgets.end())
+			auto it = m_craftingWidgets.find(shiftDestination);
+			if (it != m_craftingWidgets.end())
 				dest = &it->second;
-		}
 
-		if (!dest) {
-			DEBUG("ERROR: Destination not found: '" + m_currentInventoryWidget->shiftDestination() + "'");
-			return;
-		}
+			if (!dest) {
+				auto it = m_inventoryWidgets.find(shiftDestination);
+				if (it != m_inventoryWidgets.end())
+					dest = &it->second;
+			}
 
-		m_currentInventoryWidget->sendItemStackToDest(m_mouseItemWidget.currentItemWidget(), dest);
+			if (!dest) {
+				DEBUG("WARNING: Destination not found: '" + shiftDestination + "'");
+				return;
+			}
+
+			if (m_currentInventoryWidget->sendItemStackToDest(m_mouseItemWidget.currentItemWidget(), dest))
+				break;
+		}
 	}
 	else {
 		for (auto &it : m_inventoryWidgets)

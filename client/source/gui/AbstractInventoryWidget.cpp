@@ -24,23 +24,17 @@
  *
  * =====================================================================================
  */
-#ifndef ABSTRACTINVENTORYWIDGET_HPP_
-#define ABSTRACTINVENTORYWIDGET_HPP_
+#include <sstream>
 
-#include "ItemWidget.hpp"
+#include "AbstractInventoryWidget.hpp"
 
-class AbstractInventoryWidget : public Widget {
-	public:
-		AbstractInventoryWidget(Widget *parent) : Widget(parent) {}
+void AbstractInventoryWidget::setShiftDestination(const std::string &shiftDestination) {
+	m_shiftDestination.clear();
 
-		virtual bool sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) = 0;
-		virtual bool receiveItemStack(const ItemWidget *itemStack) = 0;
+	std::stringstream stream(shiftDestination);
+	std::string item;
+	while (std::getline(stream, item, ',')) {
+		m_shiftDestination.emplace_back(item);
+	}
+}
 
-		const std::vector<std::string> &shiftDestination() const { return m_shiftDestination; }
-		void setShiftDestination(const std::string &shiftDestination);
-
-	private:
-		std::vector<std::string> m_shiftDestination;
-};
-
-#endif // ABSTRACTINVENTORYWIDGET_HPP_

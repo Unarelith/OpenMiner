@@ -85,7 +85,7 @@ mod:block {
 			offset = 0,
 			count = 1,
 
-			shift_destination = "inv_main",
+			shift_destination = "inv_main,inv_hotbar",
 		}
 
 		gui:inventory {
@@ -99,7 +99,7 @@ mod:block {
 			offset = 1,
 			count = 1,
 
-			shift_destination = "inv_main",
+			shift_destination = "inv_main,inv_hotbar",
 		}
 
 		gui:inventory {
@@ -113,7 +113,7 @@ mod:block {
 			offset = 2,
 			count = 1,
 
-			shift_destination = "inv_main",
+			shift_destination = "inv_main,inv_hotbar",
 		}
 
 		gui:inventory {
@@ -128,7 +128,7 @@ mod:block {
 			offset = 9,
 			count = 9 * 3,
 
-			shift_destination = "inv_input",
+			shift_destination = "inv_input,inv_fuel",
 		}
 
 		gui:inventory {
@@ -143,7 +143,7 @@ mod:block {
 			offset = 0,
 			count = 9,
 
-			shift_destination = "inv_input",
+			shift_destination = "inv_input,inv_fuel",
 		}
 
 		gui:image {
