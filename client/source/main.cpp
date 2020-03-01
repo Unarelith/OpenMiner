@@ -50,10 +50,10 @@ typedef enum PROCESS_DPI_AWARENESS {
 	PROCESS_PER_MONITOR_DPI_AWARE = 2
 } PROCESS_DPI_AWARENESS;
 
-BOOL(WINAPI *SetProcessDPIAware)(void); // Vista and later
-HRESULT(WINAPI *SetProcessDpiAwareness)(PROCESS_DPI_AWARENESS dpiAwareness); // Windows 8.1 and later
-
 void setDpiAwareness() {
+	BOOL(WINAPI *SetProcessDPIAware)(void); // Vista and later
+	HRESULT(WINAPI *SetProcessDpiAwareness)(PROCESS_DPI_AWARENESS dpiAwareness); // Windows 8.1 and later
+
 	void *userDLL = SDL_LoadObject("USER32.DLL");
 	if (userDLL) {
 		SetProcessDPIAware = (BOOL(WINAPI *)(void))SDL_LoadFunction(userDLL, "SetProcessDPIAware");
