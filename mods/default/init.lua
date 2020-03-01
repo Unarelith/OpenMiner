@@ -29,6 +29,7 @@ mod = LuaMod.new("default")
 dofile("mods/default/blocks.lua")
 dofile("mods/default/items.lua")
 dofile("mods/default/recipes.lua")
+dofile("mods/default/biomes.lua")
 
 openminer:world():terrain_generator():set_blocks({
 	dirt = "default:dirt",

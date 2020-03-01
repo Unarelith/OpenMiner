@@ -86,6 +86,10 @@ void Registry::serialize(sf::Packet &packet) const {
 		packet << u8((it->type() == "craft") ? DataType::CraftingRecipe : DataType::SmeltingRecipe)
 			<< *it;
 	}
+
+	for (auto &it : m_biomes) {
+		packet << u8(DataType::Biome) << *it;
+	}
 }
 
 void Registry::deserialize(sf::Packet &packet) {
@@ -103,6 +107,9 @@ void Registry::deserialize(sf::Packet &packet) {
 		}
 		else if (type == u8(DataType::SmeltingRecipe)) {
 			registerRecipe<SmeltingRecipe>()->deserialize(packet);
+		}
+		else if (type == u8(DataType::Biome)) {
+			registerSerializedBiome<Biome>(packet);
 		}
 	}
 }

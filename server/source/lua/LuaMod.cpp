@@ -30,6 +30,7 @@
 #include "LuaMod.hpp"
 #include "Registry.hpp"
 #include "ServerBlock.hpp"
+#include "Biome.hpp"
 #include "SmeltingRecipe.hpp"
 
 void LuaMod::registerBlock(const sol::table &table) {
@@ -142,11 +143,32 @@ void LuaMod::registerSmeltingRecipe(const sol::table &table) {
 	Registry::getInstance().registerRecipe<SmeltingRecipe>(input, output);
 }
 
+void LuaMod::registerBiome(const sol::table &table) {
+	std::string stringID = m_id + ":" + table["id"].get<std::string>();
+	std::string label = table["name"].get<std::string>();
+
+	Biome &biome = Registry::getInstance().registerBiome<Biome>(stringID, label);
+
+	// TODO eventually a WorldType could have a list of biome parameter names in order, and we could use those as the ordered keys.
+	// Currently hardcoding "temperature" and "precipitation" to get something functional.
+	size_t nBiomeParams = 2;
+	std::vector<double> params(nBiomeParams);
+	params[0] = table["params"]["temperature"];
+	params[1] = table["params"]["precipitation"];
+	biome.setParams(params);
+
+	biome.setTopBlock(Registry::getInstance().getBlockFromStringID(table["top_block"]).id());
+	biome.setGroundBlock(Registry::getInstance().getBlockFromStringID(table["ground_block"]).id());
+	biome.setBeachBlock(Registry::getInstance().getBlockFromStringID(table["beach_block"]).id());
+	biome.setLiquidBlock(Registry::getInstance().getBlockFromStringID(table["liquid_block"]).id());
+}
+
 void LuaMod::initUsertype(sol::state &lua) {
 	lua.new_usertype<LuaMod>("LuaMod",
 		sol::constructors<LuaMod(std::string)>(),
 		"id",              &LuaMod::id,
 		"block",           &LuaMod::registerBlock,
+		"biome",           &LuaMod::registerBiome,
 		"item",            &LuaMod::registerItem,
 		"crafting_recipe", &LuaMod::registerCraftingRecipe,
 		"smelting_recipe", &LuaMod::registerSmeltingRecipe

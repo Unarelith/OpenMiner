@@ -35,6 +35,7 @@
 #include "Item.hpp"
 #include "Network.hpp"
 #include "Recipe.hpp"
+#include "Biome.hpp"
 
 class Registry : public ISerializable {
 	public:
@@ -66,6 +67,25 @@ class Registry : public ISerializable {
 			return m_recipes.back().get();
 		}
 
+		template<typename T>
+		auto registerBiome(const std::string &stringID, const std::string &label) -> typename std::enable_if<std::is_base_of<Biome, T>::value, T&>::type {
+			size_t id = m_biomes.size();
+			m_biomesID.emplace(stringID, id);
+			m_biomes.emplace_back(std::make_unique<T>(id, stringID, label));
+			return *static_cast<T*>(m_biomes.back().get());
+		}
+
+		template<typename T>
+		auto registerSerializedBiome(sf::Packet &packet) -> typename std::enable_if<std::is_base_of<Biome, T>::value, T&>::type {
+			m_biomes.emplace_back(std::make_unique<T>());
+			m_biomes.back()->deserialize(packet);
+
+			size_t id = m_biomes.size() - 1;
+			m_biomesID.emplace(m_biomes.back()->stringID(), id);
+
+			return *static_cast<T*>(m_biomes.back().get());
+		}
+
 		const Block &getBlock(std::size_t id) const { return *m_blocks.at(id).get(); }
 		const Item &getItem(std::size_t id) const { return m_items.at(id); }
 
@@ -74,11 +94,14 @@ class Registry : public ISerializable {
 
 		const Recipe *getRecipe(const Inventory &inventory) const;
 
+		const Biome &getBiome(std::size_t id) const { return *m_biomes.at(id).get(); }
+
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
 		const std::vector<std::unique_ptr<Block>> &blocks() const { return m_blocks; }
 		const std::vector<Item> &items() const { return m_items; }
+		const std::vector<std::unique_ptr<Biome>> &biomes() const { return m_biomes; }
 
 		static Registry &getInstance() { return *s_instance; }
 		static void setInstance(Registry &instance) { s_instance = &instance; }
@@ -89,15 +112,18 @@ class Registry : public ISerializable {
 		std::vector<std::unique_ptr<Block>> m_blocks;
 		std::vector<Item> m_items;
 		std::vector<std::unique_ptr<Recipe>> m_recipes;
+		std::vector<std::unique_ptr<Biome>> m_biomes;
 
 		std::unordered_map<std::string, u32> m_blocksID;
 		std::unordered_map<std::string, u32> m_itemsID;
+		std::unordered_map<std::string, u32> m_biomesID;
 
 		enum class DataType {
 			Block,
 			Item,
 			CraftingRecipe,
 			SmeltingRecipe,
+			Biome
 		};
 };
 

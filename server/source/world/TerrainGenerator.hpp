@@ -28,8 +28,8 @@
 #define TERRAINGENERATOR_HPP_
 
 #include <gk/core/IntTypes.hpp>
-
 #include <sol.hpp>
+#include "TerrainBiomeSampler.hpp"
 
 class ServerChunk;
 
@@ -47,6 +47,8 @@ class TerrainGenerator {
 		void oreFloodFill(ServerChunk &chunk, double x, double y, double z, u16 toReplace, u16 replaceWith, int depth) const;
 		static float noise2d(double x, double y, int octaves, float persistence);
 		static float noise3d_abs(double x, double y, double z, int octaves, float persistence);
+
+		TerrainBiomeSampler biomeSampler;
 
 		u16 m_dirtBlockID = 0;
 		u16 m_grassBlockID = 0;
