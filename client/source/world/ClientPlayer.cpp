@@ -57,6 +57,7 @@ void ClientPlayer::turnH(double angle) {
 		m_viewAngleH + angle : fmod(m_viewAngleH + angle, 360.);
 
 	if (m_viewAngleH >= 180.) m_viewAngleH -= 360.;
+	if (m_viewAngleH <= -180.) m_viewAngleH += 360.; // FIXME: Temporary fix, needs review
 
 	updateDir();
 }
@@ -65,6 +66,21 @@ void ClientPlayer::turnViewV(double angle) {
 	m_viewAngleV = std::max(std::min(m_viewAngleV + angle, 90.), -90.);
 
 	updateDir();
+}
+
+u8 ClientPlayer::getDirection() const {
+	if (m_viewAngleH >= -45. && m_viewAngleH <= 45.) {
+		return West;
+	}
+	else if (m_viewAngleH >= -135. && m_viewAngleH <= -45.) {
+		return North;
+	}
+	else if (m_viewAngleH <= -135. || m_viewAngleH >= 135.) {
+		return East;
+	}
+	else {
+		return South;
+	}
 }
 
 void ClientPlayer::updateDir() {

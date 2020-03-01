@@ -48,6 +48,9 @@ void DebugOverlay::update() {
 	s32 py = std::floor(m_player.y());
 	s32 pz = std::floor(m_player.z());
 
+	const char *directions[5] = {"West", "East", "South", "North"};
+	const char *direction = directions[m_player.getDirection()];
+
 	std::stringstream stream;
 	stream << "x: " << px << " | ";
 	stream << "y: " << py << " | ";
@@ -60,6 +63,8 @@ void DebugOverlay::update() {
 	stream << "cx: " << (px & -CHUNK_WIDTH)  / CHUNK_WIDTH << " | ";
 	stream << "cy: " << (py & -CHUNK_DEPTH)  / CHUNK_DEPTH << " | ";
 	stream << "cz: " << (pz & -CHUNK_HEIGHT) / CHUNK_HEIGHT;
+	stream << '\n';
+	stream << "dir: " << direction << " (" << m_player.viewAngleH() << ")";
 	stream << '\n';
 	stream << "Loaded chunks: " << m_world.loadedChunkCount();
 

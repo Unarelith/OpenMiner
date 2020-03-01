@@ -52,6 +52,10 @@ class ClientPlayer : public Player {
 		void turnH(double angle);
 		void turnViewV(double angle);
 
+		// West, East, South, North
+		u8 getDirection() const;
+		double viewAngleH() const { return m_viewAngleH; }
+
 		void move(double direction);
 
 		void processInputs();
