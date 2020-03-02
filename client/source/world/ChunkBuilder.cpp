@@ -171,18 +171,16 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 
 	u8 faceID = i;
 	if (block->isRotatable()) {
-		u8 orientation = chunk.getData(x, y, z) & 0x3;
-		if (faceID < 4) {
-			u8 faceToAngle[4] = {0, 2, 1, 3};
-			u8 angleToFace[4] = {BlockFace::West, BlockFace::South, BlockFace::East, BlockFace::North};
-
-			if (orientation == BlockFace::North) // FIXME: Find why North and South are inverted
-				faceID = angleToFace[(faceToAngle[faceID] + 1) % 4];
-			else if (orientation == BlockFace::East)
-				faceID = angleToFace[(faceToAngle[faceID] + 2) % 4];
-			else if (orientation == BlockFace::South)
-				faceID = angleToFace[(faceToAngle[faceID] + 3) % 4];
-		}
+		u8 orientation = chunk.getData(x, y, z) & 0x1F;
+		assert((orientation & 0x1C) == 0);     // TODO: Handle all 24 orientations
+		// Get face orientation from table
+		static constexpr BlockFace orientFace[4][6] = {
+			{ West,  East,  South, North, Bottom, Top },    // West  orientation leaves faces untouched
+			{ East,  West,  North, South, Bottom, Top },    // East  orientation rotates them 180 deg
+			{ North, South, West,  East,  Bottom, Top },    // South orientation rotates them -90 deg
+			{ South, North, East,  West,  Bottom, Top },    // North orientation rotates them 90 deg
+		};
+		faceID = orientFace[orientation][faceID];
 	}
 
 	const BlockData *blockData = chunk.getBlockData(x, y, z);

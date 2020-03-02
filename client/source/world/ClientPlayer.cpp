@@ -84,8 +84,8 @@ u8 ClientPlayer::getDirection() const {
 }
 
 u8 ClientPlayer::getOppositeDirection() const {
-	u8 direction = getDirection();
-	return (direction % 2 == 0) ? direction + 1 : direction - 1;
+	// Note: For this to work, it depends on the order of the enum BlockFace in TilesDef.hpp
+	return getDirection() ^ 1;
 }
 
 void ClientPlayer::updateDir() {
