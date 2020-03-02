@@ -9,7 +9,6 @@ varying float v_blockFace;
 varying float v_dist;
 
 uniform int u_renderDistance;
-
 uniform int u_time;
 // Get current pixel color
 vec4 getColor();
@@ -50,10 +49,10 @@ void main() {
 		const float frequency = 512000;
 
 		float time = mod(u_time, 256000);
-
 		float sunlight = clamp(v_lightValue.x * 0.5 * (1 + cos(2 * pi / frequency * time)), 0, 15);
 		float ambientIntensity = max(max(sunlight, v_lightValue.y) / 16.0, minBrightness);
 		float diffuseIntensity = max(sunlight, v_lightValue.y) / 32.0;
+
 		// These numbers should be in sync with enum BlockFace in TilesDef.hpp
 		// Bottom
 		if (blockFace == 4.)
