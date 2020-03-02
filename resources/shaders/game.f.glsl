@@ -44,7 +44,7 @@ void main() {
 	// color *= light(vec3(1.0, 1.0, 1.0), vec4(lightPosition, 1.0), 0.5, 0.5);
 
 	//variables for time and other math stuff
-	float ticktime = mod(u_time, 25600);
+	float ticktime = mod(u_time, 10000);
 	float pi = 3.14159265358979323846264338327950288419716939937510;
 
 	float minBrightness = 2.0 / 16.0;
@@ -65,14 +65,14 @@ void main() {
 
 			if (ticktime >=0 && ticktime <= 5000)
 			{
-				ambientIntensity *= min(sin(mod(ticktime/10000, pi)), 1);
-				diffuseIntensity *= min(sin(mod(ticktime/10000, pi)), 1);
+				ambientIntensity *= min(max(sin(ticktime/5000 + pi*u_time/5000), minBrightness), 1);
+				diffuseIntensity *= min(max(sin(ticktime/5000 + pi*u_time/5000), minBrightness), 1);
 				color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
 			}
 			else if(ticktime > 5000 && ticktime <10000)
 			{
-				ambientIntensity *= max(cos(mod(ticktime/10000, pi)), 0.2);
-				diffuseIntensity *= max(cos(mod(ticktime/10000, pi)), 0.2);
+				ambientIntensity *= max(cos(ticktime/5000 + pi*u_time/5000), minBrightness);
+				diffuseIntensity *= max(cos(ticktime/5000 + pi*u_time/5000), minBrightness);
 				color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
 			}
 
