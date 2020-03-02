@@ -44,23 +44,26 @@ void main() {
 	// color *= light(vec3(1.0, 1.0, 1.0), vec4(lightPosition, 1.0), 0.5, 0.5);
 
 	//variables for time and other math stuff
-	float ticktime = mod(u_time, 10000);
-	float pi = 3.14159265358979323846264338327950288419716939937510;
 
+	float minBrightness = 2.0 / 16.0;
+
+	if (lightCheck != -1.) {
+
+		float ticktime = mod(u_time, 10000);
+		float pi = 3.14159265358979323846264338327950288419716939937510;
+		float sunlight = v_lightValue.x;
 		if (ticktime >=0 && ticktime <= 5000)
 		{
-			v_lightValue.x *= min(sin(ticktime/5000 + pi*u_time/5000)*15, 15);
+			sunlight *= min(sin(ticktime/5000 + pi*u_time/5000), 1);
 			// color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
 		}
 		else if(ticktime > 5000 && ticktime <10000)
 		{
-			v_lightValue.x *= max(cos(ticktime/5000 + pi*u_time/5000)*15, 0);
+			sunlight *= max(cos(ticktime/5000 + pi*u_time/5000), 0);
 		}
 
-	float minBrightness = 2.0 / 16.0;
-	if (lightCheck != -1.) {
-		float ambientIntensity = max(max(v_lightValue.x, v_lightValue.y) / 16.0, minBrightness);
-		float diffuseIntensity = max(v_lightValue.x, v_lightValue.y) / 32.0;
+		float ambientIntensity = max(max(sunlight, v_lightValue.y) / 16.0, minBrightness);
+		float diffuseIntensity = max(sunlight, v_lightValue.y) / 32.0;
 
 		// These numbers should be in sync with enum BlockFace in TilesDef.hpp
 		// Bottom
@@ -72,7 +75,6 @@ void main() {
 		// South or North
 		if (blockFace == 2. || blockFace == 3.)
 			ambientIntensity = max(ambientIntensity * 0.9, minBrightness);
-
 
 			color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
 		// color = vec4(0, 0, v_lightValue.x / 16.0, 1);
