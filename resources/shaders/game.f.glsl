@@ -54,7 +54,7 @@ void main() {
 
 		float ambientIntensity = max(max(sunlight, v_lightValue.y) / 16.0, minBrightness);
 		float diffuseIntensity = max(sunlight, v_lightValue.y) / 32.0;
-		
+
 		// These numbers should be in sync with enum BlockFace in TilesDef.hpp
 		// Bottom
 		if (blockFace == 4.)
@@ -67,6 +67,7 @@ void main() {
 			ambientIntensity = max(ambientIntensity * 0.9, minBrightness);
 
 		color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
+		
 		// color = vec4(0, 0, v_lightValue.x / 16.0, 1);
 	}
 
@@ -76,3 +77,4 @@ void main() {
 
 	gl_FragColor = color;
 }
+
