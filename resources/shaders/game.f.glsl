@@ -50,8 +50,8 @@ void main() {
 		const float pi = 3.1415927;
 		const float frequency = 512000;
 		float time = mod(u_time, 256000);
+		
 		float sunlight = clamp(v_lightValue.x * 0.5 * (1 + cos(2 * pi / frequency * time)), 0, 15);
-
 		float ambientIntensity = max(max(sunlight, v_lightValue.y) / 16.0, minBrightness);
 		float diffuseIntensity = max(sunlight, v_lightValue.y) / 32.0;
 
@@ -76,4 +76,3 @@ void main() {
 
 	gl_FragColor = color;
 }
-
