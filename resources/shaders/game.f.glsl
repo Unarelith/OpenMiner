@@ -9,7 +9,7 @@ varying float v_blockFace;
 varying float v_dist;
 
 uniform int u_renderDistance;
-
+uniform int u_time;
 // Get current pixel color
 vec4 getColor();
 
@@ -43,6 +43,10 @@ void main() {
 	// vec3 lightPosition = vec3(0.0, sin(time) * 40, cos(time) * 40);
 	// color *= light(vec3(1.0, 1.0, 1.0), vec4(lightPosition, 1.0), 0.5, 0.5);
 
+	//variables for time and other math stuff
+	float ticktime = mod(u_time, 25600);
+	float pi = 3.14159265358979323846264338327950288419716939937510;
+
 	float minBrightness = 2.0 / 16.0;
 	if (lightCheck != -1.) {
 		float ambientIntensity = max(max(v_lightValue.x, v_lightValue.y) / 16.0, minBrightness);
@@ -59,7 +63,18 @@ void main() {
 		if (blockFace == 2. || blockFace == 3.)
 			ambientIntensity = max(ambientIntensity * 0.9, minBrightness);
 
-		color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
+			if (ticktime >=0 && ticktime <= 5000)
+			{
+				ambientIntensity *= min(sin(mod(ticktime/10000, pi)), 1);
+				diffuseIntensity *= min(sin(mod(ticktime/10000, pi)), 1);
+				color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
+			}
+			else if(ticktime > 5000 && ticktime <10000)
+			{
+				ambientIntensity *= max(cos(mod(ticktime/10000, pi)), 0.2);
+				diffuseIntensity *= max(cos(mod(ticktime/10000, pi)), 0.2);
+				color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
+			}
 
 		// color = vec4(0, 0, v_lightValue.x / 16.0, 1);
 	}
@@ -70,4 +85,3 @@ void main() {
 
 	gl_FragColor = color;
 }
-

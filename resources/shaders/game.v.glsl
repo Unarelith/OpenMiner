@@ -22,7 +22,7 @@ uniform mat4 u_projectionMatrix;
 uniform mat4 u_viewMatrix;
 
 uniform int u_renderDistance;
-// uniform int u_time;
+uniform int u_time;
 
 void main() {
 	// FIXME: This code won't work anymore because of 'blockType' attibute removal
@@ -63,4 +63,3 @@ void main() {
 
 	gl_Position = u_projectionMatrix * u_viewMatrix * v_coord3d;
 }
-

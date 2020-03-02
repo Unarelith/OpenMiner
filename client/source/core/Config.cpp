@@ -39,11 +39,11 @@ bool Config::isTorchSmoothLightingEnabled = true;
 bool Config::isSunSmoothLightingEnabled = true;
 bool Config::isAmbientOcclusionEnabled = false;
 bool Config::isWireframeModeEnabled = false;
-bool Config::isFullscreenModeEnabled = false;
-bool Config::isVerticalSyncEnabled = true;
+bool Config::isFullscreenModeEnabled = true;
+bool Config::isVerticalSyncEnabled = false;
 float Config::cameraFOV = 70.0f;
-u16 Config::screenWidth = 1600;
-u16 Config::screenHeight = 1050;
+u16 Config::screenWidth = 1920;
+u16 Config::screenHeight = 1080;
 u8 Config::guiScale = 3;
 
 // Input
@@ -88,4 +88,3 @@ void Config::loadConfigFromFile(const char *file) {
 		}
 	}
 }
-
