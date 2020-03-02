@@ -71,10 +71,6 @@ class ClientPlayer : public Player {
 		static ClientPlayer &getInstance() { return *s_instance; }
 		static void setInstance(ClientPlayer *instance) { s_instance = instance; }
 
-		double x() const { return m_x; }
-		double y() const { return m_y; }
-		double z() const { return m_z; }
-
 		float cameraYaw()   const { return m_viewAngleH; }
 		float cameraPitch() const { return m_viewAngleV; }
 		float cameraRoll()  const { return m_viewAngleRoll; }
@@ -91,10 +87,6 @@ class ClientPlayer : public Player {
 		static ClientPlayer *s_instance;
 
 		gk::Camera &m_camera;
-
-		double m_x;
-		double m_y;
-		double m_z;
 
 		float m_viewAngleH;
 		float m_viewAngleV;

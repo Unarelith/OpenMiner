@@ -48,9 +48,9 @@ void ClientCommandHandler::sendPlayerPosUpdate() {
 	packet << Network::Command::PlayerPosUpdate;
 	// FIXME: Sending client id shouldn't be necessary
 	packet << m_client.id();
-	packet << m_player.Player::x();
-	packet << m_player.Player::y();
-	packet << m_player.Player::z();
+	packet << m_player.x();
+	packet << m_player.y();
+	packet << m_player.z();
 	packet << false;
 	m_client.send(packet);
 }
@@ -147,7 +147,7 @@ void ClientCommandHandler::setupCallbacks() {
 	});
 
 	m_client.setCommandCallback(Network::Command::PlayerPosUpdate, [this](sf::Packet &packet) {
-		s32 x, y, z;
+		double x, y, z;
 		u16 clientId;
 		bool isTeleportation;
 		packet >> clientId;

@@ -39,23 +39,23 @@ class Player : public ISerializable {
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
-		s32 x() const { return m_x; }
-		s32 y() const { return m_y; }
-		s32 z() const { return m_z; }
+		double x() const { return m_x; }
+		double y() const { return m_y; }
+		double z() const { return m_z; }
 
 		Inventory &inventory() { return m_inventory; }
 
 		u16 clientID() const { return m_clientID; }
 
-		void setPosition(s32 x, s32 y, s32 z) { m_x = x; m_y = y; m_z = z; }
+		void setPosition(double x, double y, double z) { m_x = x; m_y = y; m_z = z; }
 		void setClientID(u16 clientID) { m_clientID = clientID; }
 
 		const gk::FloatBox &hitbox() const { return m_hitbox; }
 
 	protected:
-		s32 m_x = 0;
-		s32 m_y = 0;
-		s32 m_z = 0;
+		double m_x = 0;
+		double m_y = 0;
+		double m_z = 0;
 
 		u16 m_clientID = 0;
 

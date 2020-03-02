@@ -137,7 +137,7 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerPosUpdate, [this](Client &client, sf::Packet &packet) {
-		s32 x, y, z;
+		double x, y, z;
 		u16 clientId;
 		packet >> clientId;
 		packet >> x >> y >> z;

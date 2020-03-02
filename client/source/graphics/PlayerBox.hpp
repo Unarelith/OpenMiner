@@ -39,7 +39,7 @@ class PlayerBox : public gk::Drawable, public gk::Transformable, public Player {
 	public:
 		PlayerBox(const gk::Camera &camera);
 
-		void setPosition(s32 x, s32 y, s32 z) {
+		void setPosition(double x, double y, double z) {
 			Player::setPosition(x, y, z);
 		}
 
