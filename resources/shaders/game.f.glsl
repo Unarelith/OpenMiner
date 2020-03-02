@@ -47,6 +47,16 @@ void main() {
 	float ticktime = mod(u_time, 10000);
 	float pi = 3.14159265358979323846264338327950288419716939937510;
 
+		if (ticktime >=0 && ticktime <= 5000)
+		{
+			v_lightValue.x *= min(sin(ticktime/5000 + pi*u_time/5000)*15, 15);
+			// color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
+		}
+		else if(ticktime > 5000 && ticktime <10000)
+		{
+			v_lightValue.x *= max(cos(ticktime/5000 + pi*u_time/5000)*15, 0);
+		}
+
 	float minBrightness = 2.0 / 16.0;
 	if (lightCheck != -1.) {
 		float ambientIntensity = max(max(v_lightValue.x, v_lightValue.y) / 16.0, minBrightness);
@@ -63,19 +73,8 @@ void main() {
 		if (blockFace == 2. || blockFace == 3.)
 			ambientIntensity = max(ambientIntensity * 0.9, minBrightness);
 
-			if (ticktime >=0 && ticktime <= 5000)
-			{
-				ambientIntensity *= min(max(sin(ticktime/5000 + pi*u_time/5000), minBrightness), 1);
-				diffuseIntensity *= min(max(sin(ticktime/5000 + pi*u_time/5000), minBrightness), 1);
-				color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
-			}
-			else if(ticktime > 5000 && ticktime <10000)
-			{
-				ambientIntensity *= max(cos(ticktime/5000 + pi*u_time/5000), minBrightness);
-				diffuseIntensity *= max(cos(ticktime/5000 + pi*u_time/5000), minBrightness);
-				color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
-			}
 
+			color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
 		// color = vec4(0, 0, v_lightValue.x / 16.0, 1);
 	}
 
