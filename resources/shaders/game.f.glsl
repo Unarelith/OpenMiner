@@ -67,7 +67,7 @@ void main() {
 			ambientIntensity = max(ambientIntensity * 0.9, minBrightness);
 
 		color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
-		
+
 		// color = vec4(0, 0, v_lightValue.x / 16.0, 1);
 	}
 

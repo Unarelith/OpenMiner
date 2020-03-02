@@ -190,3 +190,4 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (m_clientCommandHandler.isRegistryInitialized())
 		target.draw(m_hud, states);
 }
+
