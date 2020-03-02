@@ -49,24 +49,24 @@ class ClientPlayer : public Player {
 	public:
 		ClientPlayer(gk::Camera &camera);
 
-		void turnH(double angle);
-		void turnViewV(double angle);
+		void turnH(float angle);
+		void turnViewV(float angle);
 
 		// West, East, South, North
 		// Same order as enum BlockFace in TilesDef.hpp
 		u8 getDirection() const;
 		u8 getOppositeDirection() const;
 
-		void move(double direction);
+		void move(float direction);
 
 		void processInputs();
 		void updatePosition(const ClientWorld &world);
 
 		void checkCollisions(const ClientWorld &world);
 
-		double dirTargetedX() const { return m_forwardDir.x; }
-		double dirTargetedY() const { return m_forwardDir.y; }
-		double dirTargetedZ() const { return m_forwardDir.z; }
+		float dirTargetedX() const { return m_forwardDir.x; }
+		float dirTargetedY() const { return m_forwardDir.y; }
+		float dirTargetedZ() const { return m_forwardDir.z; }
 
 		static ClientPlayer &getInstance() { return *s_instance; }
 		static void setInstance(ClientPlayer *instance) { s_instance = instance; }
@@ -75,17 +75,17 @@ class ClientPlayer : public Player {
 		double y() const { return m_y; }
 		double z() const { return m_z; }
 
-		double cameraYaw()   const { return m_viewAngleH; }
-		double cameraPitch() const { return m_viewAngleV; }
-		double cameraRoll()  const { return m_viewAngleRoll; }
+		float cameraYaw()   const { return m_viewAngleH; }
+		float cameraPitch() const { return m_viewAngleV; }
+		float cameraRoll()  const { return m_viewAngleRoll; }
 
 		void setPosition(double x, double y, double z);
-		void setCameraRoll(double angle) { m_viewAngleRoll = angle; updateDir(); };
+		void setCameraRoll(float angle) { m_viewAngleRoll = angle; updateDir(); };
 
 		gk::Camera &camera() { return m_camera; }
 
 	private:
-		void testPoint(const ClientWorld &world, double x, double y, double z, glm::dvec3 &vel);
+		void testPoint(const ClientWorld &world, double x, double y, double z, glm::vec3 &vel);
 		void updateDir();
 
 		static ClientPlayer *s_instance;
@@ -96,19 +96,19 @@ class ClientPlayer : public Player {
 		double m_y;
 		double m_z;
 
-		double m_viewAngleH;
-		double m_viewAngleV;
-		double m_viewAngleRoll;
+		float m_viewAngleH;
+		float m_viewAngleV;
+		float m_viewAngleRoll;
 
-		gk::Vector3d m_forwardDir;
+		gk::Vector3f m_forwardDir;
 
-		gk::Vector3d m_cameraLocalPos;
+		gk::Vector3f m_cameraLocalPos;
 
-		glm::dvec3 m_velocity{0};
+		glm::vec3 m_velocity{0.f};
 		bool m_isJumping = false;
 
-		const double m_gravity = 0.001;
-		const double m_jumpSpeed = 0.06f;
+		const float m_gravity = 0.001f;
+		const float m_jumpSpeed = 0.06f;
 };
 
 #endif // CLIENTPLAYER_HPP_

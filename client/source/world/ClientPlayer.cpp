@@ -38,44 +38,42 @@ ClientPlayer *ClientPlayer::s_instance = nullptr;
 
 ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
 	// FIXME: Warning: Duplicated in ServerCommandHandler.hpp
-	m_x = 14;
-	m_y = 14;
-	m_z = 18;
-	m_cameraLocalPos = gk::Vector3d{0., 0., 1.625};
+	m_x = 14.;
+	m_y = 14.;
+	m_z = 18.;
+	m_cameraLocalPos = gk::Vector3f{0.f, 0.f, 1.625f};
 
-	m_viewAngleH = -90.;
-	m_viewAngleV = 0.01;
-	m_viewAngleRoll = 0.;
+	m_viewAngleH = -90.f;
+	m_viewAngleV = 0.f;
+	m_viewAngleRoll = 0.f;
 
 	updateDir();
 
 	m_camera.setDPosition(m_x + m_cameraLocalPos.x, m_y + m_cameraLocalPos.y, m_z + m_cameraLocalPos.z);
 }
 
-void ClientPlayer::turnH(double angle) {
-	m_viewAngleH = (m_viewAngleH + angle >= -180. && m_viewAngleH + angle < 0.) ?
-		m_viewAngleH + angle : fmod(m_viewAngleH + angle, 360.);
-
-	if (m_viewAngleH >= 180.) m_viewAngleH -= 360.;
-	if (m_viewAngleH <= -180.) m_viewAngleH += 360.; // FIXME: Temporary fix, needs review
+void ClientPlayer::turnH(float angle) {
+	m_viewAngleH = fmodf(m_viewAngleH + angle, 360.f);
+	if (m_viewAngleH >= 180.f) m_viewAngleH -= 360.f;
+	if (m_viewAngleH < -180.f) m_viewAngleH += 360.f;
 
 	updateDir();
 }
 
-void ClientPlayer::turnViewV(double angle) {
-	m_viewAngleV = std::max(std::min(m_viewAngleV + angle, 90.), -90.);
+void ClientPlayer::turnViewV(float angle) {
+	m_viewAngleV = std::max(std::min(m_viewAngleV + angle, 90.f), -90.f);
 
 	updateDir();
 }
 
 u8 ClientPlayer::getDirection() const {
-	if (m_viewAngleH >= -45. && m_viewAngleH <= 45.) {
+	if (m_viewAngleH >= -45.f && m_viewAngleH <= 45.f) {
 		return East;
 	}
-	else if (m_viewAngleH >= -135. && m_viewAngleH <= -45.) {
+	else if (m_viewAngleH >= -135.f && m_viewAngleH <= -45.f) {
 		return South;
 	}
-	else if (m_viewAngleH <= -135. || m_viewAngleH >= 135.) {
+	else if (m_viewAngleH <= -135.f || m_viewAngleH >= 135.f) {
 		return West;
 	}
 	else {
@@ -89,23 +87,23 @@ u8 ClientPlayer::getOppositeDirection() const {
 }
 
 void ClientPlayer::updateDir() {
-	double ch = cos(m_viewAngleH * RADIANS_PER_DEGREES);
-	double sh = sin(m_viewAngleH * RADIANS_PER_DEGREES);
-	double cv = cos(m_viewAngleV * RADIANS_PER_DEGREES);
-	double sv = sin(m_viewAngleV * RADIANS_PER_DEGREES);
-	double cr = cos(m_viewAngleRoll * RADIANS_PER_DEGREES);
-	double sr = sin(m_viewAngleRoll * RADIANS_PER_DEGREES);
+	float ch = cosf(m_viewAngleH * RADIANS_PER_DEGREES);
+	float sh = sinf(m_viewAngleH * RADIANS_PER_DEGREES);
+	float cv = cosf(m_viewAngleV * RADIANS_PER_DEGREES);
+	float sv = sinf(m_viewAngleV * RADIANS_PER_DEGREES);
+	float cr = cosf(m_viewAngleRoll * RADIANS_PER_DEGREES);
+	float sr = sinf(m_viewAngleRoll * RADIANS_PER_DEGREES);
 
-	m_forwardDir = gk::Vector3d{ch * cv, sh * cv, sv};
+	m_forwardDir = gk::Vector3f{ch * cv, sh * cv, sv};
 	m_camera.setDirection(m_forwardDir);
-	m_camera.setUpVector(gk::Vector3d{sh * sr - ch * sv * cr, -ch * sr - sh * sv * cr, cv * cr});
+	m_camera.setUpVector(gk::Vector3f{sh * sr - ch * sv * cr, -ch * sr - sh * sv * cr, cv * cr});
 }
 
-void ClientPlayer::move(double direction) {
+void ClientPlayer::move(float direction) {
 	direction += m_viewAngleH;
 
-	m_velocity.x = 0.04 * cos(direction * RADIANS_PER_DEGREES);
-	m_velocity.y = 0.04 * sin(direction * RADIANS_PER_DEGREES);
+	m_velocity.x = 0.04f * cosf(direction * RADIANS_PER_DEGREES);
+	m_velocity.y = 0.04f * sinf(direction * RADIANS_PER_DEGREES);
 }
 
 void ClientPlayer::processInputs() {
@@ -122,20 +120,20 @@ void ClientPlayer::processInputs() {
 		m_velocity.z = -0.1;
 	}
 
-	if(gk::GamePad::isKeyPressed(GameKey::Up))        move(0.0);
-	else if(gk::GamePad::isKeyPressed(GameKey::Down)) move(180.0);
+	if(gk::GamePad::isKeyPressed(GameKey::Up))        move(0.0f);
+	else if(gk::GamePad::isKeyPressed(GameKey::Down)) move(180.0f);
 
-	if(gk::GamePad::isKeyPressed(GameKey::Left))       move(90.0);
-	else if(gk::GamePad::isKeyPressed(GameKey::Right)) move(-90.0);
+	if(gk::GamePad::isKeyPressed(GameKey::Left))       move(90.0f);
+	else if(gk::GamePad::isKeyPressed(GameKey::Right)) move(-90.0f);
 
-	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Up))   move(45.0);
-	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Up))   move(-45.0);
-	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Down)) move(135.0);
-	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Down)) move(-135.0);
+	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Up))   move(45.0f);
+	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Up))   move(-45.0f);
+	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Down)) move(135.0f);
+	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Down)) move(-135.0f);
 
 	if (gk::GamePad::isKeyPressed(GameKey::Sprint)) {
-		m_velocity.x *= 1.5;
-		m_velocity.y *= 1.5;
+		m_velocity.x *= 1.5f;
+		m_velocity.y *= 1.5f;
 	}
 }
 
@@ -151,24 +149,24 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 	}
 	else {
 		// Block player until the chunk loads
-		m_velocity = glm::dvec3{0, 0, 0};
+		m_velocity = glm::vec3{0.f, 0.f, 0.f};
 	}
 
 	if (!Config::isNoClipEnabled)
 		checkCollisions(world);
 
-	if (!Config::isFlyModeEnabled && m_velocity.z != 0) {
-		m_velocity.x *= 0.75;
-		m_velocity.y *= 0.75;
+	if (!Config::isFlyModeEnabled && m_velocity.z != 0.f) {
+		m_velocity.x *= 0.75f;
+		m_velocity.y *= 0.75f;
 	}
 
 	setPosition(m_x + m_velocity.x, m_y + m_velocity.y, m_z + m_velocity.z);
 
-	m_velocity.x = 0;
-	m_velocity.y = 0;
+	m_velocity.x = 0.f;
+	m_velocity.y = 0.f;
 
 	if (Config::isFlyModeEnabled)
-		m_velocity.z = 0;
+		m_velocity.z = 0.f;
 }
 
 void ClientPlayer::setPosition(double x, double y, double z) {
@@ -178,7 +176,7 @@ void ClientPlayer::setPosition(double x, double y, double z) {
 
 	Player::setPosition(x, y, z);
 
-	gk::Vector3d camPos = m_cameraLocalPos;
+	gk::Vector3f camPos = m_cameraLocalPos;
 	m_camera.setDPosition(m_x + camPos.x, m_y + camPos.y, m_z + camPos.z);
 }
 
@@ -206,12 +204,12 @@ bool passable(const ClientWorld &world, double x, double y, double z) {
 	return !blockID || block.drawType() == BlockDrawType::Liquid || block.drawType() == BlockDrawType::XShape;
 }
 
-void ClientPlayer::testPoint(const ClientWorld &world, double x, double y, double z, glm::dvec3 &vel) {
-	if(!passable(world, x + vel.x, y, z)) vel.x = 0;
-	if(!passable(world, x, y + vel.y, z)) vel.y = 0;
+void ClientPlayer::testPoint(const ClientWorld &world, double x, double y, double z, glm::vec3 &vel) {
+	if(!passable(world, x + vel.x, y, z)) vel.x = 0.f;
+	if(!passable(world, x, y + vel.y, z)) vel.y = 0.f;
 	if(!passable(world, x, y, z + vel.z)) {
-		if(vel.z < 0 && m_isJumping) m_isJumping = false;
-		vel.z = 0;
+		if(vel.z < 0.f && m_isJumping) m_isJumping = false;
+		vel.z = 0.f;
 	}
 }
 
