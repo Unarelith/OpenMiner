@@ -63,3 +63,4 @@ void main() {
 
 	gl_Position = u_projectionMatrix * u_viewMatrix * v_coord3d;
 }
+

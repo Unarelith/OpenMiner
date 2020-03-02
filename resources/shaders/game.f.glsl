@@ -10,6 +10,7 @@ varying float v_dist;
 
 uniform int u_renderDistance;
 uniform int u_time;
+
 // Get current pixel color
 vec4 getColor();
 
@@ -44,10 +45,9 @@ void main() {
 	// color *= light(vec3(1.0, 1.0, 1.0), vec4(lightPosition, 1.0), 0.5, 0.5);
 
 	float minBrightness = 2.0 / 16.0;
-
 	if (lightCheck != -1.) {
-		float pi = 3.1415927;
 
+		const float pi = 3.1415927;
 		const float frequency = 512000;
 		float time = mod(u_time, 256000);
 		float sunlight = clamp(v_lightValue.x * 0.5 * (1 + cos(2 * pi / frequency * time)), 0, 15);
@@ -66,7 +66,7 @@ void main() {
 		if (blockFace == 2. || blockFace == 3.)
 			ambientIntensity = max(ambientIntensity * 0.9, minBrightness);
 
-			color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
+		color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
 		// color = vec4(0, 0, v_lightValue.x / 16.0, 1);
 	}
 
@@ -76,3 +76,4 @@ void main() {
 
 	gl_FragColor = color;
 }
+

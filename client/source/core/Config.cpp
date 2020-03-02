@@ -88,3 +88,4 @@ void Config::loadConfigFromFile(const char *file) {
 		}
 	}
 }
+
