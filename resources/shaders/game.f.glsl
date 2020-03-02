@@ -10,6 +10,7 @@ varying float v_dist;
 
 uniform int u_renderDistance;
 uniform int u_time;
+
 // Get current pixel color
 vec4 getColor();
 
@@ -53,6 +54,7 @@ void main() {
 
 		float ambientIntensity = max(max(sunlight, v_lightValue.y) / 16.0, minBrightness);
 		float diffuseIntensity = max(sunlight, v_lightValue.y) / 32.0;
+		
 		// These numbers should be in sync with enum BlockFace in TilesDef.hpp
 		// Bottom
 		if (blockFace == 4.)
@@ -74,4 +76,3 @@ void main() {
 
 	gl_FragColor = color;
 }
-
