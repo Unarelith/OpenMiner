@@ -9,8 +9,8 @@ varying float v_blockFace;
 varying float v_dist;
 
 uniform int u_renderDistance;
-uniform int u_time;
 
+uniform int u_time;
 // Get current pixel color
 vec4 getColor();
 
