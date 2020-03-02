@@ -24,22 +24,18 @@
  *
  * =====================================================================================
  */
-#ifndef LUAWIDGET_HPP_
-#define LUAWIDGET_HPP_
+#include "TextButtonWidgetDef.hpp"
 
-#include <gk/core/IntTypes.hpp>
+void TextButtonWidgetDef::serialize(sf::Packet &packet) const {
+	WidgetDef::serialize(packet);
 
-namespace LuaWidget {
-	enum : u8 {
-		Undefined         = 0,
-
-		Image             = 1,
-		TextButton        = 2,
-		InventoryWidget   = 3,
-		CraftingWidget    = 4,
-		ProgressBarWidget = 5,
-		Inventory         = 6,
-	};
+	packet << m_text;
 }
 
-#endif // LUAWIDGET_HPP_
+void TextButtonWidgetDef::loadFromLuaTable(const sol::table &table) {
+	WidgetDef::loadFromLuaTable(table);
+
+	m_text = table["text"].get<std::string>();
+	m_onClick = table["on_click"].get<sol::function>();
+}
+

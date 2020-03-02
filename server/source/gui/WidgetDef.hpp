@@ -24,22 +24,34 @@
  *
  * =====================================================================================
  */
-#ifndef LUAWIDGET_HPP_
-#define LUAWIDGET_HPP_
+#ifndef WIDGETDEF_HPP_
+#define WIDGETDEF_HPP_
+
+#include <string>
 
 #include <gk/core/IntTypes.hpp>
 
-namespace LuaWidget {
-	enum : u8 {
-		Undefined         = 0,
+#include <sol.hpp>
 
-		Image             = 1,
-		TextButton        = 2,
-		InventoryWidget   = 3,
-		CraftingWidget    = 4,
-		ProgressBarWidget = 5,
-		Inventory         = 6,
-	};
-}
+#include "ISerializable.hpp"
+#include "LuaWidget.hpp"
+#include "NetworkUtils.hpp"
 
-#endif // LUAWIDGET_HPP_
+class WidgetDef : public ISerializable {
+	public:
+		WidgetDef(u8 type) : m_type(type) {}
+
+		void serialize(sf::Packet &packet) const override;
+
+		virtual void loadFromLuaTable(const sol::table &table);
+
+	protected:
+		u8 m_type = 0; // See LuaWidget
+
+		std::string m_name;
+
+		s32 m_x = 0;
+		s32 m_y = 0;
+};
+
+#endif // WIDGETDEF_HPP_

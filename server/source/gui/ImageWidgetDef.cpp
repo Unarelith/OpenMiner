@@ -24,22 +24,25 @@
  *
  * =====================================================================================
  */
-#ifndef LUAWIDGET_HPP_
-#define LUAWIDGET_HPP_
+#include "ImageWidgetDef.hpp"
 
-#include <gk/core/IntTypes.hpp>
+void ImageWidgetDef::serialize(sf::Packet &packet) const {
+	WidgetDef::serialize(packet);
 
-namespace LuaWidget {
-	enum : u8 {
-		Undefined         = 0,
-
-		Image             = 1,
-		TextButton        = 2,
-		InventoryWidget   = 3,
-		CraftingWidget    = 4,
-		ProgressBarWidget = 5,
-		Inventory         = 6,
-	};
+	packet << m_texture << m_clipRect;
 }
 
-#endif // LUAWIDGET_HPP_
+void ImageWidgetDef::loadFromLuaTable(const sol::table &table) {
+	WidgetDef::loadFromLuaTable(table);
+
+	m_texture = table["texture"].get<std::string>();
+
+	sol::optional<sol::table> clipRectTable = table["clip"];
+	if (clipRectTable != sol::nullopt) {
+		m_clipRect.x = clipRectTable.value()["x"];
+		m_clipRect.y = clipRectTable.value()["y"];
+		m_clipRect.sizeX = clipRectTable.value()["width"];
+		m_clipRect.sizeY = clipRectTable.value()["height"];
+	}
+}
+

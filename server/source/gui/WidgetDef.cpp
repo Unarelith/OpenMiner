@@ -24,22 +24,19 @@
  *
  * =====================================================================================
  */
-#ifndef LUAWIDGET_HPP_
-#define LUAWIDGET_HPP_
+#include "WidgetDef.hpp"
 
-#include <gk/core/IntTypes.hpp>
-
-namespace LuaWidget {
-	enum : u8 {
-		Undefined         = 0,
-
-		Image             = 1,
-		TextButton        = 2,
-		InventoryWidget   = 3,
-		CraftingWidget    = 4,
-		ProgressBarWidget = 5,
-		Inventory         = 6,
-	};
+void WidgetDef::serialize(sf::Packet &packet) const {
+	packet << m_type << m_name << m_x << m_y;
 }
 
-#endif // LUAWIDGET_HPP_
+void WidgetDef::loadFromLuaTable(const sol::table &table) {
+	m_name = table["name"].get<std::string>();
+
+	sol::optional<sol::table> pos = table["pos"];
+	if (pos != sol::nullopt) {
+		m_x = pos.value()["x"];
+		m_y = pos.value()["y"];
+	}
+}
+

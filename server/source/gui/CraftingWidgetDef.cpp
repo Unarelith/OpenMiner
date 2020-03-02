@@ -1,0 +1,68 @@
+/*
+ * =====================================================================================
+ *
+ *  OpenMiner
+ *
+ *  Copyright (C) 2018-2020 Unarelith, Quentin Bazin <openminer@unarelith.net>
+ *  Copyright (C) 2019-2020 the OpenMiner contributors (see CONTRIBUTORS.md)
+ *
+ *  This file is part of OpenMiner.
+ *
+ *  OpenMiner is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2.1 of the License, or (at your option) any later version.
+ *
+ *  OpenMiner is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with OpenMiner; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+ *
+ * =====================================================================================
+ */
+#include <gk/core/Debug.hpp>
+
+#include "CraftingWidgetDef.hpp"
+
+void CraftingWidgetDef::serialize(sf::Packet &packet) const {
+	WidgetDef::serialize(packet);
+
+	packet << m_inventory << m_blockPosition << m_offset << m_size
+		<< m_shiftDestination << m_resultX << m_resultY;
+}
+
+void CraftingWidgetDef::loadFromLuaTable(const sol::table &table) {
+	WidgetDef::loadFromLuaTable(table);
+
+	m_inventory = table["inventory"].get<std::string>();
+	if (m_inventory == "block") {
+		sol::optional<sol::table> blockTable = table["block"];
+		if (blockTable != sol::nullopt) {
+			m_blockPosition.x = blockTable.value()["x"];
+			m_blockPosition.y = blockTable.value()["y"];
+			m_blockPosition.z = blockTable.value()["z"];
+		}
+
+		m_offset = table["offset"].get_or<u16>(0);
+		m_size = table["size"].get_or<u16>(3);
+	}
+	else if (m_inventory == "temp") {
+		m_size = table["size"].get_or<u16>(3);
+	}
+	else {
+		DEBUG("ERROR: Inventory source '" + m_inventory + "' is not valid");
+	}
+
+	m_shiftDestination = table["shift_destination"].get_or<std::string>("");
+
+	sol::optional<sol::table> resultPosTable = table["result_pos"];
+	if (resultPosTable != sol::nullopt) {
+		m_resultX = resultPosTable.value()["x"];
+		m_resultY = resultPosTable.value()["y"];
+	}
+}
+

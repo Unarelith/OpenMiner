@@ -24,22 +24,23 @@
  *
  * =====================================================================================
  */
-#ifndef LUAWIDGET_HPP_
-#define LUAWIDGET_HPP_
+#ifndef TEXTBUTTONWIDGETDEF_HPP_
+#define TEXTBUTTONWIDGETDEF_HPP_
 
-#include <gk/core/IntTypes.hpp>
+#include "WidgetDef.hpp"
 
-namespace LuaWidget {
-	enum : u8 {
-		Undefined         = 0,
+class TextButtonWidgetDef : public WidgetDef {
+	public:
+		TextButtonWidgetDef() : WidgetDef(LuaWidget::TextButton) {}
 
-		Image             = 1,
-		TextButton        = 2,
-		InventoryWidget   = 3,
-		CraftingWidget    = 4,
-		ProgressBarWidget = 5,
-		Inventory         = 6,
-	};
-}
+		void serialize(sf::Packet &packet) const override;
 
-#endif // LUAWIDGET_HPP_
+		void loadFromLuaTable(const sol::table &table) override;
+
+	private:
+		std::string m_text;
+
+		sol::function m_onClick;
+};
+
+#endif // TEXTBUTTONWIDGETDEF_HPP_

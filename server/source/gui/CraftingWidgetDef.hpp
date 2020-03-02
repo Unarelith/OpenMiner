@@ -24,22 +24,31 @@
  *
  * =====================================================================================
  */
-#ifndef LUAWIDGET_HPP_
-#define LUAWIDGET_HPP_
+#ifndef CRAFTINGWIDGETDEF_HPP_
+#define CRAFTINGWIDGETDEF_HPP_
 
-#include <gk/core/IntTypes.hpp>
+#include "WidgetDef.hpp"
 
-namespace LuaWidget {
-	enum : u8 {
-		Undefined         = 0,
+class CraftingWidgetDef : public WidgetDef {
+	public:
+		CraftingWidgetDef() : WidgetDef(LuaWidget::CraftingWidget) {}
 
-		Image             = 1,
-		TextButton        = 2,
-		InventoryWidget   = 3,
-		CraftingWidget    = 4,
-		ProgressBarWidget = 5,
-		Inventory         = 6,
-	};
-}
+		void serialize(sf::Packet &packet) const override;
 
-#endif // LUAWIDGET_HPP_
+		void loadFromLuaTable(const sol::table &table) override;
+
+	private:
+		std::string m_inventory;
+
+		gk::Vector3i m_blockPosition; // inventory == "block"
+
+		u16 m_offset = 0;             // inventory == "block"
+		u16 m_size = 3;               // inventory == "temp" or "block"
+
+		std::string m_shiftDestination;
+
+		s32 m_resultX = 0;
+		s32 m_resultY = 0;
+};
+
+#endif // CRAFTINGWIDGETDEF_HPP_

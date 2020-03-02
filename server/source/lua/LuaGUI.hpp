@@ -30,17 +30,8 @@
 #include <list>
 
 #include "Inventory.hpp"
-#include "LuaWidgetDef.hpp"
 #include "ServerInfo.hpp"
-
-struct LuaGUIData {
-	std::list<LuaWidgetDef::Image> imageList;
-	std::list<LuaWidgetDef::TextButton> textButtonList;
-	std::list<LuaWidgetDef::InventoryWidget> inventoryWidgetList;
-	std::list<LuaWidgetDef::CraftingWidget> craftingWidgetList;
-	std::list<LuaWidgetDef::ProgressBarWidget> progressBarWidgetList;
-	std::list<Inventory> inventoryList;
-};
+#include "WidgetDef.hpp"
 
 // This class is meant to be used ONLY in Lua
 class LuaGUI {
@@ -56,7 +47,9 @@ class LuaGUI {
 
 		static void initUsertype(sol::state &lua);
 
-		LuaGUIData m_data;
+	private:
+		std::list<std::unique_ptr<WidgetDef>> m_widgetDefinitions;
+		std::list<Inventory> m_inventoryList;
 };
 
 #endif // LUAGUI_HPP_

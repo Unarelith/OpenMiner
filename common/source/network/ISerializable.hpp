@@ -33,8 +33,8 @@ class ISerializable {
 	public:
 		virtual ~ISerializable() = default;
 
-		virtual void serialize(sf::Packet &packet) const = 0;
-		virtual void deserialize(sf::Packet &packet) = 0;
+		virtual void serialize(sf::Packet &) const {};
+		virtual void deserialize(sf::Packet &) {};
 };
 
 sf::Packet &operator<<(sf::Packet &packet, const ISerializable &s);

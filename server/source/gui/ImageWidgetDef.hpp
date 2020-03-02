@@ -24,22 +24,25 @@
  *
  * =====================================================================================
  */
-#ifndef LUAWIDGET_HPP_
-#define LUAWIDGET_HPP_
+#ifndef IMAGEWIDGETDEF_HPP_
+#define IMAGEWIDGETDEF_HPP_
 
-#include <gk/core/IntTypes.hpp>
+#include <gk/core/Rect.hpp>
 
-namespace LuaWidget {
-	enum : u8 {
-		Undefined         = 0,
+#include "WidgetDef.hpp"
 
-		Image             = 1,
-		TextButton        = 2,
-		InventoryWidget   = 3,
-		CraftingWidget    = 4,
-		ProgressBarWidget = 5,
-		Inventory         = 6,
-	};
-}
+class ImageWidgetDef : public WidgetDef {
+	public:
+		ImageWidgetDef() : WidgetDef(LuaWidget::Image) {}
 
-#endif // LUAWIDGET_HPP_
+		void serialize(sf::Packet &packet) const override;
+
+		void loadFromLuaTable(const sol::table &table) override;
+
+	private:
+		std::string m_texture;
+
+		gk::FloatRect m_clipRect;
+};
+
+#endif // IMAGEWIDGETDEF_HPP_

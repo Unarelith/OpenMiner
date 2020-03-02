@@ -27,9 +27,12 @@
 #ifndef NETWORKUTILS_HPP_
 #define NETWORKUTILS_HPP_
 
-#include <vector>
-
 #include <SFML/Network/Packet.hpp>
+
+//======================================================================================
+// std::vector
+//======================================================================================
+#include <vector>
 
 template<typename T>
 sf::Packet &operator<<(sf::Packet &packet, const std::vector<T> &vec) {
@@ -50,6 +53,40 @@ sf::Packet &operator>>(sf::Packet &packet, std::vector<T> &vec) {
 		vec.emplace_back(v);
 	}
 
+	return packet;
+}
+
+//======================================================================================
+// gk::Rect
+//======================================================================================
+#include <gk/core/Rect.hpp>
+
+template<typename T>
+sf::Packet &operator<<(sf::Packet &packet, const gk::Rect<T> &rect) {
+	packet << rect.x << rect.y << rect.sizeX << rect.sizeY;
+	return packet;
+}
+
+template<typename T>
+sf::Packet &operator>>(sf::Packet &packet, gk::Rect<T> &rect) {
+	packet >> rect.x >> rect.y >> rect.sizeX >> rect.sizeY;
+	return packet;
+}
+
+//======================================================================================
+// gk::Vector3
+//======================================================================================
+#include <gk/core/Vector3.hpp>
+
+template<typename T>
+sf::Packet &operator<<(sf::Packet &packet, const gk::Vector3<T> &vec) {
+	packet << vec.x << vec.y << vec.z;
+	return packet;
+}
+
+template<typename T>
+sf::Packet &operator>>(sf::Packet &packet, gk::Vector3<T> &vec) {
+	packet >> vec.x >> vec.y >> vec.z;
 	return packet;
 }
 

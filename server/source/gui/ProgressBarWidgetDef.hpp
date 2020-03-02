@@ -24,22 +24,31 @@
  *
  * =====================================================================================
  */
-#ifndef LUAWIDGET_HPP_
-#define LUAWIDGET_HPP_
+#ifndef PROGRESSBARWIDGETDEF_HPP_
+#define PROGRESSBARWIDGETDEF_HPP_
 
-#include <gk/core/IntTypes.hpp>
+#include "WidgetDef.hpp"
 
-namespace LuaWidget {
-	enum : u8 {
-		Undefined         = 0,
+class ProgressBarWidgetDef : public WidgetDef {
+	public:
+		ProgressBarWidgetDef() : WidgetDef(LuaWidget::ProgressBarWidget) {}
 
-		Image             = 1,
-		TextButton        = 2,
-		InventoryWidget   = 3,
-		CraftingWidget    = 4,
-		ProgressBarWidget = 5,
-		Inventory         = 6,
-	};
-}
+		void serialize(sf::Packet &packet) const override;
 
-#endif // LUAWIDGET_HPP_
+		void loadFromLuaTable(const sol::table &table) override;
+
+	private:
+		u8 m_type = 0;
+
+		gk::Vector3i m_blockPosition;
+
+		// NOTE: m_maxMeta and m_maxValue can't be used together
+		std::string m_meta;
+		std::string m_maxMeta;
+		u32 m_maxValue = 0;
+
+		std::string m_texture;
+		gk::FloatRect m_clipRect;
+};
+
+#endif // PROGRESSBARWIDGETDEF_HPP_
