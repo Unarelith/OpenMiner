@@ -43,29 +43,14 @@ void main() {
 	// vec3 lightPosition = vec3(0.0, sin(time) * 40, cos(time) * 40);
 	// color *= light(vec3(1.0, 1.0, 1.0), vec4(lightPosition, 1.0), 0.5, 0.5);
 
-	//variables for time and other math stuff
-
 	float minBrightness = 2.0 / 16.0;
 
 	if (lightCheck != -1.) {
-		float pi = 3.14159265358979323846264338327950288419716939937510; // useless? high precision pi stuff
-		//		the block is pretty much a super primitive version of the 3 lines after it
-		//		mostly due to deletboi not having any idea what clamp is and
-		//		having never worked in a professional environment
-		// float sunlight = v_lightValue.x;
-		// if (ticktime >=0 && ticktime <= 256000)
-		// {
-		// 	sunlight *= min(sin(ticktime/256000 + pi*u_time/256000), 1);
-		// 	// color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
-		// }
-		// else if(ticktime > 256000 && ticktime <512000)
-		// {
-		// 	sunlight *= max(cos(ticktime/256000 + pi*u_time/256000), 0);
-		// }
+		float pi = 3.1415927;
 
-		const float frequency = 256000;
-		float time = mod(u_time, 512000);
-		float sunlight = clamp(v_lightValue.x * 0.5 * (1 + sin(2 * pi * time / frequency)), 0, 15);
+		const float frequency = 512000;
+		float time = mod(u_time, 256000);
+		float sunlight = clamp(v_lightValue.x * 0.5 * (1 + cos(2 * pi / frequency * time)), 0, 15);
 
 		float ambientIntensity = max(max(sunlight, v_lightValue.y) / 16.0, minBrightness);
 		float diffuseIntensity = max(sunlight, v_lightValue.y) / 32.0;
