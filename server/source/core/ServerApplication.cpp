@@ -73,7 +73,7 @@ void ServerApplication::init() {
 void ServerApplication::update() {
 	m_world.update(m_players);
 
-	if (gk::GameClock::getTicks() % 1000 < 10) {
+	if (gk::GameClock::getTicks() % 100 < 10) {
 		for (auto &it : m_players) {
 			m_serverCommandHandler.sendPlayerPosUpdate(it.first);
 		}

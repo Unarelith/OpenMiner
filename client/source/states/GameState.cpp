@@ -153,7 +153,7 @@ void GameState::update() {
 		}
 	}
 
-	if (gk::GameClock::getTicks() % 1000 < 10) {
+	if (gk::GameClock::getTicks() % 100 < 10) {
 		m_clientCommandHandler.sendPlayerPosUpdate();
 	}
 
