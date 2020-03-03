@@ -31,6 +31,7 @@
 
 #include "ClientApplication.hpp"
 #include "Config.hpp"
+#include "Font.hpp"
 #include "TextureAtlas.hpp"
 #include "TextureLoader.hpp"
 
@@ -66,8 +67,11 @@ void ClientApplication::init() {
 	initOpenGL();
 
 	m_resourceHandler.loadConfigFile<TextureLoader>("resources/config/textures.xml");
-	m_resourceHandler.add<gk::Font>("font-default", "resources/fonts/default.ttf");
+	m_resourceHandler.add<Font>("font-ascii", "texture-font", "resources/textures/font.properties");
 	m_resourceHandler.add<TextureAtlas>("atlas-blocks");
+
+	// FIXME: Remove this after replacing gk::TextInput in ServerConnectState
+	m_resourceHandler.add<gk::Font>("font-default", "resources/fonts/default.ttf");
 
 	Registry::setInstance(m_registry);
 

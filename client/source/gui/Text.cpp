@@ -24,16 +24,14 @@
  *
  * =====================================================================================
  */
-#include <gk/gl/Texture.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "Color.hpp"
+#include "Font.hpp"
 #include "Text.hpp"
 
-Text::Text() : m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-font")) {
+Text::Text() : m_font(gk::ResourceHandler::getInstance().get<Font>("font-ascii")) {
 	m_background.setFillColor(gk::Color::Transparent);
-
-	updateCharWidth();
 }
 
 void Text::setText(const std::string &text) {
@@ -71,38 +69,38 @@ void Text::updateTextSprites() {
 	unsigned int maxX = 0;
 	gk::Color color = gk::Color{70, 70, 70, 255};
 	for(char c : m_text) {
-		if (c == '\n' || (m_maxLineLength && x + m_charWidth[(u8)c] >= m_maxLineLength)) {
+		if (c == '\n' || (m_maxLineLength && x + m_font.getCharWidth(c) >= m_maxLineLength)) {
 			y += 9;
 			x = 0;
 			continue;
 		}
 
-		gk::Sprite sprite{"texture-font", 8, 8};
+		gk::Sprite sprite{m_font.textureName(), 8, 8};
 		sprite.setCurrentFrame(c);
 		sprite.setPosition(x + 1, y + 1, 0);
 		sprite.setColor(color);
 		m_textSprites.emplace_back(std::move(sprite));
-		x += m_charWidth[(u8)c];
+		x += m_font.getCharWidth(c);
 	}
 	x = 0;
 	y = 0;
 	color = m_color;
 	for(char c : m_text) {
-		if (c == '\n' || (m_maxLineLength && x + m_charWidth[(u8)c] >= m_maxLineLength)) {
+		if (c == '\n' || (m_maxLineLength && x + m_font.getCharWidth(c) >= m_maxLineLength)) {
 			maxX = std::max(x, maxX);
 			y += 9;
 			x = 0;
 			continue;
 		}
 
-		gk::Sprite sprite{"texture-font", 8, 8};
+		gk::Sprite sprite{m_font.textureName(), 8, 8};
 		sprite.setCurrentFrame(c);
 		sprite.setPosition(x, y, 0);
 		if (c == '[')
 			color = Color::Blue;
 		sprite.setColor(color);
 		m_textSprites.emplace_back(std::move(sprite));
-		x += m_charWidth[(u8)c];
+		x += m_font.getCharWidth(c);
 	}
 
 	m_size.x = std::max(x, maxX);
@@ -112,54 +110,5 @@ void Text::updateTextSprites() {
 	unsigned int backgroundY = std::max<int>(m_background.getSize().y, m_size.y + m_padding.y);
 
 	m_background.setSize(backgroundX, backgroundY);
-}
-
-// FIXME: Since I use the font from Minecraft assets, I needed to use
-//        this piece of code to make it look good
-//        I'll remove it later anyway
-void Text::updateCharWidth() {
-	const int width = m_texture.getSize().x;
-	const int height = m_texture.getSize().y;
-	unsigned int *data = new unsigned int[width * height];
-
-	gk::Texture::bind(&m_texture);
-	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, data);
-	gk::Texture::bind(nullptr);
-
-	const int charMaxHeight = height / 16;
-	const int charMaxWidth = width / 16;
-
-	for (int i = 0 ; i < 256 ; ++i) {
-		if (i == ' ') {
-			m_charWidth[i] = 4;
-			continue;
-		}
-
-		int charX = i % 16;
-		int charY = i / 16;
-
-		if (i == 32)
-			m_charWidth[i] = 4;
-
-		int l1;
-		for (l1 = charMaxWidth - 1 ; l1 >= 0 ; --l1) {
-			int i2 = charX * charMaxWidth + l1;
-			bool flag1 = true;
-
-			for (int j2 = 0 ; j2 < charMaxHeight && flag1 ; ++j2) {
-				int k2 = (charY * charMaxWidth + j2) * width;
-
-				if ((data[i2 + k2] & 255) != 0)
-					flag1 = false;
-			}
-
-			if (!flag1) break;
-		}
-
-		++l1;
-		m_charWidth[i] = 0.5f + l1 * (8.0f / charMaxWidth) + 1;
-	}
-
-	delete[] data;
 }
 

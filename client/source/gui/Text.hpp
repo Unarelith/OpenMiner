@@ -32,6 +32,8 @@
 #include <gk/graphics/RectangleShape.hpp>
 #include <gk/graphics/Sprite.hpp>
 
+class Font;
+
 class Text : public gk::Drawable, public gk::Transformable {
 	public:
 		Text();
@@ -55,15 +57,11 @@ class Text : public gk::Drawable, public gk::Transformable {
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		void updateTextSprites();
-		void updateCharWidth();
 
 		std::string m_text;
 		std::vector<gk::Sprite> m_textSprites;
 
-		int m_charWidth[256];
-
-		gk::Texture &m_texture;
-		gk::VertexBuffer m_vbo;
+		Font &m_font;
 
 		gk::Vector2i m_size;
 		gk::Vector2i m_padding{0, 0};
