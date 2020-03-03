@@ -24,9 +24,9 @@
  *
  * =====================================================================================
  */
-#include <iostream>
-#include <cmath>
 #include <algorithm>
+#include <cmath>
+#include <iostream>
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -179,14 +179,14 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	// Now used by day/night cycle
 	gk::Shader::bind(&m_shader);
 	m_shader.setUniform("u_time", gk::GameClock::getTicks());
+	gk::Shader::bind(nullptr);
 
 	float pi = 3.1415927;
 	float frequency = 256000;
-	float time = gk::GameClock::getTicks()%512000;
+	float time = gk::GameClock::getTicks() % 512000;
 	float sunlight = std::min(std::max((double)(1 + std::cos(2 * pi / frequency * time)), 0.25), 1.0);
 
-	glClearColor(0.46*sunlight, 0.70*sunlight, 0.80*sunlight, 1.0);
-	gk::Shader::bind(nullptr);
+	glClearColor(0.46 * sunlight, 0.70 * sunlight, 0.80 * sunlight, 1.0);
 
 	states.shader = &m_shader;
 
