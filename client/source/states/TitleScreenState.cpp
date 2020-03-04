@@ -97,6 +97,11 @@ void TitleScreenState::startSingleplayer(bool showLoadingState) {
 	m_stateStack->push<ServerLoadingState>(game, showLoadingState, this);
 }
 
+void TitleScreenState::startMultiplayer(const std::string &host) {
+	auto &game = m_stateStack->push<GameState>(host, m_port);
+	m_stateStack->push<ServerLoadingState>(game, false, this);
+}
+
 void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	prepareDraw(target, states);
 

@@ -46,6 +46,7 @@ void ClientApplication::init() {
 	m_argumentParser.addArgument("host", {"-h", "--host", true});
 	m_argumentParser.addArgument("port", {"-p", "--port", true});
 	m_argumentParser.addArgument("singleplayer", {"-s", "--singleplayer", false});
+	m_argumentParser.addArgument("multiplayer", {"-m", "--multiplayer", false});
 
 	gk::CoreApplication::init();
 
@@ -74,6 +75,8 @@ void ClientApplication::init() {
 	auto &titleScreen = m_stateStack.push<TitleScreenState>(m_port);
 	if (m_argumentParser.getArgument("singleplayer").isFound)
 		titleScreen.startSingleplayer(false);
+	else
+		titleScreen.startMultiplayer(m_host);
 }
 
 void ClientApplication::handleEvents() {
