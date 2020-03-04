@@ -65,15 +65,19 @@ void HUD::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_F3)
 		m_isDebugOverlayVisible ^= 1;
 
-	m_hotbar.onEvent(event);
+	if (Config::isHotbarVisible)
+		m_hotbar.onEvent(event);
+
 	m_blockCursor.onEvent(event, m_hotbar);
 }
 
 void HUD::update() {
 	// FIXME: Shouldn't be called every tick
-	m_hotbar.update();
+	if (Config::isHotbarVisible)
+		m_hotbar.update();
 
-	m_fpsText.setText(std::to_string(gk::GameClock::getFpsAverage()) + " FPS");
+	if (Config::isFpsCounterEnabled)
+		m_fpsText.setText(std::to_string(gk::GameClock::getFpsAverage()) + " FPS");
 
 	m_blockCursor.update(m_hotbar);
 
@@ -106,12 +110,17 @@ void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (Config::isBlockInfoWidgetEnabled)
 		target.draw(m_blockInfoWidget, states);
 
-	target.draw(m_hotbar, states);
-	target.draw(m_fpsText, states);
+	if (Config::isHotbarVisible)
+		target.draw(m_hotbar, states);
+
+	if (Config::isFpsCounterEnabled)
+		target.draw(m_fpsText, states);
+
 	target.draw(m_chat, states);
 
 	states.transform = gk::Transform::Identity;
 
-	target.draw(m_crosshair, states);
+	if (Config::isCrosshairVisible)
+		target.draw(m_crosshair, states);
 }
 

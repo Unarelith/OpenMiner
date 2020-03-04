@@ -42,6 +42,8 @@ class TitleScreenState : public InterfaceState {
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		MenuWidget m_menuWidget{1, 3};
+
+		gk::Image m_background{"texture-title_screen"};
 };
 
 #endif // TITLESCREENSTATE_HPP_

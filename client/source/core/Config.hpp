@@ -36,6 +36,9 @@ namespace Config {
 
 	// Interface
 	extern bool isBlockInfoWidgetEnabled;
+	extern bool isFpsCounterEnabled;
+	extern bool isHotbarVisible;
+	extern bool isCrosshairVisible;
 
 	// Graphics
 	extern u16 renderDistance;

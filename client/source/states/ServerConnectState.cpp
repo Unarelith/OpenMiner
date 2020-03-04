@@ -30,7 +30,7 @@
 #include "ServerConnectState.hpp"
 #include "ServerLoadingState.hpp"
 
-ServerConnectState::ServerConnectState() {
+ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : InterfaceState(parent) {
 	m_textInput.setContent("localhost:4242");
 	m_textInput.setCharacterLimit(15 + 1 + 6);
 	m_textInput.setSize(400, 54);
@@ -86,6 +86,9 @@ void ServerConnectState::update() {
 }
 
 void ServerConnectState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	if (m_parent)
+		target.draw(*m_parent, states);
+
 	prepareDraw(target, states);
 
 	target.draw(m_textInput, states);

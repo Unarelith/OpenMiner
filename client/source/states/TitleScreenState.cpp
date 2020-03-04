@@ -37,7 +37,7 @@ TitleScreenState::TitleScreenState() {
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale, 1);
 
 	m_menuWidget.addButton("Play", [this] (TextButton &) {
-		m_stateStack->push<ServerConnectState>();
+		m_stateStack->push<ServerConnectState>(this);
 	});
 
 	m_menuWidget.addButton("Options...", [this] (TextButton &) {
@@ -59,9 +59,11 @@ void TitleScreenState::update() {
 }
 
 void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	if (&m_stateStack->top() == this) {
-		prepareDraw(target, states);
+	prepareDraw(target, states);
 
+	target.draw(m_background, states);
+
+	if (&m_stateStack->top() == this) {
 		target.draw(m_menuWidget, states);
 	}
 }

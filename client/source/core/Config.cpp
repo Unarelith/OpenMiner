@@ -32,6 +32,9 @@ bool Config::isNoClipEnabled = false;
 
 // Interface
 bool Config::isBlockInfoWidgetEnabled = true;
+bool Config::isFpsCounterEnabled = true;
+bool Config::isHotbarVisible = true;
+bool Config::isCrosshairVisible = true;
 
 // Graphics
 u16 Config::renderDistance = 8;
@@ -66,6 +69,9 @@ void Config::loadConfigFromFile(const char *file) {
 			isNoClipEnabled = lua["isNoClipEnabled"].get_or(isNoClipEnabled);
 
 			isBlockInfoWidgetEnabled = lua["isBlockInfoWidgetEnabled"].get_or(isBlockInfoWidgetEnabled);
+			isFpsCounterEnabled = lua["isFpsCounterEnabled"].get_or(isFpsCounterEnabled);
+			isHotbarVisible = lua["isHotbarVisible"].get_or(isHotbarVisible);
+			isCrosshairVisible = lua["isCrosshairVisible"].get_or(isCrosshairVisible);
 
 			renderDistance = lua["renderDistance"].get_or(renderDistance);
 			isTorchSmoothLightingEnabled = lua["isTorchSmoothLightingEnabled"].get_or(isTorchSmoothLightingEnabled);
