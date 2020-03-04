@@ -38,8 +38,8 @@
 #include "ServerInfo.hpp"
 
 class Server {
-	using ConnectionCallback = std::function<void(Client&)>;
-	using CommandCallback = std::function<void(Client &, sf::Packet &packet)>;
+	using ConnectionCallback = std::function<void(ClientInfo &)>;
+	using CommandCallback = std::function<void(ClientInfo &, sf::Packet &packet)>;
 
 	public:
 		void init(u16 port = 4242);
@@ -57,6 +57,7 @@ class Server {
 		sf::UdpSocket &udpSocket() { return m_udpSocket; }
 
 		void setRunning(bool isRunning) { m_isRunning = isRunning; }
+		void setSingleplayer(bool isSingleplayer) { m_isSingleplayer = isSingleplayer; }
 
 		void setConnectionCallback(const ConnectionCallback &callback) { m_connectionCallback = callback; }
 		void setCommandCallback(Network::Command command, const CommandCallback &callback) { m_commands[command] = callback; }
@@ -66,6 +67,7 @@ class Server {
 		void handleClientMessages();
 
 		bool m_isRunning = false;
+		bool m_isSingleplayer = false;
 
 		ServerInfo m_info;
 

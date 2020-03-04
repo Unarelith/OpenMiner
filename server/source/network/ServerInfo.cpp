@@ -26,13 +26,13 @@
  */
 #include "ServerInfo.hpp"
 
-Client &ServerInfo::addClient(sf::IpAddress address, u16 port, const std::shared_ptr<sf::TcpSocket> &socket) {
+ClientInfo &ServerInfo::addClient(sf::IpAddress address, u16 port, const std::shared_ptr<sf::TcpSocket> &socket) {
 	m_clients.emplace_back(m_clients.size() + 1, address, port, socket);
 	return m_clients.back();
 }
 
-Client *ServerInfo::getClient(u16 id) {
-	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (Client &client) { return client.id == id; });
+ClientInfo *ServerInfo::getClient(u16 id) {
+	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (ClientInfo &client) { return client.id == id; });
 	if (it == m_clients.end())
 		return nullptr;
 
@@ -40,7 +40,7 @@ Client *ServerInfo::getClient(u16 id) {
 }
 
 void ServerInfo::removeClient(u16 id) {
-	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (Client &client) { return client.id == id; });
+	auto it = std::find_if(m_clients.begin(), m_clients.end(), [id] (ClientInfo &client) { return client.id == id; });
 	if (it != m_clients.end())
 		m_clients.erase(it);
 }

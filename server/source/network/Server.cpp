@@ -53,7 +53,7 @@ void Server::handleKeyState() {
 		// std::cout << "UDP Message of type '" << Network::commandToString(command) << "' received from: " << senderAddress << ":" << senderPort << std::endl;
 
 		if (command == Network::Command::KeyState) {
-			Client *client = m_info.getClient(clientId);
+			ClientInfo *client = m_info.getClient(clientId);
 			if (client && client->previousKeyTimestamp < timestamp) {
 				client->previousKeyTimestamp = timestamp;
 
@@ -99,7 +99,7 @@ void Server::handleNewConnections() {
 			u16 port;
 			packet >> address >> port;
 
-			Client &client = m_info.addClient(address, port, clientSocket);
+			ClientInfo &client = m_info.addClient(address, port, clientSocket);
 			m_selector.add(*client.tcpSocket);
 
 			sf::Packet outPacket;
@@ -123,7 +123,7 @@ void Server::handleNewConnections() {
 
 void Server::handleClientMessages() {
 	for (size_t i = 0 ; i < m_info.clients().size() ; ++i) {
-		Client &client = m_info.clients()[i];
+		ClientInfo &client = m_info.clients()[i];
 		if (m_selector.isReady(*client.tcpSocket)) {
 			sf::Packet packet;
 			if (client.tcpSocket->receive(packet) == sf::Socket::Done) {
@@ -141,10 +141,10 @@ void Server::handleClientMessages() {
 							m_selector.remove(*client.tcpSocket);
 							m_info.removeClient(client.id);
 
-							// if (m_info.clients().size() == 0) {
-							// 	// m_tcpListener.close();
-							// 	m_isRunning = false;
-							// }
+							if (m_isSingleplayer && m_info.clients().size() == 0) {
+								m_tcpListener.close();
+								m_isRunning = false;
+							}
 
 							--i;
 						}
@@ -156,7 +156,7 @@ void Server::handleClientMessages() {
 }
 
 void Server::sendToAllClients(sf::Packet &packet) {
-	for (Client &client : m_info.clients()) {
+	for (ClientInfo &client : m_info.clients()) {
 		client.tcpSocket->send(packet);
 	}
 }

@@ -27,17 +27,17 @@
 #ifndef SERVERPLAYER_HPP_
 #define SERVERPLAYER_HPP_
 
+#include "ClientInfo.hpp"
 #include "Player.hpp"
-#include "ServerInfo.hpp"
 
 class ServerPlayer : public Player {
 	public:
-		ServerPlayer(Client &client);
+		ServerPlayer(ClientInfo &client);
 
-		const Client &client() const { return m_client; }
+		const ClientInfo &client() const { return m_client; }
 
 	private:
-		Client &m_client;
+		ClientInfo &m_client;
 };
 
 #endif // SERVERPLAYER_HPP_

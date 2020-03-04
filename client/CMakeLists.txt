@@ -7,7 +7,7 @@ set(PROJECT_NAME ${CMAKE_PROJECT_NAME})
 # Get source files
 #------------------------------------------------------------------------------
 file(GLOB_RECURSE SOURCE_FILES source/*.cpp)
-file(GLOB_RECURSE HEADER_FILES source/*.hpp ../common/*.hpp ../external/*.hpp)
+file(GLOB_RECURSE HEADER_FILES source/*.hpp ../server/*.hpp ../common/*.hpp ../external/*.hpp)
 
 foreach(HEADER_FILE ${HEADER_FILES})
 	get_filename_component(HEADER_DIRECTORY ${HEADER_FILE} DIRECTORY)
@@ -18,7 +18,7 @@ endforeach(HEADER_FILE)
 # Add executables
 #------------------------------------------------------------------------------
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-add_dependencies(${PROJECT_NAME} ${CMAKE_PROJECT_NAME}_common)
+add_dependencies(${PROJECT_NAME} ${CMAKE_PROJECT_NAME}_server_lib ${CMAKE_PROJECT_NAME}_common)
 
 #------------------------------------------------------------------------------
 # Compiler flags
@@ -44,10 +44,11 @@ endif()
 # Link options
 #------------------------------------------------------------------------------
 if (UNIX)
-	set (UNIX_LIBS -ldl)
+	set (UNIX_LIBS -ldl -lpthread)
 endif ()
 
 target_link_libraries(${PROJECT_NAME}
+                      ${CMAKE_PROJECT_NAME}_server_lib
                       ${GAMEKIT_LIBRARIES}
                       ${OPENGL_LIBRARIES}
                       ${SDL2_LIBRARIES}

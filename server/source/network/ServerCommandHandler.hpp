@@ -33,7 +33,7 @@
 
 struct BlockData;
 
-class Client;
+class ClientInfo;
 class Inventory;
 class Registry;
 class ScriptEngine;
@@ -46,10 +46,10 @@ class ServerCommandHandler {
 		ServerCommandHandler(ScriptEngine &scriptEngine, Server &server, ServerWorld &world, std::unordered_map<u16, ServerPlayer> &players, Registry &registry)
 			: m_scriptEngine(scriptEngine), m_server(server), m_world(world), m_players(players), m_registry(registry) {}
 
-		void sendBlockDataUpdate(s32 x, s32 y, s32 z, const BlockData *blockData, const Client *client = nullptr) const;
-		void sendBlockInvUpdate(s32 x, s32 y, s32 z, const Inventory &inventory, const Client *client = nullptr) const;
-		void sendPlayerPosUpdate(u16 clientID, bool isTeleportation = false, const Client *client = nullptr) const;
-		void sendChatMessage(u16 clientID, const std::string &message, const Client *client = nullptr) const;
+		void sendBlockDataUpdate(s32 x, s32 y, s32 z, const BlockData *blockData, const ClientInfo *client = nullptr) const;
+		void sendBlockInvUpdate(s32 x, s32 y, s32 z, const Inventory &inventory, const ClientInfo *client = nullptr) const;
+		void sendPlayerPosUpdate(u16 clientID, bool isTeleportation = false, const ClientInfo *client = nullptr) const;
+		void sendChatMessage(u16 clientID, const std::string &message, const ClientInfo *client = nullptr) const;
 
 		void setupCallbacks();
 

@@ -29,14 +29,13 @@
 
 using namespace std::literals::string_literals;
 
-ServerApplication::ServerApplication(int argc, char **argv) : gk::CoreApplication(argc, argv) {
-	m_loadSDL = false;
+ServerApplication::ServerApplication(int argc, char **argv) : m_argumentParser(argc, argv) {
 }
 
 void ServerApplication::init() {
-	m_argumentParser.addArgument("port", {"-p", "--port", true});
+	std::srand(std::time(nullptr));
 
-	gk::CoreApplication::init();
+	m_argumentParser.addArgument("port", {"-p", "--port", true});
 
 	if (m_argumentParser.getArgument("port").isFound)
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
@@ -68,6 +67,25 @@ void ServerApplication::init() {
 	m_world.setServer(&m_serverCommandHandler);
 
 	std::cout << "Server is running on localhost:" << m_port << std::endl;
+}
+
+int ServerApplication::run(bool isProtected) {
+	if (isProtected) {
+		try {
+			init();
+			mainLoop();
+		}
+		catch(const gk::Exception &e) {
+			std::cerr << "Fatal error " << e.what() << std::endl;
+			return 1;
+		}
+	}
+	else {
+		init();
+		mainLoop();
+	}
+
+	return 0;
 }
 
 void ServerApplication::update() {

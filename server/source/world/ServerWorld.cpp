@@ -98,7 +98,7 @@ void ServerWorld::createChunkNeighbours(ServerChunk *chunk) {
 	}
 }
 
-void ServerWorld::sendChunkData(const Client &client, ServerChunk *chunk) {
+void ServerWorld::sendChunkData(const ClientInfo &client, ServerChunk *chunk) {
 	sf::Packet packet;
 	packet << Network::Command::ChunkData;
 	packet << chunk->x() << chunk->y() << chunk->z();
@@ -128,7 +128,7 @@ void ServerWorld::sendChunkData(const Client &client, ServerChunk *chunk) {
 	// std::cout << "Chunk at (" << chunk->x() << ", " << chunk->y() << ", " << chunk->z() << ") sent to client" << std::endl;
 }
 
-void ServerWorld::sendRequestedData(Client &client, int cx, int cy, int cz) {
+void ServerWorld::sendRequestedData(ClientInfo &client, int cx, int cy, int cz) {
 	ServerChunk *chunk = (ServerChunk *)getChunk(cx, cy, cz);
 	if (!chunk) {
 		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ServerChunk(cx, cy, cz, *this));

@@ -33,7 +33,7 @@
 #include "TerrainGenerator.hpp"
 #include "World.hpp"
 
-class Client;
+class ClientInfo;
 class ServerCommandHandler;
 class ServerPlayer;
 
@@ -46,8 +46,8 @@ class ServerWorld : public World {
 		void update(std::unordered_map<u16, ServerPlayer> &players);
 
 		void createChunkNeighbours(ServerChunk *chunk);
-		void sendChunkData(const Client &client, ServerChunk *chunk);
-		void sendRequestedData(Client &client, s32 cx, s32 cy, s32 cz);
+		void sendChunkData(const ClientInfo &client, ServerChunk *chunk);
+		void sendRequestedData(ClientInfo &client, s32 cx, s32 cy, s32 cz);
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
 

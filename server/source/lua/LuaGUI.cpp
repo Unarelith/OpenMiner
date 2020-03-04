@@ -26,6 +26,7 @@
  */
 #include <gk/core/ApplicationStateStack.hpp>
 
+#include "ClientInfo.hpp"
 #include "LuaGUI.hpp"
 #include "LuaWidget.hpp"
 #include "Network.hpp"
@@ -84,7 +85,7 @@ void LuaGUI::addInventory(const sol::table &table) {
 	}
 }
 
-void LuaGUI::show(Client &client) {
+void LuaGUI::show(ClientInfo &client) {
 	sf::Packet packet;
 	packet << Network::Command::BlockGUIData;
 

@@ -76,10 +76,10 @@ void ClientApplication::init() {
 
 	Registry::setInstance(m_registry);
 
-	// m_stateStack.push<TitleScreenState>();
+	m_stateStack.push<TitleScreenState>();
 	// m_stateStack.push<ServerConnectState>();
 
-	m_stateStack.push<GameState>(m_host, m_port);
+	// m_stateStack.push<GameState>(m_host, m_port);
 
 	// auto &game = m_stateStack.push<GameState>(m_host, m_port);
 	// m_stateStack.push<ServerLoadingState>(game);

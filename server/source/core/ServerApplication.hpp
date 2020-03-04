@@ -27,7 +27,8 @@
 #ifndef SERVERAPPLICATION_HPP_
 #define SERVERAPPLICATION_HPP_
 
-#include <gk/core/CoreApplication.hpp>
+#include <gk/core/ArgumentParser.hpp>
+#include <gk/core/GameClock.hpp>
 
 #include "LuaCore.hpp"
 #include "Registry.hpp"
@@ -37,15 +38,22 @@
 #include "ServerPlayer.hpp"
 #include "ServerWorld.hpp"
 
-class ServerApplication : public gk::CoreApplication {
+class ServerApplication {
 	public:
-		ServerApplication(int argc, char **argv);
+		ServerApplication(int argc = 0, char **argv = nullptr);
 
-		void init() override;
+		void init();
+
+		int run(bool isProtected = true);
+
+		void setSingleplayer(bool isSingleplayer) { m_server.setSingleplayer(isSingleplayer); }
 
 	private:
 		void update();
-		void mainLoop() override;
+		void mainLoop();
+
+		gk::ArgumentParser m_argumentParser;
+		gk::GameClock m_clock;
 
 		Server m_server;
 		ServerWorld m_world;

@@ -33,7 +33,7 @@
 #include "ServerWorld.hpp"
 #include "ServerCommandHandler.hpp"
 
-void ServerCommandHandler::sendBlockDataUpdate(s32 x, s32 y, s32 z, const BlockData *blockData, const Client *client) const {
+void ServerCommandHandler::sendBlockDataUpdate(s32 x, s32 y, s32 z, const BlockData *blockData, const ClientInfo *client) const {
 	sf::Packet packet;
 	packet << Network::Command::BlockDataUpdate << x << y << z
 		<< blockData->meta << blockData->useAltTiles;
@@ -44,7 +44,7 @@ void ServerCommandHandler::sendBlockDataUpdate(s32 x, s32 y, s32 z, const BlockD
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendBlockInvUpdate(s32 x, s32 y, s32 z, const Inventory &inventory, const Client *client) const {
+void ServerCommandHandler::sendBlockInvUpdate(s32 x, s32 y, s32 z, const Inventory &inventory, const ClientInfo *client) const {
 	sf::Packet packet;
 	packet << Network::Command::BlockInvUpdate << x << y << z << inventory;
 
@@ -54,7 +54,7 @@ void ServerCommandHandler::sendBlockInvUpdate(s32 x, s32 y, s32 z, const Invento
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendPlayerPosUpdate(u16 clientID, bool isTeleportation, const Client *client) const {
+void ServerCommandHandler::sendPlayerPosUpdate(u16 clientID, bool isTeleportation, const ClientInfo *client) const {
 	const ServerPlayer &player = m_players.at(clientID);
 
 	sf::Packet packet;
@@ -69,7 +69,7 @@ void ServerCommandHandler::sendPlayerPosUpdate(u16 clientID, bool isTeleportatio
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendChatMessage(u16 clientID, const std::string &message, const Client *client) const {
+void ServerCommandHandler::sendChatMessage(u16 clientID, const std::string &message, const ClientInfo *client) const {
 	sf::Packet packet;
 	packet << Network::Command::ChatMessage << clientID << message;
 
@@ -80,7 +80,7 @@ void ServerCommandHandler::sendChatMessage(u16 clientID, const std::string &mess
 }
 
 void ServerCommandHandler::setupCallbacks() {
-	m_server.setConnectionCallback([this](Client &client) {
+	m_server.setConnectionCallback([this](ClientInfo &client) {
 		sf::Packet packet;
 		packet << Network::Command::RegistryData;
 		m_registry.serialize(packet);
@@ -117,18 +117,18 @@ void ServerCommandHandler::setupCallbacks() {
 		// m_world.sendSpawnData(client, player);
 	});
 
-	m_server.setCommandCallback(Network::Command::ClientDisconnect, [this](Client &client, sf::Packet &) {
+	m_server.setCommandCallback(Network::Command::ClientDisconnect, [this](ClientInfo &client, sf::Packet &) {
 		m_players.erase(client.id);
 	});
 
-	m_server.setCommandCallback(Network::Command::ChunkRequest, [this](Client &client, sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::ChunkRequest, [this](ClientInfo &client, sf::Packet &packet) {
 		s32 cx, cy, cz;
 		packet >> cx >> cy >> cz;
 
 		m_world.sendRequestedData(client, cx, cy, cz);
 	});
 
-	m_server.setCommandCallback(Network::Command::PlayerInvUpdate, [this](Client &client, sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::PlayerInvUpdate, [this](ClientInfo &client, sf::Packet &packet) {
 		u16 clientId;
 		packet >> clientId;
 		if (clientId == client.id) {
@@ -136,7 +136,7 @@ void ServerCommandHandler::setupCallbacks() {
 		}
 	});
 
-	m_server.setCommandCallback(Network::Command::PlayerPosUpdate, [this](Client &client, sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::PlayerPosUpdate, [this](ClientInfo &client, sf::Packet &packet) {
 		double x, y, z;
 		u16 clientId;
 		packet >> clientId;
@@ -146,7 +146,7 @@ void ServerCommandHandler::setupCallbacks() {
 			m_players.at(client.id).setPosition(x, y, z);
 	});
 
-	m_server.setCommandCallback(Network::Command::PlayerPlaceBlock, [this](Client &, sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::PlayerPlaceBlock, [this](ClientInfo &, sf::Packet &packet) {
 		s32 x, y, z;
 		u32 block;
 		packet >> x >> y >> z >> block;
@@ -158,7 +158,7 @@ void ServerCommandHandler::setupCallbacks() {
 		m_server.sendToAllClients(answer);
 	});
 
-	m_server.setCommandCallback(Network::Command::PlayerDigBlock, [this](Client &, sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::PlayerDigBlock, [this](ClientInfo &, sf::Packet &packet) {
 		s32 x, y, z;
 		packet >> x >> y >> z;
 		m_world.setBlock(x, y, z, 0);
@@ -168,7 +168,7 @@ void ServerCommandHandler::setupCallbacks() {
 		m_server.sendToAllClients(answer);
 	});
 
-	m_server.setCommandCallback(Network::Command::PlayerInventory, [this](Client &client, sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::PlayerInventory, [this](ClientInfo &client, sf::Packet &packet) {
 		u16 screenWidth, screenHeight;
 		u8 guiScale;
 		packet >> screenWidth >> screenHeight >> guiScale;
@@ -176,7 +176,7 @@ void ServerCommandHandler::setupCallbacks() {
 		m_scriptEngine.lua()["show_inventory"](client, screenWidth, screenHeight, guiScale);
 	});
 
-	m_server.setCommandCallback(Network::Command::PlayerCreativeWindow, [this](Client &client, sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::PlayerCreativeWindow, [this](ClientInfo &client, sf::Packet &packet) {
 		u16 screenWidth, screenHeight;
 		u8 guiScale;
 		packet >> screenWidth >> screenHeight >> guiScale;
@@ -184,7 +184,7 @@ void ServerCommandHandler::setupCallbacks() {
 		m_scriptEngine.lua()["show_creative_window"](client, screenWidth, screenHeight, guiScale);
 	});
 
-	m_server.setCommandCallback(Network::Command::BlockActivated, [this](Client &client, sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::BlockActivated, [this](ClientInfo &client, sf::Packet &packet) {
 		s32 x, y, z;
 		u16 screenWidth, screenHeight;
 		u8 guiScale;
@@ -194,7 +194,7 @@ void ServerCommandHandler::setupCallbacks() {
 		((ServerBlock &)(m_registry.getBlock(id))).onBlockActivated({x, y, z}, m_players.at(client.id), m_world, client, screenWidth, screenHeight, guiScale);
 	});
 
-	m_server.setCommandCallback(Network::Command::BlockInvUpdate, [this](Client &, sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::BlockInvUpdate, [this](ClientInfo &, sf::Packet &packet) {
 		gk::Vector3<s32> pos;
 		packet >> pos.x >> pos.y >> pos.z;
 
@@ -205,7 +205,7 @@ void ServerCommandHandler::setupCallbacks() {
 			DEBUG("BlockInvUpdate: No block data found at", pos.x, pos.y, pos.z);
 	});
 
-	m_server.setCommandCallback(Network::Command::BlockDataUpdate, [this](Client &, sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::BlockDataUpdate, [this](ClientInfo &, sf::Packet &packet) {
 		gk::Vector3<s32> pos;
 		packet >> pos.x >> pos.y >> pos.z;
 
@@ -215,7 +215,7 @@ void ServerCommandHandler::setupCallbacks() {
 		}
 	});
 
-	m_server.setCommandCallback(Network::Command::ChatMessage, [this](Client &client, sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::ChatMessage, [this](ClientInfo &client, sf::Packet &packet) {
 		u16 clientID;
 		std::string message;
 		packet >> clientID >> message;

@@ -24,33 +24,31 @@
  *
  * =====================================================================================
  */
-#ifndef LUAGUI_HPP_
-#define LUAGUI_HPP_
+#ifndef CLIENTINFO_HPP_
+#define CLIENTINFO_HPP_
 
-#include <list>
+#include <memory>
 
-#include "Inventory.hpp"
-#include "WidgetDef.hpp"
+#include <SFML/Network.hpp>
 
-class ClientInfo;
+#include "NetworkInputHandler.hpp"
 
-// This class is meant to be used ONLY in Lua
-class LuaGUI {
+class ClientInfo {
 	public:
-		void addImage(const sol::table &table);
-		void addTextButton(const sol::table &table);
-		void addInventoryWidget(const sol::table &table);
-		void addCraftingWidget(const sol::table &table);
-		void addProgressBarWidget(const sol::table &table);
-		void addInventory(const sol::table &table);
+		ClientInfo(u16 _id, sf::IpAddress _address, u16 _port, const std::shared_ptr<sf::TcpSocket> &socket)
+			: id(_id), address(_address), port(_port), tcpSocket(socket) {}
 
-		void show(ClientInfo &client);
+		u16 id;
+		bool isReady = false;
 
-		static void initUsertype(sol::state &lua);
+		sf::IpAddress address;
+		u16 port;
 
-	private:
-		std::list<std::unique_ptr<WidgetDef>> m_widgetDefinitions;
-		std::list<Inventory> m_inventoryList;
+		u32 previousKeyTimestamp = 0;
+
+		std::shared_ptr<sf::TcpSocket> tcpSocket;
+
+		NetworkInputHandler inputHandler;
 };
 
-#endif // LUAGUI_HPP_
+#endif // CLIENTINFO_HPP_

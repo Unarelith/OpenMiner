@@ -27,12 +27,15 @@
 #ifndef TITLESCREENSTATE_HPP_
 #define TITLESCREENSTATE_HPP_
 
+#include <thread>
+
 #include "InterfaceState.hpp"
 #include "MenuWidget.hpp"
 
 class TitleScreenState : public InterfaceState {
 	public:
 		TitleScreenState();
+		~TitleScreenState();
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -44,6 +47,8 @@ class TitleScreenState : public InterfaceState {
 		MenuWidget m_menuWidget{1, 3};
 
 		gk::Image m_background{"texture-title_screen"};
+
+		std::thread thread;
 };
 
 #endif // TITLESCREENSTATE_HPP_

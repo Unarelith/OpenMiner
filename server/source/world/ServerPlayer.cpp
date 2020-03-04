@@ -26,7 +26,7 @@
  */
 #include "ServerPlayer.hpp"
 
-ServerPlayer::ServerPlayer(Client &client) : m_client(client) {
+ServerPlayer::ServerPlayer(ClientInfo &client) : m_client(client) {
 	m_clientID = client.id;
 }
 

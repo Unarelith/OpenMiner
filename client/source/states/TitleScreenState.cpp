@@ -27,16 +27,33 @@
 #include <gk/core/ApplicationStateStack.hpp>
 
 #include "Config.hpp"
+#include "GameState.hpp"
 #include "ServerConnectState.hpp"
 #include "SettingsMenuState.hpp"
 #include "TitleScreenState.hpp"
+
+#include "ServerApplication.hpp"
 
 TitleScreenState::TitleScreenState() {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale, 1);
 
-	m_menuWidget.addButton("Play", [this] (TextButton &) {
+	m_menuWidget.addButton("Singleplayer", [this] (TextButton &) {
+		thread = std::thread([] () {
+			ServerApplication app;
+			app.setSingleplayer(true);
+			app.run();
+		});
+
+		// thread.detach();
+
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+
+		m_stateStack->push<GameState>("localhost", 4242);
+	});
+
+	m_menuWidget.addButton("Multiplayer", [this] (TextButton &) {
 		m_stateStack->push<ServerConnectState>(this);
 	});
 
@@ -47,6 +64,11 @@ TitleScreenState::TitleScreenState() {
 	m_menuWidget.addButton("Exit", [this] (TextButton &) {
 		m_stateStack->pop();
 	});
+}
+
+TitleScreenState::~TitleScreenState() {
+	if (thread.joinable())
+		thread.join();
 }
 
 void TitleScreenState::onEvent(const SDL_Event &event) {
