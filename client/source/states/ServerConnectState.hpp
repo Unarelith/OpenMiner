@@ -27,10 +27,9 @@
 #ifndef SERVERCONNECTSTATE_HPP_
 #define SERVERCONNECTSTATE_HPP_
 
-#include <gk/graphics/TextInput.hpp>
-
 #include "InterfaceState.hpp"
 #include "TextButton.hpp"
+#include "TextInput.hpp"
 
 class ServerConnectState : public InterfaceState {
 	public:
@@ -43,7 +42,7 @@ class ServerConnectState : public InterfaceState {
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		gk::TextInput m_textInput;
+		TextInput m_textInput;
 
 		TextButton m_connectButton;
 		TextButton m_cancelButton;

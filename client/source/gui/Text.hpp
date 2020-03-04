@@ -46,9 +46,11 @@ class Text : public gk::Drawable, public gk::Transformable {
 		void setColor(const gk::Color &color);
 
 		const gk::Vector2i &getSize() const { return m_size; }
+		gk::Vector2f getBackgroundSize() const { return m_background.getSize(); }
 
 		void setBackgroundColor(const gk::Color &color) { m_background.setFillColor(color); }
 		void setBackgroundSize(unsigned int width, unsigned int height) { m_background.setSize(width, height); }
+		void setBackgroundOutline(int thickness, const gk::Color &color) { m_background.setOutlineThickness(thickness); m_background.setOutlineColor(color); }
 
 		void setPadding(int x, int y);
 
@@ -69,7 +71,7 @@ class Text : public gk::Drawable, public gk::Transformable {
 		mutable u32 m_verticesCount = 0;
 		mutable bool m_isUpdateNeeded = true;
 
-		mutable gk::Vector2i m_size;
+		mutable gk::Vector2i m_size{0, 0};
 		gk::Vector2i m_padding{0, 0};
 
 		gk::Color m_color = gk::Color::White;

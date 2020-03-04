@@ -40,10 +40,14 @@ class TextInput : public gk::Drawable, public gk::Transformable {
 		const std::string &text() const { return m_content; }
 		void setText(const std::string &text) { m_content = text; m_text.setText(m_content + m_cursor); }
 
+		gk::Vector2f getBackgroundSize() const { return m_text.getBackgroundSize(); }
+
 		void setBackgroundColor(const gk::Color &color) { m_text.setBackgroundColor(color); }
 		void setBackgroundSize(unsigned int width, unsigned int height) { m_text.setBackgroundSize(width, height); }
+		void setBackgroundOutline(int thickness, const gk::Color &color) { m_text.setBackgroundOutline(thickness, color); }
 
 		void setPadding(int x, int y) { m_text.setPadding(x, y); }
+		void setCharacterLimit(u16 characterLimit) { m_characterLimit = characterLimit; }
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
