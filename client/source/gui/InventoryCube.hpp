@@ -50,7 +50,7 @@ class InventoryCube : public gk::Drawable, public gk::Transformable {
 		gk::VertexBuffer m_vbo;
 		bool m_isVboInitialized = false;
 
-		glm::mat4 m_modelMatrix{1};
+		gk::Transformable m_transform;
 };
 
 #endif // INVENTORYCUBE_HPP_

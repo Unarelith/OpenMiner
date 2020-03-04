@@ -622,3 +622,16 @@ mod:crafting_recipe {
 	},
 	keys = {["#"] = "default:stone"}
 }
+
+-- Oak Wood Slabs
+mod:crafting_recipe {
+	result = {
+		id = "default:oak_slab",
+		amount = 3
+	},
+	pattern = {
+		"###",
+	},
+	keys = {["#"] = "default:oak_planks"}
+}
+

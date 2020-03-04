@@ -183,3 +183,14 @@ mod:block {
 	}
 }
 
+mod:block {
+	id = "oak_slab",
+	name = "Oak Wood Slab",
+	tiles = "oak_planks.png",
+
+	draw_type = 5,
+	is_opaque = false,
+
+	bounding_box = {0, 0, 0, 1, 1, 0.5}
+}
+

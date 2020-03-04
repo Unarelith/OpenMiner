@@ -105,7 +105,8 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 				if (block.drawType() == BlockDrawType::Solid
 				 || block.drawType() == BlockDrawType::Leaves
 				 || block.drawType() == BlockDrawType::Liquid
-				 || block.drawType() == BlockDrawType::Glass) {
+				 || block.drawType() == BlockDrawType::Glass
+				 || block.drawType() == BlockDrawType::BoundingBox) {
 					for(u8 i = 0 ; i < 6 ; i++) {
 						addFace(x, y, z, i, chunk, &block, surroundingBlocksPos[i]);
 					}
@@ -196,9 +197,17 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 	// Store vertex information
 	gk::Vertex vertices[4];
 	for(u8 j = 0 ; j < 4 ; j++) {
-		vertices[j].coord3d[0] = x + cubeCoords[i * 12 + j * 3];     // * boundingBox.sizeX + boundingBox.x;
-		vertices[j].coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1]; // * boundingBox.sizeY + boundingBox.y;
-		vertices[j].coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2]; // * boundingBox.sizeZ + boundingBox.z;
+		if (block->drawType() == BlockDrawType::BoundingBox) {
+			vertices[j].coord3d[0] = x + cubeCoords[i * 12 + j * 3]     * boundingBox.sizeX + boundingBox.x;
+			vertices[j].coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1] * boundingBox.sizeY + boundingBox.y;
+			vertices[j].coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2] * boundingBox.sizeZ + boundingBox.z;
+		}
+		else {
+			vertices[j].coord3d[0] = x + cubeCoords[i * 12 + j * 3];
+			vertices[j].coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1];
+			vertices[j].coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2];
+		}
+
 		vertices[j].coord3d[3] = i;
 
 		vertices[j].normal[0] = normal.x;

@@ -30,13 +30,13 @@
 using namespace std::literals::string_literals;
 
 ServerApplication::ServerApplication(int argc, char **argv) : m_argumentParser(argc, argv) {
-}
-
-void ServerApplication::init() {
 	std::srand(std::time(nullptr));
 
 	m_argumentParser.addArgument("port", {"-p", "--port", true});
+	m_argumentParser.parse();
+}
 
+void ServerApplication::init() {
 	if (m_argumentParser.getArgument("port").isFound)
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
 

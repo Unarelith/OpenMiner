@@ -40,10 +40,9 @@
 InventoryCube::InventoryCube(float size) : m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks")) {
 	m_size = size;
 
-	// FIXME: Using Transform may be better here
-	m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(-180.0f), glm::vec3{0, 0, 1});
-	m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(-30.0f), glm::vec3{1, 0, 0});
-	m_modelMatrix = glm::rotate(m_modelMatrix, glm::radians(-45.0f), glm::vec3{0, 1, 0});
+	m_transform.rotate(-180.0f, {0, 0, 1});
+	m_transform.rotate(-30.0f, {1, 0, 0});
+	m_transform.rotate(-45.0f, {0, 1, 0});
 }
 
 void InventoryCube::updateVertexBuffer(const Block &block) {
@@ -101,7 +100,7 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 	};
 
 	for (u8 i = 0 ; i < 6 ; ++i) {
-		const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block.tiles().getTextureForFace(i)); // block.getTexCoords(i, 0);
+		const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block.tiles().getTextureForFace(i));
 		float faceTexCoords[2 * 4] = {
 			blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.sizeY,
 			blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y + blockTexCoords.sizeY,
@@ -110,9 +109,11 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 		};
 
 		for(u8 j = 0 ; j < 4 ; j++) {
-			vertices[i][j].coord3d[0] = vertices[i][j].coord3d[0] * block.boundingBox().sizeX + block.boundingBox().x;
-			vertices[i][j].coord3d[1] = vertices[i][j].coord3d[1] * block.boundingBox().sizeY + block.boundingBox().y;
-			vertices[i][j].coord3d[2] = vertices[i][j].coord3d[2] * block.boundingBox().sizeZ + block.boundingBox().z;
+			if (block.drawType() == BlockDrawType::BoundingBox) {
+				vertices[i][j].coord3d[0] = vertices[i][j].coord3d[0] * block.boundingBox().sizeX + block.boundingBox().x;
+				vertices[i][j].coord3d[1] = vertices[i][j].coord3d[1] * block.boundingBox().sizeY + block.boundingBox().y;
+				vertices[i][j].coord3d[2] = vertices[i][j].coord3d[2] * block.boundingBox().sizeZ + block.boundingBox().z;
+			}
 
 			vertices[i][j].texCoord[0] = faceTexCoords[j * 2];
 			vertices[i][j].texCoord[1] = faceTexCoords[j * 2 + 1];
@@ -135,7 +136,7 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 void InventoryCube::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (!m_isVboInitialized) return;
 
-	states.transform *= m_modelMatrix;
+	states.transform *= m_transform.getTransform();
 	states.transform *= getTransform();
 
 	states.viewMatrix = gk::Transform::Identity;
