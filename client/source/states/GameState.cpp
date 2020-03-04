@@ -182,8 +182,8 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	gk::Shader::bind(nullptr);
 
 	float pi = 3.1415927;
-	float frequency = 2560;
-	float time = gk::GameClock::getTicks() % 5120;
+	float frequency = 256000;
+	float time = gk::GameClock::getTicks() % 512000;
 	float sunlight = std::min(std::max((double)(1 + std::cos(2 * pi / frequency * time)), 0.25), 1.0);
 	float red = std::min(std::max((double)sunlight-0.27, 0.0), 0.53);
 	float green = std::min(std::max((double)sunlight-0.19, 0.04), 0.81);
