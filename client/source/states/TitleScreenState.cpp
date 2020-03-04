@@ -54,6 +54,8 @@ TitleScreenState::TitleScreenState(u16 port) : m_port(port) {
 	m_menuWidget.addButton("Exit", [this] (TextButton &) {
 		m_stateStack->pop();
 	});
+
+	centerBackground();
 }
 
 TitleScreenState::~TitleScreenState() {
@@ -61,10 +63,18 @@ TitleScreenState::~TitleScreenState() {
 		m_thread.join();
 }
 
+void TitleScreenState::centerBackground() {
+	m_background.setPosition(Config::screenWidth / 2.0 - m_background.width() / 2.0, Config::screenHeight / 2.0 - m_background.height() / 2.0);
+}
+
 void TitleScreenState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
 	m_menuWidget.onEvent(event);
+
+	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+		centerBackground();
+	}
 }
 
 void TitleScreenState::update() {
