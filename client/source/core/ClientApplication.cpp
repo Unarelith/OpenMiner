@@ -31,13 +31,11 @@
 
 #include "ClientApplication.hpp"
 #include "Config.hpp"
+#include "EngineConfig.hpp"
 #include "Font.hpp"
 #include "TextureAtlas.hpp"
 #include "TextureLoader.hpp"
 
-#include "GameState.hpp"
-#include "ServerConnectState.hpp"
-#include "ServerLoadingState.hpp"
 #include "TitleScreenState.hpp"
 
 using namespace std::literals::string_literals;
@@ -48,6 +46,7 @@ ClientApplication::ClientApplication(int argc, char **argv) : gk::CoreApplicatio
 void ClientApplication::init() {
 	m_argumentParser.addArgument("host", {"-h", "--host", true});
 	m_argumentParser.addArgument("port", {"-p", "--port", true});
+	m_argumentParser.addArgument("singleplayer", {"-s", "--singleplayer", false});
 
 	gk::CoreApplication::init();
 
@@ -76,13 +75,9 @@ void ClientApplication::init() {
 
 	Registry::setInstance(m_registry);
 
-	m_stateStack.push<TitleScreenState>();
-	// m_stateStack.push<ServerConnectState>();
-
-	// m_stateStack.push<GameState>(m_host, m_port);
-
-	// auto &game = m_stateStack.push<GameState>(m_host, m_port);
-	// m_stateStack.push<ServerLoadingState>(game);
+	auto &titleScreen = m_stateStack.push<TitleScreenState>(m_port);
+	if (m_argumentParser.getArgument("singleplayer").isFound)
+		titleScreen.startSingleplayer();
 }
 
 void ClientApplication::handleEvents() {

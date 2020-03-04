@@ -47,6 +47,7 @@ class ServerApplication {
 		int run(bool isProtected = true);
 
 		void setSingleplayer(bool isSingleplayer) { m_server.setSingleplayer(isSingleplayer); }
+		void setPort(u16 port) { m_port = port; }
 
 	private:
 		void update();
@@ -64,7 +65,7 @@ class ServerApplication {
 
 		Registry m_registry;
 
-		int m_port = 4242;
+		u16 m_port = 4242;
 
 		ServerCommandHandler m_serverCommandHandler{m_scriptEngine, m_server, m_world, m_players, m_registry};
 };

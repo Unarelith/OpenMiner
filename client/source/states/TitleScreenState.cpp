@@ -34,23 +34,13 @@
 
 #include "ServerApplication.hpp"
 
-TitleScreenState::TitleScreenState() {
+TitleScreenState::TitleScreenState(u16 port) : m_port(port) {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale, 1);
 
 	m_menuWidget.addButton("Singleplayer", [this] (TextButton &) {
-		thread = std::thread([] () {
-			ServerApplication app;
-			app.setSingleplayer(true);
-			app.run();
-		});
-
-		// thread.detach();
-
-		std::this_thread::sleep_for(std::chrono::seconds(1));
-
-		m_stateStack->push<GameState>("localhost", 4242);
+		startSingleplayer();
 	});
 
 	m_menuWidget.addButton("Multiplayer", [this] (TextButton &) {
@@ -67,8 +57,8 @@ TitleScreenState::TitleScreenState() {
 }
 
 TitleScreenState::~TitleScreenState() {
-	if (thread.joinable())
-		thread.join();
+	if (m_thread.joinable())
+		m_thread.join();
 }
 
 void TitleScreenState::onEvent(const SDL_Event &event) {
@@ -78,6 +68,19 @@ void TitleScreenState::onEvent(const SDL_Event &event) {
 }
 
 void TitleScreenState::update() {
+}
+
+void TitleScreenState::startSingleplayer() {
+	m_thread = std::thread([this] () {
+		ServerApplication app;
+		app.setSingleplayer(true);
+		app.setPort(m_port);
+		app.run();
+	});
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+	m_stateStack->push<GameState>("localhost", m_port);
 }
 
 void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) const {

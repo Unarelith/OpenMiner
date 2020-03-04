@@ -34,12 +34,14 @@
 
 class TitleScreenState : public InterfaceState {
 	public:
-		TitleScreenState();
+		TitleScreenState(u16 port = 4242);
 		~TitleScreenState();
 
 		void onEvent(const SDL_Event &event) override;
 
 		void update() override;
+
+		void startSingleplayer();
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
@@ -48,7 +50,9 @@ class TitleScreenState : public InterfaceState {
 
 		gk::Image m_background{"texture-title_screen"};
 
-		std::thread thread;
+		std::thread m_thread;
+
+		u16 m_port = 4242;
 };
 
 #endif // TITLESCREENSTATE_HPP_

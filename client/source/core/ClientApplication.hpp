@@ -50,7 +50,7 @@ class ClientApplication : public gk::CoreApplication {
 		Registry m_registry;
 
 		std::string m_host = "localhost";
-		int m_port = 4242;
+		u16 m_port = 4242;
 };
 
 #endif // CLIENTAPPLICATION_HPP_
