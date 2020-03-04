@@ -12,7 +12,9 @@ vec4 fog(vec4 color, float fogCoord, float fogStart, float fogEnd) {
 
 	float time = mod(u_time, 512000);
 	float sunlight = clamp(1 + cos(2 * pi / frequency * time), 0.25, 1);
-
-	return mix(vec4(0.53 * sunlight, 0.81 * sunlight, 0.92 * sunlight, 1.0), color, fog);
+	float red = clamp(sunlight-0.27, 0.0, 0.53);
+	float green = clamp(sunlight-0.19, 0.04, 0.81);
+	float blue = clamp(sunlight-0.08, 0.13, 0.92);
+	return mix(vec4(red, green, blue, 1.0), color, fog);
 }
 
