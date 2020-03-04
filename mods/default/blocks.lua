@@ -52,8 +52,8 @@ mod:block {
 }
 
 mod:block {
-	id = "leaves",
-	name = "Leaves",
+	id = "oak_leaves",
+	name = "Oak Leaves",
 	tiles = "oak_leaves.png",
 	color_multiplier = {106, 173, 51, 255},
 	hardness = 0.5,
@@ -62,8 +62,8 @@ mod:block {
 }
 
 mod:block {
-	id = "wood",
-	name = "Wood",
+	id = "oak_wood",
+	name = "Oak Wood",
 	tiles = {"oak_log_top.png", "oak_log.png"},
 	hardness = 2
 }
@@ -116,8 +116,8 @@ mod:block {
 }
 
 mod:block {
-	id = "planks",
-	name = "Planks",
+	id = "oak_planks",
+	name = "Oak Wood Planks",
 	tiles = "oak_planks.png"
 }
 
@@ -140,8 +140,8 @@ mod:block {
 }
 
 mod:block {
-	id = "flower",
-	name = "Flower",
+	id = "dandelion",
+	name = "Dandelion",
 	tiles = "dandelion.png",
 	hardness = 0.05,
 	draw_type = 1, -- FIXME: Use string instead
@@ -150,7 +150,7 @@ mod:block {
 
 mod:block {
 	id = "tallgrass",
-	name = "Tall Grass",
+	name = "Grass",
 	tiles = "grass.png",
 	color_multiplier = {129, 191, 91, 255},
 	hardness = 0.05,
@@ -182,3 +182,4 @@ mod:block {
 		amount = 4
 	}
 }
+

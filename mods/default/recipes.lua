@@ -39,7 +39,7 @@ mod:crafting_recipe {
 	},
 
 	keys = {
-		['#'] = "default:planks",
+		['#'] = "default:oak_planks",
 		['|'] = "default:stick",
 	}
 }
@@ -58,7 +58,7 @@ mod:crafting_recipe {
 	},
 
 	keys = {
-		['#'] = "default:planks",
+		['#'] = "default:oak_planks",
 		['|'] = "default:stick",
 	}
 }
@@ -77,7 +77,7 @@ mod:crafting_recipe {
 	},
 
 	keys = {
-		['#'] = "default:planks",
+		['#'] = "default:oak_planks",
 		['|'] = "default:stick",
 	}
 }
@@ -96,7 +96,7 @@ mod:crafting_recipe {
 	},
 
 	keys = {
-		['#'] = "default:planks",
+		['#'] = "default:oak_planks",
 		['|'] = "default:stick",
 	}
 }
@@ -115,7 +115,7 @@ mod:crafting_recipe {
 	},
 
 	keys = {
-		['#'] = "default:planks",
+		['#'] = "default:oak_planks",
 		['|'] = "default:stick",
 	}
 }
@@ -513,17 +513,17 @@ mod:crafting_recipe {
 		'#'
 	},
 
-	keys = {['#'] = "default:planks"}
+	keys = {['#'] = "default:oak_planks"}
 }
 
 -- Planks
 mod:crafting_recipe {
 	result = {
-		id = "default:planks",
+		id = "default:oak_planks",
 		amount = 4
 	},
 	pattern = {"#"},
-	keys = {["#"] = "default:wood"}
+	keys = {["#"] = "default:oak_wood"}
 }
 
 -- Workbench
@@ -536,7 +536,7 @@ mod:crafting_recipe {
 		"##",
 		"##"
 	},
-	keys = {["#"] = "default:planks"}
+	keys = {["#"] = "default:oak_planks"}
 }
 
 -- Furnace
@@ -587,7 +587,7 @@ mod:smelting_recipe {
 
 -- Charcoal
 mod:smelting_recipe {
-	input = {id = "default:wood", amount = 1},
+	input = {id = "default:oak_wood", amount = 1},
 	output = {id = "default:charcoal", amount = 1}
 }
 

@@ -34,9 +34,9 @@ openminer:world():terrain_generator():set_blocks({
 	dirt = "default:dirt",
 	grass = "default:grass",
 	stone = "default:stone",
-	log = "default:wood",
-	leaves = "default:leaves",
-	flower = "default:flower",
+	log = "default:oak_wood",
+	leaves = "default:oak_leaves",
+	flower = "default:dandelion",
 	water = "default:water",
 	sand = "default:sand",
 	tallgrass = "default:tallgrass",
@@ -56,8 +56,8 @@ function init(player)
 	player_inv:add_stack("default:stone_pickaxe", 1);
 	player_inv:add_stack("default:stone_axe", 1);
 
-	player_inv:add_stack("default:wood", 64);
-	player_inv:add_stack("default:planks", 64);
+	player_inv:add_stack("default:oak_wood", 64);
+	player_inv:add_stack("default:oak_planks", 64);
 	player_inv:add_stack("default:cobblestone", 64);
 	player_inv:add_stack("default:stick", 64);
 	player_inv:add_stack("default:stone_hoe", 1);
@@ -157,19 +157,19 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 			{"default:dirt"},
 			{"default:cobblestone"},
 			{"default:grass"},
-			{"default:leaves"},
-			{"default:wood"},
+			{"default:oak_leaves"},
+			{"default:oak_wood"},
 			{"default:stone"},
 			{"default:sand"},
 			{"default:water"},
 			{"default:glass"},
 			{"default:coal_ore"},
-			{"default:planks"},
+			{"default:oak_planks"},
 			{"default:glowstone"},
 			{"default:workbench"},
 			{"default:furnace"},
 			{"default:iron_ore"},
-			{"default:flower"},
+			{"default:dandelion"},
 			{"default:tallgrass"},
 			{"default:stone_bricks"},
 			{"default:bricks"},
