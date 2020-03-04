@@ -24,6 +24,8 @@
  *
  * =====================================================================================
  */
+#include <thread>
+
 #include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/Mouse.hpp>
 #include <gk/resource/ResourceHandler.hpp>
@@ -31,44 +33,64 @@
 #include "Config.hpp"
 #include "GameState.hpp"
 #include "ServerLoadingState.hpp"
+#include "TextureAtlas.hpp"
 
-ServerLoadingState::ServerLoadingState(GameState &game) : m_game(game) {
-	m_shader.createProgram();
-	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
-	m_shader.linkProgram();
-
-	m_text.setFont(gk::ResourceHandler::getInstance().get<gk::Font>("font-default"));
-	m_text.setCharacterSize(8 * 6);
-	m_text.setString("Loading world...");
+ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, gk::ApplicationState *parent)
+	: InterfaceState(parent), m_game(game), m_showLoadingState(showLoadingState)
+{
+	m_text.setText("Loading world...");
 	m_text.setColor(gk::Color::White);
-	m_text.setPosition(Config::screenWidth / 2.0f - m_text.getLocalBounds().sizeX / 2.0f, 200);
+	m_text.updateVertexBuffer();
+	m_text.setScale(Config::guiScale * 2, Config::guiScale * 2);
 
-	m_textShadow.setFont(gk::ResourceHandler::getInstance().get<gk::Font>("font-default"));
-	m_textShadow.setCharacterSize(8 * 6);
-	m_textShadow.setString(m_text.string());
-	m_textShadow.setColor(gk::Color{70, 70, 70, 255});
-	m_textShadow.setPosition(m_text.getPosition().x + 6, m_text.getPosition().y + 6);
+	centerText();
 
 	gk::Mouse::setCursorVisible(true);
 	gk::Mouse::setCursorGrabbed(false);
 }
 
+void ServerLoadingState::centerText() {
+	m_text.setPosition(Config::screenWidth  / 2 - m_text.getSize().x * Config::guiScale * 2 / 2,
+	                   Config::screenHeight / 2 - m_text.getSize().y * Config::guiScale * 2 / 2);
+}
+
+void ServerLoadingState::onEvent(const SDL_Event &event) {
+	InterfaceState::onEvent(event);
+
+	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+		centerText();
+	}
+}
+
 void ServerLoadingState::update() {
 	m_game.client().update();
 
-	if (m_isWorldSent) {
-		m_stateStack->pop();
+	if (m_game.clientCommandHandler().isRegistryInitialized()) {
+		if (m_game.textureAtlas().isReady() && (m_hasBeenRendered || !m_showLoadingState)) {
+			if (m_showLoadingState)
+				std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-		gk::Mouse::setCursorVisible(false);
-		gk::Mouse::setCursorGrabbed(true);
+			m_stateStack->pop();
+
+			gk::Mouse::setCursorVisible(false);
+			gk::Mouse::setCursorGrabbed(true);
+		}
+		else if (!m_game.textureAtlas().isReady()) {
+			m_game.textureAtlas().loadFromRegistry();
+		}
 	}
 }
 
 void ServerLoadingState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	states.shader = &m_shader;
-	target.setView(target.getDefaultView());
-	target.draw(m_textShadow, states);
-	target.draw(m_text, states);
+	if (m_parent)
+		target.draw(*m_parent, states);
+
+	if (m_showLoadingState) {
+		prepareDraw(target, states);
+
+		target.draw(m_text, states);
+
+		m_hasBeenRendered = true;
+	}
 }
 

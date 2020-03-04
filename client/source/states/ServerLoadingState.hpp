@@ -27,29 +27,30 @@
 #ifndef SERVERLOADINGSTATE_HPP_
 #define SERVERLOADINGSTATE_HPP_
 
-#include <gk/core/ApplicationState.hpp>
-#include <gk/gl/Shader.hpp>
-#include <gk/graphics/Text.hpp>
+#include "InterfaceState.hpp"
+#include "Text.hpp"
 
-#include "GameState.hpp"
+class GameState;
 
-class ServerLoadingState : public gk::ApplicationState {
+class ServerLoadingState : public InterfaceState {
 	public:
-		ServerLoadingState(GameState &game);
+		ServerLoadingState(GameState &game, bool showLoadingState, gk::ApplicationState *parent = nullptr);
+
+		void centerText();
+
+		void onEvent(const SDL_Event &event) override;
 
 		void update() override;
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		gk::Shader m_shader;
-
-		gk::Text m_text;
-		gk::Text m_textShadow;
+		Text m_text;
 
 		GameState &m_game;
 
-		bool m_isWorldSent = false;
+		bool m_showLoadingState;
+		mutable bool m_hasBeenRendered = false;
 };
 
 #endif // SERVERLOADINGSTATE_HPP_

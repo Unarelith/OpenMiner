@@ -73,7 +73,7 @@ void ClientApplication::init() {
 
 	auto &titleScreen = m_stateStack.push<TitleScreenState>(m_port);
 	if (m_argumentParser.getArgument("singleplayer").isFound)
-		titleScreen.startSingleplayer();
+		titleScreen.startSingleplayer(false);
 }
 
 void ClientApplication::handleEvents() {

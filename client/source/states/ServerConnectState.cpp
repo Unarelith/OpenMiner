@@ -56,10 +56,8 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 			std::cerr << "Error: Invalid server address." << std::endl;
 		}
 
-		m_stateStack->push<GameState>(host, port);
-
-		// auto &game = m_stateStack->push<GameState>(host, port);
-		// m_stateStack->push<ServerLoadingState>(game);
+		auto &game = m_stateStack->push<GameState>(host, port);
+		m_stateStack->push<ServerLoadingState>(game, true, this);
 	});
 
 	m_cancelButton.setText("Cancel");
@@ -81,10 +79,12 @@ void ServerConnectState::onEvent(const SDL_Event &event) {
 		m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 261);
 	}
 
-	m_textInput.onEvent(event);
+	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
+		m_textInput.onEvent(event);
 
-	m_connectButton.onEvent(event);
-	m_cancelButton.onEvent(event);
+		m_connectButton.onEvent(event);
+		m_cancelButton.onEvent(event);
+	}
 }
 
 void ServerConnectState::update() {
@@ -94,11 +94,13 @@ void ServerConnectState::draw(gk::RenderTarget &target, gk::RenderStates states)
 	if (m_parent)
 		target.draw(*m_parent, states);
 
-	prepareDraw(target, states);
+	if (&m_stateStack->top() == this) {
+		prepareDraw(target, states);
 
-	target.draw(m_textInput, states);
+		target.draw(m_textInput, states);
 
-	target.draw(m_connectButton, states);
-	target.draw(m_cancelButton, states);
+		target.draw(m_connectButton, states);
+		target.draw(m_cancelButton, states);
+	}
 }
 

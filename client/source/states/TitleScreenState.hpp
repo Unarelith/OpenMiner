@@ -43,7 +43,7 @@ class TitleScreenState : public InterfaceState {
 
 		void update() override;
 
-		void startSingleplayer();
+		void startSingleplayer(bool showLoadingState);
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;

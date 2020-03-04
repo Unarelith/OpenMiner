@@ -29,6 +29,7 @@
 #include "Config.hpp"
 #include "GameState.hpp"
 #include "ServerConnectState.hpp"
+#include "ServerLoadingState.hpp"
 #include "SettingsMenuState.hpp"
 #include "TitleScreenState.hpp"
 
@@ -40,7 +41,7 @@ TitleScreenState::TitleScreenState(u16 port) : m_port(port) {
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale, 1);
 
 	m_menuWidget.addButton("Singleplayer", [this] (TextButton &) {
-		startSingleplayer();
+		startSingleplayer(true);
 	});
 
 	m_menuWidget.addButton("Multiplayer", [this] (TextButton &) {
@@ -70,17 +71,19 @@ void TitleScreenState::centerBackground() {
 void TitleScreenState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
-	m_menuWidget.onEvent(event);
-
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 		centerBackground();
+	}
+
+	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
+		m_menuWidget.onEvent(event);
 	}
 }
 
 void TitleScreenState::update() {
 }
 
-void TitleScreenState::startSingleplayer() {
+void TitleScreenState::startSingleplayer(bool showLoadingState) {
 	m_thread = std::thread([this] () {
 		ServerApplication app;
 		app.setSingleplayer(true);
@@ -88,9 +91,10 @@ void TitleScreenState::startSingleplayer() {
 		app.run();
 	});
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
-	m_stateStack->push<GameState>("localhost", m_port);
+	auto &game = m_stateStack->push<GameState>("localhost", m_port);
+	m_stateStack->push<ServerLoadingState>(game, showLoadingState, this);
 }
 
 void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) const {

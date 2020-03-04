@@ -100,7 +100,7 @@ void TextureAtlas::packTextures() {
 	m_isReady = true;
 
 	if (IMG_SavePNG(atlas.get(), "test_atlas.png") < 0)
-		throw EXCEPTION("Failed to save texture to: test_altas.png. Reason:", SDL_GetError());
+		throw EXCEPTION("Failed to save texture to: test_atlas.png. Reason:", IMG_GetError());
 
 	m_texture.loadFromSurface(atlas.get());
 }

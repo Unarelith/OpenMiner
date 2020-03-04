@@ -52,6 +52,8 @@ class GameState : public gk::ApplicationState {
 		void update() override;
 
 		Client &client() { return m_client; }
+		ClientCommandHandler &clientCommandHandler() { return m_clientCommandHandler; }
+		TextureAtlas &textureAtlas() { return m_textureAtlas; }
 
 	private:
 		void initShaders();
@@ -73,7 +75,7 @@ class GameState : public gk::ApplicationState {
 
 		HUD m_hud{m_player, m_world, m_clientCommandHandler};
 
-		TextureAtlas *m_textureAtlas = nullptr;
+		TextureAtlas &m_textureAtlas;
 };
 
 #endif // GAMESTATE_HPP_

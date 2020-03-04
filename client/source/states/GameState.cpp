@@ -45,11 +45,11 @@
 #include "Registry.hpp"
 #include "TextureAtlas.hpp"
 
-GameState::GameState(const std::string &host, int port) {
+GameState::GameState(const std::string &host, int port)
+	: m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
+{
 	// Set clear color to skyblue
 	glClearColor(0.196078, 0.6, 0.8, 1.0);
-
-	m_textureAtlas = &gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks");
 
 	m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
 
@@ -110,8 +110,7 @@ void GameState::onEvent(const SDL_Event &event) {
 			}
 		}
 
-		if (m_clientCommandHandler.isRegistryInitialized())
-			m_hud.onEvent(event);
+		m_hud.onEvent(event);
 	}
 
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
@@ -130,28 +129,20 @@ void GameState::update() {
 	if (m_camera.getFieldOfView() != Config::cameraFOV)
 		m_camera.setFieldOfView(Config::cameraFOV);
 
-	// FIXME: Registry init and TextureAtlas building should be done during loading phase
-	if (m_clientCommandHandler.isRegistryInitialized()) {
-		if (m_textureAtlas->isReady()) {
-			if (!m_stateStack->empty() && &m_stateStack->top() == this) {
-				m_player.processInputs();
+	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
+		m_player.processInputs();
 
-				if (gk::GamePad::isKeyPressedOnce(GameKey::Inventory)) {
-					m_clientCommandHandler.sendPlayerInventoryRequest();
-				}
-				else if (gk::GamePad::isKeyPressedOnce(GameKey::CreativeWindow)) {
-					m_clientCommandHandler.sendPlayerCreativeWindowRequest();
-				}
-			}
-
-			m_player.updatePosition(m_world);
-
-			m_hud.update();
+		if (gk::GamePad::isKeyPressedOnce(GameKey::Inventory)) {
+			m_clientCommandHandler.sendPlayerInventoryRequest();
 		}
-		else {
-			m_textureAtlas->loadFromRegistry();
+		else if (gk::GamePad::isKeyPressedOnce(GameKey::CreativeWindow)) {
+			m_clientCommandHandler.sendPlayerCreativeWindowRequest();
 		}
 	}
+
+	m_player.updatePosition(m_world);
+
+	m_hud.update();
 
 	if (gk::GameClock::getTicks() % 100 < 10) {
 		m_clientCommandHandler.sendPlayerPosUpdate();
@@ -186,7 +177,6 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	for (auto &it : m_playerBoxes)
 		target.draw(it.second, states);
 
-	if (m_clientCommandHandler.isRegistryInitialized())
-		target.draw(m_hud, states);
+	target.draw(m_hud, states);
 }
 
