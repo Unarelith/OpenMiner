@@ -41,6 +41,18 @@ Font::Font(const std::string &textureName, const std::string &configPath)
 	parseConfig(configPath);
 }
 
+gk::Vector2f Font::getTexCoords(u8 c, u8 x, u8 y) const {
+	u8 tileX = c % (m_texture.getSize().x / m_width);
+	u8 tileY = c / (m_texture.getSize().x / m_width);
+
+	gk::Vector2f texCoords{
+		(tileX + x) * m_width  / (float)m_texture.getSize().x,
+		(tileY + y) * m_height / (float)m_texture.getSize().y
+	};
+
+	return texCoords;
+}
+
 void Font::parseConfig(const std::string &configPath) {
 	std::ifstream file(configPath);
 

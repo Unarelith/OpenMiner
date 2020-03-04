@@ -88,7 +88,7 @@ This list is non exhaustive.
 - Particle system
 - Fluid propagation
 - Player model display (currently displaying an ugly box)
-- Day/night cycle with sun/moon display
+- Day/night cycle with sun/moon display ([#73](https://github.com/Unarelith/OpenMiner/issues/73))
 - Real worldgen (seed-based, biomes, cave tunnels)
 - Entities (block drops, mobs, etc...)
 - Clouds ([#52](https://github.com/Unarelith/OpenMiner/pull/52))

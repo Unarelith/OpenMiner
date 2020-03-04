@@ -32,7 +32,6 @@
 #include <sol.hpp>
 
 #include <gk/graphics/Image.hpp>
-// #include <gk/graphics/Text.hpp>
 
 #include "Text.hpp"
 #include "Widget.hpp"
@@ -63,8 +62,6 @@ class TextButton : public Widget {
 		gk::Image m_disabledBackground{"texture-widgets"};
 
 		Text m_text;
-		// gk::Text m_text;
-		// gk::Text m_textShadow;
 
 		CppCallback m_cppCallback;
 		LuaCallback m_luaCallback;

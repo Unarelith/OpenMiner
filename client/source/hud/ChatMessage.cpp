@@ -37,6 +37,7 @@ ChatMessage::ChatMessage(u16 clientID, const std::string &message, u32 posY) {
 	m_text.setBackgroundSize(300, 10);
 	m_text.setMaxLineLength(300);
 	m_text.setPadding(1, 1);
+	m_text.updateVertexBuffer();
 
 	m_timer.reset();
 	m_timer.start();

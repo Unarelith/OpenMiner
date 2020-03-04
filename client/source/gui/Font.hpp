@@ -29,7 +29,7 @@
 
 #include <string>
 
-#include <gk/core/IntTypes.hpp>
+#include <gk/core/Vector2.hpp>
 
 namespace gk {
 	class Texture;
@@ -39,7 +39,10 @@ class Font {
 	public:
 		Font(const std::string &textureName, const std::string &configPath);
 
-		u8 getCharWidth(u8 c) { return m_charWidth[c]; }
+		gk::Vector2f getTexCoords(u8 c, u8 x, u8 y) const;
+
+		u8 getCharWidth(u8 c) const { return m_charWidth[c]; }
+		gk::Vector2i getTileSize() const { return {m_width, m_height}; }
 
 		const std::string &textureName() const { return m_textureName; } // FIXME: Will be removed later
 		const gk::Texture &texture() const { return m_texture; }
@@ -51,6 +54,8 @@ class Font {
 		gk::Texture &m_texture;
 
 		u8 m_charWidth[256];
+		u8 m_width = 8; // FIXME: Hardcoded value
+		u8 m_height = 8; // FIXME: Hardcoded value
 };
 
 #endif // FONT_HPP_

@@ -27,6 +27,8 @@
 #ifndef CHATMESSAGE_HPP_
 #define CHATMESSAGE_HPP_
 
+#include <gk/core/Timer.hpp>
+
 #include "Text.hpp"
 
 class ChatMessage : public gk::Drawable, public gk::Transformable {

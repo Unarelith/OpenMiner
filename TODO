@@ -10,13 +10,9 @@ TODO
 
 # Issues
 
-• DONE: Blocks can be placed inside the player (check for AABB?)
-• DONE: Sometimes it’s possible to aim between two blocks and right-clicking will replace one
 • TODO: GUI scale issues
    ◦ TODO: `HUD` doesn’t update when GUI scale is changed
    ◦ TODO: `SettingsMenuState` should update scaling when the setting is changed
-   ◦ DONE: All Lua-defined GUI are not scaled correctly with lower GUI scale settings
-      ◦ DONE: Send client screen size and GUI scale to server
 ◦ TODO: Trees should block light
 • TODO: Blocks can be accessed from outside the world (will need a refactoring)
 • TODO: Collisions are fucked up with blocks placed at `x = -1` from `x = 0`
@@ -26,13 +22,6 @@ TODO
 • TODO: Add a mesh system, either here or in `GameKit`
    → Maybe this is the way to add custom vertex attributes while having default ones? Check 3dee
    → Or maybe it would be better to use a VAO in `GameKit`
-
-# GUI
-
-• DONE: Implement `PlayerInventoryWidget` completely in Lua
-• DONE: Implement `PlayerCraftingWidget` completely in Lua
-• DONE: Implement `FurnaceWidget` completely in Lua
-   ◦ DONE: Add a `ProgressBarWidget`
 
 # Menus
 

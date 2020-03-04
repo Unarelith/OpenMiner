@@ -24,6 +24,7 @@
  *
  * =====================================================================================
  */
+#include <gk/gl/Texture.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "Color.hpp"
@@ -37,78 +38,137 @@ Text::Text() : m_font(gk::ResourceHandler::getInstance().get<Font>("font-ascii")
 void Text::setText(const std::string &text) {
 	if (m_text != text) {
 		m_text = text;
-		updateTextSprites();
+		m_isUpdateNeeded = true;
 	}
 }
 
 void Text::setColor(const gk::Color &color) {
 	if (m_color != color) {
 		m_color = color;
-		updateTextSprites();
+		m_isUpdateNeeded = true;
+	}
+}
+
+void Text::setPadding(int x, int y) {
+	if (m_padding.x != x || m_padding.y != y) {
+		m_padding.x = x;
+		m_padding.y = y;
+		m_isUpdateNeeded = true;
+	}
+}
+
+void Text::setMaxLineLength(unsigned int maxLineLength) {
+	if (m_maxLineLength != maxLineLength) {
+		m_maxLineLength = maxLineLength;
+		m_isUpdateNeeded = true;
 	}
 }
 
 void Text::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	if (m_isUpdateNeeded) {
+		updateVertexBuffer();
+		m_isUpdateNeeded = false;
+	}
+
+	if (m_verticesCount == 0) return;
+
 	states.transform *= getTransform();
 
 	target.draw(m_background, states);
 
 	states.transform.translate(m_padding.x, m_padding.y);
+	states.texture = &m_font.texture();
+	states.vertexAttributes = gk::VertexAttribute::Only2d;
 
-	for(const gk::Sprite &sprite : m_textSprites) {
-		target.draw(sprite, states);
-	}
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+
+	target.draw(m_vbo, GL_TRIANGLES, 0, m_verticesCount, states);
 }
 
-// FIXME: USE A VBO INSTEAD
-void Text::updateTextSprites() {
-	m_textSprites.clear();
+void Text::updateVertexBuffer() const {
+	if (!m_isUpdateNeeded) return;
 
-	unsigned int x = 0;
-	unsigned int y = 0;
-	unsigned int maxX = 0;
+	std::vector<gk::Vertex> vertices;
+
+	u32 x = 0;
+	u32 y = 0;
+	u32 maxX = 0;
 	gk::Color color = gk::Color{70, 70, 70, 255};
 	for(char c : m_text) {
 		if (c == '\n' || (m_maxLineLength && x + m_font.getCharWidth(c) >= m_maxLineLength)) {
-			y += 9;
+			y += m_font.getTileSize().y + 1;
 			x = 0;
 			continue;
 		}
 
-		gk::Sprite sprite{m_font.textureName(), 8, 8};
-		sprite.setCurrentFrame(c);
-		sprite.setPosition(x + 1, y + 1, 0);
-		sprite.setColor(color);
-		m_textSprites.emplace_back(std::move(sprite));
+		addCharacter(x + 1, y + 1, color, c, vertices);
+
 		x += m_font.getCharWidth(c);
 	}
+
 	x = 0;
 	y = 0;
 	color = m_color;
 	for(char c : m_text) {
 		if (c == '\n' || (m_maxLineLength && x + m_font.getCharWidth(c) >= m_maxLineLength)) {
 			maxX = std::max(x, maxX);
-			y += 9;
+			y += m_font.getTileSize().y + 1;
 			x = 0;
 			continue;
 		}
 
-		gk::Sprite sprite{m_font.textureName(), 8, 8};
-		sprite.setCurrentFrame(c);
-		sprite.setPosition(x, y, 0);
 		if (c == '[')
 			color = Color::Blue;
-		sprite.setColor(color);
-		m_textSprites.emplace_back(std::move(sprite));
+
+		addCharacter(x, y, color, c, vertices);
+
 		x += m_font.getCharWidth(c);
 	}
 
-	m_size.x = std::max(x, maxX);
-	m_size.y = y + 9;
+	m_verticesCount = vertices.size();
 
-	unsigned int backgroundX = std::max<int>(m_background.getSize().x, m_size.x + m_padding.x);
-	unsigned int backgroundY = std::max<int>(m_background.getSize().y, m_size.y + m_padding.y);
+	gk::VertexBuffer::bind(&m_vbo);
+	m_vbo.setData(sizeof(gk::Vertex) * m_verticesCount, vertices.data(), GL_DYNAMIC_DRAW);
+	gk::VertexBuffer::bind(nullptr);
+
+	m_size.x = std::max(x, maxX);
+	m_size.y = y + m_font.getTileSize().y + 1;
+
+	u32 backgroundX = std::max<s32>(m_background.getSize().x, m_size.x + m_padding.x);
+	u32 backgroundY = std::max<s32>(m_background.getSize().y, m_size.y + m_padding.y);
 
 	m_background.setSize(backgroundX, backgroundY);
+}
+
+void Text::addCharacter(u32 x, u32 y, const gk::Color &color, u8 c, std::vector<gk::Vertex> &vertices) const {
+	static const u8 coords[6][2] = {
+		{1, 0},
+		{0, 0},
+		{1, 1},
+
+		{1, 1},
+		{0, 0},
+		{0, 1},
+	};
+
+	for (int i = 0 ; i < 6 ; ++i) {
+		vertices.emplace_back();
+		gk::Vertex &vertex = vertices.back();
+
+		vertex.coord3d[0] = x + coords[i][0] * m_font.getTileSize().x;
+		vertex.coord3d[1] = y + coords[i][1] * m_font.getTileSize().y;
+		vertex.coord3d[2] = 0;
+		vertex.coord3d[3] = -1;
+
+		vertex.color[0] = color.r;
+		vertex.color[1] = color.g;
+		vertex.color[2] = color.b;
+		vertex.color[3] = color.a;
+
+		gk::Vector2f texCoords = m_font.getTexCoords(c, coords[i][0], coords[i][1]);
+		vertex.texCoord[0] = texCoords.x;
+		vertex.texCoord[1] = texCoords.y;
+	}
 }
 

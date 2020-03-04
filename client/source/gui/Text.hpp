@@ -28,9 +28,10 @@
 #define TEXT_HPP_
 
 #include <string>
+#include <vector>
 
+#include <gk/gl/Vertex.hpp>
 #include <gk/graphics/RectangleShape.hpp>
-#include <gk/graphics/Sprite.hpp>
 
 class Font;
 
@@ -49,28 +50,33 @@ class Text : public gk::Drawable, public gk::Transformable {
 		void setBackgroundColor(const gk::Color &color) { m_background.setFillColor(color); }
 		void setBackgroundSize(unsigned int width, unsigned int height) { m_background.setSize(width, height); }
 
-		void setPadding(int x, int y) { m_padding.x = x; m_padding.y = y; updateTextSprites(); }
+		void setPadding(int x, int y);
 
-		void setMaxLineLength(unsigned int maxLineLength) { m_maxLineLength = maxLineLength; updateTextSprites(); }
+		void setMaxLineLength(u32 maxLineLength);
+
+		void updateVertexBuffer() const;
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		void updateTextSprites();
+		void addCharacter(u32 x, u32 y, const gk::Color &color, u8 c, std::vector<gk::Vertex> &vertices) const;
 
 		std::string m_text;
-		std::vector<gk::Sprite> m_textSprites;
 
 		Font &m_font;
 
-		gk::Vector2i m_size;
+		gk::VertexBuffer m_vbo;
+		mutable u32 m_verticesCount = 0;
+		mutable bool m_isUpdateNeeded = true;
+
+		mutable gk::Vector2i m_size;
 		gk::Vector2i m_padding{0, 0};
 
 		gk::Color m_color = gk::Color::White;
 
-		gk::RectangleShape m_background;
+		mutable gk::RectangleShape m_background;
 
-		unsigned int m_maxLineLength = 0;
+		u32 m_maxLineLength = 0;
 };
 
 #endif // TEXT_HPP_
