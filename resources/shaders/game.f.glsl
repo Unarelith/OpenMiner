@@ -35,16 +35,16 @@ void main() {
 	}
 
 	// Block breaking animation
-	if (blockFace == -2 && color.a != 0.) {
-		if (color.r < 0.5) {
-			color.rgb = 0.5 * color.rgb;
-			color.a -= 0.2;
-		}
-		else {
-			color.rgb = 0.8 * color.rgb;
-			color.a -= 0.7;
-		}
-	}
+	/* if (blockFace == -2 && color.a != 0.) { */
+	/* 	if (color.r < 0.5) { */
+	/* 		color.rgb = 0.5 * color.rgb; */
+	/* 		color.a -= 0.2; */
+	/* 	} */
+	/* 	else { */
+	/* 		color.rgb = 0.8 * color.rgb; */
+	/* 		color.a -= 0.7; */
+	/* 	} */
+	/* } */
 
 	// Very cheap "transparency": don't draw pixels with a low alpha value
 	if(color.a < 0.3 && blockFace > -1.) discard;

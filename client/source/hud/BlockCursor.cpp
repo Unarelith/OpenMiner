@@ -265,14 +265,14 @@ void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 	if (m_animationStart > 0) {
 		glCheck(glEnable(GL_CULL_FACE));
-		// glCheck(glBlendFunc(GL_DST_COLOR, GL_ZERO));
+		glCheck(glBlendFunc(GL_DST_COLOR, GL_ZERO));
 
 		// FIXME
 		states.texture = &gk::ResourceHandler::getInstance().get<gk::Texture>("texture-block_destroy");
 
 		target.draw(m_animationVBO, GL_QUADS, 0, 24, states);
 
-		// glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+		glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 	}
 
 	glCheck(glEnable(GL_POLYGON_OFFSET_FILL));
