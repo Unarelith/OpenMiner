@@ -47,26 +47,26 @@ void main() {
 	float minBrightness = 2.0 / 16.0;
 	if (lightCheck != -1.) {
 		const float pi = 3.1415927;
-		const float frequency = 25600;
+		const float frequency = 256000;
 
-		float time = mod(u_time, 51200);
-		float sunlight = clamp(v_lightValue.x * 0.5 * (1 + cos(2 * pi / frequency * time)), 4, 15);
+		float time = mod(u_time, 512000);
+		float sunlight = clamp(v_lightValue.x * 0.5 * (1 + cos(2 * pi / frequency * time) * 2.0), 4, 15);
 
 		float ambientIntensity = max(max(v_lightValue.x, v_lightValue.y) / 16.0, minBrightness);
 		float diffuseIntensity = max(v_lightValue.x, v_lightValue.y) / 32.0;
 
 		// These numbers should be in sync with enum BlockFace in TilesDef.hpp
 		// Bottom
-		// if (blockFace == 4.)
-		// 	ambientIntensity = max(ambientIntensity * 0.6, minBrightness);
-		// // West or East
-		// if (blockFace == 0. || blockFace == 1.)
-		// 	ambientIntensity = max(ambientIntensity * 0.75, minBrightness);
-		// // South or North
-		// if (blockFace == 2. || blockFace == 3.)
-		// 	ambientIntensity = max(ambientIntensity * 0.9, minBrightness);
-
-		color = light(color, vec3(max(v_lightValue.y / 16.0, sunlight / 16.0), max(v_lightValue.y / 16.0, sunlight / 16.0), max(v_lightValue.y / 16.0, sunlight / 16.0)), v_coord3d, ambientIntensity, diffuseIntensity);
+		if (blockFace == 4.)
+			ambientIntensity = min(ambientIntensity * 0.6, minBrightness);
+		// West or East
+		if (blockFace == 0. || blockFace == 1.)
+			ambientIntensity = max(ambientIntensity * 0.75, minBrightness);
+		// South or North
+		if (blockFace == 2. || blockFace == 3.)
+			ambientIntensity = max(ambientIntensity * 0.9, minBrightness);
+		float lightval = clamp(sunlight / 16.0, v_lightValue.y / 16.0, 1.0);
+		color = light(color, vec3(lightval, lightval, lightval), v_coord3d, ambientIntensity, diffuseIntensity);
 
 		// color = vec4(0, 0, v_lightValue.x / 16.0, 1);
 	}
@@ -77,3 +77,4 @@ void main() {
 
 	gl_FragColor = color;
 }
+
