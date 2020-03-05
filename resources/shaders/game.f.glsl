@@ -10,7 +10,10 @@ varying float v_blockFace;
 varying float v_dist;
 
 uniform int u_renderDistance;
+
 uniform sampler2D u_tex;
+
+uniform int u_time;
 
 // Get light color
 vec4 light(vec4 color, vec3 lightColor, vec4 lightPosition, float ambientIntensity, float diffuseIntensity);
@@ -50,6 +53,12 @@ void main() {
 
 	float minBrightness = 2.0 / 16.0;
 	if (lightCheck != -1.) {
+		const float pi = 3.1415927;
+		const float frequency = 480000;
+
+		float time = mod(u_time, 960000);
+		float sunlight = clamp(v_lightValue.x * 0.5 * (1 + cos(2 * pi / frequency * time) * 4.0), 3, 15);
+
 		float ambientIntensity = max(max(v_lightValue.x, v_lightValue.y) / 16.0, minBrightness);
 		float diffuseIntensity = max(v_lightValue.x, v_lightValue.y) / 32.0;
 
@@ -64,7 +73,9 @@ void main() {
 		if (blockFace == 2. || blockFace == 3.)
 			ambientIntensity = max(ambientIntensity * 0.9, minBrightness);
 
-		color = light(color, vec3(1.0, 1.0, 1.0), v_coord3d, ambientIntensity, diffuseIntensity);
+		float lightval = clamp(sunlight / 16.0, v_lightValue.y / 16.0, 1.0);
+
+		color = light(color, vec3(lightval, lightval, lightval), v_coord3d, ambientIntensity, diffuseIntensity);
 	}
 
 	color.rgb *= v_ambientOcclusion;

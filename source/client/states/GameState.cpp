@@ -24,6 +24,8 @@
  *
  * =====================================================================================
  */
+#include <algorithm>
+#include <cmath>
 #include <iostream>
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -208,9 +210,20 @@ void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	// FIXME: This uniform is not used anymore since water/leaves effects are disabled
-	// gk::Shader::bind(&m_shader);
-	// m_shader.setUniform("u_time", gk::GameClock::getInstance().getTicks());
-	// gk::Shader::bind(nullptr);
+	// Now used by day/night cycle
+	gk::Shader::bind(&m_shader);
+	m_shader.setUniform("u_time", (int)gk::GameClock::getInstance().getTicks());
+	gk::Shader::bind(nullptr);
+
+	float pi = 3.1415927;
+	float frequency = 480000;
+	float time = gk::GameClock::getInstance().getTicks() % 960000;
+	float sunlight = std::min(std::max((1 + std::cos(2 * pi / frequency * time) * 2.0), 0.0), 1.0);
+	float red = std::min(std::max(sunlight - 0.55, 0.0), 0.45);
+	float green = std::min(std::max(sunlight - 0.35, 0.0), 0.65);
+	float blue = std::min(std::max(sunlight - 0.09, 0.0), 0.91);
+
+	glClearColor(red, green, blue, 1.0);
 
 	m_fbo.begin();
 
