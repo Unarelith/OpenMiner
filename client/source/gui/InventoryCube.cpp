@@ -40,9 +40,13 @@
 InventoryCube::InventoryCube(float size) : m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks")) {
 	m_size = size;
 
-	m_transform.rotate(-180.0f, {0, 0, 1});
-	m_transform.rotate(-30.0f, {1, 0, 0});
-	m_transform.rotate(-45.0f, {0, 1, 0});
+	m_transform.setOrigin(size * 0.5, size * 0.5, size * 0.5);
+
+	// NOTE: intrinsic rotations! The axis is the local axis of the object.
+	// Note also that we start looking at the bottom of the cube due to how
+	// glm::orto is used (see comment below).
+	m_transform.rotate(120.0f, {1, 0, 0});
+	m_transform.rotate(135.0f, {0, 0, 1});
 }
 
 void InventoryCube::updateVertexBuffer(const Block &block) {
@@ -52,50 +56,50 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 	gk::Vertex vertices[6][4] = {
 		// West
 		{
-			{{0, 0, 0, 2}},
-			{{0, 0, m_size, 2}},
-			{{0, m_size, m_size, 2}},
-			{{0, m_size, 0, 2}},
+			{{0,      m_size, 0,      2}},
+			{{0,      0,      0,      2}},
+			{{0,      0,      m_size, 2}},
+			{{0,      m_size, m_size, 2}},
 		},
 
 		// East
 		{
-			{{m_size, 0, m_size, -1}},
-			{{m_size, 0, 0, -1}},
-			{{m_size, m_size, 0, -1}},
-			{{m_size, m_size, m_size, -1}},
+			{{m_size, 0,      0,      2}},
+			{{m_size, m_size, 0,      2}},
+			{{m_size, m_size, m_size, 2}},
+			{{m_size, 0,      m_size, 2}},
 		},
 
 		// South
 		{
-			{{m_size, 0, 0, 4}},
-			{{0, 0, 0, 4}},
-			{{0, m_size, 0, 4}},
-			{{m_size, m_size, 0, 4}},
+			{{0,      0,      0,      4}},
+			{{m_size, 0,      0,      4}},
+			{{m_size, 0,      m_size, 4}},
+			{{0,      0,      m_size, 4}},
 		},
 
 		// North
 		{
-			{{0, 0, m_size, -1}},
-			{{m_size, 0, m_size, -1}},
-			{{m_size, m_size, m_size, -1}},
-			{{0, m_size, m_size, -1}},
+			{{m_size, m_size, 0,      4}},
+			{{0,      m_size, 0,      4}},
+			{{0,      m_size, m_size, 4}},
+			{{m_size, m_size, m_size, 4}},
 		},
 
 		// Bottom
 		{
-			{{0, 0, 0, -1}},
-			{{m_size, 0, 0, -1}},
-			{{m_size, 0, m_size, -1}},
-			{{0, 0, m_size, -1}},
+			{{m_size, 0,      0,      -1}},
+			{{0,      0,      0,      -1}},
+			{{0,      m_size, 0,      -1}},
+			{{m_size, m_size, 0,      -1}},
 		},
 
 		// Top
 		{
-			{{m_size, m_size, 0, 3}},
-			{{0, m_size, 0, 3}},
-			{{0, m_size, m_size, 3}},
 			{{m_size, m_size, m_size, 3}},
+			{{0,      m_size, m_size, 3}},
+			{{0,      0,      m_size, 3}},
+			{{m_size, 0,      m_size, 3}},
 		},
 	};
 
@@ -136,11 +140,13 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 void InventoryCube::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (!m_isVboInitialized) return;
 
-	states.transform *= m_transform.getTransform();
 	states.transform *= getTransform();
+	states.transform *= m_transform.getTransform();
 
 	states.viewMatrix = gk::Transform::Identity;
 
+	// NOTE: This matrix has Y inverted as well as Z, causing the default
+	// rotation to show the bottom of the item instead of the top.
 	states.projectionMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f, -40.0f, DIST_FAR);
 
 	states.texture = &m_textureAtlas.texture();
@@ -153,11 +159,10 @@ void InventoryCube::draw(gk::RenderTarget &target, gk::RenderStates states) cons
 	// target.draw(m_vbo, GL_QUADS, 4 * 1, 4, states);
 	target.draw(m_vbo, GL_QUADS, 4 * BlockFace::West, 4, states);
 	// target.draw(m_vbo, GL_QUADS, 4 * 3, 4, states);
-	target.draw(m_vbo, GL_QUADS, 4 * BlockFace::South, 4, states);
+	target.draw(m_vbo, GL_QUADS, 4 * BlockFace::North, 4, states);
 	// target.draw(m_vbo, GL_QUADS, 4 * 5, 4, states);
 
 	glCheck(glEnable(GL_DEPTH_TEST));
 	glCheck(glEnable(GL_CULL_FACE));
 
 }
-
