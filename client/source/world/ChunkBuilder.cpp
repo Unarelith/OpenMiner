@@ -29,55 +29,79 @@
 #include "Registry.hpp"
 #include "TextureAtlas.hpp"
 
+constexpr int nAxes = 6;
+constexpr int nRots = 4;
+constexpr int nFaces = 6;
+constexpr int nCrossFaces = 2;
+constexpr int nVertsPerFace = 4;
+constexpr int nCoords = 3;
+constexpr int nCoordsPerUV = 2;
+
 // Same order as enum BlockFace in TilesDef.hpp
-static const float cubeCoords[6 * 4 * 3] = {
+static constexpr float cubeCoords[nFaces][nVertsPerFace][nCoords] = {
 	// West
-	0, 1, 0,
-	0, 0, 0,
-	0, 0, 1,
-	0, 1, 1,
+	{
+		{0, 1, 0},
+		{0, 0, 0},
+		{0, 0, 1},
+		{0, 1, 1},
+	},
 
 	// East
-	1, 0, 0,
-	1, 1, 0,
-	1, 1, 1,
-	1, 0, 1,
+	{
+		{1, 0, 0},
+		{1, 1, 0},
+		{1, 1, 1},
+		{1, 0, 1},
+	},
 
 	// South
-	0, 0, 0,
-	1, 0, 0,
-	1, 0, 1,
-	0, 0, 1,
+	{
+		{0, 0, 0},
+		{1, 0, 0},
+		{1, 0, 1},
+		{0, 0, 1},
+	},
 
 	// North
-	1, 1, 0,
-	0, 1, 0,
-	0, 1, 1,
-	1, 1, 1,
+	{
+		{1, 1, 0},
+		{0, 1, 0},
+		{0, 1, 1},
+		{1, 1, 1},
+	},
 
 	// Bottom
-	1, 0, 0,
-	0, 0, 0,
-	0, 1, 0,
-	1, 1, 0,
+	{
+		{1, 0, 0},
+		{0, 0, 0},
+		{0, 1, 0},
+		{1, 1, 0},
+	},
 
 	// Top
-	1, 1, 1,
-	0, 1, 1,
-	0, 0, 1,
-	1, 0, 1,
+	{
+		{1, 1, 1},
+		{0, 1, 1},
+		{0, 0, 1},
+		{1, 0, 1},
+	},
 };
 
-static const float crossCoords[2 * 4 * 3] = {
-	1, 1, 0,
-	0, 0, 0,
-	0, 0, 1,
-	1, 1, 1,
+static const uint crossCoords[nCrossFaces][nVertsPerFace][nCoords] = {
+	{
+		{1, 1, 0},
+		{0, 0, 0},
+		{0, 0, 1},
+		{1, 1, 1},
+	},
 
-	1, 0, 0,
-	0, 1, 0,
-	0, 1, 1,
-	1, 0, 1,
+	{
+		{1, 0, 0},
+		{0, 1, 0},
+		{0, 1, 1},
+		{1, 0, 1},
+	},
 };
 
 
@@ -151,17 +175,17 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 	const gk::FloatBox boundingBox = block->boundingBox();
 
 	// Three points of the face
-	a.x = cubeCoords[i * 12 + 0] * boundingBox.sizeX + boundingBox.x;
-	a.y = cubeCoords[i * 12 + 1] * boundingBox.sizeY + boundingBox.y;
-	a.z = cubeCoords[i * 12 + 2] * boundingBox.sizeZ + boundingBox.z;
+	a.x = cubeCoords[i][0][0] * boundingBox.sizeX + boundingBox.x;
+	a.y = cubeCoords[i][0][1] * boundingBox.sizeY + boundingBox.y;
+	a.z = cubeCoords[i][0][2] * boundingBox.sizeZ + boundingBox.z;
 
-	b.x = cubeCoords[i * 12 + 3] * boundingBox.sizeX + boundingBox.x;
-	b.y = cubeCoords[i * 12 + 4] * boundingBox.sizeY + boundingBox.y;
-	b.z = cubeCoords[i * 12 + 5] * boundingBox.sizeZ + boundingBox.z;
+	b.x = cubeCoords[i][1][0] * boundingBox.sizeX + boundingBox.x;
+	b.y = cubeCoords[i][1][1] * boundingBox.sizeY + boundingBox.y;
+	b.z = cubeCoords[i][1][2] * boundingBox.sizeZ + boundingBox.z;
 
-	c.x = cubeCoords[i * 12 + 6] * boundingBox.sizeX + boundingBox.x;
-	c.y = cubeCoords[i * 12 + 7] * boundingBox.sizeY + boundingBox.y;
-	c.z = cubeCoords[i * 12 + 8] * boundingBox.sizeZ + boundingBox.z;
+	c.x = cubeCoords[i][2][0] * boundingBox.sizeX + boundingBox.x;
+	c.y = cubeCoords[i][2][1] * boundingBox.sizeY + boundingBox.y;
+	c.z = cubeCoords[i][2][2] * boundingBox.sizeZ + boundingBox.z;
 
 	// Computing two vectors
 	v1 = b - a;
@@ -175,7 +199,7 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 		u8 orientation = chunk.getData(x, y, z) & 0x1F;
 		assert((orientation & 0x1C) == 0);     // TODO: Handle all 24 orientations
 		// Get face orientation from table
-		static constexpr BlockFace orientFace[4][6] = {
+		static constexpr BlockFace orientFace[nRots][nFaces] = {
 			{ West,  East,  South, North, Bottom, Top },    // West  orientation leaves faces untouched
 			{ East,  West,  North, South, Bottom, Top },    // East  orientation rotates them 180 deg
 			{ North, South, West,  East,  Bottom, Top },    // South orientation rotates them -90 deg
@@ -187,25 +211,25 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 	const BlockData *blockData = chunk.getBlockData(x, y, z);
 	const std::string &texture = block->tiles().getTextureForFace(faceID, blockData ? blockData->useAltTiles : false);
 	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(texture);
-	float faceTexCoords[2 * 4] = {
-		blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.sizeY,
-		blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y + blockTexCoords.sizeY,
-		blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y,
-		blockTexCoords.x,                        blockTexCoords.y
+	float faceTexCoords[nVertsPerFace][nCoordsPerUV] = {
+		{blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.sizeY},
+		{blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y + blockTexCoords.sizeY},
+		{blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y},
+		{blockTexCoords.x,                        blockTexCoords.y},
 	};
 
 	// Store vertex information
-	gk::Vertex vertices[4];
-	for(u8 j = 0 ; j < 4 ; j++) {
+	gk::Vertex vertices[nVertsPerFace];
+	for (u8 j = 0 ; j < nVertsPerFace; j++) {
 		if (block->drawType() == BlockDrawType::BoundingBox) {
-			vertices[j].coord3d[0] = x + cubeCoords[i * 12 + j * 3]     * boundingBox.sizeX + boundingBox.x;
-			vertices[j].coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1] * boundingBox.sizeY + boundingBox.y;
-			vertices[j].coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2] * boundingBox.sizeZ + boundingBox.z;
+			vertices[j].coord3d[0] = x + cubeCoords[i][j][0] * boundingBox.sizeX + boundingBox.x;
+			vertices[j].coord3d[1] = y + cubeCoords[i][j][1] * boundingBox.sizeY + boundingBox.y;
+			vertices[j].coord3d[2] = z + cubeCoords[i][j][2] * boundingBox.sizeZ + boundingBox.z;
 		}
 		else {
-			vertices[j].coord3d[0] = x + cubeCoords[i * 12 + j * 3];
-			vertices[j].coord3d[1] = y + cubeCoords[i * 12 + j * 3 + 1];
-			vertices[j].coord3d[2] = z + cubeCoords[i * 12 + j * 3 + 2];
+			vertices[j].coord3d[0] = x + cubeCoords[i][j][0];
+			vertices[j].coord3d[1] = y + cubeCoords[i][j][1];
+			vertices[j].coord3d[2] = z + cubeCoords[i][j][2];
 		}
 
 		vertices[j].coord3d[3] = i;
@@ -220,8 +244,8 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 		vertices[j].color[2] = colorMultiplier.b;
 		vertices[j].color[3] = colorMultiplier.a;
 
-		vertices[j].texCoord[0] = faceTexCoords[j * 2];
-		vertices[j].texCoord[1] = faceTexCoords[j * 2 + 1];
+		vertices[j].texCoord[0] = faceTexCoords[j][0];
+		vertices[j].texCoord[1] = faceTexCoords[j][1];
 
 		if (Config::isSunSmoothLightingEnabled && block->drawType() != BlockDrawType::Liquid)
 			vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, normal, chunk);
@@ -270,21 +294,21 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 
 inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Block *block) {
 	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->tiles().getTextureForFace(0));
-	float faceTexCoords[2 * 4] = {
-		blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.sizeY,
-		blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y + blockTexCoords.sizeY,
-		blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y,
-		blockTexCoords.x,                        blockTexCoords.y
+	float faceTexCoords[nFaces][nCoordsPerUV] = {
+		{blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.sizeY},
+		{blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y + blockTexCoords.sizeY},
+		{blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y},
+		{blockTexCoords.x,                        blockTexCoords.y},
 	};
 
 	static glm::vec3 normal{0, 0, 0};
 
-	for (int i = 0 ; i < 2 ; ++i) {
-		gk::Vertex vertices[4];
-		for (int j = 0 ; j < 4 ; ++j) {
-			vertices[j].coord3d[0] = x + crossCoords[i * 12 + j * 3];
-			vertices[j].coord3d[1] = y + crossCoords[i * 12 + j * 3 + 1];
-			vertices[j].coord3d[2] = z + crossCoords[i * 12 + j * 3 + 2];
+	for (int i = 0 ; i < nCrossFaces ; ++i) {
+		gk::Vertex vertices[nVertsPerFace];
+		for (int j = 0 ; j < nVertsPerFace ; ++j) {
+			vertices[j].coord3d[0] = x + crossCoords[i][j][0];
+			vertices[j].coord3d[1] = y + crossCoords[i][j][1];
+			vertices[j].coord3d[2] = z + crossCoords[i][j][2];
 			vertices[j].coord3d[3] = 6;
 
 			vertices[j].normal[0] = normal.x;
@@ -297,8 +321,8 @@ inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, c
 			vertices[j].color[2] = colorMultiplier.b;
 			vertices[j].color[3] = colorMultiplier.a;
 
-			vertices[j].texCoord[0] = faceTexCoords[j * 2];
-			vertices[j].texCoord[1] = faceTexCoords[j * 2 + 1];
+			vertices[j].texCoord[0] = faceTexCoords[j][0];
+			vertices[j].texCoord[1] = faceTexCoords[j][1];
 
 			vertices[j].lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
 			vertices[j].lightValue[1] = chunk.lightmap().getTorchlight(x, y, z);
