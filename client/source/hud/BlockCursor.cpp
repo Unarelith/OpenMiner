@@ -41,42 +41,44 @@
 #include "Hotbar.hpp"
 #include "Registry.hpp"
 
+// Same order as enum BlockFace in TilesDef.hpp
 static float cubeCoords[6 * 4 * 3] = {
-	// Right
-	1, 1, 1,
-	1, 1, 0,
-	1, 0, 0,
-	1, 0, 1,
-
-	// Top
-	1, 1, 1,
-	0, 1, 1,
-	0, 1, 0,
-	1, 1, 0,
-
-	// Back
-	1, 1, 1,
-	1, 0, 1,
-	0, 0, 1,
-	0, 1, 1,
-
-	// Left
-	0, 1, 1,
+	// West
 	0, 1, 0,
 	0, 0, 0,
 	0, 0, 1,
+	0, 1, 1,
+
+	// East
+	1, 0, 0,
+	1, 1, 0,
+	1, 1, 1,
+	1, 0, 1,
+
+	// South
+	0, 0, 0,
+	1, 0, 0,
+	1, 0, 1,
+	0, 0, 1,
+
+	// North
+	1, 1, 0,
+	0, 1, 0,
+	0, 1, 1,
+	1, 1, 1,
 
 	// Bottom
-	1, 0, 1,
-	0, 0, 1,
-	0, 0, 0,
 	1, 0, 0,
-
-	// Front
 	0, 0, 0,
 	0, 1, 0,
 	1, 1, 0,
-	1, 0, 0,
+
+	// Top
+	0, 0, 1,
+	1, 0, 1,
+	1, 1, 1,
+	0, 1, 1,
+
 };
 
 void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
@@ -218,7 +220,7 @@ void BlockCursor::updateAnimationVertexBuffer(const Block &block, int animationP
 		vertices[i].coord3d[0] = cubeCoords[i * 3]     * block.boundingBox().sizeX + block.boundingBox().x;
 		vertices[i].coord3d[1] = cubeCoords[i * 3 + 1] * block.boundingBox().sizeY + block.boundingBox().y;
 		vertices[i].coord3d[2] = cubeCoords[i * 3 + 2] * block.boundingBox().sizeZ + block.boundingBox().z;
-		vertices[i].coord3d[3] = -1;
+		vertices[i].coord3d[3] = -2;
 	}
 
 	GLfloat color[4] = {1, 1, 1, 0.5};
@@ -257,16 +259,22 @@ void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	gk::Vector3d cameraPosition = m_player.camera().getDPosition();
 	states.transform.translate(m_selectedBlock.x - cameraPosition.x, m_selectedBlock.y - cameraPosition.y, m_selectedBlock.z - cameraPosition.z);
 
-	target.draw(m_vbo, GL_LINES, 0, 24, states);
+	glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+	target.draw(m_vbo, GL_QUADS, 0, 24, states);
+	glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 
 	if (m_animationStart > 0) {
-		glCheck(glBlendFunc(GL_DST_COLOR, GL_ZERO));
-		states.texture = &gk::ResourceHandler::getInstance().get<gk::Texture>("texture-block_destroy"); // FIXME
+		glCheck(glEnable(GL_CULL_FACE));
+		// glCheck(glBlendFunc(GL_DST_COLOR, GL_ZERO));
+
+		// FIXME
+		states.texture = &gk::ResourceHandler::getInstance().get<gk::Texture>("texture-block_destroy");
+
 		target.draw(m_animationVBO, GL_QUADS, 0, 24, states);
-		glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
+		// glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 	}
 
-	glCheck(glEnable(GL_CULL_FACE));
 	glCheck(glEnable(GL_POLYGON_OFFSET_FILL));
 }
 
