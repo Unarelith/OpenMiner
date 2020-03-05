@@ -7,8 +7,8 @@
 [![Donate](https://img.shields.io/badge/donate-paypal-brightgreen.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66DH462V7TA6N&source=url)
 
 - [Project goal](#project-goal)
-- [Keys](#keys)
 - [Wiki](#wiki)
+- [Keys](#keys)
 - [How to compile](#how-to-compile)
 - [Discussion](#discussion)
 - [Project status](#project-status)
@@ -19,6 +19,11 @@
 ## Project goal
 
 The long-term goal of this project is to provide a viable alternative to Minecraft modding.
+
+## Wiki
+
+- [Getting started](https://github.com/Unarelith/OpenMiner/wiki/Getting-Started)
+- [Lua API Overview](https://github.com/Unarelith/OpenMiner/wiki/Lua-API-Overview)
 
 ## Keys
 
@@ -32,10 +37,6 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 - Exit: <kbd>Escape</kbd>
 - Debug: <kbd>F3</kbd>
 - Fullscreen: <kbd>F11</kbd>
-
-## Wiki
-
-- [Lua API Overview](https://github.com/Unarelith/OpenMiner/wiki/Lua-API-Overview)
 
 ## How to compile
 
