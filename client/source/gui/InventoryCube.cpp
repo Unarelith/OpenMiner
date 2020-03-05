@@ -152,8 +152,8 @@ void InventoryCube::draw(gk::RenderTarget &target, gk::RenderStates states) cons
 	states.texture = &m_textureAtlas.texture();
 	states.vertexAttributes = gk::VertexAttribute::Only2d;
 
-	glCheck(glDisable(GL_CULL_FACE));
-	glCheck(glDisable(GL_DEPTH_TEST));
+	glCheck(glEnable(GL_CULL_FACE));
+	glCheck(glEnable(GL_DEPTH_TEST));
 
 	target.draw(m_vbo, GL_QUADS, 4 * BlockFace::Top, 4, states);
 	// target.draw(m_vbo, GL_QUADS, 4 * 1, 4, states);
@@ -161,8 +161,4 @@ void InventoryCube::draw(gk::RenderTarget &target, gk::RenderStates states) cons
 	// target.draw(m_vbo, GL_QUADS, 4 * 3, 4, states);
 	target.draw(m_vbo, GL_QUADS, 4 * BlockFace::North, 4, states);
 	// target.draw(m_vbo, GL_QUADS, 4 * 5, 4, states);
-
-	glCheck(glEnable(GL_DEPTH_TEST));
-	glCheck(glEnable(GL_CULL_FACE));
-
 }

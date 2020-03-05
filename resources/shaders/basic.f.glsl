@@ -29,12 +29,12 @@ void main() {
 
 	if (v_faceValue == 2) {
 		// color -= vec4(0.25, 0.25, 0.25, 0.0);
-		color /= 2;
+		color.rgb /= 2.3;
 		color.a = v_color.a;
 	}
 	else if (v_faceValue == 4) {
 		// color -= vec4(0.15, 0.15, 0.15, 0.0);
-		color /= 1.5;
+		color.rgb /= 1.6;
 		color.a = v_color.a;
 	}
 
