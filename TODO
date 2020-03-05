@@ -1,42 +1,9 @@
 TODO
 
-# General
-
-• TODO: Use Faithful 32x for buttons, backgrounds and font (or use Minecraftia for the latter)
-   → Will require a fully-featured texture pack system
-   → It’s better to do this feature as a big PR
-
-# Issues
-
-• TODO: GUI scale issues
-   ◦ TODO: `HUD` doesn’t update when GUI scale is changed
-   ◦ TODO: `SettingsMenuState` should update scaling when the setting is changed
-◦ TODO: Trees should block light
-• TODO: Blocks can be accessed from outside the world (will need a refactoring)
-• TODO: Collisions are fucked up with blocks placed at `x = -1` from `x = 0`
-
 # Refactorings
 
 • TODO: Add a mesh system, either here or in `GameKit`
    → Maybe this is the way to add custom vertex attributes while having default ones? Check 3dee
    → Or maybe it would be better to use a VAO in `GameKit`
-
-# Menus
-
-• TODO: World loading/saving
-• TODO: World selection menu
-
-# World
-
-• TODO: Day/night cycle
-
-# Chunk generation
-
-• TODO: Use the seed
-• TODO: Biomes
-
-# Graphics
-
-• TODO: Add nodebox-like draw type
 
 > vim:ft=notes
