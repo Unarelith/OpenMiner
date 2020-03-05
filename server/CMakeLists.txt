@@ -6,7 +6,7 @@ set(PROJECT_NAME ${PROJECT_NAME}_server)
 #------------------------------------------------------------------------------
 # Get source files
 #------------------------------------------------------------------------------
-file(GLOB_RECURSE SOURCE_FILES source/*.cpp ../external/*.cpp)
+file(GLOB_RECURSE SOURCE_FILES source/*/*.cpp ../external/*.cpp)
 file(GLOB_RECURSE HEADER_FILES source/*.hpp ../common/*.hpp ../external/*.hpp)
 
 foreach(HEADER_FILE ${HEADER_FILES})
@@ -61,6 +61,8 @@ endif()
 if (UNIX)
 	set (UNIX_LIBS -ldl)
 endif ()
+
+target_link_libraries(${PROJECT_NAME}_lib sfml-system sfml-network)
 
 target_link_libraries(${PROJECT_NAME}
                       ${PROJECT_NAME}_lib
