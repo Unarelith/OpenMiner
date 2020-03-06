@@ -126,7 +126,8 @@ void Server::handleClientMessages() {
 		ClientInfo &client = m_info.clients()[i];
 		if (m_selector.isReady(*client.tcpSocket)) {
 			sf::Packet packet;
-			if (client.tcpSocket->receive(packet) == sf::Socket::Done) {
+			sf::Socket::Status status = client.tcpSocket->receive(packet);
+			if (status == sf::Socket::Done) {
 				Network::Command command;
 				packet >> command;
 
@@ -138,20 +139,27 @@ void Server::handleClientMessages() {
 							it.second(client, packet);
 
 						if (command == Network::Command::ClientDisconnect) {
-							m_selector.remove(*client.tcpSocket);
-							m_info.removeClient(client.id);
-
-							if (m_isSingleplayer && m_info.clients().size() == 0) {
-								m_tcpListener.close();
-								m_isRunning = false;
-							}
-
+							disconnectClient(client);
 							--i;
 						}
 					}
 				}
 			}
+			else if (status == sf::Socket::Disconnected) {
+				disconnectClient(client);
+				--i;
+			}
 		}
+	}
+}
+
+void Server::disconnectClient(ClientInfo &client) {
+	m_selector.remove(*client.tcpSocket);
+	m_info.removeClient(client.id);
+
+	if (m_isSingleplayer && m_info.clients().size() == 0) {
+		m_tcpListener.close();
+		m_isRunning = false;
 	}
 }
 

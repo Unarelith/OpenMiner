@@ -66,6 +66,8 @@ class Server {
 		void handleNewConnections();
 		void handleClientMessages();
 
+		void disconnectClient(ClientInfo &client);
+
 		bool m_isRunning = false;
 		bool m_isSingleplayer = false;
 
