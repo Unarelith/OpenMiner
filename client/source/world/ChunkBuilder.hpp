@@ -42,7 +42,7 @@ class TextureAtlas;
 
 class ChunkBuilder {
 	public:
-		ChunkBuilder(TextureAtlas &textureAtlas) : m_textureAtlas(textureAtlas) {}
+		ChunkBuilder(TextureAtlas &textureAtlas);
 
 		static constexpr u8 layers = 3;
 
@@ -55,18 +55,19 @@ class ChunkBuilder {
 		};
 
 	private:
-		void addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, const Block *block, const int surroundingBlockPos[3]);
-		void addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Block *block);
+		void addFace(s8f x, s8f y, s8f z, s8f i, const ClientChunk &chunk, const Block *block);
+		void addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk, const Block *block);
 
-		gk::Vector3i getOffsetFromVertex(u8 i, u8 j) const;
-		u8 getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const ClientChunk &chunk);
+		gk::Vector3i getOffsetFromVertex(u8f i, u8f j) const;
+		u8 getAmbientOcclusion(s8f x, s8f y, s8f z, s8f f, s8f v, const ClientChunk &chunk);
 
 		enum class Light {
 			Sun,
 			Torch
 		};
 
-		u8 getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const glm::vec3 &normal, const ClientChunk &chunk);
+		u8 getLightForVertex(Light light, s8f x, s8f y, s8f z, s8f f, s8f v, const gk::Vector3i &normal, const ClientChunk &chunk);
+		void initializeOrientation();
 
 		std::array<std::vector<gk::Vertex>, layers> m_vertices;
 

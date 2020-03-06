@@ -30,21 +30,27 @@
 #include "TextureAtlas.hpp"
 
 constexpr int nAxes = 6;
+constexpr int nAxesP2 = 8; // Next power of 2 to nAxes
 constexpr int nRots = 4;
 constexpr int nFaces = 6;
 constexpr int nCrossFaces = 2;
 constexpr int nVertsPerFace = 4;
+constexpr int nNormals = 1;
 constexpr int nCoords = 3;
 constexpr int nCoordsPerUV = 2;
 
+using tCubeCoord = s8;
+
 // Same order as enum BlockFace in TilesDef.hpp
-static constexpr float cubeCoords[nFaces][nVertsPerFace][nCoords] = {
+static constexpr tCubeCoord cubeCoords[nFaces][nVertsPerFace + nNormals][nCoords] = {
 	// West
 	{
 		{0, 1, 0},
 		{0, 0, 0},
 		{0, 0, 1},
 		{0, 1, 1},
+
+		{-1, 0, 0}, // normal
 	},
 
 	// East
@@ -53,6 +59,8 @@ static constexpr float cubeCoords[nFaces][nVertsPerFace][nCoords] = {
 		{1, 1, 0},
 		{1, 1, 1},
 		{1, 0, 1},
+
+		{1, 0, 0},
 	},
 
 	// South
@@ -61,6 +69,8 @@ static constexpr float cubeCoords[nFaces][nVertsPerFace][nCoords] = {
 		{1, 0, 0},
 		{1, 0, 1},
 		{0, 0, 1},
+
+		{0,-1, 0},
 	},
 
 	// North
@@ -69,6 +79,8 @@ static constexpr float cubeCoords[nFaces][nVertsPerFace][nCoords] = {
 		{0, 1, 0},
 		{0, 1, 1},
 		{1, 1, 1},
+
+		{0, 1, 0},
 	},
 
 	// Bottom
@@ -77,6 +89,8 @@ static constexpr float cubeCoords[nFaces][nVertsPerFace][nCoords] = {
 		{0, 0, 0},
 		{0, 1, 0},
 		{1, 1, 0},
+
+		{0, 0,-1},
 	},
 
 	// Top
@@ -85,10 +99,12 @@ static constexpr float cubeCoords[nFaces][nVertsPerFace][nCoords] = {
 		{0, 1, 1},
 		{0, 0, 1},
 		{1, 0, 1},
+
+		{0, 0, 1},
 	},
 };
 
-static const uint crossCoords[nCrossFaces][nVertsPerFace][nCoords] = {
+static constexpr tCubeCoord crossCoords[nCrossFaces][nVertsPerFace][nCoords] = {
 	{
 		{1, 1, 0},
 		{0, 0, 0},
@@ -104,35 +120,35 @@ static const uint crossCoords[nCrossFaces][nVertsPerFace][nCoords] = {
 	},
 };
 
+static tCubeCoord orientCubeCoords[nAxesP2 * nRots][nFaces][nVertsPerFace + nNormals][nCoords];
+
+ChunkBuilder::ChunkBuilder(TextureAtlas &textureAtlas) : m_textureAtlas(textureAtlas) {
+	static bool isOrientInitialized = false;
+
+	if (!isOrientInitialized) {
+		initializeOrientation();
+		isOrientInitialized = true;
+	}
+}
 
 std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const ClientChunk &chunk, const std::array<gk::VertexBuffer, layers> &vbo) {
-	for (u8 i = 0 ; i < layers ; ++i)
+	for (s8f i = 0 ; i < layers ; ++i)
 		m_vertices[i].reserve(CHUNK_WIDTH * CHUNK_DEPTH * CHUNK_HEIGHT * 6 * 4);
 
-	for(u8 z = 0 ; z < CHUNK_HEIGHT ; z++) {
-		for(u8 y = 0 ; y < CHUNK_DEPTH ; y++) {
-			for(u8 x = 0 ; x < CHUNK_WIDTH ; x++) {
+	for (s8f z = 0 ; z < CHUNK_HEIGHT ; z++) {
+		for (s8f y = 0 ; y < CHUNK_DEPTH ; y++) {
+			for (s8f x = 0 ; x < CHUNK_WIDTH ; x++) {
 				const Block &block = Registry::getInstance().getBlock(chunk.getBlock(x, y, z));
-				if(!block.id()) continue;
+				if (!block.id()) continue;
 				if (!chunk.getBlock(x, y, z)) continue;
-
-				const int surroundingBlocksPos[6][3] = {
-					// Same order as enum BlockFace in TilesDef.hpp
-					{x - 1, y, z},
-					{x + 1, y, z},
-					{x, y - 1, z},
-					{x, y + 1, z},
-					{x, y, z - 1},
-					{x, y, z + 1},
-				};
 
 				if (block.drawType() == BlockDrawType::Solid
 				 || block.drawType() == BlockDrawType::Leaves
 				 || block.drawType() == BlockDrawType::Liquid
 				 || block.drawType() == BlockDrawType::Glass
 				 || block.drawType() == BlockDrawType::BoundingBox) {
-					for(u8 i = 0 ; i < 6 ; i++) {
-						addFace(x, y, z, i, chunk, &block, surroundingBlocksPos[i]);
+					for (s8f i = 0 ; i < nFaces ; i++) {
+						addFace(x, y, z, i, chunk, &block);
 					}
 				}
 				else if (block.drawType() == BlockDrawType::XShape) {
@@ -158,9 +174,14 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 	return verticesCount;
 }
 
-inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chunk, const Block *block, const int surroundingBlockPos[3]) {
+inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk &chunk, const Block *block) {
+	u8 orientation = block->isRotatable() ? chunk.getData(x, y, z) & 0x1F : 0;
+	gk::Vector3i normal{orientCubeCoords[orientation][f][4][0],
+	                    orientCubeCoords[orientation][f][4][1],
+	                    orientCubeCoords[orientation][f][4][2]};
+
 	// Get surrounding block for that face
-	u16 surroundingBlockID = chunk.getBlock(surroundingBlockPos[0], surroundingBlockPos[1], surroundingBlockPos[2]);
+	u16 surroundingBlockID = chunk.getBlock(x + normal.x, y + normal.y, z + normal.z);
 	const Block *surroundingBlock = &Registry::getInstance().getBlock(surroundingBlockID);
 
 	// Skip hidden faces
@@ -170,46 +191,8 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 	 || (block->drawType() == BlockDrawType::Liquid && surroundingBlock->drawType() == BlockDrawType::Solid)))
 		return;
 
-	static glm::vec3 a, b, c, v1, v2, normal;
-
-	const gk::FloatBox boundingBox = block->boundingBox();
-
-	// Three points of the face
-	a.x = cubeCoords[i][0][0] * boundingBox.sizeX + boundingBox.x;
-	a.y = cubeCoords[i][0][1] * boundingBox.sizeY + boundingBox.y;
-	a.z = cubeCoords[i][0][2] * boundingBox.sizeZ + boundingBox.z;
-
-	b.x = cubeCoords[i][1][0] * boundingBox.sizeX + boundingBox.x;
-	b.y = cubeCoords[i][1][1] * boundingBox.sizeY + boundingBox.y;
-	b.z = cubeCoords[i][1][2] * boundingBox.sizeZ + boundingBox.z;
-
-	c.x = cubeCoords[i][2][0] * boundingBox.sizeX + boundingBox.x;
-	c.y = cubeCoords[i][2][1] * boundingBox.sizeY + boundingBox.y;
-	c.z = cubeCoords[i][2][2] * boundingBox.sizeZ + boundingBox.z;
-
-	// Computing two vectors
-	v1 = b - a;
-	v2 = c - a;
-
-	// Computing face normal (already normalized because vertexCoords are normalized)
-	normal = glm::cross(v1, v2);
-
-	u8 faceID = i;
-	if (block->isRotatable()) {
-		u8 orientation = chunk.getData(x, y, z) & 0x1F;
-		assert((orientation & 0x1C) == 0);     // TODO: Handle all 24 orientations
-		// Get face orientation from table
-		static constexpr BlockFace orientFace[nRots][nFaces] = {
-			{ West,  East,  South, North, Bottom, Top },    // West  orientation leaves faces untouched
-			{ East,  West,  North, South, Bottom, Top },    // East  orientation rotates them 180 deg
-			{ North, South, West,  East,  Bottom, Top },    // South orientation rotates them -90 deg
-			{ South, North, East,  West,  Bottom, Top },    // North orientation rotates them 90 deg
-		};
-		faceID = orientFace[orientation][faceID];
-	}
-
 	const BlockData *blockData = chunk.getBlockData(x, y, z);
-	const std::string &texture = block->tiles().getTextureForFace(faceID, blockData ? blockData->useAltTiles : false);
+	const std::string &texture = block->tiles().getTextureForFace(f, blockData ? blockData->useAltTiles : false);
 	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(texture);
 	float faceTexCoords[nVertsPerFace][nCoordsPerUV] = {
 		{blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.sizeY},
@@ -218,59 +201,59 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 		{blockTexCoords.x,                        blockTexCoords.y},
 	};
 
+	const gk::FloatBox boundingBox = block->boundingBox();
+
 	// Store vertex information
 	gk::Vertex vertices[nVertsPerFace];
-	for (u8 j = 0 ; j < nVertsPerFace; j++) {
+	for (s8f v = 0 ; v < nVertsPerFace; v++) {
 		if (block->drawType() == BlockDrawType::BoundingBox) {
-			vertices[j].coord3d[0] = x + cubeCoords[i][j][0] * boundingBox.sizeX + boundingBox.x;
-			vertices[j].coord3d[1] = y + cubeCoords[i][j][1] * boundingBox.sizeY + boundingBox.y;
-			vertices[j].coord3d[2] = z + cubeCoords[i][j][2] * boundingBox.sizeZ + boundingBox.z;
+			vertices[v].coord3d[0] = x + orientCubeCoords[orientation][f][v][0] * boundingBox.sizeX + boundingBox.x;
+			vertices[v].coord3d[1] = y + orientCubeCoords[orientation][f][v][1] * boundingBox.sizeY + boundingBox.y;
+			vertices[v].coord3d[2] = z + orientCubeCoords[orientation][f][v][2] * boundingBox.sizeZ + boundingBox.z;
 		}
 		else {
-			vertices[j].coord3d[0] = x + cubeCoords[i][j][0];
-			vertices[j].coord3d[1] = y + cubeCoords[i][j][1];
-			vertices[j].coord3d[2] = z + cubeCoords[i][j][2];
+			vertices[v].coord3d[0] = x + orientCubeCoords[orientation][f][v][0];
+			vertices[v].coord3d[1] = y + orientCubeCoords[orientation][f][v][1];
+			vertices[v].coord3d[2] = z + orientCubeCoords[orientation][f][v][2];
 		}
 
-		vertices[j].coord3d[3] = i;
+		vertices[v].coord3d[3] = f;
 
-		vertices[j].normal[0] = normal.x;
-		vertices[j].normal[1] = normal.y;
-		vertices[j].normal[2] = normal.z;
+		vertices[v].normal[0] = normal.x;
+		vertices[v].normal[1] = normal.y;
+		vertices[v].normal[2] = normal.z;
 
 		const gk::Color colorMultiplier = block->colorMultiplier();
-		vertices[j].color[0] = colorMultiplier.r;
-		vertices[j].color[1] = colorMultiplier.g;
-		vertices[j].color[2] = colorMultiplier.b;
-		vertices[j].color[3] = colorMultiplier.a;
+		vertices[v].color[0] = colorMultiplier.r;
+		vertices[v].color[1] = colorMultiplier.g;
+		vertices[v].color[2] = colorMultiplier.b;
+		vertices[v].color[3] = colorMultiplier.a;
 
-		vertices[j].texCoord[0] = faceTexCoords[j][0];
-		vertices[j].texCoord[1] = faceTexCoords[j][1];
+		vertices[v].texCoord[0] = faceTexCoords[v][0];
+		vertices[v].texCoord[1] = faceTexCoords[v][1];
 
 		if (Config::isSunSmoothLightingEnabled && block->drawType() != BlockDrawType::Liquid)
-			vertices[j].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, i, j, normal, chunk);
+			vertices[v].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, f, v, normal, chunk);
 		else
-			vertices[j].lightValue[0] = chunk.lightmap().getSunlight(
-					surroundingBlockPos[0], surroundingBlockPos[1], surroundingBlockPos[2]);
+			vertices[v].lightValue[0] = chunk.lightmap().getSunlight(x + normal.x, y + normal.y, z + normal.z);
 
 		int torchlight = chunk.lightmap().getTorchlight(x, y, z);
 		if (Config::isTorchSmoothLightingEnabled && torchlight == 0 && block->drawType() != BlockDrawType::Liquid)
-			vertices[j].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, i, j, normal, chunk);
+			vertices[v].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, f, v, normal, chunk);
 		else
-			vertices[j].lightValue[1] = chunk.lightmap().getTorchlight(
-				surroundingBlockPos[0], surroundingBlockPos[1], surroundingBlockPos[2]);
+			vertices[v].lightValue[1] = chunk.lightmap().getTorchlight(x + normal.x, y + normal.y, z + normal.z);
 
-		vertices[j].ambientOcclusion = getAmbientOcclusion(x, y, z, i, j, chunk);
+		vertices[v].ambientOcclusion = getAmbientOcclusion(x, y, z, f, v, chunk);
 	}
 
-	auto addVertex = [&](u8 j) {
+	auto addVertex = [&](u8 v) {
 		if (!Config::isAmbientOcclusionEnabled)
-			vertices[j].ambientOcclusion = 5;
+			vertices[v].ambientOcclusion = 5;
 
 		if (block->drawType() == BlockDrawType::Liquid)
-			m_vertices[Layer::Liquid].emplace_back(vertices[j]);
+			m_vertices[Layer::Liquid].emplace_back(vertices[v]);
 		else
-			m_vertices[Layer::Solid].emplace_back(vertices[j]);
+			m_vertices[Layer::Solid].emplace_back(vertices[v]);
 	};
 
 	// Flipping quad to fix anisotropy issue
@@ -292,7 +275,7 @@ inline void ChunkBuilder::addFace(u8 x, u8 y, u8 z, u8 i, const ClientChunk &chu
 	}
 }
 
-inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, const Block *block) {
+inline void ChunkBuilder::addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk, const Block *block) {
 	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block->tiles().getTextureForFace(0));
 	float faceTexCoords[nFaces][nCoordsPerUV] = {
 		{blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.sizeY},
@@ -301,7 +284,7 @@ inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, c
 		{blockTexCoords.x,                        blockTexCoords.y},
 	};
 
-	static glm::vec3 normal{0, 0, 0};
+	static gk::Vector3i normal{0, 0, 0};
 
 	for (int i = 0 ; i < nCrossFaces ; ++i) {
 		gk::Vertex vertices[nVertsPerFace];
@@ -339,35 +322,35 @@ inline void ChunkBuilder::addCross(u8 x, u8 y, u8 z, const ClientChunk &chunk, c
 	}
 }
 
-inline gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8 i, u8 j) const {
+inline gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8f f, u8f v) const {
 	gk::Vector3i offset;
 	offset.x = (
-			(i == BlockFace::West) ||
-			(i == BlockFace::Bottom && (j == 1 || j == 2)) ||
-			(i == BlockFace::Top    && (j == 1 || j == 2)) ||
-			(i == BlockFace::South  && (j == 0 || j == 3)) ||
-			(i == BlockFace::North  && (j == 1 || j == 2))) ? -1 : 1;
+			(f == BlockFace::West) ||
+			(f == BlockFace::Bottom && (v == 1 || v == 2)) ||
+			(f == BlockFace::Top    && (v == 1 || v == 2)) ||
+			(f == BlockFace::South  && (v == 0 || v == 3)) ||
+			(f == BlockFace::North  && (v == 1 || v == 2))) ? -1 : 1;
 
 	offset.y = (
-			(i == BlockFace::South) ||
-			(i == BlockFace::West   && (j == 1 || j == 2)) ||
-			(i == BlockFace::East   && (j == 0 || j == 3)) ||
-			(i == BlockFace::Bottom && (j == 0 || j == 1)) ||
-			(i == BlockFace::Top    && (j == 2 || j == 3))) ? -1 : 1;
+			(f == BlockFace::South) ||
+			(f == BlockFace::West   && (v == 1 || v == 2)) ||
+			(f == BlockFace::East   && (v == 0 || v == 3)) ||
+			(f == BlockFace::Bottom && (v == 0 || v == 1)) ||
+			(f == BlockFace::Top    && (v == 2 || v == 3))) ? -1 : 1;
 
 	offset.z = (
-			(i == BlockFace::Bottom) ||
-			(i == BlockFace::West   && (j == 0 || j == 1)) ||
-			(i == BlockFace::East   && (j == 0 || j == 1)) ||
-			(i == BlockFace::South  && (j == 0 || j == 1)) ||
-			(i == BlockFace::North  && (j == 0 || j == 1))) ? -1 : 1;
+			(f == BlockFace::Bottom) ||
+			(f == BlockFace::West   && (v == 0 || v == 1)) ||
+			(f == BlockFace::East   && (v == 0 || v == 1)) ||
+			(f == BlockFace::South  && (v == 0 || v == 1)) ||
+			(f == BlockFace::North  && (v == 0 || v == 1))) ? -1 : 1;
 
 	return offset;
 }
 
 // Based on this article: https://0fps.net/2013/07/03/ambient-occlusion-for-minecraft-like-worlds/
-inline u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const ClientChunk &chunk) {
-	gk::Vector3i offset = getOffsetFromVertex(i, j);
+inline u8 ChunkBuilder::getAmbientOcclusion(s8f x, s8f y, s8f z, s8f f, s8f v, const ClientChunk &chunk) {
+	gk::Vector3i offset = getOffsetFromVertex(f, v);
 
 	const Block &block0 = Registry::getInstance().getBlock(chunk.getBlock(x + offset.x, y,            z + offset.z));
 	const Block &block1 = Registry::getInstance().getBlock(chunk.getBlock(x,            y + offset.y, z + offset.z));
@@ -383,14 +366,14 @@ inline u8 ChunkBuilder::getAmbientOcclusion(u8 x, u8 y, u8 z, u8 i, u8 j, const 
 	return 3 - (side1 + side2 + corner);
 }
 
-inline u8 ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u8 j, const glm::vec3 &normal, const ClientChunk &chunk) {
+inline u8 ChunkBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, s8f f, s8f v, const gk::Vector3i &normal, const ClientChunk &chunk) {
 	std::function<s8(const Chunk *chunk, s8, s8, s8)> getLight = [&](const Chunk *chunk, s8 x, s8 y, s8 z) -> s8 {
-		if(x < 0)             return chunk->getSurroundingChunk(0) && chunk->getSurroundingChunk(0)->isInitialized() ? getLight(chunk->getSurroundingChunk(0), x + CHUNK_WIDTH, y, z) : -1;
-		if(x >= CHUNK_WIDTH)  return chunk->getSurroundingChunk(1) && chunk->getSurroundingChunk(1)->isInitialized() ? getLight(chunk->getSurroundingChunk(1), x - CHUNK_WIDTH, y, z) : -1;
-		if(y < 0)             return chunk->getSurroundingChunk(2) && chunk->getSurroundingChunk(2)->isInitialized() ? getLight(chunk->getSurroundingChunk(2), x, y + CHUNK_DEPTH, z) : -1;
-		if(y >= CHUNK_DEPTH)  return chunk->getSurroundingChunk(3) && chunk->getSurroundingChunk(3)->isInitialized() ? getLight(chunk->getSurroundingChunk(3), x, y - CHUNK_DEPTH, z) : -1;
-		if(z < 0)             return chunk->getSurroundingChunk(4) && chunk->getSurroundingChunk(4)->isInitialized() ? getLight(chunk->getSurroundingChunk(4), x, y, z + CHUNK_HEIGHT) : -1;
-		if(z >= CHUNK_HEIGHT) return chunk->getSurroundingChunk(5) && chunk->getSurroundingChunk(5)->isInitialized() ? getLight(chunk->getSurroundingChunk(5), x, y, z - CHUNK_HEIGHT) : -1;
+		if (x < 0)             return chunk->getSurroundingChunk(0) && chunk->getSurroundingChunk(0)->isInitialized() ? getLight(chunk->getSurroundingChunk(0), x + CHUNK_WIDTH, y, z) : -1;
+		if (x >= CHUNK_WIDTH)  return chunk->getSurroundingChunk(1) && chunk->getSurroundingChunk(1)->isInitialized() ? getLight(chunk->getSurroundingChunk(1), x - CHUNK_WIDTH, y, z) : -1;
+		if (y < 0)             return chunk->getSurroundingChunk(2) && chunk->getSurroundingChunk(2)->isInitialized() ? getLight(chunk->getSurroundingChunk(2), x, y + CHUNK_DEPTH, z) : -1;
+		if (y >= CHUNK_DEPTH)  return chunk->getSurroundingChunk(3) && chunk->getSurroundingChunk(3)->isInitialized() ? getLight(chunk->getSurroundingChunk(3), x, y - CHUNK_DEPTH, z) : -1;
+		if (z < 0)             return chunk->getSurroundingChunk(4) && chunk->getSurroundingChunk(4)->isInitialized() ? getLight(chunk->getSurroundingChunk(4), x, y, z + CHUNK_HEIGHT) : -1;
+		if (z >= CHUNK_HEIGHT) return chunk->getSurroundingChunk(5) && chunk->getSurroundingChunk(5)->isInitialized() ? getLight(chunk->getSurroundingChunk(5), x, y, z - CHUNK_HEIGHT) : -1;
 
 		if (light == Light::Sun)
 			return chunk->isInitialized() ? chunk->lightmap().getSunlight(x, y, z) : -1;
@@ -398,7 +381,7 @@ inline u8 ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u
 			return chunk->isInitialized() ? chunk->lightmap().getTorchlight(x, y, z) : -1;
 	};
 
-	gk::Vector3i offset = getOffsetFromVertex(i, j);
+	gk::Vector3i offset = getOffsetFromVertex(f, v);
 
 	gk::Vector3i minOffset{
 		(normal.x != 0) ? offset.x : 0,
@@ -433,3 +416,65 @@ inline u8 ChunkBuilder::getLightForVertex(Light light, u8 x, u8 y, u8 z, u8 i, u
 		return 0;
 }
 
+void ChunkBuilder::initializeOrientation() {
+	// Build all 24 rotated versions of cubeCoords
+
+	// Local rotation of top face
+	glm::mat3 topRotation = {
+	    1, 0, 0,
+	    0, 1, 0,
+	    0, 0, 1,
+	};
+	// Matrix for a rotation of 90 degrees CCW around the Z axis, used to
+	// rotate the top face in 90 degree steps around its local Z axis.
+	const glm::mat3 rotate90Z = {
+		// Note glm matrices are column-major, so each row here is
+		// actually a column of the matrix.
+		 0, 1, 0,
+		-1, 0, 0,
+		 0, 0, 1,
+	};
+	// Rotations that place the top face on each of the axes
+	const glm::mat3 rot2axis[nAxes] = {
+		{ 1,  0,  0,   0,  1,  0,   0,  0,  1},  // top face on +Z, no rotation (identity matrix)
+		{ 1,  0,  0,   0, -1,  0,   0,  0, -1},  // top face on -Z, rotating around the X axis
+		{ 1,  0,  0,   0,  0, -1,   0,  1,  0},  // top face on +Y, rotating around the X axis
+		{ 1,  0,  0,   0,  0,  1,   0, -1,  0},  // top face on -Y, rotating around the X axis
+		{ 0,  0,  1,   0,  1,  0,  -1,  0,  0},  // top face on +X, rotating around the Y axis
+		{ 0,  0, -1,   0,  1,  0,   1,  0,  0},  // top face on -X, rotating around the Y axis
+	};
+
+	for (s8f axis = 0; axis < nAxes; ++axis) {
+		for (s8f angle = 0; angle < nRots; ++angle) {
+			glm::mat3 finalMat = rot2axis[axis] * topRotation;
+
+			for (s8f face = 0; face < nFaces; ++face) {
+				for (s8f vNum = 0; vNum < nVertsPerFace + nNormals; ++vNum) {
+					glm::vec3 vertex{cubeCoords[face][vNum][0], cubeCoords[face][vNum][1], cubeCoords[face][vNum][2]};
+					if (vNum < nVertsPerFace)
+						vertex -= glm::vec3{0.5, 0.5, 0.5};  // Translate by centre of the cube
+					vertex = finalMat * vertex;
+					tCubeCoord *pVertex = orientCubeCoords[axis * nRots + angle][face][vNum];
+					if (vNum < nVertsPerFace)
+						vertex += glm::vec3{0.5, 0.5, 0.5};  // Translate back
+					pVertex[0] = tCubeCoord(vertex[0]);
+					pVertex[1] = tCubeCoord(vertex[1]);
+					pVertex[2] = tCubeCoord(vertex[2]);
+				}
+			}
+
+			// Next top rotation
+			topRotation = rotate90Z * topRotation;
+		}
+	}
+
+	// Since we use bit masking, we add eight null orientations to the normal
+	// set of 24 to complete a power of two, to make the code robust against
+	// invalid orientation values.
+	for (s8f axis = nAxes; axis < nAxesP2; ++axis) {
+		for (s8f angle = 0; angle < nRots; ++angle) {
+			memcpy(&orientCubeCoords[axis * nRots + angle], &orientCubeCoords[0],
+			       nFaces * (nVertsPerFace + nNormals) * nCoords * sizeof(tCubeCoord));
+		}
+	}
+}

@@ -34,6 +34,7 @@ namespace {
 	constexpr float DIST_NEAR = 0.1f;
 	constexpr float DIST_FAR  = 1000.0f;
 
+	// Chunk size must be a power of two and fit in a signed byte
 	constexpr int CHUNK_WIDTH  = 16;
 	constexpr int CHUNK_DEPTH  = 16;
 	constexpr int CHUNK_HEIGHT = 32;
@@ -44,6 +45,11 @@ namespace {
 	static_assert((CHUNK_WIDTH  & (CHUNK_WIDTH  - 1)) == 0, "CHUNK_WIDTH is not a power of 2");
 	static_assert((CHUNK_DEPTH  & (CHUNK_DEPTH  - 1)) == 0, "CHUNK_DEPTH is not a power of 2");
 	static_assert((CHUNK_HEIGHT & (CHUNK_HEIGHT - 1)) == 0, "CHUNK_HEIGHT is not a power of 2");
+
+	// Several parts of the code use s8 for in-chunk coordinates
+	static_assert(CHUNK_WIDTH >= -128 && CHUNK_WIDTH < 128, "CHUNK_WIDTH out of range");
+	static_assert(CHUNK_HEIGHT >= -128 && CHUNK_HEIGHT < 128, "CHUNK_HEIGHT out of range");
+	static_assert(CHUNK_DEPTH >= -128 && CHUNK_DEPTH < 128, "CHUNK_DEPTH out of range");
 
 	constexpr int SEALEVEL = 4;
 }
