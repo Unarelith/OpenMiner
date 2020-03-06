@@ -26,12 +26,14 @@
  */
 #include <map>
 
+#include "Biome.hpp"
 #include "CraftingRecipe.hpp"
 #include "LuaMod.hpp"
+#include "PlacementEntry.hpp"
 #include "Registry.hpp"
 #include "ServerBlock.hpp"
-#include "Biome.hpp"
 #include "SmeltingRecipe.hpp"
+#include "Tree.hpp"
 
 void LuaMod::registerBlock(const sol::table &table) {
 	TilesDef tiles;
@@ -143,13 +145,23 @@ void LuaMod::registerSmeltingRecipe(const sol::table &table) {
 	Registry::getInstance().registerRecipe<SmeltingRecipe>(input, output);
 }
 
+void LuaMod::registerTree(const sol::table &table) {
+	std::string stringID = m_id + ":" + table["id"].get<std::string>();
+	std::string label = table["name"].get<std::string>();
+
+	Tree &tree = Registry::getInstance().registerTree(stringID, label);
+	tree.setLogBlockID(Registry::getInstance().getBlockFromStringID(table["log_block"]).id());
+	tree.setLeavesBlockID(Registry::getInstance().getBlockFromStringID(table["leaves_block"]).id());
+}
+
 void LuaMod::registerBiome(const sol::table &table) {
 	std::string stringID = m_id + ":" + table["id"].get<std::string>();
 	std::string label = table["name"].get<std::string>();
 
-	Biome &biome = Registry::getInstance().registerBiome<Biome>(stringID, label);
+	Biome &biome = Registry::getInstance().registerBiome(stringID, label);
 
-	// TODO eventually a WorldType could have a list of biome parameter names in order, and we could use those as the ordered keys.
+	// TODO eventually a WorldType could have a list of biome parameter names in order,
+	// and we could use those as the ordered keys.
 	// Currently hardcoding "temperature" and "precipitation" to get something functional.
 	size_t nBiomeParams = 2;
 	std::vector<double> params(nBiomeParams);
@@ -157,10 +169,46 @@ void LuaMod::registerBiome(const sol::table &table) {
 	params[1] = table["params"]["precipitation"];
 	biome.setParams(params);
 
-	biome.setTopBlock(Registry::getInstance().getBlockFromStringID(table["top_block"]).id());
-	biome.setGroundBlock(Registry::getInstance().getBlockFromStringID(table["ground_block"]).id());
-	biome.setBeachBlock(Registry::getInstance().getBlockFromStringID(table["beach_block"]).id());
-	biome.setLiquidBlock(Registry::getInstance().getBlockFromStringID(table["liquid_block"]).id());
+	biome.setTopBlockID(Registry::getInstance().getBlockFromStringID(table["top_block"]).id());
+	biome.setGroundBlockID(Registry::getInstance().getBlockFromStringID(table["ground_block"]).id());
+	biome.setDeepBlockID(Registry::getInstance().getBlockFromStringID(table["deep_block"]).id());
+	biome.setBeachBlockID(Registry::getInstance().getBlockFromStringID(table["beach_block"]).id());
+	biome.setLiquidBlockID(Registry::getInstance().getBlockFromStringID(table["liquid_block"]).id());
+
+	sol::optional<sol::table> treeDefinitions = table["trees"];
+	if (treeDefinitions != sol::nullopt) {
+		for (const auto &it : treeDefinitions.value()) {
+			sol::table treeDefinition = it.second.as<sol::table>();
+
+			PlacementEntry::Tree &treeEntry = biome.addTree();
+			treeEntry.treeID = Registry::getInstance().getTreeFromStringID(treeDefinition["type"]).id();
+			treeEntry.probability = treeDefinition["probability"];
+		}
+	}
+
+	sol::optional<sol::table> floraDefinitions = table["flora"];
+	if (floraDefinitions != sol::nullopt) {
+		for (const auto &it : floraDefinitions.value()) {
+			sol::table floraDefinition = it.second.as<sol::table>();
+
+			PlacementEntry::Flora &floraEntry = biome.addFlora();
+			floraEntry.blockID = Registry::getInstance().getBlockFromStringID(floraDefinition["block"]).id();
+			floraEntry.spawnsOnBlockID = Registry::getInstance().getBlockFromStringID(floraDefinition["spawns_on"]).id();
+			floraEntry.probability = floraDefinition["probability"];
+		}
+	}
+
+	sol::optional<sol::table> oreDefinitions = table["ore"];
+	if (oreDefinitions != sol::nullopt) {
+		for (const auto &it : oreDefinitions.value()) {
+			sol::table oreDefinition = it.second.as<sol::table>();
+
+			PlacementEntry::Ore &oreEntry = biome.addOre();
+			oreEntry.blockID = Registry::getInstance().getBlockFromStringID(oreDefinition["block"]).id();
+			oreEntry.probability = oreDefinition["probability"];
+			oreEntry.size = oreDefinition["size"];
+		}
+	}
 }
 
 void LuaMod::initUsertype(sol::state &lua) {
@@ -168,10 +216,11 @@ void LuaMod::initUsertype(sol::state &lua) {
 		sol::constructors<LuaMod(std::string)>(),
 		"id",              &LuaMod::id,
 		"block",           &LuaMod::registerBlock,
-		"biome",           &LuaMod::registerBiome,
 		"item",            &LuaMod::registerItem,
 		"crafting_recipe", &LuaMod::registerCraftingRecipe,
-		"smelting_recipe", &LuaMod::registerSmeltingRecipe
+		"smelting_recipe", &LuaMod::registerSmeltingRecipe,
+		"tree",            &LuaMod::registerTree,
+		"biome",           &LuaMod::registerBiome
 	);
 }
 

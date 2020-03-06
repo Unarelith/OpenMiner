@@ -24,32 +24,25 @@
  *
  * =====================================================================================
  */
-#include "TerrainBiomeSampler.hpp"
-#include "Registry.hpp"
 #include "Biome.hpp"
+#include "Registry.hpp"
+#include "TerrainBiomeSampler.hpp"
 
 TerrainBiomeSampler::TerrainBiomeSampler() {
-
-	paramNoisesPtr = new FastNoise[nBiomeParams];
-	for (u8 i = 0; i < nBiomeParams; i++) {
-		paramNoisesPtr[i].SetNoiseType(FastNoise::NoiseType::SimplexFractal);
-		paramNoisesPtr[i].SetFrequency(1 / 800.0f);
-		paramNoisesPtr[i].SetFractalOctaves(5);
-		paramNoisesPtr[i].SetSeed(i);
+	m_paramNoises = std::vector<FastNoise>(biomeParamCount);
+	for (u8 i = 0; i < biomeParamCount; i++) {
+		m_paramNoises[i].SetNoiseType(FastNoise::NoiseType::SimplexFractal);
+		m_paramNoises[i].SetFrequency(1 / 800.0f);
+		m_paramNoises[i].SetFractalOctaves(5);
+		m_paramNoises[i].SetSeed(i);
 	}
-
-}
-
-TerrainBiomeSampler::~TerrainBiomeSampler() {
-	delete paramNoisesPtr;
 }
 
 u16 TerrainBiomeSampler::getBiomeIndexAt(s32 x, s32 y) const {
-
 	// Compute noise instances
-	double* biomeParamsPtr = new double[nBiomeParams];
-	for (u8 i = 0; i < nBiomeParams; i++) {
-		biomeParamsPtr[i] = paramNoisesPtr[i].GetNoise(x, y);
+	std::vector<double> biomeParams(biomeParamCount);
+	for (u8 i = 0; i < biomeParamCount; i++) {
+		biomeParams[i] = m_paramNoises[i].GetNoise(x, y);
 	}
 
 	// TODO with a lot of biomes, perhaps we want an R-Tree or similar, instead of a long loop.
@@ -58,12 +51,12 @@ u16 TerrainBiomeSampler::getBiomeIndexAt(s32 x, s32 y) const {
 	// True temp/precip values can then be re-interpolated out from the Voronoi diagram using a neighborhood figure "kernel".
 	// TODO with multiple worldtypes added, need to only consider biomes in one worldtype.
 	u16 decidedBiomeIndex = 0;
-	double decidedBiomeDeviation = 0xFFFF;
+	double decidedBiomeDeviation = INFINITY;
 	u16 j = 0;
 	for (auto &biome : Registry::getInstance().biomes()) {
 		double deviation = 0;
-		for (int i = 0; i < nBiomeParams; i++) {
-			double dp = biomeParamsPtr[i] - biome.get()->getParams()[i];
+		for (int i = 0; i < biomeParamCount; i++) {
+			double dp = biomeParams[i] - biome.getParams()[i];
 			deviation += dp * dp;
 		}
 		if (deviation < decidedBiomeDeviation) {
@@ -73,6 +66,5 @@ u16 TerrainBiomeSampler::getBiomeIndexAt(s32 x, s32 y) const {
 		j++;
 	}
 
-	delete biomeParamsPtr;
 	return decidedBiomeIndex;
 }

@@ -26,63 +26,89 @@
 --
 
 mod:biome {
-  id = "default:grassland",
-  name = "Grassland",
+	id = "grassland",
+	name = "Grassland",
 
-  params = {
-	temperature = -0.6,
-	precipitation = 0.4
-  },
+	params = {
+		temperature = 0.5,
+		precipitation = 0.3
+	},
 
-  top_block = "default:grass",
-  ground_block = "default:dirt",
-  beach_block = "default:sand",
-  liquid_block = "default:water",
-  
-  flora = {
-    {
-      block = "default:tallgrass",
-      spawns_on = "default:grass",
-      probability = 0.25
-    },
-    {
-      block = "default:flower",
-      spawns_on = "default:grass",
-      probability = 0.1
-    }
-  }
+	top_block = "default:grass",
+	ground_block = "default:dirt",
+	deep_block = "default:stone",
+	beach_block = "default:sand",
+	liquid_block = "default:water",
+	
+	trees = {
+		{
+			type = "default:oak",
+			probability = 0.01041666667
+		}
+	},
+
+	-- Currently, all ores are defined per-biome. In a later update,
+	-- we could see ores defined mostly by worldtype, and some extras
+	-- added per biome. In addition, given the large world depth, we
+	-- could decide whether ores at a point very far down should
+	-- still depend on the surface biome, or only on the worldtype.
+	ores = {
+		{
+			block = "default:iron_ore",
+			probability = 0.0003,
+			size = 8
+		}
+	},
+	
+	flora = {
+		{
+			block = "default:tallgrass",
+			spawns_on = "default:grass",
+			probability = 0.25
+		},
+		{
+			block = "default:dandelion",
+			spawns_on = "default:grass",
+			probability = 0.1
+		}
+	}
 }
 
 mod:biome {
-  id = "default:mountain",
-  name = "Mountain",
+	id = "mountain",
+	name = "Mountain",
 
-  params = {
-	temperature = 0.5,
-	precipitation = 0.3
-  },
+	params = {
+		temperature = -0.6,
+		precipitation = 0.4
+	},
 
-  top_block = "default:stone",
-  ground_block = "default:stone",
-  beach_block = "default:stone",
-  liquid_block = "default:water",
-  
-  flora = { }
+	top_block = "default:stone",
+	ground_block = "default:stone",
+	deep_block = "default:stone",
+	beach_block = "default:stone",
+	liquid_block = "default:water",
+	
+	trees = {
+		{
+			type = "default:oak",
+			probability = 0.00390625
+		}
+	}
 }
 
 mod:biome {
-  id = "default:barren",
-  name = "Barren",
+	id = "desert",
+	name = "Desert",
 
-  params = {
-	temperature = 0.3,
-	precipitation = -0.7
-  },
+	params = {
+		temperature = -0.3,
+		precipitation = -0.7
+	},
 
-  top_block = "default:dirt",
-  ground_block = "default:dirt",
-  beach_block = "default:dirt",
-  liquid_block = "default:water",
-  
-  flora = { }
+	top_block = "default:sand",
+	ground_block = "default:sand",
+	deep_block = "default:stone",
+	beach_block = "default:sand",
+	liquid_block = "default:water"
 }

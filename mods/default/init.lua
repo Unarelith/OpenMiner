@@ -29,20 +29,8 @@ mod = LuaMod.new("default")
 dofile("mods/default/blocks.lua")
 dofile("mods/default/items.lua")
 dofile("mods/default/recipes.lua")
+dofile("mods/default/trees.lua")
 dofile("mods/default/biomes.lua")
-
-openminer:world():terrain_generator():set_blocks({
-	dirt = "default:dirt",
-	grass = "default:grass",
-	stone = "default:stone",
-	log = "default:oak_wood",
-	leaves = "default:oak_leaves",
-	flower = "default:dandelion",
-	water = "default:water",
-	sand = "default:sand",
-	tallgrass = "default:tallgrass",
-	iron_ore = "default:iron_ore"
-})
 
 function init(player)
 	local player_inv = player:inventory()

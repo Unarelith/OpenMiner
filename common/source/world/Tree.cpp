@@ -24,30 +24,21 @@
  *
  * =====================================================================================
  */
-#ifndef TERRAINGENERATOR_HPP_
-#define TERRAINGENERATOR_HPP_
+#include <SFML/Network/Packet.hpp>
 
-#include <gk/core/IntTypes.hpp>
-#include <sol.hpp>
+#include "Tree.hpp"
+#include "NetworkUtils.hpp"
 
-#include "TerrainBiomeSampler.hpp"
+Tree::Tree(u16 id, const std::string &stringID, const std::string &label) {
+	m_id = id;
+	m_stringID = stringID;
+	m_label = label;
+}
 
-class ServerChunk;
+void Tree::serialize(sf::Packet &packet) const {
+	packet << m_id << m_stringID << m_label << m_logBlockID << m_leavesBlockID;
+}
 
-class TerrainGenerator {
-	public:
-		TerrainGenerator();
-
-		void generate(ServerChunk &chunk) const;
-
-	private:
-		void fastNoiseGeneration(ServerChunk &chunk) const;
-
-		void oreFloodFill(ServerChunk &chunk, double x, double y, double z, u16 toReplace, u16 replaceWith, int depth) const;
-		static float noise2d(double x, double y, int octaves, float persistence);
-		static float noise3d_abs(double x, double y, double z, int octaves, float persistence);
-
-		TerrainBiomeSampler biomeSampler;
-};
-
-#endif // TERRAINGENERATOR_HPP_
+void Tree::deserialize(sf::Packet &packet) {
+	packet >> m_id >> m_stringID >> m_label >> m_logBlockID >> m_leavesBlockID;
+}
