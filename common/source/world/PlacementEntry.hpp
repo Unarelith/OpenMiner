@@ -24,30 +24,57 @@
  *
  * =====================================================================================
  */
-#ifndef TERRAINGENERATOR_HPP_
-#define TERRAINGENERATOR_HPP_
+#ifndef PLACEMENTENTRY_HPP_
+#define PLACEMENTENTRY_HPP_
 
 #include <gk/core/IntTypes.hpp>
-#include <sol.hpp>
+#include <SFML/Network/Packet.hpp>
 
-#include "TerrainBiomeSampler.hpp"
+#include "ISerializable.hpp"
 
-class ServerChunk;
+namespace PlacementEntry {
 
-class TerrainGenerator {
-	public:
-		TerrainGenerator();
+struct Flora : public ISerializable {
+	u16 blockID;
+	u16 spawnsOnBlockID;
+	double probability;
 
-		void generate(ServerChunk &chunk) const;
+	void serialize(sf::Packet &packet) const override {
+		packet << blockID << spawnsOnBlockID << probability;
+	}
 
-	private:
-		void fastNoiseGeneration(ServerChunk &chunk) const;
-
-		void oreFloodFill(ServerChunk &chunk, double x, double y, double z, u16 toReplace, u16 replaceWith, int depth) const;
-		static float noise2d(double x, double y, int octaves, float persistence);
-		static float noise3d_abs(double x, double y, double z, int octaves, float persistence);
-
-		TerrainBiomeSampler biomeSampler;
+	void deserialize(sf::Packet &packet) override {
+		packet >> blockID >> spawnsOnBlockID >> probability;
+	}
 };
 
-#endif // TERRAINGENERATOR_HPP_
+struct Ore : public ISerializable {
+	u16 blockID;
+	double probability;
+	double size;
+
+	void serialize(sf::Packet &packet) const override {
+		packet << blockID << probability << size;
+	}
+
+	void deserialize(sf::Packet &packet) override {
+		packet >> blockID >> probability >> size;
+	}
+};
+
+struct Tree : public ISerializable {
+	u16 treeID;
+	double probability;
+
+	void serialize(sf::Packet &packet) const override {
+		packet << treeID << probability;
+	}
+
+	void deserialize(sf::Packet &packet) override {
+		packet >> treeID >> probability;
+	}
+};
+
+} // namespace PlacementEntry
+
+#endif // PLACEMENTENTRY_HPP_

@@ -40,19 +40,6 @@ void TerrainGenerator::generate(ServerChunk &chunk) const {
 	fastNoiseGeneration(chunk);
 }
 
-void TerrainGenerator::setBlocksFromLuaTable(const sol::table &table) {
-	m_dirtBlockID      = Registry::getInstance().getBlockFromStringID(table["dirt"].get<std::string>()).id();
-	m_grassBlockID     = Registry::getInstance().getBlockFromStringID(table["grass"].get<std::string>()).id();
-	m_stoneBlockID     = Registry::getInstance().getBlockFromStringID(table["stone"].get<std::string>()).id();
-	m_logBlockID       = Registry::getInstance().getBlockFromStringID(table["log"].get<std::string>()).id();
-	m_leavesBlockID    = Registry::getInstance().getBlockFromStringID(table["leaves"].get<std::string>()).id();
-	m_flowerBlockID    = Registry::getInstance().getBlockFromStringID(table["flower"].get<std::string>()).id();
-	m_waterBlockID     = Registry::getInstance().getBlockFromStringID(table["water"].get<std::string>()).id();
-	m_sandBlockID      = Registry::getInstance().getBlockFromStringID(table["sand"].get<std::string>()).id();
-	m_tallgrassBlockID = Registry::getInstance().getBlockFromStringID(table["tallgrass"].get<std::string>()).id();
-	m_ironOreBlockID   = Registry::getInstance().getBlockFromStringID(table["iron_ore"].get<std::string>()).id();
-}
-
 void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 	FastNoise noise;
 	noise.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
@@ -65,7 +52,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
 
 			u16 biomeIndex = biomeSampler.getBiomeIndexAt(x + chunk.x() * CHUNK_WIDTH, y + chunk.y() * CHUNK_DEPTH);
-			auto &biome = Registry::getInstance().getBiome(biomeIndex);
+			const Biome &biome = Registry::getInstance().getBiome(biomeIndex);
 
 			// Land height
 			double n = noise.GetNoise(-x - chunk.x() * CHUNK_WIDTH, y + chunk.y() * CHUNK_DEPTH);
@@ -78,57 +65,92 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 			for(int z = 0 ; z < CHUNK_HEIGHT ; z++) {
 				// Are we above "ground" level?
 				if(z + chunk.z() * CHUNK_HEIGHT > h) {
+
 					// If we are not yet up to sea level, fill with water blocks
-					if(z + chunk.z() * CHUNK_HEIGHT < SEALEVEL) {
-						chunk.setBlockRaw(x, y, z, m_waterBlockID);
+					if (z + chunk.z() * CHUNK_HEIGHT < SEALEVEL) {
+						chunk.setBlockRaw(x, y, z, biome.getLiquidBlockID());
 					}
-					// Otherwise we are in the air, so try to make a tree
-					else if(chunk.getBlock(x, y, z - 1) == m_grassBlockID && (rand() % 64) == 0 && n < 4) {
-						// Trunk
-						int h = (rand() & 3) + 3;
-						for(int i = 0 ; i < h ; i++) {
-							chunk.setBlockRaw(x, y, z + i, m_logBlockID);
-						}
+					// Otherwise we are in the air
+					else {
+						bool placedTree = false;
+						if (chunk.getBlock(x, y, z - 1) == biome.getTopBlockID()) {
+							for (const PlacementEntry::Tree &treePlacement : biome.getTrees()) {
+								if (rand() > RAND_MAX * treePlacement.probability) continue;
+								const Tree &tree = Registry::getInstance().getTree(treePlacement.treeID);
 
-						// Leaves
-						for(int iz = -3 ; iz <= 3 ; iz++) {
-							for(int iy = -3 ; iy <= 3 ; iy++) {
-								for(int ix = -3 ; ix <= 3 ; ix++) {
-									if(ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + iy, z + h + iz)) {
-										chunk.setBlockRaw(x + ix, y + iy, z + h + iz, m_leavesBlockID);
+								// Trunk
+								int h = (rand() & 3) + 3;
+								for (int i = 0; i < h; i++) {
+									chunk.setBlockRaw(x, y, z + i, tree.getLogBlockID());
+								}
 
-										// FIXME: This is a temporary fix for the second part of #41
-										chunk.lightmap().setSunlight(x + ix, y + iy, z + h + iz, 0);
+								// Leaves
+								for (int iz = -3; iz <= 3; iz++) {
+									for (int iy = -3; iy <= 3; iy++) {
+										for (int ix = -3; ix <= 3; ix++) {
+											if (ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + iy, z + h + iz)) {
+												chunk.setBlockRaw(x + ix, y + iy, z + h + iz, tree.getLeavesBlockID());
+
+												// FIXME: This is a temporary fix for the second part of #41
+												chunk.lightmap().setSunlight(x + ix, y + iy, z + h + iz, 0);
+											}
+										}
 									}
 								}
+
+								placedTree = true;
+								break;
 							}
 						}
-					}
-					// Or tallgrass
-					else if(chunk.getBlock(x, y, z - 1) == m_grassBlockID && (rand() % 32) == 0) {
-						chunk.setBlockRaw(x, y, z, m_tallgrassBlockID);
-					}
-					// Or a flower
-					else if(chunk.getBlock(x, y, z - 1) == m_grassBlockID && (rand() & 0xff) == 0) {
-						chunk.setBlockRaw(x, y, z, m_flowerBlockID);
-					}
-					// If we are on the top block of the chunk, add sunlight
-					else if (z == CHUNK_HEIGHT - 1) {
-						chunk.lightmap().addSunlight(x, y, z, 15);
+
+						// Otherwise try to place flora.
+						if (!placedTree) {
+							bool placedFlora = false;
+							for (const PlacementEntry::Flora &flora : biome.getFlora()) {
+								if (chunk.getBlock(x, y, z - 1) != flora.spawnsOnBlockID) continue;
+								if (rand() > RAND_MAX * flora.probability) continue;
+								chunk.setBlockRaw(x, y, z, flora.blockID);
+								placedFlora = true;
+								break;
+							}
+
+							// Otherwise set sunlight.
+							if (!placedFlora && z == CHUNK_HEIGHT - 1) {
+								chunk.lightmap().addSunlight(x, y, z, 15);
+							}
+						}
 					}
 				}
 				else {
 					if (z + chunk.z() * CHUNK_HEIGHT >= h - 1 && z + chunk.z() * CHUNK_HEIGHT > SEALEVEL - 1)
-						chunk.setBlockRaw(x, y, z, biome.getTopBlock());
+						chunk.setBlockRaw(x, y, z, biome.getTopBlockID());
 					else if (z + chunk.z() * CHUNK_HEIGHT <= SEALEVEL - 1 && h < SEALEVEL && z + chunk.z() * CHUNK_HEIGHT > h - 3)
-						chunk.setBlockRaw(x, y, z, biome.getBeachBlock());
+						chunk.setBlockRaw(x, y, z, biome.getBeachBlockID());
 					else if (z + chunk.z() * CHUNK_HEIGHT > h - 3)
-						chunk.setBlockRaw(x, y, z, biome.getGroundBlock());
+						chunk.setBlockRaw(x, y, z, biome.getGroundBlockID());
 					else
-						chunk.setBlockRaw(x, y, z, m_stoneBlockID);
+						chunk.setBlockRaw(x, y, z, biome.getDeepBlockID());
 
-					if ((rand() % 4096) == 0)
-						oreFloodFill(chunk, x, y, z, m_stoneBlockID, m_ironOreBlockID, 2);
+					// Populate ores.
+					// TODO: Like trees, ores should be able to seamlessly cross chunk boundaries.
+					// This could be achieved either by setting up a generation pipeline with stages,
+					// processing neighboring chunks' ores every time, or generating them with noise.
+					for (const PlacementEntry::Ore &ore : biome.getOres()) {
+						if (rand() > RAND_MAX * ore.probability) continue;
+						oreFloodFill(chunk, x, y, z, biome.getDeepBlockID(), ore.blockID, 2);
+						break;
+					}
+
+					// Caves
+					float n2 = noise2d(-(x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
+					float r2 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 512.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 0.1);
+					float r3 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 128.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 1);
+					float r4 = n2 * 5 + r2 * r3 * 20;
+					if (r4 > 6 && r4 < 8 && h > SEALEVEL) {
+						chunk.setBlockRaw(x, y, z - 1, 0);
+						chunk.setBlockRaw(x, y, z, 0);
+						chunk.setBlockRaw(x, y, z + 1, 0);
+					}
 				}
 
 				if (topChunk && topChunk->isInitialized()) {

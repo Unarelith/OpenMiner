@@ -24,20 +24,21 @@
  *
  * =====================================================================================
  */
-#include "Biome.hpp"
 #include <SFML/Network/Packet.hpp>
+
+#include "Biome.hpp"
 #include "NetworkUtils.hpp"
 
-Biome::Biome(u32 id, const std::string &stringID, const std::string &label) {
+Biome::Biome(u16 id, const std::string &stringID, const std::string &label) {
 	m_id = id;
-	std::string m_stringID;
-	std::string m_label;
+	m_stringID = stringID;
+	m_label = label;
 }
 
 void Biome::serialize(sf::Packet &packet) const {
-	packet << u32(m_id) << m_stringID << m_label << m_params << m_topBlock << m_groundBlock << m_beachBlock << m_liquidBlock;
+	packet << m_id << m_stringID << m_label << m_params << m_topBlockID << m_groundBlockID << m_deepBlockID << m_beachBlockID << m_liquidBlockID << m_flora << m_ores << m_trees;
 }
 
 void Biome::deserialize(sf::Packet &packet) {
-	packet >> m_id >> m_stringID >> m_label >> m_params >> m_topBlock >> m_groundBlock >> m_beachBlock >> m_liquidBlock;
+	packet >> m_id >> m_stringID >> m_label >> m_params >> m_topBlockID >> m_groundBlockID >> m_deepBlockID >> m_beachBlockID >> m_liquidBlockID >> m_flora >> m_ores >> m_trees;
 }

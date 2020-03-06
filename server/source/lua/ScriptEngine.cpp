@@ -67,10 +67,6 @@ void ScriptEngine::initUsertypes() {
 		"terrain_generator", &ServerWorld::terrainGenerator
 	);
 
-	m_lua.new_usertype<TerrainGenerator>("TerrainGenerator",
-		"set_blocks", &TerrainGenerator::setBlocksFromLuaTable
-	);
-
 	m_lua.new_usertype<Chunk>("Chunk",
 		"get_block", &Chunk::getBlock,
 		"get_data", &Chunk::getData,

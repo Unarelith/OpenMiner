@@ -27,21 +27,23 @@
 #ifndef TERRAINBIOMESAMPLER_HPP_
 #define TERRAINBIOMESAMPLER_HPP_
 
+#include <vector>
+
 #include <gk/core/IntTypes.hpp>
-#include "FastNoise.hpp"
+
 #include "Biome.hpp"
+#include "FastNoise.hpp"
 
 class TerrainBiomeSampler {
-public:
-	TerrainBiomeSampler(); // TODO should eventually take a worldtype
-	~TerrainBiomeSampler();
+	public:
+		TerrainBiomeSampler(); // TODO should eventually take a worldtype
 
-	u16 getBiomeIndexAt(s32 x, s32 y) const;
-	//std::vector<WeightedIndex> getWeightedBiomeIndicesAt(double x, double y);
+		u16 getBiomeIndexAt(s32 x, s32 y) const;
+		//std::vector<WeightedIndex> getWeightedBiomeIndicesAt(double x, double y);
 
-private:
-	u8 nBiomeParams = 2; // TODO should be defined in the worldtype
-	FastNoise* paramNoisesPtr;
+	private:
+		static const u8 biomeParamCount = 2; // TODO if kept, should be defined in the worldtype, dynamically.
+		std::vector<FastNoise> m_paramNoises;
 };
 
 #endif // TERRAINBIOMESAMPLER_HPP_

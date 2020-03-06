@@ -38,6 +38,7 @@ class LuaMod {
 		void registerItem(const sol::table &table);
 		void registerCraftingRecipe(const sol::table &table);
 		void registerSmeltingRecipe(const sol::table &table);
+		void registerTree(const sol::table &table);
 		void registerBiome(const sol::table &table);
 
 		const std::string &id() const { return m_id; }

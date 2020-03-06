@@ -49,6 +49,41 @@ Item &Registry::registerSerializedItem(sf::Packet &packet) {
 	return m_items.back();
 }
 
+
+Tree &Registry::registerTree(const std::string &stringID, const std::string &label) {
+	size_t id = m_trees.size();
+	m_treesID.emplace(stringID, id);
+	m_trees.emplace_back(id, stringID, label);
+	return m_trees.back();
+}
+
+Tree &Registry::registerSerializedTree(sf::Packet &packet) {
+	m_trees.emplace_back();
+	m_trees.back().deserialize(packet);
+
+	size_t id = m_trees.size() - 1;
+	m_treesID.emplace(m_trees.back().stringID(), id);
+
+	return m_trees.back();
+}
+
+Biome &Registry::registerBiome(const std::string &stringID, const std::string &label) {
+	size_t id = m_biomes.size();
+	m_biomesID.emplace(stringID, id);
+	m_biomes.emplace_back(id, stringID, label);
+	return m_biomes.back();
+}
+
+Biome &Registry::registerSerializedBiome(sf::Packet &packet) {
+	m_biomes.emplace_back();
+	m_biomes.back().deserialize(packet);
+
+	size_t id = m_biomes.size() - 1;
+	m_biomesID.emplace(m_biomes.back().stringID(), id);
+
+	return m_biomes.back();
+}
+
 const Block &Registry::getBlockFromStringID(const std::string &stringID) {
 	if (stringID.empty()) return getBlock(0);
 	auto it = m_blocksID.find(stringID);
@@ -63,6 +98,24 @@ const Item &Registry::getItemFromStringID(const std::string &stringID) {
 	if (it == m_itemsID.end())
 		throw EXCEPTION("Unknown item:", stringID);
 	return getItem(it->second);
+}
+
+const Tree &Registry::getTreeFromStringID(const std::string &stringID) {
+	if (stringID.empty())
+		throw EXCEPTION("Trying to get tree from empty string ID.");
+	auto it = m_treesID.find(stringID);
+	if (it == m_treesID.end())
+		throw EXCEPTION("Unknown tree:", stringID);
+	return getTree(it->second);
+}
+
+const Biome &Registry::getBiomeFromStringID(const std::string &stringID) {
+	if (stringID.empty())
+		throw EXCEPTION("Trying to get tree from empty string ID.");
+	auto it = m_biomesID.find(stringID);
+	if (it == m_biomesID.end())
+		throw EXCEPTION("Unknown tree:", stringID);
+	return getBiome(it->second);
 }
 
 const Recipe *Registry::getRecipe(const Inventory &inventory) const {
@@ -87,8 +140,12 @@ void Registry::serialize(sf::Packet &packet) const {
 			<< *it;
 	}
 
+	for (auto &it : m_trees) {
+		packet << u8(DataType::Tree) << it;
+	}
+
 	for (auto &it : m_biomes) {
-		packet << u8(DataType::Biome) << *it;
+		packet << u8(DataType::Biome) << it;
 	}
 }
 
@@ -109,7 +166,10 @@ void Registry::deserialize(sf::Packet &packet) {
 			registerRecipe<SmeltingRecipe>()->deserialize(packet);
 		}
 		else if (type == u8(DataType::Biome)) {
-			registerSerializedBiome<Biome>(packet);
+			registerSerializedBiome(packet);
+		}
+		else if (type == u8(DataType::Tree)) {
+			registerSerializedTree(packet);
 		}
 	}
 }

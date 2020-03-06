@@ -24,30 +24,42 @@
  *
  * =====================================================================================
  */
-#ifndef TERRAINGENERATOR_HPP_
-#define TERRAINGENERATOR_HPP_
+#ifndef TREE_HPP_
+#define TREE_HPP_
+
+#include <string>
 
 #include <gk/core/IntTypes.hpp>
-#include <sol.hpp>
 
-#include "TerrainBiomeSampler.hpp"
+#include "ISerializable.hpp"
 
-class ServerChunk;
-
-class TerrainGenerator {
+class Tree : public ISerializable
+{
 	public:
-		TerrainGenerator();
+		Tree() = default;
+		Tree(u16 id, const std::string &stringID, const std::string &label);
 
-		void generate(ServerChunk &chunk) const;
+		void serialize(sf::Packet &packet) const override;
+		void deserialize(sf::Packet &packet) override;
+
+		u16 id() const { return m_id; }
+		const std::string &stringID() const { return m_stringID; }
+		const std::string &label() const { return m_label; }
+		void setLabel(const std::string &label) { m_label = label; }
+
+		u16 getLogBlockID() const { return m_logBlockID; }
+		u16 getLeavesBlockID() const { return m_leavesBlockID; }
+
+		void setLogBlockID(u16 value) { m_logBlockID = value; }
+		void setLeavesBlockID(u16 value) { m_leavesBlockID = value; }
 
 	private:
-		void fastNoiseGeneration(ServerChunk &chunk) const;
+		u16 m_id;
+		std::string m_stringID;
+		std::string m_label;
 
-		void oreFloodFill(ServerChunk &chunk, double x, double y, double z, u16 toReplace, u16 replaceWith, int depth) const;
-		static float noise2d(double x, double y, int octaves, float persistence);
-		static float noise3d_abs(double x, double y, double z, int octaves, float persistence);
-
-		TerrainBiomeSampler biomeSampler;
+		u16 m_logBlockID;
+		u16 m_leavesBlockID;
 };
 
-#endif // TERRAINGENERATOR_HPP_
+#endif // TREE_HPP_
