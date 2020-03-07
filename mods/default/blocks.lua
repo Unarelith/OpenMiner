@@ -57,7 +57,7 @@ mod:block {
 	tiles = "oak_leaves.png",
 	color_multiplier = {106, 173, 51, 255},
 	hardness = 0.5,
-	draw_type = 2, -- FIXME: Use string instead
+	draw_type = "leaves",
 	-- is_opaque = false, -- FIXME
 }
 
@@ -91,7 +91,7 @@ mod:block {
 	name = "Water",
 	tiles = "water.png",
 	color_multiplier = {51, 115, 255, 217},
-	draw_type = 3, -- FIXME: Use string instead
+	draw_type = "liquid",
 	is_opaque = false,
 }
 
@@ -99,7 +99,7 @@ mod:block {
 	id = "glass",
 	name = "Glass",
 	tiles = "glass.png",
-	draw_type = 4, -- FIXME: Use string instead
+	draw_type = "glass",
 	is_opaque = false,
 }
 
@@ -144,7 +144,7 @@ mod:block {
 	name = "Dandelion",
 	tiles = "dandelion.png",
 	hardness = 0.05,
-	draw_type = 1, -- FIXME: Use string instead
+	draw_type = "xshape",
 	bounding_box = {0.25, 0.25, 0.0, 0.5, 0.5, 0.5},
 }
 
@@ -154,7 +154,7 @@ mod:block {
 	tiles = "grass.png",
 	color_multiplier = {129, 191, 91, 255},
 	hardness = 0.05,
-	draw_type = 1, -- FIXME: Use string instead
+	draw_type = "xshape",
 }
 
 mod:block {
@@ -188,7 +188,7 @@ mod:block {
 	name = "Oak Wood Slab",
 	tiles = "oak_planks.png",
 
-	draw_type = 5,
+	draw_type = "boundingbox",
 	is_opaque = false,
 
 	bounding_box = {0, 0, 0, 1, 1, 0.5}

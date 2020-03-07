@@ -26,6 +26,8 @@
  */
 #include <map>
 
+#include <gk/core/Debug.hpp>
+
 #include "Biome.hpp"
 #include "CraftingRecipe.hpp"
 #include "LuaMod.hpp"
@@ -66,10 +68,26 @@ void LuaMod::registerBlock(const sol::table &table) {
 		});
 	}
 
-	// FIXME: Use string instead
-	sol::optional<BlockDrawType> drawType = table["draw_type"];
-	if (drawType != sol::nullopt) {
-		block.setDrawType(drawType.value());
+	sol::object drawTypeObject = table["draw_type"];
+	if (drawTypeObject.valid()) {
+		if (drawTypeObject.get_type() == sol::type::string) {
+			static const std::unordered_map<std::string, BlockDrawType> drawTypes = {
+				{"solid",  BlockDrawType::Solid},
+				{"xshape", BlockDrawType::XShape},
+				{"leaves", BlockDrawType::Leaves},
+				{"liquid", BlockDrawType::Liquid},
+				{"glass",  BlockDrawType::Glass},
+				{"boundingbox", BlockDrawType::BoundingBox} // FIXME: Temporary
+			};
+
+			auto it = drawTypes.find(drawTypeObject.as<std::string>());
+			if (it != drawTypes.end())
+				block.setDrawType(it->second);
+			else
+				DEBUG("ERROR: In '" + block.stringID() + "' definition: Block draw type invalid");
+		}
+		else
+			DEBUG("ERROR: In '" + block.stringID() + "' definition: Block draw type must be a string");
 	}
 
 	sol::optional<sol::table> itemDrop = table["item_drop"];
