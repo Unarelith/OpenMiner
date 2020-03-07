@@ -53,12 +53,20 @@ LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, Cli
 
 	m_mainWidget.setScale(Config::guiScale, Config::guiScale);
 
+	packet >> m_width >> m_height >> m_isCentered;
+
+	if (m_isCentered)
+		centerMainWidget();
+
 	while (!packet.endOfPacket())
 		loadGUI(packet);
 }
 
 void LuaGUIState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
+
+	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED && m_isCentered)
+		centerMainWidget();
 
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 		gk::Mouse::setCursorGrabbed(true);
@@ -322,5 +330,11 @@ void LuaGUIState::loadInventory(const std::string &name, sf::Packet &packet) {
 	m_inventories.emplace(name, Inventory{});
 
 	packet >> m_inventories.at(name);
+}
+
+void LuaGUIState::centerMainWidget() {
+	int x = floor(Config::screenWidth  / 2.0f - m_width  * Config::guiScale / 2.0f + 0.5f);
+	int y = floor(Config::screenHeight / 2.0f - m_height * Config::guiScale / 2.0f + 0.5f);
+	m_mainWidget.setPosition(x, y);
 }
 

@@ -173,7 +173,14 @@ void ServerCommandHandler::setupCallbacks() {
 		u8 guiScale;
 		packet >> screenWidth >> screenHeight >> guiScale;
 
-		m_scriptEngine.lua()["show_inventory"](client, screenWidth, screenHeight, guiScale);
+		sol::unsafe_function func = m_scriptEngine.lua()["show_inventory"];
+
+		try {
+			func(client, screenWidth, screenHeight, guiScale);
+		}
+		catch (const sol::error &error) {
+			DEBUG("Failed to send inventory GUI\n", error.what());
+		}
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerCreativeWindow, [this](ClientInfo &client, sf::Packet &packet) {
@@ -181,7 +188,14 @@ void ServerCommandHandler::setupCallbacks() {
 		u8 guiScale;
 		packet >> screenWidth >> screenHeight >> guiScale;
 
-		m_scriptEngine.lua()["show_creative_window"](client, screenWidth, screenHeight, guiScale);
+		sol::unsafe_function func = m_scriptEngine.lua()["show_creative_window"];
+
+		try {
+			func(client, screenWidth, screenHeight, guiScale);
+		}
+		catch (const sol::error &error) {
+			DEBUG("Failed to send creative window GUI\n", error.what());
+		}
 	});
 
 	m_server.setCommandCallback(Network::Command::BlockActivated, [this](ClientInfo &client, sf::Packet &packet) {

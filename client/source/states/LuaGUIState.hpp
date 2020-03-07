@@ -59,6 +59,8 @@ class LuaGUIState : public InterfaceState {
 		void loadProgressBarWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet);
 		void loadInventory(const std::string &name, sf::Packet &packet);
 
+		void centerMainWidget();
+
 		ClientCommandHandler &m_client;
 
 		Widget m_mainWidget;
@@ -74,6 +76,11 @@ class LuaGUIState : public InterfaceState {
 
 		ClientPlayer &m_player;
 		ClientWorld &m_world;
+
+		u16 m_width = 0;
+		u16 m_height = 0;
+
+		bool m_isCentered = false;
 };
 
 #endif // LUAGUISTATE_HPP_

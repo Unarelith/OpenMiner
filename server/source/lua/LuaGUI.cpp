@@ -89,6 +89,8 @@ void LuaGUI::show(ClientInfo &client) {
 	sf::Packet packet;
 	packet << Network::Command::BlockGUIData;
 
+	packet << m_width << m_height << m_isCentered;
+
 	for (auto &it : m_inventoryList)
 		packet << u8(LuaWidget::Inventory) << it.name() << it;
 
@@ -106,6 +108,9 @@ void LuaGUI::initUsertype(sol::state &lua) {
 		"crafting",       &LuaGUI::addCraftingWidget,
 		"progress_bar",   &LuaGUI::addProgressBarWidget,
 		"inventory_data", &LuaGUI::addInventory,
+
+		"set_size",       &LuaGUI::setSize,
+		"set_centered",   &LuaGUI::setCentered,
 
 		"show",           &LuaGUI::show
 	);

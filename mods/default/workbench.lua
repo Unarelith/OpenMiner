@@ -37,15 +37,12 @@ mod:block {
 	on_block_activated = function(pos, player, world, client, screen_width, screen_height, gui_scale)
 		local gui = LuaGUI.new()
 
-		-- FIXME: Replace this by gui:set_size() and gui:set_centered()
-		local gui_pos = {
-			x = math.floor(screen_width / gui_scale / 2.0 - 176 / 2.0 + 0.5),
-			y = math.floor(screen_height / gui_scale / 2.0 - 166 / 2.0 + 0.5)
-		}
+		gui:set_size(176, 166)
+		gui:set_centered(true)
 
 		gui:inventory {
 			name = "inv_main",
-			pos = {x = gui_pos.x + 7, y = gui_pos.y + 83},
+			pos = {x = 7, y = 83},
 
 			inventory = "player",
 			player = "player",
@@ -59,7 +56,7 @@ mod:block {
 
 		gui:inventory {
 			name = "inv_hotbar",
-			pos = {x = gui_pos.x + 7, y = gui_pos.y + 141},
+			pos = {x = 7, y = 141},
 
 			inventory = "player",
 			player = "player",
@@ -73,8 +70,8 @@ mod:block {
 
 		gui:crafting {
 			name = "inv_crafting",
-			pos = {x = gui_pos.x + 29, y = gui_pos.y + 16},
-			result_pos = {x = gui_pos.x + 123, y = gui_pos.y + 34},
+			pos = {x = 29, y = 16},
+			result_pos = {x = 123, y = 34},
 
 			inventory = "block",
 			block = {x = pos.x, y = pos.y, z = pos.z},
@@ -84,7 +81,7 @@ mod:block {
 
 		gui:image {
 			name = "img_background",
-			pos = gui_pos,
+			pos = {x = 0, y = 0},
 
 			texture = "texture-workbench",
 			clip = {x = 0, y = 0, width = 176, height = 166},

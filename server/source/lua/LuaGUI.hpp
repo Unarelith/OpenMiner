@@ -44,13 +44,21 @@ class LuaGUI {
 		void addProgressBarWidget(const sol::table &table);
 		void addInventory(const sol::table &table);
 
+		void setSize(u16 width, u16 height) { m_width = width; m_height = height; }
+		void setCentered(bool isCentered) { m_isCentered = isCentered; }
+
 		void show(ClientInfo &client);
 
 		static void initUsertype(sol::state &lua);
 
 	private:
-		std::list<std::unique_ptr<WidgetDef>> m_widgetDefinitions;
+		u16 m_width = 0;
+		u16 m_height = 0;
+
+		bool m_isCentered = false;
+
 		std::list<Inventory> m_inventoryList;
+		std::list<std::unique_ptr<WidgetDef>> m_widgetDefinitions;
 };
 
 #endif // LUAGUI_HPP_

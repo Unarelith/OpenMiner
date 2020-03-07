@@ -63,15 +63,12 @@ end
 function show_inventory(client, screen_width, screen_height, gui_scale)
 	local gui = LuaGUI.new()
 
-	-- FIXME: Replace this by gui:set_size() and gui:set_centered()
-	local gui_pos = {
-		x = math.floor(screen_width / gui_scale / 2.0 - 176 / 2.0 + 0.5),
-		y = math.floor(screen_height / gui_scale / 2.0 - 166 / 2.0 + 0.5)
-	}
+	gui:set_size(176, 166)
+	gui:set_centered(true)
 
 	gui:image {
 		name = "img_background",
-		pos = gui_pos,
+		pos = {x = 0, y = 0},
 
 		texture = "texture-inventory",
 		clip = {x = 0, y = 0, width = 176, height = 166},
@@ -79,7 +76,7 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 
 	gui:inventory {
 		name = "inv_main",
-		pos = {x = gui_pos.x + 7, y = gui_pos.y + 83},
+		pos = {x = 7, y = 83},
 
 		inventory = "player",
 		player = "player",
@@ -93,7 +90,7 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 
 	gui:inventory {
 		name = "inv_hotbar",
-		pos = {x = gui_pos.x + 7, y = gui_pos.y + 141},
+		pos = {x = 7, y = 141},
 
 		inventory = "player",
 		player = "player",
@@ -107,8 +104,8 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 
 	gui:crafting {
 		name = "inv_crafting",
-		pos = {x = gui_pos.x + 97, y = gui_pos.y + 17},
-		result_pos = {x = gui_pos.x + 97 + 56, y = gui_pos.y + 17 + 10},
+		pos = {x = 97, y = 17},
+		result_pos = {x = 97 + 56, y = 17 + 10},
 
 		inventory = "temp",
 		size = 2,
@@ -122,15 +119,12 @@ end
 function show_creative_window(client, screen_width, screen_height, gui_scale)
 	local gui = LuaGUI.new()
 
-	-- FIXME: Replace this by gui:set_size() and gui:set_centered()
-	local gui_pos = {
-		x = math.floor(screen_width / gui_scale / 2.0 - 195 / 2.0 + 0.5),
-		y = math.floor(screen_height / gui_scale / 2.0 - 136 / 2.0 + 0.5)
-	}
+	gui:set_size(195, 136)
+	gui:set_centered(true)
 
 	gui:image {
 		name = "img_background",
-		pos = gui_pos,
+		pos = {x = 0, y = 0},
 
 		texture = "texture-creative_window",
 		clip = {x = 0, y = 0, width = 195, height = 136},
@@ -207,7 +201,7 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 
 	gui:inventory {
 		name = "inv_creative_items",
-		pos = {x = gui_pos.x + 8, y = gui_pos.y + 17},
+		pos = {x = 8, y = 17},
 
 		inventory = "temp",
 		inventory_name = "inv_data",
@@ -219,7 +213,7 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 
 	gui:inventory {
 		name = "inv_hotbar",
-		pos = {x = gui_pos.x + 8, y = gui_pos.y + 111},
+		pos = {x = 8, y = 111},
 
 		inventory = "player",
 		player = "player",

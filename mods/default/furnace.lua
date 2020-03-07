@@ -39,15 +39,12 @@ mod:block {
 	on_block_activated = function(pos, player, world, client, screen_width, screen_height, gui_scale)
 		local gui = LuaGUI.new()
 
-		-- FIXME: Replace this by gui:set_size() and gui:set_centered()
-		local gui_pos = {
-			x = math.floor(screen_width / gui_scale / 2.0 - 176 / 2.0 + 0.5),
-			y = math.floor(screen_height / gui_scale / 2.0 - 166 / 2.0 + 0.5)
-		}
+		gui:set_size(176, 166)
+		gui:set_centered(true)
 
 		gui:progress_bar {
 			name = "bar_process",
-			pos = {x = gui_pos.x + 80, y = gui_pos.y + 35},
+			pos = {x = 80, y = 35},
 
 			type = 0, -- FIXME: Use string for that
 
@@ -62,7 +59,7 @@ mod:block {
 
 		gui:progress_bar {
 			name = "bar_burn",
-			pos = {x = gui_pos.x + 57, y = gui_pos.y + 37},
+			pos = {x = 57, y = 37},
 
 			type = 1, -- FIXME: Use string for that
 
@@ -77,7 +74,7 @@ mod:block {
 
 		gui:inventory {
 			name = "inv_input",
-			pos = {x = gui_pos.x + 55, y = gui_pos.y + 16},
+			pos = {x = 55, y = 16},
 
 			inventory = "block",
 			block = {x = pos.x, y = pos.y, z = pos.z},
@@ -91,7 +88,7 @@ mod:block {
 
 		gui:inventory {
 			name = "inv_output",
-			pos = {x = gui_pos.x + 115, y = gui_pos.y + 34},
+			pos = {x = 115, y = 34},
 
 			inventory = "block",
 			block = {x = pos.x, y = pos.y, z = pos.z},
@@ -105,7 +102,7 @@ mod:block {
 
 		gui:inventory {
 			name = "inv_fuel",
-			pos = {x = gui_pos.x + 55, y = gui_pos.y + 52},
+			pos = {x = 55, y = 52},
 
 			inventory = "block",
 			block = {x = pos.x, y = pos.y, z = pos.z},
@@ -119,7 +116,7 @@ mod:block {
 
 		gui:inventory {
 			name = "inv_main",
-			pos = {x = gui_pos.x + 7, y = gui_pos.y + 83},
+			pos = {x = 7, y = 83},
 
 			inventory = "player",
 			player = "player",
@@ -134,7 +131,7 @@ mod:block {
 
 		gui:inventory {
 			name = "inv_hotbar",
-			pos = {x = gui_pos.x + 7, y = gui_pos.y + 141},
+			pos = {x = 7, y = 141},
 
 			inventory = "player",
 			player = "player",
@@ -149,7 +146,7 @@ mod:block {
 
 		gui:image {
 			name = "img_background",
-			pos = gui_pos,
+			pos = {x = 0, y = 0},
 
 			texture = "texture-furnace",
 			clip = {x = 0, y = 0, width = 176, height = 166},
