@@ -24,46 +24,21 @@
  *
  * =====================================================================================
  */
-#include "Biome.hpp"
+#include "LuaItemLoader.hpp"
 #include "LuaMod.hpp"
-#include "PlacementEntry.hpp"
 #include "Registry.hpp"
-#include "Tree.hpp"
 
-void LuaMod::registerBlock(const sol::table &table) {
-	m_blockLoader.loadBlock(table);
-}
+void LuaItemLoader::loadItem(const sol::table &table) const {
+	TilesDef tiles;
+	tiles.loadFromLuaTable(table);
 
-void LuaMod::registerItem(const sol::table &table) {
-	m_itemLoader.loadItem(table);
-}
+	std::string stringID = m_mod.id() + ":" + table["id"].get<std::string>();
+	std::string label = table["name"].get<std::string>();
 
-void LuaMod::registerCraftingRecipe(const sol::table &table) {
-	m_recipeLoader.loadCraftingRecipe(table);
-}
-
-void LuaMod::registerSmeltingRecipe(const sol::table &table) {
-	m_recipeLoader.loadSmeltingRecipe(table);
-}
-
-void LuaMod::registerTree(const sol::table &table) {
-	m_biomeLoader.loadTree(table);
-}
-
-void LuaMod::registerBiome(const sol::table &table) {
-	m_biomeLoader.loadBiome(table);
-}
-
-void LuaMod::initUsertype(sol::state &lua) {
-	lua.new_usertype<LuaMod>("LuaMod",
-		sol::constructors<LuaMod(std::string)>(),
-		"id",              &LuaMod::id,
-		"block",           &LuaMod::registerBlock,
-		"item",            &LuaMod::registerItem,
-		"crafting_recipe", &LuaMod::registerCraftingRecipe,
-		"smelting_recipe", &LuaMod::registerSmeltingRecipe,
-		"tree",            &LuaMod::registerTree,
-		"biome",           &LuaMod::registerBiome
-	);
+	Item &item = Registry::getInstance().registerItem(tiles, stringID, label);
+	item.setIsFuel(table["is_fuel"].get_or(false));
+	item.setBurnTime(table["burn_time"].get_or(0));
+	item.setHarvestCapability(table["harvest_capability"].get_or(0));
+	item.setMiningSpeed(table["mining_speed"].get_or(1));
 }
 

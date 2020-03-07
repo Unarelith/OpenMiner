@@ -27,7 +27,10 @@
 #ifndef LUAMOD_HPP_
 #define LUAMOD_HPP_
 
-#include <sol.hpp>
+#include "LuaBiomeLoader.hpp"
+#include "LuaBlockLoader.hpp"
+#include "LuaItemLoader.hpp"
+#include "LuaRecipeLoader.hpp"
 
 // This class is meant to be used ONLY in Lua
 class LuaMod {
@@ -47,6 +50,11 @@ class LuaMod {
 
 	private:
 		std::string m_id;
+
+		LuaBlockLoader m_blockLoader{*this};
+		LuaItemLoader m_itemLoader{*this};
+		LuaRecipeLoader m_recipeLoader{*this};
+		LuaBiomeLoader m_biomeLoader{*this};
 };
 
 #endif // LUAMOD_HPP_

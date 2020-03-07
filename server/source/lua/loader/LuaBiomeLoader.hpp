@@ -24,46 +24,29 @@
  *
  * =====================================================================================
  */
-#include "Biome.hpp"
-#include "LuaMod.hpp"
-#include "PlacementEntry.hpp"
-#include "Registry.hpp"
-#include "Tree.hpp"
+#ifndef LUABIOMELOADER_HPP_
+#define LUABIOMELOADER_HPP_
 
-void LuaMod::registerBlock(const sol::table &table) {
-	m_blockLoader.loadBlock(table);
-}
+#include <sol.hpp>
 
-void LuaMod::registerItem(const sol::table &table) {
-	m_itemLoader.loadItem(table);
-}
+class Biome;
+class LuaMod;
 
-void LuaMod::registerCraftingRecipe(const sol::table &table) {
-	m_recipeLoader.loadCraftingRecipe(table);
-}
+class LuaBiomeLoader {
+	public:
+		LuaBiomeLoader(LuaMod &mod) : m_mod(mod) {}
 
-void LuaMod::registerSmeltingRecipe(const sol::table &table) {
-	m_recipeLoader.loadSmeltingRecipe(table);
-}
+		void loadTree(const sol::table &table) const;
+		void loadBiome(const sol::table &table) const;
 
-void LuaMod::registerTree(const sol::table &table) {
-	m_biomeLoader.loadTree(table);
-}
+	private:
+		void loadBiomeParameters(Biome &biome, const sol::table &table) const;
+		void loadBiomeBlocks(Biome &biome, const sol::table &table) const;
+		void loadTreePlacementEntries(Biome &biome, const sol::table &table) const;
+		void loadFloraPlacementEntries(Biome &biome, const sol::table &table) const;
+		void loadOrePlacementEntries(Biome &biome, const sol::table &table) const;
 
-void LuaMod::registerBiome(const sol::table &table) {
-	m_biomeLoader.loadBiome(table);
-}
+		LuaMod &m_mod;
+};
 
-void LuaMod::initUsertype(sol::state &lua) {
-	lua.new_usertype<LuaMod>("LuaMod",
-		sol::constructors<LuaMod(std::string)>(),
-		"id",              &LuaMod::id,
-		"block",           &LuaMod::registerBlock,
-		"item",            &LuaMod::registerItem,
-		"crafting_recipe", &LuaMod::registerCraftingRecipe,
-		"smelting_recipe", &LuaMod::registerSmeltingRecipe,
-		"tree",            &LuaMod::registerTree,
-		"biome",           &LuaMod::registerBiome
-	);
-}
-
+#endif // LUABIOMELOADER_HPP_
