@@ -44,6 +44,8 @@ class ChunkBuilder {
 	public:
 		ChunkBuilder(TextureAtlas &textureAtlas);
 
+		using tCubeCoord = s8;
+
 		static constexpr u8 layers = 3;
 
 		std::array<std::size_t, layers> buildChunk(const ClientChunk &chunk, const std::array<gk::VertexBuffer, layers> &vbo);
@@ -55,18 +57,18 @@ class ChunkBuilder {
 		};
 
 	private:
-		void addFace(s8f x, s8f y, s8f z, s8f i, const ClientChunk &chunk, const Block *block);
+		void addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk &chunk, const Block *block);
 		void addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk, const Block *block);
 
-		gk::Vector3i getOffsetFromVertex(u8f i, u8f j) const;
-		u8 getAmbientOcclusion(s8f x, s8f y, s8f z, s8f f, s8f v, const ClientChunk &chunk);
+		gk::Vector3i getOffsetFromVertex(const tCubeCoord *const vertexPosPtr) const;
+		u8 getAmbientOcclusion(s8f x, s8f y, s8f z, const tCubeCoord *const vertexPosPtr, const ClientChunk &chunk);
 
 		enum class Light {
 			Sun,
 			Torch
 		};
 
-		u8 getLightForVertex(Light light, s8f x, s8f y, s8f z, s8f f, s8f v, const gk::Vector3i &normal, const ClientChunk &chunk);
+		u8 getLightForVertex(Light light, s8f x, s8f y, s8f z, const tCubeCoord *const vertexPosPtr, const gk::Vector3i &normal, const ClientChunk &chunk);
 		void initializeOrientation();
 
 		std::array<std::vector<gk::Vertex>, layers> m_vertices;

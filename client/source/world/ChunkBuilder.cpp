@@ -39,10 +39,8 @@ constexpr int nNormals = 1;
 constexpr int nCoords = 3;
 constexpr int nCoordsPerUV = 2;
 
-using tCubeCoord = s8;
-
 // Same order as enum BlockFace in TilesDef.hpp
-static constexpr tCubeCoord cubeCoords[nFaces][nVertsPerFace + nNormals][nCoords] = {
+static constexpr ChunkBuilder::tCubeCoord cubeCoords[nFaces][nVertsPerFace + nNormals][nCoords] = {
 	// West
 	{
 		{0, 1, 0},
@@ -104,7 +102,7 @@ static constexpr tCubeCoord cubeCoords[nFaces][nVertsPerFace + nNormals][nCoords
 	},
 };
 
-static constexpr tCubeCoord crossCoords[nCrossFaces][nVertsPerFace][nCoords] = {
+static constexpr ChunkBuilder::tCubeCoord crossCoords[nCrossFaces][nVertsPerFace][nCoords] = {
 	{
 		{1, 1, 0},
 		{0, 0, 0},
@@ -120,7 +118,7 @@ static constexpr tCubeCoord crossCoords[nCrossFaces][nVertsPerFace][nCoords] = {
 	},
 };
 
-static tCubeCoord orientCubeCoords[nAxesP2 * nRots][nFaces][nVertsPerFace + nNormals][nCoords];
+static ChunkBuilder::tCubeCoord orientCubeCoords[nAxesP2 * nRots][nFaces][nVertsPerFace + nNormals][nCoords];
 
 ChunkBuilder::ChunkBuilder(TextureAtlas &textureAtlas) : m_textureAtlas(textureAtlas) {
 	static bool isOrientInitialized = false;
@@ -206,15 +204,16 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 	// Store vertex information
 	gk::Vertex vertices[nVertsPerFace];
 	for (s8f v = 0 ; v < nVertsPerFace; v++) {
+		tCubeCoord *vertexPosPtr = orientCubeCoords[orientation][f][v];
 		if (block->drawType() == BlockDrawType::BoundingBox) {
-			vertices[v].coord3d[0] = x + orientCubeCoords[orientation][f][v][0] * boundingBox.sizeX + boundingBox.x;
-			vertices[v].coord3d[1] = y + orientCubeCoords[orientation][f][v][1] * boundingBox.sizeY + boundingBox.y;
-			vertices[v].coord3d[2] = z + orientCubeCoords[orientation][f][v][2] * boundingBox.sizeZ + boundingBox.z;
+			vertices[v].coord3d[0] = x + vertexPosPtr[0] * boundingBox.sizeX + boundingBox.x;
+			vertices[v].coord3d[1] = y + vertexPosPtr[1] * boundingBox.sizeY + boundingBox.y;
+			vertices[v].coord3d[2] = z + vertexPosPtr[2] * boundingBox.sizeZ + boundingBox.z;
 		}
 		else {
-			vertices[v].coord3d[0] = x + orientCubeCoords[orientation][f][v][0];
-			vertices[v].coord3d[1] = y + orientCubeCoords[orientation][f][v][1];
-			vertices[v].coord3d[2] = z + orientCubeCoords[orientation][f][v][2];
+			vertices[v].coord3d[0] = x + vertexPosPtr[0];
+			vertices[v].coord3d[1] = y + vertexPosPtr[1];
+			vertices[v].coord3d[2] = z + vertexPosPtr[2];
 		}
 
 		vertices[v].coord3d[3] = f;
@@ -232,18 +231,19 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 		vertices[v].texCoord[0] = faceTexCoords[v][0];
 		vertices[v].texCoord[1] = faceTexCoords[v][1];
 
+
 		if (Config::isSunSmoothLightingEnabled && block->drawType() != BlockDrawType::Liquid)
-			vertices[v].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, f, v, normal, chunk);
+			vertices[v].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, vertexPosPtr, normal, chunk);
 		else
 			vertices[v].lightValue[0] = chunk.lightmap().getSunlight(x + normal.x, y + normal.y, z + normal.z);
 
 		int torchlight = chunk.lightmap().getTorchlight(x, y, z);
 		if (Config::isTorchSmoothLightingEnabled && torchlight == 0 && block->drawType() != BlockDrawType::Liquid)
-			vertices[v].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, f, v, normal, chunk);
+			vertices[v].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, vertexPosPtr, normal, chunk);
 		else
 			vertices[v].lightValue[1] = chunk.lightmap().getTorchlight(x + normal.x, y + normal.y, z + normal.z);
 
-		vertices[v].ambientOcclusion = getAmbientOcclusion(x, y, z, f, v, chunk);
+		vertices[v].ambientOcclusion = getAmbientOcclusion(x, y, z, vertexPosPtr, chunk);
 	}
 
 	auto addVertex = [&](u8 v) {
@@ -322,35 +322,13 @@ inline void ChunkBuilder::addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk
 	}
 }
 
-inline gk::Vector3i ChunkBuilder::getOffsetFromVertex(u8f f, u8f v) const {
-	gk::Vector3i offset;
-	offset.x = (
-			(f == BlockFace::West) ||
-			(f == BlockFace::Bottom && (v == 1 || v == 2)) ||
-			(f == BlockFace::Top    && (v == 1 || v == 2)) ||
-			(f == BlockFace::South  && (v == 0 || v == 3)) ||
-			(f == BlockFace::North  && (v == 1 || v == 2))) ? -1 : 1;
-
-	offset.y = (
-			(f == BlockFace::South) ||
-			(f == BlockFace::West   && (v == 1 || v == 2)) ||
-			(f == BlockFace::East   && (v == 0 || v == 3)) ||
-			(f == BlockFace::Bottom && (v == 0 || v == 1)) ||
-			(f == BlockFace::Top    && (v == 2 || v == 3))) ? -1 : 1;
-
-	offset.z = (
-			(f == BlockFace::Bottom) ||
-			(f == BlockFace::West   && (v == 0 || v == 1)) ||
-			(f == BlockFace::East   && (v == 0 || v == 1)) ||
-			(f == BlockFace::South  && (v == 0 || v == 1)) ||
-			(f == BlockFace::North  && (v == 0 || v == 1))) ? -1 : 1;
-
-	return offset;
+inline gk::Vector3i ChunkBuilder::getOffsetFromVertex(const tCubeCoord *const vertexPosPtr) const {
+	return gk::Vector3i{vertexPosPtr[0] * 2 - 1, vertexPosPtr[1] * 2 - 1, vertexPosPtr[2] * 2 - 1};
 }
 
 // Based on this article: https://0fps.net/2013/07/03/ambient-occlusion-for-minecraft-like-worlds/
-inline u8 ChunkBuilder::getAmbientOcclusion(s8f x, s8f y, s8f z, s8f f, s8f v, const ClientChunk &chunk) {
-	gk::Vector3i offset = getOffsetFromVertex(f, v);
+inline u8 ChunkBuilder::getAmbientOcclusion(s8f x, s8f y, s8f z, const tCubeCoord *const vertexPosPtr, const ClientChunk &chunk) {
+	gk::Vector3i offset = getOffsetFromVertex(vertexPosPtr);
 
 	const Block &block0 = Registry::getInstance().getBlock(chunk.getBlock(x + offset.x, y,            z + offset.z));
 	const Block &block1 = Registry::getInstance().getBlock(chunk.getBlock(x,            y + offset.y, z + offset.z));
@@ -360,13 +338,10 @@ inline u8 ChunkBuilder::getAmbientOcclusion(s8f x, s8f y, s8f z, s8f f, s8f v, c
 	bool side2  = block1.id() != 0 && block1.drawType() != BlockDrawType::XShape;
 	bool corner = block2.id() != 0 && block2.drawType() != BlockDrawType::XShape;
 
-	if (side1 && side2)
-		return 0;
-
-	return 3 - (side1 + side2 + corner);
+	return (side1 && side2) ? 0 : 3 - (side1 + side2 + corner);
 }
 
-inline u8 ChunkBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, s8f f, s8f v, const gk::Vector3i &normal, const ClientChunk &chunk) {
+inline u8 ChunkBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, const tCubeCoord *const vertexPosPtr, const gk::Vector3i &normal, const ClientChunk &chunk) {
 	std::function<s8(const Chunk *chunk, s8, s8, s8)> getLight = [&](const Chunk *chunk, s8 x, s8 y, s8 z) -> s8 {
 		if (x < 0)             return chunk->getSurroundingChunk(0) && chunk->getSurroundingChunk(0)->isInitialized() ? getLight(chunk->getSurroundingChunk(0), x + CHUNK_WIDTH, y, z) : -1;
 		if (x >= CHUNK_WIDTH)  return chunk->getSurroundingChunk(1) && chunk->getSurroundingChunk(1)->isInitialized() ? getLight(chunk->getSurroundingChunk(1), x - CHUNK_WIDTH, y, z) : -1;
@@ -381,7 +356,7 @@ inline u8 ChunkBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, s8f 
 			return chunk->isInitialized() ? chunk->lightmap().getTorchlight(x, y, z) : -1;
 	};
 
-	gk::Vector3i offset = getOffsetFromVertex(f, v);
+	gk::Vector3i offset = getOffsetFromVertex(vertexPosPtr);
 
 	gk::Vector3i minOffset{
 		(normal.x != 0) ? offset.x : 0,
