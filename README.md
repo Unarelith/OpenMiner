@@ -71,7 +71,7 @@ This list is non exhaustive.
 ### Implemented features
 
 - Menus (title screen, server selection, pause menu, settings menu)
-- Basic worldgen (lakes, trees, flowers, pseudo-caves)
+- Basic worldgen (biomes, lakes, trees, flowers, pseudo-caves)
 - Infinite world in X/Y/Z axis ([#25](https://github.com/Unarelith/OpenMiner/pull/25))
 - Lighting system with smooth lighting
 - Networking ([#20](https://github.com/Unarelith/OpenMiner/pull/20))
@@ -81,18 +81,18 @@ This list is non exhaustive.
 	- Custom GUI creation
 - Special blocks (workbench, furnace)
 - Block metadata
+- Player model display (currently without rotation nor animation)
 
 ### Missing features
 
 - Texture pack system ([#34](https://github.com/Unarelith/OpenMiner/issues/34))
 - World loading/saving ([#26](https://github.com/Unarelith/OpenMiner/issues/26))
-- Particle system
-- Fluid propagation
-- Player model display (currently displaying an ugly box)
+- Fluid propagation ([#62](https://github.com/Unarelith/OpenMiner/issues/62))
 - Day/night cycle with sun/moon display ([#73](https://github.com/Unarelith/OpenMiner/issues/73))
-- Real worldgen (seed-based, biomes, cave tunnels)
-- Entities (block drops, mobs, etc...)
+- Real worldgen (seed-based, cave tunnels) ([#79](https://github.com/Unarelith/OpenMiner/issues/79))
 - Clouds ([#52](https://github.com/Unarelith/OpenMiner/pull/52))
+- Particle system
+- Entities (block drops, mobs, etc...)
 
 ## Screenshots
 
@@ -101,15 +101,7 @@ This list is non exhaustive.
 ![](screenshot3.png?raw=true)
 ![](screenshot4.png?raw=true)
 
-## Previous attempts
-
-- Here is the [commit](https://github.com/Unarelith/OpenMiner/tree/8eba845421efff6ce941f8550ff79e6364970fd5) matching the end of the first attempt made in 2013.
-- And here is the [commit](https://github.com/Unarelith/OpenMiner/tree/58c23a7e66404dab94e51998a179dc370c89ea06) matching the end of the second attempt made in 2014.
-
-You can find an history of the project [here](https://github.com/Unarelith/OpenMiner/wiki/History-of-OpenMiner).
-
 ## Credits
 
-- MadPixel (Minecrafter font) [CC BY-ND]
 - xMrVizzy ([Faithful 32x](https://www.curseforge.com/minecraft/texture-packs/faithful-32x) texture pack, will completely replace Vanilla textures)
 
