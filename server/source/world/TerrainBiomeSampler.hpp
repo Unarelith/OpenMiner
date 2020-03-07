@@ -43,6 +43,7 @@ class TerrainBiomeSampler {
 
 	private:
 		static const u8 biomeParamCount = 2; // TODO if kept, should be defined in the worldtype, dynamically.
+
 		std::vector<FastNoise> m_paramNoises;
 };
 

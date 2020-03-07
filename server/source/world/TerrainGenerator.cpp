@@ -50,7 +50,6 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 	Chunk *topChunk = chunk.getSurroundingChunk(Chunk::Top);
 	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
-
 			u16 biomeIndex = biomeSampler.getBiomeIndexAt(x + chunk.x() * CHUNK_WIDTH, y + chunk.y() * CHUNK_DEPTH);
 			const Biome &biome = Registry::getInstance().getBiome(biomeIndex);
 
@@ -65,7 +64,6 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 			for(int z = 0 ; z < CHUNK_HEIGHT ; z++) {
 				// Are we above "ground" level?
 				if(z + chunk.z() * CHUNK_HEIGHT > h) {
-
 					// If we are not yet up to sea level, fill with water blocks
 					if (z + chunk.z() * CHUNK_HEIGHT < SEALEVEL) {
 						chunk.setBlockRaw(x, y, z, biome.getLiquidBlockID());
@@ -73,9 +71,12 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 					// Otherwise we are in the air
 					else {
 						bool placedTree = false;
+						// Try to place a tree
 						if (chunk.getBlock(x, y, z - 1) == biome.getTopBlockID()) {
 							for (const PlacementEntry::Tree &treePlacement : biome.getTrees()) {
-								if (rand() > RAND_MAX * treePlacement.probability) continue;
+								if (rand() > RAND_MAX * treePlacement.probability)
+									continue;
+
 								const Tree &tree = Registry::getInstance().getTree(treePlacement.treeID);
 
 								// Trunk
@@ -107,8 +108,12 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 						if (!placedTree) {
 							bool placedFlora = false;
 							for (const PlacementEntry::Flora &flora : biome.getFlora()) {
-								if (chunk.getBlock(x, y, z - 1) != flora.spawnsOnBlockID) continue;
-								if (rand() > RAND_MAX * flora.probability) continue;
+								if (chunk.getBlock(x, y, z - 1) != flora.spawnsOnBlockID)
+									continue;
+
+								if (rand() > RAND_MAX * flora.probability)
+									continue;
+
 								chunk.setBlockRaw(x, y, z, flora.blockID);
 								placedFlora = true;
 								break;
@@ -136,7 +141,9 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 					// This could be achieved either by setting up a generation pipeline with stages,
 					// processing neighboring chunks' ores every time, or generating them with noise.
 					for (const PlacementEntry::Ore &ore : biome.getOres()) {
-						if (rand() > RAND_MAX * ore.probability) continue;
+						if (rand() > RAND_MAX * ore.probability)
+							continue;
+
 						oreFloodFill(chunk, x, y, z, biome.getDeepBlockID(), ore.blockID, 2);
 						break;
 					}

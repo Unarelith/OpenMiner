@@ -49,7 +49,6 @@ Item &Registry::registerSerializedItem(sf::Packet &packet) {
 	return m_items.back();
 }
 
-
 Tree &Registry::registerTree(const std::string &stringID, const std::string &label) {
 	size_t id = m_trees.size();
 	m_treesID.emplace(stringID, id);
@@ -103,18 +102,22 @@ const Item &Registry::getItemFromStringID(const std::string &stringID) {
 const Tree &Registry::getTreeFromStringID(const std::string &stringID) {
 	if (stringID.empty())
 		throw EXCEPTION("Trying to get tree from empty string ID.");
+
 	auto it = m_treesID.find(stringID);
 	if (it == m_treesID.end())
 		throw EXCEPTION("Unknown tree:", stringID);
+
 	return getTree(it->second);
 }
 
 const Biome &Registry::getBiomeFromStringID(const std::string &stringID) {
 	if (stringID.empty())
 		throw EXCEPTION("Trying to get tree from empty string ID.");
+
 	auto it = m_biomesID.find(stringID);
 	if (it == m_biomesID.end())
 		throw EXCEPTION("Unknown tree:", stringID);
+
 	return getBiome(it->second);
 }
 

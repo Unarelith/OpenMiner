@@ -24,10 +24,8 @@
  *
  * =====================================================================================
  */
-#include <SFML/Network/Packet.hpp>
-
-#include "Tree.hpp"
 #include "NetworkUtils.hpp"
+#include "Tree.hpp"
 
 Tree::Tree(u16 id, const std::string &stringID, const std::string &label) {
 	m_id = id;
@@ -42,3 +40,4 @@ void Tree::serialize(sf::Packet &packet) const {
 void Tree::deserialize(sf::Packet &packet) {
 	packet >> m_id >> m_stringID >> m_label >> m_logBlockID >> m_leavesBlockID;
 }
+

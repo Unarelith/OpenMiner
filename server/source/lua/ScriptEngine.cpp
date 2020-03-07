@@ -63,8 +63,7 @@ void ScriptEngine::initUsertypes() {
 	);
 
 	m_lua.new_usertype<ServerWorld>("ServerWorld",
-		sol::base_classes, sol::bases<World>(),
-		"terrain_generator", &ServerWorld::terrainGenerator
+		sol::base_classes, sol::bases<World>()
 	);
 
 	m_lua.new_usertype<Chunk>("Chunk",

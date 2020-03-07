@@ -27,8 +27,9 @@
 #ifndef PLACEMENTENTRY_HPP_
 #define PLACEMENTENTRY_HPP_
 
-#include <gk/core/IntTypes.hpp>
 #include <SFML/Network/Packet.hpp>
+
+#include <gk/core/IntTypes.hpp>
 
 #include "ISerializable.hpp"
 

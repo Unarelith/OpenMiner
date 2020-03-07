@@ -39,7 +39,7 @@ mod:biome {
 	deep_block = "default:stone",
 	beach_block = "default:sand",
 	liquid_block = "default:water",
-	
+
 	trees = {
 		{
 			type = "default:oak",
@@ -59,7 +59,7 @@ mod:biome {
 			size = 8
 		}
 	},
-	
+
 	flora = {
 		{
 			block = "default:tallgrass",
@@ -69,7 +69,7 @@ mod:biome {
 		{
 			block = "default:dandelion",
 			spawns_on = "default:grass",
-			probability = 0.1
+			probability = 0.025
 		}
 	}
 }
@@ -86,15 +86,8 @@ mod:biome {
 	top_block = "default:stone",
 	ground_block = "default:stone",
 	deep_block = "default:stone",
-	beach_block = "default:stone",
+	beach_block = "default:sand",
 	liquid_block = "default:water",
-	
-	trees = {
-		{
-			type = "default:oak",
-			probability = 0.00390625
-		}
-	}
 }
 
 mod:biome {
@@ -112,3 +105,4 @@ mod:biome {
 	beach_block = "default:sand",
 	liquid_block = "default:water"
 }
+

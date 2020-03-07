@@ -29,22 +29,17 @@
 #include "TerrainBiomeSampler.hpp"
 
 TerrainBiomeSampler::TerrainBiomeSampler() {
-	m_paramNoises = std::vector<FastNoise>(biomeParamCount);
 	for (u8 i = 0; i < biomeParamCount; i++) {
-		m_paramNoises[i].SetNoiseType(FastNoise::NoiseType::SimplexFractal);
-		m_paramNoises[i].SetFrequency(1 / 800.0f);
-		m_paramNoises[i].SetFractalOctaves(5);
-		m_paramNoises[i].SetSeed(i);
+		m_paramNoises.emplace_back();
+
+		m_paramNoises.back().SetNoiseType(FastNoise::NoiseType::SimplexFractal);
+		m_paramNoises.back().SetFrequency(1 / 800.0f);
+		m_paramNoises.back().SetFractalOctaves(5);
+		m_paramNoises.back().SetSeed(i);
 	}
 }
 
 u16 TerrainBiomeSampler::getBiomeIndexAt(s32 x, s32 y) const {
-	// Compute noise instances
-	std::vector<double> biomeParams(biomeParamCount);
-	for (u8 i = 0; i < biomeParamCount; i++) {
-		biomeParams[i] = m_paramNoises[i].GetNoise(x, y);
-	}
-
 	// TODO with a lot of biomes, perhaps we want an R-Tree or similar, instead of a long loop.
 	// Should also finish solving for analytic blending, or find completely separate solution such as isotropically-modified genlayer
 	// If we continue with temp/precip/etc params, need to write a weighted lloyd smoother so biomes becone fairly represented.
@@ -56,7 +51,7 @@ u16 TerrainBiomeSampler::getBiomeIndexAt(s32 x, s32 y) const {
 	for (auto &biome : Registry::getInstance().biomes()) {
 		double deviation = 0;
 		for (int i = 0; i < biomeParamCount; i++) {
-			double dp = biomeParams[i] - biome.getParams()[i];
+			double dp = m_paramNoises[i].GetNoise(x, y) - biome.getParams()[i];
 			deviation += dp * dp;
 		}
 		if (deviation < decidedBiomeDeviation) {
@@ -68,3 +63,4 @@ u16 TerrainBiomeSampler::getBiomeIndexAt(s32 x, s32 y) const {
 
 	return decidedBiomeIndex;
 }
+

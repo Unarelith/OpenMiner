@@ -28,6 +28,7 @@
 #define TERRAINGENERATOR_HPP_
 
 #include <gk/core/IntTypes.hpp>
+
 #include <sol.hpp>
 
 #include "TerrainBiomeSampler.hpp"

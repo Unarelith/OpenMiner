@@ -163,11 +163,8 @@ void LuaMod::registerBiome(const sol::table &table) {
 	// TODO eventually a WorldType could have a list of biome parameter names in order,
 	// and we could use those as the ordered keys.
 	// Currently hardcoding "temperature" and "precipitation" to get something functional.
-	size_t nBiomeParams = 2;
-	std::vector<double> params(nBiomeParams);
-	params[0] = table["params"]["temperature"];
-	params[1] = table["params"]["precipitation"];
-	biome.setParams(params);
+	biome.addParameter(table["params"]["temperature"]);
+	biome.addParameter(table["params"]["precipitation"]);
 
 	biome.setTopBlockID(Registry::getInstance().getBlockFromStringID(table["top_block"]).id());
 	biome.setGroundBlockID(Registry::getInstance().getBlockFromStringID(table["ground_block"]).id());
