@@ -55,35 +55,22 @@ class Biome : public ISerializable {
 		u16 getDeepBlockID() const { return m_deepBlockID; }
 		u16 getBeachBlockID() const { return m_beachBlockID; }
 		u16 getLiquidBlockID() const { return m_liquidBlockID; }
+
 		const std::vector<PlacementEntry::Flora> &getFlora() const { return m_flora; }
 		const std::vector<PlacementEntry::Ore> &getOres() const { return m_ores; }
 		const std::vector<PlacementEntry::Tree> &getTrees() const { return m_trees; }
 
-		void setParams(std::vector<double> &value) { m_params = value; }
+		void addParameter(double parameter) { m_params.emplace_back(parameter); }
 
 		void setTopBlockID(u16 value) { m_topBlockID = value; }
 		void setGroundBlockID(u16 value) { m_groundBlockID = value; }
 		void setDeepBlockID(u16 value) { m_deepBlockID = value; }
 		void setBeachBlockID(u16 value) { m_beachBlockID = value; }
 		void setLiquidBlockID(u16 value) { m_liquidBlockID = value; }
-		void setFlora(std::vector<PlacementEntry::Flora> &value) { m_flora = value; }
-		void setOres(std::vector<PlacementEntry::Ore> &value) { m_ores = value; }
-		void setTrees(std::vector<PlacementEntry::Tree> &value) { m_trees = value; }
 
-		PlacementEntry::Flora &addFlora() {
-			m_flora.emplace_back();
-			return m_flora.back();
-		}
-
-		PlacementEntry::Ore &addOre() {
-			m_ores.emplace_back();
-			return m_ores.back();
-		}
-
-		PlacementEntry::Tree &addTree() {
-			m_trees.emplace_back();
-			return m_trees.back();
-		}
+		PlacementEntry::Flora &addFlora() { m_flora.emplace_back(); return m_flora.back(); }
+		PlacementEntry::Ore &addOre() { m_ores.emplace_back(); return m_ores.back(); }
+		PlacementEntry::Tree &addTree() { m_trees.emplace_back(); return m_trees.back(); }
 
 	private:
 		u16 m_id;
@@ -92,11 +79,13 @@ class Biome : public ISerializable {
 
 		// TODO something to distinguish the worldtype of biome
 		std::vector<double> m_params;
+
 		u16 m_topBlockID;
 		u16 m_groundBlockID;
 		u16 m_deepBlockID;
 		u16 m_beachBlockID;
 		u16 m_liquidBlockID;
+
 		std::vector<PlacementEntry::Flora> m_flora;
 		std::vector<PlacementEntry::Ore> m_ores;
 		std::vector<PlacementEntry::Tree> m_trees;

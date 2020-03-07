@@ -70,6 +70,7 @@ class Registry : public ISerializable {
 
 		Tree &registerTree(const std::string &stringID, const std::string &label);
 		Tree &registerSerializedTree(sf::Packet &packet);
+
 		Biome &registerBiome(const std::string &stringID, const std::string &label);
 		Biome &registerSerializedBiome(sf::Packet &packet);
 
@@ -108,8 +109,8 @@ class Registry : public ISerializable {
 
 		std::unordered_map<std::string, u32> m_blocksID;
 		std::unordered_map<std::string, u32> m_itemsID;
-		std::unordered_map<std::string, u32> m_treesID;
-		std::unordered_map<std::string, u32> m_biomesID;
+		std::unordered_map<std::string, u16> m_treesID;
+		std::unordered_map<std::string, u16> m_biomesID;
 
 		enum class DataType {
 			Block,

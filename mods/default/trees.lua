@@ -31,3 +31,4 @@ mod:tree {
 	log_block = "default:oak_wood",
 	leaves_block = "default:oak_leaves"
 }
+

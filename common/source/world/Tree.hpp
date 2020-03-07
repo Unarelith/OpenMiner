@@ -33,8 +33,7 @@
 
 #include "ISerializable.hpp"
 
-class Tree : public ISerializable
-{
+class Tree : public ISerializable {
 	public:
 		Tree() = default;
 		Tree(u16 id, const std::string &stringID, const std::string &label);
