@@ -238,9 +238,6 @@ mod:block {
 	id = "cactus",
 	name = "Cactus",
 	tiles = {"cactus_top.png", "cactus_side.png"},
-
-	draw_type = "boundingbox",
-	bounding_box = {2/16, 2/16, 0, 12/16, 12/16, 1}
 }
 
 mod:block {

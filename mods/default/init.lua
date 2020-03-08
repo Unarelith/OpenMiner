@@ -165,6 +165,8 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 			{"default:netherrack"},
 			{"default:soul_sand"},
 			{"default:lava"},
+			{"default:cactus"},
+			{"default:deadbush"},
 
 			-- Items
 			{"default:stick"},
