@@ -166,13 +166,16 @@ void ClientCommandHandler::setupCallbacks() {
 
 	m_client.setCommandCallback(Network::Command::PlayerSpawn, [this](sf::Packet &packet) {
 		u16 clientId;
-		gk::Vector3<s32> pos;
+		gk::Vector3d pos;
 		packet >> clientId >> pos.x >> pos.y >> pos.z;
 
 		if (clientId != m_client.id()) {
 			m_playerBoxes.emplace(clientId, PlayerBox{m_player.camera()});
 			m_playerBoxes.at(clientId).setPosition(pos.x, pos.y, pos.z);
 			m_playerBoxes.at(clientId).setClientID(clientId);
+		}
+		else {
+			m_player.setPosition(pos.x, pos.y, pos.z);
 		}
 	});
 

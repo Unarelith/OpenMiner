@@ -68,7 +68,6 @@ class ServerCommandHandler {
 
 		Registry &m_registry;
 
-		// FIXME: Warning: Duplicated in ClientPlayer.cpp
 		gk::Vector3d m_spawnPosition{14.5, 14.5, 18.};
 };
 

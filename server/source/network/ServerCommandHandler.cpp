@@ -97,8 +97,7 @@ void ServerCommandHandler::setupCallbacks() {
 		m_registry.serialize(packet);
 		client.tcpSocket->send(packet);
 
-		// FIXME: Duplicated below, why?
-		// Here the new client is not part of m_players though
+		// Send already connected players to the new client
 		for (auto &it : m_players) {
 			sf::Packet spawnPacket;
 			spawnPacket << Network::Command::PlayerSpawn << it.first;
@@ -119,13 +118,11 @@ void ServerCommandHandler::setupCallbacks() {
 		invPacket << m_players.at(client.id).inventory();
 		client.tcpSocket->send(invPacket);
 
-		// FIXME: Duplicated above, why?
+		// Send spawn packet to all clients for this player
 		sf::Packet spawnPacket;
 		spawnPacket << Network::Command::PlayerSpawn << client.id;
 		spawnPacket << m_spawnPosition.x << m_spawnPosition.y << m_spawnPosition.z;
 		m_server.sendToAllClients(spawnPacket);
-
-		// m_world.sendSpawnData(client, player);
 	});
 
 	m_server.setCommandCallback(Network::Command::ClientDisconnect, [this](ClientInfo &client, sf::Packet &) {

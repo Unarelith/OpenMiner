@@ -37,10 +37,6 @@
 ClientPlayer *ClientPlayer::s_instance = nullptr;
 
 ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
-	// FIXME: Warning: Duplicated in ServerCommandHandler.hpp
-	m_x = 14.5;
-	m_y = 14.5;
-	m_z = 18.;
 	m_cameraLocalPos = gk::Vector3f{0.f, 0.f, 1.625f};
 
 	m_viewAngleH = -90.f;
