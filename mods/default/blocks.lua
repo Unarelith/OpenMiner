@@ -199,7 +199,6 @@ mod:block {
 	name = "Portal",
 	tiles = "portal.png",
 
-	-- FIXME: Use another layer for transparent blocks like this one
 	draw_type = "glass",
 	is_opaque = false,
 
