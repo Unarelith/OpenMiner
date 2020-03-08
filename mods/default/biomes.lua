@@ -106,3 +106,19 @@ mod:biome {
 	liquid_block = "default:water"
 }
 
+mod:biome {
+	id = "netherland",
+	name = "Netherland",
+
+	params = {
+		temperature = -0.3,
+		precipitation = -1
+	},
+
+	top_block = "default:netherrack",
+	ground_block = "default:netherrack",
+	deep_block = "default:netherrack",
+	beach_block = "default:soul_sand",
+	liquid_block = "default:lava"
+}
+

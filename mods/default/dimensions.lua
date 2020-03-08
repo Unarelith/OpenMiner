@@ -29,13 +29,13 @@ mod:dimension {
 	id = "overworld",
 	name = "Overworld",
 
-	biomes = {"default:grassland", "default:desert"}
+	biomes = {"default:grassland", "default:mountain", "default:desert"}
 }
 
 mod:dimension {
-	id = "stoneworld",
-	name = "Stone World",
+	id = "nether",
+	name = "Nether",
 
-	biomes = {"default:mountain"}
+	biomes = {"default:netherland"}
 }
 

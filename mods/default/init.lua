@@ -162,6 +162,9 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 			{"default:clay"},
 			{"default:oak_slab"},
 			{"default:portal"},
+			{"default:netherrack"},
+			{"default:soul_sand"},
+			{"default:lava"},
 
 			-- Items
 			{"default:stick"},

@@ -212,3 +212,25 @@ mod:block {
 	end,
 }
 
+mod:block {
+	id = "netherrack",
+	name = "Netherrack",
+	tiles = "netherrack.png",
+}
+
+mod:block {
+	id = "soul_sand",
+	name = "Soul Sand",
+	tiles = "soul_sand.png",
+}
+
+mod:block {
+	id = "lava",
+	name = "Lava",
+	tiles = "lava.png",
+
+	draw_type = "liquid",
+	is_light_source = true,
+	is_opaque = false,
+}
+
