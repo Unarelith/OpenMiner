@@ -24,50 +24,18 @@
  *
  * =====================================================================================
  */
-#ifndef SERVERAPPLICATION_HPP_
-#define SERVERAPPLICATION_HPP_
-
-#include <gk/core/ArgumentParser.hpp>
-#include <gk/core/GameClock.hpp>
-
-#include "LuaCore.hpp"
 #include "Registry.hpp"
-#include "ScriptEngine.hpp"
-#include "Server.hpp"
-#include "ServerCommandHandler.hpp"
-#include "ServerPlayer.hpp"
 #include "WorldController.hpp"
 
-class ServerApplication {
-	public:
-		ServerApplication(int argc = 0, char **argv = nullptr);
+void WorldController::init() {
+	for (const Dimension &dimension : m_registry.dimensions()) {
+		m_worldList.emplace_back(dimension);
+		m_worldList.back().setServer(m_server);
+	}
+}
 
-		void init();
+void WorldController::update(std::unordered_map<u16, ServerPlayer> &players) {
+	for (auto &it : m_worldList)
+		it.update(players);
+}
 
-		int run(bool isProtected = true);
-
-		void setSingleplayer(bool isSingleplayer) { m_server.setSingleplayer(isSingleplayer); }
-		void setPort(u16 port) { m_port = port; }
-
-	private:
-		void update();
-		void mainLoop();
-
-		gk::ArgumentParser m_argumentParser;
-		gk::GameClock m_clock;
-
-		Registry m_registry;
-
-		ScriptEngine m_scriptEngine;
-		LuaCore m_luaCore{m_registry};
-
-		u16 m_port = 4242;
-
-		WorldController m_worldController{m_registry};
-		std::unordered_map<u16, ServerPlayer> m_players;
-
-		Server m_server;
-		ServerCommandHandler m_serverCommandHandler{m_scriptEngine, m_server, m_worldController, m_players, m_registry};
-};
-
-#endif // SERVERAPPLICATION_HPP_

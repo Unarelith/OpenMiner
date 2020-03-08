@@ -47,8 +47,6 @@ void ServerApplication::init() {
 	m_registry.registerItem({}, "_:air", "Air").setIsBlock(true);
 
 	m_scriptEngine.init();
-	// m_luaCore.setPlayer(m_player); // FIXME
-	m_luaCore.setWorld(m_world);
 
 	try {
 		m_scriptEngine.lua()["openminer"] = &m_luaCore;
@@ -64,7 +62,8 @@ void ServerApplication::init() {
 
 	m_serverCommandHandler.setupCallbacks();
 
-	m_world.setServer(&m_serverCommandHandler);
+	m_worldController.setServer(m_serverCommandHandler);
+	m_worldController.init();
 
 	std::cout << "Server is running on localhost:" << m_port << std::endl;
 }
@@ -89,7 +88,7 @@ int ServerApplication::run(bool isProtected) {
 }
 
 void ServerApplication::update() {
-	m_world.update(m_players);
+	m_worldController.update(m_players);
 
 	if (gk::GameClock::getTicks() % 100 < 10) {
 		for (auto &it : m_players) {

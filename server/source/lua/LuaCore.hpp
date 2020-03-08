@@ -32,19 +32,17 @@
 #include <sol.hpp>
 
 class Registry;
-class ServerWorld;
 
 class LuaCore {
 	public:
-		ServerWorld *world() { return m_world; }
-		void setWorld(ServerWorld &world) { m_world = &world; }
+		LuaCore(Registry &registry) : m_registry(registry) {}
 
 		Registry *registry();
 
 		static void initUsertype(sol::state &lua);
 
 	private:
-		ServerWorld *m_world = nullptr;
+		Registry &m_registry;
 };
 
 #endif // LUACORE_HPP_
