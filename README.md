@@ -82,6 +82,7 @@ This list is non exhaustive.
 - Special blocks (workbench, furnace)
 - Block metadata
 - Player model display (currently without rotation nor animation)
+- Dimensions (like the Nether or the Ender in Minecraft) ([#80](https://github.com/Unarelith/OpenMiner/pull/80))
 
 ### Missing features
 
