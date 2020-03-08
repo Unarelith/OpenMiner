@@ -129,11 +129,11 @@ const Tree &Registry::getTreeFromStringID(const std::string &stringID) {
 
 const Biome &Registry::getBiomeFromStringID(const std::string &stringID) {
 	if (stringID.empty())
-		throw EXCEPTION("Trying to get tree from empty string ID.");
+		throw EXCEPTION("Trying to get biome from empty string ID.");
 
 	auto it = m_biomesID.find(stringID);
 	if (it == m_biomesID.end())
-		throw EXCEPTION("Unknown tree:", stringID);
+		throw EXCEPTION("Unknown biome:", stringID);
 
 	return getBiome(it->second);
 }

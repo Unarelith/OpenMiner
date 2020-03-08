@@ -45,6 +45,8 @@ class Dimension : public ISerializable {
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
+		const std::vector<std::string> &biomes() const { return m_biomes; }
+
 	private:
 		u16 m_id = 0;
 

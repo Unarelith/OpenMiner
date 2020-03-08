@@ -26,9 +26,10 @@
  */
 #include "Biome.hpp"
 #include "Registry.hpp"
+#include "ServerWorld.hpp"
 #include "TerrainBiomeSampler.hpp"
 
-TerrainBiomeSampler::TerrainBiomeSampler() {
+TerrainBiomeSampler::TerrainBiomeSampler(const Dimension &dimension) : m_dimension(dimension) {
 	for (u8 i = 0; i < biomeParamCount; i++) {
 		m_paramNoises.emplace_back();
 
@@ -44,21 +45,23 @@ u16 TerrainBiomeSampler::getBiomeIndexAt(s32 x, s32 y) const {
 	// Should also finish solving for analytic blending, or find completely separate solution such as isotropically-modified genlayer
 	// If we continue with temp/precip/etc params, need to write a weighted lloyd smoother so biomes becone fairly represented.
 	// True temp/precip values can then be re-interpolated out from the Voronoi diagram using a neighborhood figure "kernel".
-	// TODO with multiple worldtypes added, need to only consider biomes in one worldtype.
+
 	u16 decidedBiomeIndex = 0;
 	double decidedBiomeDeviation = INFINITY;
-	u16 j = 0;
-	for (auto &biome : Registry::getInstance().biomes()) {
+
+	for (auto &biomeID : m_dimension.biomes()) {
+		const Biome &biome = Registry::getInstance().getBiomeFromStringID(biomeID);
+
 		double deviation = 0;
 		for (int i = 0; i < biomeParamCount; i++) {
 			double dp = m_paramNoises[i].GetNoise(x, y) - biome.getParams()[i];
 			deviation += dp * dp;
 		}
+
 		if (deviation < decidedBiomeDeviation) {
 			decidedBiomeDeviation = deviation;
-			decidedBiomeIndex = j;
+			decidedBiomeIndex = biome.id();
 		}
-		j++;
 	}
 
 	return decidedBiomeIndex;

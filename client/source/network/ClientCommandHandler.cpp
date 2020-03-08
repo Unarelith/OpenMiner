@@ -179,7 +179,9 @@ void ClientCommandHandler::setupCallbacks() {
 		packet >> clientId >> x >> y >> z >> dimension;
 
 		if (clientId == m_client.id()) {
-			DEBUG("PlayerChangeDimension received:", clientId, x, y, z, dimension);
+			m_player.setDimension(dimension);
+			m_player.setPosition(x, y, z);
+			m_world.clear();
 		}
 	});
 

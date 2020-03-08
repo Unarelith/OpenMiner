@@ -31,18 +31,23 @@
 
 #include <gk/core/IntTypes.hpp>
 
-#include "Biome.hpp"
 #include "FastNoise.hpp"
+
+class Dimension;
 
 class TerrainBiomeSampler {
 	public:
-		TerrainBiomeSampler(); // TODO should eventually take a worldtype
+		TerrainBiomeSampler(const Dimension &dimension);
 
 		u16 getBiomeIndexAt(s32 x, s32 y) const;
-		//std::vector<WeightedIndex> getWeightedBiomeIndicesAt(double x, double y);
+
+		// std::vector<WeightedIndex> getWeightedBiomeIndicesAt(double x, double y);
 
 	private:
-		static const u8 biomeParamCount = 2; // TODO if kept, should be defined in the worldtype, dynamically.
+		// TODO: If kept, should be defined in the worldtype, dynamically
+		static const u8 biomeParamCount = 2;
+
+		const Dimension &m_dimension;
 
 		std::vector<FastNoise> m_paramNoises;
 };

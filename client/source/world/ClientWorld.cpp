@@ -90,6 +90,10 @@ void ClientWorld::checkPlayerChunk(double playerX, double playerY, double player
 	}
 }
 
+void ClientWorld::clear() {
+	m_chunks.clear();
+}
+
 void ClientWorld::receiveChunkData(sf::Packet &packet) {
 	s32 cx, cy, cz;
 	packet >> cx >> cy >> cz;
