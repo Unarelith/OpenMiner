@@ -31,6 +31,8 @@
 
 #include <gk/core/Vector3.hpp>
 
+#include "ChatCommandHandler.hpp"
+
 struct BlockData;
 
 class ClientInfo;
@@ -55,6 +57,8 @@ class ServerCommandHandler {
 
 		void setupCallbacks();
 
+		void setPlayerPosition(u16 clientID, s32 x, s32 y, s32 z);
+
 		const Server &server() const { return m_server; }
 
 	private:
@@ -69,6 +73,8 @@ class ServerCommandHandler {
 		Registry &m_registry;
 
 		gk::Vector3d m_spawnPosition{14.5, 14.5, 18.};
+
+		ChatCommandHandler m_chatCommandHandler{*this};
 };
 
 #endif // SERVERCOMMANDHANDLER_HPP_

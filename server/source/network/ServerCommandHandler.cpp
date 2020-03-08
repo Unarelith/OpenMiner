@@ -253,42 +253,14 @@ void ServerCommandHandler::setupCallbacks() {
 			else
 				sendChatMessage(clientID, message);
 		}
-		// FIXME: Do a proper implementation later
 		else {
-			std::stringstream sstream;
-			sstream << message.substr(1);
-
-			std::vector<std::string> command;
-			std::string line;
-			while (std::getline(sstream, line, ' ')) {
-				command.emplace_back(line);
-			}
-
-			if (!command.empty()) {
-				if (command.at(0) == "tp") {
-					if (command.size() != 4) {
-						// FIXME: ID 0 should be server messages
-						sendChatMessage(0, "Usage: /tp x y z", &client);
-					}
-					else {
-						s32 x = std::stoi(command.at(1));
-						s32 y = std::stoi(command.at(2));
-						s32 z = std::stoi(command.at(3));
-
-						m_players.at(clientID).setPosition(x, y, z);
-
-						sendPlayerPosUpdate(clientID, true);
-
-						sendChatMessage(0, "Teleported to " + std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(z), &client);
-					}
-				}
-				else {
-					sendChatMessage(0, "Unrecognized command: " + command.at(0));
-					sendChatMessage(0, "Available commands are: tp");
-				}
-			}
+			m_chatCommandHandler.parseCommand(message.substr(1), client);
 		}
 	});
+}
+
+void ServerCommandHandler::setPlayerPosition(u16 clientID, s32 x, s32 y, s32 z) {
+	m_players.at(clientID).setPosition(x, y, z);
 }
 
 inline ServerWorld &ServerCommandHandler::getWorldForClient(u16 clientID) {
