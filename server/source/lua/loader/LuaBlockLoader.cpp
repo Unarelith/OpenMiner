@@ -84,7 +84,8 @@ inline void LuaBlockLoader::loadDrawType(ServerBlock &block, const sol::table &t
 				{"leaves", BlockDrawType::Leaves},
 				{"liquid", BlockDrawType::Liquid},
 				{"glass",  BlockDrawType::Glass},
-				{"boundingbox", BlockDrawType::BoundingBox} // FIXME: Temporary
+				{"cactus", BlockDrawType::Cactus},
+				{"boundingbox", BlockDrawType::BoundingBox}, // FIXME: Temporary
 			};
 
 			auto it = drawTypes.find(drawTypeObject.as<std::string>());

@@ -144,6 +144,7 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 				 || block.drawType() == BlockDrawType::Leaves
 				 || block.drawType() == BlockDrawType::Liquid
 				 || block.drawType() == BlockDrawType::Glass
+				 || block.drawType() == BlockDrawType::Cactus
 				 || block.drawType() == BlockDrawType::BoundingBox) {
 					for (s8f i = 0 ; i < nFaces ; i++) {
 						addFace(x, y, z, i, chunk, &block);
@@ -186,7 +187,8 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 	if (surroundingBlock && surroundingBlock->id()
 	&& ((block->drawType() == BlockDrawType::Solid && surroundingBlock->drawType() == BlockDrawType::Solid && surroundingBlock->isOpaque())
 	 || (block->id() == surroundingBlock->id() && (block->drawType() == BlockDrawType::Liquid || block->drawType() == BlockDrawType::Glass))
-	 || (block->drawType() == BlockDrawType::Liquid && surroundingBlock->drawType() == BlockDrawType::Solid)))
+	 || (block->drawType() == BlockDrawType::Liquid && surroundingBlock->drawType() == BlockDrawType::Solid)
+	 || (block->drawType() == BlockDrawType::Cactus && surroundingBlock->id() == block->id())))
 		return;
 
 	const BlockData *blockData = chunk.getBlockData(x, y, z);
@@ -210,6 +212,11 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 			vertices[v].coord3d[1] = y + vertexPosPtr[1] * boundingBox.sizeY + boundingBox.y;
 			vertices[v].coord3d[2] = z + vertexPosPtr[2] * boundingBox.sizeZ + boundingBox.z;
 		}
+		else if (block->drawType() == BlockDrawType::Cactus) {
+			vertices[v].coord3d[0] = x + vertexPosPtr[0] + boundingBox.x * -normal.x;
+			vertices[v].coord3d[1] = y + vertexPosPtr[1] + boundingBox.y * -normal.y;
+			vertices[v].coord3d[2] = z + vertexPosPtr[2] + boundingBox.z * -normal.z;
+		}
 		else {
 			vertices[v].coord3d[0] = x + vertexPosPtr[0];
 			vertices[v].coord3d[1] = y + vertexPosPtr[1];
@@ -230,7 +237,6 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 
 		vertices[v].texCoord[0] = faceTexCoords[v][0];
 		vertices[v].texCoord[1] = faceTexCoords[v][1];
-
 
 		if (Config::isSunSmoothLightingEnabled && block->drawType() != BlockDrawType::Liquid)
 			vertices[v].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, vertexPosPtr, normal, chunk);

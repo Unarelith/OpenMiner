@@ -118,6 +118,20 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 				vertices[i][j].coord3d[1] = vertices[i][j].coord3d[1] * block.boundingBox().sizeY + block.boundingBox().y;
 				vertices[i][j].coord3d[2] = vertices[i][j].coord3d[2] * block.boundingBox().sizeZ + block.boundingBox().z;
 			}
+			else if (block.drawType() == BlockDrawType::Cactus) {
+				static constexpr s8 normals[6][3] = {
+					{-1, 0, 0},
+					{1, 0, 0},
+					{0, -1, 0},
+					{0, 1, 0},
+					{0, 0, -1},
+					{0, 0, 1}
+				};
+
+				vertices[i][j].coord3d[0] = vertices[i][j].coord3d[0] + block.boundingBox().x * -normals[i][0] * m_size;
+				vertices[i][j].coord3d[1] = vertices[i][j].coord3d[1] + block.boundingBox().y * -normals[i][1] * m_size;
+				vertices[i][j].coord3d[2] = vertices[i][j].coord3d[2] + block.boundingBox().z * -normals[i][2] * m_size;
+			}
 
 			vertices[i][j].texCoord[0] = faceTexCoords[j * 2];
 			vertices[i][j].texCoord[1] = faceTexCoords[j * 2 + 1];

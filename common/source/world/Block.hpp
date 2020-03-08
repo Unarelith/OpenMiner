@@ -49,7 +49,8 @@ enum class BlockDrawType {
 	Leaves  = 2,
 	Liquid  = 3,
 	Glass   = 4,
-	BoundingBox = 5, // FIXME: Temporary
+	Cactus  = 5,
+	BoundingBox = 6, // FIXME: Temporary
 };
 
 class Block : public ISerializable {
