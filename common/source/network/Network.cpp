@@ -32,33 +32,34 @@
 
 std::string Network::commandToString(Network::Command command) {
 	std::map<Network::Command, std::string> commandNames = {
-		{Network::Command::ClientConnect,        "ClientConnect"},
-		{Network::Command::ClientDisconnect,     "ClientDisconnect"},
-		{Network::Command::ClientOk,             "ClientOk"},
-		{Network::Command::ClientRefused,        "ClientRefused"},
+		{Network::Command::ClientConnect,         "ClientConnect"},
+		{Network::Command::ClientDisconnect,      "ClientDisconnect"},
+		{Network::Command::ClientOk,              "ClientOk"},
+		{Network::Command::ClientRefused,         "ClientRefused"},
 
-		{Network::Command::KeyState,             "KeyState"},
+		{Network::Command::KeyState,              "KeyState"},
 
-		{Network::Command::ChunkData,            "ChunkData"},
-		{Network::Command::ChunkRequest,         "ChunkRequest"},
+		{Network::Command::ChunkData,             "ChunkData"},
+		{Network::Command::ChunkRequest,          "ChunkRequest"},
 
-		{Network::Command::PlayerPlaceBlock,     "PlayerPlaceBlock"},
-		{Network::Command::PlayerDigBlock,       "PlayerDigBlock"},
-		{Network::Command::PlayerInvUpdate,      "PlayerInvUpdate"},
-		{Network::Command::PlayerPosUpdate,      "PlayerPosUpdate"},
-		{Network::Command::PlayerSpawn,          "PlayerSpawn"},
-		{Network::Command::PlayerInventory,      "PlayerInventory"},
-		{Network::Command::PlayerCreativeWindow, "PlayerCreativeWindow"},
+		{Network::Command::PlayerPlaceBlock,      "PlayerPlaceBlock"},
+		{Network::Command::PlayerDigBlock,        "PlayerDigBlock"},
+		{Network::Command::PlayerInvUpdate,       "PlayerInvUpdate"},
+		{Network::Command::PlayerPosUpdate,       "PlayerPosUpdate"},
+		{Network::Command::PlayerSpawn,           "PlayerSpawn"},
+		{Network::Command::PlayerInventory,       "PlayerInventory"},
+		{Network::Command::PlayerCreativeWindow,  "PlayerCreativeWindow"},
+		{Network::Command::PlayerChangeDimension, "PlayerChangeDimension"},
 
-		{Network::Command::BlockUpdate,          "BlockUpdate"},
-		{Network::Command::BlockActivated,       "BlockActivated"},
-		{Network::Command::BlockGUIData,         "BlockGUIData"},
-		{Network::Command::BlockInvUpdate,       "BlockInvUpdate"},
-		{Network::Command::BlockDataUpdate,      "BlockDataUpdate"},
+		{Network::Command::BlockUpdate,           "BlockUpdate"},
+		{Network::Command::BlockActivated,        "BlockActivated"},
+		{Network::Command::BlockGUIData,          "BlockGUIData"},
+		{Network::Command::BlockInvUpdate,        "BlockInvUpdate"},
+		{Network::Command::BlockDataUpdate,       "BlockDataUpdate"},
 
-		{Network::Command::RegistryData,         "RegistryData"},
+		{Network::Command::RegistryData,          "RegistryData"},
 
-		{Network::Command::ChatMessage,          "ChatMessage"}
+		{Network::Command::ChatMessage,           "ChatMessage"}
 	};
 	return commandNames[command];
 }

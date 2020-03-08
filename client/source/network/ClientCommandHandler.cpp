@@ -173,6 +173,16 @@ void ClientCommandHandler::setupCallbacks() {
 		}
 	});
 
+	m_client.setCommandCallback(Network::Command::PlayerChangeDimension, [this](sf::Packet &packet) {
+		u16 clientId, dimension;
+		s32 x, y, z;
+		packet >> clientId >> x >> y >> z >> dimension;
+
+		if (clientId == m_client.id()) {
+			DEBUG("PlayerChangeDimension received:", clientId, x, y, z, dimension);
+		}
+	});
+
 	m_client.setCommandCallback(Network::Command::BlockGUIData, [this](sf::Packet &packet) {
 		gk::ApplicationStateStack::getInstance().push<LuaGUIState>(*this, m_player, m_world, packet, &gk::ApplicationStateStack::getInstance().top());
 	});

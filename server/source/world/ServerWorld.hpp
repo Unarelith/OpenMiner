@@ -44,7 +44,7 @@ class ServerWorld : public World {
 	public:
 		ServerWorld(const Dimension &dimension) : m_dimension(dimension) {}
 
-		void update(std::unordered_map<u16, ServerPlayer> &players);
+		void update();
 
 		void createChunkNeighbours(ServerChunk *chunk);
 		void sendChunkData(const ClientInfo &client, ServerChunk *chunk);

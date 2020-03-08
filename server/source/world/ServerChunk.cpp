@@ -42,15 +42,14 @@ void ServerChunk::onBlockPlaced(int x, int y, int z, const Block &block) const {
 	serverBlock.onBlockPlaced(glm::ivec3{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH, z + m_z * CHUNK_HEIGHT}, m_world);
 }
 
-void ServerChunk::tick(std::unordered_map<u16, ServerPlayer> &players, World &world, ServerCommandHandler &server) {
+void ServerChunk::tick(World &world, ServerCommandHandler &server) {
 	if (!m_tickingBlocks.empty()) {
 		for (auto &it : m_tickingBlocks) {
 			int z = it.first / (width * height);
 			int y = (it.first - z * (width * height)) / width;
 			int x = (it.first - z * (width * height)) % width;
 			((ServerBlock &)it.second).onTick(
-				glm::ivec3{x + m_x * width, y + m_y * depth, z + m_z * height},
-				players, *this, world, server);
+				glm::ivec3{x + m_x * width, y + m_y * depth, z + m_z * height}, *this, world, server);
 		}
 	}
 }

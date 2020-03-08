@@ -88,7 +88,7 @@ int ServerApplication::run(bool isProtected) {
 }
 
 void ServerApplication::update() {
-	m_worldController.update(m_players);
+	m_worldController.update();
 
 	if (gk::GameClock::getTicks() % 100 < 10) {
 		for (auto &it : m_players) {

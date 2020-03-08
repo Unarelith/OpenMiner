@@ -31,10 +31,10 @@
 #include "ServerPlayer.hpp"
 #include "World.hpp"
 
-void ServerBlock::onTick(const glm::ivec3 &pos, std::unordered_map<u16, ServerPlayer> &players, Chunk &chunk, World &world, ServerCommandHandler &server) const {
+void ServerBlock::onTick(const glm::ivec3 &pos, Chunk &chunk, World &world, ServerCommandHandler &server) const {
 	try {
 		if (m_onTick && m_onTickEnabled) {
-			m_onTick(pos, players, chunk, world);
+			m_onTick(pos, chunk, world);
 
 			BlockData *blockData = world.getBlockData(pos.x, pos.y, pos.z);
 			if (blockData) {
@@ -55,10 +55,10 @@ void ServerBlock::onTick(const glm::ivec3 &pos, std::unordered_map<u16, ServerPl
 	}
 }
 
-bool ServerBlock::onBlockActivated(const glm::ivec3 &pos, Player &player, World &world, ClientInfo &client, u16 screenWidth, u16 screenHeight, u8 guiScale) const {
+bool ServerBlock::onBlockActivated(const glm::ivec3 &pos, Player &player, World &world, ClientInfo &client, ServerCommandHandler &server, u16 screenWidth, u16 screenHeight, u8 guiScale) const {
 	try {
 		if (m_onBlockActivated) {
-			m_onBlockActivated(pos, player, world, client, screenWidth, screenHeight, guiScale);
+			m_onBlockActivated(pos, player, world, client, server, screenWidth, screenHeight, guiScale);
 			return true;
 		}
 	}
