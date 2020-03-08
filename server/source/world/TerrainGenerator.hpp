@@ -33,11 +33,12 @@
 
 #include "TerrainBiomeSampler.hpp"
 
+class Dimension;
 class ServerChunk;
 
 class TerrainGenerator {
 	public:
-		TerrainGenerator();
+		TerrainGenerator(const Dimension &dimension) : m_biomeSampler(dimension) {}
 
 		void generate(ServerChunk &chunk) const;
 
@@ -48,7 +49,7 @@ class TerrainGenerator {
 		static float noise2d(double x, double y, int octaves, float persistence);
 		static float noise3d_abs(double x, double y, double z, int octaves, float persistence);
 
-		TerrainBiomeSampler biomeSampler;
+		TerrainBiomeSampler m_biomeSampler;
 };
 
 #endif // TERRAINGENERATOR_HPP_

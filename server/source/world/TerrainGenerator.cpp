@@ -33,9 +33,6 @@
 #include <glm/gtc/noise.hpp>
 #include "FastNoise.hpp"
 
-TerrainGenerator::TerrainGenerator() {
-}
-
 void TerrainGenerator::generate(ServerChunk &chunk) const {
 	fastNoiseGeneration(chunk);
 }
@@ -50,7 +47,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 	Chunk *topChunk = chunk.getSurroundingChunk(Chunk::Top);
 	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
-			u16 biomeIndex = biomeSampler.getBiomeIndexAt(x + chunk.x() * CHUNK_WIDTH, y + chunk.y() * CHUNK_DEPTH);
+			u16 biomeIndex = m_biomeSampler.getBiomeIndexAt(x + chunk.x() * CHUNK_WIDTH, y + chunk.y() * CHUNK_DEPTH);
 			const Biome &biome = Registry::getInstance().getBiome(biomeIndex);
 
 			// Land height

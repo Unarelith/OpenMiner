@@ -42,7 +42,8 @@ class ServerWorld : public World {
 	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ServerChunk>>;
 
 	public:
-		ServerWorld(const Dimension &dimension) : m_dimension(dimension) {}
+		ServerWorld(const Dimension &dimension)
+			: m_dimension(dimension), m_terrainGenerator(dimension) {}
 
 		void update();
 
