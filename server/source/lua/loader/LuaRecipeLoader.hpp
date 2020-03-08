@@ -33,13 +33,10 @@ class LuaMod;
 
 class LuaRecipeLoader {
 	public:
-		LuaRecipeLoader(LuaMod &mod) : m_mod(mod) {}
+		LuaRecipeLoader() = default;
 
 		void loadCraftingRecipe(const sol::table &table) const;
 		void loadSmeltingRecipe(const sol::table &table) const;
-
-	private:
-		LuaMod &m_mod;
 };
 
 #endif // LUARECIPELOADER_HPP_

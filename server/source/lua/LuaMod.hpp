@@ -55,7 +55,7 @@ class LuaMod {
 
 		LuaBlockLoader m_blockLoader{*this};
 		LuaItemLoader m_itemLoader{*this};
-		LuaRecipeLoader m_recipeLoader{*this};
+		LuaRecipeLoader m_recipeLoader;
 		LuaBiomeLoader m_biomeLoader{*this};
 		LuaDimensionLoader m_dimensionLoader{*this};
 };
