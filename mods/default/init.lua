@@ -36,15 +36,15 @@ dofile("mods/default/dimensions.lua")
 function init(player)
 	local player_inv = player:inventory()
 
-	player_inv:add_stack("default:workbench", 1);
+	player_inv:add_stack("default:debug", 64);
 	player_inv:add_stack("default:dirt", 64);
 	player_inv:add_stack("default:grass", 64);
 	player_inv:add_stack("default:stone", 64);
 	player_inv:add_stack("default:glass", 64);
 	player_inv:add_stack("default:glowstone", 64);
+	player_inv:add_stack("default:workbench", 1);
 	player_inv:add_stack("default:furnace", 1);
 	player_inv:add_stack("default:stone_pickaxe", 1);
-	player_inv:add_stack("default:stone_axe", 1);
 
 	player_inv:add_stack("default:oak_wood", 64);
 	player_inv:add_stack("default:oak_planks", 64);
@@ -52,6 +52,7 @@ function init(player)
 	player_inv:add_stack("default:stick", 64);
 	player_inv:add_stack("default:stone_hoe", 1);
 	player_inv:add_stack("default:stone_shovel", 1);
+	player_inv:add_stack("default:stone_axe", 1);
 	player_inv:add_stack("default:iron_ore", 64);
 	player_inv:add_stack("default:coal", 64);
 	player_inv:add_stack("default:oak_slab", 64);
@@ -167,6 +168,7 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 			{"default:lava"},
 			{"default:cactus"},
 			{"default:deadbush"},
+			{"default:debug"},
 
 			-- Items
 			{"default:stick"},

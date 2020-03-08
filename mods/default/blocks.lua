@@ -250,3 +250,16 @@ mod:block {
 	draw_type = "xshape",
 }
 
+mod:block {
+	id = "debug",
+	name = "Debug",
+	tiles = {
+		"debug/f.png",
+		"debug/g.png",
+		"debug/j.png",
+		"debug/l.png",
+		"debug/p.png",
+		"debug/r.png",
+	},
+}
+
