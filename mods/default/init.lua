@@ -31,6 +31,7 @@ dofile("mods/default/items.lua")
 dofile("mods/default/recipes.lua")
 dofile("mods/default/trees.lua")
 dofile("mods/default/biomes.lua")
+dofile("mods/default/dimensions.lua")
 
 function init(player)
 	local player_inv = player:inventory()

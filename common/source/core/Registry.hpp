@@ -33,6 +33,7 @@
 
 #include "Biome.hpp"
 #include "Block.hpp"
+#include "Dimension.hpp"
 #include "Item.hpp"
 #include "Network.hpp"
 #include "Recipe.hpp"
@@ -74,6 +75,9 @@ class Registry : public ISerializable {
 		Biome &registerBiome(const std::string &stringID, const std::string &label);
 		Biome &registerSerializedBiome(sf::Packet &packet);
 
+		Dimension &registerDimension(const std::string &stringID, const std::string &label);
+		Dimension &registerSerializedDimension(sf::Packet &packet);
+
 		const Block &getBlock(std::size_t id) const { return *m_blocks.at(id).get(); }
 		const Item &getItem(std::size_t id) const { return m_items.at(id); }
 
@@ -106,11 +110,13 @@ class Registry : public ISerializable {
 		std::vector<std::unique_ptr<Recipe>> m_recipes;
 		std::vector<Tree> m_trees;
 		std::vector<Biome> m_biomes;
+		std::vector<Dimension> m_dimensions;
 
 		std::unordered_map<std::string, u32> m_blocksID;
 		std::unordered_map<std::string, u32> m_itemsID;
 		std::unordered_map<std::string, u16> m_treesID;
 		std::unordered_map<std::string, u16> m_biomesID;
+		std::unordered_map<std::string, u16> m_dimensionsID;
 
 		enum class DataType {
 			Block,
@@ -118,7 +124,8 @@ class Registry : public ISerializable {
 			CraftingRecipe,
 			SmeltingRecipe,
 			Tree,
-			Biome
+			Biome,
+			Dimension
 		};
 };
 

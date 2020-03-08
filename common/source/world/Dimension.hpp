@@ -24,49 +24,34 @@
  *
  * =====================================================================================
  */
-#ifndef PLAYER_HPP_
-#define PLAYER_HPP_
+#ifndef DIMENSION_HPP_
+#define DIMENSION_HPP_
 
-#include <gk/core/Box.hpp>
+#include <string>
+#include <vector>
 
-#include "Inventory.hpp"
+#include <gk/core/IntTypes.hpp>
+
 #include "ISerializable.hpp"
 
-class Player : public ISerializable {
+class Dimension : public ISerializable {
 	public:
-		Player();
+		Dimension() = default;
+		Dimension(u16 id, const std::string &stringID, const std::string &name)
+			: m_id(id), m_stringID(stringID), m_name(name) {}
+
+		void addBiome(const std::string &biome) { m_biomes.emplace_back(biome); }
 
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
-		double x() const { return m_x; }
-		double y() const { return m_y; }
-		double z() const { return m_z; }
+	private:
+		u16 m_id = 0;
 
-		u16 dimension() const { return m_dimension; }
+		std::string m_stringID;
+		std::string m_name;
 
-		u16 clientID() const { return m_clientID; }
-
-		Inventory &inventory() { return m_inventory; }
-
-		void setPosition(double x, double y, double z) { m_x = x; m_y = y; m_z = z; }
-		void setDimension(u16 dimension) { m_dimension = dimension; }
-		void setClientID(u16 clientID) { m_clientID = clientID; }
-
-		const gk::FloatBox &hitbox() const { return m_hitbox; }
-
-	protected:
-		double m_x = 0;
-		double m_y = 0;
-		double m_z = 0;
-
-		u16 m_dimension = 0;
-
-		u16 m_clientID = 0;
-
-		Inventory m_inventory{9, 4};
-
-		gk::FloatBox m_hitbox;
+		std::vector<std::string> m_biomes;
 };
 
-#endif // PLAYER_HPP_
+#endif // DIMENSION_HPP_

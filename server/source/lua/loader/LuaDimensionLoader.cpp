@@ -24,49 +24,29 @@
  *
  * =====================================================================================
  */
-#ifndef PLAYER_HPP_
-#define PLAYER_HPP_
+#include <gk/core/Debug.hpp>
 
-#include <gk/core/Box.hpp>
+#include "LuaDimensionLoader.hpp"
+#include "LuaMod.hpp"
+#include "Registry.hpp"
 
-#include "Inventory.hpp"
-#include "ISerializable.hpp"
+void LuaDimensionLoader::loadDimension(const sol::table &table) const {
+	std::string id = m_mod.id() + ":" + table["id"].get<std::string>();
+	std::string name = table["name"].get<std::string>();
 
-class Player : public ISerializable {
-	public:
-		Player();
+	sol::object biomesObject = table["biomes"];
+	if (biomesObject.valid() && biomesObject.get_type() == sol::type::table) {
+		Dimension &dimension = Registry::getInstance().registerDimension(id, name);
 
-		void serialize(sf::Packet &packet) const override;
-		void deserialize(sf::Packet &packet) override;
+		sol::table biomesTable = biomesObject.as<sol::table>();
+		for (auto &it : biomesTable) {
+			if (it.second.get_type() == sol::type::string)
+				dimension.addBiome(it.second.as<std::string>());
+			else
+				DEBUG("ERROR: For dimension '" + id + "': Invalid biome string");
+		}
+	}
+	else
+		DEBUG("ERROR: For dimension '" + id + "': Invalid biome table");
+}
 
-		double x() const { return m_x; }
-		double y() const { return m_y; }
-		double z() const { return m_z; }
-
-		u16 dimension() const { return m_dimension; }
-
-		u16 clientID() const { return m_clientID; }
-
-		Inventory &inventory() { return m_inventory; }
-
-		void setPosition(double x, double y, double z) { m_x = x; m_y = y; m_z = z; }
-		void setDimension(u16 dimension) { m_dimension = dimension; }
-		void setClientID(u16 clientID) { m_clientID = clientID; }
-
-		const gk::FloatBox &hitbox() const { return m_hitbox; }
-
-	protected:
-		double m_x = 0;
-		double m_y = 0;
-		double m_z = 0;
-
-		u16 m_dimension = 0;
-
-		u16 m_clientID = 0;
-
-		Inventory m_inventory{9, 4};
-
-		gk::FloatBox m_hitbox;
-};
-
-#endif // PLAYER_HPP_

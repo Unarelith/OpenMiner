@@ -83,6 +83,23 @@ Biome &Registry::registerSerializedBiome(sf::Packet &packet) {
 	return m_biomes.back();
 }
 
+Dimension &Registry::registerDimension(const std::string &stringID, const std::string &label) {
+	u16 id = m_dimensions.size();
+	m_dimensionsID.emplace(stringID, id);
+	m_dimensions.emplace_back(id, stringID, label);
+	return m_dimensions.back();
+}
+
+Dimension &Registry::registerSerializedDimension(sf::Packet &packet) {
+	m_dimensions.emplace_back();
+	m_dimensions.back().deserialize(packet);
+
+	u16 id = m_dimensions.size() - 1;
+	m_dimensionsID.emplace(m_biomes.back().stringID(), id);
+
+	return m_dimensions.back();
+}
+
 const Block &Registry::getBlockFromStringID(const std::string &stringID) {
 	if (stringID.empty()) return getBlock(0);
 	auto it = m_blocksID.find(stringID);
@@ -150,6 +167,10 @@ void Registry::serialize(sf::Packet &packet) const {
 	for (auto &it : m_biomes) {
 		packet << u8(DataType::Biome) << it;
 	}
+
+	for (auto &it : m_dimensions) {
+		packet << u8(DataType::Dimension) << it;
+	}
 }
 
 void Registry::deserialize(sf::Packet &packet) {
@@ -173,6 +194,9 @@ void Registry::deserialize(sf::Packet &packet) {
 		}
 		else if (type == u8(DataType::Tree)) {
 			registerSerializedTree(packet);
+		}
+		else if (type == u8(DataType::Dimension)) {
+			registerSerializedDimension(packet);
 		}
 	}
 }

@@ -29,6 +29,7 @@
 
 #include "LuaBiomeLoader.hpp"
 #include "LuaBlockLoader.hpp"
+#include "LuaDimensionLoader.hpp"
 #include "LuaItemLoader.hpp"
 #include "LuaRecipeLoader.hpp"
 
@@ -43,6 +44,7 @@ class LuaMod {
 		void registerSmeltingRecipe(const sol::table &table);
 		void registerTree(const sol::table &table);
 		void registerBiome(const sol::table &table);
+		void registerDimension(const sol::table &table);
 
 		const std::string &id() const { return m_id; }
 
@@ -55,6 +57,7 @@ class LuaMod {
 		LuaItemLoader m_itemLoader{*this};
 		LuaRecipeLoader m_recipeLoader{*this};
 		LuaBiomeLoader m_biomeLoader{*this};
+		LuaDimensionLoader m_dimensionLoader{*this};
 };
 
 #endif // LUAMOD_HPP_
