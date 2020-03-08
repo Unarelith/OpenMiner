@@ -24,49 +24,14 @@
  *
  * =====================================================================================
  */
-#ifndef PLAYER_HPP_
-#define PLAYER_HPP_
+#include "Dimension.hpp"
+#include "NetworkUtils.hpp"
 
-#include <gk/core/Box.hpp>
+void Dimension::serialize(sf::Packet &packet) const {
+	packet << m_id << m_stringID << m_name << m_biomes;
+}
 
-#include "Inventory.hpp"
-#include "ISerializable.hpp"
+void Dimension::deserialize(sf::Packet &packet) {
+	packet >> m_id >> m_stringID >> m_name >> m_biomes;
+}
 
-class Player : public ISerializable {
-	public:
-		Player();
-
-		void serialize(sf::Packet &packet) const override;
-		void deserialize(sf::Packet &packet) override;
-
-		double x() const { return m_x; }
-		double y() const { return m_y; }
-		double z() const { return m_z; }
-
-		u16 dimension() const { return m_dimension; }
-
-		u16 clientID() const { return m_clientID; }
-
-		Inventory &inventory() { return m_inventory; }
-
-		void setPosition(double x, double y, double z) { m_x = x; m_y = y; m_z = z; }
-		void setDimension(u16 dimension) { m_dimension = dimension; }
-		void setClientID(u16 clientID) { m_clientID = clientID; }
-
-		const gk::FloatBox &hitbox() const { return m_hitbox; }
-
-	protected:
-		double m_x = 0;
-		double m_y = 0;
-		double m_z = 0;
-
-		u16 m_dimension = 0;
-
-		u16 m_clientID = 0;
-
-		Inventory m_inventory{9, 4};
-
-		gk::FloatBox m_hitbox;
-};
-
-#endif // PLAYER_HPP_

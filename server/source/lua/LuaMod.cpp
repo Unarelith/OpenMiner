@@ -54,6 +54,10 @@ void LuaMod::registerBiome(const sol::table &table) {
 	m_biomeLoader.loadBiome(table);
 }
 
+void LuaMod::registerDimension(const sol::table &table) {
+	m_dimensionLoader.loadDimension(table);
+}
+
 void LuaMod::initUsertype(sol::state &lua) {
 	lua.new_usertype<LuaMod>("LuaMod",
 		sol::constructors<LuaMod(std::string)>(),
@@ -63,7 +67,8 @@ void LuaMod::initUsertype(sol::state &lua) {
 		"crafting_recipe", &LuaMod::registerCraftingRecipe,
 		"smelting_recipe", &LuaMod::registerSmeltingRecipe,
 		"tree",            &LuaMod::registerTree,
-		"biome",           &LuaMod::registerBiome
+		"biome",           &LuaMod::registerBiome,
+		"dimension",       &LuaMod::registerDimension
 	);
 }
 
