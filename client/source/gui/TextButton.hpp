@@ -66,7 +66,6 @@ class TextButton : public Widget {
 		CppCallback m_cppCallback;
 		LuaCallback m_luaCallback;
 
-		// FIXME: Replace these by an enum State
 		bool m_isHovered = false;
 		bool m_isEnabled = true;
 };

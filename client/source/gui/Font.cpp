@@ -34,8 +34,6 @@
 Font::Font(const std::string &textureName, const std::string &configPath)
 	: m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>(textureName))
 {
-	m_textureName = textureName;
-
 	std::memset(m_charWidth, 0, sizeof(u8) * 256);
 
 	parseConfig(configPath);

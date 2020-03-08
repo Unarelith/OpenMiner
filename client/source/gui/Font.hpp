@@ -44,13 +44,11 @@ class Font {
 		u8 getCharWidth(u8 c) const { return m_charWidth[c]; }
 		gk::Vector2i getTileSize() const { return {m_width, m_height}; }
 
-		const std::string &textureName() const { return m_textureName; } // FIXME: Will be removed later
 		const gk::Texture &texture() const { return m_texture; }
 
 	private:
 		void parseConfig(const std::string &configPath);
 
-		std::string m_textureName; // FIXME: Will be removed later
 		gk::Texture &m_texture;
 
 		u8 m_charWidth[256];
