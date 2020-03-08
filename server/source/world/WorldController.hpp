@@ -24,50 +24,34 @@
  *
  * =====================================================================================
  */
-#ifndef SERVERWORLD_HPP_
-#define SERVERWORLD_HPP_
+#ifndef WORLDCONTROLLER_HPP_
+#define WORLDCONTROLLER_HPP_
 
-#include <unordered_map>
+#include <deque>
 
-#include "ServerChunk.hpp"
-#include "TerrainGenerator.hpp"
-#include "World.hpp"
+#include "ServerWorld.hpp"
 
-class ClientInfo;
-class Dimension;
-class ServerCommandHandler;
-class ServerPlayer;
+class Registry;
 
-class ServerWorld : public World {
-	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ServerChunk>>;
-
+class WorldController {
 	public:
-		ServerWorld(const Dimension &dimension) : m_dimension(dimension) {}
+		WorldController(Registry &registry)
+			: m_registry(registry) {}
+
+		void init();
 
 		void update(std::unordered_map<u16, ServerPlayer> &players);
 
-		void createChunkNeighbours(ServerChunk *chunk);
-		void sendChunkData(const ClientInfo &client, ServerChunk *chunk);
-		void sendRequestedData(ClientInfo &client, s32 cx, s32 cy, s32 cz);
+		ServerWorld &getWorld(u16 dimension) { return m_worldList.at(dimension); }
 
-		Chunk *getChunk(int cx, int cy, int cz) const override;
-
-		const Dimension &dimension() const { return m_dimension; }
-
-		TerrainGenerator &terrainGenerator() { return m_terrainGenerator; }
-
-		void setServer(ServerCommandHandler *server) { m_server = server; }
+		void setServer(ServerCommandHandler &server) { m_server = &server; }
 
 	private:
-		const Dimension &m_dimension;
+		std::vector<ServerWorld> m_worldList;
 
-		ChunkMap m_chunks;
-
-		u32 m_lastTick = 0;
-
-		TerrainGenerator m_terrainGenerator;
+		Registry &m_registry;
 
 		ServerCommandHandler *m_server = nullptr;
 };
 
-#endif // SERVERWORLD_HPP_
+#endif // WORLDCONTROLLER_HPP_

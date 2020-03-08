@@ -40,11 +40,12 @@ class ScriptEngine;
 class Server;
 class ServerPlayer;
 class ServerWorld;
+class WorldController;
 
 class ServerCommandHandler {
 	public:
-		ServerCommandHandler(ScriptEngine &scriptEngine, Server &server, ServerWorld &world, std::unordered_map<u16, ServerPlayer> &players, Registry &registry)
-			: m_scriptEngine(scriptEngine), m_server(server), m_world(world), m_players(players), m_registry(registry) {}
+		ServerCommandHandler(ScriptEngine &scriptEngine, Server &server, WorldController &worldController, std::unordered_map<u16, ServerPlayer> &players, Registry &registry)
+			: m_scriptEngine(scriptEngine), m_server(server), m_worldController(worldController), m_players(players), m_registry(registry) {}
 
 		void sendBlockDataUpdate(s32 x, s32 y, s32 z, const BlockData *blockData, const ClientInfo *client = nullptr) const;
 		void sendBlockInvUpdate(s32 x, s32 y, s32 z, const Inventory &inventory, const ClientInfo *client = nullptr) const;
@@ -56,10 +57,12 @@ class ServerCommandHandler {
 		const Server &server() const { return m_server; }
 
 	private:
+		ServerWorld &getWorldForClient(u16 clientID);
+
 		ScriptEngine &m_scriptEngine;
 
 		Server &m_server;
-		ServerWorld &m_world;
+		WorldController &m_worldController;
 		std::unordered_map<u16, ServerPlayer> &m_players;
 
 		Registry &m_registry;

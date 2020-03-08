@@ -29,12 +29,11 @@
 #include "ServerWorld.hpp"
 
 Registry *LuaCore::registry() {
-	return &Registry::getInstance();
+	return &m_registry;
 }
 
 void LuaCore::initUsertype(sol::state &lua) {
 	lua.new_usertype<LuaCore>("LuaCore",
-		"world",    &LuaCore::world,
 		"registry", &LuaCore::registry
 	);
 }

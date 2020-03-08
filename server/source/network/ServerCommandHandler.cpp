@@ -30,8 +30,8 @@
 #include "Server.hpp"
 #include "ServerBlock.hpp"
 #include "ServerPlayer.hpp"
-#include "ServerWorld.hpp"
 #include "ServerCommandHandler.hpp"
+#include "WorldController.hpp"
 
 void ServerCommandHandler::sendBlockDataUpdate(s32 x, s32 y, s32 z, const BlockData *blockData, const ClientInfo *client) const {
 	sf::Packet packet;
@@ -125,7 +125,7 @@ void ServerCommandHandler::setupCallbacks() {
 		s32 cx, cy, cz;
 		packet >> cx >> cy >> cz;
 
-		m_world.sendRequestedData(client, cx, cy, cz);
+		getWorldForClient(client.id).sendRequestedData(client, cx, cy, cz);
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerInvUpdate, [this](ClientInfo &client, sf::Packet &packet) {
@@ -146,22 +146,24 @@ void ServerCommandHandler::setupCallbacks() {
 			m_players.at(client.id).setPosition(x, y, z);
 	});
 
-	m_server.setCommandCallback(Network::Command::PlayerPlaceBlock, [this](ClientInfo &, sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::PlayerPlaceBlock, [this](ClientInfo &client, sf::Packet &packet) {
 		s32 x, y, z;
 		u32 block;
 		packet >> x >> y >> z >> block;
-		m_world.setBlock(x, y, z, block & 0xffff);
-		m_world.setData(x, y, z, block >> 16);
+
+		ServerWorld &world = getWorldForClient(client.id);
+		world.setBlock(x, y, z, block & 0xffff);
+		world.setData(x, y, z, block >> 16);
 
 		sf::Packet answer;
 		answer << Network::Command::BlockUpdate << x << y << z << block;
 		m_server.sendToAllClients(answer);
 	});
 
-	m_server.setCommandCallback(Network::Command::PlayerDigBlock, [this](ClientInfo &, sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::PlayerDigBlock, [this](ClientInfo &client, sf::Packet &packet) {
 		s32 x, y, z;
 		packet >> x >> y >> z;
-		m_world.setBlock(x, y, z, 0);
+		getWorldForClient(client.id).setBlock(x, y, z, 0);
 
 		sf::Packet answer;
 		answer << Network::Command::BlockUpdate << x << y << z << u32(0);
@@ -204,26 +206,28 @@ void ServerCommandHandler::setupCallbacks() {
 		u8 guiScale;
 		packet >> x >> y >> z >> screenWidth >> screenHeight >> guiScale;
 
-		u16 id = m_world.getBlock(x, y, z);
-		((ServerBlock &)(m_registry.getBlock(id))).onBlockActivated({x, y, z}, m_players.at(client.id), m_world, client, screenWidth, screenHeight, guiScale);
+		ServerWorld &world = getWorldForClient(client.id);
+
+		u16 id = world.getBlock(x, y, z);
+		((ServerBlock &)(m_registry.getBlock(id))).onBlockActivated({x, y, z}, m_players.at(client.id), world, client, screenWidth, screenHeight, guiScale);
 	});
 
-	m_server.setCommandCallback(Network::Command::BlockInvUpdate, [this](ClientInfo &, sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::BlockInvUpdate, [this](ClientInfo &client, sf::Packet &packet) {
 		gk::Vector3<s32> pos;
 		packet >> pos.x >> pos.y >> pos.z;
 
-		BlockData *data = m_world.getBlockData(pos.x, pos.y, pos.z);
+		BlockData *data = getWorldForClient(client.id).getBlockData(pos.x, pos.y, pos.z);
 		if (data)
 			packet >> data->inventory;
 		else
 			DEBUG("BlockInvUpdate: No block data found at", pos.x, pos.y, pos.z);
 	});
 
-	m_server.setCommandCallback(Network::Command::BlockDataUpdate, [this](ClientInfo &, sf::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::BlockDataUpdate, [this](ClientInfo &client, sf::Packet &packet) {
 		gk::Vector3<s32> pos;
 		packet >> pos.x >> pos.y >> pos.z;
 
-		BlockData *data = m_world.getBlockData(pos.x, pos.y, pos.z);
+		BlockData *data = getWorldForClient(client.id).getBlockData(pos.x, pos.y, pos.z);
 		if (data) {
 			packet >> data->meta >> data->useAltTiles;
 		}
@@ -276,5 +280,13 @@ void ServerCommandHandler::setupCallbacks() {
 			}
 		}
 	});
+}
+
+inline ServerWorld &ServerCommandHandler::getWorldForClient(u16 clientID) {
+	auto it = m_players.find(clientID);
+	if (it == m_players.end())
+		throw EXCEPTION("Player instance not found for client", clientID);
+
+	return m_worldController.getWorld(it->second.dimension());
 }
 
