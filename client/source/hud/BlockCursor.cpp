@@ -81,6 +81,12 @@ static float cubeCoords[6 * 4 * 3] = {
 
 };
 
+BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
+	: m_player(player), m_world(world), m_client(client)
+{
+	m_blockDestroyTexture = &gk::ResourceHandler::getInstance().get<gk::Texture>("texture-block_destroy");
+}
+
 void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
@@ -268,8 +274,7 @@ void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		glCheck(glEnable(GL_CULL_FACE));
 		glCheck(glBlendFunc(GL_DST_COLOR, GL_ZERO));
 
-		// FIXME
-		states.texture = &gk::ResourceHandler::getInstance().get<gk::Texture>("texture-block_destroy");
+		states.texture = m_blockDestroyTexture;
 
 		target.draw(m_animationVBO, GL_QUADS, 0, 24, states);
 

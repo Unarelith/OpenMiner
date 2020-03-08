@@ -38,8 +38,7 @@ class Hotbar;
 
 class BlockCursor : public gk::Drawable {
 	public:
-		BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
-			: m_player(player), m_world(world), m_client(client) {}
+		BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client);
 
 		void onEvent(const SDL_Event &event, const Hotbar &hotbar);
 
@@ -66,6 +65,8 @@ class BlockCursor : public gk::Drawable {
 		glm::ivec4 m_selectedBlock{0, 0, 0, -1};
 		const Block *m_currentBlock = nullptr;
 		const ItemStack *m_currentTool = nullptr;
+
+		gk::Texture *m_blockDestroyTexture = nullptr;
 };
 
 #endif // BLOCKCURSOR_HPP_

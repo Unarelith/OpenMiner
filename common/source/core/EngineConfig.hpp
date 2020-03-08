@@ -28,7 +28,7 @@
 #define ENGINECONFIG_HPP_
 
 namespace {
-	// FIXME: Only used in Client
+	// Only used in Client
 	constexpr const char *APP_NAME = "OpenMiner";
 
 	constexpr float DIST_NEAR = 0.1f;
