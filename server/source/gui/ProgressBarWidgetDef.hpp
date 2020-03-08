@@ -29,6 +29,12 @@
 
 #include "WidgetDef.hpp"
 
+// Duplicated in ProgressBarWidget
+enum class ProgressBarType : u8 {
+	ItemProcess = 0,
+	BurnProcess = 1
+};
+
 class ProgressBarWidgetDef : public WidgetDef {
 	public:
 		ProgressBarWidgetDef() : WidgetDef(LuaWidget::ProgressBarWidget) {}
@@ -38,6 +44,8 @@ class ProgressBarWidgetDef : public WidgetDef {
 		void loadFromLuaTable(const sol::table &table) override;
 
 	private:
+		void loadType(const sol::table &table);
+
 		u8 m_type = 0;
 
 		gk::Vector3i m_blockPosition;

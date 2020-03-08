@@ -46,7 +46,7 @@ mod:block {
 			name = "bar_process",
 			pos = {x = 80, y = 35},
 
-			type = 0, -- FIXME: Use string for that
+			type = "item_process", -- FIXME: Use string for that
 
 			block = {x = pos.x, y = pos.y, z = pos.z},
 
@@ -61,7 +61,7 @@ mod:block {
 			name = "bar_burn",
 			pos = {x = 57, y = 37},
 
-			type = 1, -- FIXME: Use string for that
+			type = "burn_process", -- FIXME: Use string for that
 
 			block = {x = pos.x, y = pos.y, z = pos.z},
 

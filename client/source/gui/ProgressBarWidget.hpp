@@ -32,6 +32,7 @@
 #include "BlockData.hpp"
 #include "Widget.hpp"
 
+// Duplicated in ProgressBarWidgetDef
 enum class ProgressBarType : u8 {
 	ItemProcess = 0,
 	BurnProcess = 1

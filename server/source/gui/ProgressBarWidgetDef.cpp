@@ -39,7 +39,7 @@ void ProgressBarWidgetDef::serialize(sf::Packet &packet) const {
 void ProgressBarWidgetDef::loadFromLuaTable(const sol::table &table) {
 	WidgetDef::loadFromLuaTable(table);
 
-	m_type = table["type"].get_or<u8>(0);
+	loadType(table);
 
 	sol::optional<sol::table> blockTable = table["block"];
 	if (blockTable != sol::nullopt) {
@@ -66,6 +66,26 @@ void ProgressBarWidgetDef::loadFromLuaTable(const sol::table &table) {
 		m_clipRect.y = clipRectTable.value()["y"];
 		m_clipRect.sizeX = clipRectTable.value()["width"];
 		m_clipRect.sizeY = clipRectTable.value()["height"];
+	}
+}
+
+inline void ProgressBarWidgetDef::loadType(const sol::table &table) {
+	sol::object typeObject = table["type"];
+	if (typeObject.valid()) {
+		if (typeObject.get_type() == sol::type::string) {
+			static const std::unordered_map<std::string, ProgressBarType> types = {
+				{"item_process", ProgressBarType::ItemProcess},
+				{"burn_process", ProgressBarType::BurnProcess},
+			};
+
+			auto it = types.find(typeObject.as<std::string>());
+			if (it != types.end())
+				m_type = u8(it->second);
+			else
+				DEBUG("ERROR: In '" + m_name + "' definition: Type invalid");
+		}
+		else
+			DEBUG("ERROR: In '" + m_name + "' definition: Type must be a string");
 	}
 }
 
