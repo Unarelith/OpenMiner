@@ -175,7 +175,8 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	target.draw(m_world, states);
 
 	for (auto &it : m_playerBoxes)
-		target.draw(it.second, states);
+		if (it.second.dimension() == m_player.dimension())
+			target.draw(it.second, states);
 
 	target.draw(m_hud, states);
 }
