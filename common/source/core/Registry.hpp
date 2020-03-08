@@ -69,7 +69,7 @@ class Registry : public ISerializable {
 			return m_recipes.back().get();
 		}
 
-		Tree &registerTree(const std::string &stringID, const std::string &label);
+		Tree &registerTree(const std::string &stringID);
 		Tree &registerSerializedTree(sf::Packet &packet);
 
 		Biome &registerBiome(const std::string &stringID, const std::string &label);

@@ -77,20 +77,22 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 								const Tree &tree = Registry::getInstance().getTree(treePlacement.treeID);
 
 								// Trunk
-								int h = (rand() & 3) + 3;
+								int h = (rand() & (tree.trunkMaxHeight() - tree.trunkMinHeight())) + tree.trunkMinHeight();
 								for (int i = 0; i < h; i++) {
 									chunk.setBlockRaw(x, y, z + i, tree.getLogBlockID());
 								}
 
 								// Leaves
-								for (int iz = -3; iz <= 3; iz++) {
-									for (int iy = -3; iy <= 3; iy++) {
-										for (int ix = -3; ix <= 3; ix++) {
-											if (ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + iy, z + h + iz)) {
-												chunk.setBlockRaw(x + ix, y + iy, z + h + iz, tree.getLeavesBlockID());
+								if (tree.hasLeaves()) {
+									for (int iz = -3; iz <= 3; iz++) {
+										for (int iy = -3; iy <= 3; iy++) {
+											for (int ix = -3; ix <= 3; ix++) {
+												if (ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + iy, z + h + iz)) {
+													chunk.setBlockRaw(x + ix, y + iy, z + h + iz, tree.getLeavesBlockID());
 
-												// FIXME: This is a temporary fix for the second part of #41
-												chunk.lightmap().setSunlight(x + ix, y + iy, z + h + iz, 0);
+													// FIXME: This is a temporary fix for the second part of #41
+													chunk.lightmap().setSunlight(x + ix, y + iy, z + h + iz, 0);
+												}
 											}
 										}
 									}

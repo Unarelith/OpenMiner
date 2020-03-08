@@ -27,17 +27,18 @@
 #include "NetworkUtils.hpp"
 #include "Tree.hpp"
 
-Tree::Tree(u16 id, const std::string &stringID, const std::string &label) {
+Tree::Tree(u16 id, const std::string &stringID) {
 	m_id = id;
 	m_stringID = stringID;
-	m_label = label;
 }
 
 void Tree::serialize(sf::Packet &packet) const {
-	packet << m_id << m_stringID << m_label << m_logBlockID << m_leavesBlockID;
+	packet << m_id << m_stringID << m_logBlockID << m_leavesBlockID
+		<< m_trunkMinHeight << m_trunkMaxHeight << m_hasLeaves;
 }
 
 void Tree::deserialize(sf::Packet &packet) {
-	packet >> m_id >> m_stringID >> m_label >> m_logBlockID >> m_leavesBlockID;
+	packet >> m_id >> m_stringID >> m_logBlockID >> m_leavesBlockID
+		>> m_trunkMinHeight >> m_trunkMaxHeight >> m_hasLeaves;
 }
 

@@ -27,8 +27,26 @@
 
 mod:tree {
 	id = "oak",
-	name = "Oak",
+
 	log_block = "default:oak_wood",
-	leaves_block = "default:oak_leaves"
+	leaves_block = "default:oak_leaves",
+
+	trunk_height = {
+		min = 3,
+		max = 6
+	},
+}
+
+mod:tree {
+	id = "tree_cactus",
+
+	log_block = "default:cactus",
+
+	trunk_height = {
+		min = 3,
+		max = 4
+	},
+
+	has_leaves = false,
 }
 

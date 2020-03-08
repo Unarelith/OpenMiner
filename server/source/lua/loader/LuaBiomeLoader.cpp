@@ -24,17 +24,48 @@
  *
  * =====================================================================================
  */
+#include <gk/core/Debug.hpp>
+
 #include "LuaBiomeLoader.hpp"
 #include "LuaMod.hpp"
 #include "Registry.hpp"
 
 void LuaBiomeLoader::loadTree(const sol::table &table) const {
 	std::string stringID = m_mod.id() + ":" + table["id"].get<std::string>();
-	std::string label = table["name"].get<std::string>();
 
-	Tree &tree = Registry::getInstance().registerTree(stringID, label);
+	Tree &tree = Registry::getInstance().registerTree(stringID);
 	tree.setLogBlockID(Registry::getInstance().getBlockFromStringID(table["log_block"]).id());
-	tree.setLeavesBlockID(Registry::getInstance().getBlockFromStringID(table["leaves_block"]).id());
+
+	sol::object trunkHeightObject = table["trunk_height"];
+	if (trunkHeightObject.valid()) {
+		if (trunkHeightObject.get_type() == sol::type::table) {
+			sol::table trunkHeight = trunkHeightObject.as<sol::table>();
+			tree.setTrunkHeight(trunkHeight["min"], trunkHeight["max"]);
+		}
+		else
+			DEBUG("ERROR: For tree '" + stringID + "': trunk_height must be a table");
+	}
+
+	sol::object hasLeavesObject = table["has_leaves"];
+	if (hasLeavesObject.valid()) {
+		if (hasLeavesObject.get_type() == sol::type::boolean) {
+			tree.setHasLeaves(hasLeavesObject.as<bool>());
+		}
+		else
+			DEBUG("ERROR: For tree '" + stringID + "': has_leaves must be a boolean");
+	}
+
+	sol::object leavesBlockObject = table["leaves_block"];
+	if (leavesBlockObject.valid()) {
+		if (leavesBlockObject.get_type() == sol::type::string) {
+			std::string leavesBlock = leavesBlockObject.as<std::string>();
+			tree.setLeavesBlockID(Registry::getInstance().getBlockFromStringID(leavesBlock).id());
+		}
+		else
+			DEBUG("ERROR: For tree '" + stringID + "': leaves_block must be a string");
+	}
+	else if (tree.hasLeaves())
+		DEBUG("ERROR: For tree '" + stringID + "': leaves_block must be defined if has_leaves == true");
 }
 
 void LuaBiomeLoader::loadBiome(const sol::table &table) const {

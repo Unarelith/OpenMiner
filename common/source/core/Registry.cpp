@@ -49,10 +49,10 @@ Item &Registry::registerSerializedItem(sf::Packet &packet) {
 	return m_items.back();
 }
 
-Tree &Registry::registerTree(const std::string &stringID, const std::string &label) {
+Tree &Registry::registerTree(const std::string &stringID) {
 	size_t id = m_trees.size();
 	m_treesID.emplace(stringID, id);
-	m_trees.emplace_back(id, stringID, label);
+	m_trees.emplace_back(id, stringID);
 	return m_trees.back();
 }
 

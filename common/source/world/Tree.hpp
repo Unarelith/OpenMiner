@@ -36,29 +36,40 @@
 class Tree : public ISerializable {
 	public:
 		Tree() = default;
-		Tree(u16 id, const std::string &stringID, const std::string &label);
+		Tree(u16 id, const std::string &stringID);
 
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
 		u16 id() const { return m_id; }
 		const std::string &stringID() const { return m_stringID; }
-		const std::string &label() const { return m_label; }
-		void setLabel(const std::string &label) { m_label = label; }
 
 		u16 getLogBlockID() const { return m_logBlockID; }
 		u16 getLeavesBlockID() const { return m_leavesBlockID; }
 
+		u8 trunkMinHeight() const { return m_trunkMinHeight; }
+		u8 trunkMaxHeight() const { return m_trunkMaxHeight; }
+
+		bool hasLeaves() const { return m_hasLeaves; }
+
 		void setLogBlockID(u16 value) { m_logBlockID = value; }
 		void setLeavesBlockID(u16 value) { m_leavesBlockID = value; }
 
-	private:
-		u16 m_id;
-		std::string m_stringID;
-		std::string m_label;
+		void setTrunkHeight(u8 min, u8 max) { m_trunkMinHeight = min; m_trunkMaxHeight = max; }
 
-		u16 m_logBlockID;
-		u16 m_leavesBlockID;
+		void setHasLeaves(bool hasLeaves) { m_hasLeaves = hasLeaves; }
+
+	private:
+		u16 m_id = 0;
+		std::string m_stringID;
+
+		u16 m_logBlockID = 0;
+		u16 m_leavesBlockID = 0;
+
+		u8 m_trunkMinHeight = 0;
+		u8 m_trunkMaxHeight = 0;
+
+		bool m_hasLeaves = true;
 };
 
 #endif // TREE_HPP_

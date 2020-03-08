@@ -99,6 +99,21 @@ mod:biome {
 		precipitation = -0.7
 	},
 
+	trees = {
+		{
+			type = "default:tree_cactus",
+			probability = 0.001,
+		}
+	},
+
+	flora = {
+		{
+			block = "default:deadbush",
+			spawns_on = "default:sand",
+			probability = 0.005,
+		}
+	},
+
 	top_block = "default:sand",
 	ground_block = "default:sand",
 	deep_block = "default:stone",
