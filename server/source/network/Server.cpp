@@ -141,6 +141,8 @@ void Server::handleClientMessages() {
 						if (command == Network::Command::ClientDisconnect) {
 							disconnectClient(client);
 							--i;
+
+							break;
 						}
 					}
 				}

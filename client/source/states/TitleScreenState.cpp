@@ -94,6 +94,8 @@ void TitleScreenState::startSingleplayer(bool showLoadingState) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
 	auto &game = m_stateStack->push<GameState>("localhost", m_port);
+	game.setSingleplayer(true);
+
 	m_stateStack->push<ServerLoadingState>(game, showLoadingState, this);
 }
 

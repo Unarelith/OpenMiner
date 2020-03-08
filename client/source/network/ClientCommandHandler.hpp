@@ -61,6 +61,8 @@ class ClientCommandHandler {
 
 		bool isRegistryInitialized() const { return m_isRegistryInitialized; }
 
+		void setSingleplayer(bool isSingleplayer) { m_isSingleplayer = isSingleplayer; }
+
 	private:
 		Client &m_client;
 		ClientWorld &m_world;
@@ -69,6 +71,8 @@ class ClientCommandHandler {
 		std::unordered_map<u16, PlayerBox> &m_playerBoxes;
 
 		bool m_isRegistryInitialized = false;
+
+		bool m_isSingleplayer = false;
 };
 
 #endif // CLIENTCOMMANDHANDLER_HPP_

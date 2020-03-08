@@ -55,6 +55,8 @@ class GameState : public gk::ApplicationState {
 		ClientCommandHandler &clientCommandHandler() { return m_clientCommandHandler; }
 		TextureAtlas &textureAtlas() { return m_textureAtlas; }
 
+		void setSingleplayer(bool isSingleplayer) { m_clientCommandHandler.setSingleplayer(isSingleplayer); }
+
 	private:
 		void initShaders();
 

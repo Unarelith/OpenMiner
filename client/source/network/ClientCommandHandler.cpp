@@ -120,7 +120,10 @@ void ClientCommandHandler::sendChatMessage(const std::string &message) {
 
 void ClientCommandHandler::setupCallbacks() {
 	m_client.setCommandCallback(Network::Command::RegistryData, [this](sf::Packet &packet) {
-		Registry::getInstance().deserialize(packet);
+		// FIXME: This is a quick fix for concurrency between client and server in singleplayer
+		if (!m_isSingleplayer)
+			Registry::getInstance().deserialize(packet);
+
 		m_isRegistryInitialized = true;
 	});
 

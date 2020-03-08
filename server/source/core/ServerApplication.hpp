@@ -56,10 +56,10 @@ class ServerApplication {
 		gk::ArgumentParser m_argumentParser;
 		gk::GameClock m_clock;
 
-		Registry m_registry;
-
 		ScriptEngine m_scriptEngine;
 		LuaCore m_luaCore{m_registry};
+
+		Registry m_registry;
 
 		u16 m_port = 4242;
 
