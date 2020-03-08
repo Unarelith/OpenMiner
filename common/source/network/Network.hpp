@@ -32,39 +32,40 @@
 namespace Network {
 	enum class Command {
 		// Client commands
-		ClientConnect        = 0,  // <TCP> [NetworkCommand][u16 udp port]           (from Client only)
-		ClientDisconnect     = 1,  // <TCP> [NetworkCommand]                         (from Client only)
-		ClientOk             = 2,  // <TCP> [NetworkCommand][u16 client id]          (from Server only)
-		ClientRefused        = 3,  // <TCP> [NetworkCommand]                         (from Server only)
+		ClientConnect         = 0,  // <TCP> [NetworkCommand][u16 udp port]           (from Client only)
+		ClientDisconnect      = 1,  // <TCP> [NetworkCommand]                         (from Client only)
+		ClientOk              = 2,  // <TCP> [NetworkCommand][u16 client id]          (from Server only)
+		ClientRefused         = 3,  // <TCP> [NetworkCommand]                         (from Server only)
 
 		// Input commands
-		KeyState             = 4,   // <UDP> [NetworkCommand][u32 timestamp][u16 client id][u32 keycode][bool isPressed]...
+		KeyState              = 4,   // <UDP> [NetworkCommand][u32 timestamp][u16 client id][u32 keycode][bool isPressed]...
 
 		// Chunk commands
-		ChunkData            = 5,   // <TCP> [NetworkCommand][s32 cx, cy, cz][u32...] (from Server only)
-		ChunkRequest         = 6,   // <TCP> [NetworkCommand][s32 cx, cy, cz]         (from Client only)
+		ChunkData             = 5,   // <TCP> [NetworkCommand][s32 cx, cy, cz][u32...] (from Server only)
+		ChunkRequest          = 6,   // <TCP> [NetworkCommand][s32 cx, cy, cz]         (from Client only)
 
 		// Player commands
-		PlayerPlaceBlock     = 7,  // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Client only)
-		PlayerDigBlock       = 8,  // <TCP> [NetworkCommand][s32 x, y, z]            (from Client only)
-		PlayerInvUpdate      = 9,  // <TCP> [NetworkCommand][u16 client id][[std::string item][u16 amount][u8 x, y]...] (both) [FIXME]
-		PlayerPosUpdate      = 10, // <TCP> [NetworkCommand][u16 client id][s32 x, y, z][bool isTeleportation] (both) // FIXME
-		PlayerSpawn          = 11, // <TCP> [NetworkCommand][u16 client id][s32 x, y, z]            (from Server only)
-		PlayerInventory      = 12, // <TCP> [NetworkCommand][u16 screenWidth, screenHeight][u8 guiScale] (from Client only)
-		PlayerCreativeWindow = 13, // <TCP> [NetworkCommand][u16 screenWidth, screenHeight][u8 guiScale] (from Client only)
+		PlayerPlaceBlock      = 7,  // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Client only)
+		PlayerDigBlock        = 8,  // <TCP> [NetworkCommand][s32 x, y, z]            (from Client only)
+		PlayerInvUpdate       = 9,  // <TCP> [NetworkCommand][u16 client id][[std::string item][u16 amount][u8 x, y]...] (both) [FIXME]
+		PlayerPosUpdate       = 10, // <TCP> [NetworkCommand][u16 client id][s32 x, y, z][bool isTeleportation] (both) // FIXME
+		PlayerSpawn           = 11, // <TCP> [NetworkCommand][u16 client id][s32 x, y, z]            (from Server only)
+		PlayerInventory       = 12, // <TCP> [NetworkCommand][u16 screenWidth, screenHeight][u8 guiScale] (from Client only)
+		PlayerCreativeWindow  = 13, // <TCP> [NetworkCommand][u16 screenWidth, screenHeight][u8 guiScale] (from Client only)
+		PlayerChangeDimension = 14, // <TCP> [NetworkCommand][u16 client id][s32 x, y, z][u16 dimension] (from Server only)
 
 		// Block commands
-		BlockUpdate          = 14, // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Server only)
-		BlockActivated       = 15, // <TCP> [NetworkCommand][s32 x, y, z][u16 screenWidth, screenHeight][u8 guiScale] (from Client only)
-		BlockGUIData         = 16, // <TCP> [NetworkCommand][LuaGUIData data]        (from Server only)
-		BlockInvUpdate       = 17, // <TCP> [NetworkCommand][s32 x, y, z][[std::string item][u16 amount][u8 x, y]...] (both) [FIXME]
-		BlockDataUpdate      = 18, // <TCP> [NetworkCommand][s32 x, y, z][u64 data]  (both) [FIXME]
+		BlockUpdate           = 15, // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Server only)
+		BlockActivated        = 16, // <TCP> [NetworkCommand][s32 x, y, z][u16 screenWidth, screenHeight][u8 guiScale] (from Client only)
+		BlockGUIData          = 17, // <TCP> [NetworkCommand][LuaGUIData data]        (from Server only)
+		BlockInvUpdate        = 18, // <TCP> [NetworkCommand][s32 x, y, z][[std::string item][u16 amount][u8 x, y]...] (both) [FIXME]
+		BlockDataUpdate       = 19, // <TCP> [NetworkCommand][s32 x, y, z][u64 data]  (both) [FIXME]
 
 		// Registry commands
-		RegistryData         = 19, // <TCP> [NetworkCommand][Block block]            (from Server only)
+		RegistryData          = 20, // <TCP> [NetworkCommand][Block block]            (from Server only)
 
 		// Chat commands
-		ChatMessage          = 20, // <TCP> [NetworkCommand][u16 client id][std::string message] (both)
+		ChatMessage           = 21, // <TCP> [NetworkCommand][u16 client id][std::string message] (both)
 	};
 
 	std::string commandToString(Command command);

@@ -194,3 +194,20 @@ mod:block {
 	bounding_box = {0, 0, 0, 1, 1, 0.5}
 }
 
+mod:block {
+	id = "portal",
+	name = "Portal",
+	tiles = "portal.png",
+
+	-- FIXME: Use another layer for transparent blocks like this one
+	draw_type = "glass",
+	is_opaque = false,
+
+	on_block_activated = function(pos, player, world, client, server, screen_width, screen_height, gui_scale)
+		local dim = (player:dimension() + 1) % 2
+
+		server:send_player_change_dimension(client.id, 0, 0, 20, dim, client);
+		player:set_dimension(dim);
+	end,
+}
+

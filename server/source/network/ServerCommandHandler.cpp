@@ -69,6 +69,17 @@ void ServerCommandHandler::sendPlayerPosUpdate(u16 clientID, bool isTeleportatio
 		client->tcpSocket->send(packet);
 }
 
+void ServerCommandHandler::sendPlayerChangeDimension(u16 clientID, s32 x, s32 y, s32 z, u16 dimension, const ClientInfo *client) const {
+	sf::Packet packet;
+	packet << Network::Command::PlayerChangeDimension;
+	packet << clientID << x << y << z << dimension;
+
+	if (!client)
+		m_server.sendToAllClients(packet);
+	else
+		client->tcpSocket->send(packet);
+}
+
 void ServerCommandHandler::sendChatMessage(u16 clientID, const std::string &message, const ClientInfo *client) const {
 	sf::Packet packet;
 	packet << Network::Command::ChatMessage << clientID << message;
@@ -209,7 +220,8 @@ void ServerCommandHandler::setupCallbacks() {
 		ServerWorld &world = getWorldForClient(client.id);
 
 		u16 id = world.getBlock(x, y, z);
-		((ServerBlock &)(m_registry.getBlock(id))).onBlockActivated({x, y, z}, m_players.at(client.id), world, client, screenWidth, screenHeight, guiScale);
+		ServerBlock &block = (ServerBlock &)(m_registry.getBlock(id));
+		block.onBlockActivated({x, y, z}, m_players.at(client.id), world, client, *this, screenWidth, screenHeight, guiScale);
 	});
 
 	m_server.setCommandCallback(Network::Command::BlockInvUpdate, [this](ClientInfo &client, sf::Packet &packet) {

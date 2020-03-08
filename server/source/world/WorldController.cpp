@@ -34,8 +34,8 @@ void WorldController::init() {
 	}
 }
 
-void WorldController::update(std::unordered_map<u16, ServerPlayer> &players) {
+void WorldController::update() {
 	for (auto &it : m_worldList)
-		it.update(players);
+		it.update();
 }
 

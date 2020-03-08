@@ -40,7 +40,7 @@ class WorldController {
 
 		void init();
 
-		void update(std::unordered_map<u16, ServerPlayer> &players);
+		void update();
 
 		ServerWorld &getWorld(u16 dimension) { return m_worldList.at(dimension); }
 

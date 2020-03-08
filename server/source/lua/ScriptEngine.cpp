@@ -30,6 +30,7 @@
 #include "LuaMod.hpp"
 #include "Registry.hpp"
 #include "ScriptEngine.hpp"
+#include "ServerCommandHandler.hpp"
 #include "ServerPlayer.hpp"
 #include "ServerWorld.hpp"
 
@@ -80,7 +81,10 @@ void ScriptEngine::initUsertypes() {
 	);
 
 	m_lua.new_usertype<Player>("Player",
-		"inventory", &Player::inventory
+		"inventory", &Player::inventory,
+
+		"dimension", &Player::dimension,
+		"set_dimension", &Player::setDimension
 	);
 
 	m_lua.new_usertype<ServerPlayer>("ServerPlayer",
@@ -122,6 +126,14 @@ void ScriptEngine::initUsertypes() {
 
 		"get_int", &BlockMetadata::getLuaObject<int>,
 		"set_int", &BlockMetadata::setInt
+	);
+
+	m_lua.new_usertype<ClientInfo>("ClientInfo",
+		"id", &ClientInfo::id
+	);
+
+	m_lua.new_usertype<ServerCommandHandler>("ServerCommandHandler",
+		"send_player_change_dimension", &ServerCommandHandler::sendPlayerChangeDimension
 	);
 
 	LuaCore::initUsertype(m_lua);

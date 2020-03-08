@@ -55,6 +55,7 @@ function init(player)
 	player_inv:add_stack("default:iron_ore", 64);
 	player_inv:add_stack("default:coal", 64);
 	player_inv:add_stack("default:oak_slab", 64);
+	player_inv:add_stack("default:portal", 64);
 
 	player_inv:add_stack("default:iron_ingot", 64);
 	player_inv:add_stack("default:gold_ingot", 64);
@@ -160,6 +161,7 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 			{"default:bricks"},
 			{"default:clay"},
 			{"default:oak_slab"},
+			{"default:portal"},
 
 			-- Items
 			{"default:stick"},

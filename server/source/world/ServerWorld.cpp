@@ -33,12 +33,12 @@
 #include "ServerPlayer.hpp"
 #include "ServerWorld.hpp"
 
-void ServerWorld::update(std::unordered_map<u16, ServerPlayer> &players) {
+void ServerWorld::update() {
 	if (m_lastTick < gk::GameClock::getTicks() / 50) {
 		m_lastTick = gk::GameClock::getTicks() / 50;
 
 		for (auto &it : m_chunks) {
-			it.second->tick(players, *this, *m_server);
+			it.second->tick(*this, *m_server);
 
 			if (it.second->areAllNeighboursLoaded())
 				it.second->updateLights();

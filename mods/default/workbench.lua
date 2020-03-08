@@ -34,7 +34,7 @@ mod:block {
 		world:add_block_data(pos.x, pos.y, pos.z, 3, 3)
 	end,
 
-	on_block_activated = function(pos, player, world, client, screen_width, screen_height, gui_scale)
+	on_block_activated = function(pos, player, world, client, server, screen_width, screen_height, gui_scale)
 		local gui = LuaGUI.new()
 
 		gui:set_size(176, 166)
