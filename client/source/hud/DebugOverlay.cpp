@@ -66,6 +66,8 @@ void DebugOverlay::update() {
 	stream << '\n';
 	stream << "dir: " << direction << " (" << m_player.cameraYaw() << ")";
 	stream << '\n';
+	stream << "dimension: " << m_player.dimension();
+	stream << '\n';
 	stream << "Loaded chunks: " << m_world.loadedChunkCount();
 
 	m_positionText.setText(stream.str());
