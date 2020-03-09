@@ -126,7 +126,9 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::ClientDisconnect, [this](ClientInfo &client, sf::Packet &) {
-		m_players.erase(client.id);
+		auto it = m_players.find(client.id);
+		if (it != m_players.end())
+			m_players.erase(it);
 	});
 
 	m_server.setCommandCallback(Network::Command::ChunkRequest, [this](ClientInfo &client, sf::Packet &packet) {

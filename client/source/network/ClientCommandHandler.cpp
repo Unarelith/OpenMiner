@@ -119,6 +119,15 @@ void ClientCommandHandler::sendChatMessage(const std::string &message) {
 }
 
 void ClientCommandHandler::setupCallbacks() {
+	m_client.setCommandCallback(Network::Command::ClientDisconnect, [this](sf::Packet &packet) {
+		u16 clientID;
+		packet >> clientID;
+
+		auto it = m_playerBoxes.find(clientID);
+		if (it != m_playerBoxes.end())
+			m_playerBoxes.erase(it);
+	});
+
 	m_client.setCommandCallback(Network::Command::RegistryData, [this](sf::Packet &packet) {
 		// FIXME: This is a quick fix for concurrency between client and server in singleplayer
 		if (!m_isSingleplayer)
@@ -157,8 +166,11 @@ void ClientCommandHandler::setupCallbacks() {
 		packet >> x >> y >> z;
 		packet >> isTeleportation;
 
-		if (clientId != m_client.id())
-			m_playerBoxes.at(clientId).setPosition(x, y, z);
+		if (clientId != m_client.id()) {
+			auto it = m_playerBoxes.find(clientId);
+			if (it != m_playerBoxes.end())
+				it->second.setPosition(x, y, z);
+		}
 		else if (isTeleportation) {
 			m_player.setPosition(x, y, z);
 		}

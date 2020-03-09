@@ -156,6 +156,12 @@ void Server::handleClientMessages() {
 }
 
 void Server::disconnectClient(ClientInfo &client) {
+	sf::Packet packet;
+	packet << Network::Command::ClientDisconnect << client.id;
+	sendToAllClients(packet);
+
+	m_commands[Network::Command::ClientDisconnect](client, packet);
+
 	m_selector.remove(*client.tcpSocket);
 	m_info.removeClient(client.id);
 
