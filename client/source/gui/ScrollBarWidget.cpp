@@ -29,8 +29,14 @@
 #include "Config.hpp"
 #include "ScrollBarWidget.hpp"
 
-void ScrollBarWidget::init(const std::string &texture, const gk::FloatRect &clipRect, InventoryWidget &widget) {
+void ScrollBarWidget::init(const std::string &texture, const gk::FloatRect &clipRect, u16 minY, u16 maxY, InventoryWidget &widget) {
 	m_clipRect = clipRect;
+
+	m_minY = minY;
+	m_maxY = maxY;
+
+	m_width = m_barWidth;
+	m_height = m_maxY - m_minY + m_barHeight;
 
 	m_widget = &widget;
 
@@ -42,18 +48,15 @@ void ScrollBarWidget::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
 		if (isPointInWidget(event.button.x, event.button.y)) {
 			m_isDragging = true;
+
+			updateScrolling(event.button.y);
 		}
 	}
 	else if (event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_LEFT) {
 		m_isDragging = false;
 	}
 	else if (event.type == SDL_MOUSEMOTION && m_isDragging) {
-		s16 y = event.motion.y - m_minY * Config::guiScale - m_parent->getPosition().y;
-		setPosition(getPosition().x, glm::clamp<s16>(y / Config::guiScale + m_height / 2, m_minY, m_maxY));
-
-		m_scrolling = (getPosition().y - m_minY) / (m_maxY - m_minY);
-
-		m_widget->scroll(m_scrolling);
+		updateScrolling(event.motion.y);
 	}
 }
 
@@ -61,5 +64,14 @@ void ScrollBarWidget::draw(gk::RenderTarget &target, gk::RenderStates states) co
 	states.transform *= getTransform();
 
 	target.draw(m_image, states);
+}
+
+void ScrollBarWidget::updateScrolling(u16 y) {
+	s16 imageY = y - getPosition().y * Config::guiScale - m_parent->getPosition().y;
+	m_image.setPosition(0, glm::clamp<s16>(imageY / Config::guiScale - m_barHeight / 2, m_minY, m_maxY));
+
+	m_scrolling = m_image.getPosition().y / (m_maxY - m_minY);
+
+	m_widget->scroll(m_scrolling);
 }
 

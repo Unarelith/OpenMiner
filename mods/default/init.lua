@@ -171,8 +171,8 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 
 		widget = "inv_creative_items",
 
-		min_y = 18,
-		max_y = 128 - 15,
+		min_y = 0,
+		max_y = 110 - 15,
 	}
 
 	gui:inventory {

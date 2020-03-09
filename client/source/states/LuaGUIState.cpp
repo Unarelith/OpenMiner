@@ -339,9 +339,7 @@ void LuaGUIState::loadScrollBarWidget(const std::string &, s32 x, s32 y, sf::Pac
 
 	ScrollBarWidget *scrollBarWidget = new ScrollBarWidget(&m_mainWidget);
 	scrollBarWidget->setPosition(x, y);
-	scrollBarWidget->setMinY(minY);
-	scrollBarWidget->setMaxY(maxY);
-	scrollBarWidget->init(texture, clipRect, m_inventoryWidgets.at(widget));
+	scrollBarWidget->init(texture, clipRect, minY, maxY, m_inventoryWidgets.at(widget));
 
 	m_widgets.emplace_back(scrollBarWidget);
 }

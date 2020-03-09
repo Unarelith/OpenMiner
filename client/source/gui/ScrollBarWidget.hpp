@@ -35,15 +35,14 @@ class ScrollBarWidget : public Widget {
 	public:
 		ScrollBarWidget(Widget *parent = nullptr) : Widget(12, 15, parent) {}
 
-		void init(const std::string &texture, const gk::FloatRect &clipRect, InventoryWidget &widget);
+		void init(const std::string &texture, const gk::FloatRect &clipRect, u16 minY, u16 maxY, InventoryWidget &widget);
 
 		void onEvent(const SDL_Event &event);
 
-		void setMinY(u16 minY) { m_minY = minY; }
-		void setMaxY(u16 maxY) { m_maxY = maxY; }
-
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const;
+
+		void updateScrolling(u16 y);
 
 		gk::Image m_image;
 
@@ -57,6 +56,9 @@ class ScrollBarWidget : public Widget {
 		bool m_isDragging = false;
 
 		float m_scrolling = 0;
+
+		const u16 m_barWidth = 12;
+		const u16 m_barHeight = 15;
 };
 
 #endif // SCROLLBARWIDGET_HPP_
