@@ -1,9 +1,0 @@
-TODO
-
-# Refactorings
-
-• TODO: Add a mesh system, either here or in `GameKit`
-   → Maybe this is the way to add custom vertex attributes while having default ones? Check 3dee
-   → Or maybe it would be better to use a VAO in `GameKit`
-
-> vim:ft=notes
