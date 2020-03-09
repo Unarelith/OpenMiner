@@ -38,12 +38,14 @@ Biome::Biome(u16 id, const std::string &stringID, const std::string &label) {
 void Biome::serialize(sf::Packet &packet) const {
 	packet << m_id << m_stringID << m_label << m_params
 		<< m_topBlockID << m_groundBlockID << m_deepBlockID << m_beachBlockID << m_liquidBlockID
+		<< m_portalBlockID << m_portalFrameBlockID
 		<< m_flora << m_ores << m_trees;
 }
 
 void Biome::deserialize(sf::Packet &packet) {
 	packet >> m_id >> m_stringID >> m_label >> m_params
 		>> m_topBlockID >> m_groundBlockID >> m_deepBlockID >> m_beachBlockID >> m_liquidBlockID
+		>> m_portalBlockID >> m_portalFrameBlockID
 		>> m_flora >> m_ores >> m_trees;
 }
 

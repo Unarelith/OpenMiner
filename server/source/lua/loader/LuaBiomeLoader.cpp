@@ -96,6 +96,8 @@ inline void LuaBiomeLoader::loadBiomeBlocks(Biome &biome, const sol::table &tabl
 	biome.setDeepBlockID(Registry::getInstance().getBlockFromStringID(table["deep_block"]).id());
 	biome.setBeachBlockID(Registry::getInstance().getBlockFromStringID(table["beach_block"]).id());
 	biome.setLiquidBlockID(Registry::getInstance().getBlockFromStringID(table["liquid_block"]).id());
+	biome.setPortalBlockID(Registry::getInstance().getBlockFromStringID(table["portal_block"]).id());
+	biome.setPortalFrameBlockID(Registry::getInstance().getBlockFromStringID(table["portal_frame_block"]).id());
 }
 
 inline void LuaBiomeLoader::loadTreePlacementEntries(Biome &biome, const sol::table &table) const {

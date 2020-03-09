@@ -90,6 +90,9 @@ void ScriptEngine::initUsertypes() {
 	m_lua.new_usertype<Player>("Player",
 		"inventory", &Player::inventory,
 
+		"x", &Player::x,
+		"y", &Player::y,
+		"z", &Player::z,
 		"set_position", &Player::setPosition,
 
 		"dimension", &Player::dimension,

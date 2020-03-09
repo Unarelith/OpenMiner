@@ -55,6 +55,8 @@ class Biome : public ISerializable {
 		u16 getDeepBlockID() const { return m_deepBlockID; }
 		u16 getBeachBlockID() const { return m_beachBlockID; }
 		u16 getLiquidBlockID() const { return m_liquidBlockID; }
+		u16 getPortalBlockID() const { return m_portalBlockID; }
+		u16 getPortalFrameBlockID() const { return m_portalFrameBlockID; }
 
 		const std::vector<PlacementEntry::Flora> &getFlora() const { return m_flora; }
 		const std::vector<PlacementEntry::Ore> &getOres() const { return m_ores; }
@@ -67,6 +69,8 @@ class Biome : public ISerializable {
 		void setDeepBlockID(u16 value) { m_deepBlockID = value; }
 		void setBeachBlockID(u16 value) { m_beachBlockID = value; }
 		void setLiquidBlockID(u16 value) { m_liquidBlockID = value; }
+		void setPortalBlockID(u16 value) { m_portalBlockID = value; }
+		void setPortalFrameBlockID(u16 value) { m_portalFrameBlockID = value; }
 
 		PlacementEntry::Flora &addFlora() { m_flora.emplace_back(); return m_flora.back(); }
 		PlacementEntry::Ore &addOre() { m_ores.emplace_back(); return m_ores.back(); }
@@ -85,6 +89,8 @@ class Biome : public ISerializable {
 		u16 m_deepBlockID;
 		u16 m_beachBlockID;
 		u16 m_liquidBlockID;
+		u16 m_portalBlockID;
+		u16 m_portalFrameBlockID;
 
 		std::vector<PlacementEntry::Flora> m_flora;
 		std::vector<PlacementEntry::Ore> m_ores;

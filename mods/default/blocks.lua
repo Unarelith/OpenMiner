@@ -204,11 +204,15 @@ mod:block {
 
 	on_block_activated = function(pos, player, world, client, server, screen_width, screen_height, gui_scale)
 		local dim = (player:dimension() + 1) % 2
-		local pos = {x = 0, y = 0, z = 20}
+		local pos = {
+			x = math.floor(player:x()),
+			y = math.floor(player:y()),
+			z = math.floor(player:z())
+		}
 
 		server:send_player_change_dimension(client.id, pos.x, pos.y, pos.z, dim, client)
 		player:set_dimension(dim)
-		player:set_position(pos.x, pos.y, pos.z)
+		-- player:set_position(pos.x, pos.y, pos.z)
 	end,
 }
 
@@ -261,5 +265,13 @@ mod:block {
 		"debug/p.png",
 		"debug/r.png",
 	},
+}
+
+mod:block {
+	id = "obsidian",
+	name = "Obsidian",
+	tiles = "obsidian.png",
+
+	hardness = 2,
 }
 

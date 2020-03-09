@@ -39,6 +39,8 @@ mod:biome {
 	deep_block = "default:stone",
 	beach_block = "default:sand",
 	liquid_block = "default:water",
+	portal_block = "default:portal",
+	portal_frame_block = "default:obsidian",
 
 	trees = {
 		{
@@ -102,7 +104,9 @@ mod:biome {
 	ground_block = "default:sand",
 	deep_block = "default:stone",
 	beach_block = "default:sand",
-	liquid_block = "default:water"
+	liquid_block = "default:water",
+	portal_block = "default:portal",
+	portal_frame_block = "default:obsidian",
 }
 
 mod:biome {
@@ -118,6 +122,8 @@ mod:biome {
 	ground_block = "default:netherrack",
 	deep_block = "default:netherrack",
 	beach_block = "default:soul_sand",
-	liquid_block = "default:lava"
+	liquid_block = "default:lava",
+	portal_block = "default:portal",
+	portal_frame_block = "default:obsidian",
 }
 

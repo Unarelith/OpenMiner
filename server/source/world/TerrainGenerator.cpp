@@ -118,8 +118,25 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 								break;
 							}
 
+							// FIXME: This is a temporary portal generation
+							//        This code should be replaced by a proper "feature" implementation
+							//        which will also allow making stuff like villages easier
+							bool placedPortal = false;
+							if (chunk.getBlock(x, y, z - 1) == biome.getTopBlockID() && rand() % 4096 == 0) {
+								for (int ix = 0 ; ix < 4 ; ++ix) {
+									for (int iz = 0 ; iz < 5 ; ++iz) {
+										if (ix == 0 || iz == 0 || ix == 3 || iz == 4)
+											chunk.setBlockRaw(x + ix, y, z + iz, biome.getPortalFrameBlockID());
+										else
+											chunk.setBlockRaw(x + ix, y, z + iz, biome.getPortalBlockID());
+									}
+								}
+
+								placedPortal = true;
+							}
+
 							// Otherwise set sunlight.
-							if (!placedFlora && z == CHUNK_HEIGHT - 1) {
+							if (!placedFlora && !placedPortal && z == CHUNK_HEIGHT - 1) {
 								chunk.lightmap().addSunlight(x, y, z, 15);
 							}
 						}
