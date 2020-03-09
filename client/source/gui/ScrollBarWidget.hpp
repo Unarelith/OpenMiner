@@ -24,23 +24,39 @@
  *
  * =====================================================================================
  */
-#ifndef LUAWIDGET_HPP_
-#define LUAWIDGET_HPP_
+#ifndef SCROLLBARWIDGET_HPP_
+#define SCROLLBARWIDGET_HPP_
 
-#include <gk/core/IntTypes.hpp>
+#include <gk/graphics/Image.hpp>
 
-namespace LuaWidget {
-	enum : u8 {
-		Undefined         = 0,
+#include "InventoryWidget.hpp"
 
-		Image             = 1,
-		TextButton        = 2,
-		InventoryWidget   = 3,
-		CraftingWidget    = 4,
-		ProgressBarWidget = 5,
-		ScrollBarWidget   = 6,
-		Inventory         = 7,
-	};
-}
+class ScrollBarWidget : public Widget {
+	public:
+		ScrollBarWidget(Widget *parent = nullptr) : Widget(12, 15, parent) {}
 
-#endif // LUAWIDGET_HPP_
+		void init(const std::string &texture, const gk::FloatRect &clipRect, InventoryWidget &widget);
+
+		void onEvent(const SDL_Event &event);
+
+		void setMinY(u16 minY) { m_minY = minY; }
+		void setMaxY(u16 maxY) { m_maxY = maxY; }
+
+	private:
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const;
+
+		gk::Image m_image;
+
+		gk::FloatRect m_clipRect;
+
+		u16 m_minY = 0;
+		u16 m_maxY = 0;
+
+		InventoryWidget *m_widget = nullptr;
+
+		bool m_isDragging = false;
+
+		float m_scrolling = 0;
+};
+
+#endif // SCROLLBARWIDGET_HPP_

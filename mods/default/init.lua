@@ -36,15 +36,15 @@ dofile("mods/default/dimensions.lua")
 function init(player)
 	local player_inv = player:inventory()
 
-	player_inv:add_stack("default:debug", 64);
+	player_inv:add_stack("default:workbench", 1);
 	player_inv:add_stack("default:dirt", 64);
 	player_inv:add_stack("default:grass", 64);
 	player_inv:add_stack("default:stone", 64);
 	player_inv:add_stack("default:glass", 64);
 	player_inv:add_stack("default:glowstone", 64);
-	player_inv:add_stack("default:workbench", 1);
 	player_inv:add_stack("default:furnace", 1);
 	player_inv:add_stack("default:stone_pickaxe", 1);
+	player_inv:add_stack("default:stone_axe", 1);
 
 	player_inv:add_stack("default:oak_wood", 64);
 	player_inv:add_stack("default:oak_planks", 64);
@@ -52,7 +52,6 @@ function init(player)
 	player_inv:add_stack("default:stick", 64);
 	player_inv:add_stack("default:stone_hoe", 1);
 	player_inv:add_stack("default:stone_shovel", 1);
-	player_inv:add_stack("default:stone_axe", 1);
 	player_inv:add_stack("default:iron_ore", 64);
 	player_inv:add_stack("default:coal", 64);
 	player_inv:add_stack("default:oak_slab", 64);
@@ -137,7 +136,7 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 		name = "inv_data",
 
 		width = 9,
-		height = 5,
+		height = 7,
 
 		items = {
 			-- Blocks
@@ -172,38 +171,38 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 
 			-- Items
 			{"default:stick"},
-			-- {"default:stone_axe"},
-			-- {"default:stone_hoe"},
-			-- {"default:stone_pickaxe"},
-			-- {"default:stone_shovel"},
-			-- {"default:stone_sword"},
+			{"default:stone_axe"},
+			{"default:stone_hoe"},
+			{"default:stone_pickaxe"},
+			{"default:stone_shovel"},
+			{"default:stone_sword"},
 			{"default:coal"},
 			{"default:iron_ingot"},
 			{"default:charcoal"},
-			-- {"default:wooden_axe"},
-			-- {"default:wooden_hoe"},
-			-- {"default:wooden_pickaxe"},
-			-- {"default:wooden_shovel"},
-			-- {"default:wooden_sword"},
+			{"default:wooden_axe"},
+			{"default:wooden_hoe"},
+			{"default:wooden_pickaxe"},
+			{"default:wooden_shovel"},
+			{"default:wooden_sword"},
 			{"default:brick"},
 			{"default:clay_ball"},
 			{"default:diamond"},
 			{"default:gold_ingot"},
-			-- {"default:iron_pickaxe"},
-			-- {"default:iron_sword"},
-			-- {"default:iron_axe"},
-			-- {"default:iron_hoe"},
-			-- {"default:iron_shovel"},
-			-- {"default:diamond_pickaxe"},
-			-- {"default:diamond_sword"},
-			-- {"default:diamond_axe"},
-			-- {"default:diamond_hoe"},
-			-- {"default:diamond_shovel"},
-			-- {"default:golden_pickaxe"},
-			-- {"default:golden_sword"},
-			-- {"default:golden_axe"},
-			-- {"default:golden_hoe"},
-			-- {"default:golden_shovel"},
+			{"default:iron_pickaxe"},
+			{"default:iron_sword"},
+			{"default:iron_axe"},
+			{"default:iron_hoe"},
+			{"default:iron_shovel"},
+			{"default:diamond_pickaxe"},
+			{"default:diamond_sword"},
+			{"default:diamond_axe"},
+			{"default:diamond_hoe"},
+			{"default:diamond_shovel"},
+			{"default:golden_pickaxe"},
+			{"default:golden_sword"},
+			{"default:golden_axe"},
+			{"default:golden_hoe"},
+			{"default:golden_shovel"},
 		},
 
 		is_unlimited = true,
@@ -215,10 +214,23 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 
 		inventory = "temp",
 		inventory_name = "inv_data",
-		size = {x = 9, y = 5},
 
 		offset = 0,
 		count = 9 * 5,
+	}
+
+	gui:scroll_bar {
+		name = "scroll_bar",
+		pos = {x = 175, y = 18},
+
+		texture = "texture-tabs",
+		clip = {x = 232, y = 0, width = 12, height = 15},
+		clip_selected = {x = 244, y = 0, width = 12, height = 15},
+
+		widget = "inv_creative_items",
+
+		min_y = 18,
+		max_y = 128 - 15,
 	}
 
 	gui:inventory {

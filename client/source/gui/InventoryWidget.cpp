@@ -30,24 +30,26 @@
 void InventoryWidget::init(Inventory &inventory, u16 offset, u16 size) {
 	m_inventory = &inventory;
 
-	m_itemWidgets.clear();
-
 	m_offset = offset;
 	m_size = size > 0 ? size : inventory.width() * inventory.height();
 
-	for (u16 i = 0 ; i < m_size ; ++i) {
-		m_itemWidgets.emplace_back(inventory, (i + offset) % inventory.width(), (i + offset) / inventory.width(), this);
-
-		ItemWidget &widget = m_itemWidgets.back();
-		widget.update();
-		widget.setPosition((i % inventory.width()) * 18, (i / inventory.width()) * 18, 0);
-	}
+	loadItemWidgets(m_offset, m_size);
 
 	m_width = inventory.width() * 18;
 	m_height = inventory.height() * 18;
 
 	m_inventoryWidth = inventory.width();
 	m_inventoryHeight = inventory.height();
+}
+
+void InventoryWidget::scroll(float scrolling) {
+	u16 offset = m_offset + floor((m_inventory->height() - m_size / m_inventory->width()) * scrolling) * m_inventory->width();
+	u16 size = m_size;
+
+	if (offset + size > m_inventory->width() * m_inventory->height())
+		size = m_inventory->width() * m_inventory->height() - offset;
+
+	loadItemWidgets(offset, size);
 }
 
 void InventoryWidget::onEvent(const SDL_Event &event) {
@@ -123,5 +125,17 @@ void InventoryWidget::draw(gk::RenderTarget &target, gk::RenderStates states) co
 
 	if (m_currentItemWidget)
 		target.draw(m_selectedItemBackground, states);
+}
+
+void InventoryWidget::loadItemWidgets(u16 offset, u16 size) {
+	m_itemWidgets.clear();
+
+	for (u16 i = 0 ; i < size ; ++i) {
+		m_itemWidgets.emplace_back(*m_inventory, (i + offset) % m_inventory->width(), (i + offset) / m_inventory->width(), this);
+
+		ItemWidget &widget = m_itemWidgets.back();
+		widget.update();
+		widget.setPosition((i % m_inventory->width()) * 18, (i / m_inventory->width()) * 18, 0);
+	}
 }
 

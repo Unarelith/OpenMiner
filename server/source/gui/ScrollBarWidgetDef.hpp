@@ -24,23 +24,28 @@
  *
  * =====================================================================================
  */
-#ifndef LUAWIDGET_HPP_
-#define LUAWIDGET_HPP_
+#ifndef SCROLLBARWIDGETDEF_HPP_
+#define SCROLLBARWIDGETDEF_HPP_
 
-#include <gk/core/IntTypes.hpp>
+#include "WidgetDef.hpp"
 
-namespace LuaWidget {
-	enum : u8 {
-		Undefined         = 0,
+class ScrollBarWidgetDef : public WidgetDef {
+	public:
+		ScrollBarWidgetDef() : WidgetDef(LuaWidget::ScrollBarWidget) {}
 
-		Image             = 1,
-		TextButton        = 2,
-		InventoryWidget   = 3,
-		CraftingWidget    = 4,
-		ProgressBarWidget = 5,
-		ScrollBarWidget   = 6,
-		Inventory         = 7,
-	};
-}
+		void serialize(sf::Packet &packet) const override;
 
-#endif // LUAWIDGET_HPP_
+		void loadFromLuaTable(const sol::table &table) override;
+
+	private:
+		std::string m_texture;
+
+		gk::FloatRect m_clipRect;
+
+		u16 m_minY = 0;
+		u16 m_maxY = 0;
+
+		std::string m_widget;
+};
+
+#endif // SCROLLBARWIDGETDEF_HPP_

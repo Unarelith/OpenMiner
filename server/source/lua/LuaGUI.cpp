@@ -32,11 +32,12 @@
 #include "Network.hpp"
 #include "Registry.hpp"
 
-#include "ImageWidgetDef.hpp"
-#include "TextButtonWidgetDef.hpp"
-#include "InventoryWidgetDef.hpp"
 #include "CraftingWidgetDef.hpp"
+#include "ImageWidgetDef.hpp"
+#include "InventoryWidgetDef.hpp"
 #include "ProgressBarWidgetDef.hpp"
+#include "ScrollBarWidgetDef.hpp"
+#include "TextButtonWidgetDef.hpp"
 
 void LuaGUI::addImage(const sol::table &table) {
 	m_widgetDefinitions.emplace_back(new ImageWidgetDef);
@@ -60,6 +61,11 @@ void LuaGUI::addCraftingWidget(const sol::table &table) {
 
 void LuaGUI::addProgressBarWidget(const sol::table &table) {
 	m_widgetDefinitions.emplace_back(new ProgressBarWidgetDef);
+	m_widgetDefinitions.back()->loadFromLuaTable(table);
+}
+
+void LuaGUI::addScrollBarWidget(const sol::table &table) {
+	m_widgetDefinitions.emplace_back(new ScrollBarWidgetDef);
 	m_widgetDefinitions.back()->loadFromLuaTable(table);
 }
 
@@ -107,6 +113,7 @@ void LuaGUI::initUsertype(sol::state &lua) {
 		"inventory",      &LuaGUI::addInventoryWidget,
 		"crafting",       &LuaGUI::addCraftingWidget,
 		"progress_bar",   &LuaGUI::addProgressBarWidget,
+		"scroll_bar",     &LuaGUI::addScrollBarWidget,
 		"inventory_data", &LuaGUI::addInventory,
 
 		"set_size",       &LuaGUI::setSize,

@@ -41,6 +41,8 @@ class InventoryWidget : public AbstractInventoryWidget {
 
 		void init(Inventory &inventory, u16 offset = 0, u16 size = 0);
 
+		void scroll(float scrolling);
+
 		void onEvent(const SDL_Event &event) override;
 
 		void update() override;
@@ -58,6 +60,8 @@ class InventoryWidget : public AbstractInventoryWidget {
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		void loadItemWidgets(u16 offset, u16 size);
 
 		ClientCommandHandler &m_client;
 

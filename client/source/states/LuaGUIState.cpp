@@ -40,8 +40,10 @@
 #include "LuaGUIState.hpp"
 #include "LuaWidget.hpp"
 #include "Network.hpp"
+#include "NetworkUtils.hpp"
 #include "Player.hpp"
 #include "ProgressBarWidget.hpp"
+#include "ScrollBarWidget.hpp"
 #include "TextButton.hpp"
 
 LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent)
@@ -189,6 +191,8 @@ void LuaGUIState::loadGUI(sf::Packet &packet) {
 		loadProgressBarWidget(name, x, y, packet);
 	else if (type == LuaWidget::CraftingWidget)
 		loadCraftingWidget(name, x, y, packet);
+	else if (type == LuaWidget::ScrollBarWidget)
+		loadScrollBarWidget(name, x, y, packet);
 	else if (type == LuaWidget::Inventory)
 		loadInventory(name, packet);
 }
@@ -324,6 +328,22 @@ void LuaGUIState::loadProgressBarWidget(const std::string &, s32 x, s32 y, sf::P
 		widget->init(clipRect, gk::Vector2i{x, y}, meta, maxValue);
 
 	m_widgets.emplace_back(widget);
+}
+
+void LuaGUIState::loadScrollBarWidget(const std::string &, s32 x, s32 y, sf::Packet &packet) {
+	std::string texture;
+	gk::FloatRect clipRect;
+	u16 minY, maxY;
+	std::string widget;
+	packet >> texture >> clipRect >> minY >> maxY >> widget;
+
+	ScrollBarWidget *scrollBarWidget = new ScrollBarWidget(&m_mainWidget);
+	scrollBarWidget->setPosition(x, y);
+	scrollBarWidget->setMinY(minY);
+	scrollBarWidget->setMaxY(maxY);
+	scrollBarWidget->init(texture, clipRect, m_inventoryWidgets.at(widget));
+
+	m_widgets.emplace_back(scrollBarWidget);
 }
 
 void LuaGUIState::loadInventory(const std::string &name, sf::Packet &packet) {

@@ -57,6 +57,7 @@ class LuaGUIState : public InterfaceState {
 		void loadInventoryWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet);
 		void loadCraftingWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet);
 		void loadProgressBarWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet);
+		void loadScrollBarWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet);
 		void loadInventory(const std::string &name, sf::Packet &packet);
 
 		void centerMainWidget();
