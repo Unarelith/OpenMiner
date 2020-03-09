@@ -24,41 +24,38 @@
  *
  * =====================================================================================
  */
-#ifndef DIMENSION_HPP_
-#define DIMENSION_HPP_
+#ifndef SKY_HPP_
+#define SKY_HPP_
 
 #include <string>
-#include <vector>
 
 #include <gk/core/IntTypes.hpp>
+#include <gk/graphics/Color.hpp>
 
 #include "ISerializable.hpp"
 
-class Dimension : public ISerializable {
+class Sky : public ISerializable {
 	public:
-		Dimension() = default;
-		Dimension(u16 id, const std::string &stringID, const std::string &name)
-			: m_id(id), m_stringID(stringID), m_name(name) {}
-
-		void addBiome(const std::string &biome) { m_biomes.emplace_back(biome); }
+		Sky() = default;
+		Sky(u16 id, const std::string &stringID);
 
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
-		const std::vector<std::string> &biomes() const { return m_biomes; }
+		const std::string &stringID() const { return m_stringID; }
 
-		const std::string &sky() const { return m_sky; }
-		void setSky(const std::string &sky) { m_sky = sky; }
+		const gk::Color &color() const { return m_color; }
+		const gk::Color &fogColor() const { return m_fogColor; }
+
+		void setColor(const gk::Color &color) { m_color = color; }
+		void setFogColor(const gk::Color &fogColor) { m_fogColor = fogColor; }
 
 	private:
-		u16 m_id = 0;
-
+		u16 m_id;
 		std::string m_stringID;
-		std::string m_name;
 
-		std::vector<std::string> m_biomes;
-
-		std::string m_sky;
+		gk::Color m_color;
+		gk::Color m_fogColor;
 };
 
-#endif // DIMENSION_HPP_
+#endif // SKY_HPP_

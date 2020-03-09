@@ -28,10 +28,10 @@
 #include "NetworkUtils.hpp"
 
 void Dimension::serialize(sf::Packet &packet) const {
-	packet << m_id << m_stringID << m_name << m_biomes;
+	packet << m_id << m_stringID << m_name << m_biomes << m_sky;
 }
 
 void Dimension::deserialize(sf::Packet &packet) {
-	packet >> m_id >> m_stringID >> m_name >> m_biomes;
+	packet >> m_id >> m_stringID >> m_name >> m_biomes >> m_sky;
 }
 

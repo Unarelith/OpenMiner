@@ -38,6 +38,7 @@
 #include "Network.hpp"
 #include "Recipe.hpp"
 #include "Tree.hpp"
+#include "Sky.hpp"
 
 class Registry : public ISerializable {
 	public:
@@ -69,6 +70,9 @@ class Registry : public ISerializable {
 			return m_recipes.back().get();
 		}
 
+		Sky &registerSky(const std::string &stringID);
+		Sky &registerSerializedSky(sf::Packet &packet);
+
 		Tree &registerTree(const std::string &stringID);
 		Tree &registerSerializedTree(sf::Packet &packet);
 
@@ -78,18 +82,20 @@ class Registry : public ISerializable {
 		Dimension &registerDimension(const std::string &stringID, const std::string &label);
 		Dimension &registerSerializedDimension(sf::Packet &packet);
 
-		const Block &getBlock(std::size_t id) const { return *m_blocks.at(id).get(); }
-		const Item &getItem(std::size_t id) const { return m_items.at(id); }
+		const Block &getBlock(u16 id) const { return *m_blocks.at(id).get(); }
+		const Item &getItem(u16 id) const { return m_items.at(id); }
+		const Sky &getSky(u16 id) const { return m_skies.at(id); }
+		const Tree &getTree(u16 id) const { return m_trees.at(id); }
+		const Biome &getBiome(u16 id) const { return m_biomes.at(id); }
+		const Dimension &getDimension(u16 id) const { return m_dimensions.at(id); }
 
 		const Block &getBlockFromStringID(const std::string &stringID);
 		const Item &getItemFromStringID(const std::string &stringID);
+		const Sky &getSkyFromStringID(const std::string &stringID);
 		const Tree &getTreeFromStringID(const std::string &stringID);
 		const Biome &getBiomeFromStringID(const std::string &stringID);
 
 		const Recipe *getRecipe(const Inventory &inventory) const;
-
-		const Tree &getTree(u32 id) const { return m_trees.at(id); }
-		const Biome &getBiome(u32 id) const { return m_biomes.at(id); }
 
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
@@ -109,12 +115,14 @@ class Registry : public ISerializable {
 		std::vector<std::unique_ptr<Block>> m_blocks;
 		std::vector<Item> m_items;
 		std::vector<std::unique_ptr<Recipe>> m_recipes;
+		std::vector<Sky> m_skies;
 		std::vector<Tree> m_trees;
 		std::vector<Biome> m_biomes;
 		std::vector<Dimension> m_dimensions;
 
 		std::unordered_map<std::string, u32> m_blocksID;
 		std::unordered_map<std::string, u32> m_itemsID;
+		std::unordered_map<std::string, u16> m_skiesID;
 		std::unordered_map<std::string, u16> m_treesID;
 		std::unordered_map<std::string, u16> m_biomesID;
 		std::unordered_map<std::string, u16> m_dimensionsID;
@@ -124,6 +132,7 @@ class Registry : public ISerializable {
 			Item,
 			CraftingRecipe,
 			SmeltingRecipe,
+			Sky,
 			Tree,
 			Biome,
 			Dimension

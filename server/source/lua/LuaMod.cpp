@@ -46,6 +46,10 @@ void LuaMod::registerSmeltingRecipe(const sol::table &table) {
 	m_recipeLoader.loadSmeltingRecipe(table);
 }
 
+void LuaMod::registerSky(const sol::table &table) {
+	m_skyLoader.loadSky(table);
+}
+
 void LuaMod::registerTree(const sol::table &table) {
 	m_biomeLoader.loadTree(table);
 }
@@ -66,6 +70,7 @@ void LuaMod::initUsertype(sol::state &lua) {
 		"item",            &LuaMod::registerItem,
 		"crafting_recipe", &LuaMod::registerCraftingRecipe,
 		"smelting_recipe", &LuaMod::registerSmeltingRecipe,
+		"sky",             &LuaMod::registerSky,
 		"tree",            &LuaMod::registerTree,
 		"biome",           &LuaMod::registerBiome,
 		"dimension",       &LuaMod::registerDimension

@@ -25,21 +25,27 @@
 -- =====================================================================================
 --
 
-mod:dimension {
-	id = "overworld",
-	name = "Overworld",
+mod:sky {
+	id = "sky_overworld",
 
-	biomes = {"default:grassland", "default:mountain", "default:desert"},
+	color = {
+		day = {50, 153, 204},
+	},
 
-	sky = "default:sky_overworld",
+	fog_color = {
+		day = {50, 153, 204},
+	},
 }
 
-mod:dimension {
-	id = "nether",
-	name = "Nether",
+mod:sky {
+	id = "sky_nether",
 
-	biomes = {"default:netherland"},
+	color = {
+		day = {154, 50, 33},
+	},
 
-	sky = "default:sky_nether",
+	fog_color = {
+		day = {154, 50, 33},
+	},
 }
 

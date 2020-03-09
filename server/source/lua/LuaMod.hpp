@@ -32,6 +32,7 @@
 #include "LuaDimensionLoader.hpp"
 #include "LuaItemLoader.hpp"
 #include "LuaRecipeLoader.hpp"
+#include "LuaSkyLoader.hpp"
 
 // This class is meant to be used ONLY in Lua
 class LuaMod {
@@ -42,6 +43,7 @@ class LuaMod {
 		void registerItem(const sol::table &table);
 		void registerCraftingRecipe(const sol::table &table);
 		void registerSmeltingRecipe(const sol::table &table);
+		void registerSky(const sol::table &table);
 		void registerTree(const sol::table &table);
 		void registerBiome(const sol::table &table);
 		void registerDimension(const sol::table &table);
@@ -56,6 +58,7 @@ class LuaMod {
 		LuaBlockLoader m_blockLoader{*this};
 		LuaItemLoader m_itemLoader{*this};
 		LuaRecipeLoader m_recipeLoader;
+		LuaSkyLoader m_skyLoader{*this};
 		LuaBiomeLoader m_biomeLoader{*this};
 		LuaDimensionLoader m_dimensionLoader{*this};
 };

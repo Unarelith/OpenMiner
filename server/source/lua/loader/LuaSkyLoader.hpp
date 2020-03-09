@@ -24,41 +24,21 @@
  *
  * =====================================================================================
  */
-#ifndef DIMENSION_HPP_
-#define DIMENSION_HPP_
+#ifndef LUASKYLOADER_HPP_
+#define LUASKYLOADER_HPP_
 
-#include <string>
-#include <vector>
+#include <sol.hpp>
 
-#include <gk/core/IntTypes.hpp>
+class LuaMod;
 
-#include "ISerializable.hpp"
-
-class Dimension : public ISerializable {
+class LuaSkyLoader {
 	public:
-		Dimension() = default;
-		Dimension(u16 id, const std::string &stringID, const std::string &name)
-			: m_id(id), m_stringID(stringID), m_name(name) {}
+		LuaSkyLoader(LuaMod &mod) : m_mod(mod) {}
 
-		void addBiome(const std::string &biome) { m_biomes.emplace_back(biome); }
-
-		void serialize(sf::Packet &packet) const override;
-		void deserialize(sf::Packet &packet) override;
-
-		const std::vector<std::string> &biomes() const { return m_biomes; }
-
-		const std::string &sky() const { return m_sky; }
-		void setSky(const std::string &sky) { m_sky = sky; }
+		void loadSky(const sol::table &table) const;
 
 	private:
-		u16 m_id = 0;
-
-		std::string m_stringID;
-		std::string m_name;
-
-		std::vector<std::string> m_biomes;
-
-		std::string m_sky;
+		LuaMod &m_mod;
 };
 
-#endif // DIMENSION_HPP_
+#endif // LUASKYLOADER_HPP_

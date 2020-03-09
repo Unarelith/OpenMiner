@@ -24,41 +24,31 @@
  *
  * =====================================================================================
  */
-#ifndef DIMENSION_HPP_
-#define DIMENSION_HPP_
+#include "LuaMod.hpp"
+#include "LuaSkyLoader.hpp"
+#include "Registry.hpp"
 
-#include <string>
-#include <vector>
+void LuaSkyLoader::loadSky(const sol::table &table) const {
+	std::string stringID = m_mod.id() + ":" + table["id"].get<std::string>();
 
-#include <gk/core/IntTypes.hpp>
+	Sky &sky = Registry::getInstance().registerSky(stringID);
 
-#include "ISerializable.hpp"
+	const sol::table &skyColor = table["color"].get<sol::table>();
+	if (skyColor.valid()) {
+		u8 r = skyColor["day"][1].get<u8>();
+		u8 g = skyColor["day"][2].get<u8>();
+		u8 b = skyColor["day"][3].get<u8>();
+		u8 a = skyColor["day"][4].get_or<u8>(255);
+		sky.setColor(gk::Color{r, g, b, a});
+	}
 
-class Dimension : public ISerializable {
-	public:
-		Dimension() = default;
-		Dimension(u16 id, const std::string &stringID, const std::string &name)
-			: m_id(id), m_stringID(stringID), m_name(name) {}
+	const sol::table &fogColor = table["fog_color"].get<sol::table>();
+	if (fogColor.valid()) {
+		u8 r = fogColor["day"][1].get<u8>();
+		u8 g = fogColor["day"][2].get<u8>();
+		u8 b = fogColor["day"][3].get<u8>();
+		u8 a = fogColor["day"][4].get_or<u8>(255);
+		sky.setFogColor(gk::Color{r, g, b, a});
+	}
+}
 
-		void addBiome(const std::string &biome) { m_biomes.emplace_back(biome); }
-
-		void serialize(sf::Packet &packet) const override;
-		void deserialize(sf::Packet &packet) override;
-
-		const std::vector<std::string> &biomes() const { return m_biomes; }
-
-		const std::string &sky() const { return m_sky; }
-		void setSky(const std::string &sky) { m_sky = sky; }
-
-	private:
-		u16 m_id = 0;
-
-		std::string m_stringID;
-		std::string m_name;
-
-		std::vector<std::string> m_biomes;
-
-		std::string m_sky;
-};
-
-#endif // DIMENSION_HPP_

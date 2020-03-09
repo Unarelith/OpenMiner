@@ -52,6 +52,7 @@ class GameState : public gk::ApplicationState {
 		void update() override;
 
 		Client &client() { return m_client; }
+		ClientWorld &world() { return m_world; }
 		ClientCommandHandler &clientCommandHandler() { return m_clientCommandHandler; }
 		TextureAtlas &textureAtlas() { return m_textureAtlas; }
 

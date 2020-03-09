@@ -24,41 +24,15 @@
  *
  * =====================================================================================
  */
-#ifndef DIMENSION_HPP_
-#define DIMENSION_HPP_
+#include "NetworkUtils.hpp"
 
-#include <string>
-#include <vector>
+sf::Packet &operator<<(sf::Packet &packet, const gk::Color &color) {
+	packet << color.r << color.g << color.b << color.a;
+	return packet;
+}
 
-#include <gk/core/IntTypes.hpp>
+sf::Packet &operator>>(sf::Packet &packet, gk::Color &color) {
+	packet >> color.r >> color.g >> color.b >> color.a;
+	return packet;
+}
 
-#include "ISerializable.hpp"
-
-class Dimension : public ISerializable {
-	public:
-		Dimension() = default;
-		Dimension(u16 id, const std::string &stringID, const std::string &name)
-			: m_id(id), m_stringID(stringID), m_name(name) {}
-
-		void addBiome(const std::string &biome) { m_biomes.emplace_back(biome); }
-
-		void serialize(sf::Packet &packet) const override;
-		void deserialize(sf::Packet &packet) override;
-
-		const std::vector<std::string> &biomes() const { return m_biomes; }
-
-		const std::string &sky() const { return m_sky; }
-		void setSky(const std::string &sky) { m_sky = sky; }
-
-	private:
-		u16 m_id = 0;
-
-		std::string m_stringID;
-		std::string m_name;
-
-		std::vector<std::string> m_biomes;
-
-		std::string m_sky;
-};
-
-#endif // DIMENSION_HPP_

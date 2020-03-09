@@ -200,6 +200,7 @@ void ClientCommandHandler::setupCallbacks() {
 			m_player.setDimension(dimension);
 			m_player.setPosition(x, y, z);
 			m_world.clear();
+			m_world.updateSky(dimension);
 		}
 	});
 

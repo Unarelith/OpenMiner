@@ -27,12 +27,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/norm.hpp>
 
+#include <gk/gl/GLCheck.hpp>
 #include <gk/gl/Shader.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
+#include "Registry.hpp"
+#include "Sky.hpp"
 #include "TextureAtlas.hpp"
 #include "World.hpp"
 
@@ -92,6 +95,15 @@ void ClientWorld::checkPlayerChunk(double playerX, double playerY, double player
 
 void ClientWorld::clear() {
 	m_chunks.clear();
+}
+
+void ClientWorld::updateSky(u16 dimensionID) {
+	const Dimension &dimension = Registry::getInstance().getDimension(dimensionID);
+	const Sky &sky = Registry::getInstance().getSkyFromStringID(dimension.sky());
+
+	glCheck(glClearColor(sky.color().r, sky.color().g, sky.color().b, sky.color().a));
+
+	m_sky = &sky;
 }
 
 void ClientWorld::receiveChunkData(sf::Packet &packet) {
@@ -203,7 +215,12 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	}
 
 	gk::Shader::bind(states.shader);
+
 	states.shader->setUniform("u_renderDistance", Config::renderDistance * CHUNK_WIDTH);
+
+	if (m_sky)
+		states.shader->setUniform("u_fogColor", m_sky->fogColor());
+
 	gk::Shader::bind(nullptr);
 
 	m_ud = 1000000.0;

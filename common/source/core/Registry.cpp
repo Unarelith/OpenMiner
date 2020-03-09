@@ -49,6 +49,23 @@ Item &Registry::registerSerializedItem(sf::Packet &packet) {
 	return m_items.back();
 }
 
+Sky &Registry::registerSky(const std::string &stringID) {
+	size_t id = m_skies.size();
+	m_skiesID.emplace(stringID, id);
+	m_skies.emplace_back(id, stringID);
+	return m_skies.back();
+}
+
+Sky &Registry::registerSerializedSky(sf::Packet &packet) {
+	m_skies.emplace_back();
+	m_skies.back().deserialize(packet);
+
+	size_t id = m_skies.size() - 1;
+	m_skiesID.emplace(m_skies.back().stringID(), id);
+
+	return m_skies.back();
+}
+
 Tree &Registry::registerTree(const std::string &stringID) {
 	size_t id = m_trees.size();
 	m_treesID.emplace(stringID, id);
@@ -116,6 +133,17 @@ const Item &Registry::getItemFromStringID(const std::string &stringID) {
 	return getItem(it->second);
 }
 
+const Sky &Registry::getSkyFromStringID(const std::string &stringID) {
+	if (stringID.empty())
+		throw EXCEPTION("Trying to get sky from empty string ID.");
+
+	auto it = m_skiesID.find(stringID);
+	if (it == m_skiesID.end())
+		throw EXCEPTION("Unknown sky:", stringID);
+
+	return getSky(it->second);
+}
+
 const Tree &Registry::getTreeFromStringID(const std::string &stringID) {
 	if (stringID.empty())
 		throw EXCEPTION("Trying to get tree from empty string ID.");
@@ -160,6 +188,10 @@ void Registry::serialize(sf::Packet &packet) const {
 			<< *it;
 	}
 
+	for (auto &it : m_skies) {
+		packet << u8(DataType::Sky) << it;
+	}
+
 	for (auto &it : m_trees) {
 		packet << u8(DataType::Tree) << it;
 	}
@@ -189,11 +221,14 @@ void Registry::deserialize(sf::Packet &packet) {
 		else if (type == u8(DataType::SmeltingRecipe)) {
 			registerRecipe<SmeltingRecipe>()->deserialize(packet);
 		}
-		else if (type == u8(DataType::Biome)) {
-			registerSerializedBiome(packet);
+		else if (type == u8(DataType::Sky)) {
+			registerSerializedSky(packet);
 		}
 		else if (type == u8(DataType::Tree)) {
 			registerSerializedTree(packet);
+		}
+		else if (type == u8(DataType::Biome)) {
+			registerSerializedBiome(packet);
 		}
 		else if (type == u8(DataType::Dimension)) {
 			registerSerializedDimension(packet);

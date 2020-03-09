@@ -90,4 +90,12 @@ sf::Packet &operator>>(sf::Packet &packet, gk::Vector3<T> &vec) {
 	return packet;
 }
 
+//======================================================================================
+// gk::Color
+//======================================================================================
+#include <gk/graphics/Color.hpp>
+
+sf::Packet &operator<<(sf::Packet &packet, const gk::Color &color);
+sf::Packet &operator>>(sf::Packet &packet, gk::Color &color);
+
 #endif // NETWORKUTILS_HPP_

@@ -70,6 +70,8 @@ void ServerLoadingState::update() {
 			if (m_showLoadingState)
 				std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
+			m_game.world().updateSky(0);
+
 			m_stateStack->pop();
 
 			gk::Mouse::setCursorVisible(false);

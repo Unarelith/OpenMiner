@@ -36,6 +36,7 @@
 #include "World.hpp"
 
 class ClientCommandHandler;
+class Sky;
 class TextureAtlas;
 
 class ClientWorld : public World, public gk::Drawable {
@@ -49,6 +50,8 @@ class ClientWorld : public World, public gk::Drawable {
 		void checkPlayerChunk(double playerX, double playerY, double playerZ);
 
 		void clear();
+
+		void updateSky(u16 dimensionID);
 
 		void receiveChunkData(sf::Packet &packet);
 		void removeChunk(ChunkMap::iterator &it);
@@ -76,6 +79,8 @@ class ClientWorld : public World, public gk::Drawable {
 		mutable s32 m_ux;
 		mutable s32 m_uy;
 		mutable s32 m_uz;
+
+		const Sky *m_sky = nullptr;
 };
 
 #endif // CLIENTWORLD_HPP_
