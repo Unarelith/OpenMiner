@@ -50,6 +50,8 @@ class ServerApplication {
 		void setPort(u16 port) { m_port = port; }
 
 	private:
+		void loadMods();
+
 		void update();
 		void mainLoop();
 
