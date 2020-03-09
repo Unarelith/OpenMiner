@@ -29,7 +29,7 @@ mod:dimension {
 	id = "overworld",
 	name = "Overworld",
 
-	biomes = {"default:grassland", "default:mountain", "default:desert"},
+	biomes = {"default:grassland", "default:desert"},
 
 	sky = "default:sky_overworld",
 }

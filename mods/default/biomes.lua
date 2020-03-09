@@ -75,22 +75,6 @@ mod:biome {
 }
 
 mod:biome {
-	id = "mountain",
-	name = "Mountain",
-
-	params = {
-		temperature = -0.6,
-		precipitation = 0.4
-	},
-
-	top_block = "default:stone",
-	ground_block = "default:stone",
-	deep_block = "default:stone",
-	beach_block = "default:sand",
-	liquid_block = "default:water",
-}
-
-mod:biome {
 	id = "desert",
 	name = "Desert",
 
