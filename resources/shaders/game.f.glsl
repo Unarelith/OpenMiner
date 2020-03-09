@@ -78,7 +78,8 @@ void main() {
 
 	color.rgb *= v_ambientOcclusion;
 
-	color = fog(color, v_dist, u_renderDistance - 32, u_renderDistance);
+	if (blockFace > -1.)
+		color = fog(color, v_dist, u_renderDistance - 32, u_renderDistance);
 
 	gl_FragColor = color;
 }

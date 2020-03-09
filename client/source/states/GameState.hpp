@@ -81,7 +81,7 @@ class GameState : public gk::ApplicationState {
 
 		TextureAtlas &m_textureAtlas;
 
-		CloudRenderer m_cloudRenderer;
+		CloudRenderer m_cloudRenderer{m_camera};
 };
 
 #endif // GAMESTATE_HPP_

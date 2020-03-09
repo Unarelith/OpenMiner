@@ -1,5 +1,6 @@
 <textures>
 	<texture name="block_destroy"    path="resources/textures/block_destroy.png" />
+	<texture name="clouds"           path="resources/textures/clouds.png" />
 	<texture name="creative_window"  path="resources/textures/creative_window.png" />
 	<texture name="font"             path="resources/textures/font.png" />
 	<texture name="furnace"          path="resources/textures/furnace.png" />

@@ -78,7 +78,6 @@ static float cubeCoords[6 * 4 * 3] = {
 	1, 0, 1,
 	1, 1, 1,
 	0, 1, 1,
-
 };
 
 BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
