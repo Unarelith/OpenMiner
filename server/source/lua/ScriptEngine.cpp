@@ -52,7 +52,10 @@ void ScriptEngine::init() {
 
 void ScriptEngine::initUsertypes() {
 	m_lua.new_usertype<Registry>("Registry",
-		"get_recipe", &Registry::getRecipe
+		"get_recipe", &Registry::getRecipe,
+
+		"blocks", &Registry::blocks,
+		"items", &Registry::items
 	);
 
 	m_lua.new_usertype<World>("World",
@@ -78,6 +81,10 @@ void ScriptEngine::initUsertypes() {
 		"inventory", &BlockData::inventory,
 		"meta", &BlockData::meta,
 		"useAltTiles", &BlockData::useAltTiles
+	);
+
+	m_lua.new_usertype<Block>("Block",
+		"string_id", &Block::stringID
 	);
 
 	m_lua.new_usertype<Player>("Player",
@@ -111,7 +118,7 @@ void ScriptEngine::initUsertypes() {
 
 	m_lua.new_usertype<Item>("Item",
 		"id", &Item::id,
-		"stringID", &Item::stringID,
+		"string_id", &Item::stringID,
 		"burn_time", &Item::burnTime,
 		"is_fuel", &Item::isFuel
 	);

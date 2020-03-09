@@ -119,6 +119,13 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 end
 
 function show_creative_window(client, screen_width, screen_height, gui_scale)
+	items = {}
+	for k, v in pairs(openminer:registry():items()) do
+		if k ~= 1 then
+			items[#items + 1] = {v:string_id()}
+		end
+	end
+
 	local gui = LuaGUI.new()
 
 	gui:set_size(195, 136)
@@ -138,72 +145,7 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 		width = 9,
 		height = 7,
 
-		items = {
-			-- Blocks
-			{"default:dirt"},
-			{"default:cobblestone"},
-			{"default:grass"},
-			{"default:oak_leaves"},
-			{"default:oak_wood"},
-			{"default:stone"},
-			{"default:sand"},
-			{"default:water"},
-			{"default:glass"},
-			{"default:coal_ore"},
-			{"default:oak_planks"},
-			{"default:glowstone"},
-			{"default:workbench"},
-			{"default:furnace"},
-			{"default:iron_ore"},
-			{"default:dandelion"},
-			{"default:tallgrass"},
-			{"default:stone_bricks"},
-			{"default:bricks"},
-			{"default:clay"},
-			{"default:oak_slab"},
-			{"default:portal"},
-			{"default:netherrack"},
-			{"default:soul_sand"},
-			{"default:lava"},
-			{"default:cactus"},
-			{"default:deadbush"},
-			{"default:debug"},
-
-			-- Items
-			{"default:stick"},
-			{"default:stone_axe"},
-			{"default:stone_hoe"},
-			{"default:stone_pickaxe"},
-			{"default:stone_shovel"},
-			{"default:stone_sword"},
-			{"default:coal"},
-			{"default:iron_ingot"},
-			{"default:charcoal"},
-			{"default:wooden_axe"},
-			{"default:wooden_hoe"},
-			{"default:wooden_pickaxe"},
-			{"default:wooden_shovel"},
-			{"default:wooden_sword"},
-			{"default:brick"},
-			{"default:clay_ball"},
-			{"default:diamond"},
-			{"default:gold_ingot"},
-			{"default:iron_pickaxe"},
-			{"default:iron_sword"},
-			{"default:iron_axe"},
-			{"default:iron_hoe"},
-			{"default:iron_shovel"},
-			{"default:diamond_pickaxe"},
-			{"default:diamond_sword"},
-			{"default:diamond_axe"},
-			{"default:diamond_hoe"},
-			{"default:diamond_shovel"},
-			{"default:golden_pickaxe"},
-			{"default:golden_sword"},
-			{"default:golden_axe"},
-			{"default:golden_hoe"},
-			{"default:golden_shovel"},
-		},
+		items = items,
 
 		is_unlimited = true,
 	}
