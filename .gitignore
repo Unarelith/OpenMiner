@@ -55,6 +55,7 @@ server/openminer_server
 *.dll
 
 # Misc
+*.dat
 *.zip
 test_atlas.png
 config.lua

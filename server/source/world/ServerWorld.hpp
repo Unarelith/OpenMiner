@@ -47,13 +47,17 @@ class ServerWorld : public World {
 
 		void update();
 
-		void createChunkNeighbours(ServerChunk *chunk);
-		void sendChunkData(const ClientInfo &client, ServerChunk *chunk);
+		void createChunkNeighbours(ServerChunk &chunk);
+		void sendChunkData(const ClientInfo &client, ServerChunk &chunk);
 		void sendRequestedData(ClientInfo &client, s32 cx, s32 cy, s32 cz);
+
+		ServerChunk &createChunk(s32 cx, s32 cy, s32 cz);
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
 
 		const Dimension &dimension() const { return m_dimension; }
+
+		const ChunkMap &chunks() const { return m_chunks; }
 
 		TerrainGenerator &terrainGenerator() { return m_terrainGenerator; }
 

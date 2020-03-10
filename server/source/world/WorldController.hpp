@@ -35,8 +35,7 @@ class Registry;
 
 class WorldController {
 	public:
-		WorldController(Registry &registry)
-			: m_registry(registry) {}
+		WorldController(Registry &registry) : m_registry(registry) {}
 
 		void init();
 

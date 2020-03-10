@@ -45,7 +45,7 @@ void ServerWorld::update() {
 
 			if (it.second->isInitialized() && !it.second->isSent()) {
 				for (auto &client : m_server->server().info().clients())
-					sendChunkData(client, it.second.get());
+					sendChunkData(client, *it.second.get());
 
 				// DEBUG("Chunk updated at", it.second->x(), it.second->y(), it.second->z());
 			}
@@ -53,14 +53,14 @@ void ServerWorld::update() {
 	}
 }
 
-void ServerWorld::createChunkNeighbours(ServerChunk *chunk) {
+void ServerWorld::createChunkNeighbours(ServerChunk &chunk) {
 	gk::Vector3i surroundingChunks[6] = {
-		{chunk->x() - 1, chunk->y(),     chunk->z()},
-		{chunk->x() + 1, chunk->y(),     chunk->z()},
-		{chunk->x(),     chunk->y() - 1, chunk->z()},
-		{chunk->x(),     chunk->y() + 1, chunk->z()},
-		{chunk->x(),     chunk->y(),     chunk->z() - 1},
-		{chunk->x(),     chunk->y(),     chunk->z() + 1},
+		{chunk.x() - 1, chunk.y(),     chunk.z()},
+		{chunk.x() + 1, chunk.y(),     chunk.z()},
+		{chunk.x(),     chunk.y() - 1, chunk.z()},
+		{chunk.x(),     chunk.y() + 1, chunk.z()},
+		{chunk.x(),     chunk.y(),     chunk.z() - 1},
+		{chunk.x(),     chunk.y(),     chunk.z() + 1},
 	};
 
 	for (u8 i = 0 ; i < 6 ; ++i) {
@@ -68,8 +68,8 @@ void ServerWorld::createChunkNeighbours(ServerChunk *chunk) {
 		ServerChunk *neighbour = (ServerChunk *)getChunk(surroundingChunks[i].x, surroundingChunks[i].y, surroundingChunks[i].z);
 		if (neighbour) {
 			// Assign surrounding chunk pointers
-			chunk->setSurroundingChunk(i, neighbour);
-			neighbour->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, chunk);
+			chunk.setSurroundingChunk(i, neighbour);
+			neighbour->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, &chunk);
 
 			continue;
 		}
@@ -93,26 +93,26 @@ void ServerWorld::createChunkNeighbours(ServerChunk *chunk) {
 		neighbour = it.first->second.get();
 
 		// Assign surrounding chunk pointers
-		chunk->setSurroundingChunk(i, neighbour);
-		neighbour->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, chunk);
+		chunk.setSurroundingChunk(i, neighbour);
+		neighbour->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, &chunk);
 	}
 }
 
-void ServerWorld::sendChunkData(const ClientInfo &client, ServerChunk *chunk) {
+void ServerWorld::sendChunkData(const ClientInfo &client, ServerChunk &chunk) {
 	sf::Packet packet;
 	packet << Network::Command::ChunkData;
-	packet << chunk->x() << chunk->y() << chunk->z();
+	packet << chunk.x() << chunk.y() << chunk.z();
 	for (u16 z = 0 ; z < CHUNK_HEIGHT ; ++z) {
 		for (u16 y = 0 ; y < CHUNK_DEPTH ; ++y) {
 			for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
-				packet << chunk->data()[z][y][x];
-				packet << chunk->lightmap().getLightData(x, y, z);
+				packet << chunk.data()[z][y][x];
+				packet << chunk.lightmap().getLightData(x, y, z);
 
-				BlockData *blockData = chunk->getBlockData(x, y, z);
+				BlockData *blockData = chunk.getBlockData(x, y, z);
 				if (blockData) {
-					s32 globalX = x + chunk->x() * CHUNK_WIDTH;
-					s32 globalY = y + chunk->y() * CHUNK_DEPTH;
-					s32 globalZ = z + chunk->z() * CHUNK_HEIGHT;
+					s32 globalX = x + chunk.x() * CHUNK_WIDTH;
+					s32 globalY = y + chunk.y() * CHUNK_DEPTH;
+					s32 globalZ = z + chunk.z() * CHUNK_HEIGHT;
 
 					m_server->sendBlockDataUpdate(globalX, globalY, globalZ, blockData, &client);
 					m_server->sendBlockInvUpdate(globalX, globalY, globalZ, blockData->inventory, &client);
@@ -122,32 +122,38 @@ void ServerWorld::sendChunkData(const ClientInfo &client, ServerChunk *chunk) {
 	}
 
 	client.tcpSocket->send(packet);
-	chunk->setSent(true);
-	chunk->setChanged(false);
+	chunk.setSent(true);
+	chunk.setChanged(false);
 
 	// std::cout << "Chunk at (" << chunk->x() << ", " << chunk->y() << ", " << chunk->z() << ") sent to client" << std::endl;
 }
 
 void ServerWorld::sendRequestedData(ClientInfo &client, int cx, int cy, int cz) {
+	ServerChunk &chunk = createChunk(cx, cy, cz);
+
+	// Create our neighbours so that we can generate and process lights correctly
+	createChunkNeighbours(chunk);
+
+	// Generate our chunk
+	if (!chunk.isInitialized()) {
+		m_terrainGenerator.generate(chunk);
+
+		chunk.setInitialized(true);
+	}
+
+	chunk.updateLights();
+
+	sendChunkData(client, chunk);
+}
+
+ServerChunk &ServerWorld::createChunk(s32 cx, s32 cy, s32 cz) {
 	ServerChunk *chunk = (ServerChunk *)getChunk(cx, cy, cz);
 	if (!chunk) {
 		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ServerChunk(cx, cy, cz, *this));
 		chunk = it.first->second.get();
 	}
 
-	// Create our neighbours so that we can generate and process lights correctly
-	createChunkNeighbours(chunk);
-
-	// Generate our chunk
-	if (!chunk->isInitialized()) {
-		m_terrainGenerator.generate(*chunk);
-
-		chunk->setInitialized(true);
-	}
-
-	chunk->updateLights();
-
-	sendChunkData(client, chunk);
+	return *chunk;
 }
 
 Chunk *ServerWorld::getChunk(int cx, int cy, int cz) const {

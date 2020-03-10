@@ -40,6 +40,8 @@ class Dimension : public ISerializable {
 		Dimension(u16 id, const std::string &stringID, const std::string &name)
 			: m_id(id), m_stringID(stringID), m_name(name) {}
 
+		u16 id() const { return m_id; }
+
 		void addBiome(const std::string &biome) { m_biomes.emplace_back(biome); }
 
 		void serialize(sf::Packet &packet) const override;
