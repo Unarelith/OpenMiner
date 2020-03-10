@@ -1,0 +1,15 @@
+site_name: OpenMiner
+
+nav:
+    - 'Home': 'index.md'
+    - 'Lua API':
+        - 'Overview': 'lua-api-overview.md'
+        - 'Blocks': 'lua-api-blocks.md'
+
+theme:
+    name: readthedocs
+    highlightjs: true
+    hljs_languages:
+        - yaml
+        - rust
+
