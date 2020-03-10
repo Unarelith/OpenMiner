@@ -59,7 +59,6 @@ class ServerApplication {
 		gk::GameClock m_clock;
 
 		ScriptEngine m_scriptEngine;
-		LuaCore m_luaCore{m_registry};
 
 		Registry m_registry;
 

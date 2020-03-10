@@ -58,6 +58,8 @@ void ServerApplication::init() {
 	m_worldController.setServer(m_serverCommandHandler);
 	m_worldController.init();
 
+	m_scriptEngine.luaCore().setRegistry(&m_registry);
+
 	std::cout << "Server is running on localhost:" << m_port << std::endl;
 }
 
@@ -108,8 +110,6 @@ void ServerApplication::loadMods() {
 	m_scriptEngine.init();
 
 	try {
-		m_scriptEngine.lua()["openminer"] = &m_luaCore;
-
 		fs::directory_iterator dir("mods/");
 		for (const auto &entry : dir) {
 			if (fs::exists(entry.path().string() + "/init.lua")) {

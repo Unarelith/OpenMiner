@@ -165,6 +165,8 @@ void ServerCommandHandler::setupCallbacks() {
 		world.setBlock(x, y, z, block & 0xffff);
 		world.setData(x, y, z, block >> 16);
 
+		m_scriptEngine.luaCore().onEvent(LuaEventType::OnBlockPlaced, glm::ivec3{x, y, z}, m_players.at(client.id), world, client, *this);
+
 		sf::Packet answer;
 		answer << Network::Command::BlockUpdate << x << y << z << block;
 		m_server.sendToAllClients(answer);

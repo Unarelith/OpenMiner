@@ -28,21 +28,43 @@
 #define LUACORE_HPP_
 
 #include <functional>
+#include <iostream>
 
 #include <sol.hpp>
 
 class Registry;
 
+enum class LuaEventType {
+	OnBlockPlaced
+};
+
 class LuaCore {
 	public:
-		LuaCore(Registry &registry) : m_registry(registry) {}
+		void addListener(LuaEventType eventType, const sol::function &listener);
 
-		Registry *registry();
+		template<typename... Args>
+		void onEvent(LuaEventType eventType, Args &&...args) {
+			for (auto &it : m_listeners) {
+				if (it.first == eventType) {
+					try {
+						it.second(std::forward<Args>(args)...);
+					}
+					catch (const sol::error &e) {
+						std::cerr << e.what() << std::endl;
+					}
+				}
+			}
+		}
+
+		Registry *registry() { return m_registry; }
+		void setRegistry(Registry *registry) { m_registry = registry; }
 
 		static void initUsertype(sol::state &lua);
 
 	private:
-		Registry &m_registry;
+		Registry *m_registry = nullptr;
+
+		std::unordered_multimap<LuaEventType, sol::unsafe_function> m_listeners;
 };
 
 #endif // LUACORE_HPP_

@@ -34,6 +34,10 @@ dofile("mods/default/trees.lua")
 dofile("mods/default/biomes.lua")
 dofile("mods/default/dimensions.lua")
 
+-- openminer:add_listener(EventType.OnBlockPlaced, function(pos, player, world, client, server)
+-- 	server:send_chat_message(0, "Block placed at " .. pos.x .. ";" .. pos.y .. ";" .. pos.z .. " by Client" .. player:client_id(), client);
+-- end)
+
 function init(player)
 	local player_inv = player:inventory()
 

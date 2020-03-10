@@ -31,21 +31,22 @@
 
 #include <sol.hpp>
 
+#include "LuaCore.hpp"
+
 class ScriptEngine {
 	public:
 		void init();
 
 		sol::state &lua() { return m_lua; }
 
-		static ScriptEngine &getInstance() { return *s_instance; }
-		static void setInstance(ScriptEngine *instance) { s_instance = instance; }
+		LuaCore &luaCore() { return m_luaCore; }
 
 	private:
 		void initUsertypes();
 
-		static ScriptEngine *s_instance;
-
 		sol::state m_lua;
+
+		LuaCore m_luaCore;
 };
 
 #endif // SCRIPTENGINE_HPP_

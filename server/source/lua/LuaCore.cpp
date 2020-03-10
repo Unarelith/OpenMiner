@@ -28,12 +28,17 @@
 #include "Registry.hpp"
 #include "ServerWorld.hpp"
 
-Registry *LuaCore::registry() {
-	return &m_registry;
+void LuaCore::addListener(LuaEventType eventType, const sol::function &listener) {
+	m_listeners.emplace(eventType, listener);
 }
 
 void LuaCore::initUsertype(sol::state &lua) {
+	lua["EventType"] = lua.create_table_with(
+		"OnBlockPlaced", LuaEventType::OnBlockPlaced
+	);
+
 	lua.new_usertype<LuaCore>("LuaCore",
+		"add_listener", &LuaCore::addListener,
 		"registry", &LuaCore::registry
 	);
 }

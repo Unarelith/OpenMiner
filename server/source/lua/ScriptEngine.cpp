@@ -34,11 +34,7 @@
 #include "ServerPlayer.hpp"
 #include "ServerWorld.hpp"
 
-ScriptEngine *ScriptEngine::s_instance = nullptr;
-
 void ScriptEngine::init() {
-	setInstance(this);
-
 	initUsertypes();
 
 	// Note: To be safe, don't add sol::lib::io and provide a better way to load/save data
@@ -48,6 +44,8 @@ void ScriptEngine::init() {
 		sol::lib::math,
 		sol::lib::table
 	);
+
+	m_lua["openminer"] = &m_luaCore;
 }
 
 void ScriptEngine::initUsertypes() {
@@ -96,7 +94,9 @@ void ScriptEngine::initUsertypes() {
 		"set_position", &Player::setPosition,
 
 		"dimension", &Player::dimension,
-		"set_dimension", &Player::setDimension
+		"set_dimension", &Player::setDimension,
+
+		"client_id", &Player::clientID
 	);
 
 	m_lua.new_usertype<ServerPlayer>("ServerPlayer",
@@ -145,7 +145,8 @@ void ScriptEngine::initUsertypes() {
 	);
 
 	m_lua.new_usertype<ServerCommandHandler>("ServerCommandHandler",
-		"send_player_change_dimension", &ServerCommandHandler::sendPlayerChangeDimension
+		"send_player_change_dimension", &ServerCommandHandler::sendPlayerChangeDimension,
+		"send_chat_message", &ServerCommandHandler::sendChatMessage
 	);
 
 	LuaCore::initUsertype(m_lua);
