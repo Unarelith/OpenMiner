@@ -30,6 +30,7 @@
 #include "LuaMod.hpp"
 #include "Registry.hpp"
 #include "ScriptEngine.hpp"
+#include "ServerBlock.hpp"
 #include "ServerCommandHandler.hpp"
 #include "ServerPlayer.hpp"
 #include "ServerWorld.hpp"
@@ -83,6 +84,10 @@ void ScriptEngine::initUsertypes() {
 
 	m_lua.new_usertype<Block>("Block",
 		"string_id", &Block::stringID
+	);
+
+	m_lua.new_usertype<ServerBlock>("ServerBlock",
+		sol::base_classes, sol::bases<Block>()
 	);
 
 	m_lua.new_usertype<Player>("Player",

@@ -38,6 +38,12 @@ dofile("mods/default/dimensions.lua")
 -- 	server:send_chat_message(0, "Block placed at " .. pos.x .. ";" .. pos.y .. ";" .. pos.z .. " by Client" .. player:client_id(), client);
 -- end)
 
+openminer:add_listener(EventType.OnBlockActivated, function(pos, block, player, world, client, server)
+	if block:string_id() == "default:portal" then
+		server:send_chat_message(0, "Swoosh! Changing dimension...", client);
+	end
+end)
+
 function init(player)
 	local player_inv = player:inventory()
 

@@ -34,7 +34,8 @@ void LuaCore::addListener(LuaEventType eventType, const sol::function &listener)
 
 void LuaCore::initUsertype(sol::state &lua) {
 	lua["EventType"] = lua.create_table_with(
-		"OnBlockPlaced", LuaEventType::OnBlockPlaced
+		"OnBlockPlaced", LuaEventType::OnBlockPlaced,
+		"OnBlockActivated", LuaEventType::OnBlockActivated
 	);
 
 	lua.new_usertype<LuaCore>("LuaCore",

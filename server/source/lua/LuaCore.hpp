@@ -35,7 +35,8 @@
 class Registry;
 
 enum class LuaEventType {
-	OnBlockPlaced
+	OnBlockPlaced,
+	OnBlockActivated
 };
 
 class LuaCore {

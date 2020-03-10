@@ -222,7 +222,10 @@ void ServerCommandHandler::setupCallbacks() {
 
 		u16 id = world.getBlock(x, y, z);
 		ServerBlock &block = (ServerBlock &)(m_registry.getBlock(id));
-		block.onBlockActivated({x, y, z}, m_players.at(client.id), world, client, *this, screenWidth, screenHeight, guiScale);
+		bool hasBeenActivated = block.onBlockActivated({x, y, z}, m_players.at(client.id), world, client, *this, screenWidth, screenHeight, guiScale);
+
+		if (hasBeenActivated)
+			m_scriptEngine.luaCore().onEvent(LuaEventType::OnBlockActivated, glm::ivec3{x, y, z}, block, m_players.at(client.id), world, client, *this);
 	});
 
 	m_server.setCommandCallback(Network::Command::BlockInvUpdate, [this](ClientInfo &client, sf::Packet &packet) {
