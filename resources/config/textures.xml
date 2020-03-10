@@ -1,13 +1,8 @@
 <textures>
 	<texture name="block_destroy"    path="resources/textures/block_destroy.png" />
-	<texture name="creative_window"  path="resources/textures/creative_window.png" />
 	<texture name="font"             path="resources/textures/font.png" />
-	<texture name="furnace"          path="resources/textures/furnace.png" />
-	<texture name="inventory"        path="resources/textures/inventory.png" />
-	<texture name="tabs"             path="resources/textures/tabs.png" />
 	<texture name="toasts"           path="resources/textures/toasts.png" />
 	<texture name="title_screen"     path="resources/textures/title_screen.png" />
 	<texture name="widgets"          path="resources/textures/widgets.png" />
-	<texture name="workbench"        path="resources/textures/workbench.png" />
 	<texture name="player"           path="resources/textures/player.png" />
 </textures>

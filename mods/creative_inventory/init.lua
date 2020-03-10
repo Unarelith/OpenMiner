@@ -42,7 +42,7 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 		name = "img_background",
 		pos = {x = 0, y = 0},
 
-		texture = "texture-creative_window",
+		texture = "mods/default/textures/gui/creative_window.png",
 		clip = {x = 0, y = 0, width = 195, height = 136},
 	}
 
@@ -72,7 +72,7 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 		name = "scroll_bar",
 		pos = {x = 175, y = 18},
 
-		texture = "texture-tabs",
+		texture = "mods/default/textures/gui/tabs.png",
 		clip = {x = 232, y = 0, width = 12, height = 15},
 		clip_selected = {x = 244, y = 0, width = 12, height = 15},
 

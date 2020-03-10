@@ -71,7 +71,7 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 		name = "img_background",
 		pos = {x = 0, y = 0},
 
-		texture = "texture-inventory",
+		texture = "mods/default/textures/gui/inventory.png",
 		clip = {x = 0, y = 0, width = 176, height = 166},
 	}
 

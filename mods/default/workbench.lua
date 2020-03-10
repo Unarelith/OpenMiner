@@ -83,7 +83,7 @@ mod:block {
 			name = "img_background",
 			pos = {x = 0, y = 0},
 
-			texture = "texture-workbench",
+			texture = "mods/default/textures/gui/workbench.png",
 			clip = {x = 0, y = 0, width = 176, height = 166},
 		}
 

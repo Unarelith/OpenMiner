@@ -60,6 +60,8 @@ class LuaGUIState : public InterfaceState {
 		void loadScrollBarWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet);
 		void loadInventory(const std::string &name, sf::Packet &packet);
 
+		gk::Texture &loadTexture(const std::string &textureFilename);
+
 		void centerMainWidget();
 
 		ClientCommandHandler &m_client;
@@ -74,6 +76,7 @@ class LuaGUIState : public InterfaceState {
 		std::vector<std::unique_ptr<Widget>> m_widgets;
 		std::vector<std::unique_ptr<gk::Drawable>> m_drawables;
 		std::unordered_map<std::string, Inventory> m_inventories;
+		std::unordered_map<std::string, gk::Texture> m_textures;
 
 		ClientPlayer &m_player;
 		ClientWorld &m_world;

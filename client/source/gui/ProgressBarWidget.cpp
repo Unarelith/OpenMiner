@@ -26,7 +26,7 @@
  */
 #include "ProgressBarWidget.hpp"
 
-ProgressBarWidget::ProgressBarWidget(const std::string &texture, BlockData &blockData, ProgressBarType type, Widget *parent)
+ProgressBarWidget::ProgressBarWidget(const gk::Texture &texture, BlockData &blockData, ProgressBarType type, Widget *parent)
 	: Widget(parent), m_blockData(blockData), m_image(texture)
 {
 	m_type = type;

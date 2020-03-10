@@ -35,7 +35,7 @@ class ScrollBarWidget : public Widget {
 	public:
 		ScrollBarWidget(Widget *parent = nullptr) : Widget(12, 15, parent) {}
 
-		void init(const std::string &texture, const gk::FloatRect &clipRect, u16 minY, u16 maxY, InventoryWidget &widget);
+		void init(const gk::Texture &texture, const gk::FloatRect &clipRect, u16 minY, u16 maxY, InventoryWidget &widget);
 
 		void onEvent(const SDL_Event &event);
 
