@@ -103,7 +103,7 @@ void Server::handleNewConnections() {
 			m_selector.add(*client.tcpSocket);
 
 			sf::Packet outPacket;
-			outPacket << Network::Command::ClientOk << client.id;
+			outPacket << Network::Command::ClientOk << client.id << m_isSingleplayer;
 			client.tcpSocket->send(outPacket);
 			// client.tcpSocket->setBlocking(false);
 

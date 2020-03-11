@@ -45,29 +45,25 @@
 #include "Registry.hpp"
 #include "TextureAtlas.hpp"
 
-GameState::GameState(const std::string &host, int port)
+GameState::GameState()
 	: m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
-	// Set clear color to skyblue
-	glClearColor(0.196078, 0.6, 0.8, 1.0);
-
-	m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
-
-	initShaders();
-
 	gk::Mouse::setCursorVisible(false);
 	gk::Mouse::setCursorGrabbed(true);
 
-	// m_playerBoxes.emplace(0, PlayerBox{});
-	// m_playerBoxes.at(0).setPosition(0, 22, 35);
-
-	m_client.connect(host, port);
+	initShaders();
 
 	m_clientCommandHandler.setupCallbacks();
 
+	m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
+
 	m_world.setClient(m_clientCommandHandler);
-	m_player.setClientID(m_client.id());
 	m_world.setCamera(m_player.camera());
+}
+
+void GameState::connect(const std::string &host, int port) {
+	m_client.connect(host, port);
+	m_player.setClientID(m_client.id());
 }
 
 void GameState::onEvent(const SDL_Event &event) {

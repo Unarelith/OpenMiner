@@ -51,6 +51,7 @@ class Client {
 		void update();
 
 		void setCommandCallback(Network::Command command, const CommandCallback &callback) { m_commands[command] = callback; }
+		void setSingleplayer(bool isSingleplayer) { m_isSingleplayer = isSingleplayer; }
 
 		bool isConnected() const { return m_isConnected; }
 
@@ -58,6 +59,7 @@ class Client {
 
 	private:
 		bool m_isConnected = false;
+		bool m_isSingleplayer = false;
 
 		u16 m_id;
 

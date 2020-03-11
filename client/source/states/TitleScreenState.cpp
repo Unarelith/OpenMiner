@@ -93,14 +93,17 @@ void TitleScreenState::startSingleplayer(bool showLoadingState) {
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
-	auto &game = m_stateStack->push<GameState>("localhost", m_port);
+	auto &game = m_stateStack->push<GameState>();
 	game.setSingleplayer(true);
+	game.connect("localhost", m_port);
 
 	m_stateStack->push<ServerLoadingState>(game, showLoadingState, this);
 }
 
 void TitleScreenState::startMultiplayer(const std::string &host) {
-	auto &game = m_stateStack->push<GameState>(host, m_port);
+	auto &game = m_stateStack->push<GameState>();
+	game.connect(host, m_port);
+
 	m_stateStack->push<ServerLoadingState>(game, false, this);
 }
 

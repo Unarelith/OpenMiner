@@ -34,7 +34,7 @@ namespace Network {
 		// Client commands
 		ClientConnect         = 0,  // <TCP> [NetworkCommand][u16 udp port]           (from Client only)
 		ClientDisconnect      = 1,  // <TCP> [NetworkCommand]                         (from Client only)
-		ClientOk              = 2,  // <TCP> [NetworkCommand][u16 client id]          (from Server only)
+		ClientOk              = 2,  // <TCP> [NetworkCommand][u16 client id][bool isSingleplayer] (from Server only)
 		ClientRefused         = 3,  // <TCP> [NetworkCommand]                         (from Server only)
 
 		// Input commands

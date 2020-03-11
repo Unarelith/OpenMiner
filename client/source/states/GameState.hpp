@@ -45,7 +45,9 @@ class TextureAtlas;
 
 class GameState : public gk::ApplicationState {
 	public:
-		GameState(const std::string &host, int port);
+		GameState();
+
+		void connect(const std::string &host, int port);
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -56,7 +58,10 @@ class GameState : public gk::ApplicationState {
 		ClientCommandHandler &clientCommandHandler() { return m_clientCommandHandler; }
 		TextureAtlas &textureAtlas() { return m_textureAtlas; }
 
-		void setSingleplayer(bool isSingleplayer) { m_clientCommandHandler.setSingleplayer(isSingleplayer); }
+		void setSingleplayer(bool isSingleplayer) {
+			m_clientCommandHandler.setSingleplayer(isSingleplayer);
+			m_client.setSingleplayer(isSingleplayer);
+		}
 
 	private:
 		void initShaders();

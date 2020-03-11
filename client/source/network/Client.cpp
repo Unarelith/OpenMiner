@@ -54,9 +54,13 @@ void Client::connect(sf::IpAddress serverAddress, u16 serverPort) {
 	if (command == Network::Command::ClientRefused)
 		throw EXCEPTION("Server error: Connection refused. Server probably reached max player amount.");
 
+	bool isSingleplayer;
 	if (command != Network::Command::ClientOk)
 		throw EXCEPTION("Network error: Expected 'ClientOk' packet.");
-	answer >> m_id;
+
+	answer >> m_id >> isSingleplayer;
+	if (m_isSingleplayer != isSingleplayer)
+		throw EXCEPTION("Client error: The server is not valid");
 
 	m_tcpSocket->setBlocking(false);
 	m_socket.setBlocking(false);

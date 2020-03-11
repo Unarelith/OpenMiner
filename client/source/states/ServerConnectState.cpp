@@ -56,7 +56,9 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 			std::cerr << "Error: Invalid server address." << std::endl;
 		}
 
-		auto &game = m_stateStack->push<GameState>(host, port);
+		auto &game = m_stateStack->push<GameState>();
+		game.connect(host, port);
+
 		m_stateStack->push<ServerLoadingState>(game, true, this);
 	});
 
