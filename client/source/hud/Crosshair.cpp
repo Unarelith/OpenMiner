@@ -32,12 +32,9 @@ Crosshair::Crosshair() {
 }
 
 void Crosshair::setup() {
-	float xFactor = Config::screenWidth * Config::screenHeight / 100;
-	float yFactor = Config::screenHeight * Config::screenWidth / 100;
-
-	m_hShape.setSize(0.002 * xFactor, 0.0002 * yFactor);
-	m_vShape1.setSize(0.0002 * xFactor, 0.001 * yFactor - m_hShape.height() / 2);
-	m_vShape2.setSize(0.0002 * xFactor, 0.001 * yFactor - m_hShape.height() / 2);
+	m_hShape.setSize(41, 4);
+	m_vShape1.setSize(4, 19);
+	m_vShape2.setSize(4, 19);
 
 	m_hShape.setFillColor(gk::Color{200, 200, 200, 180});
 	m_vShape1.setFillColor(gk::Color{200, 200, 200, 180});

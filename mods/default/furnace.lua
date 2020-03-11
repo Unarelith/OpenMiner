@@ -179,7 +179,7 @@ mod:block {
 			data.inventory:set_stack(2, 0, fuel_stack:item():string_id(), fuel_stack:amount() - 1)
 			ticks_remaining = fuel_stack:item():burn_time()
 			current_burn_time = fuel_stack:item():burn_time()
-			data.useAltTiles = true;
+			data.use_alt_tiles = true;
 			-- world:set_data(pos.x, pos.y, pos.z, 1)
 		elseif ticks_remaining > 0 then
 			ticks_remaining = ticks_remaining - 1
@@ -192,7 +192,7 @@ mod:block {
 			end
 		elseif ticks_remaining == 0 then
 			current_burn_time = 0
-			data.useAltTiles = false;
+			data.use_alt_tiles = false;
 			-- world:set_data(pos.x, pos.y, pos.z, 0)
 		end
 

@@ -38,8 +38,6 @@ class Crosshair : public gk::Drawable {
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		gk::VertexBuffer m_vbo;
-
 		gk::RectangleShape m_hShape;
 		gk::RectangleShape m_vShape1;
 		gk::RectangleShape m_vShape2;
