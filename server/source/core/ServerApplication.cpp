@@ -26,6 +26,7 @@
  */
 #include "filesystem.hpp"
 
+#include "BlockGeometry.hpp"
 #include "ServerApplication.hpp"
 #include "ServerBlock.hpp"
 
@@ -33,6 +34,7 @@ namespace fs = ghc::filesystem;
 
 ServerApplication::ServerApplication(int argc, char **argv) : m_argumentParser(argc, argv) {
 	std::srand(std::time(nullptr));
+	BlockGeometry::initOrientation();
 }
 
 void ServerApplication::init() {

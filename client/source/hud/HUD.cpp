@@ -51,7 +51,7 @@ HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 }
 
 void HUD::setup() {
-	m_orthoMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f);
+	m_orthoMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f, DIST_2D_FAR, DIST_2D_NEAR);
 
 	m_hotbar.setPosition(Config::screenWidth / getScale().x / 2 - m_hotbar.width() / 2, Config::screenHeight / getScale().y - m_hotbar.height(), 0);
 

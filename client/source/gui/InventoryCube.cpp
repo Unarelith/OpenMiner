@@ -29,9 +29,11 @@
 #include <gk/graphics/Color.hpp>
 #include <gk/gl/GLCheck.hpp>
 #include <gk/gl/Vertex.hpp>
+#include <gk/math/Math.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "Block.hpp"
+#include "BlockGeometry.hpp"
 #include "Config.hpp"
 #include "EngineConfig.hpp"
 #include "InventoryCube.hpp"
@@ -49,98 +51,76 @@ InventoryCube::InventoryCube(float size) : m_textureAtlas(gk::ResourceHandler::g
 	m_transform.rotate(135.0f, {0, 0, 1});
 }
 
+using namespace BlockGeometry;
+
 void InventoryCube::updateVertexBuffer(const Block &block) {
 	if (!block.id()) return;
 
-	// Same order as enum BlockFace in TilesDef.hpp
-	gk::Vertex vertices[6][4] = {
-		// West
-		{
-			{{0,      m_size, 0,      2}},
-			{{0,      0,      0,      2}},
-			{{0,      0,      m_size, 2}},
-			{{0,      m_size, m_size, 2}},
-		},
+	gk::Vertex vertices[nFaces][nVertsPerFace];
 
-		// East
-		{
-			{{m_size, 0,      0,      2}},
-			{{m_size, m_size, 0,      2}},
-			{{m_size, m_size, m_size, 2}},
-			{{m_size, 0,      m_size, 2}},
-		},
-
-		// South
-		{
-			{{0,      0,      0,      4}},
-			{{m_size, 0,      0,      4}},
-			{{m_size, 0,      m_size, 4}},
-			{{0,      0,      m_size, 4}},
-		},
-
-		// North
-		{
-			{{m_size, m_size, 0,      4}},
-			{{0,      m_size, 0,      4}},
-			{{0,      m_size, m_size, 4}},
-			{{m_size, m_size, m_size, 4}},
-		},
-
-		// Bottom
-		{
-			{{m_size, 0,      0,      -1}},
-			{{0,      0,      0,      -1}},
-			{{0,      m_size, 0,      -1}},
-			{{m_size, m_size, 0,      -1}},
-		},
-
-		// Top
-		{
-			{{m_size, m_size, m_size, 3}},
-			{{0,      m_size, m_size, 3}},
-			{{0,      0,      m_size, 3}},
-			{{m_size, 0,      m_size, 3}},
-		},
+	glm::vec3 vertexPos[nVertsPerCube] {
+		// Order is important. It matches the bit order defined in BlockGeometry::cubeVerts.
+		{0,      0,      0},
+		{m_size, 0,      0},
+		{0,      m_size, 0},
+		{m_size, m_size, 0},
+		{0,      0,      m_size},
+		{m_size, 0,      m_size},
+		{0,      m_size, m_size},
+		{m_size, m_size, m_size},
 	};
 
-	for (u8 i = 0 ; i < 6 ; ++i) {
-		const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block.tiles().getTextureForFace(i));
-		float faceTexCoords[2 * 4] = {
-			blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.sizeY,
-			blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y + blockTexCoords.sizeY,
-			blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y,
-			blockTexCoords.x,                        blockTexCoords.y
-		};
+	const gk::FloatBox &boundingBox = block.boundingBox();
 
-		for(u8 j = 0 ; j < 4 ; j++) {
-			if (block.drawType() == BlockDrawType::BoundingBox) {
-				vertices[i][j].coord3d[0] = vertices[i][j].coord3d[0] * block.boundingBox().sizeX + block.boundingBox().x;
-				vertices[i][j].coord3d[1] = vertices[i][j].coord3d[1] * block.boundingBox().sizeY + block.boundingBox().y;
-				vertices[i][j].coord3d[2] = vertices[i][j].coord3d[2] * block.boundingBox().sizeZ + block.boundingBox().z;
+	constexpr s8f faceValue[nFaces]{2, 2, 4, 4, -1, 3};
+
+	for (u8 f = 0; f < nFaces; ++f) {
+		// Calculate UV's
+		// These are tough to obtain. Note that texture Y grows in the up-down direction, and so does V.
+		// Vertex index in the bitmap array and U/V correspondence is:
+		//    U0V0 -> 3 2 <- U1V0
+		//    U0V1 -> 0 1 <- U1V1
+		float U0, V0, U1, V1;
+		if (block.drawType() == BlockDrawType::Cactus) {
+			U0 = 0.f;
+			V0 = 0.f;
+			U1 = 1.f;
+			V1 = 1.f;
+		}
+		else {
+			U0 = (f == 0) ? 1.f - (boundingBox.y + boundingBox.sizeY) : (f == 1) ? boundingBox.y :
+			     (f == 3) ? 1.f - (boundingBox.x + boundingBox.sizeX) : boundingBox.x;
+			V0 = (f <= 3) ? 1.f - (boundingBox.z + boundingBox.sizeZ) : (f == 4) ? boundingBox.y : 1.f - (boundingBox.y + boundingBox.sizeY);
+			U1 = (f == 0) ? 1.f - boundingBox.y : (f == 1) ? boundingBox.y + boundingBox.sizeY :
+			     (f == 3) ? 1.f - boundingBox.x : boundingBox.x + boundingBox.sizeX;
+			V1 = (f <= 3) ? 1.f - boundingBox.z : (f == 4) ? boundingBox.y + boundingBox.sizeY : 1.f - boundingBox.y;
+		}
+
+		const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block.tiles().getTextureForFace(f));
+
+		for (u8f v = 0; v < nVertsPerFace; ++v) {
+			if (block.drawType() == BlockDrawType::Cactus) {
+				vertices[f][v].coord3d[0] = vertexPos[cubeVerts[f][v]].x - boundingBox.x * faceNormals[f][0] * m_size;
+				vertices[f][v].coord3d[1] = vertexPos[cubeVerts[f][v]].y - boundingBox.y * faceNormals[f][1] * m_size;
+				vertices[f][v].coord3d[2] = vertexPos[cubeVerts[f][v]].z - boundingBox.z * faceNormals[f][2] * m_size;
 			}
-			else if (block.drawType() == BlockDrawType::Cactus) {
-				static constexpr s8 normals[6][3] = {
-					{-1, 0, 0},
-					{1, 0, 0},
-					{0, -1, 0},
-					{0, 1, 0},
-					{0, 0, -1},
-					{0, 0, 1}
-				};
-
-				vertices[i][j].coord3d[0] = vertices[i][j].coord3d[0] + block.boundingBox().x * -normals[i][0] * m_size;
-				vertices[i][j].coord3d[1] = vertices[i][j].coord3d[1] + block.boundingBox().y * -normals[i][1] * m_size;
-				vertices[i][j].coord3d[2] = vertices[i][j].coord3d[2] + block.boundingBox().z * -normals[i][2] * m_size;
+			else {
+				vertices[f][v].coord3d[0] = vertexPos[cubeVerts[f][v]].x * boundingBox.sizeX + boundingBox.x;
+				vertices[f][v].coord3d[1] = vertexPos[cubeVerts[f][v]].y * boundingBox.sizeY + boundingBox.y;
+				vertices[f][v].coord3d[2] = vertexPos[cubeVerts[f][v]].z * boundingBox.sizeZ + boundingBox.z;
 			}
+			vertices[f][v].coord3d[3] = faceValue[f];
 
-			vertices[i][j].texCoord[0] = faceTexCoords[j * 2];
-			vertices[i][j].texCoord[1] = faceTexCoords[j * 2 + 1];
+			float U = (v == 0 || v == 3) ? U0 : U1;
+			float V = (v >= 2) ? V0 : V1;
+			vertices[f][v].texCoord[0] = gk::qlerp(blockTexCoords.x, blockTexCoords.x + blockTexCoords.sizeX, U);
+			vertices[f][v].texCoord[1] = gk::qlerp(blockTexCoords.y, blockTexCoords.y + blockTexCoords.sizeY, V);
 
 			const gk::Color &colorMultiplier = block.colorMultiplier();
-			vertices[i][j].color[0] = colorMultiplier.r;
-			vertices[i][j].color[1] = colorMultiplier.g;
-			vertices[i][j].color[2] = colorMultiplier.b;
-			vertices[i][j].color[3] = colorMultiplier.a;
+			vertices[f][v].color[0] = colorMultiplier.r;
+			vertices[f][v].color[1] = colorMultiplier.g;
+			vertices[f][v].color[2] = colorMultiplier.b;
+			vertices[f][v].color[3] = colorMultiplier.a;
 		}
 	}
 
@@ -159,23 +139,16 @@ void InventoryCube::draw(gk::RenderTarget &target, gk::RenderStates states) cons
 
 	states.viewMatrix = gk::Transform::Identity;
 
-	// NOTE: This matrix has Y inverted as well as Z, causing the default
-	// rotation to show the bottom of the item instead of the top.
-	states.projectionMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f, -40.0f, DIST_FAR);
+	// NOTE: This matrix has Y inverted as well as Z. This means that
+	// negative Z is closer to the user, and that the bottom side is visible
+	// at start.
+	states.projectionMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f, DIST_2D_FAR, DIST_2D_NEAR);
 
 	states.texture = &m_textureAtlas.texture();
 	states.vertexAttributes = gk::VertexAttribute::Only2d;
 
-	glCheck(glDisable(GL_CULL_FACE));
-	glCheck(glDisable(GL_DEPTH_TEST));
-
-	target.draw(m_vbo, GL_QUADS, 4 * BlockFace::Top, 4, states);
-	// target.draw(m_vbo, GL_QUADS, 4 * 1, 4, states);
-	target.draw(m_vbo, GL_QUADS, 4 * BlockFace::West, 4, states);
-	// target.draw(m_vbo, GL_QUADS, 4 * 3, 4, states);
-	target.draw(m_vbo, GL_QUADS, 4 * BlockFace::North, 4, states);
-	// target.draw(m_vbo, GL_QUADS, 4 * 5, 4, states);
-
 	glCheck(glEnable(GL_CULL_FACE));
 	glCheck(glEnable(GL_DEPTH_TEST));
+
+	target.draw(m_vbo, GL_QUADS, 0, nFaces * nVertsPerFace, states);
 }

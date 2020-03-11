@@ -27,6 +27,7 @@
 #ifndef BLOCKCURSORRAYCAST_HPP_
 #define BLOCKCURSORRAYCAST_HPP_
 
+#include <gk/core/IntTypes.hpp>
 #include <glm/vec3.hpp>
 
 enum Axis {
@@ -39,12 +40,10 @@ class ClientWorld;
 
 namespace BlockCursorRaycast {
 	void rayCastToAxis(const Axis axis, const glm::dvec3 &position,
-	                   const glm::dvec3 &lookAt,
-	                   const double maxReach,
-	                   int_fast32_t &bestX, int_fast32_t &bestY,
-	                   int_fast32_t &bestZ,
-	                   int_fast8_t &bestFace, double &bestDepth,
+	                   const glm::dvec3 &lookAt, const double maxReach,
+	                   s32f &bestX, s32f &bestY, s32f &bestZ,
+	                   s8f &bestFace, double &bestDepth,
 	                   const ClientWorld &world);
-}
+} // namespace BlockCursorRaycast
 
 #endif // BLOCKCURSORRAYCAST_HPP_

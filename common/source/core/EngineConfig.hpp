@@ -34,6 +34,9 @@ namespace {
 	constexpr float DIST_NEAR = 0.1f;
 	constexpr float DIST_FAR  = 1000.0f;
 
+	constexpr float DIST_2D_NEAR = -512.0f;
+	constexpr float DIST_2D_FAR  = 512.0f;
+
 	// Chunk size must be a power of two and fit in a signed byte
 	constexpr int CHUNK_WIDTH  = 16;
 	constexpr int CHUNK_DEPTH  = 16;

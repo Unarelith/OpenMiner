@@ -30,6 +30,7 @@
 #include <gk/core/Mouse.hpp>
 #include <gk/gl/GLCheck.hpp>
 
+#include "BlockGeometry.hpp"
 #include "ClientApplication.hpp"
 #include "Config.hpp"
 #include "EngineConfig.hpp"
@@ -42,6 +43,7 @@
 namespace fs = ghc::filesystem;
 
 ClientApplication::ClientApplication(int argc, char **argv) : gk::CoreApplication(argc, argv) {
+	BlockGeometry::initOrientation();
 }
 
 void ClientApplication::init() {

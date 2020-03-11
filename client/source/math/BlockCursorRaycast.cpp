@@ -25,6 +25,7 @@
  * =====================================================================================
  */
 #include "BlockCursorRaycast.hpp"
+#include "BlockGeometry.hpp"
 #include "ClientWorld.hpp"
 #include "Registry.hpp"
 
@@ -47,16 +48,10 @@ static inline glm::dvec3 intersectAxisPlane(const Axis axis, const double coord,
 
 static inline void recordHit(const glm::dvec3 &position,
                              const glm::dvec3 &isect,
-                             const Axis axis,
-                             const bool neg,
-                             const int_fast32_t nx,
-                             const int_fast32_t ny,
-                             const int_fast32_t nz,
-                             int_fast32_t &bestX,
-                             int_fast32_t &bestY,
-                             int_fast32_t &bestZ,
-                             int_fast8_t &bestFace,
-                             double &bestDepth,
+                             const Axis axis, const bool neg,
+                             const s32f nx, const s32f ny, const s32f nz,
+                             s32f &bestX, s32f &bestY, s32f &bestZ,
+                             s8f &bestFace, double &bestDepth,
                              bool &hit)
 {
 	// Check if we have a record
@@ -76,11 +71,9 @@ static inline void recordHit(const glm::dvec3 &position,
 }
 
 void BlockCursorRaycast::rayCastToAxis(const Axis axis, const glm::dvec3 &position,
-                                       const glm::dvec3 &lookAt,
-                                       const double maxReach,
-                                       int_fast32_t &bestX, int_fast32_t &bestY,
-                                       int_fast32_t &bestZ,
-                                       int_fast8_t &bestFace, double &bestDepth,
+                                       const glm::dvec3 &lookAt, const double maxReach,
+                                       s32f &bestX, s32f &bestY, s32f &bestZ,
+                                       s8f &bestFace, double &bestDepth,
                                        const ClientWorld &world)
 {
 	glm::dvec3 isect;
@@ -90,7 +83,7 @@ void BlockCursorRaycast::rayCastToAxis(const Axis axis, const glm::dvec3 &positi
 	// of 'lookAt' with length 'maxReach' crosses several nodes in
 	// the X direction at integer positions. Determine the first and
 	// last such positions.
-	switch(axis) {
+	switch (axis) {
 		case AXIS_X:
 			posCoord = position.x;
 			lookAtCoord = lookAt.x;
@@ -105,8 +98,8 @@ void BlockCursorRaycast::rayCastToAxis(const Axis axis, const glm::dvec3 &positi
 			break;
 	}
 
-	int_fast32_t firstNodeRow = lookAtCoord < 0. ? int_fast32_t(floor(posCoord)) : int_fast32_t(ceil(posCoord)) - 1;
-	int_fast32_t lastNodeRow = int_fast32_t(floor(posCoord + lookAtCoord * maxReach));
+	s32f firstNodeRow = lookAtCoord < 0. ? s32f(floor(posCoord)) : s32f(ceil(posCoord)) - 1;
+	s32f lastNodeRow = s32f(floor(posCoord + lookAtCoord * maxReach));
 
 	int_fast8_t dir = (lookAtCoord > 0.) - (lookAtCoord < 0.);
 	if (!dir) {
@@ -114,39 +107,58 @@ void BlockCursorRaycast::rayCastToAxis(const Axis axis, const glm::dvec3 &positi
 		return;
 	}
 
-	for(int_fast32_t nodeRow = firstNodeRow + dir;
-			dir > 0 ? (nodeRow <= lastNodeRow) : (nodeRow >= lastNodeRow); nodeRow += dir)
+	for (s32f nodeRow = firstNodeRow + dir;
+	    dir > 0 ? (nodeRow <= lastNodeRow) : (nodeRow >= lastNodeRow); nodeRow += dir)
 	{
 		isect = intersectAxisPlane(axis, double(nodeRow + (dir < 0)), position, lookAt);
 
-		int_fast32_t nx, ny, nz;
+		s32f nx, ny, nz;
 		nx = axis == AXIS_X ? nodeRow : floor(isect.x);
 		ny = axis == AXIS_Y ? nodeRow : floor(isect.y);
 		nz = axis == AXIS_Z ? nodeRow : floor(isect.z);
 
 		u32 blockID = world.getBlock(nx, ny, nz);
 		const Block &block = Registry::getInstance().getBlock(blockID);
-		if(blockID && block.drawType() != BlockDrawType::Liquid) {
+
+		u8f orientation = block.isRotatable() ? world.getData(nx, ny, nz) & 0x1F : 0;
+
+		const gk::FloatBox &boundingBox = block.boundingBox();
+		glm::vec3 localCorner1{boundingBox.x, boundingBox.y, boundingBox.z};
+		glm::vec3 localCorner2{boundingBox.sizeX, boundingBox.sizeY, boundingBox.sizeZ};
+		localCorner2 += localCorner1;
+
+		if (orientation) {
+			const glm::vec3 half{0.5, 0.5, 0.5};
+			localCorner1 = BlockGeometry::orientMatrices[orientation] * (localCorner1 - half) + half;
+			localCorner2 = BlockGeometry::orientMatrices[orientation] * (localCorner2 - half) + half;
+			if (localCorner2.x < localCorner1.x) std::swap(localCorner1.x, localCorner2.x);
+			if (localCorner2.y < localCorner1.y) std::swap(localCorner1.y, localCorner2.y);
+			if (localCorner2.z < localCorner1.z) std::swap(localCorner1.z, localCorner2.z);
+		}
+
+		if (blockID && block.drawType() != BlockDrawType::Liquid) {
 			// Check bounding box; this should loop over all selection boxes
 			// when they are implemented
-			gk::DoubleBox selBox = block.boundingBox() + gk::Vector3d{double(nx), double(ny), double(nz)};
+			const glm::dvec3 cubePos{double(nx), double(ny), double(nz)};
+			glm::dvec3 corner1 = glm::dvec3(localCorner1) + cubePos;
+			glm::dvec3 corner2 = glm::dvec3(localCorner2) + cubePos;
 
 			bool hit = false;
 
 			// Check if we hit any of the sides of the inner box
-			isect = intersectAxisPlane(AXIS_X, (lookAt.x < 0. ? selBox.x + selBox.sizeX : selBox.x), position, lookAt);
-			if (selBox.y <= isect.y && isect.y <= selBox.y + selBox.sizeY
-			 && selBox.z <= isect.z && isect.z <= selBox.z + selBox.sizeZ)
+			isect = intersectAxisPlane(AXIS_X, (lookAt.x < 0. ? corner2.x : corner1.x), position, lookAt);
+			if (corner1.y <= isect.y && isect.y <= corner2.y
+			 && corner1.z <= isect.z && isect.z <= corner2.z)
 				recordHit(position, isect, AXIS_X, lookAt.x < 0., nx, ny, nz, bestX, bestY, bestZ, bestFace, bestDepth, hit);
 
-			isect = intersectAxisPlane(AXIS_Y, (lookAt.y < 0. ? selBox.y + selBox.sizeY : selBox.y), position, lookAt);
-			if (selBox.x <= isect.x && isect.x <= selBox.x + selBox.sizeX
-			 && selBox.z <= isect.z && isect.z <= selBox.z + selBox.sizeZ)
+			isect = intersectAxisPlane(AXIS_Y, (lookAt.y < 0. ? corner2.y : corner1.y), position, lookAt);
+			if (corner1.x <= isect.x && isect.x <= corner2.x
+			 && corner1.z <= isect.z && isect.z <= corner2.z)
 				recordHit(position, isect, AXIS_Y, lookAt.y < 0., nx, ny, nz, bestX, bestY, bestZ, bestFace, bestDepth, hit);
 
-			isect = intersectAxisPlane(AXIS_Z, (lookAt.z < 0. ? selBox.z + selBox.sizeZ : selBox.z), position, lookAt);
-			if (selBox.x <= isect.x && isect.x <= selBox.x + selBox.sizeX
-			 && selBox.y <= isect.y && isect.y <= selBox.y + selBox.sizeY)
+			isect = intersectAxisPlane(AXIS_Z, (lookAt.z < 0. ? corner2.z : corner1.z), position, lookAt);
+			if (corner1.x <= isect.x && isect.x <= corner2.x
+			 && corner1.y <= isect.y && isect.y <= corner2.y)
 				recordHit(position, isect, AXIS_Z, lookAt.z < 0., nx, ny, nz, bestX, bestY, bestZ, bestFace, bestDepth, hit);
 
 			if (hit)
@@ -154,4 +166,3 @@ void BlockCursorRaycast::rayCastToAxis(const Axis axis, const glm::dvec3 &positi
 		}
 	}
 }
-

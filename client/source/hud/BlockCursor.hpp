@@ -31,6 +31,7 @@
 
 #include "ClientWorld.hpp"
 #include "Inventory.hpp"
+#include "BlockGeometry.hpp"
 
 class ClientCommandHandler;
 class ClientPlayer;
@@ -47,8 +48,10 @@ class BlockCursor : public gk::Drawable {
 		const Block *currentBlock() const { return m_currentBlock; }
 
 	private:
-		void updateVertexBuffer(const Block &block);
-		void updateAnimationVertexBuffer(const Block &block, int animationPos = -1);
+		void updateVertexBuffer(const Block &block, const u8f orientation);
+		void updateAnimationVertexBuffer(const Block &block, const u8f orientation, int animationPos = -1);
+		void updateVBOCoords(gk::Vertex vertices[BlockGeometry::nFaces][BlockGeometry::nVertsPerFace],
+		                     const Block &block, float face, u8f orientation);
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 

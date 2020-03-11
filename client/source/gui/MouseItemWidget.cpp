@@ -239,6 +239,6 @@ void MouseItemWidget::updatePosition(float x, float y) {
 	x -= m_parent->getPosition().x + 10 * m_parent->getScale().x;
 	y -= m_parent->getPosition().y + 10 * m_parent->getScale().y;
 
-	setPosition(x / m_parent->getScale().x, y / m_parent->getScale().y, 0);
+	setPosition(x / m_parent->getScale().x, y / m_parent->getScale().y, -20);
 }
 

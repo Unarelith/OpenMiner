@@ -29,6 +29,7 @@
 #include <gk/core/ApplicationStateStack.hpp>
 
 #include "Config.hpp"
+#include "EngineConfig.hpp"
 #include "InterfaceState.hpp"
 
 InterfaceState::InterfaceState(gk::ApplicationState *parent) : gk::ApplicationState(parent) {
@@ -43,7 +44,7 @@ InterfaceState::InterfaceState(gk::ApplicationState *parent) : gk::ApplicationSt
 }
 
 void InterfaceState::setup() {
-	m_projectionMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f);
+	m_projectionMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f, DIST_2D_FAR, DIST_2D_NEAR);
 
 	m_background.setSize(Config::screenWidth, Config::screenHeight);
 

@@ -41,46 +41,6 @@
 #include "Hotbar.hpp"
 #include "Registry.hpp"
 
-// Same order as enum BlockFace in TilesDef.hpp
-static float cubeCoords[6 * 4 * 3] = {
-	// West
-	0, 1, 0,
-	0, 0, 0,
-	0, 0, 1,
-	0, 1, 1,
-
-	// East
-	1, 0, 0,
-	1, 1, 0,
-	1, 1, 1,
-	1, 0, 1,
-
-	// South
-	0, 0, 0,
-	1, 0, 0,
-	1, 0, 1,
-	0, 0, 1,
-
-	// North
-	1, 1, 0,
-	0, 1, 0,
-	0, 1, 1,
-	1, 1, 1,
-
-	// Bottom
-	1, 0, 0,
-	0, 0, 0,
-	0, 1, 0,
-	1, 1, 0,
-
-	// Top
-	0, 0, 1,
-	1, 0, 1,
-	1, 1, 1,
-	0, 1, 1,
-
-};
-
 BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 	: m_player(player), m_world(world), m_client(client)
 {
@@ -114,12 +74,13 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 				s32 y = m_selectedBlock.y;
 				s32 z = m_selectedBlock.z;
 
-				if(face == 0) x++;
-				if(face == 3) x--;
-				if(face == 1) y++;
-				if(face == 4) y--;
-				if(face == 2) z++;
-				if(face == 5) z--;
+				// FIXME: Document where these face numbers come from
+				if (face == 0) ++x;
+				if (face == 3) --x;
+				if (face == 1) ++y;
+				if (face == 4) --y;
+				if (face == 2) ++z;
+				if (face == 5) --z;
 
 				// First, we check if the new block is not replacing another block
 				u32 blockId = m_world.getBlock(x, y, z);
@@ -134,7 +95,7 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 
 						u32 block = hotbar.currentItem();
 						if (newBlock.isRotatable()) {
-							static constexpr u8 dirToFaceDir[4] = {0, 2, 1, 3};
+							static constexpr u8 dirToFaceDir[4]{0, 2, 1, 3};
 							u16 data = dirToFaceDir[m_player.getOppositeDirection() & 0x3];
 							m_world.setData(x, y, z, data);
 
@@ -198,55 +159,90 @@ void BlockCursor::update(const Hotbar &hotbar) {
 		}
 	}
 
+	u8f orientation = m_currentBlock->isRotatable() ? m_world.getData(selectedBlock.x, selectedBlock.y, selectedBlock.z) & 0x1F : 0;
+
 	if (m_selectedBlock.w != -1)
-		updateVertexBuffer(*m_currentBlock);
+		updateVertexBuffer(*m_currentBlock, orientation);
 	else
 		m_currentBlock = nullptr;
 
 	if (m_animationStart && m_currentBlock)
-		updateAnimationVertexBuffer(*m_currentBlock, (gk::GameClock::getTicks() - m_animationStart) / (timeToBreak * 100));
+		updateAnimationVertexBuffer(*m_currentBlock, orientation,
+		                            (gk::GameClock::getTicks() - m_animationStart) / (timeToBreak * 100));
 }
 
-void BlockCursor::updateVertexBuffer(const Block &block) {
-	gk::Vertex vertices[24];
-	for (u8 i = 0 ; i < 24 ; ++i) {
-		vertices[i].coord3d[0] = cubeCoords[i * 3]     * block.boundingBox().sizeX + block.boundingBox().x;
-		vertices[i].coord3d[1] = cubeCoords[i * 3 + 1] * block.boundingBox().sizeY + block.boundingBox().y;
-		vertices[i].coord3d[2] = cubeCoords[i * 3 + 2] * block.boundingBox().sizeZ + block.boundingBox().z;
-		vertices[i].coord3d[3] = -1;
+using namespace BlockGeometry;
+
+void BlockCursor::updateVBOCoords(gk::Vertex vertices[nFaces][nVertsPerFace], const Block &block,
+	float face, u8f orientation)
+{
+	glm::vec3 bottomLeft{block.boundingBox().x, block.boundingBox().y, block.boundingBox().z};
+	glm::vec3 topRight{block.boundingBox().sizeX, block.boundingBox().sizeY, block.boundingBox().sizeZ};
+	topRight += bottomLeft;
+
+	const glm::mat3 &orientMatrix = orientMatrices[orientation];
+
+	glm::vec3 vertexPos[nVertsPerCube]{
+		// Order is important. It matches the bit order defined in BlockGeometry::cubeVerts.
+		{bottomLeft.x, bottomLeft.y, bottomLeft.z},
+		{topRight.x,   bottomLeft.y, bottomLeft.z},
+		{bottomLeft.x, topRight.y,   bottomLeft.z},
+		{topRight.x,   topRight.y,   bottomLeft.z},
+		{bottomLeft.x, bottomLeft.y, topRight.z},
+		{topRight.x,   bottomLeft.y, topRight.z},
+		{bottomLeft.x, topRight.y,   topRight.z},
+		{topRight.x,   topRight.y,   topRight.z},
+	};
+
+	if (orientation != 0) {
+		static const glm::vec3 half{0.5, 0.5, 0.5};
+		// Rotate each vertex coordinate around the centre of the cube
+		for (int i = 0; i < nVertsPerCube; ++i) {
+			vertexPos[i] = orientMatrix * (vertexPos[i] - half) + half;
+		}
 	}
+
+	for (u8f f = 0 ; f < nFaces; ++f) {
+		for (u8f v = 0; v < nVertsPerFace; ++v) {
+			vertices[f][v].coord3d[0] = vertexPos[cubeVerts[f][v]].x;
+			vertices[f][v].coord3d[1] = vertexPos[cubeVerts[f][v]].y;
+			vertices[f][v].coord3d[2] = vertexPos[cubeVerts[f][v]].z;
+			vertices[f][v].coord3d[3] = face;
+		}
+	}
+}
+
+void BlockCursor::updateVertexBuffer(const Block &block, u8f orientation) {
+	gk::Vertex vertices[nFaces][nVertsPerFace];
+	updateVBOCoords(vertices, block, -1, orientation);
 
 	gk::VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	gk::VertexBuffer::bind(nullptr);
 }
 
-void BlockCursor::updateAnimationVertexBuffer(const Block &block, int animationPos) {
-	gk::Vertex vertices[24];
-	for (u8 i = 0 ; i < 24 ; ++i) {
-		vertices[i].coord3d[0] = cubeCoords[i * 3]     * block.boundingBox().sizeX + block.boundingBox().x;
-		vertices[i].coord3d[1] = cubeCoords[i * 3 + 1] * block.boundingBox().sizeY + block.boundingBox().y;
-		vertices[i].coord3d[2] = cubeCoords[i * 3 + 2] * block.boundingBox().sizeZ + block.boundingBox().z;
-		vertices[i].coord3d[3] = -2;
-	}
+void BlockCursor::updateAnimationVertexBuffer(const Block &block, u8f orientation, int animationPos) {
+	gk::Vertex vertices[nFaces][nVertsPerFace];
+	updateVBOCoords(vertices, block, -2, orientation);
 
 	GLfloat color[4] = {1, 1, 1, 0.5};
-	for (int i = 0 ; i < 24 ; ++i)
-		memcpy(vertices[i].color, color, 4 * sizeof(GLfloat));
+	for (u8f f = 0; f < nFaces; ++f)
+		for (u8f v = 0; v < nVertsPerFace; ++v)
+			memcpy(&vertices[f][v].color, &color[0], 4 * sizeof(GLfloat));
 
 	if (animationPos != -1) {
 		glm::vec4 blockTexCoords{0.1f * animationPos, 0.0, 0.1f + 0.1f * animationPos, 1.0};
-		float faceTexCoords[2 * 4] = {
-			blockTexCoords.x, blockTexCoords.w,
-			blockTexCoords.z, blockTexCoords.w,
-			blockTexCoords.z, blockTexCoords.y,
-			blockTexCoords.x, blockTexCoords.y
+		float faceTexCoords[nVertsPerFace][nCoordsPerUV] = {
+			{blockTexCoords.x, blockTexCoords.w},
+			{blockTexCoords.z, blockTexCoords.w},
+			{blockTexCoords.z, blockTexCoords.y},
+			{blockTexCoords.x, blockTexCoords.y},
 		};
 
-		for (u8 i = 0 ; i < 6 ; ++i) {
-			for(u8 j = 0 ; j < 4 ; j++) {
-				vertices[j + i * 4].texCoord[0] = faceTexCoords[j * 2];
-				vertices[j + i * 4].texCoord[1] = faceTexCoords[j * 2 + 1];
+		for (u8f f = 0 ; f < nFaces ; ++f) {
+			for(u8f v = 0 ; v < nVertsPerFace ; v++) {
+				vertices[f][v].texCoord[0] = faceTexCoords[v][0];
+				vertices[f][v].texCoord[1] = faceTexCoords[v][1];
 			}
 		}
 	}
@@ -267,7 +263,7 @@ void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	states.transform.translate(m_selectedBlock.x - cameraPosition.x, m_selectedBlock.y - cameraPosition.y, m_selectedBlock.z - cameraPosition.z);
 
 	glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
-	target.draw(m_vbo, GL_QUADS, 0, 24, states);
+	target.draw(m_vbo, GL_QUADS, 0, nFaces * nVertsPerFace, states);
 	glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 
 	if (m_animationStart > 0) {
@@ -276,7 +272,7 @@ void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 		states.texture = m_blockDestroyTexture;
 
-		target.draw(m_animationVBO, GL_QUADS, 0, 24, states);
+		target.draw(m_animationVBO, GL_QUADS, 0, nFaces * nVertsPerFace, states);
 
 		glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 	}
@@ -289,12 +285,12 @@ glm::ivec4 BlockCursor::findSelectedBlock() const {
 	                    m_player.camera().getDPosition().y,
 	                    m_player.camera().getDPosition().z};
 
-	int_fast32_t bestX = int_fast32_t(floor(position.x));
-	int_fast32_t bestY = int_fast32_t(floor(position.y));
-	int_fast32_t bestZ = int_fast32_t(floor(position.z));
+	s32f bestX = s32f(floor(position.x));
+	s32f bestY = s32f(floor(position.y));
+	s32f bestZ = s32f(floor(position.z));
 
 	// Deal with a degenerate case: camera in the middle of a block
-	uint_fast32_t blockID = m_world.getBlock(bestX, bestY, bestZ);
+	u32f blockID = m_world.getBlock(bestX, bestY, bestZ);
 	const Block &block = Registry::getInstance().getBlock(blockID);
 	if (blockID && block.drawType() != BlockDrawType::Liquid) {
 		// We're inside a node, therefore there's no face, but we still need
@@ -327,7 +323,7 @@ glm::ivec4 BlockCursor::findSelectedBlock() const {
 	// Ray casting algorithm to find out which block we are looking at
 	const double maxReach = 10.;
 	double bestDepth;
-	int_fast8_t bestFace = -1;
+	s8f bestFace = -1;
 
 	glm::dvec3 lookAtN = glm::normalize(lookAt);
 
@@ -337,4 +333,3 @@ glm::ivec4 BlockCursor::findSelectedBlock() const {
 
 	return glm::ivec4{bestX, bestY, bestZ, bestFace};
 }
-
