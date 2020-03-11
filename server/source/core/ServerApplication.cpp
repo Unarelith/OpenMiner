@@ -42,6 +42,9 @@ void ServerApplication::init() {
 	if (m_argumentParser.getArgument("port").isFound)
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
 
+	m_server.init(m_port);
+	m_server.setRunning(true);
+
 	Registry::setInstance(m_registry);
 
 	// The id "_:air" is used in CraftingRecipe, update it there if it changes
@@ -49,9 +52,6 @@ void ServerApplication::init() {
 	m_registry.registerItem({}, "_:air", "Air").setIsBlock(true);
 
 	loadMods();
-
-	m_server.init(m_port);
-	m_server.setRunning(true);
 
 	m_serverCommandHandler.setupCallbacks();
 

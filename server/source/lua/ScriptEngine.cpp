@@ -51,16 +51,33 @@ void ScriptEngine::init() {
 
 void ScriptEngine::initUsertypes() {
 	m_lua.new_usertype<Registry>("Registry",
+		"get_block",  &Registry::getBlock,
+		"get_item",   &Registry::getItem,
+		"get_sky",    &Registry::getSky,
+		"get_tree",   &Registry::getTree,
+		"get_biome",  &Registry::getBiome,
 		"get_recipe", &Registry::getRecipe,
 
+		"get_block_from_string", &Registry::getBlockFromStringID,
+		"get_item_from_string",  &Registry::getItemFromStringID,
+		"get_sky_from_string",   &Registry::getSkyFromStringID,
+		"get_tree_from_string",  &Registry::getTreeFromStringID,
+		"get_biome_from_string", &Registry::getBiomeFromStringID,
+
 		"blocks", &Registry::blocks,
-		"items", &Registry::items
+		"items", &Registry::items,
+		"trees", &Registry::trees,
+		"biomes", &Registry::biomes,
+		"dimensions", &Registry::dimensions
 	);
 
 	m_lua.new_usertype<World>("World",
 		"get_block", &World::getBlock,
+		"set_block", &World::setBlock,
+
 		"get_data", &World::getData,
 		"set_data", &World::setData,
+
 		"get_block_data", &World::getBlockData,
 		"add_block_data", &World::addBlockData
 	);
@@ -71,7 +88,11 @@ void ScriptEngine::initUsertypes() {
 
 	m_lua.new_usertype<Chunk>("Chunk",
 		"get_block", &Chunk::getBlock,
+		"set_block", &Chunk::setBlock,
+
 		"get_data", &Chunk::getData,
+		"set_data", &Chunk::setData,
+
 		"get_block_data", &Chunk::getBlockData,
 		"add_block_data", &Chunk::addBlockData
 	);
@@ -83,7 +104,12 @@ void ScriptEngine::initUsertypes() {
 	);
 
 	m_lua.new_usertype<Block>("Block",
-		"string_id", &Block::stringID
+		"id", &Block::id,
+		"data", &Block::data,
+		"string_id", &Block::stringID,
+		"label", &Block::label,
+		"mod_name", &Block::modName,
+		"is_opaque", &Block::isOpaque
 	);
 
 	m_lua.new_usertype<ServerBlock>("ServerBlock",
