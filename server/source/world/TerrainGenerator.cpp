@@ -43,7 +43,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 	noise.SetFrequency(1 / 256.0f);
 	noise.SetFractalOctaves(4);
 
-	srand(chunk.x() + chunk.y() + chunk.z() + 1337);
+	srand(chunk.x() + chunk.y() * CHUNK_WIDTH + chunk.z() * CHUNK_WIDTH * CHUNK_HEIGHT + 1337);
 	Chunk *topChunk = chunk.getSurroundingChunk(Chunk::Top);
 	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
@@ -122,7 +122,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 							//        This code should be replaced by a proper "feature" implementation
 							//        which will also allow making stuff like villages easier
 							bool placedPortal = false;
-							if (chunk.getBlock(x, y, z - 1) == biome.getTopBlockID() && rand() % 4096 == 0) {
+							if (chunk.getBlock(x, y, z - 1) == biome.getTopBlockID() && rand() < RAND_MAX * 0.0002) {
 								for (int ix = 0 ; ix < 4 ; ++ix) {
 									for (int iz = 0 ; iz < 5 ; ++iz) {
 										if (ix == 0 || iz == 0 || ix == 3 || iz == 4)
