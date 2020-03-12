@@ -1,4 +1,4 @@
-# Lua API: Blocks
+# Lua API: Block
 
 ## Example
 
@@ -45,11 +45,20 @@ tiles = "myblock.png"
 tiles = {"myblock_top.png", "myblock_bottom.png", "myblock_side.png"}
 ```
 
-More documentation will come on the table form.
+Table format:
+```cpp
+// namely: West, East, South, North, Bottom, Top
+{0, 0, 0, 0, 0, 0}, // for size = 1
+{1, 1, 1, 1, 0, 0}, // for size = 2
+{2, 2, 2, 2, 1, 0}, // for size = 3
+{2, 3, 3, 3, 1, 0}, // for size = 4
+{2, 3, 4, 4, 1, 0}, // for size = 5
+{2, 3, 4, 5, 1, 0}, // for size = 6
+```
 
 The textures will be loaded from `mods/<your-mod>/textures/blocks`
 
-**Note:** Currently, you can only use textures of the exact same size (16x16, 32x32) than the other block textures in the game.
+**Note:** Currently, you can only use textures of the exact same size (16x16, 32x32) than the other block/item textures in the game.
 
 ### `harvest_requirements`
 

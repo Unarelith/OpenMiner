@@ -72,10 +72,6 @@ mod:smelting_recipe {
 }
 ```
 
-Documented API so far:
-
-- [Blocks](lua-api-blocks.md)
-
 ### Custom GUI
 
 You can create a new GUI with:
@@ -157,11 +153,11 @@ gui:image {
 - `Sky get_sky_from_string(string id)`
 - `Tree get_tree_from_string(string id)`
 - `Biome get_biome_from_string(string id)`
-- `List<Block> blocks()`
-- `List<Item> items()`
-- `List<Tree> trees()`
-- `List<Biome> biomes()`
-- `List<Dimension> dimensions()`
+- `Block[] blocks()`
+- `Item[] items()`
+- `Tree[] trees()`
+- `Biome[] biomes()`
+- `Dimension[] dimensions()`
 
 ### World
 

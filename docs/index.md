@@ -11,7 +11,13 @@
     - [Contributing](https://github.com/Unarelith/OpenMiner/blob/master/CONTRIBUTING.md)
     - [Coding Style](https://github.com/Unarelith/OpenMiner/wiki/Coding-Style)
 - [Lua API](lua-api-overview.md)
-    - [Blocks](lua-api-blocks.md)
+    - [Block](lua-api-block.md)
+    - [Item](lua-api-item.md)
+    - [Recipe](lua-api-recipe.md)
+    - [Sky](lua-api-sky.md)
+    - [Tree](lua-api-tree.md)
+    - [Biome](lua-api-biome.md)
+    - [Dimension](lua-api-dimension.md)
 - [Network Protocol](https://github.com/Unarelith/OpenMiner/wiki/Network-Protocol)
 
 ## Other

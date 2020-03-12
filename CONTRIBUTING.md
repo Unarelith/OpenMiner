@@ -6,7 +6,7 @@ Contributions are **welcome** and will be fully **credited**.
 
 - **Read the coding style** - Make sure you read the [coding style](https://github.com/Unarelith/OpenMiner/wiki/Coding-Style) before opening a pull request.
 
-- **Document any change in behaviour** - Make sure any relevant documentation is kept up-to-date.
+- **Document any change in behaviour** - Make sure any relevant [documentation](https://openminer.readthedocs.io/en/latest/) is kept up-to-date.
 
 - **Create feature branches** - Don't ask us to pull from your master branch.
 

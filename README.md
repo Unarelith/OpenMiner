@@ -24,9 +24,17 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 ## Wiki
 
 - [Getting started](https://github.com/Unarelith/OpenMiner/wiki/Getting-Started)
-- [Coding style](https://github.com/Unarelith/OpenMiner/wiki/Coding-Style)
+    - [Contributing](https://github.com/Unarelith/OpenMiner/blob/master/CONTRIBUTING.md)
+    - [Coding style](https://github.com/Unarelith/OpenMiner/wiki/Coding-Style)
 - [Lua API](https://openminer.readthedocs.io/en/latest/lua-api-overview/)
-    - [Blocks](https://openminer.readthedocs.io/en/latest/lua-api-blocks/)
+    - [Block](https://openminer.readthedocs.io/en/latest/lua-api-block/)
+    - [Item](https://openminer.readthedocs.io/en/latest/lua-api-item/)
+    - [Recipe](https://openminer.readthedocs.io/en/latest/lua-api-recipe/)
+    - [Sky](https://openminer.readthedocs.io/en/latest/lua-api-sky/)
+    - [Tree](https://openminer.readthedocs.io/en/latest/lua-api-tree/)
+    - [Biome](https://openminer.readthedocs.io/en/latest/lua-api-biome/)
+    - [Dimension](https://openminer.readthedocs.io/en/latest/lua-api-dimension/)
+- [Network Protocol](https://github.com/Unarelith/OpenMiner/wiki/Network-Protocol)
 
 ## Keys
 

@@ -4,12 +4,17 @@ nav:
     - 'Home': 'index.md'
     - 'Lua API':
         - 'Overview': 'lua-api-overview.md'
-        - 'Blocks': 'lua-api-blocks.md'
+        - 'Block': 'lua-api-block.md'
+        - 'Item': 'lua-api-item.md'
+        - 'Recipe': 'lua-api-recipe.md'
+        - 'Sky': 'lua-api-sky.md'
+        - 'Tree': 'lua-api-tree.md'
+        - 'Biome': 'lua-api-biome.md'
+        - 'Dimension': 'lua-api-dimension.md'
 
 theme:
     name: readthedocs
     highlightjs: true
     hljs_languages:
-        - yaml
-        - rust
+        - lua
 
