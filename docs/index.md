@@ -21,6 +21,12 @@
         - [Biome](lua-api-biome.md)
         - [Dimension](lua-api-dimension.md)
     - [GUI API](lua-api-gui.md)
+        - [Crafting widget](lua-api-gui-crafting.md)
+        - [Image](lua-api-gui-image.md)
+        - [Inventory data](lua-api-gui-inventory-data.md)
+        - [Inventory widget](lua-api-gui-inventory.md)
+        - [Progress bar](lua-api-gui-progress-bar.md)
+        - [Scroll bar](lua-api-gui-scroll-bar.md)
     - [C++ classes in Lua](lua-api-cpp.md)
 - [Network Protocol](https://github.com/Unarelith/OpenMiner/wiki/Network-Protocol)
 

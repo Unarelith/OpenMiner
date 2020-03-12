@@ -37,6 +37,12 @@ The long-term goal of this project is to provide a viable alternative to Minecra
         - [Biome](https://openminer.readthedocs.io/en/latest/lua-api-biome/)
         - [Dimension](https://openminer.readthedocs.io/en/latest/lua-api-dimension/)
     - [GUI API](https://openminer.readthedocs.io/en/latest/lua-api-gui/)
+        - [Crafting widget](https://openminer.readthedocs.io/en/latest/lua-api-gui-crafting/)
+        - [Image](https://openminer.readthedocs.io/en/latest/lua-api-gui-image/)
+        - [Inventory data](https://openminer.readthedocs.io/en/latest/lua-api-gui-inventory-data/)
+        - [Inventory widget](https://openminer.readthedocs.io/en/latest/lua-api-gui-inventory/)
+        - [Progress bar](https://openminer.readthedocs.io/en/latest/lua-api-gui-progress-bar/)
+        - [Scroll bar](https://openminer.readthedocs.io/en/latest/lua-api-gui-scroll-bar/)
     - [C++ classes in Lua](https://openminer.readthedocs.io/en/latest/lua-api-cpp/)
 - [Network Protocol](https://github.com/Unarelith/OpenMiner/wiki/Network-Protocol)
 
