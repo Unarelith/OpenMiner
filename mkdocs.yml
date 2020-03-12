@@ -2,20 +2,20 @@ site_name: OpenMiner
 
 nav:
     - 'Home': 'index.md'
-    - 'Lua API':
-        - 'Core API': 'lua-api-core.md'
-        - 'Mod API':
-            - 'Overview': 'lua-api-mod.md'
-            - 'Biome': 'lua-api-biome.md'
-            - 'Block': 'lua-api-block.md'
-            - 'Dimension': 'lua-api-dimension.md'
-            - 'Item': 'lua-api-item.md'
-            - 'Recipe': 'lua-api-recipe.md'
-            - 'Sky': 'lua-api-sky.md'
-            - 'Tree': 'lua-api-tree.md'
-        - 'GUI API':
-            - 'Overview': 'lua-api-gui.md'
-        - 'C++ classes in Lua': 'lua-api-cpp.md'
+    - 'C++ classes in Lua': 'lua-api-cpp.md'
+    - 'Lua: Core API':
+        - 'openminer': 'lua-api-core.md'
+    - 'Lua: Mod API':
+        - 'Overview': 'lua-api-mod.md'
+        - 'Biome': 'lua-api-biome.md'
+        - 'Block': 'lua-api-block.md'
+        - 'Dimension': 'lua-api-dimension.md'
+        - 'Item': 'lua-api-item.md'
+        - 'Recipe': 'lua-api-recipe.md'
+        - 'Sky': 'lua-api-sky.md'
+        - 'Tree': 'lua-api-tree.md'
+    - 'Lua: GUI API':
+        - 'Overview': 'lua-api-gui.md'
 
 theme:
     name: readthedocs
