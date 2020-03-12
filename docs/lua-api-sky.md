@@ -30,6 +30,7 @@ color = {
 ```
 
 Possible values:
+
 - `day`: Sky color at midday
 
 ### `fog_color`
@@ -44,6 +45,7 @@ fog_color = {
 ```
 
 Possible values:
+
 - `day`: Fog color at midday
 
 ### `id`

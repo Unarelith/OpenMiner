@@ -57,6 +57,7 @@ result = {
 ```
 
 Possible attributes:
+
 - `id`: String ID of the item created.
 - `amount`: Amount of items in the created stack
 
@@ -100,6 +101,7 @@ input = {
 ```
 
 Possible attributes:
+
 - `id`: String ID of the item created.
 - `amount`: Amount of items in the created stack
 
@@ -116,6 +118,7 @@ output = {
 ```
 
 Possible attributes:
+
 - `id`: String ID of the item created.
 - `amount`: Amount of items in the created stack
 

@@ -60,6 +60,7 @@ flora = {
 ```
 
 Possible attributes:
+
 - `block`: Block used as flora
 - `spawn_on`: What the block below must be
 - `probability`: Probability to spawn `block`
@@ -102,6 +103,7 @@ ores = {
 ```
 
 Possible attributes:
+
 - `block`: Ore block to be used
 - `probability`: Probability to spawn an ore vein with that block
 - `size`: Ore vein size
@@ -142,6 +144,7 @@ trees = {
 ```
 
 Possible attributes:
+
 - `type`: String ID of the tree definition
 - `probability`: Probability to spawn this tree
 
