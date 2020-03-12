@@ -4,7 +4,7 @@
 
 ```lua
 mod:sky {
-	id = "sky_overworld",
+	id = "sky_overworld", -- mandatory
 
 	color = {
 		day = {50, 153, 204},
@@ -17,17 +17,6 @@ mod:sky {
 ```
 
 ## Attributes
-
-### `id`
-
-ID of the sky. **Mandatory field.**
-
-Example:
-```lua
-id = "sky_nether"
-```
-
-IDs are usually of the form `mod:sky` but the `mod:` prefix is prepended automatically so it's not needed.
 
 ### `color`
 
@@ -56,4 +45,15 @@ fog_color = {
 
 Possible values:
 - `day`: Fog color at midday
+
+### `id`
+
+ID of the sky. **Mandatory field.**
+
+Example:
+```lua
+id = "sky_nether"
+```
+
+IDs are usually of the form `mod:sky` but the `mod:` prefix is prepended automatically so it's not needed.
 

@@ -4,8 +4,8 @@
 
 ```lua
 mod:dimension {
-	id = "overworld",
-	name = "Overworld",
+	id = "overworld",   -- mandatory
+	name = "Overworld", -- mandatory
 
 	biomes = {"default:grassland", "default:desert"},
 
@@ -14,6 +14,15 @@ mod:dimension {
 ```
 
 ## Attributes
+
+### `biomes`
+
+Table containing all the string IDs of the possible biomes for this dimension.
+
+Example:
+```lua
+biomes = {"default:grassland", "default:desert"}
+```
 
 ### `id`
 
@@ -36,15 +45,6 @@ name = "Nether"
 ```
 
 This label is the name that will appear everywhere in the game.
-
-### `biomes`
-
-Table containing all the string IDs of the possible biomes for this dimension.
-
-Example:
-```lua
-biomes = {"default:grassland", "default:desert"}
-```
 
 ### `sky`
 
