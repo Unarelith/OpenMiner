@@ -61,6 +61,5 @@ target_link_libraries(${PROJECT_NAME}
                       sfml-system
                       sfml-network
                       ${UNIX_LIBS}
-                      ${CMAKE_PROJECT_NAME}_common
-                      stdc++fs)
+                      ${CMAKE_PROJECT_NAME}_common)
 

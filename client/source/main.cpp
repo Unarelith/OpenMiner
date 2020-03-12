@@ -51,8 +51,8 @@ typedef enum PROCESS_DPI_AWARENESS {
 } PROCESS_DPI_AWARENESS;
 
 void setDpiAwareness() {
-	BOOL(WINAPI *SetProcessDPIAware)(void); // Vista and later
-	HRESULT(WINAPI *SetProcessDpiAwareness)(PROCESS_DPI_AWARENESS dpiAwareness); // Windows 8.1 and later
+	BOOL(WINAPI *SetProcessDPIAware)(void) = nullptr; // Vista and later
+	HRESULT(WINAPI *SetProcessDpiAwareness)(PROCESS_DPI_AWARENESS dpiAwareness) = nullptr; // Windows 8.1 and later
 
 	void *userDLL = SDL_LoadObject("USER32.DLL");
 	if (userDLL) {
@@ -66,12 +66,12 @@ void setDpiAwareness() {
 
 	if (SetProcessDpiAwareness) {
 		// Try Windows 8.1+ version
-		HRESULT result = SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
+		/*HRESULT result = */SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
 	}
 	else if (SetProcessDPIAware) {
 		// Try Vista - Windows 8 version.
 		// This has a constant scale factor for all monitors.
-		BOOL success = SetProcessDPIAware();
+		/*BOOL success = */SetProcessDPIAware();
 	}
 }
 #endif
