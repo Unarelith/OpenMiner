@@ -21,6 +21,7 @@
         - [Biome](lua-api-biome.md)
         - [Dimension](lua-api-dimension.md)
     - [GUI API](lua-api-gui.md)
+    - [C++ classes in Lua](lua-api-cpp.md)
 - [Network Protocol](https://github.com/Unarelith/OpenMiner/wiki/Network-Protocol)
 
 ## Other

@@ -15,6 +15,7 @@ nav:
             - 'Tree': 'lua-api-tree.md'
         - 'GUI API':
             - 'Overview': 'lua-api-gui.md'
+        - 'C++ classes in Lua': 'lua-api-cpp.md'
 
 theme:
     name: readthedocs

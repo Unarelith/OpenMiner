@@ -37,6 +37,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
         - [Biome](https://openminer.readthedocs.io/en/latest/lua-api-biome/)
         - [Dimension](https://openminer.readthedocs.io/en/latest/lua-api-dimension/)
     - [GUI API](https://openminer.readthedocs.io/en/latest/lua-api-gui/)
+    - [C++ classes in Lua](https://openminer.readthedocs.io/en/latest/lua-api-cpp/)
 - [Network Protocol](https://github.com/Unarelith/OpenMiner/wiki/Network-Protocol)
 
 ## Keys
