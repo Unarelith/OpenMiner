@@ -1,80 +1,222 @@
 # Lua API: Blocks
 
-- [Attributes](#attributes)
-    - [Data types](#data-types)
-    - [Draw types](#draw-types)
-- [Functions](#functions)
-    - [on_block_placed](#on_block_placed)
-    - [on_block_activatd](#on_block_activated)
-    - [on_tick](#on_tick)
+## Example
+
+```lua
+mod:block {
+	id = "myblock",    -- mandatory
+	name = "My Block", -- mandatory
+	tiles = "myblock.png",
+}
+```
 
 ## Attributes
 
-Blocks can have the following attributes:
+### `id`
 
-| Attribute            | Type          | Description                                          |
-| -------------------- | ------------- | ---------------------------------------------------- |
-| id*                  | string        | ID of the block without the "mod:" prefix            |
-| label*               | string        | Label of the block                                   |
-| on_block_placed      | function      | Called when the block is placed                      |
-| on_block_activated   | function      | Called when a player right-click the block           |
-| on_tick              | function      | Called every tick                                    |
-| harvest_requirements | u8            | Set which tools are more effective                   |
-| hardness             | float         | Hardness of the block, affects mining speed          |
-| is_opaque            | bool          | Whether or not the block let light pass              |
-| is_light_source      | bool          | Whether or not the block is a light source           |
-| is_rotatable         | bool          | Whether or not the block is rotatable                |
-| bounding_box         | float[6]      | Bounding box of the block {x,y,z,w,d,h}              |
-| draw_type            | string        | Draw type of the block (see [Draw types](#draw-types)) |
-| item_drop            | ItemStack     | Item stack that is dropped when the block is broken  |
-| color_multiplier     | u8[4]         | Only grayscale colors are affected by this attribute |
+ID of the block. **Mandatory field.**
 
-NB: Attributes with a `*` means they're mandatory
+Example:
+```lua
+id = "cobblestone"
+```
 
-### Data types
+IDs are usually of the form `mod:block` but the `mod:` prefix is prepended automatically so it's not needed.
 
-`ItemStack` is a table composed of:
+### `name`
 
-- `id` (`string`): item id with the "mod:" prefix
-- `amount` (`u16`): amount in the stack
+Label of the block. **Mandatory field.**
 
-### Draw types
+Example:
+```lua
+name = "Cobblestone"
+```
 
-The currently allowed draw type values are:
+This label is the name that will appear everywhere in the game.
 
-- `solid`
-- `xshape`
-- `leaves`
-- `liquid`
-- `glass`
+### `tiles`
+
+This field can be either a single string, or a table of strings.
+
+Example:
+``` lua
+tiles = "myblock.png"
+-- or
+tiles = {"myblock_top.png", "myblock_bottom.png", "myblock_side.png"}
+```
+
+More documentation will come on the table form.
+
+The textures will be loaded from `mods/<your-mod>/textures/blocks`
+
+**Note:** Currently, you can only use textures of the exact same size (16x16, 32x32) than the other block textures in the game.
+
+### `harvest_requirements`
+
+Set which tools are more effective.
+
+**Note:** This attribute would need more doc but it'll probably get removed soon.
+
+### `hardness`
+
+Hardness of the block, affects mining speed.
+
+Example:
+```lua
+hardness = 0.5
+```
+
+Default value is `1.0`, any value under this will increase mining speed, and any value above will decrease mining speed.
+
+### `is_opaque`
+
+Defines if the block let the light pass or not.
+
+Example:
+```lua
+is_opaque = true -- this is the default value
+```
+
+### `is_light_source`
+
+Defines if the block is the light source or not.
+
+Example:
+```lua
+is_light_source = false -- this is the default value
+```
+
+### `is_rotatable`
+
+Defines if the block should face the player when placed, like the furnace for example
+
+Example:
+```lua
+is_rotatable = false -- this is the default value
+```
+
+### `bounding_box`
+
+Bounding box of the box.
+
+Example:
+```lua
+bounding_box = {0, 0, 0, 1, 1, 1} -- this is default value
+```
+
+Format is `{x, y, z, width, depth, height}`. Note that OpenMiner uses Z axis as up.
+
+The bounding box determines collisions with the block, as well as the selection box that will be displayed when looking at the block.
+
+Note: This is what affects the temporary `boundingbox` draw type.
+
+### `draw_type`
+
+Draw type of the block, see [Draw types](#draw-types) for more details.
+
+Example:
+```lua
+draw_type = "solid" -- this is the default value
+```
+
+### `item_drop`
+
+Item stack that is given to the player when breaking the block.
+
+Example:
+```lua
+item_drop = {
+	id = "default:cobblestone",
+	amount = 1
+} -- this is the default drop of a 'default:cobblestone' block
+```
+
+### `color_multiplier`
+
+Color multiplier of the grayscale parts of the block texture.
+
+Example:
+```lua
+color_multiplier = {1, 1, 1, 1} -- full white, this is the default value
+```
+
+Only the pure gray parts (red == green == blue) will be affected by this multiplier.
+
+## Draw types
+
+The draw type changes how the block is rendered.
+
+### `solid`
+
+This draw type is the default draw type of the blocks.
+
+It renders a basic textured cube of size 1x1x1.
+
+### `xshape`
+
+Draws two textured quads that form an X shape.
+
+Useful for flora, tallgrass, mushrooms, etc...
+
+### `leaves`
+
+Keep all the faces while drawing a block.
+
+Especially useful for leaves.
+
+### `liquid`
+
+This draw type doesn't do much yet.
+
+Makes a single mesh with all the connected blocks of the same type in a chunk.
+
+It will be rendered without back-face culling (this is why you can see water surface while being inside).
+
+### `glass`
+
+Draw type used for glass-type blocks. Also works for portals.
+
+Almost the same as the `liquid` draw type, except that back-face culling is enabled.
+
+### `cactus`
+
+Using the `bounding_box` attribute, will draw a # shape instead of a cube.
+
+Useful for `cactus` block.
+
+### `boundingbox`
+
+NB: Temporary draw type.
+
+Allow drawing a block of the size of the `bounding_box`.
 
 ## Functions
 
-### on_block_placed
+### `on_block_placed`
 
 Parameters:
 
-- `pos` (`vec3`): position of the block
+- `pos` (`ivec3`): position of the block
 - `world` (`World`): instance of `ServerWorld`
 
-### on_block_activated
+### `on_block_activated`
 
 Parameters:
 
-- `pos` (`vec3`): position of the block
-- `player` (`Player`): current player
+- `pos` (`ivec3`): position of the block
+- `player` (`Player`): player that activated the block
 - `world` (`World`): instance of the `ServerWorld`
 - `client` (`Client`): client that activated the block
+- `server` (`Server`): current server
 - `screen_width` (`u16`): width of the screen
 - `screen_height` (`u16`): height of the screen
 - `gui_scale` (`u8`): current scaling setting
 
-### on_tick
+### `on_tick`
 
 Parameters:
 
-- `pos` (`vec3`): position of the block
-- `player` (`Player`): current player
+- `pos` (`ivec3`): position of the block
 - `chunk` (`Chunk`): current chunk
 - `world` (`World`): instance of the `ServerWorld`
 

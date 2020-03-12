@@ -1,32 +1,36 @@
 # Lua API: Overview
 
-## Table of contents
-
-- [Lua API](#lua-api)
-    - [Core API](#core-api)
-    - [Mod API](#mod-api)
-    - [Custom GUI](#custom-gui)
-        - [Button](#button)
-        - [Inventory](#inventory)
-        - [Crafting table](#crafting-table)
-        - [Image](#image)
-- [C++ classes in Lua](#c-classes-in-lua)
-    - [Registry](#registry)
-    - [World](#world)
-    - [Chunk](#chunk)
-    - [BlockData](#blockdata)
-    - [Player](#player)
-    - [Inventory](#inventory-1)
-    - [Recipe](#recipe)
-    - [ItemStack](#itemstack)
-    - [Item](#item)
-
 ## Lua API
+
+Note: The Lua API is currently server-side only.
 
 ### Core API
 
-- `Registry *openminer:registry()`
-- `openminer:add_listener(event_type, listener)`
+#### `openminer:registry()`
+
+This function returns the `Registry` instance of the server.
+
+#### `openminer:add_listener(event_type, listener)`
+
+Adds a listener to a specific type of event.
+
+Example:
+```lua
+openminer:add_listener(EventType.OnBlockPlaced, function(pos, player, world, client, server)
+	server:send_chat_message(0, "Block placed at " .. pos.x .. ";" .. pos.y .. ";" .. pos.z .. " by Client" .. player:client_id(), client);
+end)
+
+openminer:add_listener(EventType.OnBlockActivated, function(pos, block, player, world, client, server)
+	if block:string_id() == "default:portal" then
+		server:send_chat_message(0, "Swoosh! Changing dimension...", client);
+	end
+end)
+```
+
+Possible events:
+
+- `OnBlockPlaced`: `funcion(pos, player, world, client, server)`
+- `OnBlockActivated`: `function(pos, block, player, world, client, server)`
 
 ### Mod API
 
@@ -39,14 +43,10 @@ mod:block {
 	id = "myblock",
 	name = "My Block",
 	tiles = "myblock.png",
-	hardness = 3,
-	harvest_requirements = 1,
-	on_tick = function(pos, player, chunk, world) end,
-	on_block_activated = function(pos, player, world, client) end,
 }
 
 mod:item {
-	id = "mymod:myitem",
+	id = "myitem",
 	name = "My Item",
 	tiles = "myitem.png",
 }
@@ -67,12 +67,14 @@ mod:crafting_recipe {
 }
 
 mod:smelting_recipe {
-	input = {id = "mymod:myblock", amount = 1},
-	output = {id = "default:ingot_iron", amount = 1}
+	input = {id = "mymod:myitem", amount = 1},
+	output = {id = "mymod:myblock", amount = 1}
 }
 ```
 
-I'll describe all the possible options later.
+Documented API so far:
+
+- [Blocks](lua-api-blocks.md)
 
 ### Custom GUI
 
@@ -144,29 +146,66 @@ gui:image {
 
 ### Registry
 
+- `Block get_block(u16 id)`
+- `Item get_item(u16 id)`
+- `Sky get_sky(u16 id)`
+- `Tree get_tree(u16 id)`
+- `Biome get_biome(u16 id)`
 - `Recipe get_recipe(Inventory crafting_inventory)`
+- `Block get_block_from_string(string id)`
+- `Item get_item_from_string(string id)`
+- `Sky get_sky_from_string(string id)`
+- `Tree get_tree_from_string(string id)`
+- `Biome get_biome_from_string(string id)`
+- `List<Block> blocks()`
+- `List<Item> items()`
+- `List<Tree> trees()`
+- `List<Biome> biomes()`
+- `List<Dimension> dimensions()`
 
 ### World
 
 - `u16 get_block(int x, int y, int z)`
+- `void set_block(int x, int y, int z, u16 block)`
 - `u16 get_data(int x, int y, int z)`
 - `void set_data(int x, int y, int z, u16 data)`
+- `BlockData *add_block_data(int x, int y, int z, int inventoryWidth, int inventoryHeight)`
 - `BlockData *get_block_data(int x, int y, int z)`
 
 ### Chunk
 
 - `u16 get_block(int x, int y, int z)`
+- `void set_block(int x, int y, int z, u16 block)`
 - `u16 get_data(int x, int y, int z)`
+- `void set_data(int x, int y, int z, u16 data)`
+- `BlockData *add_block_data(int x, int y, int z, int inventoryWidth, int inventoryHeight)`
 - `BlockData *get_block_data(int x, int y, int z)`
 
 ### BlockData
 
-- `Inventory *inventory()`
-- `u32 data()`
+- `Inventory *inventory`
+- `BlockMetadata *meta`
+- `bool use_alt_tiles`
+
+### Block
+
+- `u16 id()`
+- `u16 data()`
+- `string string_id()`
+- `string label()`
+- `stirng mod_name()`
+- `bool is_opaque()`
 
 ### Player
 
 - `Inventory *inventory()`
+- `double x()`
+- `double y()`
+- `double z()`
+- `void set_position(double x, double y, double z)`
+- `u16 dimension()`
+- `void set_dimension(u16 dimension)`
+- `u16 client_id()`
 
 ### Inventory
 
@@ -189,4 +228,27 @@ gui:image {
 - `u16 id()`
 - `string name()`
 - `u16 burn_time()`
+- `bool is_fuel()`
+
+### ivec3
+
+- `int x`
+- `int y`
+- `int z`
+
+### BlockMetadata
+
+- `string get_string(string attribute)`
+- `void set_string(string attribute, string value)`
+- `int get_int(string attribute)`
+- `void set_int(string attribute, int value)`
+
+### ClientInfo
+
+- `u16 id()`
+
+### ServerCommandHandler
+
+- `void send_player_change_dimension(u16 clientID, int x, int y, int z, u16 dimension, ClientInfo client)`
+- `void send_chat_message(u16 senderID, string message, ClientInfo client)`
 
