@@ -24,6 +24,8 @@
  *
  * =====================================================================================
  */
+#include "filesystem.hpp"
+
 #include <gk/core/input/GamePad.hpp>
 #include <gk/core/Mouse.hpp>
 #include <gk/gl/GLCheck.hpp>
@@ -37,7 +39,7 @@
 
 #include "TitleScreenState.hpp"
 
-using namespace std::literals::string_literals;
+namespace fs = ghc::filesystem;
 
 ClientApplication::ClientApplication(int argc, char **argv) : gk::CoreApplication(argc, argv) {
 }
@@ -47,8 +49,12 @@ void ClientApplication::init() {
 	m_argumentParser.addArgument("port", {"-p", "--port", true});
 	m_argumentParser.addArgument("singleplayer", {"-s", "--singleplayer", false});
 	m_argumentParser.addArgument("multiplayer", {"-m", "--multiplayer", false});
+	m_argumentParser.addArgument("working_dir", {"-w", "--working-dir", true});
 
 	gk::CoreApplication::init();
+
+	if (m_argumentParser.getArgument("working_dir").isFound)
+		fs::current_path(m_argumentParser.getArgument("working_dir").parameter);
 
 	if (m_argumentParser.getArgument("host").isFound)
 		m_host = m_argumentParser.getArgument("host").parameter;

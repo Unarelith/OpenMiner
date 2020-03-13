@@ -33,12 +33,17 @@ namespace fs = ghc::filesystem;
 
 ServerApplication::ServerApplication(int argc, char **argv) : m_argumentParser(argc, argv) {
 	std::srand(std::time(nullptr));
-
-	m_argumentParser.addArgument("port", {"-p", "--port", true});
-	m_argumentParser.parse();
 }
 
 void ServerApplication::init() {
+	m_argumentParser.addArgument("port", {"-p", "--port", true});
+	m_argumentParser.addArgument("working_dir", {"-w", "--working-dir", true});
+
+	m_argumentParser.parse();
+
+	if (m_argumentParser.getArgument("working_dir").isFound)
+		fs::current_path(m_argumentParser.getArgument("working_dir").parameter);
+
 	if (m_argumentParser.getArgument("port").isFound)
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
 
