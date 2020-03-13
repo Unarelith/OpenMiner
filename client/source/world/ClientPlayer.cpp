@@ -62,24 +62,14 @@ void ClientPlayer::turnViewV(float angle) {
 	updateDir();
 }
 
+// Note: This function returns an angle4
 u8 ClientPlayer::getDirection() const {
-	if (m_viewAngleH >= -45.f && m_viewAngleH <= 45.f) {
-		return East;
-	}
-	else if (m_viewAngleH >= -135.f && m_viewAngleH <= -45.f) {
-		return South;
-	}
-	else if (m_viewAngleH <= -135.f || m_viewAngleH >= 135.f) {
-		return West;
-	}
-	else {
-		return North;
-	}
+	return int(floorf(m_viewAngleH / 90.f + 0.5f)) & 3;
 }
 
+// Note: This function returns an angle4
 u8 ClientPlayer::getOppositeDirection() const {
-	// Note: For this to work, it depends on the order of the enum BlockFace in TilesDef.hpp
-	return getDirection() ^ 1;
+	return getDirection() ^ 2;
 }
 
 void ClientPlayer::updateDir() {

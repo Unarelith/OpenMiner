@@ -95,8 +95,7 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 
 						u32 block = hotbar.currentItem();
 						if (newBlock.isRotatable()) {
-							static constexpr u8 dirToFaceDir[4]{0, 2, 1, 3};
-							u16 data = dirToFaceDir[m_player.getOppositeDirection() & 0x3];
+							u16 data = m_player.getOppositeDirection() & 0x3;
 							m_world.setData(x, y, z, data);
 
 							block |= data << 16;

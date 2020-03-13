@@ -48,7 +48,8 @@ void DebugOverlay::update() {
 	s32 py = std::floor(m_player.y());
 	s32 pz = std::floor(m_player.z());
 
-	const char *directions[5] = {"West", "East", "South", "North"};
+	// Directions is now an angle4
+	const char *directions[4] = {"East", "North", "West", "South"};
 	const char *direction = directions[m_player.getDirection()];
 
 	std::stringstream stream;
