@@ -8,7 +8,7 @@
 - `u16 data()`
 - `string string_id()`
 - `string label()`
-- `stirng mod_name()`
+- `string mod_name()`
 - `bool is_opaque()`
 
 ## BlockData
