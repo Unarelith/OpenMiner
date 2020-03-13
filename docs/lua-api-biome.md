@@ -12,6 +12,16 @@ mod:biome {
 		precipitation = -0.7
 	},
 
+	blocks = {
+		top = "default:sand",
+		ground = "default:sand",
+		deep = "default:stone",
+		beach = "default:sand",
+		liquid = "default:water",
+		portal = "default:portal",
+		portal_frame = "default:obsidian",
+	},
+
 	trees = {
 		{
 			type = "default:tree_cactus",
@@ -26,18 +36,94 @@ mod:biome {
 			probability = 0.005,
 		}
 	},
-
-	top_block = "default:sand",
-	ground_block = "default:sand",
-	deep_block = "default:stone",
-	beach_block = "default:sand",
-	liquid_block = "default:water",
-	portal_block = "default:portal",
-	portal_frame_block = "default:obsidian",
 }
 ```
 
 ## Attributes
+
+### `blocks`
+
+Table containing the blocks used for the terrain.
+
+Example:
+```lua
+blocks = {
+	top = "default:grass",
+	ground = "default:dirt",
+	deep = "default:stone",
+	beach = "default:sand",
+	liquid = "default:water",
+	portal = "default:portal",
+	portal_frame = "default:obsidian",
+}
+```
+
+#### `beach`
+
+String ID of the block used around and under `liquid` block.
+
+Example:
+```lua
+beach = "default:sand"
+```
+
+#### `deep`
+
+String ID of the block used for the lower part of the terrain, below `ground` block.
+
+Example:
+```lua
+deep = "default:stone"
+```
+
+#### `ground`
+
+String ID of the block used for the upper part of the terrain, under `top` block.
+
+Example:
+```lua
+ground = "default:dirt"
+```
+
+#### `liquid`
+
+String ID of the block used to make lakes under `SEALEVEL` (see EngineConfig.hpp).
+
+Example:
+```lua
+liquid = "default:water"
+```
+
+#### `portal`
+
+String ID of the block used to generate portal center.
+
+Example:
+```lua
+portal = "default:portal"
+```
+
+**Note:** This attribute is temporary and will get removed soon.
+
+#### `portal_frame`
+
+String ID of the block used to generate portal frame.
+
+Example:
+```lua
+portal_frame = "default:obsidian"
+```
+
+**Note:** This attribute is temporary and will get removed soon.
+
+#### `top`
+
+String ID of the block used on the top of the terrain.
+
+Example:
+```lua
+top = "default:grass"
+```
 
 ### `flora`
 
@@ -147,73 +233,4 @@ Possible attributes:
 
 - `type`: String ID of the tree definition
 - `probability`: Probability to spawn this tree
-
-### Blocks
-
-#### `top_block`
-
-String ID of the block used on the top of the terrain.
-
-Example:
-```lua
-top_block = "default:grass"
-```
-
-#### `ground_block`
-
-String ID of the block used for the upper part of the terrain, under `top_block`.
-
-Example:
-```lua
-ground_block = "default:dirt"
-```
-
-#### `deep_block`
-
-String ID of the block used for the lower part of the terrain, below `ground_block`.
-
-Example:
-```lua
-deep_block = "default:stone"
-```
-
-#### `beach_block`
-
-String ID of the block used around and under `liquid_block`.
-
-Example:
-```lua
-beach_block = "default:sand"
-```
-
-#### `liquid_block`
-
-String ID of the block used to make lakes under `SEALEVEL` (see EngineConfig.hpp).
-
-Example:
-```lua
-liquid_block = "default:water"
-```
-
-#### `portal_block`
-
-String ID of the block used to generate portal center.
-
-Example:
-```lua
-portal_block = "default:portal"
-```
-
-**Note:** This attribute is temporary and will get removed soon.
-
-#### `portal_frame_block`
-
-String ID of the block used to generate portal frame.
-
-Example:
-```lua
-portal_frame_block = "default:obsidian"
-```
-
-**Note:** This attribute is temporary and will get removed soon.
 

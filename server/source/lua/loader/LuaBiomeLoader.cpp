@@ -91,13 +91,19 @@ inline void LuaBiomeLoader::loadBiomeParameters(Biome &biome, const sol::table &
 }
 
 inline void LuaBiomeLoader::loadBiomeBlocks(Biome &biome, const sol::table &table) const {
-	biome.setTopBlockID(Registry::getInstance().getBlockFromStringID(table["top_block"]).id());
-	biome.setGroundBlockID(Registry::getInstance().getBlockFromStringID(table["ground_block"]).id());
-	biome.setDeepBlockID(Registry::getInstance().getBlockFromStringID(table["deep_block"]).id());
-	biome.setBeachBlockID(Registry::getInstance().getBlockFromStringID(table["beach_block"]).id());
-	biome.setLiquidBlockID(Registry::getInstance().getBlockFromStringID(table["liquid_block"]).id());
-	biome.setPortalBlockID(Registry::getInstance().getBlockFromStringID(table["portal_block"]).id());
-	biome.setPortalFrameBlockID(Registry::getInstance().getBlockFromStringID(table["portal_frame_block"]).id());
+	sol::object blocksObject = table["blocks"];
+	if (blocksObject.valid() && blocksObject.get_type() == sol::type::table) {
+		sol::table table = blocksObject.as<sol::table>();
+		biome.setTopBlockID(Registry::getInstance().getBlockFromStringID(table["top"]).id());
+		biome.setGroundBlockID(Registry::getInstance().getBlockFromStringID(table["ground"]).id());
+		biome.setDeepBlockID(Registry::getInstance().getBlockFromStringID(table["deep"]).id());
+		biome.setBeachBlockID(Registry::getInstance().getBlockFromStringID(table["beach"]).id());
+		biome.setLiquidBlockID(Registry::getInstance().getBlockFromStringID(table["liquid"]).id());
+		biome.setPortalBlockID(Registry::getInstance().getBlockFromStringID(table["portal"]).id());
+		biome.setPortalFrameBlockID(Registry::getInstance().getBlockFromStringID(table["portal_frame"]).id());
+	}
+	else
+		DEBUG("ERROR: For '" + biome.stringID() + "': 'blocks' field must be a table");
 }
 
 inline void LuaBiomeLoader::loadTreePlacementEntries(Biome &biome, const sol::table &table) const {

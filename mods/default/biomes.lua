@@ -34,13 +34,15 @@ mod:biome {
 		precipitation = 0.3
 	},
 
-	top_block = "default:grass",
-	ground_block = "default:dirt",
-	deep_block = "default:stone",
-	beach_block = "default:sand",
-	liquid_block = "default:water",
-	portal_block = "default:portal",
-	portal_frame_block = "default:obsidian",
+	blocks = {
+		top = "default:grass",
+		ground = "default:dirt",
+		deep = "default:stone",
+		beach = "default:sand",
+		liquid = "default:water",
+		portal = "default:portal",
+		portal_frame = "default:obsidian",
+	},
 
 	trees = {
 		{
@@ -85,6 +87,16 @@ mod:biome {
 		precipitation = -0.7
 	},
 
+	blocks = {
+		top = "default:sand",
+		ground = "default:sand",
+		deep = "default:stone",
+		beach = "default:sand",
+		liquid = "default:water",
+		portal = "default:portal",
+		portal_frame = "default:obsidian",
+	},
+
 	trees = {
 		{
 			type = "default:tree_cactus",
@@ -99,14 +111,6 @@ mod:biome {
 			probability = 0.005,
 		}
 	},
-
-	top_block = "default:sand",
-	ground_block = "default:sand",
-	deep_block = "default:stone",
-	beach_block = "default:sand",
-	liquid_block = "default:water",
-	portal_block = "default:portal",
-	portal_frame_block = "default:obsidian",
 }
 
 mod:biome {
@@ -118,12 +122,14 @@ mod:biome {
 		precipitation = -1
 	},
 
-	top_block = "default:netherrack",
-	ground_block = "default:netherrack",
-	deep_block = "default:netherrack",
-	beach_block = "default:soul_sand",
-	liquid_block = "default:lava",
-	portal_block = "default:portal",
-	portal_frame_block = "default:obsidian",
+	blocks = {
+		top = "default:netherrack",
+		ground = "default:netherrack",
+		deep = "default:netherrack",
+		beach = "default:soul_sand",
+		liquid = "default:lava",
+		portal = "default:portal",
+		portal_frame = "default:obsidian",
+	},
 }
 
