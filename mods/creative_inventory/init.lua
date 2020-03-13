@@ -61,11 +61,14 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 		name = "inv_creative_items",
 		pos = {x = 8, y = 17},
 
-		inventory = "temp",
-		inventory_name = "inv_data",
+		inventory = {
+			source = "temp",
+			inventory_name = "inv_data",
+			offset = 0,
+			count = 9 * 5,
+		},
 
-		offset = 0,
-		count = 9 * 5,
+		size = {x = 9, y = 7}
 	}
 
 	gui:scroll_bar {
@@ -86,12 +89,15 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 		name = "inv_hotbar",
 		pos = {x = 8, y = 111},
 
-		inventory = "player",
-		player = "player",
-		inventory_name = "main",
+		inventory = {
+			source = "player",
+			player = "player",
+			inventory_name = "main",
+			offset = 0,
+			count = 9,
+		},
+
 		size = {x = 9, y = 1},
-		offset = 0,
-		count = 9,
 	}
 
 	gui:show(client);

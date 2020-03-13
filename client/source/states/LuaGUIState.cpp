@@ -222,19 +222,22 @@ void LuaGUIState::loadTextButton(const std::string &, s32 x, s32 y, sf::Packet &
 }
 
 void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet) {
-	std::string inventory, playerName, inventory_name, shiftDestination;
-	gk::Vector3i block;
+	std::string inventory, shiftDestination;
 	u16 width, height;
 	u16 offset, count;
-	packet >> inventory >> playerName >> inventory_name
-		>> block.x >> block.y >> block.z >> shiftDestination
-		>> width >> height >> offset >> count;
+	packet >> width >> height >> shiftDestination >> offset >> count >> inventory;
 
 	Inventory *widgetInventory = nullptr;
 	if (inventory == "player") {
+		std::string playerName, inventoryName;
+		packet >> playerName >> inventoryName;
+
 		widgetInventory = &m_player.inventory();
 	}
 	else if (inventory == "block") {
+		gk::Vector3i block;
+		packet >> block;
+
 		BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
 		if (!data) {
 			DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
@@ -244,14 +247,17 @@ void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf:
 		widgetInventory = &data->inventory;
 	}
 	else if (inventory == "temp") {
-		if (inventory_name.empty()) {
+		std::string inventoryName;
+		packet >> inventoryName;
+
+		if (inventoryName.empty()) {
 			m_inventories.emplace("_temp", Inventory{width, height});
 			widgetInventory = &m_inventories.at("_temp");
 		}
 		else {
-			auto it = m_inventories.find(inventory_name);
+			auto it = m_inventories.find(inventoryName);
 			if (it == m_inventories.end())
-				DEBUG("ERROR: Unable to find inventory '" + inventory_name + "' for widget '" + name + "'");
+				DEBUG("ERROR: Unable to find inventory '" + inventoryName + "' for widget '" + name + "'");
 
 			widgetInventory = &it->second;
 		}

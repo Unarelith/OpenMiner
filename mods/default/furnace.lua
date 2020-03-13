@@ -76,12 +76,14 @@ mod:block {
 			name = "inv_input",
 			pos = {x = 55, y = 16},
 
-			inventory = "block",
-			block = {x = pos.x, y = pos.y, z = pos.z},
+			inventory = {
+				source = "block",
+				block = {x = pos.x, y = pos.y, z = pos.z},
+				offset = 0,
+				count = 1,
+			},
 
 			size = {x = 1, y = 1},
-			offset = 0,
-			count = 1,
 
 			shift_destination = "inv_main,inv_hotbar",
 		}
@@ -90,12 +92,14 @@ mod:block {
 			name = "inv_output",
 			pos = {x = 115, y = 34},
 
-			inventory = "block",
-			block = {x = pos.x, y = pos.y, z = pos.z},
+			inventory = {
+				source = "block",
+				block = {x = pos.x, y = pos.y, z = pos.z},
+				offset = 1,
+				count = 1,
+			},
 
 			size = {x = 1, y = 1},
-			offset = 1,
-			count = 1,
 
 			shift_destination = "inv_main,inv_hotbar",
 		}
@@ -104,12 +108,14 @@ mod:block {
 			name = "inv_fuel",
 			pos = {x = 55, y = 52},
 
-			inventory = "block",
-			block = {x = pos.x, y = pos.y, z = pos.z},
+			inventory = {
+				source = "block",
+				block = {x = pos.x, y = pos.y, z = pos.z},
+				offset = 2,
+				count = 1,
+			},
 
 			size = {x = 1, y = 1},
-			offset = 2,
-			count = 1,
 
 			shift_destination = "inv_main,inv_hotbar",
 		}
@@ -118,13 +124,15 @@ mod:block {
 			name = "inv_main",
 			pos = {x = 7, y = 83},
 
-			inventory = "player",
-			player = "player",
-			inventory_name = "main",
+			inventory = {
+				source = "player",
+				player = "player",
+				inventory_name = "main",
+				offset = 9,
+				count = 9 * 3,
+			},
 
 			size = {x = 9, y = 3},
-			offset = 9,
-			count = 9 * 3,
 
 			shift_destination = "inv_input,inv_fuel",
 		}
@@ -133,13 +141,15 @@ mod:block {
 			name = "inv_hotbar",
 			pos = {x = 7, y = 141},
 
-			inventory = "player",
-			player = "player",
-			inventory_name = "main",
+			inventory = {
+				source = "player",
+				player = "player",
+				inventory_name = "main",
+				offset = 0,
+				count = 9,
+			},
 
 			size = {x = 9, y = 1},
-			offset = 0,
-			count = 9,
 
 			shift_destination = "inv_input,inv_fuel",
 		}

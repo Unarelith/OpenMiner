@@ -89,12 +89,15 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 		name = "inv_main",
 		pos = {x = 7, y = 83},
 
-		inventory = "player",
-		player = "player",
-		inventory_name = "main",
+		inventory = {
+			source = "player",
+			player = "player",
+			inventory_name = "main",
+			offset = 9,
+			count = 9 * 3,
+		},
+
 		size = {x = 9, y = 3},
-		offset = 9,
-		count = 9 * 3,
 
 		shift_destination = "inv_hotbar,inv_main",
 	}
@@ -103,12 +106,15 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 		name = "inv_hotbar",
 		pos = {x = 7, y = 141},
 
-		inventory = "player",
-		player = "player",
-		inventory_name = "main",
+		inventory = {
+			source = "player",
+			player = "player",
+			inventory_name = "main",
+			offset = 0,
+			count = 9,
+		},
+
 		size = {x = 9, y = 1},
-		offset = 0,
-		count = 9,
 
 		shift_destination = "inv_main,inv_hotbar",
 	}

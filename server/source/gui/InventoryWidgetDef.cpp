@@ -31,34 +31,20 @@
 void InventoryWidgetDef::serialize(sf::Packet &packet) const {
 	WidgetDef::serialize(packet);
 
-	// TODO: Only send needed data depending on m_inventory
-	packet << m_inventory << m_player << m_inventoryName
-		<< m_blockPosition << m_shiftDestination
-		<< m_width << m_height << m_offset << m_count;
+	packet << m_width << m_height << m_shiftDestination << m_offset << m_count << m_inventory;
+
+	if (m_inventory == "player")
+		packet << m_player << m_inventoryName;
+	else if (m_inventory == "temp")
+		packet << m_inventoryName;
+	else if (m_inventory == "block")
+		packet << m_blockPosition;
 }
 
 void InventoryWidgetDef::loadFromLuaTable(const sol::table &table) {
 	WidgetDef::loadFromLuaTable(table);
 
-	m_inventory = table["inventory"].get<std::string>();
-	if (m_inventory == "player") {
-		m_player = table["player"].get<std::string>();
-		m_inventoryName = table["inventory_name"].get<std::string>();
-	}
-	else if (m_inventory == "block") {
-		sol::optional<sol::table> blockTable = table["block"];
-		if (blockTable != sol::nullopt) {
-			m_blockPosition.x = blockTable.value()["x"];
-			m_blockPosition.y = blockTable.value()["y"];
-			m_blockPosition.z = blockTable.value()["z"];
-		}
-	}
-	else if (m_inventory == "temp") {
-		m_inventoryName = table["inventory_name"].get_or<std::string>("");
-	}
-	else {
-		DEBUG("ERROR: Inventory source '" + m_inventory + "' is not valid");
-	}
+	loadInventory(table);
 
 	m_shiftDestination = table["shift_destination"].get_or<std::string>("");
 
@@ -67,8 +53,41 @@ void InventoryWidgetDef::loadFromLuaTable(const sol::table &table) {
 		m_width = size.value()["x"];
 		m_height = size.value()["y"];
 	}
+	else
+		DEBUG("ERROR: For '" + m_name + "': Inventory size must be defined");
+}
 
-	m_offset = table["offset"].get<u16>();
-	m_count = table["count"].get<u16>();
+void InventoryWidgetDef::loadInventory(const sol::table &table) {
+	sol::object inventoryObject = table["inventory"];
+	if (inventoryObject.valid() && inventoryObject.get_type() == sol::type::table) {
+		sol::table inventoryTable = inventoryObject.as<sol::table>();
+
+		m_offset = inventoryTable["offset"].get_or<u16>(0);
+		m_count = inventoryTable["count"].get<u16>();
+
+		m_inventory = inventoryTable["source"].get<std::string>();
+		if (m_inventory == "player") {
+			m_player = inventoryTable["player"].get<std::string>();
+			m_inventoryName = inventoryTable["inventory_name"].get<std::string>();
+		}
+		else if (m_inventory == "temp") {
+			m_inventoryName = inventoryTable["inventory_name"].get_or<std::string>("");
+		}
+		else if (m_inventory == "block") {
+			sol::optional<sol::table> blockTable = inventoryTable["block"];
+			if (blockTable != sol::nullopt) {
+				m_blockPosition.x = blockTable.value()["x"];
+				m_blockPosition.y = blockTable.value()["y"];
+				m_blockPosition.z = blockTable.value()["z"];
+			}
+			else
+				DEBUG("ERROR: For '" + m_name + "': Block position must be defined");
+		}
+		else {
+			DEBUG("ERROR: For '" + m_name + "': Inventory source '" + m_inventory + "' is not valid");
+		}
+	}
+	else
+		DEBUG("ERROR: For '" + m_name + "': 'inventory' field must be a table");
 }
 

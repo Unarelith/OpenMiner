@@ -38,17 +38,19 @@ class InventoryWidgetDef : public WidgetDef {
 		void loadFromLuaTable(const sol::table &table) override;
 
 	private:
+		void loadInventory(const sol::table &table);
+
+		u16 m_width = 0;
+		u16 m_height = 0;
+
+		std::string m_shiftDestination;
+
 		std::string m_inventory;
 
 		std::string m_player;         // inventory == "player"
 		std::string m_inventoryName;  // inventory == "player" || inventory == "temp"
 
 		gk::Vector3i m_blockPosition; // inventory == "block"
-
-		std::string m_shiftDestination;
-
-		u16 m_width = 0;
-		u16 m_height = 0;
 
 		u16 m_offset = 0;
 		u16 m_count = 0;
