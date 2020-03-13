@@ -73,8 +73,10 @@ mod:block {
 			pos = {x = 29, y = 16},
 			result_pos = {x = 123, y = 34},
 
-			inventory = "block",
-			block = {x = pos.x, y = pos.y, z = pos.z},
+			inventory = {
+				source = "block",
+				block = {x = pos.x, y = pos.y, z = pos.z},
+			},
 
 			shift_destination = "inv_main,inv_hotbar",
 		}

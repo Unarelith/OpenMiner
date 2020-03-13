@@ -272,14 +272,15 @@ void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf:
 
 void LuaGUIState::loadCraftingWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet) {
 	std::string inventory, shiftDestination;
-	gk::Vector3i block;
-	u16 offset, size;
 	s32 resultX, resultY;
-	packet >> inventory >> block.x >> block.y >> block.z >> offset >> size
-		>> shiftDestination >> resultX >> resultY;
+	packet >> resultX >> resultY >> shiftDestination >> inventory;
 
+	u16 offset = 0, size;
 	Inventory *craftingInventory = nullptr;
 	if (inventory == "block") {
+		gk::Vector3i block;
+		packet >> block >> offset >> size;
+
 		BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
 		if (!data) {
 			DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
@@ -289,6 +290,8 @@ void LuaGUIState::loadCraftingWidget(const std::string &name, s32 x, s32 y, sf::
 		}
 	}
 	else if (inventory == "temp") {
+		packet >> size;
+
 		m_inventories.emplace("_temp", Inventory{size, size});
 		craftingInventory = &m_inventories.at("_temp");
 	}

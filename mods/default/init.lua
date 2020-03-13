@@ -118,8 +118,10 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 		pos = {x = 97, y = 17},
 		result_pos = {x = 97 + 56, y = 17 + 10},
 
-		inventory = "temp",
-		size = 2,
+		inventory = {
+			source = "temp",
+			size = 2,
+		},
 
 		shift_destination = "inv_main,inv_hotbar",
 	}

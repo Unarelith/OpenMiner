@@ -38,17 +38,19 @@ class CraftingWidgetDef : public WidgetDef {
 		void loadFromLuaTable(const sol::table &table) override;
 
 	private:
+		void loadInventory(const sol::table &table);
+
+		s32 m_resultX = 0;
+		s32 m_resultY = 0;
+
+		std::string m_shiftDestination;
+
 		std::string m_inventory;
 
 		gk::Vector3i m_blockPosition; // inventory == "block"
 
 		u16 m_offset = 0;             // inventory == "block"
 		u16 m_size = 3;               // inventory == "temp" or "block"
-
-		std::string m_shiftDestination;
-
-		s32 m_resultX = 0;
-		s32 m_resultY = 0;
 };
 
 #endif // CRAFTINGWIDGETDEF_HPP_

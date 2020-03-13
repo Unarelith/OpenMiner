@@ -8,8 +8,10 @@ gui:crafting {
 	pos = {x = 29, y = 16},
 	result_pos = {x = 123, y = 34},
 
-	inventory = "block",
-	block = {x = pos.x, y = pos.y, z = pos.z},
+	inventory = {
+		source = "block",
+		block = {x = pos.x, y = pos.y, z = pos.z},
+	},
 
 	shift_destination = "inv_main,inv_hotbar",
 }
@@ -17,7 +19,24 @@ gui:crafting {
 
 ## Attributes
 
-### `block`
+### `inventory`
+
+Inventory to use for the crafting table.
+
+Example:
+```lua
+inventory = {
+	source = "block",
+	block = {x = 0, y = 10, z = 20},
+}
+-- or
+inventory = {
+	source = "temp",
+	size = 2,
+},
+```
+
+#### `block`
 
 Specify the block to use with `block` inventory source.
 
@@ -29,13 +48,31 @@ block = {
 }
 ```
 
-### `inventory`
+#### `offset`
+
+Offset of the subset of the source inventory. Only used with `block` inventory source.
+
+Example:
+```lua
+offset = 0 -- default value
+```
+
+#### `size`
+
+Size of the crafting table. Used with both `block` and `temp` inventory sources.
+
+Example:
+```lua
+size = 3 -- default value, 3x3 crafting table
+```
+
+#### `source`
 
 Source of the inventory displayed.
 
 Example:
 ```lua
-inventory = "block"
+source = "block"
 ```
 
 Possible values:
@@ -50,15 +87,6 @@ Name of the widget. **Mandatory field.**
 Example:
 ```lua
 name = "inv_crafting"
-```
-
-### `offset`
-
-Offset of the subset of the source inventory. Only used with `inventory = "block"`.
-
-Example:
-```lua
-offset = 0
 ```
 
 ### `pos`
@@ -92,14 +120,5 @@ Names of the inventories used for the Shift+Click action, separated by `,`
 Example:
 ```lua
 shift_destination = "inv_hotbar,inv_main"
-```
-
-### `size`
-
-Size of the crafting table.
-
-Example:
-```lua
-size = 3, -- default value, 3x3 crafting table
 ```
 
