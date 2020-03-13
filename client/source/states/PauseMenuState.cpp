@@ -27,10 +27,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <gk/core/ApplicationStateStack.hpp>
+#include <gk/core/EventHandler.hpp>
 #include <gk/core/Mouse.hpp>
 
 #include "Client.hpp"
 #include "Config.hpp"
+#include "Events.hpp"
 #include "PauseMenuState.hpp"
 #include "SettingsMenuState.hpp"
 #include "TitleScreenState.hpp"
@@ -69,6 +71,10 @@ PauseMenuState::PauseMenuState(Client &client, gk::ApplicationState *parent)
 	});
 }
 
+void PauseMenuState::init() {
+	m_eventHandler->addListener<GuiScaleChangedEvent>(&PauseMenuState::onGuiScaleChanged, this);
+}
+
 void PauseMenuState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
@@ -88,6 +94,16 @@ void PauseMenuState::onEvent(const SDL_Event &event) {
 			m_stateStack->pop();
 		}
 	}
+}
+
+void PauseMenuState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
+	m_menuWidget.setScale(event.guiScale, event.guiScale);
+
+	// FIXME: Ugly hack to get MenuWidget working, will change soon
+	SDL_Event e;
+	e.type = SDL_WINDOWEVENT;
+	e.window.event = SDL_WINDOWEVENT_SIZE_CHANGED;
+	m_menuWidget.onEvent(e);
 }
 
 void PauseMenuState::draw(gk::RenderTarget &target, gk::RenderStates states) const {

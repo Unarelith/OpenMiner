@@ -27,6 +27,7 @@
 #include <gk/core/ApplicationStateStack.hpp>
 
 #include "Config.hpp"
+#include "Events.hpp"
 #include "GameState.hpp"
 #include "ServerConnectState.hpp"
 #include "ServerLoadingState.hpp"
@@ -68,6 +69,10 @@ void TitleScreenState::centerBackground() {
 	m_background.setPosition(Config::screenWidth / 2.0 - m_background.width() / 2.0, Config::screenHeight / 2.0 - m_background.height() / 2.0);
 }
 
+void TitleScreenState::init() {
+	m_eventHandler->addListener<GuiScaleChangedEvent>(&TitleScreenState::onGuiScaleChanged, this);
+}
+
 void TitleScreenState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
@@ -105,6 +110,16 @@ void TitleScreenState::startMultiplayer(const std::string &host) {
 	game.connect(host, m_port);
 
 	m_stateStack->push<ServerLoadingState>(game, false, this);
+}
+
+void TitleScreenState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
+	m_menuWidget.setScale(event.guiScale, event.guiScale);
+
+	// FIXME: Ugly hack to get MenuWidget working, will change soon
+	SDL_Event e;
+	e.type = SDL_WINDOWEVENT;
+	e.window.event = SDL_WINDOWEVENT_SIZE_CHANGED;
+	m_menuWidget.onEvent(e);
 }
 
 void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) const {

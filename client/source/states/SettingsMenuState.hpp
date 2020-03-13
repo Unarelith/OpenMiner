@@ -33,13 +33,21 @@
 #include "InterfaceState.hpp"
 #include "MenuWidget.hpp"
 
+class GuiScaleChangedEvent;
+
 class SettingsMenuState : public InterfaceState {
 	public:
 		SettingsMenuState(gk::ApplicationState *parent = nullptr);
 
+		void init() override;
+
 		void onEvent(const SDL_Event &event) override;
 
 	private:
+		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
+
+		void updateDoneButtonPosition();
+
 		void doneButtonAction();
 
 		void addMainButtons();

@@ -32,30 +32,37 @@
 #include <gk/core/input/KeyboardHandler.hpp>
 #include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/Debug.hpp>
+#include <gk/core/EventHandler.hpp>
 #include <gk/core/Mouse.hpp>
 
 #include "Config.hpp"
+#include "Events.hpp"
 #include "SettingsMenuState.hpp"
 #include "World.hpp"
 
 SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : InterfaceState(parent) {
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale, 1);
 
-	m_doneButton.setPosition(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().sizeX * Config::guiScale / 2.0f, Config::screenHeight - 291);
 	m_doneButton.setScale(Config::guiScale, Config::guiScale, 1);
 	m_doneButton.setText("Done");
 	m_doneButton.setCallback([this] (TextButton &) {
 		doneButtonAction();
 	});
 
+	updateDoneButtonPosition();
+
 	addMainButtons();
+}
+
+void SettingsMenuState::init() {
+	m_eventHandler->addListener<GuiScaleChangedEvent>(&SettingsMenuState::onGuiScaleChanged, this);
 }
 
 void SettingsMenuState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-		m_doneButton.setPosition(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().sizeX / 2.0f, Config::screenHeight - 291);
+		updateDoneButtonPosition();
 
 		if (&m_stateStack->top() != this)
 			m_menuWidget.onEvent(event);
@@ -76,6 +83,23 @@ void SettingsMenuState::onEvent(const SDL_Event &event) {
 			m_currentKeyButton = nullptr;
 		}
 	}
+}
+
+void SettingsMenuState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
+	m_menuWidget.setScale(event.guiScale, event.guiScale);
+	m_doneButton.setScale(event.guiScale, event.guiScale);
+
+	updateDoneButtonPosition();
+
+	// FIXME: Ugly hack to get MenuWidget working, will change soon
+	SDL_Event e;
+	e.type = SDL_WINDOWEVENT;
+	e.window.event = SDL_WINDOWEVENT_SIZE_CHANGED;
+	m_menuWidget.onEvent(e);
+}
+
+void SettingsMenuState::updateDoneButtonPosition() {
+	m_doneButton.setPosition(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().sizeX / 2.0f, Config::screenHeight * 0.75);
 }
 
 void SettingsMenuState::doneButtonAction() {
@@ -142,9 +166,11 @@ void SettingsMenuState::addGraphicsButtons() {
 	addToggleButton("Sun Smooth Lighting", Config::isSunSmoothLightingEnabled, true);
 	addToggleButton("Ambient Occlusion", Config::isAmbientOcclusionEnabled, false);
 
-	m_menuWidget.addButton("GUI Scale: " + std::to_string(Config::guiScale), [] (TextButton &button) {
+	m_menuWidget.addButton("GUI Scale: " + std::to_string(Config::guiScale), [this] (TextButton &button) {
 		Config::guiScale = 1 + (Config::guiScale + 1) % 3;
 		button.setText("GUI Scale: " + std::to_string(Config::guiScale));
+
+		m_eventHandler->emplaceEvent<GuiScaleChangedEvent>(Config::guiScale);
 	});
 
 	addToggleButton("Fullscreen", Config::isFullscreenModeEnabled, false);

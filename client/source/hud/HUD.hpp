@@ -36,6 +36,8 @@
 #include "DebugOverlay.hpp"
 #include "Hotbar.hpp"
 
+class GuiScaleChangedEvent;
+
 class HUD : public gk::Transformable, public gk::Drawable {
 	public:
 		HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client);
@@ -43,6 +45,7 @@ class HUD : public gk::Transformable, public gk::Drawable {
 		void setup();
 
 		void onEvent(const SDL_Event &event);
+		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
 
 		void update();
 

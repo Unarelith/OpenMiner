@@ -31,6 +31,7 @@
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "Config.hpp"
+#include "Events.hpp"
 #include "HUD.hpp"
 
 HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
@@ -69,6 +70,12 @@ void HUD::onEvent(const SDL_Event &event) {
 		m_hotbar.onEvent(event);
 
 	m_blockCursor.onEvent(event, m_hotbar);
+}
+
+void HUD::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
+	setScale(event.guiScale, event.guiScale, 1);
+
+	setup();
 }
 
 void HUD::update() {

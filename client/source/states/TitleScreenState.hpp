@@ -32,12 +32,16 @@
 #include "InterfaceState.hpp"
 #include "MenuWidget.hpp"
 
+class GuiScaleChangedEvent;
+
 class TitleScreenState : public InterfaceState {
 	public:
 		TitleScreenState(u16 port = 4242);
 		~TitleScreenState();
 
 		void centerBackground();
+
+		void init() override;
 
 		void onEvent(const SDL_Event &event) override;
 
@@ -47,6 +51,8 @@ class TitleScreenState : public InterfaceState {
 		void startMultiplayer(const std::string &host);
 
 	private:
+		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
+
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		MenuWidget m_menuWidget{1, 3};

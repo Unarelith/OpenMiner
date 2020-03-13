@@ -47,6 +47,8 @@ class GameState : public gk::ApplicationState {
 	public:
 		GameState();
 
+		void init() override;
+
 		void connect(const std::string &host, int port);
 
 		void onEvent(const SDL_Event &event) override;
@@ -65,6 +67,8 @@ class GameState : public gk::ApplicationState {
 
 	private:
 		void initShaders();
+
+		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 

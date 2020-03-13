@@ -38,6 +38,7 @@
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "ChatState.hpp"
+#include "Events.hpp"
 #include "GameKey.hpp"
 #include "GameState.hpp"
 #include "LuaGUIState.hpp"
@@ -59,6 +60,10 @@ GameState::GameState()
 
 	m_world.setClient(m_clientCommandHandler);
 	m_world.setCamera(m_player.camera());
+}
+
+void GameState::init() {
+	m_eventHandler->addListener<GuiScaleChangedEvent>(&GameState::onGuiScaleChanged, this);
 }
 
 void GameState::connect(const std::string &host, int port) {
@@ -157,6 +162,10 @@ void GameState::initShaders() {
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/game.f.glsl");
 
 	m_shader.linkProgram();
+}
+
+void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
+	m_hud.onGuiScaleChanged(event);
 }
 
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {

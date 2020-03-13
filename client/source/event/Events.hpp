@@ -24,33 +24,13 @@
  *
  * =====================================================================================
  */
-#ifndef PAUSEMENUSTATE_HPP_
-#define PAUSEMENUSTATE_HPP_
+#ifndef EVENTS_HPP_
+#define EVENTS_HPP_
 
-#include <gk/graphics/RectangleShape.hpp>
+#include <gk/core/IntTypes.hpp>
 
-#include "InterfaceState.hpp"
-#include "MenuWidget.hpp"
-
-class Client;
-class GuiScaleChangedEvent;
-
-class PauseMenuState : public InterfaceState {
-	public:
-		PauseMenuState(Client &client, gk::ApplicationState *parent = nullptr);
-
-		void init() override;
-
-		void onEvent(const SDL_Event &event) override;
-
-	private:
-		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
-
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		MenuWidget m_menuWidget{1, 4};
-
-		Client &m_client;
+struct GuiScaleChangedEvent {
+	u8 guiScale;
 };
 
-#endif // PAUSEMENUSTATE_HPP_
+#endif // EVENTS_HPP_
