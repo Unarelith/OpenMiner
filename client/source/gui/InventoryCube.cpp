@@ -60,14 +60,14 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 
 	glm::vec3 vertexPos[nVertsPerCube] {
 		// Order is important. It matches the bit order defined in BlockGeometry::cubeVerts.
-		{0,      0,      0},
-		{m_size, 0,      0},
-		{0,      m_size, 0},
-		{m_size, m_size, 0},
-		{0,      0,      m_size},
-		{m_size, 0,      m_size},
-		{0,      m_size, m_size},
-		{m_size, m_size, m_size},
+		glm::vec3{0,      0,      0},
+		glm::vec3{m_size, 0,      0},
+		glm::vec3{0,      m_size, 0},
+		glm::vec3{m_size, m_size, 0},
+		glm::vec3{0,      0,      m_size},
+		glm::vec3{m_size, 0,      m_size},
+		glm::vec3{0,      m_size, m_size},
+		glm::vec3{m_size, m_size, m_size},
 	};
 
 	const gk::FloatBox &boundingBox = block.boundingBox();
