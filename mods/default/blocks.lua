@@ -275,3 +275,12 @@ mod:block {
 	hardness = 2,
 }
 
+mod:block {
+	id = "reeds",
+	name = "Sugar Canes",
+	tiles = "reeds.png",
+	draw_type = "xshape",
+	hardness = 0.2,
+	inventory_image = "reeds_item.png"
+}
+

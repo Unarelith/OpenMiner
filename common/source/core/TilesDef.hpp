@@ -50,6 +50,7 @@ enum BlockFace : u8 {
 class TilesDef : public ISerializable {
 	public:
 		TilesDef() = default;
+		TilesDef(const std::string &texture) { m_textureFilenames.emplace_back(texture); }
 
 		const std::string &getTextureForFace(u8 face, bool useAltTiles = false) const;
 

@@ -106,6 +106,9 @@ class Block : public ISerializable {
 		bool isRotatable() const { return m_isRotatable; }
 		void setRotatable(bool isRotatable) { m_isRotatable = isRotatable; }
 
+		const std::string &inventoryImage() const { return m_inventoryImage; }
+		void setInventoryImage(const std::string &inventoryImage) { m_inventoryImage = inventoryImage; }
+
 	protected:
 		glm::vec4 getTexCoordsFromID(int textureID) const;
 
@@ -136,6 +139,8 @@ class Block : public ISerializable {
 		gk::Color m_colorMultiplier = gk::Color::White;
 
 		bool m_isRotatable = false;
+
+		std::string m_inventoryImage;
 };
 
 #endif // BLOCK_HPP_

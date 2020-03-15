@@ -46,7 +46,12 @@ void LuaBlockLoader::loadBlock(const sol::table &table) const {
 	loadItemDrop(block, table);
 	loadColorMultiplier(block, table);
 
-	Registry::getInstance().registerItem(block.tiles(), stringID, label).setIsBlock(true);
+	if (!block.inventoryImage().empty()) {
+		Registry::getInstance().registerItem(TilesDef{block.inventoryImage()}, stringID, label).setIsBlock(true);
+	}
+	else {
+		Registry::getInstance().registerItem(block.tiles(), stringID, label).setIsBlock(true);
+	}
 }
 
 inline void LuaBlockLoader::loadProperties(ServerBlock &block, const sol::table &table) const {
@@ -58,6 +63,7 @@ inline void LuaBlockLoader::loadProperties(ServerBlock &block, const sol::table 
 	block.setOnTick(table["on_tick"]);
 	block.setOnBlockPlaced(table["on_block_placed"]);
 	block.setRotatable(table["is_rotatable"].get_or(false));
+	block.setInventoryImage(table["inventory_image"].get_or<std::string>(""));
 }
 
 inline void LuaBlockLoader::loadBoundingBox(ServerBlock &block, const sol::table &table) const {

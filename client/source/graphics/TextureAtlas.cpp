@@ -117,7 +117,7 @@ void TextureAtlas::loadFromRegistry() {
 	}
 
 	for (auto &item : Registry::getInstance().items()) {
-		if (!item.isBlock()) {
+		if (!item.isBlock() || !item.tiles().textureFilenames().empty()) {
 			const TilesDef &tiles = item.tiles();
 			for (auto &textureFilename : tiles.textureFilenames())
 				addFile("mods/" + item.modName() + "/textures/items/", textureFilename);
