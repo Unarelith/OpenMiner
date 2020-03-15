@@ -50,7 +50,7 @@ BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommand
 void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
-			m_animationStart = gk::GameClock::getTicks();
+			m_animationStart = gk::GameClock::getInstance().getTicks();
 			m_currentTool = &m_player.inventory().getStack(hotbar.cursorPos(), 0);
 		}
 		else if (event.button.button == SDL_BUTTON_RIGHT) {
@@ -133,24 +133,26 @@ void BlockCursor::update(const Hotbar &hotbar) {
 	// 	m_selectedBlock.w = -1;
 	// }
 
+	u32 ticks = gk::GameClock::getInstance().getTicks();
+
 	if (selectedBlockChanged)
-		m_animationStart = (m_animationStart) ? gk::GameClock::getTicks() : 0;
+		m_animationStart = (m_animationStart) ? ticks : 0;
 
 	const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
 	float timeToBreak = 0;
 	if (m_animationStart) {
 		if (m_currentTool->item().id() != currentStack.item().id()) {
-			m_animationStart = gk::GameClock::getTicks();
+			m_animationStart = ticks;
 			m_currentTool = &currentStack;
 		}
 		else {
 			timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed());
 
-			if (gk::GameClock::getTicks() > m_animationStart + timeToBreak * 1000) {
+			if (ticks > m_animationStart + timeToBreak * 1000) {
 				ItemStack itemDrop = m_currentBlock->getItemDrop();
 				m_player.inventory().addStack(itemDrop.item().stringID(), itemDrop.amount());
 				m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
-				m_animationStart = gk::GameClock::getTicks();
+				m_animationStart = ticks;
 
 				m_client.sendPlayerDigBlock(m_selectedBlock);
 				m_client.sendPlayerInvUpdate();
@@ -167,7 +169,7 @@ void BlockCursor::update(const Hotbar &hotbar) {
 
 	if (m_animationStart && m_currentBlock)
 		updateAnimationVertexBuffer(*m_currentBlock, orientation,
-		                            (gk::GameClock::getTicks() - m_animationStart) / (timeToBreak * 100));
+		                            (ticks - m_animationStart) / (timeToBreak * 100));
 }
 
 using namespace BlockGeometry;

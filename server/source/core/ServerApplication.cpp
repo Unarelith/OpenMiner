@@ -33,11 +33,17 @@
 namespace fs = ghc::filesystem;
 
 ServerApplication::ServerApplication(int argc, char **argv) : m_argumentParser(argc, argv) {
-	std::srand(std::time(nullptr));
-	BlockGeometry::initOrientation();
+}
+
+ServerApplication::ServerApplication(gk::EventHandler &eventHandler) {
+	m_eventHandler = &eventHandler;
 }
 
 void ServerApplication::init() {
+	std::srand(std::time(nullptr));
+
+	BlockGeometry::initOrientation();
+
 	m_argumentParser.addArgument("port", {"-p", "--port", true});
 	m_argumentParser.addArgument("working_dir", {"-w", "--working-dir", true});
 
@@ -68,6 +74,9 @@ void ServerApplication::init() {
 	m_scriptEngine.luaCore().setRegistry(&m_registry);
 
 	std::cout << "Server is running on localhost:" << m_port << std::endl;
+
+	if (m_eventHandler)
+		m_eventHandler->emplaceEvent<ServerOnlineEvent>(true);
 }
 
 int ServerApplication::run(bool isProtected) {
@@ -77,6 +86,9 @@ int ServerApplication::run(bool isProtected) {
 			mainLoop();
 		}
 		catch(const gk::Exception &e) {
+			if (m_eventHandler)
+				m_eventHandler->emplaceEvent<ServerOnlineEvent>(false);
+
 			std::cerr << "Fatal error " << e.what() << std::endl;
 			return 1;
 		}
@@ -92,7 +104,7 @@ int ServerApplication::run(bool isProtected) {
 void ServerApplication::update() {
 	m_worldController.update();
 
-	if (gk::GameClock::getTicks() % 100 < 10) {
+	if (m_clock.getTicks() % 100 < 10) {
 		for (auto &it : m_players) {
 			m_serverCommandHandler.sendPlayerPosUpdate(it.first);
 		}

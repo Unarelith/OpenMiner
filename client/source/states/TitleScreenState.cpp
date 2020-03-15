@@ -71,6 +71,7 @@ void TitleScreenState::centerBackground() {
 
 void TitleScreenState::init() {
 	m_eventHandler->addListener<GuiScaleChangedEvent>(&TitleScreenState::onGuiScaleChanged, this);
+	m_eventHandler->addListener<ServerOnlineEvent>(&TitleScreenState::onServerOnlineEvent, this);
 }
 
 void TitleScreenState::onEvent(const SDL_Event &event) {
@@ -86,23 +87,27 @@ void TitleScreenState::onEvent(const SDL_Event &event) {
 }
 
 void TitleScreenState::update() {
+	if (m_isServerOnline) {
+		auto &game = m_stateStack->push<GameState>();
+		game.setSingleplayer(true);
+		game.connect("localhost", m_port);
+
+		m_stateStack->push<ServerLoadingState>(game, m_showLoadingState, this);
+	}
 }
 
 void TitleScreenState::startSingleplayer(bool showLoadingState) {
+	m_showLoadingState = showLoadingState;
+
+	if (m_thread.joinable())
+		m_thread.join();
+
 	m_thread = std::thread([this] () {
-		ServerApplication app;
+		ServerApplication app{*m_eventHandler};
 		app.setSingleplayer(true);
 		app.setPort(m_port);
 		app.run();
 	});
-
-	std::this_thread::sleep_for(std::chrono::milliseconds(200));
-
-	auto &game = m_stateStack->push<GameState>();
-	game.setSingleplayer(true);
-	game.connect("localhost", m_port);
-
-	m_stateStack->push<ServerLoadingState>(game, showLoadingState, this);
 }
 
 void TitleScreenState::startMultiplayer(const std::string &host) {
@@ -118,7 +123,13 @@ void TitleScreenState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 	m_menuWidget.onGuiScaleChanged(event);
 }
 
+void TitleScreenState::onServerOnlineEvent(const ServerOnlineEvent &event) {
+	m_isServerOnline = event.isOnline;
+}
+
 void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	if (m_isServerOnline) return;
+
 	prepareDraw(target, states);
 
 	target.draw(m_background, states);

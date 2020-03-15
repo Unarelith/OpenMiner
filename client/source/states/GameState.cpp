@@ -145,7 +145,7 @@ void GameState::update() {
 
 	m_hud.update();
 
-	if (gk::GameClock::getTicks() % 100 < 10) {
+	if (gk::GameClock::getInstance().getTicks() % 100 < 10) {
 		m_clientCommandHandler.sendPlayerPosUpdate();
 	}
 
@@ -171,7 +171,7 @@ void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	// FIXME: This uniform is not used anymore since water/leaves effects are disabled
 	// gk::Shader::bind(&m_shader);
-	// m_shader.setUniform("u_time", gk::GameClock::getTicks());
+	// m_shader.setUniform("u_time", gk::GameClock::getInstance().getTicks());
 	// gk::Shader::bind(nullptr);
 
 	states.shader = &m_shader;

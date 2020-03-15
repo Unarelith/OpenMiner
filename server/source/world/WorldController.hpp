@@ -31,11 +31,15 @@
 
 #include "ServerWorld.hpp"
 
+namespace gk {
+	class GameClock;
+}
+
 class Registry;
 
 class WorldController {
 	public:
-		WorldController(Registry &registry) : m_registry(registry) {}
+		WorldController(Registry &registry, gk::GameClock &clock) : m_registry(registry), m_clock(clock) {}
 
 		void init();
 
@@ -49,6 +53,8 @@ class WorldController {
 		std::vector<ServerWorld> m_worldList;
 
 		Registry &m_registry;
+
+		gk::GameClock &m_clock;
 
 		ServerCommandHandler *m_server = nullptr;
 };

@@ -91,7 +91,7 @@ void Client::sendKeyState() {
 		gk::InputHandler *inputHandler = gk::GamePad::getInputHandler();
 		if (inputHandler) {
 			sf::Packet packet;
-			packet << Network::Command::KeyState << gk::GameClock::getTicks() << m_id;
+			packet << Network::Command::KeyState << gk::GameClock::getInstance().getTicks() << m_id;
 			for (auto &it : inputHandler->keysPressed()) {
 				packet << static_cast<u8>(it.first) << it.second;
 			}

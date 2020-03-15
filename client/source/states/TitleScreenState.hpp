@@ -33,6 +33,7 @@
 #include "MenuWidget.hpp"
 
 struct GuiScaleChangedEvent;
+struct ServerOnlineEvent;
 
 class TitleScreenState : public InterfaceState {
 	public:
@@ -52,6 +53,7 @@ class TitleScreenState : public InterfaceState {
 
 	private:
 		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
+		void onServerOnlineEvent(const ServerOnlineEvent &event);
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
@@ -62,6 +64,9 @@ class TitleScreenState : public InterfaceState {
 		std::thread m_thread;
 
 		u16 m_port = 4242;
+
+		bool m_showLoadingState = false;
+		bool m_isServerOnline = false;
 };
 
 #endif // TITLESCREENSTATE_HPP_

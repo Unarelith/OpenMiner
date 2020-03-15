@@ -29,7 +29,7 @@
 
 void WorldController::init() {
 	for (const Dimension &dimension : m_registry.dimensions()) {
-		m_worldList.emplace_back(dimension);
+		m_worldList.emplace_back(dimension, m_clock);
 		m_worldList.back().setServer(m_server);
 	}
 }

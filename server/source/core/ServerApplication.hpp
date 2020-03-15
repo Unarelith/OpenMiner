@@ -29,6 +29,7 @@
 
 #include <gk/core/ArgumentParser.hpp>
 #include <gk/core/GameClock.hpp>
+#include <gk/core/EventHandler.hpp>
 
 #include "LuaCore.hpp"
 #include "Registry.hpp"
@@ -38,9 +39,14 @@
 #include "ServerPlayer.hpp"
 #include "WorldController.hpp"
 
+struct ServerOnlineEvent {
+	bool isOnline;
+};
+
 class ServerApplication {
 	public:
 		ServerApplication(int argc = 0, char **argv = nullptr);
+		ServerApplication(gk::EventHandler &eventHandler);
 
 		void init();
 
@@ -57,6 +63,7 @@ class ServerApplication {
 
 		gk::ArgumentParser m_argumentParser;
 		gk::GameClock m_clock;
+		gk::EventHandler *m_eventHandler = nullptr;
 
 		ScriptEngine m_scriptEngine;
 
@@ -64,7 +71,7 @@ class ServerApplication {
 
 		u16 m_port = 4242;
 
-		WorldController m_worldController{m_registry};
+		WorldController m_worldController{m_registry, m_clock};
 		std::unordered_map<u16, ServerPlayer> m_players;
 
 		Server m_server;

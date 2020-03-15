@@ -33,6 +33,10 @@
 #include "TerrainGenerator.hpp"
 #include "World.hpp"
 
+namespace gk {
+	class GameClock;
+}
+
 class ClientInfo;
 class Dimension;
 class ServerCommandHandler;
@@ -42,8 +46,8 @@ class ServerWorld : public World {
 	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ServerChunk>>;
 
 	public:
-		ServerWorld(const Dimension &dimension)
-			: m_dimension(dimension), m_terrainGenerator(dimension) {}
+		ServerWorld(const Dimension &dimension, gk::GameClock &clock)
+			: m_dimension(dimension), m_terrainGenerator(dimension), m_clock(clock) {}
 
 		void update();
 
@@ -73,6 +77,8 @@ class ServerWorld : public World {
 		TerrainGenerator m_terrainGenerator;
 
 		ServerCommandHandler *m_server = nullptr;
+
+		gk::GameClock &m_clock;
 };
 
 #endif // SERVERWORLD_HPP_

@@ -34,8 +34,8 @@
 #include "ServerWorld.hpp"
 
 void ServerWorld::update() {
-	if (m_lastTick < gk::GameClock::getTicks() / 50) {
-		m_lastTick = gk::GameClock::getTicks() / 50;
+	if (m_lastTick < m_clock.getTicks() / 50) {
+		m_lastTick = m_clock.getTicks() / 50;
 
 		for (auto &it : m_chunks) {
 			it.second->tick(*this, *m_server);
