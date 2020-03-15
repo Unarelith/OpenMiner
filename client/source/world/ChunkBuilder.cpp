@@ -208,9 +208,17 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 			vertices[v].coord3d[2] = z + vertexPos[v]->z - boundingBox.z * normal.z;
 		}
 		else {
+			float blockHeight = vertexPos[v]->z;
+			if (block.drawType() == BlockDrawType::Liquid && (!surroundingBlock || !surroundingBlock->id())) {
+				if (f == BlockFace::Bottom)
+					blockHeight = vertexPos[v]->z - 2.f / 16.f;
+				else
+					blockHeight = vertexPos[v]->z * 14.f / 16.f;
+			}
+
 			vertices[v].coord3d[0] = x + vertexPos[v]->x;
 			vertices[v].coord3d[1] = y + vertexPos[v]->y;
-			vertices[v].coord3d[2] = z + vertexPos[v]->z;
+			vertices[v].coord3d[2] = z + blockHeight;
 		}
 
 		vertices[v].coord3d[3] = f;
