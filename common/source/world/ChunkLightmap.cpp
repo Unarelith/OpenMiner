@@ -128,19 +128,18 @@ bool ChunkLightmap::updateTorchlight() {
 		LightNode node = m_torchlightBfsQueue.front();
 		m_torchlightBfsQueue.pop();
 
-		// FIXME: This doesn't check if the block is an actual light source
-		//        so if this block is a light source, it will just remove the light...
-
 		// If this block is opaque, don't propagate the light
-		// u16 block = m_chunk->getBlock(node.x, node.y, node.z);
-		// const Block &block = Registry::getInstance().getBlock(blockID);
-		// if (block.isOpaque()) {
-		// 	setTorchlight(node.x, node.y, node.z, 0);
-        //
-		// 	lightUpdated = true; // FIXME
-        //
-		// 	continue;
-		// }
+		u16 blockID = m_chunk->getBlock(node.x, node.y, node.z);
+		const Block &block = Registry::getInstance().getBlock(blockID);
+		if (block.isOpaque() && !block.isLightSource()) {
+			setTorchlight(node.x, node.y, node.z, 0);
+
+			// FIXME: This only reverts an addTorchlight that added light in a non-generated chunk
+			//        I should avoid setting the torchlight rather than reverting it
+			lightUpdated = true;
+
+			continue;
+		}
 
 		gk::Vector3i surroundingNodes[6] = {
 			{node.x - 1, node.y,     node.z},
