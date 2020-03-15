@@ -75,6 +75,19 @@ id = "cobblestone"
 
 IDs are usually of the form `mod:block` but the `mod:` prefix is prepended automatically so it's not needed.
 
+### `inventory_image`
+
+Texture used for inventory rendering.
+
+Example:
+```lua
+inventory_image = "cobblestone_item.png"
+```
+
+If you set this parameter the block will be displayed as an item in the inventory using this texture.
+
+The texture is loaded from `mods/<your-mod>/textures/items/`.
+
 ### `is_light_source`
 
 Defines if the block is the light source or not.
