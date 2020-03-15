@@ -169,7 +169,7 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 	&& ((block.drawType() == BlockDrawType::Solid && surroundingBlock->drawType() == BlockDrawType::Solid && surroundingBlock->isOpaque())
 	 || (block.id() == surroundingBlock->id() && (block.drawType() == BlockDrawType::Liquid || block.drawType() == BlockDrawType::Glass))
 	 || (block.drawType() == BlockDrawType::Liquid && surroundingBlock->drawType() == BlockDrawType::Solid)
-	 || (block.drawType() == BlockDrawType::Cactus && surroundingBlock->id() == block.id())))
+	 || (block.drawType() == BlockDrawType::Cactus && surroundingBlock->id() == block.id() && f > 3)))
 		return;
 
 	const gk::FloatBox &boundingBox = block.boundingBox();
