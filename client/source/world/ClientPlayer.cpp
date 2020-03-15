@@ -129,6 +129,8 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 		if (!Config::isFlyModeEnabled) {
 			m_velocity.z -= m_gravity; // Gravity
 
+			m_isJumping = true;
+
 			if (m_velocity.z < -m_jumpSpeed) // Limit max vertical speed to jump speed
 				m_velocity.z = -m_jumpSpeed;
 		}

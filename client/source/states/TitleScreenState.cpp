@@ -108,6 +108,8 @@ void TitleScreenState::startSingleplayer(bool showLoadingState) {
 		app.setPort(m_port);
 		app.run();
 	});
+
+	m_isServerLaunched = true;
 }
 
 void TitleScreenState::startMultiplayer(const std::string &host) {
@@ -125,16 +127,16 @@ void TitleScreenState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 
 void TitleScreenState::onServerOnlineEvent(const ServerOnlineEvent &event) {
 	m_isServerOnline = event.isOnline;
+
+	m_isServerLaunched = false;
 }
 
 void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	if (m_isServerOnline) return;
-
 	prepareDraw(target, states);
 
 	target.draw(m_background, states);
 
-	if (&m_stateStack->top() == this) {
+	if (&m_stateStack->top() == this && !m_isServerLaunched && !m_isServerOnline) {
 		target.draw(m_menuWidget, states);
 	}
 }

@@ -66,7 +66,9 @@ class TitleScreenState : public InterfaceState {
 		u16 m_port = 4242;
 
 		bool m_showLoadingState = false;
+
 		bool m_isServerOnline = false;
+		bool m_isServerLaunched = false;
 };
 
 #endif // TITLESCREENSTATE_HPP_

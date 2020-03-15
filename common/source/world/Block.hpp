@@ -43,7 +43,7 @@ class Chunk;
 class Player;
 class World;
 
-enum class BlockDrawType {
+enum class BlockDrawType : u8 {
 	Solid   = 0,
 	XShape  = 1,
 	Leaves  = 2,

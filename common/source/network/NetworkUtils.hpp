@@ -74,6 +74,23 @@ sf::Packet &operator>>(sf::Packet &packet, gk::Rect<T> &rect) {
 }
 
 //======================================================================================
+// gk::Box
+//======================================================================================
+#include <gk/core/Box.hpp>
+
+template<typename T>
+sf::Packet &operator<<(sf::Packet &packet, const gk::Box<T> &box) {
+	packet << box.x << box.y << box.z << box.sizeX << box.sizeY << box.sizeZ;
+	return packet;
+}
+
+template<typename T>
+sf::Packet &operator>>(sf::Packet &packet, gk::Box<T> &box) {
+	packet >> box.x >> box.y >> box.z >> box.sizeX >> box.sizeY >> box.sizeZ;
+	return packet;
+}
+
+//======================================================================================
 // gk::Vector3
 //======================================================================================
 #include <gk/core/Vector3.hpp>

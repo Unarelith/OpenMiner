@@ -26,9 +26,8 @@
  */
 #include <iostream>
 
-#include <SFML/Network/Packet.hpp>
-
 #include "Block.hpp"
+#include "NetworkUtils.hpp"
 #include "Player.hpp"
 #include "World.hpp"
 
@@ -46,24 +45,18 @@ Block::Block(u32 id, const TilesDef &tiles, const std::string &stringID, const s
 void Block::serialize(sf::Packet &packet) const {
 	packet << u32(m_id) << m_stringID << m_label << u8(m_drawType)
 		<< m_hardness << m_harvestRequirements << m_itemDrop << m_itemDropAmount << m_tiles
-		<< m_boundingBox.x << m_boundingBox.y << m_boundingBox.z
-		<< m_boundingBox.sizeX << m_boundingBox.sizeY << m_boundingBox.sizeZ
-		<< m_isLightSource << m_canUpdate << m_canBeActivated
-		<< m_colorMultiplier.r << m_colorMultiplier.g << m_colorMultiplier.b << m_colorMultiplier.a
-		<< m_isRotatable << m_inventoryImage;
+		<< m_boundingBox << m_isOpaque << m_isLightSource << m_canUpdate << m_canBeActivated
+		<< m_colorMultiplier << m_isRotatable << m_inventoryImage;
 }
 
 void Block::deserialize(sf::Packet &packet) {
 	u32 id;
 	u8 drawType;
 
-	packet >> id >> m_stringID >> m_label >> drawType >> m_hardness
-		>> m_harvestRequirements >> m_itemDrop >> m_itemDropAmount >> m_tiles
-		>> m_boundingBox.x >> m_boundingBox.y >> m_boundingBox.z
-		>> m_boundingBox.sizeX >> m_boundingBox.sizeY >> m_boundingBox.sizeZ
-		>> m_isLightSource >> m_canUpdate >> m_canBeActivated
-		>> m_colorMultiplier.r >> m_colorMultiplier.g >> m_colorMultiplier.b >> m_colorMultiplier.a
-		>> m_isRotatable >> m_inventoryImage;
+	packet >> id >> m_stringID >> m_label >> drawType
+		>> m_hardness >> m_harvestRequirements >> m_itemDrop >> m_itemDropAmount >> m_tiles
+		>> m_boundingBox >> m_isOpaque >> m_isLightSource >> m_canUpdate >> m_canBeActivated
+		>> m_colorMultiplier >> m_isRotatable >> m_inventoryImage;
 
 	m_id = id;
 	m_drawType = BlockDrawType(drawType);
