@@ -25,6 +25,7 @@
  * =====================================================================================
  */
 #include "Config.hpp"
+#include "Events.hpp"
 #include "MenuWidget.hpp"
 
 MenuWidget::MenuWidget(u16 width, u16 height, Widget *parent) : Widget(parent) {
@@ -47,9 +48,19 @@ void MenuWidget::onEvent(const SDL_Event &event) {
 			int x = i % m_width;
 			int y = i / m_width;
 
-			m_buttons.at(i).setPosition(Config::screenWidth  / getScale().x / 2.0f - (m_width  * (m_buttons.at(i).width()  + s_horizontalSpacing) - s_horizontalSpacing) / 2 + x * (m_buttons.at(i).width() + s_horizontalSpacing),
-			                            Config::screenHeight / getScale().y / 2.0f - (m_height * (m_buttons.at(i).height() + s_verticalSpacing)   - s_verticalSpacing)   / 2 + y * (m_buttons.at(i).height() + s_verticalSpacing), 0);
+			updateButtonPosition(m_buttons.at(i), x, y);
 		}
+	}
+}
+
+void MenuWidget::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
+	setScale(event.guiScale, event.guiScale, 1);
+
+	for (std::size_t i = 0 ; i < m_buttons.size() ; ++i) {
+		int x = i % m_width;
+		int y = i / m_width;
+
+		updateButtonPosition(m_buttons.at(i), x, y);
 	}
 }
 
@@ -62,9 +73,13 @@ TextButton &MenuWidget::addButton(const std::string &text, const TextButton::Cpp
 	TextButton &button = m_buttons.back();
 	button.setText(text);
 	button.setCallback(callback);
+	updateButtonPosition(button, x, y);
+	return button;
+}
+
+void MenuWidget::updateButtonPosition(TextButton &button, int x, int y) {
 	button.setPosition(Config::screenWidth  / getScale().x / 2.0f - (m_width  * (button.width()  + s_horizontalSpacing) - s_horizontalSpacing) / 2 + x * (button.width() + s_horizontalSpacing),
 	                   Config::screenHeight / getScale().y / 2.0f - (m_height * (button.height() + s_verticalSpacing)   - s_verticalSpacing)   / 2 + y * (button.height() + s_verticalSpacing), 0);
-	return button;
 }
 
 void MenuWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {

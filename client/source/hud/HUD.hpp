@@ -36,7 +36,7 @@
 #include "DebugOverlay.hpp"
 #include "Hotbar.hpp"
 
-class GuiScaleChangedEvent;
+struct GuiScaleChangedEvent;
 
 class HUD : public gk::Transformable, public gk::Drawable {
 	public:

@@ -115,11 +115,7 @@ void TitleScreenState::startMultiplayer(const std::string &host) {
 void TitleScreenState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 	m_menuWidget.setScale(event.guiScale, event.guiScale);
 
-	// FIXME: Ugly hack to get MenuWidget working, will change soon
-	SDL_Event e;
-	e.type = SDL_WINDOWEVENT;
-	e.window.event = SDL_WINDOWEVENT_SIZE_CHANGED;
-	m_menuWidget.onEvent(e);
+	m_menuWidget.onGuiScaleChanged(event);
 }
 
 void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) const {

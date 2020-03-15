@@ -32,7 +32,7 @@
 #include "InterfaceState.hpp"
 #include "MenuWidget.hpp"
 
-class GuiScaleChangedEvent;
+struct GuiScaleChangedEvent;
 
 class TitleScreenState : public InterfaceState {
 	public:

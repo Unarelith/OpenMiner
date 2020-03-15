@@ -29,6 +29,8 @@
 
 #include "TextButton.hpp"
 
+struct GuiScaleChangedEvent;
+
 class MenuWidget : public Widget {
 	public:
 		MenuWidget(Widget *parent = nullptr) : Widget(parent) {}
@@ -38,9 +40,13 @@ class MenuWidget : public Widget {
 
 		void onEvent(const SDL_Event &event) override;
 
+		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
+
 		TextButton &addButton(const std::string &text, const TextButton::CppCallback &callback);
 
 	private:
+		void updateButtonPosition(TextButton &button, int x, int y);
+
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		static constexpr u16 s_verticalSpacing = 5;

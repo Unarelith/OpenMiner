@@ -91,11 +91,7 @@ void SettingsMenuState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 
 	updateDoneButtonPosition();
 
-	// FIXME: Ugly hack to get MenuWidget working, will change soon
-	SDL_Event e;
-	e.type = SDL_WINDOWEVENT;
-	e.window.event = SDL_WINDOWEVENT_SIZE_CHANGED;
-	m_menuWidget.onEvent(e);
+	m_menuWidget.onGuiScaleChanged(event);
 }
 
 void SettingsMenuState::updateDoneButtonPosition() {

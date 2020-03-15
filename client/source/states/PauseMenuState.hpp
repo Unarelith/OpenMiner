@@ -33,7 +33,7 @@
 #include "MenuWidget.hpp"
 
 class Client;
-class GuiScaleChangedEvent;
+struct GuiScaleChangedEvent;
 
 class PauseMenuState : public InterfaceState {
 	public:
