@@ -104,11 +104,11 @@ This list is non exhaustive.
 - Block metadata
 - Player model display (currently without rotation nor animation)
 - Dimensions (like the Nether or the Ender in Minecraft) ([#80](https://github.com/Unarelith/OpenMiner/pull/80))
+- World loading/saving (using `/save <name>` and `/load <name>` commands, see [#26](https://github.com/Unarelith/OpenMiner/issues/26))
 
 ### Missing features
 
 - Texture pack system ([#34](https://github.com/Unarelith/OpenMiner/issues/34))
-- World loading/saving ([#26](https://github.com/Unarelith/OpenMiner/issues/26))
 - Fluid propagation ([#62](https://github.com/Unarelith/OpenMiner/issues/62))
 - Day/night cycle with sun/moon display ([#73](https://github.com/Unarelith/OpenMiner/issues/73))
 - Real worldgen (seed-based, cave tunnels) ([#79](https://github.com/Unarelith/OpenMiner/issues/79))

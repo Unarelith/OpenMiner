@@ -30,6 +30,7 @@
 #include "ChatCommandHandler.hpp"
 #include "ClientInfo.hpp"
 #include "ServerCommandHandler.hpp"
+#include "WorldController.hpp"
 
 void ChatCommandHandler::parseCommand(const std::string &str, ClientInfo &client) const {
 	std::stringstream sstream;
@@ -42,7 +43,9 @@ void ChatCommandHandler::parseCommand(const std::string &str, ClientInfo &client
 	}
 
 	std::unordered_map<std::string, decltype(&ChatCommandHandler::teleportationCommand)> commands = {
-		{"tp", &ChatCommandHandler::teleportationCommand}
+		{"tp", &ChatCommandHandler::teleportationCommand},
+		{"save", &ChatCommandHandler::saveCommand},
+		{"load", &ChatCommandHandler::loadCommand},
 	};
 
 	if (!command.empty()) {
@@ -79,6 +82,32 @@ void ChatCommandHandler::teleportationCommand(const std::vector<std::string> &co
 		m_server.sendPlayerPosUpdate(client.id, true);
 
 		m_server.sendChatMessage(0, "Teleported to " + std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(z), &client);
+	}
+}
+
+void ChatCommandHandler::saveCommand(const std::vector<std::string> &command, ClientInfo &client) const {
+	if (command.size() != 2) {
+		m_server.sendChatMessage(0, "Usage: /save <name>", &client);
+	}
+	else {
+		std::string name = command.at(1);
+
+		m_worldController.save(name);
+
+		m_server.sendChatMessage(0, "Saved '" + name + "'", &client);
+	}
+}
+
+void ChatCommandHandler::loadCommand(const std::vector<std::string> &command, ClientInfo &client) const {
+	if (command.size() != 2) {
+		m_server.sendChatMessage(0, "Usage: /load <name>", &client);
+	}
+	else {
+		std::string name = command.at(1);
+
+		m_worldController.load(name);
+
+		m_server.sendChatMessage(0, "Loaded '" + name + "'", &client);
 	}
 }
 

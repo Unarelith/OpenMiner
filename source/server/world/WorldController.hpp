@@ -45,6 +45,9 @@ class WorldController {
 
 		void update();
 
+		void load(const std::string &name);
+		void save(const std::string &name);
+
 		ServerWorld &getWorld(u16 dimension) { return m_worldList.at(dimension); }
 
 		void setServer(ServerCommandHandler &server) { m_server = &server; }

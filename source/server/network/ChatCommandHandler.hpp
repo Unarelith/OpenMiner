@@ -32,17 +32,22 @@
 
 class ClientInfo;
 class ServerCommandHandler;
+class WorldController;
 
 class ChatCommandHandler {
 	public:
-		ChatCommandHandler(ServerCommandHandler &server) : m_server(server) {}
+		ChatCommandHandler(ServerCommandHandler &server, WorldController &worldController)
+			: m_server(server), m_worldController(worldController) {}
 
 		void parseCommand(const std::string &str, ClientInfo &client) const;
 
 	private:
 		void teleportationCommand(const std::vector<std::string> &command, ClientInfo &client) const;
+		void saveCommand(const std::vector<std::string> &command, ClientInfo &client) const;
+		void loadCommand(const std::vector<std::string> &command, ClientInfo &client) const;
 
 		ServerCommandHandler &m_server;
+		WorldController &m_worldController;
 };
 
 #endif // CHATCOMMANDHANDLER_HPP_

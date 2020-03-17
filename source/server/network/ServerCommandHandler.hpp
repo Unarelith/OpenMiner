@@ -74,7 +74,7 @@ class ServerCommandHandler {
 
 		gk::Vector3d m_spawnPosition{14.5, 14.5, 18.};
 
-		ChatCommandHandler m_chatCommandHandler{*this};
+		ChatCommandHandler m_chatCommandHandler{*this, m_worldController};
 };
 
 #endif // SERVERCOMMANDHANDLER_HPP_
