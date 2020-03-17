@@ -51,12 +51,13 @@ void ClientApplication::init() {
 	m_argumentParser.addArgument("port", {"-p", "--port", true});
 	m_argumentParser.addArgument("singleplayer", {"-s", "--singleplayer", false});
 	m_argumentParser.addArgument("multiplayer", {"-m", "--multiplayer", false});
-	m_argumentParser.addArgument("working_dir", {"-w", "--working-dir", true});
+	m_argumentParser.addArgument("working-dir", {"-w", "--working-dir", true});
+	m_argumentParser.addArgument("texture-pack", {"-t", "--texture-pack", true});
 
 	gk::CoreApplication::init();
 
-	if (m_argumentParser.getArgument("working_dir").isFound)
-		fs::current_path(m_argumentParser.getArgument("working_dir").parameter);
+	if (m_argumentParser.getArgument("working-dir").isFound)
+		fs::current_path(m_argumentParser.getArgument("working-dir").parameter);
 
 	if (m_argumentParser.getArgument("host").isFound)
 		m_host = m_argumentParser.getArgument("host").parameter;
@@ -81,6 +82,8 @@ void ClientApplication::init() {
 	Registry::setInstance(m_registry);
 
 	auto &titleScreen = m_stateStack.push<TitleScreenState>(m_port);
+	if (m_argumentParser.getArgument("texture-pack").isFound)
+		titleScreen.setTexturePack(m_argumentParser.getArgument("texture-pack").parameter);
 	if (m_argumentParser.getArgument("singleplayer").isFound)
 		titleScreen.startSingleplayer(false);
 	else if (m_argumentParser.getArgument("multiplayer").isFound)

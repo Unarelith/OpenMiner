@@ -59,7 +59,8 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 		auto &game = m_stateStack->push<GameState>();
 		game.connect(host, port);
 
-		m_stateStack->push<ServerLoadingState>(game, true, this);
+		auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, true, this);
+		serverLoadingState.setTexturePack(m_texturePack);
 	});
 
 	m_cancelButton.setText("Cancel");

@@ -78,7 +78,13 @@ void ServerLoadingState::update() {
 			gk::Mouse::setCursorGrabbed(true);
 		}
 		else if (!m_game.textureAtlas().isReady()) {
-			m_game.textureAtlas().loadFromRegistry();
+			try {
+				m_game.textureAtlas().loadFromRegistry(m_texturePack);
+			}
+			catch (gk::Exception &e) {
+				m_game.client().disconnect();
+				throw e;
+			}
 		}
 	}
 }

@@ -42,6 +42,8 @@ class ServerLoadingState : public InterfaceState {
 
 		void update() override;
 
+		void setTexturePack(const std::string &texturePack) { m_texturePack = texturePack; }
+
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
@@ -51,6 +53,8 @@ class ServerLoadingState : public InterfaceState {
 
 		bool m_showLoadingState;
 		mutable bool m_hasBeenRendered = false;
+
+		std::string m_texturePack;
 };
 
 #endif // SERVERLOADINGSTATE_HPP_

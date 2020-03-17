@@ -105,24 +105,44 @@ void TextureAtlas::packTextures() {
 	m_texture.loadFromSurface(atlas.get());
 }
 
-void TextureAtlas::loadFromRegistry() {
-	addFile("mods/default/textures/blocks/", "undefined.png");
+#include <gk/core/Filesystem.hpp>
+
+void TextureAtlas::loadFromRegistry(const std::string &texturePack) {
+	if (!gk::Filesystem::fileExists("texturepacks/" + texturePack))
+		throw EXCEPTION("Texture pack '" + texturePack +"' doesn't exist");
+
+	if (texturePack.empty())
+		addFile("mods/default/textures/blocks/", "undefined.png");
+	else
+		addFile("texturepacks/" + texturePack + "/blocks/", "undefined.png");
 
 	for (auto &block : Registry::getInstance().blocks()) {
+		std::string path;
+		if (texturePack.empty())
+			path = "mods/" + block->modName() + "/textures/blocks/";
+		else
+			path = "texturepacks/" + texturePack + "/blocks/";
+
 		const TilesDef &tiles = block->tiles();
 		for (auto &textureFilename : tiles.textureFilenames())
-			addFile("mods/" + block->modName() + "/textures/blocks/", textureFilename);
+			addFile(path, textureFilename);
 		for (auto &textureFilename : tiles.altTextureFilenames())
-			addFile("mods/" + block->modName() + "/textures/blocks/", textureFilename);
+			addFile(path, textureFilename);
 	}
 
 	for (auto &item : Registry::getInstance().items()) {
 		if (!item.isBlock() || !item.tiles().textureFilenames().empty()) {
+			std::string path;
+			if (texturePack.empty())
+				path = "mods/" + item.modName() + "/textures/items/";
+			else
+				path = "texturepacks/" + texturePack + "/items/";
+
 			const TilesDef &tiles = item.tiles();
 			for (auto &textureFilename : tiles.textureFilenames())
-				addFile("mods/" + item.modName() + "/textures/items/", textureFilename);
+				addFile(path, textureFilename);
 			for (auto &textureFilename : tiles.altTextureFilenames())
-				addFile("mods/" + item.modName() + "/textures/items/", textureFilename);
+				addFile(path, textureFilename);
 		}
 	}
 

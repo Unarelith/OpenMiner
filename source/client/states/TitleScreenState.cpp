@@ -46,7 +46,7 @@ TitleScreenState::TitleScreenState(u16 port) : m_port(port) {
 	});
 
 	m_menuWidget.addButton("Multiplayer", [this] (TextButton &) {
-		m_stateStack->push<ServerConnectState>(this);
+		m_stateStack->push<ServerConnectState>(this).setTexturePack(m_texturePack);
 	});
 
 	m_menuWidget.addButton("Options...", [this] (TextButton &) {
@@ -92,7 +92,8 @@ void TitleScreenState::update() {
 		game.setSingleplayer(true);
 		game.connect("localhost", m_port);
 
-		m_stateStack->push<ServerLoadingState>(game, m_showLoadingState, this);
+		auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, m_showLoadingState, this);
+		serverLoadingState.setTexturePack(m_texturePack);
 	}
 }
 
@@ -116,7 +117,8 @@ void TitleScreenState::startMultiplayer(const std::string &host) {
 	auto &game = m_stateStack->push<GameState>();
 	game.connect(host, m_port);
 
-	m_stateStack->push<ServerLoadingState>(game, false, this);
+	auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, false, this);
+	serverLoadingState.setTexturePack(m_texturePack);
 }
 
 void TitleScreenState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {

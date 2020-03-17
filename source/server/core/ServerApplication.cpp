@@ -45,12 +45,12 @@ void ServerApplication::init() {
 	BlockGeometry::initOrientation();
 
 	m_argumentParser.addArgument("port", {"-p", "--port", true});
-	m_argumentParser.addArgument("working_dir", {"-w", "--working-dir", true});
+	m_argumentParser.addArgument("working-dir", {"-w", "--working-dir", true});
 
 	m_argumentParser.parse();
 
-	if (m_argumentParser.getArgument("working_dir").isFound)
-		fs::current_path(m_argumentParser.getArgument("working_dir").parameter);
+	if (m_argumentParser.getArgument("working-dir").isFound)
+		fs::current_path(m_argumentParser.getArgument("working-dir").parameter);
 
 	if (m_argumentParser.getArgument("port").isFound)
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);

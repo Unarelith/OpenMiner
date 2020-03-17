@@ -51,6 +51,8 @@ class TitleScreenState : public InterfaceState {
 		void startSingleplayer(bool showLoadingState);
 		void startMultiplayer(const std::string &host);
 
+		void setTexturePack(const std::string &texturePack) { m_texturePack = texturePack; }
+
 	private:
 		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
 		void onServerOnlineEvent(const ServerOnlineEvent &event);
@@ -69,6 +71,8 @@ class TitleScreenState : public InterfaceState {
 
 		bool m_isServerOnline = false;
 		bool m_isServerLaunched = false;
+
+		std::string m_texturePack;
 };
 
 #endif // TITLESCREENSTATE_HPP_

@@ -39,6 +39,8 @@ class ServerConnectState : public InterfaceState {
 
 		void update() override;
 
+		void setTexturePack(const std::string &texturePack) { m_texturePack = texturePack; }
+
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
@@ -46,6 +48,8 @@ class ServerConnectState : public InterfaceState {
 
 		TextButton m_connectButton;
 		TextButton m_cancelButton;
+
+		std::string m_texturePack;
 };
 
 #endif // SERVERCONNECTSTATE_HPP_
