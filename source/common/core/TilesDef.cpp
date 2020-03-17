@@ -37,6 +37,7 @@ const std::string &TilesDef::getTextureForFace(u8 face, bool useAltTiles) const 
 	static constexpr int nSizes = 6, nFaces = 6;
 	// Determine which indices correspond to each face, depending on how many
 	// textures were specified
+	// NOTE: If this table changes, please change 'docs/lua-api-blocks.md' accordingly
 	static constexpr u8 faceToIndex[nSizes][nFaces] = {
 		// Same order as enum BlockFace in TilesDef.hpp,
 		// namely: West, East, South, North, Bottom, Top

@@ -49,8 +49,8 @@ doc/html
 doc/latex
 
 # Binaries
-client/openminer
-server/openminer_server
+openminer
+openminer_server
 *.exe
 *.dll
 

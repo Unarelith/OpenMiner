@@ -64,7 +64,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 ### Using Linux
 
 - Dependencies:
-    - A compiler with C++14 support
+    - A compiler with C++14 support (GCC >= 5.0 or clang >= 3.4)
     - [CMake](http://www.cmake.org/download/)
     - [GameKit](http://github.com/Unarelith/GameKit) (requires `SDL2` + `tinyxml2`, will switch to `SFML` starting from 2.6)
     - [SFML](https://www.sfml-dev.org/) (only used for network)
@@ -72,8 +72,8 @@ The long-term goal of this project is to provide a viable alternative to Minecra
     - _Linux users: Check your distribution repositories for packages._
 - Run `cmake .`
 - Run `make -j8`
-- Run the server with `./server/openminer_server`
-- Run the client with `./client/openminer`
+- Run the client with `./openminer`
+- If you want a multiplayer game, run the server with `./openminer_server`
 
 ### Using Windows
 
@@ -128,4 +128,5 @@ This list is non exhaustive.
 ## Credits
 
 - xMrVizzy ([Faithful 32x](https://www.curseforge.com/minecraft/texture-packs/faithful-32x) texture pack, will completely replace Vanilla textures)
+- ThePhD ([sol2](https://github.com/ThePhD/sol2))
 
