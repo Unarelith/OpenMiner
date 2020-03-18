@@ -79,6 +79,9 @@ void TitleScreenState::onEvent(const SDL_Event &event) {
 
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 		centerBackground();
+
+		if (!m_stateStack->empty() && &m_stateStack->top() != this)
+			m_menuWidget.onEvent(event);
 	}
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
