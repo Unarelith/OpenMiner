@@ -44,10 +44,13 @@ void ServerApplication::init() {
 
 	BlockGeometry::initOrientation();
 
-	m_argumentParser.addArgument("port", {"-p", "--port", true});
-	m_argumentParser.addArgument("working-dir", {"-w", "--working-dir", true});
+	m_argumentParser.addArgument("port", {"-p", "--port", "Select the port to use.", "port"});
+	m_argumentParser.addArgument("working-dir", {"-w", "--working-dir", "Change the working direction to <dir>.", "dir"});
 
 	m_argumentParser.parse();
+
+	if (m_argumentParser.getArgument("help").isFound)
+		return;
 
 	if (m_argumentParser.getArgument("working-dir").isFound)
 		fs::current_path(m_argumentParser.getArgument("working-dir").parameter);

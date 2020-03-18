@@ -25,6 +25,7 @@
  * =====================================================================================
  */
 #include <gk/core/Exception.hpp>
+#include <gk/core/Filesystem.hpp>
 
 #include "Registry.hpp"
 #include "TextureAtlas.hpp"
@@ -104,8 +105,6 @@ void TextureAtlas::packTextures() {
 
 	m_texture.loadFromSurface(atlas.get());
 }
-
-#include <gk/core/Filesystem.hpp>
 
 void TextureAtlas::loadFromRegistry(const std::string &texturePack) {
 	if (!gk::Filesystem::fileExists("texturepacks/" + texturePack))

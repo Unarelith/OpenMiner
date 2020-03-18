@@ -47,14 +47,17 @@ ClientApplication::ClientApplication(int argc, char **argv) : gk::CoreApplicatio
 }
 
 void ClientApplication::init() {
-	m_argumentParser.addArgument("host", {"-h", "--host", true});
-	m_argumentParser.addArgument("port", {"-p", "--port", true});
-	m_argumentParser.addArgument("singleplayer", {"-s", "--singleplayer", false});
-	m_argumentParser.addArgument("multiplayer", {"-m", "--multiplayer", false});
-	m_argumentParser.addArgument("working-dir", {"-w", "--working-dir", true});
-	m_argumentParser.addArgument("texture-pack", {"-t", "--texture-pack", true});
+	m_argumentParser.addArgument("host", {"-h", "--host", "Select the host to connect to.", "host"});
+	m_argumentParser.addArgument("port", {"-p", "--port", "Select the port to use.", "port"});
+	m_argumentParser.addArgument("singleplayer", {"-s", "--singleplayer", "Start in singleplayer mode."});
+	m_argumentParser.addArgument("multiplayer", {"-m", "--multiplayer", "Start in multiplayer mode."});
+	m_argumentParser.addArgument("working-dir", {"-w", "--working-dir", "Change the working direction to <dir>.", "dir"});
+	m_argumentParser.addArgument("texture-pack", {"-t", "--texture-pack", "Use texture pack <name>.", "name"});
 
 	gk::CoreApplication::init();
+
+	if (m_argumentParser.getArgument("help").isFound)
+		return;
 
 	if (m_argumentParser.getArgument("working-dir").isFound)
 		fs::current_path(m_argumentParser.getArgument("working-dir").parameter);
