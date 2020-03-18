@@ -32,7 +32,9 @@ void Server::init(u16 port) {
 
 	m_udpSocket.setBlocking(false);
 
-	if (m_tcpListener.listen(port) != sf::Socket::Done)
+	m_port = m_udpSocket.getLocalPort();
+
+	if (m_tcpListener.listen(m_port) != sf::Socket::Done)
 		throw EXCEPTION("Network error: Listen failed");
 
 	m_tcpListener.setBlocking(false);

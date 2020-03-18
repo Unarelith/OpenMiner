@@ -52,6 +52,8 @@ class Server {
 
 		bool isRunning() const { return m_isRunning; }
 
+		u16 port() const { return m_port; }
+
 		const ServerInfo &info() const { return m_info; }
 
 		sf::UdpSocket &udpSocket() { return m_udpSocket; }
@@ -70,6 +72,8 @@ class Server {
 
 		bool m_isRunning = false;
 		bool m_isSingleplayer = false;
+
+		u16 m_port = 0;
 
 		ServerInfo m_info;
 

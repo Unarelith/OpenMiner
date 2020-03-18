@@ -76,10 +76,10 @@ void ServerApplication::init() {
 
 	m_scriptEngine.luaCore().setRegistry(&m_registry);
 
-	std::cout << "Server is running on localhost:" << m_port << std::endl;
+	std::cout << "Server is running on localhost:" << m_server.port() << std::endl;
 
 	if (m_eventHandler)
-		m_eventHandler->emplaceEvent<ServerOnlineEvent>(true);
+		m_eventHandler->emplaceEvent<ServerOnlineEvent>(true, m_server.port());
 }
 
 int ServerApplication::run(bool isProtected) {

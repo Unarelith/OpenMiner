@@ -106,7 +106,7 @@ void TitleScreenState::startSingleplayer(bool showLoadingState) {
 	m_thread = std::thread([this] () {
 		ServerApplication app{*m_eventHandler};
 		app.setSingleplayer(true);
-		app.setPort(m_port);
+		app.setPort(0);
 		app.run();
 	});
 
@@ -129,6 +129,7 @@ void TitleScreenState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 
 void TitleScreenState::onServerOnlineEvent(const ServerOnlineEvent &event) {
 	m_isServerOnline = event.isOnline;
+	m_port = event.port;
 
 	m_isServerLaunched = false;
 }

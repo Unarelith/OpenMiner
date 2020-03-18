@@ -107,7 +107,7 @@ void TextureAtlas::packTextures() {
 }
 
 void TextureAtlas::loadFromRegistry(const std::string &texturePack) {
-	if (!gk::Filesystem::fileExists("texturepacks/" + texturePack))
+	if (!texturePack.empty() && !gk::Filesystem::fileExists("texturepacks/" + texturePack))
 		throw EXCEPTION("Texture pack '" + texturePack +"' doesn't exist");
 
 	if (texturePack.empty())
