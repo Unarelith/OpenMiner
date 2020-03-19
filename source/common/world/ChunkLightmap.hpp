@@ -28,6 +28,7 @@
 #define CHUNKLIGHTMAP_HPP_
 
 #include <queue>
+#include <shared_mutex>
 
 #include <gk/core/IntTypes.hpp>
 
@@ -51,6 +52,10 @@ struct LightRemovalNode {
 class Chunk;
 
 class ChunkLightmap {
+	using MutexType = std::shared_timed_mutex;
+	using ReadLock  = std::shared_lock<MutexType>;
+	using WriteLock = std::unique_lock<MutexType>;
+
 	public:
 		ChunkLightmap(Chunk *chunk);
 
@@ -63,7 +68,7 @@ class ChunkLightmap {
 		bool updateTorchlight();
 		bool updateSunlight();
 
-		u8 getLightData(int x, int y, int z) const { return m_lightMap[z][y][x]; }
+		u8 getLightData(int x, int y, int z) const { ReadLock lock{m_mutex}; return m_lightMap[z][y][x]; }
 		u8 getSunlight(int x, int y, int z) const;
 		u8 getTorchlight(int x, int y, int z) const;
 
@@ -84,6 +89,8 @@ class ChunkLightmap {
 		std::queue<LightNode> m_sunlightBfsQueue;
 		std::queue<LightRemovalNode> m_torchlightRemovalBfsQueue;
 		std::queue<LightRemovalNode> m_sunlightRemovalBfsQueue;
+
+		mutable MutexType m_mutex;
 };
 
 #endif // CHUNKLIGHTMAP_HPP_

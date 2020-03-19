@@ -27,7 +27,10 @@
 #ifndef SERVERWORLD_HPP_
 #define SERVERWORLD_HPP_
 
+#include <thread>
 #include <unordered_map>
+
+#include <thread/ThreadPool.hpp>
 
 #include "ServerChunk.hpp"
 #include "ServerScene.hpp"
@@ -89,6 +92,8 @@ class ServerWorld : public World {
 		gk::GameClock &m_clock;
 
 		ServerScene m_scene;
+
+		std::vector<thread::ThreadPool::TaskFuture<void>> m_taskFutures;
 };
 
 #endif // SERVERWORLD_HPP_

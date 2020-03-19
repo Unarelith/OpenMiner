@@ -29,6 +29,7 @@
 
 #include <atomic>
 #include <memory>
+#include <shared_mutex>
 #include <unordered_map>
 #include <vector>
 
@@ -43,6 +44,11 @@
 class World;
 
 class Chunk : public gk::NonCopyable {
+	protected:
+		using MutexType = std::shared_timed_mutex;
+		using ReadLock  = std::shared_lock<MutexType>;
+		using WriteLock = std::unique_lock<MutexType>;
+
 	public:
 		enum {
 			West,    // cx - 1
@@ -79,18 +85,18 @@ class Chunk : public gk::NonCopyable {
 
 		World &world() { return m_world; }
 
-		Chunk *getSurroundingChunk(u8 i) { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
-		const Chunk *getSurroundingChunk(u8 i) const { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
-		void setSurroundingChunk(u8 i, Chunk *chunk) { if (i < 6) m_surroundingChunks[i] = chunk; }
+		Chunk *getSurroundingChunk(u8 i) { ReadLock lock{m_mutex}; return (i > 5) ? nullptr : m_surroundingChunks[i]; }
+		const Chunk *getSurroundingChunk(u8 i) const { ReadLock lock{m_mutex}; return (i > 5) ? nullptr : m_surroundingChunks[i]; }
+		void setSurroundingChunk(u8 i, Chunk *chunk) { WriteLock lock{m_mutex}; if (i < 6) m_surroundingChunks[i] = chunk; }
 
 		bool areAllNeighboursLoaded() const;
 		bool areAllNeighboursInitialized() const;
 
 		bool hasChanged() const { return m_hasChanged; }
-		void setChanged(bool hasChanged) { m_hasChanged = hasChanged; }
+		void setChanged(bool hasChanged) { WriteLock lock{m_mutex}; m_hasChanged = hasChanged; }
 
 		bool hasLightChanged() const { return m_hasLightChanged; }
-		void setLightChanged(bool hasLightChanged) { m_hasLightChanged = hasLightChanged; }
+		void setLightChanged(bool hasLightChanged) { WriteLock lock{m_mutex}; m_hasLightChanged = hasLightChanged; }
 
 		bool isInitialized() const { return m_isInitialized; }
 		void setInitialized(bool isInitialized) { m_isInitialized = isInitialized; }
@@ -106,7 +112,7 @@ class Chunk : public gk::NonCopyable {
 		using DataArray = u32[Chunk::height][Chunk::depth][Chunk::width];
 		const DataArray &data() const { return m_data; }
 
-		u32 data(int x, int y, int z) const { return m_data[z][y][x]; }
+		u32 data(int x, int y, int z) const { ReadLock lock{m_mutex}; return m_data[z][y][x]; }
 
 		static void initUsertype(sol::state &lua);
 
@@ -128,6 +134,8 @@ class Chunk : public gk::NonCopyable {
 		std::atomic_bool m_isInitialized{false};
 
 		std::unordered_map<gk::Vector3i, std::unique_ptr<BlockData>> m_blockData;
+
+		mutable MutexType m_mutex;
 };
 
 #endif // CHUNK_HPP_

@@ -28,14 +28,33 @@
 #include "ServerBlock.hpp"
 #include "ServerChunk.hpp"
 #include "ServerCommandHandler.hpp"
+#include "TerrainGenerator.hpp"
 #include "World.hpp"
 
 ServerChunk::ServerChunk(s32 x, s32 y, s32 z, World &world) : Chunk(x, y, z, world) {
 	m_random.seed(std::time(nullptr));
 }
 
+void ServerChunk::generate(const TerrainGenerator &terrainGenerator) {
+	WriteLock lock{m_mutex};
+
+	if (!m_isInitialized) {
+		lock.unlock();
+		terrainGenerator.generate(*this);
+		lock.lock();
+
+		m_isInitialized = true;
+	}
+}
+
 void ServerChunk::updateLights() {
-	if (m_lightmap.updateLights() || m_hasChanged || m_hasLightChanged) {
+	WriteLock lock{m_mutex};
+
+	lock.unlock();
+	bool areLightsUpdated = m_lightmap.updateLights();
+	lock.lock();
+
+	if (areLightsUpdated || m_hasChanged || m_hasLightChanged) {
 		m_isSent = false;
 		m_hasChanged = false;
 		m_hasLightChanged = false;
@@ -43,6 +62,8 @@ void ServerChunk::updateLights() {
 }
 
 void ServerChunk::onBlockPlaced(int x, int y, int z, const Block &block) {
+	WriteLock lock{m_mutex};
+
 	const ServerBlock &serverBlock = (ServerBlock &)block;
 	if (block.canUpdate()) {
 		addTickingBlock(x, y, z, serverBlock);
@@ -59,6 +80,8 @@ void ServerChunk::onBlockPlaced(int x, int y, int z, const Block &block) {
 }
 
 void ServerChunk::onBlockDestroyed(int x, int y, int z, const Block &block) {
+	WriteLock lock{m_mutex};
+
 	const ServerBlock &serverBlock = (ServerBlock &)block;
 	serverBlock.onBlockDestroyed(glm::ivec3{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH, z + m_z * CHUNK_HEIGHT}, (ServerWorld &)m_world);
 
@@ -66,6 +89,8 @@ void ServerChunk::onBlockDestroyed(int x, int y, int z, const Block &block) {
 }
 
 void ServerChunk::tick(World &world, ServerCommandHandler &server) {
+	WriteLock lock{m_mutex};
+
 	if (!m_tickingBlocks.empty()) {
 		for (auto &it : m_tickingBlocks) {
 			if (!it.second.isTickingRandomly() || m_random.get<bool>(it.second.tickProbability())) {

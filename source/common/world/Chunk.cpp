@@ -48,6 +48,9 @@ u16 Chunk::getBlock(int x, int y, int z) const {
 	if(y >= Chunk::depth)  return m_surroundingChunks[3] ? m_surroundingChunks[3]->getBlock(x, y - Chunk::depth, z) : 0;
 	if(z < 0)              return m_surroundingChunks[4] ? m_surroundingChunks[4]->getBlock(x, y, z + Chunk::height) : 0;
 	if(z >= Chunk::height) return m_surroundingChunks[5] ? m_surroundingChunks[5]->getBlock(x, y, z - Chunk::height) : 0;
+
+	ReadLock lock{m_mutex};
+
 	return m_data[z][y][x] & 0xffff;
 }
 
@@ -58,6 +61,9 @@ u16 Chunk::getData(int x, int y, int z) const {
 	if(y >= Chunk::depth)  return m_surroundingChunks[3] ? m_surroundingChunks[3]->getData(x, y - Chunk::depth, z) : 0;
 	if(z < 0)              return m_surroundingChunks[4] ? m_surroundingChunks[4]->getData(x, y, z + Chunk::height) : 0;
 	if(z >= Chunk::height) return m_surroundingChunks[5] ? m_surroundingChunks[5]->getData(x, y, z - Chunk::height) : 0;
+
+	ReadLock lock{m_mutex};
+
 	return (m_data[z][y][x] >> 16) & 0xffff;
 }
 
@@ -69,12 +75,16 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 	if(z < 0)              { if(m_surroundingChunks[4]) m_surroundingChunks[4]->setBlock(x, y, z + Chunk::height, type); return; }
 	if(z >= Chunk::height) { if(m_surroundingChunks[5]) m_surroundingChunks[5]->setBlock(x, y, z - Chunk::height, type); return; }
 
+	WriteLock lock{m_mutex};
+
 	if ((m_data[z][y][x] & 0xffff) == type) return;
 
 	u16 blockParam = getData(x, y, z);
 	const Block &block = Registry::getInstance().getBlock(type);
 	const BlockState &blockState = block.getState(block.param().hasParam(BlockParam::State)
 		? block.param().getParam(BlockParam::State, blockParam) : 0);
+
+	lock.unlock();
 
 	if (blockState.isLightSource())
 		m_lightmap.addTorchlight(x, y, z, 14);
@@ -93,6 +103,8 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 
 	setBlockRaw(x, y, z, type);
 
+	lock.lock();
+
 	if(x == 0          && m_surroundingChunks[West])   { m_surroundingChunks[West]->m_hasChanged = true; }
 	if(x == width - 1  && m_surroundingChunks[East])   { m_surroundingChunks[East]->m_hasChanged = true; }
 	if(y == 0          && m_surroundingChunks[South])  { m_surroundingChunks[South]->m_hasChanged = true; }
@@ -109,6 +121,8 @@ void Chunk::setData(int x, int y, int z, u16 data) {
 	if(z < 0)              { if(m_surroundingChunks[4]) m_surroundingChunks[4]->setData(x, y, z + Chunk::height, data); return; }
 	if(z >= Chunk::height) { if(m_surroundingChunks[5]) m_surroundingChunks[5]->setData(x, y, z - Chunk::height, data); return; }
 
+	WriteLock lock{m_mutex};
+
 	m_data[z][y][x] &= 0xffff;
 	m_data[z][y][x] |= (data << 16);
 
@@ -122,6 +136,8 @@ void Chunk::setBlockRaw(int x, int y, int z, u16 type) {
 	if(y >= Chunk::depth)  { if(m_surroundingChunks[3]) m_surroundingChunks[3]->setBlockRaw(x, y - Chunk::depth, z, type); return; }
 	if(z < 0)              { if(m_surroundingChunks[4]) m_surroundingChunks[4]->setBlockRaw(x, y, z + Chunk::height, type); return; }
 	if(z >= Chunk::height) { if(m_surroundingChunks[5]) m_surroundingChunks[5]->setBlockRaw(x, y, z - Chunk::height, type); return; }
+
+	WriteLock lock{m_mutex};
 
 	if ((m_data[z][y][x] & 0xffff) == type) return;
 
@@ -192,6 +208,8 @@ BlockData *Chunk::getBlockData(int x, int y, int z) const {
 	if(z < 0)             return m_surroundingChunks[4] ? m_surroundingChunks[4]->getBlockData(x, y, z + CHUNK_HEIGHT) : 0;
 	if(z >= CHUNK_HEIGHT) return m_surroundingChunks[5] ? m_surroundingChunks[5]->getBlockData(x, y, z - CHUNK_HEIGHT) : 0;
 
+	ReadLock lock{m_mutex};
+
 	gk::Vector3i pos{x, y, z};
 	auto it = m_blockData.find(pos);
 	if (it == m_blockData.end()) {
@@ -209,6 +227,8 @@ BlockData *Chunk::addBlockData(int x, int y, int z, int inventoryWidth, int inve
 	if(z < 0)             return m_surroundingChunks[4] ? m_surroundingChunks[4]->addBlockData(x, y, z + CHUNK_HEIGHT) : 0;
 	if(z >= CHUNK_HEIGHT) return m_surroundingChunks[5] ? m_surroundingChunks[5]->addBlockData(x, y, z - CHUNK_HEIGHT) : 0;
 
+	WriteLock lock{m_mutex};
+
 	gk::Vector3i pos{x, y, z};
 	auto it = m_blockData.find(pos);
 	if (it == m_blockData.end()) {
@@ -222,6 +242,8 @@ BlockData *Chunk::addBlockData(int x, int y, int z, int inventoryWidth, int inve
 }
 
 bool Chunk::areAllNeighboursLoaded() const {
+	ReadLock lock{m_mutex};
+
 	return m_surroundingChunks[Chunk::West]
 		&& m_surroundingChunks[Chunk::East]
 		&& m_surroundingChunks[Chunk::South]
@@ -231,6 +253,8 @@ bool Chunk::areAllNeighboursLoaded() const {
 }
 
 bool Chunk::areAllNeighboursInitialized() const {
+	ReadLock lock{m_mutex};
+
 	return m_surroundingChunks[Chunk::West]   && m_surroundingChunks[Chunk::West]->isInitialized()
 		&& m_surroundingChunks[Chunk::East]   && m_surroundingChunks[Chunk::East]->isInitialized()
 		&& m_surroundingChunks[Chunk::South]  && m_surroundingChunks[Chunk::South]->isInitialized()

@@ -141,16 +141,16 @@ void ServerWorld::sendRequestedData(ClientInfo &client, int cx, int cy, int cz) 
 	// Create our neighbours so that we can generate and process lights correctly
 	createChunkNeighbours(chunk);
 
-	// Generate our chunk
-	if (!chunk.isInitialized()) {
-		m_terrainGenerator.generate(chunk);
+	// std::cout << "Chunk at (" << cx << ", " << cy << ", " << cz << ") requested" << std::endl;
 
-		chunk.setInitialized(true);
-	}
+	m_taskFutures.emplace_back(thread::DefaultThreadPool::submitJob([&] () {
+		// Generate our chunk
+		chunk.generate(m_terrainGenerator);
 
-	chunk.updateLights();
+		chunk.updateLights();
 
-	sendChunkData(client, chunk);
+		sendChunkData(client, chunk);
+	}));
 }
 
 ServerChunk &ServerWorld::createChunk(s32 cx, s32 cy, s32 cz) {

@@ -131,7 +131,7 @@ void Server::disconnectClient(ClientInfo &client) {
 	m_selector.remove(*client.tcpSocket);
 	m_info.removeClient(client.id);
 
-	if (m_isSingleplayer && m_info.clients().size() == 0) {
+	if (/* FIXME m_isSingleplayer &&  */m_info.clients().size() == 0) {
 		m_tcpListener.close();
 		m_isRunning = false;
 	}
