@@ -43,7 +43,9 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 	noise.SetFrequency(1 / 256.0f);
 	noise.SetFractalOctaves(4);
 
-	srand(chunk.x() + chunk.y() * CHUNK_WIDTH + chunk.z() * CHUNK_WIDTH * CHUNK_HEIGHT + 1337);
+	Random_t rand;
+	rand.seed(chunk.x() + chunk.y() * CHUNK_WIDTH + chunk.z() * CHUNK_WIDTH * CHUNK_HEIGHT + 1337);
+
 	Chunk *topChunk = chunk.getSurroundingChunk(Chunk::Top);
 	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
@@ -71,13 +73,13 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 						// Try to place a tree
 						if (chunk.getBlock(x, y, z - 1) == biome.getTopBlockID()) {
 							for (const PlacementEntry::Tree &treePlacement : biome.getTrees()) {
-								if (rand() > RAND_MAX * treePlacement.probability)
+								if (!rand.get<bool>(treePlacement.probability))
 									continue;
 
 								const Tree &tree = Registry::getInstance().getTree(treePlacement.treeID);
 
 								// Trunk
-								int h = (rand() & (tree.trunkMaxHeight() - tree.trunkMinHeight())) + tree.trunkMinHeight();
+								int h = rand.get(tree.trunkMinHeight(), tree.trunkMaxHeight());
 								for (int i = 0; i < h; i++) {
 									chunk.setBlockRaw(x, y, z + i, tree.getLogBlockID());
 								}
@@ -87,7 +89,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 									for (int iz = -3; iz <= 3; iz++) {
 										for (int iy = -3; iy <= 3; iy++) {
 											for (int ix = -3; ix <= 3; ix++) {
-												if (ix * ix + iy * iy + iz * iz < 8 + (rand() & 1) && !chunk.getBlock(x + ix, y + iy, z + h + iz)) {
+												if (ix * ix + iy * iy + iz * iz < 8 + rand.get(0, 1) && !chunk.getBlock(x + ix, y + iy, z + h + iz)) {
 													chunk.setBlockRaw(x + ix, y + iy, z + h + iz, tree.getLeavesBlockID());
 
 													// FIXME: This is a temporary fix for the second part of #41
@@ -110,7 +112,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 								if (chunk.getBlock(x, y, z - 1) != flora.spawnsOnBlockID)
 									continue;
 
-								if (rand() > RAND_MAX * flora.probability)
+								if (!rand.get<bool>(flora.probability))
 									continue;
 
 								chunk.setBlockRaw(x, y, z, flora.blockID);
@@ -122,7 +124,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 							//        This code should be replaced by a proper "feature" implementation
 							//        which will also allow making stuff like villages easier
 							bool placedPortal = false;
-							if (chunk.getBlock(x, y, z - 1) == biome.getTopBlockID() && rand() < RAND_MAX * 0.0002) {
+							if (chunk.getBlock(x, y, z - 1) == biome.getTopBlockID() && rand.get<bool>(0.0002)) {
 								for (int ix = 0 ; ix < 4 ; ++ix) {
 									for (int iz = 0 ; iz < 5 ; ++iz) {
 										if (ix == 0 || iz == 0 || ix == 3 || iz == 4)
@@ -157,10 +159,10 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 					// This could be achieved either by setting up a generation pipeline with stages,
 					// processing neighboring chunks' ores every time, or generating them with noise.
 					for (const PlacementEntry::Ore &ore : biome.getOres()) {
-						if (rand() > RAND_MAX * ore.probability)
+						if (!rand.get<bool>(ore.probability))
 							continue;
 
-						oreFloodFill(chunk, x, y, z, biome.getDeepBlockID(), ore.blockID, 2);
+						oreFloodFill(chunk, x, y, z, biome.getDeepBlockID(), ore.blockID, 2, rand);
 						break;
 					}
 
@@ -187,35 +189,35 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 	}
 }
 
-void TerrainGenerator::oreFloodFill(ServerChunk &chunk, double x, double y, double z, u16 toReplace, u16 replaceWith, int depth) const {
+void TerrainGenerator::oreFloodFill(ServerChunk &chunk, double x, double y, double z, u16 toReplace, u16 replaceWith, int depth, Random_t &rand) const {
 	if (depth < 0) return;
 	if (chunk.getBlock(x, y, z) == replaceWith) return;
 	if (chunk.getBlock(x, y, z) == toReplace)
 		chunk.setBlockRaw(x, y, z, replaceWith);
 
-	oreFloodFill(chunk, x + 1, y, z, toReplace, replaceWith, depth - 1);
-	oreFloodFill(chunk, x - 1, y, z, toReplace, replaceWith, depth - 1);
-	oreFloodFill(chunk, x, y + 1, z, toReplace, replaceWith, depth - 1);
-	oreFloodFill(chunk, x, y - 1, z, toReplace, replaceWith, depth - 1);
-	oreFloodFill(chunk, x, y, z + 1, toReplace, replaceWith, depth - 1);
-	oreFloodFill(chunk, x, y, z - 1, toReplace, replaceWith, depth - 1);
+	oreFloodFill(chunk, x + 1, y, z, toReplace, replaceWith, depth - 1, rand);
+	oreFloodFill(chunk, x - 1, y, z, toReplace, replaceWith, depth - 1, rand);
+	oreFloodFill(chunk, x, y + 1, z, toReplace, replaceWith, depth - 1, rand);
+	oreFloodFill(chunk, x, y - 1, z, toReplace, replaceWith, depth - 1, rand);
+	oreFloodFill(chunk, x, y, z + 1, toReplace, replaceWith, depth - 1, rand);
+	oreFloodFill(chunk, x, y, z - 1, toReplace, replaceWith, depth - 1, rand);
 
-	if (rand() % 15 == 0)
-		oreFloodFill(chunk, x + 1, y + 1, z + 1, toReplace, replaceWith, depth - 1);
-	if (rand() % 15 == 0)
-		oreFloodFill(chunk, x + 1, y + 1, z - 1, toReplace, replaceWith, depth - 1);
-	if (rand() % 15 == 0)
-		oreFloodFill(chunk, x + 1, y - 1, z + 1, toReplace, replaceWith, depth - 1);
-	if (rand() % 15 == 0)
-		oreFloodFill(chunk, x + 1, y - 1, z - 1, toReplace, replaceWith, depth - 1);
-	if (rand() % 15 == 0)
-		oreFloodFill(chunk, x - 1, y + 1, z + 1, toReplace, replaceWith, depth - 1);
-	if (rand() % 15 == 0)
-		oreFloodFill(chunk, x - 1, y + 1, z - 1, toReplace, replaceWith, depth - 1);
-	if (rand() % 15 == 0)
-		oreFloodFill(chunk, x - 1, y - 1, z + 1, toReplace, replaceWith, depth - 1);
-	if (rand() % 15 == 0)
-		oreFloodFill(chunk, x - 1, y - 1, z - 1, toReplace, replaceWith, depth - 1);
+	if (rand.get<bool>(1.f / 15.f))
+		oreFloodFill(chunk, x + 1, y + 1, z + 1, toReplace, replaceWith, depth - 1, rand);
+	if (rand.get<bool>(1.f / 15.f))
+		oreFloodFill(chunk, x + 1, y + 1, z - 1, toReplace, replaceWith, depth - 1, rand);
+	if (rand.get<bool>(1.f / 15.f))
+		oreFloodFill(chunk, x + 1, y - 1, z + 1, toReplace, replaceWith, depth - 1, rand);
+	if (rand.get<bool>(1.f / 15.f))
+		oreFloodFill(chunk, x + 1, y - 1, z - 1, toReplace, replaceWith, depth - 1, rand);
+	if (rand.get<bool>(1.f / 15.f))
+		oreFloodFill(chunk, x - 1, y + 1, z + 1, toReplace, replaceWith, depth - 1, rand);
+	if (rand.get<bool>(1.f / 15.f))
+		oreFloodFill(chunk, x - 1, y + 1, z - 1, toReplace, replaceWith, depth - 1, rand);
+	if (rand.get<bool>(1.f / 15.f))
+		oreFloodFill(chunk, x - 1, y - 1, z + 1, toReplace, replaceWith, depth - 1, rand);
+	if (rand.get<bool>(1.f / 15.f))
+		oreFloodFill(chunk, x - 1, y - 1, z - 1, toReplace, replaceWith, depth - 1, rand);
 }
 
 float TerrainGenerator::noise2d(double x, double y, int octaves, float persistence) {

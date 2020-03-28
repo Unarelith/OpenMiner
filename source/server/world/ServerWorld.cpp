@@ -105,7 +105,7 @@ void ServerWorld::sendChunkData(const ClientInfo &client, ServerChunk &chunk) {
 	for (u16 z = 0 ; z < CHUNK_HEIGHT ; ++z) {
 		for (u16 y = 0 ; y < CHUNK_DEPTH ; ++y) {
 			for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
-				packet << chunk.data()[z][y][x];
+				packet << chunk.data(x, y, z);
 				packet << chunk.lightmap().getLightData(x, y, z);
 
 				BlockData *blockData = chunk.getBlockData(x, y, z);

@@ -27,6 +27,7 @@
 #ifndef CHUNK_HPP_
 #define CHUNK_HPP_
 
+#include <atomic>
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -100,6 +101,8 @@ class Chunk : public gk::NonCopyable {
 		using DataArray = u32[Chunk::height][Chunk::depth][Chunk::width];
 		const DataArray &data() const { return m_data; }
 
+		u32 data(int x, int y, int z) const { return m_data[z][y][x]; }
+
 	protected:
 		s32 m_x;
 		s32 m_y;
@@ -113,9 +116,9 @@ class Chunk : public gk::NonCopyable {
 
 		Chunk *m_surroundingChunks[6]{nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 
-		bool m_hasChanged = false;
-		bool m_hasLightChanged = false;
-		bool m_isInitialized = false;
+		std::atomic_bool m_hasChanged{false};
+		std::atomic_bool m_hasLightChanged{false};
+		std::atomic_bool m_isInitialized{false};
 
 		std::unordered_map<std::size_t, const Block&> m_tickingBlocks;
 

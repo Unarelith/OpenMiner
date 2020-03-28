@@ -27,6 +27,8 @@
 #ifndef SERVERCHUNK_HPP_
 #define SERVERCHUNK_HPP_
 
+#include <atomic>
+
 #include <gk/core/IntTypes.hpp>
 
 #include "Chunk.hpp"
@@ -47,7 +49,7 @@ class ServerChunk : public Chunk {
 		void setSent(bool isSent) { m_isSent = isSent; }
 
 	private:
-		bool m_isSent = false;
+		std::atomic_bool m_isSent{false};
 };
 
 #endif // SERVERCHUNK_HPP_
