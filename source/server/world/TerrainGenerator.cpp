@@ -69,78 +69,22 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 					}
 					// Otherwise we are in the air
 					else {
-						bool placedTree = false;
 						// Try to place a tree
-						if (chunk.getBlock(x, y, z - 1) == biome.getTopBlockID()) {
-							for (const PlacementEntry::Tree &treePlacement : biome.getTrees()) {
-								if (!rand.get<bool>(treePlacement.probability))
-									continue;
-
-								const Tree &tree = Registry::getInstance().getTree(treePlacement.treeID);
-
-								// Trunk
-								int h = rand.get(tree.trunkMinHeight(), tree.trunkMaxHeight());
-								for (int i = 0; i < h; i++) {
-									chunk.setBlockRaw(x, y, z + i, tree.getLogBlockID());
-								}
-
-								// Leaves
-								if (tree.hasLeaves()) {
-									for (int iz = -3; iz <= 3; iz++) {
-										for (int iy = -3; iy <= 3; iy++) {
-											for (int ix = -3; ix <= 3; ix++) {
-												if (ix * ix + iy * iy + iz * iz < 8 + rand.get(0, 1) && !chunk.getBlock(x + ix, y + iy, z + h + iz)) {
-													chunk.setBlockRaw(x + ix, y + iy, z + h + iz, tree.getLeavesBlockID());
-
-													// FIXME: This is a temporary fix for the second part of #41
-													chunk.lightmap().setSunlight(x + ix, y + iy, z + h + iz, 0);
-												}
-											}
-										}
-									}
-								}
-
-								placedTree = true;
-								break;
-							}
-						}
+						bool placedTree = tryPlaceTree(chunk, x, y, z, biome, rand);
 
 						// Otherwise try to place flora.
-						if (!placedTree) {
-							bool placedFlora = false;
-							for (const PlacementEntry::Flora &flora : biome.getFlora()) {
-								if (chunk.getBlock(x, y, z - 1) != flora.spawnsOnBlockID)
-									continue;
+						bool placedFlora = false;
+						if (!placedTree)
+							tryPlaceFlora(chunk, x, y, z, biome, rand);
 
-								if (!rand.get<bool>(flora.probability))
-									continue;
+						// Or a portal
+						bool placedPortal = false;
+						if (!placedTree && !placedFlora)
+							tryPlacePortal(chunk, x, y, z, biome, rand);
 
-								chunk.setBlockRaw(x, y, z, flora.blockID);
-								placedFlora = true;
-								break;
-							}
-
-							// FIXME: This is a temporary portal generation
-							//        This code should be replaced by a proper "feature" implementation
-							//        which will also allow making stuff like villages easier
-							bool placedPortal = false;
-							if (chunk.getBlock(x, y, z - 1) == biome.getTopBlockID() && rand.get<bool>(0.0002)) {
-								for (int ix = 0 ; ix < 4 ; ++ix) {
-									for (int iz = 0 ; iz < 5 ; ++iz) {
-										if (ix == 0 || iz == 0 || ix == 3 || iz == 4)
-											chunk.setBlockRaw(x + ix, y, z + iz, biome.getPortalFrameBlockID());
-										else
-											chunk.setBlockRaw(x + ix, y, z + iz, biome.getPortalBlockID());
-									}
-								}
-
-								placedPortal = true;
-							}
-
-							// Otherwise set sunlight.
-							if (!placedFlora && !placedPortal && z == CHUNK_HEIGHT - 1) {
-								chunk.lightmap().addSunlight(x, y, z, 15);
-							}
+						// Otherwise set sunlight.
+						if (!placedTree && !placedFlora && !placedPortal && z == CHUNK_HEIGHT - 1) {
+							chunk.lightmap().addSunlight(x, y, z, 15);
 						}
 					}
 				}
@@ -155,27 +99,10 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 						chunk.setBlockRaw(x, y, z, biome.getDeepBlockID());
 
 					// Populate ores.
-					// TODO: Like trees, ores should be able to seamlessly cross chunk boundaries.
-					// This could be achieved either by setting up a generation pipeline with stages,
-					// processing neighboring chunks' ores every time, or generating them with noise.
-					for (const PlacementEntry::Ore &ore : biome.getOres()) {
-						if (!rand.get<bool>(ore.probability))
-							continue;
-
-						oreFloodFill(chunk, x, y, z, biome.getDeepBlockID(), ore.blockID, 2, rand);
-						break;
-					}
+					generateOres(chunk, x, y, z, biome, rand);
 
 					// Caves
-					float n2 = noise2d(-(x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
-					float r2 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 512.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 0.1);
-					float r3 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 128.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 1);
-					float r4 = n2 * 5 + r2 * r3 * 20;
-					if (r4 > 6 && r4 < 8 && h > SEALEVEL) {
-						chunk.setBlockRaw(x, y, z - 1, 0);
-						chunk.setBlockRaw(x, y, z, 0);
-						chunk.setBlockRaw(x, y, z + 1, 0);
-					}
+					generateCaves(chunk, x, y, z, h);
 				}
 
 				if (topChunk && topChunk->isInitialized()) {
@@ -186,6 +113,105 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 				}
 			}
 		}
+	}
+}
+
+inline bool TerrainGenerator::tryPlaceTree(ServerChunk &chunk, int x, int y, int z, const Biome &biome, Random_t &rand) const {
+	if (chunk.getBlock(x, y, z - 1) == biome.getTopBlockID()) {
+		for (const PlacementEntry::Tree &treePlacement : biome.getTrees()) {
+			if (!rand.get<bool>(treePlacement.probability))
+				continue;
+
+			const Tree &tree = Registry::getInstance().getTree(treePlacement.treeID);
+
+			// Trunk
+			int h = rand.get(tree.trunkMinHeight(), tree.trunkMaxHeight());
+			for (int i = 0; i < h; i++) {
+				chunk.setBlockRaw(x, y, z + i, tree.getLogBlockID());
+			}
+
+			// Leaves
+			if (tree.hasLeaves()) {
+				for (int iz = -3; iz <= 3; iz++) {
+					for (int iy = -3; iy <= 3; iy++) {
+						for (int ix = -3; ix <= 3; ix++) {
+							u16 block = chunk.getBlock(x + ix, y + iy, z + h + iz);
+							if (ix * ix + iy * iy + iz * iz < 8 + rand.get(0, 1) && !block) {
+								chunk.setBlockRaw(x + ix, y + iy, z + h + iz, tree.getLeavesBlockID());
+
+								// FIXME: This is a temporary fix for the second part of #41
+								chunk.lightmap().setSunlight(x + ix, y + iy, z + h + iz, 0);
+							}
+						}
+					}
+				}
+			}
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+inline bool TerrainGenerator::tryPlaceFlora(ServerChunk &chunk, int x, int y, int z, const Biome &biome, Random_t &rand) const {
+	for (const PlacementEntry::Flora &flora : biome.getFlora()) {
+		if (chunk.getBlock(x, y, z - 1) != flora.spawnsOnBlockID)
+			continue;
+
+		if (!rand.get<bool>(flora.probability))
+			continue;
+
+		chunk.setBlockRaw(x, y, z, flora.blockID);
+
+		return true;
+	}
+
+	return false;
+}
+
+inline bool TerrainGenerator::tryPlacePortal(ServerChunk &chunk, int x, int y, int z, const Biome &biome, Random_t &rand) const {
+	// FIXME: This is a temporary portal generation
+	//        This code should be replaced by a proper "feature" implementation
+	//        which will also allow making stuff like villages easier
+	if (chunk.getBlock(x, y, z - 1) == biome.getTopBlockID() && rand.get<bool>(0.0002)) {
+		for (int ix = 0 ; ix < 4 ; ++ix) {
+			for (int iz = 0 ; iz < 5 ; ++iz) {
+				if (ix == 0 || iz == 0 || ix == 3 || iz == 4)
+					chunk.setBlockRaw(x + ix, y, z + iz, biome.getPortalFrameBlockID());
+				else
+					chunk.setBlockRaw(x + ix, y, z + iz, biome.getPortalBlockID());
+			}
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
+inline void TerrainGenerator::generateOres(ServerChunk &chunk, int x, int y, int z, const Biome &biome, Random_t &rand) const {
+	// TODO: Like trees, ores should be able to seamlessly cross chunk boundaries.
+	// This could be achieved either by setting up a generation pipeline with stages,
+	// processing neighboring chunks' ores every time, or generating them with noise.
+	for (const PlacementEntry::Ore &ore : biome.getOres()) {
+		if (!rand.get<bool>(ore.probability))
+			continue;
+
+		oreFloodFill(chunk, x, y, z, biome.getDeepBlockID(), ore.blockID, 2, rand);
+		break;
+	}
+}
+
+inline void TerrainGenerator::generateCaves(ServerChunk &chunk, int x, int y, int z, int h) const {
+	float n2 = noise2d(-(x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
+	float r2 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 512.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 0.1);
+	float r3 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 128.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 1);
+	float r4 = n2 * 5 + r2 * r3 * 20;
+	if (r4 > 6 && r4 < 8 && h > SEALEVEL) {
+		chunk.setBlockRaw(x, y, z - 1, 0);
+		chunk.setBlockRaw(x, y, z, 0);
+		chunk.setBlockRaw(x, y, z + 1, 0);
 	}
 }
 
@@ -220,7 +246,7 @@ void TerrainGenerator::oreFloodFill(ServerChunk &chunk, double x, double y, doub
 		oreFloodFill(chunk, x - 1, y - 1, z - 1, toReplace, replaceWith, depth - 1, rand);
 }
 
-float TerrainGenerator::noise2d(double x, double y, int octaves, float persistence) {
+inline float TerrainGenerator::noise2d(double x, double y, int octaves, float persistence) {
 	float sum = 0;
 	float strength = 1.0;
 	float scale = 1.0;
@@ -234,7 +260,7 @@ float TerrainGenerator::noise2d(double x, double y, int octaves, float persisten
 	return sum;
 }
 
-float TerrainGenerator::noise3d_abs(double x, double y, double z, int octaves, float persistence) {
+inline float TerrainGenerator::noise3d_abs(double x, double y, double z, int octaves, float persistence) {
 	float sum = 0;
 	float strength = 1.0;
 	float scale = 1.0;
@@ -247,3 +273,4 @@ float TerrainGenerator::noise3d_abs(double x, double y, double z, int octaves, f
 
 	return sum;
 }
+

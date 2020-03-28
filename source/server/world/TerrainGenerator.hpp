@@ -37,6 +37,7 @@
 
 using Random_t = effolkronium::random_local;
 
+class Biome;
 class Dimension;
 class ServerChunk;
 
@@ -48,6 +49,13 @@ class TerrainGenerator {
 
 	private:
 		void fastNoiseGeneration(ServerChunk &chunk) const;
+
+		bool tryPlaceTree(ServerChunk &chunk, int x, int y, int z, const Biome &biome, Random_t &rand) const;
+		bool tryPlaceFlora(ServerChunk &chunk, int x, int y, int z, const Biome &biome, Random_t &rand) const;
+		bool tryPlacePortal(ServerChunk &chunk, int x, int y, int z, const Biome &biome, Random_t &rand) const;
+
+		void generateOres(ServerChunk &chunk, int x, int y, int z, const Biome &biome, Random_t &rand) const;
+		void generateCaves(ServerChunk &chunk, int x, int y, int z, int h) const;
 
 		void oreFloodFill(ServerChunk &chunk, double x, double y, double z, u16 toReplace, u16 replaceWith, int depth, Random_t &rand) const;
 		static float noise2d(double x, double y, int octaves, float persistence);
