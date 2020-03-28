@@ -69,15 +69,20 @@ void ClientWorld::update() {
 }
 
 void ClientWorld::sendChunkRequests() {
+	s32 ux = m_closestInitializedChunk.x;
+	s32 uy = m_closestInitializedChunk.y;
+	s32 uz = m_closestInitializedChunk.z;
+	float ud = m_closestInitializedChunk.w;
+
 	// If we have a chunk marked for initialization
-	if (m_ud < 1000000.0) {
-		ClientChunk *chunk = (ClientChunk *)getChunk(m_ux, m_uy, m_uz);
+	if (ud < 1000000.0) {
+		ClientChunk *chunk = (ClientChunk *)getChunk(ux, uy, uz);
 		if(chunk && !chunk->hasBeenRequested()) {
 			// Send a chunk request to the server
-			m_client->sendChunkRequest(m_ux, m_uy, m_uz);
+			m_client->sendChunkRequest(ux, uy, uz);
 			chunk->setHasBeenRequested(true);
 
-			// std::cout << "Chunk at (" << m_ux << ", " << m_uy << ", " << m_uz << ") requested" << std::endl;
+			// std::cout << "Chunk at (" << ux << ", " << uy << ", " << uz << ") requested" << std::endl;
 		}
 	}
 }
@@ -223,10 +228,7 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 	gk::Shader::bind(nullptr);
 
-	m_ud = 1000000.0;
-	m_ux = 0;
-	m_uy = 0;
-	m_uz = 0;
+	m_closestInitializedChunk = gk::Vector4f{0, 0, 0, 1000000};
 
 	// Changing the values sent to the GPU to double precision is suicidal,
 	// performance wise, if possible at all. Therefore we want to keep the
@@ -290,11 +292,11 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		// If this chunk is not initialized, skip it
 		if(!it.second->isInitialized() && !it.second->hasBeenRequested()) {
 			// But if it is the closest to the camera, mark it for initialization
-			if(d < m_ud) {
-				m_ud = d;
-				m_ux = it.second->x();
-				m_uy = it.second->y();
-				m_uz = it.second->z();
+			if(d < m_closestInitializedChunk.w) {
+				m_closestInitializedChunk.w = d;
+				m_closestInitializedChunk.x = it.second->x();
+				m_closestInitializedChunk.y = it.second->y();
+				m_closestInitializedChunk.z = it.second->z();
 			}
 
 			continue;
