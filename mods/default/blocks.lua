@@ -246,6 +246,12 @@ mod:block {
 
 	draw_type = "cactus",
 	bounding_box = {1/16, 1/16, 0, 14/16, 14/16, 1};
+
+	on_block_destroyed = function(pos, world)
+		if world:get_block(pos.x, pos.y, pos.z + 1) == world:get_block(pos.x, pos.y, pos.z) then
+			world:set_block(pos.x, pos.y, pos.z + 1, 0)
+		end
+	end,
 }
 
 mod:block {
@@ -280,9 +286,16 @@ mod:block {
 	id = "reeds",
 	name = "Sugar Canes",
 	tiles = "reeds.png",
+	inventory_image = "reeds_item.png",
+
 	draw_type = "xshape",
 	hardness = 0.2,
-	inventory_image = "reeds_item.png"
+
+	on_block_destroyed = function(pos, world)
+		if world:get_block(pos.x, pos.y, pos.z + 1) == world:get_block(pos.x, pos.y, pos.z) then
+			world:set_block(pos.x, pos.y, pos.z + 1, 0)
+		end
+	end,
 }
 
 mod:block {
