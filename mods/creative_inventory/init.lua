@@ -28,7 +28,7 @@
 function show_creative_window(client, screen_width, screen_height, gui_scale)
 	items = {}
 	for k, v in pairs(openminer:registry():items()) do
-		if k ~= 1 then
+		if k ~= 1 and not v:has_group("group:ci_ignore") then
 			items[#items + 1] = {v:string_id()}
 		end
 	end
