@@ -59,7 +59,7 @@ result = {
 Possible attributes:
 
 - `id`: String ID of the item created.
-- `amount`: Amount of items in the created stack
+- `amount`: Amount of items in the created stack.
 
 #### `pattern`
 
@@ -77,6 +77,8 @@ pattern = {
 #### `keys`
 
 Mapping of the characters used in `pattern` to actual item string IDs.
+
+**Note:** Keys can also be groups. See [Item#Attributes#groups](/lua-api-item#groups) for more details.
 
 Example:
 ```lua
@@ -103,7 +105,9 @@ input = {
 Possible attributes:
 
 - `id`: String ID of the item created.
-- `amount`: Amount of items in the created stack
+- `amount`: Amount of items in the created stack.
+
+**Note:** `id` can also be a group. See [Item#Attributes#groups](/lua-api-item#groups) for more details.
 
 #### `output`
 
