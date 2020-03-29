@@ -100,17 +100,17 @@ bool CraftingRecipe::checkMatch(const Inventory &inventory, int offsetX, int off
 		for (x = 0 ; x < m_pattern[y].size() ; ++x) {
 			itemFound = false;
 
-			std::string inventoryItem = inventory.getStack(offsetX + x, offsetY + y).item().stringID();
+			const Item &item = inventory.getStack(offsetX + x, offsetY + y).item();
 			if (m_pattern[y][x] == ' ') {
-				itemFound = (inventoryItem.empty() || inventoryItem == "_:air");
+				itemFound = (item.stringID().empty() || item.stringID() == "_:air");
 			}
 			else {
 				auto it = m_keys.find(m_pattern[y][x]);
 				if (it == m_keys.end())
 					throw EXCEPTION("Recipe error: Invalid key char(", (int)m_pattern[y][x], ")'");
 
-				for (const std::string &item : it->second) {
-					if (item == inventoryItem)
+				for (const std::string &itemID : it->second) {
+					if (itemID == item.stringID() || (itemID.substr(0, 6) == "group:" && item.hasGroup(itemID)))
 						itemFound = true;
 				}
 			}
