@@ -26,20 +26,26 @@
  */
 #include "SmeltingRecipe.hpp"
 
-SmeltingRecipe::SmeltingRecipe(const ItemStack &input, const ItemStack &output) : Recipe("smelt", output) {
-	m_input = input;
+SmeltingRecipe::SmeltingRecipe(const std::string &inputID, u16 inputAmount, const ItemStack &output) : Recipe("smelt", output) {
+	m_inputID = inputID;
+	m_inputAmount = inputAmount;
 }
 
 void SmeltingRecipe::serialize(sf::Packet &packet) const {
-	packet << m_result << m_input;
+	packet << m_result << m_inputID << m_inputAmount;
 }
 
 void SmeltingRecipe::deserialize(sf::Packet &packet) {
-	packet >> m_result >> m_input;
+	packet >> m_result >> m_inputID >> m_inputAmount;
 }
 
 bool SmeltingRecipe::isMatching(const Inventory &inventory) const {
-	return (inventory.getStack(0, 0).item().id() == m_input.item().id()
-	     && inventory.getStack(0, 0).amount() >= m_input.amount());
+	bool isItemMatching = true;
+	if (m_inputID.substr(0, 6) == "group:")
+		isItemMatching = inventory.getStack(0, 0).item().hasGroup(m_inputID);
+	else
+		isItemMatching = (inventory.getStack(0, 0).item().stringID() == m_inputID);
+
+	return isItemMatching && inventory.getStack(0, 0).amount() >= m_inputAmount;
 }
 

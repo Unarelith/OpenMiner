@@ -32,7 +32,7 @@
 class SmeltingRecipe : public Recipe {
 	public:
 		SmeltingRecipe() : Recipe("smelt") {}
-		SmeltingRecipe(const ItemStack &input, const ItemStack &output);
+		SmeltingRecipe(const std::string &inputID, u16 inputAmount, const ItemStack &output);
 
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
@@ -40,7 +40,8 @@ class SmeltingRecipe : public Recipe {
 		bool isMatching(const Inventory &inventory) const override;
 
 	private:
-		ItemStack m_input;
+		std::string m_inputID;
+		u16 m_inputAmount = 0;
 };
 
 #endif // SMELTINGRECIPE_HPP_

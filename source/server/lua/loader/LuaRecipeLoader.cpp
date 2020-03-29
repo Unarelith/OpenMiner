@@ -57,16 +57,14 @@ void LuaRecipeLoader::loadSmeltingRecipe(const sol::table &table) const {
 	sol::table inputTable = table["input"];
 	sol::table outputTable = table["output"];
 
-	ItemStack input = {
-		inputTable["id"].get<std::string>(),
-		inputTable["amount"].get<u16>()
-	};
+	std::string inputID = inputTable["id"].get<std::string>();
+	u16 inputAmount = inputTable["amount"].get<u16>();
 
 	ItemStack output = {
 		outputTable["id"].get<std::string>(),
 		outputTable["amount"].get<u16>()
 	};
 
-	Registry::getInstance().registerRecipe<SmeltingRecipe>(input, output);
+	Registry::getInstance().registerRecipe<SmeltingRecipe>(inputID, inputAmount, output);
 }
 

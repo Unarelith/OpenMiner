@@ -184,12 +184,12 @@ mod:block {
 		end
 
 		if ticks_remaining == 0 and recipe and fuel_stack:amount() > 0 and
-				fuel_stack:item():has_group("om_fuel") and
+				fuel_stack:item():has_group("group:om_fuel") and
 				(output_stack:item():id() == 0 or output_stack:amount() == 0
 				or output_stack:item():id() == recipe:result():item():id()) then
 			data.inventory:set_stack(2, 0, fuel_stack:item():string_id(), fuel_stack:amount() - 1)
-			ticks_remaining = fuel_stack:item():get_group_value("om_fuel")
-			current_burn_time = fuel_stack:item():get_group_value("om_fuel")
+			ticks_remaining = fuel_stack:item():get_group_value("group:om_fuel")
+			current_burn_time = fuel_stack:item():get_group_value("group:om_fuel")
 			data.use_alt_tiles = true;
 			-- world:set_data(pos.x, pos.y, pos.z, 1)
 		elseif ticks_remaining > 0 then
