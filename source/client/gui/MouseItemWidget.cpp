@@ -76,24 +76,28 @@ void MouseItemWidget::onEvent(const SDL_Event &event) {
 
 void MouseItemWidget::leftClickBehaviour() {
 	if (m_currentInventoryWidget && m_currentInventoryWidget->currentItemWidget() && m_currentInventoryWidget->inventory()) {
-		ItemWidget *currentItemWidget = m_currentInventoryWidget->currentItemWidget();
-		if (!m_currentInventoryWidget->inventory()->isUnlimited())
-			swapItems(*currentItemWidget, m_currentInventoryWidget->isReadOnly());
-		else if (getStack().amount() == 0 && currentItemWidget->stack().amount() != 0)
-			setStack(currentItemWidget->stack().item().stringID(), 64);
+		if (m_currentInventoryWidget->doItemMatchFilter(m_inventory.getStack(0, 0).item())) {
+			ItemWidget *currentItemWidget = m_currentInventoryWidget->currentItemWidget();
+			if (!m_currentInventoryWidget->inventory()->isUnlimited())
+				swapItems(*currentItemWidget, m_currentInventoryWidget->isReadOnly());
+			else if (getStack().amount() == 0 && currentItemWidget->stack().amount() != 0)
+				setStack(currentItemWidget->stack().item().stringID(), 64);
 
-		m_currentInventoryWidget->sendUpdatePacket();
+			m_currentInventoryWidget->sendUpdatePacket();
+		}
 	}
 }
 
 void MouseItemWidget::rightClickBehaviour() {
 	if (m_currentInventoryWidget && m_currentInventoryWidget->currentItemWidget() && m_currentInventoryWidget->inventory()) {
 		if (!m_currentInventoryWidget->isReadOnly()) {
-			ItemWidget *currentItemWidget = m_currentInventoryWidget->currentItemWidget();
-			if (!m_currentInventoryWidget->inventory()->isUnlimited())
-				putItem(*currentItemWidget);
-			else if (getStack().amount() == 0 && currentItemWidget->stack().amount() != 0)
-				setStack(currentItemWidget->stack().item().stringID(), 1);
+			if (m_currentInventoryWidget->doItemMatchFilter(m_inventory.getStack(0, 0).item())) {
+				ItemWidget *currentItemWidget = m_currentInventoryWidget->currentItemWidget();
+				if (!m_currentInventoryWidget->inventory()->isUnlimited())
+					putItem(*currentItemWidget);
+				else if (getStack().amount() == 0 && currentItemWidget->stack().amount() != 0)
+					setStack(currentItemWidget->stack().item().stringID(), 1);
+			}
 
 			m_currentInventoryWidget->sendUpdatePacket();
 		}
@@ -167,7 +171,8 @@ void MouseItemWidget::draggingBehaviour(ItemWidget *newItemWidget) {
 
 void MouseItemWidget::updateCurrentItem(ItemWidget *currentItemWidget) {
 	if (currentItemWidget) {
-		if (m_isDragging && currentItemWidget != m_currentItemWidget)
+		bool doItemMatchFilter = !m_currentInventoryWidget || m_currentInventoryWidget->doItemMatchFilter(m_draggedStack.item());
+		if (m_isDragging && currentItemWidget != m_currentItemWidget && doItemMatchFilter)
 			draggingBehaviour(currentItemWidget);
 
 		m_currentItemWidget = (currentItemWidget->stack().item().id()) ? currentItemWidget : nullptr;

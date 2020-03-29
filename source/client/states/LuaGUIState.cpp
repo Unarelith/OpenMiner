@@ -144,8 +144,8 @@ void LuaGUIState::update() {
 		}
 	}
 
-	m_mouseItemWidget.updateCurrentItem(currentItemWidget);
 	m_mouseItemWidget.setCurrentInventoryWidget(m_currentInventoryWidget);
+	m_mouseItemWidget.updateCurrentItem(currentItemWidget);
 }
 
 void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -222,10 +222,10 @@ void LuaGUIState::loadTextButton(const std::string &, s32 x, s32 y, sf::Packet &
 }
 
 void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet) {
-	std::string inventory, shiftDestination;
+	std::string inventory, shiftDestination, filter;
 	u16 width, height;
 	u16 offset, count;
-	packet >> width >> height >> shiftDestination >> offset >> count >> inventory;
+	packet >> width >> height >> shiftDestination >> offset >> count >> inventory >> filter;
 
 	Inventory *widgetInventory = nullptr;
 	if (inventory == "player") {
@@ -270,6 +270,7 @@ void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf:
 		inventoryWidget.setPosition(x, y);
 		inventoryWidget.init(*widgetInventory, offset, count);
 		inventoryWidget.setShiftDestination(shiftDestination);
+		inventoryWidget.setFilter(filter);
 	}
 	else {
 		DEBUG("ERROR: Inventory widget '" + name + "' is invalid");

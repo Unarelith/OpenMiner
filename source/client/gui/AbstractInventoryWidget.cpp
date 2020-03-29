@@ -38,3 +38,10 @@ void AbstractInventoryWidget::setShiftDestination(const std::string &shiftDestin
 	}
 }
 
+bool AbstractInventoryWidget::doItemMatchFilter(const Item &item) {
+	if (!m_filter.empty() && item.id() != 0)
+		return item.hasGroup(m_filter);
+
+	return true;
+}
+
