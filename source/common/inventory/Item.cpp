@@ -24,9 +24,8 @@
  *
  * =====================================================================================
  */
-#include <SFML/Network/Packet.hpp>
-
 #include "Item.hpp"
+#include "NetworkUtils.hpp"
 
 Item::Item(u32 id, const TilesDef &tiles, const std::string &stringID, const std::string &label) {
 	m_id = id;
@@ -37,12 +36,12 @@ Item::Item(u32 id, const TilesDef &tiles, const std::string &stringID, const std
 }
 
 void Item::serialize(sf::Packet &packet) const {
-	packet << m_id << m_stringID << m_label << m_isBlock << m_isFuel
-		<< m_burnTime << m_miningSpeed << m_harvestCapability << m_tiles;
+	packet << m_id << m_tiles << m_stringID << m_label << m_isBlock
+		<< m_miningSpeed << m_harvestCapability << m_groups;
 }
 
 void Item::deserialize(sf::Packet &packet) {
-	packet >> m_id >> m_stringID >> m_label >> m_isBlock >> m_isFuel
-		>> m_burnTime >> m_miningSpeed >> m_harvestCapability >> m_tiles;
+	packet >> m_id >> m_tiles >> m_stringID >> m_label >> m_isBlock
+		>> m_miningSpeed >> m_harvestCapability >> m_groups;
 }
 

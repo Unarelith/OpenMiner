@@ -12,29 +12,30 @@ mod:item {
 
 ## Attributes
 
-### `burn_time`
+### `groups`
 
-Burn time of a fuel item.
+Groups of the item. They can be used in recipes, and can also filter Lua-defined inventory widgets.
+
+Each group must be set to `1` if present. Default value for each group is `0`, and it cannot exceeds `65535`.
 
 Example:
 ```lua
-burn_time = 200 -- example value for a coal item, default is 0
+groups = {
+	om_fuel = 200 -- example burn time for a coal item
+}
 ```
+
+Engine groups always start with `om_` prefix. If you create your own groups, please prefix them with something to let people know that the group comes from your mod.
+
+Available engine groups:
+
+- `om_fuel`: used in `default:furnace` and `MouseWidgetItem`, the value represents the burn time
 
 ### `harvest_capability`
 
 For a tool, set which blocks are easier to mine.
 
 **Note:** This attribute would need more doc but it'll probably get removed soon.
-
-### `is_fuel`
-
-Defines if the item is valid furnace fuel or not.
-
-Example:
-```lua
-is_fuel = false -- this is the default value
-```
 
 ### `id`
 

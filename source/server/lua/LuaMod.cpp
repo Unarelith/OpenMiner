@@ -30,6 +30,21 @@
 #include "Registry.hpp"
 #include "Tree.hpp"
 
+void LuaMod::initUsertype(sol::state &lua) {
+	lua.new_usertype<LuaMod>("LuaMod",
+		sol::constructors<LuaMod(std::string)>(),
+		"id",              &LuaMod::id,
+		"block",           &LuaMod::registerBlock,
+		"item",            &LuaMod::registerItem,
+		"crafting_recipe", &LuaMod::registerCraftingRecipe,
+		"smelting_recipe", &LuaMod::registerSmeltingRecipe,
+		"sky",             &LuaMod::registerSky,
+		"tree",            &LuaMod::registerTree,
+		"biome",           &LuaMod::registerBiome,
+		"dimension",       &LuaMod::registerDimension
+	);
+}
+
 void LuaMod::registerBlock(const sol::table &table) {
 	m_blockLoader.loadBlock(table);
 }
@@ -60,20 +75,5 @@ void LuaMod::registerBiome(const sol::table &table) {
 
 void LuaMod::registerDimension(const sol::table &table) {
 	m_dimensionLoader.loadDimension(table);
-}
-
-void LuaMod::initUsertype(sol::state &lua) {
-	lua.new_usertype<LuaMod>("LuaMod",
-		sol::constructors<LuaMod(std::string)>(),
-		"id",              &LuaMod::id,
-		"block",           &LuaMod::registerBlock,
-		"item",            &LuaMod::registerItem,
-		"crafting_recipe", &LuaMod::registerCraftingRecipe,
-		"smelting_recipe", &LuaMod::registerSmeltingRecipe,
-		"sky",             &LuaMod::registerSky,
-		"tree",            &LuaMod::registerTree,
-		"biome",           &LuaMod::registerBiome,
-		"dimension",       &LuaMod::registerDimension
-	);
 }
 

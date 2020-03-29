@@ -153,8 +153,8 @@ void ScriptEngine::initUsertypes() {
 	m_lua.new_usertype<Item>("Item",
 		"id", &Item::id,
 		"string_id", &Item::stringID,
-		"burn_time", &Item::burnTime,
-		"is_fuel", &Item::isFuel
+		"has_group", &Item::hasGroup,
+		"get_group_value", &Item::getGroupValue
 	);
 
 	m_lua.new_usertype<glm::ivec3>("ivec3",
