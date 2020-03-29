@@ -29,6 +29,7 @@
 
 #include <sol.hpp>
 
+class Item;
 class LuaMod;
 class ServerBlock;
 
@@ -44,6 +45,8 @@ class LuaBlockLoader {
 		void loadDrawType(ServerBlock &block, const sol::table &table) const;
 		void loadItemDrop(ServerBlock &block, const sol::table &table) const;
 		void loadColorMultiplier(ServerBlock &block, const sol::table &table) const;
+
+		void loadGroups(ServerBlock &block, Item &item, const sol::table &table) const;
 
 		LuaMod &m_mod;
 };

@@ -46,12 +46,17 @@ void LuaBlockLoader::loadBlock(const sol::table &table) const {
 	loadItemDrop(block, table);
 	loadColorMultiplier(block, table);
 
+	Item *item = nullptr;
 	if (!block.inventoryImage().empty()) {
-		Registry::getInstance().registerItem(TilesDef{block.inventoryImage()}, stringID, label).setIsBlock(true);
+		item = &Registry::getInstance().registerItem(TilesDef{block.inventoryImage()}, stringID, label);
 	}
 	else {
-		Registry::getInstance().registerItem(block.tiles(), stringID, label).setIsBlock(true);
+		item = &Registry::getInstance().registerItem(block.tiles(), stringID, label);
 	}
+
+	item->setIsBlock(true);
+
+	loadGroups(block, *item, table);
 }
 
 inline void LuaBlockLoader::loadProperties(ServerBlock &block, const sol::table &table) const {
@@ -123,6 +128,24 @@ inline void LuaBlockLoader::loadColorMultiplier(ServerBlock &block, const sol::t
 			colorMultiplier.value().get<u8>(3),
 			colorMultiplier.value().get<u8>(4)
 		});
+	}
+}
+
+inline void LuaBlockLoader::loadGroups(ServerBlock &block, Item &item, const sol::table &table) const {
+	sol::object groupsObject = table["groups"];
+	if (groupsObject.valid()) {
+		if (groupsObject.get_type() == sol::type::table) {
+			sol::table groupsTable = groupsObject.as<sol::table>();
+			for (auto &groupObject : groupsTable) {
+				std::string groupName = "group:" + groupObject.first.as<std::string>();
+				u16 groupValue = groupObject.second.as<u16>();
+
+				block.addGroup(groupName, groupValue);
+				item.addGroup(groupName, groupValue);
+			}
+		}
+		else
+			DEBUG("ERROR: For block '" + block.stringID() + "': 'groups' should be a table");
 	}
 }
 
