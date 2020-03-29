@@ -71,8 +71,10 @@ mod:item {
 	id = "coal",
 	name = "Coal",
 	tiles = "coal.png",
-	is_fuel = true,
-	burn_time = 1600,
+
+	groups = {
+		om_fuel = 1600,
+	},
 }
 
 mod:item {
@@ -85,8 +87,10 @@ mod:item {
 	id = "charcoal",
 	name = "Charcoal",
 	tiles = "charcoal.png",
-	is_fuel = true,
-	burn_time = 1600,
+
+	groups = {
+		om_fuel = 1600,
+	},
 }
 
 mod:item {

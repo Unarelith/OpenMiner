@@ -24,6 +24,8 @@
  *
  * =====================================================================================
  */
+#include <gk/core/Debug.hpp>
+
 #include "LuaItemLoader.hpp"
 #include "LuaMod.hpp"
 #include "Registry.hpp"
@@ -36,9 +38,19 @@ void LuaItemLoader::loadItem(const sol::table &table) const {
 	std::string label = table["name"].get<std::string>();
 
 	Item &item = Registry::getInstance().registerItem(tiles, stringID, label);
-	item.setIsFuel(table["is_fuel"].get_or(false));
-	item.setBurnTime(table["burn_time"].get_or(0));
 	item.setHarvestCapability(table["harvest_capability"].get_or(0));
 	item.setMiningSpeed(table["mining_speed"].get_or(1));
+
+	sol::object groupsObject = table["groups"];
+	if (groupsObject.valid()) {
+		if (groupsObject.get_type() == sol::type::table) {
+			sol::table groupsTable = groupsObject.as<sol::table>();
+			for (auto &groupObject : groupsTable) {
+				item.addGroup(groupObject.first.as<std::string>(), groupObject.second.as<u16>());
+			}
+		}
+		else
+			DEBUG("ERROR: For item '" + stringID + "': 'groups' should be a table");
+	}
 }
 

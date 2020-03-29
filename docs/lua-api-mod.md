@@ -1,5 +1,19 @@
 # Lua API: Mod API Overview
 
+## Introduction
+
+You can create a mod using this function:
+```
+LuaMod.new("mod_name")
+```
+
+Mod name should match this regex: `[a-zA-Z0-9_]+`
+
+Everytime your define an `id` for a mod element, this name will be prepended to it.
+For example, `myitem` will become `mymod:myitem`.
+
+The name can't be `group` because this namespace is already used by the engine.
+
 ## Example
 
 ```lua

@@ -57,6 +57,34 @@ sf::Packet &operator>>(sf::Packet &packet, std::vector<T> &vec) {
 }
 
 //======================================================================================
+// std::unordered_map
+//======================================================================================
+#include <unordered_map>
+
+template<typename T, typename U>
+sf::Packet &operator<<(sf::Packet &packet, const std::unordered_map<T, U> &map) {
+	packet << (unsigned int)map.size();
+	for (auto &it : map)
+		packet << it.first << it.second;
+	return packet;
+}
+
+template<typename T, typename U>
+sf::Packet &operator>>(sf::Packet &packet, std::unordered_map<T, U> &map) {
+	unsigned int size;
+	packet >> size;
+
+	for (unsigned int i = 0 ; i < size ; ++i) {
+		T k;
+		U v;
+		packet >> k >> v;
+		map.emplace(k, v);
+	}
+
+	return packet;
+}
+
+//======================================================================================
 // gk::Rect
 //======================================================================================
 #include <gk/core/Rect.hpp>

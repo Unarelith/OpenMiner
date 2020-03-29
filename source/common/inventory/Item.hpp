@@ -54,23 +54,25 @@ class Item : public ISerializable {
 		bool isBlock() const { return m_isBlock; }
 		void setIsBlock(bool isBlock) { m_isBlock = isBlock; }
 
-		bool isFuel() const { return m_isFuel; }
-		void setIsFuel(bool isFuel) { m_isFuel = isFuel; }
-
-		u16 burnTime() const { return m_burnTime; }
-		void setBurnTime(u16 burnTime) { m_burnTime = burnTime; }
-
 		u8 harvestCapability() const { return m_harvestCapability; }
 		void setHarvestCapability(u8 harvestCapability) { m_harvestCapability = harvestCapability; }
 
 		float miningSpeed() const { return m_miningSpeed; }
 		void setMiningSpeed(float miningSpeed) { m_miningSpeed = miningSpeed; }
 
+		void addGroup(const std::string &name, u16 value) { m_groups.emplace(name, value); }
+		bool hasGroup(const std::string &name) const { return m_groups.find(name) != m_groups.end(); }
+
+		u16 getGroupValue(const std::string &name) const {
+			auto it = m_groups.find(name);
+			if (it == m_groups.end())
+				return 0;
+
+			return it->second;
+		}
+
 	protected:
 		bool m_isBlock = false;
-		bool m_isFuel = false;
-
-		u16 m_burnTime = 0;
 
 	private:
 		u32 m_id = 0;
@@ -81,6 +83,8 @@ class Item : public ISerializable {
 
 		u8 m_harvestCapability = 0;
 		float m_miningSpeed = 1;
+
+		std::unordered_map<std::string, u16> m_groups;
 };
 
 #endif // ITEM_HPP_

@@ -37,8 +37,16 @@
 // This class is meant to be used ONLY in Lua
 class LuaMod {
 	public:
+		// FIXME: Check if this name has already been used
+		//        Check if this name matches [a-zA-Z0-9]+
+		//        Check if this name != "group"
 		LuaMod(const std::string &id) : m_id(id) {}
 
+		const std::string &id() const { return m_id; }
+
+		static void initUsertype(sol::state &lua);
+
+	private:
 		void registerBlock(const sol::table &table);
 		void registerItem(const sol::table &table);
 		void registerCraftingRecipe(const sol::table &table);
@@ -48,11 +56,6 @@ class LuaMod {
 		void registerBiome(const sol::table &table);
 		void registerDimension(const sol::table &table);
 
-		const std::string &id() const { return m_id; }
-
-		static void initUsertype(sol::state &lua);
-
-	private:
 		std::string m_id;
 
 		LuaBlockLoader m_blockLoader{*this};
