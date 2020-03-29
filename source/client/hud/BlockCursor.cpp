@@ -91,8 +91,6 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 					gk::FloatBox boundingBox = newBlock.boundingBox() + gk::Vector3f(x - m_player.x(), y - m_player.y(), z - m_player.z());
 					gk::FloatBox playerBoundingBox = m_player.hitbox();
 					if (!boundingBox.intersects(playerBoundingBox)) {
-						m_world.setBlock(x, y, z, hotbar.currentItem());
-
 						u32 block = hotbar.currentItem();
 						if (newBlock.isRotatable()) {
 							u16 data = m_player.getOppositeDirection() & 0x3;
@@ -100,6 +98,8 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 
 							block |= data << 16;
 						}
+
+						m_world.setBlock(x, y, z, hotbar.currentItem());
 
 						m_client.sendPlayerPlaceBlock(x, y, z, block);
 

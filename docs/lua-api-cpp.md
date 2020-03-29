@@ -23,6 +23,8 @@
 - `void set_string(string attribute, string value)`
 - `int get_int(string attribute)`
 - `void set_int(string attribute, int value)`
+- `bool get_bool(string attribute)`
+- `void set_bool(string attribute, bool value)`
 
 ## Chunk
 

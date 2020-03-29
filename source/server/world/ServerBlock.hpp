@@ -41,17 +41,21 @@ class ServerBlock : public Block {
 		void onTick(const glm::ivec3 &, Chunk &, World &, ServerCommandHandler &) const;
 		bool onBlockActivated(const glm::ivec3 &pos, Player &player, World &world, ClientInfo &client, ServerCommandHandler &server, u16 screenWidth, u16 screenHeight, u8 guiScale) const;
 		void onBlockPlaced(const glm::ivec3 &pos, World &world) const;
+		void onBlockDestroyed(const glm::ivec3 &pos, World &world) const;
 
 		bool canUpdate() const { return m_onTick.valid(); }
 
-		void setOnBlockActivated(const sol::function &function) { m_onBlockActivated = function; m_canBeActivated = m_onBlockActivated.valid(); }
-		void setOnTick(const sol::function &function) { m_onTick = function; m_canUpdate = m_onTick.valid(); }
-		void setOnBlockPlaced(const sol::function &function) { m_onBlockPlaced = function; }
+		void setOnBlockActivated(const sol::protected_function &function) { m_onBlockActivated = function; m_canBeActivated = m_onBlockActivated.valid(); }
+		void setOnTick(const sol::protected_function &function) { m_onTick = function; m_canUpdate = m_onTick.valid(); }
+		void setOnBlockPlaced(const sol::protected_function &function) { m_onBlockPlaced = function; }
+		void setOnBlockDestroyed(const sol::protected_function &function) { m_onBlockDestroyed = function; }
 
 	private:
-		sol::unsafe_function m_onBlockActivated;
-		sol::unsafe_function m_onTick;
-		sol::unsafe_function m_onBlockPlaced;
+		sol::protected_function m_onBlockActivated;
+		sol::protected_function m_onTick;
+		sol::protected_function m_onBlockPlaced;
+		sol::protected_function m_onBlockDestroyed;
+
 		mutable bool m_onTickEnabled = true;
 };
 

@@ -168,7 +168,10 @@ void ScriptEngine::initUsertypes() {
 		"set_string", &BlockMetadata::setString,
 
 		"get_int", &BlockMetadata::getLuaObject<int>,
-		"set_int", &BlockMetadata::setInt
+		"set_int", &BlockMetadata::setInt,
+
+		"get_bool", &BlockMetadata::getLuaObject<bool>,
+		"set_bool", &BlockMetadata::setBool
 	);
 
 	m_lua.new_usertype<ClientInfo>("ClientInfo",

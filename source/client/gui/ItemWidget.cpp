@@ -42,7 +42,7 @@ ItemWidget::ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent)
 void ItemWidget::update() {
 	if (stack().item().isBlock()) {
 		const Block &block = Registry::getInstance().getBlock(stack().item().id());
-		if (block.drawType() != BlockDrawType::XShape) {
+		if (block.drawType() != BlockDrawType::XShape && block.inventoryImage().empty()) {
 			m_cube.updateVertexBuffer(block);
 			m_isImage = false;
 		}

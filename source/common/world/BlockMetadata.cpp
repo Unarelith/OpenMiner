@@ -36,6 +36,10 @@ void BlockMetadata::setInt(const std::string &name, int value) {
 	m_data[name].set(value, BlockMetadataValue::Type::Int);
 }
 
+void BlockMetadata::setBool(const std::string &name, bool value) {
+	m_data[name].set(value, BlockMetadataValue::Type::Bool);
+}
+
 void BlockMetadata::serialize(sf::Packet &packet) const {
 	packet << u32(m_data.size());
 	for (auto &it : m_data) {
@@ -45,6 +49,9 @@ void BlockMetadata::serialize(sf::Packet &packet) const {
 		}
 		else if (it.second.type() == BlockMetadataValue::Type::Int) {
 			packet << it.second.get<int>();
+		}
+		else if (it.second.type() == BlockMetadataValue::Type::Bool) {
+			packet << it.second.get<bool>();
 		}
 	}
 }
@@ -65,6 +72,11 @@ void BlockMetadata::deserialize(sf::Packet &packet) {
 		}
 		else if (type == BlockMetadataValue::Type::Int) {
 			int value;
+			packet >> value;
+			m_data[name].set(value, type);
+		}
+		else if (type == BlockMetadataValue::Type::Bool) {
+			bool value;
 			packet >> value;
 			m_data[name].set(value, type);
 		}

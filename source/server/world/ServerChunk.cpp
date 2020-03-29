@@ -42,6 +42,11 @@ void ServerChunk::onBlockPlaced(int x, int y, int z, const Block &block) const {
 	serverBlock.onBlockPlaced(glm::ivec3{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH, z + m_z * CHUNK_HEIGHT}, m_world);
 }
 
+void ServerChunk::onBlockDestroyed(int x, int y, int z, const Block &block) const {
+	const ServerBlock &serverBlock = (ServerBlock &)block;
+	serverBlock.onBlockDestroyed(glm::ivec3{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH, z + m_z * CHUNK_HEIGHT}, m_world);
+}
+
 void ServerChunk::tick(World &world, ServerCommandHandler &server) {
 	if (!m_tickingBlocks.empty()) {
 		for (auto &it : m_tickingBlocks) {

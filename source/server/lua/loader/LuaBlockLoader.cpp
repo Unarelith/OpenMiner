@@ -67,6 +67,7 @@ inline void LuaBlockLoader::loadProperties(ServerBlock &block, const sol::table 
 	block.setOnBlockActivated(table["on_block_activated"]);
 	block.setOnTick(table["on_tick"]);
 	block.setOnBlockPlaced(table["on_block_placed"]);
+	block.setOnBlockDestroyed(table["on_block_destroyed"]);
 	block.setRotatable(table["is_rotatable"].get_or(false));
 	block.setInventoryImage(table["inventory_image"].get_or<std::string>(""));
 }

@@ -68,7 +68,7 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 	if(z < 0)              { if(m_surroundingChunks[4]) m_surroundingChunks[4]->setBlock(x, y, z + Chunk::height, type); return; }
 	if(z >= Chunk::height) { if(m_surroundingChunks[5]) m_surroundingChunks[5]->setBlock(x, y, z - Chunk::height, type); return; }
 
-	if (m_data[z][y][x] == type) return;
+	if ((m_data[z][y][x] & 0xffff) == type) return;
 
 	const Block &block = Registry::getInstance().getBlock(type);
 	if (block.canUpdate()) {
@@ -88,6 +88,11 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 	}
 
 	onBlockPlaced(x, y, z, block);
+
+	if (m_data[z][y][x] != 0) {
+		const Block &oldBlock = Registry::getInstance().getBlock(m_data[z][y][x]);
+		onBlockDestroyed(x, y, z, oldBlock);
+	}
 
 	setBlockRaw(x, y, z, type);
 
@@ -121,7 +126,7 @@ void Chunk::setBlockRaw(int x, int y, int z, u16 type) {
 	if(z < 0)              { if(m_surroundingChunks[4]) m_surroundingChunks[4]->setBlockRaw(x, y, z + Chunk::height, type); return; }
 	if(z >= Chunk::height) { if(m_surroundingChunks[5]) m_surroundingChunks[5]->setBlockRaw(x, y, z - Chunk::height, type); return; }
 
-	if (m_data[z][y][x] == type) return;
+	if ((m_data[z][y][x] & 0xffff) == type) return;
 
 	if (type == 0) {
 		auto it = m_blockData.find(gk::Vector3i{x, y, z});
@@ -129,7 +134,8 @@ void Chunk::setBlockRaw(int x, int y, int z, u16 type) {
 			m_blockData.erase(it);
 	}
 
-	m_data[z][y][x] = type;
+	m_data[z][y][x] &= 0xffff0000;
+	m_data[z][y][x] |= type;
 
 	m_hasChanged = true;
 }

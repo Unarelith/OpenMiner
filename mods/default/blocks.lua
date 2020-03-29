@@ -132,9 +132,6 @@ mod:block {
 	is_light_source = true
 }
 
-dofile("mods/default/workbench.lua")
-dofile("mods/default/furnace.lua")
-
 mod:block {
 	id = "iron_ore",
 	name = "Iron Ore",
@@ -314,4 +311,8 @@ mod:block {
 		world:set_block(pos.x, pos.y, pos.z, block:id())
 	end
 }
+
+dofile("mods/default/blocks/workbench.lua")
+dofile("mods/default/blocks/furnace.lua")
+dofile("mods/default/blocks/door.lua")
 

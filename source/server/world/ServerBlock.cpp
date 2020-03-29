@@ -80,3 +80,14 @@ void ServerBlock::onBlockPlaced(const glm::ivec3 &pos, World &world) const {
 	}
 }
 
+void ServerBlock::onBlockDestroyed(const glm::ivec3 &pos, World &world) const {
+	try {
+		if (m_onBlockDestroyed) {
+			m_onBlockDestroyed(pos, world);
+		}
+	}
+	catch (const sol::error &e) {
+		std::cerr << e.what() << std::endl;
+	}
+}
+

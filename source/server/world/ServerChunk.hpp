@@ -43,6 +43,8 @@ class ServerChunk : public Chunk {
 		void updateLights();
 
 		void onBlockPlaced(int x, int y, int z, const Block &block) const;
+		void onBlockDestroyed(int x, int y, int z, const Block &block) const;
+
 		void tick(World &world, ServerCommandHandler &server);
 
 		bool isSent() const { return m_isSent; }

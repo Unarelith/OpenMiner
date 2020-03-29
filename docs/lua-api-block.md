@@ -233,6 +233,13 @@ Parameters:
 - `screen_height` (`u16`): height of the screen
 - `gui_scale` (`u8`): current scaling setting
 
+### `on_block_destroyed`
+
+Parameters:
+
+- `pos` (`ivec3`): position of the block
+- `world` (`World`): instance of `ServerWorld`
+
 ### `on_block_placed`
 
 Parameters:

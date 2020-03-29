@@ -43,7 +43,8 @@ class BlockMetadataValue {
 		enum class Type : u8 {
 			Undefined,
 			String,
-			Int
+			Int,
+			Bool
 		};
 
 		template<typename T>
@@ -68,6 +69,7 @@ class BlockMetadata : public ISerializable {
 	public:
 		void setString(const std::string &name, const std::string &value);
 		void setInt(const std::string &name, int value);
+		void setBool(const std::string &name, bool value);
 
 		template<typename T>
 		T &get(const std::string &name) {
