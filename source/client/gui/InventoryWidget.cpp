@@ -80,7 +80,7 @@ void InventoryWidget::update() {
 }
 
 bool InventoryWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) {
-	if (dest->receiveItemStack(itemStack, this)) {
+	if (dest->doItemMatchFilter(itemStack->stack().item()) && dest->receiveItemStack(itemStack, this)) {
 		if (dest != this)
 			m_inventory->clearStack(itemStack->x(), itemStack->y());
 

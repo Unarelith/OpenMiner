@@ -112,11 +112,12 @@ mod:block {
 				source = "block",
 				block = {x = pos.x, y = pos.y, z = pos.z},
 				offset = 2,
-				count = 1
+				count = 1,
 			},
 
 			size = {x = 1, y = 1},
 
+			filter = "group:om_fuel",
 			shift_destination = "inv_main,inv_hotbar",
 		}
 

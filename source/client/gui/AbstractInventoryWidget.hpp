@@ -40,8 +40,14 @@ class AbstractInventoryWidget : public Widget {
 		void setShiftDestination(const std::string &shiftDestination);
 		void setShiftDestination(const std::vector<std::string> &shiftDestination) { m_shiftDestination = shiftDestination; }
 
+		const std::string &filter() const { return m_filter; }
+		void setFilter(const std::string &filter) { m_filter = filter; }
+		bool doItemMatchFilter(const Item &item);
+
 	protected:
 		std::vector<std::string> m_shiftDestination;
+
+		std::string m_filter;
 };
 
 #endif // ABSTRACTINVENTORYWIDGET_HPP_

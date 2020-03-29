@@ -31,7 +31,8 @@
 void InventoryWidgetDef::serialize(sf::Packet &packet) const {
 	WidgetDef::serialize(packet);
 
-	packet << m_width << m_height << m_shiftDestination << m_offset << m_count << m_inventory;
+	packet << m_width << m_height << m_shiftDestination << m_offset << m_count
+		<< m_inventory << m_filter;
 
 	if (m_inventory == "player")
 		packet << m_player << m_inventoryName;
@@ -47,6 +48,7 @@ void InventoryWidgetDef::loadFromLuaTable(const sol::table &table) {
 	loadInventory(table);
 
 	m_shiftDestination = table["shift_destination"].get_or<std::string>("");
+	m_filter = table["filter"].get_or<std::string>("");
 
 	sol::optional<sol::table> size = table["size"];
 	if (size != sol::nullopt) {

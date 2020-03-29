@@ -54,6 +54,8 @@ class InventoryWidgetDef : public WidgetDef {
 
 		u16 m_offset = 0;
 		u16 m_count = 0;
+
+		std::string m_filter;
 };
 
 #endif // INVENTORYWIDGETDEF_HPP_

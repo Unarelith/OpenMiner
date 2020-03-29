@@ -46,7 +46,7 @@ void LuaItemLoader::loadItem(const sol::table &table) const {
 		if (groupsObject.get_type() == sol::type::table) {
 			sol::table groupsTable = groupsObject.as<sol::table>();
 			for (auto &groupObject : groupsTable) {
-				item.addGroup(groupObject.first.as<std::string>(), groupObject.second.as<u16>());
+				item.addGroup("group:" + groupObject.first.as<std::string>(), groupObject.second.as<u16>());
 			}
 		}
 		else
