@@ -44,15 +44,16 @@ class ChunkBuilder {
 	public:
 		ChunkBuilder(TextureAtlas &textureAtlas) : m_textureAtlas(textureAtlas) {}
 
-		static constexpr u8 layers = 4;
+		static constexpr u8 layers = 5;
 
 		std::array<std::size_t, layers> buildChunk(const ClientChunk &chunk, const std::array<gk::VertexBuffer, layers> &vbo);
 
 		enum Layer {
 			Solid,
-			Liquid,
+			NoMipMap,
 			Flora,
 			Glass,
+			Liquid,
 		};
 
 	private:

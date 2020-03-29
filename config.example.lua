@@ -24,6 +24,7 @@ cameraFOV = 70.0
 screenWidth = 1600
 screenHeight = 1050
 guiScale = 3
+mipmapLevels = 0
 
 -- Input
 mouseSensitivity = 8

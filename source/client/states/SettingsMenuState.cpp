@@ -191,6 +191,11 @@ void SettingsMenuState::addGraphicsButtons() {
 	});
 
 	addToggleButton("Use VSync", Config::isVerticalSyncEnabled, false);
+
+	m_menuWidget.addButton("Mipmap Levels: " + std::to_string(Config::mipmapLevels), [] (TextButton &button) {
+		Config::mipmapLevels = (Config::mipmapLevels + 1) % 5;
+		button.setText("Mipmap Levels: " + std::to_string(Config::mipmapLevels));
+	});
 }
 
 void SettingsMenuState::addInputButtons() {

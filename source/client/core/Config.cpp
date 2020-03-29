@@ -48,6 +48,7 @@ float Config::cameraFOV = 70.0f;
 u16 Config::screenWidth = 1600;
 u16 Config::screenHeight = 1050;
 u8 Config::guiScale = 3;
+u8 Config::mipmapLevels = 0;
 
 // Input
 u8 Config::mouseSensitivity = 8;
@@ -84,6 +85,7 @@ void Config::loadConfigFromFile(const char *file) {
 			screenWidth = lua["screenWidth"].get_or(screenWidth);
 			screenHeight = lua["screenHeight"].get_or(screenHeight);
 			guiScale = lua["guiScale"].get_or(guiScale);
+			mipmapLevels = lua["mipmapLevels"].get_or(mipmapLevels);
 
 			mouseSensitivity = lua["mouseSensitivity"].get_or(mouseSensitivity);
 

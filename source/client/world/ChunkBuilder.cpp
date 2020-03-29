@@ -260,6 +260,8 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 			m_vertices[Layer::Liquid].emplace_back(vertices[v]);
 		else if (block.drawType() == BlockDrawType::Glass)
 			m_vertices[Layer::Glass].emplace_back(vertices[v]);
+		else if (block.colorMultiplier() != gk::Color::White)
+			m_vertices[Layer::NoMipMap].emplace_back(vertices[v]);
 		else
 			m_vertices[Layer::Solid].emplace_back(vertices[v]);
 	};

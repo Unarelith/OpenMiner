@@ -104,6 +104,18 @@ void TextureAtlas::packTextures() {
 		throw EXCEPTION("Failed to save texture to: test_atlas.png. Reason:", IMG_GetError());
 
 	m_texture.loadFromSurface(atlas.get());
+
+	gk::Texture::bind(&m_texture);
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	gk::Texture::bind(nullptr);
 }
 
 void TextureAtlas::loadFromRegistry(const std::string &texturePack) {
