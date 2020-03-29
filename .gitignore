@@ -1,3 +1,7 @@
+# Texture packs
+texturepacks
+!texturepacks/minecraft
+
 # Temporary editor files
 \#*#
 .#*
@@ -59,4 +63,5 @@ openminer_server
 *.zip
 test_atlas.png
 config.lua
+TODO
 

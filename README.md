@@ -98,7 +98,7 @@ This list is non exhaustive.
 - Networking ([#20](https://github.com/Unarelith/OpenMiner/pull/20))
 - Chat system with support for commands ([#57](https://github.com/Unarelith/OpenMiner/pull/57))
 - Lua API
-	- Block/item/recipe definition
+	- Block/item/recipe/biome/tree/sky/dimension definition
 	- Custom GUI creation
 - Special blocks (workbench, furnace)
 - Block metadata
