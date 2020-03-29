@@ -23,6 +23,15 @@ gui:inventory {
 
 ## Attributes
 
+### `filter`
+
+Use a group as a filter for this inventory widget.
+
+Example:
+```
+filter = "group:om_fuel"
+```
+
 ### `inventory`
 
 Details of the inventory to use.
