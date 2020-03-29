@@ -118,7 +118,11 @@ mod:block {
 mod:block {
 	id = "oak_planks",
 	name = "Oak Wood Planks",
-	tiles = "oak_planks.png"
+	tiles = "oak_planks.png",
+
+	groups = {
+		om_planks = 1
+	}
 }
 
 mod:block {

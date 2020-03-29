@@ -109,6 +109,17 @@ class Block : public ISerializable {
 		const std::string &inventoryImage() const { return m_inventoryImage; }
 		void setInventoryImage(const std::string &inventoryImage) { m_inventoryImage = inventoryImage; }
 
+		void addGroup(const std::string &name, u16 value) { m_groups.emplace(name, value); }
+		bool hasGroup(const std::string &name) const { return m_groups.find(name) != m_groups.end(); }
+
+		u16 getGroupValue(const std::string &name) const {
+			auto it = m_groups.find(name);
+			if (it == m_groups.end())
+				return 0;
+
+			return it->second;
+		}
+
 	protected:
 		glm::vec4 getTexCoordsFromID(int textureID) const;
 
@@ -141,6 +152,8 @@ class Block : public ISerializable {
 		bool m_isRotatable = false;
 
 		std::string m_inventoryImage;
+
+		std::unordered_map<std::string, u16> m_groups;
 };
 
 #endif // BLOCK_HPP_

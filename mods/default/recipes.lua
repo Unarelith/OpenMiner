@@ -513,7 +513,7 @@ mod:crafting_recipe {
 		'#'
 	},
 
-	keys = {['#'] = "default:oak_planks"}
+	keys = {['#'] = "group:om_planks"}
 }
 
 -- Planks
@@ -536,7 +536,7 @@ mod:crafting_recipe {
 		"##",
 		"##"
 	},
-	keys = {["#"] = "default:oak_planks"}
+	keys = {["#"] = "group:om_planks"}
 }
 
 -- Furnace
