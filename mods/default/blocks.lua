@@ -245,7 +245,7 @@ mod:block {
 mod:block {
 	id = "cactus",
 	name = "Cactus",
-	tiles = {"cactus_top.png", "cactus_side.png"},
+	tiles = {"cactus_top.png", "cactus_bottom.png", "cactus_side.png"},
 
 	draw_type = "cactus",
 	bounding_box = {1/16, 1/16, 0, 14/16, 14/16, 1};
