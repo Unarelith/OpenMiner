@@ -123,6 +123,15 @@ Possible values:
 - `block`: Set a specific block as the source
 - `temp`: Set a temporary inventory as the source
 
+### `is_read_only`
+
+Defines if the inventory is read-only or not.
+
+Example:
+```lua
+is_read_only = false -- this is the default value
+```
+
 ### `name`
 
 Name of the widget. **Mandatory field.**

@@ -37,7 +37,7 @@ class ClientCommandHandler;
 class InventoryWidget : public AbstractInventoryWidget {
 	public:
 		InventoryWidget(ClientCommandHandler &client, bool isReadOnly = false, Widget *parent = nullptr)
-			: AbstractInventoryWidget(parent), m_client(client), m_isReadOnly(isReadOnly) {}
+			: AbstractInventoryWidget(parent, isReadOnly), m_client(client) {}
 
 		void init(Inventory &inventory, u16 offset = 0, u16 size = 0);
 
@@ -53,8 +53,6 @@ class InventoryWidget : public AbstractInventoryWidget {
 		void sendUpdatePacket();
 
 		Inventory *inventory() const { return m_inventory; }
-
-		bool isReadOnly() const { return m_isReadOnly; }
 
 		ItemWidget *currentItemWidget() const { return m_currentItemWidget; }
 
@@ -72,8 +70,6 @@ class InventoryWidget : public AbstractInventoryWidget {
 
 		u16 m_offset = 0;
 		u16 m_size = 0;
-
-		bool m_isReadOnly = false;
 
 		std::vector<ItemWidget> m_itemWidgets;
 		ItemWidget *m_currentItemWidget = nullptr;

@@ -31,7 +31,8 @@
 
 class AbstractInventoryWidget : public Widget {
 	public:
-		AbstractInventoryWidget(Widget *parent) : Widget(parent) {}
+		AbstractInventoryWidget(Widget *parent, bool isReadOnly = false)
+			: Widget(parent), m_isReadOnly(isReadOnly) {}
 
 		virtual bool sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) = 0;
 		virtual bool receiveItemStack(const ItemWidget *itemStack, AbstractInventoryWidget *src) = 0;
@@ -44,10 +45,14 @@ class AbstractInventoryWidget : public Widget {
 		void setFilter(const std::string &filter) { m_filter = filter; }
 		bool doItemMatchFilter(const Item &item);
 
+		bool isReadOnly() const { return m_isReadOnly; }
+
 	protected:
 		std::vector<std::string> m_shiftDestination;
 
 		std::string m_filter;
+
+		bool m_isReadOnly = false;
 };
 
 #endif // ABSTRACTINVENTORYWIDGET_HPP_

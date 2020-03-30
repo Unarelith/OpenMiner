@@ -171,7 +171,7 @@ void MouseItemWidget::draggingBehaviour(ItemWidget *newItemWidget) {
 
 void MouseItemWidget::updateCurrentItem(ItemWidget *currentItemWidget) {
 	if (currentItemWidget) {
-		bool doItemMatchFilter = !m_currentInventoryWidget || m_currentInventoryWidget->doItemMatchFilter(m_draggedStack.item());
+		bool doItemMatchFilter = !m_currentInventoryWidget || (m_currentInventoryWidget->doItemMatchFilter(m_draggedStack.item()) && !m_currentInventoryWidget->isReadOnly());
 		if (m_isDragging && currentItemWidget != m_currentItemWidget && doItemMatchFilter)
 			draggingBehaviour(currentItemWidget);
 

@@ -99,6 +99,8 @@ mod:block {
 				count = 1,
 			},
 
+			is_read_only = true,
+
 			size = {x = 1, y = 1},
 
 			shift_destination = "inv_main,inv_hotbar",

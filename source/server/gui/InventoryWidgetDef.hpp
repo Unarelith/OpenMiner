@@ -56,6 +56,7 @@ class InventoryWidgetDef : public WidgetDef {
 		u16 m_count = 0;
 
 		std::string m_filter;
+		bool m_isReadOnly = false;
 };
 
 #endif // INVENTORYWIDGETDEF_HPP_
