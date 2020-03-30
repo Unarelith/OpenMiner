@@ -67,7 +67,7 @@ class ChunkBuilder {
 			Torch
 		};
 
-		u8 getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::Vector3i &offset, const ClientChunk &chunk);
+		u8 getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::Vector3i &offset, const gk::Vector3i &normal, const ClientChunk &chunk);
 		u8 getLightForVertex(Light light, s8f x, s8f y, s8f z, const gk::Vector3i &offset, const gk::Vector3i &normal, const ClientChunk &chunk);
 
 		std::array<std::vector<gk::Vertex>, layers> m_vertices;

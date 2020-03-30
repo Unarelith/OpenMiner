@@ -249,7 +249,7 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 		else
 			vertices[v].lightValue[1] = chunk.lightmap().getTorchlight(x + normal.x, y + normal.y, z + normal.z);
 
-		vertices[v].ambientOcclusion = getAmbientOcclusion(x, y, z, *neighbourOfs[v], chunk);
+		vertices[v].ambientOcclusion = getAmbientOcclusion(x, y, z, *neighbourOfs[v], normal, chunk);
 	}
 
 	auto addVertex = [&](u8 v) {
@@ -331,14 +331,30 @@ inline void ChunkBuilder::addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk
 }
 
 // Based on this article: https://0fps.net/2013/07/03/ambient-occlusion-for-minecraft-like-worlds/
-inline u8 ChunkBuilder::getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::Vector3i &offset, const ClientChunk &chunk) {
-	const Block &block0 = Registry::getInstance().getBlock(chunk.getBlock(x + offset.x, y,            z + offset.z));
-	const Block &block1 = Registry::getInstance().getBlock(chunk.getBlock(x,            y + offset.y, z + offset.z));
-	const Block &block2 = Registry::getInstance().getBlock(chunk.getBlock(x + offset.x, y + offset.y, z + offset.z));
+inline u8 ChunkBuilder::getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::Vector3i &offset, const gk::Vector3i &normal, const ClientChunk &chunk) {
+	gk::Vector3i minOffset{
+		(normal.x != 0) ? offset.x : 0,
+		(normal.y != 0) ? offset.y : 0,
+		(normal.z != 0) ? offset.z : 0
+	};
 
-	bool side1  = block0.id() != 0 && block0.drawType() != BlockDrawType::XShape;
-	bool side2  = block1.id() != 0 && block1.drawType() != BlockDrawType::XShape;
-	bool corner = block2.id() != 0 && block2.drawType() != BlockDrawType::XShape;
+	const Block *blocks[4] = {
+		&Registry::getInstance().getBlock(chunk.getBlock(x + minOffset.x, y + minOffset.y, z + offset.z)),
+		&Registry::getInstance().getBlock(chunk.getBlock(x + offset.x,    y + minOffset.y, z + minOffset.z)),
+		&Registry::getInstance().getBlock(chunk.getBlock(x + minOffset.x, y + offset.y,    z + minOffset.z)),
+		&Registry::getInstance().getBlock(chunk.getBlock(x + offset.x,    y + offset.y,    z + offset.z))
+	};
+
+	bool blockPresence[4] = {
+		blocks[0]->id() != 0 && blocks[0]->isOpaque(),
+		blocks[1]->id() != 0 && blocks[1]->isOpaque(),
+		blocks[2]->id() != 0 && blocks[2]->isOpaque(),
+		blocks[3]->id() != 0 && blocks[3]->isOpaque()
+	};
+
+	bool side1 = blockPresence[(minOffset.x != 0) ? 2 : 1];
+	bool side2 = blockPresence[(minOffset.z != 0) ? 2 : 0];
+	bool corner = blockPresence[3];
 
 	return (side1 && side2) ? 0 : 3 - (side1 + side2 + corner);
 }
