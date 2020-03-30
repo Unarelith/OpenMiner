@@ -49,6 +49,7 @@ u16 Config::screenWidth = 1600;
 u16 Config::screenHeight = 1050;
 u8 Config::guiScale = 3;
 u8 Config::mipmapLevels = 0;
+float Config::aoStrength = 0.5f;
 
 // Input
 u8 Config::mouseSensitivity = 8;
@@ -86,6 +87,7 @@ void Config::loadConfigFromFile(const char *file) {
 			screenHeight = lua["screenHeight"].get_or(screenHeight);
 			guiScale = lua["guiScale"].get_or(guiScale);
 			mipmapLevels = lua["mipmapLevels"].get_or(mipmapLevels);
+			aoStrength = lua["aoStrength"].get_or(aoStrength);
 
 			mouseSensitivity = lua["mouseSensitivity"].get_or(mouseSensitivity);
 

@@ -380,15 +380,22 @@ inline u8 ChunkBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, cons
 		(normal.z != 0) ? offset.z : 0
 	};
 
-	// Get light values for surrounding nodes
-	s8 lightValues[4] = {
-		getLight(&chunk, x + minOffset.x, y + minOffset.y, z + offset.z),
-		getLight(&chunk, x + offset.x,    y + minOffset.y, z + minOffset.z),
-		getLight(&chunk, x + minOffset.x, y + offset.y,    z + minOffset.z),
-		getLight(&chunk, x + offset.x,    y + offset.y,    z + offset.z),
+	gk::Vector3i surroundingBlocks[4]{
+		{x + minOffset.x, y + minOffset.y, z + offset.z},
+		{x + offset.x,    y + minOffset.y, z + minOffset.z},
+		{x + minOffset.x, y + offset.y,    z + minOffset.z},
+		{x + offset.x,    y + offset.y,    z + offset.z}
 	};
 
-	u8 count = 0, total = 0;
+	// Get light values for surrounding nodes
+	s8 lightValues[4] = {
+		getLight(&chunk, surroundingBlocks[0].x, surroundingBlocks[0].y, surroundingBlocks[0].z),
+		getLight(&chunk, surroundingBlocks[1].x, surroundingBlocks[1].y, surroundingBlocks[1].z),
+		getLight(&chunk, surroundingBlocks[2].x, surroundingBlocks[2].y, surroundingBlocks[2].z),
+		getLight(&chunk, surroundingBlocks[3].x, surroundingBlocks[3].y, surroundingBlocks[3].z),
+	};
+
+	float count = 0, total = 0;
 	for (u8 i = 0 ; i < 4 ; ++i) {
 		// Fix light approximation
 		// if (i == 3 && lightValues[i] > lightValues[0] && !lightValues[1] && !lightValues[2])
@@ -396,8 +403,9 @@ inline u8 ChunkBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, cons
 
 		// If the chunk is initialized, add the light value to the total
 		if (lightValues[i] != -1) {
-			total += lightValues[i];
-			++count;
+			float strength = ((surroundingBlocks[i] - normal == gk::Vector3i{x, y, z}) ? 1 : Config::aoStrength);
+			total += lightValues[i] * strength;
+			count += strength;
 		}
 	}
 

@@ -25,6 +25,7 @@ screenWidth = 1600
 screenHeight = 1050
 guiScale = 3
 mipmapLevels = 0
+aoStrength = 0.5
 
 -- Input
 mouseSensitivity = 8

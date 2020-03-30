@@ -60,15 +60,20 @@ class ChunkBuilder {
 		void addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk &chunk, const Block &block,
 		             const gk::Vector3i &normal, const glm::vec3 *const vertexPos[4],
 		             const gk::Vector3i *const neighbourOfs[4]);
-		void addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk, const Block &block, const glm::vec3 *const vertexPos[2][4]);
+
+		void addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk, const Block &block,
+		              const glm::vec3 *const vertexPos[2][4]);
 
 		enum class Light {
 			Sun,
 			Torch
 		};
 
-		u8 getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::Vector3i &offset, const gk::Vector3i &normal, const ClientChunk &chunk);
-		u8 getLightForVertex(Light light, s8f x, s8f y, s8f z, const gk::Vector3i &offset, const gk::Vector3i &normal, const ClientChunk &chunk);
+		u8 getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::Vector3i &offset,
+		                       const gk::Vector3i &normal, const ClientChunk &chunk);
+
+		u8 getLightForVertex(Light light, s8f x, s8f y, s8f z, const gk::Vector3i &offset,
+		                     const gk::Vector3i &normal, const ClientChunk &chunk);
 
 		std::array<std::vector<gk::Vertex>, layers> m_vertices;
 

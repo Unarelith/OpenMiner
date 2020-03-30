@@ -53,6 +53,7 @@ namespace Config {
 	extern u16 screenHeight;
 	extern u8 guiScale;
 	extern u8 mipmapLevels;
+	extern float aoStrength;
 
 	// Input
 	extern u8 mouseSensitivity;

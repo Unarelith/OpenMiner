@@ -34,6 +34,7 @@
 #include <gk/core/Debug.hpp>
 #include <gk/core/EventHandler.hpp>
 #include <gk/core/Mouse.hpp>
+#include <gk/core/Utils.hpp>
 
 #include "Config.hpp"
 #include "Events.hpp"
@@ -195,6 +196,16 @@ void SettingsMenuState::addGraphicsButtons() {
 	m_menuWidget.addButton("Mipmap Levels: " + std::to_string(Config::mipmapLevels), [] (TextButton &button) {
 		Config::mipmapLevels = (Config::mipmapLevels + 1) % 5;
 		button.setText("Mipmap Levels: " + std::to_string(Config::mipmapLevels));
+	});
+
+	m_menuWidget.addButton("AO Strength: " + gk::to_string(Config::aoStrength, 2), [] (TextButton &button) {
+		Config::aoStrength += 0.25f;
+		if (Config::aoStrength > 1.5f)
+			Config::aoStrength = 0.f;
+
+		button.setText("AO Strength: " + gk::to_string(Config::aoStrength, 2));
+
+		World::isReloadRequested = true;
 	});
 }
 
