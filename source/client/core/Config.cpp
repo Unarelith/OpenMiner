@@ -49,7 +49,7 @@ u16 Config::screenWidth = 1600;
 u16 Config::screenHeight = 1050;
 u8 Config::guiScale = 3;
 u8 Config::mipmapLevels = 0;
-float Config::aoStrength = 0.5f;
+float Config::aoStrength = 1.0f;
 
 // Input
 u8 Config::mouseSensitivity = 8;
