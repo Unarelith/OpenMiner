@@ -30,6 +30,26 @@
 #include "Registry.hpp"
 #include "Tree.hpp"
 
+void LuaMod::commit() {
+	while (!m_defs.empty()) {
+		auto &it = m_defs.front();
+
+		switch (it.first) {
+			case DefinitionType::Block:           m_blockLoader.loadBlock(it.second);            break;
+			case DefinitionType::Item:            m_itemLoader.loadItem(it.second);              break;
+			case DefinitionType::CraftingRecipe:  m_recipeLoader.loadCraftingRecipe(it.second);  break;
+			case DefinitionType::SmeltingRecipe:  m_recipeLoader.loadSmeltingRecipe(it.second);  break;
+			case DefinitionType::Sky:             m_skyLoader.loadSky(it.second);                break;
+			case DefinitionType::Tree:            m_biomeLoader.loadTree(it.second);             break;
+			case DefinitionType::Biome:           m_biomeLoader.loadBiome(it.second);            break;
+			case DefinitionType::Dimension:       m_dimensionLoader.loadDimension(it.second);    break;
+			default: break;
+		}
+
+		m_defs.pop();
+	}
+}
+
 void LuaMod::initUsertype(sol::state &lua) {
 	lua.new_usertype<LuaMod>("LuaMod",
 		sol::constructors<LuaMod(std::string)>(),
@@ -46,34 +66,34 @@ void LuaMod::initUsertype(sol::state &lua) {
 }
 
 void LuaMod::registerBlock(const sol::table &table) {
-	m_blockLoader.loadBlock(table);
+	m_defs.emplace(DefinitionType::Block, table);
 }
 
 void LuaMod::registerItem(const sol::table &table) {
-	m_itemLoader.loadItem(table);
+	m_defs.emplace(DefinitionType::Item, table);
 }
 
 void LuaMod::registerCraftingRecipe(const sol::table &table) {
-	m_recipeLoader.loadCraftingRecipe(table);
+	m_defs.emplace(DefinitionType::CraftingRecipe, table);
 }
 
 void LuaMod::registerSmeltingRecipe(const sol::table &table) {
-	m_recipeLoader.loadSmeltingRecipe(table);
+	m_defs.emplace(DefinitionType::SmeltingRecipe, table);
 }
 
 void LuaMod::registerSky(const sol::table &table) {
-	m_skyLoader.loadSky(table);
+	m_defs.emplace(DefinitionType::Sky, table);
 }
 
 void LuaMod::registerTree(const sol::table &table) {
-	m_biomeLoader.loadTree(table);
+	m_defs.emplace(DefinitionType::Tree, table);
 }
 
 void LuaMod::registerBiome(const sol::table &table) {
-	m_biomeLoader.loadBiome(table);
+	m_defs.emplace(DefinitionType::Biome, table);
 }
 
 void LuaMod::registerDimension(const sol::table &table) {
-	m_dimensionLoader.loadDimension(table);
+	m_defs.emplace(DefinitionType::Dimension, table);
 }
 

@@ -27,7 +27,11 @@
 #ifndef SERVERMODLOADER_HPP_
 #define SERVERMODLOADER_HPP_
 
-class LuaMod;
+#include <string>
+#include <unordered_map>
+
+#include "LuaMod.hpp"
+
 class ScriptEngine;
 
 class ServerModLoader {
@@ -36,10 +40,12 @@ class ServerModLoader {
 
 		void loadMods();
 
-		void registerMod(const LuaMod &mod);
+		void registerMod(LuaMod &mod);
 
 	private:
 		ScriptEngine &m_scriptEngine;
+
+		std::unordered_map<std::string, LuaMod> m_mods;
 };
 
 #endif // SERVERMODLOADER_HPP_

@@ -325,7 +325,7 @@ mod:block {
 	end
 }
 
-dofile("mods/default/blocks/workbench.lua")
-dofile("mods/default/blocks/furnace.lua")
-dofile("mods/default/blocks/door.lua")
+dofile("blocks/workbench.lua")
+dofile("blocks/furnace.lua")
+dofile("blocks/door.lua")
 

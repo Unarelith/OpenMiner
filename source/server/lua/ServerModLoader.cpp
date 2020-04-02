@@ -39,10 +39,14 @@ void ServerModLoader::loadMods() {
 	m_scriptEngine.luaCore().setModLoader(this);
 
 	try {
+		fs::path basePath = fs::current_path();
 		fs::directory_iterator dir("mods/");
 		for (const auto &entry : dir) {
 			if (fs::exists(entry.path().string() + "/init.lua")) {
-				m_scriptEngine.lua().safe_script_file(entry.path().string() + "/init.lua");
+				fs::current_path(entry.path().string());
+				m_scriptEngine.lua().safe_script_file("init.lua");
+				fs::current_path(basePath);
+
 				std::cout << "Mod '" + entry.path().filename().string() + "' loaded" << std::endl;
 			}
 			else
@@ -53,9 +57,20 @@ void ServerModLoader::loadMods() {
 		std::cerr << e.what() << std::endl;
 		return;
 	}
+
+	for (auto &it : m_mods) {
+		// DEBUG("Applying mod '" + it.second.id() + "'...");
+		it.second.commit();
+	}
 }
 
-void ServerModLoader::registerMod(const LuaMod &mod) {
-	DEBUG("Registering mod", mod.id());
+void ServerModLoader::registerMod(LuaMod &mod) {
+	// DEBUG("Registering mod '" + mod.id() + "'...");
+
+	auto it = m_mods.find(mod.id());
+	if (it == m_mods.end())
+		m_mods.emplace(mod.id(), mod);
+	else
+		DEBUG("ERROR: The mod '" + mod.id() + "' has already been loaded. Mod name must be unique.");
 }
 

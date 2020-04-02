@@ -27,6 +27,8 @@
 #ifndef LUAMOD_HPP_
 #define LUAMOD_HPP_
 
+#include <queue>
+
 #include "LuaBiomeLoader.hpp"
 #include "LuaBlockLoader.hpp"
 #include "LuaDimensionLoader.hpp"
@@ -42,6 +44,8 @@ class LuaMod {
 		//        Check if this name != "group"
 		LuaMod(const std::string &id) : m_id(id) {}
 
+		void commit();
+
 		const std::string &id() const { return m_id; }
 
 		static void initUsertype(sol::state &lua);
@@ -55,6 +59,19 @@ class LuaMod {
 		void registerTree(const sol::table &table);
 		void registerBiome(const sol::table &table);
 		void registerDimension(const sol::table &table);
+
+		enum class DefinitionType {
+			Block,
+			Item,
+			CraftingRecipe,
+			SmeltingRecipe,
+			Sky,
+			Tree,
+			Biome,
+			Dimension,
+		};
+
+		std::queue<std::pair<DefinitionType, sol::table>> m_defs;
 
 		std::string m_id;
 

@@ -26,13 +26,13 @@
 --
 mod = LuaMod.new("default")
 
-dofile("mods/default/blocks.lua")
-dofile("mods/default/items.lua")
-dofile("mods/default/recipes.lua")
-dofile("mods/default/sky.lua")
-dofile("mods/default/trees.lua")
-dofile("mods/default/biomes.lua")
-dofile("mods/default/dimensions.lua")
+dofile("blocks.lua")
+dofile("items.lua")
+dofile("recipes.lua")
+dofile("sky.lua")
+dofile("trees.lua")
+dofile("biomes.lua")
+dofile("dimensions.lua")
 
 -- openminer:add_listener(EventType.OnBlockPlaced, function(pos, player, world, client, server)
 -- 	server:send_chat_message(0, "Block placed at " .. pos.x .. ";" .. pos.y .. ";" .. pos.z .. " by Client" .. player:client_id(), client);
