@@ -33,6 +33,7 @@
 #include <sol.hpp>
 
 class Registry;
+class ServerModLoader;
 
 enum class LuaEventType {
 	OnBlockPlaced,
@@ -57,13 +58,14 @@ class LuaCore {
 			}
 		}
 
-		Registry *registry() { return m_registry; }
 		void setRegistry(Registry *registry) { m_registry = registry; }
+		void setModLoader(ServerModLoader *modLoader) { m_modLoader = modLoader; }
 
 		static void initUsertype(sol::state &lua);
 
 	private:
 		Registry *m_registry = nullptr;
+		ServerModLoader *m_modLoader = nullptr;
 
 		std::unordered_multimap<LuaEventType, sol::unsafe_function> m_listeners;
 };

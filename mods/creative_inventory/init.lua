@@ -24,6 +24,7 @@
 --
 -- =====================================================================================
 --
+mod = LuaMod.new("creative_inventory")
 
 function show_creative_window(client, screen_width, screen_height, gui_scale)
 	items = {}
@@ -102,4 +103,6 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 
 	gui:show(client);
 end
+
+openminer.mod_loader:register_mod(mod)
 

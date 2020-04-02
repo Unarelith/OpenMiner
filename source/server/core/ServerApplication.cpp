@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "filesystem.hpp"
+#include <filesystem.hpp>
 
 #include "BlockGeometry.hpp"
 #include "ServerApplication.hpp"
@@ -67,7 +67,7 @@ void ServerApplication::init() {
 	m_registry.registerBlock<ServerBlock>({}, "_:air", "Air");
 	m_registry.registerItem({}, "_:air", "Air").setIsBlock(true);
 
-	loadMods();
+	m_modLoader.loadMods();
 
 	m_serverCommandHandler.setupCallbacks();
 
@@ -125,26 +125,6 @@ void ServerApplication::mainLoop() {
 		});
 
 		m_clock.waitForNextFrame();
-	}
-}
-
-void ServerApplication::loadMods() {
-	m_scriptEngine.init();
-
-	try {
-		fs::directory_iterator dir("mods/");
-		for (const auto &entry : dir) {
-			if (fs::exists(entry.path().string() + "/init.lua")) {
-				m_scriptEngine.lua().safe_script_file(entry.path().string() + "/init.lua");
-				std::cout << "Mod '" + entry.path().filename().string() + "' loaded" << std::endl;
-			}
-			else
-				DEBUG("WARNING: The mod '" + entry.path().filename().string() + "' doesn't contain an 'init.lua' file.");
-		}
-	}
-	catch (const sol::error &e) {
-		std::cerr << e.what() << std::endl;
-		return;
 	}
 }
 

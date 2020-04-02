@@ -135,3 +135,5 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 	gui:show(client)
 end
 
+openminer.mod_loader:register_mod(mod)
+

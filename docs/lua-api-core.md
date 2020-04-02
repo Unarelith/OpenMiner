@@ -1,10 +1,16 @@
 # Lua API: Core API
 
+## Attributes
+
+### `openminer.registry`
+
+`Registry` instance of the server. See [C++ classes in lua#Registry](/lua-api-cpp#registry) for more details.
+
+### `openminer.mod_loader`
+
+Mod loader instance in the server. See [C++ classes in lua#ServerModLoader](/lua-api-cpp#servermodloader) for more details.
+
 ## Functions
-
-### `openminer:registry()`
-
-This function returns the `Registry` instance of the server.
 
 ### `openminer:add_listener(event_type, listener)`
 

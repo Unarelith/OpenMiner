@@ -32,6 +32,7 @@
 #include "ScriptEngine.hpp"
 #include "ServerBlock.hpp"
 #include "ServerCommandHandler.hpp"
+#include "ServerModLoader.hpp"
 #include "ServerPlayer.hpp"
 #include "ServerWorld.hpp"
 
@@ -181,6 +182,10 @@ void ScriptEngine::initUsertypes() {
 	m_lua.new_usertype<ServerCommandHandler>("ServerCommandHandler",
 		"send_player_change_dimension", &ServerCommandHandler::sendPlayerChangeDimension,
 		"send_chat_message", &ServerCommandHandler::sendChatMessage
+	);
+
+	m_lua.new_usertype<ServerModLoader>("ServerModLoader",
+		"register_mod", &ServerModLoader::registerMod
 	);
 
 	LuaCore::initUsertype(m_lua);

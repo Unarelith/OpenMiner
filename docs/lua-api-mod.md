@@ -50,6 +50,8 @@ mod:smelting_recipe {
 	input = {id = "mymod:myitem", amount = 1},
 	output = {id = "mymod:myblock", amount = 1}
 }
+
+openminer.mod_loader:register_mod(mod)
 ```
 
 ## Functions

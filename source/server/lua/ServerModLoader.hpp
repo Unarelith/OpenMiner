@@ -24,26 +24,22 @@
  *
  * =====================================================================================
  */
-#include "LuaCore.hpp"
-#include "Registry.hpp"
-#include "ServerModLoader.hpp"
-#include "ServerWorld.hpp"
+#ifndef SERVERMODLOADER_HPP_
+#define SERVERMODLOADER_HPP_
 
-void LuaCore::addListener(LuaEventType eventType, const sol::function &listener) {
-	m_listeners.emplace(eventType, listener);
-}
+class LuaMod;
+class ScriptEngine;
 
-void LuaCore::initUsertype(sol::state &lua) {
-	lua["EventType"] = lua.create_table_with(
-		"OnBlockPlaced", LuaEventType::OnBlockPlaced,
-		"OnBlockActivated", LuaEventType::OnBlockActivated
-	);
+class ServerModLoader {
+	public:
+		ServerModLoader(ScriptEngine &scriptEngine) : m_scriptEngine(scriptEngine) {}
 
-	lua.new_usertype<LuaCore>("LuaCore",
-		"add_listener", &LuaCore::addListener,
+		void loadMods();
 
-		"registry", &LuaCore::m_registry,
-		"mod_loader", &LuaCore::m_modLoader
-	);
-}
+		void registerMod(const LuaMod &mod);
 
+	private:
+		ScriptEngine &m_scriptEngine;
+};
+
+#endif // SERVERMODLOADER_HPP_

@@ -24,26 +24,38 @@
  *
  * =====================================================================================
  */
-#include "LuaCore.hpp"
-#include "Registry.hpp"
-#include "ServerModLoader.hpp"
-#include "ServerWorld.hpp"
+#include <gk/core/Debug.hpp>
 
-void LuaCore::addListener(LuaEventType eventType, const sol::function &listener) {
-	m_listeners.emplace(eventType, listener);
+#include <filesystem.hpp>
+
+#include "LuaMod.hpp"
+#include "ScriptEngine.hpp"
+#include "ServerModLoader.hpp"
+
+namespace fs = ghc::filesystem;
+
+void ServerModLoader::loadMods() {
+	m_scriptEngine.init();
+	m_scriptEngine.luaCore().setModLoader(this);
+
+	try {
+		fs::directory_iterator dir("mods/");
+		for (const auto &entry : dir) {
+			if (fs::exists(entry.path().string() + "/init.lua")) {
+				m_scriptEngine.lua().safe_script_file(entry.path().string() + "/init.lua");
+				std::cout << "Mod '" + entry.path().filename().string() + "' loaded" << std::endl;
+			}
+			else
+				DEBUG("WARNING: The mod '" + entry.path().filename().string() + "' doesn't contain an 'init.lua' file.");
+		}
+	}
+	catch (const sol::error &e) {
+		std::cerr << e.what() << std::endl;
+		return;
+	}
 }
 
-void LuaCore::initUsertype(sol::state &lua) {
-	lua["EventType"] = lua.create_table_with(
-		"OnBlockPlaced", LuaEventType::OnBlockPlaced,
-		"OnBlockActivated", LuaEventType::OnBlockActivated
-	);
-
-	lua.new_usertype<LuaCore>("LuaCore",
-		"add_listener", &LuaCore::addListener,
-
-		"registry", &LuaCore::m_registry,
-		"mod_loader", &LuaCore::m_modLoader
-	);
+void ServerModLoader::registerMod(const LuaMod &mod) {
+	DEBUG("Registering mod", mod.id());
 }
 

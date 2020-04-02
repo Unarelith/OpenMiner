@@ -103,6 +103,10 @@
 - `void send_player_change_dimension(u16 clientID, int x, int y, int z, u16 dimension, ClientInfo client)`
 - `void send_chat_message(u16 senderID, string message, ClientInfo client)`
 
+## ServerModLoader
+
+- `void register_mod(LuaMod mod)` (see [Lua Mod API](/lua-api-mod#example))
+
 ## World
 
 - `u16 get_block(int x, int y, int z)`

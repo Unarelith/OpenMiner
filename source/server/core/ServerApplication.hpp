@@ -36,6 +36,7 @@
 #include "ScriptEngine.hpp"
 #include "Server.hpp"
 #include "ServerCommandHandler.hpp"
+#include "ServerModLoader.hpp"
 #include "ServerPlayer.hpp"
 #include "WorldController.hpp"
 
@@ -57,8 +58,6 @@ class ServerApplication {
 		void setPort(u16 port) { m_port = port; }
 
 	private:
-		void loadMods();
-
 		void update();
 		void mainLoop();
 
@@ -67,6 +66,7 @@ class ServerApplication {
 		gk::EventHandler *m_eventHandler = nullptr;
 
 		ScriptEngine m_scriptEngine;
+		ServerModLoader m_modLoader{m_scriptEngine};
 
 		Registry m_registry;
 
