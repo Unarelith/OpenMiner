@@ -57,7 +57,7 @@ void InventoryWidgetDef::loadFromLuaTable(const sol::table &table) {
 		m_height = size.value()["y"];
 	}
 	else
-		DEBUG("ERROR: For '" + m_name + "': Inventory size must be defined");
+		gkError() << "For" << m_name << ": Inventory size must be defined";
 }
 
 void InventoryWidgetDef::loadInventory(const sol::table &table) {
@@ -84,13 +84,12 @@ void InventoryWidgetDef::loadInventory(const sol::table &table) {
 				m_blockPosition.z = blockTable.value()["z"];
 			}
 			else
-				DEBUG("ERROR: For '" + m_name + "': Block position must be defined");
+				gkError() << "For" << m_name << ": Block position must be defined";
 		}
-		else {
-			DEBUG("ERROR: For '" + m_name + "': Inventory source '" + m_inventory + "' is not valid");
-		}
+		else
+			gkError() << "For" << m_name << ": Inventory source" << m_inventory << "is not valid";
 	}
 	else
-		DEBUG("ERROR: For '" + m_name + "': 'inventory' field must be a table");
+		gkError() << "For" << m_name << ": 'inventory' field must be a table";
 }
 

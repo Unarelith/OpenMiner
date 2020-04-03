@@ -98,7 +98,7 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 			}
 
 			if (!dest) {
-				DEBUG("WARNING: Destination not found: '" + shiftDestination + "'");
+				gkWarning() << "Destination not found:" << shiftDestination;
 				return;
 			}
 
@@ -242,7 +242,7 @@ void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf:
 
 		BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
 		if (!data) {
-			DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
+			gkError() << "No inventory found at" << block.x << block.y << block.z;
 			return;
 		}
 
@@ -259,7 +259,7 @@ void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf:
 		else {
 			auto it = m_inventories.find(inventoryName);
 			if (it == m_inventories.end())
-				DEBUG("ERROR: Unable to find inventory '" + inventoryName + "' for widget '" + name + "'");
+				gkError() << "Unable to find inventory" << inventoryName << "for widget" << name;
 
 			widgetInventory = &it->second;
 		}
@@ -275,7 +275,7 @@ void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf:
 		inventoryWidget.setFilter(filter);
 	}
 	else {
-		DEBUG("ERROR: Inventory widget '" + name + "' is invalid");
+		gkError() << "Inventory widget" << name << " is invalid";
 	}
 }
 
@@ -292,7 +292,7 @@ void LuaGUIState::loadCraftingWidget(const std::string &name, s32 x, s32 y, sf::
 
 		BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
 		if (!data) {
-			DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
+			gkError() << "No inventory found at" << block.x << block.y << block.z;
 		}
 		else {
 			craftingInventory = &data->inventory;
@@ -315,7 +315,7 @@ void LuaGUIState::loadCraftingWidget(const std::string &name, s32 x, s32 y, sf::
 		craftingWidget.craftingResultInventoryWidget().setPosition(resultX, resultY);
 	}
 	else {
-		DEBUG("ERROR: Crafting inventory is invalid");
+		gkError() << "Crafting inventory is invalid";
 	}
 }
 
@@ -331,7 +331,7 @@ void LuaGUIState::loadProgressBarWidget(const std::string &, s32 x, s32 y, sf::P
 
 	BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
 	if (!data) {
-		DEBUG("ERROR: No inventory found at", block.x, block.y, block.z);
+		gkError() << "No inventory found at" << block.x << block.y << block.z;
 		return;
 	}
 

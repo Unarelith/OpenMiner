@@ -47,7 +47,7 @@ void ServerWorld::update() {
 				for (auto &client : m_server->server().info().clients())
 					sendChunkData(client, *it.second.get());
 
-				// DEBUG("Chunk updated at", it.second->x(), it.second->y(), it.second->z());
+				// gkDebug() << "Chunk updated at" << it.second->x() << it.second->y() << it.second->z();
 			}
 		}
 	}

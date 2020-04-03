@@ -54,8 +54,7 @@ float Config::aoStrength = 1.0f;
 // Input
 u8 Config::mouseSensitivity = 8;
 
-#include <iostream>
-
+#include <gk/core/Debug.hpp>
 #include <gk/core/Filesystem.hpp>
 
 #include <sol.hpp>
@@ -91,10 +90,10 @@ void Config::loadConfigFromFile(const char *file) {
 
 			mouseSensitivity = lua["mouseSensitivity"].get_or(mouseSensitivity);
 
-			std::cout << "Config file loaded successfully" << std::endl;
+			gkInfo() << "Config file loaded successfully";
 		}
 		catch (sol::error &e) {
-			std::cerr << e.what() << std::endl;
+			gkError() << e.what();
 		}
 	}
 }

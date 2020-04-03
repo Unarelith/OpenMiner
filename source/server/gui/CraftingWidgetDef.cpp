@@ -67,7 +67,7 @@ void CraftingWidgetDef::loadInventory(const sol::table &table) {
 				m_blockPosition.z = blockTable.value()["z"];
 			}
 			else
-				DEBUG("ERROR: For '" + m_name + "': Block position must be defined")
+				gkError() << "For" << m_name << ": Block position must be defined";
 
 			m_offset = inventoryTable["offset"].get_or<u16>(0);
 			m_size = inventoryTable["size"].get_or<u16>(3);
@@ -76,10 +76,10 @@ void CraftingWidgetDef::loadInventory(const sol::table &table) {
 			m_size = inventoryTable["size"].get_or<u16>(3);
 		}
 		else {
-			DEBUG("ERROR: For '" + m_name + "': Inventory source '" + m_inventory + "' is not valid");
+			gkError() << "For" << m_name << ": Inventory source" << m_inventory + "is not valid";
 		}
 	}
 	else
-		DEBUG("ERROR: For '" + m_name + "': 'inventory' field must be a table");
+		gkError() << "For" << m_name << ": 'inventory' field must be a table";
 }
 

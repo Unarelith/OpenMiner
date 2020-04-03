@@ -215,7 +215,7 @@ void ClientWorld::createChunkNeighbours(ClientChunk *chunk) {
 
 void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (!target.getView() || !m_camera) {
-		DEBUG("ERROR: Trying to draw world without a camera");
+		gkError() << "Trying to draw world without a camera";
 		return;
 	}
 

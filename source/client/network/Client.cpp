@@ -112,14 +112,14 @@ void Client::update() {
 		Network::Command command;
 		packet >> command;
 
-		// std::cout << "UDP Message of type '" << Network::commandToString(command) << "' received from: " << senderAddress << ":" << senderPort << std::endl;
+		// gkDebug() << "UDP Message of type" << Network::commandToString(command) << "received from:" << senderAddress << ":" << senderPort;
 	}
 
 	while (m_tcpSocket->receive(packet) == sf::Socket::Done) {
 		Network::Command command;
 		packet >> command;
 
-		// DEBUG("TCP message received:", Network::commandToString(command));
+		// gkDebug() << "TCP message received:" << Network::commandToString(command);
 
 		auto it = m_commands.find(command);
 		if (it != m_commands.end())

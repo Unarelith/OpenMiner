@@ -104,10 +104,10 @@ inline void LuaBlockLoader::loadDrawType(ServerBlock &block, const sol::table &t
 			if (it != drawTypes.end())
 				block.setDrawType(it->second);
 			else
-				DEBUG("ERROR: In '" + block.stringID() + "' definition: Block draw type invalid");
+				gkError() << "In" << block.stringID() << " definition: Block draw type invalid";
 		}
 		else
-			DEBUG("ERROR: In '" + block.stringID() + "' definition: Block draw type must be a string");
+			gkError() << "In" << block.stringID() << " definition: Block draw type must be a string";
 	}
 }
 
@@ -146,7 +146,7 @@ inline void LuaBlockLoader::loadGroups(ServerBlock &block, Item &item, const sol
 			}
 		}
 		else
-			DEBUG("ERROR: For block '" + block.stringID() + "': 'groups' should be a table");
+			gkError() << "For block" << block.stringID() << ": 'groups' should be a table";
 	}
 }
 

@@ -48,7 +48,7 @@ void ProgressBarWidgetDef::loadFromLuaTable(const sol::table &table) {
 		m_blockPosition.z = blockTable.value()["z"];
 	}
 	else {
-		DEBUG("ERROR: Attribute 'block' not defined for bar '" + m_name + "'");
+		gkError() << "Attribute 'block' not defined for bar" << m_name;
 		return;
 	}
 
@@ -82,10 +82,10 @@ inline void ProgressBarWidgetDef::loadType(const sol::table &table) {
 			if (it != types.end())
 				m_type = u8(it->second);
 			else
-				DEBUG("ERROR: In '" + m_name + "' definition: Type invalid");
+				gkError() << "In" << m_name << "definition: Type invalid";
 		}
 		else
-			DEBUG("ERROR: In '" + m_name + "' definition: Type must be a string");
+			gkError() << "In" << m_name << "definition: Type must be a string";
 	}
 }
 

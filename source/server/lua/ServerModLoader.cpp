@@ -55,20 +55,20 @@ void ServerModLoader::loadMods() {
 
 			fs::current_path(basePath);
 
-			std::cout << "Mod '" + entry.path().filename().string() + "' loaded" << std::endl;
+			gkInfo() << "Mod" << entry.path().filename().string() << "loaded";
 		}
 		else
-			DEBUG("WARNING: The mod '" + entry.path().filename().string() + "' doesn't contain an 'init.lua' file.");
+			gkWarning() << "The mod" << entry.path().filename().string() << "doesn't contain an 'init.lua' file.";
 	}
 
 	for (auto &it : m_mods) {
-		// DEBUG("Applying mod '" + it.second.id() + "'...");
+		// gkDebug() << "Applying mod" << it.second.id() << "...";
 		it.second.commit();
 	}
 }
 
 LuaMod &ServerModLoader::registerMod(const std::string &name) {
-	// DEBUG("Registering mod '" + mod.id() + "'...");
+	// gkDebug("Registering mod" << mod.id() << "...";
 
 	if (!gk::regexMatch(name, "^[A-Za-z0-9_]+$") || name == "group")
 		throw std::runtime_error("Mod name '" + name + "' is invalid.");

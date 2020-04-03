@@ -50,7 +50,7 @@ void LuaItemLoader::loadItem(const sol::table &table) const {
 			}
 		}
 		else
-			DEBUG("ERROR: For item '" + stringID + "': 'groups' should be a table");
+			gkError() << "For item" << stringID << ": 'groups' should be a table";
 	}
 }
 

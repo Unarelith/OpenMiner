@@ -44,10 +44,10 @@ void LuaDimensionLoader::loadDimension(const sol::table &table) const {
 			if (it.second.get_type() == sol::type::string)
 				dimension.addBiome(it.second.as<std::string>());
 			else
-				DEBUG("ERROR: For dimension '" + id + "': Invalid biome string");
+				gkError() << "For dimension" << id << ": Invalid biome string";
 		}
 	}
 	else
-		DEBUG("ERROR: For dimension '" + id + "': Invalid biome table");
+		gkError() << "For dimension" << id << ": Invalid biome table";
 }
 

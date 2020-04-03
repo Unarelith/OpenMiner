@@ -76,7 +76,7 @@ void ServerApplication::init() {
 
 	m_scriptEngine.luaCore().setRegistry(&m_registry);
 
-	std::cout << "Server is running on localhost:" << m_server.port() << std::endl;
+	gkInfo() << ("Server is running on localhost:" + std::to_string(m_server.port())).c_str();
 
 	if (m_eventHandler)
 		m_eventHandler->emplaceEvent<ServerOnlineEvent>(true, m_server.port());

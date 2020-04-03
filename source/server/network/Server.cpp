@@ -52,7 +52,7 @@ void Server::handleKeyState() {
 		u16 clientId;
 		packet >> command >> timestamp >> clientId;
 
-		// std::cout << "UDP Message of type '" << Network::commandToString(command) << "' received from: " << senderAddress << ":" << senderPort << std::endl;
+		// gkDebug() << "UDP Message of type" << Network::commandToString(command) << "received from:" << senderAddress << ":" << senderPort;
 
 		if (command == Network::Command::KeyState) {
 			ClientInfo *client = m_info.getClient(clientId);
@@ -65,7 +65,7 @@ void Server::handleKeyState() {
 					packet >> key >> isPressed;
 
 					if (client->inputHandler.keysPressed().at(key) != isPressed)
-						DEBUG((int)key, "changed state to", isPressed ? "true" : "false");
+						gkDebug() << (int)key << "changed state to" << (isPressed ? "true" : "false");
 
 					client->inputHandler.setKeyPressed(key, isPressed);
 				}
@@ -133,7 +133,7 @@ void Server::handleClientMessages() {
 				Network::Command command;
 				packet >> command;
 
-				// DEBUG("TCP message received:", Network::commandToString(command));
+				// gkDebug() << "TCP message received:" << Network::commandToString(command);
 
 				if (m_isRunning) {
 					for (auto &it : m_commands) {

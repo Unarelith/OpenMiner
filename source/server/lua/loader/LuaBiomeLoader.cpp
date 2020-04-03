@@ -43,7 +43,7 @@ void LuaBiomeLoader::loadTree(const sol::table &table) const {
 			tree.setTrunkHeight(trunkHeight["min"], trunkHeight["max"]);
 		}
 		else
-			DEBUG("ERROR: For tree '" + stringID + "': trunk_height must be a table");
+			gkError() << "For tree" << stringID << ": 'trunk_height' must be a table";
 	}
 
 	sol::object hasLeavesObject = table["has_leaves"];
@@ -52,7 +52,7 @@ void LuaBiomeLoader::loadTree(const sol::table &table) const {
 			tree.setHasLeaves(hasLeavesObject.as<bool>());
 		}
 		else
-			DEBUG("ERROR: For tree '" + stringID + "': has_leaves must be a boolean");
+			gkError() << "For tree" << stringID << ": 'has_leaves' must be a boolean";
 	}
 
 	sol::object leavesBlockObject = table["leaves_block"];
@@ -62,10 +62,10 @@ void LuaBiomeLoader::loadTree(const sol::table &table) const {
 			tree.setLeavesBlockID(Registry::getInstance().getBlockFromStringID(leavesBlock).id());
 		}
 		else
-			DEBUG("ERROR: For tree '" + stringID + "': leaves_block must be a string");
+			gkError() << "For tree" << stringID << ": 'leaves_block must be a string";
 	}
 	else if (tree.hasLeaves())
-		DEBUG("ERROR: For tree '" + stringID + "': leaves_block must be defined if has_leaves == true");
+		gkError() << "For tree" << stringID << ": 'leaves_block' must be defined if has_leaves == true";
 }
 
 void LuaBiomeLoader::loadBiome(const sol::table &table) const {
@@ -103,7 +103,7 @@ inline void LuaBiomeLoader::loadBiomeBlocks(Biome &biome, const sol::table &tabl
 		biome.setPortalFrameBlockID(Registry::getInstance().getBlockFromStringID(table["portal_frame"]).id());
 	}
 	else
-		DEBUG("ERROR: For '" + biome.stringID() + "': 'blocks' field must be a table");
+		gkError() << "For" << biome.stringID() << ": 'blocks' field must be a table";
 }
 
 inline void LuaBiomeLoader::loadTreePlacementEntries(Biome &biome, const sol::table &table) const {

@@ -193,7 +193,7 @@ void ServerCommandHandler::setupCallbacks() {
 			func(client, screenWidth, screenHeight, guiScale);
 		}
 		catch (const sol::error &error) {
-			DEBUG("Failed to send inventory GUI\n", error.what());
+			gkError() << "Failed to send inventory GUI: " << error.what();
 		}
 	});
 
@@ -208,7 +208,7 @@ void ServerCommandHandler::setupCallbacks() {
 			func(client, screenWidth, screenHeight, guiScale);
 		}
 		catch (const sol::error &error) {
-			DEBUG("Failed to send creative window GUI\n", error.what());
+			gkError() << "Failed to send creative window GUI: " << error.what();
 		}
 	});
 
@@ -236,7 +236,7 @@ void ServerCommandHandler::setupCallbacks() {
 		if (data)
 			packet >> data->inventory;
 		else
-			DEBUG("BlockInvUpdate: No block data found at", pos.x, pos.y, pos.z);
+			gkError() << "BlockInvUpdate: No block data found at" << pos.x << pos.y << pos.z;
 	});
 
 	m_server.setCommandCallback(Network::Command::BlockDataUpdate, [this](ClientInfo &client, sf::Packet &packet) {

@@ -39,7 +39,7 @@ void TextureAtlas::addFile(const std::string &path, const std::string &filename)
 
 	SurfacePtr surface{IMG_Load((path + filename).c_str()), &SDL_FreeSurface};
 	if(!surface) {
-		DEBUG("WARNING: Failed to load texture:", path + filename);
+		gkWarning() << "Failed to load texture:" << path + filename;
 		return;
 	}
 
