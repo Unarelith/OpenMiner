@@ -198,12 +198,12 @@ void SettingsMenuState::addGraphicsButtons() {
 		button.setText("Mipmap Levels: " + std::to_string(Config::mipmapLevels));
 	});
 
-	m_menuWidget.addButton("AO Strength: " + gk::to_string(Config::aoStrength, 2), [] (TextButton &button) {
+	m_menuWidget.addButton("AO Strength: " + gk::toString(Config::aoStrength, 2), [] (TextButton &button) {
 		Config::aoStrength += 0.25f;
 		if (Config::aoStrength > 1.5f)
 			Config::aoStrength = 0.f;
 
-		button.setText("AO Strength: " + gk::to_string(Config::aoStrength, 2));
+		button.setText("AO Strength: " + gk::toString(Config::aoStrength, 2));
 
 		World::isReloadRequested = true;
 	});

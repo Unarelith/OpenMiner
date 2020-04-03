@@ -304,7 +304,7 @@ mod:block {
 	tiles = "redstone_lamp_off.png",
 
 	on_block_activated = function(pos, player, world, client, server, screen_width, screen_height, gui_scale)
-		local block = openminer:registry():get_block_from_string("default:redstone_lamp_on")
+		local block = openminer.registry:get_block_from_string("default:redstone_lamp_on")
 		world:set_block(pos.x, pos.y, pos.z, block:id())
 	end
 }
@@ -320,7 +320,7 @@ mod:block {
 	},
 
 	on_block_activated = function(pos, player, world, client, server, screen_width, screen_height, gui_scale)
-		local block = openminer:registry():get_block_from_string("default:redstone_lamp_off")
+		local block = openminer.registry:get_block_from_string("default:redstone_lamp_off")
 		world:set_block(pos.x, pos.y, pos.z, block:id())
 	end
 }

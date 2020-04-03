@@ -24,7 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
+#include <gk/core/Exception.hpp>
+#include <gk/core/Utils.hpp>
 
 #include <filesystem.hpp>
 
@@ -38,24 +39,26 @@ void ServerModLoader::loadMods() {
 	m_scriptEngine.init();
 	m_scriptEngine.luaCore().setModLoader(this);
 
-	try {
-		fs::path basePath = fs::current_path();
-		fs::directory_iterator dir("mods/");
-		for (const auto &entry : dir) {
-			if (fs::exists(entry.path().string() + "/init.lua")) {
-				fs::current_path(entry.path().string());
-				m_scriptEngine.lua().safe_script_file("init.lua");
-				fs::current_path(basePath);
+	fs::path basePath = fs::current_path();
+	fs::directory_iterator dir("mods/");
+	for (const auto &entry : dir) {
+		if (fs::exists(entry.path().string() + "/init.lua")) {
+			fs::current_path(entry.path().string());
 
-				std::cout << "Mod '" + entry.path().filename().string() + "' loaded" << std::endl;
+			try {
+				m_scriptEngine.lua().safe_script_file("init.lua");
 			}
-			else
-				DEBUG("WARNING: The mod '" + entry.path().filename().string() + "' doesn't contain an 'init.lua' file.");
+			catch (const sol::error &e) {
+				std::cerr << "Error: Failed to load mod at '" << entry.path().string() << "'" << std::endl;
+				std::cerr << e.what() << std::endl;
+			}
+
+			fs::current_path(basePath);
+
+			std::cout << "Mod '" + entry.path().filename().string() + "' loaded" << std::endl;
 		}
-	}
-	catch (const sol::error &e) {
-		std::cerr << e.what() << std::endl;
-		return;
+		else
+			DEBUG("WARNING: The mod '" + entry.path().filename().string() + "' doesn't contain an 'init.lua' file.");
 	}
 
 	for (auto &it : m_mods) {
@@ -64,13 +67,18 @@ void ServerModLoader::loadMods() {
 	}
 }
 
-void ServerModLoader::registerMod(LuaMod &mod) {
+LuaMod &ServerModLoader::registerMod(const std::string &name) {
 	// DEBUG("Registering mod '" + mod.id() + "'...");
 
-	auto it = m_mods.find(mod.id());
-	if (it == m_mods.end())
-		m_mods.emplace(mod.id(), mod);
-	else
-		DEBUG("ERROR: The mod '" + mod.id() + "' has already been loaded. Mod name must be unique.");
+	if (!gk::regexMatch(name, "^[A-Za-z0-9_]+$") || name == "group")
+		throw std::runtime_error("Mod name '" + name + "' is invalid.");
+
+	auto it = m_mods.find(name);
+	if (it != m_mods.end())
+		throw std::runtime_error("The mod '" + name + "' has already been loaded. Mod name must be unique.");
+
+	m_mods.emplace(name, name);
+
+	return m_mods.at(name);
 }
 

@@ -180,7 +180,7 @@ mod:block {
 		local current_burn_time = data.meta:get_int("current_burn_time") or 0
 		local item_progress = data.meta:get_int("item_progress") or 0
 
-		local recipe = openminer:registry():get_recipe(data.inventory)
+		local recipe = openminer.registry:get_recipe(data.inventory)
 		if recipe and recipe:type() ~= "smelt" then
 			recipe = nil
 		end

@@ -4,12 +4,12 @@
 
 You can create a mod using this function:
 ```
-LuaMod.new("mod_name")
+openminer.mod_loader:register_mod("mod_name")
 ```
 
-Mod name should match this regex: `[a-zA-Z0-9_]+`
+Mod name should match this regex: `^[a-zA-Z0-9_]+$`
 
-Everytime your define an `id` for a mod element, this name will be prepended to it.
+Everytime you define an `id` for a mod element, this name will be prepended to it.
 For example, `myitem` will become `mymod:myitem`.
 
 The name can't be `group` because this namespace is already used by the engine.
@@ -17,7 +17,7 @@ The name can't be `group` because this namespace is already used by the engine.
 ## Example
 
 ```lua
-local mod = LuaMod.new("mymod")
+local mod = openminer.mod_loader:register_mod("mymod")
 
 mod:block {
 	id = "myblock",
@@ -50,8 +50,6 @@ mod:smelting_recipe {
 	input = {id = "mymod:myitem", amount = 1},
 	output = {id = "mymod:myblock", amount = 1}
 }
-
-openminer.mod_loader:register_mod(mod)
 ```
 
 ## Functions

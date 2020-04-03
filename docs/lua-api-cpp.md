@@ -105,7 +105,7 @@
 
 ## ServerModLoader
 
-- `void register_mod(LuaMod mod)` (see [Lua Mod API](/lua-api-mod#example))
+- `LuaMod *register_mod(string mod_id)` (see [Lua Mod API](/lua-api-mod#example))
 
 ## World
 

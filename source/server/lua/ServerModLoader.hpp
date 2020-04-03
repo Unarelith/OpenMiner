@@ -40,7 +40,7 @@ class ServerModLoader {
 
 		void loadMods();
 
-		void registerMod(LuaMod &mod);
+		LuaMod &registerMod(const std::string &name);
 
 	private:
 		ScriptEngine &m_scriptEngine;

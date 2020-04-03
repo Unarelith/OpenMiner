@@ -24,11 +24,11 @@
 --
 -- =====================================================================================
 --
-mod = LuaMod.new("creative_inventory")
+mod = openminer.mod_loader:register_mod("creative_inventory")
 
 function show_creative_window(client, screen_width, screen_height, gui_scale)
 	items = {}
-	for k, v in pairs(openminer:registry():items()) do
+	for k, v in pairs(openminer.registry:items()) do
 		if k ~= 1 and not v:has_group("group:ci_ignore") then
 			items[#items + 1] = {v:string_id()}
 		end
@@ -103,6 +103,4 @@ function show_creative_window(client, screen_width, screen_height, gui_scale)
 
 	gui:show(client);
 end
-
-openminer.mod_loader:register_mod(mod)
 

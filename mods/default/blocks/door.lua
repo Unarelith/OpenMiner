@@ -60,7 +60,7 @@ mod:block {
 	end,
 
 	on_block_destroyed = function(pos, world)
-		local lower_block_id = openminer:registry():get_block_from_string("default:door_wood_lower"):id()
+		local lower_block_id = openminer.registry:get_block_from_string("default:door_wood_lower"):id()
 		if world:get_block(pos.x, pos.y, pos.z - 1) == lower_block_id then
 			world:set_block(pos.x, pos.y, pos.z - 1, 0)
 		end
@@ -91,13 +91,13 @@ mod:block {
 			local data = world:get_data(pos.x, pos.y, pos.z)
 			world:set_data(pos.x, pos.y, pos.z + 1, data)
 
-			local upper_block_id = openminer:registry():get_block_from_string("default:door_wood_upper"):id()
+			local upper_block_id = openminer.registry:get_block_from_string("default:door_wood_upper"):id()
 			world:set_block(pos.x, pos.y, pos.z + 1, upper_block_id)
 		end
 	end,
 
 	on_block_destroyed = function(pos, world)
-		local upper_block_id = openminer:registry():get_block_from_string("default:door_wood_upper"):id()
+		local upper_block_id = openminer.registry:get_block_from_string("default:door_wood_upper"):id()
 		if world:get_block(pos.x, pos.y, pos.z + 1) == upper_block_id then
 			world:set_block(pos.x, pos.y, pos.z + 1, 0)
 		end
