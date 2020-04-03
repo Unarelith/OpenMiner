@@ -174,7 +174,7 @@ void BlockCursor::update(const Hotbar &hotbar) {
 
 using namespace BlockGeometry;
 
-void BlockCursor::updateVBOCoords(gk::Vertex vertices[nFaces][nVertsPerFace], const Block &block,
+void BlockCursor::updateVBOCoords(Vertex vertices[nFaces][nVertsPerFace], const Block &block,
 	float face, u8f orientation)
 {
 	glm::vec3 bottomLeft{block.boundingBox().x, block.boundingBox().y, block.boundingBox().z};
@@ -214,7 +214,7 @@ void BlockCursor::updateVBOCoords(gk::Vertex vertices[nFaces][nVertsPerFace], co
 }
 
 void BlockCursor::updateVertexBuffer(const Block &block, u8f orientation) {
-	gk::Vertex vertices[nFaces][nVertsPerFace];
+	Vertex vertices[nFaces][nVertsPerFace];
 	updateVBOCoords(vertices, block, -1, orientation);
 
 	gk::VertexBuffer::bind(&m_vbo);
@@ -223,7 +223,7 @@ void BlockCursor::updateVertexBuffer(const Block &block, u8f orientation) {
 }
 
 void BlockCursor::updateAnimationVertexBuffer(const Block &block, u8f orientation, int animationPos) {
-	gk::Vertex vertices[nFaces][nVertsPerFace];
+	Vertex vertices[nFaces][nVertsPerFace];
 	updateVBOCoords(vertices, block, -2, orientation);
 
 	GLfloat color[4] = {1, 1, 1, 0.5};
@@ -255,6 +255,8 @@ void BlockCursor::updateAnimationVertexBuffer(const Block &block, u8f orientatio
 
 void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (m_selectedBlock.w == -1) return;
+
+	states.vertexAttributes = VertexAttribute::All;
 
 	glCheck(glDisable(GL_POLYGON_OFFSET_FILL));
 	glCheck(glDisable(GL_CULL_FACE));

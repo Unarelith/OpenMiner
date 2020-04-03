@@ -24,18 +24,17 @@
  *
  * =====================================================================================
  */
-#include <gk/gl/Vertex.hpp>
 #include <gk/gl/GLCheck.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "PlayerBox.hpp"
+#include "Vertex.hpp"
 
 constexpr int NUM_QUADS = 34;
 constexpr int NUM_VERTICES_PER_QUAD = 4;
 constexpr int NUM_VERTEX_ELEMENTS = 5;
 
 static constexpr float modelCoords[NUM_QUADS * NUM_VERTICES_PER_QUAD][NUM_VERTEX_ELEMENTS] = {
-
 	// RIGHT LEG
 	// West
 	{-0.15f, -0.15f - 0.18f, 0.f,     16.f/64.f,  0.f/32.f},
@@ -255,7 +254,7 @@ PlayerBox::PlayerBox(const gk::Camera &camera)
 }
 
 void PlayerBox::updateVertexBuffer() {
-	gk::Vertex vertices[NUM_QUADS * NUM_VERTICES_PER_QUAD];
+	Vertex vertices[NUM_QUADS * NUM_VERTICES_PER_QUAD];
 	for (u8 i = 0 ; i < NUM_QUADS * NUM_VERTICES_PER_QUAD ; ++i) {
 		vertices[i].coord3d[0] = modelCoords[i][0];
 		vertices[i].coord3d[1] = modelCoords[i][1];
@@ -278,6 +277,7 @@ void PlayerBox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	states.transform *= getTransform();
 	states.texture = &m_texture;
+	states.vertexAttributes = VertexAttribute::Basic;
 
 	glCheck(glEnable(GL_CULL_FACE));
 

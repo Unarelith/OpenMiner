@@ -28,7 +28,6 @@
 
 #include <gk/graphics/Color.hpp>
 #include <gk/gl/GLCheck.hpp>
-#include <gk/gl/Vertex.hpp>
 #include <gk/math/Math.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
@@ -38,6 +37,7 @@
 #include "EngineConfig.hpp"
 #include "InventoryCube.hpp"
 #include "TextureAtlas.hpp"
+#include "Vertex.hpp"
 
 InventoryCube::InventoryCube(float size) : m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks")) {
 	m_size = size;
@@ -56,7 +56,7 @@ using namespace BlockGeometry;
 void InventoryCube::updateVertexBuffer(const Block &block) {
 	if (!block.id()) return;
 
-	gk::Vertex vertices[nFaces][nVertsPerFace];
+	Vertex vertices[nFaces][nVertsPerFace];
 
 	glm::vec3 vertexPos[nVertsPerCube] {
 		// Order is important. It matches the bit order defined in BlockGeometry::cubeVerts.
@@ -145,7 +145,7 @@ void InventoryCube::draw(gk::RenderTarget &target, gk::RenderStates states) cons
 	states.projectionMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f, DIST_2D_FAR, DIST_2D_NEAR);
 
 	states.texture = &m_textureAtlas.texture();
-	states.vertexAttributes = gk::VertexAttribute::Only2d;
+	states.vertexAttributes = VertexAttribute::Basic;
 
 	glCheck(glEnable(GL_CULL_FACE));
 	glCheck(glEnable(GL_DEPTH_TEST));

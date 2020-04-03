@@ -33,8 +33,9 @@
 #include <glm/matrix.hpp>
 
 #include <gk/core/Vector3.hpp>
-#include <gk/gl/Vertex.hpp>
 #include <gk/gl/VertexBuffer.hpp>
+
+#include "Vertex.hpp"
 
 class Block;
 class ClientChunk;
@@ -75,7 +76,7 @@ class ChunkBuilder {
 		u8 getLightForVertex(Light light, s8f x, s8f y, s8f z, const gk::Vector3i &offset,
 		                     const gk::Vector3i &normal, const ClientChunk &chunk);
 
-		std::array<std::vector<gk::Vertex>, layers> m_vertices;
+		std::array<std::vector<Vertex>, layers> m_vertices;
 
 		TextureAtlas &m_textureAtlas;
 };

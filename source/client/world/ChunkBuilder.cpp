@@ -145,7 +145,7 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 		m_vertices[i].shrink_to_fit();
 
 		gk::VertexBuffer::bind(&vbo[i]);
-		vbo[i].setData(m_vertices[i].size() * sizeof(gk::Vertex), m_vertices[i].data(), GL_DYNAMIC_DRAW);
+		vbo[i].setData(m_vertices[i].size() * sizeof(Vertex), m_vertices[i].data(), GL_DYNAMIC_DRAW);
 		gk::VertexBuffer::bind(nullptr);
 
 		verticesCount[i] = m_vertices[i].size();
@@ -200,7 +200,7 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 	}
 
 	// Prepare vertex information for VBO
-	gk::Vertex vertices[nVertsPerFace];
+	Vertex vertices[nVertsPerFace];
 	for (s8f v = 0; v < nVertsPerFace; ++v) {
 		if (block.drawType() == BlockDrawType::Cactus) {
 			vertices[v].coord3d[0] = x + vertexPos[v]->x - boundingBox.x * normal.x;
@@ -295,7 +295,7 @@ inline void ChunkBuilder::addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk
 	};
 
 	for (int f = 0; f < nCrossFaces ; ++f) {
-		gk::Vertex vertices[nVertsPerFace];
+		Vertex vertices[nVertsPerFace];
 		for (int v = 0 ; v < nVertsPerFace ; ++v) {
 			vertices[v].coord3d[0] = x + vertexPos[f][v]->x;
 			vertices[v].coord3d[1] = y + vertexPos[f][v]->y;

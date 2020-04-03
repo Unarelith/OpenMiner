@@ -37,6 +37,7 @@
 #include "Font.hpp"
 #include "TextureAtlas.hpp"
 #include "TextureLoader.hpp"
+#include "Vertex.hpp"
 
 #include "TitleScreenState.hpp"
 
@@ -55,6 +56,13 @@ void ClientApplication::init() {
 	m_argumentParser.addArgument("texture-pack", {"-t", "--texture-pack", "Use texture pack <name>.", "name"});
 
 	gk::CoreApplication::init();
+
+	m_window.addVertexAttribute(VertexAttribute::Coord3d, "coord3d", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
+	m_window.addVertexAttribute(VertexAttribute::Color, "color", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, color)));
+	m_window.addVertexAttribute(VertexAttribute::TexCoord, "texCoord", 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, texCoord)));
+	m_window.addVertexAttribute(VertexAttribute::Normal, "normal", 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, normal)));
+	m_window.addVertexAttribute(VertexAttribute::LightValue, "lightValue", 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, lightValue)));
+	m_window.addVertexAttribute(VertexAttribute::AmbientOcclusion, "ambientOcclusion", 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, ambientOcclusion)));
 
 	if (m_argumentParser.getArgument("help").isFound)
 		return;

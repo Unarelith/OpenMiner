@@ -107,7 +107,7 @@ void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.shader = &m_shader;
 	states.projectionMatrix = m_orthoMatrix;
 	states.viewMatrix = gk::Transform::Identity;
-	states.vertexAttributes = gk::VertexAttribute::Only2d;
+	states.vertexAttributes = VertexAttribute::Basic;
 
 	states.transform *= getTransform();
 

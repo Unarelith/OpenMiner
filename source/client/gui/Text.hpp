@@ -30,8 +30,9 @@
 #include <string>
 #include <vector>
 
-#include <gk/gl/Vertex.hpp>
 #include <gk/graphics/RectangleShape.hpp>
+
+#include "Vertex.hpp"
 
 class Font;
 
@@ -61,7 +62,7 @@ class Text : public gk::Drawable, public gk::Transformable {
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		void addCharacter(u32 x, u32 y, const gk::Color &color, u8 c, std::vector<gk::Vertex> &vertices) const;
+		void addCharacter(u32 x, u32 y, const gk::Color &color, u8 c, std::vector<Vertex> &vertices) const;
 
 		std::string m_text;
 

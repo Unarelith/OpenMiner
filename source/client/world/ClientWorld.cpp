@@ -219,6 +219,8 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		return;
 	}
 
+	states.vertexAttributes = VertexAttribute::All;
+
 	gk::Shader::bind(states.shader);
 
 	states.shader->setUniform("u_renderDistance", Config::renderDistance * CHUNK_WIDTH);

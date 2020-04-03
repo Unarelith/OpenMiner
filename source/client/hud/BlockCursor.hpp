@@ -50,7 +50,7 @@ class BlockCursor : public gk::Drawable {
 	private:
 		void updateVertexBuffer(const Block &block, const u8f orientation);
 		void updateAnimationVertexBuffer(const Block &block, const u8f orientation, int animationPos = -1);
-		void updateVBOCoords(gk::Vertex vertices[BlockGeometry::nFaces][BlockGeometry::nVertsPerFace],
+		void updateVBOCoords(Vertex vertices[BlockGeometry::nFaces][BlockGeometry::nVertsPerFace],
 		                     const Block &block, float face, u8f orientation);
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
