@@ -71,6 +71,8 @@ function init(player)
 	player_inv:add_stack("default:diamond", 64);
 end
 
+local modpath = mod:path()
+
 function show_inventory(client, screen_width, screen_height, gui_scale)
 	local gui = LuaGUI.new()
 
@@ -81,7 +83,7 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 		name = "img_background",
 		pos = {x = 0, y = 0},
 
-		texture = "mods/default/textures/gui/inventory.png",
+		texture = modpath .. "/textures/gui/inventory.png",
 		clip = {x = 0, y = 0, width = 176, height = 166},
 	}
 

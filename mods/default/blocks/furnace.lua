@@ -24,6 +24,7 @@
 --
 -- =====================================================================================
 --
+local modpath = mod:path()
 
 mod:block {
 	id = "furnace",
@@ -53,7 +54,7 @@ mod:block {
 			meta = "item_progress",
 			max_value = 200,
 
-			texture = "mods/default/textures/gui/furnace.png",
+			texture = modpath .. "/textures/gui/furnace.png",
 			clip = {x = 176, y = 14, width = 24, height = 17},
 		}
 
@@ -68,7 +69,7 @@ mod:block {
 			meta = "ticks_remaining",
 			max_meta = "current_burn_time",
 
-			texture = "mods/default/textures/gui/furnace.png",
+			texture = modpath .. "/textures/gui/furnace.png",
 			clip = {x = 176, y = 0, width = 14, height = 14},
 		}
 
@@ -161,7 +162,7 @@ mod:block {
 			name = "img_background",
 			pos = {x = 0, y = 0},
 
-			texture = "mods/default/textures/gui/furnace.png",
+			texture = modpath .. "/textures/gui/furnace.png",
 			clip = {x = 0, y = 0, width = 176, height = 166},
 		}
 

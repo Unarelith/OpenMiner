@@ -52,8 +52,9 @@ void LuaMod::commit() {
 
 void LuaMod::initUsertype(sol::state &lua) {
 	lua.new_usertype<LuaMod>("LuaMod",
-		sol::constructors<LuaMod(std::string)>(),
 		"id",              &LuaMod::id,
+		"path",            &LuaMod::path,
+
 		"block",           &LuaMod::registerBlock,
 		"item",            &LuaMod::registerItem,
 		"crafting_recipe", &LuaMod::registerCraftingRecipe,

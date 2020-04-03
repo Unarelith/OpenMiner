@@ -54,6 +54,16 @@ mod:smelting_recipe {
 
 ## Functions
 
+### `id`
+
+Returns the string ID of the mod.
+
+### `path`
+
+Returns the path of the mod, relative to current working directory.
+
+## Registration functions
+
 ### `block`
 
 Defines a block from a table, see [this page](lua-api-block.md) for more information.

@@ -122,6 +122,7 @@ void TextureAtlas::loadFromRegistry(const std::string &texturePack) {
 	if (!texturePack.empty() && !gk::Filesystem::fileExists("texturepacks/" + texturePack))
 		throw EXCEPTION("Texture pack '" + texturePack +"' doesn't exist");
 
+	// FIXME: Undefined texture should be created from current texture size
 	if (texturePack.empty())
 		addFile("mods/default/textures/blocks/", "undefined.png");
 	else

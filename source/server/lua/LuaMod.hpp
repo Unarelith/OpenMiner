@@ -48,6 +48,8 @@ class LuaMod {
 
 		const std::string &id() const { return m_id; }
 
+		std::string path() const { return "mods/" + m_id; }
+
 		static void initUsertype(sol::state &lua);
 
 	private:
