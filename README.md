@@ -5,7 +5,7 @@
 [![Documentation](https://codedocs.xyz/Quent42340/OpenMiner.svg)](https://codedocs.xyz/Quent42340/OpenMiner/)
 [![License](https://img.shields.io/badge/license-LGPLv2.1%2B-blue.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
 [![Discord](https://img.shields.io/discord/527527086756200458.svg?style=popout)](https://discord.gg/eN8k8wt)
-[![Donate](https://img.shields.io/badge/donate-paypal-brightgreen.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66DH462V7TA6N&source=url)
+[![Donate](https://img.shields.io/badge/donate-paypal-brightgreen.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=B4DQHF3YL4KV2&source=url)
 
 - [Project goal](#project-goal)
 - [Wiki](#wiki)
@@ -14,7 +14,6 @@
 - [Discussion](#discussion)
 - [Project status](#project-status)
 - [Screenshots](#screenshots)
-- [Previous attempts](#previous-attempts)
 - [Credits](#credits)
 
 ## Project goal
