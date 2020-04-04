@@ -66,6 +66,8 @@ void ClientWorld::update() {
 	World::isReloadRequested = false;
 
 	sendChunkRequests();
+
+	m_scene.update();
 }
 
 void ClientWorld::sendChunkRequests() {
@@ -315,5 +317,8 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	}
 
 	m_camera->setDPosition(cameraPos);  // Restore the camera to its original position
+
+	states.transform = gk::Transform::Identity;
+	target.draw(m_scene, states);
 }
 

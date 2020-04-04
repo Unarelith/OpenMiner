@@ -24,64 +24,31 @@
  *
  * =====================================================================================
  */
-#ifndef CLIENTWORLD_HPP_
-#define CLIENTWORLD_HPP_
-
-#include <unordered_map>
+#ifndef SCENE_HPP_
+#define SCENE_HPP_
 
 #include <gk/gl/Camera.hpp>
-#include <gk/core/Vector4.hpp>
+#include <gk/gl/Drawable.hpp>
+#include <gk/graphics/BoxShape.hpp>
 
-#include "ClientChunk.hpp"
-#include "Network.hpp"
-#include "Scene.hpp"
-#include "World.hpp"
+#include <entt/entt.hpp>
 
-class ClientCommandHandler;
-class Sky;
-class TextureAtlas;
-
-class ClientWorld : public World, public gk::Drawable {
-	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ClientChunk>>;
-
+class Scene : public gk::Drawable {
 	public:
-		ClientWorld();
+		Scene();
 
 		void update();
-		void sendChunkRequests();
-		void checkPlayerChunk(double playerX, double playerY, double playerZ);
 
-		void clear();
-
-		void updateSky(u16 dimensionID);
-
-		void receiveChunkData(sf::Packet &packet);
-		void removeChunk(ChunkMap::iterator &it);
-
-		Chunk *getChunk(int cx, int cy, int cz) const override;
-
-		void setClient(ClientCommandHandler &client) { m_client = &client; }
-		void setCamera(gk::Camera &camera) { m_camera = &camera; m_scene.setCamera(camera); }
-
-		std::size_t loadedChunkCount() const { return m_chunks.size(); }
+		void setCamera(gk::Camera &camera) { m_camera = &camera; }
 
 	private:
-		void createChunkNeighbours(ClientChunk *chunk);
-
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		ChunkMap m_chunks;
-
-		TextureAtlas &m_textureAtlas;
-
-		ClientCommandHandler *m_client = nullptr;
 		gk::Camera *m_camera = nullptr;
 
-		mutable gk::Vector4f m_closestInitializedChunk{0, 0, 0, 1000000};
+		gk::BoxShape m_testBox;
 
-		const Sky *m_sky = nullptr;
-
-		Scene m_scene;
+		mutable entt::DefaultRegistry m_registry;
 };
 
-#endif // CLIENTWORLD_HPP_
+#endif // SCENE_HPP_

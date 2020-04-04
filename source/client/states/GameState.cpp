@@ -156,7 +156,6 @@ void GameState::initShaders() {
 	m_shader.createProgram();
 
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/game.v.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/color.f.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/light.f.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/fog.f.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/game.f.glsl");

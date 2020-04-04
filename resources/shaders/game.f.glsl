@@ -2,6 +2,7 @@
 
 varying vec4 v_coord3d;
 varying vec4 v_color;
+varying vec2 v_texCoord;
 varying vec2 v_lightValue;
 varying float v_ambientOcclusion;
 
@@ -10,8 +11,7 @@ varying float v_dist;
 
 uniform int u_renderDistance;
 
-// Get current pixel color
-vec4 getColor();
+uniform sampler2D u_tex;
 
 // Get light color
 vec4 light(vec4 color, vec3 lightColor, vec4 lightPosition, float ambientIntensity, float diffuseIntensity);
@@ -29,9 +29,12 @@ void main() {
 	if(blockFace > -1. && v_dist > u_renderDistance) discard;
 
 	// Get current pixel color and apply multiplier on grayscale textures
-	vec4 color = getColor();
-	if (blockFace > -1 && color != v_color && color.r == color.g && color.g == color.b) {
-		color *= v_color;
+	vec4 color = v_color;
+	if (v_texCoord.x > -0.99 && v_texCoord.y > -0.99) {
+		color = texture2D(u_tex, v_texCoord);
+		if (blockFace > -1 && color.r == color.g && color.g == color.b) {
+			color *= v_color;
+		}
 	}
 
 	// Block breaking animation
