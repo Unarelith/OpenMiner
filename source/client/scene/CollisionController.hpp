@@ -27,13 +27,18 @@
 #ifndef COLLISIONCONTROLLER_HPP_
 #define COLLISIONCONTROLLER_HPP_
 
-#include <entt/entt.hpp>
+#include "AbstractController.hpp"
 
 class ClientPlayer;
 
-class CollisionController {
+class CollisionController : public AbstractController {
 	public:
-		static void update(entt::DefaultRegistry &registry, ClientPlayer &player);
+		CollisionController(ClientPlayer &player) : m_player(player) {}
+
+		void update(entt::DefaultRegistry &registry);
+
+	private:
+		ClientPlayer &m_player;
 };
 
 #endif // COLLISIONCONTROLLER_HPP_

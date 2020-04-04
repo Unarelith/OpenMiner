@@ -27,14 +27,11 @@
 #ifndef RENDERINGCONTROLLER_HPP_
 #define RENDERINGCONTROLLER_HPP_
 
-#include <gk/gl/RenderStates.hpp>
-#include <gk/gl/RenderTarget.hpp>
+#include "AbstractController.hpp"
 
-#include <entt/entt.hpp>
-
-class RenderingController {
+class RenderingController : public AbstractController {
 	public:
-		static void draw(entt::DefaultRegistry &registry, gk::RenderTarget &target, gk::RenderStates states);
+		void draw(entt::DefaultRegistry &registry, gk::RenderTarget &target, gk::RenderStates states) override;
 };
 
 #endif // RENDERINGCONTROLLER_HPP_

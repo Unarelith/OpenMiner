@@ -31,11 +31,14 @@
 #include "RenderingController.hpp"
 
 Scene::Scene(ClientPlayer &player) : m_player(player) {
+	m_controllers.emplace_back(new AnimationController);
+	m_controllers.emplace_back(new CollisionController(player));
+	m_controllers.emplace_back(new RenderingController);
 }
 
 void Scene::update() {
-	AnimationController::update(m_registry);
-	CollisionController::update(m_registry, m_player);
+	for (auto &controller : m_controllers)
+		controller->update(m_registry);
 }
 
 void Scene::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -45,6 +48,7 @@ void Scene::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	gk::Vector3d cameraPosition = m_camera->getDPosition();
 	states.transform.translate(-cameraPosition.x, -cameraPosition.y, -cameraPosition.z);
 
-	RenderingController::draw(m_registry, target, states);
+	for (auto &controller : m_controllers)
+		controller->draw(m_registry, target, states);
 }
 
