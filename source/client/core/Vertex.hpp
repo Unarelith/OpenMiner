@@ -48,7 +48,7 @@ namespace VertexAttribute {
 		AmbientOcclusion = 256,
 
 		Basic            = Coord3d | TexCoord | Color,
-		All              = 0xffff
+		All              = Basic | Normal | LightValue | AmbientOcclusion
 	};
 }
 
