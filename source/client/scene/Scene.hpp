@@ -27,11 +27,15 @@
 #ifndef SCENE_HPP_
 #define SCENE_HPP_
 
+#include <deque>
+#include <memory>
+
 #include <gk/gl/Camera.hpp>
 #include <gk/gl/Drawable.hpp>
-#include <gk/graphics/BoxShape.hpp>
 
 #include <entt/entt.hpp>
+
+#include "AbstractController.hpp"
 
 class ClientPlayer;
 
@@ -52,9 +56,9 @@ class Scene : public gk::Drawable {
 
 		gk::Camera *m_camera = nullptr;
 
-		gk::BoxShape m_testBox;
-
 		mutable entt::DefaultRegistry m_registry;
+
+		std::deque<std::unique_ptr<AbstractController>> m_controllers;
 };
 
 #endif // SCENE_HPP_

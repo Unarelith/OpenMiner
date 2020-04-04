@@ -29,13 +29,13 @@
 #include "InventoryCube.hpp"
 #include "ItemStack.hpp"
 
-void CollisionController::update(entt::DefaultRegistry &registry, ClientPlayer &player) {
+void CollisionController::update(entt::DefaultRegistry &registry) {
 	// FIXME: This shouldn't use InventoryCube, but instead a callback stored in a CollisionComponent
 	registry.view<InventoryCube, gk::DoubleBox, ItemStack>().each([&](auto entity, auto &cube, auto &box, auto &itemStack) {
 		gk::DoubleBox hitbox = box + cube.getPosition();
-		gk::DoubleBox playerHitbox = player.hitbox() + gk::Vector3d{player.x(), player.y(), player.z()};
+		gk::DoubleBox playerHitbox = m_player.hitbox() + gk::Vector3d{m_player.x(), m_player.y(), m_player.z()};
 		if (hitbox.intersects(playerHitbox)) {
-			player.inventory().addStack(itemStack.item().stringID(), itemStack.amount());
+			m_player.inventory().addStack(itemStack.item().stringID(), itemStack.amount());
 			registry.destroy(entity);
 		}
 	});

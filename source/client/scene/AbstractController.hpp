@@ -24,14 +24,18 @@
  *
  * =====================================================================================
  */
-#ifndef ANIMATIONCONTROLLER_HPP_
-#define ANIMATIONCONTROLLER_HPP_
+#ifndef ABSTRACTCONTROLLER_HPP_
+#define ABSTRACTCONTROLLER_HPP_
 
-#include "AbstractController.hpp"
+#include <gk/gl/RenderStates.hpp>
+#include <gk/gl/RenderTarget.hpp>
 
-class AnimationController : public AbstractController {
+#include <entt/entt.hpp>
+
+class AbstractController {
 	public:
-		void update(entt::DefaultRegistry &registry) override;
+		virtual void update(entt::DefaultRegistry &) {}
+		virtual void draw(entt::DefaultRegistry &, gk::RenderTarget &, gk::RenderStates) {}
 };
 
-#endif // ANIMATIONCONTROLLER_HPP_
+#endif // ABSTRACTCONTROLLER_HPP_
