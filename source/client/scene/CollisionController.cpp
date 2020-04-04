@@ -24,37 +24,20 @@
  *
  * =====================================================================================
  */
-#ifndef SCENE_HPP_
-#define SCENE_HPP_
+#include "ClientPlayer.hpp"
+#include "CollisionController.hpp"
+#include "InventoryCube.hpp"
+#include "ItemStack.hpp"
 
-#include <gk/gl/Camera.hpp>
-#include <gk/gl/Drawable.hpp>
-#include <gk/graphics/BoxShape.hpp>
+void CollisionController::update(entt::DefaultRegistry &registry, ClientPlayer &player) {
+	// FIXME: This shouldn't use InventoryCube, but instead a callback stored in a CollisionComponent
+	registry.view<InventoryCube, gk::DoubleBox, ItemStack>().each([&](auto entity, auto &cube, auto &box, auto &itemStack) {
+		gk::DoubleBox hitbox = box + cube.getPosition();
+		gk::DoubleBox playerHitbox = player.hitbox() + gk::Vector3d{player.x(), player.y(), player.z()};
+		if (hitbox.intersects(playerHitbox)) {
+			player.inventory().addStack(itemStack.item().stringID(), itemStack.amount());
+			registry.destroy(entity);
+		}
+	});
+}
 
-#include <entt/entt.hpp>
-
-class ClientPlayer;
-
-class Scene : public gk::Drawable {
-	public:
-		Scene(ClientPlayer &player);
-
-		void update();
-
-		void setCamera(gk::Camera &camera) { m_camera = &camera; }
-
-		entt::DefaultRegistry &registry() { return m_registry; }
-
-	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		ClientPlayer &m_player;
-
-		gk::Camera *m_camera = nullptr;
-
-		gk::BoxShape m_testBox;
-
-		mutable entt::DefaultRegistry m_registry;
-};
-
-#endif // SCENE_HPP_

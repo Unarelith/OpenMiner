@@ -24,37 +24,13 @@
  *
  * =====================================================================================
  */
-#ifndef SCENE_HPP_
-#define SCENE_HPP_
+#include "InventoryCube.hpp"
+#include "RenderingController.hpp"
 
-#include <gk/gl/Camera.hpp>
-#include <gk/gl/Drawable.hpp>
-#include <gk/graphics/BoxShape.hpp>
+void RenderingController::draw(entt::DefaultRegistry &registry, gk::RenderTarget &target, gk::RenderStates states) {
+	// FIXME: There's probably another way to do this
+	registry.view<InventoryCube>().each([&](auto, auto &cube) {
+		target.draw(cube, states);
+	});
+}
 
-#include <entt/entt.hpp>
-
-class ClientPlayer;
-
-class Scene : public gk::Drawable {
-	public:
-		Scene(ClientPlayer &player);
-
-		void update();
-
-		void setCamera(gk::Camera &camera) { m_camera = &camera; }
-
-		entt::DefaultRegistry &registry() { return m_registry; }
-
-	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		ClientPlayer &m_player;
-
-		gk::Camera *m_camera = nullptr;
-
-		gk::BoxShape m_testBox;
-
-		mutable entt::DefaultRegistry m_registry;
-};
-
-#endif // SCENE_HPP_

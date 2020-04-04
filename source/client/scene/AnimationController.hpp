@@ -24,37 +24,14 @@
  *
  * =====================================================================================
  */
-#ifndef SCENE_HPP_
-#define SCENE_HPP_
-
-#include <gk/gl/Camera.hpp>
-#include <gk/gl/Drawable.hpp>
-#include <gk/graphics/BoxShape.hpp>
+#ifndef ANIMATIONCONTROLLER_HPP_
+#define ANIMATIONCONTROLLER_HPP_
 
 #include <entt/entt.hpp>
 
-class ClientPlayer;
-
-class Scene : public gk::Drawable {
+class AnimationController {
 	public:
-		Scene(ClientPlayer &player);
-
-		void update();
-
-		void setCamera(gk::Camera &camera) { m_camera = &camera; }
-
-		entt::DefaultRegistry &registry() { return m_registry; }
-
-	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		ClientPlayer &m_player;
-
-		gk::Camera *m_camera = nullptr;
-
-		gk::BoxShape m_testBox;
-
-		mutable entt::DefaultRegistry m_registry;
+		static void update(entt::DefaultRegistry &registry);
 };
 
-#endif // SCENE_HPP_
+#endif // ANIMATIONCONTROLLER_HPP_

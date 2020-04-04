@@ -29,6 +29,7 @@
 // Gameplay
 bool Config::isFlyModeEnabled = false;
 bool Config::isNoClipEnabled = false;
+bool Config::useItemDrops = true;
 
 // Interface
 bool Config::isBlockInfoWidgetEnabled = true;
@@ -68,6 +69,7 @@ void Config::loadConfigFromFile(const char *file) {
 
 			isFlyModeEnabled = lua["isFlyModeEnabled"].get_or(isFlyModeEnabled);
 			isNoClipEnabled = lua["isNoClipEnabled"].get_or(isNoClipEnabled);
+			useItemDrops = lua["useItemDrops"].get_or(useItemDrops);
 
 			isBlockInfoWidgetEnabled = lua["isBlockInfoWidgetEnabled"].get_or(isBlockInfoWidgetEnabled);
 			isFpsCounterEnabled = lua["isFpsCounterEnabled"].get_or(isFpsCounterEnabled);

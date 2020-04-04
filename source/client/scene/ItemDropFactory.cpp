@@ -24,37 +24,22 @@
  *
  * =====================================================================================
  */
-#ifndef SCENE_HPP_
-#define SCENE_HPP_
+#include "AnimationComponent.hpp"
+#include "InventoryCube.hpp"
+#include "ItemDropFactory.hpp"
+#include "ItemStack.hpp"
+#include "Registry.hpp"
 
-#include <gk/gl/Camera.hpp>
-#include <gk/gl/Drawable.hpp>
-#include <gk/graphics/BoxShape.hpp>
+void ItemDropFactory::create(entt::DefaultRegistry &registry, double x, double y, double z, const std::string &itemID, u16 amount) {
+	auto entity = registry.create();
 
-#include <entt/entt.hpp>
+	InventoryCube &cube = registry.assign<InventoryCube>(entity, 0.25f, true);
+	cube.setOrigin(cube.size() / 2.f, cube.size() / 2.f, cube.size() / 2.f);
+	cube.setPosition(x + 0.5, y + 0.5, z + 0.5);
+	cube.updateVertexBuffer(Registry::getInstance().getBlockFromStringID(itemID));
 
-class ClientPlayer;
+	registry.assign<AnimationComponent>(entity, 0.f, 0.f, 1.f, 0.5f);
+	registry.assign<gk::DoubleBox>(entity, 0., 0., 0., cube.size(), cube.size(), cube.size());
+	registry.assign<ItemStack>(entity, itemID, amount);
+}
 
-class Scene : public gk::Drawable {
-	public:
-		Scene(ClientPlayer &player);
-
-		void update();
-
-		void setCamera(gk::Camera &camera) { m_camera = &camera; }
-
-		entt::DefaultRegistry &registry() { return m_registry; }
-
-	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		ClientPlayer &m_player;
-
-		gk::Camera *m_camera = nullptr;
-
-		gk::BoxShape m_testBox;
-
-		mutable entt::DefaultRegistry m_registry;
-};
-
-#endif // SCENE_HPP_

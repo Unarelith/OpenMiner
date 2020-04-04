@@ -34,6 +34,7 @@
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
+#include "ItemDropFactory.hpp"
 #include "Registry.hpp"
 #include "Sky.hpp"
 #include "TextureAtlas.hpp"
@@ -98,6 +99,11 @@ void ClientWorld::checkPlayerChunk(double playerX, double playerY, double player
 	if (!chunk) {
 		m_chunks.emplace(gk::Vector3i{pcx, pcy, pcz}, new ClientChunk(pcx, pcy, pcz, *this, m_textureAtlas));
 	}
+}
+
+void ClientWorld::onBlockDestroyed(int x, int y, int z, const Block &block) {
+	if (Config::useItemDrops)
+		ItemDropFactory::create(m_scene.registry(), x, y, z, block.getItemDrop().item().stringID(), block.getItemDrop().amount());
 }
 
 void ClientWorld::clear() {
