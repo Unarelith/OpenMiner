@@ -45,7 +45,7 @@ class ClientWorld : public World, public gk::Drawable {
 	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ClientChunk>>;
 
 	public:
-		ClientWorld();
+		ClientWorld(ClientPlayer &player);
 
 		void update();
 		void sendChunkRequests();
@@ -70,6 +70,8 @@ class ClientWorld : public World, public gk::Drawable {
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
+		Scene m_scene;
+
 		ChunkMap m_chunks;
 
 		TextureAtlas &m_textureAtlas;
@@ -80,8 +82,6 @@ class ClientWorld : public World, public gk::Drawable {
 		mutable gk::Vector4f m_closestInitializedChunk{0, 0, 0, 1000000};
 
 		const Sky *m_sky = nullptr;
-
-		Scene m_scene;
 };
 
 #endif // CLIENTWORLD_HPP_

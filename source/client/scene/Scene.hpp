@@ -33,9 +33,13 @@
 
 #include <entt/entt.hpp>
 
+class ClientPlayer;
+
 class Scene : public gk::Drawable {
 	public:
-		Scene();
+		Scene(ClientPlayer &player);
+
+		void init();
 
 		void update();
 
@@ -43,6 +47,10 @@ class Scene : public gk::Drawable {
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		bool m_isInitialized = false;
+
+		ClientPlayer &m_player;
 
 		gk::Camera *m_camera = nullptr;
 

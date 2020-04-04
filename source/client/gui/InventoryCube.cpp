@@ -39,16 +39,20 @@
 #include "TextureAtlas.hpp"
 #include "Vertex.hpp"
 
-InventoryCube::InventoryCube(float size) : m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks")) {
+InventoryCube::InventoryCube(float size, bool isEntity)
+	: m_textureAtlas(&gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
+{
 	m_size = size;
 
-	m_transform.setOrigin(size * 0.5, size * 0.5, size * 0.5);
+	if (!isEntity) {
+		m_transform.setOrigin(size * 0.5, size * 0.5, size * 0.5);
 
-	// NOTE: intrinsic rotations! The axis is the local axis of the object.
-	// Note also that we start looking at the bottom of the cube due to how
-	// glm::orto is used (see comment below).
-	m_transform.rotate(120.f, {1, 0, 0});
-	m_transform.rotate(-45.f, {0, 0, 1});
+		// NOTE: intrinsic rotations! The axis is the local axis of the object.
+		// Note also that we start looking at the bottom of the cube due to how
+		// glm::ortho is used (see comment below).
+		m_transform.rotate(120.f, {1, 0, 0});
+		m_transform.rotate(-45.f, {0, 0, 1});
+	}
 }
 
 using namespace BlockGeometry;
@@ -96,7 +100,7 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 			V1 = (f <= 3) ? 1.f - boundingBox.z : (f == 4) ? boundingBox.y + boundingBox.sizeY : 1.f - boundingBox.y;
 		}
 
-		const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block.tiles().getTextureForFace(f));
+		const gk::FloatRect &blockTexCoords = m_textureAtlas->getTexCoords(block.tiles().getTextureForFace(f));
 
 		for (u8f v = 0; v < nVertsPerFace; ++v) {
 			if (block.drawType() == BlockDrawType::Cactus) {
@@ -144,7 +148,7 @@ void InventoryCube::draw(gk::RenderTarget &target, gk::RenderStates states) cons
 	// at start.
 	states.projectionMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f, DIST_2D_FAR, DIST_2D_NEAR);
 
-	states.texture = &m_textureAtlas.texture();
+	states.texture = &m_textureAtlas->texture();
 	states.vertexAttributes = VertexAttribute::Basic;
 
 	glCheck(glEnable(GL_CULL_FACE));
