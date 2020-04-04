@@ -260,6 +260,7 @@ void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 	glCheck(glDisable(GL_POLYGON_OFFSET_FILL));
 	glCheck(glDisable(GL_CULL_FACE));
+	glCheck(glEnable(GL_DEPTH_TEST));
 
 	// Subtract the camera position - see comment in ClientWorld::draw()
 	gk::Vector3d cameraPosition = m_player.camera().getDPosition();
