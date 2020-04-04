@@ -277,7 +277,7 @@ void PlayerBox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	states.transform *= getTransform();
 	states.texture = &m_texture;
-	states.vertexAttributes = VertexAttribute::Basic;
+	states.vertexAttributes = VertexAttribute::All;
 
 	glCheck(glEnable(GL_CULL_FACE));
 

@@ -45,22 +45,14 @@ Scene::Scene(ClientPlayer &player) : m_player(player) {
 void Scene::init() {
 	auto testEntity = m_registry.create();
 
-	gk::BoxShape &shape = m_registry.assign<gk::BoxShape>(testEntity, 0.25f, 0.25f, 0.25f);
-	shape.setOrigin(shape.getSize().x / 2.f, shape.getSize().y / 2.f, shape.getSize().z / 2.f);
-	shape.setPosition(13 + shape.getOrigin().x, 13 + shape.getOrigin().y, 16 + shape.getOrigin().z);
-
-	m_registry.assign<RotationAnimation>(testEntity, 0.f, 0.f, 1.f, 1.f);
-	m_registry.assign<gk::DoubleBox>(testEntity, 0., 0., 0., shape.getSize().x, shape.getSize().y, shape.getSize().z);
-	m_registry.assign<ItemStack>(testEntity, "default:stick", 1);
-
-	auto testEntity2 = m_registry.create();
-
-	InventoryCube &cube = m_registry.assign<InventoryCube>(testEntity2, 0.25f, true);
+	InventoryCube &cube = m_registry.assign<InventoryCube>(testEntity, 0.25f, true);
 	cube.setOrigin(cube.size() / 2.f, cube.size() / 2.f, cube.size() / 2.f);
 	cube.setPosition(14 + cube.getOrigin().x, 13 + cube.getOrigin().y, 16 + cube.getOrigin().z);
 	cube.updateVertexBuffer(Registry::getInstance().getBlockFromStringID("default:cobblestone"));
 
-	m_registry.assign<RotationAnimation>(testEntity2, 0.f, 0.f, 1.f, 1.f);
+	m_registry.assign<RotationAnimation>(testEntity, 0.f, 0.f, 1.f, 1.f);
+	m_registry.assign<gk::DoubleBox>(testEntity, 0., 0., 0., cube.size(), cube.size(), cube.size());
+	m_registry.assign<ItemStack>(testEntity, "default:stick", 1);
 
 	m_isInitialized = true;
 }
@@ -68,16 +60,12 @@ void Scene::init() {
 void Scene::update() {
 	if (!m_isInitialized) init();
 
-	m_registry.view<gk::BoxShape, RotationAnimation>().each([](auto, auto &boxShape, auto &rotation) {
-		boxShape.rotate(rotation.angle, {rotation.axisX, rotation.axisY, rotation.axisZ});
-	});
-
 	m_registry.view<InventoryCube, RotationAnimation>().each([](auto, auto &cube, auto &rotation) {
 		cube.rotate(rotation.angle, {rotation.axisX, rotation.axisY, rotation.axisZ});
 	});
 
-	m_registry.view<gk::BoxShape, gk::DoubleBox, ItemStack>().each([this](auto entity, auto &boxShape, auto &box, auto &itemStack) {
-		gk::DoubleBox hitbox = box + boxShape.getPosition();
+	m_registry.view<InventoryCube, gk::DoubleBox, ItemStack>().each([this](auto entity, auto &cube, auto &box, auto &itemStack) {
+		gk::DoubleBox hitbox = box + cube.getPosition();
 		gk::DoubleBox playerHitbox = m_player.hitbox() + gk::Vector3d{m_player.x(), m_player.y(), m_player.z()};
 		if (hitbox.intersects(playerHitbox)) {
 			m_player.inventory().addStack(itemStack.item().stringID(), itemStack.amount());
@@ -92,10 +80,6 @@ void Scene::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	// Subtract the camera position - see comment in ClientWorld::draw()
 	gk::Vector3d cameraPosition = m_camera->getDPosition();
 	states.transform.translate(-cameraPosition.x, -cameraPosition.y, -cameraPosition.z);
-
-	m_registry.view<gk::BoxShape>().each([&](auto, auto &boxShape) {
-		target.draw(boxShape, states);
-	});
 
 	m_registry.view<InventoryCube>().each([&](auto, auto &cube) {
 		target.draw(cube, states);

@@ -149,7 +149,7 @@ void InventoryCube::draw(gk::RenderTarget &target, gk::RenderStates states) cons
 	states.projectionMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f, DIST_2D_FAR, DIST_2D_NEAR);
 
 	states.texture = &m_textureAtlas->texture();
-	states.vertexAttributes = VertexAttribute::Basic;
+	states.vertexAttributes = VertexAttribute::All;
 
 	glCheck(glEnable(GL_CULL_FACE));
 	glCheck(glEnable(GL_DEPTH_TEST));
