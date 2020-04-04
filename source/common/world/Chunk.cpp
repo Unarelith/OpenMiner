@@ -31,6 +31,7 @@
 #include "Chunk.hpp"
 #include "EngineConfig.hpp"
 #include "Registry.hpp"
+#include "World.hpp"
 
 Chunk::Chunk(s32 x, s32 y, s32 z, World &world) : m_world(world) {
 	m_x = x;
@@ -88,10 +89,12 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 	}
 
 	onBlockPlaced(x, y, z, block);
+	m_world.onBlockPlaced(x + m_x * width, y + m_y * depth, z + m_z * height, block);
 
 	if (m_data[z][y][x] != 0) {
 		const Block &oldBlock = Registry::getInstance().getBlock(m_data[z][y][x]);
 		onBlockDestroyed(x, y, z, oldBlock);
+		m_world.onBlockDestroyed(x + m_x * width, y + m_y * depth, z + m_z * height, oldBlock);
 	}
 
 	setBlockRaw(x, y, z, type);

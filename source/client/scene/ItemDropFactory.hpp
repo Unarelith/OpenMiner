@@ -24,37 +24,16 @@
  *
  * =====================================================================================
  */
-#ifndef SCENE_HPP_
-#define SCENE_HPP_
+#ifndef ITEMDROPFACTORY_HPP_
+#define ITEMDROPFACTORY_HPP_
 
-#include <gk/gl/Camera.hpp>
-#include <gk/gl/Drawable.hpp>
-#include <gk/graphics/BoxShape.hpp>
+#include <gk/core/IntTypes.hpp>
 
 #include <entt/entt.hpp>
 
-class ClientPlayer;
-
-class Scene : public gk::Drawable {
+class ItemDropFactory {
 	public:
-		Scene(ClientPlayer &player);
-
-		void update();
-
-		void setCamera(gk::Camera &camera) { m_camera = &camera; }
-
-		entt::DefaultRegistry &registry() { return m_registry; }
-
-	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		ClientPlayer &m_player;
-
-		gk::Camera *m_camera = nullptr;
-
-		gk::BoxShape m_testBox;
-
-		mutable entt::DefaultRegistry m_registry;
+		static void create(entt::DefaultRegistry &registry, double x, double y, double z, const std::string &itemID, u16 amount = 1);
 };
 
-#endif // SCENE_HPP_
+#endif // ITEMDROPFACTORY_HPP_

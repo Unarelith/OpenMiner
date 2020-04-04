@@ -51,6 +51,8 @@ class ClientWorld : public World, public gk::Drawable {
 		void sendChunkRequests();
 		void checkPlayerChunk(double playerX, double playerY, double playerZ);
 
+		void onBlockDestroyed(int x, int y, int z, const Block &block) override;
+
 		void clear();
 
 		void updateSky(u16 dimensionID);
@@ -59,6 +61,8 @@ class ClientWorld : public World, public gk::Drawable {
 		void removeChunk(ChunkMap::iterator &it);
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
+
+		Scene &scene() { return m_scene; }
 
 		void setClient(ClientCommandHandler &client) { m_client = &client; }
 		void setCamera(gk::Camera &camera) { m_camera = &camera; m_scene.setCamera(camera); }

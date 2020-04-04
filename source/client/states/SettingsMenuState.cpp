@@ -137,6 +137,7 @@ void SettingsMenuState::addGameplayButtons() {
 
 	addToggleButton("Fly Mode", Config::isFlyModeEnabled, false);
 	addToggleButton("No Clip", Config::isNoClipEnabled, false);
+	addToggleButton("Use item drops", Config::useItemDrops, false);
 }
 
 void SettingsMenuState::addInterfaceButtons() {

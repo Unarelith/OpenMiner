@@ -24,37 +24,17 @@
  *
  * =====================================================================================
  */
-#ifndef SCENE_HPP_
-#define SCENE_HPP_
+#ifndef RENDERINGCONTROLLER_HPP_
+#define RENDERINGCONTROLLER_HPP_
 
-#include <gk/gl/Camera.hpp>
-#include <gk/gl/Drawable.hpp>
-#include <gk/graphics/BoxShape.hpp>
+#include <gk/gl/RenderStates.hpp>
+#include <gk/gl/RenderTarget.hpp>
 
 #include <entt/entt.hpp>
 
-class ClientPlayer;
-
-class Scene : public gk::Drawable {
+class RenderingController {
 	public:
-		Scene(ClientPlayer &player);
-
-		void update();
-
-		void setCamera(gk::Camera &camera) { m_camera = &camera; }
-
-		entt::DefaultRegistry &registry() { return m_registry; }
-
-	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		ClientPlayer &m_player;
-
-		gk::Camera *m_camera = nullptr;
-
-		gk::BoxShape m_testBox;
-
-		mutable entt::DefaultRegistry m_registry;
+		static void draw(entt::DefaultRegistry &registry, gk::RenderTarget &target, gk::RenderStates states);
 };
 
-#endif // SCENE_HPP_
+#endif // RENDERINGCONTROLLER_HPP_

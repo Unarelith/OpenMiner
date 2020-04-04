@@ -24,37 +24,15 @@
  *
  * =====================================================================================
  */
-#ifndef SCENE_HPP_
-#define SCENE_HPP_
+#include "AnimationComponent.hpp"
+#include "AnimationController.hpp"
+#include "InventoryCube.hpp"
 
-#include <gk/gl/Camera.hpp>
-#include <gk/gl/Drawable.hpp>
-#include <gk/graphics/BoxShape.hpp>
+void AnimationController::update(entt::DefaultRegistry &registry) {
+	// FIXME: This shouldn't use InventoryCube but a more generic class
+	registry.view<InventoryCube, AnimationComponent>().each([](auto, auto &cube, auto &animation) {
+		if (animation.type == AnimationType::Rotation)
+			cube.rotate(animation.rotation.angle, {animation.rotation.axisX, animation.rotation.axisY, animation.rotation.axisZ});
+	});
+}
 
-#include <entt/entt.hpp>
-
-class ClientPlayer;
-
-class Scene : public gk::Drawable {
-	public:
-		Scene(ClientPlayer &player);
-
-		void update();
-
-		void setCamera(gk::Camera &camera) { m_camera = &camera; }
-
-		entt::DefaultRegistry &registry() { return m_registry; }
-
-	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		ClientPlayer &m_player;
-
-		gk::Camera *m_camera = nullptr;
-
-		gk::BoxShape m_testBox;
-
-		mutable entt::DefaultRegistry m_registry;
-};
-
-#endif // SCENE_HPP_

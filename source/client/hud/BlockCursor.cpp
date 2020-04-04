@@ -149,8 +149,11 @@ void BlockCursor::update(const Hotbar &hotbar) {
 			timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed());
 
 			if (ticks > m_animationStart + timeToBreak * 1000) {
-				ItemStack itemDrop = m_currentBlock->getItemDrop();
-				m_player.inventory().addStack(itemDrop.item().stringID(), itemDrop.amount());
+				if (!Config::useItemDrops) {
+					ItemStack itemDrop = m_currentBlock->getItemDrop();
+					m_player.inventory().addStack(itemDrop.item().stringID(), itemDrop.amount());
+				}
+
 				m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
 				m_animationStart = ticks;
 

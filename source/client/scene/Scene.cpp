@@ -24,54 +24,18 @@
  *
  * =====================================================================================
  */
+#include "AnimationController.hpp"
 #include "ClientPlayer.hpp"
+#include "CollisionController.hpp"
 #include "Scene.hpp"
-
-struct RotationAnimation {
-	float axisX;
-	float axisY;
-	float axisZ;
-
-	float angle;
-};
-
-#include "InventoryCube.hpp"
-#include "ItemStack.hpp"
-#include "Registry.hpp"
+#include "RenderingController.hpp"
 
 Scene::Scene(ClientPlayer &player) : m_player(player) {
 }
 
-void Scene::init() {
-	auto testEntity = m_registry.create();
-
-	InventoryCube &cube = m_registry.assign<InventoryCube>(testEntity, 0.25f, true);
-	cube.setOrigin(cube.size() / 2.f, cube.size() / 2.f, cube.size() / 2.f);
-	cube.setPosition(14 + cube.getOrigin().x, 13 + cube.getOrigin().y, 16 + cube.getOrigin().z);
-	cube.updateVertexBuffer(Registry::getInstance().getBlockFromStringID("default:cobblestone"));
-
-	m_registry.assign<RotationAnimation>(testEntity, 0.f, 0.f, 1.f, 1.f);
-	m_registry.assign<gk::DoubleBox>(testEntity, 0., 0., 0., cube.size(), cube.size(), cube.size());
-	m_registry.assign<ItemStack>(testEntity, "default:stick", 1);
-
-	m_isInitialized = true;
-}
-
 void Scene::update() {
-	if (!m_isInitialized) init();
-
-	m_registry.view<InventoryCube, RotationAnimation>().each([](auto, auto &cube, auto &rotation) {
-		cube.rotate(rotation.angle, {rotation.axisX, rotation.axisY, rotation.axisZ});
-	});
-
-	m_registry.view<InventoryCube, gk::DoubleBox, ItemStack>().each([this](auto entity, auto &cube, auto &box, auto &itemStack) {
-		gk::DoubleBox hitbox = box + cube.getPosition();
-		gk::DoubleBox playerHitbox = m_player.hitbox() + gk::Vector3d{m_player.x(), m_player.y(), m_player.z()};
-		if (hitbox.intersects(playerHitbox)) {
-			m_player.inventory().addStack(itemStack.item().stringID(), itemStack.amount());
-			m_registry.destroy(entity);
-		}
-	});
+	AnimationController::update(m_registry);
+	CollisionController::update(m_registry, m_player);
 }
 
 void Scene::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -81,8 +45,6 @@ void Scene::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	gk::Vector3d cameraPosition = m_camera->getDPosition();
 	states.transform.translate(-cameraPosition.x, -cameraPosition.y, -cameraPosition.z);
 
-	m_registry.view<InventoryCube>().each([&](auto, auto &cube) {
-		target.draw(cube, states);
-	});
+	RenderingController::draw(m_registry, target, states);
 }
 

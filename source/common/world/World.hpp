@@ -46,6 +46,9 @@ class World {
 		u16 getData(int x, int y, int z) const;
 		void setData(int x, int y, int z, u16 data) const;
 
+		virtual void onBlockPlaced(int, int, int, const Block &) {}
+		virtual void onBlockDestroyed(int, int, int, const Block &) {}
+
 		static bool isReloadRequested;
 };
 

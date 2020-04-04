@@ -24,37 +24,35 @@
  *
  * =====================================================================================
  */
-#ifndef SCENE_HPP_
-#define SCENE_HPP_
+#ifndef ANIMATIONCOMPONENT_HPP_
+#define ANIMATIONCOMPONENT_HPP_
 
-#include <gk/gl/Camera.hpp>
-#include <gk/gl/Drawable.hpp>
-#include <gk/graphics/BoxShape.hpp>
-
-#include <entt/entt.hpp>
-
-class ClientPlayer;
-
-class Scene : public gk::Drawable {
-	public:
-		Scene(ClientPlayer &player);
-
-		void update();
-
-		void setCamera(gk::Camera &camera) { m_camera = &camera; }
-
-		entt::DefaultRegistry &registry() { return m_registry; }
-
-	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		ClientPlayer &m_player;
-
-		gk::Camera *m_camera = nullptr;
-
-		gk::BoxShape m_testBox;
-
-		mutable entt::DefaultRegistry m_registry;
+enum class AnimationType {
+	Rotation,
 };
 
-#endif // SCENE_HPP_
+struct AnimationComponent {
+	AnimationComponent(float axisX, float axisY, float axisZ, float angle) {
+		type = AnimationType::Rotation;
+
+		rotation.axisX = axisX;
+		rotation.axisY = axisY;
+		rotation.axisZ = axisZ;
+
+		rotation.angle = angle;
+	}
+
+	AnimationType type;
+
+	union {
+		struct {
+			float axisX;
+			float axisY;
+			float axisZ;
+
+			float angle;
+		} rotation;
+	};
+};
+
+#endif // ANIMATIONCOMPONENT_HPP_
