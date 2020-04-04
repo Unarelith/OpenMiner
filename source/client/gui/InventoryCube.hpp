@@ -36,16 +36,18 @@ class TextureAtlas;
 
 class InventoryCube : public gk::Drawable, public gk::Transformable {
 	public:
-		InventoryCube(float size = 1.0f);
+		InventoryCube(float size = 1.0f, bool isEntity = false);
 
 		void updateVertexBuffer(const Block &block);
+
+		float size() const { return m_size; }
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		float m_size = 1.0f;
 
-		const TextureAtlas &m_textureAtlas;
+		const TextureAtlas *m_textureAtlas;
 
 		gk::VertexBuffer m_vbo;
 		bool m_isVboInitialized = false;
