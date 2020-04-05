@@ -40,8 +40,7 @@
 #include "TextureAtlas.hpp"
 #include "World.hpp"
 
-ClientWorld::ClientWorld(ClientPlayer &player) : m_scene(player),
-	m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
+ClientWorld::ClientWorld() : m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
 }
 

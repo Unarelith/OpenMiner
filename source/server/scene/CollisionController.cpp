@@ -37,6 +37,7 @@ void CollisionController::update(entt::DefaultRegistry &registry) {
 			gk::DoubleBox playerHitbox = it.second.hitbox() + gk::Vector3d{it.second.x(), it.second.y(), it.second.z()};
 			if (hitbox.intersects(playerHitbox)) {
 				it.second.inventory().addStack(itemStack.item().stringID(), itemStack.amount());
+				// FIXME: Send inventory update here
 				registry.destroy(entity);
 			}
 		}

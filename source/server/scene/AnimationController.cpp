@@ -26,7 +26,6 @@
  */
 #include "AnimationComponent.hpp"
 #include "AnimationController.hpp"
-#include "InventoryCube.hpp"
 
 void AnimationController::update(entt::DefaultRegistry &registry) {
 	registry.view<gk::Transformable, AnimationComponent>().each([](auto, auto &transformable, auto &animation) {

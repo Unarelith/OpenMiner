@@ -45,7 +45,7 @@ class ClientWorld : public World, public gk::Drawable {
 	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ClientChunk>>;
 
 	public:
-		ClientWorld(ClientPlayer &player);
+		ClientWorld();
 
 		void update();
 		void sendChunkRequests();

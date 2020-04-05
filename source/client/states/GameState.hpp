@@ -79,7 +79,7 @@ class GameState : public gk::ApplicationState {
 
 		Client m_client;
 
-		ClientWorld m_world{m_player};
+		ClientWorld m_world;
 
 		std::unordered_map<u16, PlayerBox> m_playerBoxes;
 

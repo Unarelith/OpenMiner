@@ -59,7 +59,7 @@ void ServerWorld::update() {
 	// FIXME: Should be placed somewhere else
 	static int lastTime = m_clock.getTicks(true);
 	int now = m_clock.getTicks(true);
-	if (now - lastTime > 1000) {
+	if (now - lastTime > 100) {
 		lastTime = now;
 
 		sf::Packet packet;
