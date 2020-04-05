@@ -37,16 +37,16 @@ struct BlockData;
 
 class ClientInfo;
 class Inventory;
+class PlayerList;
 class Registry;
 class ScriptEngine;
 class Server;
-class ServerPlayer;
 class ServerWorld;
 class WorldController;
 
 class ServerCommandHandler {
 	public:
-		ServerCommandHandler(ScriptEngine &scriptEngine, Server &server, WorldController &worldController, std::unordered_map<u16, ServerPlayer> &players, Registry &registry)
+		ServerCommandHandler(ScriptEngine &scriptEngine, Server &server, WorldController &worldController, PlayerList &players, Registry &registry)
 			: m_scriptEngine(scriptEngine), m_server(server), m_worldController(worldController), m_players(players), m_registry(registry) {}
 
 		void sendBlockDataUpdate(s32 x, s32 y, s32 z, const BlockData *blockData, const ClientInfo *client = nullptr) const;
@@ -68,7 +68,7 @@ class ServerCommandHandler {
 
 		Server &m_server;
 		WorldController &m_worldController;
-		std::unordered_map<u16, ServerPlayer> &m_players;
+		PlayerList &m_players;
 
 		Registry &m_registry;
 
