@@ -41,7 +41,7 @@ class ClientPlayer;
 
 class ClientScene : public Scene, public gk::Drawable {
 	public:
-		ClientScene(ClientPlayer &player);
+		ClientScene();
 
 		void setCamera(gk::Camera &camera) { m_camera = &camera; }
 

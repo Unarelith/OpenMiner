@@ -24,13 +24,10 @@
  *
  * =====================================================================================
  */
-#include "AnimationController.hpp"
-#include "ClientPlayer.hpp"
 #include "ClientScene.hpp"
 #include "RenderingController.hpp"
 
-ClientScene::ClientScene(ClientPlayer &player) {
-	m_controllers.emplace_back(new AnimationController);
+ClientScene::ClientScene() {
 	m_controllers.emplace_back(new RenderingController);
 }
 

@@ -45,13 +45,14 @@ sf::Packet &operator<<(sf::Packet &packet, const gk::Transformable &transformabl
 sf::Packet &operator>>(sf::Packet &packet, gk::Transformable &transformable) {
 	gk::Vector3f position, origin, scale;
 	float rotation;
-	packet >> position >> origin >> scale >> rotation
-		>> transformable.getRotationTransform().getMatrix();
+	packet >> position >> origin >> scale >> rotation;
 
 	transformable.setPosition(position);
 	transformable.setOrigin(origin);
 	transformable.setScale(scale);
 	transformable.setRotation(rotation);
+
+	packet >> transformable.getRotationTransform().getMatrix();
 
 	return packet;
 }
