@@ -26,7 +26,7 @@
  */
 #include "AnimationComponent.hpp"
 #include "DrawableComponent.hpp"
-#include "DrawableDefinitions.hpp"
+#include "DrawableDef.hpp"
 #include "ItemDropFactory.hpp"
 #include "ItemStack.hpp"
 #include "Registry.hpp"
@@ -34,11 +34,11 @@
 void ItemDropFactory::create(entt::DefaultRegistry &registry, double x, double y, double z, const std::string &itemID, u16 amount) {
 	auto entity = registry.create();
 
-	auto &drawableComponent = registry.assign<DrawableComponent>(entity);
-	auto &cube = drawableComponent.setDrawableDef<InventoryCubeDef>();
+	auto &drawableDef = registry.assign<DrawableDef>(entity);
+	auto &cube = drawableDef.addInventoryCube();
 	cube.size = 0.25f;
 	cube.origin = gk::Vector3f{cube.size / 2.f, cube.size / 2.f, cube.size / 2.f};
-	cube.block = itemID;
+	cube.blockID = itemID;
 
 	auto &transformable = registry.assign<gk::Transformable>(entity);
 	transformable.setPosition(x + 0.5, y + 0.5, z + 0.5);
@@ -47,7 +47,8 @@ void ItemDropFactory::create(entt::DefaultRegistry &registry, double x, double y
 	animationComponent.addRotation(0.f, 0.f, 1.f, 0.5f);
 	animationComponent.addTranslation(0.f, 0.f, -0.0005f, -0.2f, 0.f, true);
 
-	registry.assign<gk::DoubleBox>(entity, 0., 0., 0., cube.size, cube.size, cube.size);
+	// FIXME
+	// registry.assign<gk::DoubleBox>(entity, 0., 0., 0., cube.size, cube.size, cube.size);
 	registry.assign<ItemStack>(entity, itemID, amount);
 }
 

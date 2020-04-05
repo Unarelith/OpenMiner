@@ -24,23 +24,25 @@
  *
  * =====================================================================================
  */
-#ifndef DRAWABLEDEFINITIONS_HPP_
-#define DRAWABLEDEFINITIONS_HPP_
-
-#include <string>
-
-#include <gk/core/Vector3.hpp>
-
-#include "ISerializable.hpp"
+#include "DrawableDef.hpp"
 #include "NetworkUtils.hpp"
 
-struct InventoryCubeDef : public ISerializable {
-	float size = 1.f;
-	gk::Vector3f origin{0, 0, 0};
-	std::string block{"_:air"};
+InventoryCubeDef &DrawableDef::addInventoryCube() {
+	m_cubes.emplace_back();
+	return m_cubes.back();
+}
 
-	void serialize(sf::Packet &packet) const override { packet << size << origin << block; }
-	void deserialize(sf::Packet &packet) override { packet >> size >> origin >> block; }
-};
+void DrawableDef::serialize(sf::Packet &packet) const {
+	for (auto &it : m_cubes)
+		packet << u8(DrawableType::InventoryCube) << it;
+}
 
-#endif // DRAWABLEDEFINITIONS_HPP_
+void DrawableDef::deserialize(sf::Packet &packet) {
+	u8 type;
+	packet >> type;
+	if (type == DrawableType::InventoryCube) {
+		m_cubes.emplace_back();
+		packet >> m_cubes.back();
+	}
+}
+

@@ -57,10 +57,13 @@ void ServerWorld::update() {
 	m_scene.update();
 
 	// FIXME: Should be placed somewhere else
-	// FIXME: Shouldn't send that often
-	if (m_clock.getTicks() % 100 < 12) {
+	static int lastTime = m_clock.getTicks(true);
+	int now = m_clock.getTicks(true);
+	if (now - lastTime > 1000) {
+		lastTime = now;
+
 		sf::Packet packet;
-		packet << Network::Command::SceneState; // FIXME
+		packet << Network::Command::SceneState;
 		packet << m_dimension.id();
 		packet << m_scene;
 		m_server->server().sendToAllClients(packet);
