@@ -37,7 +37,7 @@
 #include "Server.hpp"
 #include "ServerCommandHandler.hpp"
 #include "ServerModLoader.hpp"
-#include "ServerPlayer.hpp"
+#include "PlayerList.hpp"
 #include "WorldController.hpp"
 
 struct ServerOnlineEvent {
@@ -73,7 +73,7 @@ class ServerApplication {
 		u16 m_port = 4242;
 
 		WorldController m_worldController{m_registry, m_clock};
-		std::unordered_map<u16, ServerPlayer> m_players;
+		PlayerList m_players;
 
 		Server m_server;
 		ServerCommandHandler m_serverCommandHandler{m_scriptEngine, m_server, m_worldController, m_players, m_registry};
