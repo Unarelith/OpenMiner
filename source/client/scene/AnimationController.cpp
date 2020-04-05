@@ -29,11 +29,10 @@
 #include "InventoryCube.hpp"
 
 void AnimationController::update(entt::DefaultRegistry &registry) {
-	// FIXME: This shouldn't use InventoryCube but a more generic class
-	registry.view<InventoryCube, AnimationComponent>().each([](auto, auto &cube, auto &animation) {
+	registry.view<gk::Transformable, AnimationComponent>().each([](auto, auto &transformable, auto &animation) {
 		for (auto &it : animation.list) {
 			if (it.type == AnimationType::Rotation)
-				cube.rotate(it.rotation.angle, {it.rotation.axisX, it.rotation.axisY, it.rotation.axisZ});
+				transformable.rotate(it.rotation.angle, {it.rotation.axisX, it.rotation.axisY, it.rotation.axisZ});
 			else if (it.type == AnimationType::Translation) {
 				float dx = it.translation.dx;
 				float dy = it.translation.dy;
@@ -51,7 +50,7 @@ void AnimationController::update(entt::DefaultRegistry &registry) {
 				 || it.translation.cz + it.translation.dz < it.translation.min)
 					dz = (it.translation.loop) ? -dz : 0;
 
-				cube.move(dx, dy, dz);
+				transformable.move(dx, dy, dz);
 
 				it.translation.cx += dx;
 				it.translation.cy += dy;

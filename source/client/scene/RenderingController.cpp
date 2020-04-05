@@ -24,13 +24,21 @@
  *
  * =====================================================================================
  */
+#include "DrawableComponent.hpp"
 #include "InventoryCube.hpp"
 #include "RenderingController.hpp"
 
+#include <gk/core/Debug.hpp>
+#include <gk/core/GameClock.hpp>
+
 void RenderingController::draw(entt::DefaultRegistry &registry, gk::RenderTarget &target, gk::RenderStates states) {
-	// FIXME: There's probably another way to do this
-	registry.view<InventoryCube>().each([&](auto, auto &cube) {
-		target.draw(cube, states);
+	registry.view<DrawableComponent, gk::Transformable>().each([&](auto entity, auto &drawable, auto &transformable) {
+		if (gk::GameClock::getInstance().getTicks() % 100 < 12)
+			gkDebug() << "Drawing entity" << entity << "at" << transformable.getPosition();
+
+		gk::RenderStates drawStates = states;
+		drawStates.transform *= transformable.getTransform();
+		drawable.draw(target, drawStates);
 	});
 }
 

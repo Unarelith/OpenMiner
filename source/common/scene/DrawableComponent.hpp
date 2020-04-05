@@ -24,19 +24,28 @@
  *
  * =====================================================================================
  */
-#include "ClientPlayer.hpp"
-#include "CollisionController.hpp"
-#include "InventoryCube.hpp"
-#include "ItemStack.hpp"
+#ifndef DRAWABLECOMPONENT_HPP_
+#define DRAWABLECOMPONENT_HPP_
 
-void CollisionController::update(entt::DefaultRegistry &registry) {
-	registry.view<gk::Transformable, gk::DoubleBox, ItemStack>().each([&](auto entity, auto &transformable, auto &box, auto &itemStack) {
-		gk::DoubleBox hitbox = box + transformable.getPosition();
-		gk::DoubleBox playerHitbox = m_player.hitbox() + gk::Vector3d{m_player.x(), m_player.y(), m_player.z()};
-		if (hitbox.intersects(playerHitbox)) {
-			m_player.inventory().addStack(itemStack.item().stringID(), itemStack.amount());
-			registry.destroy(entity);
+#include <memory>
+
+#include <gk/gl/Drawable.hpp>
+
+class DrawableComponent {
+	public:
+		template<typename T, typename... Args>
+		auto setDrawable(Args &&...args) -> typename std::enable_if<std::is_base_of<gk::Drawable, T>::value, T &>::type {
+			m_drawable.reset(new T(std::forward<Args>(args)...));
+			return *static_cast<T*>(m_drawable.get());
 		}
-	});
-}
 
+		void draw(gk::RenderTarget &target, gk::RenderStates states) {
+			if (m_drawable)
+				target.draw(*m_drawable, states);
+		}
+
+	private:
+		std::unique_ptr<gk::Drawable> m_drawable;
+};
+
+#endif // DRAWABLECOMPONENT_HPP_

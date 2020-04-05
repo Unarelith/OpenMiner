@@ -33,8 +33,8 @@
 #include <gk/core/Vector4.hpp>
 
 #include "ClientChunk.hpp"
+#include "ClientScene.hpp"
 #include "Network.hpp"
-#include "Scene.hpp"
 #include "World.hpp"
 
 class ClientCommandHandler;
@@ -62,7 +62,7 @@ class ClientWorld : public World, public gk::Drawable {
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
 
-		Scene &scene() { return m_scene; }
+		ClientScene &scene() { return m_scene; }
 
 		void setClient(ClientCommandHandler &client) { m_client = &client; }
 		void setCamera(gk::Camera &camera) { m_camera = &camera; m_scene.setCamera(camera); }
@@ -74,7 +74,7 @@ class ClientWorld : public World, public gk::Drawable {
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		Scene m_scene;
+		ClientScene m_scene;
 
 		ChunkMap m_chunks;
 

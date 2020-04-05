@@ -24,31 +24,24 @@
  *
  * =====================================================================================
  */
-#include "AnimationController.hpp"
-#include "ClientPlayer.hpp"
-#include "CollisionController.hpp"
-#include "Scene.hpp"
-#include "RenderingController.hpp"
+#ifndef SCENE_HPP_
+#define SCENE_HPP_
 
-Scene::Scene(ClientPlayer &player) : m_player(player) {
-	m_controllers.emplace_back(new AnimationController);
-	m_controllers.emplace_back(new CollisionController(player));
-	m_controllers.emplace_back(new RenderingController);
-}
+#include "ISerializable.hpp"
+#include "SceneSerializer.hpp"
 
-void Scene::update() {
-	for (auto &controller : m_controllers)
-		controller->update(m_registry);
-}
+class Scene : public ISerializable {
+	public:
+		void serialize(sf::Packet &packet) const override { m_serializer.serialize(packet); }
+		void deserialize(sf::Packet &packet) override { m_serializer.deserialize(packet); }
 
-void Scene::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	if (!m_camera) return;
+		entt::DefaultRegistry &registry() { return m_registry; }
 
-	// Subtract the camera position - see comment in ClientWorld::draw()
-	gk::Vector3d cameraPosition = m_camera->getDPosition();
-	states.transform.translate(-cameraPosition.x, -cameraPosition.y, -cameraPosition.z);
+	protected:
+		mutable entt::DefaultRegistry m_registry;
 
-	for (auto &controller : m_controllers)
-		controller->draw(m_registry, target, states);
-}
+	private:
+		SceneSerializer m_serializer{*this};
+};
 
+#endif // SCENE_HPP_

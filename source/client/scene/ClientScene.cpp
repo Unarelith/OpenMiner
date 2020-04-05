@@ -24,19 +24,43 @@
  *
  * =====================================================================================
  */
+#include "AnimationController.hpp"
 #include "ClientPlayer.hpp"
+#include "ClientScene.hpp"
 #include "CollisionController.hpp"
-#include "InventoryCube.hpp"
-#include "ItemStack.hpp"
+#include "RenderingController.hpp"
 
-void CollisionController::update(entt::DefaultRegistry &registry) {
-	registry.view<gk::Transformable, gk::DoubleBox, ItemStack>().each([&](auto entity, auto &transformable, auto &box, auto &itemStack) {
-		gk::DoubleBox hitbox = box + transformable.getPosition();
-		gk::DoubleBox playerHitbox = m_player.hitbox() + gk::Vector3d{m_player.x(), m_player.y(), m_player.z()};
-		if (hitbox.intersects(playerHitbox)) {
-			m_player.inventory().addStack(itemStack.item().stringID(), itemStack.amount());
-			registry.destroy(entity);
-		}
-	});
+ClientScene::ClientScene(ClientPlayer &player) : m_player(player) {
+	m_controllers.emplace_back(new AnimationController);
+	m_controllers.emplace_back(new CollisionController(player));
+	m_controllers.emplace_back(new RenderingController);
+}
+
+void ClientScene::update() {
+	for (auto &controller : m_controllers)
+		controller->update(m_registry);
+
+	static bool test = false;
+	if (!test && m_registry.alive() > 2) {
+		gkDebug() << "serializing...";
+		sf::Packet packet;
+		serialize(packet);
+		gkDebug() << "deserializing...";
+		deserialize(packet);
+		gkDebug() << "serializing...";
+		serialize(packet);
+		test = true;
+	}
+}
+
+void ClientScene::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	if (!m_camera) return;
+
+	// Subtract the camera position - see comment in ClientWorld::draw()
+	gk::Vector3d cameraPosition = m_camera->getDPosition();
+	states.transform.translate(-cameraPosition.x, -cameraPosition.y, -cameraPosition.z);
+
+	for (auto &controller : m_controllers)
+		controller->draw(m_registry, target, states);
 }
 

@@ -24,19 +24,28 @@
  *
  * =====================================================================================
  */
-#include "ClientPlayer.hpp"
-#include "CollisionController.hpp"
-#include "InventoryCube.hpp"
+#include "AnimationComponent.hpp"
 #include "ItemStack.hpp"
+#include "Scene.hpp"
+#include "SceneSerializer.hpp"
 
-void CollisionController::update(entt::DefaultRegistry &registry) {
-	registry.view<gk::Transformable, gk::DoubleBox, ItemStack>().each([&](auto entity, auto &transformable, auto &box, auto &itemStack) {
-		gk::DoubleBox hitbox = box + transformable.getPosition();
-		gk::DoubleBox playerHitbox = m_player.hitbox() + gk::Vector3d{m_player.x(), m_player.y(), m_player.z()};
-		if (hitbox.intersects(playerHitbox)) {
-			m_player.inventory().addStack(itemStack.item().stringID(), itemStack.amount());
-			registry.destroy(entity);
-		}
-	});
+void SceneSerializer::serialize(sf::Packet &packet) const {
+	m_outputArchive.setPacket(packet);
+	m_scene.registry().snapshot().component<AnimationComponent, gk::DoubleBox, ItemStack, gk::Transformable>(m_outputArchive);
+}
+
+void SceneSerializer::deserialize(sf::Packet &packet) {
+	m_inputArchive.setPacket(packet);
+	m_scene.registry().restore().component<AnimationComponent, gk::DoubleBox, ItemStack, gk::Transformable>(m_inputArchive);
+}
+
+void SceneSerializer::OutputArchive::operator()(Entity entity) {
+	gkDebug() << entity;
+	(*m_packet) << entity;
+}
+
+void SceneSerializer::InputArchive::operator()(Entity &entity) {
+	(*m_packet) >> entity;
+	gkDebug() << entity;
 }
 

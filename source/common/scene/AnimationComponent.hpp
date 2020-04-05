@@ -29,12 +29,17 @@
 
 #include <vector>
 
+#include <gk/core/IntTypes.hpp>
+
+#include "ISerializable.hpp"
+#include "NetworkUtils.hpp"
+
 enum class AnimationType {
 	Rotation,
 	Translation,
 };
 
-struct AnimationData {
+struct AnimationData : public ISerializable {
 	AnimationType type;
 
 	union {
@@ -53,9 +58,36 @@ struct AnimationData {
 			bool loop;
 		} translation;
 	};
+
+	void serialize(sf::Packet &packet) const override {
+		packet << u8(type);
+		if (type == AnimationType::Rotation) {
+			packet << rotation.axisX << rotation.axisY << rotation.axisZ << rotation.angle;
+		}
+		else if (type == AnimationType::Translation) {
+			packet << translation.dx << translation.dy << translation.dz
+				<< translation.cx << translation.cy << translation.cz
+				<< translation.min << translation.max << translation.loop;
+		}
+	}
+
+	void deserialize(sf::Packet &packet) override {
+		u8 type;
+		packet >> type;
+		if (type == u8(AnimationType::Rotation)) {
+			packet >> rotation.axisX >> rotation.axisY >> rotation.axisZ >> rotation.angle;
+		}
+		else if (type == u8(AnimationType::Translation)) {
+			packet >> translation.dx >> translation.dy >> translation.dz
+				>> translation.cx >> translation.cy >> translation.cz
+				>> translation.min >> translation.max >> translation.loop;
+		}
+
+		this->type = AnimationType(type);
+	}
 };
 
-struct AnimationComponent {
+struct AnimationComponent : public ISerializable {
 	void addRotation(float axisX, float axisY, float axisZ, float angle) {
 		list.emplace_back();
 		AnimationData &data = list.back();
@@ -88,6 +120,9 @@ struct AnimationComponent {
 
 		data.translation.loop = loop;
 	}
+
+	void serialize(sf::Packet &packet) const override { packet << list; }
+	void deserialize(sf::Packet &packet) override { packet >> list; }
 
 	std::vector<AnimationData> list;
 };
