@@ -27,12 +27,10 @@
 #include "AnimationController.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientScene.hpp"
-#include "CollisionController.hpp"
 #include "RenderingController.hpp"
 
 ClientScene::ClientScene(ClientPlayer &player) {
 	m_controllers.emplace_back(new AnimationController);
-	m_controllers.emplace_back(new CollisionController(player));
 	m_controllers.emplace_back(new RenderingController);
 }
 

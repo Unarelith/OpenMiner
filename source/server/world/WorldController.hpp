@@ -41,7 +41,7 @@ class WorldController {
 	public:
 		WorldController(Registry &registry, gk::GameClock &clock) : m_registry(registry), m_clock(clock) {}
 
-		void init();
+		void init(PlayerList &players);
 
 		void update();
 

@@ -47,8 +47,7 @@ void ItemDropFactory::create(entt::DefaultRegistry &registry, double x, double y
 	animationComponent.addRotation(0.f, 0.f, 1.f, 0.5f);
 	animationComponent.addTranslation(0.f, 0.f, -0.0005f, -0.2f, 0.f, true);
 
-	// FIXME
-	// registry.assign<gk::DoubleBox>(entity, 0., 0., 0., cube.size, cube.size, cube.size);
+	registry.assign<gk::DoubleBox>(entity, 0., 0., 0., cube.size, cube.size, cube.size);
 	registry.assign<ItemStack>(entity, itemID, amount);
 }
 

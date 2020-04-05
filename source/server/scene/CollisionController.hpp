@@ -29,16 +29,16 @@
 
 #include "AbstractController.hpp"
 
-class ClientPlayer;
+class PlayerList;
 
 class CollisionController : public AbstractController {
 	public:
-		CollisionController(ClientPlayer &player) : m_player(player) {}
+		CollisionController(PlayerList &players) : m_players(players) {}
 
 		void update(entt::DefaultRegistry &registry);
 
 	private:
-		ClientPlayer &m_player;
+		PlayerList &m_players;
 };
 
 #endif // COLLISIONCONTROLLER_HPP_
