@@ -24,30 +24,16 @@
  *
  * =====================================================================================
  */
-#ifndef SCENE_HPP_
-#define SCENE_HPP_
+#ifndef SERVERSCENE_HPP_
+#define SERVERSCENE_HPP_
 
-#include "AbstractController.hpp"
-#include "ISerializable.hpp"
-#include "SceneSerializer.hpp"
+#include "Scene.hpp"
 
-class Scene : public ISerializable {
+class ServerScene : public Scene {
 	public:
-		virtual void update() { for (auto &controller : m_controllers) controller->update(m_registry); }
+		ServerScene();
 
-		void serialize(sf::Packet &packet) const override { m_serializer.serialize(packet, *this); }
-		void deserialize(sf::Packet &packet) override { m_serializer.deserialize(packet, *this); }
-
-		const entt::DefaultRegistry &registry() const { return m_registry; }
-		entt::DefaultRegistry &registry() { return m_registry; }
-
-	protected:
-		mutable entt::DefaultRegistry m_registry;
-
-		std::deque<std::unique_ptr<AbstractController>> m_controllers;
-
-	private:
-		SceneSerializer m_serializer;
+		void update() override;
 };
 
-#endif // SCENE_HPP_
+#endif // SERVERSCENE_HPP_

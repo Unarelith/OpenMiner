@@ -35,7 +35,6 @@
 
 #include <entt/entt.hpp>
 
-#include "AbstractController.hpp"
 #include "Scene.hpp"
 
 class ClientPlayer;
@@ -44,18 +43,12 @@ class ClientScene : public Scene, public gk::Drawable {
 	public:
 		ClientScene(ClientPlayer &player);
 
-		void update();
-
 		void setCamera(gk::Camera &camera) { m_camera = &camera; }
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		ClientPlayer &m_player;
-
 		gk::Camera *m_camera = nullptr;
-
-		std::deque<std::unique_ptr<AbstractController>> m_controllers;
 };
 
 #endif // CLIENTSCENE_HPP_

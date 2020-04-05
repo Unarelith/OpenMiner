@@ -30,27 +30,10 @@
 #include "CollisionController.hpp"
 #include "RenderingController.hpp"
 
-ClientScene::ClientScene(ClientPlayer &player) : m_player(player) {
+ClientScene::ClientScene(ClientPlayer &player) {
 	m_controllers.emplace_back(new AnimationController);
 	m_controllers.emplace_back(new CollisionController(player));
 	m_controllers.emplace_back(new RenderingController);
-}
-
-void ClientScene::update() {
-	for (auto &controller : m_controllers)
-		controller->update(m_registry);
-
-	static bool test = false;
-	if (!test && m_registry.alive() > 2) {
-		gkDebug() << "serializing...";
-		sf::Packet packet;
-		serialize(packet);
-		gkDebug() << "deserializing...";
-		deserialize(packet);
-		gkDebug() << "serializing...";
-		serialize(packet);
-		test = true;
-	}
 }
 
 void ClientScene::draw(gk::RenderTarget &target, gk::RenderStates states) const {

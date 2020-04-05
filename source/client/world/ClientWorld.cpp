@@ -101,11 +101,6 @@ void ClientWorld::checkPlayerChunk(double playerX, double playerY, double player
 	}
 }
 
-void ClientWorld::onBlockDestroyed(int x, int y, int z, const Block &block) {
-	if (Config::useItemDrops)
-		ItemDropFactory::create(m_scene.registry(), x, y, z, block.getItemDrop().item().stringID(), block.getItemDrop().amount());
-}
-
 void ClientWorld::clear() {
 	m_chunks.clear();
 }

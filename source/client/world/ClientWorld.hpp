@@ -51,8 +51,6 @@ class ClientWorld : public World, public gk::Drawable {
 		void sendChunkRequests();
 		void checkPlayerChunk(double playerX, double playerY, double playerZ);
 
-		void onBlockDestroyed(int x, int y, int z, const Block &block) override;
-
 		void clear();
 
 		void updateSky(u16 dimensionID);

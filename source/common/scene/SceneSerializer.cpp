@@ -25,18 +25,19 @@
  * =====================================================================================
  */
 #include "AnimationComponent.hpp"
+#include "DrawableComponent.hpp"
 #include "ItemStack.hpp"
 #include "Scene.hpp"
 #include "SceneSerializer.hpp"
 
-void SceneSerializer::serialize(sf::Packet &packet) const {
+void SceneSerializer::serialize(sf::Packet &packet, const Scene &scene) const {
 	m_outputArchive.setPacket(packet);
-	m_scene.registry().snapshot().component<AnimationComponent, gk::DoubleBox, ItemStack, gk::Transformable>(m_outputArchive);
+	scene.registry().snapshot().component<AnimationComponent, gk::DoubleBox, ItemStack, gk::Transformable>(m_outputArchive);
 }
 
-void SceneSerializer::deserialize(sf::Packet &packet) {
+void SceneSerializer::deserialize(sf::Packet &packet, Scene &scene) {
 	m_inputArchive.setPacket(packet);
-	m_scene.registry().restore().component<AnimationComponent, gk::DoubleBox, ItemStack, gk::Transformable>(m_inputArchive);
+	scene.registry().restore().component<AnimationComponent, gk::DoubleBox, ItemStack, gk::Transformable>(m_inputArchive);
 }
 
 void SceneSerializer::OutputArchive::operator()(Entity entity) {
