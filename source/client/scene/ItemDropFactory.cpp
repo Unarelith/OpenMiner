@@ -38,7 +38,10 @@ void ItemDropFactory::create(entt::DefaultRegistry &registry, double x, double y
 	cube.setPosition(x + 0.5, y + 0.5, z + 0.5);
 	cube.updateVertexBuffer(Registry::getInstance().getBlockFromStringID(itemID));
 
-	registry.assign<AnimationComponent>(entity, 0.f, 0.f, 1.f, 0.5f);
+	auto &animationComponent = registry.assign<AnimationComponent>(entity);
+	animationComponent.addRotation(0.f, 0.f, 1.f, 0.5f);
+	animationComponent.addTranslation(0.f, 0.f, -0.0005f, -0.2f, 0.f, true);
+
 	registry.assign<gk::DoubleBox>(entity, 0., 0., 0., cube.size(), cube.size(), cube.size());
 	registry.assign<ItemStack>(entity, itemID, amount);
 }

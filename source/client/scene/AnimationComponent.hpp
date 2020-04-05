@@ -27,21 +27,14 @@
 #ifndef ANIMATIONCOMPONENT_HPP_
 #define ANIMATIONCOMPONENT_HPP_
 
+#include <vector>
+
 enum class AnimationType {
 	Rotation,
+	Translation,
 };
 
-struct AnimationComponent {
-	AnimationComponent(float axisX, float axisY, float axisZ, float angle) {
-		type = AnimationType::Rotation;
-
-		rotation.axisX = axisX;
-		rotation.axisY = axisY;
-		rotation.axisZ = axisZ;
-
-		rotation.angle = angle;
-	}
-
+struct AnimationData {
 	AnimationType type;
 
 	union {
@@ -52,7 +45,51 @@ struct AnimationComponent {
 
 			float angle;
 		} rotation;
+
+		struct {
+			float dx, dy, dz;
+			float cx, cy, cz;
+			float min, max;
+			bool loop;
+		} translation;
 	};
+};
+
+struct AnimationComponent {
+	void addRotation(float axisX, float axisY, float axisZ, float angle) {
+		list.emplace_back();
+		AnimationData &data = list.back();
+
+		data.type = AnimationType::Rotation;
+
+		data.rotation.axisX = axisX;
+		data.rotation.axisY = axisY;
+		data.rotation.axisZ = axisZ;
+
+		data.rotation.angle = angle;
+	}
+
+	void addTranslation(float dx, float dy, float dz, float min, float max, bool loop) {
+		list.emplace_back();
+		AnimationData &data = list.back();
+
+		data.type = AnimationType::Translation;
+
+		data.translation.dx = dx;
+		data.translation.dy = dy;
+		data.translation.dz = dz;
+
+		data.translation.cx = 0;
+		data.translation.cy = 0;
+		data.translation.cz = 0;
+
+		data.translation.min = min;
+		data.translation.max = max;
+
+		data.translation.loop = loop;
+	}
+
+	std::vector<AnimationData> list;
 };
 
 #endif // ANIMATIONCOMPONENT_HPP_

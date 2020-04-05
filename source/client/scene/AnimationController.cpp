@@ -31,8 +31,37 @@
 void AnimationController::update(entt::DefaultRegistry &registry) {
 	// FIXME: This shouldn't use InventoryCube but a more generic class
 	registry.view<InventoryCube, AnimationComponent>().each([](auto, auto &cube, auto &animation) {
-		if (animation.type == AnimationType::Rotation)
-			cube.rotate(animation.rotation.angle, {animation.rotation.axisX, animation.rotation.axisY, animation.rotation.axisZ});
+		for (auto &it : animation.list) {
+			if (it.type == AnimationType::Rotation)
+				cube.rotate(it.rotation.angle, {it.rotation.axisX, it.rotation.axisY, it.rotation.axisZ});
+			else if (it.type == AnimationType::Translation) {
+				float dx = it.translation.dx;
+				float dy = it.translation.dy;
+				float dz = it.translation.dz;
+
+				if (it.translation.cx + it.translation.dx > it.translation.max
+				 || it.translation.cx + it.translation.dx < it.translation.min)
+					dx = (it.translation.loop) ? -dx : 0;
+
+				if (it.translation.cy + it.translation.dy > it.translation.max
+				 || it.translation.cy + it.translation.dy < it.translation.min)
+					dy = (it.translation.loop) ? -dy : 0;
+
+				if (it.translation.cz + it.translation.dz > it.translation.max
+				 || it.translation.cz + it.translation.dz < it.translation.min)
+					dz = (it.translation.loop) ? -dz : 0;
+
+				cube.move(dx, dy, dz);
+
+				it.translation.cx += dx;
+				it.translation.cy += dy;
+				it.translation.cz += dz;
+
+				it.translation.dx = dx;
+				it.translation.dy = dy;
+				it.translation.dz = dz;
+			}
+		}
 	});
 }
 
