@@ -72,7 +72,7 @@ void ServerApplication::init() {
 	m_serverCommandHandler.setupCallbacks();
 
 	m_worldController.setServer(m_serverCommandHandler);
-	m_worldController.init();
+	m_worldController.init(m_players);
 
 	m_scriptEngine.luaCore().setRegistry(&m_registry);
 

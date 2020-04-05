@@ -27,11 +27,10 @@
 #include <gk/core/Debug.hpp>
 #include <gk/core/GameClock.hpp>
 
+#include "CollisionController.hpp"
 #include "ServerScene.hpp"
 
-ServerScene::ServerScene() {
-}
-
-void ServerScene::update() {
+ServerScene::ServerScene(PlayerList &players) {
+	m_controllers.emplace_back(new CollisionController(players));
 }
 

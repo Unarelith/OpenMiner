@@ -24,18 +24,21 @@
  *
  * =====================================================================================
  */
-#include "ClientPlayer.hpp"
+#include <gk/gl/Transformable.hpp>
+
 #include "CollisionController.hpp"
-#include "InventoryCube.hpp"
 #include "ItemStack.hpp"
+#include "PlayerList.hpp"
 
 void CollisionController::update(entt::DefaultRegistry &registry) {
 	registry.view<gk::Transformable, gk::DoubleBox, ItemStack>().each([&](auto entity, auto &transformable, auto &box, auto &itemStack) {
-		gk::DoubleBox hitbox = box + transformable.getPosition();
-		gk::DoubleBox playerHitbox = m_player.hitbox() + gk::Vector3d{m_player.x(), m_player.y(), m_player.z()};
-		if (hitbox.intersects(playerHitbox)) {
-			m_player.inventory().addStack(itemStack.item().stringID(), itemStack.amount());
-			registry.destroy(entity);
+		for (auto &it : m_players) {
+			gk::DoubleBox hitbox = box + transformable.getPosition();
+			gk::DoubleBox playerHitbox = it.second.hitbox() + gk::Vector3d{it.second.x(), it.second.y(), it.second.z()};
+			if (hitbox.intersects(playerHitbox)) {
+				it.second.inventory().addStack(itemStack.item().stringID(), itemStack.amount());
+				registry.destroy(entity);
+			}
 		}
 	});
 }

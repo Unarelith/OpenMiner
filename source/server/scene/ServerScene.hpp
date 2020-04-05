@@ -29,11 +29,11 @@
 
 #include "Scene.hpp"
 
+class PlayerList;
+
 class ServerScene : public Scene {
 	public:
-		ServerScene();
-
-		void update() override;
+		ServerScene(PlayerList &players);
 };
 
 #endif // SERVERSCENE_HPP_

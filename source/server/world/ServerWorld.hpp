@@ -40,6 +40,7 @@ namespace gk {
 
 class ClientInfo;
 class Dimension;
+class PlayerList;
 class ServerCommandHandler;
 class ServerPlayer;
 
@@ -47,8 +48,8 @@ class ServerWorld : public World {
 	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ServerChunk>>;
 
 	public:
-		ServerWorld(const Dimension &dimension, gk::GameClock &clock)
-			: m_dimension(dimension), m_terrainGenerator(dimension), m_clock(clock) {}
+		ServerWorld(PlayerList &players, const Dimension &dimension, gk::GameClock &clock)
+			: m_dimension(dimension), m_terrainGenerator(dimension), m_clock(clock), m_scene(players) {}
 
 		void update();
 
