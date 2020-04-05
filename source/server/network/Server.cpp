@@ -173,8 +173,8 @@ void Server::disconnectClient(ClientInfo &client) {
 	}
 }
 
-void Server::sendToAllClients(sf::Packet &packet) {
-	for (ClientInfo &client : m_info.clients()) {
+void Server::sendToAllClients(sf::Packet &packet) const {
+	for (const ClientInfo &client : m_info.clients()) {
 		client.tcpSocket->send(packet);
 	}
 }

@@ -31,6 +31,7 @@
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "ClientCommandHandler.hpp"
+#include "DrawableComponent.hpp"
 #include "LuaGUIState.hpp"
 #include "Registry.hpp"
 
@@ -240,6 +241,20 @@ void ClientCommandHandler::setupCallbacks() {
 				}
 			}
 		}
+	});
+
+	m_client.setCommandCallback(Network::Command::SceneState, [this](sf::Packet &packet) {
+		u16 dimensionID;
+		packet >> dimensionID;
+		// FIXME: Check dimension and only apply changes if it's the same as the current one
+
+		packet >> m_world.scene();
+
+		// FIXME: Move this elsewhere
+		m_world.scene().registry().view<DrawableComponent>().each([](auto, auto &drawableComponent) {
+			if (!drawableComponent.drawable() && drawableComponent.drawableDef()) {
+			}
+		});
 	});
 }
 

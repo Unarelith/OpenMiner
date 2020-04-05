@@ -31,19 +31,16 @@
 
 #include <entt/entt.hpp>
 
-#include "ISerializable.hpp"
 #include "NetworkUtils.hpp"
 
 class Scene;
 
-class SceneSerializer : public ISerializable {
+class SceneSerializer {
 	using Entity = entt::DefaultRegistry::entity_type;
 
 	public:
-		SceneSerializer(Scene &scene) : m_scene(scene) {}
-
-		void serialize(sf::Packet &packet) const;
-		void deserialize(sf::Packet &packet);
+		void serialize(sf::Packet &packet, const Scene &scene) const;
+		void deserialize(sf::Packet &packet, Scene &scene);
 
 	private:
 		class OutputArchive {
@@ -52,7 +49,7 @@ class SceneSerializer : public ISerializable {
 
 				template<typename T>
 				void operator()(Entity entity, const T &value) {
-					// gkDebug() << entity << value;
+					gkDebug() << entity << (void *)&value;
 					(*m_packet) << entity << value;
 				}
 
@@ -69,7 +66,7 @@ class SceneSerializer : public ISerializable {
 				template<typename T>
 				void operator()(Entity &entity, T &value) {
 					(*m_packet) >> entity >> value;
-					// gkDebug() << entity << value;
+					gkDebug() << entity << (void *)&value;
 				}
 
 				void setPacket(sf::Packet &packet) { m_packet = &packet; }
@@ -77,8 +74,6 @@ class SceneSerializer : public ISerializable {
 			private:
 				sf::Packet *m_packet = nullptr;
 		};
-
-		Scene &m_scene;
 
 		mutable OutputArchive m_outputArchive;
 		mutable InputArchive m_inputArchive;

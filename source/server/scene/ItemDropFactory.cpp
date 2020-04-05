@@ -24,30 +24,30 @@
  *
  * =====================================================================================
  */
-#ifndef SCENE_HPP_
-#define SCENE_HPP_
+#include "AnimationComponent.hpp"
+#include "DrawableComponent.hpp"
+#include "DrawableDefinitions.hpp"
+#include "ItemDropFactory.hpp"
+#include "ItemStack.hpp"
+#include "Registry.hpp"
 
-#include "AbstractController.hpp"
-#include "ISerializable.hpp"
-#include "SceneSerializer.hpp"
+void ItemDropFactory::create(entt::DefaultRegistry &registry, double x, double y, double z, const std::string &itemID, u16 amount) {
+	auto entity = registry.create();
 
-class Scene : public ISerializable {
-	public:
-		virtual void update() { for (auto &controller : m_controllers) controller->update(m_registry); }
+	auto &drawableComponent = registry.assign<DrawableComponent>(entity);
+	auto &cube = drawableComponent.setDrawableDef<InventoryCubeDef>();
+	cube.size = 0.25f;
+	cube.origin = gk::Vector3f{cube.size / 2.f, cube.size / 2.f, cube.size / 2.f};
+	cube.block = itemID;
 
-		void serialize(sf::Packet &packet) const override { m_serializer.serialize(packet, *this); }
-		void deserialize(sf::Packet &packet) override { m_serializer.deserialize(packet, *this); }
+	auto &transformable = registry.assign<gk::Transformable>(entity);
+	transformable.setPosition(x + 0.5, y + 0.5, z + 0.5);
 
-		const entt::DefaultRegistry &registry() const { return m_registry; }
-		entt::DefaultRegistry &registry() { return m_registry; }
+	auto &animationComponent = registry.assign<AnimationComponent>(entity);
+	animationComponent.addRotation(0.f, 0.f, 1.f, 0.5f);
+	animationComponent.addTranslation(0.f, 0.f, -0.0005f, -0.2f, 0.f, true);
 
-	protected:
-		mutable entt::DefaultRegistry m_registry;
+	registry.assign<gk::DoubleBox>(entity, 0., 0., 0., cube.size, cube.size, cube.size);
+	registry.assign<ItemStack>(entity, itemID, amount);
+}
 
-		std::deque<std::unique_ptr<AbstractController>> m_controllers;
-
-	private:
-		SceneSerializer m_serializer;
-};
-
-#endif // SCENE_HPP_

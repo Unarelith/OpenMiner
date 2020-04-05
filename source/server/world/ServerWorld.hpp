@@ -30,6 +30,7 @@
 #include <unordered_map>
 
 #include "ServerChunk.hpp"
+#include "ServerScene.hpp"
 #include "TerrainGenerator.hpp"
 #include "World.hpp"
 
@@ -55,6 +56,8 @@ class ServerWorld : public World {
 		void sendChunkData(const ClientInfo &client, ServerChunk &chunk);
 		void sendRequestedData(ClientInfo &client, s32 cx, s32 cy, s32 cz);
 
+		void onBlockDestroyed(int x, int y, int z, const Block &block) override;
+
 		ServerChunk &createChunk(s32 cx, s32 cy, s32 cz);
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
@@ -79,6 +82,8 @@ class ServerWorld : public World {
 		ServerCommandHandler *m_server = nullptr;
 
 		gk::GameClock &m_clock;
+
+		ServerScene m_scene;
 };
 
 #endif // SERVERWORLD_HPP_

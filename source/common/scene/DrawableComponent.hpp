@@ -31,12 +31,20 @@
 
 #include <gk/gl/Drawable.hpp>
 
-class DrawableComponent {
+#include "ISerializable.hpp"
+
+class DrawableComponent : public ISerializable {
 	public:
 		template<typename T, typename... Args>
 		auto setDrawable(Args &&...args) -> typename std::enable_if<std::is_base_of<gk::Drawable, T>::value, T &>::type {
-			m_drawable.reset(new T(std::forward<Args>(args)...));
-			return *static_cast<T*>(m_drawable.get());
+			m_drawable = std::make_shared<T>(std::forward<Args>(args)...);
+			return *std::static_pointer_cast<T>(m_drawable);
+		}
+
+		template<typename T, typename... Args>
+		auto setDrawableDef(Args &&...args) -> typename std::enable_if<std::is_base_of<ISerializable, T>::value, T &>::type {
+			m_drawableDef = std::make_shared<T>(std::forward<Args>(args)...);
+			return *std::static_pointer_cast<T>(m_drawableDef);
 		}
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) {
@@ -44,8 +52,15 @@ class DrawableComponent {
 				target.draw(*m_drawable, states);
 		}
 
+		void serialize(sf::Packet &packet) const override { m_drawableDef->serialize(packet); }
+		void deserialize(sf::Packet &packet) override { m_drawableDef->deserialize(packet); }
+
+		const gk::Drawable *drawable() const { return m_drawable.get(); }
+		const ISerializable *drawableDef() const { return m_drawableDef.get(); }
+
 	private:
-		std::unique_ptr<gk::Drawable> m_drawable;
+		std::shared_ptr<gk::Drawable> m_drawable;
+		std::shared_ptr<ISerializable> m_drawableDef;
 };
 
 #endif // DRAWABLECOMPONENT_HPP_

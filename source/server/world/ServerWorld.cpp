@@ -33,6 +33,8 @@
 #include "ServerPlayer.hpp"
 #include "ServerWorld.hpp"
 
+#include "Dimension.hpp" // FIXME
+
 void ServerWorld::update() {
 	if (m_lastTick < m_clock.getTicks() / 50) {
 		m_lastTick = m_clock.getTicks() / 50;
@@ -50,6 +52,18 @@ void ServerWorld::update() {
 				// gkDebug() << "Chunk updated at" << it.second->x() << it.second->y() << it.second->z();
 			}
 		}
+	}
+
+	m_scene.update();
+
+	// FIXME: Should be placed somewhere else
+	// FIXME: Shouldn't send that often
+	if (m_clock.getTicks() % 100 < 12) {
+		sf::Packet packet;
+		packet << Network::Command::SceneState; // FIXME
+		packet << m_dimension.id();
+		packet << m_scene;
+		m_server->server().sendToAllClients(packet);
 	}
 }
 
@@ -144,6 +158,13 @@ void ServerWorld::sendRequestedData(ClientInfo &client, int cx, int cy, int cz) 
 	chunk.updateLights();
 
 	sendChunkData(client, chunk);
+}
+
+#include "ItemDropFactory.hpp" // FIXME
+
+void ServerWorld::onBlockDestroyed(int x, int y, int z, const Block &block) {
+	// FIXME if (Config::useItemDrops)
+		ItemDropFactory::create(m_scene.registry(), x, y, z, block.getItemDrop().item().stringID(), block.getItemDrop().amount());
 }
 
 ServerChunk &ServerWorld::createChunk(s32 cx, s32 cy, s32 cz) {

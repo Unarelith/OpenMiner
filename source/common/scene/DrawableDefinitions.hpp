@@ -24,30 +24,23 @@
  *
  * =====================================================================================
  */
-#ifndef SCENE_HPP_
-#define SCENE_HPP_
+#ifndef DRAWABLEDEFINITIONS_HPP_
+#define DRAWABLEDEFINITIONS_HPP_
 
-#include "AbstractController.hpp"
+#include <string>
+
+#include <gk/core/Vector3.hpp>
+
 #include "ISerializable.hpp"
-#include "SceneSerializer.hpp"
+#include "NetworkUtils.hpp"
 
-class Scene : public ISerializable {
-	public:
-		virtual void update() { for (auto &controller : m_controllers) controller->update(m_registry); }
+struct InventoryCubeDef : public ISerializable {
+	float size = 1.f;
+	gk::Vector3f origin{0, 0, 0};
+	std::string block{"_:air"};
 
-		void serialize(sf::Packet &packet) const override { m_serializer.serialize(packet, *this); }
-		void deserialize(sf::Packet &packet) override { m_serializer.deserialize(packet, *this); }
-
-		const entt::DefaultRegistry &registry() const { return m_registry; }
-		entt::DefaultRegistry &registry() { return m_registry; }
-
-	protected:
-		mutable entt::DefaultRegistry m_registry;
-
-		std::deque<std::unique_ptr<AbstractController>> m_controllers;
-
-	private:
-		SceneSerializer m_serializer;
+	void serialize(sf::Packet &packet) const override { packet << size << origin << block; }
+	void deserialize(sf::Packet &packet) override { packet >> size >> origin >> block; }
 };
 
-#endif // SCENE_HPP_
+#endif // DRAWABLEDEFINITIONS_HPP_

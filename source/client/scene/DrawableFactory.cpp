@@ -24,29 +24,13 @@
  *
  * =====================================================================================
  */
-#include "AnimationComponent.hpp"
-#include "DrawableComponent.hpp"
+#include "DrawableFactory.hpp"
 #include "InventoryCube.hpp"
-#include "ItemDropFactory.hpp"
-#include "ItemStack.hpp"
 #include "Registry.hpp"
 
-void ItemDropFactory::create(entt::DefaultRegistry &registry, double x, double y, double z, const std::string &itemID, u16 amount) {
-	auto entity = registry.create();
-
-	auto &drawableComponent = registry.assign<DrawableComponent>(entity);
-	auto &cube = drawableComponent.setDrawable<InventoryCube>(0.25f, true);
-	cube.setOrigin(cube.size() / 2.f, cube.size() / 2.f, cube.size() / 2.f);
-	cube.updateVertexBuffer(Registry::getInstance().getBlockFromStringID(itemID));
-
-	auto &transformable = registry.assign<gk::Transformable>(entity);
-	transformable.setPosition(x + 0.5, y + 0.5, z + 0.5);
-
-	auto &animationComponent = registry.assign<AnimationComponent>(entity);
-	animationComponent.addRotation(0.f, 0.f, 1.f, 0.5f);
-	animationComponent.addTranslation(0.f, 0.f, -0.0005f, -0.2f, 0.f, true);
-
-	registry.assign<gk::DoubleBox>(entity, 0., 0., 0., cube.size(), cube.size(), cube.size());
-	registry.assign<ItemStack>(entity, itemID, amount);
+void DrawableFactory::createInventoryCube(DrawableComponent &component, const InventoryCubeDef &def) {
+	auto &cube = component.setDrawable<InventoryCube>(def.size, true);
+	cube.setOrigin(def.origin);
+	cube.updateVertexBuffer(Registry::getInstance().getBlockFromStringID(def.block));
 }
 

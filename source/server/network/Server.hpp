@@ -48,7 +48,7 @@ class Server {
 
 		void handleGameEvents();
 
-		void sendToAllClients(sf::Packet &packet);
+		void sendToAllClients(sf::Packet &packet) const;
 
 		bool isRunning() const { return m_isRunning; }
 
