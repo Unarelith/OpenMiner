@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#ifndef SCENE_HPP_
-#define SCENE_HPP_
+#ifndef CLIENTSCENE_HPP_
+#define CLIENTSCENE_HPP_
 
 #include <deque>
 #include <memory>
@@ -36,18 +36,17 @@
 #include <entt/entt.hpp>
 
 #include "AbstractController.hpp"
+#include "Scene.hpp"
 
 class ClientPlayer;
 
-class Scene : public gk::Drawable {
+class ClientScene : public Scene, public gk::Drawable {
 	public:
-		Scene(ClientPlayer &player);
+		ClientScene(ClientPlayer &player);
 
 		void update();
 
 		void setCamera(gk::Camera &camera) { m_camera = &camera; }
-
-		entt::DefaultRegistry &registry() { return m_registry; }
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
@@ -56,9 +55,7 @@ class Scene : public gk::Drawable {
 
 		gk::Camera *m_camera = nullptr;
 
-		mutable entt::DefaultRegistry m_registry;
-
 		std::deque<std::unique_ptr<AbstractController>> m_controllers;
 };
 
-#endif // SCENE_HPP_
+#endif // CLIENTSCENE_HPP_

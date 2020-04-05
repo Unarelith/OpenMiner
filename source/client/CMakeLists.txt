@@ -49,6 +49,7 @@ endif ()
 
 target_link_libraries(${PROJECT_NAME}
                       ${CMAKE_PROJECT_NAME}_server_lib
+                      ${CMAKE_PROJECT_NAME}_common
                       ${GAMEKIT_LIBRARIES}
                       ${OPENGL_LIBRARIES}
                       ${SDL2_LIBRARIES}
@@ -60,6 +61,5 @@ target_link_libraries(${PROJECT_NAME}
                       ${LUA_LIBRARIES}
                       sfml-system
                       sfml-network
-                      ${UNIX_LIBS}
-                      ${CMAKE_PROJECT_NAME}_common)
+                      ${UNIX_LIBS})
 

@@ -36,3 +36,23 @@ sf::Packet &operator>>(sf::Packet &packet, gk::Color &color) {
 	return packet;
 }
 
+sf::Packet &operator<<(sf::Packet &packet, const gk::Transformable &transformable) {
+	packet << transformable.getPosition() << transformable.getOrigin() << transformable.getScale()
+		<< transformable.getRotation() << transformable.getRotationTransform().getMatrix();
+	return packet;
+}
+
+sf::Packet &operator>>(sf::Packet &packet, gk::Transformable &transformable) {
+	gk::Vector3f position, origin, scale;
+	float rotation;
+	packet >> position >> origin >> scale >> rotation
+		>> transformable.getRotationTransform().getMatrix();
+
+	transformable.setPosition(position);
+	transformable.setOrigin(origin);
+	transformable.setScale(scale);
+	transformable.setRotation(rotation);
+
+	return packet;
+}
+

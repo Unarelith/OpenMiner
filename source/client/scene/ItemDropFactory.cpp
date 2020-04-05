@@ -25,6 +25,7 @@
  * =====================================================================================
  */
 #include "AnimationComponent.hpp"
+#include "DrawableComponent.hpp"
 #include "InventoryCube.hpp"
 #include "ItemDropFactory.hpp"
 #include "ItemStack.hpp"
@@ -33,10 +34,13 @@
 void ItemDropFactory::create(entt::DefaultRegistry &registry, double x, double y, double z, const std::string &itemID, u16 amount) {
 	auto entity = registry.create();
 
-	InventoryCube &cube = registry.assign<InventoryCube>(entity, 0.25f, true);
+	auto &drawableComponent = registry.assign<DrawableComponent>(entity);
+	auto &cube = drawableComponent.setDrawable<InventoryCube>(0.25f, true);
 	cube.setOrigin(cube.size() / 2.f, cube.size() / 2.f, cube.size() / 2.f);
-	cube.setPosition(x + 0.5, y + 0.5, z + 0.5);
 	cube.updateVertexBuffer(Registry::getInstance().getBlockFromStringID(itemID));
+
+	auto &transformable = registry.assign<gk::Transformable>(entity);
+	transformable.setPosition(x + 0.5, y + 0.5, z + 0.5);
 
 	auto &animationComponent = registry.assign<AnimationComponent>(entity);
 	animationComponent.addRotation(0.f, 0.f, 1.f, 0.5f);
