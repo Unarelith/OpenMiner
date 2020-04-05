@@ -34,7 +34,7 @@
 
 #include "Registry.hpp"
 
-void RenderingController::update(entt::DefaultRegistry &registry) {
+void RenderingController::draw(entt::DefaultRegistry &registry, gk::RenderTarget &target, gk::RenderStates states) {
 	registry.view<DrawableDef>().each([&](auto entity, auto &drawableDef) {
 		const InventoryCubeDef &cubeDef = drawableDef.getInventoryCubeDef();
 
@@ -48,9 +48,7 @@ void RenderingController::update(entt::DefaultRegistry &registry) {
 
 		registry.remove<DrawableDef>(entity);
 	});
-}
 
-void RenderingController::draw(entt::DefaultRegistry &registry, gk::RenderTarget &target, gk::RenderStates states) {
 	registry.view<DrawableComponent, gk::Transformable>().each([&](auto, auto &drawable, auto &transformable) {
 		gk::RenderStates drawStates = states;
 		drawStates.transform *= transformable.getTransform();
