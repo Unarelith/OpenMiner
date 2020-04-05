@@ -49,7 +49,7 @@ class SceneSerializer {
 
 				template<typename T>
 				void operator()(Entity entity, const T &value) {
-					gkDebug() << entity << (void *)&value;
+					// gkDebug() << entity << (void *)&value << typeid(T).name();
 					(*m_packet) << entity << value;
 				}
 
@@ -66,7 +66,7 @@ class SceneSerializer {
 				template<typename T>
 				void operator()(Entity &entity, T &value) {
 					(*m_packet) >> entity >> value;
-					gkDebug() << entity << (void *)&value;
+					// gkDebug() << entity << (void *)&value << typeid(T).name();
 				}
 
 				void setPacket(sf::Packet &packet) { m_packet = &packet; }

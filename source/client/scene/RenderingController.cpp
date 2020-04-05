@@ -24,6 +24,7 @@
  *
  * =====================================================================================
  */
+#include "DrawableDef.hpp"
 #include "DrawableComponent.hpp"
 #include "InventoryCube.hpp"
 #include "RenderingController.hpp"
@@ -31,11 +32,26 @@
 #include <gk/core/Debug.hpp>
 #include <gk/core/GameClock.hpp>
 
-void RenderingController::draw(entt::DefaultRegistry &registry, gk::RenderTarget &target, gk::RenderStates states) {
-	registry.view<DrawableComponent, gk::Transformable>().each([&](auto entity, auto &drawable, auto &transformable) {
-		if (gk::GameClock::getInstance().getTicks() % 100 < 12)
-			gkDebug() << "Drawing entity" << entity << "at" << transformable.getPosition();
+#include "Registry.hpp"
 
+void RenderingController::update(entt::DefaultRegistry &registry) {
+	registry.view<DrawableDef>().each([&](auto entity, auto &drawableDef) {
+		const InventoryCubeDef &cubeDef = drawableDef.getInventoryCubeDef();
+
+		DrawableComponent &drawable = (!registry.has<DrawableComponent>())
+			? registry.assign<DrawableComponent>(entity)
+			: registry.get<DrawableComponent>(entity);
+
+		InventoryCube &cube = drawable.setDrawable<InventoryCube>(cubeDef.size, true);
+		cube.setOrigin(cubeDef.origin);
+		cube.updateVertexBuffer(Registry::getInstance().getBlockFromStringID(cubeDef.blockID));
+
+		registry.remove<DrawableDef>(entity);
+	});
+}
+
+void RenderingController::draw(entt::DefaultRegistry &registry, gk::RenderTarget &target, gk::RenderStates states) {
+	registry.view<DrawableComponent, gk::Transformable>().each([&](auto, auto &drawable, auto &transformable) {
 		gk::RenderStates drawStates = states;
 		drawStates.transform *= transformable.getTransform();
 		drawable.draw(target, drawStates);

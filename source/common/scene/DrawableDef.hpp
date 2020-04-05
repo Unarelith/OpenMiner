@@ -24,13 +24,33 @@
  *
  * =====================================================================================
  */
-#include "DrawableFactory.hpp"
-#include "InventoryCube.hpp"
-#include "Registry.hpp"
+#ifndef DRAWABLEDEF_HPP_
+#define DRAWABLEDEF_HPP_
 
-void DrawableFactory::createInventoryCube(DrawableComponent &component, const InventoryCubeDef &def) {
-	auto &cube = component.setDrawable<InventoryCube>(def.size, true);
-	cube.setOrigin(def.origin);
-	cube.updateVertexBuffer(Registry::getInstance().getBlockFromStringID(def.block));
+#include <gk/core/IntTypes.hpp>
+
+#include "ISerializable.hpp"
+#include "InventoryCubeDef.hpp"
+
+namespace DrawableType {
+	enum : u8 {
+		Undefined     = 0,
+		InventoryCube = 1,
+	};
 }
 
+class DrawableDef : public ISerializable {
+	public:
+		InventoryCubeDef &addInventoryCube();
+
+		// FIXME
+		const InventoryCubeDef &getInventoryCubeDef() const { return m_cubes.back(); }
+
+		void serialize(sf::Packet &packet) const override;
+		void deserialize(sf::Packet &packet) override;
+
+	protected:
+		std::vector<InventoryCubeDef> m_cubes;
+};
+
+#endif // DRAWABLEDEF_HPP_

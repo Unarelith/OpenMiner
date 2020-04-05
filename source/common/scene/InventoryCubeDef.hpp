@@ -24,15 +24,23 @@
  *
  * =====================================================================================
  */
-#ifndef DRAWABLEFACTORY_HPP_
-#define DRAWABLEFACTORY_HPP_
+#ifndef INVENTORYCUBEDEF_HPP_
+#define INVENTORYCUBEDEF_HPP_
 
-#include "DrawableComponent.hpp"
-#include "DrawableDefinitions.hpp"
+#include <string>
 
-class DrawableFactory {
-	public:
-		static void createInventoryCube(DrawableComponent &component, const InventoryCubeDef &def);
+#include <gk/core/Vector3.hpp>
+
+#include "ISerializable.hpp"
+#include "NetworkUtils.hpp"
+
+struct InventoryCubeDef : public ISerializable {
+	float size = 1.f;
+	gk::Vector3f origin{0, 0, 0};
+	std::string blockID{"_:air"};
+
+	void serialize(sf::Packet &packet) const override { packet << size << origin << blockID; }
+	void deserialize(sf::Packet &packet) override { packet >> size >> origin >> blockID; }
 };
 
-#endif // DRAWABLEFACTORY_HPP_
+#endif // INVENTORYCUBEDEF_HPP_
