@@ -30,7 +30,7 @@
 #include "ItemStack.hpp"
 #include "PlayerList.hpp"
 
-void CollisionController::update(entt::DefaultRegistry &registry) {
+void CollisionController::update(entt::registry &registry) {
 	registry.view<gk::Transformable, gk::DoubleBox, ItemStack>().each([&](auto entity, auto &transformable, auto &box, auto &itemStack) {
 		for (auto &it : m_players) {
 			gk::DoubleBox hitbox = box + transformable.getPosition();

@@ -35,7 +35,7 @@ class CollisionController : public AbstractController {
 	public:
 		CollisionController(PlayerList &players) : m_players(players) {}
 
-		void update(entt::DefaultRegistry &registry);
+		void update(entt::registry &registry);
 
 	private:
 		PlayerList &m_players;

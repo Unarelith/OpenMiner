@@ -1653,7 +1653,7 @@ private:
  * The default registry is the best choice for almost all the applications.<br/>
  * Users should have a really good reason to choose something different.
  */
-using DefaultRegistry = Registry<std::uint32_t>;
+using registry = Registry<std::uint32_t>;
 
 
 }

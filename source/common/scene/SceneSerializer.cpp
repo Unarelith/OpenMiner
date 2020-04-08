@@ -32,12 +32,26 @@
 
 void SceneSerializer::serialize(sf::Packet &packet, const Scene &scene) const {
 	m_outputArchive.setPacket(packet);
-	scene.registry().snapshot().component<AnimationComponent, gk::DoubleBox, ItemStack, gk::Transformable, DrawableDef>(m_outputArchive);
+
+	scene.registry().snapshot().component<
+		AnimationComponent,
+		gk::DoubleBox,
+		ItemStack,
+		gk::Transformable,
+		DrawableDef
+	>(m_outputArchive);
 }
 
 void SceneSerializer::deserialize(sf::Packet &packet, Scene &scene) {
 	m_inputArchive.setPacket(packet);
-	scene.registry().restore().component<AnimationComponent, gk::DoubleBox, ItemStack, gk::Transformable, DrawableDef>(m_inputArchive);
+
+	scene.registry().restore().component<
+		AnimationComponent,
+		gk::DoubleBox,
+		ItemStack,
+		gk::Transformable,
+		DrawableDef
+	>(m_inputArchive);
 }
 
 void SceneSerializer::OutputArchive::operator()(Entity entity) {

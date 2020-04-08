@@ -31,7 +31,7 @@
 #include "ItemStack.hpp"
 #include "Registry.hpp"
 
-void ItemDropFactory::create(entt::DefaultRegistry &registry, double x, double y, double z, const std::string &itemID, u16 amount) {
+void ItemDropFactory::create(entt::registry &registry, double x, double y, double z, const std::string &itemID, u16 amount) {
 	auto entity = registry.create();
 
 	auto &drawableDef = registry.assign<DrawableDef>(entity);

@@ -36,7 +36,7 @@
 class Scene;
 
 class SceneSerializer {
-	using Entity = entt::DefaultRegistry::entity_type;
+	using Entity = entt::registry::entity_type;
 
 	public:
 		void serialize(sf::Packet &packet, const Scene &scene) const;
@@ -51,6 +51,9 @@ class SceneSerializer {
 				void operator()(Entity entity, const T &value) {
 					// gkDebug() << entity << (void *)&value << typeid(T).name();
 					(*m_packet) << entity << value;
+					// FIXME: It should be possible to check the type here and to create
+					//        a defintion struct to serialize for some of them
+					//        instead of sending the component
 				}
 
 				void setPacket(sf::Packet &packet) { m_packet = &packet; }

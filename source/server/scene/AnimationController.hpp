@@ -31,7 +31,7 @@
 
 class AnimationController : public AbstractController {
 	public:
-		void update(entt::DefaultRegistry &registry) override;
+		void update(entt::registry &registry) override;
 };
 
 #endif // ANIMATIONCONTROLLER_HPP_

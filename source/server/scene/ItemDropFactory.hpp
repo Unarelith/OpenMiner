@@ -33,7 +33,7 @@
 
 class ItemDropFactory {
 	public:
-		static void create(entt::DefaultRegistry &registry, double x, double y, double z, const std::string &itemID, u16 amount = 1);
+		static void create(entt::registry &registry, double x, double y, double z, const std::string &itemID, u16 amount = 1);
 };
 
 #endif // ITEMDROPFACTORY_HPP_

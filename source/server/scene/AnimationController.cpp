@@ -27,7 +27,7 @@
 #include "AnimationComponent.hpp"
 #include "AnimationController.hpp"
 
-void AnimationController::update(entt::DefaultRegistry &registry) {
+void AnimationController::update(entt::registry &registry) {
 	registry.view<gk::Transformable, AnimationComponent>().each([](auto, auto &transformable, auto &animation) {
 		for (auto &it : animation.list) {
 			if (it.type == AnimationType::Rotation)
