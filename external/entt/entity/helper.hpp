@@ -43,7 +43,7 @@ void dependency(Registry<Entity> &registry, const Entity entity) {
  * The following adds components `AType` and `AnotherType` whenever `MyType` is
  * assigned to an entity:
  * @code{.cpp}
- * entt::DefaultRegistry registry;
+ * entt::registry registry;
  * entt::connect<AType, AnotherType>(registry.construction<MyType>());
  * @endcode
  *
@@ -66,7 +66,7 @@ inline void connect(Sink<void(Registry<Entity> &, const Entity)> sink) {
  * The following breaks the dependency between the component `MyType` and the
  * components `AType` and `AnotherType`:
  * @code{.cpp}
- * entt::DefaultRegistry registry;
+ * entt::registry registry;
  * entt::disconnect<AType, AnotherType>(registry.construction<MyType>());
  * @endcode
  *
@@ -89,7 +89,7 @@ inline void disconnect(Sink<void(Registry<Entity> &, const Entity)> sink) {
  * As an example and where the user defined literal for hashed strings hasn't
  * been changed:
  * @code{.cpp}
- * entt::DefaultRegistry registry;
+ * entt::registry registry;
  * registry.assign<entt::label<"enemy"_hs>>(entity);
  * @endcode
  *

@@ -34,8 +34,8 @@
 
 class AbstractController {
 	public:
-		virtual void update(entt::DefaultRegistry &) {}
-		virtual void draw(entt::DefaultRegistry &, gk::RenderTarget &, gk::RenderStates) {}
+		virtual void update(entt::registry &) {}
+		virtual void draw(entt::registry &, gk::RenderTarget &, gk::RenderStates) {}
 };
 
 #endif // ABSTRACTCONTROLLER_HPP_

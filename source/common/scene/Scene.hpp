@@ -38,11 +38,11 @@ class Scene : public ISerializable {
 		void serialize(sf::Packet &packet) const override { m_serializer.serialize(packet, *this); }
 		void deserialize(sf::Packet &packet) override { m_serializer.deserialize(packet, *this); }
 
-		const entt::DefaultRegistry &registry() const { return m_registry; }
-		entt::DefaultRegistry &registry() { return m_registry; }
+		const entt::registry &registry() const { return m_registry; }
+		entt::registry &registry() { return m_registry; }
 
 	protected:
-		mutable entt::DefaultRegistry m_registry;
+		mutable entt::registry m_registry;
 
 		std::deque<std::unique_ptr<AbstractController>> m_controllers;
 

@@ -488,7 +488,7 @@ private:
  * applications.<br/>
  * Users should have a really good reason to choose something different.
  */
-using DefaultPrototype = Prototype<DefaultRegistry::entity_type>;
+using prototype = Prototype<registry::entity_type>;
 
 
 }

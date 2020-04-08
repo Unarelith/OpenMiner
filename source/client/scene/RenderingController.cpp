@@ -34,7 +34,7 @@
 
 #include "Registry.hpp"
 
-void RenderingController::draw(entt::DefaultRegistry &registry, gk::RenderTarget &target, gk::RenderStates states) {
+void RenderingController::draw(entt::registry &registry, gk::RenderTarget &target, gk::RenderStates states) {
 	registry.view<DrawableDef>().each([&](auto entity, auto &drawableDef) {
 		const InventoryCubeDef &cubeDef = drawableDef.getInventoryCubeDef();
 

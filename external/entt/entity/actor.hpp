@@ -234,7 +234,7 @@ private:
  * The default actor is the best choice for almost all the applications.<br/>
  * Users should have a really good reason to choose something different.
  */
-using DefaultActor = Actor<DefaultRegistry::entity_type>;
+using actor = Actor<registry::entity_type>;
 
 
 }
