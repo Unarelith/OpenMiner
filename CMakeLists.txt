@@ -22,7 +22,7 @@ set(DEBUG_GCC_FLAGS -g -Og -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
 set(RELEASE_GCC_FLAGS -O3)
 set(RELWITHDEB_GCC_FLAGS -g -O3 -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 #------------------------------------------------------------------------------
 # Setting default build type
@@ -185,6 +185,8 @@ endif ()
 #------------------------------------------------------------------------------
 # Subdirectories
 #------------------------------------------------------------------------------
+add_subdirectory(external/entt)
+
 add_subdirectory(source/common)
 add_subdirectory(source/server)
 add_subdirectory(source/client)

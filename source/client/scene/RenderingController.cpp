@@ -38,9 +38,7 @@ void RenderingController::draw(entt::registry &registry, gk::RenderTarget &targe
 	registry.view<DrawableDef>().each([&](auto entity, auto &drawableDef) {
 		const InventoryCubeDef &cubeDef = drawableDef.getInventoryCubeDef();
 
-		DrawableComponent &drawable = (!registry.has<DrawableComponent>())
-			? registry.assign<DrawableComponent>(entity)
-			: registry.get<DrawableComponent>(entity);
+		DrawableComponent &drawable = registry.get_or_assign<DrawableComponent>(entity);
 
 		InventoryCube &cube = drawable.setDrawable<InventoryCube>(cubeDef.size, true);
 		cube.setOrigin(cubeDef.origin);

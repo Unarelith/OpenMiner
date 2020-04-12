@@ -43,43 +43,43 @@ class SceneSerializer {
 		void deserialize(sf::Packet &packet, Scene &scene);
 
 	private:
-		class OutputArchive {
-			public:
-				void operator()(Entity entity);
-
-				template<typename T>
-				void operator()(Entity entity, const T &value) {
-					// gkDebug() << entity << (void *)&value << typeid(T).name();
-					(*m_packet) << entity << value;
-					// FIXME: It should be possible to check the type here and to create
-					//        a defintion struct to serialize for some of them
-					//        instead of sending the component
-				}
-
-				void setPacket(sf::Packet &packet) { m_packet = &packet; }
-
-			private:
-				sf::Packet *m_packet = nullptr;
-		};
-
-		class InputArchive {
-			public:
-				void operator()(Entity &entity);
-
-				template<typename T>
-				void operator()(Entity &entity, T &value) {
-					(*m_packet) >> entity >> value;
-					// gkDebug() << entity << (void *)&value << typeid(T).name();
-				}
-
-				void setPacket(sf::Packet &packet) { m_packet = &packet; }
-
-			private:
-				sf::Packet *m_packet = nullptr;
-		};
-
-		mutable OutputArchive m_outputArchive;
-		mutable InputArchive m_inputArchive;
+		// class OutputArchive {
+		// 	public:
+		// 		void operator()(Entity entity);
+        //
+		// 		template<typename T>
+		// 		void operator()(Entity entity, const T &value) {
+		// 			// gkDebug() << entity << (void *)&value << typeid(T).name();
+		// 			// (*m_packet) << entity << value;
+		// 			// FIXME: It should be possible to check the type here and to create
+		// 			//        a defintion struct to serialize for some of them
+		// 			//        instead of sending the component
+		// 		}
+        //
+		// 		void setPacket(sf::Packet &packet) { m_packet = &packet; }
+        //
+		// 	private:
+		// 		sf::Packet *m_packet = nullptr;
+		// };
+        //
+		// class InputArchive {
+		// 	public:
+		// 		void operator()(Entity &entity);
+        //
+		// 		template<typename T>
+		// 		void operator()(Entity &entity, T &value) {
+		// 			// (*m_packet) >> entity >> value;
+		// 			// gkDebug() << entity << (void *)&value << typeid(T).name();
+		// 		}
+        //
+		// 		void setPacket(sf::Packet &packet) { m_packet = &packet; }
+        //
+		// 	private:
+		// 		sf::Packet *m_packet = nullptr;
+		// };
+        //
+		// mutable OutputArchive m_outputArchive;
+		// mutable InputArchive m_inputArchive;
 };
 
 #endif // SCENESERIALIZER_HPP_
