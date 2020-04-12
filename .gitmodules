@@ -1,0 +1,3 @@
+[submodule "external/entt"]
+	path = external/entt
+	url = git://github.com/Unarelith/entt.git
