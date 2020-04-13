@@ -60,6 +60,7 @@ class ClientWorld : public World, public gk::Drawable {
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
 
+		const ClientScene &scene() const { return m_scene; }
 		ClientScene &scene() { return m_scene; }
 
 		void setClient(ClientCommandHandler &client) { m_client = &client; }

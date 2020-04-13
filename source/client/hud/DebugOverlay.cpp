@@ -27,6 +27,7 @@
 #include <sstream>
 
 #include "ClientPlayer.hpp"
+#include "ClientScene.hpp"
 #include "ClientWorld.hpp"
 #include "Config.hpp"
 #include "DebugOverlay.hpp"
@@ -70,6 +71,8 @@ void DebugOverlay::update() {
 	stream << "dimension: " << m_player.dimension();
 	stream << '\n';
 	stream << "Loaded chunks: " << m_world.loadedChunkCount();
+	stream << '\n';
+	stream << "Alive entities: " << m_world.scene().registry().alive();
 
 	m_positionText.setText(stream.str());
 }

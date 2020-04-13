@@ -53,7 +53,7 @@ class WorldController {
 		void setServer(ServerCommandHandler &server) { m_server = &server; }
 
 	private:
-		std::vector<ServerWorld> m_worldList;
+		std::deque<ServerWorld> m_worldList;
 
 		Registry &m_registry;
 
