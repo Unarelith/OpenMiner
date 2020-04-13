@@ -53,6 +53,7 @@ doc/html
 doc/latex
 
 # Binaries
+build
 openminer
 openminer_server
 *.exe
