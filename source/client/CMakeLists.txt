@@ -9,8 +9,6 @@ set(PROJECT_NAME ${CMAKE_PROJECT_NAME})
 file(GLOB_RECURSE SOURCE_FILES *.cpp)
 file(GLOB_RECURSE HEADER_FILES *.hpp ../server/*.hpp ../common/*.hpp)
 
-include_directories(../../external ../../external/entt/single_include)
-
 foreach(HEADER_FILE ${HEADER_FILES})
 	get_filename_component(HEADER_DIRECTORY ${HEADER_FILE} DIRECTORY)
 	include_directories(${HEADER_DIRECTORY})

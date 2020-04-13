@@ -15,6 +15,8 @@ endif ()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
+include_directories(external)
+
 #------------------------------------------------------------------------------
 # Compiler flags
 #------------------------------------------------------------------------------
@@ -54,21 +56,6 @@ endif()
 
 include_directories(${LUA_INCLUDE_DIR})
 link_directories(${LUA_LIBRARY_DIRS})
-
-#------------------------------------------------------------------------------
-# - gamekit
-#------------------------------------------------------------------------------
-if (WIN32)
-	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${WIN_LIBRARIES_PATH}/gamekit)
-endif ()
-
-find_package(GameKit REQUIRED)
-
-if(NOT GAMEKIT_FOUND)
-	message(FATAL_ERROR "gamekit is needed to build the project. Please install it correctly.")
-endif()
-
-include_directories(${GAMEKIT_INCLUDE_DIR})
 
 #------------------------------------------------------------------------------
 # - tinyxml2
@@ -149,25 +136,6 @@ include_directories(${SDL2_INCLUDE_DIRS}
                     ${SDL2_TTF_INCLUDE_DIRS})
 
 #------------------------------------------------------------------------------
-# - SFML network
-#------------------------------------------------------------------------------
-if (WIN32)
-	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${WIN_LIBRARIES_PATH}/SFML)
-endif ()
-
-if (MINGW)
-	set(SFML_STATIC_LIBRARIES TRUE)
-endif ()
-
-find_package(SFML COMPONENTS system network)
-
-if(NOT SFML_FOUND)
-	message(FATAL_ERROR "SFML is needed to build the project. Please install it correctly.")
-endif()
-
-include_directories(${SFML_INCLUDE_DIRS})
-
-#------------------------------------------------------------------------------
 # - GLEW
 #------------------------------------------------------------------------------
 if (WIN32)
@@ -183,10 +151,53 @@ if (WIN32)
 endif ()
 
 #------------------------------------------------------------------------------
-# Subdirectories
+# Submodules
+# from https://cliutils.gitlab.io/modern-cmake/chapters/projects/submodule.html
+#------------------------------------------------------------------------------
+find_package(Git QUIET)
+
+if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
+	option(GIT_SUBMODULE "Check submodules during build" ON)
+	if(GIT_SUBMODULE)
+		message(STATUS "Submodule update")
+		execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+			WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+			RESULT_VARIABLE GIT_SUBMOD_RESULT)
+		if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+			message(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
+		endif()
+	endif()
+endif()
+
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/gamekit/CMakeLists.txt")
+    message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+endif()
+
+#------------------------------------------------------------------------------
+# - EnTT
 #------------------------------------------------------------------------------
 add_subdirectory(external/entt)
+include_directories(external/entt/single_include)
 
+#------------------------------------------------------------------------------
+# - gamekit
+#------------------------------------------------------------------------------
+add_subdirectory(external/gamekit)
+
+#------------------------------------------------------------------------------
+# - SFML network
+#------------------------------------------------------------------------------
+set(SFML_BUILD_AUDIO FALSE)
+set(SFML_BUILD_GRAPHICS FALSE)
+set(SFML_BUILD_WINDOW FALSE)
+
+set(BUILD_SHARED_LIBS ON)
+
+add_subdirectory(external/SFML)
+
+#------------------------------------------------------------------------------
+# Subdirectories
+#------------------------------------------------------------------------------
 add_subdirectory(source/common)
 add_subdirectory(source/server)
 add_subdirectory(source/client)
