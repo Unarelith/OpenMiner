@@ -37,10 +37,15 @@ class Scene;
 
 class SceneSerializer {
 	public:
-		void serialize(sf::Packet &packet, const Scene &scene) const;
-		void deserialize(sf::Packet &packet, Scene &scene);
+		SceneSerializer(Scene &scene);
+
+		void serialize(sf::Packet &packet) const;
+		void deserialize(sf::Packet &packet);
 
 	private:
+		Scene &m_scene;
+		entt::continuous_loader m_loader;
+
 		class OutputArchive {
 			public:
 				void operator()(entt::entity entity);

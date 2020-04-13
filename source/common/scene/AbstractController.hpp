@@ -34,6 +34,8 @@
 
 class AbstractController {
 	public:
+		virtual ~AbstractController() = default;
+
 		virtual void update(entt::registry &) {}
 		virtual void draw(entt::registry &, gk::RenderTarget &, gk::RenderStates) {}
 };

@@ -30,28 +30,39 @@
 #include "Scene.hpp"
 #include "SceneSerializer.hpp"
 
-void SceneSerializer::serialize(sf::Packet &packet, const Scene &scene) const {
-	m_outputArchive.setPacket(packet);
-
-	scene.registry().snapshot().component<
-		AnimationComponent,
-		gk::DoubleBox,
-		ItemStack,
-		gk::Transformable,
-		DrawableDef
-	>(m_outputArchive);
+SceneSerializer::SceneSerializer(Scene &scene) : m_scene(scene), m_loader(m_scene.registry()) {
 }
 
-void SceneSerializer::deserialize(sf::Packet &packet, Scene &scene) {
+void SceneSerializer::serialize(sf::Packet &packet) const {
+	m_outputArchive.setPacket(packet);
+
+	m_scene.registry().snapshot()
+		.entities(m_outputArchive)
+		.destroyed(m_outputArchive)
+		.component<
+			AnimationComponent,
+			gk::DoubleBox,
+			ItemStack,
+			gk::Transformable,
+			DrawableDef
+		>(m_outputArchive);
+}
+
+void SceneSerializer::deserialize(sf::Packet &packet) {
 	m_inputArchive.setPacket(packet);
 
-	scene.registry().loader().component<
-		AnimationComponent,
-		gk::DoubleBox,
-		ItemStack,
-		gk::Transformable,
-		DrawableDef
-	>(m_inputArchive);
+	m_loader
+		.entities(m_inputArchive)
+		.destroyed(m_inputArchive)
+		.component<
+			AnimationComponent,
+			gk::DoubleBox,
+			ItemStack,
+			gk::Transformable,
+			DrawableDef
+		>(m_inputArchive)
+		.orphans()
+		.shrink();
 }
 
 void SceneSerializer::OutputArchive::operator()(entt::entity entity) {

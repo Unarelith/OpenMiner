@@ -90,7 +90,7 @@ int ServerApplication::run(bool isProtected) {
 		}
 		catch(const gk::Exception &e) {
 			if (m_eventHandler)
-				m_eventHandler->emplaceEvent<ServerOnlineEvent>(false);
+				m_eventHandler->emplaceEvent<ServerOnlineEvent>(false, 0);
 
 			std::cerr << "Fatal error " << e.what() << std::endl;
 			return 1;

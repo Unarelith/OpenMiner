@@ -31,6 +31,8 @@
 
 class RenderingController : public AbstractController {
 	public:
+		void update(entt::registry &registry) override;
+
 		void draw(entt::registry &registry, gk::RenderTarget &target, gk::RenderStates states) override;
 };
 
