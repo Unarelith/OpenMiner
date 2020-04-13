@@ -1,3 +1,11 @@
 [submodule "external/entt"]
 	path = external/entt
 	url = git://github.com/Unarelith/entt.git
+	ignore = dirty
+[submodule "external/SFML"]
+	path = external/SFML
+	url = git://github.com/SFML/SFML.git
+	ignore = dirty
+[submodule "external/gamekit"]
+	path = external/gamekit
+	url = git://github.com/Unarelith/GameKit.git
