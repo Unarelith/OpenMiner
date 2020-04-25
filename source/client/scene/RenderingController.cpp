@@ -35,7 +35,7 @@
 #include "Registry.hpp"
 
 void RenderingController::update(entt::registry &registry) {
-	registry.view<DrawableDef>().each([&](auto entity, auto &drawableDef) {
+	registry.view<DrawableDef>(entt::exclude<DrawableComponent>).each([&](auto entity, auto &drawableDef) {
 		const InventoryCubeDef &cubeDef = drawableDef.getInventoryCubeDef();
 
 		DrawableComponent &drawable = registry.get_or_assign<DrawableComponent>(entity);

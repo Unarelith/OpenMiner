@@ -125,6 +125,9 @@ struct AnimationComponent : public ISerializable {
 	void deserialize(sf::Packet &packet) override { packet >> list; }
 
 	std::vector<AnimationData> list;
+
+	private:
+		bool m_isInitialized = false;
 };
 
 #endif // ANIMATIONCOMPONENT_HPP_
