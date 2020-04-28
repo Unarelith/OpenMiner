@@ -55,20 +55,6 @@ void ServerWorld::update() {
 	}
 
 	m_scene.update();
-
-	// FIXME: Should be placed somewhere else
-	// FIXME: Shouldn't be sent that often
-	static int lastTime = m_clock.getTicks(true);
-	int now = m_clock.getTicks(true);
-	if (now - lastTime > 10) {
-		lastTime = now;
-
-		sf::Packet packet;
-		packet << Network::Command::SceneState;
-		packet << m_dimension.id();
-		packet << m_scene;
-		m_server->server().sendToAllClients(packet);
-	}
 }
 
 void ServerWorld::createChunkNeighbours(ServerChunk &chunk) {

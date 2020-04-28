@@ -66,9 +66,6 @@ namespace Network {
 
 		// Chat commands
 		ChatMessage           = 21, // <TCP> [NetworkCommand][u16 client id][std::string message] (both)
-
-		// Scene commands
-		SceneState            = 22, // <TCP> [NetworkCommand][u16 dimension id][Scene scene] (from Server only)
 	};
 
 	std::string commandToString(Command command);
