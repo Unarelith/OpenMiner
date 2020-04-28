@@ -24,11 +24,14 @@
  *
  * =====================================================================================
  */
+#include <glm/gtx/quaternion.hpp>
+
 #include "DrawableDef.hpp"
 #include "DrawableComponent.hpp"
 #include "InventoryCube.hpp"
 #include "PositionComponent.hpp"
 #include "RenderingController.hpp"
+#include "RotationComponent.hpp"
 
 #include "Registry.hpp"
 
@@ -47,9 +50,13 @@ void RenderingController::update(entt::registry &registry) {
 }
 
 void RenderingController::draw(entt::registry &registry, gk::RenderTarget &target, gk::RenderStates states) {
-	registry.view<DrawableComponent, PositionComponent>().each([&](auto, auto &drawable, auto &position) {
+	registry.view<DrawableComponent, PositionComponent, RotationComponent>().each([&](auto, auto &drawable, auto &position, auto &rotation) {
+		gk::Transformable transformable;
+		transformable.setPosition(position.x, position.y, position.z);
+		transformable.getRotationTransform().getMatrix() = glm::toMat4(rotation.quat);
+
 		gk::RenderStates drawStates = states;
-		drawStates.transform.translate(position.x, position.y, position.z);
+		drawStates.transform *= transformable.getTransform();
 		drawable.draw(target, drawStates);
 	});
 }

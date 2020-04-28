@@ -24,6 +24,7 @@
  *
  * =====================================================================================
  */
+#include "AnimationComponent.hpp"
 #include "DrawableDef.hpp"
 #include "NetworkComponent.hpp"
 #include "NetworkController.hpp"
@@ -53,6 +54,13 @@ void NetworkController::update(entt::registry &registry) {
 		}
 	});
 
+	registry.view<NetworkComponent, AnimationComponent>().each([this] (auto, auto &network, auto &animation) {
+		if (animation.isUpdated) {
+			m_server->sendEntityAnimation(network.entityID, animation);
+			animation.isUpdated = false;
+		}
+	});
+
 	registry.view<NetworkComponent, DrawableDef>().each([this] (auto, auto &network, auto &drawableDef) {
 		if (drawableDef.isUpdated) {
 			m_server->sendEntityDrawableDef(network.entityID, drawableDef);
@@ -66,15 +74,19 @@ void NetworkController::sendEntities(entt::registry &registry, const ClientInfo 
 		m_server->sendEntitySpawn(network.entityID, &client);
 
 		if (auto *position = registry.try_get<PositionComponent>(entity) ; position) {
-			m_server->sendEntityPosition(network.entityID, position->x, position->y, position->z);
+			m_server->sendEntityPosition(network.entityID, position->x, position->y, position->z, &client);
 		}
 
 		if (auto *rotation = registry.try_get<RotationComponent>(entity) ; rotation) {
-			m_server->sendEntityRotation(network.entityID, rotation->quat.w, rotation->quat.x, rotation->quat.y, rotation->quat.z);
+			m_server->sendEntityRotation(network.entityID, rotation->quat.w, rotation->quat.x, rotation->quat.y, rotation->quat.z, &client);
+		}
+
+		if (auto *animation = registry.try_get<AnimationComponent>(entity) ; animation) {
+			m_server->sendEntityAnimation(network.entityID, *animation, &client);
 		}
 
 		if (auto *drawableDef = registry.try_get<DrawableDef>(entity) ; drawableDef) {
-			m_server->sendEntityDrawableDef(network.entityID, *drawableDef);
+			m_server->sendEntityDrawableDef(network.entityID, *drawableDef, &client);
 		}
 	});
 }

@@ -71,8 +71,9 @@ namespace Network {
 		EntitySpawn           = 22, // <TCP> [NetworkCommand][u32 entity id] (from Server only)
 		EntityDespawn         = 23, // <TCP> [NetworkCommand][u32 entity id] (from Server only)
 		EntityPosition        = 24, // <TCP> [NetworkCommand][u32 entity id][double x, double y, double z] (from Server only)
-		EntityRotation        = 25, // <TCP> [NetworkCommand][u32 entity id][Rotation rot] (from Server only)
-		EntityDrawableDef     = 26, // <TCP> [NetworkCommand][u32 entity id][DrawableDef def] (from Server only)
+		EntityRotation        = 25, // <TCP> [NetworkCommand][u32 entity id][float w, float x, float y, float z] (from Server only)
+		EntityAnimation       = 26, // <TCP> [NetworkCommand][u32 entity id][AnimationComponent anim] (from Server only)
+		EntityDrawableDef     = 27, // <TCP> [NetworkCommand][u32 entity id][DrawableDef def] (from Server only)
 	};
 
 	std::string commandToString(Command command);

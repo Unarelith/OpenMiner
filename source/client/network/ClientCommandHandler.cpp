@@ -27,6 +27,7 @@
 #include <gk/core/Debug.hpp>
 #include <gk/gl/Camera.hpp>
 
+#include "AnimationComponent.hpp"
 #include "Client.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
@@ -303,6 +304,19 @@ void ClientCommandHandler::setupCallbacks() {
 		}
 		else
 			gkError() << "EntityRotation: Entity ID" << entityID << "is invalid";
+	});
+
+	m_client.setCommandCallback(Network::Command::EntityAnimation, [this](sf::Packet &packet) {
+		u32 entityID;
+		packet >> entityID;
+
+		auto it = m_entityMap.find(entityID);
+		if (it != m_entityMap.end()) {
+			auto &animation = m_world.scene().registry().get_or_assign<AnimationComponent>(it->second);
+			animation.deserialize(packet);
+		}
+		else
+			gkError() << "EntityAnimation: Entity ID" << entityID << "is invalid";
 	});
 
 	m_client.setCommandCallback(Network::Command::EntityDrawableDef, [this](sf::Packet &packet) {
