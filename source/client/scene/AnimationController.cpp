@@ -24,9 +24,12 @@
  *
  * =====================================================================================
  */
+#include <glm/gtx/quaternion.hpp>
+
 #include "AnimationComponent.hpp"
 #include "AnimationController.hpp"
 #include "PositionComponent.hpp"
+#include "RotationComponent.hpp"
 
 void AnimationController::update(entt::registry &registry) {
 	registry.view<PositionComponent, AnimationComponent>().each([](auto, auto &position, auto &animation) {
@@ -60,8 +63,14 @@ void AnimationController::update(entt::registry &registry) {
 				it.translation.dy = dy;
 				it.translation.dz = dz;
 			}
-			// else if (it.type == AnimationType::Rotation)
-			// 	transformable.rotate(it.rotation.angle, {it.rotation.axisX, it.rotation.axisY, it.rotation.axisZ});
+		}
+	});
+
+	registry.view<RotationComponent, AnimationComponent>().each([](auto, auto &rotation, auto &animation) {
+		for (auto &it : animation.list) {
+			if (it.type == AnimationType::Rotation) {
+				rotation.quat += glm::angleAxis(it.rotation.angle, glm::vec3{it.rotation.axisX, it.rotation.axisY, it.rotation.axisZ});
+			}
 		}
 	});
 }

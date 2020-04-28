@@ -58,7 +58,8 @@ class ServerCommandHandler {
 		void sendChatMessage(u16 clientID, const std::string &message, const ClientInfo *client = nullptr) const;
 		void sendEntitySpawn(u32 entityID, const ClientInfo *client = nullptr) const;
 		void sendEntityDespawn(u32 entityID, const ClientInfo *client = nullptr) const;
-		void sendEntityPosUpdate(u32 entityID, double x, double y, double z, const ClientInfo *client = nullptr) const;
+		void sendEntityPosition(u32 entityID, double x, double y, double z, const ClientInfo *client = nullptr) const;
+		void sendEntityRotation(u32 entityID, float w, float x, float y, float z, const ClientInfo *client = nullptr) const;
 		void sendEntityDrawableDef(u32 entityID, DrawableDef &drawableDef, const ClientInfo *client = nullptr) const;
 
 		void setupCallbacks();
