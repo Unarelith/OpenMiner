@@ -29,11 +29,21 @@
 
 #include "Scene.hpp"
 
+class ClientInfo;
+class NetworkController;
 class PlayerList;
+class ServerCommandHandler;
 
 class ServerScene : public Scene {
 	public:
 		ServerScene(PlayerList &players);
+
+		void sendEntities(const ClientInfo &client);
+
+		void setServer(ServerCommandHandler *server);
+
+	private:
+		NetworkController *m_network = nullptr;
 };
 
 #endif // SERVERSCENE_HPP_

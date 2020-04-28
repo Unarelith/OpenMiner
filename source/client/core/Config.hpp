@@ -33,7 +33,6 @@ namespace Config {
 	// Gameplay
 	extern bool isFlyModeEnabled;
 	extern bool isNoClipEnabled;
-	extern bool useItemDrops;
 
 	// Interface
 	extern bool isBlockInfoWidgetEnabled;
