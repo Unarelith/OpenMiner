@@ -30,6 +30,7 @@
 #include "Scene.hpp"
 
 class ClientInfo;
+class CollisionController;
 class NetworkController;
 class PlayerList;
 class ServerCommandHandler;
@@ -43,7 +44,8 @@ class ServerScene : public Scene {
 		void setServer(ServerCommandHandler *server);
 
 	private:
-		NetworkController *m_network = nullptr;
+		CollisionController *m_collisionController = nullptr;
+		NetworkController *m_networkController = nullptr;
 };
 
 #endif // SERVERSCENE_HPP_

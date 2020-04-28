@@ -105,6 +105,16 @@ void ServerCommandHandler::sendEntitySpawn(u32 entityID, const ClientInfo *clien
 		client->tcpSocket->send(packet);
 }
 
+void ServerCommandHandler::sendEntityDespawn(u32 entityID, const ClientInfo *client) const {
+	sf::Packet packet;
+	packet << Network::Command::EntityDespawn << entityID;
+
+	if (!client)
+		m_server.sendToAllClients(packet);
+	else
+		client->tcpSocket->send(packet);
+}
+
 void ServerCommandHandler::sendEntityPosUpdate(u32 entityID, double x, double y, double z, const ClientInfo *client) const {
 	sf::Packet packet;
 	packet << Network::Command::EntityPosUpdate << entityID << x << y << z;

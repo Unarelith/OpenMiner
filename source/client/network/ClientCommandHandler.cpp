@@ -263,15 +263,25 @@ void ClientCommandHandler::setupCallbacks() {
 		}
 	});
 
+	m_client.setCommandCallback(Network::Command::EntityDespawn, [this](sf::Packet &packet) {
+		u32 entityID;
+		packet >> entityID;
+
+		auto it = m_entityMap.find(entityID);
+		if (it != m_entityMap.end()) {
+			m_world.scene().registry().destroy(it->second);
+		}
+		else
+			gkError() << "EntityDespawn: Entity ID" << entityID << "is invalid";
+	});
+
 	m_client.setCommandCallback(Network::Command::EntityPosUpdate, [this](sf::Packet &packet) {
 		u32 entityID;
 		packet >> entityID;
 
-		auto &registry = m_world.scene().registry();
-
 		auto it = m_entityMap.find(entityID);
 		if (it != m_entityMap.end()) {
-			auto &position = registry.get_or_assign<PositionComponent>(it->second);
+			auto &position = m_world.scene().registry().get_or_assign<PositionComponent>(it->second);
 			packet >> position.x >> position.y >> position.z;
 		}
 		else
@@ -282,11 +292,9 @@ void ClientCommandHandler::setupCallbacks() {
 		u32 entityID;
 		packet >> entityID;
 
-		auto &registry = m_world.scene().registry();
-
 		auto it = m_entityMap.find(entityID);
 		if (it != m_entityMap.end()) {
-			packet >> registry.get_or_assign<DrawableDef>(it->second);
+			packet >> m_world.scene().registry().get_or_assign<DrawableDef>(it->second);
 		}
 		else
 			gkError() << "EntityDrawableDef: Entity ID" << entityID << "is invalid";

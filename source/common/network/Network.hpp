@@ -69,8 +69,9 @@ namespace Network {
 
 		// Entity commands
 		EntitySpawn           = 22, // <TCP> [NetworkCommand][u32 entity id] (from Server only)
-		EntityPosUpdate       = 23, // <TCP> [NetworkCommand][u32 entity id][double x, double y, double z] (from Server only)
-		EntityDrawableDef     = 24, // <TCP> [NetworkCommand][u32 entity id][DrawableDef def] (from Server only)
+		EntityDespawn         = 23, // <TCP> [NetworkCommand][u32 entity id] (from Server only)
+		EntityPosUpdate       = 24, // <TCP> [NetworkCommand][u32 entity id][double x, double y, double z] (from Server only)
+		EntityDrawableDef     = 25, // <TCP> [NetworkCommand][u32 entity id][DrawableDef def] (from Server only)
 	};
 
 	std::string commandToString(Command command);

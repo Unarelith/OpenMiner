@@ -57,6 +57,7 @@ class ServerCommandHandler {
 		void sendPlayerChangeDimension(u16 clientID, s32 x, s32 y, s32 z, u16 dimension, const ClientInfo *client = nullptr) const;
 		void sendChatMessage(u16 clientID, const std::string &message, const ClientInfo *client = nullptr) const;
 		void sendEntitySpawn(u32 entityID, const ClientInfo *client = nullptr) const;
+		void sendEntityDespawn(u32 entityID, const ClientInfo *client = nullptr) const;
 		void sendEntityPosUpdate(u32 entityID, double x, double y, double z, const ClientInfo *client = nullptr) const;
 		void sendEntityDrawableDef(u32 entityID, DrawableDef &drawableDef, const ClientInfo *client = nullptr) const;
 

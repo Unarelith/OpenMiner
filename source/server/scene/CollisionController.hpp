@@ -30,6 +30,7 @@
 #include "AbstractController.hpp"
 
 class PlayerList;
+class ServerCommandHandler;
 
 class CollisionController : public AbstractController {
 	public:
@@ -37,7 +38,11 @@ class CollisionController : public AbstractController {
 
 		void update(entt::registry &registry);
 
+		void setServer(ServerCommandHandler *server) { m_server = server; }
+
 	private:
+		ServerCommandHandler *m_server = nullptr;
+
 		PlayerList &m_players;
 };
 
