@@ -242,13 +242,5 @@ void ClientCommandHandler::setupCallbacks() {
 			}
 		}
 	});
-
-	m_client.setCommandCallback(Network::Command::SceneState, [this](sf::Packet &packet) {
-		u16 dimensionID;
-		packet >> dimensionID;
-
-		// FIXME: Check dimension and only apply changes if it's the same as the current one
-		packet >> m_world.scene();
-	});
 }
 

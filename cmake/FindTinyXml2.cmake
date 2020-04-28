@@ -10,7 +10,7 @@ find_path(TINYXML2_INCLUDE_DIRS NAMES tinyxml2.h)
 find_library(TINYXML2_LIBRARIES NAMES tinyxml2)
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(tinyxml2 DEFAULT_MSG TINYXML2_LIBRARIES TINYXML2_INCLUDE_DIRS)
+find_package_handle_standard_args(TinyXml2 DEFAULT_MSG TINYXML2_LIBRARIES TINYXML2_INCLUDE_DIRS)
 
 mark_as_advanced(TINYXML2_INCLUDE_DIRS TINYXML2_LIBRARIES)
 
