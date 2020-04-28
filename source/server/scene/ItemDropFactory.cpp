@@ -32,12 +32,14 @@
 #include "NetworkComponent.hpp"
 #include "PositionComponent.hpp"
 #include "Registry.hpp"
+#include "RotationComponent.hpp"
 
 static u32 counter = 0; // FIXME: TEMPORARY
 
 void ItemDropFactory::create(entt::registry &registry, double x, double y, double z, const std::string &itemID, u16 amount) {
 	auto entity = registry.create();
 	registry.assign<PositionComponent>(entity, x, y, z);
+	registry.assign<RotationComponent>(entity);
 	registry.assign<NetworkComponent>(entity, counter++);
 
 	auto &drawableDef = registry.assign<DrawableDef>(entity);

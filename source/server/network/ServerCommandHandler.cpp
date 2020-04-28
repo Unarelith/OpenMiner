@@ -24,6 +24,7 @@
  *
  * =====================================================================================
  */
+#include "AnimationComponent.hpp"
 #include "BlockData.hpp"
 #include "DrawableDef.hpp"
 #include "NetworkComponent.hpp"
@@ -128,6 +129,16 @@ void ServerCommandHandler::sendEntityPosition(u32 entityID, double x, double y, 
 void ServerCommandHandler::sendEntityRotation(u32 entityID, float w, float x, float y, float z, const ClientInfo *client) const {
 	sf::Packet packet;
 	packet << Network::Command::EntityRotation << entityID << w << x << y << z;
+
+	if (!client)
+		m_server.sendToAllClients(packet);
+	else
+		client->tcpSocket->send(packet);
+}
+
+void ServerCommandHandler::sendEntityAnimation(u32 entityID, const AnimationComponent &animation, const ClientInfo *client) const {
+	sf::Packet packet;
+	packet << Network::Command::EntityAnimation << entityID << animation;
 
 	if (!client)
 		m_server.sendToAllClients(packet);

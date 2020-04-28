@@ -69,7 +69,7 @@ void AnimationController::update(entt::registry &registry) {
 	registry.view<RotationComponent, AnimationComponent>().each([](auto, auto &rotation, auto &animation) {
 		for (auto &it : animation.list) {
 			if (it.type == AnimationType::Rotation) {
-				rotation.quat += glm::angleAxis(it.rotation.angle, glm::vec3{it.rotation.axisX, it.rotation.axisY, it.rotation.axisZ});
+				rotation.quat = glm::angleAxis(glm::radians(it.rotation.angle), glm::vec3{it.rotation.axisX, it.rotation.axisY, it.rotation.axisZ}) * rotation.quat;
 			}
 		}
 	});

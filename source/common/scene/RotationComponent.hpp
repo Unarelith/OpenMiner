@@ -30,7 +30,7 @@
 #include <glm/gtc/quaternion.hpp>
 
 struct RotationComponent {
-	glm::quat quat;
+	glm::quat quat{1, 0, 0, 0};
 
 	bool isUpdated = true;
 };

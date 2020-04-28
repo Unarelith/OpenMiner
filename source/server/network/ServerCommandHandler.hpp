@@ -35,6 +35,7 @@
 
 struct BlockData;
 
+struct AnimationComponent;
 class ClientInfo;
 class DrawableDef;
 class Inventory;
@@ -60,6 +61,7 @@ class ServerCommandHandler {
 		void sendEntityDespawn(u32 entityID, const ClientInfo *client = nullptr) const;
 		void sendEntityPosition(u32 entityID, double x, double y, double z, const ClientInfo *client = nullptr) const;
 		void sendEntityRotation(u32 entityID, float w, float x, float y, float z, const ClientInfo *client = nullptr) const;
+		void sendEntityAnimation(u32 entityID, const AnimationComponent &animation, const ClientInfo *client = nullptr) const;
 		void sendEntityDrawableDef(u32 entityID, DrawableDef &drawableDef, const ClientInfo *client = nullptr) const;
 
 		void setupCallbacks();

@@ -126,8 +126,7 @@ struct AnimationComponent : public ISerializable {
 
 	std::vector<AnimationData> list;
 
-	private:
-		bool m_isInitialized = false;
+	bool isUpdated = true;
 };
 
 #endif // ANIMATIONCOMPONENT_HPP_
