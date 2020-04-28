@@ -94,7 +94,6 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 	if (m_data[z][y][x] != 0) {
 		const Block &oldBlock = Registry::getInstance().getBlock(m_data[z][y][x]);
 		onBlockDestroyed(x, y, z, oldBlock);
-		m_world.onBlockDestroyed(x + m_x * width, y + m_y * depth, z + m_z * height, oldBlock);
 	}
 
 	setBlockRaw(x, y, z, type);

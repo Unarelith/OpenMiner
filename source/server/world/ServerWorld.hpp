@@ -57,7 +57,7 @@ class ServerWorld : public World {
 		void sendChunkData(const ClientInfo &client, ServerChunk &chunk);
 		void sendRequestedData(ClientInfo &client, s32 cx, s32 cy, s32 cz);
 
-		void onBlockDestroyed(int x, int y, int z, const Block &block) override;
+		void onBlockDigged(int x, int y, int z, const Block &block, ServerPlayer &player);
 
 		ServerChunk &createChunk(s32 cx, s32 cy, s32 cz);
 

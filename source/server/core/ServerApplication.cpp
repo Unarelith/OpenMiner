@@ -29,6 +29,7 @@
 #include "BlockGeometry.hpp"
 #include "ServerApplication.hpp"
 #include "ServerBlock.hpp"
+#include "ServerConfig.hpp"
 
 namespace fs = ghc::filesystem;
 
@@ -57,6 +58,8 @@ void ServerApplication::init() {
 
 	if (m_argumentParser.getArgument("port").isFound)
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
+
+	ServerConfig::loadConfigFromFile("server_config.lua");
 
 	m_server.init(m_port);
 	m_server.setRunning(true);

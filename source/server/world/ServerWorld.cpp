@@ -26,14 +26,15 @@
  */
 #include <gk/core/GameClock.hpp>
 
+#include "Dimension.hpp"
 #include "EngineConfig.hpp"
+#include "ItemDropFactory.hpp"
 #include "Network.hpp"
 #include "Server.hpp"
 #include "ServerCommandHandler.hpp"
+#include "ServerConfig.hpp"
 #include "ServerPlayer.hpp"
 #include "ServerWorld.hpp"
-
-#include "Dimension.hpp" // FIXME
 
 void ServerWorld::update() {
 	if (m_lastTick < m_clock.getTicks() / 50) {
@@ -150,10 +151,15 @@ void ServerWorld::sendRequestedData(ClientInfo &client, int cx, int cy, int cz) 
 	sendChunkData(client, chunk);
 }
 
-#include "ItemDropFactory.hpp" // FIXME
-
-void ServerWorld::onBlockDestroyed(int x, int y, int z, const Block &block) {
-	ItemDropFactory::create(m_scene.registry(), x + 0.5, y + 0.5, z + 0.5, block.getItemDrop().item().stringID(), block.getItemDrop().amount());
+void ServerWorld::onBlockDigged(int x, int y, int z, const Block &block, ServerPlayer &player) {
+	if (ServerConfig::useItemDrops) {
+		ItemDropFactory::create(m_scene.registry(), x + 0.5, y + 0.5, z + 0.5, block.getItemDrop().item().stringID(), block.getItemDrop().amount());
+	}
+	else {
+		player.inventory().addStack(block.getItemDrop().item().stringID(), block.getItemDrop().amount());
+		// gkDebug() << player.inventory().getStack(2, 2).item().stringID() << player.inventory().getStack(2, 2).amount();
+		m_server->sendPlayerInvUpdate(player.clientID(), &player.client());
+	}
 }
 
 ServerChunk &ServerWorld::createChunk(s32 cx, s32 cy, s32 cz) {
