@@ -85,29 +85,6 @@ sf::Packet &operator>>(sf::Packet &packet, std::unordered_map<T, U> &map) {
 }
 
 //======================================================================================
-// glm::mat4
-//======================================================================================
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/mat4x4.hpp>
-
-template<typename T>
-sf::Packet &operator<<(sf::Packet &packet, const glm::tmat4x4<T> &matrix) {
-	for (int i = 0 ; i < 4 * 4 ; ++i) {
-		packet << matrix[i % 4][i / 4];
-	}
-	return packet;
-}
-
-template<typename T>
-sf::Packet &operator>>(sf::Packet &packet, glm::tmat4x4<T> &matrix) {
-	for (int i = 0 ; i < 4 * 4 ; ++i) {
-		packet >> matrix[i % 4][i / 4];
-	}
-	return packet;
-}
-
-
-//======================================================================================
 // gk::Rect
 //======================================================================================
 #include <gk/core/Rect.hpp>
@@ -165,13 +142,5 @@ sf::Packet &operator>>(sf::Packet &packet, gk::Vector3<T> &vec) {
 
 sf::Packet &operator<<(sf::Packet &packet, const gk::Color &color);
 sf::Packet &operator>>(sf::Packet &packet, gk::Color &color);
-
-//======================================================================================
-// gk::Transformable
-//======================================================================================
-#include <gk/gl/Transformable.hpp>
-
-sf::Packet &operator<<(sf::Packet &packet, const gk::Transformable &transformable);
-sf::Packet &operator>>(sf::Packet &packet, gk::Transformable &transformable);
 
 #endif // NETWORKUTILS_HPP_

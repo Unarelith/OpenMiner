@@ -27,10 +27,8 @@
 #include "DrawableDef.hpp"
 #include "DrawableComponent.hpp"
 #include "InventoryCube.hpp"
+#include "PositionComponent.hpp"
 #include "RenderingController.hpp"
-
-#include <gk/core/Debug.hpp>
-#include <gk/core/GameClock.hpp>
 
 #include "Registry.hpp"
 
@@ -49,9 +47,9 @@ void RenderingController::update(entt::registry &registry) {
 }
 
 void RenderingController::draw(entt::registry &registry, gk::RenderTarget &target, gk::RenderStates states) {
-	registry.view<DrawableComponent, gk::Transformable>().each([&](auto, auto &drawable, auto &transformable) {
+	registry.view<DrawableComponent, PositionComponent>().each([&](auto, auto &drawable, auto &position) {
 		gk::RenderStates drawStates = states;
-		drawStates.transform *= transformable.getTransform();
+		drawStates.transform.translate(position.x, position.y, position.z);
 		drawable.draw(target, drawStates);
 	});
 }

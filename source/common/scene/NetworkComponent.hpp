@@ -24,33 +24,15 @@
  *
  * =====================================================================================
  */
-#include "AnimationComponent.hpp"
-#include "DrawableComponent.hpp"
-#include "DrawableDef.hpp"
-#include "ItemDropFactory.hpp"
-#include "ItemStack.hpp"
-#include "NetworkComponent.hpp"
-#include "PositionComponent.hpp"
-#include "Registry.hpp"
+#ifndef NETWORKCOMPONENT_HPP_
+#define NETWORKCOMPONENT_HPP_
 
-static u32 counter = 0; // FIXME: TEMPORARY
+#include <gk/core/IntTypes.hpp>
 
-void ItemDropFactory::create(entt::registry &registry, double x, double y, double z, const std::string &itemID, u16 amount) {
-	auto entity = registry.create();
-	registry.assign<PositionComponent>(entity, x, y, z);
-	registry.assign<NetworkComponent>(entity, counter++);
+struct NetworkComponent {
+	u32 entityID = 0;
 
-	auto &drawableDef = registry.assign<DrawableDef>(entity);
-	auto &cube = drawableDef.addInventoryCube();
-	cube.size = 0.25f;
-	cube.origin = gk::Vector3f{cube.size / 2.f, cube.size / 2.f, cube.size / 2.f};
-	cube.blockID = itemID;
+	bool hasSpawned = false;
+};
 
-	auto &animationComponent = registry.assign<AnimationComponent>(entity);
-	animationComponent.addRotation(0.f, 0.f, 1.f, 0.5f);
-	animationComponent.addTranslation(0.f, 0.f, -0.0005f, -0.2f, 0.f, true);
-
-	registry.assign<gk::DoubleBox>(entity, 0., 0., 0., cube.size, cube.size, cube.size);
-	registry.assign<ItemStack>(entity, itemID, amount);
-}
-
+#endif // NETWORKCOMPONENT_HPP_

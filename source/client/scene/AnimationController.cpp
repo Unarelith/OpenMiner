@@ -26,13 +26,12 @@
  */
 #include "AnimationComponent.hpp"
 #include "AnimationController.hpp"
+#include "PositionComponent.hpp"
 
 void AnimationController::update(entt::registry &registry) {
-	registry.view<gk::Transformable, AnimationComponent>().each([](auto, auto &transformable, auto &animation) {
+	registry.view<PositionComponent, AnimationComponent>().each([](auto, auto &position, auto &animation) {
 		for (auto &it : animation.list) {
-			if (it.type == AnimationType::Rotation)
-				transformable.rotate(it.rotation.angle, {it.rotation.axisX, it.rotation.axisY, it.rotation.axisZ});
-			else if (it.type == AnimationType::Translation) {
+			if (it.type == AnimationType::Translation) {
 				float dx = it.translation.dx;
 				float dy = it.translation.dy;
 				float dz = it.translation.dz;
@@ -49,7 +48,9 @@ void AnimationController::update(entt::registry &registry) {
 				 || it.translation.cz + it.translation.dz < it.translation.min)
 					dz = (it.translation.loop) ? -dz : 0;
 
-				transformable.move(dx, dy, dz);
+				position.x += dx;
+				position.y += dy;
+				position.z += dz;
 
 				it.translation.cx += dx;
 				it.translation.cy += dy;
@@ -59,6 +60,8 @@ void AnimationController::update(entt::registry &registry) {
 				it.translation.dy = dy;
 				it.translation.dz = dz;
 			}
+			// else if (it.type == AnimationType::Rotation)
+			// 	transformable.rotate(it.rotation.angle, {it.rotation.axisX, it.rotation.axisY, it.rotation.axisZ});
 		}
 	});
 }

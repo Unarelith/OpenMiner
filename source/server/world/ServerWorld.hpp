@@ -69,7 +69,9 @@ class ServerWorld : public World {
 
 		TerrainGenerator &terrainGenerator() { return m_terrainGenerator; }
 
-		void setServer(ServerCommandHandler *server) { m_server = server; }
+		ServerScene &scene() { return m_scene; }
+
+		void setServer(ServerCommandHandler *server) { m_server = server; m_scene.setServer(server); }
 
 	private:
 		const Dimension &m_dimension;

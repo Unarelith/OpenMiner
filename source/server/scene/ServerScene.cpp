@@ -25,9 +25,19 @@
  * =====================================================================================
  */
 #include "CollisionController.hpp"
+#include "NetworkController.hpp"
 #include "ServerScene.hpp"
 
 ServerScene::ServerScene(PlayerList &players) {
 	m_controllers.emplace_back(new CollisionController(players));
+	m_network = static_cast<NetworkController *>(m_controllers.emplace_back(new NetworkController).get());
+}
+
+void ServerScene::sendEntities(const ClientInfo &client) {
+	m_network->sendEntities(m_registry, client);
+}
+
+void ServerScene::setServer(ServerCommandHandler *server) {
+	m_network->setServer(server);
 }
 

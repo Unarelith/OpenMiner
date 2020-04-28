@@ -32,7 +32,10 @@
 #include "ClientWorld.hpp"
 #include "ClientCommandHandler.hpp"
 #include "DrawableComponent.hpp"
+#include "DrawableDef.hpp"
 #include "LuaGUIState.hpp"
+#include "NetworkComponent.hpp"
+#include "PositionComponent.hpp"
 #include "Registry.hpp"
 
 void ClientCommandHandler::sendPlayerInvUpdate() {
@@ -241,6 +244,52 @@ void ClientCommandHandler::setupCallbacks() {
 				}
 			}
 		}
+	});
+
+	m_client.setCommandCallback(Network::Command::EntitySpawn, [this](sf::Packet &packet) {
+		u32 entityID;
+		packet >> entityID;
+
+		auto &registry = m_world.scene().registry();
+
+		auto it = m_entityMap.find(entityID);
+		if (it == m_entityMap.end()) {
+			entt::entity entity = registry.create();
+			m_entityMap.emplace(entityID, entity);
+			registry.assign<NetworkComponent>(entity, entityID);
+		}
+		else if (registry.get<NetworkComponent>(it->second).entityID != entityID) {
+			gkError() << "EntitySpawn: Entity ID" << entityID << "is invalid";
+		}
+	});
+
+	m_client.setCommandCallback(Network::Command::EntityPosUpdate, [this](sf::Packet &packet) {
+		u32 entityID;
+		packet >> entityID;
+
+		auto &registry = m_world.scene().registry();
+
+		auto it = m_entityMap.find(entityID);
+		if (it != m_entityMap.end()) {
+			auto &position = registry.get_or_assign<PositionComponent>(it->second);
+			packet >> position.x >> position.y >> position.z;
+		}
+		else
+			gkError() << "EntityPosUpdate: Entity ID" << entityID << "is invalid";
+	});
+
+	m_client.setCommandCallback(Network::Command::EntityDrawableDef, [this](sf::Packet &packet) {
+		u32 entityID;
+		packet >> entityID;
+
+		auto &registry = m_world.scene().registry();
+
+		auto it = m_entityMap.find(entityID);
+		if (it != m_entityMap.end()) {
+			packet >> registry.get_or_assign<DrawableDef>(it->second);
+		}
+		else
+			gkError() << "EntityDrawableDef: Entity ID" << entityID << "is invalid";
 	});
 }
 

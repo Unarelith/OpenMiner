@@ -66,6 +66,11 @@ namespace Network {
 
 		// Chat commands
 		ChatMessage           = 21, // <TCP> [NetworkCommand][u16 client id][std::string message] (both)
+
+		// Entity commands
+		EntitySpawn           = 22, // <TCP> [NetworkCommand][u32 entity id] (from Server only)
+		EntityPosUpdate       = 23, // <TCP> [NetworkCommand][u32 entity id][double x, double y, double z] (from Server only)
+		EntityDrawableDef     = 24, // <TCP> [NetworkCommand][u32 entity id][DrawableDef def] (from Server only)
 	};
 
 	std::string commandToString(Command command);

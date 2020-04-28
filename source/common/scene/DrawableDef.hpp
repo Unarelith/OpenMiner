@@ -49,6 +49,8 @@ class DrawableDef : public ISerializable {
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
+		bool isUpdated = true;
+
 	protected:
 		std::vector<InventoryCubeDef> m_cubes;
 };

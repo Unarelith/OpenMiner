@@ -25,6 +25,8 @@
  * =====================================================================================
  */
 #include "BlockData.hpp"
+#include "DrawableDef.hpp"
+#include "NetworkComponent.hpp"
 #include "PlayerList.hpp"
 #include "Registry.hpp"
 #include "ScriptEngine.hpp"
@@ -93,6 +95,36 @@ void ServerCommandHandler::sendChatMessage(u16 clientID, const std::string &mess
 		client->tcpSocket->send(packet);
 }
 
+void ServerCommandHandler::sendEntitySpawn(u32 entityID, const ClientInfo *client) const {
+	sf::Packet packet;
+	packet << Network::Command::EntitySpawn << entityID;
+
+	if (!client)
+		m_server.sendToAllClients(packet);
+	else
+		client->tcpSocket->send(packet);
+}
+
+void ServerCommandHandler::sendEntityPosUpdate(u32 entityID, double x, double y, double z, const ClientInfo *client) const {
+	sf::Packet packet;
+	packet << Network::Command::EntityPosUpdate << entityID << x << y << z;
+
+	if (!client)
+		m_server.sendToAllClients(packet);
+	else
+		client->tcpSocket->send(packet);
+}
+
+void ServerCommandHandler::sendEntityDrawableDef(u32 entityID, DrawableDef &drawableDef, const ClientInfo *client) const {
+	sf::Packet packet;
+	packet << Network::Command::EntityDrawableDef << entityID << drawableDef;
+
+	if (!client)
+		m_server.sendToAllClients(packet);
+	else
+		client->tcpSocket->send(packet);
+}
+
 void ServerCommandHandler::setupCallbacks() {
 	m_server.setConnectionCallback([this](ClientInfo &client) {
 		sf::Packet packet;
@@ -124,6 +156,9 @@ void ServerCommandHandler::setupCallbacks() {
 		spawnPacket << Network::Command::PlayerSpawn << client.id;
 		spawnPacket << m_spawnPosition.x << m_spawnPosition.y << m_spawnPosition.z;
 		m_server.sendToAllClients(spawnPacket);
+
+		// Send entities to the client
+		m_worldController.getWorld(player.dimension()).scene().sendEntities(client);
 	});
 
 	m_server.setCommandCallback(Network::Command::ClientDisconnect, [this](ClientInfo &client, sf::Packet &) {

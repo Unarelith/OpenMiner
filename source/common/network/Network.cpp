@@ -60,6 +60,10 @@ std::string Network::commandToString(Network::Command command) {
 		{Network::Command::RegistryData,          "RegistryData"},
 
 		{Network::Command::ChatMessage,           "ChatMessage"},
+
+		{Network::Command::EntitySpawn,           "EntitySpawn"},
+		{Network::Command::EntityPosUpdate,       "EntityPosUpdate"},
+		{Network::Command::EntityDrawableDef,     "EntityDrawableDef"},
 	};
 
 	return commandNames[command];

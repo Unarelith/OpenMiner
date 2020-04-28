@@ -153,8 +153,7 @@ void ServerWorld::sendRequestedData(ClientInfo &client, int cx, int cy, int cz) 
 #include "ItemDropFactory.hpp" // FIXME
 
 void ServerWorld::onBlockDestroyed(int x, int y, int z, const Block &block) {
-	// FIXME if (Config::useItemDrops)
-		ItemDropFactory::create(m_scene.registry(), x, y, z, block.getItemDrop().item().stringID(), block.getItemDrop().amount());
+	ItemDropFactory::create(m_scene.registry(), x + 0.5, y + 0.5, z + 0.5, block.getItemDrop().item().stringID(), block.getItemDrop().amount());
 }
 
 ServerChunk &ServerWorld::createChunk(s32 cx, s32 cy, s32 cz) {
