@@ -75,6 +75,22 @@ void ServerCommandHandler::sendPlayerPosUpdate(u16 clientID, bool isTeleportatio
 		gkError() << ("Failed to send pos update for player " + std::to_string(clientID) + ": Player not found").c_str();
 }
 
+void ServerCommandHandler::sendPlayerInvUpdate(u16 clientID, const ClientInfo *client) const {
+	ServerPlayer *player = m_players.getPlayer(clientID);
+	if (player) {
+		sf::Packet packet;
+		packet << Network::Command::PlayerInvUpdate;
+		packet << clientID << player->inventory();
+
+		if (!client)
+			m_server.sendToAllClients(packet);
+		else
+			client->tcpSocket->send(packet);
+	}
+	else
+		gkError() << ("Failed to send inv update for player " + std::to_string(clientID) + ": Player not found").c_str();
+}
+
 void ServerCommandHandler::sendPlayerChangeDimension(u16 clientID, s32 x, s32 y, s32 z, u16 dimension, const ClientInfo *client) const {
 	sf::Packet packet;
 	packet << Network::Command::PlayerChangeDimension;

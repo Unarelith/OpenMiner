@@ -38,7 +38,7 @@ void CollisionController::update(entt::registry &registry) {
 			gk::DoubleBox playerHitbox = it.second.hitbox() + gk::Vector3d{it.second.x(), it.second.y(), it.second.z()};
 			if (hitbox.intersects(playerHitbox)) {
 				it.second.inventory().addStack(itemStack.item().stringID(), itemStack.amount());
-				// FIXME: Send inventory update here
+				m_server->sendPlayerInvUpdate(it.second.clientID(), &it.second.client());
 				m_server->sendEntityDespawn(network.entityID);
 				registry.destroy(entity);
 			}

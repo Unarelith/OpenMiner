@@ -11,6 +11,9 @@
 - [Wiki](#wiki)
 - [Keys](#keys)
 - [How to compile](#how-to-compile)
+    - [Using Linux](#using-linux)
+    - [Using Windows](#using-windows)
+    - [Using OSX](#using-osx)
 - [Discussion](#discussion)
 - [Project status](#project-status)
 - [Screenshots](#screenshots)
@@ -78,6 +81,10 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 
 - [Wiki: Compiling on Windows using CMake and MinGW-w64](https://github.com/Unarelith/OpenMiner/wiki/Compiling-on-Windows-with-MinGW-w64)
 - [Wiki: Compiling on Windows using CMake and Visual Studio 2017](https://github.com/Unarelith/OpenMiner/wiki/Compiling-on-Windows-with-Visual-Studio-2017)
+
+### Using OSX
+
+I don't have an OSX system at the moment. But you can help me create a guide for this OS if you have one!
 
 ## Discussion
 
