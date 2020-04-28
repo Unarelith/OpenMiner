@@ -28,22 +28,36 @@
 #include "NetworkComponent.hpp"
 #include "NetworkController.hpp"
 #include "PositionComponent.hpp"
+#include "RotationComponent.hpp"
 #include "ServerCommandHandler.hpp"
 
 void NetworkController::update(entt::registry &registry) {
 	registry.view<NetworkComponent>().each([this] (auto, auto &network) {
-		if (!network.hasSpawned)
+		if (!network.hasSpawned) {
 			m_server->sendEntitySpawn(network.entityID);
+			network.hasSpawned = true;
+		}
 	});
 
 	registry.view<NetworkComponent, PositionComponent>().each([this] (auto, auto &network, auto &position) {
-		if (position.isUpdated)
-			m_server->sendEntityPosUpdate(network.entityID, position.x, position.y, position.z);
+		if (position.isUpdated) {
+			m_server->sendEntityPosition(network.entityID, position.x, position.y, position.z);
+			position.isUpdated = false;
+		}
+	});
+
+	registry.view<NetworkComponent, RotationComponent>().each([this] (auto, auto &network, auto &rotation) {
+		if (rotation.isUpdated) {
+			m_server->sendEntityRotation(network.entityID, rotation.quat.w, rotation.quat.x, rotation.quat.y, rotation.quat.z);
+			rotation.isUpdated = false;
+		}
 	});
 
 	registry.view<NetworkComponent, DrawableDef>().each([this] (auto, auto &network, auto &drawableDef) {
-		if (drawableDef.isUpdated)
+		if (drawableDef.isUpdated) {
 			m_server->sendEntityDrawableDef(network.entityID, drawableDef);
+			drawableDef.isUpdated = false;
+		}
 	});
 }
 
@@ -52,7 +66,11 @@ void NetworkController::sendEntities(entt::registry &registry, const ClientInfo 
 		m_server->sendEntitySpawn(network.entityID, &client);
 
 		if (auto *position = registry.try_get<PositionComponent>(entity) ; position) {
-			m_server->sendEntityPosUpdate(network.entityID, position->x, position->y, position->z);
+			m_server->sendEntityPosition(network.entityID, position->x, position->y, position->z);
+		}
+
+		if (auto *rotation = registry.try_get<RotationComponent>(entity) ; rotation) {
+			m_server->sendEntityRotation(network.entityID, rotation->quat.w, rotation->quat.x, rotation->quat.y, rotation->quat.z);
 		}
 
 		if (auto *drawableDef = registry.try_get<DrawableDef>(entity) ; drawableDef) {

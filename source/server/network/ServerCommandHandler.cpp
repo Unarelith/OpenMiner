@@ -115,9 +115,19 @@ void ServerCommandHandler::sendEntityDespawn(u32 entityID, const ClientInfo *cli
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendEntityPosUpdate(u32 entityID, double x, double y, double z, const ClientInfo *client) const {
+void ServerCommandHandler::sendEntityPosition(u32 entityID, double x, double y, double z, const ClientInfo *client) const {
 	sf::Packet packet;
-	packet << Network::Command::EntityPosUpdate << entityID << x << y << z;
+	packet << Network::Command::EntityPosition << entityID << x << y << z;
+
+	if (!client)
+		m_server.sendToAllClients(packet);
+	else
+		client->tcpSocket->send(packet);
+}
+
+void ServerCommandHandler::sendEntityRotation(u32 entityID, float w, float x, float y, float z, const ClientInfo *client) const {
+	sf::Packet packet;
+	packet << Network::Command::EntityRotation << entityID << w << x << y << z;
 
 	if (!client)
 		m_server.sendToAllClients(packet);

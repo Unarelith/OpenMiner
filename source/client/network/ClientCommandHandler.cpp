@@ -36,6 +36,7 @@
 #include "LuaGUIState.hpp"
 #include "NetworkComponent.hpp"
 #include "PositionComponent.hpp"
+#include "RotationComponent.hpp"
 #include "Registry.hpp"
 
 void ClientCommandHandler::sendPlayerInvUpdate() {
@@ -275,7 +276,7 @@ void ClientCommandHandler::setupCallbacks() {
 			gkError() << "EntityDespawn: Entity ID" << entityID << "is invalid";
 	});
 
-	m_client.setCommandCallback(Network::Command::EntityPosUpdate, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::EntityPosition, [this](sf::Packet &packet) {
 		u32 entityID;
 		packet >> entityID;
 
@@ -285,7 +286,23 @@ void ClientCommandHandler::setupCallbacks() {
 			packet >> position.x >> position.y >> position.z;
 		}
 		else
-			gkError() << "EntityPosUpdate: Entity ID" << entityID << "is invalid";
+			gkError() << "EntityPosition: Entity ID" << entityID << "is invalid";
+	});
+
+	m_client.setCommandCallback(Network::Command::EntityRotation, [this](sf::Packet &packet) {
+		u32 entityID;
+		packet >> entityID;
+
+		auto it = m_entityMap.find(entityID);
+		if (it != m_entityMap.end()) {
+			float w, x, y, z;
+			packet >> w >> x >> y >> z;
+
+			auto &rotation = m_world.scene().registry().get_or_assign<RotationComponent>(it->second);
+			rotation.quat = glm::quat(w, x, y, z);
+		}
+		else
+			gkError() << "EntityRotation: Entity ID" << entityID << "is invalid";
 	});
 
 	m_client.setCommandCallback(Network::Command::EntityDrawableDef, [this](sf::Packet &packet) {

@@ -63,7 +63,8 @@ std::string Network::commandToString(Network::Command command) {
 
 		{Network::Command::EntitySpawn,           "EntitySpawn"},
 		{Network::Command::EntityDespawn,         "EntityDespawn"},
-		{Network::Command::EntityPosUpdate,       "EntityPosUpdate"},
+		{Network::Command::EntityPosition,        "EntityPosition"},
+		{Network::Command::EntityRotation,        "EntityRotation"},
 		{Network::Command::EntityDrawableDef,     "EntityDrawableDef"},
 	};
 
