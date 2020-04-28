@@ -24,31 +24,30 @@
  *
  * =====================================================================================
  */
-#ifndef WORLD_HPP_
-#define WORLD_HPP_
+#include "ServerConfig.hpp"
 
-#include <memory>
+// Gameplay
+bool ServerConfig::useItemDrops = true;
 
-#include "Chunk.hpp"
+#include <gk/core/Debug.hpp>
+#include <gk/core/Filesystem.hpp>
 
-class World {
-	public:
-		virtual ~World() = default;
+#include <sol.hpp>
 
-		virtual Chunk *getChunk(int cx, int cy, int cz) const = 0;
-		Chunk *getChunkAtBlockPos(int x, int y, int z) const;
+void ServerConfig::loadConfigFromFile(const char *file) {
+	if (gk::Filesystem::fileExists(file)) {
+		sol::state lua;
 
-		BlockData *getBlockData(int x, int y, int z) const;
-		BlockData *addBlockData(int x, int y, int z, int inventoryWidth = 0, int inventoryHeight = 0) const;
+		try {
+			lua.safe_script_file(file);
 
-		u16 getBlock(int x, int y, int z) const;
-		void setBlock(int x, int y, int z, u16 id) const;
-		u16 getData(int x, int y, int z) const;
-		void setData(int x, int y, int z, u16 data) const;
+			useItemDrops = lua["useItemDrops"].get_or(useItemDrops);
 
-		virtual void onBlockPlaced(int, int, int, const Block &) {}
+			gkInfo() << "Config file loaded successfully";
+		}
+		catch (sol::error &e) {
+			gkError() << e.what();
+		}
+	}
+}
 
-		static bool isReloadRequested;
-};
-
-#endif // WORLD_HPP_

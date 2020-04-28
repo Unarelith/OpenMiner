@@ -153,7 +153,6 @@ void BlockCursor::update(const Hotbar &hotbar) {
 				m_animationStart = ticks;
 
 				m_client.sendPlayerDigBlock(m_selectedBlock);
-				m_client.sendPlayerInvUpdate();
 			}
 		}
 	}

@@ -162,7 +162,7 @@ void ServerCommandHandler::sendEntityAnimation(u32 entityID, const AnimationComp
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendEntityDrawableDef(u32 entityID, DrawableDef &drawableDef, const ClientInfo *client) const {
+void ServerCommandHandler::sendEntityDrawableDef(u32 entityID, const DrawableDef &drawableDef, const ClientInfo *client) const {
 	sf::Packet packet;
 	packet << Network::Command::EntityDrawableDef << entityID << drawableDef;
 
@@ -270,13 +270,21 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerDigBlock, [this](ClientInfo &client, sf::Packet &packet) {
-		s32 x, y, z;
-		packet >> x >> y >> z;
-		getWorldForClient(client.id).setBlock(x, y, z, 0);
+		ServerPlayer *player = m_players.getPlayer(client.id);
+		if (player) {
+			s32 x, y, z;
+			packet >> x >> y >> z;
 
-		sf::Packet answer;
-		answer << Network::Command::BlockUpdate << x << y << z << u32(0);
-		m_server.sendToAllClients(answer);
+			ServerWorld &world = getWorldForClient(client.id);
+			world.onBlockDigged(x, y, z, Registry::getInstance().getBlock(world.getBlock(x, y, z)), *player);
+			world.setBlock(x, y, z, 0);
+
+			sf::Packet answer;
+			answer << Network::Command::BlockUpdate << x << y << z << u32(0);
+			m_server.sendToAllClients(answer);
+		}
+		else
+			gkError() << ("Failed to dig block using player " + std::to_string(client.id) + ": Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerInventory, [this](ClientInfo &client, sf::Packet &packet) {
