@@ -29,15 +29,16 @@
 #include "ServerScene.hpp"
 
 ServerScene::ServerScene(PlayerList &players) {
-	m_controllers.emplace_back(new CollisionController(players));
-	m_network = static_cast<NetworkController *>(m_controllers.emplace_back(new NetworkController).get());
+	m_collisionController = static_cast<CollisionController *>(m_controllers.emplace_back(new CollisionController(players)).get());
+	m_networkController = static_cast<NetworkController *>(m_controllers.emplace_back(new NetworkController).get());
 }
 
 void ServerScene::sendEntities(const ClientInfo &client) {
-	m_network->sendEntities(m_registry, client);
+	m_networkController->sendEntities(m_registry, client);
 }
 
 void ServerScene::setServer(ServerCommandHandler *server) {
-	m_network->setServer(server);
+	m_collisionController->setServer(server);
+	m_networkController->setServer(server);
 }
 

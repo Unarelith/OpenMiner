@@ -62,6 +62,7 @@ std::string Network::commandToString(Network::Command command) {
 		{Network::Command::ChatMessage,           "ChatMessage"},
 
 		{Network::Command::EntitySpawn,           "EntitySpawn"},
+		{Network::Command::EntityDespawn,         "EntityDespawn"},
 		{Network::Command::EntityPosUpdate,       "EntityPosUpdate"},
 		{Network::Command::EntityDrawableDef,     "EntityDrawableDef"},
 	};

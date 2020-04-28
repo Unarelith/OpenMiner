@@ -24,20 +24,22 @@
  *
  * =====================================================================================
  */
-#include <gk/gl/Transformable.hpp>
-
 #include "CollisionController.hpp"
 #include "ItemStack.hpp"
+#include "NetworkComponent.hpp"
 #include "PlayerList.hpp"
+#include "PositionComponent.hpp"
+#include "ServerCommandHandler.hpp"
 
 void CollisionController::update(entt::registry &registry) {
-	registry.view<gk::Transformable, gk::DoubleBox, ItemStack>().each([&](auto entity, auto &transformable, auto &box, auto &itemStack) {
+	registry.view<PositionComponent, gk::DoubleBox, ItemStack, NetworkComponent>().each([&](auto entity, auto &position, auto &box, auto &itemStack, auto &network) {
 		for (auto &it : m_players) {
-			gk::DoubleBox hitbox = box + transformable.getPosition();
+			gk::DoubleBox hitbox = box + gk::Vector3d{position.x, position.y, position.z};
 			gk::DoubleBox playerHitbox = it.second.hitbox() + gk::Vector3d{it.second.x(), it.second.y(), it.second.z()};
 			if (hitbox.intersects(playerHitbox)) {
 				it.second.inventory().addStack(itemStack.item().stringID(), itemStack.amount());
 				// FIXME: Send inventory update here
+				m_server->sendEntityDespawn(network.entityID);
 				registry.destroy(entity);
 			}
 		}
