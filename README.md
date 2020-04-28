@@ -69,10 +69,9 @@ The long-term goal of this project is to provide a viable alternative to Minecra
     - [SFML](https://www.sfml-dev.org/) (only used for network)
     - [Lua](http://www.lua.org)
     - _Linux users: Check your distribution repositories for packages._
-- Run `mkdir build && cd build`
-- Run `cmake .. && make -j8`
-- Run the client with `./openminer -w ..`
-- If you want a multiplayer game, run the server with `./openminer_server -w ..`
+- Run `cmake -B build . && cmake --build build -j8`
+- Run the client with `./build/openminer`
+- If you want a multiplayer game, run the server with `./build/openminer_server`
 
 ### Using Windows
 
