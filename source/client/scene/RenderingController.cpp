@@ -39,7 +39,7 @@ void RenderingController::update(entt::registry &registry) {
 	registry.view<DrawableDef>(entt::exclude<DrawableComponent>).each([&](auto entity, auto &drawableDef) {
 		const InventoryCubeDef &cubeDef = drawableDef.getInventoryCubeDef();
 
-		DrawableComponent &drawable = registry.get_or_assign<DrawableComponent>(entity);
+		DrawableComponent &drawable = registry.get_or_emplace<DrawableComponent>(entity);
 
 		InventoryCube &cube = drawable.setDrawable<InventoryCube>(cubeDef.size, true);
 		cube.setOrigin(cubeDef.origin);

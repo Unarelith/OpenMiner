@@ -32,6 +32,7 @@
 #include "ServerCommandHandler.hpp"
 
 void CollisionController::update(entt::registry &registry) {
+	// FIXME: This should be a callback in a CollisionComponent
 	registry.view<PositionComponent, gk::DoubleBox, ItemStack, NetworkComponent>().each([&](auto entity, auto &position, auto &box, auto &itemStack, auto &network) {
 		for (auto &it : m_players) {
 			gk::DoubleBox hitbox = box + gk::Vector3d{position.x, position.y, position.z};

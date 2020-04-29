@@ -46,7 +46,9 @@ before_install:
   - cd ..
 
 script:
-  - cmake .
+  - mkdir build
+  - cd build
+  - cmake ..
   - make -j8
 
 notifications:

@@ -258,7 +258,7 @@ void ClientCommandHandler::setupCallbacks() {
 		if (it == m_entityMap.end()) {
 			entt::entity entity = registry.create();
 			m_entityMap.emplace(entityID, entity);
-			registry.assign<NetworkComponent>(entity, entityID);
+			registry.emplace<NetworkComponent>(entity, entityID);
 		}
 		else if (registry.get<NetworkComponent>(it->second).entityID != entityID) {
 			gkError() << "EntitySpawn: Entity ID" << entityID << "is invalid";
@@ -283,7 +283,7 @@ void ClientCommandHandler::setupCallbacks() {
 
 		auto it = m_entityMap.find(entityID);
 		if (it != m_entityMap.end()) {
-			auto &position = m_world.scene().registry().get_or_assign<PositionComponent>(it->second);
+			auto &position = m_world.scene().registry().get_or_emplace<PositionComponent>(it->second);
 			packet >> position.x >> position.y >> position.z;
 		}
 		else
@@ -299,7 +299,7 @@ void ClientCommandHandler::setupCallbacks() {
 			float w, x, y, z;
 			packet >> w >> x >> y >> z;
 
-			auto &rotation = m_world.scene().registry().get_or_assign<RotationComponent>(it->second);
+			auto &rotation = m_world.scene().registry().get_or_emplace<RotationComponent>(it->second);
 			rotation.quat = glm::quat(w, x, y, z);
 		}
 		else
@@ -312,7 +312,7 @@ void ClientCommandHandler::setupCallbacks() {
 
 		auto it = m_entityMap.find(entityID);
 		if (it != m_entityMap.end()) {
-			auto &animation = m_world.scene().registry().get_or_assign<AnimationComponent>(it->second);
+			auto &animation = m_world.scene().registry().get_or_emplace<AnimationComponent>(it->second);
 			animation.deserialize(packet);
 		}
 		else
@@ -325,7 +325,7 @@ void ClientCommandHandler::setupCallbacks() {
 
 		auto it = m_entityMap.find(entityID);
 		if (it != m_entityMap.end()) {
-			packet >> m_world.scene().registry().get_or_assign<DrawableDef>(it->second);
+			packet >> m_world.scene().registry().get_or_emplace<DrawableDef>(it->second);
 		}
 		else
 			gkError() << "EntityDrawableDef: Entity ID" << entityID << "is invalid";

@@ -38,21 +38,21 @@ static u32 counter = 0; // FIXME: TEMPORARY
 
 void ItemDropFactory::create(entt::registry &registry, double x, double y, double z, const std::string &itemID, u16 amount) {
 	auto entity = registry.create();
-	registry.assign<PositionComponent>(entity, x, y, z);
-	registry.assign<RotationComponent>(entity);
-	registry.assign<NetworkComponent>(entity, counter++);
+	registry.emplace<PositionComponent>(entity, x, y, z);
+	registry.emplace<RotationComponent>(entity);
+	registry.emplace<NetworkComponent>(entity, counter++);
 
-	auto &drawableDef = registry.assign<DrawableDef>(entity);
+	auto &drawableDef = registry.emplace<DrawableDef>(entity);
 	auto &cube = drawableDef.addInventoryCube();
 	cube.size = 0.25f;
 	cube.origin = gk::Vector3f{cube.size / 2.f, cube.size / 2.f, cube.size / 2.f};
 	cube.blockID = itemID;
 
-	auto &animationComponent = registry.assign<AnimationComponent>(entity);
+	auto &animationComponent = registry.emplace<AnimationComponent>(entity);
 	animationComponent.addRotation(0.f, 0.f, 1.f, 0.5f);
 	animationComponent.addTranslation(0.f, 0.f, -0.0005f, -0.2f, 0.f, true);
 
-	registry.assign<gk::DoubleBox>(entity, 0., 0., 0., cube.size, cube.size, cube.size);
-	registry.assign<ItemStack>(entity, itemID, amount);
+	registry.emplace<gk::DoubleBox>(entity, 0., 0., 0., cube.size, cube.size, cube.size);
+	registry.emplace<ItemStack>(entity, itemID, amount);
 }
 
