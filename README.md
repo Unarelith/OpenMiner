@@ -72,7 +72,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
     - [GameKit dependencies](https://github.com/Unarelith/GameKit#how-to-compile)
     - _Linux users: Check your distribution repositories for packages._
 - Run `cmake -B build . && cmake --build build -j8`
-- Or `mkdir build && cd build && cmake .. && make -j8 && cmake ..` (for old CMake versions)
+- Or `mkdir build && cd build && cmake .. && make -j8 && cd ..` (for old CMake versions)
 - Run the client with `./build/openminer`
 - If you want a multiplayer game, run the server with `./build/openminer_server`
 
@@ -134,4 +134,5 @@ This list is non exhaustive.
 
 - xMrVizzy ([Faithful 32x](https://www.curseforge.com/minecraft/texture-packs/faithful-32x) texture pack, will completely replace Vanilla textures)
 - ThePhD ([sol2](https://github.com/ThePhD/sol2))
+- skypjack ([EnTT](https://github.com/skypjack/entt))
 
