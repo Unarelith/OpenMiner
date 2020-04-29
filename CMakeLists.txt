@@ -13,6 +13,10 @@ if (WIN32)
 	set(WIN_LIBRARIES_PATH "C:/Libraries")
 endif ()
 
+if (APPLE)
+	add_definitions(-DGL_SILENCE_DEPRECATION=1)
+endif ()
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 include_directories(external)
