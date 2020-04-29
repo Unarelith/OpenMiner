@@ -67,7 +67,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 
 - Dependencies:
     - A compiler with C++17 support (GCC >= 7.0 or clang >= 5.0)
-    - [CMake](http://www.cmake.org/download/)
+    - [CMake](http://www.cmake.org/download/) (>= 3.12.4)
     - [Lua](http://www.lua.org)
     - [GameKit dependencies](https://github.com/Unarelith/GameKit#how-to-compile)
     - _Linux users: Check your distribution repositories for packages._
