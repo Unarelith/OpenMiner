@@ -76,7 +76,7 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 
 	const gk::FloatBox &boundingBox = block.boundingBox();
 
-	constexpr s8f faceValue[nFaces]{2, 2, 4, 4, -1, 3};
+	constexpr s8f faceValue[nFaces]{2, 2, 4, 4, 3, 3};
 
 	for (u8 f = 0; f < nFaces; ++f) {
 		// Calculate UV's
