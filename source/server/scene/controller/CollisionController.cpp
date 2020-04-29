@@ -35,13 +35,15 @@ void CollisionController::update(entt::registry &registry) {
 	// FIXME: This should be a callback in a CollisionComponent
 	registry.view<PositionComponent, gk::DoubleBox, ItemStack, NetworkComponent>().each([&](auto entity, auto &position, auto &box, auto &itemStack, auto &network) {
 		for (auto &it : m_players) {
-			gk::DoubleBox hitbox = box + gk::Vector3d{position.x, position.y, position.z};
-			gk::DoubleBox playerHitbox = it.second.hitbox() + gk::Vector3d{it.second.x(), it.second.y(), it.second.z()};
-			if (hitbox.intersects(playerHitbox)) {
-				it.second.inventory().addStack(itemStack.item().stringID(), itemStack.amount());
-				m_server->sendPlayerInvUpdate(it.second.clientID(), &it.second.client());
-				m_server->sendEntityDespawn(network.entityID);
-				registry.destroy(entity);
+			if (it.second.dimension() == position.dimension) {
+				gk::DoubleBox hitbox = box + gk::Vector3d{position.x, position.y, position.z};
+				gk::DoubleBox playerHitbox = it.second.hitbox() + gk::Vector3d{it.second.x(), it.second.y(), it.second.z()};
+				if (hitbox.intersects(playerHitbox)) {
+					it.second.inventory().addStack(itemStack.item().stringID(), itemStack.amount());
+					m_server->sendPlayerInvUpdate(it.second.clientID(), &it.second.client());
+					m_server->sendEntityDespawn(network.entityID);
+					registry.destroy(entity);
+				}
 			}
 		}
 	});

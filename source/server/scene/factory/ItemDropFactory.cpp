@@ -34,9 +34,9 @@
 #include "Registry.hpp"
 #include "RotationComponent.hpp"
 
-void ItemDropFactory::create(entt::registry &registry, double x, double y, double z, const std::string &itemID, u16 amount) {
+void ItemDropFactory::create(entt::registry &registry, double x, double y, double z, u16 dimension, const std::string &itemID, u16 amount) {
 	auto entity = registry.create();
-	registry.emplace<PositionComponent>(entity, x, y, z);
+	registry.emplace<PositionComponent>(entity, x, y, z, dimension);
 	registry.emplace<RotationComponent>(entity);
 	registry.emplace<NetworkComponent>(entity, entity);
 
