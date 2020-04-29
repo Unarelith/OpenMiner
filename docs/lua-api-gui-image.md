@@ -7,7 +7,7 @@ gui:image {
 	name = "img_background", -- mandatory
 	pos = {x = 0, y = 0},    -- mandatory
 
-	texture = "mods/default/textures/gui/workbench.png",
+	texture = mod:path() .. "/textures/gui/workbench.png",
 	clip = {x = 0, y = 0, width = 176, height = 166},
 }
 ```
@@ -55,6 +55,8 @@ Full path of the texture. Relative to the repo root.
 
 Example:
 ```lua
-texture = "mods/default/textures/gui/workbench.png"
+texture = mod:path() .. "/textures/gui/workbench.png"
 ```
+
+See [this page](/lua-api-mod#path) for more details about `mod:path()`.
 

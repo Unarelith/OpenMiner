@@ -14,7 +14,7 @@ gui:progress_bar {
 	meta = "item_progress",
 	max_value = 200,
 
-	texture = "mods/default/textures/gui/furnace.png",
+	texture = mod:path() .. "/textures/gui/furnace.png",
 	clip = {x = 176, y = 14, width = 24, height = 17},
 }
 ```
@@ -101,8 +101,10 @@ Full path of the texture. Relative to the repo root.
 
 Example:
 ```lua
-texture = "mods/default/textures/gui/furnace.png"
+texture = mod:path() .. "/textures/gui/furnace.png"
 ```
+
+See [this page](/lua-api-mod#path) for more details about `mod:path()`.
 
 ### `type`
 

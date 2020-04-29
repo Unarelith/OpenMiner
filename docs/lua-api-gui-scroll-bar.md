@@ -7,7 +7,7 @@ gui:scroll_bar {
 	name = "scroll_bar",
 	pos = {x = 175, y = 18},
 
-	texture = "mods/default/textures/gui/tabs.png",
+	texture = mod:path() .. "/textures/gui/tabs.png",
 	clip = {x = 232, y = 0, width = 12, height = 15},
 
 	widget = "inv_creative_items",
@@ -78,8 +78,10 @@ Full path of the texture. Relative to the repo root.
 
 Example:
 ```lua
-texture = "mods/default/textures/gui/tabs.png"
+texture = mod:path() .. "/textures/gui/tabs.png"
 ```
+
+See [this page](/lua-api-mod#path) for more details about `mod:path()`.
 
 ### `widget`
 

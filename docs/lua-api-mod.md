@@ -62,6 +62,12 @@ Returns the string ID of the mod.
 
 Returns the path of the mod, relative to current working directory.
 
+**Note:** In callbacks like `on_block_activated`, the `mod` object may be invalid.
+You'll need to create a local variable at the beginning of the file:
+```lua
+local modpath = mod:path()
+```
+
 ## Registration functions
 
 ### `block`
