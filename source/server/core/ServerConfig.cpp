@@ -27,7 +27,7 @@
 #include "ServerConfig.hpp"
 
 // Gameplay
-bool ServerConfig::useItemDrops = true;
+bool ServerConfig::useItemDrops = false;
 
 #include <gk/core/Debug.hpp>
 #include <gk/core/Filesystem.hpp>

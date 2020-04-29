@@ -3,5 +3,5 @@
 -- See source/server/core/ServerConfig.cpp for more details
 
 -- Gameplay
-useItemDrops = true
+useItemDrops = false
 
