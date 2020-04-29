@@ -42,7 +42,7 @@
 
 struct ServerOnlineEvent {
 	bool isOnline;
-	u16 port;
+	int port;
 };
 
 class ServerApplication {

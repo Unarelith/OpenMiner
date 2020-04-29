@@ -32,18 +32,6 @@ addons:
 
 before_install:
   - sudo cp /usr/include/lua5.2/* /usr/include/
-  - git clone git://github.com/SFML/SFML.git
-  - cd SFML
-  - cmake .
-  - make -j8
-  - sudo make install
-  - cd ..
-  - git clone git://github.com/Quent42340/GameKit.git
-  - cd GameKit
-  - cmake .
-  - make -j8
-  - sudo make install
-  - cd ..
 
 script:
   - mkdir build

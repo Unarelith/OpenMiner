@@ -183,6 +183,7 @@ include_directories(external/entt/single_include)
 # - gamekit
 #------------------------------------------------------------------------------
 add_subdirectory(external/gamekit)
+include_directories(external/gamekit/include)
 
 #------------------------------------------------------------------------------
 # - SFML network
