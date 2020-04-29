@@ -36,3 +36,15 @@ sf::Packet &operator>>(sf::Packet &packet, gk::Color &color) {
 	return packet;
 }
 
+sf::Packet &operator<<(sf::Packet &packet, const entt::entity &entity) {
+	packet << std::underlying_type_t<entt::entity>(entity);
+	return packet;
+}
+
+sf::Packet &operator>>(sf::Packet &packet, entt::entity &entity) {
+	std::underlying_type_t<entt::entity> id;
+	packet >> id;
+	entity = static_cast<entt::entity>(id);
+	return packet;
+}
+

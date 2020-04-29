@@ -31,6 +31,8 @@
 
 #include <gk/core/Vector3.hpp>
 
+#include <entt/entt.hpp>
+
 #include "ChatCommandHandler.hpp"
 
 struct BlockData;
@@ -58,12 +60,12 @@ class ServerCommandHandler {
 		void sendPlayerInvUpdate(u16 clientID, const ClientInfo *client = nullptr) const;
 		void sendPlayerChangeDimension(u16 clientID, s32 x, s32 y, s32 z, u16 dimension, const ClientInfo *client = nullptr) const;
 		void sendChatMessage(u16 clientID, const std::string &message, const ClientInfo *client = nullptr) const;
-		void sendEntitySpawn(u32 entityID, const ClientInfo *client = nullptr) const;
-		void sendEntityDespawn(u32 entityID, const ClientInfo *client = nullptr) const;
-		void sendEntityPosition(u32 entityID, double x, double y, double z, const ClientInfo *client = nullptr) const;
-		void sendEntityRotation(u32 entityID, float w, float x, float y, float z, const ClientInfo *client = nullptr) const;
-		void sendEntityAnimation(u32 entityID, const AnimationComponent &animation, const ClientInfo *client = nullptr) const;
-		void sendEntityDrawableDef(u32 entityID, const DrawableDef &drawableDef, const ClientInfo *client = nullptr) const;
+		void sendEntitySpawn(entt::entity entityID, const ClientInfo *client = nullptr) const;
+		void sendEntityDespawn(entt::entity entityID, const ClientInfo *client = nullptr) const;
+		void sendEntityPosition(entt::entity entityID, double x, double y, double z, const ClientInfo *client = nullptr) const;
+		void sendEntityRotation(entt::entity entityID, float w, float x, float y, float z, const ClientInfo *client = nullptr) const;
+		void sendEntityAnimation(entt::entity entityID, const AnimationComponent &animation, const ClientInfo *client = nullptr) const;
+		void sendEntityDrawableDef(entt::entity entityID, const DrawableDef &drawableDef, const ClientInfo *client = nullptr) const;
 
 		void setupCallbacks();
 

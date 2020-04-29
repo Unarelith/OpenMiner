@@ -72,7 +72,7 @@ class ClientCommandHandler {
 
 		std::unordered_map<u16, PlayerBox> &m_playerBoxes;
 
-		std::unordered_map<u32, entt::entity> m_entityMap;
+		std::unordered_map<entt::entity, entt::entity> m_entityMap;
 
 		bool m_isRegistryInitialized = false;
 
