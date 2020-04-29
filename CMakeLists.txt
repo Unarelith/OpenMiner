@@ -191,8 +191,9 @@ include_directories(external/gamekit/include)
 set(SFML_BUILD_AUDIO FALSE)
 set(SFML_BUILD_GRAPHICS FALSE)
 set(SFML_BUILD_WINDOW FALSE)
+set(SFML_STATIC TRUE)
 
-set(BUILD_SHARED_LIBS ON)
+set(BUILD_SHARED_LIBS OFF)
 
 add_subdirectory(external/SFML)
 
