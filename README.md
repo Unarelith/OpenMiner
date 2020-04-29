@@ -68,9 +68,8 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 - Dependencies:
     - A compiler with C++17 support (GCC >= 7.0 or clang >= 5.0)
     - [CMake](http://www.cmake.org/download/)
-    - [GameKit](http://github.com/Unarelith/GameKit) (requires `SDL2` + `tinyxml2`, will switch to `SFML` starting from 2.6)
-    - [SFML](https://www.sfml-dev.org/) (only used for network)
     - [Lua](http://www.lua.org)
+    - [GameKit dependencies](https://github.com/Unarelith/GameKit#how-to-compile)
     - _Linux users: Check your distribution repositories for packages._
 - Run `cmake -B build . && cmake --build build -j8`
 - Or `mkdir build && cd build && cmake .. && make -j8 && cmake ..` (for old CMake versions)

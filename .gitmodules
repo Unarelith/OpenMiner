@@ -1,6 +1,6 @@
 [submodule "external/entt"]
 	path = external/entt
-	url = git://github.com/Unarelith/entt.git
+	url = git://github.com/skypjack/entt.git
 	ignore = dirty
 [submodule "external/SFML"]
 	path = external/SFML
