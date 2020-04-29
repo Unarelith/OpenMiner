@@ -27,10 +27,14 @@
 #ifndef POSITIONCOMPONENT_HPP_
 #define POSITIONCOMPONENT_HPP_
 
+#include <gk/core/IntTypes.hpp>
+
 struct PositionComponent {
 	double x = 0;
 	double y = 0;
 	double z = 0;
+
+	u16 dimension = 0;
 
 	bool isUpdated = true;
 };

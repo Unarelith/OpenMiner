@@ -100,6 +100,12 @@ void ServerCommandHandler::sendPlayerChangeDimension(u16 clientID, s32 x, s32 y,
 		m_server.sendToAllClients(packet);
 	else
 		client->tcpSocket->send(packet);
+
+	// FIXME: sendPlayerChangeDimension shouldn't be exposed to Lua
+	//        Instead, there should be a world.changePlayerDimension function that sends
+	//        the packet above + the entities (instead of doing that here)
+	if (client)
+		m_worldController.getWorld(dimension).scene().sendEntities(*client);
 }
 
 void ServerCommandHandler::sendChatMessage(u16 clientID, const std::string &message, const ClientInfo *client) const {

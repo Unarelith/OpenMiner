@@ -102,6 +102,7 @@ void ClientWorld::checkPlayerChunk(double playerX, double playerY, double player
 
 void ClientWorld::clear() {
 	m_chunks.clear();
+	m_scene.registry().clear();
 }
 
 void ClientWorld::updateSky(u16 dimensionID) {
