@@ -143,4 +143,12 @@ sf::Packet &operator>>(sf::Packet &packet, gk::Vector3<T> &vec) {
 sf::Packet &operator<<(sf::Packet &packet, const gk::Color &color);
 sf::Packet &operator>>(sf::Packet &packet, gk::Color &color);
 
+//======================================================================================
+// entt::entity
+//======================================================================================
+#include <entt/entt.hpp>
+
+sf::Packet &operator<<(sf::Packet &packet, const entt::entity &entity);
+sf::Packet &operator>>(sf::Packet &packet, entt::entity &entity);
+
 #endif // NETWORKUTILS_HPP_

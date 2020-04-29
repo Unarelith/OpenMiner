@@ -112,7 +112,7 @@ void ServerCommandHandler::sendChatMessage(u16 clientID, const std::string &mess
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendEntitySpawn(u32 entityID, const ClientInfo *client) const {
+void ServerCommandHandler::sendEntitySpawn(entt::entity entityID, const ClientInfo *client) const {
 	sf::Packet packet;
 	packet << Network::Command::EntitySpawn << entityID;
 
@@ -122,7 +122,7 @@ void ServerCommandHandler::sendEntitySpawn(u32 entityID, const ClientInfo *clien
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendEntityDespawn(u32 entityID, const ClientInfo *client) const {
+void ServerCommandHandler::sendEntityDespawn(entt::entity entityID, const ClientInfo *client) const {
 	sf::Packet packet;
 	packet << Network::Command::EntityDespawn << entityID;
 
@@ -132,7 +132,7 @@ void ServerCommandHandler::sendEntityDespawn(u32 entityID, const ClientInfo *cli
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendEntityPosition(u32 entityID, double x, double y, double z, const ClientInfo *client) const {
+void ServerCommandHandler::sendEntityPosition(entt::entity entityID, double x, double y, double z, const ClientInfo *client) const {
 	sf::Packet packet;
 	packet << Network::Command::EntityPosition << entityID << x << y << z;
 
@@ -142,7 +142,7 @@ void ServerCommandHandler::sendEntityPosition(u32 entityID, double x, double y, 
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendEntityRotation(u32 entityID, float w, float x, float y, float z, const ClientInfo *client) const {
+void ServerCommandHandler::sendEntityRotation(entt::entity entityID, float w, float x, float y, float z, const ClientInfo *client) const {
 	sf::Packet packet;
 	packet << Network::Command::EntityRotation << entityID << w << x << y << z;
 
@@ -152,7 +152,7 @@ void ServerCommandHandler::sendEntityRotation(u32 entityID, float w, float x, fl
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendEntityAnimation(u32 entityID, const AnimationComponent &animation, const ClientInfo *client) const {
+void ServerCommandHandler::sendEntityAnimation(entt::entity entityID, const AnimationComponent &animation, const ClientInfo *client) const {
 	sf::Packet packet;
 	packet << Network::Command::EntityAnimation << entityID << animation;
 
@@ -162,7 +162,7 @@ void ServerCommandHandler::sendEntityAnimation(u32 entityID, const AnimationComp
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendEntityDrawableDef(u32 entityID, const DrawableDef &drawableDef, const ClientInfo *client) const {
+void ServerCommandHandler::sendEntityDrawableDef(entt::entity entityID, const DrawableDef &drawableDef, const ClientInfo *client) const {
 	sf::Packet packet;
 	packet << Network::Command::EntityDrawableDef << entityID << drawableDef;
 

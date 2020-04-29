@@ -27,10 +27,10 @@
 #ifndef NETWORKCOMPONENT_HPP_
 #define NETWORKCOMPONENT_HPP_
 
-#include <gk/core/IntTypes.hpp>
+#include <entt/entt.hpp>
 
 struct NetworkComponent {
-	u32 entityID = 0;
+	entt::entity entityID;
 
 	bool hasSpawned = false;
 };
