@@ -43,8 +43,9 @@ InventoryCube::InventoryCube(float size, bool isEntity)
 	: m_textureAtlas(&gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
 	m_size = size;
+	m_isEntity = isEntity;
 
-	if (!isEntity) {
+	if (!m_isEntity) {
 		m_transform.setOrigin(size * 0.5, size * 0.5, size * 0.5);
 
 		// NOTE: intrinsic rotations! The axis is the local axis of the object.
@@ -125,6 +126,12 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 			vertices[f][v].color[1] = colorMultiplier.g;
 			vertices[f][v].color[2] = colorMultiplier.b;
 			vertices[f][v].color[3] = colorMultiplier.a;
+
+			// FIXME: Find a way to get the light from the position
+			if (m_isEntity) {
+				vertices[f][v].lightValue[0] = 15;
+				vertices[f][v].lightValue[1] = 0;
+			}
 		}
 	}
 

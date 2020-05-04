@@ -53,6 +53,8 @@ class InventoryCube : public gk::Drawable, public gk::Transformable {
 		bool m_isVboInitialized = false;
 
 		gk::Transformable m_transform;
+
+		bool m_isEntity = false;
 };
 
 #endif // INVENTORYCUBE_HPP_
