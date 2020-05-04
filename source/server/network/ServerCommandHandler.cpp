@@ -285,6 +285,8 @@ void ServerCommandHandler::setupCallbacks() {
 			world.onBlockDigged(x, y, z, Registry::getInstance().getBlock(world.getBlock(x, y, z)), *player);
 			world.setBlock(x, y, z, 0);
 
+			m_scriptEngine.luaCore().onEvent(LuaEventType::OnBlockDigged, glm::ivec3{x, y, z}, *player, world, client, *this);
+
 			sf::Packet answer;
 			answer << Network::Command::BlockUpdate << x << y << z << u32(0);
 			m_server.sendToAllClients(answer);

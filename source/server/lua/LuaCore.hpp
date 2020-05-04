@@ -37,6 +37,7 @@ class ServerModLoader;
 
 enum class LuaEventType {
 	OnBlockPlaced,
+	OnBlockDigged,
 	OnBlockActivated
 };
 
