@@ -37,10 +37,10 @@ void Client::connect(sf::IpAddress serverAddress, u16 serverPort) {
 
 	m_tcpSocket.reset(new sf::TcpSocket);
 	if (serverAddress.toInteger() == 0 || m_tcpSocket->connect(serverAddress, serverPort, sf::seconds(5)) != sf::Socket::Done)
-		throw EXCEPTION("Network error: Unable to connect to server", serverAddress.toString() + ":" + std::to_string(serverPort));
+		throw ClientConnectException("Network error: Unable to connect to server " + serverAddress.toString() + ":" + std::to_string(serverPort));
 
 	if (m_socket.bind(0) != sf::Socket::Done)
-		throw EXCEPTION("Network error: Bind failed");
+		throw ClientConnectException("Network error: Bind failed");
 
 	sf::Packet packet;
 	packet << Network::Command::ClientConnect << sf::IpAddress::getLocalAddress().toString() << m_socket.getLocalPort();
@@ -52,15 +52,15 @@ void Client::connect(sf::IpAddress serverAddress, u16 serverPort) {
 	Network::Command command;
 	answer >> command;
 	if (command == Network::Command::ClientRefused)
-		throw EXCEPTION("Server error: Connection refused. Server probably reached max player amount.");
+		throw ClientConnectException("Server error: Connection refused. Server probably reached max player amount.");
 
 	bool isSingleplayer;
 	if (command != Network::Command::ClientOk)
-		throw EXCEPTION("Network error: Expected 'ClientOk' packet.");
+		throw ClientConnectException("Network error: Expected 'ClientOk' packet.");
 
 	answer >> m_id >> isSingleplayer;
 	if (m_isSingleplayer != isSingleplayer)
-		throw EXCEPTION("Client error: The server is not valid");
+		throw ClientConnectException("Client error: The server is not valid");
 
 	m_tcpSocket->setBlocking(false);
 	m_socket.setBlocking(false);

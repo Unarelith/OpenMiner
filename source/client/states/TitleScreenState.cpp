@@ -118,7 +118,12 @@ void TitleScreenState::startSingleplayer(bool showLoadingState) {
 
 void TitleScreenState::startMultiplayer(const std::string &host) {
 	auto &game = m_stateStack->push<GameState>();
-	game.connect(host, m_port);
+	try {
+		game.connect(host, m_port);
+	}
+	catch (ClientConnectException &e) {
+		throw EXCEPTION(e.what());
+	}
 
 	auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, false, this);
 	serverLoadingState.setTexturePack(m_texturePack);

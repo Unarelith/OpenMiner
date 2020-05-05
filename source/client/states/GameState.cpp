@@ -49,9 +49,6 @@
 GameState::GameState()
 	: m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
-	gk::Mouse::setCursorVisible(false);
-	gk::Mouse::setCursorGrabbed(true);
-
 	initShaders();
 
 	m_clientCommandHandler.setupCallbacks();
@@ -69,6 +66,9 @@ void GameState::init() {
 void GameState::connect(const std::string &host, int port) {
 	m_client.connect(host, port);
 	m_player.setClientID(m_client.id());
+
+	gk::Mouse::setCursorVisible(false);
+	gk::Mouse::setCursorGrabbed(true);
 }
 
 void GameState::onEvent(const SDL_Event &event) {

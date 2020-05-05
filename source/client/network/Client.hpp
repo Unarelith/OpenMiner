@@ -39,6 +39,19 @@
 
 #include "Network.hpp"
 
+class ClientConnectException {
+	public:
+		ClientConnectException(const std::string &str)
+			: m_str(str) {}
+
+		virtual const char *what() const noexcept {
+			return m_str.c_str();
+		}
+
+	private:
+		std::string m_str;
+};
+
 class Client {
 	using CommandCallback = std::function<void(sf::Packet &packet)>;
 

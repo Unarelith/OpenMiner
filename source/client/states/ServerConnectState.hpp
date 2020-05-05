@@ -49,6 +49,8 @@ class ServerConnectState : public InterfaceState {
 		TextButton m_connectButton;
 		TextButton m_cancelButton;
 
+		Text m_errorText;
+
 		std::string m_texturePack;
 };
 

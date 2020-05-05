@@ -57,10 +57,25 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 		}
 
 		auto &game = m_stateStack->push<GameState>();
-		game.connect(host, port);
 
-		auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, true, this);
-		serverLoadingState.setTexturePack(m_texturePack);
+		try {
+			game.connect(host, port);
+
+			auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, true, this);
+			serverLoadingState.setTexturePack(m_texturePack);
+		}
+		catch (ClientConnectException &e) {
+			gkError() << e.what();
+
+			m_stateStack->pop();
+
+			m_errorText.setText(e.what());
+			m_errorText.updateVertexBuffer();
+			m_errorText.setPosition(
+				Config::screenWidth / 2.0f - m_errorText.getSize().x * Config::guiScale / 2.0f,
+				Config::screenHeight / 2.0f - 30 * Config::guiScale
+			);
+		}
 	});
 
 	m_cancelButton.setText("Cancel");
@@ -69,6 +84,9 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 	m_cancelButton.setCallback([this](TextButton &) {
 		m_stateStack->pop();
 	});
+
+	m_errorText.setColor(gk::Color::Red);
+	m_errorText.setScale(Config::guiScale, Config::guiScale);
 }
 
 void ServerConnectState::onEvent(const SDL_Event &event) {
@@ -80,6 +98,11 @@ void ServerConnectState::onEvent(const SDL_Event &event) {
 
 		m_connectButton.setPosition(Config::screenWidth / 2.0f - m_connectButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 340);
 		m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 261);
+
+		m_errorText.setPosition(
+			Config::screenWidth / 2.0f - m_errorText.getSize().x * Config::guiScale / 2.0f,
+			Config::screenHeight / 2.0f - 30 * Config::guiScale
+		);
 	}
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
@@ -104,6 +127,9 @@ void ServerConnectState::draw(gk::RenderTarget &target, gk::RenderStates states)
 
 		target.draw(m_connectButton, states);
 		target.draw(m_cancelButton, states);
+
+		if (!m_errorText.text().empty())
+			target.draw(m_errorText, states);
 	}
 }
 
