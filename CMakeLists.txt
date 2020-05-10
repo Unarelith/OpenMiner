@@ -204,8 +204,7 @@ add_subdirectory(external/SFML)
 #------------------------------------------------------------------------------
 # - zlib
 #------------------------------------------------------------------------------
-add_subdirectory(external/zlib)
-include_directories(external/zlib)
+add_subdirectory(external/zlib ${CMAKE_CURRENT_BINARY_DIR}/external/zlib)
 
 #------------------------------------------------------------------------------
 # - sol3 (sol2 v3.x)

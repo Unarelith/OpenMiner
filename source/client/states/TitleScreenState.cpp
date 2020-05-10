@@ -109,7 +109,7 @@ void TitleScreenState::startSingleplayer(bool showLoadingState) {
 	m_thread = std::thread([this] () {
 		ServerApplication app{*m_eventHandler};
 		app.setSingleplayer(true);
-		app.setPort(0);
+		app.setPort(sf::Socket::AnyPort);
 		app.run();
 	});
 
