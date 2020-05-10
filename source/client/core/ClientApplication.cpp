@@ -75,7 +75,7 @@ void ClientApplication::init() {
 	if (m_argumentParser.getArgument("port").isFound)
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
 
-	Config::loadConfigFromFile("config.lua");
+	Config::loadConfigFromFile("config/client.lua");
 
 	m_keyboardHandler.loadKeysFromFile("resources/config/keys.xml");
 	gk::GamePad::init(m_keyboardHandler);

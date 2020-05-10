@@ -63,7 +63,7 @@ openminer_server
 *.dat
 *.zip
 test_atlas.png
-config.lua
-server_config.lua
+client.lua
+server.lua
 TODO
 

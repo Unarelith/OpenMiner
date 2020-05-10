@@ -59,7 +59,7 @@ void ServerApplication::init() {
 	if (m_argumentParser.getArgument("port").isFound)
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
 
-	ServerConfig::loadConfigFromFile("server_config.lua");
+	ServerConfig::loadConfigFromFile("config/server.lua");
 
 	m_server.init(m_port);
 	m_server.setRunning(true);
