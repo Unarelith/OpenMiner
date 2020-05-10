@@ -69,16 +69,14 @@ void TilesDef::deserialize(sf::Packet &packet) {
 
 void TilesDef::loadFromLuaTable(const sol::table &table) {
 	if (table["tiles"].get_type() == sol::type::table) {
-		sol::as_table_t<std::vector<std::string>> t = table["tiles"];
-		m_textureFilenames = t.source;
+		m_textureFilenames = table["tiles"].get<std::vector<std::string>>();
 	}
 	else
 		m_textureFilenames.emplace_back(table["tiles"].get<std::string>());
 
 	if (table["alt_tiles"].get_type() != sol::type::none) {
 		if (table["alt_tiles"].get_type() == sol::type::table) {
-			sol::as_table_t<std::vector<std::string>> t = table["alt_tiles"];
-			m_altTextureFilenames = t.source;
+			m_altTextureFilenames = table["alt_tiles"].get<std::vector<std::string>>();
 		}
 		else
 			m_altTextureFilenames.emplace_back(table["alt_tiles"].get<std::string>());

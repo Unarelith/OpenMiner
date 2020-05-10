@@ -13,3 +13,7 @@
 	path = external/zlib
 	url = git://github.com/Unarelith/zlib.git
 	ignore = dirty
+[submodule "external/sol2"]
+	path = external/sol2
+	url = git://github.com/ThePhD/sol2.git
+	ignore = dirty
