@@ -27,7 +27,14 @@
 #include "Server.hpp"
 
 void Server::init(u16 port) {
-	m_port = port;
+	// Note: The UDP socket is currently unused for data sending/receiving
+	//       But it's used to find an available port for sf::TcpListener
+	if (m_udpSocket.bind(port) != sf::Socket::Done)
+		throw EXCEPTION("Network error: Bind failed");
+
+	m_udpSocket.setBlocking(false);
+
+	m_port = m_udpSocket.getLocalPort();
 
 	if (m_tcpListener.listen(m_port) != sf::Socket::Done)
 		throw EXCEPTION("Network error: Listen failed");

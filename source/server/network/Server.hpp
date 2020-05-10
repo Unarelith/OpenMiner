@@ -73,6 +73,8 @@ class Server {
 
 		ServerInfo m_info;
 
+		sf::UdpSocket m_udpSocket; // Only used to find an available port for sf::TcpListener
+
 		sf::TcpListener m_tcpListener;
 		sf::SocketSelector m_selector;
 
