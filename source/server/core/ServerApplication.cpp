@@ -121,8 +121,6 @@ void ServerApplication::mainLoop() {
 	while (m_server.isRunning()) {
 		m_server.handleGameEvents();
 
-		m_server.handleKeyState();
-
 		m_clock.updateGame([this] {
 			update();
 		});

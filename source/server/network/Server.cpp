@@ -27,12 +27,7 @@
 #include "Server.hpp"
 
 void Server::init(u16 port) {
-	if (m_udpSocket.bind(port) != sf::Socket::Done)
-		throw EXCEPTION("Network error: Bind failed");
-
-	m_udpSocket.setBlocking(false);
-
-	m_port = m_udpSocket.getLocalPort();
+	m_port = port;
 
 	if (m_tcpListener.listen(m_port) != sf::Socket::Done)
 		throw EXCEPTION("Network error: Listen failed");
@@ -40,38 +35,6 @@ void Server::init(u16 port) {
 	m_tcpListener.setBlocking(false);
 
 	m_selector.add(m_tcpListener);
-}
-
-void Server::handleKeyState() {
-	sf::Packet packet;
-	sf::IpAddress senderAddress;
-	u16 senderPort;
-	while (m_udpSocket.receive(packet, senderAddress, senderPort) == sf::Socket::Status::Done) {
-		Network::Command command;
-		u32 timestamp;
-		u16 clientId;
-		packet >> command >> timestamp >> clientId;
-
-		// gkDebug() << "UDP Message of type" << Network::commandToString(command) << "received from:" << senderAddress << ":" << senderPort;
-
-		if (command == Network::Command::KeyState) {
-			ClientInfo *client = m_info.getClient(clientId);
-			if (client && client->previousKeyTimestamp < timestamp) {
-				client->previousKeyTimestamp = timestamp;
-
-				while (!packet.endOfPacket()) {
-					u8 key;
-					bool isPressed;
-					packet >> key >> isPressed;
-
-					if (client->inputHandler.keysPressed().at(key) != isPressed)
-						gkDebug() << (int)key << "changed state to" << (isPressed ? "true" : "false");
-
-					client->inputHandler.setKeyPressed(key, isPressed);
-				}
-			}
-		}
-	}
 }
 
 void Server::handleGameEvents() {
@@ -88,7 +51,7 @@ void Server::handleGameEvents() {
 void Server::handleNewConnections() {
 	std::shared_ptr<sf::TcpSocket> clientSocket = std::make_shared<sf::TcpSocket>();
 	if (m_tcpListener.accept(*clientSocket) == sf::Socket::Done) {
-		sf::Packet packet;
+		Network::Packet packet;
 		clientSocket->receive(packet);
 
 		Network::Command command;
@@ -104,7 +67,7 @@ void Server::handleNewConnections() {
 			ClientInfo &client = m_info.addClient(address, port, clientSocket);
 			m_selector.add(*client.tcpSocket);
 
-			sf::Packet outPacket;
+			Network::Packet outPacket;
 			outPacket << Network::Command::ClientOk << client.id << m_isSingleplayer;
 			client.tcpSocket->send(outPacket);
 			// client.tcpSocket->setBlocking(false);
@@ -113,7 +76,7 @@ void Server::handleNewConnections() {
 				m_connectionCallback(client);
 		}
 		else {
-			sf::Packet outPacket;
+			Network::Packet outPacket;
 			outPacket << Network::Command::ClientRefused;
 			clientSocket->send(outPacket);
 		}
@@ -127,7 +90,7 @@ void Server::handleClientMessages() {
 	for (size_t i = 0 ; i < m_info.clients().size() ; ++i) {
 		ClientInfo &client = m_info.clients()[i];
 		if (m_selector.isReady(*client.tcpSocket)) {
-			sf::Packet packet;
+			Network::Packet packet;
 			sf::Socket::Status status = client.tcpSocket->receive(packet);
 			if (status == sf::Socket::Done) {
 				Network::Command command;
@@ -158,7 +121,7 @@ void Server::handleClientMessages() {
 }
 
 void Server::disconnectClient(ClientInfo &client) {
-	sf::Packet packet;
+	Network::Packet packet;
 	packet << Network::Command::ClientDisconnect << client.id;
 	sendToAllClients(packet);
 
@@ -173,7 +136,7 @@ void Server::disconnectClient(ClientInfo &client) {
 	}
 }
 
-void Server::sendToAllClients(sf::Packet &packet) const {
+void Server::sendToAllClients(Network::Packet &packet) const {
 	for (const ClientInfo &client : m_info.clients()) {
 		client.tcpSocket->send(packet);
 	}

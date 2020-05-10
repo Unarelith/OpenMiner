@@ -114,7 +114,7 @@ void ClientWorld::updateSky(u16 dimensionID) {
 	m_sky = &sky;
 }
 
-void ClientWorld::receiveChunkData(sf::Packet &packet) {
+void ClientWorld::receiveChunkData(Network::Packet &packet) {
 	s32 cx, cy, cz;
 	packet >> cx >> cy >> cz;
 

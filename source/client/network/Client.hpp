@@ -53,14 +53,13 @@ class ClientConnectException {
 };
 
 class Client {
-	using CommandCallback = std::function<void(sf::Packet &packet)>;
+	using CommandCallback = std::function<void(Network::Packet &packet)>;
 
 	public:
 		void connect(sf::IpAddress serverAddress, u16 serverPort);
 		void disconnect();
 
-		void send(sf::Packet &packet);
-		void sendKeyState();
+		void send(Network::Packet &packet);
 
 		void update();
 

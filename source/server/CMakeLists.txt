@@ -80,5 +80,6 @@ target_link_libraries(${PROJECT_NAME}
                       ${LUA_LIBRARIES}
                       sfml-system
                       sfml-network
+                      zlib
                       ${UNIX_LIBS})
 

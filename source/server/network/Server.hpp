@@ -39,24 +39,20 @@
 
 class Server {
 	using ConnectionCallback = std::function<void(ClientInfo &)>;
-	using CommandCallback = std::function<void(ClientInfo &, sf::Packet &packet)>;
+	using CommandCallback = std::function<void(ClientInfo &, Network::Packet &packet)>;
 
 	public:
 		void init(u16 port = 4242);
 
-		void handleKeyState();
-
 		void handleGameEvents();
 
-		void sendToAllClients(sf::Packet &packet) const;
+		void sendToAllClients(Network::Packet &packet) const;
 
 		bool isRunning() const { return m_isRunning; }
 
 		u16 port() const { return m_port; }
 
 		const ServerInfo &info() const { return m_info; }
-
-		sf::UdpSocket &udpSocket() { return m_udpSocket; }
 
 		void setRunning(bool isRunning) { m_isRunning = isRunning; }
 		void setSingleplayer(bool isSingleplayer) { m_isSingleplayer = isSingleplayer; }
@@ -76,8 +72,6 @@ class Server {
 		u16 m_port = 0;
 
 		ServerInfo m_info;
-
-		sf::UdpSocket m_udpSocket;
 
 		sf::TcpListener m_tcpListener;
 		sf::SocketSelector m_selector;

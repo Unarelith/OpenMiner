@@ -49,6 +49,11 @@ class ServerPlayer;
 class ServerWorld;
 class WorldController;
 
+//=================================================================================================
+// IMPORTANT: ServerCommandHandler is the only class that should be creating and sending packets.
+// The only exceptions to this rule are ServerWorld::sendRequestedChunks and LuaGUI::show
+//=================================================================================================
+
 class ServerCommandHandler {
 	public:
 		ServerCommandHandler(ScriptEngine &scriptEngine, Server &server, WorldController &worldController, PlayerList &players, Registry &registry)

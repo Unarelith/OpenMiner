@@ -54,7 +54,7 @@ void WorldController::load(const std::string &name) {
 		char *buffer = new char[length];
 		file.read(buffer, length);
 
-		sf::Packet save;
+		Network::Packet save;
 		save.append(buffer, length);
 
 		delete[] buffer;
@@ -98,9 +98,9 @@ void WorldController::save(const std::string &name) {
 
 	std::ofstream file(name + ".dat", std::ofstream::binary | std::ofstream::trunc);
 
-	sf::Packet save;
+	Network::Packet save;
 	for (auto &world : m_worldList) {
-		sf::Packet chunks;
+		Network::Packet chunks;
 		unsigned int chunkCount = 0;
 		for (auto &chunk : world.chunks()) {
 			if (!chunk.second->isInitialized()) continue;

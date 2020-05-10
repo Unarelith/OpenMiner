@@ -55,7 +55,7 @@ class ClientWorld : public World, public gk::Drawable {
 
 		void updateSky(u16 dimensionID);
 
-		void receiveChunkData(sf::Packet &packet);
+		void receiveChunkData(Network::Packet &packet);
 		void removeChunk(ChunkMap::iterator &it);
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;

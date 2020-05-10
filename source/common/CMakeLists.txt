@@ -18,7 +18,7 @@ endforeach(HEADER_FILE)
 # Add library
 #------------------------------------------------------------------------------
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
-add_dependencies(${PROJECT_NAME} EnTT sfml-network gamekit)
+add_dependencies(${PROJECT_NAME} zlib EnTT sfml-network gamekit)
 
 #------------------------------------------------------------------------------
 # Compiler flags
@@ -35,5 +35,5 @@ target_compile_options(${PROJECT_NAME} PRIVATE -DSOL_CHECK_ARGUMENTS -DSOL_PRINT
 
 # target_compile_options(${PROJECT_NAME} PRIVATE -pg)
 
-target_link_libraries(${PROJECT_NAME} sfml-system sfml-network)
+target_link_libraries(${PROJECT_NAME} sfml-system sfml-network zlib)
 

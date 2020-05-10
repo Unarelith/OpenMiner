@@ -92,7 +92,7 @@ void LuaGUI::addInventory(const sol::table &table) {
 }
 
 void LuaGUI::show(ClientInfo &client) {
-	sf::Packet packet;
+	Network::Packet packet;
 	packet << Network::Command::BlockGUIData;
 
 	packet << m_width << m_height << m_isCentered;

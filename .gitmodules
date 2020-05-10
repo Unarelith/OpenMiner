@@ -9,3 +9,7 @@
 [submodule "external/gamekit"]
 	path = external/gamekit
 	url = git://github.com/Unarelith/GameKit.git
+[submodule "external/zlib"]
+	path = external/zlib
+	url = git://github.com/Unarelith/zlib.git
+	ignore = dirty

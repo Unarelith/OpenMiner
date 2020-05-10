@@ -42,11 +42,11 @@ void Client::connect(sf::IpAddress serverAddress, u16 serverPort) {
 	if (m_socket.bind(0) != sf::Socket::Done)
 		throw ClientConnectException("Network error: Bind failed");
 
-	sf::Packet packet;
+	Network::Packet packet;
 	packet << Network::Command::ClientConnect << sf::IpAddress::getLocalAddress().toString() << m_socket.getLocalPort();
 	m_tcpSocket->send(packet);
 
-	sf::Packet answer;
+	Network::Packet answer;
 	m_tcpSocket->receive(answer);
 
 	Network::Command command;
@@ -69,52 +69,31 @@ void Client::connect(sf::IpAddress serverAddress, u16 serverPort) {
 }
 
 void Client::disconnect() {
-	sf::Packet packet;
+	Network::Packet packet;
 	packet << Network::Command::ClientDisconnect;
 	m_tcpSocket->send(packet);
 
 	m_tcpSocket->disconnect();
 }
 
-void Client::send(sf::Packet &packet) {
+void Client::send(Network::Packet &packet) {
 	if (m_tcpSocket)
 		m_tcpSocket->send(packet);
 	else
 		throw EXCEPTION("Network error: Trying to send a packet without being connected");
 }
 
-void Client::sendKeyState() {
-	if (!m_keyUpdateTimer.isStarted())
-		m_keyUpdateTimer.start();
-
-	if (m_keyUpdateTimer.time() > 15) {
-		gk::InputHandler *inputHandler = gk::GamePad::getInputHandler();
-		if (inputHandler) {
-			sf::Packet packet;
-			packet << Network::Command::KeyState << gk::GameClock::getInstance().getTicks() << m_id;
-			for (auto &it : inputHandler->keysPressed()) {
-				packet << static_cast<u8>(it.first) << it.second;
-			}
-
-			m_socket.send(packet, m_serverAddress, m_serverPort);
-		}
-
-		m_keyUpdateTimer.reset();
-		m_keyUpdateTimer.start();
-	}
-}
-
 void Client::update() {
-	sf::Packet packet;
-	sf::IpAddress senderAddress;
-	u16 senderPort;
-	while (m_socket.receive(packet, senderAddress, senderPort) == sf::Socket::Done) {
-		Network::Command command;
-		packet >> command;
+	// sf::IpAddress senderAddress;
+	// u16 senderPort;
+	// while (m_socket.receive(packet, senderAddress, senderPort) == sf::Socket::Done) {
+	// 	Network::Command command;
+	// 	packet >> command;
+    //
+	// 	// gkDebug() << "UDP Message of type" << Network::commandToString(command) << "received from:" << senderAddress << ":" << senderPort;
+	// }
 
-		// gkDebug() << "UDP Message of type" << Network::commandToString(command) << "received from:" << senderAddress << ":" << senderPort;
-	}
-
+	Network::Packet packet;
 	while (m_tcpSocket->receive(packet) == sf::Socket::Done) {
 		Network::Command command;
 		packet >> command;

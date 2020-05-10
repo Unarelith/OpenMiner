@@ -43,7 +43,7 @@
 #include "Registry.hpp"
 
 void ClientCommandHandler::sendPlayerInvUpdate() {
-	sf::Packet invPacket;
+	Network::Packet invPacket;
 	invPacket << Network::Command::PlayerInvUpdate;
 	// FIXME: Sending client id shouldn't be necessary
 	invPacket << m_client.id();
@@ -52,7 +52,7 @@ void ClientCommandHandler::sendPlayerInvUpdate() {
 }
 
 void ClientCommandHandler::sendPlayerPosUpdate() {
-	sf::Packet packet;
+	Network::Packet packet;
 	packet << Network::Command::PlayerPosUpdate;
 	// FIXME: Sending client id shouldn't be necessary
 	packet << m_client.id();
@@ -64,7 +64,7 @@ void ClientCommandHandler::sendPlayerPosUpdate() {
 }
 
 void ClientCommandHandler::sendPlayerDigBlock(const glm::ivec4 &selectedBlock) {
-	sf::Packet packet;
+	Network::Packet packet;
 	packet << Network::Command::PlayerDigBlock
 		<< s32(selectedBlock.x)
 		<< s32(selectedBlock.y)
@@ -73,27 +73,27 @@ void ClientCommandHandler::sendPlayerDigBlock(const glm::ivec4 &selectedBlock) {
 }
 
 void ClientCommandHandler::sendPlayerPlaceBlock(s32 x, s32 y, s32 z, u32 block) {
-	sf::Packet packet;
+	Network::Packet packet;
 	packet << Network::Command::PlayerPlaceBlock << x << y << z << block;
 	m_client.send(packet);
 }
 
 void ClientCommandHandler::sendPlayerInventoryRequest() {
-	sf::Packet packet;
+	Network::Packet packet;
 	packet << Network::Command::PlayerInventory
 		<< u16(Config::screenWidth) << u16(Config::screenHeight) << u8(Config::guiScale);
 	m_client.send(packet);
 }
 
 void ClientCommandHandler::sendPlayerCreativeWindowRequest() {
-	sf::Packet packet;
+	Network::Packet packet;
 	packet << Network::Command::PlayerCreativeWindow
 		<< u16(Config::screenWidth) << u16(Config::screenHeight) << u8(Config::guiScale);
 	m_client.send(packet);
 }
 
 void ClientCommandHandler::sendBlockActivated(const glm::ivec4 &selectedBlock) {
-	sf::Packet packet;
+	Network::Packet packet;
 	packet << Network::Command::BlockActivated
 		<< s32(selectedBlock.x)
 		<< s32(selectedBlock.y)
@@ -103,7 +103,7 @@ void ClientCommandHandler::sendBlockActivated(const glm::ivec4 &selectedBlock) {
 }
 
 void ClientCommandHandler::sendBlockInvUpdate(Inventory &inventory) {
-	sf::Packet packet;
+	Network::Packet packet;
 	packet << Network::Command::BlockInvUpdate;
 	packet << s32(inventory.blockPos().x) << s32(inventory.blockPos().y) << s32(inventory.blockPos().z);
 	packet << inventory;
@@ -111,14 +111,14 @@ void ClientCommandHandler::sendBlockInvUpdate(Inventory &inventory) {
 }
 
 void ClientCommandHandler::sendChunkRequest(s32 chunkX, s32 chunkY, s32 chunkZ) {
-	sf::Packet packet;
+	Network::Packet packet;
 	packet << Network::Command::ChunkRequest;
 	packet << chunkX << chunkY << chunkZ;
 	m_client.send(packet);
 }
 
 void ClientCommandHandler::sendChatMessage(const std::string &message) {
-	sf::Packet packet;
+	Network::Packet packet;
 	packet << Network::Command::ChatMessage;
 	// FIXME: Sending client id shouldn't be necessary
 	packet << m_client.id();
@@ -127,7 +127,7 @@ void ClientCommandHandler::sendChatMessage(const std::string &message) {
 }
 
 void ClientCommandHandler::setupCallbacks() {
-	m_client.setCommandCallback(Network::Command::ClientDisconnect, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::ClientDisconnect, [this](Network::Packet &packet) {
 		u16 clientID;
 		packet >> clientID;
 
@@ -136,7 +136,7 @@ void ClientCommandHandler::setupCallbacks() {
 			m_playerBoxes.erase(it);
 	});
 
-	m_client.setCommandCallback(Network::Command::RegistryData, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::RegistryData, [this](Network::Packet &packet) {
 		// FIXME: This is a quick fix for concurrency between client and server in singleplayer
 		if (!m_isSingleplayer)
 			Registry::getInstance().deserialize(packet);
@@ -144,11 +144,11 @@ void ClientCommandHandler::setupCallbacks() {
 		m_isRegistryInitialized = true;
 	});
 
-	m_client.setCommandCallback(Network::Command::ChunkData, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::ChunkData, [this](Network::Packet &packet) {
 		m_world.receiveChunkData(packet);
 	});
 
-	m_client.setCommandCallback(Network::Command::BlockUpdate, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::BlockUpdate, [this](Network::Packet &packet) {
 		s32 x, y, z;
 		u32 block;
 		packet >> x >> y >> z >> block;
@@ -156,7 +156,7 @@ void ClientCommandHandler::setupCallbacks() {
 		m_world.setData(x, y, z, block >> 16);
 	});
 
-	m_client.setCommandCallback(Network::Command::PlayerInvUpdate, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::PlayerInvUpdate, [this](Network::Packet &packet) {
 		u16 clientId;
 		packet >> clientId;
 
@@ -166,7 +166,7 @@ void ClientCommandHandler::setupCallbacks() {
 			packet >> m_playerBoxes.at(clientId).inventory();
 	});
 
-	m_client.setCommandCallback(Network::Command::PlayerPosUpdate, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::PlayerPosUpdate, [this](Network::Packet &packet) {
 		double x, y, z;
 		u16 clientId;
 		bool isTeleportation;
@@ -184,7 +184,7 @@ void ClientCommandHandler::setupCallbacks() {
 		}
 	});
 
-	m_client.setCommandCallback(Network::Command::PlayerSpawn, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::PlayerSpawn, [this](Network::Packet &packet) {
 		u16 clientId;
 		gk::Vector3d pos;
 		packet >> clientId >> pos.x >> pos.y >> pos.z;
@@ -199,7 +199,7 @@ void ClientCommandHandler::setupCallbacks() {
 		}
 	});
 
-	m_client.setCommandCallback(Network::Command::PlayerChangeDimension, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::PlayerChangeDimension, [this](Network::Packet &packet) {
 		u16 clientId, dimension;
 		s32 x, y, z;
 		packet >> clientId >> x >> y >> z >> dimension;
@@ -213,11 +213,11 @@ void ClientCommandHandler::setupCallbacks() {
 		}
 	});
 
-	m_client.setCommandCallback(Network::Command::BlockGUIData, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::BlockGUIData, [this](Network::Packet &packet) {
 		gk::ApplicationStateStack::getInstance().push<LuaGUIState>(*this, m_player, m_world, packet, &gk::ApplicationStateStack::getInstance().top());
 	});
 
-	m_client.setCommandCallback(Network::Command::BlockInvUpdate, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::BlockInvUpdate, [this](Network::Packet &packet) {
 		gk::Vector3<s32> pos;
 		packet >> pos.x >> pos.y >> pos.z;
 
@@ -229,7 +229,7 @@ void ClientCommandHandler::setupCallbacks() {
 			packet >> data->inventory;
 	});
 
-	m_client.setCommandCallback(Network::Command::BlockDataUpdate, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::BlockDataUpdate, [this](Network::Packet &packet) {
 		gk::Vector3<s32> pos;
 		packet >> pos.x >> pos.y >> pos.z;
 
@@ -251,7 +251,7 @@ void ClientCommandHandler::setupCallbacks() {
 		}
 	});
 
-	m_client.setCommandCallback(Network::Command::EntitySpawn, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::EntitySpawn, [this](Network::Packet &packet) {
 		entt::entity entityID;
 		packet >> entityID;
 
@@ -268,7 +268,7 @@ void ClientCommandHandler::setupCallbacks() {
 		}
 	});
 
-	m_client.setCommandCallback(Network::Command::EntityDespawn, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::EntityDespawn, [this](Network::Packet &packet) {
 		entt::entity entityID;
 		packet >> entityID;
 
@@ -280,7 +280,7 @@ void ClientCommandHandler::setupCallbacks() {
 			gkError() << "EntityDespawn: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
 	});
 
-	m_client.setCommandCallback(Network::Command::EntityPosition, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::EntityPosition, [this](Network::Packet &packet) {
 		entt::entity entityID;
 		packet >> entityID;
 
@@ -293,7 +293,7 @@ void ClientCommandHandler::setupCallbacks() {
 			gkError() << "EntityPosition: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
 	});
 
-	m_client.setCommandCallback(Network::Command::EntityRotation, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::EntityRotation, [this](Network::Packet &packet) {
 		entt::entity entityID;
 		packet >> entityID;
 
@@ -309,7 +309,7 @@ void ClientCommandHandler::setupCallbacks() {
 			gkError() << "EntityRotation: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
 	});
 
-	m_client.setCommandCallback(Network::Command::EntityAnimation, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::EntityAnimation, [this](Network::Packet &packet) {
 		entt::entity entityID;
 		packet >> entityID;
 
@@ -322,7 +322,7 @@ void ClientCommandHandler::setupCallbacks() {
 			gkError() << "EntityAnimation: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
 	});
 
-	m_client.setCommandCallback(Network::Command::EntityDrawableDef, [this](sf::Packet &packet) {
+	m_client.setCommandCallback(Network::Command::EntityDrawableDef, [this](Network::Packet &packet) {
 		entt::entity entityID;
 		packet >> entityID;
 

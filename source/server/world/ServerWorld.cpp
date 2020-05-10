@@ -104,7 +104,7 @@ void ServerWorld::createChunkNeighbours(ServerChunk &chunk) {
 }
 
 void ServerWorld::sendChunkData(const ClientInfo &client, ServerChunk &chunk) {
-	sf::Packet packet;
+	Network::Packet packet;
 	packet << Network::Command::ChunkData;
 	packet << chunk.x() << chunk.y() << chunk.z();
 	for (u16 z = 0 ; z < CHUNK_HEIGHT ; ++z) {
