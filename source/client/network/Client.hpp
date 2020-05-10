@@ -32,7 +32,6 @@
 
 #include <SFML/Network/IpAddress.hpp>
 #include <SFML/Network/TcpSocket.hpp>
-#include <SFML/Network/UdpSocket.hpp>
 
 #include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/Timer.hpp>
@@ -80,8 +79,6 @@ class Client {
 		u16 m_serverPort;
 
 		std::unique_ptr<sf::TcpSocket> m_tcpSocket;
-
-		sf::UdpSocket m_socket;
 
 		gk::Timer m_keyUpdateTimer;
 

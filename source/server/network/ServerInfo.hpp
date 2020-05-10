@@ -36,7 +36,7 @@
 
 class ServerInfo {
 	public:
-		ClientInfo &addClient(sf::IpAddress address, u16 port, const std::shared_ptr<sf::TcpSocket> &socket);
+		ClientInfo &addClient(sf::IpAddress address, const std::shared_ptr<sf::TcpSocket> &socket);
 		ClientInfo *getClient(u16 id);
 		void removeClient(u16 id);
 

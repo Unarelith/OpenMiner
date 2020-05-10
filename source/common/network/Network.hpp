@@ -34,7 +34,7 @@ namespace Network {
 
 	enum class Command {
 		// Client commands
-		ClientConnect         = 0x00,  // <TCP> [NetworkCommand][u16 udp port]           (from Client only)
+		ClientConnect         = 0x00,  // <TCP> [NetworkCommand]                         (from Client only)
 		ClientDisconnect      = 0x01,  // <TCP> [NetworkCommand]                         (from Client only)
 		ClientOk              = 0x02,  // <TCP> [NetworkCommand][u16 client id][bool isSingleplayer] (from Server only)
 		ClientRefused         = 0x03,  // <TCP> [NetworkCommand]                         (from Server only)

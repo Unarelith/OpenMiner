@@ -32,7 +32,6 @@
 
 #include <SFML/Network/SocketSelector.hpp>
 #include <SFML/Network/TcpListener.hpp>
-#include <SFML/Network/UdpSocket.hpp>
 
 #include "Network.hpp"
 #include "ServerInfo.hpp"
@@ -72,8 +71,6 @@ class Server {
 		u16 m_port = 0;
 
 		ServerInfo m_info;
-
-		sf::UdpSocket m_udpSocket; // Only used to find an available port for sf::TcpListener
 
 		sf::TcpListener m_tcpListener;
 		sf::SocketSelector m_selector;
