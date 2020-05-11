@@ -80,7 +80,7 @@ void ClientApplication::init() {
 	m_keyboardHandler.loadKeysFromFile("resources/config/keys.xml");
 	gk::GamePad::init(m_keyboardHandler);
 
-	createWindow(Config::screenWidth, Config::screenHeight, APP_NAME);
+	createWindow(sf::VideoMode{Config::screenWidth, Config::screenHeight}, APP_NAME);
 	m_window.setVerticalSyncEnabled(Config::isVerticalSyncEnabled);
 	m_window.disableView();
 
