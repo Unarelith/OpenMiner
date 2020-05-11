@@ -59,6 +59,7 @@ class TextureAtlas {
 
 		// Mapping between filename and internal texture ID
 		std::unordered_map<std::string, u16> m_textureMap;
+		std::vector<sf::Image> m_images;
 
 		// Packed texture
 		sf::Texture m_texture;
