@@ -89,6 +89,7 @@ void ClientApplication::init() {
 
 	createWindow(sf::VideoMode{Config::screenWidth, Config::screenHeight}, APP_NAME, sf::Style::Titlebar | sf::Style::Close, settings);
 	m_window.setVerticalSyncEnabled(Config::isVerticalSyncEnabled);
+	m_window.setOpenGLFlagsSetupFunc(&ClientApplication::initOpenGL);
 	m_window.disableView();
 
 	initOpenGL();
@@ -111,18 +112,17 @@ void ClientApplication::init() {
 void ClientApplication::handleEvents() {
 	gk::CoreApplication::handleEvents();
 
-	// FIXME: SFML
-	// if ((Config::isFullscreenModeEnabled && m_window.getWindowMode() != gk::Window::Mode::Fullscreen)
-	// || (!Config::isFullscreenModeEnabled && m_window.getWindowMode() != gk::Window::Mode::Windowed)) {
-	// 	m_window.setWindowMode(Config::isFullscreenModeEnabled ? gk::Window::Mode::Fullscreen : gk::Window::Mode::Windowed);
-	// }
-    //
-	// if (Config::screenWidth != m_window.getSize().x || Config::screenHeight != m_window.getSize().y) {
-	// 	m_window.resize(Config::screenWidth, Config::screenHeight);
-	// }
-    //
-	// if (Config::isVerticalSyncEnabled != m_window.isVerticalSyncEnabled())
-	// 	m_window.setVerticalSyncEnabled(Config::isVerticalSyncEnabled);
+	if ((Config::isFullscreenModeEnabled && !m_window.isFullscreenModeEnabled())
+	|| (!Config::isFullscreenModeEnabled && m_window.isFullscreenModeEnabled())) {
+		m_window.setFullscreenMode(Config::isFullscreenModeEnabled);
+	}
+
+	if (Config::screenWidth != m_window.getSize().x || Config::screenHeight != m_window.getSize().y) {
+		m_window.setSize({Config::screenWidth, Config::screenHeight});
+	}
+
+	if (Config::isVerticalSyncEnabled != m_window.isVerticalSyncEnabled())
+		m_window.setVerticalSyncEnabled(Config::isVerticalSyncEnabled);
 }
 
 void ClientApplication::onEvent(const sf::Event &event) {
@@ -131,6 +131,9 @@ void ClientApplication::onEvent(const sf::Event &event) {
 }
 
 void ClientApplication::initOpenGL() {
+	// Enable textures
+	glCheck(glEnable(GL_TEXTURE_2D));
+
 	// Enable transparency
 	glCheck(glEnable(GL_BLEND));
 	glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
@@ -139,10 +142,10 @@ void ClientApplication::initOpenGL() {
 	glCheck(glEnable(GL_DEPTH_TEST));
 	glCheck(glEnable(GL_CULL_FACE));
 
-	glCheck(glEnable(GL_POLYGON_OFFSET_FILL));
-	glCheck(glPolygonOffset(1, 1));
-
 	// Set best quality for mipmaps
 	glCheck(glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST));
+
+	glCheck(glEnable(GL_POLYGON_OFFSET_FILL));
+	glCheck(glPolygonOffset(1, 1));
 }
 
