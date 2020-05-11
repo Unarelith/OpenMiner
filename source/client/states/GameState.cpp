@@ -81,15 +81,22 @@ void GameState::onEvent(const sf::Event &event) {
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
 		gk::KeyboardHandler *keyboardHandler = (gk::KeyboardHandler *)gk::GamePad::getInputHandler();
 
+#ifdef __APPLE__
 		if (event.type == sf::Event::MouseMoved) {
-			if(Config::screenWidth / 2.0f != event.mouseMove.x || Config::screenHeight / 2.0f != event.mouseMove.y) {
-				// FIXME: SFML
-				// m_player.turnH(event.mouseMove.xrel * -0.01 * Config::mouseSensitivity);
-				// m_player.turnViewV(event.mouseMove.yrel * -0.01 * Config::mouseSensitivity);
+			gk::Mouse::update(event);
 
-				gk::Mouse::resetToWindowCenter();
-			}
+			const auto &delta = gk::Mouse::getDelta();
+			m_player.turnH(delta.x * -0.01 * Config::mouseSensitivity);
+			m_player.turnViewV(delta.y * -0.01 * Config::mouseSensitivity);
 		}
+#else
+		if (event.type == sf::Event::MouseMovedRaw) {
+			m_player.turnH(event.mouseMoveRaw.deltaX * -0.01 * Config::mouseSensitivity);
+			m_player.turnViewV(event.mouseMoveRaw.deltaY * -0.01 * Config::mouseSensitivity);
+
+			gk::Mouse::resetToWindowCenter();
+		}
+#endif
 		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
 			m_stateStack->push<PauseMenuState>(m_client, this);
 		}
