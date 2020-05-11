@@ -1,23 +1,23 @@
-<!-- Key names are defined here: https://wiki.libsdl.org/SDL_Keycode -->
+<!-- Key names are defined in external/gamekit/source/core/input/KeyboardUtils.cpp -->
 <keys>
-	<key name="Left"           scancode="A" />
-	<key name="Right"          scancode="D" />
-	<key name="Up"             scancode="W" />
-	<key name="Down"           scancode="S" />
+	<key name="Left"           keycode="A" />
+	<key name="Right"          keycode="D" />
+	<key name="Up"             keycode="W" />
+	<key name="Down"           keycode="S" />
 
-	<key name="Jump"           scancode="Space" />
-	<key name="Fly"            scancode="X" />
-	<key name="Sneak"          scancode="Left Shift" />
-	<key name="Sprint"         scancode="Left Ctrl" />
+	<key name="Jump"           keycode="Space" />
+	<key name="Fly"            keycode="X" />
+	<key name="Sneak"          keycode="LShift" />
+	<key name="Sprint"         keycode="LControl" />
 
-	<key name="Dig"            scancode="L" />
-	<key name="Use"            scancode="M" />
+	<key name="Dig"            keycode="L" />
+	<key name="Use"            keycode="M" />
 
-	<key name="Inventory"      scancode="E" />
-	<key name="CreativeWindow" scancode="H" />
+	<key name="Inventory"      keycode="E" />
+	<key name="CreativeWindow" keycode="H" />
 
-	<key name="Chat"           scancode="T" />
-	<key name="Command"        scancode="Keypad /" />
+	<key name="Chat"           keycode="T" />
+	<key name="Command"        keycode="Divide" />
 
-	<key name="Shift"          scancode="Left Shift" />
+	<key name="Shift"          keycode="LShift" />
 </keys>
