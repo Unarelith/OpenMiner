@@ -44,7 +44,7 @@ class HUD : public gk::Transformable, public gk::Drawable {
 
 		void setup();
 
-		void onEvent(const SDL_Event &event);
+		void onEvent(const sf::Event &event);
 		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
 
 		void update();

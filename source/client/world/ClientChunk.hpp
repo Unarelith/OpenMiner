@@ -28,7 +28,6 @@
 #define CLIENTCHUNK_HPP_
 
 #include <gk/gl/Drawable.hpp>
-#include <gk/gl/Texture.hpp>
 
 #include "Chunk.hpp"
 #include "ChunkBuilder.hpp"

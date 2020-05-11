@@ -38,7 +38,7 @@ class MenuWidget : public Widget {
 
 		void reset(u16 width, u16 height);
 
-		void onEvent(const SDL_Event &event) override;
+		void onEvent(const sf::Event &event) override;
 
 		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
 

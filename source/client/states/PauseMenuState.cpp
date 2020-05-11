@@ -75,10 +75,10 @@ void PauseMenuState::init() {
 	m_eventHandler->addListener<GuiScaleChangedEvent>(&PauseMenuState::onGuiScaleChanged, this);
 }
 
-void PauseMenuState::onEvent(const SDL_Event &event) {
+void PauseMenuState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
-	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+	if (event.type == sf::Event::Resized) {
 		if (!m_stateStack->empty() && &m_stateStack->top() != this)
 			m_menuWidget.onEvent(event);
 	}
@@ -86,7 +86,7 @@ void PauseMenuState::onEvent(const SDL_Event &event) {
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
 		m_menuWidget.onEvent(event);
 
-		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
 			gk::Mouse::setCursorGrabbed(true);
 			gk::Mouse::setCursorVisible(false);
 			gk::Mouse::resetToWindowCenter();

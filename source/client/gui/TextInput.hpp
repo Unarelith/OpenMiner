@@ -27,7 +27,7 @@
 #ifndef TEXTINPUT_HPP_
 #define TEXTINPUT_HPP_
 
-#include <gk/core/SDLHeaders.hpp>
+#include <SFML/Window/Event.hpp>
 
 #include "Text.hpp"
 
@@ -35,7 +35,7 @@ class TextInput : public gk::Drawable, public gk::Transformable {
 	public:
 		TextInput();
 
-		void onEvent(const SDL_Event &event);
+		void onEvent(const sf::Event &event);
 
 		const std::string &text() const { return m_content; }
 		void setText(const std::string &text) { m_content = text; m_text.setText(m_content + m_cursor); }

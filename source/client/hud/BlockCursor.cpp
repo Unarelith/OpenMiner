@@ -44,16 +44,16 @@
 BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 	: m_player(player), m_world(world), m_client(client)
 {
-	m_blockDestroyTexture = &gk::ResourceHandler::getInstance().get<gk::Texture>("texture-block_destroy");
+	m_blockDestroyTexture = &gk::ResourceHandler::getInstance().get<sf::Texture>("texture-block_destroy");
 }
 
-void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
-	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
-		if (event.button.button == SDL_BUTTON_LEFT) {
+void BlockCursor::onEvent(const sf::Event &event, const Hotbar &hotbar) {
+	if (event.type == sf::Event::MouseButtonPressed && m_selectedBlock.w != -1) {
+		if (event.mouseButton.button == sf::Mouse::Left) {
 			m_animationStart = gk::GameClock::getInstance().getTicks();
 			m_currentTool = &m_player.inventory().getStack(hotbar.cursorPos(), 0);
 		}
-		else if (event.button.button == SDL_BUTTON_RIGHT) {
+		else if (event.mouseButton.button == sf::Mouse::Right) {
 			if (m_animationStart != 0)
 				m_animationStart = 0;
 
@@ -112,8 +112,8 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 			}
 		}
 	}
-	else if (event.type == SDL_MOUSEBUTTONUP) {
-		if (event.button.button == SDL_BUTTON_LEFT) {
+	else if (event.type == sf::Event::MouseButtonReleased) {
+		if (event.mouseButton.button == sf::Mouse::Left) {
 			m_animationStart = 0;
 		}
 	}

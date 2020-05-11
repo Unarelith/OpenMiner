@@ -36,16 +36,16 @@ TextButton::TextButton(const CppCallback &callback, Widget *parent) : TextButton
 	m_cppCallback = callback;
 }
 
-void TextButton::onEvent(const SDL_Event &event) {
-	if (event.type == SDL_MOUSEMOTION) {
-		m_isHovered = isPointInWidget(event.motion.x, event.motion.y);
+void TextButton::onEvent(const sf::Event &event) {
+	if (event.type == sf::Event::MouseMoved) {
+		m_isHovered = isPointInWidget(event.mouseMove.x, event.mouseMove.y);
 
 		if (m_isEnabled && m_isHovered && m_text.color() == gk::Color::White)
 			m_text.setColor({255, 255, 160});
 		else if (!m_isHovered && m_text.color() != gk::Color::White)
 			m_text.setColor(gk::Color::White);
 	}
-	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && m_isHovered && m_isEnabled) {
+	else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && m_isHovered && m_isEnabled) {
 		if (m_cppCallback)
 			m_cppCallback(*this);
 		else if (m_luaCallback)

@@ -18,7 +18,7 @@ endforeach(HEADER_FILE)
 # Add library
 #------------------------------------------------------------------------------
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
-add_dependencies(${PROJECT_NAME} zlib EnTT sfml-network gamekit)
+add_dependencies(${PROJECT_NAME} zlib EnTT gamekit)
 
 #------------------------------------------------------------------------------
 # Compiler flags

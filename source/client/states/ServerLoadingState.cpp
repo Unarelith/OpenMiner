@@ -54,10 +54,10 @@ void ServerLoadingState::centerText() {
 	                   Config::screenHeight / 2 - m_text.getSize().y * Config::guiScale * 2 / 2);
 }
 
-void ServerLoadingState::onEvent(const SDL_Event &event) {
+void ServerLoadingState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
-	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+	if (event.type == sf::Event::Resized) {
 		centerText();
 	}
 }

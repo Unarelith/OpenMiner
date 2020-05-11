@@ -32,22 +32,20 @@ TextInput::TextInput() {
 	m_text.setText(std::string{m_cursor});
 }
 
-void TextInput::onEvent(const SDL_Event &event) {
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_BACKSPACE && !m_content.empty()) {
+void TextInput::onEvent(const sf::Event &event) {
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Backspace && !m_content.empty()) {
 		m_content.erase(m_content.begin() + m_content.length() - 1);
 
 		m_text.setText(m_content + m_cursor);
 	}
 
-  	if (event.type == SDL_TEXTINPUT) {
-		std::string text = event.text.text;
-		for (char c : text) {
-			if (isprint(c) && (!m_characterLimit || m_content.size() < m_characterLimit)) {
-				m_content += c;
-			}
-
-			m_text.setText(m_content + m_cursor);
+  	if (event.type == sf::Event::TextEntered) {
+		u32 c = event.text.unicode;
+		if (isprint(c) && (!m_characterLimit || m_content.size() < m_characterLimit)) {
+			m_content += c;
 		}
+
+		m_text.setText(m_content + m_cursor);
 	}
 }
 

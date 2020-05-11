@@ -89,10 +89,10 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 	m_errorText.setScale(Config::guiScale, Config::guiScale);
 }
 
-void ServerConnectState::onEvent(const SDL_Event &event) {
+void ServerConnectState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
-	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+	if (event.type == sf::Event::Resized) {
 		m_textInput.setPosition(Config::screenWidth / 2.0f - m_textInput.getBackgroundSize().x * Config::guiScale / 2.0f,
 				Config::screenHeight / 2.0f - m_textInput.getBackgroundSize().y * Config::guiScale / 2.0f);
 

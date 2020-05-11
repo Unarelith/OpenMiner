@@ -71,10 +71,6 @@ target_link_libraries(${PROJECT_NAME}
                       ${CMAKE_PROJECT_NAME}_common
                       gamekit
                       ${OPENGL_LIBRARIES}
-                      ${SDL2_LIBRARIES}
-                      ${SDL2_IMAGE_LIBRARIES}
-                      ${SDL2_MIXER_LIBRARIES}
-                      ${SDL2_TTF_LIBRARIES}
                       ${TINYXML2_LIBRARIES}
                       ${GLEW_LIBRARIES}
                       ${LUA_LIBRARIES}
