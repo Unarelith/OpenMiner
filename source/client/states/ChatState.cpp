@@ -58,16 +58,16 @@ void ChatState::updateTextInputGeometry() {
 	m_textInput.setBackgroundSize(Config::screenWidth / Config::guiScale - 4, 10);
 }
 
-void ChatState::onEvent(const SDL_Event &event) {
+void ChatState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
 	m_textInput.onEvent(event);
 
-	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+	if (event.type == sf::Event::Resized) {
 		updateTextInputGeometry();
 	}
 
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+	if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape) {
 		gk::Mouse::setCursorGrabbed(true);
 		gk::Mouse::setCursorVisible(false);
 		gk::Mouse::resetToWindowCenter();
@@ -78,7 +78,7 @@ void ChatState::onEvent(const SDL_Event &event) {
 			m_stateStack->pop();
 	}
 
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RETURN) {
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
 		if (!m_textInput.text().empty())
 			m_clientCommandHandler.sendChatMessage(m_textInput.text());
 

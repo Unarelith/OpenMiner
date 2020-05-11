@@ -64,13 +64,13 @@ LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, Cli
 		loadGUI(packet);
 }
 
-void LuaGUIState::onEvent(const SDL_Event &event) {
+void LuaGUIState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
-	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED && m_isCentered)
+	if (event.type == sf::Event::Resized && m_isCentered)
 		centerMainWidget();
 
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
 		gk::Mouse::setCursorGrabbed(true);
 		gk::Mouse::setCursorVisible(false);
 		gk::Mouse::resetToWindowCenter();
@@ -81,7 +81,7 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 	for (auto &it : m_widgets)
 		it->onEvent(event);
 
-	if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT
+	if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left
 	 && m_currentInventoryWidget && !m_currentInventoryWidget->shiftDestination().empty()
 	 && m_mouseItemWidget.currentItemWidget() && gk::GamePad::isKeyPressed(GameKey::Shift)) {
 		for (const std::string &shiftDestination : m_currentInventoryWidget->shiftDestination()) {
@@ -202,7 +202,7 @@ void LuaGUIState::loadImage(const std::string &, s32 x, s32 y, sf::Packet &packe
 	gk::FloatRect clipRect;
 	packet >> textureFilename >> clipRect.x >> clipRect.y >> clipRect.sizeX >> clipRect.sizeY;
 
-	gk::Texture &texture = loadTexture(textureFilename);
+	sf::Texture &texture = loadTexture(textureFilename);
 
 	auto *image = new gk::Image(texture);
 	image->setPosition(x, y);
@@ -335,7 +335,7 @@ void LuaGUIState::loadProgressBarWidget(const std::string &, s32 x, s32 y, sf::P
 		return;
 	}
 
-	gk::Texture &texture = loadTexture(textureFilename);
+	sf::Texture &texture = loadTexture(textureFilename);
 
 	ProgressBarWidget *widget = new ProgressBarWidget(texture, *data, ProgressBarType(type));
 	if (!maxMeta.empty())
@@ -353,7 +353,7 @@ void LuaGUIState::loadScrollBarWidget(const std::string &, s32 x, s32 y, sf::Pac
 	std::string widget;
 	packet >> textureFilename >> clipRect >> minY >> maxY >> widget;
 
-	gk::Texture &texture = loadTexture(textureFilename);
+	sf::Texture &texture = loadTexture(textureFilename);
 
 	ScrollBarWidget *scrollBarWidget = new ScrollBarWidget(&m_mainWidget);
 	scrollBarWidget->setPosition(x, y);
@@ -368,10 +368,10 @@ void LuaGUIState::loadInventory(const std::string &name, sf::Packet &packet) {
 	packet >> m_inventories.at(name);
 }
 
-gk::Texture &LuaGUIState::loadTexture(const std::string &textureFilename) {
+sf::Texture &LuaGUIState::loadTexture(const std::string &textureFilename) {
 	auto it = m_textures.find(textureFilename);
 	if (it == m_textures.end()) {
-		m_textures.emplace(textureFilename, gk::Texture{textureFilename});
+		m_textures.emplace(textureFilename, sf::Texture{}).first->second.loadFromFile(textureFilename);
 		return m_textures.at(textureFilename);
 	}
 	else {

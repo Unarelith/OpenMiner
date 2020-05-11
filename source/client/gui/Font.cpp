@@ -26,13 +26,14 @@
  */
 #include <fstream>
 
-#include <gk/gl/Texture.hpp>
+#include <SFML/Graphics/Texture.hpp>
+
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "Font.hpp"
 
 Font::Font(const std::string &textureName, const std::string &configPath)
-	: m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>(textureName))
+	: m_texture(gk::ResourceHandler::getInstance().get<sf::Texture>(textureName))
 {
 	std::memset(m_charWidth, 0, sizeof(u8) * 256);
 

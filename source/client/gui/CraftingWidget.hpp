@@ -37,7 +37,7 @@ class CraftingWidget : public AbstractInventoryWidget {
 
 		void init(unsigned int offset = 0, unsigned int size = 3);
 
-		void onEvent(const SDL_Event &event) override;
+		void onEvent(const sf::Event &event) override;
 
 		void update() override;
 

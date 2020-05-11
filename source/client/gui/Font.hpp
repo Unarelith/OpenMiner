@@ -31,7 +31,7 @@
 
 #include <gk/core/Vector2.hpp>
 
-namespace gk {
+namespace sf {
 	class Texture;
 }
 
@@ -44,12 +44,12 @@ class Font {
 		u8 getCharWidth(u8 c) const { return m_charWidth[c]; }
 		gk::Vector2i getTileSize() const { return {m_width, m_height}; }
 
-		const gk::Texture &texture() const { return m_texture; }
+		const sf::Texture &texture() const { return m_texture; }
 
 	private:
 		void parseConfig(const std::string &configPath);
 
-		gk::Texture &m_texture;
+		sf::Texture &m_texture;
 
 		u8 m_charWidth[256];
 		u8 m_width = 8; // FIXME: Hardcoded value

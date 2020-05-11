@@ -104,21 +104,22 @@ void ClientApplication::init() {
 void ClientApplication::handleEvents() {
 	gk::CoreApplication::handleEvents();
 
-	if ((Config::isFullscreenModeEnabled && m_window.getWindowMode() != gk::Window::Mode::Fullscreen)
-	|| (!Config::isFullscreenModeEnabled && m_window.getWindowMode() != gk::Window::Mode::Windowed)) {
-		m_window.setWindowMode(Config::isFullscreenModeEnabled ? gk::Window::Mode::Fullscreen : gk::Window::Mode::Windowed);
-	}
-
-	if (Config::screenWidth != m_window.getSize().x || Config::screenHeight != m_window.getSize().y) {
-		m_window.resize(Config::screenWidth, Config::screenHeight);
-	}
-
-	if (Config::isVerticalSyncEnabled != m_window.isVerticalSyncEnabled())
-		m_window.setVerticalSyncEnabled(Config::isVerticalSyncEnabled);
+	// FIXME: SFML
+	// if ((Config::isFullscreenModeEnabled && m_window.getWindowMode() != gk::Window::Mode::Fullscreen)
+	// || (!Config::isFullscreenModeEnabled && m_window.getWindowMode() != gk::Window::Mode::Windowed)) {
+	// 	m_window.setWindowMode(Config::isFullscreenModeEnabled ? gk::Window::Mode::Fullscreen : gk::Window::Mode::Windowed);
+	// }
+    //
+	// if (Config::screenWidth != m_window.getSize().x || Config::screenHeight != m_window.getSize().y) {
+	// 	m_window.resize(Config::screenWidth, Config::screenHeight);
+	// }
+    //
+	// if (Config::isVerticalSyncEnabled != m_window.isVerticalSyncEnabled())
+	// 	m_window.setVerticalSyncEnabled(Config::isVerticalSyncEnabled);
 }
 
-void ClientApplication::onEvent(const SDL_Event &event) {
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_F11)
+void ClientApplication::onEvent(const sf::Event &event) {
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F11)
 		Config::isFullscreenModeEnabled ^= 1;
 }
 

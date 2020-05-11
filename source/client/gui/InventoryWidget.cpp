@@ -52,11 +52,11 @@ void InventoryWidget::scroll(float scrolling) {
 	loadItemWidgets(offset, size);
 }
 
-void InventoryWidget::onEvent(const SDL_Event &event) {
-	if (event.type == SDL_MOUSEMOTION) {
+void InventoryWidget::onEvent(const sf::Event &event) {
+	if (event.type == sf::Event::MouseMoved) {
 		m_currentItemWidget = nullptr;
 		for (std::size_t i = 0 ; i < m_itemWidgets.size() ; ++i) {
-			if (m_itemWidgets[i].isPointInWidget(event.motion.x, event.motion.y)) {
+			if (m_itemWidgets[i].isPointInWidget(event.mouseMove.x, event.mouseMove.y)) {
 				m_currentItemWidget = &m_itemWidgets[i];
 
 				m_selectedItemBackground.setPosition(1 + (i % m_inventoryWidth) * 18, 1 + (i / m_inventoryWidth) * 18, 0);

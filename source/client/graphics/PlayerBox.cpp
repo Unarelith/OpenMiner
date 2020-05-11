@@ -248,7 +248,7 @@ static constexpr float modelCoords[NUM_QUADS * NUM_VERTICES_PER_QUAD][NUM_VERTEX
 
 PlayerBox::PlayerBox(const gk::Camera &camera)
 	: m_camera(camera),
-	  m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-player"))
+	  m_texture(gk::ResourceHandler::getInstance().get<sf::Texture>("texture-player"))
 {
 	updateVertexBuffer();
 }

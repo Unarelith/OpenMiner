@@ -7,7 +7,7 @@ project(openminer)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 if (WIN32)
 	set(WIN_LIBRARIES_PATH "C:/Libraries")
@@ -99,47 +99,6 @@ endif(NOT GLM_FOUND)
 include_directories(${GLM_INCLUDE_DIRS})
 
 #------------------------------------------------------------------------------
-# - SDL2, SDL2_image, SDL2_mixer
-#------------------------------------------------------------------------------
-if (MSVC)
-	set(SDL2_PATH       ${WIN_LIBRARIES_PATH}/SDL2       CACHE BOOL "" FORCE)
-	set(SDL2_IMAGE_PATH ${WIN_LIBRARIES_PATH}/SDL2_image CACHE BOOL "" FORCE)
-	set(SDL2_MIXER_PATH ${WIN_LIBRARIES_PATH}/SDL2_mixer CACHE BOOL "" FORCE)
-	set(SDL2_TTF_PATH   ${WIN_LIBRARIES_PATH}/SDL2_ttf   CACHE BOOL "" FORCE)
-elseif (WIN32)
-	set(SDL2_PATH       ${WIN_LIBRARIES_PATH}/SDL2/i686-w64-mingw32       CACHE BOOL "" FORCE)
-	set(SDL2_IMAGE_PATH ${WIN_LIBRARIES_PATH}/SDL2_image/i686-w64-mingw32 CACHE BOOL "" FORCE)
-	set(SDL2_MIXER_PATH ${WIN_LIBRARIES_PATH}/SDL2_mixer/i686-w64-mingw32 CACHE BOOL "" FORCE)
-	set(SDL2_TTF_PATH   ${WIN_LIBRARIES_PATH}/SDL2_ttf/i686-w64-mingw32   CACHE BOOL "" FORCE)
-endif ()
-
-find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
-find_package(SDL2_mixer REQUIRED)
-find_package(SDL2_ttf REQUIRED)
-
-if(NOT SDL2_FOUND)
-	message(FATAL_ERROR "SDL2 not found!")
-endif(NOT SDL2_FOUND)
-
-if(NOT SDL2_IMAGE_FOUND)
-	message(FATAL_ERROR "SDL2_image not found!")
-endif(NOT SDL2_IMAGE_FOUND)
-
-if(NOT SDL2_MIXER_FOUND)
-	message(FATAL_ERROR "SDL2_mixer not found!")
-endif(NOT SDL2_MIXER_FOUND)
-
-if(NOT SDL2_TTF_FOUND)
-	message(FATAL_ERROR "SDL2_ttf not found!")
-endif(NOT SDL2_TTF_FOUND)
-
-include_directories(${SDL2_INCLUDE_DIRS}
-                    ${SDL2_IMAGE_INCLUDE_DIRS}
-                    ${SDL2_MIXER_INCLUDE_DIRS}
-                    ${SDL2_TTF_INCLUDE_DIRS})
-
-#------------------------------------------------------------------------------
 # - GLEW
 #------------------------------------------------------------------------------
 if (WIN32)
@@ -188,18 +147,6 @@ include_directories(external/entt/single_include)
 #------------------------------------------------------------------------------
 add_subdirectory(external/gamekit)
 include_directories(external/gamekit/include)
-
-#------------------------------------------------------------------------------
-# - SFML network
-#------------------------------------------------------------------------------
-set(SFML_BUILD_AUDIO FALSE)
-set(SFML_BUILD_GRAPHICS FALSE)
-set(SFML_BUILD_WINDOW FALSE)
-set(SFML_STATIC TRUE)
-
-set(BUILD_SHARED_LIBS OFF)
-
-add_subdirectory(external/SFML)
 
 #------------------------------------------------------------------------------
 # - zlib

@@ -26,6 +26,7 @@
  */
 #include <gk/core/Exception.hpp>
 #include <gk/core/Filesystem.hpp>
+#include <gk/gl/OpenGL.hpp>
 
 #include "Registry.hpp"
 #include "TextureAtlas.hpp"
@@ -37,75 +38,78 @@ void TextureAtlas::addFile(const std::string &path, const std::string &filename)
 	if (it != m_textureMap.end())
 		return;
 
-	SurfacePtr surface{IMG_Load((path + filename).c_str()), &SDL_FreeSurface};
-	if(!surface) {
-		gkWarning() << "Failed to load texture:" << path + filename;
-		return;
-	}
-
-	if (!m_tileSize)
-		m_tileSize = surface->w;
-
-	if (m_tileSize != surface->w || m_tileSize != surface->h)
-		throw EXCEPTION("Texture size unexpected for", path + filename + ". Got", surface->w, surface->h, "instead of", m_tileSize, m_tileSize);
-
-	m_textureMap.emplace(filename, m_textures.size());
-	m_textures.emplace_back(std::move(surface));
+	// FIXME: SFML
+	// SurfacePtr surface{IMG_Load((path + filename).c_str()), &SDL_FreeSurface};
+	// if(!surface) {
+	// 	gkWarning() << "Failed to load texture:" << path + filename;
+	// 	return;
+	// }
+    //
+	// if (!m_tileSize)
+	// 	m_tileSize = surface->w;
+    //
+	// if (m_tileSize != surface->w || m_tileSize != surface->h)
+	// 	throw EXCEPTION("Texture size unexpected for", path + filename + ". Got", surface->w, surface->h, "instead of", m_tileSize, m_tileSize);
+    //
+	// m_textureMap.emplace(filename, m_textures.size());
+	// m_textures.emplace_back(std::move(surface));
 }
 
 void TextureAtlas::packTextures() {
 	if (!m_tileSize)
 		throw EXCEPTION("Cannot pack zero-sized textures!");
 
-	SurfacePtr atlas{nullptr, &SDL_FreeSurface};
-
-	// Max amount of textures on one line
-	const u16 atlasWidth = 16;
-
-	// Max amount of textures on one column
-	const u16 atlasHeight = std::ceil((float)m_textures.size() / atlasWidth);
-
-	Uint32 rmask, gmask, bmask, amask;
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	rmask = 0xff000000;
-	gmask = 0x00ff0000;
-	bmask = 0x0000ff00;
-	amask = 0x000000ff;
-#else
-	rmask = 0x000000ff;
-	gmask = 0x0000ff00;
-	bmask = 0x00ff0000;
-	amask = 0xff000000;
-#endif
-
-	atlas.reset(SDL_CreateRGBSurface(0, atlasWidth * m_tileSize, atlasHeight * m_tileSize, 32, rmask, gmask, bmask, amask));
-	if (!atlas) {
-		throw EXCEPTION("Failed to create surface:", SDL_GetError());
-	}
-
-	u16 i = 0;
-	for (auto &it : m_textures) {
-		SDL_Rect outRect;
-		outRect.x = (i % atlasWidth) * m_tileSize;
-		outRect.y = (i / atlasWidth) * m_tileSize;
-		outRect.w = m_tileSize;
-		outRect.h = m_tileSize;
-
-		SDL_BlitSurface(it.get(), nullptr, atlas.get(), &outRect);
-
-		++i;
-	}
-
-	m_textures.clear();
+	// 	FIXME: SFML
+// 	SurfacePtr atlas{nullptr, &SDL_FreeSurface};
+//
+// 	// Max amount of textures on one line
+// 	const u16 atlasWidth = 16;
+//
+// 	// Max amount of textures on one column
+// 	const u16 atlasHeight = std::ceil((float)m_textures.size() / atlasWidth);
+//
+// 	Uint32 rmask, gmask, bmask, amask;
+// #if SDL_BYTEORDER == SDL_BIG_ENDIAN
+// 	rmask = 0xff000000;
+// 	gmask = 0x00ff0000;
+// 	bmask = 0x0000ff00;
+// 	amask = 0x000000ff;
+// #else
+// 	rmask = 0x000000ff;
+// 	gmask = 0x0000ff00;
+// 	bmask = 0x00ff0000;
+// 	amask = 0xff000000;
+// #endif
+//
+// 	atlas.reset(SDL_CreateRGBSurface(0, atlasWidth * m_tileSize, atlasHeight * m_tileSize, 32, rmask, gmask, bmask, amask));
+// 	if (!atlas) {
+// 		throw EXCEPTION("Failed to create surface:", SDL_GetError());
+// 	}
+//
+// 	u16 i = 0;
+// 	for (auto &it : m_textures) {
+// 		SDL_Rect outRect;
+// 		outRect.x = (i % atlasWidth) * m_tileSize;
+// 		outRect.y = (i / atlasWidth) * m_tileSize;
+// 		outRect.w = m_tileSize;
+// 		outRect.h = m_tileSize;
+//
+// 		SDL_BlitSurface(it.get(), nullptr, atlas.get(), &outRect);
+//
+// 		++i;
+// 	}
+//
+// 	m_textures.clear();
 
 	m_isReady = true;
 
-	if (IMG_SavePNG(atlas.get(), "test_atlas.png") < 0)
-		throw EXCEPTION("Failed to save texture to: test_atlas.png. Reason:", IMG_GetError());
+	// FIXME: SFML
+	// if (IMG_SavePNG(atlas.get(), "test_atlas.png") < 0)
+	// 	throw EXCEPTION("Failed to save texture to: test_atlas.png. Reason:", IMG_GetError());
+    //
+	// m_texture.loadFromSurface(atlas.get());
 
-	m_texture.loadFromSurface(atlas.get());
-
-	gk::Texture::bind(&m_texture);
+	sf::Texture::bind(&m_texture);
 
 	glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -115,7 +119,7 @@ void TextureAtlas::packTextures() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-	gk::Texture::bind(nullptr);
+	sf::Texture::bind(nullptr);
 }
 
 void TextureAtlas::loadFromRegistry(const std::string &texturePack) {

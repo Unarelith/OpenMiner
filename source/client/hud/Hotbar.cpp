@@ -37,11 +37,11 @@ Hotbar::Hotbar(Inventory &inventory, Widget *parent) : Widget(182, 22, parent), 
 	m_cursor.setPosition(-1, -1, 0);
 }
 
-void Hotbar::onEvent(const SDL_Event &event) {
-	if (event.type == SDL_MOUSEWHEEL) {
-		if (event.wheel.y < 0)
+void Hotbar::onEvent(const sf::Event &event) {
+	if (event.type == sf::Event::MouseWheelScrolled) {
+		if (event.mouseWheelScroll.y < 0)
 			m_cursorPos = (m_cursorPos + 1) % 9;
-		else if (event.wheel.y > 0)
+		else if (event.mouseWheelScroll.y > 0)
 			m_cursorPos = (m_cursorPos == 0) ? 8 : m_cursorPos - 1;
 
 		m_cursor.setPosition(-1 + 20 * m_cursorPos, -1, 0);
