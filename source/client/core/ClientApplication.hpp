@@ -43,7 +43,7 @@ class ClientApplication : public gk::CoreApplication {
 
 		void onEvent(const sf::Event &event) override;
 
-		void initOpenGL();
+		static void initOpenGL();
 
 		gk::KeyboardHandler m_keyboardHandler;
 
