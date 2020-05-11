@@ -85,7 +85,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 
 - Dependencies (using Homebrew):
     - A compiler with C++17 support (GCC >= 7.0 or clang >= 5.0)
-    - `brew install cmake tinyxml2 glm sdl2 sdl2_mixer sdl2_ttf lua`
+    - `brew install cmake tinyxml2 glm`
     - **Optional:** `brew install ninja` (much faster builds)
 - Run `cmake -B build . && cmake --build build`; if you installed `ninja` above, add `-GNinja` before `-B` in the previous command.
 - Run the client with `./build/openminer`
