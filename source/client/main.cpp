@@ -41,46 +41,7 @@ extern "C" {
 }
 #endif
 
-// Fix the scaling problem encountered with Windows
-// From: https://discourse.libsdl.org/t/sdl-getdesktopdisplaymode-resolution-reported-in-windows-10-when-using-app-scaling/22389/4
-#ifdef _WIN32
-typedef enum PROCESS_DPI_AWARENESS {
-	PROCESS_DPI_UNAWARE = 0,
-	PROCESS_SYSTEM_DPI_AWARE = 1,
-	PROCESS_PER_MONITOR_DPI_AWARE = 2
-} PROCESS_DPI_AWARENESS;
-
-void setDpiAwareness() {
-	BOOL(WINAPI *SetProcessDPIAware)(void) = nullptr; // Vista and later
-	HRESULT(WINAPI *SetProcessDpiAwareness)(PROCESS_DPI_AWARENESS dpiAwareness) = nullptr; // Windows 8.1 and later
-
-	void *userDLL = SDL_LoadObject("USER32.DLL");
-	if (userDLL) {
-		SetProcessDPIAware = (BOOL(WINAPI *)(void))SDL_LoadFunction(userDLL, "SetProcessDPIAware");
-	}
-
-	void *shcoreDLL = SDL_LoadObject("SHCORE.DLL");
-	if (shcoreDLL) {
-		SetProcessDpiAwareness = (HRESULT(WINAPI *)(PROCESS_DPI_AWARENESS))SDL_LoadFunction(shcoreDLL, "SetProcessDpiAwareness");
-	}
-
-	if (SetProcessDpiAwareness) {
-		// Try Windows 8.1+ version
-		/*HRESULT result = */SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
-	}
-	else if (SetProcessDPIAware) {
-		// Try Vista - Windows 8 version.
-		// This has a constant scale factor for all monitors.
-		/*BOOL success = */SetProcessDPIAware();
-	}
-}
-#endif
-
 int main(int argc, char **argv) {
-#ifdef _WIN32
-	setDpiAwareness();
-#endif
-
 	ClientApplication app(argc, argv);
 	app.run();
 
