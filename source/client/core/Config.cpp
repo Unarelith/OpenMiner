@@ -59,12 +59,12 @@ u8 Config::mouseSensitivity = 8;
 
 #include <sol.hpp>
 
-void Config::loadConfigFromFile(const char *file) {
-	if (gk::Filesystem::fileExists(file)) {
+void Config::loadConfigFromFile(const char *filename) {
+	if (gk::Filesystem::fileExists(filename)) {
 		sol::state lua;
 
 		try {
-			lua.safe_script_file(file);
+			lua.safe_script_file(filename);
 
 			isFlyModeEnabled = lua["isFlyModeEnabled"].get_or(isFlyModeEnabled);
 			isNoClipEnabled = lua["isNoClipEnabled"].get_or(isNoClipEnabled);
@@ -96,5 +96,34 @@ void Config::loadConfigFromFile(const char *file) {
 			gkError() << e.what();
 		}
 	}
+}
+
+#include <fstream>
+
+void Config::saveConfigToFile(const char *filename) {
+	std::ofstream file{filename, std::ofstream::out | std::ofstream::trunc};
+	file << "isFlyModeEnabled = " << (isFlyModeEnabled ? "true" : "false") << std::endl;
+	file << "isNoClipEnabled = " << (isNoClipEnabled ? "true" : "false") << std::endl;
+	file << std::endl;
+	file << "isBlockInfoWidgetEnabled = " << (isBlockInfoWidgetEnabled ? "true" : "false") << std::endl;
+	file << "isFpsCounterEnabled = " << (isFpsCounterEnabled ? "true" : "false") << std::endl;
+	file << "isHotbarVisible = " << (isHotbarVisible ? "true" : "false") << std::endl;
+	file << "isCrosshairVisible = " << (isCrosshairVisible ? "true" : "false") << std::endl;
+	file << std::endl;
+	file << "renderDistance = " << renderDistance << std::endl;
+	file << "isTorchSmoothLightingEnabled = " << (isTorchSmoothLightingEnabled ? "true" : "false") << std::endl;
+	file << "isSunSmoothLightingEnabled = " << (isSunSmoothLightingEnabled ? "true" : "false") << std::endl;
+	file << "isAmbientOcclusionEnabled = " << (isAmbientOcclusionEnabled ? "true" : "false") << std::endl;
+	file << "isWireframeModeEnabled = " << (isWireframeModeEnabled ? "true" : "false") << std::endl;
+	file << "isFullscreenModeEnabled = " << (isFullscreenModeEnabled ? "true" : "false") << std::endl;
+	file << "isVerticalSyncEnabled = " << (isVerticalSyncEnabled ? "true" : "false") << std::endl;
+	file << "cameraFOV = " << cameraFOV << std::endl;
+	file << "screenWidth = " << screenWidth << std::endl;
+	file << "screenHeight = " << screenHeight << std::endl;
+	file << "guiScale = " << (u16)guiScale << std::endl;
+	file << "mipmapLevels = " << (u16)mipmapLevels << std::endl;
+	file << "aoStrength = " << aoStrength << std::endl;
+	file << std::endl;
+	file << "mouseSensitivity = " << (u16)mouseSensitivity << std::endl;
 }
 

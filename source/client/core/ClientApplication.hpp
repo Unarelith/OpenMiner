@@ -42,6 +42,7 @@ class ClientApplication : public gk::CoreApplication {
 		void handleEvents() override;
 
 		void onEvent(const sf::Event &event) override;
+		void onExit() override;
 
 		static void initOpenGL();
 
