@@ -130,6 +130,10 @@ void ClientApplication::onEvent(const sf::Event &event) {
 		Config::isFullscreenModeEnabled ^= 1;
 }
 
+void ClientApplication::onExit() {
+	Config::saveConfigToFile("config/client.lua");
+}
+
 void ClientApplication::initOpenGL() {
 	// Enable textures
 	glCheck(glEnable(GL_TEXTURE_2D));
