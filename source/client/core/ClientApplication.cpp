@@ -77,7 +77,7 @@ void ClientApplication::init() {
 
 	Config::loadConfigFromFile("config/client.lua");
 
-	m_keyboardHandler.loadKeysFromFile("resources/config/keys.xml");
+	m_keyboardHandler.loadKeysFromFile("config/keys.lua");
 	gk::GamePad::init(m_keyboardHandler);
 
 	sf::ContextSettings settings;
@@ -132,6 +132,8 @@ void ClientApplication::onEvent(const sf::Event &event) {
 
 void ClientApplication::onExit() {
 	Config::saveConfigToFile("config/client.lua");
+
+	m_keyboardHandler.saveKeysToFile("config/keys.lua");
 }
 
 void ClientApplication::initOpenGL() {
