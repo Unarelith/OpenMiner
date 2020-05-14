@@ -24,34 +24,33 @@
  *
  * =====================================================================================
  */
-#ifndef CLIENTAPPLICATION_HPP_
-#define CLIENTAPPLICATION_HPP_
+#ifndef KEYBOARDHANDLER_HPP_
+#define KEYBOARDHANDLER_HPP_
 
-#include <gk/core/CoreApplication.hpp>
+#include <unordered_map>
+#include <string>
 
-#include "KeyboardHandler.hpp"
-#include "Registry.hpp"
+#include <gk/core/input/InputHandler.hpp>
+#include <gk/core/input/KeyboardUtils.hpp>
 
-class ClientApplication : public gk::CoreApplication {
+class KeyboardHandler : public gk::InputHandler {
 	public:
-		ClientApplication(int argc, char **argv);
+		KeyboardHandler();
 
-		void init() override;
+		void loadKeysFromFile(const std::string &filename);
+		void saveKeysToFile(const std::string &filename);
 
-	private:
-		void handleEvents() override;
+		bool isKeyPressed(gk::GameKey key) override;
 
-		void onEvent(const sf::Event &event) override;
-		void onExit() override;
+		sf::Keyboard::Key getKeycode(gk::GameKey key) { return m_keys[key]; }
+		std::string getKeyName(gk::GameKey key) { return gk::KeyboardUtils::getNameFromKey(m_keys[key]); }
+		void setKeycode(gk::GameKey key, sf::Keyboard::Key keycode) { m_keys[key] = keycode; }
 
-		static void initOpenGL();
+	protected:
+		void addKey(gk::GameKey key, const std::string &name, sf::Keyboard::Key defaultKey);
 
-		KeyboardHandler m_keyboardHandler;
-
-		Registry m_registry;
-
-		std::string m_host = "localhost";
-		u16 m_port = 4242;
+		std::unordered_map<gk::GameKey, sf::Keyboard::Key> m_keys;
+		std::unordered_map<std::string, gk::GameKey> m_keyNames;
 };
 
-#endif // CLIENTAPPLICATION_HPP_
+#endif // KEYBOARDHANDLER_HPP_

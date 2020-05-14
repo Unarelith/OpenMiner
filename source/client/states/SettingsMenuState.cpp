@@ -29,7 +29,6 @@
 #include <algorithm>
 
 #include <gk/core/input/GamePad.hpp>
-#include <gk/core/input/KeyboardHandler.hpp>
 #include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/Debug.hpp>
 #include <gk/core/EventHandler.hpp>
@@ -38,6 +37,7 @@
 
 #include "Config.hpp"
 #include "Events.hpp"
+#include "KeyboardHandler.hpp"
 #include "SettingsMenuState.hpp"
 #include "World.hpp"
 
@@ -77,7 +77,7 @@ void SettingsMenuState::onEvent(const sf::Event &event) {
 			doneButtonAction();
 		}
 		else if (m_currentKeyButton && event.type == sf::Event::KeyPressed) {
-			gk::KeyboardHandler *keyboardHandler = (gk::KeyboardHandler *)gk::GamePad::getInputHandler();
+			KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
 			keyboardHandler->setKeycode(m_currentKey, event.key.code);
 
 			m_currentKeyButton->setText(m_currentKeyButton->text() + keyboardHandler->getKeyName(m_currentKey));
@@ -229,7 +229,7 @@ void SettingsMenuState::addInputButtons() {
 
 	m_menuWidget.reset(2, 8);
 
-	gk::KeyboardHandler *keyboardHandler = (gk::KeyboardHandler *)gk::GamePad::getInputHandler();
+	KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
 	for (auto &it : keys) {
 		m_menuWidget.addButton(it.second + ": " + keyboardHandler->getKeyName(it.first), [this, it] (TextButton &button) {
 			button.setText(it.second + ": ");

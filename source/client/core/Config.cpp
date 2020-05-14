@@ -24,6 +24,13 @@
  *
  * =====================================================================================
  */
+#include <fstream>
+
+#include <gk/core/Debug.hpp>
+#include <gk/core/Filesystem.hpp>
+
+#include <sol.hpp>
+
 #include "Config.hpp"
 
 // Gameplay
@@ -53,11 +60,6 @@ float Config::aoStrength = 1.0f;
 
 // Input
 u8 Config::mouseSensitivity = 8;
-
-#include <gk/core/Debug.hpp>
-#include <gk/core/Filesystem.hpp>
-
-#include <sol.hpp>
 
 void Config::loadConfigFromFile(const char *filename) {
 	if (gk::Filesystem::fileExists(filename)) {
@@ -97,8 +99,6 @@ void Config::loadConfigFromFile(const char *filename) {
 		}
 	}
 }
-
-#include <fstream>
 
 void Config::saveConfigToFile(const char *filename) {
 	std::ofstream file{filename, std::ofstream::out | std::ofstream::trunc};

@@ -33,7 +33,6 @@
 #include <gk/core/GameClock.hpp>
 #include <gk/core/Exception.hpp>
 #include <gk/core/Mouse.hpp>
-#include <gk/core/input/KeyboardHandler.hpp>
 #include <gk/gl/OpenGL.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
@@ -41,6 +40,7 @@
 #include "Events.hpp"
 #include "GameKey.hpp"
 #include "GameState.hpp"
+#include "KeyboardHandler.hpp"
 #include "LuaGUIState.hpp"
 #include "PauseMenuState.hpp"
 #include "Registry.hpp"
@@ -79,7 +79,7 @@ void GameState::onEvent(const sf::Event &event) {
 	}
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
-		gk::KeyboardHandler *keyboardHandler = (gk::KeyboardHandler *)gk::GamePad::getInputHandler();
+		KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
 
 #ifdef __APPLE__
 		if (event.type == sf::Event::MouseMoved) {
