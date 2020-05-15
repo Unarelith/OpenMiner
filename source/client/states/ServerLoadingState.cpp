@@ -45,8 +45,9 @@ ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, g
 
 	centerText();
 
-	gk::Mouse::setCursorVisible(true);
-	gk::Mouse::setCursorGrabbed(false);
+	// FIXME: SFML_RAW_MOUSE
+	// gk::Mouse::setCursorVisible(true);
+	// gk::Mouse::setCursorGrabbed(false);
 }
 
 void ServerLoadingState::centerText() {
