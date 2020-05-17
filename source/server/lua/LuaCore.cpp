@@ -26,6 +26,7 @@
  */
 #include "LuaCore.hpp"
 #include "Registry.hpp"
+#include "ServerConfig.hpp"
 #include "ServerModLoader.hpp"
 #include "ServerWorld.hpp"
 
@@ -38,6 +39,10 @@ void LuaCore::initUsertype(sol::state &lua) {
 		"OnBlockPlaced", LuaEventType::OnBlockPlaced,
 		"OnBlockDigged", LuaEventType::OnBlockDigged,
 		"OnBlockActivated", LuaEventType::OnBlockActivated
+	);
+
+	lua["ServerConfig"] = lua.create_table_with(
+		"useItemDrops", ServerConfig::useItemDrops
 	);
 
 	lua.new_usertype<LuaCore>("LuaCore",

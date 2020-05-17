@@ -284,7 +284,6 @@ void ServerCommandHandler::setupCallbacks() {
 
 			ServerWorld &world = getWorldForClient(client.id);
 			const Block &blockDef = Registry::getInstance().getBlock(world.getBlock(x, y, z));
-			world.onBlockDigged(x, y, z, blockDef, *player);
 			world.setBlock(x, y, z, 0);
 
 			m_scriptEngine.luaCore().onEvent(LuaEventType::OnBlockDigged, glm::ivec3{x, y, z}, blockDef, *player, world, client, *this);

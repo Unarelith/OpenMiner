@@ -24,16 +24,13 @@
  *
  * =====================================================================================
  */
-#ifndef ITEMDROPFACTORY_HPP_
-#define ITEMDROPFACTORY_HPP_
+#ifndef LUACALLBACKCOMPONENT_HPP_
+#define LUACALLBACKCOMPONENT_HPP_
 
-#include <gk/core/IntTypes.hpp>
+#include <sol.hpp>
 
-#include <entt/entt.hpp>
-
-class ItemDropFactory {
-	public:
-		static void create(entt::registry &registry, double x, double y, double z, u16 dimension, const std::string &itemID, u16 amount = 1);
+struct LuaCallbackComponent {
+	sol::unsafe_function collisionCallback;
 };
 
-#endif // ITEMDROPFACTORY_HPP_
+#endif // LUACALLBACKCOMPONENT_HPP_

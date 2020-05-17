@@ -24,25 +24,24 @@
  *
  * =====================================================================================
  */
+#include <gk/core/Debug.hpp>
+
 #include "CollisionController.hpp"
 #include "ItemStack.hpp"
+#include "LuaCallbackComponent.hpp"
 #include "NetworkComponent.hpp"
 #include "PlayerList.hpp"
 #include "PositionComponent.hpp"
 #include "ServerCommandHandler.hpp"
 
 void CollisionController::update(entt::registry &registry) {
-	// FIXME: This should be a callback in a CollisionComponent
-	registry.view<PositionComponent, gk::DoubleBox, ItemStack, NetworkComponent>().each([&](auto entity, auto &position, auto &box, auto &itemStack, auto &network) {
+	registry.view<PositionComponent, gk::DoubleBox, ItemStack, NetworkComponent, LuaCallbackComponent>().each([&](auto entity, auto &position, auto &box, auto &itemStack, auto &network, auto &luaCallbackComponent) {
 		for (auto &it : m_players) {
 			if (it.second.dimension() == position.dimension) {
 				gk::DoubleBox hitbox = box + gk::Vector3d{position.x, position.y, position.z};
 				gk::DoubleBox playerHitbox = it.second.hitbox() + gk::Vector3d{it.second.x(), it.second.y(), it.second.z()};
 				if (hitbox.intersects(playerHitbox)) {
-					it.second.inventory().addStack(itemStack.item().stringID(), itemStack.amount());
-					m_server->sendPlayerInvUpdate(it.second.clientID(), &it.second.client());
-					m_server->sendEntityDespawn(network.entityID);
-					registry.destroy(entity);
+					luaCallbackComponent.collisionCallback(itemStack, entity, network.entityID, it.second, registry, *m_server);
 				}
 			}
 		}

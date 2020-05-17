@@ -34,7 +34,6 @@
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
-#include "ItemDropFactory.hpp"
 #include "Registry.hpp"
 #include "Sky.hpp"
 #include "TextureAtlas.hpp"
