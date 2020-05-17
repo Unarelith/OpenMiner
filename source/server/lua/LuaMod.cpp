@@ -51,59 +51,27 @@ void LuaMod::commit() {
 	}
 }
 
+#define DEF_FUNC(type) [](LuaMod &self, const sol::table &table) { \
+	self.m_defs.emplace(type, table); \
+}
+
 void LuaMod::initUsertype(sol::state &lua) {
 	lua.new_usertype<LuaMod>("LuaMod",
 		"id",              &LuaMod::id,
 		"path",            &LuaMod::path,
 
-		"block",           &LuaMod::registerBlock,
-		"item",            &LuaMod::registerItem,
-		"crafting_recipe", &LuaMod::registerCraftingRecipe,
-		"smelting_recipe", &LuaMod::registerSmeltingRecipe,
-		"sky",             &LuaMod::registerSky,
-		"tree",            &LuaMod::registerTree,
-		"biome",           &LuaMod::registerBiome,
-		"dimension",       &LuaMod::registerDimension,
-		"entity",          &LuaMod::registerEntity,
+		"spawn_entity",    &LuaMod::spawnEntity,
 
-		"spawn_entity",    &LuaMod::spawnEntity
+		"block",           DEF_FUNC(DefinitionType::Block),
+		"item",            DEF_FUNC(DefinitionType::Item),
+		"crafting_recipe", DEF_FUNC(DefinitionType::CraftingRecipe),
+		"smelting_recipe", DEF_FUNC(DefinitionType::SmeltingRecipe),
+		"sky",             DEF_FUNC(DefinitionType::Sky),
+		"tree",            DEF_FUNC(DefinitionType::Tree),
+		"biome",           DEF_FUNC(DefinitionType::Biome),
+		"dimension",       DEF_FUNC(DefinitionType::Dimension),
+		"entity",          DEF_FUNC(DefinitionType::Entity)
 	);
-}
-
-void LuaMod::registerBlock(const sol::table &table) {
-	m_defs.emplace(DefinitionType::Block, table);
-}
-
-void LuaMod::registerItem(const sol::table &table) {
-	m_defs.emplace(DefinitionType::Item, table);
-}
-
-void LuaMod::registerCraftingRecipe(const sol::table &table) {
-	m_defs.emplace(DefinitionType::CraftingRecipe, table);
-}
-
-void LuaMod::registerSmeltingRecipe(const sol::table &table) {
-	m_defs.emplace(DefinitionType::SmeltingRecipe, table);
-}
-
-void LuaMod::registerSky(const sol::table &table) {
-	m_defs.emplace(DefinitionType::Sky, table);
-}
-
-void LuaMod::registerTree(const sol::table &table) {
-	m_defs.emplace(DefinitionType::Tree, table);
-}
-
-void LuaMod::registerBiome(const sol::table &table) {
-	m_defs.emplace(DefinitionType::Biome, table);
-}
-
-void LuaMod::registerDimension(const sol::table &table) {
-	m_defs.emplace(DefinitionType::Dimension, table);
-}
-
-void LuaMod::registerEntity(const sol::table &table) {
-	m_defs.emplace(DefinitionType::Entity, table);
 }
 
 void LuaMod::spawnEntity(const std::string &entityID, const sol::table &table) {
