@@ -77,7 +77,7 @@ LuaMod &ServerModLoader::registerMod(const std::string &name) {
 	if (it != m_mods.end())
 		throw std::runtime_error("The mod '" + name + "' has already been loaded. Mod name must be unique.");
 
-	m_mods.emplace(name, name);
+	m_mods.emplace(name, LuaMod{name, m_registry, m_worldController});
 
 	return m_mods.at(name);
 }

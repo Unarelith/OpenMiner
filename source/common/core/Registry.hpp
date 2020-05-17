@@ -31,6 +31,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include <entt/entt.hpp>
+
 #include "Biome.hpp"
 #include "Block.hpp"
 #include "Dimension.hpp"
@@ -82,6 +84,9 @@ class Registry : public ISerializable {
 		Dimension &registerDimension(const std::string &stringID, const std::string &label);
 		Dimension &registerSerializedDimension(sf::Packet &packet);
 
+		entt::registry &entityRegistry() { return m_entityRegistry; }
+		entt::entity registerEntity(const std::string &stringID);
+
 		const Block &getBlock(u16 id) const { return *m_blocks.at(id).get(); }
 		const Item &getItem(u16 id) const { return m_items.at(id); }
 		const Sky &getSky(u16 id) const { return m_skies.at(id); }
@@ -94,6 +99,7 @@ class Registry : public ISerializable {
 		const Sky &getSkyFromStringID(const std::string &stringID);
 		const Tree &getTreeFromStringID(const std::string &stringID);
 		const Biome &getBiomeFromStringID(const std::string &stringID);
+		entt::entity getEntityFromStringID(const std::string &stringID);
 
 		const Recipe *getRecipe(const Inventory &inventory) const;
 
@@ -126,6 +132,10 @@ class Registry : public ISerializable {
 		std::unordered_map<std::string, u16> m_treesID;
 		std::unordered_map<std::string, u16> m_biomesID;
 		std::unordered_map<std::string, u16> m_dimensionsID;
+
+		std::unordered_map<std::string, entt::entity> m_entities;
+
+		entt::registry m_entityRegistry;
 
 		enum class DataType {
 			Block,

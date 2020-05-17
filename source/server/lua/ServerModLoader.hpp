@@ -32,11 +32,14 @@
 
 #include "LuaMod.hpp"
 
+class Registry;
 class ScriptEngine;
+class WorldController;
 
 class ServerModLoader {
 	public:
-		ServerModLoader(ScriptEngine &scriptEngine) : m_scriptEngine(scriptEngine) {}
+		ServerModLoader(ScriptEngine &scriptEngine, Registry &registry, WorldController &worldController)
+			: m_scriptEngine(scriptEngine), m_registry(registry), m_worldController(worldController) {}
 
 		void loadMods();
 
@@ -44,6 +47,8 @@ class ServerModLoader {
 
 	private:
 		ScriptEngine &m_scriptEngine;
+		Registry &m_registry;
+		WorldController &m_worldController;
 
 		std::unordered_map<std::string, LuaMod> m_mods;
 };

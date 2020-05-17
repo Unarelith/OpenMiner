@@ -32,17 +32,19 @@
 #include "LuaBiomeLoader.hpp"
 #include "LuaBlockLoader.hpp"
 #include "LuaDimensionLoader.hpp"
+#include "LuaEntityLoader.hpp"
 #include "LuaItemLoader.hpp"
 #include "LuaRecipeLoader.hpp"
 #include "LuaSkyLoader.hpp"
 
+class Registry;
+class WorldController;
+
 // This class is meant to be used ONLY in Lua
 class LuaMod {
 	public:
-		// FIXME: Check if this name has already been used
-		//        Check if this name matches [a-zA-Z0-9]+
-		//        Check if this name != "group"
-		LuaMod(const std::string &id) : m_id(id) {}
+		LuaMod(const std::string &id, Registry &registry, WorldController &worldController)
+			: m_id(id), m_registry(registry), m_worldController(worldController) {}
 
 		void commit();
 
@@ -61,6 +63,9 @@ class LuaMod {
 		void registerTree(const sol::table &table);
 		void registerBiome(const sol::table &table);
 		void registerDimension(const sol::table &table);
+		void registerEntity(const sol::table &table);
+
+		void spawnEntity(const std::string &entityID, const sol::table &table);
 
 		enum class DefinitionType {
 			Block,
@@ -71,11 +76,16 @@ class LuaMod {
 			Tree,
 			Biome,
 			Dimension,
+			Entity,
 		};
 
 		std::queue<std::pair<DefinitionType, sol::table>> m_defs;
 
 		std::string m_id;
+
+		// TODO: Add registry instance to loaders in order to avoid using singleton
+		Registry &m_registry;
+		WorldController &m_worldController;
 
 		LuaBlockLoader m_blockLoader{*this};
 		LuaItemLoader m_itemLoader{*this};
@@ -83,6 +93,7 @@ class LuaMod {
 		LuaSkyLoader m_skyLoader{*this};
 		LuaBiomeLoader m_biomeLoader{*this};
 		LuaDimensionLoader m_dimensionLoader{*this};
+		LuaEntityLoader m_entityLoader{*this, m_worldController};
 };
 
 #endif // LUAMOD_HPP_

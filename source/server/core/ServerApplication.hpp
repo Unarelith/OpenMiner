@@ -65,15 +65,15 @@ class ServerApplication {
 		gk::GameClock m_clock;
 		gk::EventHandler *m_eventHandler = nullptr;
 
-		ScriptEngine m_scriptEngine;
-		ServerModLoader m_modLoader{m_scriptEngine};
-
 		Registry m_registry;
 
 		u16 m_port = 4242;
 
 		WorldController m_worldController{m_registry, m_clock};
 		PlayerList m_players;
+
+		ScriptEngine m_scriptEngine;
+		ServerModLoader m_modLoader{m_scriptEngine, m_registry, m_worldController};
 
 		Server m_server;
 		ServerCommandHandler m_serverCommandHandler{m_scriptEngine, m_server, m_worldController, m_players, m_registry};
