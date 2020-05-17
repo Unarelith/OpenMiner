@@ -125,7 +125,7 @@ void LuaEntityLoader::spawnEntity(const std::string &entityID, const sol::table 
 	// Create entity copy here
 	entt::registry &registry = Registry::getInstance().entityRegistry();
 	entt::entity entityModel = Registry::getInstance().getEntityFromStringID(entityID);
-	if (entityModel != (entt::entity)0) {
+	if (entityModel != entt::null) {
 		ServerWorld &world = m_worldController.getWorld(dim);
 		entt::registry &sceneRegistry = world.scene().registry();
 		entt::entity entity = sceneRegistry.create();

@@ -84,7 +84,9 @@ void ScriptEngine::initUsertypes() {
 	);
 
 	m_lua.new_usertype<ServerWorld>("ServerWorld",
-		sol::base_classes, sol::bases<World>()
+		sol::base_classes, sol::bases<World>(),
+
+		"dimension", &ServerWorld::dimension
 	);
 
 	m_lua.new_usertype<Chunk>("Chunk",
@@ -104,13 +106,18 @@ void ScriptEngine::initUsertypes() {
 		"use_alt_tiles", &BlockData::useAltTiles
 	);
 
+	m_lua.new_usertype<Dimension>("Dimension",
+		"id", &Dimension::id
+	);
+
 	m_lua.new_usertype<Block>("Block",
 		"id", &Block::id,
 		"data", &Block::data,
 		"string_id", &Block::stringID,
 		"label", &Block::label,
 		"mod_name", &Block::modName,
-		"is_opaque", &Block::isOpaque
+		"is_opaque", &Block::isOpaque,
+		"get_item_drop", &Block::getItemDrop
 	);
 
 	m_lua.new_usertype<ServerBlock>("ServerBlock",
@@ -132,7 +139,8 @@ void ScriptEngine::initUsertypes() {
 	);
 
 	m_lua.new_usertype<ServerPlayer>("ServerPlayer",
-		sol::base_classes, sol::bases<Player>()
+		sol::base_classes, sol::bases<Player>(),
+		"client", &ServerPlayer::client
 	);
 
 	m_lua.new_usertype<Inventory>("Inventory",
@@ -181,6 +189,7 @@ void ScriptEngine::initUsertypes() {
 
 	m_lua.new_usertype<ServerCommandHandler>("ServerCommandHandler",
 		"send_player_change_dimension", &ServerCommandHandler::sendPlayerChangeDimension,
+		"send_player_inv_update", &ServerCommandHandler::sendPlayerInvUpdate,
 		"send_chat_message", &ServerCommandHandler::sendChatMessage
 	);
 
