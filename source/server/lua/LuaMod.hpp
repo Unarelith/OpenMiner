@@ -55,16 +55,6 @@ class LuaMod {
 		static void initUsertype(sol::state &lua);
 
 	private:
-		void registerBlock(const sol::table &table);
-		void registerItem(const sol::table &table);
-		void registerCraftingRecipe(const sol::table &table);
-		void registerSmeltingRecipe(const sol::table &table);
-		void registerSky(const sol::table &table);
-		void registerTree(const sol::table &table);
-		void registerBiome(const sol::table &table);
-		void registerDimension(const sol::table &table);
-		void registerEntity(const sol::table &table);
-
 		void spawnEntity(const std::string &entityID, const sol::table &table);
 
 		enum class DefinitionType {
