@@ -64,7 +64,9 @@ void LuaMod::initUsertype(sol::state &lua) {
 		"tree",            &LuaMod::registerTree,
 		"biome",           &LuaMod::registerBiome,
 		"dimension",       &LuaMod::registerDimension,
-		"entity",          &LuaMod::registerEntity
+		"entity",          &LuaMod::registerEntity,
+
+		"spawn_entity",    &LuaMod::spawnEntity
 	);
 }
 

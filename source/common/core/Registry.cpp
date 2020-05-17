@@ -127,7 +127,7 @@ entt::entity Registry::registerEntity(const std::string &stringID) {
 	else
 		gkError() << "Redefinition of entity '" + stringID + "', keeping the first one";
 
-	return static_cast<entt::entity>(0);
+	return entt::null;
 }
 
 const Block &Registry::getBlockFromStringID(const std::string &stringID) {
@@ -182,13 +182,13 @@ const Biome &Registry::getBiomeFromStringID(const std::string &stringID) {
 entt::entity Registry::getEntityFromStringID(const std::string &stringID) {
 	if (stringID.empty()) {
 		gkError() << "Failed to get entity from empty string ID";
-		return (entt::entity)0;
+		return entt::null;
 	}
 
 	auto it = m_entities.find(stringID);
 	if (it == m_entities.end()) {
 		gkError() << "Failed to get entity '" + stringID + "': Not found";
-		return (entt::entity)0;
+		return entt::null;
 	}
 
 	return it->second;

@@ -24,7 +24,10 @@
 --
 -- =====================================================================================
 --
-mod = openminer.mod_loader:register_mod("default")
+if not mods then mods = {} end
+
+mods["default"] = openminer.mod_loader:register_mod("default")
+mod = mods["default"]
 
 dofile("blocks.lua")
 dofile("items.lua")
@@ -171,19 +174,26 @@ mod:entity {
 		hitbox = {0, 0, 0, 0.25, 0.25, 0.25},
 	},
 
-	on_collision = function(entity, other)
-		if other:type() == "player" then
-			other:inventory():add_item(entity:properties():itemstack())
-		end
-	end,
+	-- on_collision = function(entity, other)
+	-- 	if other:type() == "player" then
+	-- 		other:inventory():add_item(entity:properties():itemstack())
+	-- 	end
+	-- end,
 }
 
-openminer:add_listener(EventType.OnBlockDigged, function(pos, block, player, world, client, server)
-	mod:spawn_entity("item_drop", {
-		position = {pos.x, pos.y, pos.z},
-		dimension = world:dimension():id(),
+useItemDrops = true
 
-		itemstack = {block:string_id(), 1}
-	})
+openminer:add_listener(EventType.OnBlockDigged, function(pos, block, player, world, client, server)
+	if useItemDrops then
+		mods["default"]:spawn_entity("default:item_drop", {
+			position = {pos.x + 0.5, pos.y + 0.5, pos.z + 0.5},
+			dimension = world:dimension():id(),
+
+			itemstack = {block:get_item_drop():item():string_id(), block:get_item_drop():amount()}
+		})
+	else
+		player:inventory():add_stack(block:get_item_drop():item():string_id(), block:get_item_drop():amount());
+		server:send_player_inv_update(player:client_id(), player:client());
+	end
 end)
 
