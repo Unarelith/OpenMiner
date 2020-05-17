@@ -34,11 +34,11 @@ dofile("trees.lua")
 dofile("biomes.lua")
 dofile("dimensions.lua")
 
--- openminer:add_listener(EventType.OnBlockPlaced, function(pos, player, world, client, server)
+-- openminer:add_listener(EventType.OnBlockPlaced, function(pos, block, player, world, client, server)
 -- 	server:send_chat_message(0, "Block placed at " .. pos.x .. ";" .. pos.y .. ";" .. pos.z .. " by Client" .. player:client_id(), client);
 -- end)
 
--- openminer:add_listener(EventType.OnBlockDigged, function(pos, player, world, client, server)
+-- openminer:add_listener(EventType.OnBlockDigged, function(pos, block, player, world, client, server)
 -- 	server:send_chat_message(0, "Block digged at " .. pos.x .. ";" .. pos.y .. ";" .. pos.z .. " by Client" .. player:client_id(), client);
 -- end)
 
@@ -140,4 +140,50 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 
 	gui:show(client)
 end
+
+mod:entity {
+	id = "item_drop",
+
+	properties = {
+		visual = {
+			type = "inventorycube",
+			size = 0.25,
+			origin = {0.125, 0.125, 0.125},
+		},
+
+		is_rotatable = true,
+
+		animation = {
+			{
+				type = "rotation",
+				axis = {0, 0, 1},
+				angle = 0.5
+			},
+			{
+				type = "translation",
+				delta = {0, 0, -0.0005},
+				min = -0.2,
+				max = 0,
+				loop = true
+			}
+		},
+
+		hitbox = {0, 0, 0, 0.25, 0.25, 0.25},
+	},
+
+	on_collision = function(entity, other)
+		if other:type() == "player" then
+			other:inventory():add_item(entity:properties():itemstack())
+		end
+	end,
+}
+
+openminer:add_listener(EventType.OnBlockDigged, function(pos, block, player, world, client, server)
+	mod:spawn_entity("item_drop", {
+		position = {pos.x, pos.y, pos.z},
+		dimension = world:dimension():id(),
+
+		itemstack = {block:string_id(), 1}
+	})
+end)
 

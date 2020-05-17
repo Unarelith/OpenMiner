@@ -117,6 +117,19 @@ Dimension &Registry::registerSerializedDimension(sf::Packet &packet) {
 	return m_dimensions.back();
 }
 
+entt::entity Registry::registerEntity(const std::string &stringID) {
+	auto it = m_entities.find(stringID);
+	if (it == m_entities.end()) {
+		entt::entity entity = m_entityRegistry.create();
+		m_entities.emplace(stringID, entity);
+		return entity;
+	}
+	else
+		gkError() << "Redefinition of entity '" + stringID + "', keeping the first one";
+
+	return static_cast<entt::entity>(0);
+}
+
 const Block &Registry::getBlockFromStringID(const std::string &stringID) {
 	if (stringID.empty()) return getBlock(0);
 	auto it = m_blocksID.find(stringID);
@@ -164,6 +177,21 @@ const Biome &Registry::getBiomeFromStringID(const std::string &stringID) {
 		throw EXCEPTION("Unknown biome:", stringID);
 
 	return getBiome(it->second);
+}
+
+entt::entity Registry::getEntityFromStringID(const std::string &stringID) {
+	if (stringID.empty()) {
+		gkError() << "Failed to get entity from empty string ID";
+		return (entt::entity)0;
+	}
+
+	auto it = m_entities.find(stringID);
+	if (it == m_entities.end()) {
+		gkError() << "Failed to get entity '" + stringID + "': Not found";
+		return (entt::entity)0;
+	}
+
+	return it->second;
 }
 
 const Recipe *Registry::getRecipe(const Inventory &inventory) const {

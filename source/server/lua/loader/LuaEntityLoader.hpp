@@ -24,36 +24,25 @@
  *
  * =====================================================================================
  */
-#ifndef DRAWABLEDEF_HPP_
-#define DRAWABLEDEF_HPP_
+#ifndef LUAENTITYLOADER_HPP_
+#define LUAENTITYLOADER_HPP_
 
-#include <gk/core/IntTypes.hpp>
+#include <sol.hpp>
 
-#include "ISerializable.hpp"
-#include "InventoryCubeDef.hpp"
+class LuaMod;
+class WorldController;
 
-namespace DrawableType {
-	enum : u8 {
-		Undefined     = 0,
-		InventoryCube = 1,
-	};
-}
-
-class DrawableDef : public ISerializable {
+class LuaEntityLoader {
 	public:
-		InventoryCubeDef &addInventoryCube();
+		LuaEntityLoader(LuaMod &mod, WorldController &worldController)
+			: m_mod(mod), m_worldController(worldController) {}
 
-		// FIXME
-		InventoryCubeDef &getInventoryCubeDef() { return m_cubes.back(); }
-		const InventoryCubeDef &getInventoryCubeDef() const { return m_cubes.back(); }
+		void loadEntity(const sol::table &table) const;
+		void spawnEntity(const std::string &entityID, const sol::table &table) const;
 
-		void serialize(sf::Packet &packet) const override;
-		void deserialize(sf::Packet &packet) override;
-
-		bool isUpdated = true;
-
-	protected:
-		std::vector<InventoryCubeDef> m_cubes;
+	private:
+		LuaMod &m_mod;
+		WorldController &m_worldController;
 };
 
-#endif // DRAWABLEDEF_HPP_
+#endif // LUAENTITYLOADER_HPP_

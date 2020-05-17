@@ -43,6 +43,7 @@ void LuaMod::commit() {
 			case DefinitionType::Tree:            m_biomeLoader.loadTree(it.second);             break;
 			case DefinitionType::Biome:           m_biomeLoader.loadBiome(it.second);            break;
 			case DefinitionType::Dimension:       m_dimensionLoader.loadDimension(it.second);    break;
+			case DefinitionType::Entity:          m_entityLoader.loadEntity(it.second);          break;
 			default: break;
 		}
 
@@ -62,7 +63,8 @@ void LuaMod::initUsertype(sol::state &lua) {
 		"sky",             &LuaMod::registerSky,
 		"tree",            &LuaMod::registerTree,
 		"biome",           &LuaMod::registerBiome,
-		"dimension",       &LuaMod::registerDimension
+		"dimension",       &LuaMod::registerDimension,
+		"entity",          &LuaMod::registerEntity
 	);
 }
 
@@ -96,5 +98,13 @@ void LuaMod::registerBiome(const sol::table &table) {
 
 void LuaMod::registerDimension(const sol::table &table) {
 	m_defs.emplace(DefinitionType::Dimension, table);
+}
+
+void LuaMod::registerEntity(const sol::table &table) {
+	m_defs.emplace(DefinitionType::Entity, table);
+}
+
+void LuaMod::spawnEntity(const std::string &entityID, const sol::table &table) {
+	m_entityLoader.spawnEntity(entityID, table);
 }
 

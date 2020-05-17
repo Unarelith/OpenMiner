@@ -18,11 +18,11 @@ Adds a listener to a specific type of event.
 
 Example:
 ```lua
-openminer:add_listener(EventType.OnBlockPlaced, function(pos, player, world, client, server)
+openminer:add_listener(EventType.OnBlockPlaced, function(pos, block, player, world, client, server)
 	server:send_chat_message(0, "Block placed at " .. pos.x .. ";" .. pos.y .. ";" .. pos.z .. " by Client" .. player:client_id(), client);
 end)
 
-openminer:add_listener(EventType.OnBlockDigged, function(pos, player, world, client, server)
+openminer:add_listener(EventType.OnBlockDigged, function(pos, block, player, world, client, server)
 	server:send_chat_message(0, "Block digged at " .. pos.x .. ";" .. pos.y .. ";" .. pos.z .. " by Client" .. player:client_id(), client);
 end)
 
@@ -35,7 +35,7 @@ end)
 
 Possible events:
 
-- `OnBlockPlaced`: `funcion(pos, player, world, client, server)`
-- `OnBlockDigged`: `funcion(pos, player, world, client, server)`
+- `OnBlockPlaced`: `funcion(pos, block, player, world, client, server)`
+- `OnBlockDigged`: `funcion(pos, block, player, world, client, server)`
 - `OnBlockActivated`: `function(pos, block, player, world, client, server)`
 
