@@ -174,17 +174,16 @@ mod:entity {
 		hitbox = {0, 0, 0, 0.25, 0.25, 0.25},
 	},
 
-	-- on_collision = function(entity, other)
-	-- 	if other:type() == "player" then
-	-- 		other:inventory():add_item(entity:properties():itemstack())
-	-- 	end
-	-- end,
+	on_collision = function(item_stack, entity, entity_net_id, player, registry, server)
+		player:inventory():add_stack(item_stack:item():string_id(), item_stack:amount())
+		server:send_player_inv_update(player:client_id(), player:client());
+		server:send_entity_despawn(entity_net_id, nil)
+		registry:destroy(entity)
+	end,
 }
 
-useItemDrops = true
-
 openminer:add_listener(EventType.OnBlockDigged, function(pos, block, player, world, client, server)
-	if useItemDrops then
+	if ServerConfig.useItemDrops then
 		mods["default"]:spawn_entity("default:item_drop", {
 			position = {pos.x + 0.5, pos.y + 0.5, pos.z + 0.5},
 			dimension = world:dimension():id(),

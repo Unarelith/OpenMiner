@@ -51,6 +51,10 @@ void ScriptEngine::init() {
 }
 
 void ScriptEngine::initUsertypes() {
+	m_lua.new_usertype<entt::registry>("entt_registry",
+		"destroy", static_cast<void (entt::registry::*)(const entt::entity)>(&entt::registry::destroy)
+	);
+
 	m_lua.new_usertype<Registry>("Registry",
 		"get_block",  &Registry::getBlock,
 		"get_item",   &Registry::getItem,
@@ -190,7 +194,8 @@ void ScriptEngine::initUsertypes() {
 	m_lua.new_usertype<ServerCommandHandler>("ServerCommandHandler",
 		"send_player_change_dimension", &ServerCommandHandler::sendPlayerChangeDimension,
 		"send_player_inv_update", &ServerCommandHandler::sendPlayerInvUpdate,
-		"send_chat_message", &ServerCommandHandler::sendChatMessage
+		"send_chat_message", &ServerCommandHandler::sendChatMessage,
+		"send_entity_despawn", &ServerCommandHandler::sendEntityDespawn
 	);
 
 	m_lua.new_usertype<ServerModLoader>("ServerModLoader",

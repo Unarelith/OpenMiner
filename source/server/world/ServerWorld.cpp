@@ -28,7 +28,6 @@
 
 #include "Dimension.hpp"
 #include "EngineConfig.hpp"
-#include "ItemDropFactory.hpp"
 #include "Network.hpp"
 #include "Server.hpp"
 #include "ServerCommandHandler.hpp"
@@ -149,17 +148,6 @@ void ServerWorld::sendRequestedData(ClientInfo &client, int cx, int cy, int cz) 
 	chunk.updateLights();
 
 	sendChunkData(client, chunk);
-}
-
-void ServerWorld::onBlockDigged(int x, int y, int z, const Block &block, ServerPlayer &player) {
-	// FIXME: lua-api-entity
-	// if (ServerConfig::useItemDrops) {
-	// 	ItemDropFactory::create(m_scene.registry(), x + 0.5, y + 0.5, z + 0.5, m_dimension.id(), block.getItemDrop().item().stringID(), block.getItemDrop().amount());
-	// }
-	// else {
-	// 	player.inventory().addStack(block.getItemDrop().item().stringID(), block.getItemDrop().amount());
-	// 	m_server->sendPlayerInvUpdate(player.clientID(), &player.client());
-	// }
 }
 
 ServerChunk &ServerWorld::createChunk(s32 cx, s32 cy, s32 cz) {

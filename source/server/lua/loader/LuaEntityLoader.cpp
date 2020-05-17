@@ -28,6 +28,7 @@
 
 #include "AnimationComponent.hpp"
 #include "DrawableDef.hpp"
+#include "LuaCallbackComponent.hpp"
 #include "LuaEntityLoader.hpp"
 #include "LuaMod.hpp"
 #include "NetworkComponent.hpp"
@@ -41,9 +42,11 @@ void LuaEntityLoader::loadEntity(const sol::table &table) const {
 	entt::registry &registry = Registry::getInstance().entityRegistry();
 	entt::entity entity = Registry::getInstance().registerEntity(stringID);
 
-	// TODO: Create a struct to store these functions
-	sol::unsafe_function onSpawn = table["on_spawn"];
-	sol::unsafe_function onCollision = table["on_collision"];
+	sol::optional<sol::unsafe_function> onCollision = table["on_collision"];
+	if (onCollision != sol::nullopt) {
+		auto &luaCallbackComponent = registry.emplace<LuaCallbackComponent>(entity);
+		luaCallbackComponent.collisionCallback = onCollision.value();
+	}
 
 	sol::optional<sol::table> properties = table["properties"];
 	if (properties != sol::nullopt) {
@@ -90,7 +93,7 @@ void LuaEntityLoader::loadEntity(const sol::table &table) const {
 
 		sol::optional<sol::table> hitboxTable = properties.value()["hitbox"];
 		if (hitboxTable != sol::nullopt) {
-			registry.emplace<gk::FloatBox>(entity,
+			registry.emplace<gk::DoubleBox>(entity,
 				hitboxTable.value()[1], hitboxTable.value()[2], hitboxTable.value()[3],
 				hitboxTable.value()[4], hitboxTable.value()[5], hitboxTable.value()[6]
 			);
@@ -136,6 +139,10 @@ void LuaEntityLoader::spawnEntity(const std::string &entityID, const sol::table 
 		if (registry.has<RotationComponent>(entityModel))
 			sceneRegistry.emplace<RotationComponent>(entity);
 
+		auto *luaCallbackComponent = registry.try_get<LuaCallbackComponent>(entityModel);
+		if (luaCallbackComponent)
+			sceneRegistry.emplace<LuaCallbackComponent>(entity, *luaCallbackComponent);
+
 		auto *drawable = registry.try_get<DrawableDef>(entityModel);
 		if (drawable) {
 			auto &drawableDef = sceneRegistry.emplace<DrawableDef>(entity, *drawable);
@@ -149,9 +156,9 @@ void LuaEntityLoader::spawnEntity(const std::string &entityID, const sol::table 
 		if (animation)
 			sceneRegistry.emplace<AnimationComponent>(entity, *animation);
 
-		auto *hitbox = registry.try_get<gk::FloatBox>(entityModel);
+		auto *hitbox = registry.try_get<gk::DoubleBox>(entityModel);
 		if (hitbox)
-			sceneRegistry.emplace<gk::FloatBox>(entity, *hitbox);
+			sceneRegistry.emplace<gk::DoubleBox>(entity, *hitbox);
 
 		if (stack.amount())
 			sceneRegistry.emplace<ItemStack>(entity, stack);
