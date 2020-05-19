@@ -25,10 +25,14 @@
  * =====================================================================================
  */
 #include "Biome.hpp"
+#include "EntityWrapper.hpp"
 #include "LuaMod.hpp"
 #include "PlacementEntry.hpp"
 #include "Registry.hpp"
+#include "ServerCommandHandler.hpp"
+#include "ServerPlayer.hpp"
 #include "Tree.hpp"
+#include "WorldController.hpp"
 
 void LuaMod::commit() {
 	while (!m_defs.empty()) {
@@ -61,6 +65,9 @@ void LuaMod::initUsertype(sol::state &lua) {
 		"path",            &LuaMod::path,
 
 		"spawn_entity",    &LuaMod::spawnEntity,
+		"despawn_entity",  &LuaMod::despawnEntity,
+
+		"give_item_stack", &LuaMod::giveItemStack,
 
 		"block",           DEF_FUNC(DefinitionType::Block),
 		"item",            DEF_FUNC(DefinitionType::Item),
@@ -76,5 +83,26 @@ void LuaMod::initUsertype(sol::state &lua) {
 
 void LuaMod::spawnEntity(const std::string &entityID, const sol::table &table) {
 	m_entityLoader.spawnEntity(entityID, table);
+}
+
+void LuaMod::despawnEntity(EntityWrapper &entity) {
+	PositionComponent *position = entity.getPositionComponent();
+	NetworkComponent *network = entity.getNetworkComponent();
+	if (position && network) {
+		m_worldController.server()->sendEntityDespawn(network->entityID);
+		m_worldController.getWorld(position->dimension).scene().registry().destroy(entity.id());
+	}
+	else
+		// FIXME: Maybe improve this message with the type of entity that caused the error
+		gkError() << "In mod '" + m_id + "': Failed to despawn entity: Missing position and network components";
+}
+
+void LuaMod::giveItemStack(ServerPlayer &player, ItemStack *itemStack) {
+	if (itemStack) {
+		player.inventory().addStack(itemStack->item().stringID(), itemStack->amount());
+		m_worldController.server()->sendPlayerInvUpdate(player.clientID(), &player.client());
+	}
+	else
+		gkError() << "In mod '" + m_id + "': Failed to add stack to player";
 }
 

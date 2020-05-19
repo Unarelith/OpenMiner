@@ -25,6 +25,7 @@
  * =====================================================================================
  */
 #include "BlockMetadata.hpp"
+#include "EntityWrapper.hpp"
 #include "LuaCore.hpp"
 #include "LuaGUI.hpp"
 #include "LuaMod.hpp"
@@ -53,6 +54,14 @@ void ScriptEngine::init() {
 void ScriptEngine::initUsertypes() {
 	m_lua.new_usertype<entt::registry>("entt_registry",
 		"destroy", static_cast<void (entt::registry::*)(const entt::entity)>(&entt::registry::destroy)
+	);
+
+	m_lua.new_usertype<EntityWrapper>("EntityWrapper",
+		"id", &EntityWrapper::id,
+
+		"position", &EntityWrapper::getPositionComponent,
+		"network", &EntityWrapper::getNetworkComponent,
+		"item_stack", &EntityWrapper::getItemStack
 	);
 
 	m_lua.new_usertype<Registry>("Registry",
