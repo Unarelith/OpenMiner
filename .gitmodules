@@ -1,15 +1,15 @@
 [submodule "external/entt"]
 	path = external/entt
-	url = git://github.com/skypjack/entt.git
+	url = https://github.com/skypjack/entt.git
 	ignore = dirty
 [submodule "external/gamekit"]
 	path = external/gamekit
-	url = git://github.com/Unarelith/GameKit.git
+	url = https://github.com/Unarelith/GameKit.git
 [submodule "external/zlib"]
 	path = external/zlib
-	url = git://github.com/Unarelith/zlib.git
+	url = https://github.com/Unarelith/zlib.git
 	ignore = dirty
 [submodule "external/sol2"]
 	path = external/sol2
-	url = git://github.com/ThePhD/sol2.git
+	url = https://github.com/ThePhD/sol2.git
 	ignore = dirty
