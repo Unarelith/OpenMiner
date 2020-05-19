@@ -24,35 +24,30 @@
  *
  * =====================================================================================
  */
-#ifndef SERVERMODLOADER_HPP_
-#define SERVERMODLOADER_HPP_
+#ifndef ENTITYWRAPPER_HPP_
+#define ENTITYWRAPPER_HPP_
 
-#include <string>
-#include <unordered_map>
+#include <entt/entt.hpp>
 
-#include "LuaMod.hpp"
+#include "ItemStack.hpp"
+#include "NetworkComponent.hpp"
+#include "PositionComponent.hpp"
 
-class PlayerList;
-class Registry;
-class ScriptEngine;
-class WorldController;
-
-class ServerModLoader {
+// This class is meant to be used ONLY in Lua or Lua-related C++ classes
+class EntityWrapper {
 	public:
-		ServerModLoader(ScriptEngine &scriptEngine, Registry &registry, WorldController &worldController, PlayerList &players)
-			: m_scriptEngine(scriptEngine), m_registry(registry), m_worldController(worldController), m_players(players) {}
+		EntityWrapper(entt::entity id, entt::registry &registry)
+			: m_id(id), m_registry(registry) {}
 
-		void loadMods();
+		entt::entity id() const { return m_id; }
 
-		LuaMod &registerMod(const std::string &name);
+		PositionComponent *getPositionComponent() const { return m_registry.try_get<PositionComponent>(m_id); }
+		NetworkComponent *getNetworkComponent() const { return m_registry.try_get<NetworkComponent>(m_id); }
+		ItemStack *getItemStack() const { return m_registry.try_get<ItemStack>(m_id); }
 
 	private:
-		ScriptEngine &m_scriptEngine;
-		Registry &m_registry;
-		WorldController &m_worldController;
-		PlayerList &m_players;
-
-		std::unordered_map<std::string, LuaMod> m_mods;
+		entt::entity m_id;
+		entt::registry &m_registry;
 };
 
-#endif // SERVERMODLOADER_HPP_
+#endif // ENTITYWRAPPER_HPP_

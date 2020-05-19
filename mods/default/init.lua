@@ -174,11 +174,9 @@ mod:entity {
 		hitbox = {0, 0, 0, 0.25, 0.25, 0.25},
 	},
 
-	on_collision = function(item_stack, entity, entity_net_id, player, registry, server)
-		player:inventory():add_stack(item_stack:item():string_id(), item_stack:amount())
-		server:send_player_inv_update(player:client_id(), player:client());
-		server:send_entity_despawn(entity_net_id, nil)
-		registry:destroy(entity)
+	on_collision = function(entity, player, server)
+		mods["default"]:give_item_stack(player, entity:item_stack());
+		mods["default"]:despawn_entity(entity)
 	end,
 }
 
@@ -188,11 +186,10 @@ openminer:add_listener(EventType.OnBlockDigged, function(pos, block, player, wor
 			position = {pos.x + 0.5, pos.y + 0.5, pos.z + 0.5},
 			dimension = world:dimension():id(),
 
-			itemstack = {block:get_item_drop():item():string_id(), block:get_item_drop():amount()}
+			item_stack = {block:get_item_drop():item():string_id(), block:get_item_drop():amount()}
 		})
 	else
-		player:inventory():add_stack(block:get_item_drop():item():string_id(), block:get_item_drop():amount());
-		server:send_player_inv_update(player:client_id(), player:client());
+		mods["default"]:give_item_stack(player, block:get_item_drop())
 	end
 end)
 

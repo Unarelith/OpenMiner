@@ -73,7 +73,7 @@ class ServerApplication {
 		PlayerList m_players;
 
 		ScriptEngine m_scriptEngine;
-		ServerModLoader m_modLoader{m_scriptEngine, m_registry, m_worldController};
+		ServerModLoader m_modLoader{m_scriptEngine, m_registry, m_worldController, m_players};
 
 		Server m_server;
 		ServerCommandHandler m_serverCommandHandler{m_scriptEngine, m_server, m_worldController, m_players, m_registry};

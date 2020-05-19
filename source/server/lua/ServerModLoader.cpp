@@ -80,7 +80,7 @@ LuaMod &ServerModLoader::registerMod(const std::string &name) {
 	m_mods.emplace(
 		std::piecewise_construct,
 		std::forward_as_tuple(name),
-		std::forward_as_tuple(name, m_registry, m_worldController)
+		std::forward_as_tuple(name, m_registry, m_worldController, m_players)
 	);
 
 	return m_mods.at(name);

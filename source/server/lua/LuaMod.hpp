@@ -29,6 +29,10 @@
 
 #include <queue>
 
+#include <gk/core/IntTypes.hpp>
+
+#include <entt/entt.hpp>
+
 #include "LuaBiomeLoader.hpp"
 #include "LuaBlockLoader.hpp"
 #include "LuaDimensionLoader.hpp"
@@ -37,14 +41,18 @@
 #include "LuaRecipeLoader.hpp"
 #include "LuaSkyLoader.hpp"
 
+class EntityWrapper;
+class ItemStack;
+class PlayerList;
 class Registry;
+class ServerPlayer;
 class WorldController;
 
 // This class is meant to be used ONLY in Lua
 class LuaMod {
 	public:
-		LuaMod(const std::string &id, Registry &registry, WorldController &worldController)
-			: m_id(id), m_registry(registry), m_worldController(worldController) {}
+		LuaMod(const std::string &id, Registry &registry, WorldController &worldController, PlayerList &players)
+			: m_id(id), m_registry(registry), m_worldController(worldController), m_players(players) {}
 
 		void commit();
 
@@ -56,6 +64,9 @@ class LuaMod {
 
 	private:
 		void spawnEntity(const std::string &entityID, const sol::table &table);
+		void despawnEntity(EntityWrapper &entity);
+
+		void giveItemStack(ServerPlayer &player, ItemStack *itemStack);
 
 		enum class DefinitionType {
 			Block,
@@ -76,6 +87,7 @@ class LuaMod {
 		// TODO: Add registry instance to loaders in order to avoid using singleton
 		Registry &m_registry;
 		WorldController &m_worldController;
+		PlayerList &m_players;
 
 		LuaBlockLoader m_blockLoader{*this};
 		LuaItemLoader m_itemLoader{*this};

@@ -119,7 +119,7 @@ void LuaEntityLoader::spawnEntity(const std::string &entityID, const sol::table 
 	}
 
 	ItemStack stack;
-	sol::optional<sol::table> itemStack = table["itemstack"];
+	sol::optional<sol::table> itemStack = table["item_stack"];
 	if (itemStack != sol::nullopt) {
 		stack.setItem(itemStack.value()[1]);
 		stack.setAmount(itemStack.value()[2].get_or(1));
