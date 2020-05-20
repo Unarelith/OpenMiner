@@ -104,7 +104,7 @@ mod:spawn_entity("default:item_drop", {
 })
 ```
 
-See [entity page](/lua-api-entity#entity-spawn-parameters) for more information about the available fields in the table.
+See [entity page](lua-api-entity.md#entity-spawn-parameters) for more information about the available fields in the table.
 
 ## Registration functions
 

@@ -133,6 +133,8 @@ end
 
 ## Entity spawn parameters
 
+See [this page](lua-api-mod.md#spawn_entity) to learn more about spawning entities in the world.
+
 ### `dimension`
 
 Dimension ID of the entity. **Mandatory field.**
