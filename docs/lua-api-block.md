@@ -51,7 +51,7 @@ draw_type = "solid" -- this is the default value
 
 Groups of the block. They can be used in recipes, and can also filter Lua-defined inventory widgets.
 
-See [Item#Attributes#groups](/lua-api-item#groups) for more details.
+See [Item#Attributes#groups](lua-api-item.md#groups) for more details.
 
 ### `hardness`
 

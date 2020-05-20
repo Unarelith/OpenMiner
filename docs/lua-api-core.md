@@ -4,11 +4,11 @@
 
 ### `openminer.registry`
 
-`Registry` instance of the server. See [C++ classes in lua#Registry](/lua-api-cpp#registry) for more details.
+`Registry` instance of the server. See [C++ classes in lua#Registry](lua-api-cpp.md#registry) for more details.
 
 ### `openminer.mod_loader`
 
-Mod loader instance in the server. See [C++ classes in lua#ServerModLoader](/lua-api-cpp#servermodloader) for more details.
+Mod loader instance in the server. See [C++ classes in lua#ServerModLoader](lua-api-cpp.md#servermodloader) for more details.
 
 ## Functions
 

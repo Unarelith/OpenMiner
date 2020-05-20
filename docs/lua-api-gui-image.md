@@ -58,5 +58,5 @@ Example:
 texture = mod:path() .. "/textures/gui/workbench.png"
 ```
 
-See [this page](/lua-api-mod#path) for more details about `mod:path()`.
+See [this page](lua-api-mod.md#path) for more details about `mod:path()`.
 
