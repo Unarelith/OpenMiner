@@ -264,3 +264,23 @@ void Registry::deserialize(sf::Packet &packet) {
 	}
 }
 
+void Registry::clear() {
+	m_blocks.clear();
+	m_items.clear();
+	m_recipes.clear();
+	m_skies.clear();
+	m_trees.clear();
+	m_biomes.clear();
+	m_dimensions.clear();
+
+	m_blocksID.clear();
+	m_itemsID.clear();
+	m_skiesID.clear();
+	m_treesID.clear();
+	m_biomesID.clear();
+	m_dimensionsID.clear();
+
+	m_entities.clear();
+	m_entityRegistry.clear();
+}
+

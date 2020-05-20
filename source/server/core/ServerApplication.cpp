@@ -104,6 +104,8 @@ int ServerApplication::run(bool isProtected) {
 		mainLoop();
 	}
 
+	m_registry.clear();
+
 	return 0;
 }
 
