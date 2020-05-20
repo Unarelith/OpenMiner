@@ -24,34 +24,32 @@
  *
  * =====================================================================================
  */
-#ifndef SERVERCONNECTSTATE_HPP_
-#define SERVERCONNECTSTATE_HPP_
+#ifndef CONNECTIONERRORSTATE_HPP_
+#define CONNECTIONERRORSTATE_HPP_
 
 #include "InterfaceState.hpp"
 #include "TextButton.hpp"
-#include "TextInput.hpp"
 
-class ServerConnectState : public InterfaceState {
+class ConnectionErrorState : public InterfaceState {
 	public:
-		ServerConnectState(gk::ApplicationState *parent = nullptr);
+		ConnectionErrorState(const std::string &error, const std::string &host, u16 port, const std::string &texturePack, gk::ApplicationState *parent = nullptr);
 
 		void onEvent(const sf::Event &event) override;
 
-		void update() override;
-
-		void setTexturePack(const std::string &texturePack) { m_texturePack = texturePack; }
-
 	private:
+		void updateWidgetPosition();
+
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		TextInput m_textInput;
-
-		TextButton m_connectButton;
-		TextButton m_cancelButton;
-
-		Text m_errorText;
+		std::string m_host;
+		u16 m_port;
 
 		std::string m_texturePack;
+
+		Text m_text;
+
+		TextButton m_reconnectButton;
+		TextButton m_cancelButton;
 };
 
-#endif // SERVERCONNECTSTATE_HPP_
+#endif // CONNECTIONERRORSTATE_HPP_

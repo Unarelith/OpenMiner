@@ -31,6 +31,7 @@
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "Config.hpp"
+#include "ConnectionErrorState.hpp"
 #include "GameState.hpp"
 #include "ServerLoadingState.hpp"
 #include "TextureAtlas.hpp"
@@ -45,10 +46,10 @@ ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, c
 	m_text.updateVertexBuffer();
 	m_text.setScale(Config::guiScale * 2, Config::guiScale * 2);
 
+	centerText();
+
 	m_host = host;
 	m_port = port;
-
-	centerText();
 
 	// FIXME: SFML_RAW_MOUSE
 	// gk::Mouse::setCursorVisible(true);
@@ -79,12 +80,10 @@ void ServerLoadingState::update() {
 			m_isConnected = true;
 		}
 		catch (ClientConnectException &e) {
-			// TODO: Add a state to display this message instead of printing to the console
-
-			gkError() << "Failed to connect to" << m_host + std::to_string(m_port) + ":" << e.what();
-
 			m_stateStack->pop(); // GameState
 			m_stateStack->pop(); // ServerLoadingState
+
+			m_stateStack->push<ConnectionErrorState>(e.what(), m_host, m_port, m_texturePack, m_parent);
 		}
 	}
 
