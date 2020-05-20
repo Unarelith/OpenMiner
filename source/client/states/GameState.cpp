@@ -49,6 +49,8 @@
 GameState::GameState()
 	: m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
+	Registry::setInstance(m_registry);
+
 	initShaders();
 
 	m_clientCommandHandler.setupCallbacks();

@@ -55,7 +55,6 @@ class TitleScreenState : public InterfaceState {
 
 	private:
 		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
-		void onServerOnlineEvent(const ServerOnlineEvent &event);
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
@@ -65,14 +64,9 @@ class TitleScreenState : public InterfaceState {
 
 		std::thread m_thread;
 
-		u16 m_port = 4242;
-
-		bool m_showLoadingState = false;
-
-		bool m_isServerOnline = false;
-		bool m_isServerLaunched = false;
-
 		std::string m_texturePack;
+
+		u16 m_port = 4242;
 };
 
 #endif // TITLESCREENSTATE_HPP_

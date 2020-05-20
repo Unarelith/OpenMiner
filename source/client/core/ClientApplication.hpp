@@ -30,7 +30,6 @@
 #include <gk/core/CoreApplication.hpp>
 
 #include "KeyboardHandler.hpp"
-#include "Registry.hpp"
 
 class ClientApplication : public gk::CoreApplication {
 	public:
@@ -47,8 +46,6 @@ class ClientApplication : public gk::CoreApplication {
 		static void initOpenGL();
 
 		KeyboardHandler m_keyboardHandler;
-
-		Registry m_registry;
 
 		std::string m_host = "localhost";
 		u16 m_port = 4242;

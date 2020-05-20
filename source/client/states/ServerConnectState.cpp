@@ -45,7 +45,6 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 	m_connectButton.setScale(Config::guiScale, Config::guiScale);
 	m_connectButton.setCallback([this](TextButton &) {
 		size_t sep = m_textInput.text().find_first_of(':');
-
 		std::string host = m_textInput.text().substr(0, sep);
 
 		int port = 0;
@@ -53,29 +52,30 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 			port = std::stoi(m_textInput.text().substr(sep + 1));
 		}
 		catch (const std::invalid_argument &e) {
-			std::cerr << "Error: Invalid server address." << std::endl;
+			// TODO: Use m_errorText
+			gkError() << "Error: Invalid server address.";
 		}
 
 		auto &game = m_stateStack->push<GameState>();
 
-		try {
-			game.connect(host, port);
+		// try {
+		// 	game.connect(host, port);
 
-			auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, true, this);
+			auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, true, host, port, this);
 			serverLoadingState.setTexturePack(m_texturePack);
-		}
-		catch (ClientConnectException &e) {
-			gkError() << e.what();
-
-			m_stateStack->pop();
-
-			m_errorText.setText(e.what());
-			m_errorText.updateVertexBuffer();
-			m_errorText.setPosition(
-				Config::screenWidth / 2.0f - m_errorText.getSize().x * Config::guiScale / 2.0f,
-				Config::screenHeight / 2.0f - 30 * Config::guiScale
-			);
-		}
+		// }
+		// catch (ClientConnectException &e) {
+		// 	gkError() << e.what();
+        //
+		// 	m_stateStack->pop();
+        //
+		// 	m_errorText.setText(e.what());
+		// 	m_errorText.updateVertexBuffer();
+		// 	m_errorText.setPosition(
+		// 		Config::screenWidth / 2.0f - m_errorText.getSize().x * Config::guiScale / 2.0f,
+		// 		Config::screenHeight / 2.0f - 30 * Config::guiScale
+		// 	);
+		// }
 	});
 
 	m_cancelButton.setText("Cancel");
@@ -85,8 +85,8 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 		m_stateStack->pop();
 	});
 
-	m_errorText.setColor(gk::Color::Red);
-	m_errorText.setScale(Config::guiScale, Config::guiScale);
+	// m_errorText.setColor(gk::Color::Red);
+	// m_errorText.setScale(Config::guiScale, Config::guiScale);
 }
 
 void ServerConnectState::onEvent(const sf::Event &event) {
@@ -99,10 +99,10 @@ void ServerConnectState::onEvent(const sf::Event &event) {
 		m_connectButton.setPosition(Config::screenWidth / 2.0f - m_connectButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 340);
 		m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 261);
 
-		m_errorText.setPosition(
-			Config::screenWidth / 2.0f - m_errorText.getSize().x * Config::guiScale / 2.0f,
-			Config::screenHeight / 2.0f - 30 * Config::guiScale
-		);
+		// m_errorText.setPosition(
+		// 	Config::screenWidth / 2.0f - m_errorText.getSize().x * Config::guiScale / 2.0f,
+		// 	Config::screenHeight / 2.0f - 30 * Config::guiScale
+		// );
 	}
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
@@ -128,8 +128,8 @@ void ServerConnectState::draw(gk::RenderTarget &target, gk::RenderStates states)
 		target.draw(m_connectButton, states);
 		target.draw(m_cancelButton, states);
 
-		if (!m_errorText.text().empty())
-			target.draw(m_errorText, states);
+		// if (!m_errorText.text().empty())
+		// 	target.draw(m_errorText, states);
 	}
 }
 

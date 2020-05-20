@@ -101,8 +101,6 @@ void ClientApplication::init() {
 	m_resourceHandler.add<Font>("font-ascii", "texture-font", "resources/textures/font.properties");
 	m_resourceHandler.add<TextureAtlas>("atlas-blocks");
 
-	Registry::setInstance(m_registry);
-
 	auto &titleScreen = m_stateStack.push<TitleScreenState>(m_port);
 	if (m_argumentParser.getArgument("texture-pack").isFound)
 		titleScreen.setTexturePack(m_argumentParser.getArgument("texture-pack").parameter);

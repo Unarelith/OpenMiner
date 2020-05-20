@@ -43,6 +43,8 @@ class WorldController {
 
 		void init(PlayerList &players);
 
+		void clearEntities();
+
 		void update();
 
 		void load(const std::string &name);

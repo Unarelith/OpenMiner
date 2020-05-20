@@ -96,6 +96,12 @@ int ServerApplication::run(bool isProtected) {
 				m_eventHandler->emplaceEvent<ServerOnlineEvent>(false, 0);
 
 			std::cerr << "Fatal error " << e.what() << std::endl;
+
+			// TODO: Send server offline event here
+
+			m_registry.clear();
+			m_worldController.clearEntities();
+
 			return 1;
 		}
 	}
@@ -104,7 +110,10 @@ int ServerApplication::run(bool isProtected) {
 		mainLoop();
 	}
 
+	// TODO: Send server offline event here
+
 	m_registry.clear();
+	m_worldController.clearEntities();
 
 	return 0;
 }

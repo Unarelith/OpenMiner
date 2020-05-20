@@ -40,6 +40,7 @@
 #include "Config.hpp"
 #include "HUD.hpp"
 #include "PlayerBox.hpp"
+#include "Registry.hpp"
 
 class TextureAtlas;
 
@@ -88,6 +89,8 @@ class GameState : public gk::ApplicationState {
 		HUD m_hud{m_player, m_world, m_clientCommandHandler};
 
 		TextureAtlas &m_textureAtlas;
+
+		Registry m_registry;
 };
 
 #endif // GAMESTATE_HPP_

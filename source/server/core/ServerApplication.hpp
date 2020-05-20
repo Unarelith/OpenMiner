@@ -45,6 +45,10 @@ struct ServerOnlineEvent {
 	int port;
 };
 
+// TODO: Add server offline event to tell the clients that the server is closed
+//       The best way would be to create a dedicated state displaying the error message
+//       allowing to reconnect or to go back to title screen
+
 class ServerApplication {
 	public:
 		ServerApplication(int argc = 0, char **argv = nullptr);

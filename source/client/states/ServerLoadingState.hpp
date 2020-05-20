@@ -31,10 +31,13 @@
 #include "Text.hpp"
 
 class GameState;
+struct ServerOnlineEvent;
 
 class ServerLoadingState : public InterfaceState {
 	public:
-		ServerLoadingState(GameState &game, bool showLoadingState, gk::ApplicationState *parent = nullptr);
+		ServerLoadingState(GameState &game, bool showLoadingState, const std::string &host, u16 port, gk::ApplicationState *parent = nullptr);
+
+		void init() override;
 
 		void centerText();
 
@@ -45,6 +48,8 @@ class ServerLoadingState : public InterfaceState {
 		void setTexturePack(const std::string &texturePack) { m_texturePack = texturePack; }
 
 	private:
+		void onServerOnlineEvent(const ServerOnlineEvent &event);
+
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		Text m_text;
@@ -55,6 +60,12 @@ class ServerLoadingState : public InterfaceState {
 		mutable bool m_hasBeenRendered = false;
 
 		std::string m_texturePack;
+
+		bool m_isServerOnline = false;
+		bool m_isConnected = false;
+
+		std::string m_host;
+		u16 m_port = 4242;
 };
 
 #endif // SERVERLOADINGSTATE_HPP_

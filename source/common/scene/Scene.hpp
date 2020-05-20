@@ -38,6 +38,8 @@ class Scene {
 
 		virtual void update();
 
+		void clear() { m_registry.clear(); }
+
 		entt::entity createEntityFromModel(entt::registry &modelRegistry, entt::entity modelEntity);
 
 		const entt::registry &registry() const { return m_registry; }

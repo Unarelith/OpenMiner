@@ -34,7 +34,7 @@
 #include "SettingsMenuState.hpp"
 #include "TitleScreenState.hpp"
 
-#include "ServerApplication.hpp"
+#include "ServerApplication.hpp" // For ServerOnlineEvent
 
 TitleScreenState::TitleScreenState(u16 port) : m_port(port) {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -71,7 +71,6 @@ void TitleScreenState::centerBackground() {
 
 void TitleScreenState::init() {
 	m_eventHandler->addListener<GuiScaleChangedEvent>(&TitleScreenState::onGuiScaleChanged, this);
-	m_eventHandler->addListener<ServerOnlineEvent>(&TitleScreenState::onServerOnlineEvent, this);
 }
 
 void TitleScreenState::onEvent(const sf::Event &event) {
@@ -90,18 +89,14 @@ void TitleScreenState::onEvent(const sf::Event &event) {
 }
 
 void TitleScreenState::update() {
-	if (m_isServerOnline) {
-		auto &game = m_stateStack->push<GameState>();
-		game.setSingleplayer(true);
-		game.connect("localhost", m_port);
-
-		auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, m_showLoadingState, this);
-		serverLoadingState.setTexturePack(m_texturePack);
-	}
 }
 
 void TitleScreenState::startSingleplayer(bool showLoadingState) {
-	m_showLoadingState = showLoadingState;
+	auto &game = m_stateStack->push<GameState>();
+	game.setSingleplayer(true);
+
+	auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, showLoadingState, "localhost", sf::Socket::AnyPort, this);
+	serverLoadingState.setTexturePack(m_texturePack);
 
 	if (m_thread.joinable())
 		m_thread.join();
@@ -112,20 +107,11 @@ void TitleScreenState::startSingleplayer(bool showLoadingState) {
 		app.setPort(sf::Socket::AnyPort);
 		app.run();
 	});
-
-	m_isServerLaunched = true;
 }
 
 void TitleScreenState::startMultiplayer(const std::string &host) {
 	auto &game = m_stateStack->push<GameState>();
-	try {
-		game.connect(host, m_port);
-	}
-	catch (ClientConnectException &e) {
-		throw EXCEPTION(e.what());
-	}
-
-	auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, false, this);
+	auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, false, host, m_port, this);
 	serverLoadingState.setTexturePack(m_texturePack);
 }
 
@@ -135,19 +121,12 @@ void TitleScreenState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 	m_menuWidget.onGuiScaleChanged(event);
 }
 
-void TitleScreenState::onServerOnlineEvent(const ServerOnlineEvent &event) {
-	m_isServerOnline = event.isOnline;
-	m_port = event.port;
-
-	m_isServerLaunched = false;
-}
-
 void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	prepareDraw(target, states);
 
 	target.draw(m_background, states);
 
-	if (&m_stateStack->top() == this && !m_isServerLaunched && !m_isServerOnline) {
+	if (&m_stateStack->top() == this) {
 		target.draw(m_menuWidget, states);
 	}
 }

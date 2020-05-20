@@ -36,6 +36,11 @@ void WorldController::init(PlayerList &players) {
 	}
 }
 
+void WorldController::clearEntities() {
+	for (auto &it : m_worldList)
+		it.scene().clear();
+}
+
 void WorldController::update() {
 	for (auto &it : m_worldList)
 		it.update();

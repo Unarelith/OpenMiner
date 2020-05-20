@@ -35,7 +35,9 @@
 #include "ServerLoadingState.hpp"
 #include "TextureAtlas.hpp"
 
-ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, gk::ApplicationState *parent)
+#include "ServerApplication.hpp" // For ServerOnlineEvent
+
+ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, const std::string &host, u16 port, gk::ApplicationState *parent)
 	: InterfaceState(parent), m_game(game), m_showLoadingState(showLoadingState)
 {
 	m_text.setText("Loading world...");
@@ -43,11 +45,18 @@ ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, g
 	m_text.updateVertexBuffer();
 	m_text.setScale(Config::guiScale * 2, Config::guiScale * 2);
 
+	m_host = host;
+	m_port = port;
+
 	centerText();
 
 	// FIXME: SFML_RAW_MOUSE
 	// gk::Mouse::setCursorVisible(true);
 	// gk::Mouse::setCursorGrabbed(false);
+}
+
+void ServerLoadingState::init() {
+	m_eventHandler->addListener<ServerOnlineEvent>(&ServerLoadingState::onServerOnlineEvent, this);
 }
 
 void ServerLoadingState::centerText() {
@@ -64,7 +73,23 @@ void ServerLoadingState::onEvent(const sf::Event &event) {
 }
 
 void ServerLoadingState::update() {
-	m_game.client().update();
+	if (!m_isConnected && (m_isServerOnline || m_port != 0)) {
+		try {
+			m_game.connect(m_host, m_port);
+			m_isConnected = true;
+		}
+		catch (ClientConnectException &e) {
+			// TODO: Add a state to display this message instead of printing to the console
+
+			gkError() << "Failed to connect to" << m_host + std::to_string(m_port) + ":" << e.what();
+
+			m_stateStack->pop(); // GameState
+			m_stateStack->pop(); // ServerLoadingState
+		}
+	}
+
+	if (m_isConnected)
+		m_game.client().update();
 
 	if (m_game.clientCommandHandler().isRegistryInitialized()) {
 		if (m_game.textureAtlas().isReady() && (m_hasBeenRendered || !m_showLoadingState)) {
@@ -88,6 +113,11 @@ void ServerLoadingState::update() {
 			}
 		}
 	}
+}
+
+void ServerLoadingState::onServerOnlineEvent(const ServerOnlineEvent &event) {
+	m_isServerOnline = event.isOnline;
+	m_port = event.port;
 }
 
 void ServerLoadingState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
