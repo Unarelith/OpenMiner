@@ -29,6 +29,10 @@
 
 #include <sol.hpp>
 
+#include <entt/entt.hpp>
+
+#include "ItemStack.hpp"
+
 class LuaMod;
 class WorldController;
 
@@ -41,8 +45,17 @@ class LuaEntityLoader {
 		void spawnEntity(const std::string &entityID, const sol::table &table) const;
 
 	private:
+		void tryLoadCallbacks(const sol::table &table, entt::registry &registry, entt::entity entity) const;
+		void tryLoadVisual(const sol::table &table, entt::registry &registry, entt::entity entity) const;
+		void tryLoadRotation(const sol::table &table, entt::registry &registry, entt::entity entity) const;
+		void tryLoadAnimation(const sol::table &table, entt::registry &registry, entt::entity entity) const;
+		void tryLoadHitbox(const sol::table &table, entt::registry &registry, entt::entity entity) const;
+		ItemStack *tryLoadItemStack(const sol::table &table, entt::registry &registry, entt::entity entity) const;
+
 		LuaMod &m_mod;
 		WorldController &m_worldController;
+
+		mutable std::string m_stringID;
 };
 
 #endif // LUAENTITYLOADER_HPP_
