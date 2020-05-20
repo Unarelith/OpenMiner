@@ -34,12 +34,18 @@
 
 class Scene {
 	public:
-		virtual void update() { for (auto &controller : m_controllers) controller->update(m_registry); }
+		Scene();
+
+		virtual void update();
+
+		entt::entity createEntityFromModel(entt::registry &modelRegistry, entt::entity modelEntity);
 
 		const entt::registry &registry() const { return m_registry; }
 		entt::registry &registry() { return m_registry; }
 
 	protected:
+		void registerComponents();
+
 		mutable entt::registry m_registry;
 
 		std::deque<std::unique_ptr<AbstractController>> m_controllers;

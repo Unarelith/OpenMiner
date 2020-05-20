@@ -35,6 +35,7 @@
 #include "PositionComponent.hpp"
 #include "Registry.hpp"
 #include "RotationComponent.hpp"
+#include "WorldController.hpp"
 
 void LuaEntityLoader::loadEntity(const sol::table &table) const {
 	std::string stringID = m_mod.id() + ":" + table["id"].get<std::string>();
@@ -101,8 +102,6 @@ void LuaEntityLoader::loadEntity(const sol::table &table) const {
 	}
 }
 
-#include "WorldController.hpp"
-
 void LuaEntityLoader::spawnEntity(const std::string &entityID, const sol::table &table) const {
 	gk::Vector3f pos;
 	u16 dim;
@@ -125,43 +124,27 @@ void LuaEntityLoader::spawnEntity(const std::string &entityID, const sol::table 
 		stack.setAmount(itemStack.value()[2].get_or(1));
 	}
 
-	// Create entity copy here
-	entt::registry &registry = Registry::getInstance().entityRegistry();
-	entt::entity entityModel = Registry::getInstance().getEntityFromStringID(entityID);
-	if (entityModel != entt::null) {
+	entt::registry &modelRegistry = Registry::getInstance().entityRegistry();
+	entt::entity modelEntity = Registry::getInstance().getEntityFromStringID(entityID);
+	if (modelEntity != entt::null) {
 		ServerWorld &world = m_worldController.getWorld(dim);
-		entt::registry &sceneRegistry = world.scene().registry();
-		entt::entity entity = sceneRegistry.create();
+		Scene &scene = world.scene();
+		entt::registry &registry = scene.registry();
+		entt::entity entity = scene.createEntityFromModel(modelRegistry, modelEntity);
 
-		sceneRegistry.emplace<PositionComponent>(entity, pos.x, pos.y, pos.z, dim);
-		sceneRegistry.emplace<NetworkComponent>(entity, entity);
+		registry.emplace<PositionComponent>(entity, pos.x, pos.y, pos.z, dim);
+		registry.emplace<NetworkComponent>(entity, entity);
 
-		if (registry.has<RotationComponent>(entityModel))
-			sceneRegistry.emplace<RotationComponent>(entity);
-
-		auto *luaCallbackComponent = registry.try_get<LuaCallbackComponent>(entityModel);
-		if (luaCallbackComponent)
-			sceneRegistry.emplace<LuaCallbackComponent>(entity, *luaCallbackComponent);
-
-		auto *drawable = registry.try_get<DrawableDef>(entityModel);
-		if (drawable) {
-			auto &drawableDef = sceneRegistry.emplace<DrawableDef>(entity, *drawable);
-			if (stack.amount()) {
-				auto &cube = drawableDef.getInventoryCubeDef();
+		// FIXME: This code is too specific to the item drop entity
+		if (stack.amount()) {
+			auto *drawable = registry.try_get<DrawableDef>(entity);
+			if (drawable) {
+				auto &cube = drawable->getInventoryCubeDef();
 				cube.blockID = stack.item().stringID();
 			}
+
+			registry.emplace<ItemStack>(entity, stack);
 		}
-
-		auto *animation = registry.try_get<AnimationComponent>(entityModel);
-		if (animation)
-			sceneRegistry.emplace<AnimationComponent>(entity, *animation);
-
-		auto *hitbox = registry.try_get<gk::DoubleBox>(entityModel);
-		if (hitbox)
-			sceneRegistry.emplace<gk::DoubleBox>(entity, *hitbox);
-
-		if (stack.amount())
-			sceneRegistry.emplace<ItemStack>(entity, stack);
 	}
 	else
 		gkError() << "In mod '" + m_mod.id() + "': Cannot find entity with id '" + entityID + "'";
