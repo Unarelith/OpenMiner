@@ -106,6 +106,8 @@ class Registry : public ISerializable {
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
+		void clear();
+
 		const std::vector<std::unique_ptr<Block>> &blocks() const { return m_blocks; }
 		const std::vector<Item> &items() const { return m_items; }
 		const std::vector<Tree> &trees() const { return m_trees; }

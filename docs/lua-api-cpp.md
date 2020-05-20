@@ -10,6 +10,7 @@
 - `string label()`
 - `string mod_name()`
 - `bool is_opaque()`
+- `ItemStack get_item_drop()`
 
 ## BlockData
 
@@ -39,6 +40,17 @@
 
 - `u16 id()`
 
+## Dimension
+
+- `u16 id()`
+
+## EntityWrapper
+
+- `entt::entity id()`
+- `PositionComponent *position()`
+- `NetworkComponent *network()`
+- `ItemStack *item_stack()`
+
 ## Inventory
 
 - `void add_stack(string name, u16 amount)`
@@ -49,8 +61,8 @@
 
 - `u16 id()`
 - `string name()`
-- `u16 burn_time()`
-- `bool is_fuel()`
+- `bool has_group(string groupName)`
+- `u16 get_group_value(string groupName)`
 
 ## ItemStack
 
@@ -106,6 +118,14 @@
 ## ServerModLoader
 
 - `LuaMod *register_mod(string mod_id)` (see [Lua Mod API](/lua-api-mod#example))
+
+## ServerPlayer
+
+- `const ClientInfo &client()`
+
+## ServerWorld
+
+- `u16 dimension()`
 
 ## World
 

@@ -68,6 +68,44 @@ You'll need to create a local variable at the beginning of the file:
 local modpath = mod:path()
 ```
 
+## Utility functions
+
+### `despawn_entity`
+
+Despawn an entity.
+
+Example:
+```lua
+mod:despawn_entity(entity)
+```
+
+**NB:** `entity` is an `EntityWrapper` instance here. Currently, only `on_collision` entity callback can use it.
+
+### `give_item_stack`
+
+Give an item stack to a player.
+
+Example:
+```lua
+mod:give_item_stack(player, item_stack)
+```
+
+### `spawn_entity`
+
+Spawn an entity.
+
+Example:
+```lua
+mod:spawn_entity("default:item_drop", {
+	position = {pos.x + 0.5, pos.y + 0.5, pos.z + 0.5},
+	dimension = world:dimension():id(),
+
+	item_stack = {block:get_item_drop():item():string_id(), block:get_item_drop():amount()}
+})
+```
+
+See [entity page](/lua-api-entity#entity-spawn-parameters) for more information about the available fields in the table.
+
 ## Registration functions
 
 ### `block`
@@ -81,6 +119,10 @@ Defines a biome from a table, see [this page](lua-api-biome.md) for more informa
 ### `dimension`
 
 Defines a dimension from a table, see [this page](lua-api-dimension.md) for more information.
+
+### `entity`
+
+Defines an entity from a table, see [this page](lua-api-entity.md) for more information.
 
 ### `item`
 

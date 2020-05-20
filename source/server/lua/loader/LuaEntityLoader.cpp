@@ -114,6 +114,11 @@ void LuaEntityLoader::tryLoadVisual(const sol::table &table, entt::registry &reg
 			if (origin != sol::nullopt) {
 				cube.origin = {origin.value()[1], origin.value()[2], origin.value()[3]};
 			}
+
+			sol::optional<std::string> blockID = visual.value()["block_id"];
+			if (blockID != sol::nullopt) {
+				cube.blockID = blockID.value();
+			}
 		}
 		else
 			gkError() << "For entity '" + m_stringID + "': Visual type '" + type + "' unknown";
