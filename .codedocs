@@ -24,7 +24,7 @@ DOXYFILE = doc/Doxyfile
 #   TAGLINKS = doxygen/doxygen CodeDocs/osg
 # Note: these repositories must already be built on CodeDocs.
 
-TAGLINKS = Quent42340/GameKit
+TAGLINKS = Unarelith/GameKit
 
 #---------------------------------------------------------------------------
 # Doxygen Configuration
