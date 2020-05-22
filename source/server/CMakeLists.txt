@@ -60,29 +60,6 @@ endif()
 #------------------------------------------------------------------------------
 # Link options
 #------------------------------------------------------------------------------
-if (UNIX)
-	set (UNIX_LIBS -ldl)
-endif ()
-
-target_link_libraries(${PROJECT_NAME}_lib
-                      sfml-system
-                      sfml-network
-                      sol2
-                      lua_static
-                      glm)
-
-target_link_libraries(${PROJECT_NAME}
-                      ${PROJECT_NAME}_lib
-                      ${CMAKE_PROJECT_NAME}_common
-                      gamekit
-                      tinyxml2
-                      libglew_static
-                      sol2
-                      lua_static
-                      sfml-system
-                      sfml-network
-                      zlib
-                      glm
-                      ${OPENGL_LIBRARIES}
-                      ${UNIX_LIBS})
+target_link_libraries(${PROJECT_NAME}_lib PUBLIC ${CMAKE_PROJECT_NAME}_common)
+target_link_libraries(${PROJECT_NAME}     PRIVATE ${PROJECT_NAME}_lib)
 

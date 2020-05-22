@@ -43,25 +43,5 @@ endif()
 #------------------------------------------------------------------------------
 # Link options
 #------------------------------------------------------------------------------
-if (UNIX)
-	set (UNIX_LIBS -ldl -lpthread)
-endif ()
-
-target_link_libraries(${PROJECT_NAME}
-                      ${CMAKE_PROJECT_NAME}_server_lib
-                      ${CMAKE_PROJECT_NAME}_common
-                      gamekit
-                      tinyxml2
-                      libglew_static
-                      sol2
-                      lua_static
-                      sfml-system
-                      sfml-window
-                      sfml-network
-                      sfml-graphics
-                      sfml-audio
-                      zlib
-                      glm
-                      ${OPENGL_LIBRARIES}
-                      ${UNIX_LIBS})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_PROJECT_NAME}_server_lib)
 

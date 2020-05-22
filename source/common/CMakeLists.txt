@@ -20,11 +20,12 @@ endforeach(HEADER_FILE)
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
 add_dependencies(${PROJECT_NAME}
-                 zlib
-                 EnTT
-                 gamekit
-                 lua_static
-                 sol2)
+	zlib
+	EnTT
+	gamekit
+	lua_static
+	sol2
+)
 
 #------------------------------------------------------------------------------
 # Compiler flags
@@ -41,12 +42,16 @@ target_compile_options(${PROJECT_NAME} PRIVATE -DSOL_CHECK_ARGUMENTS -DSOL_PRINT
 
 # target_compile_options(${PROJECT_NAME} PRIVATE -pg)
 
-target_link_libraries(${PROJECT_NAME}
-                      sfml-system
-                      sfml-network
-                      tinyxml2
-                      zlib
-                      sol2
-                      lua_static
-                      glm)
+if (UNIX)
+	set (UNIX_LIBS -ldl -lpthread)
+endif ()
+
+target_link_libraries(${PROJECT_NAME} PUBLIC
+	sol2
+	lua_static
+	gamekit
+	zlib
+	${OPENGL_LIBRARIES}
+	${UNIX_LIBS}
+)
 
