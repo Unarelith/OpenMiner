@@ -54,6 +54,9 @@ class Dimension : public ISerializable {
 		const std::string &sky() const { return m_sky; }
 		void setSky(const std::string &sky) { m_sky = sky; }
 
+		float gravity() const { return m_gravity; }
+		void setGravity(float gravity) { m_gravity = gravity; }
+
 		static void initUsertype(sol::state &lua);
 
 	private:
@@ -65,6 +68,8 @@ class Dimension : public ISerializable {
 		std::vector<std::string> m_biomes;
 
 		std::string m_sky;
+
+		float m_gravity = 1.f;
 };
 
 #endif // DIMENSION_HPP_

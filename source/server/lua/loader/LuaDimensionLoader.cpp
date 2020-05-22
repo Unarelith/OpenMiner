@@ -38,6 +38,7 @@ void LuaDimensionLoader::loadDimension(const sol::table &table) const {
 	if (biomesObject.valid() && biomesObject.get_type() == sol::type::table) {
 		Dimension &dimension = Registry::getInstance().registerDimension(id, name);
 		dimension.setSky(table["sky"].get<std::string>());
+		dimension.setGravity(table["gravity"].get_or(1.f));
 
 		sol::table biomesTable = biomesObject.as<sol::table>();
 		for (auto &it : biomesTable) {

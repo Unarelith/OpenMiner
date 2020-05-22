@@ -99,7 +99,6 @@ class ClientPlayer : public Player {
 		glm::vec3 m_velocity{0.f};
 		bool m_isJumping = false;
 
-		const float m_gravity = 0.001f;
 		const float m_jumpSpeed = 0.06f;
 };
 

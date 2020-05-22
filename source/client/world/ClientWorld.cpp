@@ -95,7 +95,7 @@ void ClientWorld::checkPlayerChunk(double playerX, double playerY, double player
 
 	ClientChunk *chunk = (ClientChunk *)getChunk(pcx, pcy, pcz);
 	if (!chunk) {
-		m_chunks.emplace(gk::Vector3i{pcx, pcy, pcz}, new ClientChunk(pcx, pcy, pcz, *this, m_textureAtlas));
+		m_chunks.emplace(gk::Vector3i{pcx, pcy, pcz}, new ClientChunk(pcx, pcy, pcz, *m_dimension, *this, m_textureAtlas));
 	}
 }
 
@@ -104,10 +104,11 @@ void ClientWorld::clear() {
 	m_scene.registry().clear();
 }
 
-void ClientWorld::updateSky(u16 dimensionID) {
+void ClientWorld::changeDimension(u16 dimensionID) {
 	const Dimension &dimension = Registry::getInstance().getDimension(dimensionID);
-	const Sky &sky = Registry::getInstance().getSkyFromStringID(dimension.sky());
+	m_dimension = &dimension;
 
+	const Sky &sky = Registry::getInstance().getSkyFromStringID(dimension.sky());
 	m_sky = &sky;
 }
 
@@ -118,7 +119,7 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 	// Get the chunk from the map or create it if it doesn't exist
 	ClientChunk *chunk = (ClientChunk *)getChunk(cx, cy, cz);
 	if (!chunk) {
-		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ClientChunk(cx, cy, cz, *this, m_textureAtlas));
+		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ClientChunk(cx, cy, cz, *m_dimension, *this, m_textureAtlas));
 		chunk = it.first->second.get();
 	}
 
@@ -204,7 +205,7 @@ void ClientWorld::createChunkNeighbours(ClientChunk *chunk) {
 
 		ClientChunk *neighbour = (ClientChunk *)getChunk(scx, scy, scz);
 		if (!neighbour) {
-			auto it = m_chunks.emplace(gk::Vector3i{scx, scy, scz}, new ClientChunk(scx, scy, scz, *this, m_textureAtlas));
+			auto it = m_chunks.emplace(gk::Vector3i{scx, scy, scz}, new ClientChunk(scx, scy, scz, *m_dimension, *this, m_textureAtlas));
 			neighbour = it.first->second.get();
 		}
 
@@ -214,7 +215,7 @@ void ClientWorld::createChunkNeighbours(ClientChunk *chunk) {
 }
 
 void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	// glClearColor used to be called in updateSky(), but when "toggling fullscreen mode"
+	// glClearColor used to be called in changeDimension(), but when "toggling fullscreen mode"
 	// with SFML, you actually recreate a window. Thus, all the glEnable/glDisable/glClearColor
 	// states are cleared when fullscreen mode is enabled/disabled.
 	if (m_sky)

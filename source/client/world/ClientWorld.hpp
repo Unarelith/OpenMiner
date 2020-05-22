@@ -53,7 +53,7 @@ class ClientWorld : public World, public gk::Drawable {
 
 		void clear();
 
-		void updateSky(u16 dimensionID);
+		void changeDimension(u16 dimensionID);
 
 		void receiveChunkData(Network::Packet &packet);
 		void removeChunk(ChunkMap::iterator &it);
@@ -72,6 +72,8 @@ class ClientWorld : public World, public gk::Drawable {
 		void createChunkNeighbours(ClientChunk *chunk);
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		const Dimension *m_dimension = nullptr;
 
 		ClientScene m_scene;
 

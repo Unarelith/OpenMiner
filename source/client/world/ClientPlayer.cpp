@@ -127,7 +127,7 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 	ClientChunk *chunk = (ClientChunk *)world.getChunkAtBlockPos(m_x, m_y, m_z);
 	if (chunk && chunk->isInitialized()) {
 		if (!Config::isFlyModeEnabled) {
-			m_velocity.z -= m_gravity; // Gravity
+			m_velocity.z -= chunk->dimension().gravity() * 0.001f;
 
 			m_isJumping = true;
 

@@ -32,17 +32,20 @@
 #include "Chunk.hpp"
 #include "ChunkBuilder.hpp"
 #include "Config.hpp"
+#include "Dimension.hpp"
 
 class TextureAtlas;
 
 class ClientChunk : public Chunk {
 	public:
-		ClientChunk(s32 x, s32 y, s32 z, World &world, TextureAtlas &textureAtlas)
-			: Chunk(x, y, z, world), m_textureAtlas(textureAtlas), m_builder{textureAtlas} {}
+		ClientChunk(s32 x, s32 y, s32 z, const Dimension &dimension, World &world, TextureAtlas &textureAtlas)
+			: Chunk(x, y, z, world), m_dimension(dimension), m_textureAtlas(textureAtlas), m_builder{textureAtlas} {}
 
 		void update();
 
 		void drawLayer(gk::RenderTarget &target, gk::RenderStates states, u8 layer) const;
+
+		const Dimension &dimension() const { return m_dimension; }
 
 		bool hasBeenRequested() const { return m_hasBeenRequested; }
 		void setHasBeenRequested(bool hasBeenRequested) { m_hasBeenRequested = hasBeenRequested; }
@@ -53,6 +56,8 @@ class ClientChunk : public Chunk {
 		bool areAllNeighboursTooFar() const;
 
 	private:
+		const Dimension &m_dimension;
+
 		TextureAtlas &m_textureAtlas;
 
 		ChunkBuilder m_builder;

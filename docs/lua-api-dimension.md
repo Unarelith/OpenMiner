@@ -24,6 +24,17 @@ Example:
 biomes = {"default:grassland", "default:desert"}
 ```
 
+### `gravity`
+
+Gravity of the dimension.
+
+Example:
+```lua
+gravity = 0.5
+```
+
+Default value is `1`.
+
 ### `id`
 
 ID of the dimension. **Mandatory field.**

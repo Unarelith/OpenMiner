@@ -28,11 +28,11 @@
 #include "NetworkUtils.hpp"
 
 void Dimension::serialize(sf::Packet &packet) const {
-	packet << m_id << m_stringID << m_name << m_biomes << m_sky;
+	packet << m_id << m_stringID << m_name << m_biomes << m_sky << m_gravity;
 }
 
 void Dimension::deserialize(sf::Packet &packet) {
-	packet >> m_id >> m_stringID >> m_name >> m_biomes >> m_sky;
+	packet >> m_id >> m_stringID >> m_name >> m_biomes >> m_sky >> m_gravity;
 }
 
 // Please update 'docs/lua-api-cpp.md' if you change this
