@@ -11,8 +11,8 @@
 - [Wiki](#wiki)
 - [Keys](#keys)
 - [How to compile](#how-to-compile)
-    - [Using Linux](#using-linux)
     - [Using Windows](#using-windows)
+    - [Using Linux](#using-linux)
     - [Using MacOS](#using-macos)
 - [Discussion](#discussion)
 - [Project status](#project-status)
@@ -50,30 +50,29 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 
 ## How to compile
 
-### Using Linux
-
-- Dependencies:
-    - A compiler with C++17 support (GCC >= 7.0 or clang >= 5.0)
-    - [CMake](http://www.cmake.org/download/) (>= 3.12.4)
-    - [Lua](http://www.lua.org)
-    - [GameKit dependencies](https://github.com/Unarelith/GameKit#how-to-compile)
-    - _Linux users: Check your distribution repositories for packages._
-- Run `cmake -B build . && cmake --build build -j8`
-- Or `mkdir build && cd build && cmake .. && make -j8 && cd ..` (for old CMake versions)
-- Run the client with `./build/openminer`
-- If you want a multiplayer game, run the server with `./build/openminer_server`
-
 ### Using Windows
 
 - [Wiki: Compiling on Windows using CMake and MinGW-w64](https://github.com/Unarelith/OpenMiner/wiki/Compiling-on-Windows-with-MinGW-w64)
 - [Wiki: Compiling on Windows using CMake and Visual Studio 2017](https://github.com/Unarelith/OpenMiner/wiki/Compiling-on-Windows-with-Visual-Studio-2017)
 
+### Using Linux
+
+- Dependencies:
+    - A compiler with C++17 support (GCC >= 7.0 or clang >= 5.0)
+    - `git` and [CMake](http://www.cmake.org/download/) (>= 3.12.4)
+    - _Check your distribution repositories for packages._
+- Run `cmake -B build . && cmake --build build -j8`
+- Or `mkdir build && cd build && cmake .. && make -j8 && cd ..` (for old CMake versions)
+- Run the client with `./build/openminer`
+- If you want a multiplayer game, run the server with `./build/openminer_server`
+
 ### Using MacOS
 
-- Dependencies (using Homebrew):
+- Dependencies:
     - A compiler with C++17 support (GCC >= 7.0 or clang >= 5.0)
-    - `brew install cmake tinyxml2 glm`
-    - **Optional:** `brew install ninja` (much faster builds)
+    - `git` and [CMake](http://www.cmake.org/download/) (>= 3.12.4)
+    - **Optional:** `ninja` (much faster builds)
+    - _Check Homebrew for packages._
 - Run `cmake -B build . && cmake --build build`; if you installed `ninja` above, add `-GNinja` before `-B` in the previous command.
 - Run the client with `./build/openminer`
 - If you want a multiplayer game, run the server with `./build/openminer_server`
