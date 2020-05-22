@@ -23,13 +23,6 @@ addons:
             - libxi-dev
             - g++-8
             - cmake
-            - cxxtest
-            - libtinyxml2-dev
-            - libglm-dev
-            - liblua5.2-dev
-
-before_install:
-  - sudo cp /usr/include/lua5.2/* /usr/include/
 
 script:
   - mkdir build
