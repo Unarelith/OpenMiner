@@ -39,3 +39,20 @@ void Player::deserialize(sf::Packet &packet) {
 	packet >> m_x >> m_y >> m_z >> m_dimension >> m_inventory;
 }
 
+// Please update 'docs/lua-api-cpp.md' if you change this
+void Player::initUsertype(sol::state &lua) {
+	lua.new_usertype<Player>("Player",
+		"inventory", &Player::inventory,
+
+		"x", &Player::x,
+		"y", &Player::y,
+		"z", &Player::z,
+		"set_position", &Player::setPosition,
+
+		"dimension", &Player::dimension,
+		"set_dimension", &Player::setDimension,
+
+		"client_id", &Player::clientID
+	);
+}
+

@@ -91,3 +91,10 @@ void ServerBlock::onBlockDestroyed(const glm::ivec3 &pos, World &world) const {
 	}
 }
 
+// Please update 'docs/lua-api-cpp.md' if you change this
+void ServerBlock::initUsertype(sol::state &lua) {
+	lua.new_usertype<ServerBlock>("ServerBlock",
+		sol::base_classes, sol::bases<Block>()
+	);
+}
+

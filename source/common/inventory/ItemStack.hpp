@@ -43,6 +43,8 @@ class ItemStack {
 		u16 amount() const { return m_amount; }
 		void setAmount(u16 amount) { m_amount = amount; }
 
+		static void initUsertype(sol::state &lua);
+
 	private:
 		std::string m_stringID;
 

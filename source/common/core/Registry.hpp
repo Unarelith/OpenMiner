@@ -108,6 +108,8 @@ class Registry : public ISerializable {
 
 		void clear();
 
+		static void initUsertype(sol::state &lua);
+
 		const std::vector<std::unique_ptr<Block>> &blocks() const { return m_blocks; }
 		const std::vector<Item> &items() const { return m_items; }
 		const std::vector<Tree> &trees() const { return m_trees; }

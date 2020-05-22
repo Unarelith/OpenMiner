@@ -401,3 +401,11 @@ inline ServerWorld &ServerCommandHandler::getWorldForClient(u16 clientID) {
 	return m_worldController.getWorld(player->dimension());
 }
 
+// Please update 'docs/lua-api-cpp.md' if you change this
+void ServerCommandHandler::initUsertype(sol::state &lua) {
+	lua.new_usertype<ServerCommandHandler>("ServerCommandHandler",
+		"send_player_change_dimension", &ServerCommandHandler::sendPlayerChangeDimension,
+		"send_chat_message", &ServerCommandHandler::sendChatMessage
+	);
+}
+

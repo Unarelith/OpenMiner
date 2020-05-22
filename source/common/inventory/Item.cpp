@@ -45,3 +45,13 @@ void Item::deserialize(sf::Packet &packet) {
 		>> m_miningSpeed >> m_harvestCapability >> m_groups;
 }
 
+// Please update 'docs/lua-api-cpp.md' if you change this
+void Item::initUsertype(sol::state &lua) {
+	lua.new_usertype<Item>("Item",
+		"id", &Item::id,
+		"string_id", &Item::stringID,
+		"has_group", &Item::hasGroup,
+		"get_group_value", &Item::getGroupValue
+	);
+}
+

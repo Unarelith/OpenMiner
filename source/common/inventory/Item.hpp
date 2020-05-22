@@ -71,6 +71,8 @@ class Item : public ISerializable {
 			return it->second;
 		}
 
+		static void initUsertype(sol::state &lua);
+
 	protected:
 		bool m_isBlock = false;
 

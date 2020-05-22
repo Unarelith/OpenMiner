@@ -94,6 +94,8 @@ class BlockMetadata : public ISerializable {
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
+		static void initUsertype(sol::state &lua);
+
 	private:
 		std::unordered_map<std::string, BlockMetadataValue> m_data;
 };

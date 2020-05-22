@@ -83,3 +83,17 @@ void BlockMetadata::deserialize(sf::Packet &packet) {
 	}
 }
 
+// Please update 'docs/lua-api-cpp.md' if you change this
+void BlockMetadata::initUsertype(sol::state &lua) {
+	lua.new_usertype<BlockMetadata>("BlockMetadata",
+		"get_string", &BlockMetadata::getLuaObject<std::string>,
+		"set_string", &BlockMetadata::setString,
+
+		"get_int", &BlockMetadata::getLuaObject<int>,
+		"set_int", &BlockMetadata::setInt,
+
+		"get_bool", &BlockMetadata::getLuaObject<bool>,
+		"set_bool", &BlockMetadata::setBool
+	);
+}
+

@@ -284,3 +284,27 @@ void Registry::clear() {
 	m_entityRegistry.clear();
 }
 
+// Please update 'docs/lua-api-cpp.md' if you change this
+void Registry::initUsertype(sol::state &lua) {
+	lua.new_usertype<Registry>("Registry",
+		"get_block",  &Registry::getBlock,
+		"get_item",   &Registry::getItem,
+		"get_sky",    &Registry::getSky,
+		"get_tree",   &Registry::getTree,
+		"get_biome",  &Registry::getBiome,
+		"get_recipe", &Registry::getRecipe,
+
+		"get_block_from_string", &Registry::getBlockFromStringID,
+		"get_item_from_string",  &Registry::getItemFromStringID,
+		"get_sky_from_string",   &Registry::getSkyFromStringID,
+		"get_tree_from_string",  &Registry::getTreeFromStringID,
+		"get_biome_from_string", &Registry::getBiomeFromStringID,
+
+		"blocks", &Registry::blocks,
+		"items", &Registry::items,
+		"trees", &Registry::trees,
+		"biomes", &Registry::biomes,
+		"dimensions", &Registry::dimensions
+	);
+}
+

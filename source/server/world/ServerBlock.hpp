@@ -50,6 +50,8 @@ class ServerBlock : public Block {
 		void setOnBlockPlaced(const sol::protected_function &function) { m_onBlockPlaced = function; }
 		void setOnBlockDestroyed(const sol::protected_function &function) { m_onBlockDestroyed = function; }
 
+		static void initUsertype(sol::state &lua);
+
 	private:
 		sol::protected_function m_onBlockActivated;
 		sol::protected_function m_onTick;

@@ -45,6 +45,8 @@ class EntityWrapper {
 		NetworkComponent *getNetworkComponent() const { return m_registry.try_get<NetworkComponent>(m_id); }
 		ItemStack *getItemStack() const { return m_registry.try_get<ItemStack>(m_id); }
 
+		static void initUsertype(sol::state &lua);
+
 	private:
 		entt::entity m_id;
 		entt::registry &m_registry;

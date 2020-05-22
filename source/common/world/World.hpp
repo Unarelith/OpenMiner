@@ -48,6 +48,8 @@ class World {
 
 		virtual void onBlockPlaced(int, int, int, const Block &) {}
 
+		static void initUsertype(sol::state &lua);
+
 		static bool isReloadRequested;
 };
 

@@ -86,3 +86,10 @@ LuaMod &ServerModLoader::registerMod(const std::string &name) {
 	return m_mods.at(name);
 }
 
+// Please update 'docs/lua-api-cpp.md' if you change this
+void ServerModLoader::initUsertype(sol::state &lua) {
+	lua.new_usertype<ServerModLoader>("ServerModLoader",
+		"register_mod", &ServerModLoader::registerMod
+	);
+}
+

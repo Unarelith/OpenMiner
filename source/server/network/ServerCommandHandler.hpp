@@ -33,6 +33,8 @@
 
 #include <entt/entt.hpp>
 
+#include <sol.hpp>
+
 #include "ChatCommandHandler.hpp"
 
 struct BlockData;
@@ -77,6 +79,8 @@ class ServerCommandHandler {
 		void setPlayerPosition(u16 clientID, s32 x, s32 y, s32 z);
 
 		const Server &server() const { return m_server; }
+
+		static void initUsertype(sol::state &lua);
 
 	private:
 		ServerWorld &getWorldForClient(u16 clientID);

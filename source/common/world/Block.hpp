@@ -120,6 +120,8 @@ class Block : public ISerializable {
 			return it->second;
 		}
 
+		static void initUsertype(sol::state &lua);
+
 	protected:
 		glm::vec4 getTexCoordsFromID(int textureID) const;
 

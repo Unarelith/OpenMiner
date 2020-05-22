@@ -168,3 +168,12 @@ Chunk *ServerWorld::getChunk(int cx, int cy, int cz) const {
 	return it->second.get();
 }
 
+// Please update 'docs/lua-api-cpp.md' if you change this
+void ServerWorld::initUsertype(sol::state &lua) {
+	lua.new_usertype<ServerWorld>("ServerWorld",
+		sol::base_classes, sol::bases<World>(),
+
+		"dimension", &ServerWorld::dimension
+	);
+}
+

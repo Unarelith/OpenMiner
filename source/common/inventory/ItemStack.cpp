@@ -31,6 +31,14 @@ const Item &ItemStack::item() const {
 	return Registry::getInstance().getItemFromStringID(m_stringID);
 }
 
+// Please update 'docs/lua-api-cpp.md' if you change this
+void ItemStack::initUsertype(sol::state &lua) {
+	lua.new_usertype<ItemStack>("ItemStack",
+		"amount", &ItemStack::amount,
+		"item", &ItemStack::item
+	);
+}
+
 sf::Packet &operator<<(sf::Packet &packet, const ItemStack &itemStack) {
 	return packet << itemStack.item().stringID() << itemStack.amount();
 }

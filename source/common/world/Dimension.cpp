@@ -35,3 +35,10 @@ void Dimension::deserialize(sf::Packet &packet) {
 	packet >> m_id >> m_stringID >> m_name >> m_biomes >> m_sky;
 }
 
+// Please update 'docs/lua-api-cpp.md' if you change this
+void Dimension::initUsertype(sol::state &lua) {
+	lua.new_usertype<Dimension>("Dimension",
+		"id", &Dimension::id
+	);
+}
+

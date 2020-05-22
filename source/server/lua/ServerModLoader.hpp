@@ -46,6 +46,8 @@ class ServerModLoader {
 
 		LuaMod &registerMod(const std::string &name);
 
+		static void initUsertype(sol::state &lua);
+
 	private:
 		ScriptEngine &m_scriptEngine;
 		Registry &m_registry;

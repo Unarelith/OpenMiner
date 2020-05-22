@@ -60,3 +60,16 @@ void Block::deserialize(sf::Packet &packet) {
 	m_drawType = BlockDrawType(drawType);
 }
 
+// Please update 'docs/lua-api-cpp.md' if you change this
+void Block::initUsertype(sol::state &lua) {
+	lua.new_usertype<Block>("Block",
+		"id", &Block::id,
+		"data", &Block::data,
+		"string_id", &Block::stringID,
+		"label", &Block::label,
+		"mod_name", &Block::modName,
+		"is_opaque", &Block::isOpaque,
+		"get_item_drop", &Block::getItemDrop
+	);
+}
+

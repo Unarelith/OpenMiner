@@ -55,6 +55,8 @@ class Player : public ISerializable {
 
 		const gk::FloatBox &hitbox() const { return m_hitbox; }
 
+		static void initUsertype(sol::state &lua);
+
 	protected:
 		double m_x = 0;
 		double m_y = 0;

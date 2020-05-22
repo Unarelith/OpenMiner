@@ -197,3 +197,17 @@ bool Chunk::areAllNeighboursInitialized() const {
 		&& m_surroundingChunks[Chunk::Top]    && m_surroundingChunks[Chunk::Top]->isInitialized();
 }
 
+// Please update 'docs/lua-api-cpp.md' if you change this
+void Chunk::initUsertype(sol::state &lua) {
+	lua.new_usertype<Chunk>("Chunk",
+		"get_block", &Chunk::getBlock,
+		"set_block", &Chunk::setBlock,
+
+		"get_data", &Chunk::getData,
+		"set_data", &Chunk::setData,
+
+		"get_block_data", &Chunk::getBlockData,
+		"add_block_data", &Chunk::addBlockData
+	);
+}
+

@@ -71,6 +71,8 @@ class ServerWorld : public World {
 
 		void setServer(ServerCommandHandler *server) { m_server = server; m_scene.setServer(server); }
 
+		static void initUsertype(sol::state &lua);
+
 	private:
 		const Dimension &m_dimension;
 

@@ -52,62 +52,22 @@ void ScriptEngine::init() {
 }
 
 void ScriptEngine::initUsertypes() {
-	m_lua.new_usertype<EntityWrapper>("EntityWrapper",
-		"id", &EntityWrapper::id,
-
-		"position", &EntityWrapper::getPositionComponent,
-		"network", &EntityWrapper::getNetworkComponent,
-		"item_stack", &EntityWrapper::getItemStack
-	);
-
-	m_lua.new_usertype<Registry>("Registry",
-		"get_block",  &Registry::getBlock,
-		"get_item",   &Registry::getItem,
-		"get_sky",    &Registry::getSky,
-		"get_tree",   &Registry::getTree,
-		"get_biome",  &Registry::getBiome,
-		"get_recipe", &Registry::getRecipe,
-
-		"get_block_from_string", &Registry::getBlockFromStringID,
-		"get_item_from_string",  &Registry::getItemFromStringID,
-		"get_sky_from_string",   &Registry::getSkyFromStringID,
-		"get_tree_from_string",  &Registry::getTreeFromStringID,
-		"get_biome_from_string", &Registry::getBiomeFromStringID,
-
-		"blocks", &Registry::blocks,
-		"items", &Registry::items,
-		"trees", &Registry::trees,
-		"biomes", &Registry::biomes,
-		"dimensions", &Registry::dimensions
-	);
-
-	m_lua.new_usertype<World>("World",
-		"get_block", &World::getBlock,
-		"set_block", &World::setBlock,
-
-		"get_data", &World::getData,
-		"set_data", &World::setData,
-
-		"get_block_data", &World::getBlockData,
-		"add_block_data", &World::addBlockData
-	);
-
-	m_lua.new_usertype<ServerWorld>("ServerWorld",
-		sol::base_classes, sol::bases<World>(),
-
-		"dimension", &ServerWorld::dimension
-	);
-
-	m_lua.new_usertype<Chunk>("Chunk",
-		"get_block", &Chunk::getBlock,
-		"set_block", &Chunk::setBlock,
-
-		"get_data", &Chunk::getData,
-		"set_data", &Chunk::setData,
-
-		"get_block_data", &Chunk::getBlockData,
-		"add_block_data", &Chunk::addBlockData
-	);
+	Block               ::initUsertype(m_lua);
+	BlockMetadata       ::initUsertype(m_lua);
+	Chunk               ::initUsertype(m_lua);
+	Dimension           ::initUsertype(m_lua);
+	EntityWrapper       ::initUsertype(m_lua);
+	Inventory           ::initUsertype(m_lua);
+	Item                ::initUsertype(m_lua);
+	ItemStack           ::initUsertype(m_lua);
+	Player              ::initUsertype(m_lua);
+	Registry            ::initUsertype(m_lua);
+	ServerBlock         ::initUsertype(m_lua);
+	ServerCommandHandler::initUsertype(m_lua);
+	ServerModLoader     ::initUsertype(m_lua);
+	ServerPlayer        ::initUsertype(m_lua);
+	World               ::initUsertype(m_lua);
+	ServerWorld         ::initUsertype(m_lua);
 
 	m_lua.new_usertype<BlockData>("BlockData",
 		"inventory", &BlockData::inventory,
@@ -115,64 +75,9 @@ void ScriptEngine::initUsertypes() {
 		"use_alt_tiles", &BlockData::useAltTiles
 	);
 
-	m_lua.new_usertype<Dimension>("Dimension",
-		"id", &Dimension::id
-	);
-
-	m_lua.new_usertype<Block>("Block",
-		"id", &Block::id,
-		"data", &Block::data,
-		"string_id", &Block::stringID,
-		"label", &Block::label,
-		"mod_name", &Block::modName,
-		"is_opaque", &Block::isOpaque,
-		"get_item_drop", &Block::getItemDrop
-	);
-
-	m_lua.new_usertype<ServerBlock>("ServerBlock",
-		sol::base_classes, sol::bases<Block>()
-	);
-
-	m_lua.new_usertype<Player>("Player",
-		"inventory", &Player::inventory,
-
-		"x", &Player::x,
-		"y", &Player::y,
-		"z", &Player::z,
-		"set_position", &Player::setPosition,
-
-		"dimension", &Player::dimension,
-		"set_dimension", &Player::setDimension,
-
-		"client_id", &Player::clientID
-	);
-
-	m_lua.new_usertype<ServerPlayer>("ServerPlayer",
-		sol::base_classes, sol::bases<Player>(),
-		"client", &ServerPlayer::client
-	);
-
-	m_lua.new_usertype<Inventory>("Inventory",
-		"add_stack", sol::overload(&Inventory::addStack, &Inventory::addStack2),
-		"get_stack", &Inventory::getStack,
-		"set_stack", &Inventory::setStack
-	);
-
 	m_lua.new_usertype<Recipe>("Recipe",
 		"type", &Recipe::type,
 		"result", &Recipe::result
-	);
-
-	m_lua.new_usertype<ItemStack>("ItemStack",
-		"amount", &ItemStack::amount,
-		"item", &ItemStack::item
-	);
-
-	m_lua.new_usertype<Item>("Item",
-		"id", &Item::id,
-		"string_id", &Item::stringID,
-		"has_group", &Item::hasGroup,
-		"get_group_value", &Item::getGroupValue
 	);
 
 	m_lua.new_usertype<glm::ivec3>("ivec3",
@@ -181,28 +86,8 @@ void ScriptEngine::initUsertypes() {
 		"z", &glm::ivec3::z
 	);
 
-	m_lua.new_usertype<BlockMetadata>("BlockMetadata",
-		"get_string", &BlockMetadata::getLuaObject<std::string>,
-		"set_string", &BlockMetadata::setString,
-
-		"get_int", &BlockMetadata::getLuaObject<int>,
-		"set_int", &BlockMetadata::setInt,
-
-		"get_bool", &BlockMetadata::getLuaObject<bool>,
-		"set_bool", &BlockMetadata::setBool
-	);
-
 	m_lua.new_usertype<ClientInfo>("ClientInfo",
 		"id", &ClientInfo::id
-	);
-
-	m_lua.new_usertype<ServerCommandHandler>("ServerCommandHandler",
-		"send_player_change_dimension", &ServerCommandHandler::sendPlayerChangeDimension,
-		"send_chat_message", &ServerCommandHandler::sendChatMessage
-	);
-
-	m_lua.new_usertype<ServerModLoader>("ServerModLoader",
-		"register_mod", &ServerModLoader::registerMod
 	);
 
 	LuaCore::initUsertype(m_lua);

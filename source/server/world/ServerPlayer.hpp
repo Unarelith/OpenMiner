@@ -36,6 +36,8 @@ class ServerPlayer : public Player {
 
 		const ClientInfo &client() const { return m_client; }
 
+		static void initUsertype(sol::state &lua);
+
 	private:
 		ClientInfo &m_client;
 };

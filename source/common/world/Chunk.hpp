@@ -103,6 +103,8 @@ class Chunk : public gk::NonCopyable {
 
 		u32 data(int x, int y, int z) const { return m_data[z][y][x]; }
 
+		static void initUsertype(sol::state &lua);
+
 	protected:
 		s32 m_x;
 		s32 m_y;

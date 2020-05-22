@@ -97,3 +97,12 @@ void Inventory::deserialize(sf::Packet &packet) {
 	}
 }
 
+// Please update 'docs/lua-api-cpp.md' if you change this
+void Inventory::initUsertype(sol::state &lua) {
+	lua.new_usertype<Inventory>("Inventory",
+		"add_stack", sol::overload(&Inventory::addStack, &Inventory::addStack2),
+		"get_stack", &Inventory::getStack,
+		"set_stack", &Inventory::setStack
+	);
+}
+

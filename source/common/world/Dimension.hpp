@@ -32,6 +32,8 @@
 
 #include <gk/core/IntTypes.hpp>
 
+#include <sol.hpp>
+
 #include "ISerializable.hpp"
 
 class Dimension : public ISerializable {
@@ -51,6 +53,8 @@ class Dimension : public ISerializable {
 
 		const std::string &sky() const { return m_sky; }
 		void setSky(const std::string &sky) { m_sky = sky; }
+
+		static void initUsertype(sol::state &lua);
 
 	private:
 		u16 m_id = 0;

@@ -24,17 +24,16 @@
  *
  * =====================================================================================
  */
-#include "ServerPlayer.hpp"
-
-ServerPlayer::ServerPlayer(ClientInfo &client) : m_client(client) {
-	m_clientID = client.id;
-}
+#include "EntityWrapper.hpp"
 
 // Please update 'docs/lua-api-cpp.md' if you change this
-void ServerPlayer::initUsertype(sol::state &lua) {
-	lua.new_usertype<ServerPlayer>("ServerPlayer",
-		sol::base_classes, sol::bases<Player>(),
-		"client", &ServerPlayer::client
+void EntityWrapper::initUsertype(sol::state &lua) {
+	lua.new_usertype<EntityWrapper>("EntityWrapper",
+		"id", &EntityWrapper::id,
+
+		"position", &EntityWrapper::getPositionComponent,
+		"network", &EntityWrapper::getNetworkComponent,
+		"item_stack", &EntityWrapper::getItemStack
 	);
 }
 

@@ -70,6 +70,8 @@ class Inventory : public ISerializable {
 		bool isUnlimited() const { return m_isUnlimited; }
 		void setUnlimited(bool isUnlimited) { m_isUnlimited = isUnlimited; }
 
+		static void initUsertype(sol::state &lua);
+
 	private:
 		std::string m_name;
 

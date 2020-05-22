@@ -84,3 +84,18 @@ void World::setData(int x, int y, int z, u16 data) const {
 	if (chunk)
 		chunk->setData(x & (CHUNK_WIDTH - 1), y & (CHUNK_DEPTH - 1), z & (CHUNK_HEIGHT - 1), data);
 }
+
+// Please update 'docs/lua-api-cpp.md' if you change this
+void World::initUsertype(sol::state &lua) {
+	lua.new_usertype<World>("World",
+		"get_block", &World::getBlock,
+		"set_block", &World::setBlock,
+
+		"get_data", &World::getData,
+		"set_data", &World::setData,
+
+		"get_block_data", &World::getBlockData,
+		"add_block_data", &World::addBlockData
+	);
+}
+
