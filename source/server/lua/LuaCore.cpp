@@ -35,10 +35,12 @@ void LuaCore::addListener(LuaEventType eventType, const sol::function &listener)
 }
 
 void LuaCore::initUsertype(sol::state &lua) {
-	lua["EventType"] = lua.create_table_with(
-		"OnBlockPlaced", LuaEventType::OnBlockPlaced,
-		"OnBlockDigged", LuaEventType::OnBlockDigged,
-		"OnBlockActivated", LuaEventType::OnBlockActivated
+	lua["Event"] = lua.create_table_with(
+		"BlockPlaced", LuaEventType::BlockPlaced,
+		"BlockDigged", LuaEventType::BlockDigged,
+		"BlockActivated", LuaEventType::BlockActivated,
+
+		"PlayerConnected", LuaEventType::PlayerConnected
 	);
 
 	lua["ServerConfig"] = lua.create_table_with(

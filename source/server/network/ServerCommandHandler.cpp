@@ -196,8 +196,7 @@ void ServerCommandHandler::setupCallbacks() {
 		auto &player = m_players.addPlayer(client);
 		player.setPosition(m_spawnPosition.x, m_spawnPosition.y, m_spawnPosition.z);
 
-		// FIXME: Find a better way to give starting items
-		m_scriptEngine.lua()["init"](player);
+		m_scriptEngine.luaCore().onEvent(LuaEventType::PlayerConnected, glm::ivec3{m_spawnPosition.x, m_spawnPosition.y, m_spawnPosition.z}, player, client, *this);
 
 		Network::Packet invPacket;
 		invPacket << Network::Command::PlayerInvUpdate << client.id;
@@ -266,7 +265,7 @@ void ServerCommandHandler::setupCallbacks() {
 			world.setBlock(x, y, z, block & 0xffff);
 			const Block &blockDef = Registry::getInstance().getBlock(block & 0xffff);
 
-			m_scriptEngine.luaCore().onEvent(LuaEventType::OnBlockPlaced, glm::ivec3{x, y, z}, blockDef, *player, world, client, *this);
+			m_scriptEngine.luaCore().onEvent(LuaEventType::BlockPlaced, glm::ivec3{x, y, z}, blockDef, *player, world, client, *this);
 
 			Network::Packet answer;
 			answer << Network::Command::BlockUpdate << x << y << z << block;
@@ -286,7 +285,7 @@ void ServerCommandHandler::setupCallbacks() {
 			const Block &blockDef = Registry::getInstance().getBlock(world.getBlock(x, y, z));
 			world.setBlock(x, y, z, 0);
 
-			m_scriptEngine.luaCore().onEvent(LuaEventType::OnBlockDigged, glm::ivec3{x, y, z}, blockDef, *player, world, client, *this);
+			m_scriptEngine.luaCore().onEvent(LuaEventType::BlockDigged, glm::ivec3{x, y, z}, blockDef, *player, world, client, *this);
 
 			Network::Packet answer;
 			answer << Network::Command::BlockUpdate << x << y << z << u32(0);
@@ -341,7 +340,7 @@ void ServerCommandHandler::setupCallbacks() {
 			bool hasBeenActivated = block.onBlockActivated({x, y, z}, *player, world, client, *this, screenWidth, screenHeight, guiScale);
 
 			if (hasBeenActivated)
-				m_scriptEngine.luaCore().onEvent(LuaEventType::OnBlockActivated, glm::ivec3{x, y, z}, block, *player, world, client, *this);
+				m_scriptEngine.luaCore().onEvent(LuaEventType::BlockActivated, glm::ivec3{x, y, z}, block, *player, world, client, *this);
 		}
 		else
 			gkError() << ("Failed to activate block using player " + std::to_string(client.id) + ": Player not found").c_str();

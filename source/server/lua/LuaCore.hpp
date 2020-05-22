@@ -36,9 +36,11 @@ class Registry;
 class ServerModLoader;
 
 enum class LuaEventType {
-	OnBlockPlaced,
-	OnBlockDigged,
-	OnBlockActivated
+	BlockPlaced,
+	BlockDigged,
+	BlockActivated,
+
+	PlayerConnected,
 };
 
 class LuaCore {

@@ -37,46 +37,54 @@ dofile("trees.lua")
 dofile("biomes.lua")
 dofile("dimensions.lua")
 
--- openminer:add_listener(EventType.OnBlockPlaced, function(pos, block, player, world, client, server)
--- 	server:send_chat_message(0, "Block placed at " .. pos.x .. ";" .. pos.y .. ";" .. pos.z .. " by Client" .. player:client_id(), client);
+-- openminer:add_listener(Event.BlockPlaced, function(pos, block, player, world, client, server)
+-- 	server:send_chat_message(0, "Block placed at " .. pos.x .. ";" .. pos.y .. ";" .. pos.z .. " by Client" .. player:client_id(), client)
 -- end)
 
--- openminer:add_listener(EventType.OnBlockDigged, function(pos, block, player, world, client, server)
--- 	server:send_chat_message(0, "Block digged at " .. pos.x .. ";" .. pos.y .. ";" .. pos.z .. " by Client" .. player:client_id(), client);
+-- openminer:add_listener(Event.BlockDigged, function(pos, block, player, world, client, server)
+-- 	server:send_chat_message(0, "Block digged at " .. pos.x .. ";" .. pos.y .. ";" .. pos.z .. " by Client" .. player:client_id(), client)
 -- end)
 
-openminer:add_listener(EventType.OnBlockActivated, function(pos, block, player, world, client, server)
+openminer:add_listener(Event.BlockActivated, function(pos, block, player, world, client, server)
 	if block:string_id() == "default:portal" then
-		server:send_chat_message(0, "Swoosh! Changing dimension...", client);
+		server:send_chat_message(0, "Swoosh! Changing dimension...", client)
 	end
 end)
 
-function init(player)
+openminer:add_listener(Event.PlayerConnected, function(pos, player, client, server)
+	local starting_items = {
+		{"default:workbench",       1},
+		{"default:dirt",           64},
+		{"default:grass",          64},
+		{"default:stone",          64},
+		{"default:glass",          64},
+		{"default:glowstone",      64},
+		{"default:furnace",         1},
+		{"default:stone_pickaxe",   1},
+		{"default:stone_axe",       1},
+
+		{"default:oak_wood",       64},
+		{"default:oak_planks",     64},
+		{"default:cobblestone",    64},
+		{"default:stick",          64},
+		{"default:stone_hoe",       1},
+		{"default:stone_shovel",    1},
+		{"default:iron_ore",       64},
+		{"default:coal",           64},
+
+		{"default:iron_ingot",     64},
+		{"default:gold_ingot",     64},
+		{"default:diamond",        64}
+	}
+
+
 	local player_inv = player:inventory()
+	for _, v in ipairs(starting_items) do
+		player_inv:add_stack(v[1], v[2])
+	end
 
-	player_inv:add_stack("default:workbench", 1);
-	player_inv:add_stack("default:dirt", 64);
-	player_inv:add_stack("default:grass", 64);
-	player_inv:add_stack("default:stone", 64);
-	player_inv:add_stack("default:glass", 64);
-	player_inv:add_stack("default:glowstone", 64);
-	player_inv:add_stack("default:furnace", 1);
-	player_inv:add_stack("default:stone_pickaxe", 1);
-	player_inv:add_stack("default:stone_axe", 1);
-
-	player_inv:add_stack("default:oak_wood", 64);
-	player_inv:add_stack("default:oak_planks", 64);
-	player_inv:add_stack("default:cobblestone", 64);
-	player_inv:add_stack("default:stick", 64);
-	player_inv:add_stack("default:stone_hoe", 1);
-	player_inv:add_stack("default:stone_shovel", 1);
-	player_inv:add_stack("default:iron_ore", 64);
-	player_inv:add_stack("default:coal", 64);
-
-	player_inv:add_stack("default:iron_ingot", 64);
-	player_inv:add_stack("default:gold_ingot", 64);
-	player_inv:add_stack("default:diamond", 64);
-end
+	server:send_chat_message(0, "Welcome to OpenMiner!", client)
+end)
 
 local modpath = mod:path()
 
@@ -175,12 +183,12 @@ mod:entity {
 	},
 
 	on_collision = function(entity, player, server)
-		mods["default"]:give_item_stack(player, entity:item_stack());
+		mods["default"]:give_item_stack(player, entity:item_stack())
 		mods["default"]:despawn_entity(entity)
 	end,
 }
 
-openminer:add_listener(EventType.OnBlockDigged, function(pos, block, player, world, client, server)
+openminer:add_listener(Event.BlockDigged, function(pos, block, player, world, client, server)
 	if ServerConfig.useItemDrops then
 		mods["default"]:spawn_entity("default:item_drop", {
 			position = {pos.x + 0.5, pos.y + 0.5, pos.z + 0.5},
