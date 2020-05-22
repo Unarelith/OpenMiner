@@ -29,7 +29,7 @@
 
 #include <glm/vec3.hpp>
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 #include "LuaCore.hpp"
 

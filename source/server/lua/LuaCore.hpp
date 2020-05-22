@@ -30,7 +30,7 @@
 #include <functional>
 #include <iostream>
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 class Registry;
 class ServerModLoader;

@@ -32,7 +32,7 @@ bool ServerConfig::useItemDrops = false;
 #include <gk/core/Debug.hpp>
 #include <gk/core/Filesystem.hpp>
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 void ServerConfig::loadConfigFromFile(const char *file) {
 	if (gk::Filesystem::fileExists(file)) {

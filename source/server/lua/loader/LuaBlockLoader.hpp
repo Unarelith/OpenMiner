@@ -27,7 +27,7 @@
 #ifndef LUABLOCKLOADER_HPP_
 #define LUABLOCKLOADER_HPP_
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 class Item;
 class LuaMod;

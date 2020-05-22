@@ -32,7 +32,7 @@
 
 #include <gk/core/IntTypes.hpp>
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 #include "ISerializable.hpp"
 

@@ -27,7 +27,7 @@
 #ifndef LUAITEMLOADER_HPP_
 #define LUAITEMLOADER_HPP_
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 class LuaMod;
 

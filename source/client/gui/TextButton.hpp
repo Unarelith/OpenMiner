@@ -29,7 +29,7 @@
 
 #include <functional>
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 #include <gk/graphics/Image.hpp>
 

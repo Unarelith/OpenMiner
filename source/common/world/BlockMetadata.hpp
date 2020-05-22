@@ -31,7 +31,7 @@
 #include <string>
 #include <unordered_map>
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 #include <gk/core/IntTypes.hpp>
 #include <gk/core/Exception.hpp>

@@ -67,6 +67,8 @@ endif ()
 target_link_libraries(${PROJECT_NAME}_lib
                       sfml-system
                       sfml-network
+                      sol2
+                      lua_static
                       glm)
 
 target_link_libraries(${PROJECT_NAME}
@@ -75,6 +77,7 @@ target_link_libraries(${PROJECT_NAME}
                       gamekit
                       tinyxml2
                       libglew_static
+                      sol2
                       lua_static
                       sfml-system
                       sfml-network

@@ -27,7 +27,7 @@
 #ifndef LUACALLBACKCOMPONENT_HPP_
 #define LUACALLBACKCOMPONENT_HPP_
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 struct LuaCallbackComponent {
 	sol::unsafe_function collisionCallback;

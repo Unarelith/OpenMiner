@@ -33,7 +33,7 @@
 
 #include <entt/entt.hpp>
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 #include "ChatCommandHandler.hpp"
 

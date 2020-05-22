@@ -27,7 +27,7 @@
 #ifndef LUAENTITYLOADER_HPP_
 #define LUAENTITYLOADER_HPP_
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 #include <entt/entt.hpp>
 

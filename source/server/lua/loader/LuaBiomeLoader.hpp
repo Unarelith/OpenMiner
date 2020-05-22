@@ -27,7 +27,7 @@
 #ifndef LUABIOMELOADER_HPP_
 #define LUABIOMELOADER_HPP_
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 class Biome;
 class LuaMod;

@@ -27,7 +27,7 @@
 #ifndef LUADIMENSIONLOADER_HPP_
 #define LUADIMENSIONLOADER_HPP_
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 class LuaMod;
 

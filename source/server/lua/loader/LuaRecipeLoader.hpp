@@ -27,7 +27,7 @@
 #ifndef LUARECIPELOADER_HPP_
 #define LUARECIPELOADER_HPP_
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 class LuaMod;
 

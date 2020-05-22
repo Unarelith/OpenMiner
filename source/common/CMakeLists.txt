@@ -23,7 +23,8 @@ add_dependencies(${PROJECT_NAME}
                  zlib
                  EnTT
                  gamekit
-                 lua_static)
+                 lua_static
+                 sol2)
 
 #------------------------------------------------------------------------------
 # Compiler flags
@@ -45,6 +46,7 @@ target_link_libraries(${PROJECT_NAME}
                       sfml-network
                       tinyxml2
                       zlib
+                      sol2
                       lua_static
                       glm)
 

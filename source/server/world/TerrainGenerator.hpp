@@ -31,7 +31,7 @@
 
 #include <random.hpp>
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 #include "TerrainBiomeSampler.hpp"
 

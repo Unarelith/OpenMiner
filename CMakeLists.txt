@@ -100,7 +100,9 @@ add_subdirectory(external/lua)
 #------------------------------------------------------------------------------
 # - sol3 (sol2 v3.x)
 #------------------------------------------------------------------------------
-include_directories(external/sol2/single/include/sol)
+set(LUA_LOCAL_DIR external/lua)
+
+add_subdirectory(external/sol2)
 
 #------------------------------------------------------------------------------
 # Subdirectories

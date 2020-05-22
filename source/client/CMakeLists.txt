@@ -53,6 +53,7 @@ target_link_libraries(${PROJECT_NAME}
                       gamekit
                       tinyxml2
                       libglew_static
+                      sol2
                       lua_static
                       sfml-system
                       sfml-window

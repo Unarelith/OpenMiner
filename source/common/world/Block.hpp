@@ -29,7 +29,7 @@
 
 #include <glm/glm.hpp>
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 #include <gk/core/Box.hpp>
 #include <gk/core/IntTypes.hpp>

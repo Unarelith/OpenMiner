@@ -27,7 +27,7 @@
 #ifndef LUASKYLOADER_HPP_
 #define LUASKYLOADER_HPP_
 
-#include <sol.hpp>
+#include <sol/sol.hpp>
 
 class LuaMod;
 
