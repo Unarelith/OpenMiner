@@ -88,14 +88,14 @@ This list is non exhaustive.
 
 ### Implemented features
 
-- Menus (title screen, server selection, pause menu, settings menu)
+- Menus (title screen, server selection, pause, settings)
 - Basic worldgen (biomes, lakes, trees, flowers, pseudo-caves)
 - Infinite world in X/Y/Z axis ([#25](https://github.com/Unarelith/OpenMiner/pull/25))
-- Lighting system with smooth lighting
+- Smooth lighting
 - Networking ([#20](https://github.com/Unarelith/OpenMiner/pull/20))
 - Chat system with support for commands ([#57](https://github.com/Unarelith/OpenMiner/pull/57))
 - Lua API
-	- Block/item/recipe/biome/tree/sky/dimension definition
+	- Block/item/recipe/biome/tree/sky/dimension/entity definition
 	- Custom GUI creation
 - Special blocks (workbench, furnace)
 - Block metadata
@@ -103,7 +103,7 @@ This list is non exhaustive.
 - Dimensions (like the Nether or the Ender in Minecraft) ([#80](https://github.com/Unarelith/OpenMiner/pull/80))
 - World loading/saving (using `/save <name>` and `/load <name>` commands, see [#26](https://github.com/Unarelith/OpenMiner/issues/26))
 - Texture pack system (partially implemented, see [#34](https://github.com/Unarelith/OpenMiner/issues/34))
-- Entities (block drops, mobs, etc...) ([#90](https://github.com/Unarelith/OpenMiner/pull/90))
+- Entities ([#90](https://github.com/Unarelith/OpenMiner/pull/90))
 
 ### Missing features
 
