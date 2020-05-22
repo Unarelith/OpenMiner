@@ -64,18 +64,22 @@ if (UNIX)
 	set (UNIX_LIBS -ldl)
 endif ()
 
-target_link_libraries(${PROJECT_NAME}_lib sfml-system sfml-network)
+target_link_libraries(${PROJECT_NAME}_lib
+                      sfml-system
+                      sfml-network
+                      glm)
 
 target_link_libraries(${PROJECT_NAME}
                       ${PROJECT_NAME}_lib
                       ${CMAKE_PROJECT_NAME}_common
                       gamekit
-                      ${OPENGL_LIBRARIES}
-                      ${TINYXML2_LIBRARIES}
-                      ${GLEW_LIBRARIES}
-                      ${LUA_LIBRARIES}
+                      tinyxml2
+                      libglew_static
+                      lua_static
                       sfml-system
                       sfml-network
                       zlib
+                      glm
+                      ${OPENGL_LIBRARIES}
                       ${UNIX_LIBS})
 

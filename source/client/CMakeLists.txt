@@ -51,15 +51,16 @@ target_link_libraries(${PROJECT_NAME}
                       ${CMAKE_PROJECT_NAME}_server_lib
                       ${CMAKE_PROJECT_NAME}_common
                       gamekit
-                      ${OPENGL_LIBRARIES}
-                      ${TINYXML2_LIBRARIES}
-                      ${GLEW_LIBRARIES}
-                      ${LUA_LIBRARIES}
+                      tinyxml2
+                      libglew_static
+                      lua_static
                       sfml-system
                       sfml-window
                       sfml-network
                       sfml-graphics
                       sfml-audio
                       zlib
+                      glm
+                      ${OPENGL_LIBRARIES}
                       ${UNIX_LIBS})
 

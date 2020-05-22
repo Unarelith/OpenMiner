@@ -9,10 +9,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-if (WIN32)
-	set(WIN_LIBRARIES_PATH "C:/Libraries")
-endif ()
-
 if (APPLE)
 	add_definitions(-DGL_SILENCE_DEPRECATION=1)
 endif ()
@@ -46,72 +42,15 @@ endif()
 #------------------------------------------------------------------------------
 # Packages
 #------------------------------------------------------------------------------
-# - Lua
-#------------------------------------------------------------------------------
-if (WIN32)
-	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${WIN_LIBRARIES_PATH}/lua)
-endif ()
-
-find_package(Lua REQUIRED)
-
-if(NOT LUA_FOUND)
-	message(FATAL_ERROR "Lua is needed to build the project. Please install it correctly.")
-endif()
-
-include_directories(${LUA_INCLUDE_DIR})
-link_directories(${LUA_LIBRARY_DIRS})
-
-#------------------------------------------------------------------------------
-# - tinyxml2
-#------------------------------------------------------------------------------
-if (WIN32)
-	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${WIN_LIBRARIES_PATH}/tinyxml2)
-endif ()
-
-find_package(TinyXml2 REQUIRED)
-
-if(NOT TINYXML2_FOUND)
-	message(FATAL_ERROR "tinyxml2 is needed to build the project. Please install it correctly.")
-endif()
-
-include_directories(${TINYXML2_INCLUDE_DIRS})
-
-#------------------------------------------------------------------------------
 # - OpenGL
 #------------------------------------------------------------------------------
 set(OpenGL_GL_PREFERENCE "LEGACY")
 
-if (WIN32)
-	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${WIN_LIBRARIES_PATH}/glm)
-endif ()
-
 find_package(OpenGL REQUIRED)
-find_package(GLM REQUIRED)
 
 if(NOT OPENGL_FOUND)
 	message(FATAL_ERROR "OpenGL not found!")
 endif(NOT OPENGL_FOUND)
-
-if(NOT GLM_FOUND)
-	message(FATAL_ERROR "glm not found!")
-endif(NOT GLM_FOUND)
-
-include_directories(${GLM_INCLUDE_DIRS})
-
-#------------------------------------------------------------------------------
-# - GLEW
-#------------------------------------------------------------------------------
-if (WIN32)
-	set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${WIN_LIBRARIES_PATH}/glew)
-
-	find_package(GLEW REQUIRED)
-
-	if(NOT GLEW_FOUND)
-		message(FATAL_ERROR "GLEW not found!")
-	endif(NOT GLEW_FOUND)
-
-	include_directories(${GLEW_INCLUDE_DIRS})
-endif ()
 
 #------------------------------------------------------------------------------
 # Submodules
@@ -152,6 +91,11 @@ include_directories(external/gamekit/include)
 # - zlib
 #------------------------------------------------------------------------------
 add_subdirectory(external/zlib ${CMAKE_CURRENT_BINARY_DIR}/external/zlib)
+
+#------------------------------------------------------------------------------
+# - lua
+#------------------------------------------------------------------------------
+add_subdirectory(external/lua)
 
 #------------------------------------------------------------------------------
 # - sol3 (sol2 v3.x)
