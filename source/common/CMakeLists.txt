@@ -23,7 +23,7 @@ add_dependencies(${PROJECT_NAME}
 	zlib
 	EnTT
 	gamekit
-	lua_static
+	liblua
 	sol2
 )
 
@@ -48,7 +48,7 @@ endif ()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
 	sol2
-	lua_static
+	liblua
 	gamekit
 	zlib
 	${OPENGL_LIBRARIES}

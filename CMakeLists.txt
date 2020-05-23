@@ -75,11 +75,13 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/gamekit/CMakeLists.txt")
     message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif()
 
+set(BUILD_SHARED_LIBS OFF)
+
 #------------------------------------------------------------------------------
 # - EnTT
 #------------------------------------------------------------------------------
 add_subdirectory(external/entt)
-include_directories(external/entt/single_include)
+include_directories(external/entt/src)
 
 #------------------------------------------------------------------------------
 # - gamekit
@@ -95,7 +97,10 @@ add_subdirectory(external/zlib ${CMAKE_CURRENT_BINARY_DIR}/external/zlib)
 #------------------------------------------------------------------------------
 # - lua
 #------------------------------------------------------------------------------
+set(LUA_BUILD_WLUA OFF CACHE BOOL "")
+
 add_subdirectory(external/lua)
+include_directories(external/lua/src ${CMAKE_CURRENT_BINARY_DIR}/external/lua)
 
 #------------------------------------------------------------------------------
 # - sol3 (sol2 v3.x)
