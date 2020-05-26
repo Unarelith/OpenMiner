@@ -54,6 +54,7 @@ doc/latex
 
 # Binaries
 build
+build_win32
 openminer
 openminer_server
 *.exe

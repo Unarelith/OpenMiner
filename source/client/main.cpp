@@ -31,7 +31,7 @@
 // Thanks to Hopson for pointing this out
 #ifdef _WIN32
 extern "C" {
-	#include <Windows.h>
+	#include <windows.h>
 
 	// http://developer.download.nvidia.com/devzone/devcenter/gamegraphics/files/OptimusRenderingPolicies.pdf
 	__declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;

@@ -30,8 +30,13 @@
 
 #include "Scene.hpp"
 
+static bool areComponentsRegistered = false;
+
 Scene::Scene() {
-	registerComponents();
+	if (!areComponentsRegistered) {
+		registerComponents();
+		areComponentsRegistered = true;
+	}
 }
 
 void Scene::update() {
