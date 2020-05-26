@@ -33,7 +33,24 @@
 
 namespace fs = ghc::filesystem;
 
+static bool hasBeenInterrupted = false;
+
+#ifdef SFML_SYSTEM_LINUX
+
+#include <stdio.h>
+#include <signal.h>
+
+static void sigintHandler(int) {
+	signal(SIGINT, sigintHandler);
+	hasBeenInterrupted = true;
+}
+
+#endif // SFML_SYSTEM_LINUX
+
 ServerApplication::ServerApplication(int argc, char **argv) : m_argumentParser(argc, argv) {
+#ifdef SFML_SYSTEM_LINUX
+	signal(SIGINT, sigintHandler);
+#endif
 }
 
 ServerApplication::ServerApplication(gk::EventHandler &eventHandler) {
@@ -97,7 +114,7 @@ int ServerApplication::run(bool isProtected) {
 
 			std::cerr << "Fatal error " << e.what() << std::endl;
 
-			// TODO: Send server offline event here
+			m_serverCommandHandler.sendServerClosed(std::string("Server error ") + e.what());
 
 			m_registry.clear();
 			m_worldController.clearEntities();
@@ -110,7 +127,7 @@ int ServerApplication::run(bool isProtected) {
 		mainLoop();
 	}
 
-	// TODO: Send server offline event here
+	m_serverCommandHandler.sendServerClosed("Server closed.");
 
 	m_registry.clear();
 	m_worldController.clearEntities();
@@ -129,7 +146,7 @@ void ServerApplication::update() {
 }
 
 void ServerApplication::mainLoop() {
-	while (m_server.isRunning()) {
+	while (!hasBeenInterrupted && m_server.isRunning()) {
 		m_server.handleGameEvents();
 
 		m_clock.updateGame([this] {

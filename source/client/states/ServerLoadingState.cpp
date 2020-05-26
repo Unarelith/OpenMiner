@@ -114,6 +114,11 @@ void ServerLoadingState::update() {
 	}
 }
 
+void ServerLoadingState::setTexturePack(const std::string &texturePack) {
+	m_game.client().setTexturePack(texturePack);
+	m_texturePack = texturePack;
+}
+
 void ServerLoadingState::onServerOnlineEvent(const ServerOnlineEvent &event) {
 	m_isServerOnline = event.isOnline;
 	m_port = event.port;

@@ -45,7 +45,7 @@ class ServerLoadingState : public InterfaceState {
 
 		void update() override;
 
-		void setTexturePack(const std::string &texturePack) { m_texturePack = texturePack; }
+		void setTexturePack(const std::string &texturePack);
 
 	private:
 		void onServerOnlineEvent(const ServerOnlineEvent &event);

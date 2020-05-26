@@ -69,6 +69,14 @@ class Client {
 
 		u16 id() const { return m_id; }
 
+		sf::IpAddress serverAddress() const { return m_serverAddress; }
+		u16 serverPort() const { return m_serverPort; }
+
+		// FIXME: This should move elsewhere, see command callback
+		//        in ClientCommandHandler for ServerClosed
+		const std::string &texturePack() const { return m_texturePack; }
+		void setTexturePack(const std::string &texturePack) { m_texturePack = texturePack; }
+
 	private:
 		bool m_isConnected = false;
 		bool m_isSingleplayer = false;
@@ -83,6 +91,8 @@ class Client {
 		gk::Timer m_keyUpdateTimer;
 
 		std::unordered_map<Network::Command, CommandCallback> m_commands;
+
+		std::string m_texturePack;
 };
 
 #endif // CLIENT_HPP_

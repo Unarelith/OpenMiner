@@ -34,6 +34,7 @@
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "ClientCommandHandler.hpp"
+#include "ConnectionErrorState.hpp"
 #include "DrawableComponent.hpp"
 #include "DrawableDef.hpp"
 #include "LuaGUIState.hpp"
@@ -134,6 +135,15 @@ void ClientCommandHandler::setupCallbacks() {
 		auto it = m_playerBoxes.find(clientID);
 		if (it != m_playerBoxes.end())
 			m_playerBoxes.erase(it);
+	});
+
+	m_client.setCommandCallback(Network::Command::ServerClosed, [this](Network::Packet &packet) {
+		std::string message;
+		packet >> message;
+
+		gk::ApplicationStateStack::getInstance().pop();
+		gk::ApplicationStateStack::getInstance().pop();
+		gk::ApplicationStateStack::getInstance().push<ConnectionErrorState>(message, m_client.serverAddress().toString(), m_client.serverPort(), m_client.texturePack(), &gk::ApplicationStateStack::getInstance().top());
 	});
 
 	m_client.setCommandCallback(Network::Command::RegistryData, [this](Network::Packet &packet) {
