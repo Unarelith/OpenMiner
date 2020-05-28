@@ -93,6 +93,7 @@ include_directories(external/gamekit/include)
 # - zlib
 #------------------------------------------------------------------------------
 add_subdirectory(external/zlib ${CMAKE_CURRENT_BINARY_DIR}/external/zlib)
+include_directories(external/zlib ${CMAKE_CURRENT_BINARY_DIR}/external/zlib)
 
 #------------------------------------------------------------------------------
 # - lua

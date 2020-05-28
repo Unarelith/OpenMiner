@@ -55,6 +55,8 @@ doc/latex
 # Binaries
 build
 build_win32
+build_win64
+build_msvc
 openminer
 openminer_server
 *.exe
