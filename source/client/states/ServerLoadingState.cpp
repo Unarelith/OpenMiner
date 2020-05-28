@@ -51,9 +51,8 @@ ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, c
 	m_host = host;
 	m_port = port;
 
-	// FIXME: SFML_RAW_MOUSE
-	// gk::Mouse::setCursorVisible(true);
-	// gk::Mouse::setCursorGrabbed(false);
+	gk::Mouse::setCursorVisible(true);
+	gk::Mouse::setCursorGrabbed(false);
 }
 
 void ServerLoadingState::init() {

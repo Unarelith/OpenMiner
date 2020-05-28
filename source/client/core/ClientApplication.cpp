@@ -57,9 +57,6 @@ void ClientApplication::init() {
 
 	gk::CoreApplication::init();
 
-	// FIXME: SFML_RAW_MOUSE
-	gk::Mouse::setCursorGrabbed(true);
-
 	m_window.addVertexAttribute(VertexAttribute::Coord3d, "coord3d", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
 	m_window.addVertexAttribute(VertexAttribute::TexCoord, "texCoord", 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, texCoord)));
 	m_window.addVertexAttribute(VertexAttribute::Color, "color", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, color)));
