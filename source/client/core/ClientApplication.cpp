@@ -55,6 +55,8 @@ void ClientApplication::init() {
 	m_argumentParser.addArgument("working-dir", {"-w", "--working-dir", "Change the working direction to <dir>.", "dir"});
 	m_argumentParser.addArgument("texture-pack", {"-t", "--texture-pack", "Use texture pack <name>.", "name"});
 
+	m_loggerHandler.setName("client");
+
 	gk::CoreApplication::init();
 
 	m_window.addVertexAttribute(VertexAttribute::Coord3d, "coord3d", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));

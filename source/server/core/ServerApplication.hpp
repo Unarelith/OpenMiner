@@ -64,6 +64,7 @@ class ServerApplication {
 		gk::ArgumentParser m_argumentParser;
 		gk::GameClock m_clock;
 		gk::EventHandler *m_eventHandler = nullptr;
+		gk::LoggerHandler m_loggerHandler;
 
 		Registry m_registry;
 

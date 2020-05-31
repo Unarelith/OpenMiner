@@ -60,6 +60,9 @@ ServerApplication::ServerApplication(gk::EventHandler &eventHandler) {
 void ServerApplication::init() {
 	std::srand(std::time(nullptr));
 
+	m_loggerHandler.setName("server");
+	gk::LoggerHandler::setInstance(m_loggerHandler);
+
 	BlockGeometry::initOrientation();
 
 	m_argumentParser.addArgument("port", {"-p", "--port", "Select the port to use.", "port"});
