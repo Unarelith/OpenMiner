@@ -57,14 +57,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 
 ### Using Linux
 
-- Dependencies:
-    - A compiler with C++17 support (GCC >= 7.0 or clang >= 5.0)
-    - `git` and [CMake](http://www.cmake.org/download/) (>= 3.12.4)
-    - _Check your distribution repositories for packages._
-- Run `cmake -B build . && cmake --build build -j8`
-- Or `mkdir build && cd build && cmake .. && make -j8 && cd ..` (for old CMake versions)
-- Run the client with `./build/openminer`
-- If you want a multiplayer game, run the server with `./build/openminer_server`
+- [Wiki: Compiling on Linux](https://github.com/Unarelith/OpenMiner/wiki/Compiling-on-Linux)
 
 ### Using MacOS
 
