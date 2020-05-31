@@ -62,6 +62,7 @@ if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
 	option(GIT_SUBMODULE "Check submodules during build" ON)
 	if(GIT_SUBMODULE)
 		message(STATUS "Submodule update")
+		execute_process(COMMAND ${GIT_EXECUTABLE} submodule sync WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 		execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
 			WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 			RESULT_VARIABLE GIT_SUBMOD_RESULT)
@@ -100,7 +101,9 @@ include_directories(external/zlib ${CMAKE_CURRENT_BINARY_DIR}/external/zlib)
 #------------------------------------------------------------------------------
 # - lua
 #------------------------------------------------------------------------------
+set(LUA_BUILD_LUA_LUAC OFF CACHE BOOL "")
 set(LUA_BUILD_WLUA OFF CACHE BOOL "")
+set(LUA_USE_READLINE OFF CACHE BOOL "")
 
 add_subdirectory(external/lua)
 include_directories(external/lua/src ${CMAKE_CURRENT_BINARY_DIR}/external/lua)

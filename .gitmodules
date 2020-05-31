@@ -15,4 +15,4 @@
 	ignore = dirty
 [submodule "external/lua"]
 	path = external/lua
-	url = https://github.com/xpol/lua
+	url = https://github.com/Unarelith/lua
