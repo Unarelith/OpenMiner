@@ -92,6 +92,8 @@ include_directories(external/gamekit/include)
 #------------------------------------------------------------------------------
 # - zlib
 #------------------------------------------------------------------------------
+set(ZLIB_STATIC ON)
+
 add_subdirectory(external/zlib ${CMAKE_CURRENT_BINARY_DIR}/external/zlib)
 include_directories(external/zlib ${CMAKE_CURRENT_BINARY_DIR}/external/zlib)
 
