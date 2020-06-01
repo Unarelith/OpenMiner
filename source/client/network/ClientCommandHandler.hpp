@@ -65,14 +65,16 @@ class ClientCommandHandler {
 
 		void setSingleplayer(bool isSingleplayer) { m_isSingleplayer = isSingleplayer; }
 
+		using PlayerBoxMap = std::unordered_map<u16, PlayerBox>;
+		using EntityMap = std::unordered_map<entt::entity, entt::entity>;
+
 	private:
 		Client &m_client;
 		ClientWorld &m_world;
 		ClientPlayer &m_player;
 
-		std::unordered_map<u16, PlayerBox> &m_playerBoxes;
-
-		std::unordered_map<entt::entity, entt::entity> m_entityMap;
+		PlayerBoxMap &m_playerBoxes;
+		EntityMap m_entityMap;
 
 		bool m_isRegistryInitialized = false;
 

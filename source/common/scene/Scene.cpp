@@ -28,6 +28,8 @@
 
 #include <entt/entt.hpp>
 
+#include "Network.hpp"
+#include "NetworkUtils.hpp"
 #include "Scene.hpp"
 
 static bool areComponentsRegistered = false;
@@ -52,7 +54,7 @@ entt::entity Scene::createEntityFromModel(entt::registry &modelRegistry, entt::e
 	}
 
 	auto other = m_registry.create();
-	modelRegistry.visit(modelEntity, [&](const auto component) {
+	modelRegistry.visit(modelEntity, [&](const auto &component) {
 		const auto type = entt::resolve_type(component);
 		const auto any = type.func("get"_hs).invoke({}, std::ref(modelRegistry), modelEntity);
 		type.func("set"_hs).invoke({}, std::ref(m_registry), other, any);
@@ -60,21 +62,34 @@ entt::entity Scene::createEntityFromModel(entt::registry &modelRegistry, entt::e
 	return other;
 }
 
-template<typename Type>
-Type &get(entt::registry &registry, entt::entity entity) {
-	return registry.get_or_emplace<Type>(entity);
+template<typename T>
+T &get(entt::registry &registry, entt::entity entity) {
+	return registry.get_or_emplace<T>(entity);
 }
 
-template<typename Type>
-Type &set(entt::registry &registry, entt::entity entity, const Type &instance) {
-	return registry.emplace_or_replace<Type>(entity, instance);
+template<typename T>
+T &set(entt::registry &registry, entt::entity entity, const T &instance) {
+	return registry.emplace_or_replace<T>(entity, instance);
+}
+
+template<typename T>
+Network::Packet serialize(entt::entity entity, T &component) {
+	Network::Packet packet;
+	if constexpr(std::is_base_of_v<ISerializable, std::decay_t<T>>) {
+		if (component.isUpdated) {
+			packet << component.packetType << entity << component;
+			component.isUpdated = false;
+		}
+	}
+	return packet;
 }
 
 template<typename Type>
 void extend_meta_type() {
 	entt::meta<Type>().type()
 		.template func<&get<Type>, entt::as_ref_t>("get"_hs)
-		.template func<&set<Type>>("set"_hs);
+		.template func<&set<Type>>("set"_hs)
+		.template func<&serialize<Type>>("serialize"_hs);
 }
 
 #include <gk/core/Box.hpp>

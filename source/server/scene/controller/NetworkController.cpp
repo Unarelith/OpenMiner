@@ -24,48 +24,26 @@
  *
  * =====================================================================================
  */
-#include "AnimationComponent.hpp"
-#include "DrawableDef.hpp"
+#include "Network.hpp"
 #include "NetworkComponent.hpp"
 #include "NetworkController.hpp"
-#include "PositionComponent.hpp"
-#include "RotationComponent.hpp"
+#include "Server.hpp"
 #include "ServerCommandHandler.hpp"
 
 void NetworkController::update(entt::registry &registry) {
-	registry.view<NetworkComponent>().each([this] (auto, auto &network) {
+	registry.view<NetworkComponent>().each([&] (auto entity, auto &network) {
 		if (!network.hasSpawned) {
 			m_server->sendEntitySpawn(network.entityID);
 			network.hasSpawned = true;
 		}
-	});
 
-	registry.view<NetworkComponent, PositionComponent>().each([this] (auto, auto &network, auto &position) {
-		if (position.isUpdated) {
-			m_server->sendEntityPosition(network.entityID, position.x, position.y, position.z);
-			position.isUpdated = false;
-		}
-	});
-
-	registry.view<NetworkComponent, RotationComponent>().each([this] (auto, auto &network, auto &rotation) {
-		if (rotation.isUpdated) {
-			m_server->sendEntityRotation(network.entityID, rotation.quat.w, rotation.quat.x, rotation.quat.y, rotation.quat.z);
-			rotation.isUpdated = false;
-		}
-	});
-
-	registry.view<NetworkComponent, AnimationComponent>().each([this] (auto, auto &network, auto &animation) {
-		if (animation.isUpdated) {
-			m_server->sendEntityAnimation(network.entityID, animation);
-			animation.isUpdated = false;
-		}
-	});
-
-	registry.view<NetworkComponent, DrawableDef>().each([this] (auto, auto &network, auto &drawableDef) {
-		if (drawableDef.isUpdated) {
-			m_server->sendEntityDrawableDef(network.entityID, drawableDef);
-			drawableDef.isUpdated = false;
-		}
+		registry.visit(entity, [&] (const auto &component_type) {
+			const auto &type = entt::resolve_type(component_type);
+			const auto &component = type.func("get"_hs).invoke({}, std::ref(registry), entity);
+			Network::Packet packet = type.func("serialize"_hs).invoke({}, entity, component).template cast<Network::Packet>();
+			if (packet.getDataSize())
+				m_server->server().sendToAllClients(packet);
+		});
 	});
 }
 
@@ -73,21 +51,13 @@ void NetworkController::sendEntities(entt::registry &registry, const ClientInfo 
 	registry.view<NetworkComponent>().each([&] (auto entity, auto &network) {
 		m_server->sendEntitySpawn(network.entityID, &client);
 
-		if (auto *position = registry.try_get<PositionComponent>(entity) ; position) {
-			m_server->sendEntityPosition(network.entityID, position->x, position->y, position->z, &client);
-		}
-
-		if (auto *rotation = registry.try_get<RotationComponent>(entity) ; rotation) {
-			m_server->sendEntityRotation(network.entityID, rotation->quat.w, rotation->quat.x, rotation->quat.y, rotation->quat.z, &client);
-		}
-
-		if (auto *animation = registry.try_get<AnimationComponent>(entity) ; animation) {
-			m_server->sendEntityAnimation(network.entityID, *animation, &client);
-		}
-
-		if (auto *drawableDef = registry.try_get<DrawableDef>(entity) ; drawableDef) {
-			m_server->sendEntityDrawableDef(network.entityID, *drawableDef, &client);
-		}
+		registry.visit(entity, [&] (const auto &component_type) {
+			const auto &type = entt::resolve_type(component_type);
+			const auto &component = type.func("get"_hs).invoke({}, std::ref(registry), entity);
+			Network::Packet packet = type.func("serialize"_hs).invoke({}, entity, component).template cast<Network::Packet>();
+			if (packet.getDataSize())
+				client.tcpSocket->send(packet);
+		});
 	});
 }
 

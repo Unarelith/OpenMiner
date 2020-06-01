@@ -148,46 +148,6 @@ void ServerCommandHandler::sendEntityDespawn(entt::entity entityID, const Client
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendEntityPosition(entt::entity entityID, double x, double y, double z, const ClientInfo *client) const {
-	Network::Packet packet;
-	packet << Network::Command::EntityPosition << entityID << x << y << z;
-
-	if (!client)
-		m_server.sendToAllClients(packet);
-	else
-		client->tcpSocket->send(packet);
-}
-
-void ServerCommandHandler::sendEntityRotation(entt::entity entityID, float w, float x, float y, float z, const ClientInfo *client) const {
-	Network::Packet packet;
-	packet << Network::Command::EntityRotation << entityID << w << x << y << z;
-
-	if (!client)
-		m_server.sendToAllClients(packet);
-	else
-		client->tcpSocket->send(packet);
-}
-
-void ServerCommandHandler::sendEntityAnimation(entt::entity entityID, const AnimationComponent &animation, const ClientInfo *client) const {
-	Network::Packet packet;
-	packet << Network::Command::EntityAnimation << entityID << animation;
-
-	if (!client)
-		m_server.sendToAllClients(packet);
-	else
-		client->tcpSocket->send(packet);
-}
-
-void ServerCommandHandler::sendEntityDrawableDef(entt::entity entityID, const DrawableDef &drawableDef, const ClientInfo *client) const {
-	Network::Packet packet;
-	packet << Network::Command::EntityDrawableDef << entityID << drawableDef;
-
-	if (!client)
-		m_server.sendToAllClients(packet);
-	else
-		client->tcpSocket->send(packet);
-}
-
 void ServerCommandHandler::setupCallbacks() {
 	m_server.setConnectionCallback([this](ClientInfo &client) {
 		Network::Packet packet;

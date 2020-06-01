@@ -29,10 +29,17 @@
 
 #include <glm/gtc/quaternion.hpp>
 
-struct RotationComponent {
+#include "ISerializable.hpp"
+#include "Network.hpp"
+
+struct RotationComponent : public ISerializable {
 	glm::quat quat{1, 0, 0, 0};
 
 	bool isUpdated = true;
+
+	void serialize(sf::Packet &packet) const override { packet << quat.w << quat.x << quat.y << quat.z; }
+	void deserialize(sf::Packet &packet) override { packet >> quat.w >> quat.x >> quat.y >> quat.z; }
+	Network::Command packetType = Network::Command::EntityRotation;
 };
 
 #endif // ROTATIONCOMPONENT_HPP_

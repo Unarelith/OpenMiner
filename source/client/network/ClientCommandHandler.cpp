@@ -127,6 +127,22 @@ void ClientCommandHandler::sendChatMessage(const std::string &message) {
 	m_client.send(packet);
 }
 
+template<typename ComponentType>
+static void addComponentCommandCallback(Network::Command command, Client &client, ClientCommandHandler::EntityMap &entityMap, ClientWorld &world) {
+	client.setCommandCallback(command, [&](Network::Packet &packet) {
+		entt::entity entityID;
+		packet >> entityID;
+
+		auto it = entityMap.find(entityID);
+		if (it != entityMap.end()) {
+			auto &component = world.scene().registry().get_or_emplace<ComponentType>(it->second);
+			component.deserialize(packet);
+		}
+		else
+			gkError() << Network::commandToString(command) + ": Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
+	});
+}
+
 void ClientCommandHandler::setupCallbacks() {
 	m_client.setCommandCallback(Network::Command::ClientDisconnect, [this](Network::Packet &packet) {
 		u16 clientID;
@@ -290,58 +306,9 @@ void ClientCommandHandler::setupCallbacks() {
 			gkError() << "EntityDespawn: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
 	});
 
-	m_client.setCommandCallback(Network::Command::EntityPosition, [this](Network::Packet &packet) {
-		entt::entity entityID;
-		packet >> entityID;
-
-		auto it = m_entityMap.find(entityID);
-		if (it != m_entityMap.end()) {
-			auto &position = m_world.scene().registry().get_or_emplace<PositionComponent>(it->second);
-			packet >> position.x >> position.y >> position.z;
-		}
-		else
-			gkError() << "EntityPosition: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
-	});
-
-	m_client.setCommandCallback(Network::Command::EntityRotation, [this](Network::Packet &packet) {
-		entt::entity entityID;
-		packet >> entityID;
-
-		auto it = m_entityMap.find(entityID);
-		if (it != m_entityMap.end()) {
-			float w, x, y, z;
-			packet >> w >> x >> y >> z;
-
-			auto &rotation = m_world.scene().registry().get_or_emplace<RotationComponent>(it->second);
-			rotation.quat = glm::quat(w, x, y, z);
-		}
-		else
-			gkError() << "EntityRotation: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
-	});
-
-	m_client.setCommandCallback(Network::Command::EntityAnimation, [this](Network::Packet &packet) {
-		entt::entity entityID;
-		packet >> entityID;
-
-		auto it = m_entityMap.find(entityID);
-		if (it != m_entityMap.end()) {
-			auto &animation = m_world.scene().registry().get_or_emplace<AnimationComponent>(it->second);
-			animation.deserialize(packet);
-		}
-		else
-			gkError() << "EntityAnimation: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
-	});
-
-	m_client.setCommandCallback(Network::Command::EntityDrawableDef, [this](Network::Packet &packet) {
-		entt::entity entityID;
-		packet >> entityID;
-
-		auto it = m_entityMap.find(entityID);
-		if (it != m_entityMap.end()) {
-			packet >> m_world.scene().registry().get_or_emplace<DrawableDef>(it->second);
-		}
-		else
-			gkError() << "EntityDrawableDef: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
-	});
+	addComponentCommandCallback<PositionComponent>(Network::Command::EntityPosition, m_client, m_entityMap, m_world);
+	addComponentCommandCallback<RotationComponent>(Network::Command::EntityRotation, m_client, m_entityMap, m_world);
+	addComponentCommandCallback<AnimationComponent>(Network::Command::EntityAnimation, m_client, m_entityMap, m_world);
+	addComponentCommandCallback<DrawableDef>(Network::Command::EntityDrawableDef, m_client, m_entityMap, m_world);
 }
 

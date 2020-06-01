@@ -29,7 +29,14 @@
 
 #include <gk/core/IntTypes.hpp>
 
-struct PositionComponent {
+#include "ISerializable.hpp"
+#include "Network.hpp"
+
+struct PositionComponent : public ISerializable {
+	PositionComponent() = default;
+	PositionComponent(double x_, double y_, double z_, u16 dimension_)
+		: x(x_), y(y_), z(z_), dimension(dimension_) {}
+
 	double x = 0;
 	double y = 0;
 	double z = 0;
@@ -37,6 +44,10 @@ struct PositionComponent {
 	u16 dimension = 0;
 
 	bool isUpdated = true;
+
+	void serialize(sf::Packet &packet) const override { packet << x << y << z; }
+	void deserialize(sf::Packet &packet) override { packet >> x >> y >> z; }
+	Network::Command packetType = Network::Command::EntityPosition;
 };
 
 #endif // POSITIONCOMPONENT_HPP_

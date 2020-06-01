@@ -31,6 +31,7 @@
 
 #include "ISerializable.hpp"
 #include "InventoryCubeDef.hpp"
+#include "Network.hpp"
 
 namespace DrawableType {
 	enum : u8 {
@@ -49,6 +50,7 @@ class DrawableDef : public ISerializable {
 
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
+		Network::Command packetType = Network::Command::EntityDrawableDef;
 
 		bool isUpdated = true;
 

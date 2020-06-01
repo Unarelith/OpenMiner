@@ -32,6 +32,7 @@
 #include <gk/core/IntTypes.hpp>
 
 #include "ISerializable.hpp"
+#include "Network.hpp"
 #include "NetworkUtils.hpp"
 
 enum class AnimationType {
@@ -123,6 +124,7 @@ struct AnimationComponent : public ISerializable {
 
 	void serialize(sf::Packet &packet) const override { packet << list; }
 	void deserialize(sf::Packet &packet) override { packet >> list; }
+	Network::Command packetType = Network::Command::EntityAnimation;
 
 	std::vector<AnimationData> list;
 
