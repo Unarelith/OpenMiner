@@ -81,7 +81,7 @@ void Server::handleNewConnections() {
 		}
 	}
 	else {
-		std::cerr << "Warning: Connection accept failed." << std::endl;
+		gkWarning() << "Warning: Connection accept failed.";
 	}
 }
 

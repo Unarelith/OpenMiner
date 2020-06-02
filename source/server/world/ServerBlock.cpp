@@ -50,8 +50,8 @@ void ServerBlock::onTick(const glm::ivec3 &pos, Chunk &chunk, World &world, Serv
 	}
 	catch (const sol::error &e) {
 		m_onTickEnabled = false;
-		std::cerr << e.what() << std::endl;
-		std::cerr << "Block stopped ticking at (" << pos.x << ", " << pos.y << ", " << pos.z << ")" << std::endl;
+		gkError() << e.what();
+		gkError() << "Block stopped ticking at (" << pos.x << ", " << pos.y << ", " << pos.z << ")";
 	}
 }
 
@@ -63,7 +63,7 @@ bool ServerBlock::onBlockActivated(const glm::ivec3 &pos, Player &player, World 
 		}
 	}
 	catch (const sol::error &e) {
-		std::cerr << e.what() << std::endl;
+		gkError() << e.what();
 	}
 
 	return false;
@@ -76,7 +76,7 @@ void ServerBlock::onBlockPlaced(const glm::ivec3 &pos, World &world) const {
 		}
 	}
 	catch (const sol::error &e) {
-		std::cerr << e.what() << std::endl;
+		gkError() << e.what();
 	}
 }
 
@@ -87,7 +87,7 @@ void ServerBlock::onBlockDestroyed(const glm::ivec3 &pos, World &world) const {
 		}
 	}
 	catch (const sol::error &e) {
-		std::cerr << e.what() << std::endl;
+		gkError() << e.what();
 	}
 }
 

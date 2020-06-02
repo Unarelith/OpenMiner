@@ -115,7 +115,7 @@ int ServerApplication::run(bool isProtected) {
 			if (m_eventHandler)
 				m_eventHandler->emplaceEvent<ServerOnlineEvent>(false, 0);
 
-			std::cerr << "Fatal error " << e.what() << std::endl;
+			gkError() << "Fatal error" << e.what();
 
 			m_serverCommandHandler.sendServerClosed(std::string("Server error ") + e.what());
 

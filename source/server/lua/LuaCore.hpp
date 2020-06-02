@@ -30,6 +30,8 @@
 #include <functional>
 #include <iostream>
 
+#include <gk/core/Debug.hpp>
+
 #include <sol/sol.hpp>
 
 class Registry;
@@ -55,7 +57,7 @@ class LuaCore {
 						it.second(std::forward<Args>(args)...);
 					}
 					catch (const sol::error &e) {
-						std::cerr << e.what() << std::endl;
+						gkError() << e.what();
 					}
 				}
 			}

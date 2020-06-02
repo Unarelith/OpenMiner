@@ -49,8 +49,8 @@ void ServerModLoader::loadMods() {
 				m_scriptEngine.lua().safe_script_file("init.lua");
 			}
 			catch (const sol::error &e) {
-				std::cerr << "Error: Failed to load mod at '" << entry.path().string() << "'" << std::endl;
-				std::cerr << e.what() << std::endl;
+				gkError() << "Error: Failed to load mod at" << entry.path().string();
+				gkError() << e.what();
 			}
 
 			fs::current_path(basePath);
