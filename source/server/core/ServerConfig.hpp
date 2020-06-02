@@ -27,9 +27,14 @@
 #ifndef SERVERCONFIG_HPP_
 #define SERVERCONFIG_HPP_
 
+#include <gk/core/IntTypes.hpp>
+
 namespace ServerConfig {
 	// Gameplay
 	extern bool useItemDrops;
+
+	// Server
+	extern u8 maxPlayers;
 
 	void loadConfigFromFile(const char *file);
 }

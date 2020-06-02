@@ -25,6 +25,7 @@
  * =====================================================================================
  */
 #include "Server.hpp"
+#include "ServerConfig.hpp"
 
 void Server::init(u16 port) {
 	if (m_tcpListener.listen(port) != sf::Socket::Done)
@@ -57,9 +58,8 @@ void Server::handleNewConnections() {
 		Network::Command command;
 		packet >> command;
 		if (command != Network::Command::ClientConnect)
-			throw EXCEPTION("Network error: Expected 'ClientConnect' packet.");
-
-		if (m_info.clients().size() < 5) {
+			gkError() << "Network error: Expected 'ClientConnect' packet for new clients.";
+		else if (m_info.clients().size() < ServerConfig::maxPlayers) {
 			std::string address;
 			packet >> address;
 

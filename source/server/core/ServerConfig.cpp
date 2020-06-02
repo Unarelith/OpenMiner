@@ -29,6 +29,9 @@
 // Gameplay
 bool ServerConfig::useItemDrops = false;
 
+// Server
+u8 ServerConfig::maxPlayers = 5;
+
 #include <gk/core/Debug.hpp>
 #include <gk/core/Filesystem.hpp>
 
@@ -42,6 +45,8 @@ void ServerConfig::loadConfigFromFile(const char *file) {
 			lua.safe_script_file(file);
 
 			useItemDrops = lua["useItemDrops"].get_or(useItemDrops);
+
+			maxPlayers = lua["maxPlayers"].get_or(maxPlayers);
 
 			gkInfo() << "Config file loaded successfully";
 		}

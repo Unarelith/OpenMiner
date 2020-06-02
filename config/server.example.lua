@@ -5,3 +5,6 @@
 -- Gameplay
 useItemDrops = false
 
+-- Server
+maxPlayers = 5
+
