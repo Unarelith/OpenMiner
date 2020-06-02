@@ -27,6 +27,8 @@
 #ifndef SERVERPLAYER_HPP_
 #define SERVERPLAYER_HPP_
 
+#include <gk/core/Debug.hpp>
+
 #include "ClientInfo.hpp"
 #include "Player.hpp"
 
@@ -36,10 +38,15 @@ class ServerPlayer : public Player {
 
 		const ClientInfo &client() const { return m_client; }
 
+		const ItemStack &heldItemStack() { return m_inventory.getStack(m_heldItemSlot, 0); }
+		void setHeldItemSlot(u8 heldItemSlot) { m_heldItemSlot = heldItemSlot; }
+
 		static void initUsertype(sol::state &lua);
 
 	private:
 		ClientInfo &m_client;
+
+		u8 m_heldItemSlot = 0;
 };
 
 #endif // SERVERPLAYER_HPP_

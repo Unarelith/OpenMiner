@@ -295,6 +295,21 @@ void ServerCommandHandler::setupCallbacks() {
 		}
 	});
 
+	m_server.setCommandCallback(Network::Command::PlayerHeldItemChanged, [this](ClientInfo &client, Network::Packet &packet) {
+		ServerPlayer *player = m_players.getPlayer(client.id);
+		if (player) {
+			u8 hotbarSlot;
+			u16 itemID;
+			packet >> hotbarSlot >> itemID;
+			if (player->inventory().getStack(hotbarSlot, 0).item().id() != itemID)
+				gkWarning() << "PlayerHeldItemChanged:" << "Desync of item ID between client and server";
+
+			player->setHeldItemSlot(hotbarSlot);
+		}
+		else
+			gkError() << ("Failed to change held item of player " + std::to_string(client.id) + ": Player not found").c_str();
+	});
+
 	m_server.setCommandCallback(Network::Command::BlockActivated, [this](ClientInfo &client, Network::Packet &packet) {
 		ServerPlayer *player = m_players.getPlayer(client.id);
 		if (player) {

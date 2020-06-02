@@ -122,6 +122,7 @@
 ## ServerPlayer
 
 - `const ClientInfo &client()`
+- `ItemStack held_item_stack()`
 
 ## ServerWorld
 

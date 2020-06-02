@@ -93,6 +93,13 @@ void ClientCommandHandler::sendPlayerCreativeWindowRequest() {
 	m_client.send(packet);
 }
 
+void ClientCommandHandler::sendPlayerHeldItemChanged(u8 hotbarSlot, u16 itemID) {
+	Network::Packet packet;
+	packet << Network::Command::PlayerHeldItemChanged
+		<< hotbarSlot << itemID;
+	m_client.send(packet);
+}
+
 void ClientCommandHandler::sendBlockActivated(const glm::ivec4 &selectedBlock) {
 	Network::Packet packet;
 	packet << Network::Command::BlockActivated

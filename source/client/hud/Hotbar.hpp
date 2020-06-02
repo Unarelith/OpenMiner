@@ -32,16 +32,18 @@
 #include "Inventory.hpp"
 #include "ItemWidget.hpp"
 
+class ClientCommandHandler;
+
 class Hotbar : public Widget {
 	public:
-		Hotbar(Inventory &inventory, Widget *parent = nullptr);
+		Hotbar(Inventory &inventory, ClientCommandHandler &client, Widget *parent = nullptr);
 
 		void onEvent(const sf::Event &event) override;
 
 		void update() override;
 
 		int cursorPos() const { return m_cursorPos; }
-		u16 currentItem() const { return m_inventory.getStack(m_cursorPos, 0).item().id(); }
+		const Item &currentItem() const { return m_inventory.getStack(m_cursorPos, 0).item(); }
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
@@ -52,6 +54,8 @@ class Hotbar : public Widget {
 		int m_cursorPos = 0;
 
 		Inventory &m_inventory;
+
+		ClientCommandHandler &m_client;
 
 		std::vector<ItemWidget> m_items;
 };

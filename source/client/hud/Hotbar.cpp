@@ -24,10 +24,13 @@
  *
  * =====================================================================================
  */
+#include "ClientCommandHandler.hpp"
 #include "Config.hpp"
 #include "Hotbar.hpp"
 
-Hotbar::Hotbar(Inventory &inventory, Widget *parent) : Widget(182, 22, parent), m_inventory(inventory) {
+Hotbar::Hotbar(Inventory &inventory, ClientCommandHandler &client, Widget *parent)
+	: Widget(182, 22, parent), m_inventory(inventory), m_client(client)
+{
 	m_background.load("texture-widgets");
 	m_background.setClipRect(0, 0, 182, 22);
 	m_background.setPosition(0, 0, 0);
@@ -39,10 +42,14 @@ Hotbar::Hotbar(Inventory &inventory, Widget *parent) : Widget(182, 22, parent), 
 
 void Hotbar::onEvent(const sf::Event &event) {
 	if (event.type == sf::Event::MouseWheelScrolled) {
-		if (event.mouseWheelScroll.delta < 0)
+		if (event.mouseWheelScroll.delta < 0) {
 			m_cursorPos = (m_cursorPos + 1) % 9;
-		else if (event.mouseWheelScroll.delta > 0)
+			m_client.sendPlayerHeldItemChanged(m_cursorPos, currentItem().id());
+		}
+		else if (event.mouseWheelScroll.delta > 0) {
 			m_cursorPos = (m_cursorPos == 0) ? 8 : m_cursorPos - 1;
+			m_client.sendPlayerHeldItemChanged(m_cursorPos, currentItem().id());
+		}
 
 		m_cursor.setPosition(-1 + 20 * m_cursorPos, -1, 0);
 	}

@@ -59,7 +59,7 @@ void BlockCursor::onEvent(const sf::Event &event, const Hotbar &hotbar) {
 
 			u32 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
 			const Block &block = Registry::getInstance().getBlock(blockId);
-			const Item &item = Registry::getInstance().getItem(hotbar.currentItem());
+			const Item &item = hotbar.currentItem();
 
 			bool blockActivationSent = false;
 			if (block.id() && block.canBeActivated() && !gk::GamePad::isKeyPressed(GameKey::Sneak)) {
@@ -67,7 +67,7 @@ void BlockCursor::onEvent(const sf::Event &event, const Hotbar &hotbar) {
 				blockActivationSent = true;
 			}
 
-			if (block.id() && !blockActivationSent && hotbar.currentItem() && item.isBlock()) {
+			if (block.id() && !blockActivationSent && hotbar.currentItem().id() && item.isBlock()) {
 				s8 face = m_selectedBlock.w;
 
 				s32 x = m_selectedBlock.x;
@@ -87,11 +87,11 @@ void BlockCursor::onEvent(const sf::Event &event, const Hotbar &hotbar) {
 				const Block &block = Registry::getInstance().getBlock(blockId);
 				if (!blockId || block.drawType() == BlockDrawType::Liquid) {
 					// Second, we check if the new block is not inside the player
-					const Block &newBlock = Registry::getInstance().getBlock(hotbar.currentItem());
+					const Block &newBlock = Registry::getInstance().getBlock(hotbar.currentItem().id());
 					gk::FloatBox boundingBox = newBlock.boundingBox() + gk::Vector3f(x - m_player.x(), y - m_player.y(), z - m_player.z());
 					gk::FloatBox playerBoundingBox = m_player.hitbox();
 					if (!boundingBox.intersects(playerBoundingBox)) {
-						u32 block = hotbar.currentItem();
+						u32 block = hotbar.currentItem().id();
 						if (newBlock.isRotatable()) {
 							u16 data = m_player.getOppositeDirection() & 0x3;
 							m_world.setData(x, y, z, data);
@@ -99,7 +99,7 @@ void BlockCursor::onEvent(const sf::Event &event, const Hotbar &hotbar) {
 							block |= data << 16;
 						}
 
-						m_world.setBlock(x, y, z, hotbar.currentItem());
+						m_world.setBlock(x, y, z, hotbar.currentItem().id());
 
 						m_client.sendPlayerPlaceBlock(x, y, z, block);
 
