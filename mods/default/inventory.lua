@@ -24,21 +24,69 @@
 --
 -- =====================================================================================
 --
-if not mods then mods = {} end
+local modpath = mod:path()
 
-mods["default"] = openminer.mod_loader:register_mod("default")
-mod = mods["default"]
+function show_inventory(client, screen_width, screen_height, gui_scale)
+	local gui = LuaGUI.new()
 
-dofile("blocks.lua")
-dofile("items.lua")
-dofile("recipes.lua")
-dofile("sky.lua")
-dofile("trees.lua")
-dofile("biomes.lua")
-dofile("dimensions.lua")
+	gui:set_size(176, 166)
+	gui:set_centered(true)
 
-dofile("listeners.lua")
-dofile("inventory.lua")
+	gui:image {
+		name = "img_background",
+		pos = {x = 0, y = 0},
 
-dofile("item_drop.lua")
+		texture = modpath .. "/textures/gui/inventory.png",
+		clip = {x = 0, y = 0, width = 176, height = 166},
+	}
+
+	gui:inventory {
+		name = "inv_main",
+		pos = {x = 7, y = 83},
+
+		inventory = {
+			source = "player",
+			player = "player",
+			inventory_name = "main",
+			offset = 9,
+			count = 9 * 3,
+		},
+
+		size = {x = 9, y = 3},
+
+		shift_destination = "inv_hotbar,inv_main",
+	}
+
+	gui:inventory {
+		name = "inv_hotbar",
+		pos = {x = 7, y = 141},
+
+		inventory = {
+			source = "player",
+			player = "player",
+			inventory_name = "main",
+			offset = 0,
+			count = 9,
+		},
+
+		size = {x = 9, y = 1},
+
+		shift_destination = "inv_main,inv_hotbar",
+	}
+
+	gui:crafting {
+		name = "inv_crafting",
+		pos = {x = 97, y = 17},
+		result_pos = {x = 97 + 56, y = 17 + 10},
+
+		inventory = {
+			source = "temp",
+			size = 2,
+		},
+
+		shift_destination = "inv_main,inv_hotbar",
+	}
+
+	gui:show(client)
+end
 
