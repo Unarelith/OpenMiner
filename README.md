@@ -92,7 +92,7 @@ This list is non exhaustive.
 	- Custom GUI creation
 - Special blocks (workbench, furnace)
 - Block metadata
-- Player model display (currently without rotation nor animation)
+- Player model display (without animation)
 - Dimensions (like the Nether or the Ender in Minecraft) ([#80](https://github.com/Unarelith/OpenMiner/pull/80))
 - World loading/saving (using `/save <name>` and `/load <name>` commands, see [#26](https://github.com/Unarelith/OpenMiner/issues/26))
 - Texture pack system (partially implemented, see [#34](https://github.com/Unarelith/OpenMiner/issues/34))

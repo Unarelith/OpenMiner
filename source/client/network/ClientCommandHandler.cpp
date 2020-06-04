@@ -227,6 +227,19 @@ void ClientCommandHandler::setupCallbacks() {
 		}
 	});
 
+	m_client.setCommandCallback(Network::Command::PlayerRotUpdate, [this](Network::Packet &packet) {
+		float yaw, pitch;
+		u16 clientId;
+		packet >> clientId;
+		packet >> yaw >> pitch;
+
+		if (clientId != m_client.id()) {
+			auto it = m_playerBoxes.find(clientId);
+			if (it != m_playerBoxes.end())
+				it->second.Player::setRotation(yaw, pitch);
+		}
+	});
+
 	m_client.setCommandCallback(Network::Command::PlayerSpawn, [this](Network::Packet &packet) {
 		u16 clientId;
 		gk::Vector3d pos;
