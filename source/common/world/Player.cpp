@@ -31,6 +31,16 @@ Player::Player() {
 	m_hitbox = gk::FloatBox{-0.3125, -0.3125, 0, 0.625, 0.625, 1.75};
 }
 
+// Note: This function returns an angle4
+u8 Player::getDirection() const {
+	return int(floorf(m_viewAngleH / 90.f + 0.5f)) & 3;
+}
+
+// Note: This function returns an angle4
+u8 Player::getOppositeDirection() const {
+	return getDirection() ^ 2;
+}
+
 void Player::serialize(sf::Packet &packet) const {
 	packet << m_x << m_y << m_z << m_dimension << m_inventory;
 }

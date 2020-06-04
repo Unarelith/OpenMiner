@@ -52,11 +52,6 @@ class ClientPlayer : public Player {
 		void turnH(float angle);
 		void turnViewV(float angle);
 
-		// West, East, South, North
-		// Same order as enum BlockFace in TilesDef.hpp
-		u8 getDirection() const;
-		u8 getOppositeDirection() const;
-
 		void move(float direction);
 
 		void processInputs();
@@ -71,10 +66,6 @@ class ClientPlayer : public Player {
 		static ClientPlayer &getInstance() { return *s_instance; }
 		static void setInstance(ClientPlayer *instance) { s_instance = instance; }
 
-		float cameraYaw()   const { return m_viewAngleH; }
-		float cameraPitch() const { return m_viewAngleV; }
-		float cameraRoll()  const { return m_viewAngleRoll; }
-
 		void setPosition(double x, double y, double z);
 		void setCameraRoll(float angle) { m_viewAngleRoll = angle; updateDir(); };
 
@@ -87,10 +78,6 @@ class ClientPlayer : public Player {
 		static ClientPlayer *s_instance;
 
 		gk::Camera &m_camera;
-
-		float m_viewAngleH;
-		float m_viewAngleV;
-		float m_viewAngleRoll;
 
 		gk::Vector3f m_forwardDir;
 

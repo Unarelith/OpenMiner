@@ -82,7 +82,24 @@ void ServerCommandHandler::sendPlayerPosUpdate(u16 clientID, bool isTeleportatio
 			client->tcpSocket->send(packet);
 	}
 	else
-		gkError() << ("Failed to send pos update for player " + std::to_string(clientID) + ": Player not found").c_str();
+		gkError() << ("Failed to send position update for player " + std::to_string(clientID) + ": Player not found").c_str();
+}
+
+void ServerCommandHandler::sendPlayerRotUpdate(u16 clientID, const ClientInfo *client) const {
+	const ServerPlayer *player = m_players.getPlayer(clientID);
+	if (player) {
+		Network::Packet packet;
+		packet << Network::Command::PlayerRotUpdate;
+		packet << clientID;
+		packet << player->cameraYaw() << player->cameraPitch();
+
+		if (!client)
+			m_server.sendToAllClients(packet);
+		else
+			client->tcpSocket->send(packet);
+	}
+	else
+		gkError() << ("Failed to send rotation update for player " + std::to_string(clientID) + ": Player not found").c_str();
 }
 
 void ServerCommandHandler::sendPlayerInvUpdate(u16 clientID, const ClientInfo *client) const {
@@ -98,7 +115,7 @@ void ServerCommandHandler::sendPlayerInvUpdate(u16 clientID, const ClientInfo *c
 			client->tcpSocket->send(packet);
 	}
 	else
-		gkError() << ("Failed to send inv update for player " + std::to_string(clientID) + ": Player not found").c_str();
+		gkError() << ("Failed to send inventory update for player " + std::to_string(clientID) + ": Player not found").c_str();
 }
 
 void ServerCommandHandler::sendPlayerChangeDimension(u16 clientID, s32 x, s32 y, s32 z, u16 dimension, const ClientInfo *client) const {
@@ -221,6 +238,20 @@ void ServerCommandHandler::setupCallbacks() {
 		}
 		else
 			gkError() << ("Failed to update position of player " + std::to_string(client.id) + ": Player not found").c_str();
+	});
+
+	m_server.setCommandCallback(Network::Command::PlayerRotUpdate, [this](ClientInfo &client, Network::Packet &packet) {
+		u16 clientId;
+		float yaw, pitch;
+		packet >> clientId >> yaw >> pitch;
+
+		ServerPlayer *player = m_players.getPlayer(client.id);
+		if (player) {
+			if (clientId == client.id)
+				player->setRotation(yaw, pitch);
+		}
+		else
+			gkError() << ("Failed to update rotation of player " + std::to_string(client.id) + ": Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerPlaceBlock, [this](ClientInfo &client, Network::Packet &packet) {

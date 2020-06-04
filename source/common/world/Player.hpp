@@ -36,6 +36,11 @@ class Player : public ISerializable {
 	public:
 		Player();
 
+		// West, East, South, North
+		// Same order as enum BlockFace in TilesDef.hpp
+		u8 getDirection() const;
+		u8 getOppositeDirection() const;
+
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
@@ -45,11 +50,16 @@ class Player : public ISerializable {
 
 		u16 dimension() const { return m_dimension; }
 
+		float cameraYaw()   const { return m_viewAngleH; }
+		float cameraPitch() const { return m_viewAngleV; }
+		float cameraRoll()  const { return m_viewAngleRoll; }
+
 		u16 clientID() const { return m_clientID; }
 
 		Inventory &inventory() { return m_inventory; }
 
 		void setPosition(double x, double y, double z) { m_x = x; m_y = y; m_z = z; }
+		void setRotation(float yaw, float pitch) { m_viewAngleH = yaw; m_viewAngleV = pitch; }
 		void setDimension(u16 dimension) { m_dimension = dimension; }
 		void setClientID(u16 clientID) { m_clientID = clientID; }
 
@@ -63,6 +73,10 @@ class Player : public ISerializable {
 		double m_z = 0;
 
 		u16 m_dimension = 0;
+
+		float m_viewAngleH;
+		float m_viewAngleV;
+		float m_viewAngleRoll;
 
 		u16 m_clientID = 0;
 

@@ -155,6 +155,7 @@ void GameState::update() {
 
 	if (gk::GameClock::getInstance().getTicks() % 100 < 10) {
 		m_clientCommandHandler.sendPlayerPosUpdate();
+		m_clientCommandHandler.sendPlayerRotUpdate();
 	}
 
 	m_client.update();

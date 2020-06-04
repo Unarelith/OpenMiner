@@ -48,6 +48,7 @@ class ClientCommandHandler {
 
 		void sendPlayerInvUpdate();
 		void sendPlayerPosUpdate();
+		void sendPlayerRotUpdate();
 		void sendPlayerDigBlock(const glm::ivec4 &selectedBlock);
 		void sendPlayerPlaceBlock(s32 x, s32 y, s32 z, u32 block);
 		void sendPlayerInventoryRequest();

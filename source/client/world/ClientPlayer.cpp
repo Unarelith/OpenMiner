@@ -62,16 +62,6 @@ void ClientPlayer::turnViewV(float angle) {
 	updateDir();
 }
 
-// Note: This function returns an angle4
-u8 ClientPlayer::getDirection() const {
-	return int(floorf(m_viewAngleH / 90.f + 0.5f)) & 3;
-}
-
-// Note: This function returns an angle4
-u8 ClientPlayer::getOppositeDirection() const {
-	return getDirection() ^ 2;
-}
-
 void ClientPlayer::updateDir() {
 	float ch = cosf(m_viewAngleH * RADIANS_PER_DEGREES);
 	float sh = sinf(m_viewAngleH * RADIANS_PER_DEGREES);

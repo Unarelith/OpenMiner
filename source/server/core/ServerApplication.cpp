@@ -144,6 +144,7 @@ void ServerApplication::update() {
 	if (m_clock.getTicks() % 100 < 10) {
 		for (auto &it : m_players) {
 			m_serverCommandHandler.sendPlayerPosUpdate(it.first);
+			m_serverCommandHandler.sendPlayerRotUpdate(it.first);
 		}
 	}
 }
