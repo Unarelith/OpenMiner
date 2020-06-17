@@ -29,8 +29,6 @@
 #include "Config.hpp"
 
 Chat::Chat(Client &client) {
-	setPosition(2, Config::screenHeight / Config::guiScale - 50);
-
 	client.setCommandCallback(Network::Command::ChatMessage, [this](sf::Packet &packet) {
 		u16 clientID;
 		std::string message;

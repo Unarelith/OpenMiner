@@ -60,6 +60,8 @@ void HUD::setup() {
 	m_fpsText.setPosition(Config::screenWidth / getScale().x - 36, 2);
 
 	m_crosshair.setup();
+
+	m_chat.setPosition(2, Config::screenHeight / Config::guiScale - 50);
 }
 
 void HUD::onEvent(const sf::Event &event) {
