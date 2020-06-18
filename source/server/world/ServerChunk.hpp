@@ -42,16 +42,19 @@ class ServerChunk : public Chunk {
 
 		void updateLights();
 
-		void onBlockPlaced(int x, int y, int z, const Block &block) const;
-		void onBlockDestroyed(int x, int y, int z, const Block &block) const;
+		void onBlockPlaced(int x, int y, int z, const Block &block) override;
+		void onBlockDestroyed(int x, int y, int z, const Block &block) override;
 
 		void tick(World &world, ServerCommandHandler &server);
 
 		bool isSent() const { return m_isSent; }
 		void setSent(bool isSent) { m_isSent = isSent; }
 
+		bool hasBeenModified() const { return m_hasBeenModified; }
+
 	private:
 		std::atomic_bool m_isSent{false};
+		std::atomic_bool m_hasBeenModified{false};
 };
 
 #endif // SERVERCHUNK_HPP_

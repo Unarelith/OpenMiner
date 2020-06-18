@@ -110,18 +110,18 @@ void WorldController::save(const std::string &name) {
 	for (auto &world : m_worldList) {
 		Network::Packet chunks;
 		unsigned int chunkCount = 0;
-		for (auto &chunk : world.chunks()) {
-			if (!chunk.second->isInitialized()) continue;
+		for (auto &it : world.chunks()) {
+			if (!it.second->isInitialized() || !it.second->hasBeenModified()) continue;
 
-			const gk::Vector3i &chunkpos = chunk.first;
-			const Chunk::DataArray &data = chunk.second->data();
+			const gk::Vector3i &chunkpos = it.first;
+			const Chunk::DataArray &data = it.second->data();
 			chunks << chunkpos.x << chunkpos.y << chunkpos.z;
 
 			for (u8 z = 0 ; z < Chunk::height ; ++z) {
 				for (u8 y = 0 ; y < Chunk::depth ; ++y) {
 					for (u8 x = 0 ; x < Chunk::width ; ++x) {
 						chunks << u32(data[z][y][x])
-							<< u8(chunk.second->lightmap().getLightData(x, y, z));
+							<< u8(it.second->lightmap().getLightData(x, y, z));
 					}
 				}
 			}

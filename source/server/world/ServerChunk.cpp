@@ -37,14 +37,18 @@ void ServerChunk::updateLights() {
 	}
 }
 
-void ServerChunk::onBlockPlaced(int x, int y, int z, const Block &block) const {
+void ServerChunk::onBlockPlaced(int x, int y, int z, const Block &block) {
 	const ServerBlock &serverBlock = (ServerBlock &)block;
 	serverBlock.onBlockPlaced(glm::ivec3{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH, z + m_z * CHUNK_HEIGHT}, m_world);
+
+	m_hasBeenModified = true;
 }
 
-void ServerChunk::onBlockDestroyed(int x, int y, int z, const Block &block) const {
+void ServerChunk::onBlockDestroyed(int x, int y, int z, const Block &block) {
 	const ServerBlock &serverBlock = (ServerBlock &)block;
 	serverBlock.onBlockDestroyed(glm::ivec3{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH, z + m_z * CHUNK_HEIGHT}, m_world);
+
+	m_hasBeenModified = true;
 }
 
 void ServerChunk::tick(World &world, ServerCommandHandler &server) {
