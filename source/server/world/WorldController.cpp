@@ -24,6 +24,7 @@
  *
  * =====================================================================================
  */
+#include <filesystem>
 #include <fstream>
 
 #include "Registry.hpp"
@@ -49,7 +50,7 @@ void WorldController::update() {
 void WorldController::load(const std::string &name) {
 	gkDebug() << ("Loading '" + name + "'...").c_str();
 
-	std::ifstream file(name + ".dat", std::ofstream::binary);
+	std::ifstream file("saves/" + name + ".dat", std::ofstream::binary);
 
 	if (file.is_open()) {
 		file.seekg(0, file.end);
@@ -101,7 +102,9 @@ void WorldController::load(const std::string &name) {
 void WorldController::save(const std::string &name) {
 	gkDebug() << ("Saving '" + name + "'...").c_str();
 
-	std::ofstream file(name + ".dat", std::ofstream::binary | std::ofstream::trunc);
+	std::filesystem::create_directory("saves");
+
+	std::ofstream file("saves/" + name + ".dat", std::ofstream::binary | std::ofstream::trunc);
 
 	Network::Packet save;
 	for (auto &world : m_worldList) {
