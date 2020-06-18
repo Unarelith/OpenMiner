@@ -29,6 +29,7 @@
 #include "Dimension.hpp"
 #include "EngineConfig.hpp"
 #include "Network.hpp"
+#include "PlayerList.hpp"
 #include "Server.hpp"
 #include "ServerCommandHandler.hpp"
 #include "ServerConfig.hpp"
@@ -47,7 +48,8 @@ void ServerWorld::update() {
 
 			if (it.second->isInitialized() && !it.second->isSent()) {
 				for (auto &client : m_server->server().info().clients())
-					sendChunkData(client, *it.second.get());
+					if (m_players.getPlayer(client.id)->dimension() == m_dimension.id())
+						sendChunkData(client, *it.second.get());
 
 				// gkDebug() << "Chunk updated at" << it.second->x() << it.second->y() << it.second->z();
 			}

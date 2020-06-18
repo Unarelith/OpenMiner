@@ -47,7 +47,7 @@ void WorldController::update() {
 }
 
 void WorldController::load(const std::string &name) {
-	// std::cout << "Loading '" + name + "'..." << std::endl;
+	gkDebug() << ("Loading '" + name + "'...").c_str();
 
 	std::ifstream file(name + ".dat", std::ofstream::binary);
 
@@ -68,7 +68,7 @@ void WorldController::load(const std::string &name) {
 			unsigned int chunkCount;
 			save >> chunkCount;
 
-			// std::cout << "Dimension " << world.dimension().id() << " chunk count: " << chunkCount << std::endl;
+			gkDebug() << "Loading dimension" << world.dimension().id() << "| Chunk count:" << chunkCount;
 
 			for (unsigned int i = 0 ; i < chunkCount ; ++i) {
 				int cx, cy, cz;
@@ -95,11 +95,11 @@ void WorldController::load(const std::string &name) {
 		}
 	}
 
-	// std::cout << "Loading done." << std::endl;
+	gkDebug() << "Loading done.";
 }
 
 void WorldController::save(const std::string &name) {
-	// std::cout << "Saving '" << name << "'..." << std::endl;
+	gkDebug() << ("Saving '" + name + "'...").c_str();
 
 	std::ofstream file(name + ".dat", std::ofstream::binary | std::ofstream::trunc);
 
@@ -126,11 +126,13 @@ void WorldController::save(const std::string &name) {
 			++chunkCount;
 		}
 
-		// std::cout << "Saving dimension " << world.dimension().id() << ". Chunk count: " << chunkCount << std::endl;
+		gkDebug() << "Saving dimension" << world.dimension().id() << "| Chunk count:" << chunkCount;
 
 		save << chunkCount;
 		save.append(chunks.getData(), chunks.getDataSize());
 	}
 
 	file.write((const char *)save.getData(), save.getDataSize());
+
+	gkDebug() << "Saving done.";
 }

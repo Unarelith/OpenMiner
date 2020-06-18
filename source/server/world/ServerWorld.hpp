@@ -49,7 +49,7 @@ class ServerWorld : public World {
 
 	public:
 		ServerWorld(PlayerList &players, const Dimension &dimension, gk::GameClock &clock)
-			: m_dimension(dimension), m_terrainGenerator(dimension), m_clock(clock), m_scene(players) {}
+			: m_players(players), m_dimension(dimension), m_terrainGenerator(dimension), m_clock(clock), m_scene(players) {}
 
 		void update();
 
@@ -74,6 +74,8 @@ class ServerWorld : public World {
 		static void initUsertype(sol::state &lua);
 
 	private:
+		PlayerList &m_players;
+
 		const Dimension &m_dimension;
 
 		ChunkMap m_chunks;
