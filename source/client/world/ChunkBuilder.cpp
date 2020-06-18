@@ -209,7 +209,7 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 		}
 		else {
 			float blockHeight = vertexPos[v]->z;
-			if (block.drawType() == BlockDrawType::Liquid && (!surroundingBlock || !surroundingBlock->id())) {
+			if (block.drawType() == BlockDrawType::Liquid && (f != BlockFace::Bottom || !surroundingBlock || !surroundingBlock->id())) {
 				if (f == BlockFace::Bottom)
 					blockHeight = vertexPos[v]->z - 2.f / 16.f;
 				else
