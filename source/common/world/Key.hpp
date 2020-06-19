@@ -45,14 +45,8 @@ class Key : public ISerializable {
 		Key(u16 id, const std::string &stringID, const std::string &name)
 			: m_id(id), m_stringID(stringID), m_name(name) {}
 
-		void serialize(sf::Packet &packet) const override {
-			packet << m_id << m_stringID << m_name << m_defaultKey;
-		}
-
-		void deserialize(sf::Packet &packet) override {
-			packet >> m_id >> m_stringID >> m_name >> m_defaultKey;
-			m_keycode = gk::KeyboardUtils::getKeyFromName(m_defaultKey);
-		}
+		void serialize(sf::Packet &packet) const override { packet << m_id << m_stringID << m_name << m_defaultKey; }
+		void deserialize(sf::Packet &packet) override { packet >> m_id >> m_stringID >> m_name >> m_defaultKey; }
 
 		u16 id() const { return m_id; }
 
@@ -64,7 +58,12 @@ class Key : public ISerializable {
 		void setKeycode(sf::Keyboard::Key keycode) { m_keycode = keycode; if (m_parent) m_parent->m_keycode = keycode; }
 
 		const std::string &defaultKey() const { return m_defaultKey; }
-		void setDefaultKey(const std::string &defaultKey) { m_defaultKey = defaultKey; }
+		void setDefaultKey(const std::string &defaultKey) {
+			m_defaultKey = defaultKey;
+
+			if (m_keycode == sf::Keyboard::Unknown)
+				m_keycode = gk::KeyboardUtils::getKeyFromName(m_defaultKey);
+		}
 
 		const sol::unsafe_function &callback() const { return m_callback; }
 		void setCallback(const sol::unsafe_function &callback) { m_callback = callback; }
