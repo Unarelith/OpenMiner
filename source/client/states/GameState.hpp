@@ -39,6 +39,7 @@
 #include "ClientWorld.hpp"
 #include "Config.hpp"
 #include "HUD.hpp"
+#include "KeyboardHandler.hpp"
 #include "PlayerBox.hpp"
 #include "Registry.hpp"
 
@@ -47,7 +48,6 @@ class TextureAtlas;
 class GameState : public gk::ApplicationState {
 	public:
 		GameState();
-		~GameState();
 
 		void init() override;
 
@@ -92,6 +92,9 @@ class GameState : public gk::ApplicationState {
 		TextureAtlas &m_textureAtlas;
 
 		Registry m_registry;
+
+		KeyboardHandler *m_keyboardHandler;
+		bool m_areModKeysLoaded = false;
 };
 
 #endif // GAMESTATE_HPP_

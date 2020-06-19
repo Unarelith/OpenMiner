@@ -41,9 +41,6 @@ namespace GameKey {
 		Sneak,
 		Sprint,
 
-		Dig,
-		Use,
-
 		Chat,
 		Command,
 

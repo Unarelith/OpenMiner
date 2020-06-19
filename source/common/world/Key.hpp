@@ -58,6 +58,7 @@ class Key : public ISerializable {
 
 		const std::string &stringID() const { return m_stringID; }
 		const std::string &name() const { return m_name; }
+		void setName(const std::string &name) { m_name = name; }
 
 		sf::Keyboard::Key keycode() const { return m_keycode; }
 		void setKeycode(sf::Keyboard::Key keycode) { m_keycode = keycode; }

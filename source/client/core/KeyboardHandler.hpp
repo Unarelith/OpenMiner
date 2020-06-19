@@ -27,11 +27,13 @@
 #ifndef KEYBOARDHANDLER_HPP_
 #define KEYBOARDHANDLER_HPP_
 
-#include <unordered_map>
+#include <map>
 #include <string>
 
 #include <gk/core/input/InputHandler.hpp>
 #include <gk/core/input/KeyboardUtils.hpp>
+
+#include "Key.hpp"
 
 class KeyboardHandler : public gk::InputHandler {
 	public:
@@ -42,16 +44,18 @@ class KeyboardHandler : public gk::InputHandler {
 
 		bool isKeyPressed(gk::GameKey key) override;
 
-		sf::Keyboard::Key getKeycode(gk::GameKey key) { return m_keys[key]; }
-		std::string getKeyName(gk::GameKey key) { return gk::KeyboardUtils::getNameFromKey(m_keys[key]); }
-		void setKeycode(gk::GameKey key, sf::Keyboard::Key keycode) { m_keys[key] = keycode; }
+		sf::Keyboard::Key getKeycode(gk::GameKey key) { return m_keys[key].keycode(); }
+		std::string getKeyName(gk::GameKey key) { return gk::KeyboardUtils::getNameFromKey(m_keys[key].keycode()); }
+		void setKeycode(gk::GameKey key, sf::Keyboard::Key keycode) { m_keys[key].setKeycode(keycode); }
 
-		void addKey(gk::GameKey key, const std::string &name, sf::Keyboard::Key defaultKey);
-		u32 keyCount() { return m_keyNames.size(); }
+		void addKey(gk::GameKey key, const std::string &name, sf::Keyboard::Key defaultKey, const std::string &stringID = "");
+		u32 keyCount() { return m_keys.size(); }
+
+		const std::map<gk::GameKey, Key> &keys() const { return m_keys; }
 
 	protected:
-		std::unordered_map<gk::GameKey, sf::Keyboard::Key> m_keys;
-		std::unordered_map<std::string, gk::GameKey> m_keyNames;
+		std::map<gk::GameKey, Key> m_keys;
+		std::map<std::string, gk::GameKey> m_keysID;
 };
 
 #endif // KEYBOARDHANDLER_HPP_

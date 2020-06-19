@@ -31,8 +31,6 @@
 #include "SmeltingRecipe.hpp"
 #include "Registry.hpp"
 
-bool Registry::isActive = false;
-
 Registry *Registry::s_instance = nullptr;
 
 Item &Registry::registerItem(const TilesDef &tiles, const std::string &stringID, const std::string &label) {

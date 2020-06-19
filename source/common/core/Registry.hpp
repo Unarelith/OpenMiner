@@ -122,7 +122,6 @@ class Registry : public ISerializable {
 		const std::vector<Dimension> &dimensions() const { return m_dimensions; }
 		std::vector<Key> &keys() { return m_keys; }
 
-		static bool isActive;
 		static Registry &getInstance() { return *s_instance; }
 		static void setInstance(Registry &instance) { s_instance = &instance; }
 
