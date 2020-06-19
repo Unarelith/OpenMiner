@@ -130,6 +130,8 @@ int ServerApplication::run(bool isProtected) {
 		mainLoop();
 	}
 
+	gkInfo() << "Stopping server...";
+
 	m_serverCommandHandler.sendServerClosed("Server closed.");
 
 	m_registry.clear();

@@ -416,6 +416,10 @@ inline ServerWorld &ServerCommandHandler::getWorldForClient(u16 clientID) {
 	return m_worldController.getWorld(player->dimension());
 }
 
+void ServerCommandHandler::stopServer() const {
+	m_server.setRunning(false);
+}
+
 // Please update 'docs/lua-api-cpp.md' if you change this
 void ServerCommandHandler::initUsertype(sol::state &lua) {
 	lua.new_usertype<ServerCommandHandler>("ServerCommandHandler",

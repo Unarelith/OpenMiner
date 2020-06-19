@@ -174,9 +174,8 @@ void ClientCommandHandler::setupCallbacks() {
 		std::string message;
 		packet >> message;
 
-		gk::ApplicationStateStack::getInstance().pop();
-		gk::ApplicationStateStack::getInstance().pop();
-		gk::ApplicationStateStack::getInstance().push<ConnectionErrorState>(message, m_client.serverAddress().toString(), m_client.serverPort(), m_client.texturePack(), &gk::ApplicationStateStack::getInstance().top());
+		gk::ApplicationStateStack::getInstance().clear();
+		gk::ApplicationStateStack::getInstance().push<ConnectionErrorState>(message, m_client.serverAddress().toString(), m_client.serverPort(), m_client.texturePack(), nullptr);
 	});
 
 	m_client.setCommandCallback(Network::Command::RegistryData, [this](Network::Packet &packet) {

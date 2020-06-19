@@ -25,13 +25,18 @@
  * =====================================================================================
  */
 #include <gk/core/ApplicationStateStack.hpp>
+#include <gk/core/Mouse.hpp>
 
 #include "Config.hpp"
 #include "ConnectionErrorState.hpp"
 #include "GameState.hpp"
 #include "ServerLoadingState.hpp"
+#include "TitleScreenState.hpp"
 
 ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::string &host, u16 port, const std::string &texturePack, gk::ApplicationState *parent) : InterfaceState(parent) {
+	gk::Mouse::setCursorGrabbed(false);
+	gk::Mouse::setCursorVisible(true);
+
 	m_host = host;
 	m_port = port;
 
@@ -55,7 +60,13 @@ ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::
 	m_cancelButton.setText("Cancel");
 	m_cancelButton.setScale(Config::guiScale, Config::guiScale);
 	m_cancelButton.setCallback([this](TextButton &) {
-		m_stateStack->pop();
+		if (m_stateStack->size() > 1) {
+			m_stateStack->pop();
+		}
+		else {
+			m_stateStack->pop();
+			m_stateStack->push<TitleScreenState>(m_port).setTexturePack(m_texturePack);
+		}
 	});
 
 	updateWidgetPosition();
@@ -83,11 +94,10 @@ void ConnectionErrorState::updateWidgetPosition() {
 }
 
 void ConnectionErrorState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	if (m_parent)
-		target.draw(*m_parent, states);
-
 	if (&m_stateStack->top() == this) {
 		prepareDraw(target, states);
+
+		target.draw(m_background, states);
 
 		target.draw(m_text, states);
 

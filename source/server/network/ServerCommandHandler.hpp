@@ -76,6 +76,8 @@ class ServerCommandHandler {
 
 		void setPlayerPosition(u16 clientID, s32 x, s32 y, s32 z);
 
+		void stopServer() const;
+
 		const Server &server() const { return m_server; }
 
 		static void initUsertype(sol::state &lua);

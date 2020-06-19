@@ -50,6 +50,8 @@ class ConnectionErrorState : public InterfaceState {
 
 		TextButton m_reconnectButton;
 		TextButton m_cancelButton;
+
+		gk::Image m_background{"texture-title_screen"};
 };
 
 #endif // CONNECTIONERRORSTATE_HPP_

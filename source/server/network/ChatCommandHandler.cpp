@@ -46,6 +46,7 @@ void ChatCommandHandler::parseCommand(const std::string &str, ClientInfo &client
 		{"tp", &ChatCommandHandler::teleportationCommand},
 		{"save", &ChatCommandHandler::saveCommand},
 		{"load", &ChatCommandHandler::loadCommand},
+		{"stop", &ChatCommandHandler::stopCommand},
 	};
 
 	if (!command.empty()) {
@@ -109,5 +110,10 @@ void ChatCommandHandler::loadCommand(const std::vector<std::string> &command, Cl
 
 		m_server.sendChatMessage(0, "Loaded '" + name + "'", &client);
 	}
+}
+
+void ChatCommandHandler::stopCommand(const std::vector<std::string> &, ClientInfo &client) const {
+	m_server.sendChatMessage(0, "Stopping server...", &client);
+	m_server.stopServer();
 }
 
