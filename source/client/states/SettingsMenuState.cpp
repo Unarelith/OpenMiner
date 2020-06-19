@@ -78,21 +78,14 @@ void SettingsMenuState::onEvent(const sf::Event &event) {
 			doneButtonAction();
 		}
 		else if (m_currentKeyButton && event.type == sf::Event::KeyPressed) {
-			if (!m_key) {
-				KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
-				keyboardHandler->setKeycode(m_currentKey, event.key.code);
+			KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
+			keyboardHandler->setKeycode(m_currentKey, event.key.code);
 
-				m_currentKeyButton->setText(m_currentKeyButton->text() + keyboardHandler->getKeyName(m_currentKey));
-				m_currentKeyButton = nullptr;
-			}
-			else{
-				m_key->setKeycode(event.key.code);
+			m_key->setKeycode(event.key.code);
+			m_key = nullptr;
 
-				m_currentKeyButton->setText(m_currentKeyButton->text() + gk::KeyboardUtils::getNameFromKey(m_key->keycode()));
-				m_currentKeyButton = nullptr;
-
-				m_key = nullptr;
-			}
+			m_currentKeyButton->setText(m_currentKeyButton->text() + keyboardHandler->getKeyName(m_currentKey));
+			m_currentKeyButton = nullptr;
 		}
 	}
 }
@@ -229,6 +222,7 @@ void SettingsMenuState::addInputButtons() {
 			button.setText(it.second.name() + ": ");
 			m_currentKey = it.first;
 			m_currentKeyButton = &button;
+			m_key = const_cast<Key *>(&it.second);
 		});
 	}
 

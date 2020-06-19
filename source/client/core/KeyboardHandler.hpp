@@ -48,7 +48,7 @@ class KeyboardHandler : public gk::InputHandler {
 		std::string getKeyName(gk::GameKey key) { return gk::KeyboardUtils::getNameFromKey(m_keys[key].keycode()); }
 		void setKeycode(gk::GameKey key, sf::Keyboard::Key keycode) { m_keys[key].setKeycode(keycode); }
 
-		void addKey(gk::GameKey key, const std::string &name, sf::Keyboard::Key defaultKey, const std::string &stringID = "");
+		void addKey(gk::GameKey id, const std::string &name, sf::Keyboard::Key defaultKey, const std::string &stringID = "", Key *key = nullptr);
 		u32 keyCount() { return m_keys.size(); }
 
 		const std::map<gk::GameKey, Key> &keys() const { return m_keys; }
