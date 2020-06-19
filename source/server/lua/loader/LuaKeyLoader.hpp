@@ -24,34 +24,21 @@
  *
  * =====================================================================================
  */
-#ifndef KEYBOARDHANDLER_HPP_
-#define KEYBOARDHANDLER_HPP_
+#ifndef LUAKEYLOADER_HPP_
+#define LUAKEYLOADER_HPP_
 
-#include <unordered_map>
-#include <string>
+#include <sol/sol.hpp>
 
-#include <gk/core/input/InputHandler.hpp>
-#include <gk/core/input/KeyboardUtils.hpp>
+class LuaMod;
 
-class KeyboardHandler : public gk::InputHandler {
+class LuaKeyLoader {
 	public:
-		KeyboardHandler();
+		LuaKeyLoader(LuaMod &mod) : m_mod(mod) {}
 
-		void loadKeysFromFile(const std::string &filename);
-		void saveKeysToFile(const std::string &filename);
+		void loadKey(const sol::table &table) const;
 
-		bool isKeyPressed(gk::GameKey key) override;
-
-		sf::Keyboard::Key getKeycode(gk::GameKey key) { return m_keys[key]; }
-		std::string getKeyName(gk::GameKey key) { return gk::KeyboardUtils::getNameFromKey(m_keys[key]); }
-		void setKeycode(gk::GameKey key, sf::Keyboard::Key keycode) { m_keys[key] = keycode; }
-
-		void addKey(gk::GameKey key, const std::string &name, sf::Keyboard::Key defaultKey);
-		u32 keyCount() { return m_keyNames.size(); }
-
-	protected:
-		std::unordered_map<gk::GameKey, sf::Keyboard::Key> m_keys;
-		std::unordered_map<std::string, gk::GameKey> m_keyNames;
+	private:
+		LuaMod &m_mod;
 };
 
-#endif // KEYBOARDHANDLER_HPP_
+#endif // LUAKEYLOADER_HPP_

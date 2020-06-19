@@ -112,9 +112,26 @@ Dimension &Registry::registerSerializedDimension(sf::Packet &packet) {
 	m_dimensions.back().deserialize(packet);
 
 	u16 id = m_dimensions.size() - 1;
-	m_dimensionsID.emplace(m_biomes.back().stringID(), id);
+	m_dimensionsID.emplace(m_dimensions.back().stringID(), id);
 
 	return m_dimensions.back();
+}
+
+Key &Registry::registerKey(const std::string &stringID, const std::string &label) {
+	u16 id = m_keys.size();
+	m_keysID.emplace(stringID, id);
+	m_keys.emplace_back(id, stringID, label);
+	return m_keys.back();
+}
+
+Key &Registry::registerSerializedKey(sf::Packet &packet) {
+	m_keys.emplace_back();
+	m_keys.back().deserialize(packet);
+
+	u16 id = m_keys.size() - 1;
+	m_keysID.emplace(m_biomes.back().stringID(), id);
+
+	return m_keys.back();
 }
 
 entt::entity Registry::registerEntity(const std::string &stringID) {
@@ -231,6 +248,10 @@ void Registry::serialize(sf::Packet &packet) const {
 	for (auto &it : m_dimensions) {
 		packet << u8(DataType::Dimension) << it;
 	}
+
+	for (auto &it : m_keys) {
+		packet << u8(DataType::Key) << it;
+	}
 }
 
 void Registry::deserialize(sf::Packet &packet) {
@@ -261,6 +282,9 @@ void Registry::deserialize(sf::Packet &packet) {
 		else if (type == u8(DataType::Dimension)) {
 			registerSerializedDimension(packet);
 		}
+		else if (type == u8(DataType::Key)) {
+			registerSerializedKey(packet);
+		}
 	}
 }
 
@@ -272,6 +296,7 @@ void Registry::clear() {
 	m_trees.clear();
 	m_biomes.clear();
 	m_dimensions.clear();
+	m_keys.clear();
 
 	m_blocksID.clear();
 	m_itemsID.clear();
@@ -279,6 +304,7 @@ void Registry::clear() {
 	m_treesID.clear();
 	m_biomesID.clear();
 	m_dimensionsID.clear();
+	m_keysID.clear();
 
 	m_entities.clear();
 	m_entityRegistry.clear();
@@ -293,6 +319,7 @@ void Registry::initUsertype(sol::state &lua) {
 		"get_tree",   &Registry::getTree,
 		"get_biome",  &Registry::getBiome,
 		"get_recipe", &Registry::getRecipe,
+		"get_key",    &Registry::getKey,
 
 		"get_block_from_string", &Registry::getBlockFromStringID,
 		"get_item_from_string",  &Registry::getItemFromStringID,

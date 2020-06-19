@@ -47,6 +47,7 @@ void LuaMod::commit() {
 			case DefinitionType::Tree:            m_biomeLoader.loadTree(it.second);             break;
 			case DefinitionType::Biome:           m_biomeLoader.loadBiome(it.second);            break;
 			case DefinitionType::Dimension:       m_dimensionLoader.loadDimension(it.second);    break;
+			case DefinitionType::Key:             m_keyLoader.loadKey(it.second);                break;
 			case DefinitionType::Entity:          m_entityLoader.loadEntity(it.second);          break;
 			default: break;
 		}
@@ -77,6 +78,7 @@ void LuaMod::initUsertype(sol::state &lua) {
 		"tree",            DEF_FUNC(DefinitionType::Tree),
 		"biome",           DEF_FUNC(DefinitionType::Biome),
 		"dimension",       DEF_FUNC(DefinitionType::Dimension),
+		"key",             DEF_FUNC(DefinitionType::Key),
 		"entity",          DEF_FUNC(DefinitionType::Entity)
 	);
 }
