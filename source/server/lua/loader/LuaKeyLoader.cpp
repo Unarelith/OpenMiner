@@ -24,34 +24,15 @@
  *
  * =====================================================================================
  */
-#ifndef KEYBOARDHANDLER_HPP_
-#define KEYBOARDHANDLER_HPP_
+#include "LuaKeyLoader.hpp"
+#include "LuaMod.hpp"
+#include "Registry.hpp"
 
-#include <unordered_map>
-#include <string>
+void LuaKeyLoader::loadKey(const sol::table &table) const {
+	std::string stringID = m_mod.id() + ":" + table["id"].get<std::string>();
+	std::string name = table["name"].get_or<std::string>(stringID);
+	std::string defaultKey = table["default_key"].get_or<std::string>("");
 
-#include <gk/core/input/InputHandler.hpp>
-#include <gk/core/input/KeyboardUtils.hpp>
+	Registry::getInstance().registerKey(stringID, name).setDefaultKey(defaultKey);
+}
 
-class KeyboardHandler : public gk::InputHandler {
-	public:
-		KeyboardHandler();
-
-		void loadKeysFromFile(const std::string &filename);
-		void saveKeysToFile(const std::string &filename);
-
-		bool isKeyPressed(gk::GameKey key) override;
-
-		sf::Keyboard::Key getKeycode(gk::GameKey key) { return m_keys[key]; }
-		std::string getKeyName(gk::GameKey key) { return gk::KeyboardUtils::getNameFromKey(m_keys[key]); }
-		void setKeycode(gk::GameKey key, sf::Keyboard::Key keycode) { m_keys[key] = keycode; }
-
-		void addKey(gk::GameKey key, const std::string &name, sf::Keyboard::Key defaultKey);
-		u32 keyCount() { return m_keyNames.size(); }
-
-	protected:
-		std::unordered_map<gk::GameKey, sf::Keyboard::Key> m_keys;
-		std::unordered_map<std::string, gk::GameKey> m_keyNames;
-};
-
-#endif // KEYBOARDHANDLER_HPP_

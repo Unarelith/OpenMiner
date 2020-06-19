@@ -38,6 +38,7 @@
 #include "LuaDimensionLoader.hpp"
 #include "LuaEntityLoader.hpp"
 #include "LuaItemLoader.hpp"
+#include "LuaKeyLoader.hpp"
 #include "LuaRecipeLoader.hpp"
 #include "LuaSkyLoader.hpp"
 
@@ -77,6 +78,7 @@ class LuaMod {
 			Tree,
 			Biome,
 			Dimension,
+			Key,
 			Entity,
 		};
 
@@ -96,6 +98,7 @@ class LuaMod {
 		LuaBiomeLoader m_biomeLoader{*this};
 		LuaDimensionLoader m_dimensionLoader{*this};
 		LuaEntityLoader m_entityLoader{*this, m_worldController};
+		LuaKeyLoader m_keyLoader{*this};
 };
 
 #endif // LUAMOD_HPP_

@@ -24,34 +24,40 @@
  *
  * =====================================================================================
  */
-#ifndef KEYBOARDHANDLER_HPP_
-#define KEYBOARDHANDLER_HPP_
+#ifndef KEY_HPP_
+#define KEY_HPP_
 
-#include <unordered_map>
 #include <string>
 
-#include <gk/core/input/InputHandler.hpp>
-#include <gk/core/input/KeyboardUtils.hpp>
+#include <gk/core/IntTypes.hpp>
 
-class KeyboardHandler : public gk::InputHandler {
+#include "ISerializable.hpp"
+#include "NetworkUtils.hpp"
+
+class Key : public ISerializable {
 	public:
-		KeyboardHandler();
+		Key() = default;
+		Key(u16 id, const std::string &stringID, const std::string &name)
+			: m_id(id), m_stringID(stringID), m_name(name) {}
 
-		void loadKeysFromFile(const std::string &filename);
-		void saveKeysToFile(const std::string &filename);
+		void serialize(sf::Packet &packet) const override { packet << m_id << m_stringID << m_name << m_defaultKey; }
+		void deserialize(sf::Packet &packet) override { packet >> m_id >> m_stringID >> m_name >> m_defaultKey; }
 
-		bool isKeyPressed(gk::GameKey key) override;
+		u16 id() const { return m_id; }
 
-		sf::Keyboard::Key getKeycode(gk::GameKey key) { return m_keys[key]; }
-		std::string getKeyName(gk::GameKey key) { return gk::KeyboardUtils::getNameFromKey(m_keys[key]); }
-		void setKeycode(gk::GameKey key, sf::Keyboard::Key keycode) { m_keys[key] = keycode; }
+		const std::string &stringID() const { return m_stringID; }
+		const std::string &name() const { return m_name; }
 
-		void addKey(gk::GameKey key, const std::string &name, sf::Keyboard::Key defaultKey);
-		u32 keyCount() { return m_keyNames.size(); }
+		const std::string &defaultKey() const { return m_defaultKey; }
+		void setDefaultKey(const std::string &defaultKey) { m_defaultKey = defaultKey; }
 
-	protected:
-		std::unordered_map<gk::GameKey, sf::Keyboard::Key> m_keys;
-		std::unordered_map<std::string, gk::GameKey> m_keyNames;
+	private:
+		u16 m_id;
+
+		std::string m_stringID;
+		std::string m_name;
+
+		std::string m_defaultKey;
 };
 
-#endif // KEYBOARDHANDLER_HPP_
+#endif // KEY_HPP_

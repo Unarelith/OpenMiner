@@ -90,3 +90,13 @@ function show_inventory(client, screen_width, screen_height, gui_scale)
 	gui:show(client)
 end
 
+mod:key {
+	id = "inventory",
+	name = "Inventory",
+	default_key = "E"
+}
+
+mod:key_callback("default:inventory", function(client, screen_width, screen_height, gui_scale)
+	show_inventory(client, screen_width, screen_height, gui_scale)
+end)
+

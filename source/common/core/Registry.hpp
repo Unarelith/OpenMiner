@@ -37,6 +37,7 @@
 #include "Block.hpp"
 #include "Dimension.hpp"
 #include "Item.hpp"
+#include "Key.hpp"
 #include "Network.hpp"
 #include "Recipe.hpp"
 #include "Tree.hpp"
@@ -84,6 +85,9 @@ class Registry : public ISerializable {
 		Dimension &registerDimension(const std::string &stringID, const std::string &label);
 		Dimension &registerSerializedDimension(sf::Packet &packet);
 
+		Key &registerKey(const std::string &stringID, const std::string &label);
+		Key &registerSerializedKey(sf::Packet &packet);
+
 		entt::registry &entityRegistry() { return m_entityRegistry; }
 		entt::entity registerEntity(const std::string &stringID);
 
@@ -93,6 +97,7 @@ class Registry : public ISerializable {
 		const Tree &getTree(u16 id) const { return m_trees.at(id); }
 		const Biome &getBiome(u16 id) const { return m_biomes.at(id); }
 		const Dimension &getDimension(u16 id) const { return m_dimensions.at(id); }
+		const Key &getKey(u16 id) const { return m_keys.at(id); }
 
 		const Block &getBlockFromStringID(const std::string &stringID);
 		const Item &getItemFromStringID(const std::string &stringID);
@@ -115,6 +120,7 @@ class Registry : public ISerializable {
 		const std::vector<Tree> &trees() const { return m_trees; }
 		const std::vector<Biome> &biomes() const { return m_biomes; }
 		const std::vector<Dimension> &dimensions() const { return m_dimensions; }
+		const std::vector<Key> &keys() const { return m_keys; }
 
 		static Registry &getInstance() { return *s_instance; }
 		static void setInstance(Registry &instance) { s_instance = &instance; }
@@ -129,6 +135,7 @@ class Registry : public ISerializable {
 		std::vector<Tree> m_trees;
 		std::vector<Biome> m_biomes;
 		std::vector<Dimension> m_dimensions;
+		std::vector<Key> m_keys;
 
 		std::unordered_map<std::string, u32> m_blocksID;
 		std::unordered_map<std::string, u32> m_itemsID;
@@ -136,6 +143,7 @@ class Registry : public ISerializable {
 		std::unordered_map<std::string, u16> m_treesID;
 		std::unordered_map<std::string, u16> m_biomesID;
 		std::unordered_map<std::string, u16> m_dimensionsID;
+		std::unordered_map<std::string, u16> m_keysID;
 
 		std::unordered_map<std::string, entt::entity> m_entities;
 
@@ -149,7 +157,8 @@ class Registry : public ISerializable {
 			Sky,
 			Tree,
 			Biome,
-			Dimension
+			Dimension,
+			Key
 		};
 };
 
