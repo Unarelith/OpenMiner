@@ -46,7 +46,7 @@ class TextButton : public Widget {
 
 		void onEvent(const sf::Event &event) override;
 
-		const std::string &text() const { return m_text.text(); }
+		const std::string &text() const { return m_text.string(); }
 		void setText(const std::string &text);
 
 		void setCallback(const CppCallback &callback) { m_cppCallback = callback; }

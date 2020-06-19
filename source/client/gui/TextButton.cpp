@@ -54,7 +54,7 @@ void TextButton::onEvent(const sf::Event &event) {
 }
 
 void TextButton::setText(const std::string &text) {
-	m_text.setText(text);
+	m_text.setString(text);
 	m_text.updateVertexBuffer();
 	m_text.setPosition(m_width / 2 - m_text.getSize().x / 2,
 			m_height / 2 - m_text.getSize().y / 2, 0);

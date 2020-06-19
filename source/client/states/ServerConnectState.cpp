@@ -31,7 +31,7 @@
 #include "ServerLoadingState.hpp"
 
 ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : InterfaceState(parent) {
-	m_textInput.setText("localhost:4242");
+	m_textInput.setString("localhost:4242");
 	m_textInput.setCharacterLimit(15 + 1 + 6);
 	m_textInput.setBackgroundSize(150, 20);
 	m_textInput.setBackgroundOutline(1, gk::Color::White);
@@ -44,14 +44,14 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 	m_connectButton.setPosition(Config::screenWidth / 2.0f - m_connectButton.getGlobalBounds().sizeX * Config::guiScale / 2.0f, Config::screenHeight - 340);
 	m_connectButton.setScale(Config::guiScale, Config::guiScale);
 	m_connectButton.setCallback([this](TextButton &) {
-		size_t sep = m_textInput.text().find_first_of(':');
-		std::string host = m_textInput.text().substr(0, sep);
+		size_t sep = m_textInput.string().find_first_of(':');
+		std::string host = m_textInput.string().substr(0, sep);
 
 		bool isPortInvalid = false;
 		int port = 0;
 		if (sep != std::string::npos) {
 			try {
-				port = std::stoi(m_textInput.text().substr(sep + 1));
+				port = std::stoi(m_textInput.string().substr(sep + 1));
 			}
 			catch (const std::invalid_argument &e) {
 				isPortInvalid = true;
@@ -59,7 +59,7 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 		}
 
 		if (port == 0 || isPortInvalid) {
-			m_errorText.setText("Error: Invalid server address");
+			m_errorText.setString("Error: Invalid server address");
 			m_errorText.updateVertexBuffer();
 			m_errorText.setPosition(
 				Config::screenWidth / 2.0f - m_errorText.getSize().x * Config::guiScale / 2.0f,
@@ -123,7 +123,7 @@ void ServerConnectState::draw(gk::RenderTarget &target, gk::RenderStates states)
 		target.draw(m_connectButton, states);
 		target.draw(m_cancelButton, states);
 
-		if (!m_errorText.text().empty())
+		if (!m_errorText.string().empty())
 			target.draw(m_errorText, states);
 	}
 }

@@ -37,8 +37,8 @@ class TextInput : public gk::Drawable, public gk::Transformable {
 
 		void onEvent(const sf::Event &event);
 
-		const std::string &text() const { return m_content; }
-		void setText(const std::string &text) { m_content = text; m_text.setText(m_content + m_cursor); }
+		const std::string &string() const { return m_content; }
+		void setString(const std::string &string) { m_content = string; m_text.setString(m_content + m_cursor); }
 
 		gk::Vector2f getBackgroundSize() const { return m_text.getBackgroundSize(); }
 

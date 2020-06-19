@@ -29,14 +29,14 @@
 #include "TextInput.hpp"
 
 TextInput::TextInput() {
-	m_text.setText(std::string{m_cursor});
+	m_text.setString(std::string{m_cursor});
 }
 
 void TextInput::onEvent(const sf::Event &event) {
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Backspace && !m_content.empty()) {
 		m_content.erase(m_content.begin() + m_content.length() - 1);
 
-		m_text.setText(m_content + m_cursor);
+		m_text.setString(m_content + m_cursor);
 	}
 
   	if (event.type == sf::Event::TextEntered) {
@@ -45,7 +45,7 @@ void TextInput::onEvent(const sf::Event &event) {
 			m_content += c;
 		}
 
-		m_text.setText(m_content + m_cursor);
+		m_text.setString(m_content + m_cursor);
 	}
 }
 

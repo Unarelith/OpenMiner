@@ -37,7 +37,7 @@ DebugOverlay::DebugOverlay(const ClientPlayer &player, const ClientWorld &world)
 {
 	setPosition(4, 4, 0);
 
-	m_versionText.setText(APP_NAME + std::string(" v0.0.1"));
+	m_versionText.setString(APP_NAME + std::string(" v0.0.1"));
 	m_versionText.setColor(gk::Color::White);
 
 	m_positionText.setPosition(0, 10, 0);
@@ -74,7 +74,7 @@ void DebugOverlay::update() {
 	stream << '\n';
 	stream << "Alive entities: " << m_world.scene().registry().alive();
 
-	m_positionText.setText(stream.str());
+	m_positionText.setString(stream.str());
 }
 
 void DebugOverlay::draw(gk::RenderTarget &target, gk::RenderStates states) const {

@@ -176,12 +176,12 @@ void MouseItemWidget::updateCurrentItem(ItemWidget *currentItemWidget) {
 			draggingBehaviour(currentItemWidget);
 
 		m_currentItemWidget = (currentItemWidget->stack().item().id()) ? currentItemWidget : nullptr;
-		m_tooltipText.setText(currentItemWidget->stack().item().label() + " [" + std::to_string(currentItemWidget->stack().item().id()) + "]");
+		m_tooltipText.setString(currentItemWidget->stack().item().label() + " [" + std::to_string(currentItemWidget->stack().item().id()) + "]");
 
 		if (currentItemWidget->stack().item().hasGroup("group:om_fuel"))
-			m_tooltipInfoText.setText("Burn time: " + std::to_string(currentItemWidget->stack().item().getGroupValue("group:om_fuel")) + " ticks");
+			m_tooltipInfoText.setString("Burn time: " + std::to_string(currentItemWidget->stack().item().getGroupValue("group:om_fuel")) + " ticks");
 		else
-			m_tooltipInfoText.setText("");
+			m_tooltipInfoText.setString("");
 	}
 	else {
 		m_currentItemWidget = nullptr;

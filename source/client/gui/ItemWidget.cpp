@@ -52,7 +52,7 @@ void ItemWidget::update() {
 	else
 		updateImage();
 
-	m_text.setText(std::to_string(stack().amount()));
+	m_text.setString(std::to_string(stack().amount()));
 	m_text.setPosition(16 - 4 - 6 * floor(log10(stack().amount())), 16 - 6, 0);
 }
 

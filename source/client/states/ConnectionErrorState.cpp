@@ -42,7 +42,7 @@ ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::
 
 	m_texturePack = texturePack;
 
-	m_text.setText(error);
+	m_text.setString(error);
 	m_text.setColor(gk::Color::Red);
 	m_text.updateVertexBuffer();
 	m_text.setScale(Config::guiScale * 1.5, Config::guiScale * 1.5);

@@ -40,8 +40,8 @@ class Text : public gk::Drawable, public gk::Transformable {
 	public:
 		Text();
 
-		const std::string &text() const { return m_text; }
-		void setText(const std::string &text);
+		const std::string &string() const { return m_string; }
+		void setString(const std::string &string);
 
 		const gk::Color &color() const { return m_color; }
 		void setColor(const gk::Color &color);
@@ -64,7 +64,7 @@ class Text : public gk::Drawable, public gk::Transformable {
 
 		void addCharacter(u32 x, u32 y, const gk::Color &color, u8 c, std::vector<Vertex> &vertices) const;
 
-		std::string m_text;
+		std::string m_string;
 
 		Font &m_font;
 

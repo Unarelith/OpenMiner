@@ -86,7 +86,7 @@ void HUD::update() {
 		m_hotbar.update();
 
 	if (Config::isFpsCounterEnabled)
-		m_fpsText.setText(std::to_string(gk::GameClock::getInstance().getFpsAverage()) + " FPS");
+		m_fpsText.setString(std::to_string(gk::GameClock::getInstance().getFpsAverage()) + " FPS");
 
 	m_blockCursor.update(m_hotbar);
 

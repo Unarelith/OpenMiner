@@ -48,7 +48,7 @@ ChatState::ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, boo
 	updateTextInputGeometry();
 
 	if (addSlash)
-		m_textInput.setText("/");
+		m_textInput.setString("/");
 
 	m_chat.setMessageVisibility(true);
 }
@@ -79,9 +79,9 @@ void ChatState::onEvent(const sf::Event &event) {
 	}
 
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
-		if (!m_textInput.text().empty()) {
-			m_clientCommandHandler.sendChatMessage(m_textInput.text());
-			m_chat.addHistoryEntry(m_textInput.text());
+		if (!m_textInput.string().empty()) {
+			m_clientCommandHandler.sendChatMessage(m_textInput.string());
+			m_chat.addHistoryEntry(m_textInput.string());
 		}
 
 		gk::Mouse::setCursorGrabbed(true);
@@ -97,15 +97,15 @@ void ChatState::onEvent(const sf::Event &event) {
 	if (event.type == sf::Event::KeyPressed) {
 		if (event.key.code == sf::Keyboard::Up && m_currentHistoryEntry < (int)m_chat.historySize() - 1) {
 			if (m_currentHistoryEntry == -1)
-				m_oldEntry = m_textInput.text();
-			m_textInput.setText(m_chat.getHistoryEntry(++m_currentHistoryEntry));
+				m_oldEntry = m_textInput.string();
+			m_textInput.setString(m_chat.getHistoryEntry(++m_currentHistoryEntry));
 		}
 		else if (event.key.code == sf::Keyboard::Down && m_currentHistoryEntry >= 0) {
 			--m_currentHistoryEntry;
 			if (m_currentHistoryEntry == -1)
-				m_textInput.setText(m_oldEntry);
+				m_textInput.setString(m_oldEntry);
 			else
-				m_textInput.setText(m_chat.getHistoryEntry(m_currentHistoryEntry));
+				m_textInput.setString(m_chat.getHistoryEntry(m_currentHistoryEntry));
 		}
 	}
 }

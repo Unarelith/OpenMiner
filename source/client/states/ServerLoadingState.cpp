@@ -41,7 +41,7 @@
 ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, const std::string &host, u16 port, gk::ApplicationState *parent)
 	: InterfaceState(parent), m_game(game), m_showLoadingState(showLoadingState)
 {
-	m_text.setText("Loading world...");
+	m_text.setString("Loading world...");
 	m_text.setColor(gk::Color::White);
 	m_text.updateVertexBuffer();
 	m_text.setScale(Config::guiScale * 2, Config::guiScale * 2);
