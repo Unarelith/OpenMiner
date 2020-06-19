@@ -33,6 +33,8 @@ void LuaKeyLoader::loadKey(const sol::table &table) const {
 	std::string name = table["name"].get_or<std::string>(stringID);
 	std::string defaultKey = table["default_key"].get_or<std::string>("");
 
-	Registry::getInstance().registerKey(stringID, name).setDefaultKey(defaultKey);
+	auto &key = Registry::getInstance().registerKey(stringID, name);
+	key.setDefaultKey(defaultKey);
+	key.setCallback(table["callback"]);
 }
 
