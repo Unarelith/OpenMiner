@@ -89,20 +89,6 @@ void ClientCommandHandler::sendPlayerPlaceBlock(s32 x, s32 y, s32 z, u32 block) 
 	m_client.send(packet);
 }
 
-void ClientCommandHandler::sendPlayerInventoryRequest() {
-	Network::Packet packet;
-	packet << Network::Command::PlayerInventory
-		<< u16(Config::screenWidth) << u16(Config::screenHeight) << u8(Config::guiScale);
-	m_client.send(packet);
-}
-
-void ClientCommandHandler::sendPlayerCreativeWindowRequest() {
-	Network::Packet packet;
-	packet << Network::Command::PlayerCreativeWindow
-		<< u16(Config::screenWidth) << u16(Config::screenHeight) << u8(Config::guiScale);
-	m_client.send(packet);
-}
-
 void ClientCommandHandler::sendPlayerHeldItemChanged(u8 hotbarSlot, u16 itemID) {
 	Network::Packet packet;
 	packet << Network::Command::PlayerHeldItemChanged
@@ -141,6 +127,13 @@ void ClientCommandHandler::sendChatMessage(const std::string &message) {
 	// FIXME: Sending client id shouldn't be necessary
 	packet << m_client.id();
 	packet << message;
+	m_client.send(packet);
+}
+
+void ClientCommandHandler::sendKeyPressed(u16 keyID) {
+	Network::Packet packet;
+	packet << Network::Command::KeyPressed << keyID
+		<< Config::screenWidth << Config::screenHeight << Config::guiScale;
 	m_client.send(packet);
 }
 

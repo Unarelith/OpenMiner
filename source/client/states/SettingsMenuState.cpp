@@ -221,8 +221,6 @@ void SettingsMenuState::addInputButtons() {
 		{GameKey::Sprint,         "Sprint"},
 		// {GameKey::Dig,            "Dig"},
 		// {GameKey::Use,            "Use"},
-		{GameKey::Inventory,      "Inventory"},
-		{GameKey::CreativeWindow, "Creative window"},
 		{GameKey::Chat,           "Chat"},
 		{GameKey::Command,        "Command"},
 	};

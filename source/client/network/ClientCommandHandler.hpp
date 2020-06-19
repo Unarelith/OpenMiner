@@ -51,13 +51,12 @@ class ClientCommandHandler {
 		void sendPlayerRotUpdate();
 		void sendPlayerDigBlock(const glm::ivec4 &selectedBlock);
 		void sendPlayerPlaceBlock(s32 x, s32 y, s32 z, u32 block);
-		void sendPlayerInventoryRequest();
-		void sendPlayerCreativeWindowRequest();
 		void sendPlayerHeldItemChanged(u8 hotbarSlot, u16 itemID);
 		void sendBlockActivated(const glm::ivec4 &selectedBlock);
 		void sendBlockInvUpdate(Inventory &inventory);
 		void sendChunkRequest(s32 chunkX, s32 chunkY, s32 chunkZ);
 		void sendChatMessage(const std::string &message);
+		void sendKeyPressed(u16 keyID);
 
 		void setupCallbacks();
 
