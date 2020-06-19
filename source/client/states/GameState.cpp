@@ -50,7 +50,6 @@ GameState::GameState()
 	: m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
 	Registry::setInstance(m_registry);
-	Registry::isActive = true;
 
 	initShaders();
 
@@ -60,10 +59,8 @@ GameState::GameState()
 
 	m_world.setClient(m_clientCommandHandler);
 	m_world.setCamera(m_player.camera());
-}
 
-GameState::~GameState() {
-	Registry::isActive = false;
+	m_keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
 }
 
 void GameState::init() {
@@ -152,6 +149,14 @@ void GameState::update() {
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
 		m_player.processInputs();
+	}
+
+	if (!m_areModKeysLoaded) {
+		for (auto &it : m_registry.keys()) {
+			m_keyboardHandler->addKey(it.id(), it.name(), it.keycode(), it.stringID());
+		}
+
+		m_areModKeysLoaded = true;
 	}
 
 	m_player.updatePosition(m_world);

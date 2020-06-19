@@ -107,7 +107,7 @@ void SettingsMenuState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 }
 
 void SettingsMenuState::updateDoneButtonPosition() {
-	m_doneButton.setPosition(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().sizeX / 2.0f, Config::screenHeight * 0.75);
+	m_doneButton.setPosition(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().sizeX / 2.0f, Config::screenHeight * 0.85);
 }
 
 void SettingsMenuState::doneButtonAction() {
@@ -221,41 +221,15 @@ void SettingsMenuState::addGraphicsButtons() {
 }
 
 void SettingsMenuState::addInputButtons() {
-	std::vector<std::pair<u8, std::string>> keys = {
-		{GameKey::Up,             "Forward"},
-		{GameKey::Left,           "Left"},
-		{GameKey::Down,           "Back"},
-		{GameKey::Right,          "Right"},
-		{GameKey::Jump,           "Jump"},
-		{GameKey::Fly,            "Jetpack"},
-		{GameKey::Sneak,          "Sneak"},
-		{GameKey::Sprint,         "Sprint"},
-		// {GameKey::Dig,            "Dig"},
-		// {GameKey::Use,            "Use"},
-		{GameKey::Chat,           "Chat"},
-		{GameKey::Command,        "Command"},
-	};
-
-	m_menuWidget.reset(2, 8);
-
 	KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
-	for (auto &it : keys) {
-		m_menuWidget.addButton(it.second + ": " + keyboardHandler->getKeyName(it.first), [this, it] (TextButton &button) {
-			button.setText(it.second + ": ");
+	m_menuWidget.reset(2, keyboardHandler->keyCount() / 2.f + 1.5f);
+
+	for (auto &it : keyboardHandler->keys()) {
+		m_menuWidget.addButton(it.second.name() + ": " + keyboardHandler->getKeyName(it.first), [this, it] (TextButton &button) {
+			button.setText(it.second.name() + ": ");
 			m_currentKey = it.first;
 			m_currentKeyButton = &button;
 		});
-	}
-
-	if (Registry::isActive) {
-		for (auto &it : Registry::getInstance().keys()) {
-			m_menuWidget.addButton(it.name() + ": " + gk::KeyboardUtils::getNameFromKey(it.keycode()), [this, &it] (TextButton &button) {
-				button.setText(it.name() + ": ");
-				m_currentKey = it.id();
-				m_currentKeyButton = &button;
-				m_key = &it;
-			});
-		}
 	}
 
 	m_menuWidget.addButton("Mouse sensitivity: " + std::to_string(Config::mouseSensitivity), [] (TextButton &button) {

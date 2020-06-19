@@ -45,9 +45,6 @@ KeyboardHandler::KeyboardHandler() {
 	addKey(GameKey::Sneak,           "Sneak",           sf::Keyboard::LShift);
 	addKey(GameKey::Sprint,          "Sprint",          sf::Keyboard::LControl);
 
-	addKey(GameKey::Dig,             "Dig",             sf::Keyboard::L);
-	addKey(GameKey::Use,             "Use",             sf::Keyboard::M);
-
 	addKey(GameKey::Chat,            "Chat",            sf::Keyboard::T);
 	addKey(GameKey::Command,         "Command",         sf::Keyboard::Divide);
 
@@ -64,19 +61,22 @@ void KeyboardHandler::loadKeysFromFile(const std::string &filename) {
 			sol::optional<sol::table> keys = lua["keys"];
 			if (keys != sol::nullopt) {
 				for (auto &it : keys.value()) {
-					const std::string &keyName = it.first.as<std::string>();
+					const std::string &keyID = it.first.as<std::string>();
 					const std::string &keyValue = it.second.as<std::string>();
 
-					auto keyit = m_keyNames.find(keyName);
-					if (keyit != m_keyNames.end()) {
+					sf::Keyboard::Key keycode = gk::KeyboardUtils::getKeyFromName(keyValue);
+
+					auto keyit = m_keysID.find(keyID);
+					if (keyit != m_keysID.end()) {
 						gk::GameKey key = keyit->second;
-						m_keys[key] = gk::KeyboardUtils::getKeyFromName(keyValue);
-						if (m_keys[key] == sf::Keyboard::Unknown) {
+						m_keys[key].setKeycode(keycode);
+						if (m_keys[key].keycode() == sf::Keyboard::Unknown) {
 							gkWarning() << "Key name '" + keyValue + "' not recognized";
 						}
 					}
-					else
-						gkWarning() << "Key '" + keyName + "' is invalid (maybe deprecated?)";
+					else {
+						addKey(m_keys.size(), "", keycode, keyID);
+					}
 				}
 			}
 
@@ -91,19 +91,27 @@ void KeyboardHandler::loadKeysFromFile(const std::string &filename) {
 void KeyboardHandler::saveKeysToFile(const std::string &filename) {
 	std::ofstream file{filename, std::ofstream::out | std::ofstream::trunc};
 	file << "keys = {" << std::endl;
-	for (auto &it : m_keyNames) {
-		file << "\t" << it.first << " = \"" << getKeyName(it.second) << "\"," << std::endl;
+	for (auto &it : m_keys) {
+		file << "\t[\"" << it.second.stringID() << "\"] = \"" << getKeyName(it.first) << "\"," << std::endl;
 	}
 	file << "}" << std::endl;
 }
 
 bool KeyboardHandler::isKeyPressed(gk::GameKey key) {
-	return sf::Keyboard::isKeyPressed(m_keys[key]);
+	return sf::Keyboard::isKeyPressed(m_keys[key].keycode());
 }
 
-void KeyboardHandler::addKey(gk::GameKey key, const std::string &name, sf::Keyboard::Key defaultKey) {
-	m_keys.emplace(key, defaultKey);
-	m_keyNames.emplace(name, key);
+void KeyboardHandler::addKey(gk::GameKey key, const std::string &name, sf::Keyboard::Key defaultKey, const std::string &stringID) {
+	auto keyit = m_keysID.find(stringID);
+	if (keyit == m_keysID.end()) {
+		auto it = m_keys.emplace(key, Key((u16)key, (stringID.empty() ? "_" + name : stringID), name));
+		it.first->second.setKeycode(defaultKey);
+
+		m_keysID.emplace(it.first->second.stringID(), key);
+	}
+	else {
+		m_keys.at(keyit->second).setName(name);
+	}
 
 	InputHandler::addKey(key);
 }
