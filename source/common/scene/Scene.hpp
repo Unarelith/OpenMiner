@@ -30,7 +30,6 @@
 #include <deque>
 
 #include "AbstractController.hpp"
-#include "ISerializable.hpp"
 
 class Scene {
 	public:

@@ -34,12 +34,11 @@
 
 #include <sol/sol.hpp>
 
-#include "ISerializable.hpp"
+#include <gk/core/ISerializable.hpp>
+
 #include "NetworkUtils.hpp"
 
-#include <gk/core/Debug.hpp>
-
-class Key : public ISerializable {
+class Key : public gk::ISerializable {
 	public:
 		Key() = default;
 		Key(u16 id, const std::string &stringID, const std::string &name)

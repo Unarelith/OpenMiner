@@ -29,10 +29,11 @@
 
 #include <glm/gtc/quaternion.hpp>
 
-#include "ISerializable.hpp"
+#include <gk/core/ISerializable.hpp>
+
 #include "Network.hpp"
 
-struct RotationComponent : public ISerializable {
+struct RotationComponent : public gk::ISerializable {
 	glm::quat quat{1, 0, 0, 0};
 
 	bool isUpdated = true;

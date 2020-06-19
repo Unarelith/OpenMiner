@@ -30,12 +30,12 @@
 #include <string>
 
 #include <gk/core/IntTypes.hpp>
+#include <gk/core/ISerializable.hpp>
 
 #include "ItemType.hpp"
-#include "ISerializable.hpp"
 #include "TilesDef.hpp"
 
-class Item : public ISerializable {
+class Item : public gk::ISerializable {
 	public:
 		Item() = default;
 		Item(u32 id, const TilesDef &tiles, const std::string &stringID, const std::string &label);

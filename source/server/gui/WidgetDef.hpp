@@ -30,14 +30,14 @@
 #include <string>
 
 #include <gk/core/IntTypes.hpp>
+#include <gk/core/ISerializable.hpp>
 
 #include <sol/sol.hpp>
 
-#include "ISerializable.hpp"
 #include "LuaWidget.hpp"
 #include "NetworkUtils.hpp"
 
-class WidgetDef : public ISerializable {
+class WidgetDef : public gk::ISerializable {
 	public:
 		WidgetDef(u8 type) : m_type(type) {}
 

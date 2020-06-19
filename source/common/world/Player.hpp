@@ -28,11 +28,11 @@
 #define PLAYER_HPP_
 
 #include <gk/core/Box.hpp>
+#include <gk/core/ISerializable.hpp>
 
 #include "Inventory.hpp"
-#include "ISerializable.hpp"
 
-class Player : public ISerializable {
+class Player : public gk::ISerializable {
 	public:
 		Player();
 

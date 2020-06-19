@@ -30,12 +30,11 @@
 #include <SFML/Network/Packet.hpp>
 
 #include <gk/core/IntTypes.hpp>
-
-#include "ISerializable.hpp"
+#include <gk/core/ISerializable.hpp>
 
 namespace PlacementEntry {
 
-struct Flora : public ISerializable {
+struct Flora : public gk::ISerializable {
 	u16 blockID;
 	u16 spawnsOnBlockID;
 	double probability;
@@ -49,7 +48,7 @@ struct Flora : public ISerializable {
 	}
 };
 
-struct Ore : public ISerializable {
+struct Ore : public gk::ISerializable {
 	u16 blockID;
 	double probability;
 	double size;
@@ -63,7 +62,7 @@ struct Ore : public ISerializable {
 	}
 };
 
-struct Tree : public ISerializable {
+struct Tree : public gk::ISerializable {
 	u16 treeID;
 	double probability;
 

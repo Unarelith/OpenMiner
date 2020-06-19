@@ -29,12 +29,12 @@
 
 #include <string>
 
+#include <gk/core/ISerializable.hpp>
 #include <gk/core/Vector3.hpp>
 
-#include "ISerializable.hpp"
 #include "NetworkUtils.hpp"
 
-struct InventoryCubeDef : public ISerializable {
+struct InventoryCubeDef : public gk::ISerializable {
 	float size = 1.f;
 	gk::Vector3f origin{0, 0, 0};
 	std::string blockID{"_:air"};

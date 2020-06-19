@@ -33,10 +33,9 @@
 
 #include <sol/sol.hpp>
 
-#include <gk/core/IntTypes.hpp>
 #include <gk/core/Exception.hpp>
-
-#include "ISerializable.hpp"
+#include <gk/core/IntTypes.hpp>
+#include <gk/core/ISerializable.hpp>
 
 class BlockMetadataValue {
 	public:
@@ -65,7 +64,7 @@ class BlockMetadataValue {
 		Type m_type = Type::Undefined;
 };
 
-class BlockMetadata : public ISerializable {
+class BlockMetadata : public gk::ISerializable {
 	public:
 		void setString(const std::string &name, const std::string &value);
 		void setInt(const std::string &name, int value);

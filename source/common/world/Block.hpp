@@ -33,10 +33,10 @@
 
 #include <gk/core/Box.hpp>
 #include <gk/core/IntTypes.hpp>
+#include <gk/core/ISerializable.hpp>
 #include <gk/graphics/Color.hpp>
 
 #include "ItemStack.hpp"
-#include "ISerializable.hpp"
 #include "TilesDef.hpp"
 
 class Chunk;
@@ -53,7 +53,7 @@ enum class BlockDrawType : u8 {
 	BoundingBox = 6, // FIXME: Temporary
 };
 
-class Block : public ISerializable {
+class Block : public gk::ISerializable {
 	public:
 		Block() = default;
 		Block(u32 id, const TilesDef &tiles, const std::string &stringID, const std::string &label);

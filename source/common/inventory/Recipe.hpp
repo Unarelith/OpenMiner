@@ -27,12 +27,11 @@
 #ifndef RECIPE_HPP_
 #define RECIPE_HPP_
 
+#include <gk/core/ISerializable.hpp>
+
 #include "Inventory.hpp"
-#include "ISerializable.hpp"
 
-namespace sf { class Packet; }
-
-class Recipe : public ISerializable {
+class Recipe : public gk::ISerializable {
 	public:
 		Recipe(const std::string &type, const ItemStack &result = {}) : m_type(type), m_result(result) {}
 		virtual ~Recipe() = default;

@@ -25,6 +25,7 @@
  * =====================================================================================
  */
 #include <gk/core/Debug.hpp>
+#include <gk/core/ISerializable.hpp>
 
 #include <entt/entt.hpp>
 
@@ -75,7 +76,7 @@ T &set(entt::registry &registry, entt::entity entity, const T &instance) {
 template<typename T>
 Network::Packet serialize(entt::entity entity, T &component) {
 	Network::Packet packet;
-	if constexpr(std::is_base_of_v<ISerializable, std::decay_t<T>>) {
+	if constexpr(std::is_base_of_v<gk::ISerializable, std::decay_t<T>>) {
 		if (component.isUpdated) {
 			packet << component.packetType << entity << component;
 			component.isUpdated = false;
