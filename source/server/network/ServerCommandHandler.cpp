@@ -296,36 +296,6 @@ void ServerCommandHandler::setupCallbacks() {
 			gkError() << ("Failed to dig block using player " + std::to_string(client.id) + ": Player not found").c_str();
 	});
 
-	m_server.setCommandCallback(Network::Command::PlayerInventory, [this](ClientInfo &client, Network::Packet &packet) {
-		u16 screenWidth, screenHeight;
-		u8 guiScale;
-		packet >> screenWidth >> screenHeight >> guiScale;
-
-		sol::unsafe_function func = m_scriptEngine.lua()["show_inventory"];
-
-		try {
-			func(client, screenWidth, screenHeight, guiScale);
-		}
-		catch (const sol::error &error) {
-			gkError() << "Failed to send inventory GUI: " << error.what();
-		}
-	});
-
-	m_server.setCommandCallback(Network::Command::PlayerCreativeWindow, [this](ClientInfo &client, Network::Packet &packet) {
-		u16 screenWidth, screenHeight;
-		u8 guiScale;
-		packet >> screenWidth >> screenHeight >> guiScale;
-
-		sol::unsafe_function func = m_scriptEngine.lua()["show_creative_window"];
-
-		try {
-			func(client, screenWidth, screenHeight, guiScale);
-		}
-		catch (const sol::error &error) {
-			gkError() << "Failed to send creative window GUI: " << error.what();
-		}
-	});
-
 	m_server.setCommandCallback(Network::Command::PlayerHeldItemChanged, [this](ClientInfo &client, Network::Packet &packet) {
 		ServerPlayer *player = m_players.getPlayer(client.id);
 		if (player) {
@@ -397,6 +367,14 @@ void ServerCommandHandler::setupCallbacks() {
 		else {
 			m_chatCommandHandler.parseCommand(message.substr(1), client);
 		}
+	});
+
+	m_server.setCommandCallback(Network::Command::KeyPressed, [this](ClientInfo &client, Network::Packet &packet) {
+		u16 keyID, screenWidth, screenHeight;
+		u8 guiScale;
+		packet >> keyID >> screenWidth >> screenHeight >> guiScale;
+
+		m_registry.getKey(keyID).callback()(client, screenWidth, screenHeight, guiScale);
 	});
 }
 

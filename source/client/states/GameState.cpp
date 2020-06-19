@@ -118,6 +118,13 @@ void GameState::onEvent(const sf::Event &event) {
 			gk::Mouse::setCursorGrabbed(true);
 			gk::Mouse::setCursorVisible(false);
 		}
+		else if (event.type == sf::Event::KeyPressed) {
+			for (auto &key : m_registry.keys()) {
+				if (event.key.code == key.defaultKeyCode()) {
+					m_clientCommandHandler.sendKeyPressed(key.id());
+				}
+			}
+		}
 
 		m_hud.onEvent(event);
 	}
@@ -140,13 +147,6 @@ void GameState::update() {
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
 		m_player.processInputs();
-
-		if (gk::GamePad::isKeyPressedOnce(GameKey::Inventory)) {
-			m_clientCommandHandler.sendPlayerInventoryRequest();
-		}
-		else if (gk::GamePad::isKeyPressedOnce(GameKey::CreativeWindow)) {
-			m_clientCommandHandler.sendPlayerCreativeWindowRequest();
-		}
 	}
 
 	m_player.updatePosition(m_world);

@@ -48,8 +48,6 @@ std::string Network::commandToString(Network::Command command) {
 		{Network::Command::PlayerPosUpdate,       "PlayerPosUpdate"},
 		{Network::Command::PlayerRotUpdate,       "PlayerRotUpdate"},
 		{Network::Command::PlayerSpawn,           "PlayerSpawn"},
-		{Network::Command::PlayerInventory,       "PlayerInventory"},
-		{Network::Command::PlayerCreativeWindow,  "PlayerCreativeWindow"},
 		{Network::Command::PlayerChangeDimension, "PlayerChangeDimension"},
 		{Network::Command::PlayerHeldItemChanged, "PlayerHeldItemChanged"},
 
@@ -69,6 +67,8 @@ std::string Network::commandToString(Network::Command command) {
 		{Network::Command::EntityRotation,        "EntityRotation"},
 		{Network::Command::EntityAnimation,       "EntityRotation"},
 		{Network::Command::EntityDrawableDef,     "EntityDrawableDef"},
+
+		{Network::Command::KeyPressed,            "KeyPressed"},
 	};
 
 	return commandNames[command];

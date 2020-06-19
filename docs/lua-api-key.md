@@ -8,13 +8,24 @@ mod:key {
 	name = "Inventory",
 	default_key = "E"
 
-	key_callback = function(client, screen_width, screen_height, gui_scale)
+	callback = function(client, screen_width, screen_height, gui_scale)
 		show_inventory(client, screen_width, screen_height, gui_scale)
 	end
 }
 ```
 
 ## Attributes
+
+### `callback`
+
+Function called when the key is pressed.
+
+Example:
+```lua
+callback = function(client, screen_width, screen_height, gui_scale)
+	show_inventory(client, screen_width, screen_height, gui_scale)
+end
+```
 
 ### `default_key`
 
@@ -24,6 +35,8 @@ Example:
 ```lua
 default_key = "E"
 ```
+
+Names are defined [here](https://github.com/Unarelith/GameKit/blob/master/source/core/input/KeyboardUtils.cpp).
 
 ### `name`
 

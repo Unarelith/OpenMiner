@@ -48,9 +48,6 @@ KeyboardHandler::KeyboardHandler() {
 	addKey(GameKey::Dig,             "Dig",             sf::Keyboard::L);
 	addKey(GameKey::Use,             "Use",             sf::Keyboard::M);
 
-	addKey(GameKey::Inventory,       "Inventory",       sf::Keyboard::E);
-	addKey(GameKey::CreativeWindow,  "CreativeWindow",  sf::Keyboard::H);
-
 	addKey(GameKey::Chat,            "Chat",            sf::Keyboard::T);
 	addKey(GameKey::Command,         "Command",         sf::Keyboard::Divide);
 

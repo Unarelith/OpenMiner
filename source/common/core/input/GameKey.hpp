@@ -44,9 +44,6 @@ namespace GameKey {
 		Dig,
 		Use,
 
-		Inventory,
-		CreativeWindow,
-
 		Chat,
 		Command,
 
