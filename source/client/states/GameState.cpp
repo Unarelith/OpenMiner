@@ -121,7 +121,7 @@ void GameState::onEvent(const sf::Event &event) {
 			gk::Mouse::setCursorVisible(false);
 		}
 		else if (event.type == sf::Event::KeyPressed) {
-			for (auto &key : m_registry.keys()) {
+			for (auto &key : Registry::getInstance().keys()) {
 				if (event.key.code == key.keycode()) {
 					m_clientCommandHandler.sendKeyPressed(key.id());
 				}
@@ -152,7 +152,7 @@ void GameState::update() {
 	}
 
 	if (!m_areModKeysLoaded) {
-		for (auto &it : m_registry.keys()) {
+		for (auto &it : Registry::getInstance().keys()) {
 			m_keyboardHandler->addKey(it.id(), it.name(), it.keycode(), it.stringID(), &it);
 		}
 

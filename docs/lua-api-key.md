@@ -6,7 +6,7 @@
 mod:key {
 	id = "inventory",
 	name = "Inventory",
-	default_key = "E"
+	default_key = "E",
 
 	callback = function(client, screen_width, screen_height, gui_scale)
 		show_inventory(client, screen_width, screen_height, gui_scale)
