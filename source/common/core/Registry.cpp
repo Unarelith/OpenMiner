@@ -27,8 +27,11 @@
 #include <gk/core/Exception.hpp>
 
 #include "CraftingRecipe.hpp"
+#include "GameKey.hpp"
 #include "SmeltingRecipe.hpp"
 #include "Registry.hpp"
+
+bool Registry::isActive = false;
 
 Registry *Registry::s_instance = nullptr;
 
@@ -118,7 +121,7 @@ Dimension &Registry::registerSerializedDimension(sf::Packet &packet) {
 }
 
 Key &Registry::registerKey(const std::string &stringID, const std::string &label) {
-	u16 id = m_keys.size();
+	u16 id = GameKey::KeyCount + m_keys.size();
 	m_keysID.emplace(stringID, id);
 	m_keys.emplace_back(id, stringID, label);
 	return m_keys.back();
@@ -128,7 +131,7 @@ Key &Registry::registerSerializedKey(sf::Packet &packet) {
 	m_keys.emplace_back();
 	m_keys.back().deserialize(packet);
 
-	u16 id = m_keys.size() - 1;
+	u16 id = GameKey::KeyCount + m_keys.size() - 1;
 	m_keysID.emplace(m_biomes.back().stringID(), id);
 
 	return m_keys.back();
@@ -145,6 +148,10 @@ entt::entity Registry::registerEntity(const std::string &stringID) {
 		gkError() << "Redefinition of entity '" + stringID + "', keeping the first one";
 
 	return entt::null;
+}
+
+const Key &Registry::getKey(u16 id) const {
+	return m_keys.at(id - GameKey::KeyCount);
 }
 
 const Block &Registry::getBlockFromStringID(const std::string &stringID) {

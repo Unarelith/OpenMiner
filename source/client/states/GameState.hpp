@@ -47,6 +47,7 @@ class TextureAtlas;
 class GameState : public gk::ApplicationState {
 	public:
 		GameState();
+		~GameState();
 
 		void init() override;
 
