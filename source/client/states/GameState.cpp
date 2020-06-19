@@ -50,6 +50,7 @@ GameState::GameState()
 	: m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
 	Registry::setInstance(m_registry);
+	Registry::isActive = true;
 
 	initShaders();
 
@@ -59,6 +60,10 @@ GameState::GameState()
 
 	m_world.setClient(m_clientCommandHandler);
 	m_world.setCamera(m_player.camera());
+}
+
+GameState::~GameState() {
+	Registry::isActive = false;
 }
 
 void GameState::init() {
@@ -120,7 +125,7 @@ void GameState::onEvent(const sf::Event &event) {
 		}
 		else if (event.type == sf::Event::KeyPressed) {
 			for (auto &key : m_registry.keys()) {
-				if (event.key.code == key.defaultKeyCode()) {
+				if (event.key.code == key.keycode()) {
 					m_clientCommandHandler.sendKeyPressed(key.id());
 				}
 			}

@@ -38,6 +38,7 @@
 #include "Config.hpp"
 #include "Events.hpp"
 #include "KeyboardHandler.hpp"
+#include "Registry.hpp"
 #include "SettingsMenuState.hpp"
 #include "World.hpp"
 
@@ -77,11 +78,21 @@ void SettingsMenuState::onEvent(const sf::Event &event) {
 			doneButtonAction();
 		}
 		else if (m_currentKeyButton && event.type == sf::Event::KeyPressed) {
-			KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
-			keyboardHandler->setKeycode(m_currentKey, event.key.code);
+			if (!m_key) {
+				KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
+				keyboardHandler->setKeycode(m_currentKey, event.key.code);
 
-			m_currentKeyButton->setText(m_currentKeyButton->text() + keyboardHandler->getKeyName(m_currentKey));
-			m_currentKeyButton = nullptr;
+				m_currentKeyButton->setText(m_currentKeyButton->text() + keyboardHandler->getKeyName(m_currentKey));
+				m_currentKeyButton = nullptr;
+			}
+			else{
+				m_key->setKeycode(event.key.code);
+
+				m_currentKeyButton->setText(m_currentKeyButton->text() + gk::KeyboardUtils::getNameFromKey(m_key->keycode()));
+				m_currentKeyButton = nullptr;
+
+				m_key = nullptr;
+			}
 		}
 	}
 }
@@ -234,6 +245,17 @@ void SettingsMenuState::addInputButtons() {
 			m_currentKey = it.first;
 			m_currentKeyButton = &button;
 		});
+	}
+
+	if (Registry::isActive) {
+		for (auto &it : Registry::getInstance().keys()) {
+			m_menuWidget.addButton(it.name() + ": " + gk::KeyboardUtils::getNameFromKey(it.keycode()), [this, &it] (TextButton &button) {
+				button.setText(it.name() + ": ");
+				m_currentKey = it.id();
+				m_currentKeyButton = &button;
+				m_key = &it;
+			});
+		}
 	}
 
 	m_menuWidget.addButton("Mouse sensitivity: " + std::to_string(Config::mouseSensitivity), [] (TextButton &button) {

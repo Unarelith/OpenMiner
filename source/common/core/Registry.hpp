@@ -97,7 +97,7 @@ class Registry : public ISerializable {
 		const Tree &getTree(u16 id) const { return m_trees.at(id); }
 		const Biome &getBiome(u16 id) const { return m_biomes.at(id); }
 		const Dimension &getDimension(u16 id) const { return m_dimensions.at(id); }
-		const Key &getKey(u16 id) const { return m_keys.at(id); }
+		const Key &getKey(u16 id) const;
 
 		const Block &getBlockFromStringID(const std::string &stringID);
 		const Item &getItemFromStringID(const std::string &stringID);
@@ -120,8 +120,9 @@ class Registry : public ISerializable {
 		const std::vector<Tree> &trees() const { return m_trees; }
 		const std::vector<Biome> &biomes() const { return m_biomes; }
 		const std::vector<Dimension> &dimensions() const { return m_dimensions; }
-		const std::vector<Key> &keys() const { return m_keys; }
+		std::vector<Key> &keys() { return m_keys; }
 
+		static bool isActive;
 		static Registry &getInstance() { return *s_instance; }
 		static void setInstance(Registry &instance) { s_instance = &instance; }
 

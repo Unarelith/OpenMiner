@@ -48,6 +48,8 @@ namespace GameKey {
 		Command,
 
 		Shift,
+
+		KeyCount
 	};
 }
 

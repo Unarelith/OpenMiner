@@ -37,6 +37,8 @@
 #include "ISerializable.hpp"
 #include "NetworkUtils.hpp"
 
+#include <gk/core/Debug.hpp>
+
 class Key : public ISerializable {
 	public:
 		Key() = default;
@@ -49,7 +51,7 @@ class Key : public ISerializable {
 
 		void deserialize(sf::Packet &packet) override {
 			packet >> m_id >> m_stringID >> m_name >> m_defaultKey;
-			m_defaultKeyCode = gk::KeyboardUtils::getKeyFromName(m_defaultKey);
+			m_keycode = gk::KeyboardUtils::getKeyFromName(m_defaultKey);
 		}
 
 		u16 id() const { return m_id; }
@@ -57,7 +59,10 @@ class Key : public ISerializable {
 		const std::string &stringID() const { return m_stringID; }
 		const std::string &name() const { return m_name; }
 
-		sf::Keyboard::Key defaultKeyCode() const { return m_defaultKeyCode; }
+		sf::Keyboard::Key keycode() const { return m_keycode; }
+		void setKeycode(sf::Keyboard::Key keycode) { m_keycode = keycode; }
+
+		const std::string &defaultKey() const { return m_defaultKey; }
 		void setDefaultKey(const std::string &defaultKey) { m_defaultKey = defaultKey; }
 
 		const sol::unsafe_function &callback() const { return m_callback; }
@@ -70,7 +75,7 @@ class Key : public ISerializable {
 		std::string m_name;
 
 		std::string m_defaultKey;
-		sf::Keyboard::Key m_defaultKeyCode = sf::Keyboard::Unknown;
+		sf::Keyboard::Key m_keycode = sf::Keyboard::Unknown;
 
 		sol::unsafe_function m_callback;
 };
