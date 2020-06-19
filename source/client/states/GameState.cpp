@@ -153,7 +153,7 @@ void GameState::update() {
 
 	if (!m_areModKeysLoaded) {
 		for (auto &it : m_registry.keys()) {
-			m_keyboardHandler->addKey(it.id(), it.name(), it.keycode(), it.stringID());
+			m_keyboardHandler->addKey(it.id(), it.name(), it.keycode(), it.stringID(), &it);
 		}
 
 		m_areModKeysLoaded = true;

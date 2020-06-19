@@ -61,13 +61,15 @@ class Key : public ISerializable {
 		void setName(const std::string &name) { m_name = name; }
 
 		sf::Keyboard::Key keycode() const { return m_keycode; }
-		void setKeycode(sf::Keyboard::Key keycode) { m_keycode = keycode; }
+		void setKeycode(sf::Keyboard::Key keycode) { m_keycode = keycode; if (m_parent) m_parent->m_keycode = keycode; }
 
 		const std::string &defaultKey() const { return m_defaultKey; }
 		void setDefaultKey(const std::string &defaultKey) { m_defaultKey = defaultKey; }
 
 		const sol::unsafe_function &callback() const { return m_callback; }
 		void setCallback(const sol::unsafe_function &callback) { m_callback = callback; }
+
+		void setParent(Key *parent) { m_parent = parent; }
 
 	private:
 		u16 m_id;
@@ -79,6 +81,8 @@ class Key : public ISerializable {
 		sf::Keyboard::Key m_keycode = sf::Keyboard::Unknown;
 
 		sol::unsafe_function m_callback;
+
+		Key *m_parent = nullptr;
 };
 
 #endif // KEY_HPP_

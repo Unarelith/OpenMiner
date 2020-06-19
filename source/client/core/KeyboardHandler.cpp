@@ -101,18 +101,24 @@ bool KeyboardHandler::isKeyPressed(gk::GameKey key) {
 	return sf::Keyboard::isKeyPressed(m_keys[key].keycode());
 }
 
-void KeyboardHandler::addKey(gk::GameKey key, const std::string &name, sf::Keyboard::Key defaultKey, const std::string &stringID) {
+void KeyboardHandler::addKey(gk::GameKey id, const std::string &name, sf::Keyboard::Key defaultKey, const std::string &stringID, Key *key) {
 	auto keyit = m_keysID.find(stringID);
 	if (keyit == m_keysID.end()) {
-		auto it = m_keys.emplace(key, Key((u16)key, (stringID.empty() ? "_" + name : stringID), name));
+		auto it = m_keys.emplace(id, Key((u16)id, (stringID.empty() ? "_" + name : stringID), name));
 		it.first->second.setKeycode(defaultKey);
 
-		m_keysID.emplace(it.first->second.stringID(), key);
+		m_keysID.emplace(it.first->second.stringID(), id);
 	}
 	else {
-		m_keys.at(keyit->second).setName(name);
+		Key &keyitem = m_keys.at(keyit->second);
+		keyitem.setName(name);
+
+		if (key) {
+			key->setKeycode(keyitem.keycode());
+			keyitem.setParent(key);
+		}
 	}
 
-	InputHandler::addKey(key);
+	InputHandler::addKey(id);
 }
 
