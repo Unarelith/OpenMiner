@@ -128,6 +128,10 @@ Defines an entity from a table, see [this page](lua-api-entity.md) for more info
 
 Defines an item from a table, see [this page](lua-api-item.md) for more information.
 
+### `key`
+
+Defines a key from a table, see [this page](lua-api-key.md) for more information.
+
 ### `recipe`
 
 Defines a recipe from a table, see [this page](lua-api-recipe.md) for more information.
