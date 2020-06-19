@@ -31,6 +31,8 @@
 
 #include <gk/core/IntTypes.hpp>
 
+#include <sol/sol.hpp>
+
 #include "ISerializable.hpp"
 #include "NetworkUtils.hpp"
 
@@ -51,6 +53,8 @@ class Key : public ISerializable {
 		const std::string &defaultKey() const { return m_defaultKey; }
 		void setDefaultKey(const std::string &defaultKey) { m_defaultKey = defaultKey; }
 
+		void setCallback(const sol::unsafe_function &callback) { m_callback = callback; }
+
 	private:
 		u16 m_id;
 
@@ -58,6 +62,8 @@ class Key : public ISerializable {
 		std::string m_name;
 
 		std::string m_defaultKey;
+
+		sol::unsafe_function m_callback;
 };
 
 #endif // KEY_HPP_
