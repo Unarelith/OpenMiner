@@ -8,6 +8,7 @@
     - [Dimension](lua-api-dimension.md)
     - [Entity](lua-api-entity.md)
     - [Item](lua-api-item.md)
+    - [Key](lua-api-key.md)
     - [Recipe](lua-api-recipe.md)
     - [Sky](lua-api-sky.md)
     - [Tree](lua-api-tree.md)
