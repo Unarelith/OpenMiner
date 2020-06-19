@@ -79,8 +79,10 @@ void ChatState::onEvent(const sf::Event &event) {
 	}
 
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
-		if (!m_textInput.text().empty())
+		if (!m_textInput.text().empty()) {
 			m_clientCommandHandler.sendChatMessage(m_textInput.text());
+			m_chat.addHistoryEntry(m_textInput.text());
+		}
 
 		gk::Mouse::setCursorGrabbed(true);
 		gk::Mouse::setCursorVisible(false);
@@ -90,6 +92,21 @@ void ChatState::onEvent(const sf::Event &event) {
 
 		if (!m_stateStack->empty())
 			m_stateStack->pop();
+	}
+
+	if (event.type == sf::Event::KeyPressed) {
+		if (event.key.code == sf::Keyboard::Up && m_currentHistoryEntry < (int)m_chat.historySize() - 1) {
+			if (m_currentHistoryEntry == -1)
+				m_oldEntry = m_textInput.text();
+			m_textInput.setText(m_chat.getHistoryEntry(++m_currentHistoryEntry));
+		}
+		else if (event.key.code == sf::Keyboard::Down && m_currentHistoryEntry >= 0) {
+			--m_currentHistoryEntry;
+			if (m_currentHistoryEntry == -1)
+				m_textInput.setText(m_oldEntry);
+			else
+				m_textInput.setText(m_chat.getHistoryEntry(m_currentHistoryEntry));
+		}
 	}
 }
 

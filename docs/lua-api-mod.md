@@ -116,6 +116,17 @@ Defines a block from a table, see [this page](lua-api-block.md) for more informa
 
 Defines a biome from a table, see [this page](lua-api-biome.md) for more information.
 
+### `config`
+
+Defines a config option.
+
+Example:
+```lua
+mod:option("use_item_drops", false);
+```
+
+See [this page](lua-api-core.md#openminerget_configname) for more details.
+
 ### `dimension`
 
 Defines a dimension from a table, see [this page](lua-api-dimension.md) for more information.

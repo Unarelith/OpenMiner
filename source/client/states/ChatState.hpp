@@ -49,6 +49,9 @@ class ChatState : public InterfaceState {
 		ClientCommandHandler &m_clientCommandHandler;
 
 		Chat &m_chat;
+
+		s32 m_currentHistoryEntry = -1;
+		std::string m_oldEntry;
 };
 
 #endif // CHATSTATE_HPP_

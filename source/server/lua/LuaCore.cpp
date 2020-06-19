@@ -43,15 +43,20 @@ void LuaCore::initUsertype(sol::state &lua) {
 		"PlayerConnected", LuaEventType::PlayerConnected
 	);
 
-	lua["ServerConfig"] = lua.create_table_with(
-		"useItemDrops", ServerConfig::useItemDrops
-	);
-
 	lua.new_usertype<LuaCore>("LuaCore",
-		"add_listener", &LuaCore::addListener,
-
 		"registry", &LuaCore::m_registry,
-		"mod_loader", &LuaCore::m_modLoader
+		"mod_loader", &LuaCore::m_modLoader,
+
+		"add_listener", &LuaCore::addListener,
+		"get_config", [&](const std::string &option) {
+			auto it = ServerConfig::options.find(option);
+			if (it == ServerConfig::options.end()) {
+				gkWarning() << "Option" << option << "doesn't exist";
+				return sol::object{};
+			}
+
+			return it->second;
+		}
 	);
 }
 

@@ -30,6 +30,7 @@
 #include "PlacementEntry.hpp"
 #include "Registry.hpp"
 #include "ServerCommandHandler.hpp"
+#include "ServerConfig.hpp"
 #include "ServerPlayer.hpp"
 #include "Tree.hpp"
 #include "WorldController.hpp"
@@ -79,7 +80,13 @@ void LuaMod::initUsertype(sol::state &lua) {
 		"biome",           DEF_FUNC(DefinitionType::Biome),
 		"dimension",       DEF_FUNC(DefinitionType::Dimension),
 		"key",             DEF_FUNC(DefinitionType::Key),
-		"entity",          DEF_FUNC(DefinitionType::Entity)
+		"entity",          DEF_FUNC(DefinitionType::Entity),
+
+		"option", [&] (LuaMod &self, const std::string &name, sol::object defaultValue) {
+			auto it = ServerConfig::options.find(name);
+			if (it == ServerConfig::options.end())
+				ServerConfig::options.emplace(self.m_id + ":" + name, defaultValue);
+		}
 	);
 }
 

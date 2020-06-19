@@ -40,3 +40,14 @@ Possible events:
 - `BlockActivated`: `function(pos, block, player, world, client, server)`
 - `PlayerConnected`: `function(pos, player, client, server)`
 
+### `openminer:get_config(name)`
+
+Get value for config option.
+
+Example:
+```lua
+use_item_drop = openminer:get_config("default:use_item_drop")
+```
+
+See [this page](lua-api-mod.md#config) for more details about config options.
+

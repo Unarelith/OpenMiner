@@ -61,8 +61,10 @@ mod:entity {
 	end,
 }
 
+mod:option("use_item_drops", false)
+
 openminer:add_listener(Event.BlockDigged, function(pos, block, player, world, client, server)
-	if ServerConfig.useItemDrops then
+	if openminer.get_config("default:use_item_drops")then
 		mods["default"]:spawn_entity("default:item_drop", {
 			position = {pos.x + 0.5, pos.y + 0.5, pos.z + 0.5},
 			dimension = world:dimension():id(),

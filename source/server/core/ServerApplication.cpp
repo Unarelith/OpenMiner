@@ -117,6 +117,9 @@ int ServerApplication::run(bool isProtected) {
 
 			gkError() << "Fatal error" << e.what();
 
+			ServerConfig::saveConfigToFile("config/server.lua");
+			ServerConfig::options.clear();
+
 			m_serverCommandHandler.sendServerClosed(std::string("Server error ") + e.what());
 
 			m_registry.clear();
@@ -131,6 +134,9 @@ int ServerApplication::run(bool isProtected) {
 	}
 
 	gkInfo() << "Stopping server...";
+
+	ServerConfig::saveConfigToFile("config/server.lua");
+	ServerConfig::options.clear();
 
 	m_serverCommandHandler.sendServerClosed("Server closed.");
 

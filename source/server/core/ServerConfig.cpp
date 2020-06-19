@@ -24,29 +24,33 @@
  *
  * =====================================================================================
  */
-#include "ServerConfig.hpp"
-
-// Gameplay
-bool ServerConfig::useItemDrops = false;
-
-// Server
-u8 ServerConfig::maxPlayers = 5;
+#include <fstream>
 
 #include <gk/core/Debug.hpp>
 #include <gk/core/Filesystem.hpp>
 
-#include <sol/sol.hpp>
+#include "ServerConfig.hpp"
+
+// Server
+u8 ServerConfig::maxPlayers = 5;
+
+// Mod-defined options
+std::unordered_map<std::string, sol::object> ServerConfig::options;
+
+static sol::state lua;
 
 void ServerConfig::loadConfigFromFile(const char *file) {
 	if (gk::Filesystem::fileExists(file)) {
-		sol::state lua;
-
 		try {
 			lua.safe_script_file(file);
 
-			useItemDrops = lua["useItemDrops"].get_or(useItemDrops);
+			maxPlayers = lua["max_players"].get_or(maxPlayers);
 
-			maxPlayers = lua["maxPlayers"].get_or(maxPlayers);
+			if (lua["mod_options"].valid() && lua["mod_options"].get_type() == sol::type::table) {
+				for (auto &it : lua["mod_options"].get<sol::table>()) {
+					options.emplace(it.first.as<std::string>(), it.second);
+				}
+			}
 
 			gkInfo() << "Config file loaded successfully";
 		}
@@ -54,5 +58,57 @@ void ServerConfig::loadConfigFromFile(const char *file) {
 			gkError() << e.what();
 		}
 	}
+}
+
+void ServerConfig::saveConfigToFile(const char *filename) {
+	std::ofstream file{filename, std::ofstream::out | std::ofstream::trunc};
+	file << "max_players = " << (u16)maxPlayers << std::endl;
+	file << "mod_options = {" << std::endl;
+
+	for (auto &it : options) {
+		file << "\t[\"" << it.first << "\"] = ";
+
+		if (it.second.get_type() == sol::type::boolean) {
+			bool value = it.second.as<bool>();
+			file << (value ? "true" : "false");
+		}
+		else if (it.second.get_type() == sol::type::number) {
+			file << it.second.as<double>();
+		}
+		else if (it.second.get_type() == sol::type::string) {
+			file << it.second.as<std::string>();
+		}
+		else {
+			file << "nil";
+		}
+
+		file << "," << std::endl;
+	}
+
+	file << "}" << std::endl;
+}
+
+bool ServerConfig::assignOption(const std::string &name, const std::string &value) {
+	auto it = options.find(name);
+	if (it != options.end()) {
+		try {
+			sol::object object = lua.load("return " + value)();
+			if (object.valid()
+				&& (object.get_type() == sol::type::boolean
+				 || object.get_type() == sol::type::number
+				 || object.get_type() == sol::type::string)) {
+				it->second = object;
+				return true;
+			}
+		}
+		catch (sol::error &e) {
+			gkWarning() << e.what();
+		}
+	}
+	else {
+		gkWarning() << "Can't assign option: '" + name + "' doesn't exist";
+	}
+
+	return false;
 }
 

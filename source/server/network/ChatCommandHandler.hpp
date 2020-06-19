@@ -46,6 +46,7 @@ class ChatCommandHandler {
 		void saveCommand(const std::vector<std::string> &command, ClientInfo &client) const;
 		void loadCommand(const std::vector<std::string> &command, ClientInfo &client) const;
 		void stopCommand(const std::vector<std::string> &command, ClientInfo &client) const;
+		void optionCommand(const std::vector<std::string> &command, ClientInfo &client) const;
 
 		ServerCommandHandler &m_server;
 		WorldController &m_worldController;

@@ -27,16 +27,24 @@
 #ifndef SERVERCONFIG_HPP_
 #define SERVERCONFIG_HPP_
 
+#include <string>
+#include <unordered_map>
+
 #include <gk/core/IntTypes.hpp>
 
-namespace ServerConfig {
-	// Gameplay
-	extern bool useItemDrops;
+#include <sol/sol.hpp>
 
+namespace ServerConfig {
 	// Server
 	extern u8 maxPlayers;
 
+	// Mod-defined options
+	extern std::unordered_map<std::string, sol::object> options;
+
 	void loadConfigFromFile(const char *file);
+	void saveConfigToFile(const char *file);
+
+	bool assignOption(const std::string &name, const std::string &value);
 }
 
 #endif // SERVERCONFIG_HPP_

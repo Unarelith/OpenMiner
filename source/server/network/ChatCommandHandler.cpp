@@ -47,6 +47,7 @@ void ChatCommandHandler::parseCommand(const std::string &str, ClientInfo &client
 		{"save", &ChatCommandHandler::saveCommand},
 		{"load", &ChatCommandHandler::loadCommand},
 		{"stop", &ChatCommandHandler::stopCommand},
+		{"option", &ChatCommandHandler::optionCommand},
 	};
 
 	if (!command.empty()) {
@@ -117,3 +118,42 @@ void ChatCommandHandler::stopCommand(const std::vector<std::string> &, ClientInf
 	m_server.stopServer();
 }
 
+#include "ServerConfig.hpp"
+
+void ChatCommandHandler::optionCommand(const std::vector<std::string> &command, ClientInfo &client) const {
+	if (command.size() < 2 || command.size() > 3) {
+		m_server.sendChatMessage(0, "Usage: /option <name> [<value>]", &client);
+	}
+	else {
+		std::string name = command.at(1);
+
+		auto it = ServerConfig::options.find(name);
+		if (it != ServerConfig::options.end()) {
+			if (command.size() < 3) {
+				if (it->second.get_type() == sol::type::boolean) {
+					bool value = it->second.as<bool>();
+					m_server.sendChatMessage(0, std::string("Value: ") + (value ? "true" : "false"));
+				}
+				else if (it->second.get_type() == sol::type::number) {
+					m_server.sendChatMessage(0, "Value: " + std::to_string(it->second.as<double>()));
+				}
+				else if (it->second.get_type() == sol::type::string) {
+					m_server.sendChatMessage(0, "Value: " + it->second.as<std::string>());
+				}
+				else {
+					m_server.sendChatMessage(0, "Value: nil");
+				}
+			}
+			else {
+				std::string value = command.at(2);
+				if (ServerConfig::assignOption(name, value))
+					m_server.sendChatMessage(0, "Value: " + value);
+				else
+					m_server.sendChatMessage(0, "Invalid option value");
+			}
+		}
+		else {
+			m_server.sendChatMessage(0, "Option '" + name + "' doesn't exist");
+		}
+	}
+}
