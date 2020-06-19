@@ -46,8 +46,6 @@
 void ClientCommandHandler::sendPlayerInvUpdate() {
 	Network::Packet invPacket;
 	invPacket << Network::Command::PlayerInvUpdate;
-	// FIXME: Sending client id shouldn't be necessary when sending this packet from client
-	invPacket << m_client.id();
 	invPacket << m_player.inventory();
 	m_client.send(invPacket);
 }
@@ -55,20 +53,15 @@ void ClientCommandHandler::sendPlayerInvUpdate() {
 void ClientCommandHandler::sendPlayerPosUpdate() {
 	Network::Packet packet;
 	packet << Network::Command::PlayerPosUpdate;
-	// FIXME: Sending client id shouldn't be necessary when sending this packet from client
-	packet << m_client.id();
 	packet << m_player.x();
 	packet << m_player.y();
 	packet << m_player.z();
-	packet << false;
 	m_client.send(packet);
 }
 
 void ClientCommandHandler::sendPlayerRotUpdate() {
 	Network::Packet packet;
 	packet << Network::Command::PlayerRotUpdate;
-	// FIXME: Sending client id shouldn't be necessary when sending this packet from client
-	packet << m_client.id();
 	packet << m_player.cameraYaw();
 	packet << m_player.cameraPitch();
 	m_client.send(packet);
@@ -124,8 +117,6 @@ void ClientCommandHandler::sendChunkRequest(s32 chunkX, s32 chunkY, s32 chunkZ) 
 void ClientCommandHandler::sendChatMessage(const std::string &message) {
 	Network::Packet packet;
 	packet << Network::Command::ChatMessage;
-	// FIXME: Sending client id shouldn't be necessary
-	packet << m_client.id();
 	packet << message;
 	m_client.send(packet);
 }
@@ -133,7 +124,7 @@ void ClientCommandHandler::sendChatMessage(const std::string &message) {
 void ClientCommandHandler::sendKeyPressed(u16 keyID) {
 	Network::Packet packet;
 	packet << Network::Command::KeyPressed << keyID
-		<< Config::screenWidth << Config::screenHeight << Config::guiScale;
+		<< u16(Config::screenWidth) << u16(Config::screenHeight) << u8(Config::guiScale);
 	m_client.send(packet);
 }
 

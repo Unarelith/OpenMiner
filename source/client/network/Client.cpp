@@ -40,7 +40,7 @@ void Client::connect(sf::IpAddress serverAddress, u16 serverPort) {
 		throw ClientConnectException("Network error: Unable to connect to server " + serverAddress.toString() + ":" + std::to_string(serverPort));
 
 	Network::Packet packet;
-	packet << Network::Command::ClientConnect << sf::IpAddress::getLocalAddress().toString();
+	packet << Network::Command::ClientConnect;
 	m_tcpSocket->send(packet);
 
 	Network::Packet answer;

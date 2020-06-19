@@ -26,8 +26,8 @@
  */
 #include "ServerInfo.hpp"
 
-ClientInfo &ServerInfo::addClient(sf::IpAddress address, const std::shared_ptr<sf::TcpSocket> &socket) {
-	m_clients.emplace_back(m_clients.size() + 1, address, socket);
+ClientInfo &ServerInfo::addClient(const std::shared_ptr<sf::TcpSocket> &socket) {
+	m_clients.emplace_back(m_clients.size() + 1, socket);
 	return m_clients.back();
 }
 

@@ -212,14 +212,9 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerInvUpdate, [this](ClientInfo &client, Network::Packet &packet) {
-		u16 clientId;
-		packet >> clientId;
-
-		ServerPlayer *player = m_players.getPlayer(clientId);
+		ServerPlayer *player = m_players.getPlayer(client.id);
 		if (player) {
-			if (clientId == client.id) {
-				packet >> player->inventory();
-			}
+			packet >> player->inventory();
 		}
 		else
 			gkError() << ("Failed to update inventory of player " + std::to_string(client.id) + ": Player not found").c_str();
@@ -227,28 +222,23 @@ void ServerCommandHandler::setupCallbacks() {
 
 	m_server.setCommandCallback(Network::Command::PlayerPosUpdate, [this](ClientInfo &client, Network::Packet &packet) {
 		double x, y, z;
-		u16 clientId;
-		packet >> clientId;
 		packet >> x >> y >> z;
 
-		ServerPlayer *player = m_players.getPlayer(clientId);
+		ServerPlayer *player = m_players.getPlayer(client.id);
 		if (player) {
-			if (clientId == client.id)
-				player->setPosition(x, y, z);
+			player->setPosition(x, y, z);
 		}
 		else
 			gkError() << ("Failed to update position of player " + std::to_string(client.id) + ": Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerRotUpdate, [this](ClientInfo &client, Network::Packet &packet) {
-		u16 clientId;
 		float yaw, pitch;
-		packet >> clientId >> yaw >> pitch;
+		packet >> yaw >> pitch;
 
 		ServerPlayer *player = m_players.getPlayer(client.id);
 		if (player) {
-			if (clientId == client.id)
-				player->setRotation(yaw, pitch);
+			player->setRotation(yaw, pitch);
 		}
 		else
 			gkError() << ("Failed to update rotation of player " + std::to_string(client.id) + ": Player not found").c_str();
@@ -354,15 +344,14 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::ChatMessage, [this](ClientInfo &client, Network::Packet &packet) {
-		u16 clientID;
 		std::string message;
-		packet >> clientID >> message;
+		packet >> message;
 
 		if (message[0] != '/' || (message.length() > 1 && message[1] == '/')) {
 			if (message[0] == '/' && message.length() > 1 && message[1] == '/')
-				sendChatMessage(clientID, message.substr(1));
+				sendChatMessage(client.id, message.substr(1));
 			else
-				sendChatMessage(clientID, message);
+				sendChatMessage(client.id, message);
 		}
 		else {
 			m_chatCommandHandler.parseCommand(message.substr(1), client);

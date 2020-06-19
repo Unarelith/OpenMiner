@@ -33,7 +33,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
     - [Mod API](https://openminer.readthedocs.io/en/latest/lua-api-mod/)
     - [GUI API](https://openminer.readthedocs.io/en/latest/lua-api-gui/)
     - [C++ classes in Lua](https://openminer.readthedocs.io/en/latest/lua-api-cpp/)
-- [Network Protocol](https://github.com/Unarelith/OpenMiner/wiki/Network-Protocol)
+- [Network Protocol](https://openminer.readthedocs.io/en/latest/network-protocol/)
 
 ## Keys
 

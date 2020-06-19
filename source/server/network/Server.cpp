@@ -60,10 +60,7 @@ void Server::handleNewConnections() {
 		if (command != Network::Command::ClientConnect)
 			gkError() << "Network error: Expected 'ClientConnect' packet for new clients.";
 		else if (m_info.clients().size() < ServerConfig::maxPlayers) {
-			std::string address;
-			packet >> address;
-
-			ClientInfo &client = m_info.addClient(address, clientSocket);
+			ClientInfo &client = m_info.addClient(clientSocket);
 			m_selector.add(*client.tcpSocket);
 
 			Network::Packet outPacket;

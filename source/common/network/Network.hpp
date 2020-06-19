@@ -29,56 +29,57 @@
 
 #include "CompressedPacket.hpp"
 
+// Please update 'docs/network-protocol.md' if you change this
 namespace Network {
 	using Packet = CompressedPacket;
 
 	enum class Command {
 		// Client commands
-		ClientConnect         = 0x00,  // <TCP> [NetworkCommand]                         (from Client only)
-		ClientDisconnect      = 0x01,  // <TCP> [NetworkCommand]                         (from Client only)
-		ClientOk              = 0x02,  // <TCP> [NetworkCommand][u16 client id][bool isSingleplayer] (from Server only)
-		ClientRefused         = 0x03,  // <TCP> [NetworkCommand]                         (from Server only)
+		ClientConnect         = 0x00,
+		ClientDisconnect      = 0x01,
+		ClientOk              = 0x02,
+		ClientRefused         = 0x03,
 
 		// Server commands
-		ServerClosed          = 0x04,  // <TCP> [NetworkCommand][string message] (from Server only)
+		ServerClosed          = 0x04,
 
 		// Chunk commands
-		ChunkData             = 0x05,   // <TCP> [NetworkCommand][s32 cx, cy, cz][u32...] (from Server only)
-		ChunkRequest          = 0x06,   // <TCP> [NetworkCommand][s32 cx, cy, cz]         (from Client only)
+		ChunkData             = 0x05,
+		ChunkRequest          = 0x06,
 
 		// Player commands
-		PlayerPlaceBlock      = 0x07,  // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Client only)
-		PlayerDigBlock        = 0x08,  // <TCP> [NetworkCommand][s32 x, y, z]            (from Client only)
-		PlayerInvUpdate       = 0x09,  // <TCP> [NetworkCommand][u16 client id][[std::string item][u16 amount][u8 x, y]...] (both) [FIXME]
-		PlayerPosUpdate       = 0x0a, // <TCP> [NetworkCommand][u16 client id][s32 x, y, z][bool isTeleportation] (both) // FIXME
-		PlayerRotUpdate       = 0x0b, // <TCP> [NetworkCommand][u16 client id][float yaw][float pitch] (from Client only)
-		PlayerSpawn           = 0x0c, // <TCP> [NetworkCommand][u16 client id][s32 x, y, z]            (from Server only)
-		PlayerChangeDimension = 0x0d, // <TCP> [NetworkCommand][u16 client id][s32 x, y, z][u16 dimension] (from Server only)
-		PlayerHeldItemChanged = 0x0e, // <TCP> [NetworkCommand][u8 hotbar slot][u16 item id (to check match with server)] (from Client only)
+		PlayerPlaceBlock      = 0x07,
+		PlayerDigBlock        = 0x08,
+		PlayerInvUpdate       = 0x09,
+		PlayerPosUpdate       = 0x0a,
+		PlayerRotUpdate       = 0x0b,
+		PlayerSpawn           = 0x0c,
+		PlayerChangeDimension = 0x0d,
+		PlayerHeldItemChanged = 0x0e,
 
 		// Block commands
-		BlockUpdate           = 0x0f, // <TCP> [NetworkCommand][s32 x, y, z][u32 block] (from Server only)
-		BlockActivated        = 0x10, // <TCP> [NetworkCommand][s32 x, y, z][u16 screenWidth, screenHeight][u8 guiScale] (from Client only)
-		BlockGUIData          = 0x11, // <TCP> [NetworkCommand][LuaGUIData data]        (from Server only)
-		BlockInvUpdate        = 0x12, // <TCP> [NetworkCommand][s32 x, y, z][[std::string item][u16 amount][u8 x, y]...] (both) [FIXME]
-		BlockDataUpdate       = 0x13, // <TCP> [NetworkCommand][s32 x, y, z][u64 data]  (both) [FIXME]
+		BlockUpdate           = 0x0f,
+		BlockActivated        = 0x10,
+		BlockGUIData          = 0x11,
+		BlockInvUpdate        = 0x12,
+		BlockDataUpdate       = 0x13,
 
 		// Registry commands
-		RegistryData          = 0x14, // <TCP> [NetworkCommand][Block block]            (from Server only)
+		RegistryData          = 0x14,
 
 		// Chat commands
-		ChatMessage           = 0x15, // <TCP> [NetworkCommand][u16 client id][std::string message] (both)
+		ChatMessage           = 0x15,
 
 		// Entity commands
-		EntitySpawn           = 0x16, // <TCP> [NetworkCommand][u32 entity id] (from Server only)
-		EntityDespawn         = 0x17, // <TCP> [NetworkCommand][u32 entity id] (from Server only)
-		EntityPosition        = 0x18, // <TCP> [NetworkCommand][u32 entity id][double x, double y, double z] (from Server only)
-		EntityRotation        = 0x19, // <TCP> [NetworkCommand][u32 entity id][float w, float x, float y, float z] (from Server only)
-		EntityAnimation       = 0x1a, // <TCP> [NetworkCommand][u32 entity id][AnimationComponent anim] (from Server only)
-		EntityDrawableDef     = 0x1b, // <TCP> [NetworkCommand][u32 entity id][DrawableDef def] (from Server only)
+		EntitySpawn           = 0x16,
+		EntityDespawn         = 0x17,
+		EntityPosition        = 0x18,
+		EntityRotation        = 0x19,
+		EntityAnimation       = 0x1a,
+		EntityDrawableDef     = 0x1b,
 
 		// Key commands
-		KeyPressed            = 0x1c, // <TCP> [NetworkCommand][u16 key id][u16 screenWidth, screenHeight][u8 guiScale] (from Client only)
+		KeyPressed            = 0x1c,
 	};
 
 	std::string commandToString(Command command);

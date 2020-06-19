@@ -24,10 +24,15 @@ nav:
         - 'Inventory widget': 'lua-api-gui-inventory.md'
         - 'Progress bar': 'lua-api-gui-progress-bar.md'
         - 'Scroll bar': 'lua-api-gui-scroll-bar.md'
+    - 'Misc':
+      - 'Network Protocol': 'network-protocol.md'
 
 theme:
     name: readthedocs
     highlightjs: true
     hljs_languages:
         - lua
+
+extra_javascript:
+  - script.js
 

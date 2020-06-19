@@ -35,13 +35,11 @@
 
 class ClientInfo {
 	public:
-		ClientInfo(u16 _id, sf::IpAddress _address, const std::shared_ptr<sf::TcpSocket> &socket)
-			: id(_id), address(_address), tcpSocket(socket) {}
+		ClientInfo(u16 _id, const std::shared_ptr<sf::TcpSocket> &socket)
+			: id(_id), tcpSocket(socket) {}
 
 		u16 id;
 		bool isReady = false;
-
-		sf::IpAddress address;
 
 		u32 previousKeyTimestamp = 0;
 
