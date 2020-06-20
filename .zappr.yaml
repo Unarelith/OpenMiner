@@ -1,0 +1,7 @@
+approvals:
+  minimum: 1
+  ignore: pr_opener
+  from:
+    collaborators: true
+    users:
+      - Unarelith
