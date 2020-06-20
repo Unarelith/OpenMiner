@@ -113,6 +113,8 @@ void ClientWorld::changeDimension(u16 dimensionID) {
 }
 
 void ClientWorld::receiveChunkData(Network::Packet &packet) {
+	if (!m_dimension) return;
+
 	s32 cx, cy, cz;
 	packet >> cx >> cy >> cz;
 
