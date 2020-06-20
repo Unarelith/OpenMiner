@@ -33,6 +33,7 @@
 #include "ServerLoadingState.hpp"
 #include "SettingsMenuState.hpp"
 #include "TitleScreenState.hpp"
+#include "WorldSelectionState.hpp"
 
 #include "ServerApplication.hpp" // For ServerOnlineEvent
 
@@ -42,7 +43,7 @@ TitleScreenState::TitleScreenState(u16 port) : m_port(port) {
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale, 1);
 
 	m_menuWidget.addButton("Singleplayer", [this] (TextButton &) {
-		startSingleplayer(true);
+		m_stateStack->push<WorldSelectionState>(this);
 	});
 
 	m_menuWidget.addButton("Multiplayer", [this] (TextButton &) {
@@ -91,7 +92,7 @@ void TitleScreenState::onEvent(const sf::Event &event) {
 void TitleScreenState::update() {
 }
 
-void TitleScreenState::startSingleplayer(bool showLoadingState) {
+void TitleScreenState::startSingleplayer(bool showLoadingState, const std::string &save) {
 	auto &game = m_stateStack->push<GameState>();
 	game.setSingleplayer(true);
 
@@ -101,8 +102,12 @@ void TitleScreenState::startSingleplayer(bool showLoadingState) {
 	if (m_thread.joinable())
 		m_thread.join();
 
-	m_thread = std::thread([this] () {
+	m_thread = std::thread([this, save] () {
 		ServerApplication app{*m_eventHandler};
+
+		if (!save.empty())
+			app.setSaveFile(save);
+
 		app.setSingleplayer(true);
 		app.setPort(sf::Socket::AnyPort);
 		app.run();

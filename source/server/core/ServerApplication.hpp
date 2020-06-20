@@ -56,6 +56,7 @@ class ServerApplication {
 
 		void setSingleplayer(bool isSingleplayer) { m_server.setSingleplayer(isSingleplayer); }
 		void setPort(u16 port) { m_port = port; }
+		void setSaveFile(const std::string &saveFile) { m_saveFile = saveFile; }
 
 	private:
 		void update();
@@ -69,6 +70,8 @@ class ServerApplication {
 		Registry m_registry;
 
 		u16 m_port = 4242;
+
+		std::string m_saveFile;
 
 		WorldController m_worldController{m_registry, m_clock};
 		PlayerList m_players;

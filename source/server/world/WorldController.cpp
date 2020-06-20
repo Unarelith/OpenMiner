@@ -24,11 +24,14 @@
  *
  * =====================================================================================
  */
-#include <filesystem>
 #include <fstream>
+
+#include <filesystem.hpp>
 
 #include "Registry.hpp"
 #include "WorldController.hpp"
+
+namespace fs = ghc::filesystem;
 
 void WorldController::init(PlayerList &players) {
 	for (const Dimension &dimension : m_registry.dimensions()) {
@@ -69,7 +72,7 @@ void WorldController::load(const std::string &name) {
 			unsigned int chunkCount;
 			save >> chunkCount;
 
-			gkInfo() << "Loading dimension" << world.dimension().id() << "| Chunk count:" << chunkCount;
+			// gkInfo() << "Loading dimension" << world.dimension().id() << "| Chunk count:" << chunkCount;
 
 			for (unsigned int i = 0 ; i < chunkCount ; ++i) {
 				int cx, cy, cz;
@@ -92,17 +95,18 @@ void WorldController::load(const std::string &name) {
 
 				chunk.setInitialized(true);
 				chunk.setSent(false);
+				chunk.setModified(true);
 			}
 		}
 	}
 
-	gkInfo() << "Loading done.";
+	// gkInfo() << "Loading done.";
 }
 
 void WorldController::save(const std::string &name) {
 	gkInfo() << ("Saving '" + name + "'...").c_str();
 
-	std::filesystem::create_directory("saves");
+	fs::create_directory("saves");
 
 	std::ofstream file("saves/" + name + ".dat", std::ofstream::binary | std::ofstream::trunc);
 
@@ -129,7 +133,7 @@ void WorldController::save(const std::string &name) {
 			++chunkCount;
 		}
 
-		gkInfo() << "Saving dimension" << world.dimension().id() << "| Chunk count:" << chunkCount;
+		// gkInfo() << "Saving dimension" << world.dimension().id() << "| Chunk count:" << chunkCount;
 
 		save << chunkCount;
 		save.append(chunks.getData(), chunks.getDataSize());
@@ -137,5 +141,5 @@ void WorldController::save(const std::string &name) {
 
 	file.write((const char *)save.getData(), save.getDataSize());
 
-	gkInfo() << "Saving done.";
+	// gkInfo() << "Saving done.";
 }
