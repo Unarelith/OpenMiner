@@ -86,7 +86,8 @@ void WorldSelectionState::loadSaveList() {
 				std::string filename = entry.path().filename();
 				if (filename.substr(filename.find_last_of('.')) == ".dat") {
 					std::string saveFile = filename.substr(0, filename.find_last_of('.'));
-					m_menuWidget.addButton("- " + saveFile + " -", [&, saveFile](TextButton &) {
+					std::string filesize = std::to_string(entry.file_size() / 1000.f / 1000.f);
+					m_menuWidget.addButton("- " + saveFile + " (" + filesize.substr(0, filesize.find_first_of('.') + 3) + " MB)" + " -", [&, saveFile](TextButton &) {
 						m_stateStack->pop();
 						m_titleScreen->startSingleplayer(true, saveFile);
 					});
