@@ -51,6 +51,7 @@ class ServerChunk : public Chunk {
 		void setSent(bool isSent) { m_isSent = isSent; }
 
 		bool hasBeenModified() const { return m_hasBeenModified; }
+		void setModified(bool hasBeenModified) { m_hasBeenModified = hasBeenModified; }
 
 	private:
 		std::atomic_bool m_isSent{false};

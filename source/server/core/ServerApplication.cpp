@@ -66,6 +66,7 @@ void ServerApplication::init() {
 	BlockGeometry::initOrientation();
 
 	m_argumentParser.addArgument("port", {"-p", "--port", "Select the port to use.", "port"});
+	m_argumentParser.addArgument("save", {"-s", "--save", "Select a save file to use.", "save"});
 	m_argumentParser.addArgument("working-dir", {"-w", "--working-dir", "Change the working direction to <dir>.", "dir"});
 
 	m_argumentParser.parse();
@@ -78,6 +79,9 @@ void ServerApplication::init() {
 
 	if (m_argumentParser.getArgument("port").isFound)
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
+
+	if (m_argumentParser.getArgument("save").isFound)
+		m_saveFile = m_argumentParser.getArgument("save").parameter;
 
 	ServerConfig::loadConfigFromFile("config/server.lua");
 
@@ -103,6 +107,9 @@ void ServerApplication::init() {
 
 	if (m_eventHandler)
 		m_eventHandler->emplaceEvent<ServerOnlineEvent>(true, m_server.port());
+
+	if (!m_saveFile.empty())
+		m_worldController.load(m_saveFile);
 }
 
 int ServerApplication::run(bool isProtected) {
@@ -134,6 +141,10 @@ int ServerApplication::run(bool isProtected) {
 	}
 
 	gkInfo() << "Stopping server...";
+
+	if (!m_saveFile.empty()) {
+		m_worldController.save(m_saveFile);
+	}
 
 	ServerConfig::saveConfigToFile("config/server.lua");
 	ServerConfig::options.clear();

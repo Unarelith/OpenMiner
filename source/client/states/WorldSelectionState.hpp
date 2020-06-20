@@ -24,49 +24,33 @@
  *
  * =====================================================================================
  */
-#ifndef TITLESCREENSTATE_HPP_
-#define TITLESCREENSTATE_HPP_
-
-#include <thread>
+#ifndef WORLDSELECTIONSTATE_HPP_
+#define WORLDSELECTIONSTATE_HPP_
 
 #include "InterfaceState.hpp"
 #include "MenuWidget.hpp"
 
-struct GuiScaleChangedEvent;
-struct ServerOnlineEvent;
+class TitleScreenState;
 
-class TitleScreenState : public InterfaceState {
+class WorldSelectionState : public InterfaceState {
 	public:
-		TitleScreenState(u16 port = 4242);
-		~TitleScreenState();
-
-		void centerBackground();
-
-		void init() override;
+		WorldSelectionState(TitleScreenState *titleScreen);
 
 		void onEvent(const sf::Event &event) override;
 
 		void update() override;
 
-		void startSingleplayer(bool showLoadingState, const std::string &save = "");
-		void startMultiplayer(const std::string &host);
-
-		void setTexturePack(const std::string &texturePack) { m_texturePack = texturePack; }
-
 	private:
-		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
+		void updateButtonPosition();
+		void loadSaveList();
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		MenuWidget m_menuWidget{1, 3};
+		TitleScreenState *m_titleScreen = nullptr;
 
-		gk::Image m_background{"texture-title_screen"};
+		MenuWidget m_menuWidget;
 
-		std::thread m_thread;
-
-		std::string m_texturePack;
-
-		u16 m_port = 4242;
+		TextButton m_cancelButton;
 };
 
-#endif // TITLESCREENSTATE_HPP_
+#endif // WORLDSELECTIONSTATE_HPP_
