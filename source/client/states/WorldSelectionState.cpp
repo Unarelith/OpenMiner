@@ -31,6 +31,7 @@
 
 #include "Config.hpp"
 #include "TitleScreenState.hpp"
+#include "WorldCreationState.hpp"
 #include "WorldSelectionState.hpp"
 
 namespace fs = ghc::filesystem;
@@ -41,8 +42,7 @@ WorldSelectionState::WorldSelectionState(TitleScreenState *titleScreen)
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
 
 	m_menuWidget.addButton("New world", [this](TextButton &) {
-		m_stateStack->pop();
-		m_titleScreen->startSingleplayer(true);
+		m_stateStack->push<WorldCreationState>(m_titleScreen);
 	});
 
 	m_cancelButton.setScale(Config::guiScale, Config::guiScale);
