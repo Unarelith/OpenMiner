@@ -75,15 +75,20 @@ void ChatCommandHandler::teleportationCommand(const std::vector<std::string> &co
 		m_server.sendChatMessage(0, "Usage: /tp x y z", &client);
 	}
 	else {
-		s32 x = std::stoi(command.at(1));
-		s32 y = std::stoi(command.at(2));
-		s32 z = std::stoi(command.at(3));
+		try {
+			s32 x = std::stoi(command.at(1));
+			s32 y = std::stoi(command.at(2));
+			s32 z = std::stoi(command.at(3));
 
-		m_server.setPlayerPosition(client.id, x, y, z);
+			m_server.setPlayerPosition(client.id, x, y, z);
 
-		m_server.sendPlayerPosUpdate(client.id, true);
+			m_server.sendPlayerPosUpdate(client.id, true);
 
-		m_server.sendChatMessage(0, "Teleported to " + std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(z), &client);
+			m_server.sendChatMessage(0, "Teleported to " + std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(z), &client);
+		}
+		catch (std::out_of_range &e) {
+			m_server.sendChatMessage(0, "Invalid coordinates", &client);
+		}
 	}
 }
 

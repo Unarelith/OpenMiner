@@ -131,7 +131,7 @@ void ServerWorld::sendChunkData(const ClientInfo &client, ServerChunk &chunk) {
 	chunk.setSent(true);
 	chunk.setChanged(false);
 
-	// std::cout << "Chunk at (" << chunk->x() << ", " << chunk->y() << ", " << chunk->z() << ") sent to client" << std::endl;
+	// std::cout << "Chunk at (" << chunk.x() << ", " << chunk.y() << ", " << chunk.z() << ") sent to client" << std::endl;
 }
 
 void ServerWorld::sendRequestedData(ClientInfo &client, int cx, int cy, int cz) {

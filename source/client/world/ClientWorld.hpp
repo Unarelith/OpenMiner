@@ -84,7 +84,7 @@ class ClientWorld : public World, public gk::Drawable {
 		ClientCommandHandler *m_client = nullptr;
 		gk::Camera *m_camera = nullptr;
 
-		mutable gk::Vector4f m_closestInitializedChunk{0, 0, 0, 1000000};
+		mutable gk::Vector4d m_closestInitializedChunk{0, 0, 0, 1000000};
 
 		const Sky *m_sky = nullptr;
 };

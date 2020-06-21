@@ -74,9 +74,9 @@ class Player : public gk::ISerializable {
 
 		u16 m_dimension = 0;
 
-		float m_viewAngleH;
-		float m_viewAngleV;
-		float m_viewAngleRoll;
+		float m_viewAngleH = 0;
+		float m_viewAngleV = 0;
+		float m_viewAngleRoll = 0;
 
 		u16 m_clientID = 0;
 
