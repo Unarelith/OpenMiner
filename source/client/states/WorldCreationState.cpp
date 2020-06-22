@@ -32,25 +32,39 @@
 #include "Config.hpp"
 #include "TitleScreenState.hpp"
 #include "WorldCreationState.hpp"
+#include "WorldSelectionState.hpp"
 
 namespace fs = ghc::filesystem;
 
-WorldCreationState::WorldCreationState(TitleScreenState *titleScreen) : InterfaceState(titleScreen) {
-	m_textInput.setString("");
+WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std::string &originalName) : InterfaceState(titleScreen) {
+	m_textInput.setString(originalName);
 	m_textInput.setCharacterLimit(32);
 	m_textInput.setBackgroundSize(150, 20);
 	m_textInput.setBackgroundOutline(1, gk::Color::White);
 	m_textInput.setPadding(5, 6);
 	m_textInput.setScale(Config::guiScale, Config::guiScale);
 
-	m_createButton.setText("Create");
+	m_createButton.setText(originalName.empty() ? "Create" : "Rename");
 	m_createButton.setScale(Config::guiScale, Config::guiScale);
-	m_createButton.setCallback([this, titleScreen](TextButton &) {
+	m_createButton.setCallback([this, titleScreen, originalName](TextButton &) {
 		std::string worldName = m_textInput.string();
 		if (!fs::exists("saves/" + worldName + ".dat")) {
 			if (gk::regexMatch(worldName, "^[A-Za-z0-9_]+$")) {
+				if (!originalName.empty()) {
+					fs::copy_file("saves/" + originalName + ".dat", "saves/" + worldName  + ".dat");
+					fs::remove("saves/" + originalName + ".dat");
+
+					m_stateStack->pop();
+
+					// FIXME: This is needed because there's currently no way to refresh WorldSelectionState
+					m_stateStack->pop(); // WorldSelectionState
+					m_stateStack->push<WorldSelectionState>(titleScreen);
+				}
+
 				m_stateStack->pop();
-				titleScreen->startSingleplayer(true, worldName);
+
+				if (originalName.empty())
+					titleScreen->startSingleplayer(true, worldName);
 			}
 			else {
 				m_errorText.setString("Invalid world name");

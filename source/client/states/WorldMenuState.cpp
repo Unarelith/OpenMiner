@@ -25,37 +25,44 @@
  * =====================================================================================
  */
 #include <gk/core/ApplicationStateStack.hpp>
-#include <gk/core/Debug.hpp>
+#include <gk/core/Utils.hpp>
 
 #include <filesystem.hpp>
 
 #include "Config.hpp"
 #include "TitleScreenState.hpp"
-#include "WorldCreationState.hpp"
+#include "WorldDeletionState.hpp"
 #include "WorldMenuState.hpp"
+#include "WorldCreationState.hpp"
 #include "WorldSelectionState.hpp"
 
 namespace fs = ghc::filesystem;
 
-WorldSelectionState::WorldSelectionState(TitleScreenState *titleScreen)
-	: InterfaceState(titleScreen), m_titleScreen(titleScreen)
-{
+WorldMenuState::WorldMenuState(const std::string &worldName, TitleScreenState *titleScreen) : InterfaceState(titleScreen) {
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
-	m_menuWidget.addButton("New world", [this](TextButton &) {
-		m_stateStack->push<WorldCreationState>(m_titleScreen);
+
+	m_menuWidget.addButton("Play", [worldName, titleScreen](TextButton &) {
+		titleScreen->startSingleplayer(true, worldName);
 	});
 
-	m_cancelButton.setScale(Config::guiScale, Config::guiScale);
+	m_menuWidget.addButton("Rename", [this, titleScreen, worldName](TextButton &) {
+		m_stateStack->push<WorldCreationState>(titleScreen, worldName);
+	});
+
+	m_menuWidget.addButton("Delete", [this, worldName, titleScreen](TextButton &) {
+		m_stateStack->push<WorldDeletionState>(worldName, titleScreen);
+	});
+
 	m_cancelButton.setText("Cancel");
+	m_cancelButton.setScale(Config::guiScale, Config::guiScale);
 	m_cancelButton.setCallback([this](TextButton &) {
 		m_stateStack->pop();
 	});
 
 	updateWidgetPosition();
-	loadSaveList();
 }
 
-void WorldSelectionState::onEvent(const sf::Event &event) {
+void WorldMenuState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
 	if (event.type == sf::Event::Resized) {
@@ -70,41 +77,14 @@ void WorldSelectionState::onEvent(const sf::Event &event) {
 	}
 }
 
-void WorldSelectionState::update() {
+void WorldMenuState::update() {
 }
 
-void WorldSelectionState::updateWidgetPosition() {
+void WorldMenuState::updateWidgetPosition() {
 	m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX / 2.0f, Config::screenHeight * 0.85);
 }
 
-void WorldSelectionState::loadSaveList() {
-	if (fs::is_directory("saves")) {
-		std::vector<fs::directory_entry> files;
-
-		fs::path basePath = fs::current_path();
-		fs::directory_iterator dir("saves/");
-		for (const auto &entry : dir) {
-			if (entry.is_regular_file()) {
-				files.emplace_back(entry);
-			}
-		}
-
-		std::sort(files.begin(), files.end());
-
-		for (auto &entry : files) {
-			std::string filename = entry.path().filename();
-			if (filename.substr(filename.find_last_of('.')) == ".dat") {
-				std::string saveFile = filename.substr(0, filename.find_last_of('.'));
-				std::string filesize = std::to_string(entry.file_size() / 1000.f / 1000.f);
-				m_menuWidget.addButton("- " + saveFile + " (" + filesize.substr(0, filesize.find_first_of('.') + 3) + " MB)" + " -", [&, saveFile](TextButton &) {
-					m_stateStack->push<WorldMenuState>(saveFile, m_titleScreen);
-				});
-			}
-		}
-	}
-}
-
-void WorldSelectionState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void WorldMenuState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (m_parent)
 		target.draw(*m_parent, states);
 
@@ -115,4 +95,3 @@ void WorldSelectionState::draw(gk::RenderTarget &target, gk::RenderStates states
 		target.draw(m_cancelButton, states);
 	}
 }
-

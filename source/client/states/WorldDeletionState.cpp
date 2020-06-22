@@ -48,7 +48,7 @@ WorldDeletionState::WorldDeletionState(const std::string &worldName, TitleScreen
 		if (fs::exists(saveFilepath))
 			fs::remove(saveFilepath);
 		m_stateStack->pop(); // WorldDeletionState
-		m_stateStack->pop(); // WorldInfoState
+		m_stateStack->pop(); // WorldMenuState
 
 		// FIXME: This is needed because there's currently no way to refresh WorldSelectionState
 		m_stateStack->pop(); // WorldSelectionState

@@ -35,7 +35,7 @@ class TitleScreenState;
 
 class WorldCreationState : public InterfaceState {
 	public:
-		WorldCreationState(TitleScreenState *titleScreen);
+		WorldCreationState(TitleScreenState *titleScreen, const std::string &originalName = "");
 
 		void onEvent(const sf::Event &event) override;
 
