@@ -31,26 +31,48 @@
 
 #include "Config.hpp"
 #include "TitleScreenState.hpp"
-#include "WorldCreationState.hpp"
+#include "WorldDeletionState.hpp"
+#include "WorldInfoState.hpp"
+#include "WorldSelectionState.hpp"
 
 namespace fs = ghc::filesystem;
 
-WorldCreationState::WorldCreationState(TitleScreenState *titleScreen) : InterfaceState(titleScreen) {
-	m_textInput.setString("");
+WorldInfoState::WorldInfoState(const std::string &worldName, TitleScreenState *titleScreen) : InterfaceState(titleScreen) {
+	m_textInput.setString(worldName);
 	m_textInput.setCharacterLimit(32);
 	m_textInput.setBackgroundSize(150, 20);
 	m_textInput.setBackgroundOutline(1, gk::Color::White);
 	m_textInput.setPadding(5, 6);
 	m_textInput.setScale(Config::guiScale, Config::guiScale);
 
-	m_createButton.setText("Create");
-	m_createButton.setScale(Config::guiScale, Config::guiScale);
-	m_createButton.setCallback([this, titleScreen](TextButton &) {
+	m_playButton.setText("Play");
+	m_playButton.setScale(Config::guiScale, Config::guiScale);
+	m_playButton.setCallback([this, worldName, titleScreen](TextButton &) {
+		if (fs::exists("saves/" + worldName + ".dat")) {
+			m_stateStack->pop();
+			titleScreen->startSingleplayer(true, worldName);
+		}
+		else {
+			m_errorText.setString("World '" + worldName + "' doesn't exist");
+			m_errorText.updateVertexBuffer();
+			updateWidgetPosition();
+		}
+	});
+
+	m_renameButton.setText("Rename");
+	m_renameButton.setScale(Config::guiScale, Config::guiScale);
+	m_renameButton.setCallback([this, titleScreen, world=worldName](TextButton &) {
 		std::string worldName = m_textInput.string();
 		if (!fs::exists("saves/" + worldName + ".dat")) {
 			if (gk::regexMatch(worldName, "^[A-Za-z0-9_]+$")) {
+				fs::copy_file("saves/" + world + ".dat", "saves/" + worldName + ".dat");
+				fs::remove("saves/" + world + ".dat");
+
 				m_stateStack->pop();
-				titleScreen->startSingleplayer(true, worldName);
+
+				// FIXME: This is needed because there's currently no way to refresh WorldSelectionState
+				m_stateStack->pop(); // WorldSelectionState
+				m_stateStack->push<WorldSelectionState>(titleScreen);
 			}
 			else {
 				m_errorText.setString("Invalid world name");
@@ -71,13 +93,19 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen) : Interfac
 		m_stateStack->pop();
 	});
 
+	m_deleteButton.setText("Delete");
+	m_deleteButton.setScale(Config::guiScale, Config::guiScale);
+	m_deleteButton.setCallback([this, worldName, titleScreen](TextButton &) {
+		m_stateStack->push<WorldDeletionState>(worldName, titleScreen);
+	});
+
 	m_errorText.setColor(gk::Color::Red);
 	m_errorText.setScale(Config::guiScale, Config::guiScale);
 
 	updateWidgetPosition();
 }
 
-void WorldCreationState::onEvent(const sf::Event &event) {
+void WorldInfoState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
 	if (event.type == sf::Event::Resized) {
@@ -87,22 +115,26 @@ void WorldCreationState::onEvent(const sf::Event &event) {
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
 		m_textInput.onEvent(event);
 
-		m_createButton.onEvent(event);
+		m_playButton.onEvent(event);
+		m_renameButton.onEvent(event);
 		m_cancelButton.onEvent(event);
+		m_deleteButton.onEvent(event);
 	}
 }
 
-void WorldCreationState::update() {
+void WorldInfoState::update() {
 }
 
-void WorldCreationState::updateWidgetPosition() {
+void WorldInfoState::updateWidgetPosition() {
 	m_textInput.setPosition(
 		Config::screenWidth / 2.0f - m_textInput.getBackgroundSize().x * Config::guiScale / 2.0f,
 		Config::screenHeight / 2.0f - m_textInput.getBackgroundSize().y * Config::guiScale / 2.0f
 	);
 
-	m_createButton.setPosition(Config::screenWidth / 2.0f - m_createButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 340);
-	m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 261);
+	m_playButton.setPosition(Config::screenWidth / 2.0f - m_playButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 420);
+	m_renameButton.setPosition(Config::screenWidth / 2.0f - m_playButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 340);
+	m_deleteButton.setPosition(Config::screenWidth / 2.0f - m_deleteButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 260);
+	m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 180);
 
 	m_errorText.setPosition(
 		Config::screenWidth / 2.0f - m_errorText.getSize().x * Config::guiScale / 2.0f,
@@ -110,7 +142,7 @@ void WorldCreationState::updateWidgetPosition() {
 	);
 }
 
-void WorldCreationState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void WorldInfoState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (m_parent)
 		target.draw(*m_parent, states);
 
@@ -119,11 +151,12 @@ void WorldCreationState::draw(gk::RenderTarget &target, gk::RenderStates states)
 
 		target.draw(m_textInput, states);
 
-		target.draw(m_createButton, states);
+		target.draw(m_playButton, states);
+		target.draw(m_renameButton, states);
 		target.draw(m_cancelButton, states);
+		target.draw(m_deleteButton, states);
 
 		if (!m_errorText.string().empty())
 			target.draw(m_errorText, states);
 	}
 }
-

@@ -32,6 +32,7 @@
 #include "Config.hpp"
 #include "TitleScreenState.hpp"
 #include "WorldCreationState.hpp"
+#include "WorldInfoState.hpp"
 #include "WorldSelectionState.hpp"
 
 namespace fs = ghc::filesystem;
@@ -50,7 +51,7 @@ WorldSelectionState::WorldSelectionState(TitleScreenState *titleScreen)
 		m_stateStack->pop();
 	});
 
-	updateButtonPosition();
+	updateWidgetPosition();
 	loadSaveList();
 }
 
@@ -58,7 +59,7 @@ void WorldSelectionState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
 	if (event.type == sf::Event::Resized) {
-		updateButtonPosition();
+		updateWidgetPosition();
 		if (!m_stateStack->empty() && &m_stateStack->top() != this)
 			m_menuWidget.onEvent(event);
 	}
@@ -72,7 +73,7 @@ void WorldSelectionState::onEvent(const sf::Event &event) {
 void WorldSelectionState::update() {
 }
 
-void WorldSelectionState::updateButtonPosition() {
+void WorldSelectionState::updateWidgetPosition() {
 	m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX / 2.0f, Config::screenHeight * 0.85);
 }
 
@@ -96,8 +97,9 @@ void WorldSelectionState::loadSaveList() {
 				std::string saveFile = filename.substr(0, filename.find_last_of('.'));
 				std::string filesize = std::to_string(entry.file_size() / 1000.f / 1000.f);
 				m_menuWidget.addButton("- " + saveFile + " (" + filesize.substr(0, filesize.find_first_of('.') + 3) + " MB)" + " -", [&, saveFile](TextButton &) {
-					m_stateStack->pop();
-					m_titleScreen->startSingleplayer(true, saveFile);
+					// m_stateStack->pop();
+					// m_titleScreen->startSingleplayer(true, saveFile);
+					m_stateStack->push<WorldInfoState>(saveFile, m_titleScreen);
 				});
 			}
 		}
