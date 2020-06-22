@@ -24,17 +24,17 @@
  *
  * =====================================================================================
  */
-#ifndef WORLDSELECTIONSTATE_HPP_
-#define WORLDSELECTIONSTATE_HPP_
+#ifndef WORLDDELETIONSTATE_HPP_
+#define WORLDDELETIONSTATE_HPP_
 
 #include "InterfaceState.hpp"
-#include "MenuWidget.hpp"
+#include "TextButton.hpp"
 
 class TitleScreenState;
 
-class WorldSelectionState : public InterfaceState {
+class WorldDeletionState : public InterfaceState {
 	public:
-		WorldSelectionState(TitleScreenState *titleScreen);
+		WorldDeletionState(const std::string &worldName, TitleScreenState *titleScreen);
 
 		void onEvent(const sf::Event &event) override;
 
@@ -42,15 +42,13 @@ class WorldSelectionState : public InterfaceState {
 
 	private:
 		void updateWidgetPosition();
-		void loadSaveList();
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		TitleScreenState *m_titleScreen = nullptr;
+		Text m_text;
 
-		MenuWidget m_menuWidget{1, 8};
-
+		TextButton m_confirmButton;
 		TextButton m_cancelButton;
 };
 
-#endif // WORLDSELECTIONSTATE_HPP_
+#endif // WORLDDELETIONSTATE_HPP_
