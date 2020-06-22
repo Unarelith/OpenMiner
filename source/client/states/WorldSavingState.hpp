@@ -24,13 +24,40 @@
  *
  * =====================================================================================
  */
-#ifndef EVENTS_HPP_
-#define EVENTS_HPP_
+#ifndef WORLDSAVINGSTATE_HPP_
+#define WORLDSAVINGSTATE_HPP_
 
-#include <gk/core/IntTypes.hpp>
+#include <gk/graphics/Image.hpp>
 
-struct GuiScaleChangedEvent {
-	u8 guiScale;
+#include "InterfaceState.hpp"
+#include "Text.hpp"
+
+class Client;
+
+class WorldSavingState : public InterfaceState {
+	public:
+		WorldSavingState(Client &client, bool closeClient, gk::ApplicationState *parent = nullptr);
+
+		void onEvent(const sf::Event &event) override;
+
+		void update() override;
+
+	private:
+		void updateWidgetPosition();
+
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		gk::Image m_background{"texture-title_screen"};
+		gk::RectangleShape m_backgroundFilter;
+
+		Client &m_client;
+
+		bool m_closeClient = false;
+
+		bool m_isWorldSaved = false;
+		mutable bool m_hasBeenRendered = false;
+
+		Text m_text;
 };
 
-#endif // EVENTS_HPP_
+#endif // WORLDSAVINGSTATE_HPP_

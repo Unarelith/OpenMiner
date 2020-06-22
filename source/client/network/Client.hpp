@@ -63,6 +63,8 @@ class Client {
 		void update();
 
 		void setCommandCallback(Network::Command command, const CommandCallback &callback) { m_commands[command] = callback; }
+
+		bool isSingleplayer() const { return m_isSingleplayer; }
 		void setSingleplayer(bool isSingleplayer) { m_isSingleplayer = isSingleplayer; }
 
 		bool isConnected() const { return m_isConnected; }
@@ -76,6 +78,10 @@ class Client {
 		//        in ClientCommandHandler for ServerClosed
 		const std::string &texturePack() const { return m_texturePack; }
 		void setTexturePack(const std::string &texturePack) { m_texturePack = texturePack; }
+
+		// FIXME: Idem
+		const std::string &worldName() const { return m_worldName; }
+		void setWorldName(const std::string &worldName) { m_worldName = worldName; }
 
 	private:
 		bool m_isConnected = false;
@@ -93,6 +99,7 @@ class Client {
 		std::unordered_map<Network::Command, CommandCallback> m_commands;
 
 		std::string m_texturePack;
+		std::string m_worldName;
 };
 
 #endif // CLIENT_HPP_

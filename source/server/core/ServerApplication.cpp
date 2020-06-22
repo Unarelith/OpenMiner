@@ -27,6 +27,7 @@
 #include <filesystem.hpp>
 
 #include "BlockGeometry.hpp"
+#include "Events.hpp"
 #include "ServerApplication.hpp"
 #include "ServerBlock.hpp"
 #include "ServerConfig.hpp"
@@ -57,7 +58,7 @@ ServerApplication::ServerApplication(gk::EventHandler &eventHandler) {
 	m_eventHandler = &eventHandler;
 }
 
-void ServerApplication::init() {
+bool ServerApplication::init() {
 	std::srand(std::time(nullptr));
 
 	m_loggerHandler.setName("server");
@@ -72,7 +73,7 @@ void ServerApplication::init() {
 	m_argumentParser.parse();
 
 	if (m_argumentParser.getArgument("help").isFound)
-		return;
+		return false;
 
 	if (m_argumentParser.getArgument("working-dir").isFound)
 		fs::current_path(m_argumentParser.getArgument("working-dir").parameter);
@@ -81,7 +82,7 @@ void ServerApplication::init() {
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
 
 	if (m_argumentParser.getArgument("save").isFound)
-		m_saveFile = m_argumentParser.getArgument("save").parameter;
+		m_worldName = m_argumentParser.getArgument("save").parameter;
 
 	ServerConfig::loadConfigFromFile("config/server.lua");
 
@@ -108,15 +109,18 @@ void ServerApplication::init() {
 	if (m_eventHandler)
 		m_eventHandler->emplaceEvent<ServerOnlineEvent>(true, m_server.port());
 
-	if (!m_saveFile.empty())
-		m_worldController.load(m_saveFile);
+	if (!m_worldName.empty())
+		m_worldController.load(m_worldName);
+
+	return true;
 }
 
 int ServerApplication::run(bool isProtected) {
+	bool isInitSuccessful = false;
 	if (isProtected) {
 		try {
-			init();
-			mainLoop();
+			if ((isInitSuccessful = init()))
+				mainLoop();
 		}
 		catch(const gk::Exception &e) {
 			if (m_eventHandler)
@@ -136,23 +140,25 @@ int ServerApplication::run(bool isProtected) {
 		}
 	}
 	else {
-		init();
-		mainLoop();
+		if ((isInitSuccessful = init()))
+			mainLoop();
 	}
 
-	gkInfo() << "Stopping server...";
+	if (isInitSuccessful) {
+		gkInfo() << "Stopping server...";
 
-	if (!m_saveFile.empty()) {
-		m_worldController.save(m_saveFile);
+		if (!m_worldName.empty()) {
+			m_worldController.save(m_worldName);
+		}
+
+		ServerConfig::saveConfigToFile("config/server.lua");
+		ServerConfig::options.clear();
+
+		m_serverCommandHandler.sendServerClosed("Server closed.");
+
+		m_registry.clear();
+		m_worldController.clearEntities();
 	}
-
-	ServerConfig::saveConfigToFile("config/server.lua");
-	ServerConfig::options.clear();
-
-	m_serverCommandHandler.sendServerClosed("Server closed.");
-
-	m_registry.clear();
-	m_worldController.clearEntities();
 
 	return 0;
 }

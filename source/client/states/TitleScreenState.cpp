@@ -92,9 +92,10 @@ void TitleScreenState::onEvent(const sf::Event &event) {
 void TitleScreenState::update() {
 }
 
-void TitleScreenState::startSingleplayer(bool showLoadingState, const std::string &save) {
+void TitleScreenState::startSingleplayer(bool showLoadingState, const std::string &worldName) {
 	auto &game = m_stateStack->push<GameState>();
 	game.setSingleplayer(true);
+	game.setWorldName(worldName);
 
 	auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, showLoadingState, "localhost", sf::Socket::AnyPort, this);
 	serverLoadingState.setTexturePack(m_texturePack);
@@ -102,11 +103,11 @@ void TitleScreenState::startSingleplayer(bool showLoadingState, const std::strin
 	if (m_thread.joinable())
 		m_thread.join();
 
-	m_thread = std::thread([this, save] () {
+	m_thread = std::thread([this, worldName] () {
 		ServerApplication app{*m_eventHandler};
 
-		if (!save.empty())
-			app.setSaveFile(save);
+		if (!worldName.empty())
+			app.setWorldName(worldName);
 
 		app.setSingleplayer(true);
 		app.setPort(sf::Socket::AnyPort);
