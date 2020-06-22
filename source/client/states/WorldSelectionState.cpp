@@ -40,7 +40,6 @@ WorldSelectionState::WorldSelectionState(TitleScreenState *titleScreen)
 	: InterfaceState(titleScreen), m_titleScreen(titleScreen)
 {
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
-
 	m_menuWidget.addButton("New world", [this](TextButton &) {
 		m_stateStack->push<WorldCreationState>(m_titleScreen);
 	});

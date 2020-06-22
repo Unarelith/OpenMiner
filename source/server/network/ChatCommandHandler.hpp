@@ -27,6 +27,7 @@
 #ifndef CHATCOMMANDHANDLER_HPP_
 #define CHATCOMMANDHANDLER_HPP_
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -35,6 +36,8 @@ class ServerCommandHandler;
 class WorldController;
 
 class ChatCommandHandler {
+	using CommandCallback = void (ChatCommandHandler::*)(const std::vector<std::string> &command, ClientInfo &client) const;
+
 	public:
 		ChatCommandHandler(ServerCommandHandler &server, WorldController &worldController)
 			: m_server(server), m_worldController(worldController) {}
@@ -42,14 +45,20 @@ class ChatCommandHandler {
 		void parseCommand(const std::string &str, ClientInfo &client) const;
 
 	private:
-		void teleportationCommand(const std::vector<std::string> &command, ClientInfo &client) const;
-		void saveCommand(const std::vector<std::string> &command, ClientInfo &client) const;
-		void loadCommand(const std::vector<std::string> &command, ClientInfo &client) const;
-		void stopCommand(const std::vector<std::string> &command, ClientInfo &client) const;
+		void helpCommand(const std::vector<std::string> &command, ClientInfo &client) const;
 		void optionCommand(const std::vector<std::string> &command, ClientInfo &client) const;
+		void stopCommand(const std::vector<std::string> &command, ClientInfo &client) const;
+		void teleportationCommand(const std::vector<std::string> &command, ClientInfo &client) const;
 
 		ServerCommandHandler &m_server;
 		WorldController &m_worldController;
+
+		std::map<std::string, CommandCallback> m_commands = {
+			{"help",   &ChatCommandHandler::helpCommand},
+			{"option", &ChatCommandHandler::optionCommand},
+			{"stop",   &ChatCommandHandler::stopCommand},
+			{"tp",     &ChatCommandHandler::teleportationCommand},
+		};
 };
 
 #endif // CHATCOMMANDHANDLER_HPP_

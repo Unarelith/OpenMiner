@@ -48,7 +48,7 @@ class WorldSelectionState : public InterfaceState {
 
 		TitleScreenState *m_titleScreen = nullptr;
 
-		MenuWidget m_menuWidget;
+		MenuWidget m_menuWidget{1, 8};
 
 		TextButton m_cancelButton;
 };
