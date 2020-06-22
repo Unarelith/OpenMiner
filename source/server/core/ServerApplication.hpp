@@ -40,23 +40,18 @@
 #include "PlayerList.hpp"
 #include "WorldController.hpp"
 
-struct ServerOnlineEvent {
-	bool isOnline;
-	int port;
-};
-
 class ServerApplication {
 	public:
 		ServerApplication(int argc = 0, char **argv = nullptr);
 		ServerApplication(gk::EventHandler &eventHandler);
 
-		void init();
+		bool init();
 
 		int run(bool isProtected = true);
 
 		void setSingleplayer(bool isSingleplayer) { m_server.setSingleplayer(isSingleplayer); }
 		void setPort(u16 port) { m_port = port; }
-		void setSaveFile(const std::string &saveFile) { m_saveFile = saveFile; }
+		void setWorldName(const std::string &worldName) { m_worldName = worldName; }
 
 	private:
 		void update();
@@ -71,7 +66,7 @@ class ServerApplication {
 
 		u16 m_port = 4242;
 
-		std::string m_saveFile;
+		std::string m_worldName;
 
 		WorldController m_worldController{m_registry, m_clock};
 		PlayerList m_players;

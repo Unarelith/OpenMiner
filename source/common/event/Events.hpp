@@ -24,49 +24,18 @@
  *
  * =====================================================================================
  */
-#ifndef TITLESCREENSTATE_HPP_
-#define TITLESCREENSTATE_HPP_
+#ifndef EVENTS_HPP_
+#define EVENTS_HPP_
 
-#include <thread>
+#include <gk/core/IntTypes.hpp>
 
-#include "InterfaceState.hpp"
-#include "MenuWidget.hpp"
-
-struct GuiScaleChangedEvent;
-struct ServerOnlineEvent;
-
-class TitleScreenState : public InterfaceState {
-	public:
-		TitleScreenState(u16 port = 4242);
-		~TitleScreenState();
-
-		void centerBackground();
-
-		void init() override;
-
-		void onEvent(const sf::Event &event) override;
-
-		void update() override;
-
-		void startSingleplayer(bool showLoadingState, const std::string &worldName = "");
-		void startMultiplayer(const std::string &host);
-
-		void setTexturePack(const std::string &texturePack) { m_texturePack = texturePack; }
-
-	private:
-		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
-
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		MenuWidget m_menuWidget{1, 3};
-
-		gk::Image m_background{"texture-title_screen"};
-
-		std::thread m_thread;
-
-		std::string m_texturePack;
-
-		u16 m_port = 4242;
+struct ServerOnlineEvent {
+	bool isOnline;
+	int port;
 };
 
-#endif // TITLESCREENSTATE_HPP_
+struct GuiScaleChangedEvent {
+	u8 guiScale;
+};
+
+#endif // EVENTS_HPP_

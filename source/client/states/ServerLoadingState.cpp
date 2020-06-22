@@ -33,10 +33,9 @@
 #include "Config.hpp"
 #include "ConnectionErrorState.hpp"
 #include "GameState.hpp"
+#include "Events.hpp"
 #include "ServerLoadingState.hpp"
 #include "TextureAtlas.hpp"
-
-#include "ServerApplication.hpp" // For ServerOnlineEvent
 
 ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, const std::string &host, u16 port, gk::ApplicationState *parent)
 	: InterfaceState(parent), m_game(game), m_showLoadingState(showLoadingState)

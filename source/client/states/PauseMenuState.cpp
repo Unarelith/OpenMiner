@@ -36,6 +36,7 @@
 #include "PauseMenuState.hpp"
 #include "SettingsMenuState.hpp"
 #include "TitleScreenState.hpp"
+#include "WorldSavingState.hpp"
 
 PauseMenuState::PauseMenuState(Client &client, gk::ApplicationState *parent)
 	: InterfaceState(parent), m_client(client)
@@ -58,16 +59,24 @@ PauseMenuState::PauseMenuState(Client &client, gk::ApplicationState *parent)
 	});
 
 	m_menuWidget.addButton("Title Screen", [this] (TextButton &) {
-		m_client.disconnect();
+		if (!m_client.isSingleplayer() || m_client.worldName().empty()) {
+			m_client.disconnect();
 
-		m_stateStack->clear();
-		m_stateStack->push<TitleScreenState>();
+			m_stateStack->clear();
+			m_stateStack->push<TitleScreenState>();
+		}
+		else
+			m_stateStack->push<WorldSavingState>(m_client, false);
 	});
 
 	m_menuWidget.addButton("Exit", [this] (TextButton &) {
-		m_client.disconnect();
+		if (!m_client.isSingleplayer() || m_client.worldName().empty()) {
+			m_client.disconnect();
 
-		m_stateStack->clear();
+			m_stateStack->clear();
+		}
+		else
+			m_stateStack->push<WorldSavingState>(m_client, true);
 	});
 }
 
