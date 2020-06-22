@@ -78,19 +78,27 @@ void WorldSelectionState::updateButtonPosition() {
 
 void WorldSelectionState::loadSaveList() {
 	if (fs::is_directory("saves")) {
+		std::vector<fs::directory_entry> files;
+
 		fs::path basePath = fs::current_path();
 		fs::directory_iterator dir("saves/");
 		for (const auto &entry : dir) {
 			if (entry.is_regular_file()) {
-				std::string filename = entry.path().filename();
-				if (filename.substr(filename.find_last_of('.')) == ".dat") {
-					std::string saveFile = filename.substr(0, filename.find_last_of('.'));
-					std::string filesize = std::to_string(entry.file_size() / 1000.f / 1000.f);
-					m_menuWidget.addButton("- " + saveFile + " (" + filesize.substr(0, filesize.find_first_of('.') + 3) + " MB)" + " -", [&, saveFile](TextButton &) {
-						m_stateStack->pop();
-						m_titleScreen->startSingleplayer(true, saveFile);
-					});
-				}
+				files.emplace_back(entry);
+			}
+		}
+
+		std::sort(files.begin(), files.end());
+
+		for (auto &entry : files) {
+			std::string filename = entry.path().filename();
+			if (filename.substr(filename.find_last_of('.')) == ".dat") {
+				std::string saveFile = filename.substr(0, filename.find_last_of('.'));
+				std::string filesize = std::to_string(entry.file_size() / 1000.f / 1000.f);
+				m_menuWidget.addButton("- " + saveFile + " (" + filesize.substr(0, filesize.find_first_of('.') + 3) + " MB)" + " -", [&, saveFile](TextButton &) {
+					m_stateStack->pop();
+					m_titleScreen->startSingleplayer(true, saveFile);
+				});
 			}
 		}
 	}
