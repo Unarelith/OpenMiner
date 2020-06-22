@@ -122,6 +122,9 @@ void Text::updateVertexBuffer() const {
 
 		addCharacter(x, y, color, c, vertices);
 
+		if (c == ']')
+			color = m_color;
+
 		x += m_font.getCharWidth(c);
 	}
 
