@@ -62,7 +62,8 @@ void KeyboardHandler::loadKeysFromFile(const std::string &filename) {
 			if (keys != sol::nullopt) {
 				for (auto &it : keys.value()) {
 					const std::string &keyID = it.first.as<std::string>();
-					const std::string &keyValue = it.second.as<std::string>();
+					const std::string &keyName = it.second.as<sol::table>()["name"].get<std::string>();
+					const std::string &keyValue = it.second.as<sol::table>()["value"].get<std::string>();
 
 					sf::Keyboard::Key keycode = gk::KeyboardUtils::getKeyFromName(keyValue);
 
@@ -75,7 +76,7 @@ void KeyboardHandler::loadKeysFromFile(const std::string &filename) {
 						}
 					}
 					else {
-						addKey(m_keys.size(), "", keycode, keyID);
+						addKey(m_keys.size(), keyName, keycode, keyID);
 					}
 				}
 			}
@@ -92,7 +93,10 @@ void KeyboardHandler::saveKeysToFile(const std::string &filename) {
 	std::ofstream file{filename, std::ofstream::out | std::ofstream::trunc};
 	file << "keys = {" << std::endl;
 	for (auto &it : m_keys) {
-		file << "\t[\"" << it.second.stringID() << "\"] = \"" << getKeyName(it.first) << "\"," << std::endl;
+		file << "\t[\"" << it.second.stringID() << "\"] = {" << std::endl;
+		file << "\t\tname = \"" + it.second.name() + "\"," << std::endl;
+		file << "\t\tvalue = \"" << getKeyName(it.first) << "\"" << std::endl;
+		file << "\t}," << std::endl;
 	}
 	file << "}" << std::endl;
 }
