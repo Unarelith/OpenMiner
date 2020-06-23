@@ -41,12 +41,17 @@ class ServerPlayer : public Player {
 		const ItemStack &heldItemStack() { return m_inventory.getStack(m_heldItemSlot, 0); }
 		void setHeldItemSlot(u8 heldItemSlot) { m_heldItemSlot = heldItemSlot; }
 
+		bool isOnline() const { return m_isOnline; }
+		void setOnline(bool isOnline) { m_isOnline = isOnline; }
+
 		static void initUsertype(sol::state &lua);
 
 	private:
 		ClientInfo &m_client;
 
 		u8 m_heldItemSlot = 0;
+
+		bool m_isOnline = false;
 };
 
 #endif // SERVERPLAYER_HPP_

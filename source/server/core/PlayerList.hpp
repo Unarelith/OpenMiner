@@ -32,9 +32,9 @@
 #include "ServerPlayer.hpp"
 
 class PlayerList {
-	using Container = std::unordered_map<u16, ServerPlayer>;
-	using Iterator = Container::iterator;
-	using ConstIterator = Container::const_iterator;
+	using PlayerMap = std::unordered_map<u16, ServerPlayer>;
+	using Iterator = PlayerMap::iterator;
+	using ConstIterator = PlayerMap::const_iterator;
 
 	public:
 		ServerPlayer &addPlayer(ClientInfo &client);
@@ -50,7 +50,7 @@ class PlayerList {
 		ConstIterator end() const { return m_players.end(); }
 
 	private:
-		Container m_players;
+		PlayerMap m_players;
 };
 
 #endif // PLAYERLIST_HPP_
