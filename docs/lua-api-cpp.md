@@ -123,6 +123,7 @@
 
 - `const ClientInfo &client()`
 - `ItemStack held_item_stack()`
+- `bool is_online()`
 
 ## ServerWorld
 

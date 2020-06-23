@@ -115,11 +115,11 @@ bool ServerApplication::init() {
 
 	gkInfo() << ("Server is running on localhost:" + std::to_string(m_server.port())).c_str();
 
-	if (m_eventHandler)
-		m_eventHandler->emplaceEvent<ServerOnlineEvent>(true, m_server.port());
-
 	if (!m_worldName.empty())
 		m_worldController.load(m_worldName);
+
+	if (m_eventHandler)
+		m_eventHandler->emplaceEvent<ServerOnlineEvent>(true, m_server.port());
 
 	return true;
 }

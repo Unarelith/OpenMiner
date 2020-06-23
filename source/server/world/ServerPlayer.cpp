@@ -35,7 +35,8 @@ void ServerPlayer::initUsertype(sol::state &lua) {
 	lua.new_usertype<ServerPlayer>("ServerPlayer",
 		sol::base_classes, sol::bases<Player>(),
 		"client", &ServerPlayer::client,
-		"held_item_stack", &ServerPlayer::heldItemStack
+		"held_item_stack", &ServerPlayer::heldItemStack,
+		"is_online", &ServerPlayer::isOnline
 	);
 }
 
