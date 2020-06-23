@@ -130,12 +130,13 @@ void ClientCommandHandler::sendKeyPressed(u16 keyID) {
 
 template<typename ComponentType>
 static void addComponentCommandCallback(Network::Command command, Client &client, ClientCommandHandler::EntityMap &entityMap, ClientWorld &world) {
-	client.setCommandCallback(command, [&](Network::Packet &packet) {
+	client.setCommandCallback(command, [&, command](Network::Packet &packet) {
 		entt::entity entityID;
 		packet >> entityID;
 
 		auto it = entityMap.find(entityID);
 		if (it != entityMap.end()) {
+			// gkDebug() << "Received component" << Network::commandToString(command);
 			auto &component = world.scene().registry().get_or_emplace<ComponentType>(it->second);
 			component.deserialize(packet);
 		}
@@ -301,6 +302,7 @@ void ClientCommandHandler::setupCallbacks() {
 			entt::entity entity = registry.create();
 			m_entityMap.emplace(entityID, entity);
 			registry.emplace<NetworkComponent>(entity, entityID);
+			// gkDebug() << "Entity spawned:" << std::underlying_type_t<entt::entity>(entityID);
 		}
 		else if (registry.get<NetworkComponent>(it->second).entityID != entityID) {
 			gkError() << "EntitySpawn: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";

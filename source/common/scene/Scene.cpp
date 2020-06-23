@@ -74,20 +74,21 @@ T &set(entt::registry &registry, entt::entity entity, const T &instance) {
 }
 
 template<typename T>
-Network::Packet serialize(entt::entity entity, T &component) {
+Network::Packet serialize(entt::entity entity, T &component, bool forWorldSave) {
 	Network::Packet packet;
 	if constexpr(std::is_base_of_v<gk::ISerializable, std::decay_t<T>>) {
-		if (component.isUpdated) {
+		if (forWorldSave || component.isUpdated) {
 			packet << component.packetType << entity << component;
-			component.isUpdated = false;
+			if (!forWorldSave)
+				component.isUpdated = false;
 		}
 	}
 	return packet;
 }
 
 template<typename Type>
-void extend_meta_type() {
-	entt::meta<Type>().type()
+void extend_meta_type(const std::string &name) {
+	entt::meta<Type>().type().prop("name"_hs, name)
 		.template func<&get<Type>, entt::as_ref_t>("get"_hs)
 		.template func<&set<Type>>("set"_hs)
 		.template func<&serialize<Type>>("serialize"_hs);
@@ -104,13 +105,13 @@ void extend_meta_type() {
 #include "RotationComponent.hpp"
 
 void Scene::registerComponents() {
-	extend_meta_type<gk::DoubleBox>();
-	extend_meta_type<AnimationComponent>();
-	extend_meta_type<DrawableDef>();
-	extend_meta_type<ItemStack>();
-	extend_meta_type<LuaCallbackComponent>();
-	extend_meta_type<NetworkComponent>();
-	extend_meta_type<PositionComponent>();
-	extend_meta_type<RotationComponent>();
+	extend_meta_type<gk::DoubleBox>("gk::DoubleBox");
+	extend_meta_type<AnimationComponent>("AnimationComponent");
+	extend_meta_type<DrawableDef>("DrawableDef");
+	extend_meta_type<ItemStack>("ItemStack");
+	extend_meta_type<LuaCallbackComponent>("LuaCallbackComponent");
+	extend_meta_type<NetworkComponent>("NetworkComponent");
+	extend_meta_type<PositionComponent>("PositionComponent");
+	extend_meta_type<RotationComponent>("RotationComponent");
 }
 

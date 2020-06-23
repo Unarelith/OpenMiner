@@ -56,6 +56,9 @@ class WorldController {
 		void setServer(ServerCommandHandler &server) { m_server = &server; }
 
 	private:
+		void loadEntities(sf::Packet &save, ServerWorld &world);
+		void saveEntities(sf::Packet &save, ServerWorld &world);
+
 		std::deque<ServerWorld> m_worldList;
 
 		Registry &m_registry;
@@ -63,6 +66,8 @@ class WorldController {
 		gk::GameClock &m_clock;
 
 		ServerCommandHandler *m_server = nullptr;
+
+		std::unordered_map<entt::entity, entt::entity> m_entityMap;
 };
 
 #endif // WORLDCONTROLLER_HPP_

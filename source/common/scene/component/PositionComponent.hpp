@@ -45,8 +45,8 @@ struct PositionComponent : public gk::ISerializable {
 
 	bool isUpdated = true;
 
-	void serialize(sf::Packet &packet) const override { packet << x << y << z; }
-	void deserialize(sf::Packet &packet) override { packet >> x >> y >> z; }
+	void serialize(sf::Packet &packet) const override { packet << x << y << z << dimension; }
+	void deserialize(sf::Packet &packet) override { packet >> x >> y >> z >> dimension; }
 	Network::Command packetType = Network::Command::EntityPosition;
 };
 
