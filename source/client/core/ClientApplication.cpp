@@ -52,7 +52,7 @@ void ClientApplication::init() {
 	m_argumentParser.addArgument("port", {"-p", "--port", "Select the port to use.", "port"});
 	m_argumentParser.addArgument("singleplayer", {"-s", "--singleplayer", "Start in singleplayer mode."});
 	m_argumentParser.addArgument("multiplayer", {"-m", "--multiplayer", "Start in multiplayer mode."});
-	m_argumentParser.addArgument("working-dir", {"-w", "--working-dir", "Change the working direction to <dir>.", "dir"});
+	m_argumentParser.addArgument("working-dir", {"-w", "--working-dir", "Change the working directory to <dir>.", "dir"});
 	m_argumentParser.addArgument("texture-pack", {"-t", "--texture-pack", "Use texture pack <name>.", "name"});
 
 	m_loggerHandler.setName("client");
