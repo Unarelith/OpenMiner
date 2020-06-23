@@ -52,6 +52,8 @@ ServerApplication::ServerApplication(int argc, char **argv) : m_argumentParser(a
 #ifdef SFML_SYSTEM_LINUX
 	signal(SIGINT, sigintHandler);
 #endif
+
+	m_worldName = "_server";
 }
 
 ServerApplication::ServerApplication(gk::EventHandler &eventHandler) {
@@ -75,8 +77,15 @@ bool ServerApplication::init() {
 	if (m_argumentParser.getArgument("help").isFound)
 		return false;
 
-	if (m_argumentParser.getArgument("working-dir").isFound)
-		fs::current_path(m_argumentParser.getArgument("working-dir").parameter);
+	if (m_argumentParser.getArgument("working-dir").isFound) {
+		try {
+			fs::current_path(m_argumentParser.getArgument("working-dir").parameter);
+		}
+		catch (fs::filesystem_error &e){
+			gkError() << "Failed to change working directory:" << e.what();
+			return false;
+		}
+	}
 
 	if (m_argumentParser.getArgument("port").isFound)
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);

@@ -49,7 +49,7 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 	m_createButton.setCallback([this, titleScreen, originalName](TextButton &) {
 		std::string worldName = m_textInput.string();
 		if (!fs::exists("saves/" + worldName + ".dat")) {
-			if (gk::regexMatch(worldName, "^[A-Za-z0-9_]+$")) {
+			if (gk::regexMatch(worldName, "^[A-Za-z0-9_]+$") && worldName[0] != '_') {
 				if (!originalName.empty()) {
 					fs::copy_file("saves/" + originalName + ".dat", "saves/" + worldName  + ".dat");
 					fs::remove("saves/" + originalName + ".dat");
