@@ -84,7 +84,7 @@ void WorldSelectionState::loadSaveList() {
 		fs::path basePath = fs::current_path();
 		fs::directory_iterator dir("saves/");
 		for (const auto &entry : dir) {
-			if (entry.is_regular_file()) {
+			if (entry.is_regular_file() && entry.path().filename().generic_string()[0] != '_') {
 				files.emplace_back(entry);
 			}
 		}
