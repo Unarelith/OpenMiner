@@ -165,6 +165,8 @@ int ServerApplication::run(bool isProtected) {
 
 		m_serverCommandHandler.sendServerClosed("Server closed.");
 
+		m_server.disconnectAllClients();
+
 		m_registry.clear();
 		m_worldController.clearEntities();
 	}

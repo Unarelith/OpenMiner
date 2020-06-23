@@ -82,6 +82,14 @@ void WorldController::load(const std::string &name) {
 				for (u8 z = 0 ; z < Chunk::height ; ++z) {
 					for (u8 y = 0 ; y < Chunk::depth ; ++y) {
 						for (u8 x = 0 ; x < Chunk::width ; ++x) {
+							bool hasMetadata;
+							save >> hasMetadata;
+
+							if (hasMetadata) {
+								BlockData *blockData = chunk.addBlockData(x, y, z);
+								save >> blockData->inventory >> blockData->meta >> blockData->useAltTiles;
+							}
+
 							u32 data;
 							u8 light;
 							save >> data >> light;
@@ -89,6 +97,10 @@ void WorldController::load(const std::string &name) {
 							chunk.setBlockRaw(x, y, z, data & 0xffff);
 							chunk.setData(x, y, z, data >> 16);
 							chunk.lightmap().setLightData(x, y, z, light);
+
+							const Block &block = Registry::getInstance().getBlock(data & 0xffff);
+							if (block.canUpdate())
+								chunk.addTickingBlock(x, y, z, block);
 						}
 					}
 				}
@@ -124,6 +136,12 @@ void WorldController::save(const std::string &name) {
 			for (u8 z = 0 ; z < Chunk::height ; ++z) {
 				for (u8 y = 0 ; y < Chunk::depth ; ++y) {
 					for (u8 x = 0 ; x < Chunk::width ; ++x) {
+						BlockData *blockData = it.second->getBlockData(x, y, z);
+						if (blockData)
+							chunks << true << blockData->inventory << blockData->meta << blockData->useAltTiles;
+						else
+							chunks << false;
+
 						chunks << u32(data[z][y][x])
 							<< u8(it.second->lightmap().getLightData(x, y, z));
 					}

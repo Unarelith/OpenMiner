@@ -54,11 +54,13 @@ void ServerChunk::onBlockDestroyed(int x, int y, int z, const Block &block) {
 void ServerChunk::tick(World &world, ServerCommandHandler &server) {
 	if (!m_tickingBlocks.empty()) {
 		for (auto &it : m_tickingBlocks) {
-			int z = it.first / (width * height);
-			int y = (it.first - z * (width * height)) / width;
-			int x = (it.first - z * (width * height)) % width;
 			((ServerBlock &)it.second).onTick(
-				glm::ivec3{x + m_x * width, y + m_y * depth, z + m_z * height}, *this, world, server);
+				glm::ivec3{
+					it.first.x + m_x * width,
+					it.first.y + m_y * depth,
+					it.first.z + m_z * height
+				},
+			*this, world, server);
 		}
 	}
 }

@@ -73,10 +73,10 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 
 	const Block &block = Registry::getInstance().getBlock(type);
 	if (block.canUpdate()) {
-		m_tickingBlocks.emplace(x + y * width + z * (width * height), block);
+		addTickingBlock(x, y, z, block);
 	}
 	else {
-		auto it = m_tickingBlocks.find(x + y * width + z * (width * height));
+		auto it = m_tickingBlocks.find(gk::Vector3i{x, y, z});
 		if (it != m_tickingBlocks.end())
 			m_tickingBlocks.erase(it);
 	}

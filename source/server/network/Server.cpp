@@ -38,6 +38,11 @@ void Server::init(u16 port) {
 	m_selector.add(m_tcpListener);
 }
 
+void Server::disconnectAllClients() {
+	for (auto &it : m_info.clients())
+		disconnectClient(it);
+}
+
 void Server::handleGameEvents() {
 	if (m_selector.wait(sf::milliseconds(10))) {
 		if (m_selector.isReady(m_tcpListener)) {

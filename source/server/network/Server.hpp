@@ -43,6 +43,8 @@ class Server {
 	public:
 		void init(u16 port = 4242);
 
+		void disconnectAllClients();
+
 		void handleGameEvents();
 
 		void sendToAllClients(Network::Packet &packet) const;
