@@ -69,8 +69,8 @@ bool ServerApplication::init() {
 	BlockGeometry::initOrientation();
 
 	m_argumentParser.addArgument("port", {"-p", "--port", "Select the port to use.", "port"});
-	m_argumentParser.addArgument("save", {"-s", "--save", "Select a save file to use.", "save"});
-	m_argumentParser.addArgument("working-dir", {"-w", "--working-dir", "Change the working direction to <dir>.", "dir"});
+	m_argumentParser.addArgument("world", {"-w", "--world", "Select a world to use.", "world"});
+	m_argumentParser.addArgument("working-dir", {"-d", "--working-dir", "Change the working directory to <dir>.", "dir"});
 
 	m_argumentParser.parse();
 
@@ -90,8 +90,8 @@ bool ServerApplication::init() {
 	if (m_argumentParser.getArgument("port").isFound)
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
 
-	if (m_argumentParser.getArgument("save").isFound)
-		m_worldName = m_argumentParser.getArgument("save").parameter;
+	if (m_argumentParser.getArgument("world").isFound)
+		m_worldName = m_argumentParser.getArgument("world").parameter;
 
 	ServerConfig::loadConfigFromFile("config/server.lua");
 
