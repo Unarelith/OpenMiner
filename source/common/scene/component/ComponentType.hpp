@@ -24,27 +24,24 @@
  *
  * =====================================================================================
  */
-#ifndef NETWORKCOMPONENT_HPP_
-#define NETWORKCOMPONENT_HPP_
+#ifndef COMPONENTTYPE_HPP_
+#define COMPONENTTYPE_HPP_
 
-#include <gk/core/ISerializable.hpp>
+#include <SFML/Network/Packet.hpp>
 
-#include <entt/entt.hpp>
+enum class ComponentType {
+	Position    = 0,
+	Rotation    = 1,
+	Animation   = 2,
+	Drawable    = 3,
+	Network     = 4,
 
-#include "Network.hpp"
-
-struct NetworkComponent : public gk::ISerializable {
-	entt::entity entityID = entt::null;
-
-	bool hasSpawned = false;
-
-	// FIXME
-	NetworkComponent() = default;
-	NetworkComponent(entt::entity _entityID) : entityID(_entityID) {}
-	void serialize(sf::Packet &) const {}
-	void deserialize(sf::Packet &) {}
-	bool isUpdated = false;
-	Network::Command packetType;
+	LuaCallback = 5, // FIXME
+	Hitbox      = 6,
+	ItemStack   = 7,
 };
 
-#endif // NETWORKCOMPONENT_HPP_
+sf::Packet &operator<<(sf::Packet &packet, ComponentType type);
+sf::Packet &operator>>(sf::Packet &packet, ComponentType &type);
+
+#endif // COMPONENTTYPE_HPP_

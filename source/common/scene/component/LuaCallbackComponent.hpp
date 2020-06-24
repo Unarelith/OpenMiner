@@ -27,10 +27,20 @@
 #ifndef LUACALLBACKCOMPONENT_HPP_
 #define LUACALLBACKCOMPONENT_HPP_
 
+#include <gk/core/ISerializable.hpp>
+
 #include <sol/sol.hpp>
 
-struct LuaCallbackComponent {
+#include "Network.hpp"
+
+struct LuaCallbackComponent : public gk::ISerializable {
 	sol::unsafe_function collisionCallback;
+
+	// FIXME
+	void serialize(sf::Packet &) const {}
+	void deserialize(sf::Packet &) {}
+	bool isUpdated = false;
+	Network::Command packetType;
 };
 
 #endif // LUACALLBACKCOMPONENT_HPP_

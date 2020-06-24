@@ -24,27 +24,17 @@
  *
  * =====================================================================================
  */
-#ifndef NETWORKCOMPONENT_HPP_
-#define NETWORKCOMPONENT_HPP_
+#include <gk/core/IntTypes.hpp>
 
-#include <gk/core/ISerializable.hpp>
+#include "ComponentType.hpp"
 
-#include <entt/entt.hpp>
+sf::Packet &operator<<(sf::Packet &packet, ComponentType type) {
+	return packet << static_cast<u16>(type);
+}
 
-#include "Network.hpp"
-
-struct NetworkComponent : public gk::ISerializable {
-	entt::entity entityID = entt::null;
-
-	bool hasSpawned = false;
-
-	// FIXME
-	NetworkComponent() = default;
-	NetworkComponent(entt::entity _entityID) : entityID(_entityID) {}
-	void serialize(sf::Packet &) const {}
-	void deserialize(sf::Packet &) {}
-	bool isUpdated = false;
-	Network::Command packetType;
-};
-
-#endif // NETWORKCOMPONENT_HPP_
+sf::Packet &operator>>(sf::Packet &packet, ComponentType &type) {
+	u16 tmp;
+	packet >> tmp;
+	type = static_cast<ComponentType>(tmp);
+	return packet;
+}

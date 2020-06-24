@@ -29,6 +29,7 @@
 
 #include <entt/entt.hpp>
 
+#include "ComponentType.hpp"
 #include "Network.hpp"
 #include "NetworkUtils.hpp"
 #include "Scene.hpp"
@@ -74,24 +75,36 @@ T &set(entt::registry &registry, entt::entity entity, const T &instance) {
 }
 
 template<typename T>
-Network::Packet serialize(entt::entity entity, T &component, bool forWorldSave) {
+Network::Packet serialize(entt::entity entity, T &component, bool useUpdateStatus) {
 	Network::Packet packet;
 	if constexpr(std::is_base_of_v<gk::ISerializable, std::decay_t<T>>) {
-		if (forWorldSave || component.isUpdated) {
+		if (!useUpdateStatus || component.isUpdated) {
 			packet << component.packetType << entity << component;
-			if (!forWorldSave)
+			if (useUpdateStatus)
 				component.isUpdated = false;
 		}
 	}
 	return packet;
 }
 
+template<typename T>
+Network::Packet save(T &component) {
+	Network::Packet packet;
+	packet << component;
+	return packet;
+}
+
 template<typename Type>
-void extend_meta_type(const std::string &name) {
-	entt::meta<Type>().type().prop("name"_hs, name)
+void extend_meta_type(const std::string &name, ComponentType type, bool isSerializable, bool isSavable) {
+	entt::meta<Type>().type()
+			.prop("name"_hs, name)
+			.prop("type"_hs, type)
+			.prop("is_serializable"_hs, isSerializable)
+			.prop("is_savable"_hs, isSavable)
 		.template func<&get<Type>, entt::as_ref_t>("get"_hs)
 		.template func<&set<Type>>("set"_hs)
-		.template func<&serialize<Type>>("serialize"_hs);
+		.template func<&serialize<Type>>("serialize"_hs)
+		.template func<&save<Type>>("save"_hs);
 }
 
 #include <gk/core/Box.hpp>
@@ -105,13 +118,13 @@ void extend_meta_type(const std::string &name) {
 #include "RotationComponent.hpp"
 
 void Scene::registerComponents() {
-	extend_meta_type<gk::DoubleBox>("gk::DoubleBox");
-	extend_meta_type<AnimationComponent>("AnimationComponent");
-	extend_meta_type<DrawableDef>("DrawableDef");
-	extend_meta_type<ItemStack>("ItemStack");
-	extend_meta_type<LuaCallbackComponent>("LuaCallbackComponent");
-	extend_meta_type<NetworkComponent>("NetworkComponent");
-	extend_meta_type<PositionComponent>("PositionComponent");
-	extend_meta_type<RotationComponent>("RotationComponent");
+	extend_meta_type<gk::DoubleBox>       ("gk::DoubleBox",        ComponentType::Hitbox,      false, true);
+	extend_meta_type<AnimationComponent>  ("AnimationComponent",   ComponentType::Animation,   true,  true);
+	extend_meta_type<DrawableDef>         ("DrawableDef",          ComponentType::Drawable,    true,  true);
+	extend_meta_type<ItemStack>           ("ItemStack",            ComponentType::ItemStack,   false, true);
+	extend_meta_type<LuaCallbackComponent>("LuaCallbackComponent", ComponentType::LuaCallback, false, false);
+	extend_meta_type<NetworkComponent>    ("NetworkComponent",     ComponentType::Network,     false, false);
+	extend_meta_type<PositionComponent>   ("PositionComponent",    ComponentType::Position,    true,  true);
+	extend_meta_type<RotationComponent>   ("RotationComponent",    ComponentType::Rotation,    true,  true);
 }
 
