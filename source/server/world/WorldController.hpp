@@ -30,6 +30,7 @@
 #include <deque>
 
 #include "ServerWorld.hpp"
+#include "WorldSaveBackend.hpp"
 
 namespace gk {
 	class GameClock;
@@ -39,7 +40,8 @@ class Registry;
 
 class WorldController {
 	public:
-		WorldController(Registry &registry, gk::GameClock &clock) : m_registry(registry), m_clock(clock) {}
+		WorldController(Registry &registry, gk::GameClock &clock)
+			: m_registry(registry), m_clock(clock) {}
 
 		void init(PlayerList &players);
 
@@ -47,8 +49,8 @@ class WorldController {
 
 		void update();
 
-		void load(const std::string &name);
-		void save(const std::string &name);
+		void load(const std::string &worldName) { m_worldSaveBackend->load(worldName); }
+		void save(const std::string &worldName) { m_worldSaveBackend->save(worldName); }
 
 		ServerWorld &getWorld(u16 dimension) { return m_worldList.at(dimension); }
 
@@ -56,9 +58,6 @@ class WorldController {
 		void setServer(ServerCommandHandler &server) { m_server = &server; }
 
 	private:
-		void loadEntities(sf::Packet &save, ServerWorld &world);
-		void saveEntities(sf::Packet &save, ServerWorld &world);
-
 		std::deque<ServerWorld> m_worldList;
 
 		Registry &m_registry;
@@ -67,7 +66,7 @@ class WorldController {
 
 		ServerCommandHandler *m_server = nullptr;
 
-		std::unordered_map<entt::entity, entt::entity> m_entityMap;
+		std::unique_ptr<WorldSaveBackend> m_worldSaveBackend{nullptr};
 };
 
 #endif // WORLDCONTROLLER_HPP_

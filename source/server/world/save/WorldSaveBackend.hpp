@@ -24,26 +24,15 @@
  *
  * =====================================================================================
  */
-#include "Registry.hpp"
-#include "WorldController.hpp"
-#include "WorldSaveBasicBackend.hpp"
+#ifndef WORLDSAVEBACKEND_HPP_
+#define WORLDSAVEBACKEND_HPP_
 
-void WorldController::init(PlayerList &players) {
-	for (const Dimension &dimension : m_registry.dimensions()) {
-		m_worldList.emplace_back(players, dimension, m_clock);
-		m_worldList.back().setServer(m_server);
-	}
+#include <string>
 
-	m_worldSaveBackend.reset(new WorldSaveBasicBackend{m_worldList});
-}
+class WorldSaveBackend {
+	public:
+		virtual void load(const std::string &worldName) = 0;
+		virtual void save(const std::string &worldName) = 0;
+};
 
-void WorldController::clearEntities() {
-	for (auto &it : m_worldList)
-		it.scene().clear();
-}
-
-void WorldController::update() {
-	for (auto &it : m_worldList)
-		it.update();
-}
-
+#endif // WORLDSAVEBACKEND_HPP_

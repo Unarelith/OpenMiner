@@ -24,26 +24,35 @@
  *
  * =====================================================================================
  */
-#include "Registry.hpp"
-#include "WorldController.hpp"
-#include "WorldSaveBasicBackend.hpp"
+#ifndef WORLDSAVEBASICBACKEND_HPP_
+#define WORLDSAVEBASICBACKEND_HPP_
 
-void WorldController::init(PlayerList &players) {
-	for (const Dimension &dimension : m_registry.dimensions()) {
-		m_worldList.emplace_back(players, dimension, m_clock);
-		m_worldList.back().setServer(m_server);
-	}
+#include <deque>
+#include <unordered_map>
 
-	m_worldSaveBackend.reset(new WorldSaveBasicBackend{m_worldList});
-}
+#include <entt/entt.hpp>
 
-void WorldController::clearEntities() {
-	for (auto &it : m_worldList)
-		it.scene().clear();
-}
+#include "WorldSaveBackend.hpp"
 
-void WorldController::update() {
-	for (auto &it : m_worldList)
-		it.update();
-}
+namespace sf { class Packet; }
 
+class ServerWorld;
+
+class WorldSaveBasicBackend : public WorldSaveBackend {
+	public:
+		WorldSaveBasicBackend(std::deque<ServerWorld> &worldList)
+			: m_worldList(worldList) {}
+
+		void load(const std::string &worldName) override;
+		void save(const std::string &worldName) override;
+
+	private:
+		void loadEntities(sf::Packet &save, ServerWorld &world);
+		void saveEntities(sf::Packet &save, ServerWorld &world);
+
+		std::deque<ServerWorld> &m_worldList;
+
+		std::unordered_map<entt::entity, entt::entity> m_entityMap;
+};
+
+#endif // WORLDSAVEBASICBACKEND_HPP_
