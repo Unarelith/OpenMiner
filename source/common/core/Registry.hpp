@@ -36,6 +36,7 @@
 #include "Biome.hpp"
 #include "Block.hpp"
 #include "Dimension.hpp"
+#include "EntityCallbackContainer.hpp"
 #include "Item.hpp"
 #include "Key.hpp"
 #include "Network.hpp"
@@ -108,6 +109,9 @@ class Registry : public gk::ISerializable {
 
 		const Recipe *getRecipe(const Inventory &inventory) const;
 
+		EntityCallbackContainer &addEntityCallbackContainer(const std::string &stringID);
+		EntityCallbackContainer &getEntityCallbackContainer(const std::string &stringID);
+
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
@@ -146,6 +150,7 @@ class Registry : public gk::ISerializable {
 		std::unordered_map<std::string, u16> m_keysID;
 
 		std::unordered_map<std::string, entt::entity> m_entities;
+		std::unordered_map<std::string, EntityCallbackContainer> m_entityCallbacks;
 
 		entt::registry m_entityRegistry;
 

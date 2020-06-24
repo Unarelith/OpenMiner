@@ -24,23 +24,13 @@
  *
  * =====================================================================================
  */
-#ifndef LUACALLBACKCOMPONENT_HPP_
-#define LUACALLBACKCOMPONENT_HPP_
-
-#include <gk/core/ISerializable.hpp>
+#ifndef ENTITYCALLBACKCONTAINER_HPP_
+#define ENTITYCALLBACKCONTAINER_HPP_
 
 #include <sol/sol.hpp>
 
-#include "Network.hpp"
-
-struct LuaCallbackComponent : public gk::ISerializable {
+struct EntityCallbackContainer {
 	sol::unsafe_function collisionCallback;
-
-	// FIXME
-	void serialize(sf::Packet &) const {}
-	void deserialize(sf::Packet &) {}
-	bool isUpdated = false;
-	Network::Command packetType;
 };
 
-#endif // LUACALLBACKCOMPONENT_HPP_
+#endif // ENTITYCALLBACKCONTAINER_HPP_

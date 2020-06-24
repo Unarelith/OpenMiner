@@ -156,6 +156,7 @@ void WorldSaveBasicBackend::save(const std::string &name) {
 }
 
 #include "AnimationComponent.hpp"
+#include "ComponentType.hpp"
 #include "DrawableDef.hpp"
 #include "PositionComponent.hpp"
 #include "RotationComponent.hpp"
@@ -177,7 +178,7 @@ void WorldSaveBasicBackend::loadEntities(sf::Packet &save, ServerWorld &world) {
 		m_entityMap.emplace(entityID, entity);
 		registry.emplace<NetworkComponent>(entity, entity);
 
-		gkDebug() << "Creating entity" << std::underlying_type_t<entt::entity>(entityID);
+		// gkDebug() << "Creating entity" << std::underlying_type_t<entt::entity>(entityID);
 
 		u32 componentCount;
 		save >> componentCount;
@@ -186,7 +187,7 @@ void WorldSaveBasicBackend::loadEntities(sf::Packet &save, ServerWorld &world) {
 			ComponentType type;
 			save >> type;
 
-			gkDebug() << "Loading component" << (u16)type << "for entity" << std::underlying_type_t<entt::entity>(entityID);
+			// gkDebug() << "Loading component" << (u16)type << "for entity" << std::underlying_type_t<entt::entity>(entityID);
 
 			if (type == ComponentType::Position) {
 				save >> registry.emplace<PositionComponent>(entity);
@@ -206,13 +207,14 @@ void WorldSaveBasicBackend::loadEntities(sf::Packet &save, ServerWorld &world) {
 			else if (type == ComponentType::Hitbox) {
 				save >> registry.emplace<gk::DoubleBox>(entity);
 			}
+			else if (type == ComponentType::EntityID) {
+				save >> registry.emplace<std::string>(entity);
+			}
 			else
 				gkWarning() << "Unknown component with type" << (int)type;
 		}
 	}
 }
-
-#include "ComponentType.hpp"
 
 void WorldSaveBasicBackend::saveEntities(sf::Packet &save, ServerWorld &world) {
 	entt::registry &registry = world.scene().registry();
@@ -232,18 +234,18 @@ void WorldSaveBasicBackend::saveEntities(sf::Packet &save, ServerWorld &world) {
 				Network::Packet packet = type.func("save"_hs).invoke({}, component).template cast<Network::Packet>();
 				entityPacket.append(packet.getData(), packet.getDataSize());
 
-				gkDebug() << "Serializing component" << type.prop("name"_hs).value().template cast<std::string>() << "for entity" << std::underlying_type_t<entt::entity>(entity) << "of size" << packet.getDataSize();
+				// gkDebug() << "Serializing component" << type.prop("name"_hs).value().template cast<std::string>() << "for entity" << std::underlying_type_t<entt::entity>(entity) << "of size" << packet.getDataSize();
 
 				++componentCount;
 			}
 		});
 
-		gkDebug() << "Saving" << componentCount << "components for entity" << std::underlying_type_t<entt::entity>(entity);
+		// gkDebug() << "Saving" << componentCount << "components for entity" << std::underlying_type_t<entt::entity>(entity);
 
 		save << network.entityID << componentCount;
 		save.append(entityPacket.getData(), entityPacket.getDataSize());
 	});
 
-	gkDebug() << "Saving" << view.size() << "entities in dimension" << world.dimension().id();
+	// gkDebug() << "Saving" << view.size() << "entities in dimension" << world.dimension().id();
 }
 

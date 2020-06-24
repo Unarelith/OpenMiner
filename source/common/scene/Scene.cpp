@@ -112,19 +112,18 @@ void extend_meta_type(const std::string &name, ComponentType type, bool isSerial
 #include "AnimationComponent.hpp"
 #include "DrawableDef.hpp"
 #include "ItemStack.hpp"
-#include "LuaCallbackComponent.hpp"
 #include "NetworkComponent.hpp"
 #include "PositionComponent.hpp"
 #include "RotationComponent.hpp"
 
 void Scene::registerComponents() {
-	extend_meta_type<gk::DoubleBox>       ("gk::DoubleBox",        ComponentType::Hitbox,      false, true);
-	extend_meta_type<AnimationComponent>  ("AnimationComponent",   ComponentType::Animation,   true,  true);
-	extend_meta_type<DrawableDef>         ("DrawableDef",          ComponentType::Drawable,    true,  true);
-	extend_meta_type<ItemStack>           ("ItemStack",            ComponentType::ItemStack,   false, true);
-	extend_meta_type<LuaCallbackComponent>("LuaCallbackComponent", ComponentType::LuaCallback, false, false);
-	extend_meta_type<NetworkComponent>    ("NetworkComponent",     ComponentType::Network,     false, false);
-	extend_meta_type<PositionComponent>   ("PositionComponent",    ComponentType::Position,    true,  true);
-	extend_meta_type<RotationComponent>   ("RotationComponent",    ComponentType::Rotation,    true,  true);
+	extend_meta_type<gk::DoubleBox>      ("gk::DoubleBox",      ComponentType::Hitbox,    false, true);
+	extend_meta_type<AnimationComponent> ("AnimationComponent", ComponentType::Animation, true,  true);
+	extend_meta_type<DrawableDef>        ("DrawableDef",        ComponentType::Drawable,  true,  true);
+	extend_meta_type<ItemStack>          ("ItemStack",          ComponentType::ItemStack, false, true);
+	extend_meta_type<NetworkComponent>   ("NetworkComponent",   ComponentType::Network,   false, false);
+	extend_meta_type<PositionComponent>  ("PositionComponent",  ComponentType::Position,  true,  true);
+	extend_meta_type<RotationComponent>  ("RotationComponent",  ComponentType::Rotation,  true,  true);
+	extend_meta_type<std::string>        ("EntityID",           ComponentType::EntityID,  false, true);
 }
 

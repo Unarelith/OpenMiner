@@ -45,7 +45,7 @@ class LuaEntityLoader {
 		void spawnEntity(const std::string &entityID, const sol::table &table) const;
 
 	private:
-		void tryLoadCallbacks(const sol::table &table, entt::registry &registry, entt::entity entity) const;
+		void tryLoadCallbacks(const sol::table &table) const;
 		void tryLoadVisual(const sol::table &table, entt::registry &registry, entt::entity entity) const;
 		void tryLoadRotation(const sol::table &table, entt::registry &registry, entt::entity entity) const;
 		void tryLoadAnimation(const sol::table &table, entt::registry &registry, entt::entity entity) const;

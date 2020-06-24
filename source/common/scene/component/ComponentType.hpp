@@ -36,7 +36,7 @@ enum class ComponentType {
 	Drawable    = 3,
 	Network     = 4,
 
-	LuaCallback = 5, // FIXME
+	EntityID    = 5,
 	Hitbox      = 6,
 	ItemStack   = 7,
 };

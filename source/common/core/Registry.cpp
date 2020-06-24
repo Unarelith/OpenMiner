@@ -224,6 +224,14 @@ const Recipe *Registry::getRecipe(const Inventory &inventory) const {
 	return nullptr;
 }
 
+EntityCallbackContainer &Registry::addEntityCallbackContainer(const std::string &stringID) {
+	return m_entityCallbacks.emplace(stringID, EntityCallbackContainer{}).first->second;
+}
+
+EntityCallbackContainer &Registry::getEntityCallbackContainer(const std::string &stringID) {
+	return m_entityCallbacks.at(stringID);
+}
+
 void Registry::serialize(sf::Packet &packet) const {
 	for (auto &it : m_items) {
 		packet << u8(DataType::Item) << it;
@@ -312,6 +320,7 @@ void Registry::clear() {
 	m_keysID.clear();
 
 	m_entities.clear();
+	m_entityCallbacks.clear();
 	m_entityRegistry.clear();
 }
 

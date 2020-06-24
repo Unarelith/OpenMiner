@@ -28,7 +28,6 @@
 
 #include "AnimationComponent.hpp"
 #include "DrawableDef.hpp"
-#include "LuaCallbackComponent.hpp"
 #include "LuaEntityLoader.hpp"
 #include "LuaMod.hpp"
 #include "NetworkComponent.hpp"
@@ -43,7 +42,7 @@ void LuaEntityLoader::loadEntity(const sol::table &table) const {
 	entt::registry &registry = Registry::getInstance().entityRegistry();
 	entt::entity entity = Registry::getInstance().registerEntity(m_stringID);
 
-	tryLoadCallbacks(table, registry, entity);
+	tryLoadCallbacks(table);
 
 	sol::optional<sol::table> properties = table["properties"];
 	if (properties != sol::nullopt) {
@@ -79,6 +78,7 @@ void LuaEntityLoader::spawnEntity(const std::string &entityID, const sol::table 
 
 		registry.emplace<PositionComponent>(entity, pos.x, pos.y, pos.z, dim);
 		registry.emplace<NetworkComponent>(entity, entity);
+		registry.emplace<std::string>(entity, entityID);
 
 		// FIXME: This code is too specific to the item drop entity
 		ItemStack *itemStack = tryLoadItemStack(table, registry, entity);
@@ -92,11 +92,12 @@ void LuaEntityLoader::spawnEntity(const std::string &entityID, const sol::table 
 		gkError() << "In mod '" + m_mod.id() + "': Cannot find entity with id '" + entityID + "'";
 }
 
-void LuaEntityLoader::tryLoadCallbacks(const sol::table &table, entt::registry &registry, entt::entity entity) const {
+void LuaEntityLoader::tryLoadCallbacks(const sol::table &table) const {
+	auto &entityCallbackContainer = Registry::getInstance().addEntityCallbackContainer(m_stringID);
+
 	sol::optional<sol::unsafe_function> onCollision = table["on_collision"];
 	if (onCollision != sol::nullopt) {
-		auto &luaCallbackComponent = registry.emplace<LuaCallbackComponent>(entity);
-		luaCallbackComponent.collisionCallback = onCollision.value();
+		entityCallbackContainer.collisionCallback = onCollision.value();
 	}
 }
 

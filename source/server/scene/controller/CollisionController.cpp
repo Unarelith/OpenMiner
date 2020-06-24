@@ -29,21 +29,23 @@
 #include "CollisionController.hpp"
 #include "EntityWrapper.hpp"
 #include "ItemStack.hpp"
-#include "LuaCallbackComponent.hpp"
 #include "NetworkComponent.hpp"
 #include "PlayerList.hpp"
 #include "PositionComponent.hpp"
+#include "Registry.hpp"
 #include "ServerCommandHandler.hpp"
 
 void CollisionController::update(entt::registry &registry) {
-	registry.view<PositionComponent, gk::DoubleBox, LuaCallbackComponent>().each([&](auto id, auto &position, auto &box, auto &luaCallbackComponent) {
+	registry.view<PositionComponent, gk::DoubleBox, std::string>().each([&](auto entity, auto &position, auto &box, auto &id) {
 		for (auto &it : m_players) {
 			if (it.second.dimension() == position.dimension) {
 				gk::DoubleBox hitbox = box + gk::Vector3d{position.x, position.y, position.z};
 				gk::DoubleBox playerHitbox = it.second.hitbox() + gk::Vector3d{it.second.x(), it.second.y(), it.second.z()};
 				if (hitbox.intersects(playerHitbox)) {
-					EntityWrapper entity{id, registry};
-					luaCallbackComponent.collisionCallback(entity, it.second, *m_server);
+					EntityWrapper entityWrapper{entity, registry};
+
+					auto &entityCallbackContainer = Registry::getInstance().getEntityCallbackContainer(id);
+					entityCallbackContainer.collisionCallback(entityWrapper, it.second, *m_server);
 				}
 			}
 		}
