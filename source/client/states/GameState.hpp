@@ -51,7 +51,7 @@ class GameState : public gk::ApplicationState {
 
 		void init() override;
 
-		void connect(const std::string &host, int port);
+		void connect(const std::string &host, int port, const std::string &username);
 
 		void onEvent(const sf::Event &event) override;
 

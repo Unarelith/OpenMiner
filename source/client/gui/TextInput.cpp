@@ -29,29 +29,50 @@
 #include "TextInput.hpp"
 
 TextInput::TextInput() {
-	m_text.setString(std::string{m_cursor});
+	m_cursor.setString("_");
+
+	m_placeholder.setColor(gk::Color(150, 150, 150));
 }
 
 void TextInput::onEvent(const sf::Event &event) {
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Backspace && !m_content.empty()) {
-		m_content.erase(m_content.begin() + m_content.length() - 1);
+	if (m_hasFocus) {
+		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Backspace && !m_content.empty()) {
+			m_content.erase(m_content.begin() + m_content.length() - 1);
 
-		m_text.setString(m_content + m_cursor);
-	}
-
-  	if (event.type == sf::Event::TextEntered) {
-		u32 c = event.text.unicode;
-		if (isprint(c) && (!m_characterLimit || m_content.size() < m_characterLimit)) {
-			m_content += c;
+			m_text.setString(m_content);
+			m_text.updateVertexBuffer();
+			m_cursor.setPosition(m_text.getSize().x, 0);
 		}
 
-		m_text.setString(m_content + m_cursor);
+		if (event.type == sf::Event::TextEntered) {
+			u32 c = event.text.unicode;
+			if (isprint(c) && (!m_characterLimit || m_content.size() < m_characterLimit)) {
+				m_content += c;
+			}
+
+			m_text.setString(m_content);
+			m_text.updateVertexBuffer();
+			m_cursor.setPosition(m_text.getSize().x, 0);
+		}
 	}
+}
+
+void TextInput::setString(const std::string &string) {
+	m_content = string;
+	m_text.setString(m_content);
+	m_text.updateVertexBuffer();
+	m_cursor.setPosition(m_text.getSize().x, 0);
 }
 
 void TextInput::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_text, states);
+
+	if (m_hasFocus)
+		target.draw(m_cursor, states);
+
+	if (m_content.empty() && !m_hasFocus)
+		target.draw(m_placeholder, states);
 }
 

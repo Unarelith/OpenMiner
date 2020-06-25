@@ -67,9 +67,11 @@ void GameState::init() {
 	m_eventHandler->addListener<GuiScaleChangedEvent>(&GameState::onGuiScaleChanged, this);
 }
 
-void GameState::connect(const std::string &host, int port) {
-	m_client.connect(host, port);
+void GameState::connect(const std::string &host, int port, const std::string &username) {
+	m_client.connect(host, port, m_player);
 	m_player.setClientID(m_client.id());
+	m_player.setName(username);
+	m_client.addPlayer(m_player);
 
 	gk::Mouse::setCursorVisible(false);
 	gk::Mouse::setCursorGrabbed(true);

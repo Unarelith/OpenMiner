@@ -77,7 +77,7 @@
 
 ## Player
 
-- `Inventory *inventory()`
+- `string name()`
 - `double x()`
 - `double y()`
 - `double z()`
@@ -85,6 +85,7 @@
 - `u16 dimension()`
 - `void set_dimension(u16 dimension)`
 - `u16 client_id()`
+- `Inventory *inventory()`
 
 ## Recipe
 

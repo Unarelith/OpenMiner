@@ -42,9 +42,12 @@ class ServerConnectState : public InterfaceState {
 		void setTexturePack(const std::string &texturePack) { m_texturePack = texturePack; }
 
 	private:
+		void updateWidgetPosition();
+
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		TextInput m_textInput;
+		TextInput m_usernameInput;
+		TextInput m_addressInput;
 
 		TextButton m_connectButton;
 		TextButton m_cancelButton;

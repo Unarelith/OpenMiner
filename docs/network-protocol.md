@@ -33,7 +33,9 @@ _This packet has no field._
 
 Packet sent from a client attempting to connect.
 
-_This packet has no field._
+| Field name    | Field type  | Notes                                                |
+| ------------- | ----------- | ---------------------------------------------------- |
+| Username      | std::string | Name of the player attempting to connect             |
 
 #### ClientDisconnect
 
@@ -87,6 +89,8 @@ _This packet has no field._
 | Player X       | double      | Player X coordinate                                  |
 | Player Y       | double      | Player Y coordinate                                  |
 | Player Z       | double      | Player Z coordinate                                  |
+| Dimension      | u16         | Dimension ID                                         |
+| Username       | std::string | Name of the player                                   |
 
 #### PlayerChangeDimension
 

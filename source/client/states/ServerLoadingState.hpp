@@ -46,6 +46,7 @@ class ServerLoadingState : public InterfaceState {
 		void update() override;
 
 		void setTexturePack(const std::string &texturePack);
+		void setUsername(const std::string &username) { m_username = username; }
 
 	private:
 		void onServerOnlineEvent(const ServerOnlineEvent &event);
@@ -60,6 +61,7 @@ class ServerLoadingState : public InterfaceState {
 		mutable bool m_hasBeenRendered = false;
 
 		std::string m_texturePack;
+		std::string m_username;
 
 		bool m_isServerOnline = false;
 		bool m_isConnected = false;

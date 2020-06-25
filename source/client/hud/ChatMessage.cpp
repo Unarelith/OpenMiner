@@ -25,10 +25,11 @@
  * =====================================================================================
  */
 #include "ChatMessage.hpp"
+#include "Player.hpp"
 
-ChatMessage::ChatMessage(u16 clientID, const std::string &message, u32 posY) {
-	if (clientID > 0)
-		m_text.setString("<Client " + std::to_string(clientID) + "> " + message);
+ChatMessage::ChatMessage(const std::string &message, u32 posY, const Player *player) {
+	if (player)
+		m_text.setString("<" + player->name() + "> " + message);
 	else
 		m_text.setString(message);
 

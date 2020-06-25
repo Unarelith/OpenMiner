@@ -166,7 +166,14 @@ void ServerCommandHandler::sendEntityDespawn(entt::entity entityID, const Client
 }
 
 void ServerCommandHandler::setupCallbacks() {
-	m_server.setConnectionCallback([this](ClientInfo &client) {
+	m_server.setConnectionCallback([this](ClientInfo &client, Network::Packet &connectionPacket) {
+		std::string username;
+		connectionPacket >> username;
+
+		auto &player = m_players.addPlayer(client);
+		player.setPosition(m_spawnPosition.x, m_spawnPosition.y, m_spawnPosition.z);
+		player.setName(username);
+
 		Network::Packet packet;
 		packet << Network::Command::RegistryData;
 		m_registry.serialize(packet);
@@ -180,9 +187,6 @@ void ServerCommandHandler::setupCallbacks() {
 			client.tcpSocket->send(spawnPacket);
 		}
 
-		auto &player = m_players.addPlayer(client);
-		player.setPosition(m_spawnPosition.x, m_spawnPosition.y, m_spawnPosition.z);
-
 		m_scriptEngine.luaCore().onEvent(LuaEventType::PlayerConnected, glm::ivec3{m_spawnPosition.x, m_spawnPosition.y, m_spawnPosition.z}, player, client, *this);
 
 		Network::Packet invPacket;
@@ -193,7 +197,7 @@ void ServerCommandHandler::setupCallbacks() {
 		// Send spawn packet to all clients for this player
 		Network::Packet spawnPacket;
 		spawnPacket << Network::Command::PlayerSpawn << client.id;
-		spawnPacket << m_spawnPosition.x << m_spawnPosition.y << m_spawnPosition.z;
+		spawnPacket << player.x() << player.y() << player.z() << player.dimension() << player.name();
 		m_server.sendToAllClients(spawnPacket);
 
 		// Send entities to the client

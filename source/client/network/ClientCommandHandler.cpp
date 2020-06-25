@@ -151,8 +151,10 @@ void ClientCommandHandler::setupCallbacks() {
 		packet >> clientID;
 
 		auto it = m_playerBoxes.find(clientID);
-		if (it != m_playerBoxes.end())
+		if (it != m_playerBoxes.end()) {
+			m_client.addPlayer(m_playerBoxes.at(clientID));
 			m_playerBoxes.erase(it);
+		}
 	});
 
 	m_client.setCommandCallback(Network::Command::ServerClosed, [this](Network::Packet &packet) {
@@ -227,12 +229,18 @@ void ClientCommandHandler::setupCallbacks() {
 	m_client.setCommandCallback(Network::Command::PlayerSpawn, [this](Network::Packet &packet) {
 		u16 clientId;
 		gk::Vector3d pos;
-		packet >> clientId >> pos.x >> pos.y >> pos.z;
+		u16 dimension;
+		std::string username;
+		packet >> clientId >> pos.x >> pos.y >> pos.z >> dimension >> username;
 
 		if (clientId != m_client.id()) {
 			m_playerBoxes.emplace(clientId, PlayerBox{m_player.camera()});
-			m_playerBoxes.at(clientId).setPosition(pos.x, pos.y, pos.z);
-			m_playerBoxes.at(clientId).setClientID(clientId);
+			Player &player = m_playerBoxes.at(clientId);
+			player.setPosition(pos.x, pos.y, pos.z);
+			player.setDimension(dimension);
+			player.setClientID(clientId);
+			player.setName(username);
+			m_client.addPlayer(player);
 		}
 		else {
 			m_player.setPosition(pos.x, pos.y, pos.z);
