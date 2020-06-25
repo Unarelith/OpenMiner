@@ -42,17 +42,17 @@ u8 Player::getOppositeDirection() const {
 }
 
 void Player::serialize(sf::Packet &packet) const {
-	packet << m_x << m_y << m_z << m_dimension << m_inventory;
+	packet << m_x << m_y << m_z << m_dimension << m_inventory << m_name;
 }
 
 void Player::deserialize(sf::Packet &packet) {
-	packet >> m_x >> m_y >> m_z >> m_dimension >> m_inventory;
+	packet >> m_x >> m_y >> m_z >> m_dimension >> m_inventory >> m_name;
 }
 
 // Please update 'docs/lua-api-cpp.md' if you change this
 void Player::initUsertype(sol::state &lua) {
 	lua.new_usertype<Player>("Player",
-		"inventory", &Player::inventory,
+		"name", &Player::name,
 
 		"x", &Player::x,
 		"y", &Player::y,
@@ -62,7 +62,9 @@ void Player::initUsertype(sol::state &lua) {
 		"dimension", &Player::dimension,
 		"set_dimension", &Player::setDimension,
 
-		"client_id", &Player::clientID
+		"client_id", &Player::clientID,
+
+		"inventory", &Player::inventory
 	);
 }
 

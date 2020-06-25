@@ -36,6 +36,8 @@ class Player : public gk::ISerializable {
 	public:
 		Player();
 
+		const std::string &name() const { return m_name; }
+
 		// West, East, South, North
 		// Same order as enum BlockFace in TilesDef.hpp
 		u8 getDirection() const;
@@ -58,6 +60,7 @@ class Player : public gk::ISerializable {
 
 		Inventory &inventory() { return m_inventory; }
 
+		void setName(const std::string &name) { m_name = name; }
 		void setPosition(double x, double y, double z) { m_x = x; m_y = y; m_z = z; }
 		void setRotation(float yaw, float pitch) { m_viewAngleH = yaw; m_viewAngleV = pitch; }
 		void setDimension(u16 dimension) { m_dimension = dimension; }
@@ -68,6 +71,8 @@ class Player : public gk::ISerializable {
 		static void initUsertype(sol::state &lua);
 
 	protected:
+		std::string m_name;
+
 		double m_x = 0;
 		double m_y = 0;
 		double m_z = 0;

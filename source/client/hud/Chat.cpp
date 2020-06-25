@@ -29,12 +29,15 @@
 #include "Config.hpp"
 
 Chat::Chat(Client &client) {
-	client.setCommandCallback(Network::Command::ChatMessage, [this](sf::Packet &packet) {
+	client.setCommandCallback(Network::Command::ChatMessage, [&](sf::Packet &packet) {
 		u16 clientID;
 		std::string message;
 		packet >> clientID >> message;
 
-		m_chatMessages.emplace_back(clientID, message, m_posY);
+		if (clientID != 0)
+			m_chatMessages.emplace_back(message, m_posY, &client.getPlayer(clientID));
+		else
+			m_chatMessages.emplace_back(message, m_posY);
 
 		m_posY += m_chatMessages.back().text().getSize().y + 1;
 

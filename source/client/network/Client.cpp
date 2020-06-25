@@ -31,7 +31,7 @@
 
 #include "Client.hpp"
 
-void Client::connect(sf::IpAddress serverAddress, u16 serverPort) {
+void Client::connect(sf::IpAddress serverAddress, u16 serverPort, Player &player) {
 	m_serverAddress = serverAddress;
 	m_serverPort = serverPort;
 
@@ -40,7 +40,7 @@ void Client::connect(sf::IpAddress serverAddress, u16 serverPort) {
 		throw ClientConnectException("Network error: Unable to connect to server " + serverAddress.toString() + ":" + std::to_string(serverPort));
 
 	Network::Packet packet;
-	packet << Network::Command::ClientConnect;
+	packet << Network::Command::ClientConnect << player.name();
 	m_tcpSocket->send(packet);
 
 	Network::Packet answer;

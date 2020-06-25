@@ -74,7 +74,7 @@ void Server::handleNewConnections() {
 			// client.tcpSocket->setBlocking(false);
 
 			if (m_connectionCallback)
-				m_connectionCallback(client);
+				m_connectionCallback(client, packet);
 		}
 		else {
 			Network::Packet outPacket;

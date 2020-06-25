@@ -38,7 +38,7 @@ class TextInput : public gk::Drawable, public gk::Transformable {
 		void onEvent(const sf::Event &event);
 
 		const std::string &string() const { return m_content; }
-		void setString(const std::string &string) { m_content = string; m_text.setString(m_content + m_cursor); }
+		void setString(const std::string &string);
 
 		gk::Vector2f getBackgroundSize() const { return m_text.getBackgroundSize(); }
 
@@ -46,17 +46,26 @@ class TextInput : public gk::Drawable, public gk::Transformable {
 		void setBackgroundSize(unsigned int width, unsigned int height) { m_text.setBackgroundSize(width, height); }
 		void setBackgroundOutline(int thickness, const gk::Color &color) { m_text.setBackgroundOutline(thickness, color); }
 
-		void setPadding(int x, int y) { m_text.setPadding(x, y); }
+		void setPadding(int x, int y) { m_text.setPadding(x, y); m_cursor.setPadding(x, y); m_placeholder.setPadding(x, y); }
 		void setCharacterLimit(u16 characterLimit) { m_characterLimit = characterLimit; }
+
+		void setPlaceholder(const std::string &placeholder) { m_placeholder.setString(placeholder); }
+
+		void setFocus(bool hasFocus) { m_hasFocus = hasFocus; }
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		Text m_text;
 		std::string m_content;
-		char m_cursor = '_';
+
+		Text m_cursor;
 
 		u16 m_characterLimit = 0;
+
+		Text m_placeholder;
+
+		bool m_hasFocus = true;
 };
 
 #endif // TEXTINPUT_HPP_

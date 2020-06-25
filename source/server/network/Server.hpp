@@ -37,7 +37,7 @@
 #include "ServerInfo.hpp"
 
 class Server {
-	using ConnectionCallback = std::function<void(ClientInfo &)>;
+	using ConnectionCallback = std::function<void(ClientInfo &, Network::Packet &packet)>;
 	using CommandCallback = std::function<void(ClientInfo &, Network::Packet &packet)>;
 
 	public:

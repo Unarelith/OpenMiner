@@ -31,9 +31,11 @@
 
 #include "Text.hpp"
 
+class Player;
+
 class ChatMessage : public gk::Drawable, public gk::Transformable {
 	public:
-		ChatMessage(u16 clientID, const std::string &message, u32 posY);
+		ChatMessage(const std::string &message, u32 posY, const Player *player = nullptr);
 
 		void setVisible(bool isVisible) { m_isVisible = isVisible; }
 

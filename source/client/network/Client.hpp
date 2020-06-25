@@ -37,6 +37,7 @@
 #include <gk/core/Timer.hpp>
 
 #include "Network.hpp"
+#include "Player.hpp"
 
 class ClientConnectException {
 	public:
@@ -55,7 +56,7 @@ class Client {
 	using CommandCallback = std::function<void(Network::Packet &packet)>;
 
 	public:
-		void connect(sf::IpAddress serverAddress, u16 serverPort);
+		void connect(sf::IpAddress serverAddress, u16 serverPort, Player &player);
 		void disconnect();
 
 		void send(Network::Packet &packet);
@@ -83,6 +84,10 @@ class Client {
 		const std::string &worldName() const { return m_worldName; }
 		void setWorldName(const std::string &worldName) { m_worldName = worldName; }
 
+		void addPlayer(Player &player) { m_players.emplace(player.clientID(), player); }
+		void removePlayer(u16 clientID) { m_players.erase(clientID); }
+		Player &getPlayer(u16 clientID) { return m_players.at(clientID); }
+
 	private:
 		bool m_isConnected = false;
 		bool m_isSingleplayer = false;
@@ -100,6 +105,8 @@ class Client {
 
 		std::string m_texturePack;
 		std::string m_worldName;
+
+		std::unordered_map<u16, Player &> m_players;
 };
 
 #endif // CLIENT_HPP_

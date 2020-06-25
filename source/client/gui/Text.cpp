@@ -69,11 +69,11 @@ void Text::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 		m_isUpdateNeeded = false;
 	}
 
-	if (m_verticesCount == 0) return;
-
 	states.transform *= getTransform();
 
 	target.draw(m_background, states);
+
+	if (m_verticesCount == 0) return;
 
 	states.transform.translate(m_padding.x, m_padding.y);
 	states.texture = &m_font.texture();

@@ -74,7 +74,7 @@ void ServerLoadingState::onEvent(const sf::Event &event) {
 void ServerLoadingState::update() {
 	if (!m_isConnected && (m_isServerOnline || m_port != 0)) {
 		try {
-			m_game.connect(m_host, m_port);
+			m_game.connect(m_host, m_port, m_username);
 			m_isConnected = true;
 		}
 		catch (ClientConnectException &e) {
