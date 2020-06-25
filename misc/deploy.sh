@@ -13,7 +13,9 @@ i686-w64-mingw32-cmake -B deploy/win32 . && \
 cmake --build deploy/win32 -j8 && \
 i686-w64-mingw32-strip deploy/win32/openminer.exe deploy/win32/openminer_server.exe && \
 cp deploy/win32/openminer.exe deploy/win32/openminer_server.exe deploy/win32/bin/openminer && \
-cp -r config docs mods resources texturepacks deploy/win32/bin/openminer && \
+cp -r docs mods resources texturepacks deploy/win32/bin/openminer && \
+mkdir deploy/win32/bin/openminer/config && \
+cp config/*.example.lua deploy/win32/bin/openminer/config && \
 cp /usr/i686-w64-mingw32/bin/libwinpthread-1.dll deploy/win32/bin/openminer && \
 cd deploy/win32/bin && \
 zip -T -r ../../OpenMiner-$version-win32.zip openminer &&
@@ -24,7 +26,9 @@ x86_64-w64-mingw32-cmake -B deploy/win64 . && \
 cmake --build deploy/win64 -j8 && \
 x86_64-w64-mingw32-strip deploy/win64/openminer.exe deploy/win64/openminer_server.exe && \
 cp deploy/win64/openminer.exe deploy/win64/openminer_server.exe deploy/win64/bin/openminer && \
-cp -r config docs mods resources texturepacks deploy/win64/bin/openminer && \
+cp -r docs mods resources texturepacks deploy/win64/bin/openminer && \
+mkdir deploy/win64/bin/openminer/config && \
+cp config/*.example.lua deploy/win64/bin/openminer/config && \
 cp /usr/x86_64-w64-mingw32/bin/libwinpthread-1.dll deploy/win64/bin/openminer && \
 cd deploy/win64/bin && \
 zip -T -r ../../OpenMiner-$version-win64.zip openminer &&
@@ -36,7 +40,9 @@ cmake --build deploy/linux64 -j8 && \
 strip deploy/linux64/openminer deploy/linux64/openminer_server && \
 mkdir -p deploy/linux64/bin/openminer/bin deploy/linux64/bin/openminer/lib && \
 cp deploy/linux64/openminer deploy/linux64/openminer_server deploy/linux64/bin/openminer/bin && \
-cp -r config docs mods resources texturepacks deploy/linux64/bin/openminer && \
+cp -r docs mods resources texturepacks deploy/linux64/bin/openminer && \
+mkdir deploy/linux64/bin/openminer/config && \
+cp config/*.example.lua deploy/linux64/bin/openminer/config && \
 cp /usr/lib/ld-linux-x86-64.so.2 \
 /usr/lib/libc.so.6 \
 /usr/lib/libdl.so.2 \

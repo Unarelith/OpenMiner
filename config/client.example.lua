@@ -1,4 +1,4 @@
--- You can copy this file as 'config.lua' to load automatically those settings at client startup
+-- You can copy this file as 'config/client.lua' to load automatically those settings at client startup
 -- Here the default values are set, you can remove options or change them accordingly
 -- See source/client/core/Config.cpp for more details
 
