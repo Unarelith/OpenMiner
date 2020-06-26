@@ -31,6 +31,14 @@
 #include "ServerLoadingState.hpp"
 
 ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : InterfaceState(parent) {
+	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
+
+	m_filter.setFillColor(gk::Color(0, 0, 0, 192));
+
+	m_title.setScale(Config::guiScale, Config::guiScale);
+	m_title.setString("Play Multiplayer");
+	m_title.updateVertexBuffer();
+
 	m_usernameInput.setString(Config::defaultUsername);
 	m_usernameInput.setCharacterLimit(20);
 	m_usernameInput.setBackgroundSize(150, 20);
@@ -49,9 +57,8 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 	m_addressInput.setPlaceholder("Server address");
 	m_addressInput.setFocus(false);
 
-	m_connectButton.setText("Connect");
-	m_connectButton.setScale(Config::guiScale, Config::guiScale);
-	m_connectButton.setCallback([this](TextButton &) {
+	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
+	m_menuWidget.addButton("Join Server", [this](TextButton &) {
 		size_t sep = m_addressInput.string().find_first_of(':');
 		std::string host = m_addressInput.string().substr(0, sep);
 
@@ -88,9 +95,7 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 		}
 	});
 
-	m_cancelButton.setText("Cancel");
-	m_cancelButton.setScale(Config::guiScale, Config::guiScale);
-	m_cancelButton.setCallback([this](TextButton &) {
+	m_menuWidget.addButton("Cancel", [this](TextButton &) {
 		m_stateStack->pop();
 	});
 
@@ -107,8 +112,7 @@ void ServerConnectState::onEvent(const sf::Event &event) {
 		m_usernameInput.onEvent(event);
 		m_addressInput.onEvent(event);
 
-		m_connectButton.onEvent(event);
-		m_cancelButton.onEvent(event);
+		m_menuWidget.onEvent(event);
 	}
 }
 
@@ -116,9 +120,19 @@ void ServerConnectState::update() {
 }
 
 void ServerConnectState::updateWidgetPosition() {
+	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+
+	m_filter.setSize(Config::screenWidth, Config::screenHeight);
+
+	m_title.setPosition(
+		Config::screenWidth / 2.0f - m_title.getSize().x * Config::guiScale / 2.0f,
+		12.5f * Config::guiScale - m_title.getSize().y * Config::guiScale / 2.0f
+	);
+
 	m_usernameInput.setPosition(
 		Config::screenWidth / 2.0f - m_usernameInput.getBackgroundSize().x * Config::guiScale / 2.0f,
-		Config::screenHeight / 2.0f - m_usernameInput.getBackgroundSize().y * Config::guiScale / 2.0f - 25 * Config::guiScale
+		Config::screenHeight / 2.0f - m_usernameInput.getBackgroundSize().y * Config::guiScale / 2.0f - 30 * Config::guiScale
 	);
 
 	m_addressInput.setPosition(
@@ -126,8 +140,10 @@ void ServerConnectState::updateWidgetPosition() {
 		Config::screenHeight / 2.0f - m_addressInput.getBackgroundSize().y * Config::guiScale / 2.0f
 	);
 
-	m_connectButton.setPosition(Config::screenWidth / 2.0f - m_connectButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 340);
-	m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 261);
+	m_menuWidget.setPosition(
+		Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2,
+		Config::screenHeight - 110 * Config::guiScale
+	);
 
 	m_errorText.setPosition(
 		Config::screenWidth / 2.0f - m_errorText.getSize().x * Config::guiScale / 2.0f,
@@ -136,17 +152,18 @@ void ServerConnectState::updateWidgetPosition() {
 }
 
 void ServerConnectState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	if (m_parent)
-		target.draw(*m_parent, states);
-
 	if (&m_stateStack->top() == this) {
 		prepareDraw(target, states);
+
+		target.draw(m_background, states);
+		target.draw(m_filter, states);
+
+		target.draw(m_title, states);
 
 		target.draw(m_usernameInput, states);
 		target.draw(m_addressInput, states);
 
-		target.draw(m_connectButton, states);
-		target.draw(m_cancelButton, states);
+		target.draw(m_menuWidget, states);
 
 		if (!m_errorText.string().empty())
 			target.draw(m_errorText, states);

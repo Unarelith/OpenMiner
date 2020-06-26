@@ -28,7 +28,7 @@
 #define SERVERCONNECTSTATE_HPP_
 
 #include "InterfaceState.hpp"
-#include "TextButton.hpp"
+#include "MenuWidget.hpp"
 #include "TextInput.hpp"
 
 class ServerConnectState : public InterfaceState {
@@ -46,11 +46,15 @@ class ServerConnectState : public InterfaceState {
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
+		gk::Image m_background{"texture-menu_background"};
+		gk::RectangleShape m_filter;
+
+		Text m_title;
+
 		TextInput m_usernameInput;
 		TextInput m_addressInput;
 
-		TextButton m_connectButton;
-		TextButton m_cancelButton;
+		MenuWidget m_menuWidget{1, 2};
 
 		Text m_errorText;
 

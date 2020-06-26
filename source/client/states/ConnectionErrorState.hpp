@@ -28,7 +28,7 @@
 #define CONNECTIONERRORSTATE_HPP_
 
 #include "InterfaceState.hpp"
-#include "TextButton.hpp"
+#include "MenuWidget.hpp"
 
 class ConnectionErrorState : public InterfaceState {
 	public:
@@ -46,12 +46,12 @@ class ConnectionErrorState : public InterfaceState {
 
 		std::string m_texturePack;
 
+		gk::Image m_background{"texture-menu_background"};
+		gk::RectangleShape m_filter;
+
 		Text m_text;
 
-		TextButton m_reconnectButton;
-		TextButton m_cancelButton;
-
-		gk::Image m_background{"texture-title_screen"};
+		MenuWidget m_menuWidget{1, 2};
 };
 
 #endif // CONNECTIONERRORSTATE_HPP_

@@ -42,14 +42,18 @@ ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::
 
 	m_texturePack = texturePack;
 
+	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
+
+	m_filter.setFillColor(gk::Color(0, 0, 0, 192));
+
 	m_text.setString(error);
 	m_text.setColor(gk::Color::Red);
 	m_text.updateVertexBuffer();
 	m_text.setScale(Config::guiScale * 1.5, Config::guiScale * 1.5);
+	m_text.setShadowEnabled(false);
 
-	m_reconnectButton.setText("Reconnect");
-	m_reconnectButton.setScale(Config::guiScale, Config::guiScale);
-	m_reconnectButton.setCallback([this](TextButton &) {
+	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
+	m_menuWidget.addButton("Reconnect", [this](TextButton &) {
 		m_stateStack->pop();
 
 		auto &game = m_stateStack->push<GameState>();
@@ -58,9 +62,7 @@ ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::
 		serverLoadingState.setUsername(Config::defaultUsername);
 	});
 
-	m_cancelButton.setText("Cancel");
-	m_cancelButton.setScale(Config::guiScale, Config::guiScale);
-	m_cancelButton.setCallback([this](TextButton &) {
+	m_menuWidget.addButton("Cancel", [this](TextButton &) {
 		if (m_stateStack->size() > 1) {
 			m_stateStack->pop();
 		}
@@ -77,17 +79,23 @@ void ConnectionErrorState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
-		m_reconnectButton.onEvent(event);
-		m_cancelButton.onEvent(event);
+		m_menuWidget.onEvent(event);
 	}
 }
 
 void ConnectionErrorState::updateWidgetPosition() {
+	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+
+	m_filter.setSize(Config::screenWidth, Config::screenHeight);
+
 	m_text.setPosition(Config::screenWidth  / 2 - m_text.getSize().x * Config::guiScale * 1.5 / 2,
 	                   Config::screenHeight / 2 - m_text.getSize().y * Config::guiScale * 1.5 / 2);
 
-	m_reconnectButton.setPosition(Config::screenWidth / 2.0f - m_reconnectButton.getGlobalBounds().sizeX / 2.0f, Config::screenHeight - 340);
-	m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX / 2.0f, Config::screenHeight - 261);
+	m_menuWidget.setPosition(
+		Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2,
+		Config::screenHeight - 110 * Config::guiScale
+	);
 }
 
 void ConnectionErrorState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -95,11 +103,11 @@ void ConnectionErrorState::draw(gk::RenderTarget &target, gk::RenderStates state
 		prepareDraw(target, states);
 
 		target.draw(m_background, states);
+		target.draw(m_filter, states);
 
 		target.draw(m_text, states);
 
-		target.draw(m_reconnectButton, states);
-		target.draw(m_cancelButton, states);
+		target.draw(m_menuWidget, states);
 	}
 }
 

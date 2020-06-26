@@ -42,8 +42,8 @@ WorldSelectionState::WorldSelectionState(TitleScreenState *titleScreen)
 {
 	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
 
-	m_filter1.setFillColor(gk::Color(0, 0, 0, 176));
-	m_filter2.setFillColor(gk::Color(0, 0, 0, 136));
+	m_filter1.setFillColor(gk::Color(0, 0, 0, 192));
+	m_filter2.setFillColor(gk::Color(0, 0, 0, 120));
 
 	m_title.setScale(Config::guiScale, Config::guiScale);
 	m_title.setString("Select World");
