@@ -45,8 +45,8 @@ class WorldSavingState : public InterfaceState {
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		gk::Image m_background{"texture-title_screen"};
-		gk::RectangleShape m_backgroundFilter;
+		gk::Image m_background{"texture-menu_background"};
+		gk::RectangleShape m_filter;
 
 		Client &m_client;
 

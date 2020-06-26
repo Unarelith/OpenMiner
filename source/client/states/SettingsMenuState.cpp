@@ -97,6 +97,9 @@ void SettingsMenuState::onEvent(const sf::Event &event) {
 }
 
 void SettingsMenuState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
+	m_background.setScale(event.guiScale * 2, event.guiScale * 2);
+	m_title.setScale(event.guiScale, event.guiScale);
+
 	m_menuWidget.setScale(event.guiScale, event.guiScale);
 	m_doneButton.setScale(event.guiScale, event.guiScale);
 

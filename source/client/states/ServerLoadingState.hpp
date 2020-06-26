@@ -27,6 +27,8 @@
 #ifndef SERVERLOADINGSTATE_HPP_
 #define SERVERLOADINGSTATE_HPP_
 
+#include <gk/graphics/Image.hpp>
+
 #include "InterfaceState.hpp"
 #include "Text.hpp"
 
@@ -50,6 +52,9 @@ class ServerLoadingState : public InterfaceState {
 		void updateWidgetPosition() override;
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		gk::Image m_background{"texture-menu_background"};
+		gk::RectangleShape m_filter;
 
 		Text m_text;
 

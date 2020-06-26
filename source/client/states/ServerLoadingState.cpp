@@ -40,6 +40,10 @@
 ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, const std::string &host, u16 port, gk::ApplicationState *parent)
 	: InterfaceState(parent), m_game(game), m_showLoadingState(showLoadingState)
 {
+	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
+
+	m_filter.setFillColor(gk::Color(0, 0, 0, 192));
+
 	m_text.setString("Loading world...");
 	m_text.setColor(gk::Color::White);
 	m_text.updateVertexBuffer();
@@ -110,16 +114,21 @@ void ServerLoadingState::onServerOnlineEvent(const ServerOnlineEvent &event) {
 }
 
 void ServerLoadingState::updateWidgetPosition() {
+	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+
+	m_filter.setSize(Config::screenWidth, Config::screenHeight);
+
 	m_text.setPosition(Config::screenWidth  / 2 - m_text.getSize().x * Config::guiScale * 2 / 2,
 	                   Config::screenHeight / 2 - m_text.getSize().y * Config::guiScale * 2 / 2);
 }
 
 void ServerLoadingState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	if (m_parent)
-		target.draw(*m_parent, states);
-
 	if (m_showLoadingState) {
 		prepareDraw(target, states);
+
+		target.draw(m_background, states);
+		target.draw(m_filter, states);
 
 		target.draw(m_text, states);
 

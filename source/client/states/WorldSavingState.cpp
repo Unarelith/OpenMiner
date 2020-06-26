@@ -36,7 +36,9 @@ WorldSavingState::WorldSavingState(Client &client, bool closeClient, gk::Applica
 {
 	m_closeClient = closeClient;
 
-	m_backgroundFilter.setFillColor(gk::Color{0, 0, 0, 127});
+	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
+
+	m_filter.setFillColor(gk::Color(0, 0, 0, 192));
 
 	m_text.setString("Saving world...");
 	m_text.setColor(gk::Color::White);
@@ -67,10 +69,13 @@ void WorldSavingState::update() {
 }
 
 void WorldSavingState::updateWidgetPosition() {
+	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+
+	m_filter.setSize(Config::screenWidth, Config::screenHeight);
+
 	m_text.setPosition(Config::screenWidth  / 2 - m_text.getSize().x * Config::guiScale * 2 / 2,
 	                   Config::screenHeight / 2 - m_text.getSize().y * Config::guiScale * 2 / 2);
-
-	m_background.setPosition(Config::screenWidth / 2.0 - m_background.width() / 2.0, Config::screenHeight / 2.0 - m_background.height() / 2.0);
 }
 
 void WorldSavingState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -78,7 +83,7 @@ void WorldSavingState::draw(gk::RenderTarget &target, gk::RenderStates states) c
 		prepareDraw(target, states);
 
 		target.draw(m_background, states);
-		target.draw(m_backgroundFilter, states);
+		target.draw(m_filter, states);
 
 		target.draw(m_text, states);
 
