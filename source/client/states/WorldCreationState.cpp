@@ -43,6 +43,8 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 	m_textInput.setBackgroundOutline(1, gk::Color::White);
 	m_textInput.setPadding(5, 6);
 	m_textInput.setScale(Config::guiScale, Config::guiScale);
+	m_textInput.setFocus(false);
+	m_textInput.setPlaceholder("World Name");
 
 	m_createButton.setText(originalName.empty() ? "Create" : "Rename");
 	m_createButton.setScale(Config::guiScale, Config::guiScale);

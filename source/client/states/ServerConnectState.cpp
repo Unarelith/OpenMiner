@@ -110,31 +110,6 @@ void ServerConnectState::onEvent(const sf::Event &event) {
 		m_connectButton.onEvent(event);
 		m_cancelButton.onEvent(event);
 	}
-
-	if (event.type == sf::Event::MouseButtonPressed) {
-		gk::FloatRect usernameInputRect{
-			m_usernameInput.getPosition().x,
-			m_usernameInput.getPosition().y,
-			m_usernameInput.getBackgroundSize().x * m_usernameInput.getScale().x,
-			m_usernameInput.getBackgroundSize().y * m_usernameInput.getScale().y
-		};
-
-		gk::FloatRect addressInputRect{
-			m_addressInput.getPosition().x,
-			m_addressInput.getPosition().y,
-			m_addressInput.getBackgroundSize().x * m_addressInput.getScale().x,
-			m_addressInput.getBackgroundSize().y * m_addressInput.getScale().y
-		};
-
-		if (usernameInputRect.contains(event.mouseButton.x, event.mouseButton.y)) {
-			m_usernameInput.setFocus(true);
-			m_addressInput.setFocus(false);
-		}
-		else if (addressInputRect.contains(event.mouseButton.x, event.mouseButton.y)) {
-			m_usernameInput.setFocus(false);
-			m_addressInput.setFocus(true);
-		}
-	}
 }
 
 void ServerConnectState::update() {

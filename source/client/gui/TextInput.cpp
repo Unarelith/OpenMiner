@@ -35,7 +35,17 @@ TextInput::TextInput() {
 }
 
 void TextInput::onEvent(const sf::Event &event) {
-	if (m_hasFocus) {
+	if (event.type == sf::Event::MouseButtonPressed) {
+		gk::FloatRect rect{
+			getPosition().x,
+			getPosition().y,
+			getBackgroundSize().x * getScale().x,
+			getBackgroundSize().y * getScale().y
+		};
+
+		m_hasFocus = rect.contains(event.mouseButton.x, event.mouseButton.y);
+	}
+	else if (m_hasFocus) {
 		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Backspace && !m_content.empty()) {
 			m_content.erase(m_content.begin() + m_content.length() - 1);
 
