@@ -28,7 +28,7 @@
 #define WORLDDELETIONSTATE_HPP_
 
 #include "InterfaceState.hpp"
-#include "TextButton.hpp"
+#include "MenuWidget.hpp"
 
 class TitleScreenState;
 
@@ -45,10 +45,13 @@ class WorldDeletionState : public InterfaceState {
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		Text m_text;
+		gk::Image m_background{"texture-menu_background"};
+		gk::RectangleShape m_filter;
 
-		TextButton m_confirmButton;
-		TextButton m_cancelButton;
+		Text m_text1;
+		Text m_text2;
+
+		MenuWidget m_menuWidget{2, 1};
 };
 
 #endif // WORLDDELETIONSTATE_HPP_

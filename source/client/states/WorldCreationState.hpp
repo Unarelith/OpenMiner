@@ -28,7 +28,7 @@
 #define WORLDCREATIONSTATE_HPP_
 
 #include "InterfaceState.hpp"
-#include "TextButton.hpp"
+#include "MenuWidget.hpp"
 #include "TextInput.hpp"
 
 class TitleScreenState;
@@ -46,10 +46,14 @@ class WorldCreationState : public InterfaceState {
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
+		gk::Image m_background{"texture-menu_background"};
+		gk::RectangleShape m_filter;
+
+		Text m_title;
+
 		TextInput m_textInput;
 
-		TextButton m_createButton;
-		TextButton m_cancelButton;
+		MenuWidget m_menuWidget{2, 1};
 
 		Text m_errorText;
 };

@@ -37,6 +37,14 @@
 namespace fs = ghc::filesystem;
 
 WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std::string &originalName) : InterfaceState(titleScreen) {
+	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
+
+	m_filter.setFillColor(gk::Color(0, 0, 0, 192));
+
+	m_title.setScale(Config::guiScale, Config::guiScale);
+	m_title.setString(originalName.empty() ? "Create New World" : "Edit World");
+	m_title.updateVertexBuffer();
+
 	m_textInput.setString(originalName);
 	m_textInput.setCharacterLimit(32);
 	m_textInput.setBackgroundSize(150, 20);
@@ -46,9 +54,8 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 	m_textInput.setFocus(false);
 	m_textInput.setPlaceholder("World Name");
 
-	m_createButton.setText(originalName.empty() ? "Create" : "Rename");
-	m_createButton.setScale(Config::guiScale, Config::guiScale);
-	m_createButton.setCallback([this, titleScreen, originalName](TextButton &) {
+	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
+	m_menuWidget.addButton(originalName.empty() ? "Create New World" : "Save World", [this, titleScreen, originalName](TextButton &) {
 		std::string worldName = m_textInput.string();
 		if (!fs::exists("saves/" + worldName + ".dat")) {
 			if (gk::regexMatch(worldName, "^[A-Za-z0-9_]+$") && worldName[0] != '_') {
@@ -79,13 +86,11 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 			m_errorText.updateVertexBuffer();
 			updateWidgetPosition();
 		}
-	});
+	}, 150);
 
-	m_cancelButton.setText("Cancel");
-	m_cancelButton.setScale(Config::guiScale, Config::guiScale);
-	m_cancelButton.setCallback([this](TextButton &) {
+	m_menuWidget.addButton("Cancel", [this](TextButton &) {
 		m_stateStack->pop();
-	});
+	}, 150);
 
 	m_errorText.setColor(gk::Color::Red);
 	m_errorText.setScale(Config::guiScale, Config::guiScale);
@@ -99,8 +104,7 @@ void WorldCreationState::onEvent(const sf::Event &event) {
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
 		m_textInput.onEvent(event);
 
-		m_createButton.onEvent(event);
-		m_cancelButton.onEvent(event);
+		m_menuWidget.onEvent(event);
 	}
 }
 
@@ -108,13 +112,25 @@ void WorldCreationState::update() {
 }
 
 void WorldCreationState::updateWidgetPosition() {
+	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+
+	m_filter.setSize(Config::screenWidth, Config::screenHeight);
+
+	m_title.setPosition(
+		Config::screenWidth / 2.0f - m_title.getSize().x * Config::guiScale / 2.0f,
+		12.5f * Config::guiScale - m_title.getSize().y * Config::guiScale / 2.0f
+	);
+
 	m_textInput.setPosition(
 		Config::screenWidth / 2.0f - m_textInput.getBackgroundSize().x * Config::guiScale / 2.0f,
 		Config::screenHeight / 2.0f - m_textInput.getBackgroundSize().y * Config::guiScale / 2.0f
 	);
 
-	m_createButton.setPosition(Config::screenWidth / 2.0f - m_createButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 340);
-	m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 261);
+	m_menuWidget.setPosition(
+		Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2.0f,
+		Config::screenHeight - 12.5f * Config::guiScale - m_menuWidget.getGlobalBounds().sizeY / 2.0f
+	);
 
 	m_errorText.setPosition(
 		Config::screenWidth / 2.0f - m_errorText.getSize().x * Config::guiScale / 2.0f,
@@ -123,16 +139,17 @@ void WorldCreationState::updateWidgetPosition() {
 }
 
 void WorldCreationState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	if (m_parent)
-		target.draw(*m_parent, states);
-
 	if (&m_stateStack->top() == this) {
 		prepareDraw(target, states);
 
+		target.draw(m_background, states);
+		target.draw(m_filter, states);
+
+		target.draw(m_title, states);
+
 		target.draw(m_textInput, states);
 
-		target.draw(m_createButton, states);
-		target.draw(m_cancelButton, states);
+		target.draw(m_menuWidget, states);
 
 		if (!m_errorText.string().empty())
 			target.draw(m_errorText, states);

@@ -36,14 +36,20 @@
 namespace fs = ghc::filesystem;
 
 WorldDeletionState::WorldDeletionState(const std::string &worldName, TitleScreenState *titleScreen) : InterfaceState(titleScreen) {
-	m_text.setString("Are you sure you want to delete '" + worldName + "'?");
-	m_text.setColor(gk::Color::White);
-	m_text.updateVertexBuffer();
-	m_text.setScale(Config::guiScale * 2, Config::guiScale * 2);
+	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
 
-	m_confirmButton.setText("Yes");
-	m_confirmButton.setScale(Config::guiScale, Config::guiScale);
-	m_confirmButton.setCallback([this, worldName, titleScreen](TextButton &) {
+	m_filter.setFillColor(gk::Color(0, 0, 0, 176));
+
+	m_text1.setString("Are you sure you want to delete this world?");
+	m_text1.updateVertexBuffer();
+	m_text1.setScale(Config::guiScale, Config::guiScale);
+
+	m_text2.setString("'" + worldName + "' will be lost forever! (A long time!)");
+	m_text2.updateVertexBuffer();
+	m_text2.setScale(Config::guiScale, Config::guiScale);
+
+	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
+	m_menuWidget.addButton("Yes", [this, worldName, titleScreen](TextButton &) {
 		std::string saveFilepath = "saves/" + worldName + ".dat";
 		if (fs::exists(saveFilepath))
 			fs::remove(saveFilepath);
@@ -52,13 +58,11 @@ WorldDeletionState::WorldDeletionState(const std::string &worldName, TitleScreen
 		// FIXME: This is needed because there's currently no way to refresh WorldSelectionState
 		m_stateStack->pop(); // WorldSelectionState
 		m_stateStack->push<WorldSelectionState>(titleScreen);
-	});
+	}, 150);
 
-	m_cancelButton.setText("No");
-	m_cancelButton.setScale(Config::guiScale, Config::guiScale);
-	m_cancelButton.setCallback([this](TextButton &) {
+	m_menuWidget.addButton("No", [this](TextButton &) {
 		m_stateStack->pop();
-	});
+	}, 150);
 
 	updateWidgetPosition();
 }
@@ -67,8 +71,7 @@ void WorldDeletionState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
 	if (&m_stateStack->top() == this) {
-		m_confirmButton.onEvent(event);
-		m_cancelButton.onEvent(event);
+		m_menuWidget.onEvent(event);
 	}
 }
 
@@ -76,11 +79,21 @@ void WorldDeletionState::update() {
 }
 
 void WorldDeletionState::updateWidgetPosition() {
-	m_text.setPosition(Config::screenWidth  / 2 - m_text.getSize().x * Config::guiScale * 2 / 2,
-	                   Config::screenHeight / 2 - m_text.getSize().y * Config::guiScale * 2 / 2);
+	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
 
-	m_confirmButton.setPosition(Config::screenWidth / 2.0f - m_confirmButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 340);
-	m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX / 2, Config::screenHeight - 261);
+	m_filter.setSize(Config::screenWidth, Config::screenHeight);
+
+	m_text1.setPosition(Config::screenWidth  / 2 - m_text1.getSize().x * Config::guiScale / 2,
+	                    Config::screenHeight / 2 - 30 * Config::guiScale);
+
+	m_text2.setPosition(Config::screenWidth  / 2 - m_text2.getSize().x * Config::guiScale / 2,
+	                    Config::screenHeight / 2 - m_text2.getSize().y * Config::guiScale / 2);
+
+	m_menuWidget.setPosition(
+		Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2,
+		Config::screenHeight - 110 * Config::guiScale
+	);
 }
 
 void WorldDeletionState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -90,10 +103,13 @@ void WorldDeletionState::draw(gk::RenderTarget &target, gk::RenderStates states)
 	if (&m_stateStack->top() == this) {
 		prepareDraw(target, states);
 
-		target.draw(m_text, states);
+		target.draw(m_background, states);
+		target.draw(m_filter, states);
 
-		target.draw(m_confirmButton, states);
-		target.draw(m_cancelButton, states);
+		target.draw(m_text1, states);
+		target.draw(m_text2, states);
+
+		target.draw(m_menuWidget, states);
 	}
 }
 
