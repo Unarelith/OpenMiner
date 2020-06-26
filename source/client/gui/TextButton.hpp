@@ -55,12 +55,16 @@ class TextButton : public Widget {
 
 		void setEnabled(bool isEnabled) {
 			m_isEnabled = isEnabled;
-			m_text.setColor(isEnabled ? gk::Color{224, 224, 224} : gk::Color{160, 160, 160});
+			m_text.setColor(isEnabled ? m_defaultColor : m_disabledColor);
 			m_text.setShadowEnabled(isEnabled);
 		}
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		const gk::Color m_defaultColor{224, 224, 224};
+		const gk::Color m_hoverColor{255, 255, 160};
+		const gk::Color m_disabledColor{160, 160, 160};
 
 		gk::Image m_background{"texture-widgets"};
 		gk::Image m_hoverBackground{"texture-widgets"};
