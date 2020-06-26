@@ -68,7 +68,7 @@ void GameState::init() {
 }
 
 void GameState::connect(const std::string &host, int port, const std::string &username) {
-	m_player.setName(username);
+	m_player.setName(username.empty() ? "Player" : username);
 	m_client.connect(host, port, m_player);
 	m_player.setClientID(m_client.id());
 	m_client.addPlayer(m_player);
