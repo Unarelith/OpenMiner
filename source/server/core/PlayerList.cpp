@@ -31,12 +31,18 @@ ServerPlayer &PlayerList::addPlayer(const std::string &name, bool isNewPlayer) {
 	return m_players.at(name);
 }
 
-ServerPlayer &PlayerList::connectPlayer(const std::string &name, ClientInfo &client) {
+ServerPlayer *PlayerList::connectPlayer(const std::string &name, ClientInfo &client) {
 	ServerPlayer *player = nullptr;
 	auto it = m_players.find(name);
 	if (it != m_players.end()) {
-		player = &it->second;
-		gkInfo() << name << "is online";
+		if (!it->second.isOnline()) {
+			player = &it->second;
+			gkInfo() << name << "is online";
+		}
+		else {
+			gkInfo() << name << "failed to connect: already online";
+			return nullptr;
+		}
 	}
 	else {
 		player = &addPlayer(name, true);
@@ -48,7 +54,7 @@ ServerPlayer &PlayerList::connectPlayer(const std::string &name, ClientInfo &cli
 
 	client.playerName = name;
 
-	return *player;
+	return player;
 }
 
 void PlayerList::disconnectPlayer(const std::string &name) {

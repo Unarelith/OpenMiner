@@ -55,6 +55,7 @@ ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::
 		auto &game = m_stateStack->push<GameState>();
 		auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, true, m_host, m_port, m_parent);
 		serverLoadingState.setTexturePack(m_texturePack);
+		serverLoadingState.setUsername(Config::defaultUsername);
 	});
 
 	m_cancelButton.setText("Cancel");
