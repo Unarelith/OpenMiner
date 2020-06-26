@@ -231,12 +231,15 @@ void ClientCommandHandler::setupCallbacks() {
 		gk::Vector3d pos;
 		u16 dimension;
 		std::string username;
-		packet >> clientId >> pos.x >> pos.y >> pos.z >> dimension >> username;
+		float cameraYaw, cameraPitch;
+		packet >> clientId >> pos.x >> pos.y >> pos.z >> dimension
+			>> username >> cameraYaw >> cameraPitch;
 
 		if (clientId != m_client.id()) {
 			m_playerBoxes.emplace(clientId, PlayerBox{m_player.camera()});
 			Player &player = m_playerBoxes.at(clientId);
 			player.setPosition(pos.x, pos.y, pos.z);
+			player.setRotation(cameraYaw, cameraPitch);
 			player.setDimension(dimension);
 			player.setClientID(clientId);
 			player.setName(username);
@@ -244,6 +247,8 @@ void ClientCommandHandler::setupCallbacks() {
 		}
 		else {
 			m_player.setPosition(pos.x, pos.y, pos.z);
+			m_player.setRotation(cameraYaw, cameraPitch);
+			m_player.updateCamera();
 		}
 	});
 

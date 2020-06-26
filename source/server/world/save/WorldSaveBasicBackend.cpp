@@ -101,6 +101,16 @@ void WorldSaveBasicBackend::load(const std::string &name) {
 
 			loadEntities(save, world);
 		}
+
+		u16 playerCount;
+		save >> playerCount;
+		for (u16 i = 0 ; i < playerCount ; ++i) {
+			std::string username;
+			save >> username;
+
+			auto &player = m_playerList.addPlayer(username, false);
+			player.deserialize(save);
+		}
 	}
 
 	// gkInfo() << "Loading done.";
@@ -148,6 +158,13 @@ void WorldSaveBasicBackend::save(const std::string &name) {
 		save.append(chunks.getData(), chunks.getDataSize());
 
 		saveEntities(save, world);
+	}
+
+	save << (u16)m_playerList.size();
+
+	for (auto &it : m_playerList) {
+		save << it.second.name();
+		save << it.second;
 	}
 
 	file.write((const char *)save.getData(), save.getDataSize());

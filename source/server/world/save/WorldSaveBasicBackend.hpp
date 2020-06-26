@@ -32,6 +32,7 @@
 
 #include <entt/entt.hpp>
 
+#include "PlayerList.hpp"
 #include "WorldSaveBackend.hpp"
 
 namespace sf { class Packet; }
@@ -40,8 +41,8 @@ class ServerWorld;
 
 class WorldSaveBasicBackend : public WorldSaveBackend {
 	public:
-		WorldSaveBasicBackend(std::deque<ServerWorld> &worldList)
-			: m_worldList(worldList) {}
+		WorldSaveBasicBackend(std::deque<ServerWorld> &worldList, PlayerList &playerList)
+			: m_worldList(worldList), m_playerList(playerList) {}
 
 		void load(const std::string &worldName) override;
 		void save(const std::string &worldName) override;
@@ -51,6 +52,8 @@ class WorldSaveBasicBackend : public WorldSaveBackend {
 		void saveEntities(sf::Packet &save, ServerWorld &world);
 
 		std::deque<ServerWorld> &m_worldList;
+
+		PlayerList &m_playerList;
 
 		std::unordered_map<entt::entity, entt::entity> m_entityMap;
 };

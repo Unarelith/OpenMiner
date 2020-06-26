@@ -52,6 +52,8 @@ class ClientPlayer : public Player {
 		void turnH(float angle);
 		void turnViewV(float angle);
 
+		void updateCamera();
+
 		void move(float direction);
 
 		void processInputs();
@@ -67,13 +69,12 @@ class ClientPlayer : public Player {
 		static void setInstance(ClientPlayer *instance) { s_instance = instance; }
 
 		void setPosition(double x, double y, double z);
-		void setCameraRoll(float angle) { m_viewAngleRoll = angle; updateDir(); };
+		void setCameraRoll(float angle) { m_viewAngleRoll = angle; updateCamera(); };
 
 		gk::Camera &camera() { return m_camera; }
 
 	private:
 		void testPoint(const ClientWorld &world, double x, double y, double z, glm::vec3 &vel);
-		void updateDir();
 
 		static ClientPlayer *s_instance;
 

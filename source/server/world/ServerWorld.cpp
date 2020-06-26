@@ -48,7 +48,7 @@ void ServerWorld::update() {
 
 			if (it.second->isInitialized() && !it.second->isSent()) {
 				for (auto &client : m_server->server().info().clients())
-					if (m_players.getPlayer(client.id)->dimension() == m_dimension.id())
+					if (m_players.getPlayer(client.playerName)->dimension() == m_dimension.id())
 						sendChunkData(client, *it.second.get());
 
 				// gkDebug() << "Chunk updated at" << it.second->x() << it.second->y() << it.second->z();

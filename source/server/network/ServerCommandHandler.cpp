@@ -68,7 +68,7 @@ void ServerCommandHandler::sendBlockInvUpdate(s32 x, s32 y, s32 z, const Invento
 }
 
 void ServerCommandHandler::sendPlayerPosUpdate(u16 clientID, bool isTeleportation, const ClientInfo *client) const {
-	const ServerPlayer *player = m_players.getPlayer(clientID);
+	const ServerPlayer *player = m_players.getPlayerFromClientID(clientID);
 	if (player) {
 		Network::Packet packet;
 		packet << Network::Command::PlayerPosUpdate;
@@ -86,7 +86,7 @@ void ServerCommandHandler::sendPlayerPosUpdate(u16 clientID, bool isTeleportatio
 }
 
 void ServerCommandHandler::sendPlayerRotUpdate(u16 clientID, const ClientInfo *client) const {
-	const ServerPlayer *player = m_players.getPlayer(clientID);
+	const ServerPlayer *player = m_players.getPlayerFromClientID(clientID);
 	if (player) {
 		Network::Packet packet;
 		packet << Network::Command::PlayerRotUpdate;
@@ -103,7 +103,7 @@ void ServerCommandHandler::sendPlayerRotUpdate(u16 clientID, const ClientInfo *c
 }
 
 void ServerCommandHandler::sendPlayerInvUpdate(u16 clientID, const ClientInfo *client) const {
-	ServerPlayer *player = m_players.getPlayer(clientID);
+	ServerPlayer *player = m_players.getPlayerFromClientID(clientID);
 	if (player) {
 		Network::Packet packet;
 		packet << Network::Command::PlayerInvUpdate;
@@ -170,9 +170,9 @@ void ServerCommandHandler::setupCallbacks() {
 		std::string username;
 		connectionPacket >> username;
 
-		auto &player = m_players.addPlayer(client);
-		player.setPosition(m_spawnPosition.x, m_spawnPosition.y, m_spawnPosition.z);
-		player.setName(username);
+		auto &player = m_players.connectPlayer(username, client);
+		if (player.isNewPlayer())
+			player.setPosition(m_spawnPosition.x, m_spawnPosition.y, m_spawnPosition.z);
 
 		Network::Packet packet;
 		packet << Network::Command::RegistryData;
@@ -183,11 +183,13 @@ void ServerCommandHandler::setupCallbacks() {
 		for (auto &it : m_players) {
 			Network::Packet spawnPacket;
 			spawnPacket << Network::Command::PlayerSpawn << it.first;
-			spawnPacket << it.second.x() << it.second.y() << it.second.z();
+			spawnPacket << it.second.x() << it.second.y() << it.second.z() << it.second.dimension() << it.second.name();
+			spawnPacket << it.second.cameraYaw() << it.second.cameraPitch();
 			client.tcpSocket->send(spawnPacket);
 		}
 
-		m_scriptEngine.luaCore().onEvent(LuaEventType::PlayerConnected, glm::ivec3{m_spawnPosition.x, m_spawnPosition.y, m_spawnPosition.z}, player, client, *this);
+		if (player.isNewPlayer())
+			m_scriptEngine.luaCore().onEvent(LuaEventType::PlayerConnected, glm::ivec3{player.x(), player.y(), player.z()}, player, client, *this);
 
 		Network::Packet invPacket;
 		invPacket << Network::Command::PlayerInvUpdate << client.id;
@@ -198,6 +200,7 @@ void ServerCommandHandler::setupCallbacks() {
 		Network::Packet spawnPacket;
 		spawnPacket << Network::Command::PlayerSpawn << client.id;
 		spawnPacket << player.x() << player.y() << player.z() << player.dimension() << player.name();
+		spawnPacket << player.cameraYaw() << player.cameraPitch();
 		m_server.sendToAllClients(spawnPacket);
 
 		// Send entities to the client
@@ -205,7 +208,7 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::ClientDisconnect, [this](ClientInfo &client, Network::Packet &) {
-		m_players.removePlayer(client.id);
+		m_players.disconnectPlayer(client.playerName);
 	});
 
 	m_server.setCommandCallback(Network::Command::ChunkRequest, [this](ClientInfo &client, Network::Packet &packet) {
@@ -216,7 +219,7 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerInvUpdate, [this](ClientInfo &client, Network::Packet &packet) {
-		ServerPlayer *player = m_players.getPlayer(client.id);
+		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			packet >> player->inventory();
 		}
@@ -228,7 +231,7 @@ void ServerCommandHandler::setupCallbacks() {
 		double x, y, z;
 		packet >> x >> y >> z;
 
-		ServerPlayer *player = m_players.getPlayer(client.id);
+		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			player->setPosition(x, y, z);
 		}
@@ -240,7 +243,7 @@ void ServerCommandHandler::setupCallbacks() {
 		float yaw, pitch;
 		packet >> yaw >> pitch;
 
-		ServerPlayer *player = m_players.getPlayer(client.id);
+		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			player->setRotation(yaw, pitch);
 		}
@@ -249,7 +252,7 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerPlaceBlock, [this](ClientInfo &client, Network::Packet &packet) {
-		ServerPlayer *player = m_players.getPlayer(client.id);
+		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			s32 x, y, z;
 			u32 block;
@@ -271,7 +274,7 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerDigBlock, [this](ClientInfo &client, Network::Packet &packet) {
-		ServerPlayer *player = m_players.getPlayer(client.id);
+		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			s32 x, y, z;
 			packet >> x >> y >> z;
@@ -291,7 +294,7 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerHeldItemChanged, [this](ClientInfo &client, Network::Packet &packet) {
-		ServerPlayer *player = m_players.getPlayer(client.id);
+		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			u8 hotbarSlot;
 			u16 itemID;
@@ -306,7 +309,7 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::BlockActivated, [this](ClientInfo &client, Network::Packet &packet) {
-		ServerPlayer *player = m_players.getPlayer(client.id);
+		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			s32 x, y, z;
 			u16 screenWidth, screenHeight;
@@ -372,7 +375,7 @@ void ServerCommandHandler::setupCallbacks() {
 }
 
 void ServerCommandHandler::setPlayerPosition(u16 clientID, s32 x, s32 y, s32 z) {
-	ServerPlayer *player = m_players.getPlayer(clientID);
+	ServerPlayer *player = m_players.getPlayerFromClientID(clientID);
 	if (player)
 		player->setPosition(x, y, z);
 	else
@@ -380,7 +383,7 @@ void ServerCommandHandler::setPlayerPosition(u16 clientID, s32 x, s32 y, s32 z) 
 }
 
 inline ServerWorld &ServerCommandHandler::getWorldForClient(u16 clientID) {
-	ServerPlayer *player = m_players.getPlayer(clientID);
+	ServerPlayer *player = m_players.getPlayerFromClientID(clientID);
 	if (!player)
 		throw EXCEPTION("Player instance not found for client", clientID);
 

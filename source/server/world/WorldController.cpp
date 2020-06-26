@@ -34,7 +34,7 @@ void WorldController::init(PlayerList &players) {
 		m_worldList.back().setServer(m_server);
 	}
 
-	m_worldSaveBackend.reset(new WorldSaveBasicBackend{m_worldList});
+	m_worldSaveBackend.reset(new WorldSaveBasicBackend{m_worldList, players});
 }
 
 void WorldController::clearEntities() {

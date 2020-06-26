@@ -91,6 +91,8 @@ _This packet has no field._
 | Player Z       | double      | Player Z coordinate                                  |
 | Dimension      | u16         | Dimension ID                                         |
 | Username       | std::string | Name of the player                                   |
+| Camera Yaw     | float       | Horizontal camera view angle                         |
+| Camera Pitch   | float       | Vertical camera view angle                           |
 
 #### PlayerChangeDimension
 

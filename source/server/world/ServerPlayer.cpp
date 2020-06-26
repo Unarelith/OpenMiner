@@ -26,10 +26,6 @@
  */
 #include "ServerPlayer.hpp"
 
-ServerPlayer::ServerPlayer(ClientInfo &client) : m_client(client) {
-	m_clientID = client.id;
-}
-
 // Please update 'docs/lua-api-cpp.md' if you change this
 void ServerPlayer::initUsertype(sol::state &lua) {
 	lua.new_usertype<ServerPlayer>("ServerPlayer",

@@ -34,24 +34,30 @@
 
 class ServerPlayer : public Player {
 	public:
-		ServerPlayer(ClientInfo &client);
+		ServerPlayer(const std::string &name, bool isNewPlayer) {
+			m_name = name;
+			m_isNewPlayer = isNewPlayer;
+		}
 
-		const ClientInfo &client() const { return m_client; }
+		const ClientInfo *client() const { return m_client; }
+		void setClient(ClientInfo *client) { m_client = client; }
 
 		const ItemStack &heldItemStack() { return m_inventory.getStack(m_heldItemSlot, 0); }
 		void setHeldItemSlot(u8 heldItemSlot) { m_heldItemSlot = heldItemSlot; }
 
-		bool isOnline() const { return m_isOnline; }
-		void setOnline(bool isOnline) { m_isOnline = isOnline; }
+		bool isOnline() const { return m_client != nullptr; }
+		bool isNewPlayer() const { return m_isNewPlayer; }
+		void setNewPlayer(bool isNewPlayer) { m_isNewPlayer = isNewPlayer; }
 
 		static void initUsertype(sol::state &lua);
 
 	private:
-		ClientInfo &m_client;
+		ClientInfo *m_client = nullptr;
 
 		u8 m_heldItemSlot = 0;
 
 		bool m_isOnline = false;
+		bool m_isNewPlayer = false;
 };
 
 #endif // SERVERPLAYER_HPP_

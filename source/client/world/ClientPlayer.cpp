@@ -43,7 +43,7 @@ ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
 	m_viewAngleV = 0.f;
 	m_viewAngleRoll = 0.f;
 
-	updateDir();
+	updateCamera();
 
 	m_camera.setDPosition(m_x + m_cameraLocalPos.x, m_y + m_cameraLocalPos.y, m_z + m_cameraLocalPos.z);
 }
@@ -53,16 +53,16 @@ void ClientPlayer::turnH(float angle) {
 	if (m_viewAngleH >= 180.f) m_viewAngleH -= 360.f;
 	if (m_viewAngleH < -180.f) m_viewAngleH += 360.f;
 
-	updateDir();
+	updateCamera();
 }
 
 void ClientPlayer::turnViewV(float angle) {
 	m_viewAngleV = std::max(std::min(m_viewAngleV + angle, 90.f), -90.f);
 
-	updateDir();
+	updateCamera();
 }
 
-void ClientPlayer::updateDir() {
+void ClientPlayer::updateCamera() {
 	float ch = cosf(m_viewAngleH * RADIANS_PER_DEGREES);
 	float sh = sinf(m_viewAngleH * RADIANS_PER_DEGREES);
 	float cv = cosf(m_viewAngleV * RADIANS_PER_DEGREES);

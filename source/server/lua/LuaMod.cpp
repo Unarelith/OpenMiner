@@ -109,7 +109,7 @@ void LuaMod::despawnEntity(EntityWrapper &entity) {
 void LuaMod::giveItemStack(ServerPlayer &player, ItemStack *itemStack) {
 	if (itemStack) {
 		player.inventory().addStack(itemStack->item().stringID(), itemStack->amount());
-		m_worldController.server()->sendPlayerInvUpdate(player.clientID(), &player.client());
+		m_worldController.server()->sendPlayerInvUpdate(player.clientID(), player.client());
 	}
 	else
 		gkError() << "In mod '" + m_id + "': Failed to add stack to player";
