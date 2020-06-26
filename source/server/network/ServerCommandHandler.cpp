@@ -170,6 +170,11 @@ void ServerCommandHandler::setupCallbacks() {
 		std::string username;
 		connectionPacket >> username;
 
+		if (!gk::regexMatch(username, "^[A-Za-z0-9_]+$")) {
+			sendServerClosed("Invalid username", &client);
+			return;
+		}
+
 		ServerPlayer *player = m_players.connectPlayer(username, client);
 		if (!player) {
 			sendServerClosed("User is already online", &client);
