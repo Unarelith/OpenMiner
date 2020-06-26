@@ -38,12 +38,10 @@ class WorldSavingState : public InterfaceState {
 	public:
 		WorldSavingState(Client &client, bool closeClient, gk::ApplicationState *parent = nullptr);
 
-		void onEvent(const sf::Event &event) override;
-
 		void update() override;
 
 	private:
-		void updateWidgetPosition();
+		void updateWidgetPosition() override;
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 

@@ -47,7 +47,7 @@ class SettingsMenuState : public InterfaceState {
 	private:
 		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
 
-		void updateDoneButtonPosition();
+		void updateWidgetPosition() override;
 
 		void doneButtonAction();
 

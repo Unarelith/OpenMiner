@@ -42,7 +42,7 @@ class ServerConnectState : public InterfaceState {
 		void setTexturePack(const std::string &texturePack) { m_texturePack = texturePack; }
 
 	private:
-		void updateWidgetPosition();
+		void updateWidgetPosition() override;
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 

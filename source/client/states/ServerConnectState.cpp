@@ -103,10 +103,6 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 void ServerConnectState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
-	if (event.type == sf::Event::Resized) {
-		updateWidgetPosition();
-	}
-
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
 		m_usernameInput.onEvent(event);
 		m_addressInput.onEvent(event);

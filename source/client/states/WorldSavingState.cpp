@@ -50,14 +50,6 @@ WorldSavingState::WorldSavingState(Client &client, bool closeClient, gk::Applica
 	updateWidgetPosition();
 }
 
-void WorldSavingState::onEvent(const sf::Event &event) {
-	InterfaceState::onEvent(event);
-
-	if (event.type == sf::Event::Resized) {
-		updateWidgetPosition();
-	}
-}
-
 void WorldSavingState::update() {
 	if (m_hasBeenRendered || m_isWorldSaved) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(500));

@@ -37,7 +37,7 @@ class ConnectionErrorState : public InterfaceState {
 		void onEvent(const sf::Event &event) override;
 
 	private:
-		void updateWidgetPosition();
+		void updateWidgetPosition() override;
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 

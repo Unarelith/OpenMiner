@@ -67,10 +67,6 @@ WorldDeletionState::WorldDeletionState(const std::string &worldName, TitleScreen
 void WorldDeletionState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
-	if (event.type == sf::Event::Resized) {
-		updateWidgetPosition();
-	}
-
 	if (&m_stateStack->top() == this) {
 		m_confirmButton.onEvent(event);
 		m_cancelButton.onEvent(event);

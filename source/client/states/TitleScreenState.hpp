@@ -40,8 +40,6 @@ class TitleScreenState : public InterfaceState {
 		TitleScreenState(u16 port = 4242);
 		~TitleScreenState();
 
-		void centerBackground();
-
 		void init() override;
 
 		void onEvent(const sf::Event &event) override;
@@ -55,6 +53,8 @@ class TitleScreenState : public InterfaceState {
 
 	private:
 		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
+
+		void updateWidgetPosition() override;
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 

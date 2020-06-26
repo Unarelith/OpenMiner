@@ -51,7 +51,7 @@ SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : InterfaceSt
 		doneButtonAction();
 	});
 
-	updateDoneButtonPosition();
+	updateWidgetPosition();
 
 	addMainButtons();
 }
@@ -63,11 +63,8 @@ void SettingsMenuState::init() {
 void SettingsMenuState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
-	if (event.type == sf::Event::Resized) {
-		updateDoneButtonPosition();
-
-		if (&m_stateStack->top() != this)
-			m_menuWidget.onEvent(event);
+	if (event.type == sf::Event::Resized && &m_stateStack->top() != this) {
+		m_menuWidget.onEvent(event);
 	}
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
@@ -94,12 +91,12 @@ void SettingsMenuState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 	m_menuWidget.setScale(event.guiScale, event.guiScale);
 	m_doneButton.setScale(event.guiScale, event.guiScale);
 
-	updateDoneButtonPosition();
+	updateWidgetPosition();
 
 	m_menuWidget.onGuiScaleChanged(event);
 }
 
-void SettingsMenuState::updateDoneButtonPosition() {
+void SettingsMenuState::updateWidgetPosition() {
 	m_doneButton.setPosition(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().sizeX / 2.0f, Config::screenHeight * 0.85);
 }
 

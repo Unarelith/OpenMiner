@@ -45,7 +45,7 @@ ChatState::ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, boo
 	m_textInput.setBackgroundColor(gk::Color{0, 0, 0, 127});
 	m_textInput.setPadding(1, 1);
 
-	updateTextInputGeometry();
+	updateWidgetPosition();
 
 	if (addSlash)
 		m_textInput.setString("/");
@@ -53,19 +53,10 @@ ChatState::ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, boo
 	m_chat.setMessageVisibility(true);
 }
 
-void ChatState::updateTextInputGeometry() {
-	m_textInput.setPosition(4, Config::screenHeight - 12 * Config::guiScale);
-	m_textInput.setBackgroundSize(Config::screenWidth / Config::guiScale - 4, 10);
-}
-
 void ChatState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
 	m_textInput.onEvent(event);
-
-	if (event.type == sf::Event::Resized) {
-		updateTextInputGeometry();
-	}
 
 	if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape) {
 		gk::Mouse::setCursorGrabbed(true);
@@ -108,6 +99,11 @@ void ChatState::onEvent(const sf::Event &event) {
 				m_textInput.setString(m_chat.getHistoryEntry(m_currentHistoryEntry));
 		}
 	}
+}
+
+void ChatState::updateWidgetPosition() {
+	m_textInput.setPosition(4, Config::screenHeight - 12 * Config::guiScale);
+	m_textInput.setBackgroundSize(Config::screenWidth / Config::guiScale - 4, 10);
 }
 
 void ChatState::draw(gk::RenderTarget &target, gk::RenderStates states) const {

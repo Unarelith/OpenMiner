@@ -65,10 +65,8 @@ WorldMenuState::WorldMenuState(const std::string &worldName, TitleScreenState *t
 void WorldMenuState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
-	if (event.type == sf::Event::Resized) {
-		updateWidgetPosition();
-		if (!m_stateStack->empty() && &m_stateStack->top() != this)
-			m_menuWidget.onEvent(event);
+	if (event.type == sf::Event::Resized && !m_stateStack->empty() && &m_stateStack->top() != this) {
+		m_menuWidget.onEvent(event);
 	}
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {

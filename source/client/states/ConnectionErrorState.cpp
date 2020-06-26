@@ -76,10 +76,6 @@ ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::
 void ConnectionErrorState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
-	if (event.type == sf::Event::Resized) {
-		updateWidgetPosition();
-	}
-
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
 		m_reconnectButton.onEvent(event);
 		m_cancelButton.onEvent(event);

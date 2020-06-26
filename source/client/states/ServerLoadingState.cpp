@@ -45,7 +45,7 @@ ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, c
 	m_text.updateVertexBuffer();
 	m_text.setScale(Config::guiScale * 2, Config::guiScale * 2);
 
-	centerText();
+	updateWidgetPosition();
 
 	m_host = host;
 	m_port = port;
@@ -56,19 +56,6 @@ ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, c
 
 void ServerLoadingState::init() {
 	m_eventHandler->addListener<ServerOnlineEvent>(&ServerLoadingState::onServerOnlineEvent, this);
-}
-
-void ServerLoadingState::centerText() {
-	m_text.setPosition(Config::screenWidth  / 2 - m_text.getSize().x * Config::guiScale * 2 / 2,
-	                   Config::screenHeight / 2 - m_text.getSize().y * Config::guiScale * 2 / 2);
-}
-
-void ServerLoadingState::onEvent(const sf::Event &event) {
-	InterfaceState::onEvent(event);
-
-	if (event.type == sf::Event::Resized) {
-		centerText();
-	}
 }
 
 void ServerLoadingState::update() {
@@ -120,6 +107,11 @@ void ServerLoadingState::setTexturePack(const std::string &texturePack) {
 void ServerLoadingState::onServerOnlineEvent(const ServerOnlineEvent &event) {
 	m_isServerOnline = event.isOnline;
 	m_port = event.port;
+}
+
+void ServerLoadingState::updateWidgetPosition() {
+	m_text.setPosition(Config::screenWidth  / 2 - m_text.getSize().x * Config::guiScale * 2 / 2,
+	                   Config::screenHeight / 2 - m_text.getSize().y * Config::guiScale * 2 / 2);
 }
 
 void ServerLoadingState::draw(gk::RenderTarget &target, gk::RenderStates states) const {

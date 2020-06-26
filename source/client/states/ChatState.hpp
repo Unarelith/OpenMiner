@@ -37,11 +37,11 @@ class ChatState : public InterfaceState {
 	public:
 		ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, bool addSlash, gk::ApplicationState *parent = nullptr);
 
-		void updateTextInputGeometry();
-
 		void onEvent(const sf::Event &event) override;
 
 	private:
+		void updateWidgetPosition() override;
+
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		TextInput m_textInput;

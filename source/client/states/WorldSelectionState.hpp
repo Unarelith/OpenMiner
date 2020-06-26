@@ -41,7 +41,7 @@ class WorldSelectionState : public InterfaceState {
 		void update() override;
 
 	private:
-		void updateWidgetPosition();
+		void updateWidgetPosition() override;
 		void loadSaveList();
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;

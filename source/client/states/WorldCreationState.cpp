@@ -94,10 +94,6 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 void WorldCreationState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
-	if (event.type == sf::Event::Resized) {
-		updateWidgetPosition();
-	}
-
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
 		m_textInput.onEvent(event);
 

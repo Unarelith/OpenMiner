@@ -39,10 +39,6 @@ class ServerLoadingState : public InterfaceState {
 
 		void init() override;
 
-		void centerText();
-
-		void onEvent(const sf::Event &event) override;
-
 		void update() override;
 
 		void setTexturePack(const std::string &texturePack);
@@ -50,6 +46,8 @@ class ServerLoadingState : public InterfaceState {
 
 	private:
 		void onServerOnlineEvent(const ServerOnlineEvent &event);
+
+		void updateWidgetPosition() override;
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 

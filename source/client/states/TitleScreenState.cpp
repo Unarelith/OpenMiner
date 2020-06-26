@@ -58,16 +58,12 @@ TitleScreenState::TitleScreenState(u16 port) : m_port(port) {
 		m_stateStack->pop();
 	});
 
-	centerBackground();
+	updateWidgetPosition();
 }
 
 TitleScreenState::~TitleScreenState() {
 	if (m_thread.joinable())
 		m_thread.join();
-}
-
-void TitleScreenState::centerBackground() {
-	m_background.setPosition(Config::screenWidth / 2.0 - m_background.width() / 2.0, Config::screenHeight / 2.0 - m_background.height() / 2.0);
 }
 
 void TitleScreenState::init() {
@@ -78,8 +74,6 @@ void TitleScreenState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
 	if (event.type == sf::Event::Resized) {
-		centerBackground();
-
 		if (!m_stateStack->empty() && &m_stateStack->top() != this)
 			m_menuWidget.onEvent(event);
 	}
@@ -127,6 +121,10 @@ void TitleScreenState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 	m_menuWidget.setScale(event.guiScale, event.guiScale);
 
 	m_menuWidget.onGuiScaleChanged(event);
+}
+
+void TitleScreenState::updateWidgetPosition() {
+	m_background.setPosition(Config::screenWidth / 2.0 - m_background.width() / 2.0, Config::screenHeight / 2.0 - m_background.height() / 2.0);
 }
 
 void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) const {

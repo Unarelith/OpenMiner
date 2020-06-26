@@ -46,6 +46,8 @@ class InterfaceState : public gk::ApplicationState {
 		bool m_drawBackground = true;
 
 	private:
+		virtual void updateWidgetPosition() {}
+
 		gk::Shader m_shader;
 		// gk::View m_view;
 

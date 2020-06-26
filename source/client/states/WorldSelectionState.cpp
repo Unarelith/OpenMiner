@@ -45,12 +45,8 @@ WorldSelectionState::WorldSelectionState(TitleScreenState *titleScreen)
 	m_title.updateVertexBuffer();
 
 	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
-	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
-	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
 
-	m_filter1.setSize(Config::screenWidth, Config::screenHeight);
 	m_filter1.setFillColor(gk::Color(0, 0, 0, 128));
-
 	m_filter2.setFillColor(gk::Color(0, 0, 0, 192));
 
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
@@ -71,10 +67,8 @@ WorldSelectionState::WorldSelectionState(TitleScreenState *titleScreen)
 void WorldSelectionState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
-	if (event.type == sf::Event::Resized) {
-		updateWidgetPosition();
-		if (!m_stateStack->empty() && &m_stateStack->top() != this)
-			m_menuWidget.onEvent(event);
+	if (event.type == sf::Event::Resized && !m_stateStack->empty() && &m_stateStack->top() != this) {
+		m_menuWidget.onEvent(event);
 	}
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
@@ -87,6 +81,11 @@ void WorldSelectionState::update() {
 }
 
 void WorldSelectionState::updateWidgetPosition() {
+	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+
+	m_filter1.setSize(Config::screenWidth, Config::screenHeight);
+
 	const int borderSize = 25 * Config::guiScale;
 	m_filter2.setSize(Config::screenWidth, Config::screenHeight - borderSize * 2);
 	m_filter2.setPosition(0, borderSize);

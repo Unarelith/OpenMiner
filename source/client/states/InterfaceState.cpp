@@ -67,6 +67,8 @@ void InterfaceState::onEvent(const sf::Event &event) {
 		}
 
 		setup();
+
+		updateWidgetPosition();
 	}
 }
 

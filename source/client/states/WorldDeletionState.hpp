@@ -41,7 +41,7 @@ class WorldDeletionState : public InterfaceState {
 		void update() override;
 
 	private:
-		void updateWidgetPosition();
+		void updateWidgetPosition() override;
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
