@@ -43,6 +43,15 @@
 #include "World.hpp"
 
 SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : InterfaceState(parent) {
+	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
+
+	m_filter1.setFillColor(gk::Color(0, 0, 0, 192));
+	m_filter2.setFillColor(gk::Color(0, 0, 0, 120));
+
+	m_title.setScale(Config::guiScale, Config::guiScale);
+	m_title.setString("Options");
+	m_title.updateVertexBuffer();
+
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
 
 	m_doneButton.setScale(Config::guiScale, Config::guiScale);
@@ -97,11 +106,29 @@ void SettingsMenuState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 }
 
 void SettingsMenuState::updateWidgetPosition() {
-	m_doneButton.setPosition(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().sizeX / 2.0f, Config::screenHeight * 0.85);
+	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+
+	m_filter1.setSize(Config::screenWidth, Config::screenHeight);
+
+	const int topBorderSize = 25 * Config::guiScale;
+	const int bottomBorderSize = 25 * Config::guiScale;
+	m_filter2.setSize(Config::screenWidth, Config::screenHeight - topBorderSize - bottomBorderSize);
+	m_filter2.setPosition(0, topBorderSize);
+
+	m_title.setPosition(
+		Config::screenWidth / 2.0f - m_title.getSize().x * Config::guiScale / 2.0f,
+		topBorderSize / 2.0f - m_title.getSize().y * Config::guiScale / 2.0f
+	);
+
+	m_doneButton.setPosition(
+		Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().sizeX / 2.0f,
+		Config::screenHeight - bottomBorderSize / 2.0f - m_doneButton.getGlobalBounds().sizeY / 2.0
+	);
 
 	m_menuWidget.setPosition(
 		Config::screenWidth / 2.0 - m_menuWidget.getGlobalBounds().sizeX / 2.0,
-		Config::screenHeight / 2.0 - m_menuWidget.getGlobalBounds().sizeY / 2.0
+		topBorderSize + 5 * Config::guiScale
 	);
 }
 
@@ -255,10 +282,13 @@ TextButton &SettingsMenuState::addToggleButton(const std::string &text, bool &co
 }
 
 void SettingsMenuState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	if (m_parent)
-		target.draw(*m_parent, states);
-
 	prepareDraw(target, states);
+
+	target.draw(m_background, states);
+	target.draw(m_filter1, states);
+	target.draw(m_filter2, states);
+
+	target.draw(m_title, states);
 
 	target.draw(m_menuWidget, states);
 	target.draw(m_doneButton, states);
