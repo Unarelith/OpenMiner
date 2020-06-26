@@ -27,6 +27,8 @@
 #ifndef CONFIG_HPP_
 #define CONFIG_HPP_
 
+#include <string>
+
 #include <gk/core/IntTypes.hpp>
 
 namespace Config {
@@ -57,6 +59,10 @@ namespace Config {
 
 	// Input
 	extern u8 mouseSensitivity;
+
+	// Other
+	extern std::string defaultUsername;
+	extern std::string defaultServerAddress;
 
 	void loadConfigFromFile(const char *filename);
 	void saveConfigToFile(const char *filename);

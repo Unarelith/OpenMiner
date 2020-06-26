@@ -30,3 +30,6 @@ aoStrength = 1
 -- Input
 mouseSensitivity = 8
 
+-- Other
+username = ""
+
