@@ -37,7 +37,14 @@ DebugOverlay::DebugOverlay(const ClientPlayer &player, const ClientWorld &world)
 {
 	setPosition(4, 4, 0);
 
-	m_versionText.setString(APP_NAME + std::string(" v0.0.1"));
+	std::string versionString = APP_NAME;
+	versionString.append(" ");
+	versionString.append(1, '0' + VERSION_MAJOR);
+	versionString.append(".");
+	versionString.append(1, '0' + VERSION_MINOR);
+	versionString.append(".");
+	versionString.append(1, '0' + VERSION_PATCH);
+	m_versionText.setString(versionString);
 	m_versionText.setColor(gk::Color::White);
 
 	m_positionText.setPosition(0, 10, 0);

@@ -67,6 +67,10 @@ class TitleScreenState : public InterfaceState {
 		std::string m_texturePack;
 
 		u16 m_port = 4242;
+
+		Text m_versionText;
+		Text m_copyrightText;
+		Text m_licenseText;
 };
 
 #endif // TITLESCREENSTATE_HPP_

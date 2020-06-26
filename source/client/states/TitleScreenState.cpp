@@ -40,7 +40,7 @@
 TitleScreenState::TitleScreenState(u16 port) : m_port(port) {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 
-	m_menuWidget.setScale(Config::guiScale, Config::guiScale, 1);
+	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
 
 	m_menuWidget.addButton("Singleplayer", [this] (TextButton &) {
 		m_stateStack->push<WorldSelectionState>(this);
@@ -57,6 +57,25 @@ TitleScreenState::TitleScreenState(u16 port) : m_port(port) {
 	m_menuWidget.addButton("Exit", [this] (TextButton &) {
 		m_stateStack->pop();
 	});
+
+	std::string versionString = APP_NAME;
+	versionString.append(" ");
+	versionString.append(1, '0' + VERSION_MAJOR);
+	versionString.append(".");
+	versionString.append(1, '0' + VERSION_MINOR);
+	versionString.append(".");
+	versionString.append(1, '0' + VERSION_PATCH);
+	m_versionText.setString(versionString);
+	m_versionText.setScale(Config::guiScale, Config::guiScale);
+	m_versionText.updateVertexBuffer();
+
+	m_copyrightText.setString("Copyright Unarelith and contributors");
+	m_copyrightText.setScale(Config::guiScale, Config::guiScale);
+	m_copyrightText.updateVertexBuffer();
+
+	m_licenseText.setString("License: LGPL v2.1");
+	m_licenseText.setScale(Config::guiScale, Config::guiScale);
+	m_licenseText.updateVertexBuffer();
 
 	updateWidgetPosition();
 }
@@ -135,6 +154,16 @@ void TitleScreenState::updateWidgetPosition() {
 		Config::screenWidth / 2.0 - m_menuWidget.getGlobalBounds().sizeX / 2.0,
 		Config::screenHeight / 2.0 - m_menuWidget.getGlobalBounds().sizeY / 2.0
 	);
+
+	m_versionText.setPosition(Config::guiScale, Config::screenHeight - m_versionText.getSize().y * Config::guiScale);
+	m_copyrightText.setPosition(
+		Config::screenWidth - m_copyrightText.getSize().x * Config::guiScale - Config::guiScale,
+		Config::screenHeight - m_copyrightText.getSize().y * Config::guiScale
+	);
+	m_licenseText.setPosition(
+		Config::screenWidth - m_licenseText.getSize().x * Config::guiScale - Config::guiScale,
+		Config::screenHeight - (m_copyrightText.getSize().y + m_licenseText.getSize().y + 2) * Config::guiScale
+	);
 }
 
 void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -142,8 +171,10 @@ void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) c
 
 	target.draw(m_background, states);
 
-	if (&m_stateStack->top() == this) {
-		target.draw(m_menuWidget, states);
-	}
+	target.draw(m_versionText, states);
+	target.draw(m_copyrightText, states);
+	target.draw(m_licenseText, states);
+
+	target.draw(m_menuWidget, states);
 }
 

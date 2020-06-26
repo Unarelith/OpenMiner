@@ -59,8 +59,13 @@ void TextButton::onEvent(const sf::Event &event) {
 		else if (m_isEnabled && !m_isHovered)
 			m_text.setColor(m_defaultColor);
 	}
-	else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && m_isEnabled) {
+	else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && m_isHovered && m_isEnabled) {
 		m_isHovered = isPointInWidget(event.mouseButton.x, event.mouseButton.y);
+
+		if (m_isEnabled && m_isHovered)
+			m_text.setColor(m_hoverColor);
+		else if (m_isEnabled && !m_isHovered)
+			m_text.setColor(m_defaultColor);
 
 		if (m_isHovered) {
 			if (m_cppCallback)
