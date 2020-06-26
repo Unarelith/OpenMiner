@@ -43,11 +43,12 @@ void TextureLoader::load(const char *xmlFilename, gk::ResourceHandler &handler) 
 		auto &texture = handler.add<sf::Texture>("texture-" + name);
 		texture.loadFromFile(path);
 
-		// sf::Texture::bind(&texture);
-		// glGenerateMipmap(GL_TEXTURE_2D);
-		// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-		// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 4);
-		// sf::Texture::bind(nullptr);
+		if (textureElement->Attribute("repeat", "true")) {
+			sf::Texture::bind(&texture);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			sf::Texture::bind(nullptr);
+		}
 
 		textureElement = textureElement->NextSiblingElement("texture");
 	}

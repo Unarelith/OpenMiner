@@ -40,6 +40,19 @@ namespace fs = ghc::filesystem;
 WorldSelectionState::WorldSelectionState(TitleScreenState *titleScreen)
 	: InterfaceState(titleScreen), m_titleScreen(titleScreen)
 {
+	m_title.setScale(Config::guiScale, Config::guiScale);
+	m_title.setString("Select or create a world");
+	m_title.updateVertexBuffer();
+
+	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
+	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+
+	m_filter1.setSize(Config::screenWidth, Config::screenHeight);
+	m_filter1.setFillColor(gk::Color(0, 0, 0, 128));
+
+	m_filter2.setFillColor(gk::Color(0, 0, 0, 192));
+
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
 	m_menuWidget.addButton("New world", [this](TextButton &) {
 		m_stateStack->push<WorldCreationState>(m_titleScreen);
@@ -74,7 +87,19 @@ void WorldSelectionState::update() {
 }
 
 void WorldSelectionState::updateWidgetPosition() {
-	m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX / 2.0f, Config::screenHeight * 0.85);
+	const int borderSize = 25 * Config::guiScale;
+	m_filter2.setSize(Config::screenWidth, Config::screenHeight - borderSize * 2);
+	m_filter2.setPosition(0, borderSize);
+
+	m_cancelButton.setPosition(
+		Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX / 2.0f,
+		Config::screenHeight - borderSize / 2 - m_cancelButton.getGlobalBounds().sizeY / 2.0f
+	);
+
+	m_title.setPosition(
+		Config::screenWidth / 2.0f - m_title.getSize().x * Config::guiScale / 2.0f,
+		borderSize / 2 - m_title.getSize().y * Config::guiScale / 2.0f
+	);
 }
 
 void WorldSelectionState::loadSaveList() {
@@ -105,11 +130,14 @@ void WorldSelectionState::loadSaveList() {
 }
 
 void WorldSelectionState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	if (m_parent)
-		target.draw(*m_parent, states);
-
 	if (&m_stateStack->top() == this) {
 		prepareDraw(target, states);
+
+		target.draw(m_background, states);
+		target.draw(m_filter1, states);
+		target.draw(m_filter2, states);
+
+		target.draw(m_title, states);
 
 		target.draw(m_menuWidget, states);
 		target.draw(m_cancelButton, states);

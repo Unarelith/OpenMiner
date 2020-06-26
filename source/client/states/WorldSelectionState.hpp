@@ -48,7 +48,13 @@ class WorldSelectionState : public InterfaceState {
 
 		TitleScreenState *m_titleScreen = nullptr;
 
-		MenuWidget m_menuWidget{1, 8};
+		gk::Image m_background{"texture-menu_background"};
+		gk::RectangleShape m_filter1;
+		gk::RectangleShape m_filter2;
+
+		Text m_title;
+
+		MenuWidget m_menuWidget{1, 11};
 
 		TextButton m_cancelButton;
 };
