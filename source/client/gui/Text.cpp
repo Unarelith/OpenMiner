@@ -95,7 +95,7 @@ void Text::updateVertexBuffer() const {
 	u32 maxX = 0;
 
 	if (m_isShadowEnabled) {
-		gk::Color color = gk::Color{70, 70, 70, 255};
+		gk::Color color = m_shadowColor;
 		for(char c : m_string) {
 			if (c == '\n' || (m_maxLineLength && x + m_font.getCharWidth(c) >= m_maxLineLength)) {
 				y += m_font.getTileSize().y + 1;

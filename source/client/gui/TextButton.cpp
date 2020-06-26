@@ -30,6 +30,9 @@ TextButton::TextButton(Widget *parent) : TextButton(200, parent) {
 }
 
 TextButton::TextButton(u16 width, Widget *parent) : Widget(width, 20, parent) {
+	m_text.setColor({224, 224, 224});
+	m_text.setShadowColor({56, 56, 56});
+
 	m_background.setClipRect(0, 66, width, 20);
 	m_hoverBackground.setClipRect(0, 86, width, 20);
 	m_disabledBackground.setClipRect(0, 46, width, 20);
@@ -51,10 +54,10 @@ void TextButton::onEvent(const sf::Event &event) {
 	if (event.type == sf::Event::MouseMoved) {
 		m_isHovered = isPointInWidget(event.mouseMove.x, event.mouseMove.y);
 
-		if (m_isEnabled && m_isHovered && m_text.color() == gk::Color::White)
+		if (m_isEnabled && m_isHovered)
 			m_text.setColor({255, 255, 160});
-		else if (m_isEnabled && !m_isHovered && m_text.color() != gk::Color::White)
-			m_text.setColor(gk::Color::White);
+		else if (m_isEnabled && !m_isHovered)
+			m_text.setColor({224, 224, 224});
 	}
 	else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && m_isHovered && m_isEnabled) {
 		if (m_cppCallback)

@@ -82,9 +82,16 @@ TextButton &MenuWidget::addButton(const std::string &text, const TextButton::Cpp
 	return button;
 }
 
+void MenuWidget::setButtonEnabled(const std::string &text, bool isEnabled) {
+	for (auto &it : m_buttons) {
+		if (it.text() == text)
+			it.setEnabled(isEnabled);
+	}
+}
+
 void MenuWidget::updateButtonPosition(TextButton &button, int x, int y) {
-	button.setPosition(x * (button.width() + s_horizontalSpacing),
-	                   y * (button.height() + s_verticalSpacing));
+	button.setPosition(x * (button.width() + m_horizontalSpacing),
+	                   y * (button.height() + m_verticalSpacing));
 
 	if (button.getPosition().x + button.width() > Widget::m_width) {
 		Widget::m_width = button.getPosition().x + button.width();

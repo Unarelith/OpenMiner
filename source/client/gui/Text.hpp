@@ -45,6 +45,7 @@ class Text : public gk::Drawable, public gk::Transformable {
 
 		const gk::Color &color() const { return m_color; }
 		void setColor(const gk::Color &color);
+		void setShadowColor(const gk::Color &color) { m_shadowColor = color; }
 
 		const gk::Vector2i &getSize() const { return m_size; }
 		gk::Vector2f getBackgroundSize() const { return m_background.getSize(); }
@@ -68,6 +69,7 @@ class Text : public gk::Drawable, public gk::Transformable {
 		std::string m_string;
 
 		bool m_isShadowEnabled = true;
+		gk::Color m_shadowColor{70, 70, 70};
 
 		Font &m_font;
 

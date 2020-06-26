@@ -43,14 +43,18 @@ class MenuWidget : public Widget {
 		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
 
 		TextButton &addButton(const std::string &text, const TextButton::CppCallback &callback, u16 width = 200);
+		void setButtonEnabled(const std::string &text, bool isEnabled);
+
+		void setVerticalSpacing(u16 verticalSpacing) { m_verticalSpacing = verticalSpacing; }
+		void setHorizontalSpacing(u16 horizontalSpacing) { m_horizontalSpacing = horizontalSpacing; }
 
 	private:
 		void updateButtonPosition(TextButton &button, int x, int y);
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		static constexpr u16 s_verticalSpacing = 5;
-		static constexpr u16 s_horizontalSpacing = 5;
+		u16 m_verticalSpacing = 5;
+		u16 m_horizontalSpacing = 5;
 
 		u16 m_width = 1;
 		u16 m_height = 1;

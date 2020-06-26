@@ -55,7 +55,7 @@ class TextButton : public Widget {
 
 		void setEnabled(bool isEnabled) {
 			m_isEnabled = isEnabled;
-			m_text.setColor(isEnabled ? gk::Color::White : gk::Color{160, 160, 160});
+			m_text.setColor(isEnabled ? gk::Color{224, 224, 224} : gk::Color{160, 160, 160});
 			m_text.setShadowEnabled(isEnabled);
 		}
 
