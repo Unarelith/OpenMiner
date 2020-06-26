@@ -42,6 +42,7 @@ class TextButton : public Widget {
 		using LuaCallback = sol::function;
 
 		TextButton(Widget *parent = nullptr);
+		TextButton(u16 width, Widget *parent = nullptr);
 		TextButton(const CppCallback &callback, Widget *parent = nullptr);
 
 		void onEvent(const sf::Event &event) override;

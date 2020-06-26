@@ -80,6 +80,11 @@ void WorldMenuState::update() {
 
 void WorldMenuState::updateWidgetPosition() {
 	m_cancelButton.setPosition(Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX / 2.0f, Config::screenHeight * 0.85);
+
+	m_menuWidget.setPosition(
+		Config::screenWidth / 2.0 - m_menuWidget.getGlobalBounds().sizeX / 2.0,
+		Config::screenHeight / 2.0 - m_menuWidget.getGlobalBounds().sizeY / 2.0
+	);
 }
 
 void WorldMenuState::draw(gk::RenderTarget &target, gk::RenderStates states) const {

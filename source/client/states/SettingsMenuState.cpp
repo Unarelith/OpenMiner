@@ -43,9 +43,9 @@
 #include "World.hpp"
 
 SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : InterfaceState(parent) {
-	m_menuWidget.setScale(Config::guiScale, Config::guiScale, 1);
+	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
 
-	m_doneButton.setScale(Config::guiScale, Config::guiScale, 1);
+	m_doneButton.setScale(Config::guiScale, Config::guiScale);
 	m_doneButton.setText("Done");
 	m_doneButton.setCallback([this] (TextButton &) {
 		doneButtonAction();
@@ -98,6 +98,11 @@ void SettingsMenuState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 
 void SettingsMenuState::updateWidgetPosition() {
 	m_doneButton.setPosition(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().sizeX / 2.0f, Config::screenHeight * 0.85);
+
+	m_menuWidget.setPosition(
+		Config::screenWidth / 2.0 - m_menuWidget.getGlobalBounds().sizeX / 2.0,
+		Config::screenHeight / 2.0 - m_menuWidget.getGlobalBounds().sizeY / 2.0
+	);
 }
 
 void SettingsMenuState::doneButtonAction() {
@@ -131,6 +136,8 @@ void SettingsMenuState::addMainButtons() {
 		m_state = MenuState::Input;
 		addInputButtons();
 	});
+
+	updateWidgetPosition();
 }
 
 void SettingsMenuState::addGameplayButtons() {
@@ -138,6 +145,8 @@ void SettingsMenuState::addGameplayButtons() {
 
 	addToggleButton("Fly Mode", Config::isFlyModeEnabled, false);
 	addToggleButton("No Clip", Config::isNoClipEnabled, false);
+
+	updateWidgetPosition();
 }
 
 void SettingsMenuState::addInterfaceButtons() {
@@ -147,6 +156,8 @@ void SettingsMenuState::addInterfaceButtons() {
 	addToggleButton("Show FPS counter", Config::isFpsCounterEnabled, false);
 	addToggleButton("Show hotbar", Config::isHotbarVisible, false);
 	addToggleButton("Show crosshair", Config::isCrosshairVisible, false);
+
+	updateWidgetPosition();
 }
 
 void SettingsMenuState::addGraphicsButtons() {
@@ -208,6 +219,8 @@ void SettingsMenuState::addGraphicsButtons() {
 
 		World::isReloadRequested = true;
 	});
+
+	updateWidgetPosition();
 }
 
 void SettingsMenuState::addInputButtons() {
@@ -227,6 +240,8 @@ void SettingsMenuState::addInputButtons() {
 		Config::mouseSensitivity = std::max(2, (Config::mouseSensitivity + 2) % 14);
 		button.setText("Mouse sensitivity: " + std::to_string(Config::mouseSensitivity));
 	});
+
+	updateWidgetPosition();
 }
 
 TextButton &SettingsMenuState::addToggleButton(const std::string &text, bool &configOption, bool worldReloadRequested) {

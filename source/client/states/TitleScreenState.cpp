@@ -124,7 +124,15 @@ void TitleScreenState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 }
 
 void TitleScreenState::updateWidgetPosition() {
-	m_background.setPosition(Config::screenWidth / 2.0 - m_background.width() / 2.0, Config::screenHeight / 2.0 - m_background.height() / 2.0);
+	m_background.setPosition(
+		Config::screenWidth / 2.0 - m_background.width() / 2.0,
+		Config::screenHeight / 2.0 - m_background.height() / 2.0
+	);
+
+	m_menuWidget.setPosition(
+		Config::screenWidth / 2.0 - m_menuWidget.getGlobalBounds().sizeX / 2.0,
+		Config::screenHeight / 2.0 - m_menuWidget.getGlobalBounds().sizeY / 2.0
+	);
 }
 
 void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) const {

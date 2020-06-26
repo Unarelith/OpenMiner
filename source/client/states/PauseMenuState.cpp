@@ -78,6 +78,8 @@ PauseMenuState::PauseMenuState(Client &client, gk::ApplicationState *parent)
 		else
 			m_stateStack->push<WorldSavingState>(m_client, true);
 	});
+
+	updateWidgetPosition();
 }
 
 void PauseMenuState::init() {
@@ -108,6 +110,13 @@ void PauseMenuState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 	m_menuWidget.setScale(event.guiScale, event.guiScale);
 
 	m_menuWidget.onGuiScaleChanged(event);
+}
+
+void PauseMenuState::updateWidgetPosition() {
+	m_menuWidget.setPosition(
+		Config::screenWidth / 2.0 - m_menuWidget.getGlobalBounds().sizeX / 2.0,
+		Config::screenHeight / 2.0 - m_menuWidget.getGlobalBounds().sizeY / 2.0
+	);
 }
 
 void PauseMenuState::draw(gk::RenderTarget &target, gk::RenderStates states) const {

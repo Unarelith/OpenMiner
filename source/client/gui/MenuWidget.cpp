@@ -38,6 +38,9 @@ void MenuWidget::reset(u16 width, u16 height) {
 
 	m_buttons.clear();
 	m_buttons.reserve(m_width * m_height);
+
+	Widget::m_width = 0;
+	Widget::m_height = 0;
 }
 
 void MenuWidget::onEvent(const sf::Event &event) {
@@ -64,11 +67,11 @@ void MenuWidget::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 	}
 }
 
-TextButton &MenuWidget::addButton(const std::string &text, const TextButton::CppCallback &callback) {
+TextButton &MenuWidget::addButton(const std::string &text, const TextButton::CppCallback &callback, u16 width) {
 	int x = m_buttons.size() % m_width;
 	int y = m_buttons.size() / m_width;
 
-	m_buttons.emplace_back(this);
+	m_buttons.emplace_back(width, this);
 
 	TextButton &button = m_buttons.back();
 	button.setText(text);
@@ -78,8 +81,15 @@ TextButton &MenuWidget::addButton(const std::string &text, const TextButton::Cpp
 }
 
 void MenuWidget::updateButtonPosition(TextButton &button, int x, int y) {
-	button.setPosition(Config::screenWidth  / getScale().x / 2.0f - (m_width  * (button.width()  + s_horizontalSpacing) - s_horizontalSpacing) / 2 + x * (button.width() + s_horizontalSpacing),
-	                   Config::screenHeight / getScale().y / 2.0f - (m_height * (button.height() + s_verticalSpacing)   - s_verticalSpacing)   / 2 + y * (button.height() + s_verticalSpacing), 0);
+	button.setPosition(x * (button.width() + s_horizontalSpacing),
+	                   y * (button.height() + s_verticalSpacing));
+
+	if (button.getPosition().x + button.width() > Widget::m_width) {
+		Widget::m_width = button.getPosition().x + button.width();
+	}
+	if (button.getPosition().y + button.height() > Widget::m_height) {
+		Widget::m_height = button.getPosition().y + button.height();
+	}
 }
 
 void MenuWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {

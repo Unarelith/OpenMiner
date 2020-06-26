@@ -42,7 +42,7 @@ class MenuWidget : public Widget {
 
 		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
 
-		TextButton &addButton(const std::string &text, const TextButton::CppCallback &callback);
+		TextButton &addButton(const std::string &text, const TextButton::CppCallback &callback, u16 width = 200);
 
 	private:
 		void updateButtonPosition(TextButton &button, int x, int y);

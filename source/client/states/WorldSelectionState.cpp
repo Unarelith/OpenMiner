@@ -54,15 +54,15 @@ WorldSelectionState::WorldSelectionState(TitleScreenState *titleScreen)
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
 	m_menuWidget.addButton("New world", [this](TextButton &) {
 		m_stateStack->push<WorldCreationState>(m_titleScreen);
-	});
+	}, 100);
 	m_menuWidget.addButton("Open", [this](TextButton &) {
 		const ScrollableListElement *element = m_worldList.selectedElement();
 		if (element)
 			m_stateStack->push<WorldMenuState>(element->line1(), m_titleScreen);
-	});
+	}, 100);
 	m_menuWidget.addButton("Cancel", [this](TextButton &) {
 		m_stateStack->pop();
-	});
+	}, 100);
 
 	updateWidgetPosition();
 	loadSaveList();
@@ -102,6 +102,11 @@ void WorldSelectionState::updateWidgetPosition() {
 	m_worldList.setPosition(
 		Config::screenWidth / 2.0f - m_worldList.getGlobalBounds().sizeX / 2.0f,
 		borderSize + 2 * Config::guiScale
+	);
+
+	m_menuWidget.setPosition(
+		Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2.0f,
+		Config::screenHeight - borderSize / 2 - m_menuWidget.getGlobalBounds().sizeY / 2.0f
 	);
 }
 

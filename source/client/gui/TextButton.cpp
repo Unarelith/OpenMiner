@@ -26,10 +26,13 @@
  */
 #include "TextButton.hpp"
 
-TextButton::TextButton(Widget *parent) : Widget(200, 20, parent) {
-	m_background.setClipRect(0, 66, 200, 20);
-	m_hoverBackground.setClipRect(0, 86, 200, 20);
-	m_disabledBackground.setClipRect(0, 46, 200, 20);
+TextButton::TextButton(Widget *parent) : TextButton(200, parent) {
+}
+
+TextButton::TextButton(u16 width, Widget *parent) : Widget(width, 20, parent) {
+	m_background.setClipRect(0, 66, width, 20);
+	m_hoverBackground.setClipRect(0, 86, width, 20);
+	m_disabledBackground.setClipRect(0, 46, width, 20);
 }
 
 TextButton::TextButton(const CppCallback &callback, Widget *parent) : TextButton(parent) {
