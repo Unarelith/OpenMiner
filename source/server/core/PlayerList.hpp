@@ -38,7 +38,7 @@ class PlayerList {
 
 	public:
 		ServerPlayer &addPlayer(const std::string &name, bool isNewPlayer);
-		ServerPlayer &connectPlayer(const std::string &name, ClientInfo &client);
+		ServerPlayer *connectPlayer(const std::string &name, ClientInfo &client);
 		void disconnectPlayer(const std::string &name);
 
 		const ServerPlayer *getPlayer(const std::string &name) const;

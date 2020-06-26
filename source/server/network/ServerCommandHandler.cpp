@@ -170,9 +170,14 @@ void ServerCommandHandler::setupCallbacks() {
 		std::string username;
 		connectionPacket >> username;
 
-		auto &player = m_players.connectPlayer(username, client);
-		if (player.isNewPlayer())
-			player.setPosition(m_spawnPosition.x, m_spawnPosition.y, m_spawnPosition.z);
+		ServerPlayer *player = m_players.connectPlayer(username, client);
+		if (!player) {
+			sendServerClosed("User is already online", &client);
+			return;
+		}
+
+		if (player->isNewPlayer())
+			player->setPosition(m_spawnPosition.x, m_spawnPosition.y, m_spawnPosition.z);
 
 		Network::Packet packet;
 		packet << Network::Command::RegistryData;
@@ -188,23 +193,23 @@ void ServerCommandHandler::setupCallbacks() {
 			client.tcpSocket->send(spawnPacket);
 		}
 
-		if (player.isNewPlayer())
-			m_scriptEngine.luaCore().onEvent(LuaEventType::PlayerConnected, glm::ivec3{player.x(), player.y(), player.z()}, player, client, *this);
+		if (player->isNewPlayer())
+			m_scriptEngine.luaCore().onEvent(LuaEventType::PlayerConnected, glm::ivec3{player->x(), player->y(), player->z()}, player, client, *this);
 
 		Network::Packet invPacket;
 		invPacket << Network::Command::PlayerInvUpdate << client.id;
-		invPacket << player.inventory();
+		invPacket << player->inventory();
 		client.tcpSocket->send(invPacket);
 
 		// Send spawn packet to all clients for this player
 		Network::Packet spawnPacket;
 		spawnPacket << Network::Command::PlayerSpawn << client.id;
-		spawnPacket << player.x() << player.y() << player.z() << player.dimension() << player.name();
-		spawnPacket << player.cameraYaw() << player.cameraPitch();
+		spawnPacket << player->x() << player->y() << player->z() << player->dimension() << player->name();
+		spawnPacket << player->cameraYaw() << player->cameraPitch();
 		m_server.sendToAllClients(spawnPacket);
 
 		// Send entities to the client
-		m_worldController.getWorld(player.dimension()).scene().sendEntities(client);
+		m_worldController.getWorld(player->dimension()).scene().sendEntities(client);
 	});
 
 	m_server.setCommandCallback(Network::Command::ClientDisconnect, [this](ClientInfo &client, Network::Packet &) {
