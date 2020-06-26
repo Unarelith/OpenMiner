@@ -3,10 +3,10 @@
 echo -n "Which version are you deploying? "
 read version
 
-rm -r deploy/win32/bin/openminer deploy/win64/bin/openminer deploy/linux64/bin/openminer
+rm -rf deploy/win32/bin/openminer deploy/win64/bin/openminer deploy/linux64/bin/openminer
 mkdir -p deploy/win32/bin/openminer deploy/win64/bin/openminer deploy/linux64/bin/openminer
 
-rm deploy/*.zip
+rm -f deploy/*.zip
 
 # Win32
 i686-w64-mingw32-cmake -B deploy/win32 . && \
@@ -17,6 +17,7 @@ cp -r docs mods resources texturepacks deploy/win32/bin/openminer && \
 mkdir deploy/win32/bin/openminer/config && \
 cp config/*.example.lua deploy/win32/bin/openminer/config && \
 cp /usr/i686-w64-mingw32/bin/libwinpthread-1.dll deploy/win32/bin/openminer && \
+cp /usr/i686-w64-mingw32/bin/libssp-0.dll deploy/win32/bin/openminer && \
 cd deploy/win32/bin && \
 zip -T -r ../../OpenMiner-$version-win32.zip openminer &&
 cd ../../..
@@ -30,6 +31,7 @@ cp -r docs mods resources texturepacks deploy/win64/bin/openminer && \
 mkdir deploy/win64/bin/openminer/config && \
 cp config/*.example.lua deploy/win64/bin/openminer/config && \
 cp /usr/x86_64-w64-mingw32/bin/libwinpthread-1.dll deploy/win64/bin/openminer && \
+cp /usr/x86_64-w64-mingw32/bin/libssp-0.dll deploy/win64/bin/openminer && \
 cd deploy/win64/bin && \
 zip -T -r ../../OpenMiner-$version-win64.zip openminer &&
 cd ../../..

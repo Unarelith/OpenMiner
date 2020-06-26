@@ -117,6 +117,13 @@ void ClientApplication::handleEvents() {
 	if ((Config::isFullscreenModeEnabled && !m_window.isFullscreenModeEnabled())
 	|| (!Config::isFullscreenModeEnabled && m_window.isFullscreenModeEnabled())) {
 		m_window.setFullscreenMode(Config::isFullscreenModeEnabled);
+
+		// FIXME: Required for Windows
+		sf::Event event;
+		event.type = sf::Event::Resized;
+		event.size.width = m_window.window().getSize().x;
+		event.size.height = m_window.window().getSize().y;
+		onEvent(event);
 	}
 
 	if (Config::screenWidth != m_window.getSize().x || Config::screenHeight != m_window.getSize().y) {
@@ -128,6 +135,8 @@ void ClientApplication::handleEvents() {
 }
 
 void ClientApplication::onEvent(const sf::Event &event) {
+	gk::CoreApplication::onEvent(event);
+
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F11)
 		Config::isFullscreenModeEnabled ^= 1;
 }
