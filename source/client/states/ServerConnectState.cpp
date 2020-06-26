@@ -66,8 +66,15 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 			}
 		}
 
+		std::string username = m_usernameInput.string();
+
 		if (port == 0 || isPortInvalid) {
 			m_errorText.setString("Error: Invalid server address");
+			m_errorText.updateVertexBuffer();
+			updateWidgetPosition();
+		}
+		else if (!gk::regexMatch(username, "^[A-Za-z0-9_]+$")) {
+			m_errorText.setString("Error: Invalid username");
 			m_errorText.updateVertexBuffer();
 			updateWidgetPosition();
 		}
@@ -75,7 +82,7 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 			auto &game = m_stateStack->push<GameState>();
 			auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, true, host, port, this);
 			serverLoadingState.setTexturePack(m_texturePack);
-			serverLoadingState.setUsername(m_usernameInput.string());
+			serverLoadingState.setUsername(username);
 		}
 	});
 
@@ -151,7 +158,7 @@ void ServerConnectState::updateWidgetPosition() {
 
 	m_errorText.setPosition(
 		Config::screenWidth / 2.0f - m_errorText.getSize().x * Config::guiScale / 2.0f,
-		Config::screenHeight / 2.0f - 30 * Config::guiScale
+		Config::screenHeight / 2.0f + 30 * Config::guiScale
 	);
 }
 
