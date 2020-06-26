@@ -121,6 +121,8 @@ void TitleScreenState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 	m_menuWidget.setScale(event.guiScale, event.guiScale);
 
 	m_menuWidget.onGuiScaleChanged(event);
+
+	updateWidgetPosition();
 }
 
 void TitleScreenState::updateWidgetPosition() {

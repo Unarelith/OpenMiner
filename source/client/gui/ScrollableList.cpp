@@ -75,8 +75,8 @@ void ScrollableList::onEvent(const sf::Event &event) {
 	if (event.type == sf::Event::MouseButtonPressed) {
 		for (auto &it : m_elements) {
 			if (it.isPointInWidget(event.mouseButton.x, event.mouseButton.y)) {
-				m_cursor.setSize(it.width() + 8, it.height() + 6);
-				m_cursor.setPosition(-4, it.getPosition().y - 3);
+				m_cursor.setSize(it.width() + 2, it.height() + 2);
+				m_cursor.setPosition(-1, it.getPosition().y - 1);
 
 				m_selectedElement = &it;
 			}
@@ -86,7 +86,7 @@ void ScrollableList::onEvent(const sf::Event &event) {
 
 void ScrollableList::addElement(const std::string &line1, const std::string &line2, const std::string &line3) {
 	m_elements.emplace_back(line1, line2, line3, this);
-	m_elements.back().setPosition(0, m_elements.size() * (m_elements.back().height() + 10));
+	m_elements.back().setPosition(0, (m_elements.size() - 1) * (m_elements.back().height() + 4) + 2);
 
 	m_height += m_elements.back().height();
 }
