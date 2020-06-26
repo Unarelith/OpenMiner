@@ -31,28 +31,52 @@ ServerPlayer &PlayerList::addPlayer(const std::string &name, bool isNewPlayer) {
 	return m_players.at(name);
 }
 
-ServerPlayer *PlayerList::connectPlayer(const std::string &name, ClientInfo &client) {
+ServerPlayer *PlayerList::connectPlayer(const std::string &name, ClientInfo &client, bool isSingleplayer) {
 	ServerPlayer *player = nullptr;
-	auto it = m_players.find(name);
-	if (it != m_players.end()) {
-		if (!it->second.isOnline()) {
-			player = &it->second;
+
+	static bool isFirstPlayer = true;
+	if (isFirstPlayer && isSingleplayer && !m_players.empty()) {
+		if (m_players.size() == 1) {
+			std::string oldname = m_players.begin()->second.name();
+			if (oldname != name) {
+				m_players.emplace(name, m_players.begin()->second);
+				m_players.erase(oldname);
+			}
+
+			player = &m_players.at(name);
+			player->setName(name);
+
 			gkInfo() << name << "is online";
 		}
 		else {
-			gkInfo() << name << "failed to connect: already online";
+			gkWarning() << "Multiple players in singleplayer mode not handled yet";
 			return nullptr;
 		}
 	}
 	else {
-		player = &addPlayer(name, true);
-		gkInfo() << name << "is online (first connection)";
+		auto it = m_players.find(name);
+		if (it != m_players.end()) {
+			if (!it->second.isOnline()) {
+				player = &it->second;
+				gkInfo() << name << "is online";
+			}
+			else {
+				gkWarning() << name << "failed to connect: already online";
+				return nullptr;
+			}
+		}
+		else {
+			player = &addPlayer(name, true);
+			gkInfo() << name << "is online (first connection)";
+		}
 	}
 
 	player->setClient(&client);
 	player->setClientID(client.id);
 
 	client.playerName = name;
+
+	isFirstPlayer = false;
 
 	return player;
 }

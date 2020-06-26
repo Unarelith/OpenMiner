@@ -50,6 +50,7 @@ class Server {
 		void sendToAllClients(Network::Packet &packet) const;
 
 		bool isRunning() const { return m_isRunning; }
+		bool isSingleplayer() const { return m_isSingleplayer; }
 
 		u16 port() const { return m_port; }
 
