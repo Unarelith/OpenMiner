@@ -58,6 +58,10 @@ TitleScreenState::TitleScreenState(u16 port) : m_port(port) {
 		m_stateStack->pop();
 	});
 
+	m_titleText.setScale(Config::guiScale * 4, Config::guiScale * 4);
+	m_titleText.setString(APP_NAME);
+	m_titleText.updateVertexBuffer();
+
 	std::string versionString = APP_NAME;
 	versionString.append(" ");
 	versionString.append(1, '0' + VERSION_MAJOR);
@@ -138,23 +142,31 @@ void TitleScreenState::startMultiplayer(const std::string &host) {
 
 void TitleScreenState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 	m_menuWidget.setScale(event.guiScale, event.guiScale);
-
 	m_menuWidget.onGuiScaleChanged(event);
+
+	m_titleText.setScale(event.guiScale * 4, event.guiScale * 4);
+	m_versionText.setScale(event.guiScale, event.guiScale);
+	m_copyrightText.setScale(event.guiScale, event.guiScale);
+	m_licenseText.setScale(event.guiScale, event.guiScale);
 
 	updateWidgetPosition();
 }
 
 void TitleScreenState::updateWidgetPosition() {
 	m_background.setPosition(
-		Config::screenWidth / 2.0 - m_background.width() / 2.0,
-		Config::screenHeight / 2.0 - m_background.height() / 2.0
+		Config::screenWidth / 2.0f - m_background.width() / 2.0f,
+		Config::screenHeight / 2.0f - m_background.height() / 2.0f
 	);
 
 	m_menuWidget.setPosition(
-		Config::screenWidth / 2.0 - m_menuWidget.getGlobalBounds().sizeX / 2.0,
-		Config::screenHeight / 2.0 - m_menuWidget.getGlobalBounds().sizeY / 2.0
+		Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2.0f,
+		Config::screenHeight / 2.0f - m_menuWidget.getGlobalBounds().sizeY / 2.0f
 	);
 
+	m_titleText.setPosition(
+		Config::screenWidth / 2.0f - m_titleText.getSize().x * m_titleText.getScale().x / 2.0f,
+		50 * Config::guiScale
+	);
 	m_versionText.setPosition(Config::guiScale, Config::screenHeight - m_versionText.getSize().y * Config::guiScale);
 	m_copyrightText.setPosition(
 		Config::screenWidth - m_copyrightText.getSize().x * Config::guiScale - Config::guiScale,
@@ -171,6 +183,7 @@ void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) c
 
 	target.draw(m_background, states);
 
+	target.draw(m_titleText, states);
 	target.draw(m_versionText, states);
 	target.draw(m_copyrightText, states);
 	target.draw(m_licenseText, states);

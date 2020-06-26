@@ -68,6 +68,7 @@ class TitleScreenState : public InterfaceState {
 
 		u16 m_port = 4242;
 
+		Text m_titleText;
 		Text m_versionText;
 		Text m_copyrightText;
 		Text m_licenseText;
