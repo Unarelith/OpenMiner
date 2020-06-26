@@ -165,7 +165,7 @@ void TitleScreenState::updateWidgetPosition() {
 
 	m_titleText.setPosition(
 		Config::screenWidth / 2.0f - m_titleText.getSize().x * m_titleText.getScale().x / 2.0f,
-		50 * Config::guiScale
+		0.04 * Config::screenHeight * Config::guiScale
 	);
 	m_versionText.setPosition(Config::guiScale, Config::screenHeight - m_versionText.getSize().y * Config::guiScale);
 	m_copyrightText.setPosition(

@@ -142,7 +142,7 @@ void ServerConnectState::updateWidgetPosition() {
 
 	m_menuWidget.setPosition(
 		Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2,
-		Config::screenHeight - 110 * Config::guiScale
+		Config::screenHeight - 0.10 * Config::screenHeight * Config::guiScale
 	);
 
 	m_errorText.setPosition(
