@@ -179,8 +179,10 @@ void ServerApplication::update() {
 
 	if (m_clock.getTicks() % 100 < 10) {
 		for (auto &it : m_players) {
-			m_serverCommandHandler.sendPlayerPosUpdate(it.first);
-			m_serverCommandHandler.sendPlayerRotUpdate(it.first);
+			if (it.second.isOnline()) {
+				m_serverCommandHandler.sendPlayerPosUpdate(it.second.clientID());
+				m_serverCommandHandler.sendPlayerRotUpdate(it.second.clientID());
+			}
 		}
 	}
 }

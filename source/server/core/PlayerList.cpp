@@ -26,30 +26,61 @@
  */
 #include "PlayerList.hpp"
 
-ServerPlayer &PlayerList::addPlayer(ClientInfo &client) {
-	m_players.emplace(client.id, client);
-	return m_players.at(client.id);
+ServerPlayer &PlayerList::addPlayer(const std::string &name, bool isNewPlayer) {
+	m_players.emplace(name, ServerPlayer{name, isNewPlayer});
+	return m_players.at(name);
 }
 
-void PlayerList::removePlayer(u16 id) {
-	auto it = m_players.find(id);
-	if (it != m_players.end())
-		m_players.erase(it);
+ServerPlayer &PlayerList::connectPlayer(const std::string &name, ClientInfo &client) {
+	ServerPlayer *player = nullptr;
+	auto it = m_players.find(name);
+	if (it != m_players.end()) {
+		player = &it->second;
+		gkInfo() << name << "is online";
+	}
+	else {
+		player = &addPlayer(name, true);
+		gkInfo() << name << "is online (first connection)";
+	}
+
+	player->setClient(&client);
+	player->setClientID(client.id);
+
+	client.playerName = name;
+
+	return *player;
 }
 
-const ServerPlayer *PlayerList::getPlayer(u16 id) const {
-	auto it = m_players.find(id);
+void PlayerList::disconnectPlayer(const std::string &name) {
+	auto it = m_players.find(name);
+	if (it != m_players.end()) {
+		it->second.setClient(nullptr);
+		it->second.setNewPlayer(false);
+	}
+}
+
+const ServerPlayer *PlayerList::getPlayer(const std::string &name) const {
+	auto it = m_players.find(name);
 	if (it == m_players.end())
 		return nullptr;
 
 	return &it->second;
 }
 
-ServerPlayer *PlayerList::getPlayer(u16 id) {
-	auto it = m_players.find(id);
+ServerPlayer *PlayerList::getPlayer(const std::string &name) {
+	auto it = m_players.find(name);
 	if (it == m_players.end())
 		return nullptr;
 
 	return &it->second;
+}
+
+ServerPlayer *PlayerList::getPlayerFromClientID(u16 clientID) {
+	for (auto &it : m_players) {
+		if (it.second.clientID() == clientID)
+			return &it.second;
+	}
+
+	return nullptr;
 }
 

@@ -46,6 +46,8 @@ class ClientInfo {
 		std::shared_ptr<sf::TcpSocket> tcpSocket;
 
 		NetworkInputHandler inputHandler;
+
+		std::string playerName;
 };
 
 #endif // CLIENTINFO_HPP_

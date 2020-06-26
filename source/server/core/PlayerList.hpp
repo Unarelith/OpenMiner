@@ -32,22 +32,27 @@
 #include "ServerPlayer.hpp"
 
 class PlayerList {
-	using PlayerMap = std::unordered_map<u16, ServerPlayer>;
+	using PlayerMap = std::unordered_map<std::string, ServerPlayer>;
 	using Iterator = PlayerMap::iterator;
 	using ConstIterator = PlayerMap::const_iterator;
 
 	public:
-		ServerPlayer &addPlayer(ClientInfo &client);
-		void removePlayer(u16 id);
+		ServerPlayer &addPlayer(const std::string &name, bool isNewPlayer);
+		ServerPlayer &connectPlayer(const std::string &name, ClientInfo &client);
+		void disconnectPlayer(const std::string &name);
 
-		const ServerPlayer *getPlayer(u16 id) const;
-		ServerPlayer *getPlayer(u16 id);
+		const ServerPlayer *getPlayer(const std::string &name) const;
+		ServerPlayer *getPlayer(const std::string &name);
+
+		ServerPlayer *getPlayerFromClientID(u16 clientID);
 
 		Iterator begin() { return m_players.begin(); }
 		Iterator end() { return m_players.end(); }
 
 		ConstIterator begin() const { return m_players.begin(); }
 		ConstIterator end() const { return m_players.end(); }
+
+		std::size_t size() const { return m_players.size(); }
 
 	private:
 		PlayerMap m_players;

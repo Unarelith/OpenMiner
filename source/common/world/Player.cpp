@@ -42,11 +42,11 @@ u8 Player::getOppositeDirection() const {
 }
 
 void Player::serialize(sf::Packet &packet) const {
-	packet << m_x << m_y << m_z << m_dimension << m_inventory << m_name;
+	packet << m_x << m_y << m_z << m_dimension << m_viewAngleH << m_viewAngleV << m_viewAngleRoll << m_inventory;
 }
 
 void Player::deserialize(sf::Packet &packet) {
-	packet >> m_x >> m_y >> m_z >> m_dimension >> m_inventory >> m_name;
+	packet >> m_x >> m_y >> m_z >> m_dimension >> m_viewAngleH >> m_viewAngleV >> m_viewAngleRoll >> m_inventory;
 }
 
 // Please update 'docs/lua-api-cpp.md' if you change this
