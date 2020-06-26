@@ -39,10 +39,6 @@ ClientPlayer *ClientPlayer::s_instance = nullptr;
 ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
 	m_cameraLocalPos = gk::Vector3f{0.f, 0.f, 1.625f};
 
-	m_viewAngleH = -90.f;
-	m_viewAngleV = 0.f;
-	m_viewAngleRoll = 0.f;
-
 	updateCamera();
 
 	m_camera.setDPosition(m_x + m_cameraLocalPos.x, m_y + m_cameraLocalPos.y, m_z + m_cameraLocalPos.z);

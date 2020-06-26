@@ -54,6 +54,7 @@ void ClientApplication::init() {
 	m_argumentParser.addArgument("multiplayer", {"-m", "--multiplayer", "Start in multiplayer mode."});
 	m_argumentParser.addArgument("working-dir", {"-w", "--working-dir", "Change the working directory to <dir>.", "dir"});
 	m_argumentParser.addArgument("texture-pack", {"-t", "--texture-pack", "Use texture pack <name>.", "name"});
+	m_argumentParser.addArgument("username", {"-u", "--username", "Use <username> when using -m or -s", "username"});
 
 	m_loggerHandler.setName("client");
 
@@ -78,6 +79,9 @@ void ClientApplication::init() {
 		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
 
 	Config::loadConfigFromFile("config/client.lua");
+
+	if (m_argumentParser.getArgument("username").isFound)
+		Config::defaultUsername = m_argumentParser.getArgument("username").parameter;
 
 	m_keyboardHandler.loadKeysFromFile("config/keys.lua");
 	gk::GamePad::init(m_keyboardHandler);
