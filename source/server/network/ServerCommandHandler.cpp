@@ -175,7 +175,7 @@ void ServerCommandHandler::setupCallbacks() {
 			return;
 		}
 
-		ServerPlayer *player = m_players.connectPlayer(username, client);
+		ServerPlayer *player = m_players.connectPlayer(username, client, m_server.isSingleplayer());
 		if (!player) {
 			sendServerClosed("User is already online", &client);
 			return;
