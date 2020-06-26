@@ -60,8 +60,8 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 					m_stateStack->pop(); // WorldSelectionState
 					m_stateStack->push<WorldSelectionState>(titleScreen);
 				}
-
-				m_stateStack->pop();
+				else
+					m_stateStack->pop();
 
 				if (originalName.empty())
 					titleScreen->startSingleplayer(true, worldName);

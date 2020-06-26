@@ -32,7 +32,7 @@
 #include "Config.hpp"
 #include "TitleScreenState.hpp"
 #include "WorldCreationState.hpp"
-#include "WorldMenuState.hpp"
+#include "WorldDeletionState.hpp"
 #include "WorldSelectionState.hpp"
 
 namespace fs = ghc::filesystem;
@@ -41,28 +41,44 @@ WorldSelectionState::WorldSelectionState(TitleScreenState *titleScreen)
 	: InterfaceState(titleScreen), m_titleScreen(titleScreen)
 {
 	m_title.setScale(Config::guiScale, Config::guiScale);
-	m_title.setString("Select or create a world");
+	m_title.setString("Select World");
 	m_title.updateVertexBuffer();
 
 	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
 
-	m_filter1.setFillColor(gk::Color(0, 0, 0, 128));
+	m_filter1.setFillColor(gk::Color(0, 0, 0, 176));
 	m_filter2.setFillColor(gk::Color(0, 0, 0, 192));
 
 	m_worldList.setScale(Config::guiScale, Config::guiScale);
 
-	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
-	m_menuWidget.addButton("New world", [this](TextButton &) {
-		m_stateStack->push<WorldCreationState>(m_titleScreen);
-	}, 100);
-	m_menuWidget.addButton("Open", [this](TextButton &) {
+	m_menuWidget1.setScale(Config::guiScale, Config::guiScale);
+	m_menuWidget1.addButton("Play Selected World", [this](TextButton &) {
 		const ScrollableListElement *element = m_worldList.selectedElement();
 		if (element)
-			m_stateStack->push<WorldMenuState>(element->line1(), m_titleScreen);
-	}, 100);
-	m_menuWidget.addButton("Cancel", [this](TextButton &) {
+			m_titleScreen->startSingleplayer(true, element->line1());
+	});
+	m_menuWidget1.addButton("Create New World", [this](TextButton &) {
+		m_stateStack->push<WorldCreationState>(m_titleScreen);
+	});
+
+	m_menuWidget2.setScale(Config::guiScale, Config::guiScale);
+	m_menuWidget2.addButton("Edit", [this](TextButton &) {
+		const ScrollableListElement *element = m_worldList.selectedElement();
+		if (element)
+			m_stateStack->push<WorldCreationState>(m_titleScreen, element->line1());
+	}, 98);
+	m_menuWidget2.addButton("Delete", [this](TextButton &) {
+		const ScrollableListElement *element = m_worldList.selectedElement();
+		if (element)
+			m_stateStack->push<WorldDeletionState>(element->line1(), m_titleScreen);
+	}, 97);
+
+	m_menuWidget3.setScale(Config::guiScale, Config::guiScale);
+	m_menuWidget3.addButton("Re-Create", [](TextButton &) {
+	}, 97).setEnabled(false);
+	m_menuWidget3.addButton("Cancel", [this](TextButton &) {
 		m_stateStack->pop();
-	}, 100);
+	}, 98);
 
 	updateWidgetPosition();
 	loadSaveList();
@@ -77,7 +93,10 @@ void WorldSelectionState::onEvent(const sf::Event &event) {
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
 		m_worldList.onEvent(event);
-		m_menuWidget.onEvent(event);
+
+		m_menuWidget1.onEvent(event);
+		m_menuWidget2.onEvent(event);
+		m_menuWidget3.onEvent(event);
 	}
 }
 
@@ -90,23 +109,34 @@ void WorldSelectionState::updateWidgetPosition() {
 
 	m_filter1.setSize(Config::screenWidth, Config::screenHeight);
 
-	const int borderSize = 25 * Config::guiScale;
-	m_filter2.setSize(Config::screenWidth, Config::screenHeight - borderSize * 2);
-	m_filter2.setPosition(0, borderSize);
+	const int topBorderSize = 25 * Config::guiScale;
+	const int bottomBorderSize = 50 * Config::guiScale;
+	m_filter2.setSize(Config::screenWidth, Config::screenHeight - topBorderSize - bottomBorderSize);
+	m_filter2.setPosition(0, topBorderSize);
 
 	m_title.setPosition(
 		Config::screenWidth / 2.0f - m_title.getSize().x * Config::guiScale / 2.0f,
-		borderSize / 2 - m_title.getSize().y * Config::guiScale / 2.0f
+		topBorderSize / 2.0f - m_title.getSize().y * Config::guiScale / 2.0f
 	);
 
 	m_worldList.setPosition(
 		Config::screenWidth / 2.0f - m_worldList.getGlobalBounds().sizeX / 2.0f,
-		borderSize + 2 * Config::guiScale
+		topBorderSize + 2.0f * Config::guiScale
 	);
 
-	m_menuWidget.setPosition(
-		Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2.0f,
-		Config::screenHeight - borderSize / 2 - m_menuWidget.getGlobalBounds().sizeY / 2.0f
+	m_menuWidget1.setPosition(
+		Config::screenWidth / 2.0f - m_menuWidget1.getGlobalBounds().sizeX / 2.0f,
+		Config::screenHeight - bottomBorderSize / 2.0f - m_menuWidget1.getGlobalBounds().sizeY - 2
+	);
+
+	m_menuWidget2.setPosition(
+		Config::screenWidth / 2.0f - m_menuWidget2.getGlobalBounds().sizeX - 10,
+		Config::screenHeight - bottomBorderSize / 2.0f + 2
+	);
+
+	m_menuWidget3.setPosition(
+		Config::screenWidth / 2.0f + 6,
+		Config::screenHeight - bottomBorderSize / 2.0f + 2
 	);
 }
 
@@ -146,7 +176,9 @@ void WorldSelectionState::draw(gk::RenderTarget &target, gk::RenderStates states
 		target.draw(m_title, states);
 
 		target.draw(m_worldList, states);
-		target.draw(m_menuWidget, states);
+		target.draw(m_menuWidget1, states);
+		target.draw(m_menuWidget2, states);
+		target.draw(m_menuWidget3, states);
 	}
 }
 

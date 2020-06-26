@@ -57,7 +57,9 @@ class WorldSelectionState : public InterfaceState {
 
 		ScrollableList m_worldList;
 
-		MenuWidget m_menuWidget{3, 1};
+		MenuWidget m_menuWidget1{2, 1};
+		MenuWidget m_menuWidget2{2, 1};
+		MenuWidget m_menuWidget3{2, 1};
 };
 
 #endif // WORLDSELECTIONSTATE_HPP_

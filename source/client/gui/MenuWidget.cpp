@@ -76,7 +76,9 @@ TextButton &MenuWidget::addButton(const std::string &text, const TextButton::Cpp
 	TextButton &button = m_buttons.back();
 	button.setText(text);
 	button.setCallback(callback);
+
 	updateButtonPosition(button, x, y);
+
 	return button;
 }
 

@@ -53,7 +53,11 @@ class TextButton : public Widget {
 		void setCallback(const CppCallback &callback) { m_cppCallback = callback; }
 		void setCallback(const LuaCallback &callback) { m_luaCallback = callback; }
 
-		void setEnabled(bool isEnabled) { m_isEnabled = isEnabled; }
+		void setEnabled(bool isEnabled) {
+			m_isEnabled = isEnabled;
+			m_text.setColor(isEnabled ? gk::Color::White : gk::Color{160, 160, 160});
+			m_text.setShadowEnabled(isEnabled);
+		}
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
@@ -61,6 +65,10 @@ class TextButton : public Widget {
 		gk::Image m_background{"texture-widgets"};
 		gk::Image m_hoverBackground{"texture-widgets"};
 		gk::Image m_disabledBackground{"texture-widgets"};
+
+		gk::Image m_backgroundBorder{"texture-widgets"};
+		gk::Image m_hoverBackgroundBorder{"texture-widgets"};
+		gk::Image m_disabledBackgroundBorder{"texture-widgets"};
 
 		Text m_text;
 
