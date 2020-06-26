@@ -62,6 +62,7 @@ void PlayerList::disconnectPlayer(const std::string &name) {
 	if (it != m_players.end()) {
 		it->second.setClient(nullptr);
 		it->second.setNewPlayer(false);
+		gkInfo() << name << "is offline";
 	}
 }
 

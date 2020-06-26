@@ -99,6 +99,7 @@ void TitleScreenState::startSingleplayer(bool showLoadingState, const std::strin
 
 	auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, showLoadingState, "localhost", sf::Socket::AnyPort, this);
 	serverLoadingState.setTexturePack(m_texturePack);
+	serverLoadingState.setUsername(Config::defaultUsername);
 
 	if (m_thread.joinable())
 		m_thread.join();
@@ -119,6 +120,7 @@ void TitleScreenState::startMultiplayer(const std::string &host) {
 	auto &game = m_stateStack->push<GameState>();
 	auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, false, host, m_port, this);
 	serverLoadingState.setTexturePack(m_texturePack);
+	serverLoadingState.setUsername(Config::defaultUsername);
 }
 
 void TitleScreenState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
