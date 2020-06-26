@@ -31,7 +31,7 @@
 #include "ServerLoadingState.hpp"
 
 ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : InterfaceState(parent) {
-	m_usernameInput.setString("");
+	m_usernameInput.setString(Config::defaultUsername);
 	m_usernameInput.setCharacterLimit(20);
 	m_usernameInput.setBackgroundSize(150, 20);
 	m_usernameInput.setBackgroundOutline(1, gk::Color::White);
@@ -40,7 +40,7 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 	m_usernameInput.setPlaceholder("Username");
 	m_usernameInput.setFocus(false);
 
-	m_addressInput.setString("localhost:4242");
+	m_addressInput.setString(Config::defaultServerAddress);
 	m_addressInput.setCharacterLimit(15 + 1 + 6);
 	m_addressInput.setBackgroundSize(150, 20);
 	m_addressInput.setBackgroundOutline(1, gk::Color::White);
@@ -83,6 +83,8 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 			auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, true, host, port, this);
 			serverLoadingState.setTexturePack(m_texturePack);
 			serverLoadingState.setUsername(username);
+			Config::defaultUsername = username;
+			Config::defaultServerAddress = m_addressInput.string();
 		}
 	});
 

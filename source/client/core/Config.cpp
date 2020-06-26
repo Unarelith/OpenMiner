@@ -61,6 +61,10 @@ float Config::aoStrength = 1.0f;
 // Input
 u8 Config::mouseSensitivity = 8;
 
+// Other
+std::string Config::defaultUsername = "";
+std::string Config::defaultServerAddress = "localhost:4242";
+
 void Config::loadConfigFromFile(const char *filename) {
 	if (gk::Filesystem::fileExists(filename)) {
 		sol::state lua;
@@ -91,6 +95,9 @@ void Config::loadConfigFromFile(const char *filename) {
 			aoStrength = lua["aoStrength"].get_or(aoStrength);
 
 			mouseSensitivity = lua["mouseSensitivity"].get_or(mouseSensitivity);
+
+			defaultUsername = lua["defaultUsername"].get_or(defaultUsername);
+			defaultServerAddress = lua["defaultServerAddress"].get_or(defaultServerAddress);
 
 			gkInfo() << "Config file loaded successfully";
 		}
@@ -125,5 +132,8 @@ void Config::saveConfigToFile(const char *filename) {
 	file << "aoStrength = " << aoStrength << std::endl;
 	file << std::endl;
 	file << "mouseSensitivity = " << (u16)mouseSensitivity << std::endl;
+	file << std::endl;
+	file << "defaultUsername = \"" << defaultUsername << "\"" << std::endl;
+	file << "defaultServerAddress = \"" << defaultServerAddress << "\"" << std::endl;
 }
 
