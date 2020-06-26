@@ -24,40 +24,49 @@
  *
  * =====================================================================================
  */
-#ifndef WORLDSELECTIONSTATE_HPP_
-#define WORLDSELECTIONSTATE_HPP_
+#ifndef SCROLLABLELIST_HPP_
+#define SCROLLABLELIST_HPP_
 
-#include "InterfaceState.hpp"
-#include "MenuWidget.hpp"
-#include "ScrollableList.hpp"
+#include <gk/graphics/Image.hpp>
 
-class TitleScreenState;
+#include "Text.hpp"
+#include "Widget.hpp"
 
-class WorldSelectionState : public InterfaceState {
+class ScrollableListElement : public Widget {
 	public:
-		WorldSelectionState(TitleScreenState *titleScreen);
+		ScrollableListElement(const std::string &line1, const std::string &line2, const std::string &line3, Widget *parent);
+
+		static u16 widgetWidth;
+
+		const std::string &line1() const { return m_line1.string(); }
+
+	private:
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		gk::Image m_icon{"texture-world_icon"};
+
+		Text m_line1;
+		Text m_line2;
+		Text m_line3;
+};
+
+class ScrollableList : public Widget {
+	public:
+		ScrollableList();
 
 		void onEvent(const sf::Event &event) override;
 
-		void update() override;
+		void addElement(const std::string &line1, const std::string &line2, const std::string &line3);
+
+		const ScrollableListElement *selectedElement() const { return m_selectedElement; }
 
 	private:
-		void updateWidgetPosition() override;
-		void loadSaveList();
-
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		TitleScreenState *m_titleScreen = nullptr;
+		std::vector<ScrollableListElement> m_elements;
 
-		gk::Image m_background{"texture-menu_background"};
-		gk::RectangleShape m_filter1;
-		gk::RectangleShape m_filter2;
-
-		Text m_title;
-
-		ScrollableList m_worldList;
-
-		MenuWidget m_menuWidget{3, 1};
+		gk::RectangleShape m_cursor;
+		ScrollableListElement *m_selectedElement = nullptr;
 };
 
-#endif // WORLDSELECTIONSTATE_HPP_
+#endif // SCROLLABLELIST_HPP_

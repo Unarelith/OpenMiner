@@ -52,6 +52,7 @@ class Text : public gk::Drawable, public gk::Transformable {
 		void setBackgroundColor(const gk::Color &color) { m_background.setFillColor(color); }
 		void setBackgroundSize(unsigned int width, unsigned int height) { m_background.setSize(width, height); }
 		void setBackgroundOutline(int thickness, const gk::Color &color) { m_background.setOutlineThickness(thickness); m_background.setOutlineColor(color); }
+		void setShadowEnabled(bool isShadowEnabled) { m_isShadowEnabled = isShadowEnabled; m_isUpdateNeeded = true; }
 
 		void setPadding(int x, int y);
 
@@ -65,6 +66,8 @@ class Text : public gk::Drawable, public gk::Transformable {
 		void addCharacter(u32 x, u32 y, const gk::Color &color, u8 c, std::vector<Vertex> &vertices) const;
 
 		std::string m_string;
+
+		bool m_isShadowEnabled = true;
 
 		Font &m_font;
 

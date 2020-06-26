@@ -49,14 +49,18 @@ WorldSelectionState::WorldSelectionState(TitleScreenState *titleScreen)
 	m_filter1.setFillColor(gk::Color(0, 0, 0, 128));
 	m_filter2.setFillColor(gk::Color(0, 0, 0, 192));
 
+	m_worldList.setScale(Config::guiScale, Config::guiScale);
+
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
 	m_menuWidget.addButton("New world", [this](TextButton &) {
 		m_stateStack->push<WorldCreationState>(m_titleScreen);
 	});
-
-	m_cancelButton.setScale(Config::guiScale, Config::guiScale);
-	m_cancelButton.setText("Cancel");
-	m_cancelButton.setCallback([this](TextButton &) {
+	m_menuWidget.addButton("Open", [this](TextButton &) {
+		const ScrollableListElement *element = m_worldList.selectedElement();
+		if (element)
+			m_stateStack->push<WorldMenuState>(element->line1(), m_titleScreen);
+	});
+	m_menuWidget.addButton("Cancel", [this](TextButton &) {
 		m_stateStack->pop();
 	});
 
@@ -68,12 +72,12 @@ void WorldSelectionState::onEvent(const sf::Event &event) {
 	InterfaceState::onEvent(event);
 
 	if (event.type == sf::Event::Resized && !m_stateStack->empty() && &m_stateStack->top() != this) {
-		m_menuWidget.onEvent(event);
+		m_worldList.onEvent(event);
 	}
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
+		m_worldList.onEvent(event);
 		m_menuWidget.onEvent(event);
-		m_cancelButton.onEvent(event);
 	}
 }
 
@@ -90,14 +94,14 @@ void WorldSelectionState::updateWidgetPosition() {
 	m_filter2.setSize(Config::screenWidth, Config::screenHeight - borderSize * 2);
 	m_filter2.setPosition(0, borderSize);
 
-	m_cancelButton.setPosition(
-		Config::screenWidth / 2.0f - m_cancelButton.getGlobalBounds().sizeX / 2.0f,
-		Config::screenHeight - borderSize / 2 - m_cancelButton.getGlobalBounds().sizeY / 2.0f
-	);
-
 	m_title.setPosition(
 		Config::screenWidth / 2.0f - m_title.getSize().x * Config::guiScale / 2.0f,
 		borderSize / 2 - m_title.getSize().y * Config::guiScale / 2.0f
+	);
+
+	m_worldList.setPosition(
+		Config::screenWidth / 2.0f - m_worldList.getGlobalBounds().sizeX / 2.0f,
+		borderSize + 2 * Config::guiScale
 	);
 }
 
@@ -120,9 +124,7 @@ void WorldSelectionState::loadSaveList() {
 			if (filename.substr(filename.find_last_of('.')) == ".dat") {
 				std::string saveFile = filename.substr(0, filename.find_last_of('.'));
 				std::string filesize = std::to_string(entry.file_size() / 1000.f / 1000.f);
-				m_menuWidget.addButton("- " + saveFile + " (" + filesize.substr(0, filesize.find_first_of('.') + 3) + " MB)" + " -", [&, saveFile](TextButton &) {
-					m_stateStack->push<WorldMenuState>(saveFile, m_titleScreen);
-				});
+				m_worldList.addElement(saveFile, filesize.substr(0, filesize.find_first_of('.') + 3) + " MB", "");
 			}
 		}
 	}
@@ -138,8 +140,8 @@ void WorldSelectionState::draw(gk::RenderTarget &target, gk::RenderStates states
 
 		target.draw(m_title, states);
 
+		target.draw(m_worldList, states);
 		target.draw(m_menuWidget, states);
-		target.draw(m_cancelButton, states);
 	}
 }
 

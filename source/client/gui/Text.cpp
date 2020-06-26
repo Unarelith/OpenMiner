@@ -93,22 +93,25 @@ void Text::updateVertexBuffer() const {
 	u32 x = 0;
 	u32 y = 0;
 	u32 maxX = 0;
-	gk::Color color = gk::Color{70, 70, 70, 255};
-	for(char c : m_string) {
-		if (c == '\n' || (m_maxLineLength && x + m_font.getCharWidth(c) >= m_maxLineLength)) {
-			y += m_font.getTileSize().y + 1;
-			x = 0;
-			continue;
+
+	if (m_isShadowEnabled) {
+		gk::Color color = gk::Color{70, 70, 70, 255};
+		for(char c : m_string) {
+			if (c == '\n' || (m_maxLineLength && x + m_font.getCharWidth(c) >= m_maxLineLength)) {
+				y += m_font.getTileSize().y + 1;
+				x = 0;
+				continue;
+			}
+
+			addCharacter(x + 1, y + 1, color, c, vertices);
+
+			x += m_font.getCharWidth(c);
 		}
-
-		addCharacter(x + 1, y + 1, color, c, vertices);
-
-		x += m_font.getCharWidth(c);
 	}
 
 	x = 0;
 	y = 0;
-	color = m_color;
+	gk::Color color = m_color;
 	for(char c : m_string) {
 		if (c == '\n' || (m_maxLineLength && x + m_font.getCharWidth(c) >= m_maxLineLength)) {
 			maxX = std::max(x, maxX);
