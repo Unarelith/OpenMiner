@@ -16,6 +16,7 @@ cp deploy/win32/openminer.exe deploy/win32/openminer_server.exe deploy/win32/bin
 cp -r docs mods resources texturepacks deploy/win32/bin/openminer && \
 mkdir deploy/win32/bin/openminer/config && \
 cp config/*.example.lua deploy/win32/bin/openminer/config && \
+cp LICENSE *.md deploy/win32/bin/openminer && \
 cp /usr/i686-w64-mingw32/bin/libwinpthread-1.dll deploy/win32/bin/openminer && \
 cp /usr/i686-w64-mingw32/bin/libssp-0.dll deploy/win32/bin/openminer && \
 cd deploy/win32/bin && \
@@ -30,6 +31,7 @@ cp deploy/win64/openminer.exe deploy/win64/openminer_server.exe deploy/win64/bin
 cp -r docs mods resources texturepacks deploy/win64/bin/openminer && \
 mkdir deploy/win64/bin/openminer/config && \
 cp config/*.example.lua deploy/win64/bin/openminer/config && \
+cp LICENSE *.md deploy/win64/bin/openminer && \
 cp /usr/x86_64-w64-mingw32/bin/libwinpthread-1.dll deploy/win64/bin/openminer && \
 cp /usr/x86_64-w64-mingw32/bin/libssp-0.dll deploy/win64/bin/openminer && \
 cd deploy/win64/bin && \
@@ -45,6 +47,7 @@ cp deploy/linux64/openminer deploy/linux64/openminer_server deploy/linux64/bin/o
 cp -r docs mods resources texturepacks deploy/linux64/bin/openminer && \
 mkdir deploy/linux64/bin/openminer/config && \
 cp config/*.example.lua deploy/linux64/bin/openminer/config && \
+cp LICENSE *.md deploy/linux64/bin/openminer && \
 cp /usr/lib/ld-linux-x86-64.so.2 \
 /usr/lib/libc.so.6 \
 /usr/lib/libdl.so.2 \
