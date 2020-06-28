@@ -248,6 +248,7 @@ void ClientCommandHandler::setupCallbacks() {
 		else {
 			m_player.setPosition(pos.x, pos.y, pos.z);
 			m_player.setRotation(cameraYaw, cameraPitch);
+			m_player.setDimension(dimension);
 			m_player.updateCamera();
 		}
 	});

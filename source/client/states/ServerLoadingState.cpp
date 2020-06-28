@@ -84,7 +84,7 @@ void ServerLoadingState::update() {
 			if (m_showLoadingState)
 				std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-			m_game.world().changeDimension(0);
+			m_game.world().changeDimension(m_game.player().dimension());
 
 			m_stateStack->pop();
 
