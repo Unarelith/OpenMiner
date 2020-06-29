@@ -47,6 +47,24 @@ Example:
 draw_type = "solid" -- this is the default value
 ```
 
+### `fog_color`
+
+Color of the fog drawn for players inside the block.
+
+Example:
+```lua
+fog_color = {255, 0, 255}
+```
+
+### `fog_depth`
+
+Depth of the fog drawn for players inside the block.
+
+Example:
+```lua
+fog_depth = 20
+```
+
 ### `groups`
 
 Groups of the block. They can be used in recipes, and can also filter Lua-defined inventory widgets.

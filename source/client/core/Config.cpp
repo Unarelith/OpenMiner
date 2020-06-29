@@ -64,6 +64,11 @@ u8 Config::mouseSensitivity = 8;
 std::string Config::defaultUsername = "";
 std::string Config::defaultServerAddress = "localhost:4242";
 
+// Temporary
+u16 Config::currentScreenEffect = 0;
+float Config::fogDepth = 0;
+gk::Color Config::fogColor = gk::Color::White;
+
 void Config::loadConfigFromFile(const char *filename) {
 	if (gk::Filesystem::fileExists(filename)) {
 		sol::state lua;

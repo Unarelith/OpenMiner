@@ -5,15 +5,20 @@ varying vec2 v_coord2d;
 
 uniform sampler2D screenTexture;
 uniform sampler2D depthTexture;
-uniform int effectType;
+
+uniform int u_effectType;
+uniform float u_fogDepth;
+uniform vec4 u_fogColor;
 
 void main() {
 	vec4 color = texture2D(screenTexture, v_texCoord);
 	float depth = texture2D(depthTexture, v_texCoord).r;
 
 	// Underwater effect
-	if (effectType == 1)
-		color.rgb = mix(color.rgb, vec3(0, 0.5, 1), clamp(pow(depth, 20.0), 0.0, 1.0));
+	if (u_effectType == 1) {
+		/* color.rgb = mix(color.rgb, vec3(0, 0.5, 1), clamp(pow(depth, 20.0), 0.0, 1.0)); */
+		color.rgb = mix(color.rgb, u_fogColor.rgb, clamp(pow(depth, u_fogDepth), 0.0, 1.0));
+	}
 
 	// Grayscale
 	/* float average = (color.r + color.g + color.b) / 3.0; // Basic */

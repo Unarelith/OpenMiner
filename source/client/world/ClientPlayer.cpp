@@ -141,6 +141,18 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 
 	if (Config::isFlyModeEnabled)
 		m_velocity.z = 0.f;
+
+	// Checking to block at camera position to enable specific effects
+	u16 blockID = world.getBlock(m_camera.getDPosition().x, m_camera.getDPosition().y, m_camera.getDPosition().z);
+	const Block &block = Registry::getInstance().getBlock(blockID);
+	if (block.fogDepth() != 0) {
+		Config::currentScreenEffect = 1;
+		Config::fogDepth = block.fogDepth();
+		Config::fogColor = block.fogColor();
+	}
+	else {
+		Config::currentScreenEffect = 0;
+	}
 }
 
 void ClientPlayer::setPosition(double x, double y, double z) {

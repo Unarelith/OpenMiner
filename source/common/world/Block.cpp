@@ -44,7 +44,8 @@ void Block::serialize(sf::Packet &packet) const {
 	packet << u32(m_id) << m_stringID << m_label << u8(m_drawType)
 		<< m_hardness << m_harvestRequirements << m_itemDrop << m_itemDropAmount << m_tiles
 		<< m_boundingBox << m_isOpaque << m_isLightSource << m_canUpdate << m_canBeActivated
-		<< m_colorMultiplier << m_isRotatable << m_inventoryImage << m_groups;
+		<< m_colorMultiplier << m_isRotatable << m_inventoryImage << m_groups
+		<< m_fogDepth << m_fogColor;
 }
 
 void Block::deserialize(sf::Packet &packet) {
@@ -54,7 +55,8 @@ void Block::deserialize(sf::Packet &packet) {
 	packet >> id >> m_stringID >> m_label >> drawType
 		>> m_hardness >> m_harvestRequirements >> m_itemDrop >> m_itemDropAmount >> m_tiles
 		>> m_boundingBox >> m_isOpaque >> m_isLightSource >> m_canUpdate >> m_canBeActivated
-		>> m_colorMultiplier >> m_isRotatable >> m_inventoryImage >> m_groups;
+		>> m_colorMultiplier >> m_isRotatable >> m_inventoryImage >> m_groups
+		>> m_fogDepth >> m_fogColor;
 
 	m_id = id;
 	m_drawType = BlockDrawType(drawType);

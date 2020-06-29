@@ -120,6 +120,12 @@ class Block : public gk::ISerializable {
 			return it->second;
 		}
 
+		float fogDepth() const { return m_fogDepth; }
+		void setFogDepth(float fogDepth) { m_fogDepth = fogDepth; }
+
+		const gk::Color &fogColor() const { return m_fogColor; }
+		void setFogColor(const gk::Color &fogColor) { m_fogColor = fogColor; }
+
 		static void initUsertype(sol::state &lua);
 
 	protected:
@@ -156,6 +162,9 @@ class Block : public gk::ISerializable {
 		std::string m_inventoryImage;
 
 		std::unordered_map<std::string, u16> m_groups;
+
+		float m_fogDepth = 0;
+		gk::Color m_fogColor = gk::Color::White;
 };
 
 #endif // BLOCK_HPP_

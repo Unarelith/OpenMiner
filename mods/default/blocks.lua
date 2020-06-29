@@ -89,10 +89,15 @@ mod:block {
 mod:block {
 	id = "water",
 	name = "Water",
+
 	tiles = "water.png",
 	color_multiplier = {51, 115, 255, 217},
+
 	draw_type = "liquid",
 	is_opaque = false,
+
+	fog_depth = 20.0,
+	fog_color = {0, 128, 255},
 }
 
 mod:block {
@@ -237,6 +242,9 @@ mod:block {
 	draw_type = "liquid",
 	is_light_source = true,
 	is_opaque = false,
+
+	fog_depth = 10.0,
+	fog_color = {255, 128, 0},
 }
 
 mod:block {

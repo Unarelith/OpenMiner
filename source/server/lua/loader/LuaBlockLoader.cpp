@@ -70,6 +70,18 @@ inline void LuaBlockLoader::loadProperties(ServerBlock &block, const sol::table 
 	block.setOnBlockDestroyed(table["on_block_destroyed"]);
 	block.setRotatable(table["is_rotatable"].get_or(false));
 	block.setInventoryImage(table["inventory_image"].get_or<std::string>(""));
+	block.setFogDepth(table["fog_depth"].get_or<float>(0));
+
+	if (block.fogDepth()) {
+		sol::optional<sol::table> fogColor = table["fog_color"];
+		if (fogColor != sol::nullopt) {
+			block.setFogColor(gk::Color{
+				fogColor.value().get<u8>(1),
+				fogColor.value().get<u8>(2),
+				fogColor.value().get<u8>(3),
+			});
+		}
+	}
 }
 
 inline void LuaBlockLoader::loadBoundingBox(ServerBlock &block, const sol::table &table) const {
