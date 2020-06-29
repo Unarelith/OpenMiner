@@ -102,8 +102,6 @@ void HUD::update() {
 }
 
 void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	target.draw(m_blockCursor, states);
-
 	target.disableView();
 
 	states.shader = &m_shader;

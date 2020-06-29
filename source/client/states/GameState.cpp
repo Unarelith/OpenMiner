@@ -208,10 +208,9 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 		if (it.second.dimension() == m_player.dimension())
 			target.draw(it.second, states);
 
-	m_fbo.end();
+	target.draw(m_hud.blockCursor(), states);
 
-	states.shader = &m_shader;
-	glEnable(GL_DEPTH_TEST);
+	m_fbo.end();
 
 	target.draw(m_hud, states);
 }

@@ -172,6 +172,8 @@ void Framebuffer::end() const {
 	gk::Shader::bind(nullptr);
 
 	glActiveTexture(GL_TEXTURE0);
+
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Framebuffer::bind(const Framebuffer *framebuffer) {
