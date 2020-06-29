@@ -29,11 +29,18 @@
 
 #include <gk/core/IntTypes.hpp>
 #include <gk/gl/OpenGL.hpp>
+#include <gk/utils/NonCopyable.hpp>
 
-class Framebuffer {
+class Framebuffer : public gk::NonCopyable {
 	public:
 		Framebuffer(u16 width, u16 height);
+		Framebuffer(Framebuffer &&) = default;
 		~Framebuffer();
+
+		Framebuffer &operator=(Framebuffer &&) = default;
+
+		void init(u16 width, u16 height);
+		void clear();
 
 		GLuint texid() const { return m_texid; }
 

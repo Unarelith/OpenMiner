@@ -30,6 +30,17 @@
 #include "Framebuffer.hpp"
 
 Framebuffer::Framebuffer(u16 width, u16 height) {
+	init(width, height);
+}
+
+Framebuffer::~Framebuffer() {
+	clear();
+}
+
+void Framebuffer::init(u16 width, u16 height) {
+	if (m_id)
+		clear();
+
 	glCheck(glGenFramebuffers(1, &m_id));
 	bind(this);
 
@@ -55,15 +66,21 @@ Framebuffer::Framebuffer(u16 width, u16 height) {
 	bind(nullptr);
 }
 
-Framebuffer::~Framebuffer() {
-	if (m_id)
+void Framebuffer::clear() {
+	if (m_id) {
 		glCheck(glDeleteFramebuffers(1, &m_id));
+		m_id = 0;
+	}
 
-	if (m_texid)
+	if (m_texid) {
 		glCheck(glDeleteTextures(1, &m_texid));
+		m_texid = 0;
+	}
 
-	if (m_rbo)
+	if (m_rbo) {
 		glCheck(glDeleteRenderbuffers(1, &m_rbo));
+		m_rbo = 0;
+	}
 }
 
 void Framebuffer::bind(const Framebuffer *framebuffer) {

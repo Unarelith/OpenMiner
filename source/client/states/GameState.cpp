@@ -139,6 +139,8 @@ void GameState::onEvent(const sf::Event &event) {
 
 		m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
 		m_hud.setup();
+
+		m_fbo.init(Config::screenWidth, Config::screenHeight);
 	}
 }
 
@@ -213,7 +215,6 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	// gk::Shader::bind(nullptr);
 
 	Framebuffer::bind(&m_fbo);
-	// glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
@@ -226,7 +227,6 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 			target.draw(it.second, states);
 
 	Framebuffer::bind(nullptr);
-	// glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glDisable(GL_DEPTH_TEST);
