@@ -44,8 +44,7 @@ namespace Config {
 
 	// Graphics
 	extern u16 renderDistance;
-	extern bool isTorchSmoothLightingEnabled;
-	extern bool isSunSmoothLightingEnabled;
+	extern bool isSmoothLightingEnabled;
 	extern bool isAmbientOcclusionEnabled;
 	extern bool isWireframeModeEnabled;
 	extern bool isFullscreenModeEnabled;

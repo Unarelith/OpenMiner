@@ -201,9 +201,17 @@ void SettingsMenuState::addGraphicsButtons() {
 
 	addToggleButton("Wireframe Mode", Config::isWireframeModeEnabled, false);
 
-	addToggleButton("Torch Smooth Lighting", Config::isTorchSmoothLightingEnabled, true);
-	addToggleButton("Sun Smooth Lighting", Config::isSunSmoothLightingEnabled, true);
-	addToggleButton("Ambient Occlusion", Config::isAmbientOcclusionEnabled, true);
+	m_menuWidget.addButton(std::string("Smooth Lighting: ") + (Config::isSmoothLightingEnabled ? "ON" : "OFF"), [&] (TextButton &button) {
+		Config::isSmoothLightingEnabled = !Config::isSmoothLightingEnabled;
+		button.setText(std::string("Smooth Lighting: ") + (Config::isSmoothLightingEnabled ? "ON" : "OFF"));
+
+		m_aoButton->setEnabled(!Config::isSmoothLightingEnabled);
+
+		World::isReloadRequested = true;
+	});
+
+	m_aoButton = &addToggleButton("Ambient Occlusion", Config::isAmbientOcclusionEnabled, true);
+	m_aoButton->setEnabled(!Config::isSmoothLightingEnabled);
 
 	m_menuWidget.addButton("GUI Scale: " + std::to_string(Config::guiScale), [this] (TextButton &button) {
 		Config::guiScale = 1 + (Config::guiScale + 1) % 3;

@@ -14,8 +14,7 @@ isCrosshairVisible = true
 
 -- Graphics
 renderDistance = 8
-isTorchSmoothLightingEnabled = true
-isSunSmoothLightingEnabled = true
+isSmoothLightingEnabled = true
 isAmbientOcclusionEnabled = false
 isWireframeModeEnabled = false
 isFullscreenModeEnabled = false

@@ -238,13 +238,13 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 		vertices[v].texCoord[0] = gk::qlerp(blockTexCoords.x, blockTexCoords.x + blockTexCoords.sizeX, U);
 		vertices[v].texCoord[1] = gk::qlerp(blockTexCoords.y, blockTexCoords.y + blockTexCoords.sizeY, V);
 
-		if (Config::isSunSmoothLightingEnabled && block.drawType() != BlockDrawType::Liquid)
+		if (Config::isSmoothLightingEnabled && block.drawType() != BlockDrawType::Liquid)
 			vertices[v].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, *neighbourOfs[v], normal, chunk);
 		else
 			vertices[v].lightValue[0] = chunk.lightmap().getSunlight(x + normal.x, y + normal.y, z + normal.z);
 
 		int torchlight = chunk.lightmap().getTorchlight(x, y, z);
-		if (Config::isTorchSmoothLightingEnabled && torchlight == 0 && block.drawType() != BlockDrawType::Liquid)
+		if (Config::isSmoothLightingEnabled && torchlight == 0 && block.drawType() != BlockDrawType::Liquid)
 			vertices[v].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, *neighbourOfs[v], normal, chunk);
 		else
 			vertices[v].lightValue[1] = chunk.lightmap().getTorchlight(x + normal.x, y + normal.y, z + normal.z);

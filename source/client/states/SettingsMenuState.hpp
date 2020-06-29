@@ -82,6 +82,8 @@ class SettingsMenuState : public InterfaceState {
 		};
 
 		MenuState m_state = MenuState::Main;
+
+		TextButton *m_aoButton = nullptr;
 };
 
 #endif // SETTINGSMENUSTATE_HPP_
