@@ -79,9 +79,7 @@ class GameState : public gk::ApplicationState {
 
 		gk::Shader m_shader;
 
-		gk::Shader m_screenShader;
 		Framebuffer m_fbo{Config::screenWidth, Config::screenHeight};
-		gk::VertexBuffer m_screenQuadVBO;
 
 		gk::Camera m_camera{70.0f, DIST_NEAR, DIST_FAR};
 		ClientPlayer m_player{m_camera};

@@ -4,9 +4,16 @@ varying vec2 v_texCoord;
 varying vec2 v_coord2d;
 
 uniform sampler2D screenTexture;
+uniform sampler2D depthTexture;
+uniform int effectType;
 
 void main() {
 	vec4 color = texture2D(screenTexture, v_texCoord);
+	float depth = texture2D(depthTexture, v_texCoord).r;
+
+	// Underwater effect
+	if (effectType == 1)
+		color.rgb = mix(color.rgb, vec3(0, 0.5, 1), clamp(pow(depth, 20.0), 0.0, 1.0));
 
 	// Grayscale
 	/* float average = (color.r + color.g + color.b) / 3.0; // Basic */

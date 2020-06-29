@@ -185,23 +185,7 @@ void GameState::initShaders() {
 
 	m_shader.linkProgram();
 
-	m_screenShader.createProgram();
-	m_screenShader.addShader(GL_VERTEX_SHADER, "resources/shaders/screen.v.glsl");
-	m_screenShader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/screen.f.glsl");
-	m_screenShader.linkProgram();
-
-	float quad[24] = {
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		-1.0f, -1.0f,  0.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f, 0.0f,
-
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		 1.0f, -1.0f,  1.0f, 0.0f,
-		 1.0f,  1.0f,  1.0f, 1.0f
-	};
-	gk::VertexBuffer::bind(&m_screenQuadVBO);
-	m_screenQuadVBO.setData(sizeof(quad), &quad, GL_STATIC_DRAW);
-	gk::VertexBuffer::bind(nullptr);
+	m_fbo.loadShader("screen");
 }
 
 void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
@@ -214,9 +198,7 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	// m_shader.setUniform("u_time", gk::GameClock::getInstance().getTicks());
 	// gk::Shader::bind(nullptr);
 
-	Framebuffer::bind(&m_fbo);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_DEPTH_TEST);
+	m_fbo.begin();
 
 	states.shader = &m_shader;
 	target.setView(m_camera);
@@ -226,23 +208,7 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 		if (it.second.dimension() == m_player.dimension())
 			target.draw(it.second, states);
 
-	Framebuffer::bind(nullptr);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	glDisable(GL_DEPTH_TEST);
-	glBindTexture(GL_TEXTURE_2D, m_fbo.texid());
-
-	gk::Shader::bind(&m_screenShader);
-	gk::VertexBuffer::bind(&m_screenQuadVBO);
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	m_screenQuadVBO.setAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(0 * sizeof(float)));
-	m_screenQuadVBO.setAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(0);
-	gk::VertexBuffer::bind(nullptr);
-	gk::Shader::bind(nullptr);
+	m_fbo.end();
 
 	states.shader = &m_shader;
 	glEnable(GL_DEPTH_TEST);

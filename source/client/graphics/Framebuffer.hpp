@@ -27,9 +27,8 @@
 #ifndef FRAMEBUFFER_HPP_
 #define FRAMEBUFFER_HPP_
 
-#include <gk/core/IntTypes.hpp>
-#include <gk/gl/OpenGL.hpp>
-#include <gk/utils/NonCopyable.hpp>
+#include <gk/gl/Shader.hpp>
+#include <gk/gl/VertexBuffer.hpp>
 
 class Framebuffer : public gk::NonCopyable {
 	public:
@@ -42,15 +41,23 @@ class Framebuffer : public gk::NonCopyable {
 		void init(u16 width, u16 height);
 		void clear();
 
-		GLuint texid() const { return m_texid; }
+		void loadShader(const std::string &name);
+
+		void begin() const;
+		void end() const;
 
 		static void bind(const Framebuffer *framebuffer);
 
 	private:
 		GLuint m_id = 0;
 
-		GLuint m_texid = 0;
+		GLuint m_colorTexID = 0;
+		GLuint m_depthTexID = 0;
+
 		GLuint m_rbo = 0;
+
+		gk::Shader m_shader;
+		gk::VertexBuffer m_vbo;
 };
 
 #endif // FRAMEBUFFER_HPP_
