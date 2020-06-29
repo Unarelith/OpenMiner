@@ -38,6 +38,7 @@
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "Config.hpp"
+#include "Framebuffer.hpp"
 #include "HUD.hpp"
 #include "KeyboardHandler.hpp"
 #include "PlayerBox.hpp"
@@ -77,6 +78,10 @@ class GameState : public gk::ApplicationState {
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		gk::Shader m_shader;
+
+		gk::Shader m_screenShader;
+		Framebuffer m_fbo{Config::screenWidth, Config::screenHeight};
+		gk::VertexBuffer m_screenQuadVBO;
 
 		gk::Camera m_camera{70.0f, DIST_NEAR, DIST_FAR};
 		ClientPlayer m_player{m_camera};
