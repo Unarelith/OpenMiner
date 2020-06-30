@@ -253,7 +253,7 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 	}
 
 	auto addVertex = [&](u8 v) {
-		if (!Config::isAmbientOcclusionEnabled)
+		if (!Config::isAmbientOcclusionEnabled || Config::isSmoothLightingEnabled)
 			vertices[v].ambientOcclusion = 5;
 
 		if (block.drawType() == BlockDrawType::Liquid)
