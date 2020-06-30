@@ -47,14 +47,16 @@ void Framebuffer::init(u16 width, u16 height) {
 	bind(this);
 
 	// Create a texture to store the colors
-	glCheck(glGenTextures(1, &m_colorTexID));
-	glCheck(glBindTexture(GL_TEXTURE_2D, m_colorTexID));
-	glCheck(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr));
-	glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-	glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-	glCheck(glBindTexture(GL_TEXTURE_2D, 0));
+	m_colorTex.setSmooth(true);
+	m_colorTex.create(width, height);
 
-	glCheck(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_colorTexID, 0));
+	glCheck(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_colorTex.getNativeHandle(), 0));
+
+	// Create texture for bloom effect
+	m_bloomTex.setSmooth(true);
+	m_bloomTex.create(width, height);
+
+	glCheck(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_bloomTex.getNativeHandle(), 0));
 
 	// Create a renderbuffer
 	// glCheck(glGenRenderbuffers(1, &m_rbo));
@@ -100,11 +102,6 @@ void Framebuffer::clear() {
 		m_id = 0;
 	}
 
-	if (m_colorTexID) {
-		glCheck(glDeleteTextures(1, &m_colorTexID));
-		m_colorTexID = 0;
-	}
-
 	if (m_depthTexID) {
 		glCheck(glDeleteTextures(1, &m_depthTexID));
 		m_depthTexID = 0;
@@ -123,16 +120,25 @@ void Framebuffer::loadShader(const std::string &name) {
 	m_shader.linkProgram();
 
 	gk::Shader::bind(&m_shader);
-	m_shader.setUniform("screenTexture", 0);
-	m_shader.setUniform("depthTexture", 1);
+	m_shader.setUniform("colorTexture", 0);
+	m_shader.setUniform("bloomTexture", 1);
+	m_shader.setUniform("depthTexture", 2);
 	gk::Shader::bind(nullptr);
 }
 
 void Framebuffer::begin() const {
 	bind(this);
+
+	static GLenum buffers[2] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+	glDrawBuffers(2, buffers);
+
+	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	glEnable(GL_DEPTH_TEST);
 }
+
+// #include <gk/core/GameClock.hpp>
 
 void Framebuffer::end() const {
 	bind(nullptr);
@@ -140,13 +146,24 @@ void Framebuffer::end() const {
 
 	glDisable(GL_DEPTH_TEST);
 
-	if (m_colorTexID != 0) {
+	if (m_colorTex.getNativeHandle() != 0) {
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, m_colorTexID);
+		sf::Texture::bind(&m_colorTex);
+
+		// if (gk::GameClock::getInstance().getTicks() % 60 == 0)
+		// 	m_colorTex.copyToImage().saveToFile("tex0_test.png");
+	}
+
+	if (m_bloomTex.getNativeHandle() != 0) {
+		glActiveTexture(GL_TEXTURE1);
+		sf::Texture::bind(&m_bloomTex);
+
+		// if (gk::GameClock::getInstance().getTicks() % 60 == 0)
+		// 	m_bloomTex.copyToImage().saveToFile("tex1_test.png");
 	}
 
 	if (m_depthTexID != 0) {
-		glActiveTexture(GL_TEXTURE1);
+		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, m_depthTexID);
 	}
 

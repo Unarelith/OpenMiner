@@ -25,6 +25,7 @@
  * =====================================================================================
  */
 #include <gk/gl/GLCheck.hpp>
+// #include <gk/gl/Shader.hpp>
 
 #include "ClientChunk.hpp"
 #include "TextureAtlas.hpp"
@@ -40,6 +41,20 @@ void ClientChunk::update() {
 
 void ClientChunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u8 layer) const {
 	if (m_verticesCount.size() <= layer || m_verticesCount.at(layer) == 0) return;
+
+	// static sf::Texture texture;
+	// if (!texture.getNativeHandle()) {
+	// 	texture.loadFromFile("test_atlas_bloom.png");
+	// }
+    //
+	// glActiveTexture(GL_TEXTURE1);
+	// sf::Texture::bind(&texture);
+	// glActiveTexture(GL_TEXTURE0);
+    //
+	// gk::Shader::bind(states.shader);
+	// states.shader->setUniform("u_tex", 0);
+	// states.shader->setUniform("u_bloomTex", 1);
+	// gk::Shader::bind(nullptr);
 
 	states.texture = &m_textureAtlas.texture();
 

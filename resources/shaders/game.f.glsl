@@ -12,6 +12,7 @@ varying float v_dist;
 uniform int u_renderDistance;
 
 uniform sampler2D u_tex;
+/* uniform sampler2D u_bloomTex; */
 
 // Get light color
 vec4 light(vec4 color, vec3 lightColor, vec4 lightPosition, float ambientIntensity, float diffuseIntensity);
@@ -20,6 +21,9 @@ vec4 light(vec4 color, vec3 lightColor, vec4 lightPosition, float ambientIntensi
 vec4 fog(vec4 color, float fogCoord, float fogStart, float fogEnd);
 
 void main() {
+	/* gl_FragData[1] = texture2D(u_bloomTex, v_texCoord); */
+	gl_FragData[1] = vec4(0, 0, 0, 0);
+
 	// Needed to prevent bad interpolation on some systems
 	// Refer to #23 for more informations
 	float blockFace = floor(v_blockFace + 0.5);
@@ -52,12 +56,6 @@ void main() {
 	// Very cheap "transparency": don't draw pixels with a low alpha value
 	if(color.a < 0.3 && blockFace > -1.) discard;
 
-	// FIXME: FINISH THIS WITH PROPER CODE AND SUN BASIC DISPLAY
-	// int maxTime = 5 * 1000;
-	// float time = mod(u_lightPosition, maxTime) / maxTime * 2 - 1;
-	// vec3 lightPosition = vec3(0.0, sin(time) * 40, cos(time) * 40);
-	// color *= light(vec3(1.0, 1.0, 1.0), vec4(lightPosition, 1.0), 0.5, 0.5);
-
 	float minBrightness = 2.0 / 16.0;
 	if (lightCheck != -1.) {
 		float ambientIntensity = max(max(v_lightValue.x, v_lightValue.y) / 16.0, minBrightness);
@@ -83,6 +81,6 @@ void main() {
 
 	color = fog(color, v_dist, u_renderDistance - 32, u_renderDistance);
 
-	gl_FragColor = color;
+	gl_FragData[0] = color;
 }
 

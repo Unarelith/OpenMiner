@@ -27,6 +27,8 @@
 #ifndef FRAMEBUFFER_HPP_
 #define FRAMEBUFFER_HPP_
 
+#include <SFML/Graphics/Texture.hpp>
+
 #include <gk/gl/Shader.hpp>
 #include <gk/gl/VertexBuffer.hpp>
 
@@ -51,7 +53,8 @@ class Framebuffer : public gk::NonCopyable {
 	private:
 		GLuint m_id = 0;
 
-		GLuint m_colorTexID = 0;
+		sf::Texture m_colorTex;
+		sf::Texture m_bloomTex;
 		GLuint m_depthTexID = 0;
 
 		GLuint m_rbo = 0;
