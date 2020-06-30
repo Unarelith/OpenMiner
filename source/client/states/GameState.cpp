@@ -140,7 +140,7 @@ void GameState::onEvent(const sf::Event &event) {
 		m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
 		m_hud.setup();
 
-		m_fbo.init(Config::screenWidth, Config::screenHeight);
+		m_effectRenderer.init(Config::screenWidth, Config::screenHeight);
 	}
 }
 
@@ -185,7 +185,7 @@ void GameState::initShaders() {
 
 	m_shader.linkProgram();
 
-	m_fbo.loadShader("screen");
+	m_effectRenderer.loadShaders();
 }
 
 void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
@@ -198,7 +198,7 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	// m_shader.setUniform("u_time", gk::GameClock::getInstance().getTicks());
 	// gk::Shader::bind(nullptr);
 
-	m_fbo.begin();
+	m_effectRenderer.begin();
 
 	states.shader = &m_shader;
 	target.setView(m_camera);
@@ -210,7 +210,9 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	target.draw(m_hud.blockCursor(), states);
 
-	m_fbo.end();
+	m_effectRenderer.end();
+
+	m_effectRenderer.render();
 
 	target.draw(m_hud, states);
 }

@@ -242,6 +242,7 @@ void SettingsMenuState::addGraphicsButtons() {
 	});
 
 	addToggleButton("Use VSync", Config::isVerticalSyncEnabled, false);
+	addToggleButton("Bloom effect", Config::isBloomEffectEnabled, false).setEnabled(false);
 
 	m_menuWidget.addButton("Mipmap Levels: " + std::to_string(Config::mipmapLevels), [] (TextButton &button) {
 		Config::mipmapLevels = (Config::mipmapLevels + 1) % 5;

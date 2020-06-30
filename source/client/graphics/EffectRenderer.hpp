@@ -24,54 +24,38 @@
  *
  * =====================================================================================
  */
-#ifndef CONFIG_HPP_
-#define CONFIG_HPP_
+#ifndef EFFECTRENDERER_HPP_
+#define EFFECTRENDERER_HPP_
 
-#include <string>
+#include <gk/gl/Shader.hpp>
+#include <gk/gl/VertexBuffer.hpp>
 
-#include <gk/core/IntTypes.hpp>
-#include <gk/graphics/Color.hpp>
+#include "Framebuffer.hpp"
 
-namespace Config {
-	// Gameplay
-	extern bool isFlyModeEnabled;
-	extern bool isNoClipEnabled;
+class EffectRenderer {
+	public:
+		EffectRenderer(u16 width, u16 height) { init(width, height); }
 
-	// Interface
-	extern bool isBlockInfoWidgetEnabled;
-	extern bool isFpsCounterEnabled;
-	extern bool isHotbarVisible;
-	extern bool isCrosshairVisible;
+		void init(u16 width, u16 height);
 
-	// Graphics
-	extern u16 renderDistance;
-	extern bool isSmoothLightingEnabled;
-	extern bool isAmbientOcclusionEnabled;
-	extern bool isWireframeModeEnabled;
-	extern bool isFullscreenModeEnabled;
-	extern bool isVerticalSyncEnabled;
-	extern bool isBloomEffectEnabled;
-	extern float cameraFOV;
-	extern u16 screenWidth;
-	extern u16 screenHeight;
-	extern u8 guiScale;
-	extern u8 mipmapLevels;
-	extern float aoStrength;
+		void loadShaders();
 
-	// Input
-	extern u8 mouseSensitivity;
+		void begin() const;
+		void end() const;
 
-	// Other
-	extern std::string defaultUsername;
-	extern std::string defaultServerAddress;
+		void render() const;
 
-	// Temporary
-	extern u16 currentScreenEffect;
-	extern float fogDepth;
-	extern gk::Color fogColor;
+	private:
+		void renderQuad() const;
 
-	void loadConfigFromFile(const char *filename);
-	void saveConfigToFile(const char *filename);
-}
+		Framebuffer m_fbo{Framebuffer::All};
 
-#endif // CONFIG_HPP_
+		Framebuffer m_pingpongBuffer[2]{Framebuffer::Color, Framebuffer::Color};
+
+		gk::Shader m_shader;
+		gk::Shader m_blurShader;
+
+		gk::VertexBuffer m_vbo;
+};
+
+#endif // EFFECTRENDERER_HPP_

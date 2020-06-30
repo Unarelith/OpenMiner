@@ -38,7 +38,7 @@
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "Config.hpp"
-#include "Framebuffer.hpp"
+#include "EffectRenderer.hpp"
 #include "HUD.hpp"
 #include "KeyboardHandler.hpp"
 #include "PlayerBox.hpp"
@@ -79,7 +79,7 @@ class GameState : public gk::ApplicationState {
 
 		gk::Shader m_shader;
 
-		Framebuffer m_fbo{Config::screenWidth, Config::screenHeight};
+		EffectRenderer m_effectRenderer{Config::screenWidth, Config::screenHeight};
 
 		gk::Camera m_camera{70.0f, DIST_NEAR, DIST_FAR};
 		ClientPlayer m_player{m_camera};

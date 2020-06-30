@@ -19,6 +19,7 @@ isAmbientOcclusionEnabled = false
 isWireframeModeEnabled = false
 isFullscreenModeEnabled = false
 isVerticalSyncEnabled = true
+isBloomEffectEnabled = false
 cameraFOV = 70.0
 screenWidth = 1600
 screenHeight = 1050

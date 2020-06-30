@@ -12,7 +12,9 @@ varying float v_dist;
 uniform int u_renderDistance;
 
 uniform sampler2D u_tex;
-/* uniform sampler2D u_bloomTex; */
+uniform sampler2D u_bloomTex;
+
+uniform int u_isBloomEnabled;
 
 // Get light color
 vec4 light(vec4 color, vec3 lightColor, vec4 lightPosition, float ambientIntensity, float diffuseIntensity);
@@ -21,9 +23,6 @@ vec4 light(vec4 color, vec3 lightColor, vec4 lightPosition, float ambientIntensi
 vec4 fog(vec4 color, float fogCoord, float fogStart, float fogEnd);
 
 void main() {
-	/* gl_FragData[1] = texture2D(u_bloomTex, v_texCoord); */
-	gl_FragData[1] = vec4(0, 0, 0, 0);
-
 	// Needed to prevent bad interpolation on some systems
 	// Refer to #23 for more informations
 	float blockFace = floor(v_blockFace + 0.5);
@@ -82,5 +81,10 @@ void main() {
 	color = fog(color, v_dist, u_renderDistance - 32, u_renderDistance);
 
 	gl_FragData[0] = color;
+
+	if (u_isBloomEnabled == 1)
+		gl_FragData[1] = texture2D(u_bloomTex, v_texCoord);
+	else
+		gl_FragData[1] = vec4(0, 0, 0, 0);
 }
 

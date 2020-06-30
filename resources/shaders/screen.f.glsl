@@ -22,8 +22,8 @@ void main() {
 		color.rgb = mix(color.rgb, u_fogColor.rgb, clamp(pow(depth, u_fogDepth), 0.0, 1.0));
 	}
 
-	if (gl_FragCoord.x < 800)
-		color += bloom;
+	/* if (gl_FragCoord.x < 800) */
+		color.rgb += bloom.rgb;
 
 	// Grayscale
 	/* float average = (color.r + color.g + color.b) / 3.0; // Basic */

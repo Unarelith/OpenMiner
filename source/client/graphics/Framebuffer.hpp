@@ -29,12 +29,14 @@
 
 #include <SFML/Graphics/Texture.hpp>
 
-#include <gk/gl/Shader.hpp>
-#include <gk/gl/VertexBuffer.hpp>
+#include <gk/core/IntTypes.hpp>
+#include <gk/gl/OpenGL.hpp>
+#include <gk/utils/NonCopyable.hpp>
 
 class Framebuffer : public gk::NonCopyable {
 	public:
-		Framebuffer(u16 width, u16 height);
+		Framebuffer(u8 components) : m_components((Component)components) {}
+		Framebuffer(u16 width, u16 height, u8 components);
 		Framebuffer(Framebuffer &&) = default;
 		~Framebuffer();
 
@@ -43,14 +45,23 @@ class Framebuffer : public gk::NonCopyable {
 		void init(u16 width, u16 height);
 		void clear();
 
-		void loadShader(const std::string &name);
-
-		void begin() const;
-		void end() const;
+		void bindColorTexture(u16 index) const;
+		void bindBloomTexture(u16 index) const;
+		void bindDepthTexture(u16 index) const;
 
 		static void bind(const Framebuffer *framebuffer);
 
+		enum Component {
+			Color = 1,
+			Bloom = 2,
+			Depth = 4,
+
+			All   = Color | Bloom | Depth
+		};
+
 	private:
+		Component m_components;
+
 		GLuint m_id = 0;
 
 		sf::Texture m_colorTex;
@@ -58,9 +69,6 @@ class Framebuffer : public gk::NonCopyable {
 		GLuint m_depthTexID = 0;
 
 		GLuint m_rbo = 0;
-
-		gk::Shader m_shader;
-		gk::VertexBuffer m_vbo;
 };
 
 #endif // FRAMEBUFFER_HPP_
