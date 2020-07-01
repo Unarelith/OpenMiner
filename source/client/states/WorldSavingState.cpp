@@ -61,7 +61,7 @@ void WorldSavingState::update() {
 		m_stateStack->clear();
 
 		if (!m_closeClient)
-			m_stateStack->push<TitleScreenState>().setTexturePack(m_client.texturePack());
+			m_stateStack->push<TitleScreenState>();
 	}
 	else {
 		m_client.update();

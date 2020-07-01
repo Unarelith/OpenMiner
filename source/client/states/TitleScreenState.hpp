@@ -49,8 +49,6 @@ class TitleScreenState : public InterfaceState {
 		void startSingleplayer(bool showLoadingState, const std::string &worldName = "");
 		void startMultiplayer(const std::string &host);
 
-		void setTexturePack(const std::string &texturePack) { m_texturePack = texturePack; }
-
 	private:
 		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
 
@@ -63,8 +61,6 @@ class TitleScreenState : public InterfaceState {
 		gk::Image m_background{"texture-title_screen"};
 
 		std::thread m_thread;
-
-		std::string m_texturePack;
 
 		u16 m_port = 4242;
 

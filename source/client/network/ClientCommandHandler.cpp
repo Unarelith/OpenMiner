@@ -162,7 +162,7 @@ void ClientCommandHandler::setupCallbacks() {
 		packet >> message;
 
 		gk::ApplicationStateStack::getInstance().clear();
-		gk::ApplicationStateStack::getInstance().push<ConnectionErrorState>(message, m_client.serverAddress().toString(), m_client.serverPort(), m_client.texturePack(), nullptr);
+		gk::ApplicationStateStack::getInstance().push<ConnectionErrorState>(message, m_client.serverAddress().toString(), m_client.serverPort(), nullptr);
 	});
 
 	m_client.setCommandCallback(Network::Command::RegistryData, [this](Network::Packet &packet) {

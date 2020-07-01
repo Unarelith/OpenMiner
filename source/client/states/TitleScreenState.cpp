@@ -28,6 +28,7 @@
 
 #include "Config.hpp"
 #include "Events.hpp"
+#include "GameConfig.hpp"
 #include "GameState.hpp"
 #include "ServerConnectState.hpp"
 #include "ServerLoadingState.hpp"
@@ -47,7 +48,7 @@ TitleScreenState::TitleScreenState(u16 port) : m_port(port) {
 	});
 
 	m_menuWidget.addButton("Multiplayer", [this] (TextButton &) {
-		m_stateStack->push<ServerConnectState>(this).setTexturePack(m_texturePack);
+		m_stateStack->push<ServerConnectState>(this);
 	});
 
 	m_menuWidget.addButton("Options...", [this] (TextButton &) {
@@ -110,12 +111,12 @@ void TitleScreenState::update() {
 }
 
 void TitleScreenState::startSingleplayer(bool showLoadingState, const std::string &worldName) {
+	GameConfig::worldName = worldName;
+
 	auto &game = m_stateStack->push<GameState>();
 	game.setSingleplayer(true);
-	game.setWorldName(worldName);
 
 	auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, showLoadingState, "localhost", sf::Socket::AnyPort, this);
-	serverLoadingState.setTexturePack(m_texturePack);
 	serverLoadingState.setUsername(Config::defaultUsername);
 
 	if (m_thread.joinable())
@@ -136,7 +137,6 @@ void TitleScreenState::startSingleplayer(bool showLoadingState, const std::strin
 void TitleScreenState::startMultiplayer(const std::string &host) {
 	auto &game = m_stateStack->push<GameState>();
 	auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, false, host, m_port, this);
-	serverLoadingState.setTexturePack(m_texturePack);
 	serverLoadingState.setUsername(Config::defaultUsername);
 }
 

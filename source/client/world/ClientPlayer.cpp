@@ -31,6 +31,7 @@
 
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
+#include "GameConfig.hpp"
 #include "GameKey.hpp"
 #include "Registry.hpp"
 
@@ -146,12 +147,12 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 	u16 blockID = world.getBlock(m_camera.getDPosition().x, m_camera.getDPosition().y, m_camera.getDPosition().z);
 	const Block &block = Registry::getInstance().getBlock(blockID);
 	if (block.fogDepth() != 0) {
-		Config::currentScreenEffect = 1;
-		Config::fogDepth = block.fogDepth();
-		Config::fogColor = block.fogColor();
+		GameConfig::currentScreenEffect = 1;
+		GameConfig::fogDepth = block.fogDepth();
+		GameConfig::fogColor = block.fogColor();
 	}
 	else {
-		Config::currentScreenEffect = 0;
+		GameConfig::currentScreenEffect = 0;
 	}
 }
 

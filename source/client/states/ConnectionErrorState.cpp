@@ -33,14 +33,12 @@
 #include "ServerLoadingState.hpp"
 #include "TitleScreenState.hpp"
 
-ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::string &host, u16 port, const std::string &texturePack, gk::ApplicationState *parent) : InterfaceState(parent) {
+ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::string &host, u16 port, gk::ApplicationState *parent) : InterfaceState(parent) {
 	gk::Mouse::setCursorGrabbed(false);
 	gk::Mouse::setCursorVisible(true);
 
 	m_host = host;
 	m_port = port;
-
-	m_texturePack = texturePack;
 
 	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
 
@@ -58,7 +56,6 @@ ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::
 
 		auto &game = m_stateStack->push<GameState>();
 		auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, true, m_host, m_port, m_parent);
-		serverLoadingState.setTexturePack(m_texturePack);
 		serverLoadingState.setUsername(Config::defaultUsername);
 	});
 
@@ -68,7 +65,7 @@ ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::
 		}
 		else {
 			m_stateStack->pop();
-			m_stateStack->push<TitleScreenState>(m_port).setTexturePack(m_texturePack);
+			m_stateStack->push<TitleScreenState>(m_port);
 		}
 	});
 

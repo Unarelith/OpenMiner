@@ -27,8 +27,8 @@
 #include <gk/core/Exception.hpp>
 #include <gk/gl/GLCheck.hpp>
 
-#include "Config.hpp"
 #include "Framebuffer.hpp"
+#include "GameConfig.hpp"
 
 Framebuffer::Framebuffer(u16 width, u16 height) {
 	init(width, height);
@@ -151,9 +151,9 @@ void Framebuffer::end() const {
 	}
 
 	gk::Shader::bind(&m_shader);
-	m_shader.setUniform("u_effectType", Config::currentScreenEffect);
-	m_shader.setUniform("u_fogDepth", Config::fogDepth);
-	m_shader.setUniform("u_fogColor", Config::fogColor);
+	m_shader.setUniform("u_effectType", GameConfig::currentScreenEffect);
+	m_shader.setUniform("u_fogDepth", GameConfig::fogDepth);
+	m_shader.setUniform("u_fogColor", GameConfig::fogColor);
 
 	gk::VertexBuffer::bind(&m_vbo);
 

@@ -39,8 +39,6 @@ class ServerConnectState : public InterfaceState {
 
 		void update() override;
 
-		void setTexturePack(const std::string &texturePack) { m_texturePack = texturePack; }
-
 	private:
 		void updateWidgetPosition() override;
 
@@ -57,8 +55,6 @@ class ServerConnectState : public InterfaceState {
 		MenuWidget m_menuWidget{1, 2};
 
 		Text m_errorText;
-
-		std::string m_texturePack;
 };
 
 #endif // SERVERCONNECTSTATE_HPP_

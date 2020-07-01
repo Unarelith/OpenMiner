@@ -32,7 +32,7 @@
 
 class ConnectionErrorState : public InterfaceState {
 	public:
-		ConnectionErrorState(const std::string &error, const std::string &host, u16 port, const std::string &texturePack, gk::ApplicationState *parent = nullptr);
+		ConnectionErrorState(const std::string &error, const std::string &host, u16 port, gk::ApplicationState *parent = nullptr);
 
 		void onEvent(const sf::Event &event) override;
 
@@ -43,8 +43,6 @@ class ConnectionErrorState : public InterfaceState {
 
 		std::string m_host;
 		u16 m_port;
-
-		std::string m_texturePack;
 
 		gk::Image m_background{"texture-menu_background"};
 		gk::RectangleShape m_filter;

@@ -75,15 +75,6 @@ class Client {
 		sf::IpAddress serverAddress() const { return m_serverAddress; }
 		u16 serverPort() const { return m_serverPort; }
 
-		// FIXME: This should move elsewhere, see command callback
-		//        in ClientCommandHandler for ServerClosed
-		const std::string &texturePack() const { return m_texturePack; }
-		void setTexturePack(const std::string &texturePack) { m_texturePack = texturePack; }
-
-		// FIXME: Idem
-		const std::string &worldName() const { return m_worldName; }
-		void setWorldName(const std::string &worldName) { m_worldName = worldName; }
-
 		void addPlayer(Player &player) { m_players.emplace(player.clientID(), player); }
 		void removePlayer(u16 clientID) { m_players.erase(clientID); }
 		Player &getPlayer(u16 clientID) { return m_players.at(clientID); }

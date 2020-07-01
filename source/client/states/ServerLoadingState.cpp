@@ -32,6 +32,7 @@
 
 #include "Config.hpp"
 #include "ConnectionErrorState.hpp"
+#include "GameConfig.hpp"
 #include "GameState.hpp"
 #include "Events.hpp"
 #include "ServerLoadingState.hpp"
@@ -72,7 +73,7 @@ void ServerLoadingState::update() {
 			m_stateStack->pop(); // GameState
 			m_stateStack->pop(); // ServerLoadingState
 
-			m_stateStack->push<ConnectionErrorState>(e.what(), m_host, m_port, m_texturePack, m_parent);
+			m_stateStack->push<ConnectionErrorState>(e.what(), m_host, m_port, m_parent);
 		}
 	}
 
@@ -93,7 +94,7 @@ void ServerLoadingState::update() {
 		}
 		else if (!m_game.textureAtlas().isReady()) {
 			try {
-				m_game.textureAtlas().loadFromRegistry(m_texturePack);
+				m_game.textureAtlas().loadFromRegistry(GameConfig::texturePack);
 			}
 			catch (gk::Exception &e) {
 				m_game.client().disconnect();
@@ -101,11 +102,6 @@ void ServerLoadingState::update() {
 			}
 		}
 	}
-}
-
-void ServerLoadingState::setTexturePack(const std::string &texturePack) {
-	m_game.client().setTexturePack(texturePack);
-	m_texturePack = texturePack;
 }
 
 void ServerLoadingState::onServerOnlineEvent(const ServerOnlineEvent &event) {

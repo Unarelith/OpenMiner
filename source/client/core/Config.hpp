@@ -30,7 +30,6 @@
 #include <string>
 
 #include <gk/core/IntTypes.hpp>
-#include <gk/graphics/Color.hpp>
 
 namespace Config {
 	// Gameplay
@@ -63,11 +62,6 @@ namespace Config {
 	// Other
 	extern std::string defaultUsername;
 	extern std::string defaultServerAddress;
-
-	// Temporary
-	extern u16 currentScreenEffect;
-	extern float fogDepth;
-	extern gk::Color fogColor;
 
 	void loadConfigFromFile(const char *filename);
 	void saveConfigToFile(const char *filename);

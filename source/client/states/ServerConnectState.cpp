@@ -88,7 +88,6 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 		else {
 			auto &game = m_stateStack->push<GameState>();
 			auto &serverLoadingState = m_stateStack->push<ServerLoadingState>(game, true, host, port, this);
-			serverLoadingState.setTexturePack(m_texturePack);
 			serverLoadingState.setUsername(username);
 			Config::defaultUsername = username;
 			Config::defaultServerAddress = m_addressInput.string();

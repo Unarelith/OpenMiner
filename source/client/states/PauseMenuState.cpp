@@ -33,6 +33,7 @@
 #include "Client.hpp"
 #include "Config.hpp"
 #include "Events.hpp"
+#include "GameConfig.hpp"
 #include "PauseMenuState.hpp"
 #include "SettingsMenuState.hpp"
 #include "TitleScreenState.hpp"
@@ -59,7 +60,7 @@ PauseMenuState::PauseMenuState(Client &client, gk::ApplicationState *parent)
 	});
 
 	m_menuWidget.addButton("Title Screen", [this] (TextButton &) {
-		if (!m_client.isSingleplayer() || m_client.worldName().empty()) {
+		if (!m_client.isSingleplayer() || GameConfig::worldName.empty()) {
 			m_client.disconnect();
 
 			m_stateStack->clear();
@@ -70,7 +71,7 @@ PauseMenuState::PauseMenuState(Client &client, gk::ApplicationState *parent)
 	});
 
 	m_menuWidget.addButton("Exit", [this] (TextButton &) {
-		if (!m_client.isSingleplayer() || m_client.worldName().empty()) {
+		if (!m_client.isSingleplayer() || GameConfig::worldName.empty()) {
 			m_client.disconnect();
 
 			m_stateStack->clear();

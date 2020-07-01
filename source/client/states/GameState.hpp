@@ -64,7 +64,6 @@ class GameState : public gk::ApplicationState {
 		ClientCommandHandler &clientCommandHandler() { return m_clientCommandHandler; }
 		TextureAtlas &textureAtlas() { return m_textureAtlas; }
 
-		void setWorldName(const std::string &worldName) { m_client.setWorldName(worldName); }
 		void setSingleplayer(bool isSingleplayer) {
 			m_clientCommandHandler.setSingleplayer(isSingleplayer);
 			m_client.setSingleplayer(isSingleplayer);

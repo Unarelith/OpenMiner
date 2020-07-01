@@ -24,51 +24,14 @@
  *
  * =====================================================================================
  */
-#ifndef SERVERLOADINGSTATE_HPP_
-#define SERVERLOADINGSTATE_HPP_
+#include "GameConfig.hpp"
 
-#include <gk/graphics/Image.hpp>
+// Pre-game configuration
+std::string GameConfig::worldName = "";
+std::string GameConfig::texturePack = "";
 
-#include "InterfaceState.hpp"
-#include "Text.hpp"
+// Screen effects
+u16 GameConfig::currentScreenEffect = 0;
+float GameConfig::fogDepth = 0;
+gk::Color GameConfig::fogColor = gk::Color::White;
 
-class GameState;
-struct ServerOnlineEvent;
-
-class ServerLoadingState : public InterfaceState {
-	public:
-		ServerLoadingState(GameState &game, bool showLoadingState, const std::string &host, u16 port, gk::ApplicationState *parent = nullptr);
-
-		void init() override;
-
-		void update() override;
-
-		void setUsername(const std::string &username) { m_username = username; }
-
-	private:
-		void onServerOnlineEvent(const ServerOnlineEvent &event);
-
-		void updateWidgetPosition() override;
-
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		gk::Image m_background{"texture-menu_background"};
-		gk::RectangleShape m_filter;
-
-		Text m_text;
-
-		GameState &m_game;
-
-		bool m_showLoadingState;
-		mutable bool m_hasBeenRendered = false;
-
-		std::string m_username;
-
-		bool m_isServerOnline = false;
-		bool m_isConnected = false;
-
-		std::string m_host;
-		u16 m_port = 4242;
-};
-
-#endif // SERVERLOADINGSTATE_HPP_
