@@ -31,6 +31,8 @@
 
 class WorldSaveBackend {
 	public:
+		virtual ~WorldSaveBackend() = default;
+
 		virtual void load(const std::string &worldName) = 0;
 		virtual void save(const std::string &worldName) = 0;
 };

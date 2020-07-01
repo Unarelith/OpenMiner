@@ -56,7 +56,6 @@ class ServerPlayer : public Player {
 
 		u8 m_heldItemSlot = 0;
 
-		bool m_isOnline = false;
 		bool m_isNewPlayer = false;
 };
 
