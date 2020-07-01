@@ -24,7 +24,12 @@
 --
 -- =====================================================================================
 --
-mod = openminer.mod_loader:register_mod("creative_inventory")
+if not mods then mods = {} end
+
+mods["creative_inventory"] = openminer.mod_loader:register_mod("creative_inventory")
+mod = mods["creative_inventory"]
+
+local modpath = mod:path()
 
 mod:key {
 	id = "creative_inventory",
@@ -48,7 +53,7 @@ mod:key {
 			name = "img_background",
 			pos = {x = 0, y = 0},
 
-			texture = mod:path() .. "/textures/gui/creative_window.png",
+			texture = modpath .. "/textures/gui/creative_window.png",
 			clip = {x = 0, y = 0, width = 195, height = 136},
 		}
 
@@ -81,7 +86,7 @@ mod:key {
 			name = "scroll_bar",
 			pos = {x = 175, y = 18},
 
-			texture = mod:path() .. "/textures/gui/tabs.png",
+			texture = modpath .. "/textures/gui/tabs.png",
 			clip = {x = 232, y = 0, width = 12, height = 15},
 			clip_selected = {x = 244, y = 0, width = 12, height = 15},
 
