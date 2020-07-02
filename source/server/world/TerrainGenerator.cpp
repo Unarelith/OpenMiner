@@ -68,28 +68,14 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 						chunk.setBlockRaw(x, y, z, biome.getLiquidBlockID());
 					}
 					// Otherwise we are in the air
-					else {
-						// Try to place a tree
-						bool placedTree = tryPlaceTree(chunk, x, y, z, biome, rand);
-
-						// Otherwise try to place flora.
-						bool placedFlora = false;
-						if (!placedTree)
-							tryPlaceFlora(chunk, x, y, z, biome, rand);
-
-						// Or a portal
-						bool placedPortal = false;
-						if (!placedTree && !placedFlora)
-							tryPlacePortal(chunk, x, y, z, biome, rand);
-
-						// Otherwise set sunlight.
-						if (!placedTree && !placedFlora && !placedPortal && z == CHUNK_HEIGHT - 1) {
-							chunk.lightmap().addSunlight(x, y, z, 15);
-						}
+					else if (chunk.getBlock(x, y, z) == 0 && z == CHUNK_HEIGHT - 1) {
+						// Add sunlight at the top of the chunk if possible
+						chunk.lightmap().addSunlight(x, y, z, 15);
 					}
 				}
 				else {
-					if (z + chunk.z() * CHUNK_HEIGHT >= h - 1 && z + chunk.z() * CHUNK_HEIGHT > SEALEVEL - 1)
+					bool isGeneratingTopBlock = z + chunk.z() * CHUNK_HEIGHT >= h - 1 && z + chunk.z() * CHUNK_HEIGHT > SEALEVEL - 1;
+					if (isGeneratingTopBlock)
 						chunk.setBlockRaw(x, y, z, biome.getTopBlockID());
 					else if (z + chunk.z() * CHUNK_HEIGHT <= SEALEVEL - 1 && h < SEALEVEL && z + chunk.z() * CHUNK_HEIGHT > h - 3)
 						chunk.setBlockRaw(x, y, z, biome.getBeachBlockID());
@@ -103,6 +89,21 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 
 					// Caves
 					generateCaves(chunk, x, y, z, h);
+
+					// Generate trees, flora and portals
+					if (isGeneratingTopBlock && chunk.getBlock(x, y, z)) {
+						// Try to place a tree
+						bool placedTree = tryPlaceTree(chunk, x, y, z + 1, biome, rand);
+
+						// Otherwise try to place flora.
+						bool placedFlora = false;
+						if (!placedTree)
+							placedFlora = tryPlaceFlora(chunk, x, y, z + 1, biome, rand);
+
+						// Or a portal
+						if (!placedTree && !placedFlora)
+							tryPlacePortal(chunk, x, y, z + 1, biome, rand);
+					}
 				}
 
 				if (topChunk && topChunk->isInitialized()) {
