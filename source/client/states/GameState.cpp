@@ -173,6 +173,13 @@ void GameState::update() {
 	}
 
 	m_client.update();
+
+	// Update far plane using render distance
+	static u16 oldRenderDistance = Config::renderDistance;
+	if (Config::renderDistance != oldRenderDistance) {
+		m_camera.setFarClippingPlane(Config::renderDistance * CHUNK_SIZE);
+		oldRenderDistance = Config::renderDistance;
+	}
 }
 
 void GameState::initShaders() {

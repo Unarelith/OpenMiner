@@ -21,7 +21,6 @@ uniform mat4 u_modelMatrix;
 uniform mat4 u_projectionMatrix;
 uniform mat4 u_viewMatrix;
 
-uniform int u_renderDistance;
 // uniform int u_time;
 
 void main() {
