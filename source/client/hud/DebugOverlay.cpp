@@ -26,6 +26,8 @@
  */
 #include <sstream>
 
+#include <gk/math/Math.hpp>
+
 #include "ClientPlayer.hpp"
 #include "ClientScene.hpp"
 #include "ClientWorld.hpp"
@@ -56,14 +58,6 @@ void DebugOverlay::update() {
 	s32 py = std::floor(m_player.y());
 	s32 pz = std::floor(m_player.z());
 
-	s32 rx = px % CHUNK_WIDTH;
-	s32 ry = py % CHUNK_DEPTH;
-	s32 rz = pz % CHUNK_HEIGHT;
-
-	if (rx < 0) rx += 16;
-	if (ry < 0) ry += 16;
-	if (rz < 0) rz += 16;
-
 	// Directions is now an angle4
 	const char *directions[4] = {"East", "North", "West", "South"};
 	const char *direction = directions[m_player.getDirection()];
@@ -73,9 +67,9 @@ void DebugOverlay::update() {
 	stream << "y: " << py << " | ";
 	stream << "z: " << pz;
 	stream << '\n';
-	stream << "rx: " << rx << " | ";
-	stream << "ry: " << ry << " | ";
-	stream << "rz: " << rz;
+	stream << "rx: " << gk::pmod(px, CHUNK_WIDTH) << " | ";
+	stream << "ry: " << gk::pmod(py, CHUNK_DEPTH) << " | ";
+	stream << "rz: " << gk::pmod(pz, CHUNK_HEIGHT);
 	stream << '\n';
 	stream << "cx: " << (px & -CHUNK_WIDTH)  / CHUNK_WIDTH << " | ";
 	stream << "cy: " << (py & -CHUNK_DEPTH)  / CHUNK_DEPTH << " | ";
