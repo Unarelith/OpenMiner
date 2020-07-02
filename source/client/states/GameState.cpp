@@ -92,8 +92,8 @@ void GameState::onEvent(const sf::Event &event) {
 			gk::Mouse::update(event);
 
 			const auto &delta = gk::Mouse::getDelta();
-			m_player.turnH(delta.x * -0.01 * Config::mouseSensitivity);
-			m_player.turnViewV(delta.y * -0.01 * Config::mouseSensitivity);
+			m_player.turnH(delta.x * -0.02 * Config::mouseSensitivity);
+			m_player.turnViewV(delta.y * -0.02 * Config::mouseSensitivity);
 		}
 #else
 		if (event.type == sf::Event::MouseMovedRaw) {
