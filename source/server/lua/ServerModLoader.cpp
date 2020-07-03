@@ -35,30 +35,81 @@
 
 namespace fs = ghc::filesystem;
 
+struct ModEntry {
+	fs::path path;
+	std::string id;
+	std::vector<std::string> dependencies;
+};
+
 void ServerModLoader::loadMods() {
-	m_scriptEngine.init();
-	m_scriptEngine.luaCore().setModLoader(this);
+	std::unordered_map<std::string, ModEntry> mods;
+	sol::state lua;
 
 	fs::path basePath = fs::current_path();
 	fs::directory_iterator dir("mods/");
 	for (const auto &entry : dir) {
-		if (fs::exists(entry.path().string() + "/init.lua")) {
-			fs::current_path(entry.path().string());
+		if (fs::exists(entry.path().string() + "/config.lua")) {
+			try {
+				lua.safe_script_file(entry.path().string() + "/config.lua");
+
+				sol::table config = lua["mod_config"].get<sol::table>();
+
+				ModEntry mod;
+				mod.path = entry.path().string();
+				mod.id = config["id"];
+
+				if (mod.id != entry.path().filename().string())
+					gkWarning() << ("For mod '" + mod.id + "': Folder name '" + entry.path().filename().string() + "' is different from mod id").c_str();
+
+				auto it = mods.find(mod.id);
+				if (it == mods.end()) {
+					sol::table dependencies = config["dependencies"];
+					for (auto &it : dependencies) {
+						mod.dependencies.emplace_back(it.second.as<std::string>());
+					}
+
+					mods.emplace(mod.id, mod);
+				}
+				else {
+					gkWarning() << ("Trying to load mod '" + mod.id + "' twice").c_str();
+					gkWarning() << "Loaded path: " << it->second.path.string();
+					gkWarning() << "Current path:" << mod.path.string();
+				}
+			}
+			catch (sol::error &e) {
+				gkError() << e.what();
+			}
+
+		}
+		else
+			gkWarning() << ("The mod at '" + entry.path().string() + "' doesn't contain a 'config.lua' file.").c_str();
+	}
+
+	// TODO: Build a dependency graph
+	// TODO: Make sure to handle cyclic dependencies
+	// TODO: Load 'mods/config.lua' to let user define a preferred mod path (see #82)
+
+	m_scriptEngine.init();
+	m_scriptEngine.luaCore().setModLoader(this);
+
+	for (auto &it : mods) {
+		if (fs::exists(it.second.path.string() + "/init.lua")) {
+			fs::current_path(it.second.path.string());
 
 			try {
 				m_scriptEngine.lua().safe_script_file("init.lua");
 			}
 			catch (const sol::error &e) {
-				gkError() << "Error: Failed to load mod at" << entry.path().string();
+				gkError() << "Error: Failed eo load mod at" << it.second.path.string();
 				gkError() << e.what();
 			}
 
 			fs::current_path(basePath);
 
-			gkInfo() << "Mod" << entry.path().filename().string() << "loaded";
+			gkInfo() << "Mod" << it.first << "loaded";
 		}
 		else
-			gkWarning() << "The mod" << entry.path().filename().string() << "doesn't contain an 'init.lua' file.";
+			gkWarning() << ("The mod at '" + it.second.path.string() + "' doesn't contain an 'init.lua' file.").c_str();
 	}
 
 	for (auto &it : m_mods) {
