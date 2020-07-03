@@ -81,16 +81,16 @@ This list is non exhaustive.
 
 ### Implemented features
 
-- Menus (title screen, server selection, pause, settings)
+- Menus (title screen, world selection, settings, etc...)
 - Basic worldgen (biomes, lakes, trees, flowers, pseudo-caves)
-- Infinite world in X/Y/Z axis ([#25](https://github.com/Unarelith/OpenMiner/pull/25))
-- Smooth lighting
-- Networking ([#20](https://github.com/Unarelith/OpenMiner/pull/20))
-- Chat system with support for commands ([#57](https://github.com/Unarelith/OpenMiner/pull/57))
-- Lua API
+- Pseudo-infinite world in X/Y/Z axis (2^32 * 2^32 * 2^32 blocks) ([#25](https://github.com/Unarelith/OpenMiner/pull/25))
+- Smooth lighting + ambient occlusion
+- Client/server architecture ([#20](https://github.com/Unarelith/OpenMiner/pull/20))
+- Chat with support for commands (for example `/tp`) ([#57](https://github.com/Unarelith/OpenMiner/pull/57))
+- Lua modding API
 	- Block/item/recipe/biome/tree/sky/dimension/entity definition
 	- Custom GUI creation
-- Special blocks (workbench, furnace)
+- Blocks can have an inventory and update every server tick (workbench, furnace)
 - Block metadata
 - Player model display (without animation)
 - Dimensions (like the Nether or the Ender in Minecraft) ([#80](https://github.com/Unarelith/OpenMiner/pull/80))
