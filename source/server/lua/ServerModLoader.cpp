@@ -58,23 +58,31 @@ void ServerModLoader::loadMods() {
 				mod.path = entry.path().string();
 				mod.id = config["id"];
 
-				if (mod.id != entry.path().filename().string())
-					gkWarning() << ("For mod '" + mod.id + "': Folder name '" + entry.path().filename().string() + "' is different from mod id").c_str();
+				if (!mod.id.empty()) {
+					if (mod.id != entry.path().filename().string())
+						gkWarning() << ("Mod ID '" + mod.id + "' is different from folder name '" + entry.path().filename().string() + "'").c_str();
 
-				auto it = mods.find(mod.id);
-				if (it == mods.end()) {
-					sol::table dependencies = config["dependencies"];
-					for (auto &it : dependencies) {
-						mod.dependencies.emplace_back(it.second.as<std::string>());
+					auto it = mods.find(mod.id);
+					if (it == mods.end()) {
+						sol::object dependencies = config["dependencies"];
+						if (dependencies.get_type() == sol::type::table) {
+							for (auto &it : dependencies.as<sol::table>()) {
+								mod.dependencies.emplace_back(it.second.as<std::string>());
+							}
+						}
+						else
+							gkWarning() << ("Failed to load dependencies for mod '" + mod.id + "'").c_str();
+
+						mods.emplace(mod.id, mod);
 					}
-
-					mods.emplace(mod.id, mod);
+					else {
+						gkError() << ("Trying to load mod '" + mod.id + "' twice").c_str();
+						gkError() << "Loaded path: " << it->second.path.string();
+						gkError() << "Current path:" << mod.path.string();
+					}
 				}
-				else {
-					gkWarning() << ("Trying to load mod '" + mod.id + "' twice").c_str();
-					gkWarning() << "Loaded path: " << it->second.path.string();
-					gkWarning() << "Current path:" << mod.path.string();
-				}
+				else
+					gkError() << ("Failed to load mod '" + mod.path.filename().string() + "': Mod ID required in 'config.lua'").c_str();
 			}
 			catch (sol::error &e) {
 				gkError() << e.what();
@@ -82,11 +90,38 @@ void ServerModLoader::loadMods() {
 
 		}
 		else
-			gkWarning() << ("The mod at '" + entry.path().string() + "' doesn't contain a 'config.lua' file.").c_str();
+			gkError() << ("The mod at '" + entry.path().string() + "' doesn't contain a 'config.lua' file.").c_str();
+	}
+
+	{
+		// Small BFS to check cyclic dependencies
+		for (auto &modit : mods) {
+			std::queue<std::string> queue;
+			queue.emplace(modit.first);
+			while (!queue.empty()) {
+				std::string modID = queue.front();
+				queue.pop();
+
+				auto it = mods.find(modID);
+				if (it == mods.end())
+					break;
+
+				for (auto &dep : it->second.dependencies) {
+					if (dep == modit.first)
+						throw EXCEPTION("Cyclic dependency detected for mod '"
+								+ modit.second.id + "' in mod '" + it->second.id + "'");
+
+					queue.emplace(dep);
+				}
+			}
+		}
 	}
 
 	// TODO: Build a dependency graph
-	// TODO: Make sure to handle cyclic dependencies
+	//       Two types of dependencies should be handled
+	//       - Required (cyclic depedencies not handled)
+	//       - Optional (cyclic dependencies handled)
+
 	// TODO: Load 'mods/config.lua' to let user define a preferred mod path (see #82)
 
 	m_scriptEngine.init();
@@ -100,7 +135,7 @@ void ServerModLoader::loadMods() {
 				m_scriptEngine.lua().safe_script_file("init.lua");
 			}
 			catch (const sol::error &e) {
-				gkError() << "Error: Failed eo load mod at" << it.second.path.string();
+				gkError() << "Error: Failed to load mod at" << it.second.path.string();
 				gkError() << e.what();
 			}
 
@@ -109,7 +144,7 @@ void ServerModLoader::loadMods() {
 			gkInfo() << "Mod" << it.first << "loaded";
 		}
 		else
-			gkWarning() << ("The mod at '" + it.second.path.string() + "' doesn't contain an 'init.lua' file.").c_str();
+			gkError() << ("The mod at '" + it.second.path.string() + "' doesn't contain an 'init.lua' file.").c_str();
 	}
 
 	for (auto &it : m_mods) {

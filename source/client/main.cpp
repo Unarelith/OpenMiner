@@ -43,8 +43,14 @@ extern "C" {
 
 int main(int argc, char **argv) {
 	ClientApplication app(argc, argv);
-	app.run();
 
-	return 0;
+	int exitCode = app.run();
+
+#ifdef _WIN32
+	if (exitCode != 0)
+		system("pause");
+#endif
+
+	return exitCode;
 }
 
