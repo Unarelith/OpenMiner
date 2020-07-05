@@ -34,6 +34,7 @@
 #include "Network.hpp"
 #include "NetworkComponent.hpp"
 #include "Registry.hpp"
+#include "ServerBlock.hpp"
 #include "ServerWorld.hpp"
 #include "WorldSaveBasicBackend.hpp"
 
@@ -87,7 +88,7 @@ void WorldSaveBasicBackend::load(const std::string &name) {
 							chunk.setData(x, y, z, data >> 16);
 							chunk.lightmap().setLightData(x, y, z, light);
 
-							const Block &block = Registry::getInstance().getBlock(data & 0xffff);
+							const ServerBlock &block = (ServerBlock &)Registry::getInstance().getBlock(data & 0xffff);
 							if (block.canUpdate())
 								chunk.addTickingBlock(x, y, z, block);
 						}

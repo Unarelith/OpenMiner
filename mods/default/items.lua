@@ -320,3 +320,16 @@ mod:item {
 		end
 	end
 }
+
+mod:item {
+	id = "wheat",
+	name = "Wheat",
+	tiles = "wheat.png",
+}
+
+mod:item {
+	id = "bread",
+	name = "Bread",
+	tiles = "bread.png",
+}
+

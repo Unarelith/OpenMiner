@@ -34,6 +34,7 @@ const Item &ItemStack::item() const {
 // Please update 'docs/lua-api-cpp.md' if you change this
 void ItemStack::initUsertype(sol::state &lua) {
 	lua.new_usertype<ItemStack>("ItemStack",
+		sol::constructors<ItemStack(const std::string &, u16)>(),
 		"amount", &ItemStack::amount,
 		"item", &ItemStack::item
 	);

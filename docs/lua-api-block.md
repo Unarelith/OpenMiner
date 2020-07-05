@@ -162,6 +162,26 @@ name = "Cobblestone"
 
 This label is the name that will appear everywhere in the game.
 
+### `tick_probability`
+
+Probability to call the `on_tick` function when `tick_randomly` is enabled.
+
+Example:
+```lua
+tick_probability = 0.5 -- 50%
+```
+
+### `tick_randomly`
+
+Whether or not the block `on_tick` function is executed randomly.
+
+See also `tick_probability`.
+
+Example:
+```lua
+tick_randomly = true
+```
+
 ### `tiles`
 
 This field can be either a single string, or a table of strings.
@@ -243,8 +263,8 @@ Useful for flora, tallgrass, mushrooms, etc...
 Parameters:
 
 - `pos` (`ivec3`): position of the block
-- `player` (`Player`): player that activated the block
-- `world` (`World`): instance of the `ServerWorld`
+- `player` (`ServerPlayer`): player that activated the block
+- `world` (`ServerWorld`): instance of the world
 - `client` (`Client`): client that activated the block
 - `server` (`Server`): current server
 - `screen_width` (`u16`): width of the screen
@@ -256,20 +276,20 @@ Parameters:
 Parameters:
 
 - `pos` (`ivec3`): position of the block
-- `world` (`World`): instance of `ServerWorld`
+- `world` (`ServerWorld`): instance of the world
 
 ### `on_block_placed`
 
 Parameters:
 
 - `pos` (`ivec3`): position of the block
-- `world` (`World`): instance of `ServerWorld`
+- `world` (`ServerWorld`): instance of the world
 
 ### `on_tick`
 
 Parameters:
 
 - `pos` (`ivec3`): position of the block
-- `chunk` (`Chunk`): current chunk
-- `world` (`World`): instance of the `ServerWorld`
+- `chunk` (`ServerChunk`): current chunk
+- `world` (`ServerWorld`): instance of the world
 

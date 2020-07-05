@@ -83,8 +83,6 @@ class Chunk : public gk::NonCopyable {
 		bool areAllNeighboursLoaded() const;
 		bool areAllNeighboursInitialized() const;
 
-		void addTickingBlock(int x, int y, int z, const Block &block) { m_tickingBlocks.emplace(gk::Vector3i{x, y, z}, block); }
-
 		bool hasChanged() const { return m_hasChanged; }
 		void setChanged(bool hasChanged) { m_hasChanged = hasChanged; }
 
@@ -126,7 +124,6 @@ class Chunk : public gk::NonCopyable {
 		std::atomic_bool m_hasLightChanged{false};
 		std::atomic_bool m_isInitialized{false};
 
-		std::unordered_map<gk::Vector3i, const Block&> m_tickingBlocks;
 		std::unordered_map<gk::Vector3i, std::unique_ptr<BlockData>> m_blockData;
 };
 

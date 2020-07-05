@@ -29,11 +29,12 @@
 #include "ServerBlock.hpp"
 #include "ServerCommandHandler.hpp"
 #include "ServerPlayer.hpp"
+#include "ServerWorld.hpp"
 #include "World.hpp"
 
-void ServerBlock::onTick(const glm::ivec3 &pos, Chunk &chunk, World &world, ServerCommandHandler &server) const {
-	try {
-		if (m_onTick && m_onTickEnabled) {
+void ServerBlock::onTick(const glm::ivec3 &pos, ServerChunk &chunk, ServerWorld &world, ServerCommandHandler &server) const {
+	if (m_onTickEnabled && m_onTick) {
+		try {
 			m_onTick(pos, chunk, world);
 
 			BlockData *blockData = world.getBlockData(pos.x, pos.y, pos.z);
@@ -47,18 +48,24 @@ void ServerBlock::onTick(const glm::ivec3 &pos, Chunk &chunk, World &world, Serv
 				}
 			}
 		}
-	}
-	catch (const sol::error &e) {
-		m_onTickEnabled = false;
-		gkError() << e.what();
-		gkError() << "Block stopped ticking at (" << pos.x << ", " << pos.y << ", " << pos.z << ")";
+		catch (const sol::error &e) {
+			m_onTickEnabled = false;
+			gkError() << e.what();
+			gkError() << "Block stopped ticking at (" << pos.x << ", " << pos.y << ", " << pos.z << ")";
+		}
 	}
 }
 
-bool ServerBlock::onBlockActivated(const glm::ivec3 &pos, Player &player, World &world, ClientInfo &client, ServerCommandHandler &server, u16 screenWidth, u16 screenHeight, u8 guiScale) const {
+bool ServerBlock::onBlockActivated(const glm::ivec3 &pos, ServerPlayer &player, ServerWorld &world, ClientInfo &client, ServerCommandHandler &server, u16 screenWidth, u16 screenHeight, u8 guiScale) const {
 	try {
 		if (m_onBlockActivated) {
 			m_onBlockActivated(pos, player, world, client, server, screenWidth, screenHeight, guiScale);
+
+			// FIXME: Check if data changed before sending
+			BlockData *blockData = world.getBlockData(pos.x, pos.y, pos.z);
+			if (blockData)
+				server.sendBlockDataUpdate(pos.x, pos.y, pos.z, blockData);
+
 			return true;
 		}
 	}
@@ -69,7 +76,7 @@ bool ServerBlock::onBlockActivated(const glm::ivec3 &pos, Player &player, World 
 	return false;
 }
 
-void ServerBlock::onBlockPlaced(const glm::ivec3 &pos, World &world) const {
+void ServerBlock::onBlockPlaced(const glm::ivec3 &pos, ServerWorld &world) const {
 	try {
 		if (m_onBlockPlaced) {
 			m_onBlockPlaced(pos, world);
@@ -80,7 +87,7 @@ void ServerBlock::onBlockPlaced(const glm::ivec3 &pos, World &world) const {
 	}
 }
 
-void ServerBlock::onBlockDestroyed(const glm::ivec3 &pos, World &world) const {
+void ServerBlock::onBlockDestroyed(const glm::ivec3 &pos, ServerWorld &world) const {
 	try {
 		if (m_onBlockDestroyed) {
 			m_onBlockDestroyed(pos, world);

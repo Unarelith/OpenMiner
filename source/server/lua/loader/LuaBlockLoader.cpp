@@ -71,6 +71,8 @@ inline void LuaBlockLoader::loadProperties(ServerBlock &block, const sol::table 
 	block.setRotatable(table["is_rotatable"].get_or(false));
 	block.setInventoryImage(table["inventory_image"].get_or<std::string>(""));
 	block.setFogDepth(table["fog_depth"].get_or<float>(0));
+	block.setTickRandomly(table["tick_randomly"].get_or(false));
+	block.setTickProbability(table["tick_probability"].get_or(0.f));
 
 	if (block.fogDepth()) {
 		sol::optional<sol::table> fogColor = table["fog_color"];

@@ -149,7 +149,7 @@ mod:block {
 	id = "dandelion",
 	name = "Dandelion",
 	tiles = "dandelion.png",
-	hardness = 0.05,
+	hardness = 0,
 	draw_type = "xshape",
 	bounding_box = {0.25, 0.25, 0.0, 0.5, 0.5, 0.5},
 }
@@ -159,7 +159,7 @@ mod:block {
 	name = "Grass",
 	tiles = "grass.png",
 	color_multiplier = {129, 191, 91, 255},
-	hardness = 0.05,
+	hardness = 0,
 	draw_type = "xshape",
 }
 
@@ -350,6 +350,49 @@ mod:block {
 
 	draw_type = "boundingbox",
 	bounding_box = {0, 0, 0, 1, 1, 15 / 16},
+}
+
+mod:block {
+	id = "seeds",
+	name = "Seeds",
+	tiles = "wheat_stage_0.png",
+	alt_tiles = "wheat_stage_7.png",
+	draw_type = "xshape",
+	inventory_image = "seeds_wheat.png",
+	hardness = 0,
+
+	tick_randomly = true,
+	tick_probability = 0.01,
+
+	on_block_placed = function(pos, world)
+		world:add_block_data(pos.x, pos.y, pos.z, 0, 0)
+	end,
+
+	on_tick = function(pos, chunk, world)
+		local data = world:get_block_data(pos.x, pos.y, pos.z)
+		if not data then return end
+
+		local growth_stage = data.meta:get_int("growth_stage") or 0
+		if growth_stage < 7 then
+			data.use_alt_tiles = true
+			data.meta:set_int("growth_stage", 7)
+		end
+	end,
+
+	on_block_activated = function(pos, player, world, client, server, screen_width, screen_height, gui_scale)
+		local data = world:get_block_data(pos.x, pos.y, pos.z)
+		if not data then return end
+
+		local growth_stage = data.meta:get_int("growth_stage") or 0
+		if growth_stage >= 7 then
+			data.use_alt_tiles = false
+			data.meta:set_int("growth_stage", 0)
+
+			-- FIXME: It should drop the item if 'default:use_item_drops' is enabled
+			local item_stack = ItemStack.new("default:wheat", 1)
+			mods["default"]:give_item_stack(player, item_stack)
+		end
+	end
 }
 
 dofile("blocks/workbench.lua")

@@ -31,14 +31,19 @@
 
 #include <gk/core/IntTypes.hpp>
 
+#include <random.hpp>
+
 #include "Chunk.hpp"
 
+using Random_t = effolkronium::random_local;
+
+class ServerBlock;
 class ServerCommandHandler;
 class ServerPlayer;
 
 class ServerChunk : public Chunk {
 	public:
-		ServerChunk(s32 x, s32 y, s32 z, World &world) : Chunk(x, y, z, world) {}
+		ServerChunk(s32 x, s32 y, s32 z, World &world);
 
 		void updateLights();
 
@@ -53,9 +58,15 @@ class ServerChunk : public Chunk {
 		bool hasBeenModified() const { return m_hasBeenModified; }
 		void setModified(bool hasBeenModified) { m_hasBeenModified = hasBeenModified; }
 
+		void addTickingBlock(int x, int y, int z, const ServerBlock &block) { m_tickingBlocks.emplace(gk::Vector3i{x, y, z}, block); }
+
 	private:
 		std::atomic_bool m_isSent{false};
 		std::atomic_bool m_hasBeenModified{false};
+
+		Random_t m_random;
+
+		std::unordered_map<gk::Vector3i, const ServerBlock &> m_tickingBlocks;
 };
 
 #endif // SERVERCHUNK_HPP_

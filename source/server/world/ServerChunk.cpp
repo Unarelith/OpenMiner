@@ -30,6 +30,10 @@
 #include "ServerCommandHandler.hpp"
 #include "World.hpp"
 
+ServerChunk::ServerChunk(s32 x, s32 y, s32 z, World &world) : Chunk(x, y, z, world) {
+	m_random.seed(std::time(nullptr));
+}
+
 void ServerChunk::updateLights() {
 	if (m_lightmap.updateLights() || m_hasChanged) {
 		m_isSent = false;
@@ -39,14 +43,23 @@ void ServerChunk::updateLights() {
 
 void ServerChunk::onBlockPlaced(int x, int y, int z, const Block &block) {
 	const ServerBlock &serverBlock = (ServerBlock &)block;
-	serverBlock.onBlockPlaced(glm::ivec3{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH, z + m_z * CHUNK_HEIGHT}, m_world);
+	if (block.canUpdate()) {
+		addTickingBlock(x, y, z, serverBlock);
+	}
+	else {
+		auto it = m_tickingBlocks.find(gk::Vector3i{x, y, z});
+		if (it != m_tickingBlocks.end())
+			m_tickingBlocks.erase(it);
+	}
+
+	serverBlock.onBlockPlaced(glm::ivec3{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH, z + m_z * CHUNK_HEIGHT}, (ServerWorld &)m_world);
 
 	m_hasBeenModified = true;
 }
 
 void ServerChunk::onBlockDestroyed(int x, int y, int z, const Block &block) {
 	const ServerBlock &serverBlock = (ServerBlock &)block;
-	serverBlock.onBlockDestroyed(glm::ivec3{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH, z + m_z * CHUNK_HEIGHT}, m_world);
+	serverBlock.onBlockDestroyed(glm::ivec3{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH, z + m_z * CHUNK_HEIGHT}, (ServerWorld &)m_world);
 
 	m_hasBeenModified = true;
 }
@@ -54,13 +67,15 @@ void ServerChunk::onBlockDestroyed(int x, int y, int z, const Block &block) {
 void ServerChunk::tick(World &world, ServerCommandHandler &server) {
 	if (!m_tickingBlocks.empty()) {
 		for (auto &it : m_tickingBlocks) {
-			((ServerBlock &)it.second).onTick(
-				glm::ivec3{
-					it.first.x + m_x * width,
-					it.first.y + m_y * depth,
-					it.first.z + m_z * height
-				},
-			*this, world, server);
+			if (!it.second.isTickingRandomly() || m_random.get<bool>(it.second.tickProbability())) {
+				it.second.onTick(
+					glm::ivec3{
+						it.first.x + m_x * width,
+						it.first.y + m_y * depth,
+						it.first.z + m_z * height
+					},
+				*this, (ServerWorld &)world, server);
+			}
 		}
 	}
 }

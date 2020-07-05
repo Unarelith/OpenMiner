@@ -635,3 +635,14 @@ mod:crafting_recipe {
 	keys = {["#"] = "default:oak_planks"}
 }
 
+-- Bread
+mod:crafting_recipe {
+	result = {
+		id = "default:bread",
+		amount = 1
+	},
+	pattern = {
+		"###",
+	},
+	keys = {["#"] = "default:wheat"}
+}

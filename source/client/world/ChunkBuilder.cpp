@@ -286,7 +286,10 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 }
 
 inline void ChunkBuilder::addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk, const Block &block, const glm::vec3 *const vertexPos[nCrossFaces][nVertsPerFace]) {
-	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(block.tiles().getTextureForFace(0));
+	const BlockData *blockData = chunk.getBlockData(x, y, z);
+	const std::string &texture = block.tiles().getTextureForFace(0, blockData ? blockData->useAltTiles : false);
+	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(texture);
+
 	float faceTexCoords[nVertsPerFace][nCoordsPerUV] = {
 		{blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.sizeY},
 		{blockTexCoords.x + blockTexCoords.sizeX, blockTexCoords.y + blockTexCoords.sizeY},

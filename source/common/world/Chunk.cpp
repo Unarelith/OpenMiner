@@ -72,15 +72,6 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 	if ((m_data[z][y][x] & 0xffff) == type) return;
 
 	const Block &block = Registry::getInstance().getBlock(type);
-	if (block.canUpdate()) {
-		addTickingBlock(x, y, z, block);
-	}
-	else {
-		auto it = m_tickingBlocks.find(gk::Vector3i{x, y, z});
-		if (it != m_tickingBlocks.end())
-			m_tickingBlocks.erase(it);
-	}
-
 	if (block.isLightSource())
 		m_lightmap.addTorchlight(x, y, z, 14);
 	else {

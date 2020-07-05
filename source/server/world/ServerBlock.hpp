@@ -30,18 +30,20 @@
 #include "Block.hpp"
 
 class ClientInfo;
+class ServerChunk;
 class ServerCommandHandler;
 class ServerPlayer;
+class ServerWorld;
 
 class ServerBlock : public Block {
 	public:
 		ServerBlock(u32 id, const TilesDef &tiles, const std::string &name, const std::string &label)
 			: Block(id, tiles, name, label) {}
 
-		void onTick(const glm::ivec3 &, Chunk &, World &, ServerCommandHandler &) const;
-		bool onBlockActivated(const glm::ivec3 &pos, Player &player, World &world, ClientInfo &client, ServerCommandHandler &server, u16 screenWidth, u16 screenHeight, u8 guiScale) const;
-		void onBlockPlaced(const glm::ivec3 &pos, World &world) const;
-		void onBlockDestroyed(const glm::ivec3 &pos, World &world) const;
+		void onTick(const glm::ivec3 &pos, ServerChunk &chunk, ServerWorld &world, ServerCommandHandler &server) const;
+		bool onBlockActivated(const glm::ivec3 &pos, ServerPlayer &player, ServerWorld &world, ClientInfo &client, ServerCommandHandler &server, u16 screenWidth, u16 screenHeight, u8 guiScale) const;
+		void onBlockPlaced(const glm::ivec3 &pos, ServerWorld &world) const;
+		void onBlockDestroyed(const glm::ivec3 &pos, ServerWorld &world) const;
 
 		bool canUpdate() const { return m_onTick.valid(); }
 
@@ -49,6 +51,12 @@ class ServerBlock : public Block {
 		void setOnTick(const sol::protected_function &function) { m_onTick = function; m_canUpdate = m_onTick.valid(); }
 		void setOnBlockPlaced(const sol::protected_function &function) { m_onBlockPlaced = function; }
 		void setOnBlockDestroyed(const sol::protected_function &function) { m_onBlockDestroyed = function; }
+
+		bool isTickingRandomly() const { return m_isTickingRandomly; }
+		void setTickRandomly(bool isTickingRandomly) { m_isTickingRandomly = isTickingRandomly; }
+
+		float tickProbability() const { return m_tickProbability; }
+		void setTickProbability(float tickProbability) { m_tickProbability = tickProbability; }
 
 		static void initUsertype(sol::state &lua);
 
@@ -59,6 +67,9 @@ class ServerBlock : public Block {
 		sol::unsafe_function m_onBlockDestroyed;
 
 		mutable bool m_onTickEnabled = true;
+
+		bool m_isTickingRandomly = false;
+		float m_tickProbability = 0.f;
 };
 
 #endif // SERVERBLOCK_HPP_
