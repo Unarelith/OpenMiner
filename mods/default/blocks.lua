@@ -343,6 +343,15 @@ mod:block {
 	bounding_box = {0, 0, 0, 1, 1, 15 / 16},
 }
 
+mod:block {
+	id = "grass_path",
+	name = "Grass Path",
+	tiles = {"grass_path_top.png", "dirt.png", "grass_path_side.png"},
+
+	draw_type = "boundingbox",
+	bounding_box = {0, 0, 0, 1, 1, 15 / 16},
+}
+
 dofile("blocks/workbench.lua")
 dofile("blocks/furnace.lua")
 dofile("blocks/door.lua")

@@ -65,6 +65,12 @@ mod:item {
 	tiles = "stone_shovel.png",
 	mining_speed = 4,
 	harvest_capability = 2,
+
+	on_item_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
+		if block:string_id() == "default:grass" then
+			world:set_block_from_str(pos.x, pos.y, pos.z, "default:grass_path")
+		end
+	end
 }
 
 mod:item {
@@ -133,6 +139,12 @@ mod:item {
 	tiles = "wooden_shovel.png",
 	mining_speed = 2,
 	harvest_capability = 2,
+
+	on_item_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
+		if block:string_id() == "default:grass" then
+			world:set_block_from_str(pos.x, pos.y, pos.z, "default:grass_path")
+		end
+	end
 }
 
 mod:item {
@@ -204,7 +216,13 @@ mod:item {
 	name = "Iron Shovel",
 	tiles = "iron_shovel.png",
 	mining_speed = 6,
-	harvest_capability = 2
+	harvest_capability = 2,
+
+	on_item_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
+		if block:string_id() == "default:grass" then
+			world:set_block_from_str(pos.x, pos.y, pos.z, "default:grass_path")
+		end
+	end
 }
 
 mod:item {
@@ -246,7 +264,13 @@ mod:item {
 	name = "Diamond Shovel",
 	tiles = "diamond_shovel.png",
 	mining_speed = 8,
-	harvest_capability = 2
+	harvest_capability = 2,
+
+	on_item_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
+		if block:string_id() == "default:grass" then
+			world:set_block_from_str(pos.x, pos.y, pos.z, "default:grass_path")
+		end
+	end
 }
 
 mod:item {
@@ -288,5 +312,11 @@ mod:item {
 	name = "Golden Shovel",
 	tiles = "golden_shovel.png",
 	mining_speed = 10,
-	harvest_capability = 2
+	harvest_capability = 2,
+
+	on_item_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
+		if block:string_id() == "default:grass" then
+			world:set_block_from_str(pos.x, pos.y, pos.z, "default:grass_path")
+		end
+	end
 }
