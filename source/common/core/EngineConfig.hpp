@@ -42,11 +42,11 @@ namespace {
 	constexpr float DIST_2D_FAR  = 512.0f;
 
 	// Chunk size must be a power of two and fit in a signed byte
-	constexpr int CHUNK_SIZE = 16;
+	constexpr int CHUNK_WIDTH  = 16;
+	constexpr int CHUNK_DEPTH  = 16;
+	constexpr int CHUNK_HEIGHT = 32;
 
-	constexpr int CHUNK_WIDTH  = CHUNK_SIZE;
-	constexpr int CHUNK_DEPTH  = CHUNK_SIZE;
-	constexpr int CHUNK_HEIGHT = CHUNK_SIZE;
+	constexpr int CHUNK_MAXSIZE = CHUNK_WIDTH > CHUNK_DEPTH ? (CHUNK_HEIGHT > CHUNK_WIDTH ? CHUNK_HEIGHT : CHUNK_WIDTH) : (CHUNK_HEIGHT > CHUNK_DEPTH ? CHUNK_HEIGHT : CHUNK_DEPTH);
 
 	// Several parts of the code use & (CHUNK_xxx - 1) assuming they are powers of 2
 	static_assert((CHUNK_WIDTH  & (CHUNK_WIDTH  - 1)) == 0, "CHUNK_WIDTH is not a power of 2");
