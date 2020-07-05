@@ -35,11 +35,16 @@
 
 namespace fs = ghc::filesystem;
 
+struct ModDependency {
+	std::string id;
+	bool isRequired;
+};
+
 struct ModEntry {
 	fs::path path;
 	std::string id;
 
-	std::vector<std::string> dependencies;
+	std::vector<ModDependency> dependencies;
 	std::vector<ModEntry *> requiredBy;
 
 	bool isLoaded = false;
@@ -50,6 +55,7 @@ void ServerModLoader::loadMods() {
 	std::unordered_map<std::string, ModEntry> mods;
 	sol::state lua;
 
+	// Search 'mods' folder for mods
 	fs::path basePath = fs::current_path();
 	fs::directory_iterator dir("mods/");
 	for (const auto &entry : dir) {
@@ -72,7 +78,16 @@ void ServerModLoader::loadMods() {
 						sol::object dependencies = config["dependencies"];
 						if (dependencies.get_type() == sol::type::table) {
 							for (auto &it : dependencies.as<sol::table>()) {
-								mod.dependencies.emplace_back(it.second.as<std::string>());
+								std::string dependencyID = it.second.as<std::string>();
+								if (dependencyID.empty()) {
+									gkWarning() << "Mod '" + mod.id + "' contain an empty dependency";
+									continue;
+								}
+
+								if (dependencyID.at(0) == '*')
+									mod.dependencies.emplace_back(ModDependency{dependencyID.substr(1), false});
+								else
+									mod.dependencies.emplace_back(ModDependency{dependencyID, true});
 							}
 						}
 						else
@@ -108,36 +123,35 @@ void ServerModLoader::loadMods() {
 			ModEntry *mod = queue.front();
 			queue.pop();
 
-			if (mod->dependencies.empty())
-				dependencyTree.emplace(mod);
-
-			for (const std::string &dependencyID : mod->dependencies) {
-				if (dependencyID == modit.second.id) {
+			bool hasDependency = false;
+			for (const ModDependency &dependency : mod->dependencies) {
+				if (dependency.id == modit.second.id) {
 					gkError() << ("Cyclic dependency detected for mod '" + modit.second.id + "' in mod '" + mod->id + "'").c_str();
 					mod->isValid = false;
 					break;
 				}
 
-				auto it = mods.find(dependencyID);
+				auto it = mods.find(dependency.id);
 				if (it != mods.end()) {
 					it->second.requiredBy.emplace_back(mod);
 					queue.emplace(&it->second);
+					hasDependency = true;
 				}
-				else {
-					gkError() << ("Mod '" + mod->id + "' cannot be loaded: Missing dependency '" + dependencyID + "'").c_str();
+				else if (dependency.isRequired) {
+					gkError() << ("Mod '" + mod->id + "' cannot be loaded: Missing dependency '" + dependency.id + "'").c_str();
 					mod->isValid = false;
 				}
 			}
+
+			if (!hasDependency)
+				dependencyTree.emplace(mod);
 		}
 	}
-
-	// TODO: Two types of dependencies should be handled
-	//       - Required (cyclic depedencies not handled)
-	//       - Optional (cyclic dependencies handled)
 
 	m_scriptEngine.init();
 	m_scriptEngine.luaCore().setModLoader(this);
 
+	// Traverse the tree and load the mods
 	while (!dependencyTree.empty()) {
 		ModEntry *mod = dependencyTree.front();
 		dependencyTree.pop();

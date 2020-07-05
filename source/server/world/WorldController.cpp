@@ -47,3 +47,10 @@ void WorldController::update() {
 		it.update();
 }
 
+ServerWorld &WorldController::getWorld(u16 dimension) {
+	if (m_worldList.size() <= dimension)
+		throw EXCEPTION("Failed to get world object for dimension", dimension);
+
+	return m_worldList.at(dimension);
+}
+

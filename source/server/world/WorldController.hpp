@@ -52,7 +52,7 @@ class WorldController {
 		void load(const std::string &worldName) { m_worldSaveBackend->load(worldName); }
 		void save(const std::string &worldName) { m_worldSaveBackend->save(worldName); }
 
-		ServerWorld &getWorld(u16 dimension) { return m_worldList.at(dimension); }
+		ServerWorld &getWorld(u16 dimension);
 
 		const ServerCommandHandler *server() const { return m_server; }
 		void setServer(ServerCommandHandler &server) { m_server = &server; }
