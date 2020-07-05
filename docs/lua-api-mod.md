@@ -1,6 +1,28 @@
 # Lua API: Mod API Overview
 
-## Introduction
+## Intrduction
+
+Mods are folders and they should contain at least two files:
+
+- `init.lua`: your code
+- `config.lua`: mod config (name, depedencies)
+
+They are located in `mods` folder.
+
+## Mod config
+
+Here is an example of configuration:
+```lua
+mod_config = {
+	id = "creative_inventory",
+
+	dependencies = {"*default"}
+}
+```
+
+The `*` before `default` means it's an optional dependency.
+
+## How to use this API
 
 You can create a mod using this function:
 ```
