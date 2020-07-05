@@ -333,6 +333,16 @@ mod:block {
 	end
 }
 
+mod:block {
+	id = "farmland",
+	name = "Farmland",
+	tiles = {"farmland_dry.png", "dirt.png", "dirt.png"},
+	alt_tiles = {"farmland_wet.png", "dirt.png", "dirt.png"},
+
+	draw_type = "boundingbox",
+	bounding_box = {0, 0, 0, 1, 1, 15 / 16},
+}
+
 dofile("blocks/workbench.lua")
 dofile("blocks/furnace.lua")
 dofile("blocks/door.lua")

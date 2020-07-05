@@ -138,4 +138,6 @@
 - `void set_data(int x, int y, int z, u16 data)`
 - `BlockData *add_block_data(int x, int y, int z, int inventoryWidth, int inventoryHeight)`
 - `BlockData *get_block_data(int x, int y, int z)`
+- `const Block &get_block_def(int x, int y, int z)`
+- `void set_block_from_str(int x, int y, int z, string block_id)`
 

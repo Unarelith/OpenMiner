@@ -120,14 +120,14 @@ void TextureAtlas::loadFromRegistry(const std::string &texturePack) {
 	}
 
 	for (auto &item : Registry::getInstance().items()) {
-		if (!item.isBlock() || !item.tiles().textureFilenames().empty()) {
+		if (!item->isBlock() || !item->tiles().textureFilenames().empty()) {
 			std::string path;
 			if (texturePack.empty())
-				path = "mods/" + item.modName() + "/textures/items/";
+				path = "mods/" + item->modName() + "/textures/items/";
 			else
 				path = "texturepacks/" + texturePack + "/items/";
 
-			const TilesDef &tiles = item.tiles();
+			const TilesDef &tiles = item->tiles();
 			for (auto &textureFilename : tiles.textureFilenames())
 				addFile(path, textureFilename);
 			for (auto &textureFilename : tiles.altTextureFilenames())

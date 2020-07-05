@@ -34,6 +34,7 @@
 #include "Server.hpp"
 #include "ServerBlock.hpp"
 #include "ServerCommandHandler.hpp"
+#include "ServerItem.hpp"
 #include "WorldController.hpp"
 
 void ServerCommandHandler::sendServerClosed(const std::string &message, const ClientInfo *client) const {
@@ -336,7 +337,7 @@ void ServerCommandHandler::setupCallbacks() {
 				m_scriptEngine.luaCore().onEvent(LuaEventType::BlockActivated, glm::ivec3{x, y, z}, block, *player, world, client, *this);
 		}
 		else
-			gkError() << ("Failed to activate block using player " + std::to_string(client.id) + ": Player not found").c_str();
+			gkError() << ("Failed to activate block using player '" + client.playerName + "': Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::BlockInvUpdate, [this](ClientInfo &client, Network::Packet &packet) {
@@ -358,6 +359,31 @@ void ServerCommandHandler::setupCallbacks() {
 		if (data) {
 			packet >> data->meta >> data->useAltTiles;
 		}
+	});
+
+	m_server.setCommandCallback(Network::Command::ItemActivated, [this](ClientInfo &client, Network::Packet &packet) {
+		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+		if (player) {
+			s32 x, y, z;
+			u16 screenWidth, screenHeight;
+			u8 guiScale;
+			packet >> x >> y >> z >> screenWidth >> screenHeight >> guiScale;
+
+			ServerWorld &world = getWorldForClient(client.id);
+
+			u16 id = world.getBlock(x, y, z);
+			ServerBlock &block = (ServerBlock &)(m_registry.getBlock(id));
+
+			ServerItem &item = (ServerItem &)player->heldItemStack().item();
+			if (item.canBeActivated()) {
+				bool hasBeenActivated = item.onItemActivated({x, y, z}, block, *player, world, client, *this, screenWidth, screenHeight, guiScale);
+
+				if (hasBeenActivated)
+					m_scriptEngine.luaCore().onEvent(LuaEventType::ItemActivated, glm::ivec3{x, y, z}, block, *player, world, client, *this);
+			}
+		}
+		else
+			gkError() << ("Failed to activate item using player '" + client.playerName + "': Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::ChatMessage, [this](ClientInfo &client, Network::Packet &packet) {

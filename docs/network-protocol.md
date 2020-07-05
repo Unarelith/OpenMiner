@@ -271,6 +271,17 @@ _This packet has no field._
 | Block Z       | s32         | Block Z coordinate                                   |
 | Inventory     | Inventory   | Block inventory                                      |
 
+#### ItemActivated
+
+| Field name    | Field type  | Notes                                                |
+| ------------- | ----------- | ---------------------------------------------------- |
+| Block X       | s32         | Selected block X coordinate                          |
+| Block Y       | s32         | Selected block Y coordinate                          |
+| Block Z       | s32         | Selected block Z coordinate                          |
+| Screen width  | u16         | Client screen width                                  |
+| Screen height | u16         | Client screen height                                 |
+| GUI scale     | u8          | Client GUI scale                                     |
+
 #### ChatMessage (serverbound)
 
 | Field name    | Field type  | Notes                                                |

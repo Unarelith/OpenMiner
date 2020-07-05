@@ -26,33 +26,29 @@
  */
 #include <gk/core/Debug.hpp>
 
-#include "LuaItemLoader.hpp"
-#include "LuaMod.hpp"
-#include "Registry.hpp"
+#include "Chunk.hpp"
+#include "Player.hpp"
+#include "ServerCommandHandler.hpp"
 #include "ServerItem.hpp"
+#include "ServerPlayer.hpp"
+#include "World.hpp"
 
-void LuaItemLoader::loadItem(const sol::table &table) const {
-	TilesDef tiles;
-	tiles.loadFromLuaTable(table);
-
-	std::string stringID = m_mod.id() + ":" + table["id"].get<std::string>();
-	std::string label = table["name"].get<std::string>();
-
-	ServerItem &item = Registry::getInstance().registerItem<ServerItem>(tiles, stringID, label);
-	item.setHarvestCapability(table["harvest_capability"].get_or(0));
-	item.setMiningSpeed(table["mining_speed"].get_or(1));
-	item.setOnItemActivated(table["on_item_activated"]);
-
-	sol::object groupsObject = table["groups"];
-	if (groupsObject.valid()) {
-		if (groupsObject.get_type() == sol::type::table) {
-			sol::table groupsTable = groupsObject.as<sol::table>();
-			for (auto &groupObject : groupsTable) {
-				item.addGroup("group:" + groupObject.first.as<std::string>(), groupObject.second.as<u16>());
-			}
+bool ServerItem::onItemActivated(const glm::ivec3 &pos, Block &block, Player &player, World &world, ClientInfo &client, ServerCommandHandler &server, u16 screenWidth, u16 screenHeight, u8 guiScale) const {
+	try {
+		if (m_onItemActivated) {
+			m_onItemActivated(pos, block, player, world, client, server, screenWidth, screenHeight, guiScale);
+			return true;
 		}
-		else
-			gkError() << "For item" << stringID << ": 'groups' should be a table";
 	}
+	catch (const sol::error &e) {
+		gkError() << e.what();
+	}
+
+	return false;
+}
+
+void ServerItem::setOnItemActivated(const sol::protected_function &function) {
+	m_onItemActivated = function;
+	m_canBeActivated = m_onItemActivated.valid();
 }
 

@@ -71,10 +71,14 @@ class Item : public gk::ISerializable {
 			return it->second;
 		}
 
+		bool canBeActivated() const { return m_canBeActivated; }
+
 		static void initUsertype(sol::state &lua);
 
 	protected:
 		bool m_isBlock = false;
+
+		bool m_canBeActivated = false;
 
 	private:
 		u32 m_id = 0;

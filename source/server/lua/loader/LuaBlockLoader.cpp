@@ -48,10 +48,10 @@ void LuaBlockLoader::loadBlock(const sol::table &table) const {
 
 	Item *item = nullptr;
 	if (!block.inventoryImage().empty()) {
-		item = &Registry::getInstance().registerItem(TilesDef{block.inventoryImage()}, stringID, label);
+		item = &Registry::getInstance().registerItem<Item>(TilesDef{block.inventoryImage()}, stringID, label);
 	}
 	else {
-		item = &Registry::getInstance().registerItem(block.tiles(), stringID, label);
+		item = &Registry::getInstance().registerItem<Item>(block.tiles(), stringID, label);
 	}
 
 	item->setIsBlock(true);

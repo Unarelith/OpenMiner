@@ -65,8 +65,24 @@ class Registry : public gk::ISerializable {
 			return *static_cast<T*>(m_blocks.back().get());
 		}
 
-		Item &registerItem(const TilesDef &tiles, const std::string &stringID, const std::string &name);
-		Item &registerSerializedItem(sf::Packet &packet);
+		template<typename T>
+		auto registerItem(const TilesDef &tiles, const std::string &stringID, const std::string &label) -> typename std::enable_if<std::is_base_of<Item, T>::value, T&>::type {
+			u32 id = m_items.size();
+			m_itemsID.emplace(stringID, id);
+			m_items.emplace_back(std::make_unique<T>(id, tiles, stringID, label));
+			return *static_cast<T*>(m_items.back().get());
+		}
+
+		template<typename T>
+		auto registerSerializedItem(sf::Packet &packet) -> typename std::enable_if<std::is_base_of<Item, T>::value, T&>::type {
+			m_items.emplace_back(std::make_unique<T>());
+			m_items.back()->deserialize(packet);
+
+			u32 id = m_items.size() - 1;
+			m_itemsID.emplace(m_items.back()->stringID(), id);
+
+			return *static_cast<T*>(m_items.back().get());
+		}
 
 		template<typename T, typename... Args>
 		auto registerRecipe(Args &&...args) -> typename std::enable_if<std::is_base_of<Recipe, T>::value, Recipe*>::type {
@@ -93,7 +109,7 @@ class Registry : public gk::ISerializable {
 		entt::entity registerEntity(const std::string &stringID);
 
 		const Block &getBlock(u16 id) const { return *m_blocks.at(id).get(); }
-		const Item &getItem(u16 id) const { return m_items.at(id); }
+		const Item &getItem(u16 id) const { return *m_items.at(id).get(); }
 		const Sky &getSky(u16 id) const { return m_skies.at(id); }
 		const Tree &getTree(u16 id) const { return m_trees.at(id); }
 		const Biome &getBiome(u16 id) const { return m_biomes.at(id); }
@@ -120,7 +136,7 @@ class Registry : public gk::ISerializable {
 		static void initUsertype(sol::state &lua);
 
 		const std::vector<std::unique_ptr<Block>> &blocks() const { return m_blocks; }
-		const std::vector<Item> &items() const { return m_items; }
+		const std::vector<std::unique_ptr<Item>> &items() const { return m_items; }
 		const std::vector<Tree> &trees() const { return m_trees; }
 		const std::vector<Biome> &biomes() const { return m_biomes; }
 		const std::vector<Dimension> &dimensions() const { return m_dimensions; }
@@ -133,7 +149,7 @@ class Registry : public gk::ISerializable {
 		static Registry *s_instance;
 
 		std::vector<std::unique_ptr<Block>> m_blocks;
-		std::vector<Item> m_items;
+		std::vector<std::unique_ptr<Item>> m_items;
 		std::vector<std::unique_ptr<Recipe>> m_recipes;
 		std::vector<Sky> m_skies;
 		std::vector<Tree> m_trees;

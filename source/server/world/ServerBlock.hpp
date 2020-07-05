@@ -53,10 +53,10 @@ class ServerBlock : public Block {
 		static void initUsertype(sol::state &lua);
 
 	private:
-		sol::protected_function m_onBlockActivated;
-		sol::protected_function m_onTick;
-		sol::protected_function m_onBlockPlaced;
-		sol::protected_function m_onBlockDestroyed;
+		sol::unsafe_function m_onBlockActivated;
+		sol::unsafe_function m_onTick;
+		sol::unsafe_function m_onBlockPlaced;
+		sol::unsafe_function m_onBlockDestroyed;
 
 		mutable bool m_onTickEnabled = true;
 };

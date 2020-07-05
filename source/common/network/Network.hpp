@@ -40,14 +40,11 @@ namespace Network {
 		ClientOk              = 0x02,
 		ClientRefused         = 0x03,
 
-		// Server commands
 		ServerClosed          = 0x04,
 
-		// Chunk commands
 		ChunkData             = 0x05,
 		ChunkRequest          = 0x06,
 
-		// Player commands
 		PlayerPlaceBlock      = 0x07,
 		PlayerDigBlock        = 0x08,
 		PlayerInvUpdate       = 0x09,
@@ -57,29 +54,26 @@ namespace Network {
 		PlayerChangeDimension = 0x0d,
 		PlayerHeldItemChanged = 0x0e,
 
-		// Block commands
 		BlockUpdate           = 0x0f,
 		BlockActivated        = 0x10,
 		BlockGUIData          = 0x11,
 		BlockInvUpdate        = 0x12,
 		BlockDataUpdate       = 0x13,
 
-		// Registry commands
-		RegistryData          = 0x14,
+		ItemActivated         = 0x14,
 
-		// Chat commands
-		ChatMessage           = 0x15,
+		RegistryData          = 0x15,
 
-		// Entity commands
-		EntitySpawn           = 0x16,
-		EntityDespawn         = 0x17,
-		EntityPosition        = 0x18,
-		EntityRotation        = 0x19,
-		EntityAnimation       = 0x1a,
-		EntityDrawableDef     = 0x1b,
+		ChatMessage           = 0x16,
 
-		// Key commands
-		KeyPressed            = 0x1c,
+		EntitySpawn           = 0x17,
+		EntityDespawn         = 0x18,
+		EntityPosition        = 0x19,
+		EntityRotation        = 0x1a,
+		EntityAnimation       = 0x1b,
+		EntityDrawableDef     = 0x1c,
+
+		KeyPressed            = 0x1d,
 	};
 
 	std::string commandToString(Command command);

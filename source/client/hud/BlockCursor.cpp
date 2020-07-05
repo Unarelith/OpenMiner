@@ -61,13 +61,25 @@ void BlockCursor::onEvent(const sf::Event &event, const Hotbar &hotbar) {
 			const Block &block = Registry::getInstance().getBlock(blockId);
 			const Item &item = hotbar.currentItem();
 
+			bool itemActivationSent = false;
+			bool sneakedItemActivation = false;
+			if (item.id() && item.canBeActivated()) {
+				if (!gk::GamePad::isKeyPressed(GameKey::Sneak)) {
+					m_client.sendItemActivated(m_selectedBlock);
+					itemActivationSent = true;
+				}
+				else
+					sneakedItemActivation = true;
+			}
+
 			bool blockActivationSent = false;
-			if (block.id() && block.canBeActivated() && !gk::GamePad::isKeyPressed(GameKey::Sneak)) {
+			if (!itemActivationSent && block.id() && block.canBeActivated()
+			&& (!gk::GamePad::isKeyPressed(GameKey::Sneak) || sneakedItemActivation)) {
 				m_client.sendBlockActivated(m_selectedBlock);
 				blockActivationSent = true;
 			}
 
-			if (block.id() && !blockActivationSent && hotbar.currentItem().id() && item.isBlock()) {
+			if (block.id() && !itemActivationSent && !blockActivationSent && hotbar.currentItem().id() && item.isBlock()) {
 				s8 face = m_selectedBlock.w;
 
 				s32 x = m_selectedBlock.x;

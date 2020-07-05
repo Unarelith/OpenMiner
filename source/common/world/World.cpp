@@ -29,6 +29,7 @@
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "EngineConfig.hpp"
+#include "Registry.hpp"
 #include "World.hpp"
 
 bool World::isReloadRequested = false;
@@ -95,7 +96,15 @@ void World::initUsertype(sol::state &lua) {
 		"set_data", &World::setData,
 
 		"get_block_data", &World::getBlockData,
-		"add_block_data", &World::addBlockData
+		"add_block_data", &World::addBlockData,
+
+		"get_block_def", [&](World &self, int x, int y, int z) {
+			return Registry::getInstance().getBlock(self.getBlock(x, y, z));
+		},
+
+		"set_block_from_str", [&](World &self, int x, int y, int z, const std::string &id) {
+			self.setBlock(x, y, z, Registry::getInstance().getBlockFromStringID(id).id());
+		}
 	);
 }
 

@@ -40,6 +40,8 @@ void LuaCore::initUsertype(sol::state &lua) {
 		"BlockDigged", LuaEventType::BlockDigged,
 		"BlockActivated", LuaEventType::BlockActivated,
 
+		"ItemActivated", LuaEventType::ItemActivated,
+
 		"PlayerConnected", LuaEventType::PlayerConnected
 	);
 

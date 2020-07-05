@@ -33,23 +33,6 @@
 
 Registry *Registry::s_instance = nullptr;
 
-Item &Registry::registerItem(const TilesDef &tiles, const std::string &stringID, const std::string &label) {
-	u32 id = m_items.size();
-	m_itemsID.emplace(stringID, id);
-	m_items.emplace_back(id, tiles, stringID, label);
-	return m_items.back();
-}
-
-Item &Registry::registerSerializedItem(sf::Packet &packet) {
-	m_items.emplace_back();
-	m_items.back().deserialize(packet);
-
-	u32 id = m_items.size() - 1;
-	m_itemsID.emplace(m_items.back().stringID(), id);
-
-	return m_items.back();
-}
-
 Sky &Registry::registerSky(const std::string &stringID) {
 	size_t id = m_skies.size();
 	m_skiesID.emplace(stringID, id);
@@ -233,12 +216,12 @@ EntityCallbackContainer &Registry::getEntityCallbackContainer(const std::string 
 }
 
 void Registry::serialize(sf::Packet &packet) const {
-	for (auto &it : m_items) {
-		packet << u8(DataType::Item) << it;
-	}
-
 	for (auto &it : m_blocks) {
 		packet << u8(DataType::Block) << *it;
+	}
+
+	for (auto &it : m_items) {
+		packet << u8(DataType::Item) << *it;
 	}
 
 	for (auto &it : m_recipes) {
@@ -275,7 +258,7 @@ void Registry::deserialize(sf::Packet &packet) {
 			registerSerializedBlock<Block>(packet);
 		}
 		else if (type == u8(DataType::Item)) {
-			registerSerializedItem(packet);
+			registerSerializedItem<Item>(packet);
 		}
 		else if (type == u8(DataType::CraftingRecipe)) {
 			registerRecipe<CraftingRecipe>()->deserialize(packet);

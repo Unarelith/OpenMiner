@@ -42,6 +42,8 @@ enum class LuaEventType {
 	BlockDigged,
 	BlockActivated,
 
+	ItemActivated,
+
 	PlayerConnected,
 };
 

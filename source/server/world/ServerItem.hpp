@@ -24,35 +24,30 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
+#ifndef SERVERITEM_HPP_
+#define SERVERITEM_HPP_
 
-#include "LuaItemLoader.hpp"
-#include "LuaMod.hpp"
-#include "Registry.hpp"
-#include "ServerItem.hpp"
+#include <glm/vec3.hpp>
 
-void LuaItemLoader::loadItem(const sol::table &table) const {
-	TilesDef tiles;
-	tiles.loadFromLuaTable(table);
+#include "Item.hpp"
 
-	std::string stringID = m_mod.id() + ":" + table["id"].get<std::string>();
-	std::string label = table["name"].get<std::string>();
+class Block;
+class ClientInfo;
+class Player;
+class ServerCommandHandler;
+class World;
 
-	ServerItem &item = Registry::getInstance().registerItem<ServerItem>(tiles, stringID, label);
-	item.setHarvestCapability(table["harvest_capability"].get_or(0));
-	item.setMiningSpeed(table["mining_speed"].get_or(1));
-	item.setOnItemActivated(table["on_item_activated"]);
+class ServerItem : public Item {
+	public:
+		ServerItem(u32 id, const TilesDef &tiles, const std::string &stringID, const std::string &label)
+			: Item(id, tiles, stringID, label) {}
 
-	sol::object groupsObject = table["groups"];
-	if (groupsObject.valid()) {
-		if (groupsObject.get_type() == sol::type::table) {
-			sol::table groupsTable = groupsObject.as<sol::table>();
-			for (auto &groupObject : groupsTable) {
-				item.addGroup("group:" + groupObject.first.as<std::string>(), groupObject.second.as<u16>());
-			}
-		}
-		else
-			gkError() << "For item" << stringID << ": 'groups' should be a table";
-	}
-}
+		bool onItemActivated(const glm::ivec3 &pos, Block &block, Player &player, World &world, ClientInfo &client, ServerCommandHandler &server, u16 screenWidth, u16 screenHeight, u8 guiScale) const;
 
+		void setOnItemActivated(const sol::protected_function &function);
+
+	private:
+		sol::unsafe_function m_onItemActivated;
+};
+
+#endif // SERVERITEM_HPP_

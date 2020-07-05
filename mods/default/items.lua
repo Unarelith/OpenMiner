@@ -42,7 +42,13 @@ mod:item {
 mod:item {
 	id = "stone_hoe",
 	name = "Stone Hoe",
-	tiles = "stone_hoe.png"
+	tiles = "stone_hoe.png",
+
+	on_item_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
+		if block:string_id() == "default:grass" then
+			world:set_block_from_str(pos.x, pos.y, pos.z, "default:farmland")
+		end
+	end
 }
 
 mod:item {
@@ -105,6 +111,12 @@ mod:item {
 	id = "wooden_hoe",
 	name = "Wooden Hoe",
 	tiles = "wooden_hoe.png",
+
+	on_item_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
+		if block:string_id() == "default:grass" then
+			world:set_block_from_str(pos.x, pos.y, pos.z, "default:farmland")
+		end
+	end
 }
 
 mod:item {
@@ -178,7 +190,13 @@ mod:item {
 mod:item {
 	id = "iron_hoe",
 	name = "Iron Hoe",
-	tiles = "iron_hoe.png"
+	tiles = "iron_hoe.png",
+
+	on_item_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
+		if block:string_id() == "default:grass" then
+			world:set_block_from_str(pos.x, pos.y, pos.z, "default:farmland")
+		end
+	end
 }
 
 mod:item {
@@ -214,7 +232,13 @@ mod:item {
 mod:item {
 	id = "diamond_hoe",
 	name = "Diamond Hoe",
-	tiles = "diamond_hoe.png"
+	tiles = "diamond_hoe.png",
+
+	on_item_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
+		if block:string_id() == "default:grass" then
+			world:set_block_from_str(pos.x, pos.y, pos.z, "default:farmland")
+		end
+	end
 }
 
 mod:item {
@@ -250,7 +274,13 @@ mod:item {
 mod:item {
 	id = "golden_hoe",
 	name = "Golden Hoe",
-	tiles = "golden_hoe.png"
+	tiles = "golden_hoe.png",
+
+	on_item_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
+		if block:string_id() == "default:grass" then
+			world:set_block_from_str(pos.x, pos.y, pos.z, "default:farmland")
+		end
+	end
 }
 
 mod:item {

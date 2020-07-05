@@ -81,3 +81,19 @@ The textures will be loaded from `mods/<your-mod>/textures/items`
 
 **Note:** Currently, you can only use textures of the exact same size (16x16, 32x32) than the other block/item textures in the game.
 
+## Functions
+
+### `on_item_activated`
+
+Parameters:
+
+- `pos` (`ivec3`): position of the targeted block
+- `block` (`Block`): definition of the targeted block
+- `player` (`Player`): player that activated the item
+- `world` (`World`): instance of the `ServerWorld`
+- `client` (`Client`): client that activated the item
+- `server` (`Server`): current server
+- `screen_width` (`u16`): width of the screen
+- `screen_height` (`u16`): height of the screen
+- `gui_scale` (`u8`): current scaling setting
+

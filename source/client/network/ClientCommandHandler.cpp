@@ -107,6 +107,16 @@ void ClientCommandHandler::sendBlockInvUpdate(Inventory &inventory) {
 	m_client.send(packet);
 }
 
+void ClientCommandHandler::sendItemActivated(const glm::ivec4 &selectedBlock) {
+	Network::Packet packet;
+	packet << Network::Command::ItemActivated
+		<< s32(selectedBlock.x)
+		<< s32(selectedBlock.y)
+		<< s32(selectedBlock.z)
+		<< u16(Config::screenWidth) << u16(Config::screenHeight) << u8(Config::guiScale);
+	m_client.send(packet);
+}
+
 void ClientCommandHandler::sendChunkRequest(s32 chunkX, s32 chunkY, s32 chunkZ) {
 	Network::Packet packet;
 	packet << Network::Command::ChunkRequest;
