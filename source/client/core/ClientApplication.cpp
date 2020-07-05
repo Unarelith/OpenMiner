@@ -49,13 +49,14 @@ ClientApplication::ClientApplication(int argc, char **argv) : gk::CoreApplicatio
 }
 
 void ClientApplication::init() {
-	m_argumentParser.addArgument("host", {"-h", "--host", "Select the host to connect to.", "host"});
-	m_argumentParser.addArgument("port", {"-p", "--port", "Select the port to use.", "port"});
+	m_argumentParser.addArgument("host",         {"-h", "--host",         "Select the host to connect to.", "host"});
+	m_argumentParser.addArgument("port",         {"-p", "--port",         "Select the port to use.", "port"});
 	m_argumentParser.addArgument("singleplayer", {"-s", "--singleplayer", "Start in singleplayer mode."});
-	m_argumentParser.addArgument("multiplayer", {"-m", "--multiplayer", "Start in multiplayer mode."});
-	m_argumentParser.addArgument("working-dir", {"-w", "--working-dir", "Change the working directory to <dir>.", "dir"});
+	m_argumentParser.addArgument("multiplayer",  {"-m", "--multiplayer",  "Start in multiplayer mode."});
+	m_argumentParser.addArgument("working-dir",  {"-w", "--working-dir",  "Change the working directory to <dir>.", "dir"});
 	m_argumentParser.addArgument("texture-pack", {"-t", "--texture-pack", "Use texture pack <name>.", "name"});
-	m_argumentParser.addArgument("username", {"-u", "--username", "Use <username> when using -m or -s", "username"});
+	m_argumentParser.addArgument("username",     {"-u", "--username",     "Use <username> when using -m or -s", "username"});
+	m_argumentParser.addArgument("log-level",    {"-l", "--log-level",    "Choose the log level (debug, info, warning, error)", "level"});
 
 	m_loggerHandler.setName("client");
 
@@ -70,6 +71,21 @@ void ClientApplication::init() {
 
 	if (m_argumentParser.getArgument("help").isFound)
 		return;
+
+	if (m_argumentParser.getArgument("log-level").isFound) {
+		std::unordered_map<std::string, gk::LogLevel> levels = {
+			{"debug",   gk::LogLevel::Debug},
+			{"info",    gk::LogLevel::Info},
+			{"warning", gk::LogLevel::Warning},
+			{"error",   gk::LogLevel::Error},
+		};
+
+		auto it = levels.find(m_argumentParser.getArgument("log-level").parameter);
+		if (it != levels.end())
+			m_loggerHandler.setMaxLevel(it->second);
+		else
+			gkWarning() << ("Failed to set log level to '" + m_argumentParser.getArgument("log-level").parameter + "': Invalid value").c_str();
+	}
 
 	if (m_argumentParser.getArgument("working-dir").isFound)
 		fs::current_path(m_argumentParser.getArgument("working-dir").parameter);

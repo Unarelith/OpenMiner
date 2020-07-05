@@ -63,14 +63,15 @@ ServerApplication::ServerApplication(gk::EventHandler &eventHandler) {
 bool ServerApplication::init() {
 	std::srand(std::time(nullptr));
 
-	m_loggerHandler.setName("server");
 	gk::LoggerHandler::setInstance(m_loggerHandler);
+	m_loggerHandler.setName("server");
 
 	BlockGeometry::initOrientation();
 
 	m_argumentParser.addArgument("port", {"-p", "--port", "Select the port to use.", "port"});
 	m_argumentParser.addArgument("world", {"-w", "--world", "Select a world to use.", "world"});
 	m_argumentParser.addArgument("working-dir", {"-d", "--working-dir", "Change the working directory to <dir>.", "dir"});
+	m_argumentParser.addArgument("log-level", {"-l", "--log-level", "Choose the log level (debug, info, warning, error)", "level"});
 
 	m_argumentParser.parse();
 
@@ -92,6 +93,21 @@ bool ServerApplication::init() {
 
 	if (m_argumentParser.getArgument("world").isFound)
 		m_worldName = m_argumentParser.getArgument("world").parameter;
+
+	if (m_argumentParser.getArgument("log-level").isFound) {
+		std::unordered_map<std::string, gk::LogLevel> levels = {
+			{"debug",   gk::LogLevel::Debug},
+			{"info",    gk::LogLevel::Info},
+			{"warning", gk::LogLevel::Warning},
+			{"error",   gk::LogLevel::Error},
+		};
+
+		auto it = levels.find(m_argumentParser.getArgument("log-level").parameter);
+		if (it != levels.end())
+			m_loggerHandler.setMaxLevel(it->second);
+		else
+			gkWarning() << ("Failed to set log level to '" + m_argumentParser.getArgument("log-level").parameter + "': Invalid value").c_str();
+	}
 
 	ServerConfig::loadConfigFromFile("config/server.lua");
 

@@ -122,12 +122,14 @@ void TitleScreenState::startSingleplayer(bool showLoadingState, const std::strin
 	if (m_thread.joinable())
 		m_thread.join();
 
-	m_thread = std::thread([this, worldName] () {
+	gk::LogLevel logLevel = gk::LoggerHandler::getInstance().maxLevel();
+	m_thread = std::thread([this, worldName, logLevel] () {
 		ServerApplication app{*m_eventHandler};
 
 		if (!worldName.empty())
 			app.setWorldName(worldName);
 
+		app.setLogLevel(logLevel);
 		app.setSingleplayer(true);
 		app.setPort(sf::Socket::AnyPort);
 		app.run();

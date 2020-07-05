@@ -52,6 +52,7 @@ class ServerApplication {
 		void setSingleplayer(bool isSingleplayer) { m_server.setSingleplayer(isSingleplayer); }
 		void setPort(u16 port) { m_port = port; }
 		void setWorldName(const std::string &worldName) { m_worldName = worldName; }
+		void setLogLevel(gk::LogLevel logLevel) { m_loggerHandler.setMaxLevel(logLevel); }
 
 	private:
 		void update();
