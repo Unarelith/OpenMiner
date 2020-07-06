@@ -29,12 +29,25 @@
 #include "ClientChunk.hpp"
 #include "TextureAtlas.hpp"
 
+u32 ClientChunk::chunkUpdatesPerSec = 0;
+u32 ClientChunk::chunkUpdateCounter = 0;
+u64 ClientChunk::chunkUpdateTime = 0;
+
 void ClientChunk::update() {
+	u64 time = std::time(nullptr);
+	if (time > ClientChunk::chunkUpdateTime) {
+		ClientChunk::chunkUpdatesPerSec = ClientChunk::chunkUpdateCounter;
+		ClientChunk::chunkUpdateCounter = 0;
+		ClientChunk::chunkUpdateTime = time;
+	}
+
 	if (m_lightmap.updateLights() || m_hasChanged || m_hasLightChanged) {
 		m_hasChanged = false;
 		m_hasLightChanged = false;
 
 		m_verticesCount = m_builder.buildChunk(*this, m_vbo);
+
+		++ClientChunk::chunkUpdateCounter;
 	}
 }
 

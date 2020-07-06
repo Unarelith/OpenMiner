@@ -55,6 +55,10 @@ class ClientChunk : public Chunk {
 
 		bool areAllNeighboursTooFar() const;
 
+		static u32 chunkUpdatesPerSec;
+		static u32 chunkUpdateCounter;
+		static u64 chunkUpdateTime;
+
 	private:
 		const Dimension &m_dimension;
 

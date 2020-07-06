@@ -82,6 +82,8 @@ void DebugOverlay::update() {
 	stream << "Loaded chunks: " << m_world.loadedChunkCount();
 	stream << '\n';
 	stream << "Alive entities: " << m_world.scene().registry().alive();
+	stream << '\n';
+	stream << "Chunk updates: " << ClientChunk::chunkUpdatesPerSec;
 
 	m_positionText.setString(stream.str());
 }
