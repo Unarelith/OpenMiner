@@ -69,8 +69,10 @@ std::string Config::defaultUsername = "";
 std::string Config::defaultServerAddress = "localhost:4242";
 
 void Config::loadConfigFromFile(const char *filename) {
-	if (!fs::exists("config"))
-		fs::create_directory("config");
+	if (!fs::exists("config") && !fs::create_directory("config")) {
+		gkError() << "Failed to create 'config' folder";
+		return;
+	}
 
 	if (fs::exists(filename)) {
 		sol::state lua;
