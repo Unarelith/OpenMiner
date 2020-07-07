@@ -89,9 +89,9 @@ class ClientPlayer : public Player {
 
 		const float m_jumpSpeed = 0.06f;
 
-		float inertia = 0;
-		
-		float old_inertia = 0;
+		float m_inertia = 0;
+
+		float m_old_inertia = 0;
 };
 
 #endif // CLIENTPLAYER_HPP_
