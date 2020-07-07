@@ -130,14 +130,6 @@ See [entity page](lua-api-entity.md#entity-spawn-parameters) for more informatio
 
 ## Registration functions
 
-### `block`
-
-Defines a block from a table, see [this page](lua-api-block.md) for more information.
-
-### `biome`
-
-Defines a biome from a table, see [this page](lua-api-biome.md) for more information.
-
 ### `config`
 
 Defines a config option.
@@ -149,31 +141,15 @@ mod:option("use_item_drops", false);
 
 See [this page](lua-api-core.md#openminerget_configname) for more details.
 
-### `dimension`
+### Other functions
 
-Defines a dimension from a table, see [this page](lua-api-dimension.md) for more information.
-
-### `entity`
-
-Defines an entity from a table, see [this page](lua-api-entity.md) for more information.
-
-### `item`
-
-Defines an item from a table, see [this page](lua-api-item.md) for more information.
-
-### `key`
-
-Defines a key from a table, see [this page](lua-api-key.md) for more information.
-
-### `recipe`
-
-Defines a recipe from a table, see [this page](lua-api-recipe.md) for more information.
-
-### `sky`
-
-Defines a sky type from a table, see [this page](lua-api-sky.md) for more information.
-
-### `tree`
-
-Defines a tree type from a table, see [this page](lua-api-tree.md) for more information.
+- [block](lua-api-block.md)
+- [biome](lua-api-biome.md)
+- [dimension](lua-api-dimension.md)
+- [entity](lua-api-entity.md)
+- [item](lua-api-item.md)
+- [key](lua-api-key.md)
+- [recipe](lua-api-recipe.md)
+- [sky](lua-api-sky.md)
+- [tree](lua-api-tree.md)
 
