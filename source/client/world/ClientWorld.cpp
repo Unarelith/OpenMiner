@@ -110,6 +110,9 @@ void ClientWorld::changeDimension(u16 dimensionID) {
 
 	const Sky &sky = Registry::getInstance().getSkyFromStringID(dimension.sky());
 	m_sky = &sky;
+
+	glCheck(glClearColor(sky.color().r, sky.color().g, sky.color().b, sky.color().a));
+
 }
 
 void ClientWorld::receiveChunkData(Network::Packet &packet) {
@@ -217,12 +220,6 @@ void ClientWorld::createChunkNeighbours(ClientChunk *chunk) {
 }
 
 void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	// glClearColor used to be called in changeDimension(), but when "toggling fullscreen mode"
-	// with SFML, you actually recreate a window. Thus, all the glEnable/glDisable/glClearColor
-	// states are cleared when fullscreen mode is enabled/disabled.
-	if (m_sky)
-		glCheck(glClearColor(m_sky->color().r, m_sky->color().g, m_sky->color().b, m_sky->color().a));
-
 	if (!target.getView() || !m_camera) {
 		gkError() << "Trying to draw world without a camera";
 		return;
