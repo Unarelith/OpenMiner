@@ -75,8 +75,8 @@ void ClientPlayer::updateCamera() {
 void ClientPlayer::move(float direction) {
 	direction += m_viewAngleH;
 	if (m_inertia < 1) m_inertia += 0.025;
-	m_velocity.x = 0.04 * cosf(direction * RADIANS_PER_DEGREES) * m_inertia;
-	m_velocity.y = 0.04 * sinf(direction * RADIANS_PER_DEGREES) * m_inertia;
+	m_velocity.x = 0.04f * cosf(direction * RADIANS_PER_DEGREES) * m_inertia;
+	m_velocity.y = 0.04f * sinf(direction * RADIANS_PER_DEGREES) * m_inertia;
 }
 
 void ClientPlayer::processInputs() {
