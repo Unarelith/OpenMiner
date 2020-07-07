@@ -31,7 +31,11 @@
 
 #include <sol/sol.hpp>
 
+#include <filesystem.hpp>
+
 #include "Config.hpp"
+
+namespace fs = ghc::filesystem;
 
 // Gameplay
 bool Config::isFlyModeEnabled = false;
@@ -65,7 +69,10 @@ std::string Config::defaultUsername = "";
 std::string Config::defaultServerAddress = "localhost:4242";
 
 void Config::loadConfigFromFile(const char *filename) {
-	if (gk::Filesystem::fileExists(filename)) {
+	if (!fs::exists("config"))
+		fs::create_directory("config");
+
+	if (fs::exists(filename)) {
 		sol::state lua;
 
 		try {
