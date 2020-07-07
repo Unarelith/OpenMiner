@@ -32,8 +32,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include <SFML/Graphics/Image.hpp> // FIXME: Make a similar implementation in GameKit
-
 #include <gk/core/IntTypes.hpp>
 #include <gk/core/Rect.hpp>
 #include <gk/gl/Texture.hpp>
@@ -60,7 +58,10 @@ class TextureAtlas {
 
 		// Mapping between filename and internal texture ID
 		std::unordered_map<std::string, u16> m_textureMap;
-		std::vector<sf::Image> m_images;
+
+		// Textures to pack together
+		using SurfacePtr = std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)>;
+		std::vector<SurfacePtr> m_textures;
 
 		// Packed texture
 		gk::Texture m_texture;
