@@ -275,7 +275,7 @@ void SettingsMenuState::addInputButtons() {
 	}
 
 	m_menuWidget.addButton("Mouse sensitivity: " + std::to_string(Config::mouseSensitivity), [] (TextButton &button) {
-		Config::mouseSensitivity = std::max(2, (Config::mouseSensitivity + 2) % 14);
+		Config::mouseSensitivity = std::max(2, (Config::mouseSensitivity + 2) % 22);
 		button.setText("Mouse sensitivity: " + std::to_string(Config::mouseSensitivity));
 	});
 
