@@ -74,7 +74,8 @@ void ClientPlayer::updateCamera() {
 
 void ClientPlayer::move(float direction) {
 	direction += m_viewAngleH;
-	if (m_inertia < 1) m_inertia += 0.025;
+	if (m_inertia < 1)
+		m_inertia += 0.025;
 	m_velocity.x = 0.04f * cosf(direction * RADIANS_PER_DEGREES) * m_inertia;
 	m_velocity.y = 0.04f * sinf(direction * RADIANS_PER_DEGREES) * m_inertia;
 }
@@ -132,9 +133,10 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 		m_velocity.y *= 0.75f;
 	}
 
-	if(m_inertia > 0 && m_oldInertia >= m_inertia){
+	if (m_inertia > 0 && m_oldInertia >= m_inertia) {
 		m_inertia -= 0.0025;
-		if(m_inertia < 0.83) m_inertia = 0;
+		if(m_inertia < 0.83)
+			m_inertia = 0;
 		m_velocity.x *= m_inertia;
 		m_velocity.y *= m_inertia;
 	}

@@ -90,7 +90,6 @@ class ClientPlayer : public Player {
 		const float m_jumpSpeed = 0.06f;
 
 		float m_inertia = 0;
-
 		float m_oldInertia = 0;
 };
 
