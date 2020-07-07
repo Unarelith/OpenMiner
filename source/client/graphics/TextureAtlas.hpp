@@ -32,10 +32,11 @@
 #include <unordered_map>
 #include <vector>
 
-#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Image.hpp> // FIXME: Make a similar implementation in GameKit
 
 #include <gk/core/IntTypes.hpp>
 #include <gk/core/Rect.hpp>
+#include <gk/gl/Texture.hpp>
 
 class TextureAtlas {
 	public:
@@ -49,7 +50,7 @@ class TextureAtlas {
 		u16 getTextureID(const std::string &filename) const;
 		gk::FloatRect getTexCoords(const std::string &filename, bool normalized = true) const;
 
-		const sf::Texture &texture() const { return m_texture; }
+		const gk::Texture &texture() const { return m_texture; }
 
 		bool isReady() const { return m_isReady; }
 
@@ -62,7 +63,7 @@ class TextureAtlas {
 		std::vector<sf::Image> m_images;
 
 		// Packed texture
-		sf::Texture m_texture;
+		gk::Texture m_texture;
 
 		// Is the texture atlas ready to use?
 		bool m_isReady = false;

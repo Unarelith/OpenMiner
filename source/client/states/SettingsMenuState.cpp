@@ -69,10 +69,10 @@ void SettingsMenuState::init() {
 	m_eventHandler->addListener<GuiScaleChangedEvent>(&SettingsMenuState::onGuiScaleChanged, this);
 }
 
-void SettingsMenuState::onEvent(const sf::Event &event) {
+void SettingsMenuState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
-	if (event.type == sf::Event::Resized && &m_stateStack->top() != this) {
+	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED && &m_stateStack->top() != this) {
 		m_menuWidget.onEvent(event);
 	}
 
@@ -80,14 +80,14 @@ void SettingsMenuState::onEvent(const sf::Event &event) {
 		m_menuWidget.onEvent(event);
 		m_doneButton.onEvent(event);
 
-		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 			doneButtonAction();
 		}
-		else if (m_currentKeyButton && event.type == sf::Event::KeyPressed) {
+		else if (m_currentKeyButton && event.type == SDL_KEYDOWN) {
 			KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
-			keyboardHandler->setKeycode(m_currentKey, event.key.code);
+			keyboardHandler->setKeycode(m_currentKey, event.key.keysym.sym);
 
-			m_key->setKeycode(event.key.code);
+			m_key->setKeycode(event.key.keysym.sym);
 			m_key = nullptr;
 
 			m_currentKeyButton->setText(m_currentKeyButton->text() + keyboardHandler->getKeyName(m_currentKey));

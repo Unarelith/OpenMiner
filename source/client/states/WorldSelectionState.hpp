@@ -37,7 +37,7 @@ class WorldSelectionState : public InterfaceState {
 	public:
 		WorldSelectionState(TitleScreenState *titleScreen);
 
-		void onEvent(const sf::Event &event) override;
+		void onEvent(const SDL_Event &event) override;
 
 		void update() override;
 

@@ -67,15 +67,12 @@ WorldDeletionState::WorldDeletionState(const std::string &worldName, TitleScreen
 	updateWidgetPosition();
 }
 
-void WorldDeletionState::onEvent(const sf::Event &event) {
+void WorldDeletionState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
 	if (&m_stateStack->top() == this) {
 		m_menuWidget.onEvent(event);
 	}
-}
-
-void WorldDeletionState::update() {
 }
 
 void WorldDeletionState::updateWidgetPosition() {

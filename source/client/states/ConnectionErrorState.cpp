@@ -72,7 +72,7 @@ ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::
 	updateWidgetPosition();
 }
 
-void ConnectionErrorState::onEvent(const sf::Event &event) {
+void ConnectionErrorState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {

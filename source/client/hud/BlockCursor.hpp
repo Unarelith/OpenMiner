@@ -27,7 +27,7 @@
 #ifndef BLOCKCURSOR_HPP_
 #define BLOCKCURSOR_HPP_
 
-#include <SFML/Window/Event.hpp>
+#include <gk/core/SDLHeaders.hpp>
 
 #include "ClientWorld.hpp"
 #include "Inventory.hpp"
@@ -41,7 +41,7 @@ class BlockCursor : public gk::Drawable {
 	public:
 		BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client);
 
-		void onEvent(const sf::Event &event, const Hotbar &hotbar);
+		void onEvent(const SDL_Event &event, const Hotbar &hotbar);
 
 		void update(const Hotbar &hotbar);
 
@@ -69,7 +69,7 @@ class BlockCursor : public gk::Drawable {
 		const Block *m_currentBlock = nullptr;
 		const ItemStack *m_currentTool = nullptr;
 
-		sf::Texture *m_blockDestroyTexture = nullptr;
+		gk::Texture *m_blockDestroyTexture = nullptr;
 };
 
 #endif // BLOCKCURSOR_HPP_

@@ -35,20 +35,20 @@
 #include "KeyboardHandler.hpp"
 
 KeyboardHandler::KeyboardHandler() {
-	addKey(GameKey::Left,            "Left",            sf::Keyboard::A);
-	addKey(GameKey::Right,           "Right",           sf::Keyboard::D);
-	addKey(GameKey::Up,              "Up",              sf::Keyboard::W);
-	addKey(GameKey::Down,            "Down",            sf::Keyboard::S);
+	addKey(GameKey::Left,            "Left",            SDLK_a);
+	addKey(GameKey::Right,           "Right",           SDLK_d);
+	addKey(GameKey::Up,              "Up",              SDLK_w);
+	addKey(GameKey::Down,            "Down",            SDLK_s);
 
-	addKey(GameKey::Jump,            "Jump",            sf::Keyboard::Space);
-	addKey(GameKey::Fly,             "Fly",             sf::Keyboard::X);
-	addKey(GameKey::Sneak,           "Sneak",           sf::Keyboard::LShift);
-	addKey(GameKey::Sprint,          "Sprint",          sf::Keyboard::LControl);
+	addKey(GameKey::Jump,            "Jump",            SDLK_SPACE);
+	addKey(GameKey::Fly,             "Fly",             SDLK_x);
+	addKey(GameKey::Sneak,           "Sneak",           SDLK_LSHIFT);
+	addKey(GameKey::Sprint,          "Sprint",          SDLK_LCTRL);
 
-	addKey(GameKey::Chat,            "Chat",            sf::Keyboard::T);
-	addKey(GameKey::Command,         "Command",         sf::Keyboard::Divide);
+	addKey(GameKey::Chat,            "Chat",            SDLK_t);
+	addKey(GameKey::Command,         "Command",         SDLK_KP_DIVIDE);
 
-	addKey(GameKey::Shift,           "Shift",           sf::Keyboard::LShift);
+	addKey(GameKey::Shift,           "Shift",           SDLK_LSHIFT);
 }
 
 void KeyboardHandler::loadKeysFromFile(const std::string &filename) {
@@ -65,13 +65,13 @@ void KeyboardHandler::loadKeysFromFile(const std::string &filename) {
 					const std::string &keyName = it.second.as<sol::table>()["name"].get<std::string>();
 					const std::string &keyValue = it.second.as<sol::table>()["value"].get<std::string>();
 
-					sf::Keyboard::Key keycode = gk::KeyboardUtils::getKeyFromName(keyValue);
+					SDL_Keycode keycode = SDL_GetKeyFromName(keyValue.c_str());
 
 					auto keyit = m_keysID.find(keyID);
 					if (keyit != m_keysID.end()) {
 						gk::GameKey key = keyit->second;
 						m_keys[key].setKeycode(keycode);
-						if (m_keys[key].keycode() == sf::Keyboard::Unknown) {
+						if (m_keys[key].keycode() == SDLK_UNKNOWN) {
 							gkWarning() << "Key name '" + keyValue + "' not recognized";
 						}
 					}
@@ -102,10 +102,15 @@ void KeyboardHandler::saveKeysToFile(const std::string &filename) {
 }
 
 bool KeyboardHandler::isKeyPressed(gk::GameKey key) {
-	return sf::Keyboard::isKeyPressed(m_keys[key].keycode());
+	const u8 *keyboardState = SDL_GetKeyboardState(nullptr);
+	SDL_Keycode keyScancode = m_keys[key].keycode();
+
+	m_keysPressed[key] = keyboardState[SDL_GetScancodeFromKey(keyScancode)];
+
+	return m_keysPressed[key];
 }
 
-void KeyboardHandler::addKey(gk::GameKey id, const std::string &name, sf::Keyboard::Key defaultKey, const std::string &stringID, Key *key) {
+void KeyboardHandler::addKey(gk::GameKey id, const std::string &name, SDL_Keycode defaultKey, const std::string &stringID, Key *key) {
 	auto keyit = m_keysID.find(stringID);
 	if (keyit == m_keysID.end()) {
 		auto it = m_keys.emplace(id, Key((u16)id, (stringID.empty() ? "_" + name : stringID), name));

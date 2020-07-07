@@ -50,17 +50,17 @@ TextButton::TextButton(const CppCallback &callback, Widget *parent) : TextButton
 	m_cppCallback = callback;
 }
 
-void TextButton::onEvent(const sf::Event &event) {
-	if (event.type == sf::Event::MouseMoved) {
-		m_isHovered = isPointInWidget(event.mouseMove.x, event.mouseMove.y);
+void TextButton::onEvent(const SDL_Event &event) {
+	if (event.type == SDL_MOUSEMOTION) {
+		m_isHovered = isPointInWidget(event.motion.x, event.motion.y);
 
 		if (m_isEnabled && m_isHovered)
 			m_text.setColor(m_hoverColor);
 		else if (m_isEnabled && !m_isHovered)
 			m_text.setColor(m_defaultColor);
 	}
-	else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && m_isHovered && m_isEnabled) {
-		m_isHovered = isPointInWidget(event.mouseButton.x, event.mouseButton.y);
+	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && m_isHovered && m_isEnabled) {
+		m_isHovered = isPointInWidget(event.button.x, event.button.y);
 
 		if (m_isEnabled && m_isHovered)
 			m_text.setColor(m_hoverColor);

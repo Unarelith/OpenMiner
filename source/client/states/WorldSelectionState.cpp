@@ -87,10 +87,11 @@ WorldSelectionState::WorldSelectionState(TitleScreenState *titleScreen)
 	loadSaveList();
 }
 
-void WorldSelectionState::onEvent(const sf::Event &event) {
+void WorldSelectionState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
-	if (event.type == sf::Event::Resized && !m_stateStack->empty() && &m_stateStack->top() != this) {
+	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED
+	&& !m_stateStack->empty() && &m_stateStack->top() != this) {
 		m_worldList.onEvent(event);
 	}
 

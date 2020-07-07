@@ -34,7 +34,7 @@ class ConnectionErrorState : public InterfaceState {
 	public:
 		ConnectionErrorState(const std::string &error, const std::string &host, u16 port, gk::ApplicationState *parent = nullptr);
 
-		void onEvent(const sf::Event &event) override;
+		void onEvent(const SDL_Event &event) override;
 
 	private:
 		void updateWidgetPosition() override;

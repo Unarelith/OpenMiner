@@ -77,8 +77,8 @@ void GameState::connect(const std::string &host, int port, const std::string &us
 	gk::Mouse::setCursorGrabbed(true);
 }
 
-void GameState::onEvent(const sf::Event &event) {
-	if (event.type == sf::Event::Closed) {
+void GameState::onEvent(const SDL_Event &event) {
+	if (event.type == SDL_QUIT) {
 		m_client.disconnect();
 
 		m_stateStack->clear();
@@ -87,44 +87,38 @@ void GameState::onEvent(const sf::Event &event) {
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
 		KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
 
-#ifdef __APPLE__
-		if (event.type == sf::Event::MouseMoved) {
-			gk::Mouse::update(event);
+		if (event.type == SDL_MOUSEMOTION) {
+			if(Config::screenWidth / 2.0f != event.motion.x || Config::screenHeight / 2.0f != event.motion.y) {
+				m_player.turnH(event.motion.xrel * -0.01 * Config::mouseSensitivity);
+				m_player.turnViewV(event.motion.yrel * -0.01 * Config::mouseSensitivity);
 
-			const auto &delta = gk::Mouse::getDelta();
-			m_player.turnH(delta.x * -0.02 * Config::mouseSensitivity);
-			m_player.turnViewV(delta.y * -0.02 * Config::mouseSensitivity);
+				gk::Mouse::resetToWindowCenter();
+			}
 		}
-#else
-		if (event.type == sf::Event::MouseMovedRaw) {
-			m_player.turnH(event.mouseMoveRaw.deltaX * -0.01 * Config::mouseSensitivity);
-			m_player.turnViewV(event.mouseMoveRaw.deltaY * -0.01 * Config::mouseSensitivity);
-
-			gk::Mouse::resetToWindowCenter();
-		}
-#endif
-		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 			m_stateStack->push<PauseMenuState>(m_client, this);
 		}
-		else if (event.type == sf::Event::KeyPressed
-		&& (event.key.code == keyboardHandler->getKeycode(GameKey::Chat)
-		 || event.key.code == keyboardHandler->getKeycode(GameKey::Command)))
+		else if (event.type == SDL_KEYDOWN
+		&& (event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Chat)
+		 || event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Command)))
 		{
-			m_stateStack->push<ChatState>(m_clientCommandHandler, m_hud.chat(), event.key.code == keyboardHandler->getKeycode(GameKey::Command), this);
+			m_stateStack->push<ChatState>(m_clientCommandHandler, m_hud.chat(), event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Command), this);
 		}
-		else if (event.type == sf::Event::LostFocus) {
-			m_stateStack->push<PauseMenuState>(m_client, this);
+		else if (event.type == SDL_WINDOWEVENT) {
+			if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
+				m_stateStack->push<PauseMenuState>(m_client, this);
 
-			gk::Mouse::setCursorGrabbed(false);
-			gk::Mouse::setCursorVisible(true);
+				gk::Mouse::setCursorGrabbed(false);
+				gk::Mouse::setCursorVisible(true);
+			}
+			else if (event.type == SDL_WINDOWEVENT_FOCUS_GAINED) {
+				gk::Mouse::setCursorGrabbed(true);
+				gk::Mouse::setCursorVisible(false);
+			}
 		}
-		else if (event.type == sf::Event::GainedFocus) {
-			gk::Mouse::setCursorGrabbed(true);
-			gk::Mouse::setCursorVisible(false);
-		}
-		else if (event.type == sf::Event::KeyPressed) {
+		else if (event.type == SDL_KEYDOWN) {
 			for (auto &key : Registry::getInstance().keys()) {
-				if (event.key.code == key.keycode()) {
+				if (event.key.keysym.sym == key.keycode()) {
 					m_clientCommandHandler.sendKeyPressed(key.id());
 				}
 			}
@@ -133,9 +127,9 @@ void GameState::onEvent(const sf::Event &event) {
 		m_hud.onEvent(event);
 	}
 
-	if (event.type == sf::Event::Resized) {
-		Config::screenWidth = event.size.width;
-		Config::screenHeight = event.size.height;
+	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+		Config::screenWidth = event.window.data1;
+		Config::screenHeight = event.window.data2;
 
 		m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
 		m_hud.setup();

@@ -94,10 +94,10 @@ void TitleScreenState::init() {
 	m_eventHandler->addListener<GuiScaleChangedEvent>(&TitleScreenState::onGuiScaleChanged, this);
 }
 
-void TitleScreenState::onEvent(const sf::Event &event) {
+void TitleScreenState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
-	if (event.type == sf::Event::Resized) {
+	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 		if (!m_stateStack->empty() && &m_stateStack->top() != this)
 			m_menuWidget.onEvent(event);
 	}

@@ -36,9 +36,7 @@ class WorldDeletionState : public InterfaceState {
 	public:
 		WorldDeletionState(const std::string &worldName, TitleScreenState *titleScreen);
 
-		void onEvent(const sf::Event &event) override;
-
-		void update() override;
+		void onEvent(const SDL_Event &event) override;
 
 	private:
 		void updateWidgetPosition() override;

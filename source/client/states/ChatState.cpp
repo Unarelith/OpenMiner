@@ -53,12 +53,12 @@ ChatState::ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, boo
 	m_chat.setMessageVisibility(true);
 }
 
-void ChatState::onEvent(const sf::Event &event) {
+void ChatState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
 	m_textInput.onEvent(event);
 
-	if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape) {
+	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 		gk::Mouse::setCursorGrabbed(true);
 		gk::Mouse::setCursorVisible(false);
 		gk::Mouse::resetToWindowCenter();
@@ -69,7 +69,7 @@ void ChatState::onEvent(const sf::Event &event) {
 			m_stateStack->pop();
 	}
 
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
+	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RETURN) {
 		if (!m_textInput.string().empty()) {
 			m_clientCommandHandler.sendChatMessage(m_textInput.string());
 			m_chat.addHistoryEntry(m_textInput.string());
@@ -85,13 +85,13 @@ void ChatState::onEvent(const sf::Event &event) {
 			m_stateStack->pop();
 	}
 
-	if (event.type == sf::Event::KeyPressed) {
-		if (event.key.code == sf::Keyboard::Up && m_currentHistoryEntry < (int)m_chat.historySize() - 1) {
+	if (event.type == SDL_KEYDOWN) {
+		if (event.key.keysym.sym == SDLK_UP && m_currentHistoryEntry < (int)m_chat.historySize() - 1) {
 			if (m_currentHistoryEntry == -1)
 				m_oldEntry = m_textInput.string();
 			m_textInput.setString(m_chat.getHistoryEntry(++m_currentHistoryEntry));
 		}
-		else if (event.key.code == sf::Keyboard::Down && m_currentHistoryEntry >= 0) {
+		else if (event.key.keysym.sym == SDLK_DOWN && m_currentHistoryEntry >= 0) {
 			--m_currentHistoryEntry;
 			if (m_currentHistoryEntry == -1)
 				m_textInput.setString(m_oldEntry);

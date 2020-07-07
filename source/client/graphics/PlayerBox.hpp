@@ -27,12 +27,11 @@
 #ifndef PLAYERBOX_HPP_
 #define PLAYERBOX_HPP_
 
-#include <SFML/Graphics/Texture.hpp>
-
 #include <gk/gl/Camera.hpp>
 #include <gk/gl/Drawable.hpp>
-#include <gk/gl/VertexBuffer.hpp>
+#include <gk/gl/Texture.hpp>
 #include <gk/gl/Transformable.hpp>
+#include <gk/gl/VertexBuffer.hpp>
 
 #include "Player.hpp"
 
@@ -53,7 +52,7 @@ class PlayerBox : public gk::Drawable, public gk::Transformable, public Player {
 
 		const gk::Camera &m_camera;
 
-		sf::Texture &m_texture;
+		gk::Texture &m_texture;
 };
 
 #endif // PLAYERBOX_HPP_

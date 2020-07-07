@@ -30,11 +30,10 @@
 #include <string>
 
 #include <gk/core/IntTypes.hpp>
-#include <gk/core/input/KeyboardUtils.hpp>
+#include <gk/core/ISerializable.hpp>
+#include <gk/core/SDLHeaders.hpp>
 
 #include <sol/sol.hpp>
-
-#include <gk/core/ISerializable.hpp>
 
 #include "NetworkUtils.hpp"
 
@@ -53,15 +52,15 @@ class Key : public gk::ISerializable {
 		const std::string &name() const { return m_name; }
 		void setName(const std::string &name) { m_name = name; }
 
-		sf::Keyboard::Key keycode() const { return m_keycode; }
-		void setKeycode(sf::Keyboard::Key keycode) { m_keycode = keycode; if (m_parent) m_parent->m_keycode = keycode; }
+		SDL_Keycode keycode() const { return m_keycode; }
+		void setKeycode(SDL_Keycode keycode) { m_keycode = keycode; if (m_parent) m_parent->m_keycode = keycode; }
 
 		const std::string &defaultKey() const { return m_defaultKey; }
 		void setDefaultKey(const std::string &defaultKey) {
 			m_defaultKey = defaultKey;
 
-			if (m_keycode == sf::Keyboard::Unknown)
-				m_keycode = gk::KeyboardUtils::getKeyFromName(m_defaultKey);
+			if (m_keycode == SDLK_UNKNOWN)
+				m_keycode = SDL_GetKeyFromName(m_defaultKey.c_str());
 		}
 
 		const sol::unsafe_function &callback() const { return m_callback; }
@@ -76,7 +75,7 @@ class Key : public gk::ISerializable {
 		std::string m_name;
 
 		std::string m_defaultKey;
-		sf::Keyboard::Key m_keycode = sf::Keyboard::Unknown;
+		SDL_Keycode m_keycode = SDLK_UNKNOWN;
 
 		sol::unsafe_function m_callback;
 

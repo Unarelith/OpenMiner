@@ -43,7 +43,7 @@ void CraftingWidget::init(unsigned int offset, unsigned int size) {
 	m_craftingResultInventoryWidget.setShiftDestination(m_shiftDestination);
 }
 
-void CraftingWidget::onEvent(const sf::Event &event) {
+void CraftingWidget::onEvent(const SDL_Event &event) {
 	m_craftingInventoryWidget.onEvent(event);
 	m_craftingResultInventoryWidget.onEvent(event);
 
