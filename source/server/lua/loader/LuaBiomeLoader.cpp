@@ -134,7 +134,7 @@ inline void LuaBiomeLoader::loadFloraPlacementEntries(Biome &biome, const sol::t
 }
 
 inline void LuaBiomeLoader::loadOrePlacementEntries(Biome &biome, const sol::table &table) const {
-	sol::optional<sol::table> oreDefinitions = table["ore"];
+	sol::optional<sol::table> oreDefinitions = table["ores"];
 	if (oreDefinitions != sol::nullopt) {
 		for (const auto &it : oreDefinitions.value()) {
 			sol::table oreDefinition = it.second.as<sol::table>();
