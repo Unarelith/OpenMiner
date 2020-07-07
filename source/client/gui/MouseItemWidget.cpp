@@ -37,35 +37,35 @@ MouseItemWidget::MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0,
 	m_tooltipInfoText.setColor({180, 180, 180});
 }
 
-void MouseItemWidget::onEvent(const sf::Event &event) {
-	if (event.type == sf::Event::MouseMoved) {
-		updatePosition(event.mouseMove.x, event.mouseMove.y);
+void MouseItemWidget::onEvent(const SDL_Event &event) {
+	if (event.type == SDL_MOUSEMOTION) {
+		updatePosition(event.motion.x, event.motion.y);
 	}
-	else if (event.type == sf::Event::MouseButtonPressed) {
-		updatePosition(event.mouseButton.x, event.mouseButton.y);
+	else if (event.type == SDL_MOUSEBUTTONDOWN) {
+		updatePosition(event.button.x, event.button.y);
 
 		if (getStack().amount() == 0) {
-			if (event.mouseButton.button == sf::Mouse::Left) {
+			if (event.button.button == SDL_BUTTON_LEFT) {
 				leftClickBehaviour();
 			}
-			else if (event.mouseButton.button == sf::Mouse::Right) {
+			else if (event.button.button == SDL_BUTTON_RIGHT) {
 				rightClickBehaviour();
 			}
 
 			m_isDragging = false;
 		}
-		else if (event.mouseButton.button == sf::Mouse::Left || event.mouseButton.button == sf::Mouse::Right) {
-			startDragging(event.mouseButton.button == sf::Mouse::Left);
+		else if (event.button.button == SDL_BUTTON_LEFT || event.button.button == SDL_BUTTON_RIGHT) {
+			startDragging(event.button.button == SDL_BUTTON_LEFT);
 		}
 	}
-	else if (event.type == sf::Event::MouseButtonReleased) {
-		updatePosition(event.mouseButton.x, event.mouseButton.y);
+	else if (event.type == SDL_MOUSEBUTTONUP) {
+		updatePosition(event.button.x, event.button.y);
 
 		if (m_isDragging && m_draggedSlots.size() <= 1) {
-			if (event.mouseButton.button == sf::Mouse::Left) {
+			if (event.button.button == SDL_BUTTON_LEFT) {
 				leftClickBehaviour();
 			}
-			else if (event.mouseButton.button == sf::Mouse::Right) {
+			else if (event.button.button == SDL_BUTTON_RIGHT) {
 				rightClickBehaviour();
 			}
 		}

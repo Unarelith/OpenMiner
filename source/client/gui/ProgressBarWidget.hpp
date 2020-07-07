@@ -40,7 +40,7 @@ enum class ProgressBarType : u8 {
 
 class ProgressBarWidget : public Widget {
 	public:
-		ProgressBarWidget(const sf::Texture &texture, BlockData &blockData, ProgressBarType type, Widget *parent = nullptr);
+		ProgressBarWidget(const gk::Texture &texture, BlockData &blockData, ProgressBarType type, Widget *parent = nullptr);
 
 		void init(const gk::FloatRect &clipRect, const gk::Vector2i &position, const std::string &meta, unsigned int maxMetaValue);
 		void init(const gk::FloatRect &clipRect, const gk::Vector2i &position, const std::string &meta, const std::string &maxMeta);

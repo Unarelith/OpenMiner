@@ -43,11 +43,11 @@ void MenuWidget::reset(u16 width, u16 height) {
 	Widget::m_height = 0;
 }
 
-void MenuWidget::onEvent(const sf::Event &event) {
+void MenuWidget::onEvent(const SDL_Event &event) {
 	for (std::size_t i = 0 ; i < m_buttons.size() ; ++i) {
 		m_buttons.at(i).onEvent(event);
 
-		if (event.type == sf::Event::Resized) {
+		if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 			int x = i % m_width;
 			int y = i / m_width;
 

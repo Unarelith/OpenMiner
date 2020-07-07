@@ -35,12 +35,12 @@ class ScrollBarWidget : public Widget {
 	public:
 		ScrollBarWidget(Widget *parent = nullptr) : Widget(12, 15, parent) {}
 
-		void init(const sf::Texture &texture, const gk::FloatRect &clipRect, u16 minY, u16 maxY, InventoryWidget &widget);
+		void init(const gk::Texture &texture, const gk::FloatRect &clipRect, u16 minY, u16 maxY, InventoryWidget &widget);
 
-		void onEvent(const sf::Event &event);
+		void onEvent(const SDL_Event &event) override;
 
 	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const;
+		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		void updateScrolling(u16 y);
 

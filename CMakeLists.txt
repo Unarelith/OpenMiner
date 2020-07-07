@@ -85,6 +85,18 @@ add_subdirectory(external/entt)
 include_directories(external/entt/src)
 
 #------------------------------------------------------------------------------
+# - SFML
+#------------------------------------------------------------------------------
+set(SFML_STATIC TRUE)
+
+set(SFML_BUILD_AUDIO FALSE CACHE BOOL "")
+set(SFML_BUILD_GRAPHICS FALSE CACHE BOOL "")
+set(SFML_BUILD_NETWORK TRUE CACHE BOOL "")
+set(SFML_BUILD_WINDOW FALSE CACHE BOOL "")
+
+add_subdirectory(external/SFML)
+
+#------------------------------------------------------------------------------
 # - gamekit
 #------------------------------------------------------------------------------
 add_subdirectory(external/gamekit)

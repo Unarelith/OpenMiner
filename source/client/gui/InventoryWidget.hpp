@@ -43,7 +43,7 @@ class InventoryWidget : public AbstractInventoryWidget {
 
 		void scroll(float scrolling);
 
-		void onEvent(const sf::Event &event) override;
+		void onEvent(const SDL_Event &event) override;
 
 		void update() override;
 

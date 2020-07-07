@@ -98,7 +98,7 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 	updateWidgetPosition();
 }
 
-void WorldCreationState::onEvent(const sf::Event &event) {
+void WorldCreationState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {

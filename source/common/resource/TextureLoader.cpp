@@ -24,10 +24,9 @@
  *
  * =====================================================================================
  */
-#include <SFML/Graphics/Texture.hpp>
-
 #include <gk/core/XMLFile.hpp>
 #include <gk/gl/OpenGL.hpp>
+#include <gk/gl/Texture.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "TextureLoader.hpp"
@@ -40,14 +39,14 @@ void TextureLoader::load(const char *xmlFilename, gk::ResourceHandler &handler) 
 		std::string name = textureElement->Attribute("name");
 		std::string path = textureElement->Attribute("path");
 
-		auto &texture = handler.add<sf::Texture>("texture-" + name);
+		auto &texture = handler.add<gk::Texture>("texture-" + name);
 		texture.loadFromFile(path);
 
 		if (textureElement->Attribute("repeat", "true")) {
-			sf::Texture::bind(&texture);
+			gk::Texture::bind(&texture);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			sf::Texture::bind(nullptr);
+			gk::Texture::bind(nullptr);
 		}
 
 		textureElement = textureElement->NextSiblingElement("texture");

@@ -82,7 +82,7 @@ void TextureAtlas::packTextures() {
 
 	m_texture.loadFromImage(atlas);
 
-	sf::Texture::bind(&m_texture);
+	gk::Texture::bind(&m_texture);
 
 	glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -92,7 +92,7 @@ void TextureAtlas::packTextures() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-	sf::Texture::bind(nullptr);
+	gk::Texture::bind(nullptr);
 }
 
 void TextureAtlas::loadFromRegistry(const std::string &texturePack) {

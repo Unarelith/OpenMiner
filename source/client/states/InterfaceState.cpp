@@ -52,18 +52,18 @@ void InterfaceState::setup() {
 	// m_view.setCenter(Config::screenWidth / 2.0f, Config::screenHeight / 2.0f);
 }
 
-void InterfaceState::onEvent(const sf::Event &event) {
+void InterfaceState::onEvent(const SDL_Event &event) {
 	if (m_parent) {
 		m_parent->onEvent(event);
 	}
-	else if (event.type == sf::Event::Closed) {
+	else if (event.type == SDL_QUIT) {
 		m_stateStack->clear();
 	}
 
-	if (event.type == sf::Event::Resized) {
+	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 		if (!m_parent) {
-			Config::screenWidth = event.size.width;
-			Config::screenHeight = event.size.height;
+			Config::screenWidth = event.window.data1;
+			Config::screenHeight = event.window.data2;
 		}
 
 		setup();

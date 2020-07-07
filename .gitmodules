@@ -16,3 +16,6 @@
 [submodule "external/lua"]
 	path = external/lua
 	url = https://github.com/Unarelith/lua
+[submodule "external/SFML"]
+	path = external/SFML
+	url = https://github.com/SFML/SFML

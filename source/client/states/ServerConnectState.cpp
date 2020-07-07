@@ -104,7 +104,7 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 	updateWidgetPosition();
 }
 
-void ServerConnectState::onEvent(const sf::Event &event) {
+void ServerConnectState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {

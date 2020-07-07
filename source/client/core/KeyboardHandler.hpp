@@ -31,7 +31,6 @@
 #include <string>
 
 #include <gk/core/input/InputHandler.hpp>
-#include <gk/core/input/KeyboardUtils.hpp>
 
 #include "Key.hpp"
 
@@ -44,11 +43,11 @@ class KeyboardHandler : public gk::InputHandler {
 
 		bool isKeyPressed(gk::GameKey key) override;
 
-		sf::Keyboard::Key getKeycode(gk::GameKey key) { return m_keys[key].keycode(); }
-		std::string getKeyName(gk::GameKey key) { return gk::KeyboardUtils::getNameFromKey(m_keys[key].keycode()); }
-		void setKeycode(gk::GameKey key, sf::Keyboard::Key keycode) { m_keys[key].setKeycode(keycode); }
+		SDL_Keycode getKeycode(gk::GameKey key) { return m_keys[key].keycode(); }
+		std::string getKeyName(gk::GameKey key) { return SDL_GetKeyName(m_keys[key].keycode()); }
+		void setKeycode(gk::GameKey key, SDL_Keycode keycode) { m_keys[key].setKeycode(keycode); }
 
-		void addKey(gk::GameKey id, const std::string &name, sf::Keyboard::Key defaultKey, const std::string &stringID = "", Key *key = nullptr);
+		void addKey(gk::GameKey id, const std::string &name, SDL_Keycode defaultKey, const std::string &stringID = "", Key *key = nullptr);
 		u32 keyCount() { return m_keys.size(); }
 
 		const std::map<gk::GameKey, Key> &keys() const { return m_keys; }

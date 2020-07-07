@@ -44,7 +44,7 @@ class LuaGUIState : public InterfaceState {
 	public:
 		LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent = nullptr);
 
-		void onEvent(const sf::Event &event) override;
+		void onEvent(const SDL_Event &event) override;
 
 		void update() override;
 
@@ -60,7 +60,7 @@ class LuaGUIState : public InterfaceState {
 		void loadScrollBarWidget(const std::string &name, s32 x, s32 y, sf::Packet &packet);
 		void loadInventory(const std::string &name, sf::Packet &packet);
 
-		sf::Texture &loadTexture(const std::string &textureFilename);
+		gk::Texture &loadTexture(const std::string &textureFilename);
 
 		void centerMainWidget();
 
@@ -76,7 +76,7 @@ class LuaGUIState : public InterfaceState {
 		std::vector<std::unique_ptr<Widget>> m_widgets;
 		std::vector<std::unique_ptr<gk::Drawable>> m_drawables;
 		std::unordered_map<std::string, Inventory> m_inventories;
-		std::unordered_map<std::string, sf::Texture> m_textures;
+		std::unordered_map<std::string, gk::Texture> m_textures;
 
 		ClientPlayer &m_player;
 		ClientWorld &m_world;

@@ -61,9 +61,9 @@ void ClientChunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u
 	else
 		glCheck(glEnable(GL_CULL_FACE));
 
-	sf::Texture::bind(states.texture);
+	gk::Texture::bind(states.texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, (layer == ChunkBuilder::Layer::NoMipMap || layer == ChunkBuilder::Layer::Flora) ? 0 : Config::mipmapLevels);
-	sf::Texture::bind(nullptr);
+	gk::Texture::bind(nullptr);
 
 	glCheck(glEnable(GL_DEPTH_TEST));
 

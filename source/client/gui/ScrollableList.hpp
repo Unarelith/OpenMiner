@@ -54,7 +54,7 @@ class ScrollableList : public Widget {
 	public:
 		ScrollableList();
 
-		void onEvent(const sf::Event &event) override;
+		void onEvent(const SDL_Event &event) override;
 
 		void addElement(const std::string &line1, const std::string &line2, const std::string &line3);
 

@@ -20,6 +20,8 @@ endforeach(HEADER_FILE)
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
 add_dependencies(${PROJECT_NAME}
+	sfml-network
+	sfml-system
 	zlib
 	EnTT
 	gamekit
@@ -47,6 +49,8 @@ if (UNIX)
 endif ()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
+	sfml-network
+	sfml-system
 	sol2
 	liblua
 	gamekit

@@ -64,8 +64,8 @@ void HUD::setup() {
 	m_chat.setPosition(2, Config::screenHeight / Config::guiScale - 50);
 }
 
-void HUD::onEvent(const sf::Event &event) {
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F3)
+void HUD::onEvent(const SDL_Event &event) {
+	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_F3)
 		m_isDebugOverlayVisible ^= 1;
 
 	if (Config::isHotbarVisible)

@@ -34,8 +34,8 @@ TextInput::TextInput() {
 	m_placeholder.setColor(gk::Color(150, 150, 150));
 }
 
-void TextInput::onEvent(const sf::Event &event) {
-	if (event.type == sf::Event::MouseButtonPressed) {
+void TextInput::onEvent(const SDL_Event &event) {
+	if (event.type == SDL_MOUSEBUTTONDOWN) {
 		gk::FloatRect rect{
 			getPosition().x,
 			getPosition().y,
@@ -43,10 +43,10 @@ void TextInput::onEvent(const sf::Event &event) {
 			getBackgroundSize().y * getScale().y
 		};
 
-		m_hasFocus = rect.contains(event.mouseButton.x, event.mouseButton.y);
+		m_hasFocus = rect.contains(event.button.x, event.button.y);
 	}
 	else if (m_hasFocus) {
-		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Backspace && !m_content.empty()) {
+		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_BACKSPACE && !m_content.empty()) {
 			m_content.erase(m_content.begin() + m_content.length() - 1);
 
 			m_text.setString(m_content);
@@ -54,15 +54,17 @@ void TextInput::onEvent(const sf::Event &event) {
 			m_cursor.setPosition(m_text.getSize().x, 0);
 		}
 
-		if (event.type == sf::Event::TextEntered) {
-			u32 c = event.text.unicode;
-			if (isprint(c) && (!m_characterLimit || m_content.size() < m_characterLimit)) {
-				m_content += c;
-			}
+		if (event.type == SDL_TEXTINPUT) {
+			std::string text = event.text.text;
+			for (char c : text) {
+				if (isprint(c) && (!m_characterLimit || m_content.size() < m_characterLimit)) {
+					m_content += c;
+				}
 
-			m_text.setString(m_content);
-			m_text.updateVertexBuffer();
-			m_cursor.setPosition(m_text.getSize().x, 0);
+				m_text.setString(m_content);
+				m_text.updateVertexBuffer();
+				m_cursor.setPosition(m_text.getSize().x, 0);
+			}
 		}
 	}
 }

@@ -106,14 +106,7 @@ void ClientApplication::init() {
 	m_keyboardHandler.loadKeysFromFile("config/keys.lua");
 	gk::GamePad::init(m_keyboardHandler);
 
-	sf::ContextSettings settings;
-	settings.depthBits = 24;
-	settings.stencilBits = 8;
-	settings.antialiasingLevel = 0;
-	settings.majorVersion = 2;
-	settings.minorVersion = 1;
-
-	createWindow(sf::VideoMode{Config::screenWidth, Config::screenHeight}, APP_NAME, sf::Style::Titlebar | sf::Style::Close, settings);
+	createWindow(Config::screenWidth, Config::screenHeight, APP_NAME);
 	m_window.setVerticalSyncEnabled(Config::isVerticalSyncEnabled);
 	m_window.setOpenGLFlagsSetupFunc(&ClientApplication::initOpenGL);
 	m_window.disableView();
@@ -132,30 +125,23 @@ void ClientApplication::init() {
 void ClientApplication::handleEvents() {
 	gk::CoreApplication::handleEvents();
 
-	if ((Config::isFullscreenModeEnabled && !m_window.isFullscreenModeEnabled())
-	|| (!Config::isFullscreenModeEnabled && m_window.isFullscreenModeEnabled())) {
-		m_window.setFullscreenMode(Config::isFullscreenModeEnabled);
-
-		// FIXME: Required for Windows
-		sf::Event event;
-		event.type = sf::Event::Resized;
-		event.size.width = m_window.window().getSize().x;
-		event.size.height = m_window.window().getSize().y;
-		onEvent(event);
+	if ((Config::isFullscreenModeEnabled && m_window.getWindowMode() != gk::Window::Mode::Fullscreen)
+	|| (!Config::isFullscreenModeEnabled && m_window.getWindowMode() != gk::Window::Mode::Windowed)) {
+		m_window.setWindowMode(Config::isFullscreenModeEnabled ? gk::Window::Mode::Fullscreen : gk::Window::Mode::Windowed);
 	}
 
 	if (Config::screenWidth != m_window.getSize().x || Config::screenHeight != m_window.getSize().y) {
-		m_window.setSize({Config::screenWidth, Config::screenHeight});
+		m_window.resize(Config::screenWidth, Config::screenHeight);
 	}
 
 	if (Config::isVerticalSyncEnabled != m_window.isVerticalSyncEnabled())
 		m_window.setVerticalSyncEnabled(Config::isVerticalSyncEnabled);
 }
 
-void ClientApplication::onEvent(const sf::Event &event) {
+void ClientApplication::onEvent(const SDL_Event &event) {
 	gk::CoreApplication::onEvent(event);
 
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F11)
+	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_F11)
 		Config::isFullscreenModeEnabled ^= 1;
 }
 

@@ -71,10 +71,10 @@ ScrollableList::ScrollableList() : Widget(ScrollableListElement::widgetWidth, 0)
 	m_cursor.setSize(m_width, m_height);
 }
 
-void ScrollableList::onEvent(const sf::Event &event) {
-	if (event.type == sf::Event::MouseButtonPressed) {
+void ScrollableList::onEvent(const SDL_Event &event) {
+	if (event.type == SDL_MOUSEBUTTONDOWN) {
 		for (auto &it : m_elements) {
-			if (it.isPointInWidget(event.mouseButton.x, event.mouseButton.y)) {
+			if (it.isPointInWidget(event.button.x, event.button.y)) {
 				m_cursor.setSize(it.width() + 2, it.height() + 2);
 				m_cursor.setPosition(-1, it.getPosition().y - 1);
 

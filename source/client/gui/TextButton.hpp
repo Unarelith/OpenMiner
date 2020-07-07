@@ -45,7 +45,7 @@ class TextButton : public Widget {
 		TextButton(u16 width, Widget *parent = nullptr);
 		TextButton(const CppCallback &callback, Widget *parent = nullptr);
 
-		void onEvent(const sf::Event &event) override;
+		void onEvent(const SDL_Event &event) override;
 
 		const std::string &text() const { return m_text.string(); }
 		void setText(const std::string &text);

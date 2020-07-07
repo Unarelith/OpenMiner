@@ -29,7 +29,7 @@
 #include "Config.hpp"
 #include "ScrollBarWidget.hpp"
 
-void ScrollBarWidget::init(const sf::Texture &texture, const gk::FloatRect &clipRect, u16 minY, u16 maxY, InventoryWidget &widget) {
+void ScrollBarWidget::init(const gk::Texture &texture, const gk::FloatRect &clipRect, u16 minY, u16 maxY, InventoryWidget &widget) {
 	m_clipRect = clipRect;
 
 	m_minY = minY;
@@ -44,19 +44,19 @@ void ScrollBarWidget::init(const sf::Texture &texture, const gk::FloatRect &clip
 	m_image.setClipRect(m_clipRect.x, m_clipRect.y, m_clipRect.sizeX, m_clipRect.sizeY);
 }
 
-void ScrollBarWidget::onEvent(const sf::Event &event) {
-	if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-		if (isPointInWidget(event.mouseButton.x, event.mouseButton.y)) {
+void ScrollBarWidget::onEvent(const SDL_Event &event) {
+	if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
+		if (isPointInWidget(event.button.x, event.button.y)) {
 			m_isDragging = true;
 
-			updateScrolling(event.mouseButton.y);
+			updateScrolling(event.button.y);
 		}
 	}
-	else if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
+	else if (event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_LEFT) {
 		m_isDragging = false;
 	}
-	else if (event.type == sf::Event::MouseMoved && m_isDragging) {
-		updateScrolling(event.mouseMove.y);
+	else if (event.type == SDL_MOUSEMOTION && m_isDragging) {
+		updateScrolling(event.motion.y);
 	}
 }
 

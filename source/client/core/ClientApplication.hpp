@@ -40,7 +40,7 @@ class ClientApplication : public gk::CoreApplication {
 	private:
 		void handleEvents() override;
 
-		void onEvent(const sf::Event &event) override;
+		void onEvent(const SDL_Event &event) override;
 		void onExit() override;
 
 		static void initOpenGL();
