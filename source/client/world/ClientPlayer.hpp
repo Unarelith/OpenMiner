@@ -89,8 +89,6 @@ class ClientPlayer : public Player {
 
 		const float m_jumpSpeed = 0.06f;
 
-		bool key_pressed = false;
-
 		float inertia = 0;
 		
 		float old_inertia = 0;
