@@ -91,7 +91,7 @@ class ClientPlayer : public Player {
 
 		float m_inertia = 0;
 
-		float m_old_inertia = 0;
+		float m_oldInertia = 0;
 };
 
 #endif // CLIENTPLAYER_HPP_
