@@ -38,20 +38,20 @@ void TextureAtlas::addFile(const std::string &path, const std::string &filename)
 	if (it != m_textureMap.end())
 		return;
 
-	sf::Image image;
-	if (!image.loadFromFile(path + filename)) {
+	SurfacePtr surface{IMG_Load((path + filename).c_str()), &SDL_FreeSurface};
+	if(!surface) {
 		gkWarning() << "Failed to load texture:" << path + filename;
 		return;
 	}
 
 	if (!m_tileSize)
-		m_tileSize = image.getSize().x;
+		m_tileSize = surface->w;
 
-	if (m_tileSize != image.getSize().x || m_tileSize != image.getSize().y)
-		throw EXCEPTION("Texture size unexpected for", path + filename + ". Got", image.getSize().x, image.getSize().y, "instead of", m_tileSize, m_tileSize);
+	if (m_tileSize != surface->w || m_tileSize != surface->h)
+		throw EXCEPTION("Texture size unexpected for", path + filename + ". Got", surface->w, surface->h, "instead of", m_tileSize, m_tileSize);
 
-	m_textureMap.emplace(filename, m_images.size());
-	m_images.emplace_back(std::move(image));
+	m_textureMap.emplace(filename, m_textures.size());
+	m_textures.emplace_back(std::move(surface));
 }
 
 void TextureAtlas::packTextures() {
@@ -62,25 +62,49 @@ void TextureAtlas::packTextures() {
 	const u16 atlasWidth = 16;
 
 	// Max amount of textures on one column
-	const u16 atlasHeight = std::ceil((float)m_images.size() / atlasWidth);
+	const u16 atlasHeight = std::ceil((float)m_textures.size() / atlasWidth);
 
-	sf::Image atlas;
-	atlas.create(atlasWidth * m_tileSize, atlasHeight * m_tileSize);
+	SurfacePtr atlas{nullptr, &SDL_FreeSurface};
+
+	Uint32 rmask, gmask, bmask, amask;
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	rmask = 0xff000000;
+	gmask = 0x00ff0000;
+	bmask = 0x0000ff00;
+	amask = 0x000000ff;
+#else
+	rmask = 0x000000ff;
+	gmask = 0x0000ff00;
+	bmask = 0x00ff0000;
+	amask = 0xff000000;
+#endif
+
+	atlas.reset(SDL_CreateRGBSurface(0, atlasWidth * m_tileSize, atlasHeight * m_tileSize, 32, rmask, gmask, bmask, amask));
+	if (!atlas) {
+		throw EXCEPTION("Failed to create surface:", SDL_GetError());
+	}
 
 	u16 i = 0;
-	for (auto &it : m_images) {
-		atlas.copy(it, (i % atlasWidth) * m_tileSize, (i / atlasWidth) * m_tileSize);
+	for (auto &it : m_textures) {
+		SDL_Rect outRect;
+		outRect.x = (i % atlasWidth) * m_tileSize;
+		outRect.y = (i / atlasWidth) * m_tileSize;
+		outRect.w = m_tileSize;
+		outRect.h = m_tileSize;
+
+		SDL_BlitSurface(it.get(), nullptr, atlas.get(), &outRect);
+
 		++i;
 	}
 
-	m_images.clear();
+	m_textures.clear();
 
 	m_isReady = true;
 
-	if (!atlas.saveToFile("test_atlas.png"))
-		throw EXCEPTION("Failed to save texture atlas to: test_atlas.png.");
+	if (IMG_SavePNG(atlas.get(), "test_atlas.png") < 0)
+		throw EXCEPTION("Failed to save texture to: test_atlas.png. Reason:", IMG_GetError());
 
-	m_texture.loadFromImage(atlas);
+	m_texture.loadFromSurface(atlas.get());
 
 	gk::Texture::bind(&m_texture);
 
