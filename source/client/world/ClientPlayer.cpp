@@ -74,9 +74,9 @@ void ClientPlayer::updateCamera() {
 
 void ClientPlayer::move(float direction) {
 	direction += m_viewAngleH;
-
-	m_velocity.x = 0.04f * cosf(direction * RADIANS_PER_DEGREES);
-	m_velocity.y = 0.04f * sinf(direction * RADIANS_PER_DEGREES);
+	if (inertia < 1) inertia += 0.025;
+	m_velocity.x = 0.04 * cosf(direction * RADIANS_PER_DEGREES) * inertia;
+	m_velocity.y = 0.04 * sinf(direction * RADIANS_PER_DEGREES) * inertia;
 }
 
 void ClientPlayer::processInputs() {
@@ -117,9 +117,6 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 			m_velocity.z -= chunk->dimension().gravity() * 0.001f;
 
 			m_isJumping = true;
-
-			if (m_velocity.z < -m_jumpSpeed) // Limit max vertical speed to jump speed
-				m_velocity.z = -m_jumpSpeed;
 		}
 	}
 	else {
@@ -135,10 +132,16 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 		m_velocity.y *= 0.75f;
 	}
 
-	setPosition(m_x + m_velocity.x, m_y + m_velocity.y, m_z + m_velocity.z);
+	if(inertia > 0 && old_inertia >= inertia){
+		inertia -= 0.0025;
+		if(inertia < 0.83) inertia = 0;
+		m_velocity.x *= inertia;
+		m_velocity.y *= inertia;
+	}
 
-	m_velocity.x = 0.f;
-	m_velocity.y = 0.f;
+	old_inertia = inertia;
+
+	setPosition(m_x + m_velocity.x, m_y + m_velocity.y, m_z + m_velocity.z);
 
 	if (Config::isFlyModeEnabled)
 		m_velocity.z = 0.f;

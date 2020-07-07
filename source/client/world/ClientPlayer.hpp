@@ -88,6 +88,12 @@ class ClientPlayer : public Player {
 		bool m_isJumping = false;
 
 		const float m_jumpSpeed = 0.06f;
+
+		bool key_pressed = false;
+
+		float inertia = 0;
+		
+		float old_inertia = 0;
 };
 
 #endif // CLIENTPLAYER_HPP_
