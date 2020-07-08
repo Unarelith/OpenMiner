@@ -37,6 +37,8 @@ class Chat : public gk::Drawable, public gk::Transformable {
 	public:
 		Chat(Client &client);
 
+		void addChatMessage(u16 clientID, const std::string &message);
+
 		void setMessageVisibility(bool areMessagesVisible);
 
 		const std::string &getHistoryEntry(u32 id) const { return m_history.at(m_history.size() - id - 1); }
@@ -45,6 +47,8 @@ class Chat : public gk::Drawable, public gk::Transformable {
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+
+		Client &m_client;
 
 		std::deque<ChatMessage> m_chatMessages;
 		std::deque<std::string> m_history;

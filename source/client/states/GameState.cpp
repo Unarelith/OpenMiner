@@ -117,6 +117,19 @@ void GameState::onEvent(const SDL_Event &event) {
 			}
 		}
 		else if (event.type == SDL_KEYDOWN) {
+			if (event.key.keysym.sym == SDLK_F2) {
+				std::time_t now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+
+				char filename[100];
+				std::strftime(filename, sizeof(filename), "Screenshot-%Y-%m-%d-%H-%M-%S.png", std::localtime(&now));
+
+				bool isScreenshotSaved = gk::Window::saveScreenshot(0, 0, Config::screenWidth, Config::screenHeight, filename);
+				if (isScreenshotSaved)
+					m_hud.chat().addChatMessage(0, "Screenshot saved: " + std::string(filename));
+				else
+					m_hud.chat().addChatMessage(0, "Failed to save screenshot");
+			}
+
 			for (auto &key : Registry::getInstance().keys()) {
 				if (event.key.keysym.sym == key.keycode()) {
 					m_clientCommandHandler.sendKeyPressed(key.id());

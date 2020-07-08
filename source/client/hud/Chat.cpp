@@ -28,21 +28,25 @@
 #include "Client.hpp"
 #include "Config.hpp"
 
-Chat::Chat(Client &client) {
+Chat::Chat(Client &client) : m_client(client) {
 	client.setCommandCallback(Network::Command::ChatMessage, [&](sf::Packet &packet) {
 		u16 clientID;
 		std::string message;
 		packet >> clientID >> message;
 
-		if (clientID != 0)
-			m_chatMessages.emplace_back(message, m_posY, &client.getPlayer(clientID));
-		else
-			m_chatMessages.emplace_back(message, m_posY);
-
-		m_posY += m_chatMessages.back().text().getSize().y + 1;
-
-		move(0, -m_chatMessages.back().text().getSize().y - 1);
+		addChatMessage(clientID, message);
 	});
+}
+
+void Chat::addChatMessage(u16 clientID, const std::string &message) {
+	if (clientID != 0)
+		m_chatMessages.emplace_back(message, m_posY, &m_client.getPlayer(clientID));
+	else
+		m_chatMessages.emplace_back(message, m_posY);
+
+	m_posY += m_chatMessages.back().text().getSize().y + 1;
+
+	move(0, -m_chatMessages.back().text().getSize().y - 1);
 }
 
 void Chat::setMessageVisibility(bool areMessagesVisible) {

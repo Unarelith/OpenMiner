@@ -72,4 +72,5 @@ config/client.lua
 config/keys.lua
 config/server.lua
 TODO
+Screenshot-*
 
