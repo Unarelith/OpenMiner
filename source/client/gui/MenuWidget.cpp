@@ -37,21 +37,26 @@ void MenuWidget::reset(u16 width, u16 height) {
 	m_height = height;
 
 	m_buttons.clear();
-	m_buttons.reserve(m_width * m_height);
+	m_sliders.clear();
 
 	Widget::m_width = 0;
 	Widget::m_height = 0;
 }
 
 void MenuWidget::onEvent(const SDL_Event &event) {
-	for (std::size_t i = 0 ; i < m_buttons.size() ; ++i) {
-		m_buttons.at(i).onEvent(event);
+	for (auto &it : m_buttons) {
+		it.first.onEvent(event);
 
 		if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-			int x = i % m_width;
-			int y = i / m_width;
+			updateWidgetPosition(it.first, it.second.x, it.second.y);
+		}
+	}
 
-			updateButtonPosition(m_buttons.at(i), x, y);
+	for (auto &it : m_sliders) {
+		it.first.onEvent(event);
+
+		if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+			updateWidgetPosition(it.first, it.second.x, it.second.y);
 		}
 	}
 }
@@ -59,54 +64,78 @@ void MenuWidget::onEvent(const SDL_Event &event) {
 void MenuWidget::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 	setScale(event.guiScale, event.guiScale, 1);
 
-	for (std::size_t i = 0 ; i < m_buttons.size() ; ++i) {
-		int x = i % m_width;
-		int y = i / m_width;
+	for (auto &it : m_buttons) {
+		updateWidgetPosition(it.first, it.second.x, it.second.y);
+	}
 
-		updateButtonPosition(m_buttons.at(i), x, y);
+	for (auto &it : m_sliders) {
+		updateWidgetPosition(it.first, it.second.x, it.second.y);
 	}
 }
 
 TextButton &MenuWidget::addButton(const std::string &text, const TextButton::CppCallback &callback, u16 width) {
-	int x = m_buttons.size() % m_width;
-	int y = m_buttons.size() / m_width;
+	int x = (m_buttons.size() + m_sliders.size()) % m_width;
+	int y = (m_buttons.size() + m_sliders.size()) / m_width;
 
-	m_buttons.emplace_back(width, this);
+	m_buttons.emplace_back(std::piecewise_construct,
+		std::forward_as_tuple(width, this), std::forward_as_tuple(x, y));
 
-	TextButton &button = m_buttons.back();
+	TextButton &button = m_buttons.back().first;
 	button.setText(text);
 	button.setCallback(callback);
 
-	updateButtonPosition(button, x, y);
+	updateWidgetPosition(button, x, y);
 
 	return button;
 }
 
 void MenuWidget::setButtonEnabled(const std::string &text, bool isEnabled) {
 	for (auto &it : m_buttons) {
-		if (it.text() == text)
-			it.setEnabled(isEnabled);
+		if (it.first.text() == text)
+			it.first.setEnabled(isEnabled);
 	}
 }
 
-void MenuWidget::updateButtonPosition(TextButton &button, int x, int y) {
-	button.setPosition(x * (button.width() + m_horizontalSpacing),
-	                   y * (button.height() + m_verticalSpacing));
+SliderWidget &MenuWidget::addSlider(const std::string &text, const SliderWidget::CppCallback &callback, int min, int max, int initialValue) {
+	int x = (m_buttons.size() + m_sliders.size()) % m_width;
+	int y = (m_buttons.size() + m_sliders.size()) / m_width;
 
-	if (button.getPosition().x + button.width() > Widget::m_width) {
-		Widget::m_width = button.getPosition().x + button.width();
+	m_sliders.emplace_back(std::piecewise_construct,
+		std::forward_as_tuple(this), std::forward_as_tuple(x, y));
+
+	SliderWidget &slider = m_sliders.back().first;
+	slider.setText(text);
+	slider.setCallback(callback);
+	slider.setMinMaxValues(min, max);
+	slider.setCurrentValue(initialValue);
+
+	updateWidgetPosition(slider, x, y);
+
+	return slider;
+}
+
+void MenuWidget::updateWidgetPosition(Widget &widget, int x, int y) {
+	widget.setPosition(x * (widget.width() + m_horizontalSpacing),
+	                   y * (widget.height() + m_verticalSpacing));
+
+	if (widget.getPosition().x + widget.width() > Widget::m_width) {
+		Widget::m_width = widget.getPosition().x + widget.width();
 	}
-	if (button.getPosition().y + button.height() > Widget::m_height) {
-		Widget::m_height = button.getPosition().y + button.height();
+	if (widget.getPosition().y + widget.height() > Widget::m_height) {
+		Widget::m_height = widget.getPosition().y + widget.height();
 	}
 }
 
 void MenuWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
-	for (const TextButton &button : m_buttons) {
-		if (!button.text().empty())
-			target.draw(button, states);
+	for (auto &it : m_buttons) {
+		if (!it.first.text().empty())
+			target.draw(it.first, states);
+	}
+
+	for (auto &it : m_sliders) {
+		target.draw(it.first, states);
 	}
 }
 

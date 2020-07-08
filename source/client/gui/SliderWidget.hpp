@@ -24,46 +24,59 @@
  *
  * =====================================================================================
  */
-#ifndef MENUWIDGET_HPP_
-#define MENUWIDGET_HPP_
+#ifndef SLIDERWIDGET_HPP_
+#define SLIDERWIDGET_HPP_
 
-#include "SliderWidget.hpp"
-#include "TextButton.hpp"
+#include <functional>
 
-struct GuiScaleChangedEvent;
+#include <gk/graphics/Image.hpp>
 
-class MenuWidget : public Widget {
+#include "Text.hpp"
+#include "Widget.hpp"
+
+class SliderWidget : public Widget {
 	public:
-		MenuWidget(Widget *parent = nullptr) : Widget(parent) {}
-		MenuWidget(u16 width, u16 height, Widget *parent = nullptr);
+		using CppCallback = std::function<void(SliderWidget &, u32)>;
 
-		void reset(u16 width, u16 height);
+		SliderWidget(Widget *parent = nullptr);
+		SliderWidget(u16 width, Widget *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
-		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
+		int getCurrentValue() const { return m_min + (m_max - m_min) * m_percentage; }
+		void setMinMaxValues(int min, int max) { m_min = min; m_max = max; }
+		void setCurrentValue(int currentValue);
 
-		TextButton &addButton(const std::string &text, const TextButton::CppCallback &callback, u16 width = 200);
-		void setButtonEnabled(const std::string &text, bool isEnabled);
+		const std::string &text() const { return m_text.string(); }
+		void setText(const std::string &text);
 
-		SliderWidget &addSlider(const std::string &text, const SliderWidget::CppCallback &callback, int min, int max, int initialValue);
-
-		void setVerticalSpacing(u16 verticalSpacing) { m_verticalSpacing = verticalSpacing; }
-		void setHorizontalSpacing(u16 horizontalSpacing) { m_horizontalSpacing = horizontalSpacing; }
+		void setCallback(const CppCallback &callback) { m_callback = callback; }
 
 	private:
-		void updateWidgetPosition(Widget &widget, int x, int y);
+		void updatePercentage(s32 mouseX);
+		void updateSliderPosition();
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		u16 m_verticalSpacing = 5;
-		u16 m_horizontalSpacing = 5;
+		const gk::Color m_defaultTextColor{224, 224, 224};
+		const gk::Color m_hoverColor{255, 255, 160};
 
-		u16 m_width = 1;
-		u16 m_height = 1;
+		gk::Image m_slider{"texture-widgets"};
+		gk::Image m_background{"texture-widgets"};
 
-		std::vector<std::pair<TextButton, gk::Vector2i>> m_buttons;
-		std::vector<std::pair<SliderWidget, gk::Vector2i>> m_sliders;
+		gk::Image m_sliderBorder{"texture-widgets"};
+		gk::Image m_backgroundBorder{"texture-widgets"};
+
+		Text m_text;
+
+		int m_min = 0;
+		int m_max = 100;
+
+		float m_percentage = 0.f;
+
+		bool m_isDragging = false;
+
+		CppCallback m_callback;
 };
 
-#endif // MENUWIDGET_HPP_
+#endif // SLIDERWIDGET_HPP_

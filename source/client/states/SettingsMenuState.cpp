@@ -193,11 +193,11 @@ void SettingsMenuState::addInterfaceButtons() {
 void SettingsMenuState::addGraphicsButtons() {
 	m_menuWidget.reset(2, 8);
 
-	m_menuWidget.addButton("Render Distance: " + std::to_string(Config::renderDistance), [] (TextButton &button) {
-		Config::renderDistance = std::max(4, (Config::renderDistance + 2) % 16);
-		button.setText("Render Distance: " + std::to_string(Config::renderDistance));
+	m_menuWidget.addSlider("Render Distance: " + std::to_string(Config::renderDistance), [] (SliderWidget &slider, u32) {
+		Config::renderDistance = slider.getCurrentValue();
+		slider.setText("Render Distance: " + std::to_string(Config::renderDistance));
 		World::isReloadRequested = true;
-	});
+	}, 4, 16, Config::renderDistance);
 
 	addToggleButton("Wireframe Mode", Config::isWireframeModeEnabled, false);
 
@@ -213,12 +213,13 @@ void SettingsMenuState::addGraphicsButtons() {
 	m_aoButton = &addToggleButton("Ambient Occlusion", Config::isAmbientOcclusionEnabled, true);
 	m_aoButton->setEnabled(!Config::isSmoothLightingEnabled);
 
-	m_menuWidget.addButton("GUI Scale: " + std::to_string(Config::guiScale), [this] (TextButton &button) {
-		Config::guiScale = 1 + (Config::guiScale + 1) % 3;
-		button.setText("GUI Scale: " + std::to_string(Config::guiScale));
-
-		m_eventHandler->emplaceEvent<GuiScaleChangedEvent>(Config::guiScale);
-	});
+	m_menuWidget.addSlider("GUI Scale: " + std::to_string(Config::guiScale), [this] (SliderWidget &slider, u32 eventType) {
+		slider.setText("GUI Scale: " + std::to_string(slider.getCurrentValue()));
+		if (eventType == SDL_MOUSEBUTTONUP) {
+			Config::guiScale = slider.getCurrentValue();
+			m_eventHandler->emplaceEvent<GuiScaleChangedEvent>(Config::guiScale);
+		}
+	}, 1, 3, Config::guiScale);
 
 	addToggleButton("Fullscreen", Config::isFullscreenModeEnabled, false);
 	m_menuWidget.addButton("Resolution: " + std::to_string(Config::screenWidth) + "x" + std::to_string(Config::screenHeight), [] (TextButton &button) {
@@ -243,20 +244,10 @@ void SettingsMenuState::addGraphicsButtons() {
 
 	addToggleButton("Use VSync", Config::isVerticalSyncEnabled, false);
 
-	m_menuWidget.addButton("Mipmap Levels: " + std::to_string(Config::mipmapLevels), [] (TextButton &button) {
-		Config::mipmapLevels = (Config::mipmapLevels + 1) % 5;
-		button.setText("Mipmap Levels: " + std::to_string(Config::mipmapLevels));
-	});
-
-	m_menuWidget.addButton("AO Strength: " + gk::toString(Config::aoStrength, 2), [] (TextButton &button) {
-		Config::aoStrength += 0.25f;
-		if (Config::aoStrength > 1.5f)
-			Config::aoStrength = 0.f;
-
-		button.setText("AO Strength: " + gk::toString(Config::aoStrength, 2));
-
-		World::isReloadRequested = true;
-	});
+	m_menuWidget.addSlider("Mipmap Levels: " + std::to_string(Config::mipmapLevels), [] (SliderWidget &slider, u32) {
+		Config::mipmapLevels = slider.getCurrentValue();
+		slider.setText("Mipmap Levels: " + std::to_string(Config::mipmapLevels));
+	}, 0, 4, Config::mipmapLevels);
 
 	updateWidgetPosition();
 }
@@ -274,10 +265,10 @@ void SettingsMenuState::addInputButtons() {
 		});
 	}
 
-	m_menuWidget.addButton("Mouse sensitivity: " + std::to_string(Config::mouseSensitivity), [] (TextButton &button) {
-		Config::mouseSensitivity = std::max(2, (Config::mouseSensitivity + 2) % 22);
-		button.setText("Mouse sensitivity: " + std::to_string(Config::mouseSensitivity));
-	});
+	m_menuWidget.addSlider("Mouse Sensitivity: " + std::to_string(Config::mouseSensitivity), [] (SliderWidget &slider, u32) {
+		Config::mouseSensitivity = slider.getCurrentValue();
+		slider.setText("Mouse Sensitivity: " + std::to_string(Config::mouseSensitivity));
+	}, 4, 32, Config::mouseSensitivity);
 
 	updateWidgetPosition();
 }

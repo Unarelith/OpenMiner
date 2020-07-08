@@ -43,7 +43,7 @@ ClientWorld::ClientWorld() : m_textureAtlas(gk::ResourceHandler::getInstance().g
 {
 }
 
-void ClientWorld::update() {
+void ClientWorld::update(bool allowWorldReload) {
 	// Update loaded chunks
 	for (auto it = m_chunks.begin() ; it != m_chunks.end() ;) {
 		// If chunk is too far, remove it
@@ -52,7 +52,7 @@ void ClientWorld::update() {
 		}
 		// Otherwise, update the chunk
 		else {
-			if (World::isReloadRequested)
+			if (World::isReloadRequested && allowWorldReload)
 				it->second->setChanged(true);
 
 			if (it->second->areAllNeighboursInitialized())
@@ -62,7 +62,8 @@ void ClientWorld::update() {
 		}
 	}
 
-	World::isReloadRequested = false;
+	if (allowWorldReload)
+		World::isReloadRequested = false;
 
 	sendChunkRequests();
 

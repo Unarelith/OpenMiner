@@ -406,9 +406,11 @@ inline u8 ChunkBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, cons
 
 		// If the chunk is initialized, add the light value to the total
 		if (lightValues[i] != -1) {
-			float strength = ((surroundingBlocks[i] - normal == gk::Vector3i{x, y, z}) ? 1 : Config::aoStrength);
-			total += lightValues[i] * strength;
-			count += strength;
+			// float strength = ((surroundingBlocks[i] - normal == gk::Vector3i{x, y, z}) ? 1 : Config::aoStrength);
+			// total += lightValues[i] * strength;
+			// count += strength;
+			total += lightValues[i];
+			++count;
 		}
 	}
 
