@@ -45,6 +45,7 @@ class LuaBiomeLoader {
 		void loadTreePlacementEntries(Biome &biome, const sol::table &table) const;
 		void loadFloraPlacementEntries(Biome &biome, const sol::table &table) const;
 		void loadOrePlacementEntries(Biome &biome, const sol::table &table) const;
+		void loadUndergroundBiomeBlocks(Biome &biome, const sol::table &table) const;
 
 		LuaMod &m_mod;
 };

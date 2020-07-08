@@ -49,6 +49,7 @@ class Biome : public gk::ISerializable {
 		void setLabel(const std::string &label) { m_label = label; }
 
 		const std::vector<double> &getParams() const { return m_params; }
+		const std::vector<u16> &getUndergroundBiomeBlocks() const { return m_undergroundBiomeBlocks; }
 
 		u16 getTopBlockID() const { return m_topBlockID; }
 		u16 getGroundBlockID() const { return m_groundBlockID; }
@@ -63,6 +64,7 @@ class Biome : public gk::ISerializable {
 		const std::vector<PlacementEntry::Tree> &getTrees() const { return m_trees; }
 
 		void addParameter(double parameter) { m_params.emplace_back(parameter); }
+		void addUndergroundBiomeBlock(u16 undergroundBiomeBlock) { m_undergroundBiomeBlocks.emplace_back(undergroundBiomeBlock); }
 
 		void setTopBlockID(u16 value) { m_topBlockID = value; }
 		void setGroundBlockID(u16 value) { m_groundBlockID = value; }
@@ -83,6 +85,7 @@ class Biome : public gk::ISerializable {
 
 		// TODO something to distinguish the worldtype of biome
 		std::vector<double> m_params;
+		std::vector<u16> m_undergroundBiomeBlocks;
 
 		u16 m_topBlockID;
 		u16 m_groundBlockID;

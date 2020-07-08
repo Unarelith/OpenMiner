@@ -76,6 +76,7 @@ void LuaBiomeLoader::loadBiome(const sol::table &table) const {
 
 	loadBiomeParameters(biome, table);
 	loadBiomeBlocks(biome, table);
+	loadUndergroundBiomeBlocks(biome, table);
 
 	loadTreePlacementEntries(biome, table);
 	loadFloraPlacementEntries(biome, table);
@@ -104,6 +105,22 @@ inline void LuaBiomeLoader::loadBiomeBlocks(Biome &biome, const sol::table &tabl
 	}
 	else
 		gkError() << "For" << biome.stringID() << ": 'blocks' field must be a table";
+}
+
+inline void LuaBiomeLoader::loadUndergroundBiomeBlocks(Biome &biome, const sol::table &table) const {
+	sol::object blocksObject = table["undergroundBiomeBlocks"];
+	if (blocksObject.valid() && blocksObject.get_type() == sol::type::table) {
+		sol::table blocksTable = blocksObject.as<sol::table>();
+		for (auto &it : blocksTable) {
+			if (it.second.get_type() == sol::type::string)
+				biome.addUndergroundBiomeBlock(Registry::getInstance().getBlockFromStringID(it.second.as<std::string>()).id());
+			else
+				gkError() << "For" << biome.stringID() << ": Invalid block";
+		}
+	}
+	else
+		gkError() << "For" << biome.stringID() << ": 'undergroundBiomeBlocks' field must be a table";
+
 }
 
 inline void LuaBiomeLoader::loadTreePlacementEntries(Biome &biome, const sol::table &table) const {
