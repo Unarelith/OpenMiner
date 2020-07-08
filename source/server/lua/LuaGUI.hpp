@@ -37,6 +37,9 @@ class ClientInfo;
 // This class is meant to be used ONLY in Lua
 class LuaGUI {
 	public:
+		LuaGUI() = default;
+		LuaGUI(s16 keyID) : m_keyID(keyID) {}
+
 		void addImage(const sol::table &table);
 		void addTextButton(const sol::table &table);
 		void addInventoryWidget(const sol::table &table);
@@ -60,6 +63,8 @@ class LuaGUI {
 
 		std::list<Inventory> m_inventoryList;
 		std::list<std::unique_ptr<WidgetDef>> m_widgetDefinitions;
+
+		s16 m_keyID = -1;
 };
 
 #endif // LUAGUI_HPP_

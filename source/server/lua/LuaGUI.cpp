@@ -95,7 +95,7 @@ void LuaGUI::show(ClientInfo &client) {
 	Network::Packet packet;
 	packet << Network::Command::BlockGUIData;
 
-	packet << m_width << m_height << m_isCentered;
+	packet << m_width << m_height << m_isCentered << m_keyID;
 
 	for (auto &it : m_inventoryList)
 		packet << u8(LuaWidget::Inventory) << it.name() << it;
@@ -108,6 +108,8 @@ void LuaGUI::show(ClientInfo &client) {
 
 void LuaGUI::initUsertype(sol::state &lua) {
 	lua.new_usertype<LuaGUI>("LuaGUI",
+		sol::constructors<LuaGUI(), LuaGUI(s16)>(),
+
 		"image",          &LuaGUI::addImage,
 		"button",         &LuaGUI::addTextButton,
 		"inventory",      &LuaGUI::addInventoryWidget,

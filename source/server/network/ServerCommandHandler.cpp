@@ -406,7 +406,7 @@ void ServerCommandHandler::setupCallbacks() {
 		u8 guiScale;
 		packet >> keyID >> screenWidth >> screenHeight >> guiScale;
 
-		m_registry.getKey(keyID).callback()(client, screenWidth, screenHeight, guiScale);
+		m_registry.getKey(keyID).callback()(keyID, client, screenWidth, screenHeight, guiScale);
 	});
 }
 

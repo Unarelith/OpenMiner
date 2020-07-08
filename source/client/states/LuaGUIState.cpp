@@ -43,6 +43,7 @@
 #include "NetworkUtils.hpp"
 #include "Player.hpp"
 #include "ProgressBarWidget.hpp"
+#include "Registry.hpp"
 #include "ScrollBarWidget.hpp"
 #include "TextButton.hpp"
 
@@ -57,7 +58,7 @@ LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, Cli
 
 	m_mainWidget.setScale(Config::guiScale, Config::guiScale);
 
-	packet >> m_width >> m_height >> m_isCentered;
+	packet >> m_width >> m_height >> m_isCentered >> m_keyID;
 
 	if (m_isCentered)
 		centerMainWidget();
@@ -74,7 +75,8 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED && m_isCentered)
 		centerMainWidget();
 
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+	if (event.type == SDL_KEYDOWN && (event.key.keysym.sym == SDLK_ESCAPE
+	 || (m_keyID >= 0 && event.key.keysym.sym == Registry::getInstance().getKey(m_keyID).keycode()))) {
 		gk::Mouse::setCursorGrabbed(true);
 		gk::Mouse::setCursorVisible(false);
 		gk::Mouse::resetToWindowCenter();

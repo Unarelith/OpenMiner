@@ -87,6 +87,8 @@ class LuaGUIState : public InterfaceState {
 		u16 m_height = 0;
 
 		bool m_isCentered = false;
+
+		s16 m_keyID = -1;
 };
 
 #endif // LUAGUISTATE_HPP_

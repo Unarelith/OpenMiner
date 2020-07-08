@@ -31,8 +31,8 @@ mod:key {
 	name = "Inventory",
 	default_key = "E",
 
-	callback = function(client, screen_width, screen_height, gui_scale)
-		local gui = LuaGUI.new()
+	callback = function(keyID, client, screen_width, screen_height, gui_scale)
+		local gui = LuaGUI.new(keyID)
 
 		gui:set_size(176, 166)
 		gui:set_centered(true)

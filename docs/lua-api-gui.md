@@ -6,6 +6,11 @@ You can create a new GUI with:
 ```lua
 local gui = LuaGUI.new()
 ```
+or
+```lua
+local gui = LuaGUI.new(keyID)
+```
+where `keyID` is the ID of the key to use for closing the GUI along with `Esc` key.
 
 ## Set the size of the gui
 

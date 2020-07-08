@@ -36,7 +36,7 @@ mod:key {
 	name = "Creative window",
 	default_key = "H",
 
-	callback = function(client, screen_width, screen_height, gui_scale)
+	callback = function(keyID, client, screen_width, screen_height, gui_scale)
 		items = {}
 		for k, v in pairs(openminer.registry:items()) do
 			if k ~= 1 and not v:has_group("group:ci_ignore") then
@@ -44,7 +44,7 @@ mod:key {
 			end
 		end
 
-		local gui = LuaGUI.new()
+		local gui = LuaGUI.new(keyID)
 
 		gui:set_size(195, 136)
 		gui:set_centered(true)

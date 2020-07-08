@@ -8,8 +8,8 @@ mod:key {
 	name = "Inventory",
 	default_key = "E",
 
-	callback = function(client, screen_width, screen_height, gui_scale)
-		show_inventory(client, screen_width, screen_height, gui_scale)
+	callback = function(keyID, client, screen_width, screen_height, gui_scale)
+		show_inventory(keyID, client, screen_width, screen_height, gui_scale)
 	end
 }
 ```
@@ -22,8 +22,8 @@ Function called when the key is pressed.
 
 Example:
 ```lua
-callback = function(client, screen_width, screen_height, gui_scale)
-	show_inventory(client, screen_width, screen_height, gui_scale)
+callback = function(keyID, client, screen_width, screen_height, gui_scale)
+	show_inventory(keyID, client, screen_width, screen_height, gui_scale)
 end
 ```
 
