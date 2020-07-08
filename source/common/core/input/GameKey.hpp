@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#ifndef GK_GAMEKEY_HPP_
-#define GK_GAMEKEY_HPP_
+#ifndef GAMEKEY_HPP_
+#define GAMEKEY_HPP_
 
 namespace GameKey {
 	enum {
@@ -33,8 +33,8 @@ namespace GameKey {
 
 		Left,
 		Right,
-		Up,
-		Down,
+		Forward,
+		Back,
 
 		Jump,
 		Fly,
@@ -50,4 +50,4 @@ namespace GameKey {
 	};
 }
 
-#endif // GK_GAMEKEY_HPP_
+#endif // GAMEKEY_HPP_

@@ -37,8 +37,8 @@
 KeyboardHandler::KeyboardHandler() {
 	addKey(GameKey::Left,            "Left",            SDLK_a);
 	addKey(GameKey::Right,           "Right",           SDLK_d);
-	addKey(GameKey::Up,              "Up",              SDLK_w);
-	addKey(GameKey::Down,            "Down",            SDLK_s);
+	addKey(GameKey::Forward,         "Forward",         SDLK_w);
+	addKey(GameKey::Back,            "Back",            SDLK_s);
 
 	addKey(GameKey::Jump,            "Jump",            SDLK_SPACE);
 	addKey(GameKey::Fly,             "Fly",             SDLK_x);

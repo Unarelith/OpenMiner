@@ -93,16 +93,16 @@ void ClientPlayer::processInputs() {
 		m_velocity.z = -0.1;
 	}
 
-	if(gk::GamePad::isKeyPressed(GameKey::Up))        move(0.0f);
-	else if(gk::GamePad::isKeyPressed(GameKey::Down)) move(180.0f);
+	if(gk::GamePad::isKeyPressed(GameKey::Forward))    move(0.0f);
+	else if(gk::GamePad::isKeyPressed(GameKey::Back))  move(180.0f);
 
 	if(gk::GamePad::isKeyPressed(GameKey::Left))       move(90.0f);
 	else if(gk::GamePad::isKeyPressed(GameKey::Right)) move(-90.0f);
 
-	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Up))   move(45.0f);
-	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Up))   move(-45.0f);
-	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Down)) move(135.0f);
-	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Down)) move(-135.0f);
+	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Forward)) move(45.0f);
+	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Forward)) move(-45.0f);
+	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Back))    move(135.0f);
+	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Back))    move(-135.0f);
 
 	if (gk::GamePad::isKeyPressed(GameKey::Sprint)) {
 		m_velocity.x *= 1.5f;
