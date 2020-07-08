@@ -44,7 +44,7 @@ void MenuWidget::reset(u16 width, u16 height) {
 }
 
 void MenuWidget::onEvent(const SDL_Event &event) {
-	for (auto &it : m_buttons) {
+	for (auto &it : m_sliders) {
 		it.first.onEvent(event);
 
 		if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
@@ -52,7 +52,7 @@ void MenuWidget::onEvent(const SDL_Event &event) {
 		}
 	}
 
-	for (auto &it : m_sliders) {
+	for (auto &it : m_buttons) {
 		it.first.onEvent(event);
 
 		if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
