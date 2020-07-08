@@ -183,7 +183,8 @@ ores = {
 	{
 		block = "default:iron_ore",
 		probability = 0.0003,
-		size = 8
+		size = 8,
+		gen_type = "flood_fill"
 	}
 }
 ```
@@ -193,6 +194,7 @@ Possible attributes:
 - `block`: Ore block to be used
 - `probability`: Probability to spawn an ore vein with that block
 - `size`: Ore vein size
+- `gen_type`: Algorithm used for generation (possible values: `flood_fill`, `random_walk`)
 
 ### `params`
 

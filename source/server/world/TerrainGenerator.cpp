@@ -84,11 +84,11 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 					else
 						chunk.setBlockRaw(x, y, z, biome.getDeepBlockID());
 
-					// Populate ores.
-					generateOres(chunk, x, y, z, biome, rand);
-
 					// Caves
 					generateCaves(chunk, x, y, z, h);
+
+					// Populate ores.
+					generateOres(chunk, x, y, z, biome, rand);
 
 					// Generate trees, flora and portals
 					if (isGeneratingTopBlock && chunk.getBlock(x, y, z)) {
@@ -199,20 +199,39 @@ inline void TerrainGenerator::generateOres(ServerChunk &chunk, int x, int y, int
 		if (!rand.get<bool>(ore.probability))
 			continue;
 
-		oreFloodFill(chunk, x, y, z, biome.getDeepBlockID(), ore.blockID, 2, rand);
+		if (ore.genType == PlacementEntry::Ore::Gen::RandomWalk)
+			randomWalkOrePlace(chunk, x, y, z, rand, ore.blockID, biome.getDeepBlockID(), ore.size);
+		else if (ore.genType == PlacementEntry::Ore::Gen::FloodFill)
+			oreFloodFill(chunk, x, y, z, biome.getDeepBlockID(), ore.blockID, ore.size, rand);
+
 		break;
 	}
 }
 
-inline void TerrainGenerator::generateCaves(ServerChunk &chunk, int x, int y, int z, int h) const {
-	float n2 = noise2d(-(x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
-	float r2 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 512.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 0.1);
-	float r3 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 128.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 1);
-	float r4 = n2 * 5 + r2 * r3 * 20;
-	if (r4 > 6 && r4 < 8 && h > SEALEVEL) {
-		chunk.setBlockRaw(x, y, z - 1, 0);
-		chunk.setBlockRaw(x, y, z, 0);
-		chunk.setBlockRaw(x, y, z + 1, 0);
+inline void TerrainGenerator::randomWalkOrePlace(ServerChunk &chunk, int x, int y, int z, Random_t &rand, u16 oreBlock, u16 deepBlock, int size) const {
+	if (size <= 0 || chunk.getBlock(x, y, z) != deepBlock)
+		return;
+	chunk.setBlockRaw(x, y, z, oreBlock);
+	int direction = rand.get(1, 6);
+	switch(direction) {
+		case 1:
+			randomWalkOrePlace(chunk, x + 1, y, z, rand, oreBlock, deepBlock, size - 1);
+			break;
+		case 2:
+			randomWalkOrePlace(chunk, x - 1, y, z, rand, oreBlock, deepBlock, size - 1);
+			break;
+		case 3:
+			randomWalkOrePlace(chunk, x, y + 1, z, rand, oreBlock, deepBlock, size - 1);
+			break;
+		case 4:
+			randomWalkOrePlace(chunk, x, y - 1, z, rand, oreBlock, deepBlock, size - 1);
+			break;
+		case 5:
+			randomWalkOrePlace(chunk, x, y, z + 1, rand, oreBlock, deepBlock, size - 1);
+			break;
+		case 6:
+			randomWalkOrePlace(chunk, x, y, z - 1, rand, oreBlock, deepBlock, size - 1);
+			break;
 	}
 }
 
@@ -245,6 +264,18 @@ void TerrainGenerator::oreFloodFill(ServerChunk &chunk, double x, double y, doub
 		oreFloodFill(chunk, x - 1, y - 1, z + 1, toReplace, replaceWith, depth - 1, rand);
 	if (rand.get<bool>(1.f / 15.f))
 		oreFloodFill(chunk, x - 1, y - 1, z - 1, toReplace, replaceWith, depth - 1, rand);
+}
+
+inline void TerrainGenerator::generateCaves(ServerChunk &chunk, int x, int y, int z, int h) const {
+	float n2 = noise2d(-(x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
+	float r2 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 512.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 0.1);
+	float r3 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 128.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 1);
+	float r4 = n2 * 5 + r2 * r3 * 20;
+	if (r4 > 6 && r4 < 8 && h > SEALEVEL) {
+		chunk.setBlockRaw(x, y, z - 1, 0);
+		chunk.setBlockRaw(x, y, z, 0);
+		chunk.setBlockRaw(x, y, z + 1, 0);
+	}
 }
 
 inline float TerrainGenerator::noise2d(double x, double y, int octaves, float persistence) {

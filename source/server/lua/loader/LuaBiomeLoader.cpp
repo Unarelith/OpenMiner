@@ -143,6 +143,13 @@ inline void LuaBiomeLoader::loadOrePlacementEntries(Biome &biome, const sol::tab
 			oreEntry.blockID = Registry::getInstance().getBlockFromStringID(oreDefinition["block"]).id();
 			oreEntry.probability = oreDefinition["probability"];
 			oreEntry.size = oreDefinition["size"];
+
+			std::unordered_map<std::string, PlacementEntry::Ore::Gen> genTypes{
+				{"random_walk", PlacementEntry::Ore::Gen::RandomWalk},
+				{"flood_fill", PlacementEntry::Ore::Gen::FloodFill},
+			};
+
+			oreEntry.genType = genTypes.at(oreDefinition["gen_type"].get<std::string>());
 		}
 	}
 }

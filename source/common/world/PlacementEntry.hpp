@@ -49,16 +49,22 @@ struct Flora : public gk::ISerializable {
 };
 
 struct Ore : public gk::ISerializable {
+	enum Gen {
+		RandomWalk,
+		FloodFill
+	};
+
 	u16 blockID;
 	double probability;
 	double size;
+	u8 genType;
 
 	void serialize(sf::Packet &packet) const override {
-		packet << blockID << probability << size;
+		packet << blockID << probability << size << genType;
 	}
 
 	void deserialize(sf::Packet &packet) override {
-		packet >> blockID >> probability >> size;
+		packet >> blockID >> probability >> size >> genType;
 	}
 };
 
