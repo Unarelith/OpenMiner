@@ -58,9 +58,16 @@ mod:biome {
 	-- still depend on the surface biome, or only on the worldtype.
 	ores = {
 		{
+			block = "default:coal_ore",
+			probability = 0.001,
+			size = 2,
+			gen_type = "flood_fill",
+		},
+		{
 			block = "default:iron_ore",
-			probability = 0.0003,
-			size = 8
+			probability = 0.003,
+			size = 8,
+			gen_type = "random_walk",
 		}
 	},
 

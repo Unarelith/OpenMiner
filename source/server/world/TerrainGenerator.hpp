@@ -58,6 +58,7 @@ class TerrainGenerator {
 		void generateCaves(ServerChunk &chunk, int x, int y, int z, int h) const;
 
 		void randomWalkOrePlace(ServerChunk &chunk, int x, int y, int z, Random_t &rand, u16 oreBlock, u16 deepBlock, int size) const;
+		void oreFloodFill(ServerChunk &chunk, double x, double y, double z, u16 toReplace, u16 replaceWith, int depth, Random_t &rand) const;
 
 		static float noise2d(double x, double y, int octaves, float persistence);
 		static float noise3d_abs(double x, double y, double z, int octaves, float persistence);
