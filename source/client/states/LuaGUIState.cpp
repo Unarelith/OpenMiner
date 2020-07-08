@@ -46,6 +46,8 @@
 #include "ScrollBarWidget.hpp"
 #include "TextButton.hpp"
 
+bool LuaGUIState::isActive = false;
+
 LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent)
 	: InterfaceState(parent), m_client(client), m_player(player), m_world(world)
 {
@@ -62,6 +64,8 @@ LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, Cli
 
 	while (!packet.endOfPacket())
 		loadGUI(packet);
+
+	isActive = true;
 }
 
 void LuaGUIState::onEvent(const SDL_Event &event) {
@@ -74,6 +78,8 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 		gk::Mouse::setCursorGrabbed(true);
 		gk::Mouse::setCursorVisible(false);
 		gk::Mouse::resetToWindowCenter();
+
+		isActive = false;
 
 		m_stateStack->pop();
 	}

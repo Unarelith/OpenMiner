@@ -48,6 +48,8 @@ class LuaGUIState : public InterfaceState {
 
 		void update() override;
 
+		static bool isActive;
+
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 

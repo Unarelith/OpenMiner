@@ -278,7 +278,8 @@ void ClientCommandHandler::setupCallbacks() {
 	});
 
 	m_client.setCommandCallback(Network::Command::BlockGUIData, [this](Network::Packet &packet) {
-		gk::ApplicationStateStack::getInstance().push<LuaGUIState>(*this, m_player, m_world, packet, &gk::ApplicationStateStack::getInstance().top());
+		if (!LuaGUIState::isActive)
+			gk::ApplicationStateStack::getInstance().push<LuaGUIState>(*this, m_player, m_world, packet, &gk::ApplicationStateStack::getInstance().top());
 	});
 
 	m_client.setCommandCallback(Network::Command::BlockInvUpdate, [this](Network::Packet &packet) {
