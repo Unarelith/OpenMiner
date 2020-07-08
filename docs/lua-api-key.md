@@ -36,7 +36,7 @@ Example:
 default_key = "E"
 ```
 
-Names are defined [here](https://github.com/Unarelith/GameKit/blob/master/source/core/input/KeyboardUtils.cpp).
+Names are defined [here](https://wiki.libsdl.org/SDL_Keycode).
 
 ### `name`
 

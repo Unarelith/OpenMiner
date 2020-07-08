@@ -44,7 +44,13 @@ class Key : public gk::ISerializable {
 			: m_id(id), m_stringID(stringID), m_name(name) {}
 
 		void serialize(sf::Packet &packet) const override { packet << m_id << m_stringID << m_name << m_defaultKey; }
-		void deserialize(sf::Packet &packet) override { packet >> m_id >> m_stringID >> m_name >> m_defaultKey; }
+		void deserialize(sf::Packet &packet) override {
+			packet >> m_id >> m_stringID >> m_name >> m_defaultKey;
+
+			// Needed for multiplayer mode
+			if (m_keycode == SDLK_UNKNOWN)
+				m_keycode = SDL_GetKeyFromName(m_defaultKey.c_str());
+		}
 
 		u16 id() const { return m_id; }
 
@@ -59,6 +65,7 @@ class Key : public gk::ISerializable {
 		void setDefaultKey(const std::string &defaultKey) {
 			m_defaultKey = defaultKey;
 
+			// Needed for singleplayer mode
 			if (m_keycode == SDLK_UNKNOWN)
 				m_keycode = SDL_GetKeyFromName(m_defaultKey.c_str());
 		}
