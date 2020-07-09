@@ -31,6 +31,15 @@ mod = mods["creative_inventory"]
 
 local modpath = mod:path()
 
+-- FIXME: Put it in the engine if it works with tables too
+local function _ipairs(t, var)
+	var = var + 1
+	local value = t[var]
+	if value == nil then return end
+	return var, value
+end
+function ipairs(t) return _ipairs, t, 0 end
+
 mod:key {
 	id = "creative_inventory",
 	name = "Creative window",
@@ -38,7 +47,7 @@ mod:key {
 
 	callback = function(keyID, client, screen_width, screen_height, gui_scale)
 		items = {}
-		for k, v in pairs(openminer.registry:items()) do
+		for k, v in ipairs(openminer.registry:items()) do
 			if k ~= 1 and not v:has_group("group:ci_ignore") then
 				items[#items + 1] = {v:string_id()}
 			end
