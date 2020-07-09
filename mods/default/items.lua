@@ -185,7 +185,7 @@ mod:item {
 
 mod:item {
 	id = "redstone",
-	name = "Redstone",
+	name = "Redstone Dust",
 	tiles = "redstone.png"
 }
 
@@ -211,6 +211,12 @@ mod:item {
 	id = "bone",
 	name = "Bone",
 	tiles = "bone.png"
+}
+
+mod:item {
+	id = "bone_meal",
+	name = "Bone Meal",
+	tiles = "bone_meal.png"
 }
 
 mod:item {
@@ -265,6 +271,12 @@ mod:item {
 	id = "beetroot",
 	name = "Beetroot",
 	tiles = "beetroot.png"
+}
+
+mod:item {
+	id = "beetroot_soup",
+	name = "Beetroot Soup",
+	tiles = "beetroot_soup.png"
 }
 
 mod:item {
@@ -481,4 +493,10 @@ mod:item {
 	id = "scute",
 	name = "Scute",
 	tiles = "scute.png"
+}
+
+mod:item {
+	id = "sugar_cane",
+	name = "Sugar Cane",
+	tiles = "sugar_cane.png"
 }
