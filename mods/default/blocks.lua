@@ -447,4 +447,3 @@ mod:block {
 dofile("blocks/workbench.lua")
 dofile("blocks/furnace.lua")
 dofile("blocks/door.lua")
-
