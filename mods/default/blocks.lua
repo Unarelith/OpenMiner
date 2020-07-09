@@ -468,12 +468,6 @@ mod:block {
 }
 
 mod:block {
-	id = "blue_ice",
-	name = "Blue Ice",
-	tiles = "blue_ice.png"
-}
-
-mod:block {
 	id = "ice",
 	name = "Ice",
 	tiles = "ice.png"

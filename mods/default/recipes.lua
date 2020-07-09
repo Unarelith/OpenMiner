@@ -688,12 +688,6 @@ mod:smelting_recipe {
 	output = {id = "default:cooked_salmon", amount = 1}
 }
 
--- Dried Kelp
-mod:smelting_recipe {
-	input = {id = "default:kelp", amount = 1},
-	output = {id = "default:dried_kelp", amount = 1}
-}
-
 -- Bricks
 mod:crafting_recipe {
 	result = {

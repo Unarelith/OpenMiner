@@ -280,12 +280,6 @@ mod:item {
 }
 
 mod:item {
-	id = "bamboo",
-	name = "Bamboo",
-	tiles = "bamboo.png"
-}
-
-mod:item {
 	id = "arrow",
 	name = "Arrow",
 	tiles = "arrow.png"
@@ -349,12 +343,6 @@ mod:item {
 	id = "bucket",
 	name = "Bucket",
 	tiles = "bucket.png"
-}
-
-mod:item {
-	id = "sweet_berries",
-	name = "Sweet Berries",
-	tiles = "sweet_berries.png"
 }
 
 mod:item {
@@ -448,51 +436,9 @@ mod:item {
 }
 
 mod:item {
-	id = "salmon_bucket",
-	name = "Salmon Bucket",
-	tiles = "salmon_bucket.png"
-}
-
-mod:item {
-	id = "pufferfish_bucket",
-	name = "Pufferfish Bucket",
-	tiles = "pufferfish_bucket.png"
-}
-
-mod:item {
-	id = "cod_bucket",
-	name = "Cod Bucket",
-	tiles = "cod_bucket.png"
-}
-
-mod:item {
 	id = "leather",
 	name = "Leather",
 	tiles = "leather.png"
-}
-
-mod:item {
-	id = "kelp",
-	name = "Kelp",
-	tiles = "kelp.png"
-}
-
-mod:item {
-	id = "dried_kelp",
-	name = "Dried Kelp",
-	tiles = "dried_kelp.png"
-}
-
-mod:item {
-	id = "honeycomb",
-	name = "Honeycomb",
-	tiles = "honeycomb.png"
-}
-
-mod:item {
-	id = "scute",
-	name = "Scute",
-	tiles = "scute.png"
 }
 
 mod:item {
