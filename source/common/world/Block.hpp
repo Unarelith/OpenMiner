@@ -36,6 +36,7 @@
 #include <gk/core/ISerializable.hpp>
 #include <gk/graphics/Color.hpp>
 
+#include "BlockParam.hpp"
 #include "ItemStack.hpp"
 #include "TilesDef.hpp"
 
@@ -126,6 +127,9 @@ class Block : public gk::ISerializable {
 		const gk::Color &fogColor() const { return m_fogColor; }
 		void setFogColor(const gk::Color &fogColor) { m_fogColor = fogColor; }
 
+		const BlockParam &param() const { return m_param; }
+		BlockParam &param() { return m_param; }
+
 		static void initUsertype(sol::state &lua);
 
 	protected:
@@ -165,6 +169,8 @@ class Block : public gk::ISerializable {
 
 		float m_fogDepth = 0;
 		gk::Color m_fogColor = gk::Color::White;
+
+		BlockParam m_param{*this};
 };
 
 #endif // BLOCK_HPP_

@@ -57,6 +57,8 @@ void LuaBlockLoader::loadBlock(const sol::table &table) const {
 	item->setIsBlock(true);
 
 	loadGroups(block, *item, table);
+
+	loadParams(block);
 }
 
 inline void LuaBlockLoader::loadProperties(ServerBlock &block, const sol::table &table) const {
@@ -162,5 +164,10 @@ inline void LuaBlockLoader::loadGroups(ServerBlock &block, Item &item, const sol
 		else
 			gkError() << "For block" << block.stringID() << ": 'groups' should be a table";
 	}
+}
+
+void LuaBlockLoader::loadParams(ServerBlock &block) const {
+	if (block.isRotatable())
+		block.param().allocateBits(BlockParam::Type::Rotation, 5);
 }
 

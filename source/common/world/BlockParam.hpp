@@ -24,31 +24,59 @@
  *
  * =====================================================================================
  */
-#ifndef LUABLOCKLOADER_HPP_
-#define LUABLOCKLOADER_HPP_
+#ifndef BLOCKPARAM_HPP_
+#define BLOCKPARAM_HPP_
 
-#include <sol/sol.hpp>
+#include <string>
+#include <unordered_map>
 
-class Item;
-class LuaMod;
-class ServerBlock;
+#include <gk/core/IntTypes.hpp>
+#include <gk/core/ISerializable.hpp>
 
-class LuaBlockLoader {
+#include "NetworkUtils.hpp"
+
+namespace sol { class state; }
+
+class Block;
+
+class BlockParam : public gk::ISerializable {
 	public:
-		LuaBlockLoader(LuaMod &mod) : m_mod(mod) {}
+		BlockParam(Block &block) : m_block(block) {}
 
-		void loadBlock(const sol::table &table) const;
+		void serialize(sf::Packet &packet) const override;
+		void deserialize(sf::Packet &packet) override;
+
+		enum Type {
+			Rotation,
+
+			Count
+		};
+
+		void allocateBits(u8 type, u8 size);
+
+		u16 getParam(u8 type, u16 data) const;
+		u16 setParam(u8 type, u16 data, u16 param);
+
+		static std::string getTypeName(u8 type);
+
+		static void initUsertype(sol::state &lua);
 
 	private:
-		void loadProperties(ServerBlock &block, const sol::table &table) const;
-		void loadBoundingBox(ServerBlock &block, const sol::table &table) const;
-		void loadDrawType(ServerBlock &block, const sol::table &table) const;
-		void loadItemDrop(ServerBlock &block, const sol::table &table) const;
-		void loadColorMultiplier(ServerBlock &block, const sol::table &table) const;
-		void loadGroups(ServerBlock &block, Item &item, const sol::table &table) const;
-		void loadParams(ServerBlock &block) const;
+		Block &m_block;
+		u8 m_totalSize = 0;
 
-		LuaMod &m_mod;
+		struct Param : public gk::ISerializable {
+			Param() = default;
+			Param(u8 _offset, u8 _size) : offset(_offset), size(_size) {}
+
+			void serialize(sf::Packet &packet) const override { packet << offset << size; }
+			void deserialize(sf::Packet &packet) override { packet >> offset >> size; }
+
+			u8 offset;
+			u8 size;
+		};
+
+		std::unordered_map<u8, Param> m_allocatedBits;
 };
 
-#endif // LUABLOCKLOADER_HPP_
+#endif // BLOCKPARAM_HPP_

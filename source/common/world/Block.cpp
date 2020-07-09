@@ -45,7 +45,7 @@ void Block::serialize(sf::Packet &packet) const {
 		<< m_hardness << m_harvestRequirements << m_itemDrop << m_itemDropAmount << m_tiles
 		<< m_boundingBox << m_isOpaque << m_isLightSource << m_canUpdate << m_canBeActivated
 		<< m_colorMultiplier << m_isRotatable << m_inventoryImage << m_groups
-		<< m_fogDepth << m_fogColor;
+		<< m_fogDepth << m_fogColor << m_param;
 }
 
 void Block::deserialize(sf::Packet &packet) {
@@ -56,7 +56,7 @@ void Block::deserialize(sf::Packet &packet) {
 		>> m_hardness >> m_harvestRequirements >> m_itemDrop >> m_itemDropAmount >> m_tiles
 		>> m_boundingBox >> m_isOpaque >> m_isLightSource >> m_canUpdate >> m_canBeActivated
 		>> m_colorMultiplier >> m_isRotatable >> m_inventoryImage >> m_groups
-		>> m_fogDepth >> m_fogColor;
+		>> m_fogDepth >> m_fogColor >> m_param;
 
 	m_id = id;
 	m_drawType = BlockDrawType(drawType);
@@ -71,7 +71,8 @@ void Block::initUsertype(sol::state &lua) {
 		"label", &Block::label,
 		"mod_name", &Block::modName,
 		"is_opaque", &Block::isOpaque,
-		"get_item_drop", &Block::getItemDrop
+		"get_item_drop", &Block::getItemDrop,
+		"param", (const BlockParam &(Block::*)() const)&Block::param
 	);
 }
 

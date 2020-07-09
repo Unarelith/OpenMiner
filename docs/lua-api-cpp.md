@@ -11,6 +11,7 @@
 - `string mod_name()`
 - `bool is_opaque()`
 - `ItemStack get_item_drop()`
+- `BlockParam param()`
 
 ## BlockData
 

@@ -49,7 +49,8 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 
 				const gk::FloatBox &boundingBox = block.boundingBox();
 
-				u8f orientation = block.isRotatable() ? chunk.getData(x, y, z) & 0x1F : 0;
+				u8f orientation = block.isRotatable()
+					? block.param().getParam(BlockParam::Rotation, chunk.getData(x, y, z)) : 0;
 				const glm::mat3 &orientMatrix = orientMatrices[orientation];
 
 				if (block.drawType() == BlockDrawType::Solid
