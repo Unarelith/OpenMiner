@@ -25,7 +25,7 @@ add_dependencies(${PROJECT_NAME}
 	zlib
 	EnTT
 	gamekit
-	liblua
+	libluajit
 	sol2
 )
 
@@ -52,7 +52,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 	sfml-network
 	sfml-system
 	sol2
-	liblua
+	libluajit
 	gamekit
 	zlib
 	${OPENGL_LIBRARIES}

@@ -113,18 +113,12 @@ include_directories(external/zlib ${CMAKE_CURRENT_BINARY_DIR}/external/zlib)
 #------------------------------------------------------------------------------
 # - lua
 #------------------------------------------------------------------------------
-set(LUA_BUILD_LUA_LUAC OFF CACHE BOOL "")
-set(LUA_BUILD_WLUA OFF CACHE BOOL "")
-set(LUA_USE_READLINE OFF CACHE BOOL "")
-
 add_subdirectory(external/lua)
-include_directories(external/lua/src ${CMAKE_CURRENT_BINARY_DIR}/external/lua)
+include_directories(external/lua/src)
 
 #------------------------------------------------------------------------------
 # - sol3 (sol2 v3.x)
 #------------------------------------------------------------------------------
-set(LUA_LOCAL_DIR external/lua)
-
 add_subdirectory(external/sol2)
 
 #------------------------------------------------------------------------------
