@@ -49,7 +49,11 @@ enum BlockFace : u8 {
 class TilesDef : public gk::ISerializable {
 	public:
 		TilesDef() = default;
-		TilesDef(const std::string &texture) { m_textureFilenames.emplace_back(texture); }
+		TilesDef(const std::string &objectID, u16 stateID)
+			: m_objectID(objectID), m_stateID(stateID) {}
+		TilesDef(const std::string &objectID, u16 stateID, const std::string &texture) : TilesDef(objectID, stateID) {
+			m_textureFilenames.emplace_back(texture);
+		}
 
 		const std::string &getTextureForFace(u8 face, bool useAltTiles = false) const;
 
@@ -62,6 +66,9 @@ class TilesDef : public gk::ISerializable {
 		const std::vector<std::string> &altTextureFilenames() const { return m_altTextureFilenames; }
 
 	private:
+		std::string m_objectID;
+		u16 m_stateID = 0;
+
 		std::vector<std::string> m_textureFilenames;
 		std::vector<std::string> m_altTextureFilenames;
 };

@@ -37,12 +37,34 @@ void LuaBlockLoader::loadBlock(const sol::table &table) const {
 	ServerBlock &block = Registry::getInstance().registerBlock<ServerBlock>(stringID);
 	block.setRotatable(table["is_rotatable"].get_or(false));
 
+	block.setOnBlockActivated(table["on_block_activated"]);
+	block.setOnTick(table["on_tick"]);
+	block.setOnBlockPlaced(table["on_block_placed"]);
+	block.setOnBlockDestroyed(table["on_block_destroyed"]);
+	block.setTickRandomly(table["tick_randomly"].get_or(false));
+	block.setTickProbability(table["tick_probability"].get_or(0.f));
+
 	BlockState &defaultState = block.getState(0);
 	loadBlockState(defaultState, table, block);
+
+	Item *item = nullptr;
+	if (!defaultState.inventoryImage().empty()) {
+		TilesDef tilesDef{block.stringID(), 0, defaultState.inventoryImage()};
+		item = &Registry::getInstance().registerItem<Item>(tilesDef, block.stringID(), defaultState.label());
+	}
+	else {
+		item = &Registry::getInstance().registerItem<Item>(defaultState.tiles(), block.stringID(), defaultState.label());
+	}
+
+	item->setIsBlock(true);
+
+	loadGroups(block, table, item);
+
+	loadParams(block);
 }
 
 void LuaBlockLoader::loadBlockState(BlockState &state, const sol::table &table, ServerBlock &block) const {
-	TilesDef tiles;
+	TilesDef tiles{block.stringID(), state.id()};
 	tiles.loadFromLuaTable(table);
 	state.tiles(tiles);
 
@@ -52,19 +74,7 @@ void LuaBlockLoader::loadBlockState(BlockState &state, const sol::table &table, 
 	loadItemDrop(state, table);
 	loadColorMultiplier(state, table);
 
-	Item *item = nullptr;
-	if (!state.inventoryImage().empty()) {
-		item = &Registry::getInstance().registerItem<Item>(TilesDef{state.inventoryImage()}, block.stringID(), state.label());
-	}
-	else {
-		item = &Registry::getInstance().registerItem<Item>(state.tiles(), block.stringID(), state.label());
-	}
-
-	item->setIsBlock(true);
-
-	loadGroups(block, table, item);
-
-	loadParams(block);
+	loadStates(block, state, table);
 }
 
 inline void LuaBlockLoader::loadProperties(BlockState &state, const sol::table &table) const {
@@ -75,13 +85,6 @@ inline void LuaBlockLoader::loadProperties(BlockState &state, const sol::table &
 	state.isLightSource(table["is_light_source"].get_or(false));
 	state.inventoryImage(table["inventory_image"].get_or<std::string>(""));
 	state.fogDepth(table["fog_depth"].get_or<float>(0));
-
-	// state.onBlockActivated(table["on_block_activated"]);
-	// state.onTick(table["on_tick"]);
-	// state.onBlockPlaced(table["on_block_placed"]);
-	// state.onBlockDestroyed(table["on_block_destroyed"]);
-	// state.setTickRandomly(table["tick_randomly"].get_or(false));
-	// state.setTickProbability(table["tick_probability"].get_or(0.f));
 
 	if (state.fogDepth()) {
 		sol::optional<sol::table> fogColor = table["fog_color"];
@@ -155,6 +158,28 @@ inline void LuaBlockLoader::loadColorMultiplier(BlockState &state, const sol::ta
 	}
 }
 
+inline void LuaBlockLoader::loadStates(ServerBlock &block, BlockState &state, const sol::table &table) const {
+	sol::object statesObject = table["states"];
+	if (statesObject.valid()) {
+		if (statesObject.get_type() == sol::type::table) {
+			sol::table statesTable = statesObject.as<sol::table>();
+			for (auto &statesObject : statesTable) {
+				unsigned int stateID = statesObject.first.as<unsigned int>();
+				if (stateID == block.states().size()) {
+					BlockState &state = block.addState();
+					loadBlockState(state, statesObject.second.as<sol::table>(), block);
+				}
+				else {
+					gkError() << ("For block '" + block.stringID() + "':").c_str() << "States must be defined in a correct order starting from 1";
+					gkError() << "StateID:" << stateID << "| States registered:" << block.states().size();
+				}
+			}
+		}
+		else
+			gkError() << "For block" << state.block().stringID() << ": 'states' must be a table";
+	}
+}
+
 inline void LuaBlockLoader::loadGroups(ServerBlock &block, const sol::table &table, Item *item) const {
 	sol::object groupsObject = table["groups"];
 	if (groupsObject.valid()) {
@@ -170,12 +195,20 @@ inline void LuaBlockLoader::loadGroups(ServerBlock &block, const sol::table &tab
 			}
 		}
 		else
-			gkError() << "For block" << block.stringID() << ": 'groups' should be a table";
+			gkError() << "For block" << block.stringID() << ": 'groups' must be a table";
 	}
 }
 
-void LuaBlockLoader::loadParams(ServerBlock &block) const {
+inline void LuaBlockLoader::loadParams(ServerBlock &block) const {
 	if (block.isRotatable())
 		block.param().allocateBits(BlockParam::Type::Rotation, 5);
+
+	if (block.states().size() > 1) {
+		int bits = 0;
+		int index = block.states().size();
+		while (index >>= 1)
+			++bits;
+		block.param().allocateBits(BlockParam::Type::State, bits);
+	}
 }
 

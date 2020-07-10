@@ -32,11 +32,11 @@
 #include "ServerItem.hpp"
 
 void LuaItemLoader::loadItem(const sol::table &table) const {
-	TilesDef tiles;
-	tiles.loadFromLuaTable(table);
-
 	std::string stringID = m_mod.id() + ":" + table["id"].get<std::string>();
 	std::string label = table["name"].get<std::string>();
+
+	TilesDef tiles{stringID, 0};
+	tiles.loadFromLuaTable(table);
 
 	ServerItem &item = Registry::getInstance().registerItem<ServerItem>(tiles, stringID, label);
 	item.setHarvestCapability(table["harvest_capability"].get_or(0));

@@ -32,7 +32,7 @@
 const std::string &TilesDef::getTextureForFace(u8 face, bool useAltTiles) const {
 	u8 size = (!useAltTiles) ? m_textureFilenames.size() : m_altTextureFilenames.size();
 	if (size == 0)
-		throw EXCEPTION("Trying to get texture from empty tiles definition");
+		throw EXCEPTION("For object '" + m_objectID + "' in state " + std::to_string(m_stateID) + ": Trying to get texture from empty tiles definition");
 
 	static constexpr int nSizes = 6, nFaces = 6;
 	// Determine which indices correspond to each face, depending on how many
@@ -60,11 +60,11 @@ const std::string &TilesDef::getTextureForFace(u8 face, bool useAltTiles) const 
 }
 
 void TilesDef::serialize(sf::Packet &packet) const {
-	packet << m_textureFilenames << m_altTextureFilenames;
+	packet << m_objectID << m_stateID << m_textureFilenames << m_altTextureFilenames;
 }
 
 void TilesDef::deserialize(sf::Packet &packet) {
-	packet >> m_textureFilenames >> m_altTextureFilenames;
+	packet >> m_objectID >> m_stateID >> m_textureFilenames >> m_altTextureFilenames;
 }
 
 bool TilesDef::loadFromLuaTable(const sol::table &table) {

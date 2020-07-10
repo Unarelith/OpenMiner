@@ -28,7 +28,7 @@
 #define NETWORKUTILS_HPP_
 
 #include <SFML/Network/Packet.hpp>
-
+//
 //======================================================================================
 // std::vector
 //======================================================================================
@@ -51,6 +51,33 @@ sf::Packet &operator>>(sf::Packet &packet, std::vector<T> &vec) {
 		T v;
 		packet >> v;
 		vec.emplace_back(v);
+	}
+
+	return packet;
+}
+
+//======================================================================================
+// std::deque
+//======================================================================================
+#include <deque>
+
+template<typename T>
+sf::Packet &operator<<(sf::Packet &packet, const std::deque<T> &deq) {
+	packet << (unsigned int)deq.size();
+	for (auto &it : deq)
+		packet << it;
+	return packet;
+}
+
+template<typename T>
+sf::Packet &operator>>(sf::Packet &packet, std::deque<T> &deq) {
+	unsigned int size;
+	packet >> size;
+
+	for (unsigned int i = 0 ; i < size ; ++i) {
+		T v;
+		packet >> v;
+		deq.emplace_back(v);
 	}
 
 	return packet;

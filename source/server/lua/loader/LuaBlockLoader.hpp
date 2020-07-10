@@ -47,6 +47,7 @@ class LuaBlockLoader {
 		void loadDrawType(BlockState &state, const sol::table &table, const ServerBlock &block) const;
 		void loadItemDrop(BlockState &state, const sol::table &table) const;
 		void loadColorMultiplier(BlockState &state, const sol::table &table) const;
+		void loadStates(ServerBlock &block, BlockState &state, const sol::table &table) const;
 		void loadGroups(ServerBlock &block, const sol::table &table, Item *item = nullptr) const;
 		void loadParams(ServerBlock &block) const;
 

@@ -31,6 +31,7 @@
 #include <unordered_map>
 
 #include <gk/core/Box.hpp>
+#include <gk/core/Debug.hpp> // FIXME
 #include <gk/core/IntTypes.hpp>
 
 #include "BlockParam.hpp"
@@ -49,10 +50,12 @@ enum class BlockDrawType : u8 {
 
 #define BLOCK_ATTR_GETTER(attrName) \
 	auto attrName() const -> const std::remove_reference<decltype(m_##attrName)>::type & { \
-		if (!m_defaultState || m_attrs & BlockAttribute::attr_##attrName) \
+		if (!m_defaultState || m_attrs & BlockAttribute::attr_##attrName) { \
 			return m_##attrName; \
-		else \
+		} \
+		else { \
 			return m_defaultState->m_##attrName; \
+		} \
 	}
 
 #define BLOCK_ATTR_SETTER(attrName) \
@@ -79,7 +82,7 @@ enum class BlockDrawType : u8 {
 class BlockState : public gk::ISerializable {
 	public:
 		BlockState() = default;
-		BlockState(u16 id, const Block *block, const BlockState *defaultState = nullptr)
+		BlockState(u16 id, const Block *block, const BlockState *defaultState)
 			: m_block(block), m_defaultState(defaultState), m_id(id) {}
 
 		void serialize(sf::Packet &packet) const override;
@@ -107,21 +110,20 @@ class BlockState : public gk::ISerializable {
 		u16 m_id = 0;
 
 		enum BlockAttribute : u32 {
-			attr_tiles,
-			attr_label,
-			attr_itemDrop,
-			attr_itemDropAmount,
-			attr_harvestRequirements,
-			attr_hardness,
-			attr_boundingBox,
-			attr_drawType,
-			attr_colorMultiplier,
-			attr_isOpaque,
-			attr_isLightSource,
-			attr_inventoryImage,
-			attr_fogDepth,
-			attr_fogColor,
-			attr_param,
+			attr_label                = 1 << 0,
+			attr_tiles                = 1 << 1,
+			attr_itemDrop             = 1 << 2,
+			attr_itemDropAmount       = 1 << 3,
+			attr_harvestRequirements  = 1 << 4,
+			attr_hardness             = 1 << 5,
+			attr_boundingBox          = 1 << 6,
+			attr_drawType             = 1 << 7,
+			attr_colorMultiplier      = 1 << 8,
+			attr_isOpaque             = 1 << 9,
+			attr_isLightSource        = 1 << 10,
+			attr_inventoryImage       = 1 << 12,
+			attr_fogDepth             = 1 << 13,
+			attr_fogColor             = 1 << 14,
 		};
 
 		BLOCK_ATTR(std::string, label);

@@ -27,6 +27,8 @@
 #ifndef BLOCK_HPP_
 #define BLOCK_HPP_
 
+#include <deque>
+
 #include <glm/glm.hpp>
 
 #include <sol/sol.hpp>
@@ -84,7 +86,7 @@ class Block : public gk::ISerializable {
 		BlockState &addState();
 		BlockState &getState(u16 id);
 		const BlockState &getState(u16 id) const;
-		const std::vector<BlockState> &states() const { return m_states; }
+		const std::deque<BlockState> &states() const { return m_states; }
 
 		static void initUsertype(sol::state &lua);
 
@@ -102,7 +104,7 @@ class Block : public gk::ISerializable {
 
 		std::unordered_map<std::string, u16> m_groups;
 
-		std::vector<BlockState> m_states;
+		std::deque<BlockState> m_states;
 
 		BlockParam m_param{*this};
 };
