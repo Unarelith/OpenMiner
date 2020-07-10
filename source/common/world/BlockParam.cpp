@@ -96,6 +96,17 @@ std::string BlockParam::getTypeName(u8 type) {
 
 // Please update 'docs/lua-api-cpp.md' if you change this
 void BlockParam::initUsertype(sol::state &lua) {
-	lua.new_usertype<BlockParam>("BlockParam");
+	lua.new_usertype<BlockParam>("BlockParam",
+		"get_param", &BlockParam::getParam,
+		"set_param", &BlockParam::setParam,
+		"has_param", &BlockParam::hasParam
+	);
+
+	lua["BlockParamType"] = lua.create_table_with(
+		"Rotation", Type::Rotation,
+		"State", Type::State,
+
+		"Count", Type::Count
+	);
 }
 

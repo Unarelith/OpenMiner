@@ -62,6 +62,7 @@ void Block::deserialize(sf::Packet &packet) {
 		it.setBlock(this);
 		it.setDefaultState(&m_states.at(0));
 	}
+
 }
 
 BlockState &Block::addState() {
