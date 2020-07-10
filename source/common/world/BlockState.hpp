@@ -139,7 +139,6 @@ class BlockState : public gk::ISerializable {
 
 		BLOCK_ATTR_V(gk::Color, colorMultiplier, gk::Color::White);
 
-		BLOCK_ATTR_V(bool, isOpaque, true);
 		BLOCK_ATTR_V(bool, isLightSource, false);
 
 		BLOCK_ATTR(std::string, inventoryImage);
@@ -148,6 +147,13 @@ class BlockState : public gk::ISerializable {
 		BLOCK_ATTR_V(gk::Color, fogColor, gk::Color::White);
 
 		u32 m_attrs = 0;
+
+	// isOpaque needs a custom getter
+	private:
+		bool m_isOpaque = true;
+	public:
+		bool isOpaque() const;
+		BLOCK_ATTR_SETTER(isOpaque);
 };
 
 #undef BLOCK_ATTR

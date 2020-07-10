@@ -153,7 +153,7 @@ bool ChunkLightmap::updateTorchlight() {
 		for (const gk::Vector3i &surroundingNode : surroundingNodes) {
 			if (getTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= lightLevel) {
 				const BlockState *blockState = m_chunk->getBlockState(surroundingNode.x, surroundingNode.y, surroundingNode.z);
-				if (blockState && blockState->isOpaque()) {
+				if (blockState && !blockState->isOpaque()) {
 					addTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, lightLevel - 1);
 
 					lightUpdated = true;
@@ -229,7 +229,7 @@ bool ChunkLightmap::updateSunlight() {
 			if (neighbourSunlightLevel + 2 <= sunlightLevel
 			|| (sunlightLevel == 15 && neighbourSunlightLevel != 15 && surroundingNode.z == node.z - 1)) {
 				const BlockState *blockState = m_chunk->getBlockState(surroundingNode.x, surroundingNode.y, surroundingNode.z);
-				if (blockState && blockState->isOpaque()) {
+				if (blockState && !blockState->isOpaque()) {
 					if (sunlightLevel == 15 && surroundingNode.z == node.z - 1 && (!blockState->block().id() || blockState->drawType() == BlockDrawType::Glass || blockState->drawType() == BlockDrawType::XShape)) {
 						addSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel);
 
