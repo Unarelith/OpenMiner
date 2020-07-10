@@ -308,7 +308,7 @@ mod:block {
 
 mod:block {
 	id = "redstone_lamp",
-	name = "Redstone Lamp (with states)",
+	name = "Redstone Lamp",
 	tiles = "redstone_lamp_off.png",
 
 	states = {
@@ -316,8 +316,8 @@ mod:block {
 	},
 
 	on_block_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
-		local current_state = math.abs(world:get_block_state(pos.x, pos.y, pos.z):id() - 1)
-		world:set_block_state(pos.x, pos.y, pos.z, current_state)
+		local next_state = math.abs(world:get_block_state(pos.x, pos.y, pos.z):id() - 1)
+		world:set_block_state(pos.x, pos.y, pos.z, next_state)
 	end
 }
 

@@ -35,9 +35,10 @@ ServerChunk::ServerChunk(s32 x, s32 y, s32 z, World &world) : Chunk(x, y, z, wor
 }
 
 void ServerChunk::updateLights() {
-	if (m_lightmap.updateLights() || m_hasChanged) {
+	if (m_lightmap.updateLights() || m_hasChanged || m_hasLightChanged) {
 		m_isSent = false;
 		m_hasChanged = false;
+		m_hasLightChanged = false;
 	}
 }
 

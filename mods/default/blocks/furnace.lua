@@ -33,7 +33,10 @@ mod:block {
 	is_rotatable = true,
 
 	states = {
-		{ tiles = {"furnace_top.png", "furnace_top.png", "furnace_front_on.png", "furnace_side.png"} },
+		{
+			is_light_source = true,
+			tiles = {"furnace_top.png", "furnace_top.png", "furnace_front_on.png", "furnace_side.png"},
+		},
 	},
 
 	on_block_placed = function(pos, world)
@@ -199,8 +202,7 @@ mod:block {
 			data.inventory:set_stack(2, 0, fuel_stack:item():string_id(), fuel_stack:amount() - 1)
 			ticks_remaining = fuel_stack:item():get_group_value("group:om_fuel")
 			current_burn_time = fuel_stack:item():get_group_value("group:om_fuel")
-			world:set_data(pos.x, pos.y, pos.z,
-				block:param():set_param(BlockParamType.State, block_param, 1))
+			world:set_block_state(pos.x, pos.y, pos.z, 1)
 		elseif ticks_remaining > 0 then
 			ticks_remaining = ticks_remaining - 1
 
@@ -212,8 +214,7 @@ mod:block {
 			end
 		elseif ticks_remaining == 0 then
 			current_burn_time = 0
-			world:set_data(pos.x, pos.y, pos.z,
-				block:param():set_param(BlockParamType.State, block_param, 0))
+			world:set_block_state(pos.x, pos.y, pos.z, 0)
 		end
 
 		if item_progress >= 200 and recipe then

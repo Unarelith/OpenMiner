@@ -43,8 +43,9 @@ void ServerWorld::update() {
 		for (auto &it : m_chunks) {
 			it.second->tick(*this, *m_server);
 
-			if (it.second->areAllNeighboursLoaded())
+			if (it.second->areAllNeighboursLoaded()) {
 				it.second->updateLights();
+			}
 
 			if (it.second->isInitialized() && !it.second->isSent()) {
 				for (auto &client : m_server->server().info().clients())
@@ -131,7 +132,7 @@ void ServerWorld::sendChunkData(const ClientInfo &client, ServerChunk &chunk) {
 	chunk.setSent(true);
 	chunk.setChanged(false);
 
-	// std::cout << "Chunk at (" << chunk.x() << ", " << chunk.y() << ", " << chunk.z() << ") sent to client" << std::endl;
+	// gkDebug() << "Chunk at" << chunk.x() << chunk.y() << chunk.z() << "sent to client";
 }
 
 void ServerWorld::sendRequestedData(ClientInfo &client, int cx, int cy, int cz) {
