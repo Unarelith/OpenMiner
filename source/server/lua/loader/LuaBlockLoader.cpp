@@ -32,54 +32,61 @@
 #include "ServerBlock.hpp"
 
 void LuaBlockLoader::loadBlock(const sol::table &table) const {
+	std::string stringID = m_mod.id() + ":" + table["id"].get<std::string>();
+
+	ServerBlock &block = Registry::getInstance().registerBlock<ServerBlock>(stringID);
+	block.setRotatable(table["is_rotatable"].get_or(false));
+
+	BlockState &defaultState = block.getState(0);
+	loadBlockState(defaultState, table, block);
+}
+
+void LuaBlockLoader::loadBlockState(BlockState &state, const sol::table &table, ServerBlock &block) const {
 	TilesDef tiles;
 	tiles.loadFromLuaTable(table);
+	state.tiles(tiles);
 
-	std::string stringID = m_mod.id() + ":" + table["id"].get<std::string>();
-	std::string label = table["name"].get<std::string>();
-
-	ServerBlock &block = Registry::getInstance().registerBlock<ServerBlock>(tiles, stringID, label);
-
-	loadProperties(block, table);
-	loadBoundingBox(block, table);
-	loadDrawType(block, table);
-	loadItemDrop(block, table);
-	loadColorMultiplier(block, table);
+	loadProperties(state, table);
+	loadBoundingBox(state, table);
+	loadDrawType(state, table, block);
+	loadItemDrop(state, table);
+	loadColorMultiplier(state, table);
 
 	Item *item = nullptr;
-	if (!block.inventoryImage().empty()) {
-		item = &Registry::getInstance().registerItem<Item>(TilesDef{block.inventoryImage()}, stringID, label);
+	if (!state.inventoryImage().empty()) {
+		item = &Registry::getInstance().registerItem<Item>(TilesDef{state.inventoryImage()}, block.stringID(), state.label());
 	}
 	else {
-		item = &Registry::getInstance().registerItem<Item>(block.tiles(), stringID, label);
+		item = &Registry::getInstance().registerItem<Item>(state.tiles(), block.stringID(), state.label());
 	}
 
 	item->setIsBlock(true);
 
-	loadGroups(block, *item, table);
+	loadGroups(block, table, item);
 
 	loadParams(block);
 }
 
-inline void LuaBlockLoader::loadProperties(ServerBlock &block, const sol::table &table) const {
-	block.setHarvestRequirements(table["harvest_requirements"].get_or(0));
-	block.setHardness(table["hardness"].get_or(1.0f));
-	block.setOpaque(table["is_opaque"].get_or(true));
-	block.setLightSource(table["is_light_source"].get_or(false));
-	block.setOnBlockActivated(table["on_block_activated"]);
-	block.setOnTick(table["on_tick"]);
-	block.setOnBlockPlaced(table["on_block_placed"]);
-	block.setOnBlockDestroyed(table["on_block_destroyed"]);
-	block.setRotatable(table["is_rotatable"].get_or(false));
-	block.setInventoryImage(table["inventory_image"].get_or<std::string>(""));
-	block.setFogDepth(table["fog_depth"].get_or<float>(0));
-	block.setTickRandomly(table["tick_randomly"].get_or(false));
-	block.setTickProbability(table["tick_probability"].get_or(0.f));
+inline void LuaBlockLoader::loadProperties(BlockState &state, const sol::table &table) const {
+	state.label(table["name"].get<std::string>());
+	state.harvestRequirements(table["harvest_requirements"].get_or(0));
+	state.hardness(table["hardness"].get_or(1.0f));
+	state.isOpaque(table["is_opaque"].get_or(true));
+	state.isLightSource(table["is_light_source"].get_or(false));
+	state.inventoryImage(table["inventory_image"].get_or<std::string>(""));
+	state.fogDepth(table["fog_depth"].get_or<float>(0));
 
-	if (block.fogDepth()) {
+	// state.onBlockActivated(table["on_block_activated"]);
+	// state.onTick(table["on_tick"]);
+	// state.onBlockPlaced(table["on_block_placed"]);
+	// state.onBlockDestroyed(table["on_block_destroyed"]);
+	// state.setTickRandomly(table["tick_randomly"].get_or(false));
+	// state.setTickProbability(table["tick_probability"].get_or(0.f));
+
+	if (state.fogDepth()) {
 		sol::optional<sol::table> fogColor = table["fog_color"];
 		if (fogColor != sol::nullopt) {
-			block.setFogColor(gk::Color{
+			state.fogColor(gk::Color{
 				fogColor.value().get<u8>(1),
 				fogColor.value().get<u8>(2),
 				fogColor.value().get<u8>(3),
@@ -88,10 +95,10 @@ inline void LuaBlockLoader::loadProperties(ServerBlock &block, const sol::table 
 	}
 }
 
-inline void LuaBlockLoader::loadBoundingBox(ServerBlock &block, const sol::table &table) const {
+inline void LuaBlockLoader::loadBoundingBox(BlockState &state, const sol::table &table) const {
 	sol::optional<sol::table> boundingBox = table["bounding_box"];
 	if (boundingBox != sol::nullopt) {
-		block.setBoundingBox(gk::FloatBox{
+		state.boundingBox(gk::FloatBox{
 			boundingBox.value().get<float>(1),
 			boundingBox.value().get<float>(2),
 			boundingBox.value().get<float>(3),
@@ -102,7 +109,7 @@ inline void LuaBlockLoader::loadBoundingBox(ServerBlock &block, const sol::table
 	}
 }
 
-inline void LuaBlockLoader::loadDrawType(ServerBlock &block, const sol::table &table) const {
+inline void LuaBlockLoader::loadDrawType(BlockState &state, const sol::table &table, const ServerBlock &block) const {
 	sol::object drawTypeObject = table["draw_type"];
 	if (drawTypeObject.valid()) {
 		if (drawTypeObject.get_type() == sol::type::string) {
@@ -117,8 +124,9 @@ inline void LuaBlockLoader::loadDrawType(ServerBlock &block, const sol::table &t
 			};
 
 			auto it = drawTypes.find(drawTypeObject.as<std::string>());
-			if (it != drawTypes.end())
-				block.setDrawType(it->second);
+			if (it != drawTypes.end()) {
+				state.drawType(it->second);
+			}
 			else
 				gkError() << "In" << block.stringID() << " definition: Block draw type invalid";
 		}
@@ -127,19 +135,18 @@ inline void LuaBlockLoader::loadDrawType(ServerBlock &block, const sol::table &t
 	}
 }
 
-inline void LuaBlockLoader::loadItemDrop(ServerBlock &block, const sol::table &table) const {
+inline void LuaBlockLoader::loadItemDrop(BlockState &state, const sol::table &table) const {
 	sol::optional<sol::table> itemDrop = table["item_drop"];
 	if (itemDrop != sol::nullopt) {
-		std::string dropID = itemDrop.value()["id"];
-		u16 dropAmount = itemDrop.value()["amount"];
-		block.setItemDrop(dropID, dropAmount);
+		state.itemDrop(itemDrop.value()["id"]);
+		state.itemDropAmount(itemDrop.value()["amount"]);
 	}
 }
 
-inline void LuaBlockLoader::loadColorMultiplier(ServerBlock &block, const sol::table &table) const {
+inline void LuaBlockLoader::loadColorMultiplier(BlockState &state, const sol::table &table) const {
 	sol::optional<sol::table> colorMultiplier = table["color_multiplier"];
 	if (colorMultiplier != sol::nullopt) {
-		block.setColorMultiplier(gk::Color{
+		state.colorMultiplier(gk::Color{
 			colorMultiplier.value().get<u8>(1),
 			colorMultiplier.value().get<u8>(2),
 			colorMultiplier.value().get<u8>(3),
@@ -148,7 +155,7 @@ inline void LuaBlockLoader::loadColorMultiplier(ServerBlock &block, const sol::t
 	}
 }
 
-inline void LuaBlockLoader::loadGroups(ServerBlock &block, Item &item, const sol::table &table) const {
+inline void LuaBlockLoader::loadGroups(ServerBlock &block, const sol::table &table, Item *item) const {
 	sol::object groupsObject = table["groups"];
 	if (groupsObject.valid()) {
 		if (groupsObject.get_type() == sol::type::table) {
@@ -158,7 +165,8 @@ inline void LuaBlockLoader::loadGroups(ServerBlock &block, Item &item, const sol
 				u16 groupValue = groupObject.second.as<u16>();
 
 				block.addGroup(groupName, groupValue);
-				item.addGroup(groupName, groupValue);
+				if (item)
+					item->addGroup(groupName, groupValue);
 			}
 		}
 		else

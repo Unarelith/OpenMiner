@@ -42,7 +42,7 @@ void BlockParam::deserialize(sf::Packet &packet) {
 void BlockParam::allocateBits(u8 type, u8 size) {
 	auto it = m_allocatedBits.find(type);
 	if (it != m_allocatedBits.end()) {
-		gkWarning() << "Can't allocate param type" << getTypeName(type) << "twice in block" << m_block.stringID();
+		gkWarning() << "Can't allocate param type" << getTypeName(type) << "twice in block" << m_block->stringID();
 	}
 	else if (m_totalSize + size <= 16) {
 		m_allocatedBits.emplace(type, Param{m_totalSize, size});
@@ -52,7 +52,7 @@ void BlockParam::allocateBits(u8 type, u8 size) {
 		// gkDebug() << "Allocated" << (int)size << "bits for type" << getTypeName(type) << "in block" << m_block.stringID();
 	}
 	else {
-		gkError() << "Failed to allocate bits for param" << getTypeName(type) << "in block" << m_block.stringID();
+		gkError() << "Failed to allocate bits for param" << getTypeName(type) << "in block" << m_block->stringID();
 		gkError() << "Reason: Can't allocate more than 16 bits. Allocated bits:";
 		for (auto &it : m_allocatedBits) {
 			gkError() << "\t-" << getTypeName(it.first) << "=" << (int)it.second.size;
@@ -63,7 +63,7 @@ void BlockParam::allocateBits(u8 type, u8 size) {
 u16 BlockParam::getParam(u8 type, u16 data) const {
 	auto it = m_allocatedBits.find(type);
 	if (it == m_allocatedBits.end()) {
-		gkWarning() << "Failed to get param" << getTypeName(type) << "in block" << m_block.stringID();
+		gkWarning() << "Failed to get param" << getTypeName(type) << "in block" << m_block->stringID();
 		return 0;
 	}
 
@@ -73,14 +73,14 @@ u16 BlockParam::getParam(u8 type, u16 data) const {
 u16 BlockParam::setParam(u8 type, u16 data, u16 param) {
 	auto it = m_allocatedBits.find(type);
 	if (it == m_allocatedBits.end()) {
-		gkWarning() << "Failed to set param" << getTypeName(type) << "in block" << m_block.stringID();
+		gkWarning() << "Failed to set param" << getTypeName(type) << "in block" << m_block->stringID();
 		return 0;
 	}
 
 	u16 mask = ~(~0u << it->second.size) << it->second.offset;
 	param <<= it->second.offset;
 	if ((param & ~mask) != 0)
-		gkWarning() << "Block param overflow for type" << getTypeName(type) << "in block" << m_block.stringID();
+		gkWarning() << "Block param overflow for type" << getTypeName(type) << "in block" << m_block->stringID();
 
 	return (data & ~mask) | (param & mask);
 }
@@ -88,6 +88,7 @@ u16 BlockParam::setParam(u8 type, u16 data, u16 param) {
 std::string BlockParam::getTypeName(u8 type) {
 	std::array<std::string, Type::Count> names = {
 		"Rotation",
+		"State",
 	};
 
 	return names[type];

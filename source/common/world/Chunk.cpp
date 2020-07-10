@@ -71,8 +71,12 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 
 	if ((m_data[z][y][x] & 0xffff) == type) return;
 
+	u16 blockParam = getData(x, y, z);
 	const Block &block = Registry::getInstance().getBlock(type);
-	if (block.isLightSource())
+	const BlockState &blockState = block.getState(block.param().hasParam(BlockParam::State)
+		? block.param().getParam(BlockParam::State, blockParam) : 0);
+
+	if (blockState.isLightSource())
 		m_lightmap.addTorchlight(x, y, z, 14);
 	else {
 		m_lightmap.removeTorchlight(x, y, z);
@@ -82,8 +86,8 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 	onBlockPlaced(x, y, z, block);
 	m_world.onBlockPlaced(x + m_x * width, y + m_y * depth, z + m_z * height, block);
 
-	if (m_data[z][y][x] != 0) {
-		const Block &oldBlock = Registry::getInstance().getBlock(m_data[z][y][x]);
+	if ((m_data[z][y][x] & 0xffff) != 0) {
+		const Block &oldBlock = Registry::getInstance().getBlock(m_data[z][y][x] & 0xffff);
 		onBlockDestroyed(x, y, z, oldBlock);
 	}
 
@@ -131,6 +135,23 @@ void Chunk::setBlockRaw(int x, int y, int z, u16 type) {
 	m_data[z][y][x] |= type;
 
 	m_hasChanged = true;
+}
+
+const BlockState *Chunk::getBlockState(int x, int y, int z) const {
+	if(x < 0)              return m_surroundingChunks[0] ? m_surroundingChunks[0]->getBlockState(x + Chunk::width, y, z) : nullptr;
+	if(x >= Chunk::width)  return m_surroundingChunks[1] ? m_surroundingChunks[1]->getBlockState(x - Chunk::width, y, z) : nullptr;
+	if(y < 0)              return m_surroundingChunks[2] ? m_surroundingChunks[2]->getBlockState(x, y + Chunk::depth, z) : nullptr;
+	if(y >= Chunk::depth)  return m_surroundingChunks[3] ? m_surroundingChunks[3]->getBlockState(x, y - Chunk::depth, z) : nullptr;
+	if(z < 0)              return m_surroundingChunks[4] ? m_surroundingChunks[4]->getBlockState(x, y, z + Chunk::height) : nullptr;
+	if(z >= Chunk::height) return m_surroundingChunks[5] ? m_surroundingChunks[5]->getBlockState(x, y, z - Chunk::height) : nullptr;
+
+	u16 blockID = getBlock(x, y, z);
+	u16 blockParam = getData(x, y, z);
+	const Block &block = Registry::getInstance().getBlock(blockID);
+	if (!block.param().hasParam(BlockParam::State))
+		return &block.getState(0);
+
+	return &block.getState(block.param().getParam(BlockParam::State, blockParam));
 }
 
 BlockData *Chunk::getBlockData(int x, int y, int z) const {

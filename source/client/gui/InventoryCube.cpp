@@ -58,8 +58,10 @@ InventoryCube::InventoryCube(float size, bool isEntity)
 
 using namespace BlockGeometry;
 
-void InventoryCube::updateVertexBuffer(const Block &block) {
+void InventoryCube::updateVertexBuffer(const Block &block, u8 state) {
 	if (!block.id()) return;
+
+	const BlockState &blockState = block.getState(state);
 
 	Vertex vertices[nFaces][nVertsPerFace];
 
@@ -75,7 +77,7 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 		glm::vec3{m_size, m_size, m_size},
 	};
 
-	const gk::FloatBox &boundingBox = block.boundingBox();
+	const gk::FloatBox &boundingBox = blockState.boundingBox();
 
 	constexpr s8f faceValue[nFaces]{2, 2, 4, 4, 3, 3};
 
@@ -86,7 +88,7 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 		//    U0V0 -> 3 2 <- U1V0
 		//    U0V1 -> 0 1 <- U1V1
 		float U0, V0, U1, V1;
-		if (block.drawType() == BlockDrawType::Cactus) {
+		if (blockState.drawType() == BlockDrawType::Cactus) {
 			U0 = 0.f;
 			V0 = 0.f;
 			U1 = 1.f;
@@ -101,10 +103,10 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 			V1 = (f <= 3) ? 1.f - boundingBox.z : (f == 4) ? boundingBox.y + boundingBox.sizeY : 1.f - boundingBox.y;
 		}
 
-		const gk::FloatRect &blockTexCoords = m_textureAtlas->getTexCoords(block.tiles().getTextureForFace(f));
+		const gk::FloatRect &blockTexCoords = m_textureAtlas->getTexCoords(blockState.tiles().getTextureForFace(f));
 
 		for (u8f v = 0; v < nVertsPerFace; ++v) {
-			if (block.drawType() == BlockDrawType::Cactus) {
+			if (blockState.drawType() == BlockDrawType::Cactus) {
 				vertices[f][v].coord3d[0] = vertexPos[cubeVerts[f][v]].x - boundingBox.x * faceNormals[f][0] * m_size;
 				vertices[f][v].coord3d[1] = vertexPos[cubeVerts[f][v]].y - boundingBox.y * faceNormals[f][1] * m_size;
 				vertices[f][v].coord3d[2] = vertexPos[cubeVerts[f][v]].z - boundingBox.z * faceNormals[f][2] * m_size;
@@ -121,7 +123,7 @@ void InventoryCube::updateVertexBuffer(const Block &block) {
 			vertices[f][v].texCoord[0] = gk::qlerp(blockTexCoords.x, blockTexCoords.x + blockTexCoords.sizeX, U);
 			vertices[f][v].texCoord[1] = gk::qlerp(blockTexCoords.y, blockTexCoords.y + blockTexCoords.sizeY, V);
 
-			const gk::Color &colorMultiplier = block.colorMultiplier();
+			const gk::Color &colorMultiplier = blockState.colorMultiplier();
 			vertices[f][v].color[0] = colorMultiplier.r;
 			vertices[f][v].color[1] = colorMultiplier.g;
 			vertices[f][v].color[2] = colorMultiplier.b;

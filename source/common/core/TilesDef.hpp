@@ -56,7 +56,7 @@ class TilesDef : public gk::ISerializable {
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
-		void loadFromLuaTable(const sol::table &table);
+		bool loadFromLuaTable(const sol::table &table);
 
 		const std::vector<std::string> &textureFilenames() const { return m_textureFilenames; };
 		const std::vector<std::string> &altTextureFilenames() const { return m_altTextureFilenames; }

@@ -144,12 +144,11 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 		m_velocity.z = 0.f;
 
 	// Checking to block at camera position to enable specific effects
-	u16 blockID = world.getBlock(m_camera.getDPosition().x, m_camera.getDPosition().y, m_camera.getDPosition().z);
-	const Block &block = Registry::getInstance().getBlock(blockID);
-	if (block.fogDepth() != 0) {
+	const BlockState *blockState = world.getBlockState(m_camera.getDPosition().x, m_camera.getDPosition().y, m_camera.getDPosition().z);
+	if (blockState && blockState->fogDepth() != 0) {
 		GameConfig::currentScreenEffect = 1;
-		GameConfig::fogDepth = block.fogDepth();
-		GameConfig::fogColor = block.fogColor();
+		GameConfig::fogDepth = blockState->fogDepth();
+		GameConfig::fogColor = blockState->fogColor();
 	}
 	else {
 		GameConfig::currentScreenEffect = 0;
@@ -186,9 +185,8 @@ void ClientPlayer::checkCollisions(const ClientWorld &world) {
 }
 
 bool passable(const ClientWorld &world, double x, double y, double z) {
-	u32 blockID = world.getBlock(floor(x), floor(y), floor(z));
-	const Block &block = Registry::getInstance().getBlock(blockID);
-	return !blockID || block.drawType() == BlockDrawType::Liquid || block.drawType() == BlockDrawType::XShape;
+	const BlockState *blockState = world.getBlockState(floor(x), floor(y), floor(z));
+	return !blockState || !blockState->block().id() || blockState->drawType() == BlockDrawType::Liquid || blockState->drawType() == BlockDrawType::XShape;
 }
 
 void ClientPlayer::testPoint(const ClientWorld &world, double x, double y, double z, glm::vec3 &vel) {

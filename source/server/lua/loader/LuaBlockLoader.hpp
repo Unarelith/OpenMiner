@@ -31,6 +31,7 @@
 
 class Item;
 class LuaMod;
+class BlockState;
 class ServerBlock;
 
 class LuaBlockLoader {
@@ -40,12 +41,13 @@ class LuaBlockLoader {
 		void loadBlock(const sol::table &table) const;
 
 	private:
-		void loadProperties(ServerBlock &block, const sol::table &table) const;
-		void loadBoundingBox(ServerBlock &block, const sol::table &table) const;
-		void loadDrawType(ServerBlock &block, const sol::table &table) const;
-		void loadItemDrop(ServerBlock &block, const sol::table &table) const;
-		void loadColorMultiplier(ServerBlock &block, const sol::table &table) const;
-		void loadGroups(ServerBlock &block, Item &item, const sol::table &table) const;
+		void loadBlockState(BlockState &state, const sol::table &table, ServerBlock &block) const;
+		void loadProperties(BlockState &state, const sol::table &table) const;
+		void loadBoundingBox(BlockState &state, const sol::table &table) const;
+		void loadDrawType(BlockState &state, const sol::table &table, const ServerBlock &block) const;
+		void loadItemDrop(BlockState &state, const sol::table &table) const;
+		void loadColorMultiplier(BlockState &state, const sol::table &table) const;
+		void loadGroups(ServerBlock &block, const sol::table &table, Item *item = nullptr) const;
 		void loadParams(ServerBlock &block) const;
 
 		LuaMod &m_mod;

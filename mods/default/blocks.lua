@@ -208,7 +208,7 @@ mod:block {
 	draw_type = "glass",
 	is_opaque = false,
 
-	on_block_activated = function(pos, player, world, client, server, screen_width, screen_height, gui_scale)
+	on_block_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
 		local dim = (player:dimension() + 1) % 2
 		local pos = {
 			x = math.floor(player:x()),
@@ -311,7 +311,7 @@ mod:block {
 	name = "Redstone Lamp",
 	tiles = "redstone_lamp_off.png",
 
-	on_block_activated = function(pos, player, world, client, server, screen_width, screen_height, gui_scale)
+	on_block_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
 		local block = openminer.registry:get_block_from_string("default:redstone_lamp_on")
 		world:set_block(pos.x, pos.y, pos.z, block:id())
 	end
@@ -327,7 +327,7 @@ mod:block {
 		ci_ignore = 1
 	},
 
-	on_block_activated = function(pos, player, world, client, server, screen_width, screen_height, gui_scale)
+	on_block_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
 		local block = openminer.registry:get_block_from_string("default:redstone_lamp_off")
 		world:set_block(pos.x, pos.y, pos.z, block:id())
 	end
@@ -356,10 +356,21 @@ mod:block {
 	id = "seeds",
 	name = "Seeds",
 	tiles = "wheat_stage_0.png",
-	alt_tiles = "wheat_stage_7.png",
 	draw_type = "xshape",
 	inventory_image = "seeds_wheat.png",
 	hardness = 0,
+
+	bounding_box = {0, 0, 0, 1, 1, 1.0 / 16.0},
+
+	states = {
+		[1] = { tiles = "wheat_stage_1.png", bounding_box = {0, 0, 0, 1, 1, 3.0 / 16.0}, },
+		[2] = { tiles = "wheat_stage_2.png", bounding_box = {0, 0, 0, 1, 1, 5.0 / 16.0}, },
+		[3] = { tiles = "wheat_stage_3.png", bounding_box = {0, 0, 0, 1, 1, 8.0 / 16.0}, },
+		[4] = { tiles = "wheat_stage_4.png", bounding_box = {0, 0, 0, 1, 1, 10.0 / 16.0}, },
+		[5] = { tiles = "wheat_stage_5.png", bounding_box = {0, 0, 0, 1, 1, 12.0 / 16.0}, },
+		[6] = { tiles = "wheat_stage_6.png", bounding_box = {0, 0, 0, 1, 1, 14.0 / 16.0}, },
+		[7] = { tiles = "wheat_stage_7.png", bounding_box = {0, 0, 0, 1, 1, 1}, },
+	},
 
 	tick_randomly = true,
 	tick_probability = 0.01,
@@ -368,25 +379,20 @@ mod:block {
 		world:add_block_data(pos.x, pos.y, pos.z, 0, 0)
 	end,
 
-	on_tick = function(pos, chunk, world)
-		local data = world:get_block_data(pos.x, pos.y, pos.z)
-		if not data then return end
-
-		local growth_stage = data.meta:get_int("growth_stage") or 0
-		if growth_stage < 7 then
-			data.use_alt_tiles = true
-			data.meta:set_int("growth_stage", 7)
+	on_tick = function(pos, block, chunk, world)
+		local block_param = world:get_block_param(pos.x, pos.y, pos.z)
+		local current_state = block:param():get_param(BlockParam.State, block_param)
+		if current_state < 7 then
+			world:set_block_param(pos.x, pos.y, pos.z, current_state + 1)
 		end
 	end,
 
-	on_block_activated = function(pos, player, world, client, server, screen_width, screen_height, gui_scale)
-		local data = world:get_block_data(pos.x, pos.y, pos.z)
-		if not data then return end
-
-		local growth_stage = data.meta:get_int("growth_stage") or 0
-		if growth_stage >= 7 then
-			data.use_alt_tiles = false
-			data.meta:set_int("growth_stage", 0)
+	on_block_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
+		local block_param = world:get_block_param(pos.x, pos.y, pos.z)
+		local current_state = block:param():get_param(BlockParam.State, block_param)
+		if current_state >= 7 then
+			world:set_block_param(pos.x, pos.y, pos.z,
+				block:param():set_param(BlockParam.State, block_param, 0))
 
 			-- FIXME: It should drop the item if 'default:use_item_drops' is enabled
 			local item_stack = ItemStack.new("default:wheat", 1)

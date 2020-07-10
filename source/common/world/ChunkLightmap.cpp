@@ -129,9 +129,8 @@ bool ChunkLightmap::updateTorchlight() {
 		m_torchlightBfsQueue.pop();
 
 		// If this block is opaque, don't propagate the light
-		u16 blockID = m_chunk->getBlock(node.x, node.y, node.z);
-		const Block &block = Registry::getInstance().getBlock(blockID);
-		if (block.isOpaque() && !block.isLightSource()) {
+		const BlockState *blockState = m_chunk->getBlockState(node.x, node.y, node.z);
+		if (blockState && blockState->isOpaque() && !blockState->isLightSource()) {
 			setTorchlight(node.x, node.y, node.z, 0);
 
 			// FIXME: This only reverts an addTorchlight that added light in a non-generated chunk
@@ -153,9 +152,8 @@ bool ChunkLightmap::updateTorchlight() {
 		u8 lightLevel = getTorchlight(node.x, node.y, node.z);
 		for (const gk::Vector3i &surroundingNode : surroundingNodes) {
 			if (getTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= lightLevel) {
-				u16 blockID = m_chunk->getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z);
-				const Block &block = Registry::getInstance().getBlock(blockID);
-				if (!block.isOpaque()) {
+				const BlockState *blockState = m_chunk->getBlockState(surroundingNode.x, surroundingNode.y, surroundingNode.z);
+				if (blockState && blockState->isOpaque()) {
 					addTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, lightLevel - 1);
 
 					lightUpdated = true;
@@ -205,9 +203,8 @@ bool ChunkLightmap::updateSunlight() {
 		m_sunlightBfsQueue.pop();
 
 		// If this block is opaque, don't propagate the light
-		u16 blockID = m_chunk->getBlock(node.x, node.y, node.z);
-		const Block &block = Registry::getInstance().getBlock(blockID);
-		if (block.isOpaque()) {
+		const BlockState *blockState = m_chunk->getBlockState(node.x, node.y, node.z);
+		if (blockState && blockState->isOpaque()) {
 			setSunlight(node.x, node.y, node.z, 0);
 
 			// FIXME: This only reverts an addSunlight that added light in a non-generated chunk
@@ -231,10 +228,9 @@ bool ChunkLightmap::updateSunlight() {
 			u8 neighbourSunlightLevel = getSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 			if (neighbourSunlightLevel + 2 <= sunlightLevel
 			|| (sunlightLevel == 15 && neighbourSunlightLevel != 15 && surroundingNode.z == node.z - 1)) {
-				u16 blockID = m_chunk->getBlock(surroundingNode.x, surroundingNode.y, surroundingNode.z);
-				const Block &block = Registry::getInstance().getBlock(blockID);
-				if (!block.isOpaque()) {
-					if (sunlightLevel == 15 && surroundingNode.z == node.z - 1 && (!blockID || block.drawType() == BlockDrawType::Glass || block.drawType() == BlockDrawType::XShape)) {
+				const BlockState *blockState = m_chunk->getBlockState(surroundingNode.x, surroundingNode.y, surroundingNode.z);
+				if (blockState && blockState->isOpaque()) {
+					if (sunlightLevel == 15 && surroundingNode.z == node.z - 1 && (!blockState->block().id() || blockState->drawType() == BlockDrawType::Glass || blockState->drawType() == BlockDrawType::XShape)) {
 						addSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, sunlightLevel);
 
 						lightUpdated = true;

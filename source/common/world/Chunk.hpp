@@ -64,6 +64,8 @@ class Chunk : public gk::NonCopyable {
 
 		void setBlockRaw(int x, int y, int z, u16 block);
 
+		const BlockState *getBlockState(int x, int y, int z) const;
+
 		virtual void onBlockPlaced(int, int, int, const Block &) {}
 		virtual void onBlockDestroyed(int, int, int, const Block &) {}
 

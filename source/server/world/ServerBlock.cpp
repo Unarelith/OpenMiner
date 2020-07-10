@@ -35,7 +35,7 @@
 void ServerBlock::onTick(const glm::ivec3 &pos, ServerChunk &chunk, ServerWorld &world, ServerCommandHandler &server) const {
 	if (m_onTickEnabled && m_onTick) {
 		try {
-			m_onTick(pos, chunk, world);
+			m_onTick(pos, *this, chunk, world);
 
 			BlockData *blockData = world.getBlockData(pos.x, pos.y, pos.z);
 			if (blockData) {
@@ -59,7 +59,7 @@ void ServerBlock::onTick(const glm::ivec3 &pos, ServerChunk &chunk, ServerWorld 
 bool ServerBlock::onBlockActivated(const glm::ivec3 &pos, ServerPlayer &player, ServerWorld &world, ClientInfo &client, ServerCommandHandler &server, u16 screenWidth, u16 screenHeight, u8 guiScale) const {
 	try {
 		if (m_onBlockActivated) {
-			m_onBlockActivated(pos, player, world, client, server, screenWidth, screenHeight, guiScale);
+			m_onBlockActivated(pos, *this, player, world, client, server, screenWidth, screenHeight, guiScale);
 
 			// FIXME: Check if data changed before sending
 			BlockData *blockData = world.getBlockData(pos.x, pos.y, pos.z);

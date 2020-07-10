@@ -40,16 +40,16 @@ void BlockInfoWidget::update() {
 	m_itemWidget.update();
 }
 
-void BlockInfoWidget::setCurrentBlock(const Block *block) {
-	m_currentBlock = block;
+void BlockInfoWidget::setCurrentBlock(const BlockState *blockState) {
+	m_currentBlock = blockState;
 
 	if (!m_currentBlock)
 		m_isVisible = false;
 	else {
 		m_isVisible = true;
 
-		m_text.setString(block->label());
-		m_itemWidget.setStack(block->stringID(), 1);
+		m_text.setString(blockState->label());
+		m_itemWidget.setStack(blockState->block().stringID(), 1);
 	}
 }
 

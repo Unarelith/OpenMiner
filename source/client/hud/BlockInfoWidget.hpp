@@ -37,8 +37,8 @@ class BlockInfoWidget : public Widget {
 
 		void update() override;
 
-		const Block *currentBlock() const { return m_currentBlock; }
-		void setCurrentBlock(const Block *block);
+		const BlockState *currentBlock() const { return m_currentBlock; }
+		void setCurrentBlock(const BlockState *blockState);
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
@@ -51,7 +51,7 @@ class BlockInfoWidget : public Widget {
 
 		bool m_isVisible = false;
 
-		const Block *m_currentBlock = nullptr;
+		const BlockState *m_currentBlock = nullptr;
 };
 
 #endif // BLOCKINFOWIDGET_HPP_

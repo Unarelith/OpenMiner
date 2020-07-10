@@ -43,22 +43,26 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 	for (s8f z = 0 ; z < CHUNK_HEIGHT ; z++) {
 		for (s8f y = 0 ; y < CHUNK_DEPTH ; y++) {
 			for (s8f x = 0 ; x < CHUNK_WIDTH ; x++) {
-				const Block &block = Registry::getInstance().getBlock(chunk.getBlock(x, y, z));
-				if (!block.id()) continue;
-				if (!chunk.getBlock(x, y, z)) continue;
+				u16 blockID = chunk.getBlock(x, y, z);
+				const Block &block = Registry::getInstance().getBlock(blockID);
+				if (!blockID) continue;
 
-				const gk::FloatBox &boundingBox = block.boundingBox();
+				u16 blockParam = chunk.getData(x, y, z);
+				const BlockState &blockState = block.getState(block.param().hasParam(BlockParam::State)
+					? block.param().getParam(BlockParam::State, blockParam) : 0);
+
+				const gk::FloatBox &boundingBox = blockState.boundingBox();
 
 				u8f orientation = block.isRotatable()
-					? block.param().getParam(BlockParam::Rotation, chunk.getData(x, y, z)) : 0;
+					? block.param().getParam(BlockParam::Rotation, blockParam) : 0;
 				const glm::mat3 &orientMatrix = orientMatrices[orientation];
 
-				if (block.drawType() == BlockDrawType::Solid
-				 || block.drawType() == BlockDrawType::Leaves
-				 || block.drawType() == BlockDrawType::Liquid
-				 || block.drawType() == BlockDrawType::Glass
-				 || block.drawType() == BlockDrawType::Cactus
-				 || block.drawType() == BlockDrawType::BoundingBox)
+				if (blockState.drawType() == BlockDrawType::Solid
+				 || blockState.drawType() == BlockDrawType::Leaves
+				 || blockState.drawType() == BlockDrawType::Liquid
+				 || blockState.drawType() == BlockDrawType::Glass
+				 || blockState.drawType() == BlockDrawType::Cactus
+				 || blockState.drawType() == BlockDrawType::BoundingBox)
 				{
 					glm::vec3 vertexPos[nVertsPerCube]{
 						// Order is important. It matches the bit order defined in BlockGeometry::cubeVerts.
@@ -72,7 +76,7 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 						{boundingBox.x + boundingBox.sizeX, boundingBox.y + boundingBox.sizeY, boundingBox.z + boundingBox.sizeZ},
 					};
 
-					if (block.drawType() == BlockDrawType::Cactus) {
+					if (blockState.drawType() == BlockDrawType::Cactus) {
 						// Ignore bounding box, initialize it to full node coordinates
 						for (u8f i = 0; i < nVertsPerCube; ++i) {
 							vertexPos[i].x = (i >> 0) & 1;
@@ -115,10 +119,10 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 
 						const gk::Vector3i *vFaceNeighbours[nVertsPerFace]{&corner0, &corner1, &corner2, &corner3};
 
-						addFace(x, y, z, f, chunk, block, normal, faceVerts, vFaceNeighbours);
+						addFace(x, y, z, f, chunk, blockState, normal, faceVerts, vFaceNeighbours);
 					}
 				}
-				else if (block.drawType() == BlockDrawType::XShape) {
+				else if (blockState.drawType() == BlockDrawType::XShape) {
 					glm::vec3 vertexPos[nVertsPerCube]{
 						{0, 0, 0},
 						{1, 0, 0},
@@ -135,7 +139,7 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 						{&vertexPos[crossVerts[1][0]], &vertexPos[crossVerts[1][1]],
 						 &vertexPos[crossVerts[1][2]], &vertexPos[crossVerts[1][3]]},
 					};
-					addCross(x, y, z, chunk, block, faceVertices);
+					addCross(x, y, z, chunk, blockState, faceVertices);
 				}
 			}
 		}
@@ -157,26 +161,25 @@ std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const Cli
 	return verticesCount;
 }
 
-inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk &chunk, const Block &block,
+inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk &chunk, const BlockState &blockState,
                                   const gk::Vector3i &normal, const glm::vec3 *const vertexPos[nVertsPerFace],
                                   const gk::Vector3i *const neighbourOfs[nVertsPerFace])
 {
 	// Get surrounding block for the face
-	u16 surroundingBlockID = chunk.getBlock(x + normal.x, y + normal.y, z + normal.z);
-	const Block *surroundingBlock = &Registry::getInstance().getBlock(surroundingBlockID);
+	const BlockState *surroundingBlockState = chunk.getBlockState(x + normal.x, y + normal.y, z + normal.z);
 
 	// Skip hidden faces
-	if (surroundingBlock && surroundingBlock->id()
-	&& ((block.drawType() == BlockDrawType::Solid && surroundingBlock->drawType() == BlockDrawType::Solid && surroundingBlock->isOpaque())
-	 || (block.id() == surroundingBlock->id() && (block.drawType() == BlockDrawType::Liquid || block.drawType() == BlockDrawType::Glass))
-	 || (block.drawType() == BlockDrawType::Liquid && surroundingBlock->drawType() == BlockDrawType::Solid)
-	 || (block.drawType() == BlockDrawType::Cactus && surroundingBlock->id() == block.id() && f > 3)))
+	if (surroundingBlockState && surroundingBlockState->block().id()
+	&& ((blockState.drawType() == BlockDrawType::Solid && surroundingBlockState->drawType() == BlockDrawType::Solid && surroundingBlockState->isOpaque())
+	 || (blockState.block().id() == surroundingBlockState->block().id() && (blockState.drawType() == BlockDrawType::Liquid || blockState.drawType() == BlockDrawType::Glass))
+	 || (blockState.drawType() == BlockDrawType::Liquid && surroundingBlockState->drawType() == BlockDrawType::Solid)
+	 || (blockState.drawType() == BlockDrawType::Cactus && surroundingBlockState->block().id() == blockState.block().id() && f > 3)))
 		return;
 
-	const gk::FloatBox &boundingBox = block.boundingBox();
+	const gk::FloatBox &boundingBox = blockState.boundingBox();
 
 	const BlockData *blockData = chunk.getBlockData(x, y, z);
-	const std::string &texture = block.tiles().getTextureForFace(f, blockData ? blockData->useAltTiles : false);
+	const std::string &texture = blockState.tiles().getTextureForFace(f, blockData ? blockData->useAltTiles : false);
 	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(texture);
 
 	// Calculate UV's
@@ -185,7 +188,7 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 	//    U0V0 -> 3 2 <- U1V0
 	//    U0V1 -> 0 1 <- U1V1
 	float U0, V0, U1, V1;
-	if (block.drawType() == BlockDrawType::Cactus) {
+	if (blockState.drawType() == BlockDrawType::Cactus) {
 		U0 = 0.f;
 		V0 = 0.f;
 		U1 = 1.f;
@@ -203,14 +206,14 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 	// Prepare vertex information for VBO
 	Vertex vertices[nVertsPerFace];
 	for (s8f v = 0; v < nVertsPerFace; ++v) {
-		if (block.drawType() == BlockDrawType::Cactus) {
+		if (blockState.drawType() == BlockDrawType::Cactus) {
 			vertices[v].coord3d[0] = x + vertexPos[v]->x - boundingBox.x * normal.x;
 			vertices[v].coord3d[1] = y + vertexPos[v]->y - boundingBox.y * normal.y;
 			vertices[v].coord3d[2] = z + vertexPos[v]->z - boundingBox.z * normal.z;
 		}
 		else {
 			float blockHeight = vertexPos[v]->z;
-			if (block.drawType() == BlockDrawType::Liquid && (f != BlockFace::Bottom || !surroundingBlock || !surroundingBlock->id())) {
+			if (blockState.drawType() == BlockDrawType::Liquid && (f != BlockFace::Bottom || !surroundingBlockState || !surroundingBlockState->block().id())) {
 				if (f == BlockFace::Bottom)
 					blockHeight = vertexPos[v]->z - 2.f / 16.f;
 				else
@@ -228,7 +231,7 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 		vertices[v].normal[1] = normal.y;
 		vertices[v].normal[2] = normal.z;
 
-		const gk::Color colorMultiplier = block.colorMultiplier();
+		const gk::Color colorMultiplier = blockState.colorMultiplier();
 		vertices[v].color[0] = colorMultiplier.r;
 		vertices[v].color[1] = colorMultiplier.g;
 		vertices[v].color[2] = colorMultiplier.b;
@@ -239,13 +242,13 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 		vertices[v].texCoord[0] = gk::qlerp(blockTexCoords.x, blockTexCoords.x + blockTexCoords.sizeX, U);
 		vertices[v].texCoord[1] = gk::qlerp(blockTexCoords.y, blockTexCoords.y + blockTexCoords.sizeY, V);
 
-		if (Config::isSmoothLightingEnabled && block.drawType() != BlockDrawType::Liquid)
+		if (Config::isSmoothLightingEnabled && blockState.drawType() != BlockDrawType::Liquid)
 			vertices[v].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, *neighbourOfs[v], normal, chunk);
 		else
 			vertices[v].lightValue[0] = chunk.lightmap().getSunlight(x + normal.x, y + normal.y, z + normal.z);
 
 		int torchlight = chunk.lightmap().getTorchlight(x, y, z);
-		if (Config::isSmoothLightingEnabled && torchlight == 0 && block.drawType() != BlockDrawType::Liquid)
+		if (Config::isSmoothLightingEnabled && torchlight == 0 && blockState.drawType() != BlockDrawType::Liquid)
 			vertices[v].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, *neighbourOfs[v], normal, chunk);
 		else
 			vertices[v].lightValue[1] = chunk.lightmap().getTorchlight(x + normal.x, y + normal.y, z + normal.z);
@@ -257,11 +260,11 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 		if (!Config::isAmbientOcclusionEnabled || Config::isSmoothLightingEnabled)
 			vertices[v].ambientOcclusion = 5;
 
-		if (block.drawType() == BlockDrawType::Liquid)
+		if (blockState.drawType() == BlockDrawType::Liquid)
 			m_vertices[Layer::Liquid].emplace_back(vertices[v]);
-		else if (block.drawType() == BlockDrawType::Glass)
+		else if (blockState.drawType() == BlockDrawType::Glass)
 			m_vertices[Layer::Glass].emplace_back(vertices[v]);
-		else if (block.colorMultiplier() != gk::Color::White)
+		else if (blockState.colorMultiplier() != gk::Color::White)
 			m_vertices[Layer::NoMipMap].emplace_back(vertices[v]);
 		else
 			m_vertices[Layer::Solid].emplace_back(vertices[v]);
@@ -286,9 +289,9 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 	}
 }
 
-inline void ChunkBuilder::addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk, const Block &block, const glm::vec3 *const vertexPos[nCrossFaces][nVertsPerFace]) {
+inline void ChunkBuilder::addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk, const BlockState &blockState, const glm::vec3 *const vertexPos[nCrossFaces][nVertsPerFace]) {
 	const BlockData *blockData = chunk.getBlockData(x, y, z);
-	const std::string &texture = block.tiles().getTextureForFace(0, blockData ? blockData->useAltTiles : false);
+	const std::string &texture = blockState.tiles().getTextureForFace(0, blockData ? blockData->useAltTiles : false);
 	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(texture);
 
 	float faceTexCoords[nVertsPerFace][nCoordsPerUV] = {
@@ -310,7 +313,7 @@ inline void ChunkBuilder::addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk
 			vertices[v].normal[1] = 0;
 			vertices[v].normal[2] = 0;
 
-			const gk::Color colorMultiplier = block.colorMultiplier();
+			const gk::Color colorMultiplier = blockState.colorMultiplier();
 			vertices[v].color[0] = colorMultiplier.r;
 			vertices[v].color[1] = colorMultiplier.g;
 			vertices[v].color[2] = colorMultiplier.b;
@@ -342,18 +345,18 @@ inline u8 ChunkBuilder::getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::Vecto
 		(normal.z != 0) ? offset.z : 0
 	};
 
-	const Block *blocks[4] = {
-		&Registry::getInstance().getBlock(chunk.getBlock(x + minOffset.x, y + minOffset.y, z + offset.z)),
-		&Registry::getInstance().getBlock(chunk.getBlock(x + offset.x,    y + minOffset.y, z + minOffset.z)),
-		&Registry::getInstance().getBlock(chunk.getBlock(x + minOffset.x, y + offset.y,    z + minOffset.z)),
-		&Registry::getInstance().getBlock(chunk.getBlock(x + offset.x,    y + offset.y,    z + offset.z))
+	const BlockState *blocks[4] = {
+		chunk.getBlockState(x + minOffset.x, y + minOffset.y, z + offset.z),
+		chunk.getBlockState(x + offset.x,    y + minOffset.y, z + minOffset.z),
+		chunk.getBlockState(x + minOffset.x, y + offset.y,    z + minOffset.z),
+		chunk.getBlockState(x + offset.x,    y + offset.y,    z + offset.z)
 	};
 
 	bool blockPresence[4] = {
-		blocks[0]->id() != 0 && blocks[0]->isOpaque(),
-		blocks[1]->id() != 0 && blocks[1]->isOpaque(),
-		blocks[2]->id() != 0 && blocks[2]->isOpaque(),
-		blocks[3]->id() != 0 && blocks[3]->isOpaque()
+		blocks[0] && blocks[0]->block().id() != 0 && blocks[0]->isOpaque(),
+		blocks[1] && blocks[1]->block().id() != 0 && blocks[1]->isOpaque(),
+		blocks[2] && blocks[2]->block().id() != 0 && blocks[2]->isOpaque(),
+		blocks[3] && blocks[3]->block().id() != 0 && blocks[3]->isOpaque()
 	};
 
 	bool side1 = blockPresence[(minOffset.x != 0) ? 2 : 1];

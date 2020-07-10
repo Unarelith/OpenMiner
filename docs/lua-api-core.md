@@ -35,8 +35,8 @@ end)
 
 Possible events:
 
-- `BlockPlaced`: `funcion(pos, block, player, world, client, server)`
-- `BlockDigged`: `funcion(pos, block, player, world, client, server)`
+- `BlockPlaced`: `funcion(pos, block_state, player, world, client, server)`
+- `BlockDigged`: `funcion(pos, block_state, player, world, client, server)`
 - `BlockActivated`: `function(pos, block, player, world, client, server)`
 - `ItemActivated`: `function(pos, block, player, world, client, server)`
 - `PlayerConnected`: `function(pos, player, client, server)`

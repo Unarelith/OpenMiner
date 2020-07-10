@@ -37,7 +37,7 @@ mod:block {
 		world:add_block_data(pos.x, pos.y, pos.z, 3, 1)
 	end,
 
-	on_block_activated = function(pos, player, world, client, server, screen_width, screen_height, gui_scale)
+	on_block_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
 		local gui = LuaGUI.new()
 
 		gui:set_size(176, 166)
@@ -169,7 +169,7 @@ mod:block {
 		gui:show(client)
 	end,
 
-	on_tick = function(pos, chunk, world)
+	on_tick = function(pos, block, chunk, world)
 		local data = world:get_block_data(pos.x, pos.y, pos.z)
 		if not data then return end
 
