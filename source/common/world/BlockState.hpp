@@ -1,0 +1,157 @@
+/*
+ * =====================================================================================
+ *
+ *  OpenMiner
+ *
+ *  Copyright (C) 2018-2020 Unarelith, Quentin Bazin <openminer@unarelith.net>
+ *  Copyright (C) 2019-2020 the OpenMiner contributors (see CONTRIBUTORS.md)
+ *
+ *  This file is part of OpenMiner.
+ *
+ *  OpenMiner is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2.1 of the License, or (at your option) any later version.
+ *
+ *  OpenMiner is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with OpenMiner; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+ *
+ * =====================================================================================
+ */
+#ifndef BLOCKSTATE_HPP_
+#define BLOCKSTATE_HPP_
+
+#include <string>
+#include <unordered_map>
+
+#include <gk/core/Box.hpp>
+#include <gk/core/IntTypes.hpp>
+
+#include "BlockParam.hpp"
+#include "ItemStack.hpp"
+#include "TilesDef.hpp"
+
+enum class BlockDrawType : u8 {
+	Solid   = 0,
+	XShape  = 1,
+	Leaves  = 2,
+	Liquid  = 3,
+	Glass   = 4,
+	Cactus  = 5,
+	BoundingBox = 6, // FIXME: Temporary
+};
+
+#define BLOCK_ATTR_GETTER(attrName) \
+	auto attrName() const -> const std::remove_reference<decltype(m_##attrName)>::type & { \
+		if (!m_defaultState || m_attrs & BlockAttribute::attr_##attrName) \
+			return m_##attrName; \
+		else \
+			return m_defaultState->m_##attrName; \
+	}
+
+#define BLOCK_ATTR_SETTER(attrName) \
+	void attrName(const std::remove_reference<decltype(m_##attrName)>::type &value) { \
+		m_##attrName = value; \
+		m_attrs |= BlockAttribute::attr_##attrName; \
+	}
+
+#define BLOCK_ATTR(type, name) \
+	private: \
+		type m_##name; \
+	public: \
+		BLOCK_ATTR_GETTER(name) \
+		BLOCK_ATTR_SETTER(name)
+
+#define BLOCK_ATTR_V(type, name, defaultValue) \
+	private: \
+		type m_##name = defaultValue; \
+	public: \
+		BLOCK_ATTR_GETTER(name) \
+		BLOCK_ATTR_SETTER(name)
+
+
+class BlockState : public gk::ISerializable {
+	public:
+		BlockState() = default;
+		BlockState(u16 id, const Block *block, const BlockState *defaultState = nullptr)
+			: m_block(block), m_defaultState(defaultState), m_id(id) {}
+
+		void serialize(sf::Packet &packet) const override;
+		void deserialize(sf::Packet &packet) override;
+
+		const Block &block() const { return *m_block; }
+
+		u16 id() const { return m_id; }
+
+		float timeToBreak(u8 harvestCapability, float miningSpeed) const {
+			return ((m_harvestRequirements & harvestCapability) == m_harvestRequirements) ? 1.5 * m_hardness / miningSpeed : 5 * m_hardness;
+		}
+
+		ItemStack getItemDrop() const { return {m_itemDrop, m_itemDropAmount}; }
+
+		void setBlock(const Block *block) { m_block = block; }
+		void setDefaultState(const BlockState *defaultState) { m_defaultState = defaultState; }
+
+		static void initUsertype(sol::state &lua);
+
+	private:
+		const Block *m_block = nullptr;
+		const BlockState *m_defaultState = nullptr;
+
+		u16 m_id = 0;
+
+		enum BlockAttribute : u32 {
+			attr_tiles,
+			attr_label,
+			attr_itemDrop,
+			attr_itemDropAmount,
+			attr_harvestRequirements,
+			attr_hardness,
+			attr_boundingBox,
+			attr_drawType,
+			attr_colorMultiplier,
+			attr_isOpaque,
+			attr_isLightSource,
+			attr_inventoryImage,
+			attr_fogDepth,
+			attr_fogColor,
+			attr_param,
+		};
+
+		BLOCK_ATTR(std::string, label);
+		BLOCK_ATTR(TilesDef, tiles);
+
+		BLOCK_ATTR(std::string, itemDrop);
+		BLOCK_ATTR_V(u16, itemDropAmount, 1);
+
+		BLOCK_ATTR_V(u8, harvestRequirements, 0);
+		BLOCK_ATTR_V(float, hardness, 1.0f);
+
+		BLOCK_ATTR_V(gk::FloatBox, boundingBox, (gk::FloatBox{0, 0, 0, 1, 1, 1}));
+
+		BLOCK_ATTR_V(BlockDrawType, drawType, BlockDrawType::Solid);
+
+		BLOCK_ATTR_V(gk::Color, colorMultiplier, gk::Color::White);
+
+		BLOCK_ATTR_V(bool, isOpaque, true);
+		BLOCK_ATTR_V(bool, isLightSource, false);
+
+		BLOCK_ATTR(std::string, inventoryImage);
+
+		BLOCK_ATTR_V(float, fogDepth, 0);
+		BLOCK_ATTR_V(gk::Color, fogColor, gk::Color::White);
+
+		u32 m_attrs = 0;
+};
+
+#undef BLOCK_ATTR
+#undef BLOCK_ATTR_GETTER
+#undef BLOCK_ATTR_SETTER
+
+#endif // BLOCKSTATE_HPP_

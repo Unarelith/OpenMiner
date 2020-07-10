@@ -38,7 +38,7 @@ class InventoryCube : public gk::Drawable, public gk::Transformable {
 	public:
 		InventoryCube(float size = 1.0f, bool isEntity = false);
 
-		void updateVertexBuffer(const Block &block);
+		void updateVertexBuffer(const Block &block, u8 state = 0);
 
 		float size() const { return m_size; }
 

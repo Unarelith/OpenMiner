@@ -263,6 +263,7 @@ Useful for flora, tallgrass, mushrooms, etc...
 Parameters:
 
 - `pos` (`ivec3`): position of the block
+- `block` (`ServerBlock`): block definition
 - `player` (`ServerPlayer`): player that activated the block
 - `world` (`ServerWorld`): instance of the world
 - `client` (`Client`): client that activated the block
@@ -290,6 +291,7 @@ Parameters:
 Parameters:
 
 - `pos` (`ivec3`): position of the block
+- `block` (`ServerBlock`): block definition
 - `chunk` (`ServerChunk`): current chunk
 - `world` (`ServerWorld`): instance of the world
 

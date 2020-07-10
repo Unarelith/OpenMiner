@@ -42,12 +42,13 @@ ItemWidget::ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent)
 void ItemWidget::update() {
 	if (stack().item().isBlock()) {
 		const Block &block = Registry::getInstance().getBlock(stack().item().id());
-		if (block.drawType() != BlockDrawType::XShape && block.inventoryImage().empty()) {
+		const BlockState &blockState = block.getState(0); // FIXME: Get state from item stack
+		if (blockState.drawType() != BlockDrawType::XShape && blockState.inventoryImage().empty()) {
 			m_cube.updateVertexBuffer(block);
 			m_isImage = false;
 		}
 		else
-			updateImage(&block);
+			updateImage(&blockState);
 	}
 	else
 		updateImage();
@@ -56,7 +57,7 @@ void ItemWidget::update() {
 	m_text.setPosition(16 - 4 - 6 * floor(log10(stack().amount())), 16 - 6, 0);
 }
 
-void ItemWidget::updateImage(const Block *block) {
+void ItemWidget::updateImage(const BlockState *blockState) {
 	if (m_image.width() == 0) {
 		m_image.load(m_textureAtlas.texture());
 		m_image.setPosition(1, 1, 0);
@@ -67,8 +68,8 @@ void ItemWidget::updateImage(const Block *block) {
 	m_image.setClipRect(clipRect.x, clipRect.y, clipRect.sizeX, clipRect.sizeY);
 	m_image.setScale(16.0f / clipRect.sizeX, 16.0f / clipRect.sizeY);
 
-	if (block)
-		m_image.setColor(block->colorMultiplier());
+	if (blockState)
+		m_image.setColor(blockState->colorMultiplier());
 
 	m_isImage = true;
 }

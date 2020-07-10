@@ -47,10 +47,10 @@
 class Registry : public gk::ISerializable {
 	public:
 		template<typename T>
-		auto registerBlock(const TilesDef &tiles, const std::string &stringID, const std::string &label) -> typename std::enable_if<std::is_base_of<Block, T>::value, T&>::type {
+		auto registerBlock(const std::string &stringID) -> typename std::enable_if<std::is_base_of<Block, T>::value, T&>::type {
 			u32 id = m_blocks.size();
 			m_blocksID.emplace(stringID, id);
-			m_blocks.emplace_back(std::make_unique<T>(id, tiles, stringID, label));
+			m_blocks.emplace_back(std::make_unique<T>(id, stringID));
 			return *static_cast<T*>(m_blocks.back().get());
 		}
 

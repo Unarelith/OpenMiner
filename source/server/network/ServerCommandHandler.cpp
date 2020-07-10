@@ -272,9 +272,11 @@ void ServerCommandHandler::setupCallbacks() {
 			ServerWorld &world = getWorldForClient(client.id);
 			world.setData(x, y, z, block >> 16);
 			world.setBlock(x, y, z, block & 0xffff);
-			const Block &blockDef = Registry::getInstance().getBlock(block & 0xffff);
 
-			m_scriptEngine.luaCore().onEvent(LuaEventType::BlockPlaced, glm::ivec3{x, y, z}, blockDef, *player, world, client, *this);
+			const BlockState *blockState = world.getBlockState(x, y, z);
+			if (!blockState) return;
+
+			m_scriptEngine.luaCore().onEvent(LuaEventType::BlockPlaced, glm::ivec3{x, y, z}, blockState, *player, world, client, *this);
 
 			Network::Packet answer;
 			answer << Network::Command::BlockUpdate << x << y << z << block;
@@ -291,10 +293,11 @@ void ServerCommandHandler::setupCallbacks() {
 			packet >> x >> y >> z;
 
 			ServerWorld &world = getWorldForClient(client.id);
-			const Block &blockDef = Registry::getInstance().getBlock(world.getBlock(x, y, z));
+			const BlockState *blockState = world.getBlockState(x, y, z);
+			if (!blockState) return;
 			world.setBlock(x, y, z, 0);
 
-			m_scriptEngine.luaCore().onEvent(LuaEventType::BlockDigged, glm::ivec3{x, y, z}, blockDef, *player, world, client, *this);
+			m_scriptEngine.luaCore().onEvent(LuaEventType::BlockDigged, glm::ivec3{x, y, z}, blockState, *player, world, client, *this);
 
 			Network::Packet answer;
 			answer << Network::Command::BlockUpdate << x << y << z << u32(0);

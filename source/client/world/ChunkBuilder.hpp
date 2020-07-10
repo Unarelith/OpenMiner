@@ -37,7 +37,7 @@
 
 #include "Vertex.hpp"
 
-class Block;
+class BlockState;
 class ClientChunk;
 class TextureAtlas;
 
@@ -58,11 +58,11 @@ class ChunkBuilder {
 		};
 
 	private:
-		void addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk &chunk, const Block &block,
+		void addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk &chunk, const BlockState &blockState,
 		             const gk::Vector3i &normal, const glm::vec3 *const vertexPos[4],
 		             const gk::Vector3i *const neighbourOfs[4]);
 
-		void addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk, const Block &block,
+		void addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk, const BlockState &blockState,
 		              const glm::vec3 *const vertexPos[2][4]);
 
 		enum class Light {

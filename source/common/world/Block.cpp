@@ -29,50 +29,75 @@
 #include "Player.hpp"
 #include "World.hpp"
 
-Block::Block(u32 id, const TilesDef &tiles, const std::string &stringID, const std::string &label) {
+Block::Block(u32 id, const std::string &stringID) {
 	m_id = id;
-	m_tiles = tiles;
-
 	m_stringID = stringID;
-	m_label = label;
 
-	m_itemDrop = stringID;
-	m_itemDropAmount = 1;
+	BlockState &defaultState = addState();
+	defaultState.itemDrop(stringID);
+	defaultState.itemDropAmount(1);
+}
+
+const TilesDef &Block::tiles(u16 stateID) const {
+	if (stateID >= m_states.size()) {
+		gkError() << ("Failed to get tiles for block '" + m_stringID + "': State").c_str() << stateID << "doesn't exist";
+		return m_states[0].tiles();
+	}
+
+	return m_states[stateID].tiles();
 }
 
 void Block::serialize(sf::Packet &packet) const {
-	packet << u32(m_id) << m_stringID << m_label << u8(m_drawType)
-		<< m_hardness << m_harvestRequirements << m_itemDrop << m_itemDropAmount << m_tiles
-		<< m_boundingBox << m_isOpaque << m_isLightSource << m_canUpdate << m_canBeActivated
-		<< m_colorMultiplier << m_isRotatable << m_inventoryImage << m_groups
-		<< m_fogDepth << m_fogColor << m_param;
+	packet << u32(m_id) << m_stringID << m_canUpdate << m_canBeActivated
+		<< m_isRotatable << m_groups << m_states << m_param;
 }
 
 void Block::deserialize(sf::Packet &packet) {
 	u32 id;
-	u8 drawType;
-
-	packet >> id >> m_stringID >> m_label >> drawType
-		>> m_hardness >> m_harvestRequirements >> m_itemDrop >> m_itemDropAmount >> m_tiles
-		>> m_boundingBox >> m_isOpaque >> m_isLightSource >> m_canUpdate >> m_canBeActivated
-		>> m_colorMultiplier >> m_isRotatable >> m_inventoryImage >> m_groups
-		>> m_fogDepth >> m_fogColor >> m_param;
-
+	packet >> id >> m_stringID >> m_canUpdate >> m_canBeActivated
+		>> m_isRotatable >> m_groups >> m_states >> m_param;
 	m_id = id;
-	m_drawType = BlockDrawType(drawType);
+
+	for (auto &it : m_states) {
+		it.setBlock(this);
+		it.setDefaultState(&m_states.at(0));
+	}
+}
+
+BlockState &Block::addState() {
+	if (!m_states.empty())
+		m_states.emplace_back(m_states.size(), this, &getState(0));
+	else
+		m_states.emplace_back(m_states.size(), this, nullptr);
+	return m_states.back();
+}
+
+BlockState &Block::getState(u16 id) {
+	if (id >= m_states.size()) {
+		gkError() << "Failed to get state" << id << "in block" << m_stringID;
+		return m_states.at(0);
+	}
+
+	return m_states.at(id);
+}
+
+const BlockState &Block::getState(u16 id) const {
+	if (id >= m_states.size()) {
+		gkError() << "Failed to get state" << id << "in block" << m_stringID;
+		return m_states.at(0);
+	}
+
+	return m_states.at(id);
 }
 
 // Please update 'docs/lua-api-cpp.md' if you change this
 void Block::initUsertype(sol::state &lua) {
 	lua.new_usertype<Block>("Block",
 		"id", &Block::id,
-		"data", &Block::data,
 		"string_id", &Block::stringID,
-		"label", &Block::label,
 		"mod_name", &Block::modName,
-		"is_opaque", &Block::isOpaque,
-		"get_item_drop", &Block::getItemDrop,
-		"param", (const BlockParam &(Block::*)() const)&Block::param
+		"param", (const BlockParam &(Block::*)() const)&Block::param,
+		"get_state", (const BlockState &(Block::*)(u16) const)&Block::getState
 	);
 }
 

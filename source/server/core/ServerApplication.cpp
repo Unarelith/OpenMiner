@@ -117,7 +117,7 @@ bool ServerApplication::init() {
 	Registry::setInstance(m_registry);
 
 	// The id "_:air" is used in CraftingRecipe, update it there if it changes
-	m_registry.registerBlock<ServerBlock>({}, "_:air", "Air");
+	m_registry.registerBlock<ServerBlock>("_:air").getState(0).label("Air");
 	m_registry.registerItem<Item>({}, "_:air", "Air").setIsBlock(true);
 
 	m_modLoader.loadMods();

@@ -45,13 +45,13 @@ class BlockCursor : public gk::Drawable {
 
 		void update(const Hotbar &hotbar);
 
-		const Block *currentBlock() const { return m_currentBlock; }
+		const BlockState *currentBlock() const { return m_currentBlock; }
 
 	private:
-		void updateVertexBuffer(const Block &block, const u8f orientation);
-		void updateAnimationVertexBuffer(const Block &block, const u8f orientation, int animationPos = -1);
+		void updateVertexBuffer(const BlockState &blockState, const u8f orientation);
+		void updateAnimationVertexBuffer(const BlockState &blockState, const u8f orientation, int animationPos = -1);
 		void updateVBOCoords(Vertex vertices[BlockGeometry::nFaces][BlockGeometry::nVertsPerFace],
-		                     const Block &block, float face, u8f orientation);
+		                     const BlockState &blockState, float face, u8f orientation);
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
@@ -66,7 +66,7 @@ class BlockCursor : public gk::Drawable {
 
 		unsigned int m_animationStart = 0;
 		glm::ivec4 m_selectedBlock{0, 0, 0, -1};
-		const Block *m_currentBlock = nullptr;
+		const BlockState *m_currentBlock = nullptr;
 		const ItemStack *m_currentTool = nullptr;
 
 		gk::Texture *m_blockDestroyTexture = nullptr;

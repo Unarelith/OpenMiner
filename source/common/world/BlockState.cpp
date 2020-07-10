@@ -24,53 +24,35 @@
  *
  * =====================================================================================
  */
-#ifndef ITEMWIDGET_HPP_
-#define ITEMWIDGET_HPP_
+#include "BlockState.hpp"
+#include "Registry.hpp"
 
-#include <gk/graphics/Image.hpp>
+void BlockState::serialize(sf::Packet &packet) const {
+	packet << m_id << m_label << m_tiles
+		<< m_itemDrop << m_itemDropAmount
+		<< m_hardness << m_harvestRequirements
+		<< m_boundingBox << u8(m_drawType) << m_colorMultiplier
+		<< m_isOpaque << m_isLightSource
+		<< m_inventoryImage << m_fogDepth << m_fogColor << m_attrs;
+}
 
-#include "Inventory.hpp"
-#include "InventoryCube.hpp"
-#include "Text.hpp"
-#include "Widget.hpp"
+void BlockState::deserialize(sf::Packet &packet) {
+	u8 drawType;
 
-class BlockState;
+	packet >> m_id >> m_label >> m_tiles
+		>> m_itemDrop >> m_itemDropAmount
+		>> m_hardness >> m_harvestRequirements
+		>> m_boundingBox >> drawType >> m_colorMultiplier
+		>> m_isOpaque >> m_isLightSource
+		>> m_inventoryImage >> m_fogDepth >> m_fogColor >> m_attrs;
 
-class ItemWidget : public Widget {
-	public:
-		ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent = nullptr);
+	m_drawType = BlockDrawType(drawType);
+}
 
-		void update() override;
-		void updateImage(const BlockState *blockState = nullptr);
+// Please update 'docs/lua-api-cpp.md' if you change this
+void BlockState::initUsertype(sol::state &lua) {
+	lua.new_usertype<BlockState>("BlockState",
+		"get_item_drop", &BlockState::getItemDrop
+	);
+}
 
-		const ItemStack &stack() const { return m_inventory.getStack(m_x, m_y); }
-		void setStack(const std::string &name, unsigned int amount = 1);
-
-		unsigned int x() const { return m_x; }
-		unsigned int y() const { return m_y; }
-
-		bool hasChanged() const { return m_hasChanged; }
-		void setChanged(bool hasChanged) { m_hasChanged = hasChanged; }
-
-	protected:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-	private:
-		Inventory &m_inventory;
-
-		unsigned int m_x = 0;
-		unsigned int m_y = 0;
-
-		TextureAtlas &m_textureAtlas;
-
-		gk::Image m_image;
-		Text m_text;
-
-		InventoryCube m_cube{10};
-
-		bool m_isImage = false;
-
-		bool m_hasChanged = false;
-};
-
-#endif // ITEMWIDGET_HPP_

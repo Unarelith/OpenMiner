@@ -41,13 +41,14 @@ class Block;
 
 class BlockParam : public gk::ISerializable {
 	public:
-		BlockParam(Block &block) : m_block(block) {}
+		BlockParam(Block &block) : m_block(&block) {}
 
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
 
 		enum Type {
 			Rotation,
+			State,
 
 			Count
 		};
@@ -56,13 +57,14 @@ class BlockParam : public gk::ISerializable {
 
 		u16 getParam(u8 type, u16 data) const;
 		u16 setParam(u8 type, u16 data, u16 param);
+		bool hasParam(u8 type) const { return m_allocatedBits.find(type) != m_allocatedBits.end(); }
 
 		static std::string getTypeName(u8 type);
 
 		static void initUsertype(sol::state &lua);
 
 	private:
-		Block &m_block;
+		Block *m_block = nullptr;
 		u8 m_totalSize = 0;
 
 		struct Param : public gk::ISerializable {

@@ -5,13 +5,10 @@
 ## Block
 
 - `u16 id()`
-- `u16 data()`
 - `string string_id()`
-- `string label()`
 - `string mod_name()`
-- `bool is_opaque()`
-- `ItemStack get_item_drop()`
 - `BlockParam param()`
+- `Block get_state()`
 
 ## BlockData
 

@@ -95,12 +95,14 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 				if (face == 5) --z;
 
 				// First, we check if the new block is not replacing another block
-				u32 blockId = m_world.getBlock(x, y, z);
-				const Block &block = Registry::getInstance().getBlock(blockId);
-				if (!blockId || block.drawType() == BlockDrawType::Liquid) {
+				// u32 blockId = m_world.getBlock(x, y, z);
+				// const Block &block = Registry::getInstance().getBlock(blockId);
+				const BlockState *blockState = m_world.getBlockState(x, y, z);
+				if (blockState && (!blockState->block().id() || blockState->drawType() == BlockDrawType::Liquid)) {
 					// Second, we check if the new block is not inside the player
 					const Block &newBlock = Registry::getInstance().getBlock(hotbar.currentItem().id());
-					gk::FloatBox boundingBox = newBlock.boundingBox() + gk::Vector3f(x - m_player.x(), y - m_player.y(), z - m_player.z());
+					const BlockState &newBlockState = newBlock.getState(0); // FIXME: Get state from item stack
+					gk::FloatBox boundingBox = newBlockState.boundingBox() + gk::Vector3f(x - m_player.x(), y - m_player.y(), z - m_player.z());
 					gk::FloatBox playerBoundingBox = m_player.hitbox();
 					if (!boundingBox.intersects(playerBoundingBox)) {
 						u32 block = hotbar.currentItem().id();
@@ -137,11 +139,13 @@ void BlockCursor::update(const Hotbar &hotbar) {
 
 	m_selectedBlock = selectedBlock;
 
-	m_currentBlock = &Registry::getInstance().getBlock(m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z));
+	m_currentBlock = m_world.getBlockState(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
 	// if (block.boundingBox().intersects(FloatBox{m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 1, 1, 1})) {
 	// 	selectedBlockChanged = false;
 	// 	m_selectedBlock.w = -1;
 	// }
+
+	if (!m_currentBlock) return;
 
 	u32 ticks = gk::GameClock::getInstance().getTicks();
 
@@ -167,7 +171,7 @@ void BlockCursor::update(const Hotbar &hotbar) {
 		}
 	}
 
-	u8f orientation = m_currentBlock->isRotatable() ? m_world.getData(selectedBlock.x, selectedBlock.y, selectedBlock.z) & 0x1F : 0;
+	u8f orientation = m_currentBlock->block().isRotatable() ? m_world.getData(selectedBlock.x, selectedBlock.y, selectedBlock.z) & 0x1F : 0;
 
 	if (m_selectedBlock.w != -1)
 		updateVertexBuffer(*m_currentBlock, orientation);
@@ -181,11 +185,11 @@ void BlockCursor::update(const Hotbar &hotbar) {
 
 using namespace BlockGeometry;
 
-void BlockCursor::updateVBOCoords(Vertex vertices[nFaces][nVertsPerFace], const Block &block,
+void BlockCursor::updateVBOCoords(Vertex vertices[nFaces][nVertsPerFace], const BlockState &blockState,
 	float face, u8f orientation)
 {
-	glm::vec3 bottomLeft{block.boundingBox().x, block.boundingBox().y, block.boundingBox().z};
-	glm::vec3 topRight{block.boundingBox().sizeX, block.boundingBox().sizeY, block.boundingBox().sizeZ};
+	glm::vec3 bottomLeft{blockState.boundingBox().x, blockState.boundingBox().y, blockState.boundingBox().z};
+	glm::vec3 topRight{blockState.boundingBox().sizeX, blockState.boundingBox().sizeY, blockState.boundingBox().sizeZ};
 	topRight += bottomLeft;
 
 	const glm::mat3 &orientMatrix = orientMatrices[orientation];
@@ -220,18 +224,18 @@ void BlockCursor::updateVBOCoords(Vertex vertices[nFaces][nVertsPerFace], const 
 	}
 }
 
-void BlockCursor::updateVertexBuffer(const Block &block, u8f orientation) {
+void BlockCursor::updateVertexBuffer(const BlockState &blockState, u8f orientation) {
 	Vertex vertices[nFaces][nVertsPerFace];
-	updateVBOCoords(vertices, block, -1, orientation);
+	updateVBOCoords(vertices, blockState, -1, orientation);
 
 	gk::VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	gk::VertexBuffer::bind(nullptr);
 }
 
-void BlockCursor::updateAnimationVertexBuffer(const Block &block, u8f orientation, int animationPos) {
+void BlockCursor::updateAnimationVertexBuffer(const BlockState &blockState, u8f orientation, int animationPos) {
 	Vertex vertices[nFaces][nVertsPerFace];
-	updateVBOCoords(vertices, block, -2, orientation);
+	updateVBOCoords(vertices, blockState, -2, orientation);
 
 	GLfloat color[4] = {1, 1, 1, 0.5};
 	for (u8f f = 0; f < nFaces; ++f)
@@ -301,9 +305,8 @@ glm::ivec4 BlockCursor::findSelectedBlock() const {
 	s32f bestZ = s32f(floor(position.z));
 
 	// Deal with a degenerate case: camera in the middle of a block
-	u32f blockID = m_world.getBlock(bestX, bestY, bestZ);
-	const Block &block = Registry::getInstance().getBlock(blockID);
-	if (blockID && block.drawType() != BlockDrawType::Liquid) {
+	const BlockState *blockState = m_world.getBlockState(bestX, bestY, bestZ);
+	if (blockState && blockState->block().id() && blockState->drawType() != BlockDrawType::Liquid) {
 		// We're inside a node, therefore there's no face, but we still need
 		// to return a valid block. We use face 6 for that. For rightclicks,
 		// it should attempt to place the block on the same node clicked, and
@@ -320,9 +323,8 @@ glm::ivec4 BlockCursor::findSelectedBlock() const {
 	if (double(bestX) == position.x && double(bestY) == position.y) {
 		for (int y = -1; y <= 0; y++) {
 			for (int x = -1; x <= 0; x++) {
-				blockID = m_world.getBlock(bestX + x, bestY + y, bestZ);
-				const Block &block = Registry::getInstance().getBlock(blockID);
-				if (blockID && block.drawType() != BlockDrawType::Liquid) {
+				const BlockState *blockState = m_world.getBlockState(bestX, bestY, bestZ);
+				if (blockState && blockState->block().id() && blockState->drawType() != BlockDrawType::Liquid) {
 					return glm::ivec4{bestX + x, bestY + y, bestZ, 6};
 				}
 			}

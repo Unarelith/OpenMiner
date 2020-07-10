@@ -117,12 +117,12 @@ void BlockCursorRaycast::rayCastToAxis(const Axis axis, const glm::dvec3 &positi
 		ny = axis == AXIS_Y ? nodeRow : floor(isect.y);
 		nz = axis == AXIS_Z ? nodeRow : floor(isect.z);
 
-		u32 blockID = world.getBlock(nx, ny, nz);
-		const Block &block = Registry::getInstance().getBlock(blockID);
+		const BlockState *blockState = world.getBlockState(nx, ny, nz);
+		if (!blockState) continue;
 
-		u8f orientation = block.isRotatable() ? world.getData(nx, ny, nz) & 0x1F : 0;
+		u8f orientation = blockState->block().isRotatable() ? world.getData(nx, ny, nz) & 0x1F : 0;
 
-		const gk::FloatBox &boundingBox = block.boundingBox();
+		const gk::FloatBox &boundingBox = blockState->boundingBox();
 		glm::vec3 localCorner1{boundingBox.x, boundingBox.y, boundingBox.z};
 		glm::vec3 localCorner2{boundingBox.sizeX, boundingBox.sizeY, boundingBox.sizeZ};
 		localCorner2 += localCorner1;
@@ -136,7 +136,7 @@ void BlockCursorRaycast::rayCastToAxis(const Axis axis, const glm::dvec3 &positi
 			if (localCorner2.z < localCorner1.z) std::swap(localCorner1.z, localCorner2.z);
 		}
 
-		if (blockID && block.drawType() != BlockDrawType::Liquid) {
+		if (blockState->block().id() && blockState->drawType() != BlockDrawType::Liquid) {
 			// Check bounding box; this should loop over all selection boxes
 			// when they are implemented
 			const glm::dvec3 cubePos{double(nx), double(ny), double(nz)};
