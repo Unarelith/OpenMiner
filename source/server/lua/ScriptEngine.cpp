@@ -54,6 +54,8 @@ void ScriptEngine::init() {
 void ScriptEngine::initUsertypes() {
 	Block               ::initUsertype(m_lua);
 	BlockMetadata       ::initUsertype(m_lua);
+	BlockParam          ::initUsertype(m_lua);
+	BlockState          ::initUsertype(m_lua);
 	Chunk               ::initUsertype(m_lua);
 	Dimension           ::initUsertype(m_lua);
 	EntityWrapper       ::initUsertype(m_lua);

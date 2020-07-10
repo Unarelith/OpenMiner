@@ -52,6 +52,7 @@ void BlockState::deserialize(sf::Packet &packet) {
 // Please update 'docs/lua-api-cpp.md' if you change this
 void BlockState::initUsertype(sol::state &lua) {
 	lua.new_usertype<BlockState>("BlockState",
+		"label", (const std::string &(BlockState::*)() const)&BlockState::label,
 		"get_item_drop", &BlockState::getItemDrop
 	);
 }
