@@ -276,7 +276,7 @@ void ServerCommandHandler::setupCallbacks() {
 			const BlockState *blockState = world.getBlockState(x, y, z);
 			if (!blockState) return;
 
-			m_scriptEngine.luaCore().onEvent(LuaEventType::BlockPlaced, glm::ivec3{x, y, z}, blockState, *player, world, client, *this);
+			m_scriptEngine.luaCore().onEvent(LuaEventType::BlockPlaced, glm::ivec3{x, y, z}, *blockState, *player, world, client, *this);
 
 			Network::Packet answer;
 			answer << Network::Command::BlockUpdate << x << y << z << block;
@@ -297,7 +297,7 @@ void ServerCommandHandler::setupCallbacks() {
 			if (!blockState) return;
 			world.setBlock(x, y, z, 0);
 
-			m_scriptEngine.luaCore().onEvent(LuaEventType::BlockDigged, glm::ivec3{x, y, z}, blockState, *player, world, client, *this);
+			m_scriptEngine.luaCore().onEvent(LuaEventType::BlockDigged, glm::ivec3{x, y, z}, *blockState, *player, world, client, *this);
 
 			Network::Packet answer;
 			answer << Network::Command::BlockUpdate << x << y << z << u32(0);
