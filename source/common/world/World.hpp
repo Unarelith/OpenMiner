@@ -42,6 +42,7 @@ class World {
 		BlockData *addBlockData(int x, int y, int z, int inventoryWidth = 0, int inventoryHeight = 0) const;
 
 		const BlockState *getBlockState(int x, int y, int z) const;
+		void setBlockState(int x, int y, int z, u16 stateID);
 
 		u16 getBlock(int x, int y, int z) const;
 		void setBlock(int x, int y, int z, u16 id) const;
