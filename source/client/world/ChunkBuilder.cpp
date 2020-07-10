@@ -178,8 +178,7 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 
 	const gk::FloatBox &boundingBox = blockState.boundingBox();
 
-	const BlockData *blockData = chunk.getBlockData(x, y, z);
-	const std::string &texture = blockState.tiles().getTextureForFace(f, blockData ? blockData->useAltTiles : false);
+	const std::string &texture = blockState.tiles().getTextureForFace(f);
 	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(texture);
 
 	// Calculate UV's
@@ -290,8 +289,7 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 }
 
 inline void ChunkBuilder::addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk, const BlockState &blockState, const glm::vec3 *const vertexPos[nCrossFaces][nVertsPerFace]) {
-	const BlockData *blockData = chunk.getBlockData(x, y, z);
-	const std::string &texture = blockState.tiles().getTextureForFace(0, blockData ? blockData->useAltTiles : false);
+	const std::string &texture = blockState.tiles().getTextureForFace(0);
 	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(texture);
 
 	float faceTexCoords[nVertsPerFace][nCoordsPerUV] = {

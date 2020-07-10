@@ -30,8 +30,11 @@ mod:block {
 	id = "furnace",
 	name = "Furnace",
 	tiles = {"furnace_top.png", "furnace_top.png", "furnace_front.png", "furnace_side.png"},
-	alt_tiles = {"", "", "furnace_front_on.png", ""},
 	is_rotatable = true,
+
+	states = {
+		{ tiles = {"furnace_top.png", "furnace_top.png", "furnace_front_on.png", "furnace_side.png"} },
+	},
 
 	on_block_placed = function(pos, world)
 		world:add_block_data(pos.x, pos.y, pos.z, 3, 1)
@@ -173,6 +176,9 @@ mod:block {
 		local data = world:get_block_data(pos.x, pos.y, pos.z)
 		if not data then return end
 
+		local block_param = world:get_data(pos.x, pos.y, pos.z)
+		local current_state = block:param():get_param(BlockParamType.State, block_param)
+
 		local input_stack = data.inventory:get_stack(0, 0)
 		local output_stack = data.inventory:get_stack(1, 0)
 		local fuel_stack = data.inventory:get_stack(2, 0)
@@ -193,8 +199,8 @@ mod:block {
 			data.inventory:set_stack(2, 0, fuel_stack:item():string_id(), fuel_stack:amount() - 1)
 			ticks_remaining = fuel_stack:item():get_group_value("group:om_fuel")
 			current_burn_time = fuel_stack:item():get_group_value("group:om_fuel")
-			data.use_alt_tiles = true;
-			-- world:set_data(pos.x, pos.y, pos.z, 1)
+			world:set_data(pos.x, pos.y, pos.z,
+				block:param():set_param(BlockParamType.State, block_param, 1))
 		elseif ticks_remaining > 0 then
 			ticks_remaining = ticks_remaining - 1
 
@@ -206,8 +212,8 @@ mod:block {
 			end
 		elseif ticks_remaining == 0 then
 			current_burn_time = 0
-			data.use_alt_tiles = false;
-			-- world:set_data(pos.x, pos.y, pos.z, 0)
+			world:set_data(pos.x, pos.y, pos.z,
+				block:param():set_param(BlockParamType.State, block_param, 0))
 		end
 
 		if item_progress >= 200 and recipe then

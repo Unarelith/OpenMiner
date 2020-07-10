@@ -49,8 +49,7 @@ void ServerCommandHandler::sendServerClosed(const std::string &message, const Cl
 
 void ServerCommandHandler::sendBlockDataUpdate(s32 x, s32 y, s32 z, const BlockData *blockData, const ClientInfo *client) const {
 	Network::Packet packet;
-	packet << Network::Command::BlockDataUpdate << x << y << z
-		<< blockData->meta << blockData->useAltTiles;
+	packet << Network::Command::BlockDataUpdate << x << y << z << blockData->meta;
 
 	if (!client)
 		m_server.sendToAllClients(packet);
@@ -360,8 +359,10 @@ void ServerCommandHandler::setupCallbacks() {
 
 		BlockData *data = getWorldForClient(client.id).getBlockData(pos.x, pos.y, pos.z);
 		if (data) {
-			packet >> data->meta >> data->useAltTiles;
+			packet >> data->meta;
 		}
+		else
+			gkError() << "BlockDataUpdate: No block data found at" << pos.x << pos.y << pos.z;
 	});
 
 	m_server.setCommandCallback(Network::Command::ItemActivated, [this](ClientInfo &client, Network::Packet &packet) {

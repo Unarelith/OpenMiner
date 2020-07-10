@@ -73,8 +73,7 @@ void ScriptEngine::initUsertypes() {
 
 	m_lua.new_usertype<BlockData>("BlockData",
 		"inventory", &BlockData::inventory,
-		"meta", &BlockData::meta,
-		"use_alt_tiles", &BlockData::useAltTiles
+		"meta", &BlockData::meta
 	);
 
 	m_lua.new_usertype<Recipe>("Recipe",

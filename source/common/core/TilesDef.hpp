@@ -55,7 +55,7 @@ class TilesDef : public gk::ISerializable {
 			m_textureFilenames.emplace_back(texture);
 		}
 
-		const std::string &getTextureForFace(u8 face, bool useAltTiles = false) const;
+		const std::string &getTextureForFace(u8 face) const;
 
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
@@ -63,14 +63,12 @@ class TilesDef : public gk::ISerializable {
 		bool loadFromLuaTable(const sol::table &table);
 
 		const std::vector<std::string> &textureFilenames() const { return m_textureFilenames; };
-		const std::vector<std::string> &altTextureFilenames() const { return m_altTextureFilenames; }
 
 	private:
 		std::string m_objectID;
 		u16 m_stateID = 0;
 
 		std::vector<std::string> m_textureFilenames;
-		std::vector<std::string> m_altTextureFilenames;
 };
 
 #endif // TILESDEF_HPP_

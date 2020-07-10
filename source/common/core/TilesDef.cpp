@@ -29,8 +29,8 @@
 #include "NetworkUtils.hpp"
 #include "TilesDef.hpp"
 
-const std::string &TilesDef::getTextureForFace(u8 face, bool useAltTiles) const {
-	u8 size = (!useAltTiles) ? m_textureFilenames.size() : m_altTextureFilenames.size();
+const std::string &TilesDef::getTextureForFace(u8 face) const {
+	u8 size = m_textureFilenames.size();
 	if (size == 0)
 		throw EXCEPTION("For object '" + m_objectID + "' in state " + std::to_string(m_stateID) + ": Trying to get texture from empty tiles definition");
 
@@ -51,31 +51,18 @@ const std::string &TilesDef::getTextureForFace(u8 face, bool useAltTiles) const 
 
 	u8 index = faceToIndex[size <= nSizes ? size - 1 : nSizes - 1][face];
 
-	if (!useAltTiles)
-		return m_textureFilenames.at(index);
-	else {
-		const std::string &filename = m_altTextureFilenames.at(index);
-		return (!filename.empty()) ? filename : getTextureForFace(face, false);
-	}
+	return m_textureFilenames.at(index);
 }
 
 void TilesDef::serialize(sf::Packet &packet) const {
-	packet << m_objectID << m_stateID << m_textureFilenames << m_altTextureFilenames;
+	packet << m_objectID << m_stateID << m_textureFilenames;
 }
 
 void TilesDef::deserialize(sf::Packet &packet) {
-	packet >> m_objectID >> m_stateID >> m_textureFilenames >> m_altTextureFilenames;
+	packet >> m_objectID >> m_stateID >> m_textureFilenames;
 }
 
 bool TilesDef::loadFromLuaTable(const sol::table &table) {
-	if (table["alt_tiles"].get_type() != sol::type::none) {
-		if (table["alt_tiles"].get_type() == sol::type::table) {
-			m_altTextureFilenames = table["alt_tiles"].get<std::vector<std::string>>();
-		}
-		else
-			m_altTextureFilenames.emplace_back(table["alt_tiles"].get<std::string>());
-	}
-
 	if (table["tiles"].get_type() == sol::type::table) {
 		m_textureFilenames = table["tiles"].get<std::vector<std::string>>();
 		return true;
@@ -84,8 +71,7 @@ bool TilesDef::loadFromLuaTable(const sol::table &table) {
 		m_textureFilenames.emplace_back(table["tiles"].get<std::string>());
 		return true;
 	}
-	else {
-		return false;
-	}
+
+	return false;
 }
 
