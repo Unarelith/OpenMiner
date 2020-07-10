@@ -66,6 +66,13 @@ const BlockState *World::getBlockState(int x, int y, int z) const {
 	return nullptr;
 }
 
+void World::setBlockState(int x, int y, int z, u16 stateID) {
+	Chunk *chunk = getChunkAtBlockPos(x, y, z);
+	if (chunk)
+		chunk->setBlockState(x & (CHUNK_WIDTH - 1), y & (CHUNK_DEPTH - 1), z & (CHUNK_HEIGHT - 1), stateID);
+}
+
+
 u16 World::getBlock(int x, int y, int z) const {
 	Chunk *chunk = getChunkAtBlockPos(x, y, z);
 	if (chunk)
@@ -112,7 +119,10 @@ void World::initUsertype(sol::state &lua) {
 
 		"set_block_from_str", [&](World &self, int x, int y, int z, const std::string &id) {
 			self.setBlock(x, y, z, Registry::getInstance().getBlockFromStringID(id).id());
-		}
+		},
+
+		"get_block_state", &World::getBlockState,
+		"set_block_state", &World::setBlockState
 	);
 }
 

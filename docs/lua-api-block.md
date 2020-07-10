@@ -162,6 +162,65 @@ name = "Cobblestone"
 
 This label is the name that will appear everywhere in the game.
 
+### `states`
+
+Optional table containing block state definitions.
+
+Example:
+```lua
+mod:block {
+	tiles = "wheat_stage_0.png",
+	draw_type = "xshape",
+	inventory_image = "seeds_wheat.png",
+	hardness = 0,
+
+	bounding_box = {0, 0, 0, 1, 1, 1.0 / 16.0},
+
+	states = {
+		{ tiles = "wheat_stage_1.png", bounding_box = {0, 0, 0, 1, 1, 3.0 / 16.0}, },  -- 1
+		{ tiles = "wheat_stage_2.png", bounding_box = {0, 0, 0, 1, 1, 5.0 / 16.0}, },  -- 2
+		{ tiles = "wheat_stage_3.png", bounding_box = {0, 0, 0, 1, 1, 8.0 / 16.0}, },  -- 3
+		{ tiles = "wheat_stage_4.png", bounding_box = {0, 0, 0, 1, 1, 10.0 / 16.0}, }, -- 4
+		{ tiles = "wheat_stage_5.png", bounding_box = {0, 0, 0, 1, 1, 12.0 / 16.0}, }, -- 5
+		{ tiles = "wheat_stage_6.png", bounding_box = {0, 0, 0, 1, 1, 14.0 / 16.0}, }, -- 6
+		{ tiles = "wheat_stage_7.png", bounding_box = {0, 0, 0, 1, 1, 1}, },           -- 7
+	},
+}
+```
+
+States, when active, will override default attributes for the block.
+
+Some attributes are not handled, mainly:
+
+- `groups`
+- `id`
+- `is_rotatable`
+- `states`
+- `tick_probability`
+- `tick_randomly`
+- and all the callbacks
+
+To get the current state of a block:
+```lua
+-- if you already have 'block'
+local block_param = world:get_data(pos.x, pos.y, pos.z)
+local current_state = block:param():get_param(BlockParamType.State, block_param)
+-- if you don't
+local current_state = world:get_block_param(pos.x, pos.y, pos.z)
+```
+
+To set the current state of a block:
+```lua
+local my_new_state = 5
+-- if you already have 'block'
+local block_param = world:get_data(pos.x, pos.y, pos.z)
+world:set_data(pos.x, pos.y, pos.z,
+	block:param():set_param(BlockParamType.State, block_param, my_new_state))
+-- if you don't
+world:set_block_state(pos.x, pos.y, pos.z, my_new_state)
+```
+
+
 ### `tick_probability`
 
 Probability to call the `on_tick` function when `tick_randomly` is enabled.

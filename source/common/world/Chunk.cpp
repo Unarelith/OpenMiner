@@ -154,6 +154,21 @@ const BlockState *Chunk::getBlockState(int x, int y, int z) const {
 	return &block.getState(block.param().getParam(BlockParam::State, blockParam));
 }
 
+void Chunk::setBlockState(int x, int y, int z, u16 stateID) {
+	if(x < 0)              { if (m_surroundingChunks[0]) m_surroundingChunks[0]->setBlockState(x + Chunk::width, y, z, stateID); return; }
+	if(x >= Chunk::width)  { if (m_surroundingChunks[1]) m_surroundingChunks[1]->setBlockState(x - Chunk::width, y, z, stateID); return; }
+	if(y < 0)              { if (m_surroundingChunks[2]) m_surroundingChunks[2]->setBlockState(x, y + Chunk::depth, z, stateID); return; }
+	if(y >= Chunk::depth)  { if (m_surroundingChunks[3]) m_surroundingChunks[3]->setBlockState(x, y - Chunk::depth, z, stateID); return; }
+	if(z < 0)              { if (m_surroundingChunks[4]) m_surroundingChunks[4]->setBlockState(x, y, z + Chunk::height, stateID); return; }
+	if(z >= Chunk::height) { if (m_surroundingChunks[5]) m_surroundingChunks[5]->setBlockState(x, y, z - Chunk::height, stateID); return; }
+
+	u16 blockID = getBlock(x, y, z);
+	u16 blockParam = getData(x, y, z);
+	const Block &block = Registry::getInstance().getBlock(blockID);
+	if (block.param().hasParam(BlockParam::State))
+		setData(x, y, z, block.param().setParam(BlockParam::State, blockParam, stateID));
+}
+
 BlockData *Chunk::getBlockData(int x, int y, int z) const {
 	if(x < 0)             return m_surroundingChunks[0] ? m_surroundingChunks[0]->getBlockData(x + CHUNK_WIDTH, y, z) : 0;
 	if(x >= CHUNK_WIDTH)  return m_surroundingChunks[1] ? m_surroundingChunks[1]->getBlockData(x - CHUNK_WIDTH, y, z) : 0;
@@ -219,7 +234,10 @@ void Chunk::initUsertype(sol::state &lua) {
 		"set_data", &Chunk::setData,
 
 		"get_block_data", &Chunk::getBlockData,
-		"add_block_data", &Chunk::addBlockData
+		"add_block_data", &Chunk::addBlockData,
+
+		"get_block_state", &Chunk::getBlockState,
+		"set_block_state", &Chunk::setBlockState
 	);
 }
 

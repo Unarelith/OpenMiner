@@ -8,7 +8,7 @@
 - `string string_id()`
 - `string mod_name()`
 - `BlockParam param()`
-- `Block get_state()`
+- `BlockState get_state()`
 
 ## BlockData
 
@@ -24,14 +24,28 @@
 - `bool get_bool(string attribute)`
 - `void set_bool(string attribute, bool value)`
 
+## BlockParam
+
+- `u16 get_param(BlockParamType type, u16 block_param)`
+- `u16 set_param(BlockParamType type, u16 block_param, u16 param_value)`
+- `bool has_param(BlockParamType type)`
+
+## BlockParamType
+
+- `BlockParamType.Rotation`
+- `BlockParamType.State`
+- `BlockParamType.Count`
+
 ## Chunk
 
 - `u16 get_block(int x, int y, int z)`
 - `void set_block(int x, int y, int z, u16 block)`
 - `u16 get_data(int x, int y, int z)`
 - `void set_data(int x, int y, int z, u16 data)`
-- `BlockData *add_block_data(int x, int y, int z, int inventoryWidth, int inventoryHeight)`
 - `BlockData *get_block_data(int x, int y, int z)`
+- `BlockData *add_block_data(int x, int y, int z, int inventoryWidth, int inventoryHeight)`
+- `BlockState *get_block_state(int x, int y, int z)`
+- `void set_block_state(int x, int y, int z, u16 stateID)`
 
 ## ClientInfo
 
@@ -97,6 +111,7 @@
 - `Tree get_tree(u16 id)`
 - `Biome get_biome(u16 id)`
 - `Recipe get_recipe(Inventory crafting_inventory)`
+- `Key get_key(u16 id)`
 - `Block get_block_from_string(string id)`
 - `Item get_item_from_string(string id)`
 - `Sky get_sky_from_string(string id)`
@@ -137,4 +152,6 @@
 - `BlockData *get_block_data(int x, int y, int z)`
 - `const Block &get_block_def(int x, int y, int z)`
 - `void set_block_from_str(int x, int y, int z, string block_id)`
+- `const BlockState *get_block_state(int x, int y, int z)`
+- `void set_block_state(int x, int y, int z, u16 stateID)`
 

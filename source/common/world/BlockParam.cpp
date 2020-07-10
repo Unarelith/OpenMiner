@@ -70,7 +70,7 @@ u16 BlockParam::getParam(u8 type, u16 data) const {
 	return (data >> it->second.offset) & ~(~0u << it->second.size);
 }
 
-u16 BlockParam::setParam(u8 type, u16 data, u16 param) {
+u16 BlockParam::setParam(u8 type, u16 data, u16 param) const {
 	auto it = m_allocatedBits.find(type);
 	if (it == m_allocatedBits.end()) {
 		gkWarning() << "Failed to set param" << getTypeName(type) << "in block" << m_block->stringID();
