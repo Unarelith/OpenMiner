@@ -39,8 +39,6 @@ struct BlockData {
 	Inventory inventory;
 
 	BlockMetadata meta;
-
-	bool useAltTiles = false;
 };
 
 #endif // BLOCKDATA_HPP_

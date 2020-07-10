@@ -14,7 +14,6 @@
 
 - `Inventory *inventory`
 - `BlockMetadata *meta`
-- `bool use_alt_tiles`
 
 ## BlockMetadata
 

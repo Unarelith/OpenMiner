@@ -305,13 +305,7 @@ void ClientCommandHandler::setupCallbacks() {
 				data = m_world.addBlockData(pos.x, pos.y, pos.z);
 
 			if (data) {
-				bool useAltTiles;
-				packet >> data->meta >> useAltTiles;
-
-				if (data->useAltTiles != useAltTiles) {
-					chunk->setChanged(true);
-					data->useAltTiles = useAltTiles;
-				}
+				packet >> data->meta;
 			}
 		}
 	});

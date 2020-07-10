@@ -140,8 +140,6 @@ void TextureAtlas::loadFromRegistry(const std::string &texturePack) {
 			const TilesDef &tiles = state.tiles();
 			for (auto &textureFilename : tiles.textureFilenames())
 				addFile(path, textureFilename);
-			for (auto &textureFilename : tiles.altTextureFilenames())
-				addFile(path, textureFilename);
 		}
 	}
 
@@ -155,8 +153,6 @@ void TextureAtlas::loadFromRegistry(const std::string &texturePack) {
 
 			const TilesDef &tiles = item->tiles();
 			for (auto &textureFilename : tiles.textureFilenames())
-				addFile(path, textureFilename);
-			for (auto &textureFilename : tiles.altTextureFilenames())
 				addFile(path, textureFilename);
 		}
 	}

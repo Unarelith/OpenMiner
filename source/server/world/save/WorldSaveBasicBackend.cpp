@@ -77,7 +77,7 @@ void WorldSaveBasicBackend::load(const std::string &name) {
 
 							if (hasMetadata) {
 								BlockData *blockData = chunk.addBlockData(x, y, z);
-								save >> blockData->inventory >> blockData->meta >> blockData->useAltTiles;
+								save >> blockData->inventory >> blockData->meta;
 							}
 
 							u32 data;
@@ -140,7 +140,7 @@ void WorldSaveBasicBackend::save(const std::string &name) {
 					for (u8 x = 0 ; x < Chunk::width ; ++x) {
 						BlockData *blockData = it.second->getBlockData(x, y, z);
 						if (blockData)
-							chunks << true << blockData->inventory << blockData->meta << blockData->useAltTiles;
+							chunks << true << blockData->inventory << blockData->meta;
 						else
 							chunks << false;
 
