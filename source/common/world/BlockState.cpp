@@ -50,7 +50,8 @@ void BlockState::deserialize(sf::Packet &packet) {
 }
 
 bool BlockState::isOpaque() const {
-	return m_block && m_block->id() != 0 && m_isOpaque && m_drawType != BlockDrawType::XShape;
+	bool isOpaque = (!m_defaultState || m_attrs & BlockAttribute::attr_isOpaque) ? m_isOpaque : m_defaultState->m_isOpaque;
+	return m_block && m_block->id() != 0 && isOpaque && drawType() != BlockDrawType::XShape;
 }
 
 // Please update 'docs/lua-api-cpp.md' if you change this

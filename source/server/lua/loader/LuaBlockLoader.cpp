@@ -66,7 +66,8 @@ void LuaBlockLoader::loadBlock(const sol::table &table) const {
 void LuaBlockLoader::loadBlockState(BlockState &state, const sol::table &table, ServerBlock &block) const {
 	TilesDef tiles{block.stringID(), state.id()};
 	tiles.loadFromLuaTable(table);
-	state.tiles(tiles);
+	if (!tiles.textureFilenames().empty())
+		state.tiles(tiles);
 
 	loadProperties(state, table);
 	loadBoundingBox(state, table);
@@ -78,13 +79,26 @@ void LuaBlockLoader::loadBlockState(BlockState &state, const sol::table &table, 
 }
 
 inline void LuaBlockLoader::loadProperties(BlockState &state, const sol::table &table) const {
-	state.label(table["name"].get<std::string>());
-	state.harvestRequirements(table["harvest_requirements"].get_or(0));
-	state.hardness(table["hardness"].get_or(1.0f));
-	state.isOpaque(table["is_opaque"].get_or(true));
-	state.isLightSource(table["is_light_source"].get_or(false));
-	state.inventoryImage(table["inventory_image"].get_or<std::string>(""));
-	state.fogDepth(table["fog_depth"].get_or<float>(0));
+	if (table["name"].get_type() == sol::type::string)
+		state.label(table["name"].get<std::string>());
+
+	if (table["harvest_requirements"].get_type() == sol::type::number)
+		state.harvestRequirements(table["harvest_requirements"].get<int>());
+
+	if (table["hardness"].get_type() == sol::type::number)
+		state.hardness(table["hardness"].get<float>());
+
+	if (table["is_opaque"].get_type() == sol::type::boolean)
+		state.isOpaque(table["is_opaque"].get<bool>());
+
+	if (table["is_light_source"].get_type() == sol::type::boolean)
+		state.isLightSource(table["is_light_source"].get<bool>());
+
+	if (table["inventory_image"].get_type() == sol::type::string)
+		state.inventoryImage(table["inventory_image"].get<std::string>());
+
+	if (table["fog_depth"].get_type() == sol::type::number)
+		state.fogDepth(table["fog_depth"].get<float>());
 
 	if (state.fogDepth()) {
 		sol::optional<sol::table> fogColor = table["fog_color"];
