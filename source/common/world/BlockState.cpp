@@ -49,6 +49,10 @@ void BlockState::deserialize(sf::Packet &packet) {
 	m_drawType = BlockDrawType(drawType);
 }
 
+bool BlockState::isOpaque() const {
+	return m_block && m_block->id() != 0 && m_isOpaque && m_drawType != BlockDrawType::XShape;
+}
+
 // Please update 'docs/lua-api-cpp.md' if you change this
 void BlockState::initUsertype(sol::state &lua) {
 	lua.new_usertype<BlockState>("BlockState",

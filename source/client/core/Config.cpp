@@ -58,7 +58,7 @@ float Config::cameraFOV = 70.0f;
 u16 Config::screenWidth = 1600;
 u16 Config::screenHeight = 1050;
 u8 Config::guiScale = 3;
-u8 Config::mipmapLevels = 3;
+u8 Config::mipmapLevels = 0;
 
 // Input
 u8 Config::mouseSensitivity = 8;
