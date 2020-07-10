@@ -208,7 +208,7 @@ To get the current state of a block:
 local block_param = world:get_data(pos.x, pos.y, pos.z)
 local current_state = block:param():get_param(BlockParamType.State, block_param)
 -- if you don't
-local current_state = world:get_block_state(pos.x, pos.y, pos.z)
+local current_state = world:get_block_state(pos.x, pos.y, pos.z):id()
 ```
 
 To set the current state of a block:

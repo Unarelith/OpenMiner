@@ -36,6 +36,12 @@
 - `BlockParamType.State`
 - `BlockParamType.Count`
 
+## BlockState
+
+- `u16 id()`
+- `std::string label()`
+- `ItemStack get_item_drop()`
+
 ## Chunk
 
 - `u16 get_block(int x, int y, int z)`

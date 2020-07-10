@@ -57,6 +57,7 @@ bool BlockState::isOpaque() const {
 // Please update 'docs/lua-api-cpp.md' if you change this
 void BlockState::initUsertype(sol::state &lua) {
 	lua.new_usertype<BlockState>("BlockState",
+		"id", &BlockState::id,
 		"label", (const std::string &(BlockState::*)() const)&BlockState::label,
 		"get_item_drop", &BlockState::getItemDrop
 	);

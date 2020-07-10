@@ -165,6 +165,21 @@ void Chunk::setBlockState(int x, int y, int z, u16 stateID) {
 	u16 blockID = getBlock(x, y, z);
 	u16 blockParam = getData(x, y, z);
 	const Block &block = Registry::getInstance().getBlock(blockID);
+	const BlockState &blockState = block.getState(block.param().hasParam(BlockParam::State)
+		? block.param().getParam(BlockParam::State, blockParam) : 0);
+	const BlockState &newBlockState = block.getState(block.param().hasParam(BlockParam::State)
+		? stateID : 0);
+
+	if (!blockState.isLightSource() && newBlockState.isLightSource()) {
+		m_lightmap.addTorchlight(x, y, z, 14);
+	}
+	else if (blockState.isLightSource() && !newBlockState.isLightSource()) {
+		gkDebug() << block.stringID();
+
+		m_lightmap.removeTorchlight(x, y, z);
+		m_lightmap.removeSunlight(x, y, z);
+	}
+
 	if (block.param().hasParam(BlockParam::State))
 		setData(x, y, z, block.param().setParam(BlockParam::State, blockParam, stateID));
 }
