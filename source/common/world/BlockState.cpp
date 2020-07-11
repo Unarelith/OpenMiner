@@ -33,7 +33,8 @@ void BlockState::serialize(sf::Packet &packet) const {
 		<< m_hardness << m_harvestRequirements
 		<< m_boundingBox << u8(m_drawType) << m_colorMultiplier
 		<< m_isOpaque << m_isLightSource
-		<< m_inventoryImage << m_fogDepth << m_fogColor << m_attrs;
+		<< m_inventoryImage << m_fogDepth << m_fogColor
+		<< m_drawOffset << m_attrs;
 }
 
 void BlockState::deserialize(sf::Packet &packet) {
@@ -44,7 +45,8 @@ void BlockState::deserialize(sf::Packet &packet) {
 		>> m_hardness >> m_harvestRequirements
 		>> m_boundingBox >> drawType >> m_colorMultiplier
 		>> m_isOpaque >> m_isLightSource
-		>> m_inventoryImage >> m_fogDepth >> m_fogColor >> m_attrs;
+		>> m_inventoryImage >> m_fogDepth >> m_fogColor
+		>> m_drawOffset >> m_attrs;
 
 	m_drawType = BlockDrawType(drawType);
 }

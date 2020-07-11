@@ -38,6 +38,17 @@ color_multiplier = {1, 1, 1, 1} -- full white, this is the default value
 
 Only the pure gray parts (red == green == blue) will be affected by this multiplier.
 
+### `draw_offset`
+
+Draw offset of the block.
+
+Example:
+```lua
+draw_offset = {0, 0, -1 / 16} -- used for crops
+```
+
+**Note:** The selection box will ignore this parameter.
+
 ### `draw_type`
 
 Draw type of the block, see [Draw types](#draw-types) for more details.

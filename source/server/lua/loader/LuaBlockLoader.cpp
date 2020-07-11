@@ -110,6 +110,15 @@ inline void LuaBlockLoader::loadProperties(BlockState &state, const sol::table &
 			});
 		}
 	}
+
+	sol::optional<sol::table> drawOffset = table["draw_offset"];
+	if (drawOffset != sol::nullopt) {
+		state.drawOffset(gk::Vector3f{
+			drawOffset.value().get<float>(1),
+			drawOffset.value().get<float>(2),
+			drawOffset.value().get<float>(3),
+		});
+	}
 }
 
 inline void LuaBlockLoader::loadBoundingBox(BlockState &state, const sol::table &table) const {

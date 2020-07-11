@@ -224,6 +224,10 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 			vertices[v].coord3d[2] = z + blockHeight;
 		}
 
+		vertices[v].coord3d[0] += blockState.drawOffset().x;
+		vertices[v].coord3d[1] += blockState.drawOffset().y;
+		vertices[v].coord3d[2] += blockState.drawOffset().z;
+
 		vertices[v].coord3d[3] = f;
 
 		vertices[v].normal[0] = normal.x;
@@ -302,9 +306,9 @@ inline void ChunkBuilder::addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk
 	for (int f = 0; f < nCrossFaces ; ++f) {
 		Vertex vertices[nVertsPerFace];
 		for (int v = 0 ; v < nVertsPerFace ; ++v) {
-			vertices[v].coord3d[0] = x + vertexPos[f][v]->x;
-			vertices[v].coord3d[1] = y + vertexPos[f][v]->y;
-			vertices[v].coord3d[2] = z + vertexPos[f][v]->z;
+			vertices[v].coord3d[0] = x + vertexPos[f][v]->x + blockState.drawOffset().x;
+			vertices[v].coord3d[1] = y + vertexPos[f][v]->y + blockState.drawOffset().y;
+			vertices[v].coord3d[2] = z + vertexPos[f][v]->z + blockState.drawOffset().z;
 			vertices[v].coord3d[3] = 6;
 
 			vertices[v].normal[0] = 0;

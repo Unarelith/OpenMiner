@@ -333,7 +333,11 @@ mod:block {
 	id = "farmland",
 	name = "Farmland",
 	tiles = {"farmland_dry.png", "dirt.png", "dirt.png"},
-	alt_tiles = {"farmland_wet.png", "dirt.png", "dirt.png"},
+	is_opaque = false,
+
+	states = {
+		{ alt_tiles = {"farmland_wet.png", "dirt.png", "dirt.png"} },
+	},
 
 	draw_type = "boundingbox",
 	bounding_box = {0, 0, 0, 1, 1, 15 / 16},
@@ -343,6 +347,7 @@ mod:block {
 	id = "grass_path",
 	name = "Grass Path",
 	tiles = {"grass_path_top.png", "dirt.png", "grass_path_side.png"},
+	is_opaque = false,
 
 	draw_type = "boundingbox",
 	bounding_box = {0, 0, 0, 1, 1, 15 / 16},
@@ -357,6 +362,7 @@ mod:block {
 	hardness = 0,
 
 	bounding_box = {0, 0, 0, 1, 1, 1.0 / 16.0},
+	draw_offset = {0, 0, -1.0 / 16.0},
 
 	states = {
 		{ tiles = "wheat_stage_1.png", bounding_box = {0, 0, 0, 1, 1, 3.0 / 16.0}, },  -- 1
