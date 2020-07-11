@@ -159,7 +159,7 @@ void GameState::update() {
 		m_camera.setFieldOfView(Config::cameraFOV);
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
-		m_player.processInputs();
+		m_player.processInputs(*m_world.dimension());
 	}
 
 	if (!m_areModKeysLoaded) {

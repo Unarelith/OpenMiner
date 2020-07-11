@@ -52,7 +52,8 @@ class ClientWorld : public World, public gk::Drawable {
 		void checkPlayerChunk(double playerX, double playerY, double playerZ);
 
 		void clear();
-
+		
+		const Dimension *dimension() const { return m_dimension; }
 		void changeDimension(u16 dimensionID);
 
 		void receiveChunkData(Network::Packet &packet);

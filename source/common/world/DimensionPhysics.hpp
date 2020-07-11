@@ -24,21 +24,32 @@
  *
  * =====================================================================================
  */
-#include "Dimension.hpp"
-#include "NetworkUtils.hpp"
+#ifndef DIMENSIONPHYSICS_HPP_
+#define DIMENSIONPHYSICS_HPP_
 
-void Dimension::serialize(sf::Packet &packet) const {
-	packet << m_id << m_stringID << m_name << m_biomes << m_sky << m_physics;
-}
+#include <gk/core/ISerializable.hpp>
 
-void Dimension::deserialize(sf::Packet &packet) {
-	packet >> m_id >> m_stringID >> m_name >> m_biomes >> m_sky >> m_physics;
-}
+struct DimensionPhysics : public gk::ISerializable {
+	void serialize(sf::Packet &packet) const override;
+	void deserialize(sf::Packet &packet) override;
+		
+	float gravity = 1.f;
+	float jumpSpeed = 0.05f;
+	
+	float jumpAntigravity = 0.3f;
+	float glideGravity = 0.04f;
 
-// Please update 'docs/lua-api-cpp.md' if you change this
-void Dimension::initUsertype(sol::state &lua) {
-	lua.new_usertype<Dimension>("Dimension",
-		"id", &Dimension::id
-	);
-}
+	float horizontalSprintMod = 1.5f;
+	float verticalSprintMod = 1.5f;
 
+	float moveSpeed = 0.04f;
+	float airSpeedMod = 0.75f;
+
+	float flySpeed = 0.1f;
+	float sneakVerticalSpeed = 0.1f;
+	float sneakHorizontalMod = 0.5f;
+
+	bool isSneakAlwaysMod = false;
+};
+
+#endif // DIMENSIONPHYSICS_HPP_

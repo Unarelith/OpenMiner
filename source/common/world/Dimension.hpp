@@ -35,6 +35,8 @@
 
 #include <sol/sol.hpp>
 
+#include "DimensionPhysics.hpp"
+
 class Dimension : public gk::ISerializable {
 	public:
 		Dimension() = default;
@@ -55,8 +57,8 @@ class Dimension : public gk::ISerializable {
 		const std::string &sky() const { return m_sky; }
 		void setSky(const std::string &sky) { m_sky = sky; }
 
-		float gravity() const { return m_gravity; }
-		void setGravity(float gravity) { m_gravity = gravity; }
+		const DimensionPhysics &physics() const { return m_physics; }
+		void setPhysics(const DimensionPhysics &physics) { m_physics = physics; }
 
 		static void initUsertype(sol::state &lua);
 
@@ -70,7 +72,7 @@ class Dimension : public gk::ISerializable {
 
 		std::string m_sky;
 
-		float m_gravity = 1.f;
+		DimensionPhysics m_physics;
 };
 
 #endif // DIMENSION_HPP_

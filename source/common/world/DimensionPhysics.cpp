@@ -24,21 +24,18 @@
  *
  * =====================================================================================
  */
-#include "Dimension.hpp"
+#include "DimensionPhysics.hpp"
 #include "NetworkUtils.hpp"
 
-void Dimension::serialize(sf::Packet &packet) const {
-	packet << m_id << m_stringID << m_name << m_biomes << m_sky << m_physics;
+void DimensionPhysics::serialize(sf::Packet &packet) const {
+	packet << gravity << jumpSpeed << jumpAntigravity << glideGravity << horizontalSprintMod << 
+	verticalSprintMod << moveSpeed << airSpeedMod << flySpeed << sneakVerticalSpeed << 
+	sneakHorizontalMod << isSneakAlwaysMod;
 }
 
-void Dimension::deserialize(sf::Packet &packet) {
-	packet >> m_id >> m_stringID >> m_name >> m_biomes >> m_sky >> m_physics;
-}
-
-// Please update 'docs/lua-api-cpp.md' if you change this
-void Dimension::initUsertype(sol::state &lua) {
-	lua.new_usertype<Dimension>("Dimension",
-		"id", &Dimension::id
-	);
+void DimensionPhysics::deserialize(sf::Packet &packet) {
+	packet >> gravity >> jumpSpeed >> jumpAntigravity >> glideGravity >> horizontalSprintMod >> 
+	verticalSprintMod >> moveSpeed >> airSpeedMod >> flySpeed >> sneakVerticalSpeed >> 
+	sneakHorizontalMod >> isSneakAlwaysMod;
 }
 

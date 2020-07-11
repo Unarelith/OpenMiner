@@ -72,41 +72,61 @@ void ClientPlayer::updateCamera() {
 	m_camera.setUpVector(gk::Vector3f{sh * sr - ch * sv * cr, -ch * sr - sh * sv * cr, cv * cr});
 }
 
-void ClientPlayer::move(float direction) {
+void ClientPlayer::move(const Dimension &dimension, float direction) {
 	direction += m_viewAngleH;
 
-	m_velocity.x = 0.04f * cosf(direction * RADIANS_PER_DEGREES);
-	m_velocity.y = 0.04f * sinf(direction * RADIANS_PER_DEGREES);
+	m_velocity.x = dimension.physics().moveSpeed * cosf(direction * RADIANS_PER_DEGREES);
+	m_velocity.y =dimension.physics().moveSpeed * sinf(direction * RADIANS_PER_DEGREES);
 }
 
-void ClientPlayer::processInputs() {
-	if(gk::GamePad::isKeyPressed(GameKey::Jump) && !m_isJumping) {
-		m_isJumping = true;
-		m_velocity.z = m_jumpSpeed;
+void ClientPlayer::processInputs(const Dimension &dimension) {
+	if(gk::GamePad::isKeyPressed(GameKey::Jump)) {
+		if (!m_isJumping) {
+			m_isJumping = true;
+			m_velocity.z = dimension.physics().jumpSpeed;
+		}
+
+		if (m_isJumping && m_velocity.z > 0.0f) {
+			m_velocity.z += dimension.physics().jumpAntigravity * 0.001f;
+		}
+
+		if (m_velocity.z < 0.0f) {
+			if (!m_isGliding) m_isGliding = true;
+		}
+	}
+	else {
+		if (m_velocity.z < 0.0f) {
+			if (m_isGliding) m_isGliding = false;
+		}
+	}
+
+	if(gk::GamePad::isKeyPressed(GameKey::Forward))    move(dimension, 0.0f);
+	else if(gk::GamePad::isKeyPressed(GameKey::Back))  move(dimension, 180.0f);
+
+	if(gk::GamePad::isKeyPressed(GameKey::Left))       move(dimension, 90.0f);
+	else if(gk::GamePad::isKeyPressed(GameKey::Right)) move(dimension, -90.0f);
+
+	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Forward)) move(dimension, 45.0f);
+	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Forward)) move(dimension, -45.0f);
+	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Back))    move(dimension, 135.0f);
+	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Back))    move(dimension, -135.0f);
+
+	if (gk::GamePad::isKeyPressed(GameKey::Sprint)) {
+		m_velocity.x *= dimension.physics().horizontalSprintMod;
+		m_velocity.y *= dimension.physics().verticalSprintMod;
 	}
 
 	if(gk::GamePad::isKeyPressed(GameKey::Fly)) {
-		m_velocity.z = 0.1;
+		m_velocity.z = dimension.physics().flySpeed;
 	}
 
 	if(gk::GamePad::isKeyPressed(GameKey::Sneak)) {
-		m_velocity.z = -0.1;
-	}
+		if (m_velocity.z == 0 || dimension.physics().isSneakAlwaysMod) {
+			m_velocity.x *= dimension.physics().sneakHorizontalMod;
+			m_velocity.y *= dimension.physics().sneakHorizontalMod;
+		}
 
-	if(gk::GamePad::isKeyPressed(GameKey::Forward))    move(0.0f);
-	else if(gk::GamePad::isKeyPressed(GameKey::Back))  move(180.0f);
-
-	if(gk::GamePad::isKeyPressed(GameKey::Left))       move(90.0f);
-	else if(gk::GamePad::isKeyPressed(GameKey::Right)) move(-90.0f);
-
-	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Forward)) move(45.0f);
-	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Forward)) move(-45.0f);
-	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Back))    move(135.0f);
-	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Back))    move(-135.0f);
-
-	if (gk::GamePad::isKeyPressed(GameKey::Sprint)) {
-		m_velocity.x *= 1.5f;
-		m_velocity.y *= 1.5f;
+		m_velocity.z = -dimension.physics().sneakVerticalSpeed;
 	}
 }
 
@@ -114,12 +134,18 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 	ClientChunk *chunk = (ClientChunk *)world.getChunkAtBlockPos(m_x, m_y, m_z);
 	if (chunk && chunk->isInitialized()) {
 		if (!Config::isFlyModeEnabled) {
-			m_velocity.z -= chunk->dimension().gravity() * 0.001f;
+			m_velocity.z -= world.dimension()->physics().gravity * 0.001f;
 
 			m_isJumping = true;
 
-			if (m_velocity.z < -m_jumpSpeed) // Limit max vertical speed to jump speed
-				m_velocity.z = -m_jumpSpeed;
+			if (m_isGliding) {
+				if (m_velocity.z < -world.dimension()->physics().glideGravity) // Limit max vertical speed to glide gravity
+					m_velocity.z = -world.dimension()->physics().glideGravity;
+			}
+			else {
+				if (m_velocity.z < -world.dimension()->physics().jumpSpeed) // Limit max vertical speed to jump speed
+					m_velocity.z = -world.dimension()->physics().jumpSpeed;
+			}
 		}
 	}
 	else {
@@ -131,8 +157,8 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 		checkCollisions(world);
 
 	if (!Config::isFlyModeEnabled && m_velocity.z != 0.f) {
-		m_velocity.x *= 0.75f;
-		m_velocity.y *= 0.75f;
+		m_velocity.x *= world.dimension()->physics().airSpeedMod;
+		m_velocity.y *= world.dimension()->physics().airSpeedMod;
 	}
 
 	setPosition(m_x + m_velocity.x, m_y + m_velocity.y, m_z + m_velocity.z);
@@ -194,6 +220,7 @@ void ClientPlayer::testPoint(const ClientWorld &world, double x, double y, doubl
 	if(!passable(world, x, y + vel.y, z)) vel.y = 0.f;
 	if(!passable(world, x, y, z + vel.z)) {
 		if(vel.z < 0.f && m_isJumping) m_isJumping = false;
+		if(vel.z < 0.f && m_isGliding) m_isGliding = false;
 		vel.z = 0.f;
 	}
 }
