@@ -93,7 +93,7 @@ class BlockState : public gk::ISerializable {
 		u16 id() const { return m_id; }
 
 		float timeToBreak(u8 harvestCapability, float miningSpeed) const {
-			return ((m_harvestRequirements & harvestCapability) == m_harvestRequirements) ? 1.5 * m_hardness / miningSpeed : 5 * m_hardness;
+			return (harvestRequirements() & harvestCapability) ? 1.5 * m_hardness / miningSpeed : 5 * m_hardness;
 		}
 
 		ItemStack getItemDrop() const { return {m_itemDrop, m_itemDropAmount}; }

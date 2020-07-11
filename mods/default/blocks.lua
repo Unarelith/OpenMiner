@@ -35,6 +35,7 @@ mod:block {
 	id = "cobblestone",
 	name = "Cobblestone",
 	tiles = "cobblestone.png",
+
 	hardness = 2,
 	harvest_requirements = 1,
 }
@@ -56,16 +57,19 @@ mod:block {
 	name = "Oak Leaves",
 	tiles = "oak_leaves.png",
 	color_multiplier = {106, 173, 51, 255},
-	hardness = 0.5,
+	hardness = 0,
 	draw_type = "leaves",
 	-- is_opaque = false, -- FIXME
+
+	item_drop = {},
 }
 
 mod:block {
 	id = "oak_wood",
 	name = "Oak Wood",
 	tiles = {"oak_log_top.png", "oak_log.png"},
-	hardness = 2
+	hardness = 1,
+	harvest_requirements = 4,
 }
 
 mod:block {
@@ -125,6 +129,9 @@ mod:block {
 	name = "Oak Wood Planks",
 	tiles = "oak_planks.png",
 
+	hardness = 1,
+	harvest_requirements = 4,
+
 	groups = {
 		default_planks = 1
 	}
@@ -161,6 +168,7 @@ mod:block {
 	color_multiplier = {129, 191, 91, 255},
 	hardness = 0,
 	draw_type = "xshape",
+	item_drop = {},
 }
 
 mod:block {

@@ -32,6 +32,9 @@ mod:block {
 	tiles = {"furnace_top.png", "furnace_top.png", "furnace_front.png", "furnace_side.png"},
 	is_rotatable = true,
 
+	hardness = 2,
+	harvest_requirements = 1,
+
 	states = {
 		{
 			is_light_source = true,

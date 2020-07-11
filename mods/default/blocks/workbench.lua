@@ -31,6 +31,9 @@ mod:block {
 	name = "Workbench",
 	tiles = {"crafting_table_top.png", "crafting_table_top.png", "crafting_table_front.png", "crafting_table_side.png"},
 
+	hardness = 1,
+	harvest_requirements = 4,
+
 	on_block_placed = function(pos, world)
 		world:add_block_data(pos.x, pos.y, pos.z, 3, 3)
 	end,

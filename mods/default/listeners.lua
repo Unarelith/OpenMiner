@@ -40,37 +40,10 @@ openminer:add_listener(Event.BlockActivated, function(pos, block, player, world,
 end)
 
 openminer:add_listener(Event.PlayerConnected, function(pos, player, client, server)
-	local starting_items = {
-		{"default:workbench",       1},
-		{"default:dirt",           64},
-		{"default:stone",          64},
-		{"default:glass",          64},
-		{"default:glowstone",      64},
-		{"default:furnace",         1},
-		{"default:stone_pickaxe",   1},
-		{"default:stone_axe",       1},
-		{"default:stone_hoe",       1},
-
-		{"default:oak_wood",       64},
-		{"default:oak_planks",     64},
-		{"default:grass",          64},
-		{"default:cobblestone",    64},
-		{"default:stick",          64},
-		{"default:stone_shovel",    1},
-		{"default:iron_ore",       64},
-		{"default:coal",           64},
-
-		{"default:iron_ingot",     64},
-		{"default:gold_ingot",     64},
-		{"default:diamond",        64}
-	}
-
-
-	local player_inv = player:inventory()
-	for _, v in ipairs(starting_items) do
-		player_inv:add_stack(v[1], v[2])
-	end
+	player:inventory():add_stack("default:stone_axe", 1)
 
 	server:send_chat_message(0, "Welcome to OpenMiner!", client)
+	server:send_chat_message(0, "Press E to show inventory", client)
+	server:send_chat_message(0, "Press H to show creative inventory", client)
 end)
 
