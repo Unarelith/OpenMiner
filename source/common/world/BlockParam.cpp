@@ -42,7 +42,7 @@ void BlockParam::deserialize(sf::Packet &packet) {
 void BlockParam::allocateBits(u8 type, u8 size) {
 	auto it = m_allocatedBits.find(type);
 	if (it != m_allocatedBits.end()) {
-		gkWarning() << "Can't allocate param type" << getTypeName(type) << "twice in block" << m_block->stringID();
+		gkError() << "Can't allocate param type" << getTypeName(type) << "twice in block" << m_block->stringID();
 	}
 	else if (m_totalSize + size <= 16) {
 		m_allocatedBits.emplace(type, Param{m_totalSize, size});
@@ -63,7 +63,8 @@ void BlockParam::allocateBits(u8 type, u8 size) {
 u16 BlockParam::getParam(u8 type, u16 data) const {
 	auto it = m_allocatedBits.find(type);
 	if (it == m_allocatedBits.end()) {
-		gkWarning() << "Failed to get param" << getTypeName(type) << "in block" << m_block->stringID();
+		gkError() << "Failed to get param" << getTypeName(type) << "in block" << m_block->stringID();
+		gkError() << "Reason: This param type has not been allocated.";
 		return 0;
 	}
 
@@ -73,7 +74,8 @@ u16 BlockParam::getParam(u8 type, u16 data) const {
 u16 BlockParam::setParam(u8 type, u16 data, u16 param) const {
 	auto it = m_allocatedBits.find(type);
 	if (it == m_allocatedBits.end()) {
-		gkWarning() << "Failed to set param" << getTypeName(type) << "in block" << m_block->stringID();
+		gkError() << "Failed to set param" << getTypeName(type) << "in block" << m_block->stringID();
+		gkError() << "Reason: This param type has not been allocated.";
 		return 0;
 	}
 

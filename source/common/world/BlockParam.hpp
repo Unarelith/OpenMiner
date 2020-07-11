@@ -54,6 +54,7 @@ class BlockParam : public gk::ISerializable {
 		};
 
 		void allocateBits(u8 type, u8 size);
+		u8 getAllocatedSize() const { return m_totalSize; }
 
 		u16 getParam(u8 type, u16 data) const;
 		u16 setParam(u8 type, u16 data, u16 param) const;
