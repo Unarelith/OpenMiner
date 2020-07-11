@@ -40,6 +40,7 @@ namespace fs = ghc::filesystem;
 // Gameplay
 bool Config::isFlyModeEnabled = false;
 bool Config::isNoClipEnabled = false;
+u16 Config::maxBlockReach = 7;
 
 // Interface
 bool Config::isBlockInfoWidgetEnabled = true;
@@ -81,6 +82,7 @@ void Config::loadConfigFromFile(const char *filename) {
 
 			isFlyModeEnabled = lua["isFlyModeEnabled"].get_or(isFlyModeEnabled);
 			isNoClipEnabled = lua["isNoClipEnabled"].get_or(isNoClipEnabled);
+			maxBlockReach = lua["maxBlockReach"].get_or(maxBlockReach);
 
 			isBlockInfoWidgetEnabled = lua["isBlockInfoWidgetEnabled"].get_or(isBlockInfoWidgetEnabled);
 			isFpsCounterEnabled = lua["isFpsCounterEnabled"].get_or(isFpsCounterEnabled);
@@ -116,6 +118,7 @@ void Config::saveConfigToFile(const char *filename) {
 	std::ofstream file{filename, std::ofstream::out | std::ofstream::trunc};
 	file << "isFlyModeEnabled = " << (isFlyModeEnabled ? "true" : "false") << std::endl;
 	file << "isNoClipEnabled = " << (isNoClipEnabled ? "true" : "false") << std::endl;
+	file << "maxBlockReach = " << maxBlockReach << std::endl;
 	file << std::endl;
 	file << "isBlockInfoWidgetEnabled = " << (isBlockInfoWidgetEnabled ? "true" : "false") << std::endl;
 	file << "isFpsCounterEnabled = " << (isFpsCounterEnabled ? "true" : "false") << std::endl;

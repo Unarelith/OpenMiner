@@ -176,6 +176,11 @@ void SettingsMenuState::addGameplayButtons() {
 	addToggleButton("Fly Mode", Config::isFlyModeEnabled, false);
 	addToggleButton("No Clip", Config::isNoClipEnabled, false);
 
+	m_menuWidget.addSlider("Max Block Reach: " + std::to_string(Config::maxBlockReach), [] (SliderWidget &slider, u32) {
+		Config::maxBlockReach = slider.getCurrentValue();
+		slider.setText("Max Block Reach: " + std::to_string(Config::maxBlockReach));
+	}, 1, 15, Config::maxBlockReach);
+
 	updateWidgetPosition();
 }
 

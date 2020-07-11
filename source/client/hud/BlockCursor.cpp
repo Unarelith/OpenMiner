@@ -334,7 +334,7 @@ glm::ivec4 BlockCursor::findSelectedBlock() const {
 	glm::dvec3 lookAt{m_player.dirTargetedX(), m_player.dirTargetedY(), m_player.dirTargetedZ()};
 
 	// Ray casting algorithm to find out which block we are looking at
-	const double maxReach = 10.;
+	const double maxReach = Config::maxBlockReach;
 	double bestDepth;
 	s8f bestFace = -1;
 
