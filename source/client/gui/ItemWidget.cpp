@@ -70,6 +70,8 @@ void ItemWidget::updateImage(const BlockState *blockState) {
 
 	if (blockState)
 		m_image.setColor(blockState->colorMultiplier());
+	else
+		m_image.setColor(gk::Color::White);
 
 	m_isImage = true;
 }
