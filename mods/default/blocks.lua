@@ -28,7 +28,8 @@
 mod:block {
 	id = "dirt",
 	name = "Dirt",
-	tiles = "dirt.png"
+	tiles = "dirt.png",
+	harvest_requirements = 2,
 }
 
 mod:block {
@@ -45,6 +46,7 @@ mod:block {
 	name = "Grass",
 	tiles = {"grass_block_top.png", "dirt.png", "grass_block_side.png"},
 	color_multiplier = {129, 191, 91, 255},
+	harvest_requirements = 2,
 
 	item_drop = {
 		id = mod:id()..":dirt",
@@ -68,7 +70,6 @@ mod:block {
 	id = "oak_wood",
 	name = "Oak Wood",
 	tiles = {"oak_log_top.png", "oak_log.png"},
-	hardness = 1,
 	harvest_requirements = 4,
 }
 
@@ -87,7 +88,8 @@ mod:block {
 mod:block {
 	id = "sand",
 	name = "Sand",
-	tiles = "sand.png"
+	tiles = "sand.png",
+	harvest_requirements = 2,
 }
 
 mod:block {
@@ -110,6 +112,7 @@ mod:block {
 	tiles = "glass.png",
 	draw_type = "glass",
 	is_opaque = false,
+	harvest_requirements = 1,
 }
 
 mod:block {
@@ -141,7 +144,8 @@ mod:block {
 	id = "glowstone",
 	name = "Glowstone",
 	tiles = "glowstone.png",
-	is_light_source = true
+	is_light_source = true,
+	harvest_requirements = 1,
 }
 
 mod:block {
@@ -191,6 +195,7 @@ mod:block {
 	id = "clay",
 	name = "Clay",
 	tiles = "clay.png",
+	harvest_requirements = 2,
 	item_drop = {
 		id = mod:id()..":clay_ball",
 		amount = 4
@@ -201,6 +206,8 @@ mod:block {
 	id = "oak_slab",
 	name = "Oak Wood Slab",
 	tiles = "oak_planks.png",
+
+	harvest_requirements = 4,
 
 	draw_type = "boundingbox",
 	is_opaque = false,
@@ -234,12 +241,14 @@ mod:block {
 	id = "netherrack",
 	name = "Netherrack",
 	tiles = "netherrack.png",
+	harvest_requirements = 1,
 }
 
 mod:block {
 	id = "soul_sand",
 	name = "Soul Sand",
 	tiles = "soul_sand.png",
+	harvest_requirements = 2,
 }
 
 mod:block {
@@ -275,6 +284,7 @@ mod:block {
 	name = "Dead Bush",
 	tiles = "deadbush.png",
 	draw_type = "xshape",
+	hardness = 0,
 }
 
 mod:block {
@@ -295,7 +305,8 @@ mod:block {
 	name = "Obsidian",
 	tiles = "obsidian.png",
 
-	hardness = 2,
+	hardness = 8,
+	harvest_requirements = 1,
 }
 
 mod:block {
@@ -305,7 +316,7 @@ mod:block {
 	inventory_image = "reeds_item.png",
 
 	draw_type = "xshape",
-	hardness = 0.2,
+	hardness = 0,
 
 	on_block_destroyed = function(pos, world)
 		if world:get_block(pos.x, pos.y, pos.z + 1) == world:get_block(pos.x, pos.y, pos.z) then
@@ -318,6 +329,7 @@ mod:block {
 	id = "redstone_lamp",
 	name = "Redstone Lamp",
 	tiles = "redstone_lamp_off.png",
+	harvest_requirements = 1,
 
 	states = {
 		{ is_light_source = true, tiles = "redstone_lamp_on.png" }
@@ -334,6 +346,7 @@ mod:block {
 	name = "Farmland",
 	tiles = {"farmland_dry.png", "dirt.png", "dirt.png"},
 	is_opaque = false,
+	harvest_requirements = 2,
 
 	states = {
 		{ alt_tiles = {"farmland_wet.png", "dirt.png", "dirt.png"} },
@@ -348,6 +361,7 @@ mod:block {
 	name = "Grass Path",
 	tiles = {"grass_path_top.png", "dirt.png", "grass_path_side.png"},
 	is_opaque = false,
+	harvest_requirements = 2,
 
 	draw_type = "boundingbox",
 	bounding_box = {0, 0, 0, 1, 1, 15 / 16},
