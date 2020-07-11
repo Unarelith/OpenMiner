@@ -31,6 +31,7 @@ mod = mods["default"]
 
 dofile("blocks.lua")
 dofile("items.lua")
+dofile("tools.lua")
 dofile("recipes.lua")
 dofile("sky.lua")
 dofile("trees.lua")

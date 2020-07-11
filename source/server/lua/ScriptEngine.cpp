@@ -45,7 +45,8 @@ void ScriptEngine::init() {
 	m_lua.open_libraries(
 		sol::lib::base,
 		sol::lib::math,
-		sol::lib::table
+		sol::lib::table,
+		sol::lib::string
 	);
 
 	m_lua["openminer"] = &m_luaCore;
