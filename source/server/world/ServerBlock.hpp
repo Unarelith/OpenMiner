@@ -41,7 +41,7 @@ class ServerBlock : public Block {
 			: Block(id, name) {}
 
 		void onTick(const glm::ivec3 &pos, ServerChunk &chunk, ServerWorld &world, ServerCommandHandler &server) const;
-		bool onBlockActivated(const glm::ivec3 &pos, ServerPlayer &player, ServerWorld &world, ClientInfo &client, ServerCommandHandler &server, u16 screenWidth, u16 screenHeight, u8 guiScale) const;
+		bool onBlockActivated(const glm::ivec3 &pos, ServerPlayer &player, ServerWorld &world, ClientInfo &client, ServerCommandHandler &server) const;
 		void onBlockPlaced(const glm::ivec3 &pos, ServerWorld &world) const;
 		void onBlockDestroyed(const glm::ivec3 &pos, ServerWorld &world) const;
 

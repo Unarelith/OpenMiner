@@ -89,7 +89,10 @@ void ScriptEngine::initUsertypes() {
 	);
 
 	m_lua.new_usertype<ClientInfo>("ClientInfo",
-		"id", &ClientInfo::id
+		"id", &ClientInfo::id,
+		"screen_width", &ClientInfo::screenWidth,
+		"screen_height", &ClientInfo::screenHeight,
+		"gui_scale", &ClientInfo::guiScale
 	);
 
 	LuaCore::initUsertype(m_lua);

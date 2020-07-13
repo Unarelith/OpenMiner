@@ -48,6 +48,10 @@ class ClientInfo {
 		NetworkInputHandler inputHandler;
 
 		std::string playerName;
+
+		u16 screenWidth = 1;
+		u16 screenHeight = 1;
+		u8 guiScale = 1;
 };
 
 #endif // CLIENTINFO_HPP_

@@ -55,7 +55,10 @@
 
 ## ClientInfo
 
-- `u16 id()`
+- `u16 id`
+- `u16 screen_width`
+- `u16 screen_height`
+- `u8 gui_scale`
 
 ## Dimension
 

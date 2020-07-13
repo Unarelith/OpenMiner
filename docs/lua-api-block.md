@@ -339,9 +339,6 @@ Parameters:
 - `world` (`ServerWorld`): instance of the world
 - `client` (`Client`): client that activated the block
 - `server` (`Server`): current server
-- `screen_width` (`u16`): width of the screen
-- `screen_height` (`u16`): height of the screen
-- `gui_scale` (`u8`): current scaling setting
 
 ### `on_block_destroyed`
 

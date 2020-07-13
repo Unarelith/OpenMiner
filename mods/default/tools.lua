@@ -41,7 +41,7 @@ function register_tool(name, material, mining_speed, harvest_capability)
 	end
 
 	if name == "hoe" then
-		tool_def.on_item_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
+		tool_def.on_item_activated = function(pos, block, player, world, client, server)
 			if block:string_id() == "default:grass" then
 				world:set_block_from_str(pos.x, pos.y, pos.z, "default:farmland")
 			end
@@ -52,7 +52,7 @@ function register_tool(name, material, mining_speed, harvest_capability)
 			"group:om_material:sand"
 		}
 
-		tool_def.on_item_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
+		tool_def.on_item_activated = function(pos, block, player, world, client, server)
 			if block:string_id() == "default:grass" then
 				world:set_block_from_str(pos.x, pos.y, pos.z, "default:grass_path")
 			end

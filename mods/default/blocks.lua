@@ -229,7 +229,7 @@ mod:block {
 	draw_type = "glass",
 	is_opaque = false,
 
-	on_block_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
+	on_block_activated = function(pos, block, player, world, client, server)
 		local dim = (player:dimension() + 1) % 2
 		local pos = {
 			x = math.floor(player:x()),
@@ -343,7 +343,7 @@ mod:block {
 		{ is_light_source = true, tiles = "redstone_lamp_on.png" }
 	},
 
-	on_block_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
+	on_block_activated = function(pos, block, player, world, client, server)
 		local next_state = math.abs(world:get_block_state(pos.x, pos.y, pos.z):id() - 1)
 		world:set_block_state(pos.x, pos.y, pos.z, next_state)
 	end
@@ -411,7 +411,7 @@ mod:block {
 		end
 	end,
 
-	on_block_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
+	on_block_activated = function(pos, block, player, world, client, server)
 		local block_param = world:get_data(pos.x, pos.y, pos.z)
 		local current_state = block:param():get_param(BlockParamType.State, block_param)
 		if current_state >= 7 then

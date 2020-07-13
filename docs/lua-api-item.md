@@ -106,7 +106,4 @@ Parameters:
 - `world` (`World`): instance of the `ServerWorld`
 - `client` (`Client`): client that activated the item
 - `server` (`Server`): current server
-- `screen_width` (`u16`): width of the screen
-- `screen_height` (`u16`): height of the screen
-- `gui_scale` (`u8`): current scaling setting
 

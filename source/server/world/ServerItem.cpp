@@ -33,10 +33,10 @@
 #include "ServerPlayer.hpp"
 #include "World.hpp"
 
-bool ServerItem::onItemActivated(const glm::ivec3 &pos, Block &block, Player &player, World &world, ClientInfo &client, ServerCommandHandler &server, u16 screenWidth, u16 screenHeight, u8 guiScale) const {
+bool ServerItem::onItemActivated(const glm::ivec3 &pos, Block &block, Player &player, World &world, ClientInfo &client, ServerCommandHandler &server) const {
 	try {
 		if (m_onItemActivated) {
-			m_onItemActivated(pos, block, player, world, client, server, screenWidth, screenHeight, guiScale);
+			m_onItemActivated(pos, block, player, world, client, server);
 			return true;
 		}
 	}

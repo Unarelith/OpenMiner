@@ -325,15 +325,13 @@ void ServerCommandHandler::setupCallbacks() {
 		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			s32 x, y, z;
-			u16 screenWidth, screenHeight;
-			u8 guiScale;
-			packet >> x >> y >> z >> screenWidth >> screenHeight >> guiScale;
+			packet >> x >> y >> z >> client.screenWidth >> client.screenHeight >> client.guiScale;
 
 			ServerWorld &world = getWorldForClient(client.id);
 
 			u16 id = world.getBlock(x, y, z);
 			ServerBlock &block = (ServerBlock &)(m_registry.getBlock(id));
-			bool hasBeenActivated = block.onBlockActivated({x, y, z}, *player, world, client, *this, screenWidth, screenHeight, guiScale);
+			bool hasBeenActivated = block.onBlockActivated({x, y, z}, *player, world, client, *this);
 
 			if (hasBeenActivated)
 				m_scriptEngine.luaCore().onEvent(LuaEventType::BlockActivated, glm::ivec3{x, y, z}, block, *player, world, client, *this);
@@ -369,9 +367,7 @@ void ServerCommandHandler::setupCallbacks() {
 		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
 			s32 x, y, z;
-			u16 screenWidth, screenHeight;
-			u8 guiScale;
-			packet >> x >> y >> z >> screenWidth >> screenHeight >> guiScale;
+			packet >> x >> y >> z >> client.screenWidth >> client.screenHeight >> client.guiScale;
 
 			ServerWorld &world = getWorldForClient(client.id);
 
@@ -380,7 +376,7 @@ void ServerCommandHandler::setupCallbacks() {
 
 			ServerItem &item = (ServerItem &)player->heldItemStack().item();
 			if (item.canBeActivated()) {
-				bool hasBeenActivated = item.onItemActivated({x, y, z}, block, *player, world, client, *this, screenWidth, screenHeight, guiScale);
+				bool hasBeenActivated = item.onItemActivated({x, y, z}, block, *player, world, client, *this);
 
 				if (hasBeenActivated)
 					m_scriptEngine.luaCore().onEvent(LuaEventType::ItemActivated, glm::ivec3{x, y, z}, block, *player, world, client, *this);
@@ -406,11 +402,10 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::KeyPressed, [this](ClientInfo &client, Network::Packet &packet) {
-		u16 keyID, screenWidth, screenHeight;
-		u8 guiScale;
-		packet >> keyID >> screenWidth >> screenHeight >> guiScale;
+		u16 keyID;
+		packet >> keyID >> client.screenWidth >> client.screenHeight >> client.guiScale;
 
-		m_registry.getKey(keyID).callback()(keyID, client, screenWidth, screenHeight, guiScale);
+		m_registry.getKey(keyID).callback()(keyID, client);
 	});
 }
 

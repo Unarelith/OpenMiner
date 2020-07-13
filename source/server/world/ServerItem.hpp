@@ -42,7 +42,7 @@ class ServerItem : public Item {
 		ServerItem(u32 id, const TilesDef &tiles, const std::string &stringID, const std::string &label)
 			: Item(id, tiles, stringID, label) {}
 
-		bool onItemActivated(const glm::ivec3 &pos, Block &block, Player &player, World &world, ClientInfo &client, ServerCommandHandler &server, u16 screenWidth, u16 screenHeight, u8 guiScale) const;
+		bool onItemActivated(const glm::ivec3 &pos, Block &block, Player &player, World &world, ClientInfo &client, ServerCommandHandler &server) const;
 
 		void setOnItemActivated(const sol::protected_function &function);
 
