@@ -15,7 +15,7 @@ endif ()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-option(OM_BUILD_TESTS ON "Enable building tests if CxxTest is available")
+set(OM_BUILD_TESTS ON CACHE BOOL "Enable building tests if CxxTest is available")
 
 include_directories(external)
 

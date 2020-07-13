@@ -15,7 +15,7 @@
 	ignore = dirty
 [submodule "external/lua"]
 	path = external/lua
-	url = https://github.com/WohlSoft/LuaJIT
+	url = https://github.com/Unarelith/LuaJIT
 	ignore = dirty
 [submodule "external/SFML"]
 	path = external/SFML

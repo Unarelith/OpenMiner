@@ -107,9 +107,6 @@ void TitleScreenState::onEvent(const SDL_Event &event) {
 	}
 }
 
-void TitleScreenState::update() {
-}
-
 void TitleScreenState::startSingleplayer(bool showLoadingState, const std::string &worldName) {
 	GameConfig::worldName = worldName;
 

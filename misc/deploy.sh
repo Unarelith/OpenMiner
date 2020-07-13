@@ -10,6 +10,7 @@ rm -f deploy/*.zip
 
 # Win32
 i686-w64-mingw32-cmake -B deploy/win32 . && \
+cp /usr/i686-w64-mingw32/bin/libssp-0.dll deploy/win32 && \
 cmake --build deploy/win32 -j8 && \
 i686-w64-mingw32-strip deploy/win32/openminer.exe deploy/win32/openminer_server.exe && \
 cp deploy/win32/openminer.exe deploy/win32/openminer_server.exe deploy/win32/bin/openminer && \
@@ -23,10 +24,11 @@ cp deploy/win32/libjpeg.dll deploy/win32/bin/openminer && \
 cp deploy/win32/libpng16.dll deploy/win32/bin/openminer && \
 cd deploy/win32/bin && \
 zip -T -r ../../OpenMiner-$version-win32.zip openminer &&
-cd ../../..
+cd ../../.. && \
 
 # Win64
 x86_64-w64-mingw32-cmake -B deploy/win64 . && \
+cp /usr/x86_64-w64-mingw32/bin/libssp-0.dll deploy/win64 && \
 cmake --build deploy/win64 -j8 && \
 x86_64-w64-mingw32-strip deploy/win64/openminer.exe deploy/win64/openminer_server.exe && \
 cp deploy/win64/openminer.exe deploy/win64/openminer_server.exe deploy/win64/bin/openminer && \
@@ -40,7 +42,7 @@ cp deploy/win64/libjpeg.dll deploy/win64/bin/openminer && \
 cp deploy/win64/libpng16.dll deploy/win64/bin/openminer && \
 cd deploy/win64/bin && \
 zip -T -r ../../OpenMiner-$version-win64.zip openminer &&
-cd ../../..
+cd ../../.. && \
 
 # Linux64
 cmake -B deploy/linux64 . && \
@@ -76,7 +78,7 @@ echo -e "#!/bin/bash\n./lib/ld-linux-x86-64.so.2 --library-path lib ./bin/openmi
 chmod +x deploy/linux64/bin/openminer/openminer deploy/linux64/bin/openminer/openminer_server && \
 cd deploy/linux64/bin && \
 zip -T -r ../../OpenMiner-$version-linux64.zip openminer && \
-cd ../../..
+cd ../../.. && \
 
 # Mods and texture packs
 cd mods && \

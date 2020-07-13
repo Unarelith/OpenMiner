@@ -44,8 +44,6 @@ class TitleScreenState : public InterfaceState {
 
 		void onEvent(const SDL_Event &event) override;
 
-		void update() override;
-
 		void startSingleplayer(bool showLoadingState, const std::string &worldName = "");
 		void startMultiplayer(const std::string &host);
 

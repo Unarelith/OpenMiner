@@ -108,7 +108,6 @@ void ClientApplication::init() {
 
 	createWindow(Config::screenWidth, Config::screenHeight, APP_NAME);
 	m_window.setVerticalSyncEnabled(Config::isVerticalSyncEnabled);
-	m_window.setOpenGLFlagsSetupFunc(&ClientApplication::initOpenGL);
 	m_window.disableView();
 
 	m_resourceHandler.loadConfigFile<TextureLoader>("resources/config/textures.xml");
