@@ -29,6 +29,9 @@ mod:block {
 	id = "dirt",
 	name = "Dirt",
 	tiles = "dirt.png",
+	groups = {
+		om_material_dirt = 1,
+	},
 }
 
 mod:block {
@@ -45,6 +48,9 @@ mod:block {
 	name = "Grass",
 	tiles = {"grass_block_top.png", "dirt.png", "grass_block_side.png"},
 	color_multiplier = {129, 191, 91, 255},
+	groups = {
+		om_material_dirt = 1,
+	},
 
 	item_drop = {
 		id = mod:id()..":dirt",
@@ -68,6 +74,9 @@ mod:block {
 	id = "oak_wood",
 	name = "Oak Wood",
 	tiles = {"oak_log_top.png", "oak_log.png"},
+	groups = {
+		om_material_wood = 1,
+	}
 }
 
 mod:block {
@@ -86,6 +95,9 @@ mod:block {
 	id = "sand",
 	name = "Sand",
 	tiles = "sand.png",
+	groups = {
+		om_material_sand = 1
+	}
 }
 
 mod:block {
@@ -130,6 +142,7 @@ mod:block {
 	hardness = 1,
 
 	groups = {
+		om_material_wood = 1,
 		default_planks = 1
 	}
 }
@@ -198,6 +211,9 @@ mod:block {
 	id = "oak_slab",
 	name = "Oak Wood Slab",
 	tiles = "oak_planks.png",
+	groups = {
+		om_material_wood = 1,
+	},
 
 	draw_type = "boundingbox",
 	is_opaque = false,
@@ -238,6 +254,9 @@ mod:block {
 	id = "soul_sand",
 	name = "Soul Sand",
 	tiles = "soul_sand.png",
+	groups = {
+		om_material_sand = 1
+	}
 }
 
 mod:block {
@@ -257,6 +276,7 @@ mod:block {
 	id = "cactus",
 	name = "Cactus",
 	tiles = {"cactus_top.png", "cactus_bottom.png", "cactus_side.png"},
+	hardness = 0,
 
 	draw_type = "cactus",
 	bounding_box = {1/16, 1/16, 0, 14/16, 14/16, 1};
@@ -318,7 +338,6 @@ mod:block {
 	id = "redstone_lamp",
 	name = "Redstone Lamp",
 	tiles = "redstone_lamp_off.png",
-	harvest_requirements = 1,
 
 	states = {
 		{ is_light_source = true, tiles = "redstone_lamp_on.png" }
@@ -335,6 +354,9 @@ mod:block {
 	name = "Farmland",
 	tiles = {"farmland_dry.png", "dirt.png", "dirt.png"},
 	is_opaque = false,
+	groups = {
+		om_material_dirt = 1,
+	},
 
 	states = {
 		{ alt_tiles = {"farmland_wet.png", "dirt.png", "dirt.png"} },
@@ -349,6 +371,9 @@ mod:block {
 	name = "Grass Path",
 	tiles = {"grass_path_top.png", "dirt.png", "grass_path_side.png"},
 	is_opaque = false,
+	groups = {
+		om_material_dirt = 1,
+	},
 
 	draw_type = "boundingbox",
 	bounding_box = {0, 0, 0, 1, 1, 15 / 16},

@@ -54,5 +54,17 @@ void LuaItemLoader::loadItem(const sol::table &table) const {
 		else
 			gkError() << "For item" << stringID << ": 'groups' should be a table";
 	}
+
+	sol::object effectiveOnObject = table["effective_on"];
+	if (effectiveOnObject.valid()) {
+		if (effectiveOnObject.get_type() == sol::type::table) {
+			sol::table effectiveOnTable = effectiveOnObject.as<sol::table>();
+			for (auto &effectiveOnObject : effectiveOnTable) {
+				item.addEffectiveBlock(effectiveOnObject.second.as<std::string>());
+			}
+		}
+		else
+			gkError() << "For item" << stringID << ": 'effective_on' should be a table";
+	}
 }
 

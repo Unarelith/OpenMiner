@@ -30,6 +30,9 @@ mod:block {
 	id = "workbench",
 	name = "Workbench",
 	tiles = {"crafting_table_top.png", "crafting_table_top.png", "crafting_table_front.png", "crafting_table_side.png"},
+	groups = {
+		om_material_wood = 1
+	},
 
 	hardness = 1,
 	harvest_requirements = 4,

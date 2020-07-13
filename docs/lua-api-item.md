@@ -12,6 +12,18 @@ mod:item {
 
 ## Attributes
 
+### `effective_on`
+
+List of groups or block string IDs on which that item is effective when mining.
+
+Example:
+```lua
+effective_on = {
+	"group:om_material_dirt",
+	"group:om_material_sand"
+}
+```
+
 ### `groups`
 
 Groups of the item. They can be used in recipes, and can also filter Lua-defined inventory widgets.
@@ -30,6 +42,7 @@ Engine groups always start with `om_` prefix. If you create your own groups, ple
 Available engine groups:
 
 - `om_fuel`: used in `default:furnace` and `MouseWidgetItem`, the value represents the burn time
+- `om_material_dirt/sand/wood/stone`: these groups are not used in the engine, but it's nice to use them if you can
 
 ### `harvest_capability`
 

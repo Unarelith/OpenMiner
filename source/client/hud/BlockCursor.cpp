@@ -160,7 +160,15 @@ void BlockCursor::update(const Hotbar &hotbar) {
 			m_currentTool = &currentStack;
 		}
 		else {
-			timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed());
+			bool isEffective = false;
+			for (auto &it : currentStack.item().effectiveOn()) {
+				if (m_currentBlock->block().hasGroup(it)) {
+					isEffective = true;
+					break;
+				}
+			}
+
+			timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed(), isEffective);
 
 			if (ticks > m_animationStart + timeToBreak * 1000) {
 				m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);

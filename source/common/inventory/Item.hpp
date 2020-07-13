@@ -73,6 +73,9 @@ class Item : public gk::ISerializable {
 
 		bool canBeActivated() const { return m_canBeActivated; }
 
+		const std::vector<std::string> &effectiveOn() const { return m_effectiveOn; }
+		void addEffectiveBlock(const std::string &blockID) { m_effectiveOn.emplace_back(blockID); }
+
 		static void initUsertype(sol::state &lua);
 
 	protected:
@@ -91,6 +94,8 @@ class Item : public gk::ISerializable {
 		float m_miningSpeed = 1;
 
 		std::unordered_map<std::string, u16> m_groups;
+
+		std::vector<std::string> m_effectiveOn;
 };
 
 #endif // ITEM_HPP_

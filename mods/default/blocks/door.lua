@@ -47,7 +47,10 @@ mod:block {
 	name = "Wooden Door",
 	tiles = "door_wood_upper.png",
 	inventory_image = "door_wood.png",
-	groups = {ci_ignore = 1},
+	groups = {
+		ci_ignore = 1,
+		om_material_wood = 1
+	},
 
 	is_rotatable = true,
 	is_opaque = false,

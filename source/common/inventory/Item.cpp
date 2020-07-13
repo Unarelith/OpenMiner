@@ -37,12 +37,14 @@ Item::Item(u32 id, const TilesDef &tiles, const std::string &stringID, const std
 
 void Item::serialize(sf::Packet &packet) const {
 	packet << m_id << m_tiles << m_stringID << m_label << m_isBlock
-		<< m_miningSpeed << m_harvestCapability << m_groups << m_canBeActivated;
+		<< m_miningSpeed << m_harvestCapability << m_groups << m_canBeActivated
+		<< m_effectiveOn;
 }
 
 void Item::deserialize(sf::Packet &packet) {
 	packet >> m_id >> m_tiles >> m_stringID >> m_label >> m_isBlock
-		>> m_miningSpeed >> m_harvestCapability >> m_groups >> m_canBeActivated;
+		>> m_miningSpeed >> m_harvestCapability >> m_groups >> m_canBeActivated
+		>> m_effectiveOn;
 }
 
 // Please update 'docs/lua-api-cpp.md' if you change this

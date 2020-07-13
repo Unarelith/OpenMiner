@@ -47,11 +47,20 @@ function register_tool(name, material, mining_speed, harvest_capability)
 			end
 		end
 	elseif name == "shovel" then
+		tool_def.effective_on = {
+			"group:om_material_dirt",
+			"group:om_material:sand"
+		}
+
 		tool_def.on_item_activated = function(pos, block, player, world, client, server, screen_width, screen_height, gui_scale)
 			if block:string_id() == "default:grass" then
 				world:set_block_from_str(pos.x, pos.y, pos.z, "default:grass_path")
 			end
 		end
+	elseif name == "axe" then
+		tool_def.effective_on = {
+			"group:om_material_wood"
+		}
 	end
 
 	mod:item(tool_def)
