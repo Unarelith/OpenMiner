@@ -110,6 +110,8 @@ void ClientApplication::init() {
 	m_window.setVerticalSyncEnabled(Config::isVerticalSyncEnabled);
 	m_window.disableView();
 
+	initOpenGL();
+
 	m_resourceHandler.loadConfigFile<TextureLoader>("resources/config/textures.xml");
 	m_resourceHandler.add<Font>("font-ascii", "texture-font", "resources/textures/font.properties");
 	m_resourceHandler.add<TextureAtlas>("atlas-blocks");
