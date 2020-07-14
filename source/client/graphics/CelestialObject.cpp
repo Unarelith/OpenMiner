@@ -26,6 +26,7 @@
  */
 #include <gk/core/GameClock.hpp>
 #include <gk/gl/GLCheck.hpp>
+#include <gk/gl/Texture.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "CelestialObject.hpp"
@@ -62,14 +63,25 @@ void CelestialObject::updateVertexBuffer() const {
 	}
 
 	if (m_texture) {
-		vertices[0].texCoord[0] = 1.f;
-		vertices[0].texCoord[1] = 0.f;
-		vertices[1].texCoord[0] = 0.f;
-		vertices[1].texCoord[1] = 0.f;
-		vertices[2].texCoord[0] = 0.f;
-		vertices[2].texCoord[1] = 1.f;
-		vertices[3].texCoord[0] = 1.f;
-		vertices[3].texCoord[1] = 1.f;
+		gk::FloatRect texRect{0, 0, 1, 1};
+
+		if (m_phaseCount && m_phaseSize && m_currentPhase < m_phaseCount) {
+			u16 currentPhaseX = m_currentPhase % (m_texture->getSize().x / m_phaseSize);
+			u16 currentPhaseY = m_currentPhase / (m_texture->getSize().x / m_phaseSize);
+			texRect.x = currentPhaseX / float(m_texture->getSize().x);
+			texRect.y = currentPhaseY / float(m_texture->getSize().y);
+			texRect.sizeX = m_phaseSize / float(m_texture->getSize().x);
+			texRect.sizeY = m_phaseSize / float(m_texture->getSize().y);
+		}
+
+		vertices[0].texCoord[0] = texRect.x + texRect.sizeX;
+		vertices[0].texCoord[1] = texRect.y;
+		vertices[1].texCoord[0] = texRect.x;
+		vertices[1].texCoord[1] = texRect.y;
+		vertices[2].texCoord[0] = texRect.x;
+		vertices[2].texCoord[1] = texRect.y + texRect.sizeY;
+		vertices[3].texCoord[0] = texRect.x + texRect.sizeX;
+		vertices[3].texCoord[1] = texRect.y + texRect.sizeY;
 	}
 
 	gk::VertexBuffer::bind(&m_vbo);
