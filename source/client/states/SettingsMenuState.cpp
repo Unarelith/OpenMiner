@@ -40,6 +40,7 @@
 #include "KeyboardHandler.hpp"
 #include "Registry.hpp"
 #include "SettingsMenuState.hpp"
+#include "TexturePackSelectionState.hpp"
 #include "World.hpp"
 
 SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : InterfaceState(parent) {
@@ -165,6 +166,10 @@ void SettingsMenuState::addMainButtons() {
 	m_menuWidget.addButton("Input...", [this] (TextButton &) {
 		m_state = MenuState::Input;
 		addInputButtons();
+	});
+
+	m_menuWidget.addButton("Texture Pack...", [this] (TextButton &) {
+		m_stateStack->push<TexturePackSelectionState>(this);
 	});
 
 	updateWidgetPosition();

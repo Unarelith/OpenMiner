@@ -57,6 +57,8 @@ ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, c
 
 	gk::Mouse::setCursorVisible(true);
 	gk::Mouse::setCursorGrabbed(false);
+
+	m_game.textureAtlas().clear();
 }
 
 void ServerLoadingState::init() {

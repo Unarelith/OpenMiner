@@ -28,7 +28,9 @@
 
 u16 ScrollableListElement::widgetWidth = 200;
 
-ScrollableListElement::ScrollableListElement(const std::string &line1, const std::string &line2, const std::string &line3, Widget *parent) : Widget(widgetWidth, 0, parent) {
+ScrollableListElement::ScrollableListElement(u16 id, const std::string &line1, const std::string &line2, const std::string &line3, Widget *parent) : Widget(widgetWidth, 0, parent) {
+	m_id = id;
+
 	m_line1.setString(line1);
 	m_line1.updateVertexBuffer();
 	m_line1.setPosition(0, 1);
@@ -75,20 +77,29 @@ void ScrollableList::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_MOUSEBUTTONDOWN) {
 		for (auto &it : m_elements) {
 			if (it.isPointInWidget(event.button.x, event.button.y)) {
-				m_cursor.setSize(it.width() + 2, it.height() + 2);
-				m_cursor.setPosition(-1, it.getPosition().y - 1);
-
-				m_selectedElement = &it;
+				selectElement(it);
 			}
 		}
 	}
 }
 
-void ScrollableList::addElement(const std::string &line1, const std::string &line2, const std::string &line3) {
-	m_elements.emplace_back(line1, line2, line3, this);
-	m_elements.back().setPosition(0, (m_elements.size() - 1) * (m_elements.back().height() + 4) + 2);
+void ScrollableList::addElement(const std::string &line1, const std::string &line2, const std::string &line3, bool isSelected) {
+	m_elements.emplace_back(m_elements.size(), line1, line2, line3, this);
+
+	ScrollableListElement &element = m_elements.back();
+	element.setPosition(0, (m_elements.size() - 1) * (m_elements.back().height() + 4) + 2);
 
 	m_height += m_elements.back().height();
+
+	if (isSelected)
+		selectElement(element);
+}
+
+void ScrollableList::selectElement(ScrollableListElement &element) {
+	m_cursor.setSize(element.width() + 2, element.height() + 2);
+	m_cursor.setPosition(-1, element.getPosition().y - 1);
+
+	m_selectedElement = &element;
 }
 
 void ScrollableList::draw(gk::RenderTarget &target, gk::RenderStates states) const {

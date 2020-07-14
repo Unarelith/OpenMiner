@@ -43,6 +43,8 @@ class TextureAtlas {
 		void addFile(const std::string &path, const std::string &filename);
 		void packTextures();
 
+		void clear();
+
 		void loadFromRegistry(const std::string &texturePack = "");
 
 		u16 getTextureID(const std::string &filename) const;

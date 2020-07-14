@@ -24,54 +24,37 @@
  *
  * =====================================================================================
  */
-#ifndef SCROLLABLELIST_HPP_
-#define SCROLLABLELIST_HPP_
+#ifndef TEXTUREPACKSELECTIONSTATE_HPP_
+#define TEXTUREPACKSELECTIONSTATE_HPP_
 
 #include <gk/graphics/Image.hpp>
 
+#include "InterfaceState.hpp"
+#include "MenuWidget.hpp"
+#include "ScrollableList.hpp"
 #include "Text.hpp"
-#include "Widget.hpp"
 
-class ScrollableListElement : public Widget {
+class TexturePackSelectionState : public InterfaceState {
 	public:
-		ScrollableListElement(u16 id, const std::string &line1, const std::string &line2, const std::string &line3, Widget *parent);
-
-		static u16 widgetWidth;
-
-		u16 id() const { return m_id; }
-
-		const std::string &line1() const { return m_line1.string(); }
-
-	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		u16 m_id = 0;
-
-		gk::Image m_icon{"texture-world_icon"};
-
-		Text m_line1;
-		Text m_line2;
-		Text m_line3;
-};
-
-class ScrollableList : public Widget {
-	public:
-		ScrollableList();
+		TexturePackSelectionState(gk::ApplicationState *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
-		void addElement(const std::string &line1, const std::string &line2, const std::string &line3, bool isSelected = false);
-
-		const ScrollableListElement *selectedElement() const { return m_selectedElement; }
-
 	private:
-		void selectElement(ScrollableListElement &element);
+		void updateWidgetPosition() override;
+		void loadTexturePackList();
+
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		std::vector<ScrollableListElement> m_elements;
+		gk::Image m_background{"texture-menu_background"};
+		gk::RectangleShape m_filter1;
+		gk::RectangleShape m_filter2;
 
-		gk::RectangleShape m_cursor;
-		ScrollableListElement *m_selectedElement = nullptr;
+		Text m_title;
+
+		ScrollableList m_texturePackList;
+
+		MenuWidget m_menuWidget{2, 1};
 };
 
-#endif // SCROLLABLELIST_HPP_
+#endif // TEXTUREPACKSELECTIONSTATE_HPP_

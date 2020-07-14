@@ -119,6 +119,15 @@ void TextureAtlas::packTextures() {
 	gk::Texture::bind(nullptr);
 }
 
+void TextureAtlas::clear() {
+	m_tileSize = 0;
+
+	m_textureMap.clear();
+	m_textures.clear();
+
+	m_isReady = false;
+}
+
 void TextureAtlas::loadFromRegistry(const std::string &texturePack) {
 	if (!texturePack.empty() && !gk::Filesystem::fileExists("texturepacks/" + texturePack))
 		throw EXCEPTION("Texture pack '" + texturePack +"' doesn't exist");

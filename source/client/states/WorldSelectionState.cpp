@@ -115,9 +115,6 @@ void WorldSelectionState::onEvent(const SDL_Event &event) {
 	}
 }
 
-void WorldSelectionState::update() {
-}
-
 void WorldSelectionState::updateWidgetPosition() {
 	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
 	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
@@ -159,7 +156,6 @@ void WorldSelectionState::loadSaveList() {
 	if (fs::is_directory("saves")) {
 		std::vector<fs::directory_entry> files;
 
-		fs::path basePath = fs::current_path();
 		fs::directory_iterator dir("saves/");
 		for (const auto &entry : dir) {
 			if (entry.is_regular_file() && entry.path().filename().generic_string()[0] != '_') {
