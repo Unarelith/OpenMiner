@@ -25,12 +25,15 @@
  * =====================================================================================
  */
 #include <gk/core/ApplicationStateStack.hpp>
+#include <gk/resource/ResourceHandler.hpp>
 
 #include <filesystem.hpp>
 
 #include "Config.hpp"
 #include "GameConfig.hpp"
+#include "TextureAtlas.hpp"
 #include "TexturePackSelectionState.hpp"
+#include "World.hpp"
 
 namespace fs = ghc::filesystem;
 
@@ -50,8 +53,18 @@ TexturePackSelectionState::TexturePackSelectionState(gk::ApplicationState *paren
 	m_menuWidget.setHorizontalSpacing(8);
 	m_menuWidget.addButton("Select Texture Pack", [this](TextButton &) {
 		const ScrollableListElement *element = m_texturePackList.selectedElement();
-		if (element)
-			GameConfig::texturePack = (element->id()) ? element->line1() : "";
+		if (element) {
+			std::string texturePack = (element->id()) ? element->line1() : "";
+			if (GameConfig::texturePack != texturePack) {
+				GameConfig::texturePack = texturePack;
+
+				auto &atlas = gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks");
+				atlas.clear();
+				atlas.loadFromRegistry(GameConfig::texturePack);
+
+				World::isReloadRequested = true;
+			}
+		}
 
 		m_stateStack->pop();
 	}, 150);

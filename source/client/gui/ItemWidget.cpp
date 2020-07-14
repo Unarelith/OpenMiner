@@ -57,8 +57,13 @@ void ItemWidget::update() {
 	m_text.setPosition(16 - 4 - 6 * floor(log10(stack().amount())), 16 - 6, 0);
 }
 
+#include "GameConfig.hpp"
+
 void ItemWidget::updateImage(const BlockState *blockState) {
-	if (m_image.width() == 0) {
+	static std::string oldTexturePack{""};
+	if (m_image.width() == 0 || oldTexturePack != GameConfig::texturePack) {
+		oldTexturePack = GameConfig::texturePack;
+
 		m_image.load(m_textureAtlas.texture());
 		m_image.setPosition(1, 1, 0);
 		m_image.setClipRect(0, 0, 0, 0);
