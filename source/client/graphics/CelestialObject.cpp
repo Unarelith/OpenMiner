@@ -24,17 +24,17 @@
  *
  * =====================================================================================
  */
+#include <gk/core/GameClock.hpp>
 #include <gk/gl/GLCheck.hpp>
-#include <gk/graphics/Color.hpp>
 
-#include "Sun.hpp"
+#include "CelestialObject.hpp"
 #include "Vertex.hpp"
 
-Sun::Sun() {
+CelestialObject::CelestialObject() {
 	updateVertexBuffer();
 }
 
-void Sun::updateVertexBuffer() const {
+void CelestialObject::updateVertexBuffer() const {
 	float width = 20.f;
 	float height = 20.f;
 	Vertex vertices[4] = {
@@ -45,12 +45,11 @@ void Sun::updateVertexBuffer() const {
 		{{0, width, height, -1}},
 	};
 
-	gk::Color color = gk::Color::Yellow;
 	for (u8 i = 0 ; i < 4 ; ++i) {
-		vertices[i].color[0] = color.r;
-		vertices[i].color[1] = color.g;
-		vertices[i].color[2] = color.b;
-		vertices[i].color[3] = color.a;
+		vertices[i].color[0] = m_color.r;
+		vertices[i].color[1] = m_color.g;
+		vertices[i].color[2] = m_color.b;
+		vertices[i].color[3] = m_color.a;
 	}
 
 	gk::VertexBuffer::bind(&m_vbo);
@@ -58,8 +57,9 @@ void Sun::updateVertexBuffer() const {
 	gk::VertexBuffer::bind(nullptr);
 }
 
-void Sun::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	// states.transform *= getTransform();
+void CelestialObject::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	states.transform.rotate(fmod(gk::GameClock::getInstance().getTicks(true) / 1000.f, 360), {0, 1, 0});
+	states.transform *= getTransform();
 
 	states.vertexAttributes = VertexAttribute::All;
 

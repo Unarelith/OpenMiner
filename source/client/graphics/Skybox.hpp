@@ -29,7 +29,7 @@
 
 #include <gk/gl/Camera.hpp>
 
-#include "Sun.hpp"
+#include "CelestialObject.hpp"
 
 class Skybox : public gk::Drawable, public gk::Transformable {
 	public:
@@ -42,7 +42,8 @@ class Skybox : public gk::Drawable, public gk::Transformable {
 
 		gk::VertexBuffer m_sunVBO;
 
-		Sun m_sun;
+		CelestialObject m_sun;
+		CelestialObject m_moon;
 };
 
 #endif // SKYBOX_HPP_
