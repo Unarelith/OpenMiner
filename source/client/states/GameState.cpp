@@ -58,7 +58,7 @@ GameState::GameState()
 	m_clientCommandHandler.setupCallbacks();
 
 	m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
-	m_camera.setFarClippingPlane(10000.0f);
+	m_camera.setFarClippingPlane(1000.0f);
 
 	m_world.setClient(m_clientCommandHandler);
 	m_world.setCamera(m_player.camera());
@@ -201,7 +201,7 @@ void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 }
 
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	float time = std::fmod(gk::GameClock::getInstance().getTicks() * 4.f / 1000.f, 360.f) / 360.f;
+	float time = std::fmod(gk::GameClock::getInstance().getTicks() * 1.f / 1000.f, 360.f) / 360.f;
 	if (m_world.sky()) {
 		const float pi = 3.1415927f;
 		float sunlight = std::clamp(0.5f + std::sin(2 * pi * time) * 2.0f, 0.0f, 1.0f);
