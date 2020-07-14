@@ -43,6 +43,7 @@
 #include "KeyboardHandler.hpp"
 #include "PlayerBox.hpp"
 #include "Registry.hpp"
+#include "Skybox.hpp"
 
 class TextureAtlas;
 
@@ -99,6 +100,8 @@ class GameState : public gk::ApplicationState {
 
 		KeyboardHandler *m_keyboardHandler;
 		bool m_areModKeysLoaded = false;
+
+		Skybox m_skybox{m_camera};
 };
 
 #endif // GAMESTATE_HPP_
