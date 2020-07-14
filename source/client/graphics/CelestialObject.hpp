@@ -24,23 +24,28 @@
  *
  * =====================================================================================
  */
-#ifndef SUN_HPP_
-#define SUN_HPP_
+#ifndef CELESTIALOBJECT_HPP_
+#define CELESTIALOBJECT_HPP_
 
 #include <gk/gl/Drawable.hpp>
 #include <gk/gl/Transformable.hpp>
 #include <gk/gl/VertexBuffer.hpp>
+#include <gk/graphics/Color.hpp>
 
-class Sun : public gk::Drawable, public gk::Transformable  {
+class CelestialObject : public gk::Drawable, public gk::Transformable  {
 	public:
-		Sun();
+		CelestialObject();
 
-		void updateVertexBuffer() const;
+		void setColor(const gk::Color &color) { m_color = color; updateVertexBuffer(); }
 
 	private:
+		void updateVertexBuffer() const;
+
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		gk::VertexBuffer m_vbo;
+
+		gk::Color m_color = gk::Color::White;
 };
 
-#endif // SUN_HPP_
+#endif // CELESTIALOBJECT_HPP_
