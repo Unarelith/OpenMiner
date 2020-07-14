@@ -217,6 +217,7 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.shader = &m_shader;
 	target.setView(m_camera);
 	target.draw(m_world, states);
+	target.draw(m_skybox, states);
 
 	for (auto &it : m_playerBoxes)
 		if (it.second.dimension() == m_player.dimension())
