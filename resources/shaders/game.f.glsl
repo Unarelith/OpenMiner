@@ -27,6 +27,9 @@ void main() {
 	float blockFace = floor(v_blockFace + 0.5);
 	float lightCheck = floor(v_lightValue.x + 0.5);
 
+	// Discard if the pixel is too far away
+	if(blockFace > -1. && v_dist > u_renderDistance) discard;
+
 	// Get current pixel color and apply multiplier on grayscale textures
 	vec4 color = v_color;
 	if (v_texCoord.x > -0.99 && v_texCoord.y > -0.99) {
