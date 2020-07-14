@@ -24,6 +24,8 @@
  *
  * =====================================================================================
  */
+#include <algorithm>
+#include <cmath>
 #include <iostream>
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -207,10 +209,23 @@ void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 }
 
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	// FIXME: This uniform is not used anymore since water/leaves effects are disabled
-	// gk::Shader::bind(&m_shader);
-	// m_shader.setUniform("u_time", gk::GameClock::getInstance().getTicks());
-	// gk::Shader::bind(nullptr);
+	float time = std::fmod(gk::GameClock::getInstance().getTicks() * 4.f / 1000.f, 360.f) / 360.f;
+
+	gk::Shader::bind(&m_shader);
+	m_shader.setUniform("u_time", time);
+	gk::Shader::bind(nullptr);
+
+	if (m_world.sky()) {
+		const float pi = 3.1415927f;
+		float sunlight = std::clamp(0.5f + std::sin(2 * pi * time) * 2.0f, 0.0f, 1.0f);
+
+		gk::Color skyColor = m_world.sky()->color();
+		float red = std::clamp(sunlight - (1 - skyColor.r), 0.0f, skyColor.r);
+		float green = std::clamp(sunlight - (1 - skyColor.g), 0.0f, skyColor.g);
+		float blue = std::clamp(sunlight - (1 - skyColor.b), 0.0f, skyColor.b);
+
+		glClearColor(red, green, blue, 1.0f);
+	}
 
 	m_fbo.begin();
 
