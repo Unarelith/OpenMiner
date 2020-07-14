@@ -33,10 +33,10 @@ Skybox::Skybox(gk::Camera &camera) : m_camera(camera) {
 	m_shader.linkProgram();
 
 	m_sun.setColor(gk::Color::Yellow);
-	m_sun.setPosition(150, -10, -10);
+	m_sun.setPosition(300, -10, -10);
 
-	m_moon.setColor(gk::Color::White);
-	m_moon.setPosition(-150, -10, -10);
+	m_moon.setColor(gk::Color{240, 240, 240});
+	m_moon.setPosition(-300, -10, -10);
 }
 
 void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -44,7 +44,7 @@ void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	// Subtract the camera position - see comment in ClientWorld::draw()
 	const gk::Vector3d &cameraPosition = m_camera.getDPosition();
-	states.transform.translate(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+	states.transform.translate(cameraPosition.x, cameraPosition.y, cameraPosition.z - 50);
 
 	target.draw(m_sun, states);
 	target.draw(m_moon, states);
