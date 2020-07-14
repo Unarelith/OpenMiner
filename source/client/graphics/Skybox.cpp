@@ -25,9 +25,13 @@
  * =====================================================================================
  */
 #include "Skybox.hpp"
-#include "Vertex.hpp"
 
 Skybox::Skybox(gk::Camera &camera) : m_camera(camera) {
+	m_shader.createProgram();
+	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/skybox.v.glsl");
+	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/skybox.f.glsl");
+	m_shader.linkProgram();
+
 	m_sun.setColor(gk::Color::Yellow);
 	m_sun.setPosition(150, -10, -10);
 
@@ -36,9 +40,11 @@ Skybox::Skybox(gk::Camera &camera) : m_camera(camera) {
 }
 
 void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	states.shader = &m_shader;
+
 	// Subtract the camera position - see comment in ClientWorld::draw()
-	gk::Vector3d cameraPosition = m_camera.getDPosition();
-	states.transform.translate(-cameraPosition.x, -cameraPosition.y, -cameraPosition.z);
+	const gk::Vector3d &cameraPosition = m_camera.getDPosition();
+	states.transform.translate(cameraPosition.x, cameraPosition.y, cameraPosition.z);
 
 	target.draw(m_sun, states);
 	target.draw(m_moon, states);

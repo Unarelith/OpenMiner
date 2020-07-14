@@ -9,7 +9,7 @@ vec4 fog(vec4 color, float fogCoord, float fogStart, float fogEnd) {
 
 	const float pi = 3.1415927;
 
-	float sunlight = clamp((1 + sin(2 * pi * u_time) * 4.0), 0.0, 1.0);
+	float sunlight = clamp(0.5 + sin(2 * pi * u_time) * 2.0, 0.0, 1.0);
 
 	float red = clamp(sunlight - (1 - u_fogColor.r), 0.0, u_fogColor.r);
 	float green = clamp(sunlight - (1 - u_fogColor.g), 0.0, u_fogColor.g);

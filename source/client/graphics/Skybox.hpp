@@ -28,6 +28,7 @@
 #define SKYBOX_HPP_
 
 #include <gk/gl/Camera.hpp>
+#include <gk/gl/Shader.hpp>
 
 #include "CelestialObject.hpp"
 
@@ -38,9 +39,8 @@ class Skybox : public gk::Drawable, public gk::Transformable {
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		gk::Camera m_camera;
-
-		gk::VertexBuffer m_sunVBO;
+		gk::Camera &m_camera;
+		gk::Shader m_shader;
 
 		CelestialObject m_sun;
 		CelestialObject m_moon;

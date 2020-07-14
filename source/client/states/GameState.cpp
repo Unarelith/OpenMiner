@@ -58,6 +58,7 @@ GameState::GameState()
 	m_clientCommandHandler.setupCallbacks();
 
 	m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
+	m_camera.setFarClippingPlane(10000.0f);
 
 	m_world.setClient(m_clientCommandHandler);
 	m_world.setCamera(m_player.camera());
@@ -182,23 +183,14 @@ void GameState::update() {
 	}
 
 	m_client.update();
-
-	// Update far plane using render distance
-	static u16 oldRenderDistance = Config::renderDistance;
-	if (Config::renderDistance != oldRenderDistance) {
-		m_camera.setFarClippingPlane(Config::renderDistance * CHUNK_MAXSIZE);
-		oldRenderDistance = Config::renderDistance;
-	}
 }
 
 void GameState::initShaders() {
 	m_shader.createProgram();
-
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/game.v.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/light.f.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/fog.f.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/game.f.glsl");
-
 	m_shader.linkProgram();
 
 	m_fbo.loadShader("screen");
@@ -210,11 +202,6 @@ void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	float time = std::fmod(gk::GameClock::getInstance().getTicks() * 4.f / 1000.f, 360.f) / 360.f;
-
-	gk::Shader::bind(&m_shader);
-	m_shader.setUniform("u_time", time);
-	gk::Shader::bind(nullptr);
-
 	if (m_world.sky()) {
 		const float pi = 3.1415927f;
 		float sunlight = std::clamp(0.5f + std::sin(2 * pi * time) * 2.0f, 0.0f, 1.0f);
@@ -227,12 +214,18 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 		glClearColor(red, green, blue, 1.0f);
 	}
 
+	gk::Shader::bind(&m_shader);
+	m_shader.setUniform("u_time", time);
+	gk::Shader::bind(nullptr);
+
 	m_fbo.begin();
 
 	states.shader = &m_shader;
+
 	target.setView(m_camera);
-	target.draw(m_world, states);
+
 	target.draw(m_skybox, states);
+	target.draw(m_world, states);
 
 	for (auto &it : m_playerBoxes)
 		if (it.second.dimension() == m_player.dimension())
