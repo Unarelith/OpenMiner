@@ -36,7 +36,12 @@ class CelestialObject : public gk::Drawable, public gk::Transformable  {
 	public:
 		CelestialObject();
 
-		void setColor(const gk::Color &color) { m_color = color; updateVertexBuffer(); }
+		float width() const { return m_width; }
+		float height() const { return m_height; }
+
+		void setColor(const gk::Color &color) { m_color = color; m_isUpdateNeeded = true; }
+		void setSize(float width, float height) { m_width = width; m_height = height; m_isUpdateNeeded = true; }
+		void setTexture(const std::string &textureName);
 
 	private:
 		void updateVertexBuffer() const;
@@ -46,6 +51,13 @@ class CelestialObject : public gk::Drawable, public gk::Transformable  {
 		gk::VertexBuffer m_vbo;
 
 		gk::Color m_color = gk::Color::White;
+
+		float m_width = 0.f;
+		float m_height = 0.f;
+
+		const gk::Texture *m_texture = nullptr;
+
+		mutable bool m_isUpdateNeeded = true;
 };
 
 #endif // CELESTIALOBJECT_HPP_
