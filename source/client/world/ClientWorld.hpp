@@ -68,6 +68,8 @@ class ClientWorld : public World, public gk::Drawable {
 
 		std::size_t loadedChunkCount() const { return m_chunks.size(); }
 
+		const Sky *sky() const { return m_sky; }
+
 	private:
 		void createChunkNeighbours(ClientChunk *chunk);
 

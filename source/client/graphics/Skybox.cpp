@@ -29,10 +29,10 @@
 
 Skybox::Skybox(gk::Camera &camera) : m_camera(camera) {
 	m_sun.setColor(gk::Color::Yellow);
-	m_sun.setPosition(150, -10, 0);
+	m_sun.setPosition(150, -10, -10);
 
 	m_moon.setColor(gk::Color::White);
-	m_moon.setPosition(-150, -10, 0);
+	m_moon.setPosition(-150, -10, -10);
 }
 
 void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
