@@ -42,6 +42,8 @@ class CelestialObject : public gk::Drawable, public gk::Transformable  {
 		void setColor(const gk::Color &color) { m_color = color; m_isUpdateNeeded = true; }
 		void setSize(float width, float height) { m_width = width; m_height = height; m_isUpdateNeeded = true; }
 		void setTexture(const std::string &textureName);
+		void setPhaseCount(u16 phaseCount, u16 phaseSize) { m_phaseCount = phaseCount; m_phaseSize = phaseSize; m_isUpdateNeeded = true; }
+		void setCurrentPhase(u16 currentPhase) { m_currentPhase = currentPhase; m_isUpdateNeeded = true; }
 
 	private:
 		void updateVertexBuffer() const;
@@ -58,6 +60,10 @@ class CelestialObject : public gk::Drawable, public gk::Transformable  {
 		const gk::Texture *m_texture = nullptr;
 
 		mutable bool m_isUpdateNeeded = true;
+
+		u16 m_phaseCount = 0;
+		u16 m_phaseSize = 0;
+		u16 m_currentPhase = 0;
 };
 
 #endif // CELESTIALOBJECT_HPP_

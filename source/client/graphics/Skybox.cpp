@@ -37,13 +37,16 @@ Skybox::Skybox(gk::Camera &camera, ClientWorld &world) : m_camera(camera), m_wor
 	m_shader.linkProgram();
 
 	m_sun.setColor(gk::Color::Yellow);
-	m_sun.setSize(100, 100);
-	m_sun.setPosition(300, -m_sun.width() / 2, -m_sun.height() / 2);
+	m_sun.setSize(200, 200);
+	m_sun.setPosition(500, -m_sun.width() / 2, -m_sun.height() / 2);
 	m_sun.setTexture("texture-sun");
 
 	m_moon.setColor(gk::Color{240, 240, 240});
-	m_moon.setSize(20, 20);
-	m_moon.setPosition(-300, -m_moon.width() / 2, -m_moon.height() / 2);
+	m_moon.setSize(200, 200);
+	m_moon.setPosition(-500, -m_moon.width() / 2, -m_moon.height() / 2);
+	m_moon.setTexture("texture-moon_phases");
+	m_moon.setPhaseCount(8, 32);
+	m_moon.setCurrentPhase(0);
 }
 
 void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {

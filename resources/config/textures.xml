@@ -2,6 +2,7 @@
 	<texture name="block_destroy"    path="resources/textures/block_destroy.png" />
 	<texture name="font"             path="resources/textures/font.png" />
 	<texture name="menu_background"  path="resources/textures/menu_background.png" repeat="true" />
+	<texture name="moon_phases"      path="resources/textures/moon_phases.png" />
 	<texture name="player"           path="resources/textures/player.png" />
 	<texture name="sun"              path="resources/textures/sun.png" />
 	<texture name="title_screen"     path="resources/textures/title_screen.png" />
