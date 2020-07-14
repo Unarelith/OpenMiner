@@ -201,6 +201,7 @@ void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 }
 
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	// FIXME: Duplicated in Skybox
 	float time = std::fmod(gk::GameClock::getInstance().getTicks() * 1.f / 1000.f, 360.f) / 360.f;
 	if (m_world.sky()) {
 		const float pi = 3.1415927f;

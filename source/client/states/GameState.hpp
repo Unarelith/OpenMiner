@@ -101,7 +101,7 @@ class GameState : public gk::ApplicationState {
 		KeyboardHandler *m_keyboardHandler;
 		bool m_areModKeysLoaded = false;
 
-		Skybox m_skybox{m_camera};
+		Skybox m_skybox{m_camera, m_world};
 };
 
 #endif // GAMESTATE_HPP_

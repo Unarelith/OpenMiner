@@ -32,14 +32,18 @@
 
 #include "CelestialObject.hpp"
 
+class ClientWorld;
+
 class Skybox : public gk::Drawable, public gk::Transformable {
 	public:
-		Skybox(gk::Camera &camera);
+		Skybox(gk::Camera &camera, ClientWorld &world);
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		gk::Camera &m_camera;
+		ClientWorld &m_world;
+
 		gk::Shader m_shader;
 
 		CelestialObject m_sun;
