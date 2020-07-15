@@ -48,6 +48,8 @@ class Skybox : public gk::Drawable, public gk::Transformable {
 
 		CelestialObject m_sun;
 		CelestialObject m_moon;
+
+		std::vector<CelestialObject> m_stars;
 };
 
 #endif // SKYBOX_HPP_

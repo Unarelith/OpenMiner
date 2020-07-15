@@ -95,7 +95,7 @@ void CelestialObject::draw(gk::RenderTarget &target, gk::RenderStates states) co
 	if (m_isUpdateNeeded)
 		updateVertexBuffer();
 
-	states.transform.rotate(-fmod(gk::GameClock::getInstance().getTicks() * 1.f / 1000.f, 360), {0, 1, 0});
+	states.transform.rotate(-fmod((gk::GameClock::getInstance().getTicks() * 1.f / 1000.f + m_rotationOffset), 360), m_rotationAxis);
 	states.transform *= getTransform();
 
 	states.vertexAttributes = VertexAttribute::All;
