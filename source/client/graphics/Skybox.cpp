@@ -36,17 +36,24 @@ Skybox::Skybox(gk::Camera &camera, ClientWorld &world) : m_camera(camera), m_wor
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/skybox.f.glsl");
 	m_shader.linkProgram();
 
-	m_sun.setColor(gk::Color::Yellow);
 	m_sun.setSize(200, 200);
 	m_sun.setPosition(500, -m_sun.width() / 2, -m_sun.height() / 2);
 	m_sun.setTexture("texture-sun");
 
-	m_moon.setColor(gk::Color{240, 240, 240});
 	m_moon.setSize(200, 200);
 	m_moon.setPosition(-500, -m_moon.width() / 2, -m_moon.height() / 2);
 	m_moon.setTexture("texture-moon_phases");
 	m_moon.setPhaseCount(8, 32);
 	m_moon.setCurrentPhase(0);
+
+	for (int i = 0 ; i < 1000 ; ++i) {
+		auto &star = m_stars.emplace_back();
+		star.setColor(gk::Color{0, 0, 0, 0});
+		star.setSize(5, 5);
+		star.setPosition(700 * ((rand() % 2) * 2 - 1), (rand() % 500) * 2 - 500, (rand() % 500) * 2 - 500);
+		star.setRotationOffset(rand() % 360);
+		star.setRotationAxis({rand() % 100 / 100.f, rand() % 100 / 100.f, rand() % 100 / 100.f});
+	}
 }
 
 void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -57,12 +64,13 @@ void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 		float sunlight = std::clamp(0.5f + std::sin(2 * pi * time) * 2.0f, 0.0f, 1.0f);
 
 		gk::Color skyColor = m_world.sky()->color();
-		skyColor.r = std::clamp(sunlight - (1 - skyColor.r), 0.0f, skyColor.r);
-		skyColor.g = std::clamp(sunlight - (1 - skyColor.g), 0.0f, skyColor.g);
-		skyColor.b = std::clamp(sunlight - (1 - skyColor.b), 0.0f, skyColor.b);
+		skyColor.r = std::clamp(sunlight - (1.f - skyColor.r), 0.0f, skyColor.r);
+		skyColor.g = std::clamp(sunlight - (1.f - skyColor.g), 0.0f, skyColor.g);
+		skyColor.b = std::clamp(sunlight - (1.f - skyColor.b), 0.0f, skyColor.b);
 
 		gk::Shader::bind(&m_shader);
 		m_shader.setUniform("u_skyColor", skyColor);
+		m_shader.setUniform("u_starColor", m_world.sky()->color());
 		gk::Shader::bind(nullptr);
 	}
 
@@ -74,5 +82,10 @@ void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	target.draw(m_sun, states);
 	target.draw(m_moon, states);
+
+	glDisable(GL_CULL_FACE);
+
+	for (auto &it : m_stars)
+		target.draw(it, states);
 }
 

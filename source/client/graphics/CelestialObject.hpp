@@ -44,6 +44,8 @@ class CelestialObject : public gk::Drawable, public gk::Transformable  {
 		void setTexture(const std::string &textureName);
 		void setPhaseCount(u16 phaseCount, u16 phaseSize) { m_phaseCount = phaseCount; m_phaseSize = phaseSize; m_isUpdateNeeded = true; }
 		void setCurrentPhase(u16 currentPhase) { m_currentPhase = currentPhase; m_isUpdateNeeded = true; }
+		void setRotationOffset(u16 rotationOffset) { m_rotationOffset = rotationOffset; }
+		void setRotationAxis(const gk::Vector3f &rotationAxis) { m_rotationAxis = rotationAxis; }
 
 	private:
 		void updateVertexBuffer() const;
@@ -64,6 +66,9 @@ class CelestialObject : public gk::Drawable, public gk::Transformable  {
 		u16 m_phaseCount = 0;
 		u16 m_phaseSize = 0;
 		u16 m_currentPhase = 0;
+
+		u16 m_rotationOffset = 0;
+		gk::Vector3f m_rotationAxis{0, 1, 0};
 };
 
 #endif // CELESTIALOBJECT_HPP_
