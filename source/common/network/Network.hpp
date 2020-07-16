@@ -40,40 +40,41 @@ namespace Network {
 		ClientOk              = 0x02,
 		ClientRefused         = 0x03,
 
-		ServerClosed          = 0x04,
+		ServerTick            = 0x04,
+		ServerClosed          = 0x05,
 
-		ChunkData             = 0x05,
-		ChunkRequest          = 0x06,
+		ChunkData             = 0x06,
+		ChunkRequest          = 0x07,
 
-		PlayerPlaceBlock      = 0x07,
-		PlayerDigBlock        = 0x08,
-		PlayerInvUpdate       = 0x09,
-		PlayerPosUpdate       = 0x0a,
-		PlayerRotUpdate       = 0x0b,
-		PlayerSpawn           = 0x0c,
-		PlayerChangeDimension = 0x0d,
-		PlayerHeldItemChanged = 0x0e,
+		PlayerPlaceBlock      = 0x08,
+		PlayerDigBlock        = 0x09,
+		PlayerInvUpdate       = 0x0a,
+		PlayerPosUpdate       = 0x0b,
+		PlayerRotUpdate       = 0x0c,
+		PlayerSpawn           = 0x0d,
+		PlayerChangeDimension = 0x0e,
+		PlayerHeldItemChanged = 0x0f,
 
-		BlockUpdate           = 0x0f,
-		BlockActivated        = 0x10,
-		BlockGUIData          = 0x11,
-		BlockInvUpdate        = 0x12,
-		BlockDataUpdate       = 0x13,
+		BlockUpdate           = 0x10,
+		BlockActivated        = 0x11,
+		BlockGUIData          = 0x12,
+		BlockInvUpdate        = 0x13,
+		BlockDataUpdate       = 0x14,
 
-		ItemActivated         = 0x14,
+		ItemActivated         = 0x15,
 
-		RegistryData          = 0x15,
+		RegistryData          = 0x16,
 
-		ChatMessage           = 0x16,
+		ChatMessage           = 0x17,
 
-		EntitySpawn           = 0x17,
-		EntityDespawn         = 0x18,
-		EntityPosition        = 0x19,
-		EntityRotation        = 0x1a,
-		EntityAnimation       = 0x1b,
-		EntityDrawableDef     = 0x1c,
+		EntitySpawn           = 0x18,
+		EntityDespawn         = 0x19,
+		EntityPosition        = 0x1a,
+		EntityRotation        = 0x1b,
+		EntityAnimation       = 0x1c,
+		EntityDrawableDef     = 0x1d,
 
-		KeyPressed            = 0x1d,
+		KeyPressed            = 0x1e,
 	};
 
 	std::string commandToString(Command command);

@@ -37,6 +37,7 @@
 #include "ConnectionErrorState.hpp"
 #include "DrawableComponent.hpp"
 #include "DrawableDef.hpp"
+#include "GameTime.hpp"
 #include "LuaGUIState.hpp"
 #include "NetworkComponent.hpp"
 #include "PositionComponent.hpp"
@@ -165,6 +166,11 @@ void ClientCommandHandler::setupCallbacks() {
 			m_client.addPlayer(m_playerBoxes.at(clientID));
 			m_playerBoxes.erase(it);
 		}
+	});
+
+	m_client.setCommandCallback(Network::Command::ServerTick, [this](Network::Packet &) {
+		if (!m_isSingleplayer) // FIXME
+			GameTime::incrementTicks();
 	});
 
 	m_client.setCommandCallback(Network::Command::ServerClosed, [this](Network::Packet &packet) {

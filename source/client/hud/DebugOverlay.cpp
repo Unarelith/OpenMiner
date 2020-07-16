@@ -33,6 +33,7 @@
 #include "ClientWorld.hpp"
 #include "Config.hpp"
 #include "DebugOverlay.hpp"
+#include "GameTime.hpp"
 
 DebugOverlay::DebugOverlay(const ClientPlayer &player, const ClientWorld &world)
 	: m_player(player), m_world(world)
@@ -84,6 +85,8 @@ void DebugOverlay::update() {
 	stream << "Alive entities: " << m_world.scene().registry().alive();
 	stream << '\n';
 	stream << "Chunk updates: " << ClientChunk::chunkUpdatesPerSec;
+	stream << '\n';
+	stream << "TPS: " << GameTime::getTicksPerSecond();
 
 	m_positionText.setString(stream.str());
 }

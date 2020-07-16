@@ -61,6 +61,7 @@ class ServerCommandHandler {
 		ServerCommandHandler(ScriptEngine &scriptEngine, Server &server, WorldController &worldController, PlayerList &players, Registry &registry)
 			: m_scriptEngine(scriptEngine), m_server(server), m_worldController(worldController), m_players(players), m_registry(registry) {}
 
+		void sendServerTick(const ClientInfo *client = nullptr) const;
 		void sendServerClosed(const std::string &message, const ClientInfo *client = nullptr) const;
 		void sendBlockDataUpdate(s32 x, s32 y, s32 z, const BlockData *blockData, const ClientInfo *client = nullptr) const;
 		void sendBlockInvUpdate(s32 x, s32 y, s32 z, const Inventory &inventory, const ClientInfo *client = nullptr) const;

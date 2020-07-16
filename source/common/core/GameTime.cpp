@@ -35,7 +35,7 @@ u64 GameTime::s_ticks = 0;
 u16 GameTime::s_ticksPerSecond = 0;
 
 float GameTime::getCurrentTime(float offset, float speed) {
-	return std::fmod(gk::GameClock::getInstance().getTicks() * daySpeed * speed / 1000.f + offset, 360.f) / 360.f;
+	return std::fmod(s_ticks * daySpeed * speed + offset, dayLength) / dayLength;
 }
 
 float GameTime::getSunlightIntensityFromTime(float time) {
