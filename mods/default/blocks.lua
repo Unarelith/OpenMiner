@@ -152,6 +152,9 @@ mod:block {
 	name = "Glowstone",
 	tiles = "glowstone.png",
 	is_light_source = true,
+	groups = {
+		om_material_stone = 1
+	},
 }
 
 mod:block {
@@ -338,6 +341,9 @@ mod:block {
 	id = "redstone_lamp",
 	name = "Redstone Lamp",
 	tiles = "redstone_lamp_off.png",
+	groups = {
+		om_material_stone = 1
+	},
 
 	states = {
 		{ is_light_source = true, tiles = "redstone_lamp_on.png" }
