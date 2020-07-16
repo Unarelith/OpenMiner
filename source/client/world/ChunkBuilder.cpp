@@ -260,7 +260,7 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 	}
 
 	auto addVertex = [&](u8 v) {
-		if (!Config::isAmbientOcclusionEnabled || Config::isSmoothLightingEnabled)
+		if (Config::ambientOcclusion != 1)
 			vertices[v].ambientOcclusion = 5;
 
 		if (blockState.drawType() == BlockDrawType::Liquid)
@@ -411,10 +411,8 @@ inline u8 ChunkBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, cons
 		// 	continue;
 
 		// If the chunk is initialized, add the light value to the total
-		if (lightValues[i] != -1) {
-			// float strength = ((surroundingBlocks[i] - normal == gk::Vector3i{x, y, z}) ? 1 : Config::aoStrength);
-			// total += lightValues[i] * strength;
-			// count += strength;
+		// But only add dark blocks if AO is set on Smooth Lighting
+		if (lightValues[i] != -1 && (Config::ambientOcclusion == 2 || lightValues[i] != 0)) {
 			total += lightValues[i];
 			++count;
 		}
