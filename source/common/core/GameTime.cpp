@@ -31,8 +31,8 @@
 #include "GameTime.hpp"
 #include "Sky.hpp"
 
-float GameTime::getCurrentTime(float offset) {
-	return std::fmod(gk::GameClock::getInstance().getTicks() * daySpeed / 1000.f + offset, 360.f) / 360.f;
+float GameTime::getCurrentTime(float offset, float speed) {
+	return std::fmod(gk::GameClock::getInstance().getTicks() * daySpeed * speed / 1000.f + offset, 360.f) / 360.f;
 }
 
 float GameTime::getSunlightIntensityFromTime(float time) {
