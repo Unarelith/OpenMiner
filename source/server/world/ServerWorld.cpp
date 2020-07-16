@@ -36,28 +36,26 @@
 #include "ServerPlayer.hpp"
 #include "ServerWorld.hpp"
 
-void ServerWorld::update() {
-	if (m_lastTick < m_clock.getTicks() / 50) {
-		m_lastTick = m_clock.getTicks() / 50;
-
-		for (auto &it : m_chunks) {
+void ServerWorld::update(bool doTick) {
+	for (auto &it : m_chunks) {
+		if (doTick)
 			it.second->tick(*this, *m_server);
 
-			if (it.second->areAllNeighboursLoaded()) {
-				it.second->updateLights();
-			}
+		if (it.second->areAllNeighboursLoaded()) {
+			it.second->updateLights();
+		}
 
-			if (it.second->isInitialized() && !it.second->isSent()) {
-				for (auto &client : m_server->server().info().clients())
-					if (m_players.getPlayer(client.playerName)->dimension() == m_dimension.id())
-						sendChunkData(client, *it.second.get());
+		if (it.second->isInitialized() && !it.second->isSent()) {
+			for (auto &client : m_server->server().info().clients())
+				if (m_players.getPlayer(client.playerName)->dimension() == m_dimension.id())
+					sendChunkData(client, *it.second.get());
 
-				// gkDebug() << "Chunk updated at" << it.second->x() << it.second->y() << it.second->z();
-			}
+			// gkDebug() << "Chunk updated at" << it.second->x() << it.second->y() << it.second->z();
 		}
 	}
 
-	m_scene.update();
+	if (doTick)
+		m_scene.update();
 }
 
 void ServerWorld::createChunkNeighbours(ServerChunk &chunk) {

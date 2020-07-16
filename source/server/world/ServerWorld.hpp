@@ -51,7 +51,7 @@ class ServerWorld : public World {
 		ServerWorld(PlayerList &players, const Dimension &dimension, gk::GameClock &clock)
 			: m_players(players), m_dimension(dimension), m_terrainGenerator(dimension), m_clock(clock), m_scene(players) {}
 
-		void update();
+		void update(bool doTick);
 
 		void createChunkNeighbours(ServerChunk &chunk);
 		void sendChunkData(const ClientInfo &client, ServerChunk &chunk);
@@ -79,8 +79,6 @@ class ServerWorld : public World {
 		const Dimension &m_dimension;
 
 		ChunkMap m_chunks;
-
-		u32 m_lastTick = 0;
 
 		TerrainGenerator m_terrainGenerator;
 

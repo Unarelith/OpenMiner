@@ -42,9 +42,9 @@ void WorldController::clearEntities() {
 		it.scene().clear();
 }
 
-void WorldController::update() {
+void WorldController::update(bool doTick) {
 	for (auto &it : m_worldList)
-		it.update();
+		it.update(doTick);
 }
 
 ServerWorld &WorldController::getWorld(u16 dimension) {

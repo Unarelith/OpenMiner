@@ -49,6 +49,7 @@ class ChatCommandHandler {
 		void optionCommand(const std::vector<std::string> &command, ClientInfo &client) const;
 		void stopCommand(const std::vector<std::string> &command, ClientInfo &client) const;
 		void teleportationCommand(const std::vector<std::string> &command, ClientInfo &client) const;
+		void tpsCommand(const std::vector<std::string> &command, ClientInfo &client) const;
 
 		ServerCommandHandler &m_server;
 		WorldController &m_worldController;
@@ -58,6 +59,7 @@ class ChatCommandHandler {
 			{"option", &ChatCommandHandler::optionCommand},
 			{"stop",   &ChatCommandHandler::stopCommand},
 			{"tp",     &ChatCommandHandler::teleportationCommand},
+			{"tps",    &ChatCommandHandler::tpsCommand},
 		};
 };
 

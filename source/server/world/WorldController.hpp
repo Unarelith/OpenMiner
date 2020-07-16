@@ -47,7 +47,7 @@ class WorldController {
 
 		void clearEntities();
 
-		void update();
+		void update(bool doTick);
 
 		void load(const std::string &worldName) { m_worldSaveBackend->load(worldName); }
 		void save(const std::string &worldName) { m_worldSaveBackend->save(worldName); }
