@@ -24,9 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/GameClock.hpp>
-
 #include "ClientWorld.hpp"
+#include "GameTime.hpp"
 #include "Sky.hpp"
 #include "Skybox.hpp"
 
@@ -57,19 +56,9 @@ Skybox::Skybox(gk::Camera &camera, ClientWorld &world) : m_camera(camera), m_wor
 }
 
 void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	// FIXME: Duplicated in GameState
-	float time = std::fmod(gk::GameClock::getInstance().getTicks() * 1.f / 1000.f, 360.f) / 360.f;
 	if (m_world.sky()) {
-		const float pi = 3.1415927f;
-		float sunlight = std::clamp(0.5f + std::sin(2 * pi * time) * 2.0f, 0.0f, 1.0f);
-
-		gk::Color skyColor = m_world.sky()->color();
-		skyColor.r = std::clamp(sunlight - (1.f - skyColor.r), 0.0f, skyColor.r);
-		skyColor.g = std::clamp(sunlight - (1.f - skyColor.g), 0.0f, skyColor.g);
-		skyColor.b = std::clamp(sunlight - (1.f - skyColor.b), 0.0f, skyColor.b);
-
 		gk::Shader::bind(&m_shader);
-		m_shader.setUniform("u_skyColor", skyColor);
+		m_shader.setUniform("u_skyColor", GameTime::getSkyColorFromTime(*m_world.sky(), GameTime::getCurrentTime()));
 		m_shader.setUniform("u_starColor", m_world.sky()->color());
 		gk::Shader::bind(nullptr);
 	}
