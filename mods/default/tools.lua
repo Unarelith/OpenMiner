@@ -61,6 +61,10 @@ function register_tool(name, material, mining_speed, harvest_capability)
 		tool_def.effective_on = {
 			"group:om_material_wood"
 		}
+	elseif name == "pickaxe" then
+		tool_def.effective_on = {
+			"group:om_material_stone"
+		}
 	end
 
 	mod:item(tool_def)
