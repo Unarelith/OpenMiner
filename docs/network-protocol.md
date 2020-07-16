@@ -47,6 +47,12 @@ _This packet has no field._
 
 ### Clientbound
 
+#### ServerTick
+
+Packet sent at the beginning of every server tick.
+
+_This packet has no field._
+
 #### ServerClosed
 
 | Field name    | Field type  | Notes                                                |

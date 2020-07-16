@@ -201,6 +201,8 @@ void ServerApplication::update() {
 		doTick = true;
 
 		GameTime::incrementTicks();
+
+		m_serverCommandHandler.sendServerTick();
 	}
 
 	m_worldController.update(doTick);

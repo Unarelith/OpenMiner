@@ -37,6 +37,7 @@ std::string Network::commandToString(Network::Command command) {
 		{Network::Command::ClientOk,              "ClientOk"},
 		{Network::Command::ClientRefused,         "ClientRefused"},
 
+		{Network::Command::ServerTick,            "ServerTick"},
 		{Network::Command::ServerClosed,          "ServerClosed"},
 
 		{Network::Command::ChunkData,             "ChunkData"},

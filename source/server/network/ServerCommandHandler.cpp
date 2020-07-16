@@ -37,6 +37,16 @@
 #include "ServerItem.hpp"
 #include "WorldController.hpp"
 
+void ServerCommandHandler::sendServerTick(const ClientInfo *client) const {
+	Network::Packet packet;
+	packet << Network::Command::ServerTick;
+
+	if (!client)
+		m_server.sendToAllClients(packet);
+	else
+		client->tcpSocket->send(packet);
+}
+
 void ServerCommandHandler::sendServerClosed(const std::string &message, const ClientInfo *client) const {
 	Network::Packet packet;
 	packet << Network::Command::ServerClosed << message;
