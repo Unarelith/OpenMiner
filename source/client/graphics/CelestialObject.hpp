@@ -45,6 +45,7 @@ class CelestialObject : public gk::Drawable, public gk::Transformable  {
 		void setPhaseCount(u16 phaseCount, u16 phaseSize) { m_phaseCount = phaseCount; m_phaseSize = phaseSize; m_isUpdateNeeded = true; }
 		void setCurrentPhase(u16 currentPhase) { m_currentPhase = currentPhase; m_isUpdateNeeded = true; }
 		void setRotationOffset(u16 rotationOffset) { m_rotationOffset = rotationOffset; }
+		void setRotationSpeed(float rotationSpeed) { m_rotationSpeed = rotationSpeed; }
 		void setRotationAxis(const gk::Vector3f &rotationAxis) { m_rotationAxis = rotationAxis; }
 
 	private:
@@ -68,6 +69,7 @@ class CelestialObject : public gk::Drawable, public gk::Transformable  {
 		u16 m_currentPhase = 0;
 
 		u16 m_rotationOffset = 0;
+		float m_rotationSpeed = 1.f;
 		gk::Vector3f m_rotationAxis{0, 1, 0};
 };
 

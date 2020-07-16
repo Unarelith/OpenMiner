@@ -35,7 +35,7 @@ class GameTime {
 	public:
 		static constexpr float daySpeed = 1.f;
 
-		static float getCurrentTime(float offset = 0.f);
+		static float getCurrentTime(float offset = 0.f, float speed = 1.f);
 
 		// Note: These functions are only needed in the client
 		static float getSunlightIntensityFromTime(float time);

@@ -51,6 +51,7 @@ Skybox::Skybox(gk::Camera &camera, ClientWorld &world) : m_camera(camera), m_wor
 		star.setSize(5, 5);
 		star.setPosition(700 * ((rand() % 2) * 2 - 1), (rand() % 500) * 2 - 500, (rand() % 500) * 2 - 500);
 		star.setRotationOffset(rand() % 360);
+		star.setRotationSpeed(0.4f);
 		star.setRotationAxis({rand() % 100 / 100.f, rand() % 100 / 100.f, rand() % 100 / 100.f});
 	}
 }
