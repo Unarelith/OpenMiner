@@ -50,8 +50,8 @@ bool Config::isCrosshairVisible = true;
 
 // Graphics
 u16 Config::renderDistance = 8;
+u8 Config::ambientOcclusion = 2;
 bool Config::isSmoothLightingEnabled = true;
-bool Config::isAmbientOcclusionEnabled = false;
 bool Config::isWireframeModeEnabled = false;
 bool Config::isFullscreenModeEnabled = false;
 bool Config::isVerticalSyncEnabled = true;
@@ -90,16 +90,16 @@ void Config::loadConfigFromFile(const char *filename) {
 			isCrosshairVisible = lua["isCrosshairVisible"].get_or(isCrosshairVisible);
 
 			renderDistance = lua["renderDistance"].get_or(renderDistance);
+			ambientOcclusion = std::clamp<u8>(lua["ambientOcclusion"].get_or(ambientOcclusion), 0, 2);
 			isSmoothLightingEnabled = lua["isSmoothLightingEnabled"].get_or(isSmoothLightingEnabled);
-			isAmbientOcclusionEnabled = lua["isAmbientOcclusionEnabled"].get_or(isAmbientOcclusionEnabled);
 			isWireframeModeEnabled = lua["isWireframeModeEnabled"].get_or(isWireframeModeEnabled);
 			isFullscreenModeEnabled = lua["isFullscreenModeEnabled"].get_or(isFullscreenModeEnabled);
 			isVerticalSyncEnabled = lua["isVerticalSyncEnabled"].get_or(isVerticalSyncEnabled);
 			cameraFOV = lua["cameraFOV"].get_or(cameraFOV);
 			screenWidth = lua["screenWidth"].get_or(screenWidth);
 			screenHeight = lua["screenHeight"].get_or(screenHeight);
-			guiScale = lua["guiScale"].get_or(guiScale);
-			mipmapLevels = lua["mipmapLevels"].get_or(mipmapLevels);
+			guiScale = std::clamp<u8>(lua["guiScale"].get_or(guiScale), 1, 3);
+			mipmapLevels = std::clamp<u8>(lua["mipmapLevels"].get_or(mipmapLevels), 0, 4);
 
 			mouseSensitivity = lua["mouseSensitivity"].get_or(mouseSensitivity);
 
@@ -126,8 +126,8 @@ void Config::saveConfigToFile(const char *filename) {
 	file << "isCrosshairVisible = " << (isCrosshairVisible ? "true" : "false") << std::endl;
 	file << std::endl;
 	file << "renderDistance = " << renderDistance << std::endl;
+	file << "ambientOcclusion = " << (u16)ambientOcclusion << std::endl;
 	file << "isSmoothLightingEnabled = " << (isSmoothLightingEnabled ? "true" : "false") << std::endl;
-	file << "isAmbientOcclusionEnabled = " << (isAmbientOcclusionEnabled ? "true" : "false") << std::endl;
 	file << "isWireframeModeEnabled = " << (isWireframeModeEnabled ? "true" : "false") << std::endl;
 	file << "isFullscreenModeEnabled = " << (isFullscreenModeEnabled ? "true" : "false") << std::endl;
 	file << "isVerticalSyncEnabled = " << (isVerticalSyncEnabled ? "true" : "false") << std::endl;

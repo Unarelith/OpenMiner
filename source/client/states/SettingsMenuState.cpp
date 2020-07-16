@@ -215,13 +215,21 @@ void SettingsMenuState::addGraphicsButtons() {
 		Config::isSmoothLightingEnabled = !Config::isSmoothLightingEnabled;
 		button.setText(std::string("Smooth Lighting: ") + (Config::isSmoothLightingEnabled ? "ON" : "OFF"));
 
-		m_aoButton->setEnabled(!Config::isSmoothLightingEnabled);
-
 		World::isReloadRequested = true;
 	});
 
-	m_aoButton = &addToggleButton("Ambient Occlusion", Config::isAmbientOcclusionEnabled, true);
-	m_aoButton->setEnabled(!Config::isSmoothLightingEnabled);
+	const std::string aoValueNames[3] = {
+		"OFF",
+		"Normal",
+		"Smooth Lighting"
+	};
+
+	m_menuWidget.addButton(std::string("Ambient Occlusion: ") + aoValueNames[Config::ambientOcclusion], [&, aoValueNames] (TextButton &button) {
+		Config::ambientOcclusion = (Config::ambientOcclusion + 1) % (Config::isSmoothLightingEnabled ? 3 : 2);
+		button.setText(std::string("Ambient Occlusion: ") + aoValueNames[Config::ambientOcclusion]);
+
+		World::isReloadRequested = true;
+	});
 
 	m_menuWidget.addSlider("GUI Scale: " + std::to_string(Config::guiScale), [this] (SliderWidget &slider, u32 eventType) {
 		slider.setText("GUI Scale: " + std::to_string(slider.getCurrentValue()));
