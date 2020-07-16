@@ -32,8 +32,8 @@
 
 #include <gk/core/input/GamePad.hpp>
 #include <gk/core/ApplicationStateStack.hpp>
-#include <gk/core/GameClock.hpp>
 #include <gk/core/Exception.hpp>
+#include <gk/core/GameClock.hpp>
 #include <gk/core/Mouse.hpp>
 #include <gk/gl/OpenGL.hpp>
 #include <gk/resource/ResourceHandler.hpp>
@@ -42,6 +42,7 @@
 #include "Events.hpp"
 #include "GameKey.hpp"
 #include "GameState.hpp"
+#include "GameTime.hpp"
 #include "KeyboardHandler.hpp"
 #include "LuaGUIState.hpp"
 #include "PauseMenuState.hpp"
@@ -201,22 +202,17 @@ void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 }
 
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	// FIXME: Duplicated in Skybox
-	float time = std::fmod(gk::GameClock::getInstance().getTicks() * 1.f / 1000.f, 360.f) / 360.f;
+	gk::Shader::bind(&m_shader);
+
+	float time = GameTime::getCurrentTime();
 	if (m_world.sky()) {
-		const float pi = 3.1415927f;
-		float sunlight = std::clamp(0.5f + std::sin(2 * pi * time) * 2.0f, 0.0f, 1.0f);
+		const gk::Color &color = GameTime::getSkyColorFromTime(*m_world.sky(), time);
+		glClearColor(color.r, color.g, color.b, color.a);
 
-		gk::Color skyColor = m_world.sky()->color();
-		float red = std::clamp(sunlight - (1 - skyColor.r), 0.0f, skyColor.r);
-		float green = std::clamp(sunlight - (1 - skyColor.g), 0.0f, skyColor.g);
-		float blue = std::clamp(sunlight - (1 - skyColor.b), 0.0f, skyColor.b);
-
-		glClearColor(red, green, blue, 1.0f);
+		m_shader.setUniform("u_skyColor", color);
+		m_shader.setUniform("u_sunlightIntensity", GameTime::getSunlightIntensityFromTime(time));
 	}
 
-	gk::Shader::bind(&m_shader);
-	m_shader.setUniform("u_time", time);
 	gk::Shader::bind(nullptr);
 
 	m_fbo.begin();

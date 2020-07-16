@@ -13,7 +13,8 @@ uniform int u_renderDistance;
 
 uniform sampler2D u_tex;
 
-uniform float u_time;
+uniform vec4 u_skyColor;
+uniform float u_sunlightIntensity;
 
 // Get light color
 vec4 light(vec4 color, vec3 lightColor, vec4 lightPosition, float ambientIntensity, float diffuseIntensity);
@@ -56,9 +57,7 @@ void main() {
 
 	float minBrightness = 2.0 / 16.0;
 	if (lightCheck != -1.) {
-		const float pi = 3.1415927;
-
-		float sunlight = clamp(v_lightValue.x * 0.5 * (1 + sin(2 * pi * u_time) * 4.0), 3, 15);
+		float sunlight = clamp(v_lightValue.x * u_sunlightIntensity, 3, 15);
 
 		float ambientIntensity = max(max(v_lightValue.x, v_lightValue.y) / 16.0, minBrightness);
 		float diffuseIntensity = max(v_lightValue.x, v_lightValue.y) / 32.0;
