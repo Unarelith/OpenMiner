@@ -29,6 +29,7 @@
 
 #include "ChatCommandHandler.hpp"
 #include "ClientInfo.hpp"
+#include "GameTime.hpp"
 #include "ServerCommandHandler.hpp"
 #include "ServerConfig.hpp"
 #include "WorldController.hpp"
@@ -113,9 +114,13 @@ void ChatCommandHandler::optionCommand(const std::vector<std::string> &command, 
 	}
 }
 
-void ChatCommandHandler::stopCommand(const std::vector<std::string> &, ClientInfo &client) const {
-	m_server.sendChatMessage(0, "Stopping server...", &client);
-	m_server.stopServer();
+void ChatCommandHandler::stopCommand(const std::vector<std::string> &command, ClientInfo &client) const {
+	if (command.size() > 1)
+		m_server.sendChatMessage(0, "Usage: /stop", &client);
+	else {
+		m_server.sendChatMessage(0, "Stopping server...", &client);
+		m_server.stopServer();
+	}
 }
 
 void ChatCommandHandler::teleportationCommand(const std::vector<std::string> &command, ClientInfo &client) const {
@@ -138,5 +143,12 @@ void ChatCommandHandler::teleportationCommand(const std::vector<std::string> &co
 			m_server.sendChatMessage(0, "Invalid coordinates", &client);
 		}
 	}
+}
+
+void ChatCommandHandler::tpsCommand(const std::vector<std::string> &command, ClientInfo &client) const {
+	if (command.size() > 1)
+		m_server.sendChatMessage(0, "Usage: /tps", &client);
+	else
+		m_server.sendChatMessage(0, "TPS: " + std::to_string(GameTime::getTicksPerSecond()), &client);
 }
 

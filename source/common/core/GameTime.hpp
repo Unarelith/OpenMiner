@@ -35,11 +35,19 @@ class GameTime {
 	public:
 		static constexpr float daySpeed = 1.f;
 
-		static float getCurrentTime(float offset = 0.f, float speed = 1.f);
-
 		// Note: These functions are only needed in the client
+		static float getCurrentTime(float offset = 0.f, float speed = 1.f);
 		static float getSunlightIntensityFromTime(float time);
 		static gk::Color getSkyColorFromTime(const Sky &sky, float time);
+
+		// Note: These functions are only needed in the server
+		static void incrementTicks();
+		static u16 getTicksPerSecond();
+		static u64 getTicks() { return s_ticks; }
+
+	private:
+		static u64 s_ticks;
+		static u16 s_ticksPerSecond;
 };
 
 #endif // GAMETIME_HPP_

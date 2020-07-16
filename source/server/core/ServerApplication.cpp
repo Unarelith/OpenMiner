@@ -28,6 +28,7 @@
 
 #include "BlockGeometry.hpp"
 #include "Events.hpp"
+#include "GameTime.hpp"
 #include "ServerApplication.hpp"
 #include "ServerBlock.hpp"
 #include "ServerConfig.hpp"
@@ -193,7 +194,16 @@ int ServerApplication::run(bool isProtected) {
 }
 
 void ServerApplication::update() {
-	m_worldController.update();
+	static u64 lastTick = m_clock.getTicks() / 50;
+	bool doTick = false;
+	if (lastTick < m_clock.getTicks() / 50) {
+		lastTick = m_clock.getTicks() / 50;
+		doTick = true;
+
+		GameTime::incrementTicks();
+	}
+
+	m_worldController.update(doTick);
 
 	if (m_clock.getTicks() % 100 < 10) {
 		for (auto &it : m_players) {

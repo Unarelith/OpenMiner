@@ -31,6 +31,9 @@
 #include "GameTime.hpp"
 #include "Sky.hpp"
 
+u64 GameTime::s_ticks = 0;
+u16 GameTime::s_ticksPerSecond = 0;
+
 float GameTime::getCurrentTime(float offset, float speed) {
 	return std::fmod(gk::GameClock::getInstance().getTicks() * daySpeed * speed / 1000.f + offset, 360.f) / 360.f;
 }
@@ -50,5 +53,25 @@ gk::Color GameTime::getSkyColorFromTime(const Sky &sky, float time) {
 	skyColor.a = 1.f;
 
 	return skyColor;
+}
+
+void GameTime::incrementTicks() {
+	++s_ticks;
+
+	static u64 tpsTimer = gk::GameClock::getInstance().getTicks(true);
+	static u8 tpsCount = 0;
+
+	u64 currentClockTicks = gk::GameClock::getInstance().getTicks(true);
+	++tpsCount;
+
+	if (currentClockTicks - tpsTimer > 1000) {
+		s_ticksPerSecond = floor(tpsCount / ((currentClockTicks - tpsTimer) / 1000.0f) + 0.5f);
+		tpsTimer = currentClockTicks;
+		tpsCount = 0;
+	}
+}
+
+u16 GameTime::getTicksPerSecond() {
+	return s_ticksPerSecond;
 }
 
