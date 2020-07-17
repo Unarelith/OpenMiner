@@ -33,12 +33,14 @@ function register_tool(name, material, mining_speed, harvest_capability)
 		max_stack_size = 1,
 	}
 
-	if mining_speed then
-		tool_def.mining_speed = mining_speed
-	end
+	if name ~= "sword" then
+		if mining_speed then
+			tool_def.mining_speed = mining_speed
+		end
 
-	if harvest_capability then
-		tool_def.harvest_capability = harvest_capability
+		if harvest_capability then
+			tool_def.harvest_capability = harvest_capability
+		end
 	end
 
 	if name == "hoe" then
