@@ -55,6 +55,7 @@ bool Config::isSmoothLightingEnabled = true;
 bool Config::isWireframeModeEnabled = false;
 bool Config::isFullscreenModeEnabled = false;
 bool Config::isVerticalSyncEnabled = true;
+bool Config::isStarRenderingEnabled = true;
 float Config::cameraFOV = 70.0f;
 u16 Config::screenWidth = 1600;
 u16 Config::screenHeight = 1050;
@@ -95,6 +96,7 @@ void Config::loadConfigFromFile(const char *filename) {
 			isWireframeModeEnabled = lua["isWireframeModeEnabled"].get_or(isWireframeModeEnabled);
 			isFullscreenModeEnabled = lua["isFullscreenModeEnabled"].get_or(isFullscreenModeEnabled);
 			isVerticalSyncEnabled = lua["isVerticalSyncEnabled"].get_or(isVerticalSyncEnabled);
+			isStarRenderingEnabled = lua["isStarRenderingEnabled"].get_or(isStarRenderingEnabled);
 			cameraFOV = lua["cameraFOV"].get_or(cameraFOV);
 			screenWidth = lua["screenWidth"].get_or(screenWidth);
 			screenHeight = lua["screenHeight"].get_or(screenHeight);
@@ -131,6 +133,7 @@ void Config::saveConfigToFile(const char *filename) {
 	file << "isWireframeModeEnabled = " << (isWireframeModeEnabled ? "true" : "false") << std::endl;
 	file << "isFullscreenModeEnabled = " << (isFullscreenModeEnabled ? "true" : "false") << std::endl;
 	file << "isVerticalSyncEnabled = " << (isVerticalSyncEnabled ? "true" : "false") << std::endl;
+	file << "isStarRenderingEnabled = " << (isStarRenderingEnabled ? "true" : "false") << std::endl;
 	file << "cameraFOV = " << cameraFOV << std::endl;
 	file << "screenWidth = " << screenWidth << std::endl;
 	file << "screenHeight = " << screenHeight << std::endl;
