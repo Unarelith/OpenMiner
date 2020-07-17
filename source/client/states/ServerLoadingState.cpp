@@ -32,7 +32,6 @@
 
 #include "Config.hpp"
 #include "ConnectionErrorState.hpp"
-#include "GameConfig.hpp"
 #include "GameState.hpp"
 #include "Events.hpp"
 #include "ServerLoadingState.hpp"
@@ -96,7 +95,7 @@ void ServerLoadingState::update() {
 		}
 		else if (!m_game.textureAtlas().isReady()) {
 			try {
-				m_game.textureAtlas().loadFromRegistry(GameConfig::texturePack);
+				m_game.textureAtlas().loadFromRegistry(Config::texturePack);
 			}
 			catch (gk::Exception &e) {
 				m_game.client().disconnect();

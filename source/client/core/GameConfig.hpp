@@ -35,7 +35,6 @@
 namespace GameConfig {
 	// Pre-game configuration
 	extern std::string worldName;
-	extern std::string texturePack;
 
 	// Screen effects
 	extern u16 currentScreenEffect;

@@ -71,6 +71,8 @@ class ItemWidget : public Widget {
 		bool m_isImage = false;
 
 		bool m_hasChanged = false;
+
+		std::string m_oldTexturePack{""};
 };
 
 #endif // ITEMWIDGET_HPP_

@@ -28,7 +28,6 @@
 
 // Pre-game configuration
 std::string GameConfig::worldName = "";
-std::string GameConfig::texturePack = "";
 
 // Screen effects
 u16 GameConfig::currentScreenEffect = 0;

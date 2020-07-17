@@ -26,6 +26,7 @@
  */
 #include <gk/resource/ResourceHandler.hpp>
 
+#include "Config.hpp"
 #include "ItemWidget.hpp"
 #include "Registry.hpp"
 #include "TextureAtlas.hpp"
@@ -57,12 +58,9 @@ void ItemWidget::update() {
 	m_text.setPosition(16 - 4 - 6 * floor(log10(stack().amount())), 16 - 6, 0);
 }
 
-#include "GameConfig.hpp"
-
 void ItemWidget::updateImage(const BlockState *blockState) {
-	static std::string oldTexturePack{""};
-	if (m_image.width() == 0 || oldTexturePack != GameConfig::texturePack) {
-		oldTexturePack = GameConfig::texturePack;
+	if (m_image.width() == 0 || m_oldTexturePack != Config::texturePack) {
+		m_oldTexturePack = Config::texturePack;
 
 		m_image.load(m_textureAtlas.texture());
 		m_image.setPosition(1, 1, 0);

@@ -30,7 +30,6 @@
 #include <filesystem.hpp>
 
 #include "Config.hpp"
-#include "GameConfig.hpp"
 #include "TextureAtlas.hpp"
 #include "TexturePackSelectionState.hpp"
 #include "World.hpp"
@@ -55,12 +54,12 @@ TexturePackSelectionState::TexturePackSelectionState(gk::ApplicationState *paren
 		const ScrollableListElement *element = m_texturePackList.selectedElement();
 		if (element) {
 			std::string texturePack = (element->id()) ? element->line1() : "";
-			if (GameConfig::texturePack != texturePack) {
-				GameConfig::texturePack = texturePack;
+			if (Config::texturePack != texturePack) {
+				Config::texturePack = texturePack;
 
 				auto &atlas = gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks");
 				atlas.clear();
-				atlas.loadFromRegistry(GameConfig::texturePack);
+				atlas.loadFromRegistry(Config::texturePack);
 
 				World::isReloadRequested = true;
 			}
@@ -122,7 +121,7 @@ void TexturePackSelectionState::updateWidgetPosition() {
 }
 
 void TexturePackSelectionState::loadTexturePackList() {
-	m_texturePackList.addElement("No Texture Pack", "Use default mod textures", "", GameConfig::texturePack.empty());
+	m_texturePackList.addElement("No Texture Pack", "Use default mod textures", "", Config::texturePack.empty());
 
 	if (fs::is_directory("texturepacks")) {
 		std::vector<fs::directory_entry> dirs;
@@ -151,7 +150,7 @@ void TexturePackSelectionState::loadTexturePackList() {
 				textures += "GUI";
 			}
 
-			bool isSelected = GameConfig::texturePack == dirname;
+			bool isSelected = Config::texturePack == dirname;
 			m_texturePackList.addElement(dirname, textures, "", isSelected);
 		}
 	}

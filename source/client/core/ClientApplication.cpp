@@ -35,7 +35,6 @@
 #include "Config.hpp"
 #include "EngineConfig.hpp"
 #include "Font.hpp"
-#include "GameConfig.hpp"
 #include "TextureAtlas.hpp"
 #include "TextureLoader.hpp"
 #include "Vertex.hpp"
@@ -101,7 +100,7 @@ void ClientApplication::init() {
 		Config::defaultUsername = m_argumentParser.getArgument("username").parameter;
 
 	if (m_argumentParser.getArgument("texture-pack").isFound)
-		GameConfig::texturePack = m_argumentParser.getArgument("texture-pack").parameter;
+		Config::texturePack = m_argumentParser.getArgument("texture-pack").parameter;
 
 	m_keyboardHandler.loadKeysFromFile("config/keys.lua");
 	gk::GamePad::init(m_keyboardHandler);

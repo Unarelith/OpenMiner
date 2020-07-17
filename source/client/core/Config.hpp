@@ -63,6 +63,7 @@ namespace Config {
 	// Other
 	extern std::string defaultUsername;
 	extern std::string defaultServerAddress;
+	extern std::string texturePack;
 
 	void loadConfigFromFile(const char *filename);
 	void saveConfigToFile(const char *filename);

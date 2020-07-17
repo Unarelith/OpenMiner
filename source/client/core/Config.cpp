@@ -68,6 +68,7 @@ u8 Config::mouseSensitivity = 8;
 // Other
 std::string Config::defaultUsername = "";
 std::string Config::defaultServerAddress = "localhost:4242";
+std::string Config::texturePack = "";
 
 void Config::loadConfigFromFile(const char *filename) {
 	if (!fs::exists("config") && !fs::create_directory("config")) {
@@ -107,6 +108,7 @@ void Config::loadConfigFromFile(const char *filename) {
 
 			defaultUsername = lua["defaultUsername"].get_or(defaultUsername);
 			defaultServerAddress = lua["defaultServerAddress"].get_or(defaultServerAddress);
+			texturePack = lua["texturePack"].get_or(texturePack);
 
 			gkInfo() << "Config file loaded successfully";
 		}
@@ -144,5 +146,6 @@ void Config::saveConfigToFile(const char *filename) {
 	file << std::endl;
 	file << "defaultUsername = \"" << defaultUsername << "\"" << std::endl;
 	file << "defaultServerAddress = \"" << defaultServerAddress << "\"" << std::endl;
+	file << "texturePack = \"" << texturePack  << "\"" << std::endl;
 }
 
