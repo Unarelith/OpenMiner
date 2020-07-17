@@ -42,11 +42,15 @@ class GameTime {
 		static float getSunlightIntensityFromTime(float time);
 		static gk::Color getSkyColorFromTime(const Sky &sky, float time);
 
-		static void incrementTicks();
-		static void setTicks(u64 ticks) { s_ticks = ticks; }
+		static void incrementTicks() { ++s_ticks; updateTpsCounter(); }
+		static void setTicks(u64 ticks) { s_ticks = ticks; updateTpsCounter(); }
 
 		static u16 getTicksPerSecond() { return s_ticksPerSecond; }
 		static u64 getTicks() { return s_ticks; }
+
+		static u32 getCurrentDay() {
+			return (s_ticks + dayStartOffset + 3000.f) / 1000.f / 24 + 1;
+		}
 
 		static u8 getCurrentHour() {
 			return u64((s_ticks + dayStartOffset + 3000.f) / 1000.f) % 24;

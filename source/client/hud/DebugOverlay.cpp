@@ -92,8 +92,10 @@ void DebugOverlay::update() {
 	stream << '\n';
 	stream << "Game time: ";
 
+	u32 day = GameTime::getCurrentDay();
 	u16 hour = GameTime::getCurrentHour();
 	u16 minute = GameTime::getCurrentMinute();
+	stream << "Day " << day << " ";
 	stream << (hour < 10 ? "0" : "") << hour << ":";
 	stream << (minute < 10 ? "0" : "") << minute;
 
