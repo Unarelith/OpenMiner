@@ -56,14 +56,17 @@ Skybox::Skybox(gk::Camera &camera, ClientWorld &world) : m_camera(camera), m_wor
 }
 
 void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	if (m_world.sky()) {
-		gk::Shader::bind(&m_shader);
-		m_shader.setUniform("u_skyColor", GameTime::getSkyColorFromTime(*m_world.sky(), GameTime::getCurrentTime()));
-		m_shader.setUniform("u_starColor", m_world.sky()->color());
-		gk::Shader::bind(nullptr);
-	}
+	if (!m_world.sky()) return;
 
-	m_moon.setCurrentPhase((GameTime::getTicks() / 24000) % 8);
+	gk::Color skyColor = GameTime::getSkyColorFromTime(*m_world.sky(), GameTime::getCurrentTime());
+	gk::Color starColor = m_world.sky()->color();
+
+	gk::Shader::bind(&m_shader);
+	m_shader.setUniform("u_skyColor", skyColor);
+	m_shader.setUniform("u_starColor", starColor);
+	gk::Shader::bind(nullptr);
+
+	m_moon.setCurrentPhase((GameTime::getTicks() / GameTime::dayLength) % 8);
 
 	states.shader = &m_shader;
 
@@ -74,9 +77,11 @@ void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	target.draw(m_sun, states);
 	target.draw(m_moon, states);
 
-	glDisable(GL_CULL_FACE);
+	if (Config::isStarRenderingEnabled && skyColor != starColor) {
+		glDisable(GL_CULL_FACE);
 
-	for (auto &it : m_stars)
-		target.draw(it, states);
+		for (auto &it : m_stars)
+			target.draw(it, states);
+	}
 }
 

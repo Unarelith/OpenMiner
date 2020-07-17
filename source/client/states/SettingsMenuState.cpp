@@ -267,6 +267,8 @@ void SettingsMenuState::addGraphicsButtons() {
 		slider.setText("Mipmap Levels: " + std::to_string(Config::mipmapLevels));
 	}, 0, 4, Config::mipmapLevels);
 
+	addToggleButton("Star Rendering", Config::isStarRenderingEnabled, false);
+
 	updateWidgetPosition();
 }
 
