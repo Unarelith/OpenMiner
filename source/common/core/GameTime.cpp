@@ -35,7 +35,7 @@ u64 GameTime::s_ticks = 0;
 u16 GameTime::s_ticksPerSecond = 0;
 
 float GameTime::getCurrentTime(float offset, float speed) {
-	return std::fmod(s_ticks * daySpeed * speed + offset, dayLength) / dayLength;
+	return std::fmod((s_ticks + dayStartOffset) * daySpeed * speed + offset, dayLength) / dayLength;
 }
 
 float GameTime::getSunlightIntensityFromTime(float time) {
@@ -58,6 +58,10 @@ gk::Color GameTime::getSkyColorFromTime(const Sky &sky, float time) {
 void GameTime::incrementTicks() {
 	++s_ticks;
 
+	updateTpsCounter();
+}
+
+void GameTime::updateTpsCounter() {
 	static u64 tpsTimer = gk::GameClock::getInstance().getTicks(true);
 	static u8 tpsCount = 0;
 
@@ -69,9 +73,5 @@ void GameTime::incrementTicks() {
 		tpsTimer = currentClockTicks;
 		tpsCount = 0;
 	}
-}
-
-u16 GameTime::getTicksPerSecond() {
-	return s_ticksPerSecond;
 }
 

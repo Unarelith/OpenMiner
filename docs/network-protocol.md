@@ -51,7 +51,9 @@ _This packet has no field._
 
 Packet sent at the beginning of every server tick.
 
-_This packet has no field._
+| Field name    | Field type  | Notes                                                |
+| ------------- | ----------- | ---------------------------------------------------- |
+| Current time  | u64         | Current time in the server                           |
 
 #### ServerClosed
 

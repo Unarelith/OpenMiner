@@ -27,6 +27,7 @@
 #include "AnimationComponent.hpp"
 #include "BlockData.hpp"
 #include "DrawableDef.hpp"
+#include "GameTime.hpp"
 #include "NetworkComponent.hpp"
 #include "PlayerList.hpp"
 #include "Registry.hpp"
@@ -39,7 +40,7 @@
 
 void ServerCommandHandler::sendServerTick(const ClientInfo *client) const {
 	Network::Packet packet;
-	packet << Network::Command::ServerTick;
+	packet << Network::Command::ServerTick << (sf::Uint64)GameTime::getTicks();
 
 	if (!client)
 		m_server.sendToAllClients(packet);

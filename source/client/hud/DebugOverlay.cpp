@@ -86,7 +86,16 @@ void DebugOverlay::update() {
 	stream << '\n';
 	stream << "Chunk updates: " << ClientChunk::chunkUpdatesPerSec;
 	stream << '\n';
+	stream << "Ticks: " << GameTime::getTicks();
+	stream << '\n';
 	stream << "TPS: " << GameTime::getTicksPerSecond();
+	stream << '\n';
+	stream << "Game time: ";
+
+	u16 hour = GameTime::getCurrentHour();
+	u16 minute = GameTime::getCurrentMinute();
+	stream << (hour < 10 ? "0" : "") << hour << ":";
+	stream << (minute < 10 ? "0" : "") << minute;
 
 	m_positionText.setString(stream.str());
 }
