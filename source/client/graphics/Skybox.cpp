@@ -41,6 +41,7 @@ void Skybox::loadSky(const Sky &sky) {
 	m_sun = CelestialObject{};
 	m_sun.setSize(sun.size, sun.size);
 	m_sun.setPosition(500, -m_sun.width() / 2, -m_sun.height() / 2);
+	m_sun.setRotationSpeed(sky.daylightCycleSpeed());
 
 	try {
 		m_sun.setTexture(sun.texture);
@@ -56,6 +57,7 @@ void Skybox::loadSky(const Sky &sky) {
 	m_moon.setPosition(-500, -m_moon.width() / 2, -m_moon.height() / 2);
 	m_moon.setPhaseCount(moon.phaseCount, moon.phaseSize);
 	m_moon.setCurrentPhase(0);
+	m_moon.setRotationSpeed(sky.daylightCycleSpeed());
 
 	try {
 		m_moon.setTexture(moon.texture);
@@ -75,13 +77,15 @@ void Skybox::loadSky(const Sky &sky) {
 		star.setPosition(650 * ((rand() % 2) * 2 - 1), (rand() % 500) * 2 - 500, (rand() % 500) * 2 - 500);
 		star.setRotationOffset(rand() % GameTime::dayLength);
 		star.setRotationAxis({rand() % 100 / 100.f, rand() % 100 / 100.f, rand() % 100 / 100.f});
+		star.setRotationSpeed(sky.daylightCycleSpeed());
 	}
 }
 
 void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (!m_world.sky()) return;
 
-	gk::Color skyColor = GameTime::getSkyColorFromTime(*m_world.sky(), GameTime::getCurrentTime());
+	float time = GameTime::getCurrentTime(0, m_world.sky()->daylightCycleSpeed());
+	gk::Color skyColor = GameTime::getSkyColorFromTime(*m_world.sky(), time);
 	gk::Color starColor = m_world.sky()->color();
 
 	gk::Shader::bind(&m_shader);

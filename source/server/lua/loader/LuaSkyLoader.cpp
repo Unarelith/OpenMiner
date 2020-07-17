@@ -51,6 +51,11 @@ void LuaSkyLoader::loadSky(const sol::table &table) const {
 		sky.setFogColor(gk::Color{r, g, b, a});
 	}
 
+	if (sol::object obj = table["daylight_cycle"] ; obj.valid()) {
+		sol::table daylightCycleTable = obj.as<sol::table>();
+		sky.setDaylightCycleSpeed(daylightCycleTable["speed"].get_or(0.f));
+	}
+
 	loadObjects(sky, table);
 }
 
