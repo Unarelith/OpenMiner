@@ -73,7 +73,7 @@ void main() {
 		if (blockFace == 2. || blockFace == 3.)
 			ambientIntensity = max(ambientIntensity * 0.9, minBrightness);
 
-		float lightval = clamp(sunlight / 16.0, v_lightValue.y / 16.0, 1.0);
+		float lightval = clamp(sunlight / 15.0, v_lightValue.y / 15.0, 1.0);
 
 		color = light(color, vec3(lightval, lightval, lightval), v_coord3d, ambientIntensity, diffuseIntensity);
 	}

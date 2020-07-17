@@ -106,7 +106,7 @@ See also the roadmap for 1.0.0 [here](https://github.com/Unarelith/OpenMiner/wik
 - Fluid propagation ([#62](https://github.com/Unarelith/OpenMiner/issues/62))
 - Seed-based worldgen ([#116](https://github.com/Unarelith/OpenMiner/issues/116))
 - Cave tunnels ([#118](https://github.com/Unarelith/OpenMiner/issues/118))
-- Clouds ([#52](https://github.com/Unarelith/OpenMiner/pull/52))
+- Clouds ([#156](https://github.com/Unarelith/OpenMiner/issues/156))
 - Particle system ([#155](https://github.com/Unarelith/OpenMiner/issues/155))
 
 ## Screenshots
