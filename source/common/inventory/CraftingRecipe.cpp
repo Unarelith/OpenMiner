@@ -29,6 +29,7 @@
 #include <gk/core/Exception.hpp>
 
 #include "CraftingRecipe.hpp"
+#include "EngineConfig.hpp"
 #include "Network.hpp"
 
 CraftingRecipe::CraftingRecipe(const std::vector<std::string> &pattern, const std::map<char, std::vector<std::string>> &keys, const ItemStack &result) : Recipe("craft", result) {
@@ -102,7 +103,7 @@ bool CraftingRecipe::checkMatch(const Inventory &inventory, int offsetX, int off
 
 			const Item &item = inventory.getStack(offsetX + x, offsetY + y).item();
 			if (m_pattern[y][x] == ' ') {
-				itemFound = (item.stringID().empty() || item.stringID() == "_:air");
+				itemFound = (item.stringID().empty() || item.stringID() == BLOCK_AIR);
 			}
 			else {
 				auto it = m_keys.find(m_pattern[y][x]);

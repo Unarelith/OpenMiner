@@ -24,6 +24,7 @@
  *
  * =====================================================================================
  */
+#include "EngineConfig.hpp"
 #include "Inventory.hpp"
 #include "Network.hpp"
 
@@ -33,6 +34,9 @@ void Inventory::setStack(u16 x, u16 y, const std::string &stringID, u16 amount) 
 }
 
 ItemStack Inventory::addStack(const std::string &stringID, u16 amount, u16 offset, u16 size, bool mergeOnly) {
+	if (stringID.empty() || stringID == BLOCK_AIR || amount == 0)
+		return {BLOCK_AIR, 0};
+
 	ItemStack ret{stringID, amount};
 	for (std::size_t i = offset ; ret.amount() && i < (size ? offset + size : m_items.size()) ; ++i) {
 		const Item &item = m_items[i].item();
@@ -74,7 +78,7 @@ ItemStack Inventory::addStack2(const std::string &stringID, u16 amount) {
 }
 
 void Inventory::clearStack(u16 x, u16 y) {
-	setStack(x, y, "_:air", 0);
+	setStack(x, y, BLOCK_AIR, 0);
 }
 
 void Inventory::serialize(sf::Packet &packet) const {

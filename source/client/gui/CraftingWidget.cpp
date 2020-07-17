@@ -25,6 +25,7 @@
  * =====================================================================================
  */
 #include "CraftingWidget.hpp"
+#include "EngineConfig.hpp"
 #include "Registry.hpp"
 
 CraftingWidget::CraftingWidget(ClientCommandHandler &client, Inventory &craftingInventory, Widget *parent)
@@ -77,7 +78,7 @@ void CraftingWidget::update() {
 		if (m_recipe)
 			m_craftingResultInventory.setStack(0, 0, m_recipe->result().item().stringID(), m_recipe->result().amount());
 		else
-			m_craftingResultInventory.setStack(0, 0, "", 0);
+			m_craftingResultInventory.setStack(0, 0, BLOCK_AIR, 0);
 
 		m_craftingResultInventoryWidget.init(m_craftingResultInventory);
 	}

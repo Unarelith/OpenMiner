@@ -32,12 +32,13 @@
 #include <gk/core/ISerializable.hpp>
 #include <gk/core/Vector3.hpp>
 
+#include "EngineConfig.hpp"
 #include "NetworkUtils.hpp"
 
 struct InventoryCubeDef : public gk::ISerializable {
 	float size = 1.f;
 	gk::Vector3f origin{0, 0, 0};
-	std::string blockID{"_:air"};
+	std::string blockID{BLOCK_AIR};
 
 	void serialize(sf::Packet &packet) const override { packet << size << origin << blockID; }
 	void deserialize(sf::Packet &packet) override { packet >> size >> origin >> blockID; }

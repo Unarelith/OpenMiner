@@ -27,6 +27,7 @@
 #ifndef ITEMSTACK_HPP_
 #define ITEMSTACK_HPP_
 
+#include "EngineConfig.hpp"
 #include "Item.hpp"
 
 namespace sf { class Packet; }
@@ -46,7 +47,7 @@ class ItemStack {
 		static void initUsertype(sol::state &lua);
 
 	private:
-		std::string m_stringID;
+		std::string m_stringID{BLOCK_AIR};
 
 		u16 m_amount = 0;
 };

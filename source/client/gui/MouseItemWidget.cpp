@@ -150,14 +150,14 @@ void MouseItemWidget::draggingBehaviour(ItemWidget *newItemWidget) {
 
 			u16 remainingAmount = (m_draggedStack.amount() == 1) ? 0 : m_draggedStack.amount() % m_draggedSlots.size();
 
-			setStack(remainingAmount ? m_draggedStack.item().stringID() : "_:air", remainingAmount);
+			setStack(remainingAmount ? m_draggedStack.item().stringID() : BLOCK_AIR, remainingAmount);
 		}
 		else if (m_draggedStack.amount() > 0 && (newItemWidget->stack().amount() == 0 || newItemWidget->stack().item().stringID() == m_draggedStack.item().stringID())) {
 			if (m_dragOrigin) {
 				m_dragOrigin->setStack(m_draggedStack.item().stringID(), m_dragOrigin->stack().amount() + 1);
 
 				m_draggedStack.setAmount(m_draggedStack.amount() - 1);
-				setStack(m_draggedStack.amount() ? m_draggedStack.item().stringID() : "_:air", m_draggedStack.amount());
+				setStack(m_draggedStack.amount() ? m_draggedStack.item().stringID() : BLOCK_AIR, m_draggedStack.amount());
 
 				m_dragOrigin = nullptr;
 			}
@@ -165,7 +165,7 @@ void MouseItemWidget::draggingBehaviour(ItemWidget *newItemWidget) {
 			newItemWidget->setStack(m_draggedStack.item().stringID(), newItemWidget->stack().amount() + 1);
 
 			m_draggedStack.setAmount(m_draggedStack.amount() - 1);
-			setStack(m_draggedStack.amount() ? m_draggedStack.item().stringID() : "_:air", m_draggedStack.amount());
+			setStack(m_draggedStack.amount() ? m_draggedStack.item().stringID() : BLOCK_AIR, m_draggedStack.amount());
 		}
 	}
 }
