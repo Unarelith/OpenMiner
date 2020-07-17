@@ -35,11 +35,11 @@ Skybox::Skybox(gk::Camera &camera, ClientWorld &world) : m_camera(camera), m_wor
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/skybox.f.glsl");
 	m_shader.linkProgram();
 
-	m_sun.setSize(200, 200);
+	m_sun.setSize(256, 256);
 	m_sun.setPosition(500, -m_sun.width() / 2, -m_sun.height() / 2);
 	m_sun.setTexture("texture-sun");
 
-	m_moon.setSize(200, 200);
+	m_moon.setSize(256, 256);
 	m_moon.setPosition(-500, -m_moon.width() / 2, -m_moon.height() / 2);
 	m_moon.setTexture("texture-moon_phases");
 	m_moon.setPhaseCount(8, 32);
@@ -48,8 +48,8 @@ Skybox::Skybox(gk::Camera &camera, ClientWorld &world) : m_camera(camera), m_wor
 	for (int i = 0 ; i < 1000 ; ++i) {
 		auto &star = m_stars.emplace_back();
 		star.setColor(gk::Color{0, 0, 0, 0});
-		star.setSize(5, 5);
-		star.setPosition(600 * ((rand() % 2) * 2 - 1), (rand() % 500) * 2 - 500, (rand() % 500) * 2 - 500);
+		star.setSize(4, 4);
+		star.setPosition(650 * ((rand() % 2) * 2 - 1), (rand() % 500) * 2 - 500, (rand() % 500) * 2 - 500);
 		star.setRotationOffset(rand() % GameTime::dayLength);
 		star.setRotationAxis({rand() % 100 / 100.f, rand() % 100 / 100.f, rand() % 100 / 100.f});
 	}

@@ -131,10 +131,10 @@ void ChatCommandHandler::timeCommand(const std::vector<std::string> &command, Cl
 		static const std::unordered_map<std::string, u64> values = {
 			{"day",       1000},
 			{"noon",      6000},
-			{"sunset",   12000},
+			{"sunset",   11000},
 			{"night",    13000},
 			{"midnight", 18000},
-			{"sunrise",  23000},
+			{"sunrise",   1000},
 		};
 
 		if (auto it = values.find(command.at(2)) ; it != values.end()) {
@@ -150,7 +150,7 @@ void ChatCommandHandler::timeCommand(const std::vector<std::string> &command, Cl
 
 				m_server.sendChatMessage(0, "Time set to " + std::to_string(ticks), &client);
 			}
-			catch (std::out_of_range &e) {
+			catch (...) {
 				m_server.sendChatMessage(0, "Invalid time", &client);
 			}
 		}
@@ -163,7 +163,7 @@ void ChatCommandHandler::timeCommand(const std::vector<std::string> &command, Cl
 
 			m_server.sendChatMessage(0, "Added " + std::to_string(ticks) + " to the time", &client);
 		}
-		catch (std::out_of_range &e) {
+		catch (...) {
 			m_server.sendChatMessage(0, "Invalid time", &client);
 		}
 	}
@@ -185,7 +185,7 @@ void ChatCommandHandler::tpCommand(const std::vector<std::string> &command, Clie
 
 			m_server.sendChatMessage(0, "Teleported to " + std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(z), &client);
 		}
-		catch (std::out_of_range &e) {
+		catch (...) {
 			m_server.sendChatMessage(0, "Invalid coordinates", &client);
 		}
 	}
