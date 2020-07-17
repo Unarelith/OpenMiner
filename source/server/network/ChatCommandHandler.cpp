@@ -123,7 +123,53 @@ void ChatCommandHandler::stopCommand(const std::vector<std::string> &command, Cl
 	}
 }
 
-void ChatCommandHandler::teleportationCommand(const std::vector<std::string> &command, ClientInfo &client) const {
+void ChatCommandHandler::timeCommand(const std::vector<std::string> &command, ClientInfo &client) const {
+	if (command.size() != 3 || (command.at(1) != "set" && command.at(1) != "add")) {
+		m_server.sendChatMessage(0, "Usage: /time <set|add> <value>", &client);
+	}
+	else if (command.at(1) == "set") {
+		static const std::unordered_map<std::string, u64> values = {
+			{"day",       1000},
+			{"noon",      6000},
+			{"sunset",   12000},
+			{"night",    13000},
+			{"midnight", 18000},
+			{"sunrise",  23000},
+		};
+
+		if (auto it = values.find(command.at(2)) ; it != values.end()) {
+			GameTime::setTicks(it->second);
+
+			m_server.sendChatMessage(0, "Time set to " + std::to_string(it->second), &client);
+		}
+		else {
+			try {
+				u64 ticks = std::stoull(command.at(2));
+
+				GameTime::setTicks(ticks);
+
+				m_server.sendChatMessage(0, "Time set to " + std::to_string(ticks), &client);
+			}
+			catch (std::out_of_range &e) {
+				m_server.sendChatMessage(0, "Invalid time", &client);
+			}
+		}
+	}
+	else if (command.at(1) == "add") {
+		try {
+			u64 ticks = std::stoull(command.at(2));
+
+			GameTime::setTicks(GameTime::getTicks() + ticks);
+
+			m_server.sendChatMessage(0, "Added " + std::to_string(ticks) + " to the time", &client);
+		}
+		catch (std::out_of_range &e) {
+			m_server.sendChatMessage(0, "Invalid time", &client);
+		}
+	}
+}
+
+void ChatCommandHandler::tpCommand(const std::vector<std::string> &command, ClientInfo &client) const {
 	if (command.size() != 4) {
 		m_server.sendChatMessage(0, "Usage: /tp x y z", &client);
 	}

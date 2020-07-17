@@ -55,23 +55,18 @@ gk::Color GameTime::getSkyColorFromTime(const Sky &sky, float time) {
 	return skyColor;
 }
 
-void GameTime::incrementTicks() {
-	++s_ticks;
-
-	updateTpsCounter();
-}
-
 void GameTime::updateTpsCounter() {
 	static u64 tpsTimer = gk::GameClock::getInstance().getTicks(true);
-	static u8 tpsCount = 0;
+	static u64 tpsStart = s_ticks;
+
+	if (tpsStart > s_ticks)
+		tpsStart = s_ticks;
 
 	u64 currentClockTicks = gk::GameClock::getInstance().getTicks(true);
-	++tpsCount;
-
 	if (currentClockTicks - tpsTimer > 1000) {
-		s_ticksPerSecond = floor(tpsCount / ((currentClockTicks - tpsTimer) / 1000.0f) + 0.5f);
+		s_ticksPerSecond = floor((s_ticks - tpsStart) / ((currentClockTicks - tpsTimer) / 1000.0f) + 0.5f);
 		tpsTimer = currentClockTicks;
-		tpsCount = 0;
+		tpsStart = s_ticks;
 	}
 }
 

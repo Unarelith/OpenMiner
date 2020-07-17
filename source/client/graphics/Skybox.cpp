@@ -63,6 +63,8 @@ void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 		gk::Shader::bind(nullptr);
 	}
 
+	m_moon.setCurrentPhase((GameTime::getTicks() / 24000) % 8);
+
 	states.shader = &m_shader;
 
 	// Subtract the camera position - see comment in ClientWorld::draw()
