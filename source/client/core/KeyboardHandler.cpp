@@ -117,6 +117,11 @@ void KeyboardHandler::addKey(gk::GameKey id, const std::string &name, SDL_Keycod
 		it.first->second.setKeycode(defaultKey);
 
 		m_keysID.emplace(it.first->second.stringID(), id);
+
+		if (key) {
+			key->setKeycode(it.first->second.keycode());
+			it.first->second.setParent(key);
+		}
 	}
 	else {
 		Key &keyitem = m_keys.at(keyit->second);
