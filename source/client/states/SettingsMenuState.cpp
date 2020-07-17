@@ -220,8 +220,8 @@ void SettingsMenuState::addGraphicsButtons() {
 
 	const std::string aoValueNames[3] = {
 		"OFF",
-		"Normal",
-		"Smooth Lighting"
+		"Fast",
+		"Fancy"
 	};
 
 	m_menuWidget.addButton(std::string("Ambient Occlusion: ") + aoValueNames[Config::ambientOcclusion], [&, aoValueNames] (TextButton &button) {
