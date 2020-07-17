@@ -25,11 +25,12 @@
  * =====================================================================================
  */
 #include "ClientCommandHandler.hpp"
+#include "ClientPlayer.hpp"
 #include "Config.hpp"
 #include "Hotbar.hpp"
 
-Hotbar::Hotbar(Inventory &inventory, ClientCommandHandler &client, Widget *parent)
-	: Widget(182, 22, parent), m_inventory(inventory), m_client(client)
+Hotbar::Hotbar(ClientPlayer &player, ClientCommandHandler &client, Widget *parent)
+	: Widget(182, 22, parent), m_player(player), m_client(client)
 {
 	m_background.load("texture-widgets");
 	m_background.setClipRect(0, 0, 182, 22);
@@ -41,13 +42,17 @@ Hotbar::Hotbar(Inventory &inventory, ClientCommandHandler &client, Widget *paren
 }
 
 void Hotbar::onEvent(const SDL_Event &event) {
+	if (m_cursorPos == -1) return;
+
 	if (event.type == SDL_MOUSEWHEEL) {
 		if (event.wheel.y < 0) {
 			m_cursorPos = (m_cursorPos + 1) % 9;
+			m_player.setHeldItemSlot(m_cursorPos);
 			m_client.sendPlayerHeldItemChanged(m_cursorPos, currentItem().id());
 		}
 		else if (event.wheel.y > 0) {
 			m_cursorPos = (m_cursorPos == 0) ? 8 : m_cursorPos - 1;
+			m_player.setHeldItemSlot(m_cursorPos);
 			m_client.sendPlayerHeldItemChanged(m_cursorPos, currentItem().id());
 		}
 
@@ -56,16 +61,31 @@ void Hotbar::onEvent(const SDL_Event &event) {
 }
 
 void Hotbar::update() {
+	if (m_cursorPos == -1) {
+		if (m_player.heldItemSlot() == -1)
+			return;
+
+		m_cursorPos = m_player.heldItemSlot();
+		m_cursor.setPosition(-1 + 20 * m_cursorPos, -1, 0);
+	}
+
 	for (u16 i = 0 ; i < 9 ; ++i) {
 		if (m_items.size() <= i) {
-			m_items.emplace_back(m_inventory, i, 0);
+			m_items.emplace_back(m_player.inventory(), i, 0);
 
 			ItemWidget &widget = m_items.back();
 			widget.setPosition(5 + 20 * i - 3, 2, 0);
 		}
 
-		m_items[i].setStack(m_inventory.getStack(i, 0).item().stringID(), m_inventory.getStack(i, 0).amount());
+		m_items[i].setStack(
+			m_player.inventory().getStack(i, 0).item().stringID(),
+			m_player.inventory().getStack(i, 0).amount()
+		);
 	}
+}
+
+const Item &Hotbar::currentItem() const {
+	return m_player.inventory().getStack(m_cursorPos, 0).item();
 }
 
 void Hotbar::draw(gk::RenderTarget &target, gk::RenderStates states) const {

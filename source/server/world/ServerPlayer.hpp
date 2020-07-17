@@ -42,9 +42,6 @@ class ServerPlayer : public Player {
 		const ClientInfo *client() const { return m_client; }
 		void setClient(ClientInfo *client) { m_client = client; }
 
-		const ItemStack &heldItemStack() { return m_inventory.getStack(m_heldItemSlot, 0); }
-		void setHeldItemSlot(u8 heldItemSlot) { m_heldItemSlot = heldItemSlot; }
-
 		bool isOnline() const { return m_client != nullptr; }
 		bool isNewPlayer() const { return m_isNewPlayer; }
 		void setNewPlayer(bool isNewPlayer) { m_isNewPlayer = isNewPlayer; }
@@ -53,8 +50,6 @@ class ServerPlayer : public Player {
 
 	private:
 		ClientInfo *m_client = nullptr;
-
-		u8 m_heldItemSlot = 0;
 
 		bool m_isNewPlayer = false;
 };

@@ -48,10 +48,13 @@ BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommand
 }
 
 void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
+	int cursorPos = hotbar.cursorPos();
+	if (cursorPos == -1) return;
+
 	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
 			m_animationStart = gk::GameClock::getInstance().getTicks();
-			m_currentTool = &m_player.inventory().getStack(hotbar.cursorPos(), 0);
+				m_currentTool = &m_player.inventory().getStack(cursorPos, 0);
 		}
 		else if (event.button.button == SDL_BUTTON_RIGHT) {
 			if (m_animationStart != 0)
@@ -117,8 +120,8 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 
 						m_client.sendPlayerPlaceBlock(x, y, z, block);
 
-						const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
-						m_player.inventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().stringID() : "", currentStack.amount() - 1);
+						const ItemStack &currentStack = m_player.inventory().getStack(cursorPos, 0);
+						m_player.inventory().setStack(cursorPos, 0, currentStack.amount() > 1 ? currentStack.item().stringID() : "", currentStack.amount() - 1);
 
 						m_client.sendPlayerInvUpdate();
 					}
@@ -152,43 +155,47 @@ void BlockCursor::update(const Hotbar &hotbar) {
 	if (selectedBlockChanged)
 		m_animationStart = (m_animationStart) ? ticks : 0;
 
-	const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
-	float timeToBreak = 0;
-	if (m_animationStart) {
-		if (m_currentTool->item().id() != currentStack.item().id()) {
-			m_animationStart = ticks;
-			m_currentTool = &currentStack;
-		}
-		else {
-			bool isEffective = false;
-			for (auto &it : currentStack.item().effectiveOn()) {
-				if (m_currentBlock->block().hasGroup(it)) {
-					isEffective = true;
-					break;
+	// FIXME: This should use block param
+	u8f orientation = m_currentBlock->block().isRotatable() ? m_world.getData(selectedBlock.x, selectedBlock.y, selectedBlock.z) & 0x1F : 0;
+
+	int cursorPos = hotbar.cursorPos();
+	if (cursorPos != -1) {
+		float timeToBreak = 0;
+		if (m_animationStart) {
+			const ItemStack &currentStack = m_player.inventory().getStack(cursorPos, 0);
+			if (m_currentTool->item().id() != currentStack.item().id()) {
+				m_animationStart = ticks;
+				m_currentTool = &currentStack;
+			}
+			else {
+				bool isEffective = false;
+				for (auto &it : currentStack.item().effectiveOn()) {
+					if (m_currentBlock->block().hasGroup(it)) {
+						isEffective = true;
+						break;
+					}
+				}
+
+				timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed(), isEffective);
+
+				if (ticks > m_animationStart + timeToBreak * 1000) {
+					m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
+					m_animationStart = ticks;
+
+					m_client.sendPlayerDigBlock(m_selectedBlock);
 				}
 			}
-
-			timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed(), isEffective);
-
-			if (ticks > m_animationStart + timeToBreak * 1000) {
-				m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
-				m_animationStart = ticks;
-
-				m_client.sendPlayerDigBlock(m_selectedBlock);
-			}
 		}
-	}
 
-	u8f orientation = m_currentBlock->block().isRotatable() ? m_world.getData(selectedBlock.x, selectedBlock.y, selectedBlock.z) & 0x1F : 0;
+		if (m_animationStart && m_currentBlock)
+			updateAnimationVertexBuffer(*m_currentBlock, orientation,
+										(ticks - m_animationStart) / (timeToBreak * 100));
+	}
 
 	if (m_selectedBlock.w != -1)
 		updateVertexBuffer(*m_currentBlock, orientation);
 	else
 		m_currentBlock = nullptr;
-
-	if (m_animationStart && m_currentBlock)
-		updateAnimationVertexBuffer(*m_currentBlock, orientation,
-		                            (ticks - m_animationStart) / (timeToBreak * 100));
 }
 
 using namespace BlockGeometry;

@@ -208,8 +208,16 @@ void ClientCommandHandler::setupCallbacks() {
 		u16 clientId;
 		packet >> clientId;
 
-		if (clientId == m_client.id())
+		if (clientId == m_client.id()) {
 			packet >> m_player.inventory();
+
+			s8 heldItemSlot;
+			packet >> heldItemSlot;
+
+			if (m_player.heldItemSlot() == -1) {
+				m_player.setHeldItemSlot(heldItemSlot);
+			}
+		}
 		else
 			packet >> m_playerBoxes.at(clientId).inventory();
 	});

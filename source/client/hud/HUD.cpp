@@ -35,7 +35,7 @@
 #include "HUD.hpp"
 
 HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
-	: m_hotbar(player.inventory(), client),
+	: m_hotbar(player, client),
 	m_blockCursor(player, world, client),
 	m_debugOverlay(player, world),
 	m_chat(client.client())

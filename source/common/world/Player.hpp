@@ -68,6 +68,10 @@ class Player : public gk::ISerializable {
 
 		const gk::FloatBox &hitbox() const { return m_hitbox; }
 
+		const ItemStack &heldItemStack() { return m_inventory.getStack(m_heldItemSlot, 0); }
+		s8 heldItemSlot() const { return m_heldItemSlot; }
+		void setHeldItemSlot(u8 heldItemSlot) { m_heldItemSlot = heldItemSlot; }
+
 		static void initUsertype(sol::state &lua);
 
 	protected:
@@ -88,6 +92,8 @@ class Player : public gk::ISerializable {
 		Inventory m_inventory{9, 4};
 
 		gk::FloatBox m_hitbox;
+
+		s8 m_heldItemSlot = -1;
 };
 
 #endif // PLAYER_HPP_

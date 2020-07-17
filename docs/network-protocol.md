@@ -78,6 +78,7 @@ Packet sent at the beginning of every server tick.
 | ------------- | ----------- | ---------------------------------------------------- |
 | ID            | u16         | Player ID                                            |
 | Inventory     | Inventory   | Player inventory                                     |
+| Current slot  | s8          | Player held item slot                                |
 
 #### PlayerPosUpdate (clientbound)
 

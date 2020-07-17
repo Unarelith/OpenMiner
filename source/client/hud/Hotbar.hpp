@@ -33,17 +33,18 @@
 #include "ItemWidget.hpp"
 
 class ClientCommandHandler;
+class ClientPlayer;
 
 class Hotbar : public Widget {
 	public:
-		Hotbar(Inventory &inventory, ClientCommandHandler &client, Widget *parent = nullptr);
+		Hotbar(ClientPlayer &player, ClientCommandHandler &client, Widget *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
 		void update() override;
 
 		int cursorPos() const { return m_cursorPos; }
-		const Item &currentItem() const { return m_inventory.getStack(m_cursorPos, 0).item(); }
+		const Item &currentItem() const;
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
@@ -51,9 +52,9 @@ class Hotbar : public Widget {
 		gk::Image m_background;
 
 		gk::Image m_cursor;
-		int m_cursorPos = 0;
+		int m_cursorPos = -1;
 
-		Inventory &m_inventory;
+		ClientPlayer &m_player;
 
 		ClientCommandHandler &m_client;
 

@@ -42,11 +42,11 @@ u8 Player::getOppositeDirection() const {
 }
 
 void Player::serialize(sf::Packet &packet) const {
-	packet << m_x << m_y << m_z << m_dimension << m_viewAngleH << m_viewAngleV << m_viewAngleRoll << m_inventory;
+	packet << m_x << m_y << m_z << m_dimension << m_viewAngleH << m_viewAngleV << m_viewAngleRoll << m_inventory << m_heldItemSlot;
 }
 
 void Player::deserialize(sf::Packet &packet) {
-	packet >> m_x >> m_y >> m_z >> m_dimension >> m_viewAngleH >> m_viewAngleV >> m_viewAngleRoll >> m_inventory;
+	packet >> m_x >> m_y >> m_z >> m_dimension >> m_viewAngleH >> m_viewAngleV >> m_viewAngleRoll >> m_inventory >> m_heldItemSlot;
 }
 
 // Please update 'docs/lua-api-cpp.md' if you change this
@@ -64,7 +64,9 @@ void Player::initUsertype(sol::state &lua) {
 
 		"client_id", &Player::clientID,
 
-		"inventory", &Player::inventory
+		"inventory", &Player::inventory,
+
+		"held_item_stack", &Player::heldItemStack
 	);
 }
 

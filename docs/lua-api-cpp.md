@@ -106,6 +106,7 @@
 - `void set_dimension(u16 dimension)`
 - `u16 client_id()`
 - `Inventory *inventory()`
+- `ItemStack held_item_stack()`
 
 ## Recipe
 
@@ -144,7 +145,6 @@
 ## ServerPlayer
 
 - `const ClientInfo &client()`
-- `ItemStack held_item_stack()`
 - `bool is_online()`
 
 ## ServerWorld

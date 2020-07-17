@@ -287,6 +287,7 @@ mod:block {
 
 	on_block_destroyed = function(pos, world)
 		if world:get_block(pos.x, pos.y, pos.z + 1) == world:get_block(pos.x, pos.y, pos.z) then
+			-- FIXME: Make something like "player:break_block(pos.x, pos.y, pos.z + 1)"
 			world:set_block(pos.x, pos.y, pos.z + 1, 0)
 		end
 	end,

@@ -118,7 +118,7 @@ void ServerCommandHandler::sendPlayerInvUpdate(u16 clientID, const ClientInfo *c
 	if (player) {
 		Network::Packet packet;
 		packet << Network::Command::PlayerInvUpdate;
-		packet << clientID << player->inventory();
+		packet << clientID << player->inventory() << player->heldItemSlot();
 
 		if (!client)
 			m_server.sendToAllClients(packet);
@@ -192,8 +192,10 @@ void ServerCommandHandler::setupCallbacks() {
 			return;
 		}
 
-		if (player->isNewPlayer())
+		if (player->isNewPlayer()) {
 			player->setPosition(m_spawnPosition.x, m_spawnPosition.y, m_spawnPosition.z);
+			player->setHeldItemSlot(0);
+		}
 
 		Network::Packet packet;
 		packet << Network::Command::RegistryData;
@@ -212,10 +214,7 @@ void ServerCommandHandler::setupCallbacks() {
 		if (player->isNewPlayer())
 			m_scriptEngine.luaCore().onEvent(LuaEventType::PlayerConnected, glm::ivec3{player->x(), player->y(), player->z()}, player, client, *this);
 
-		Network::Packet invPacket;
-		invPacket << Network::Command::PlayerInvUpdate << client.id;
-		invPacket << player->inventory();
-		client.tcpSocket->send(invPacket);
+		sendPlayerInvUpdate(client.id, &client);
 
 		// Send spawn packet to all clients for this player
 		Network::Packet spawnPacket;
