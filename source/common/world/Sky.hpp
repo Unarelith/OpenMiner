@@ -49,12 +49,41 @@ class Sky : public gk::ISerializable {
 		void setColor(const gk::Color &color) { m_color = color; }
 		void setFogColor(const gk::Color &fogColor) { m_fogColor = fogColor; }
 
+		struct SunDefinition {
+			std::string texture;
+			float size;
+		};
+
+		struct MoonDefinition {
+			std::string texture;
+			float size;
+			u16 phaseCount;
+			u16 phaseSize;
+		};
+
+		struct StarsDefinition {
+			u16 count;
+			float size;
+		};
+
+		const SunDefinition &sunDefinition() const { return m_sunDefinition; }
+		const MoonDefinition &moonDefinition() const { return m_moonDefinition; }
+		const StarsDefinition &starsDefinition() const { return m_starsDefinition; }
+
+		void setSunDefinition(const SunDefinition &sunDefinition) { m_sunDefinition = sunDefinition; }
+		void setMoonDefinition(const MoonDefinition &moonDefinition) { m_moonDefinition = moonDefinition; }
+		void setStarsDefinition(const StarsDefinition &starsDefinition) { m_starsDefinition = starsDefinition; }
+
 	private:
 		u16 m_id;
 		std::string m_stringID;
 
 		gk::Color m_color;
 		gk::Color m_fogColor;
+
+		SunDefinition m_sunDefinition;
+		MoonDefinition m_moonDefinition;
+		StarsDefinition m_starsDefinition;
 };
 
 #endif // SKY_HPP_

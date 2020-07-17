@@ -34,21 +34,44 @@ Skybox::Skybox(gk::Camera &camera, ClientWorld &world) : m_camera(camera), m_wor
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/skybox.v.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/skybox.f.glsl");
 	m_shader.linkProgram();
+}
 
-	m_sun.setSize(256, 256);
+void Skybox::loadSky(const Sky &sky) {
+	const Sky::SunDefinition &sun = sky.sunDefinition();
+	m_sun = CelestialObject{};
+	m_sun.setSize(sun.size, sun.size);
 	m_sun.setPosition(500, -m_sun.width() / 2, -m_sun.height() / 2);
-	m_sun.setTexture("texture-sun");
 
-	m_moon.setSize(256, 256);
+	try {
+		m_sun.setTexture(sun.texture);
+	}
+	catch (...) {
+		m_sun.setColor(gk::Color::Yellow);
+		gkWarning() << "Failed to load sun texture" << sun.texture;
+	}
+
+	const Sky::MoonDefinition &moon = sky.moonDefinition();
+	m_moon = CelestialObject{};
+	m_moon.setSize(moon.size, moon.size);
 	m_moon.setPosition(-500, -m_moon.width() / 2, -m_moon.height() / 2);
-	m_moon.setTexture("texture-moon_phases");
-	m_moon.setPhaseCount(8, 32);
+	m_moon.setPhaseCount(moon.phaseCount, moon.phaseSize);
 	m_moon.setCurrentPhase(0);
 
-	for (int i = 0 ; i < 1000 ; ++i) {
+	try {
+		m_moon.setTexture(moon.texture);
+	}
+	catch (...) {
+		m_moon.setColor(gk::Color{240, 240, 240});
+		gkWarning() << "Failed to load moon texture" << sun.texture;
+	}
+
+	const Sky::StarsDefinition &stars = sky.starsDefinition();
+	m_stars.clear();
+	m_stars.reserve(stars.count);
+	for (int i = 0 ; i < stars.count ; ++i) {
 		auto &star = m_stars.emplace_back();
 		star.setColor(gk::Color{0, 0, 0, 0});
-		star.setSize(4, 4);
+		star.setSize(stars.size, stars.size);
 		star.setPosition(650 * ((rand() % 2) * 2 - 1), (rand() % 500) * 2 - 500, (rand() % 500) * 2 - 500);
 		star.setRotationOffset(rand() % GameTime::dayLength);
 		star.setRotationAxis({rand() % 100 / 100.f, rand() % 100 / 100.f, rand() % 100 / 100.f});
@@ -74,8 +97,11 @@ void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	const gk::Vector3d &cameraPosition = m_camera.getDPosition();
 	states.transform.translate(cameraPosition.x, cameraPosition.y, cameraPosition.z - 50);
 
-	target.draw(m_sun, states);
-	target.draw(m_moon, states);
+	if (m_sun.width() && m_sun.height())
+		target.draw(m_sun, states);
+
+	if (m_moon.width() && m_moon.height())
+		target.draw(m_moon, states);
 
 	if (Config::isStarRenderingEnabled && skyColor != starColor) {
 		glDisable(GL_CULL_FACE);

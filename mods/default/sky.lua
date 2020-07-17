@@ -35,6 +35,27 @@ mod:sky {
 	fog_color = {
 		day = {50, 153, 204},
 	},
+
+	objects = {
+		sun = {
+			texture = "texture-sun", -- FIXME: Use a path instead like block attribute 'tiles'
+			size = 256,
+		},
+
+		moon = {
+			texture = "texture-moon_phases", -- FIXME: ^
+			size = 256,
+			phases = {
+				count = 8,
+				size = 32
+			}
+		},
+
+		stars = {
+			count = 1000,
+			size = 4,
+		}
+	}
 }
 
 mod:sky {

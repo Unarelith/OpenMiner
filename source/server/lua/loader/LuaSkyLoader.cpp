@@ -50,5 +50,49 @@ void LuaSkyLoader::loadSky(const sol::table &table) const {
 		u8 a = fogColor["day"][4].get_or<u8>(255);
 		sky.setFogColor(gk::Color{r, g, b, a});
 	}
+
+	loadObjects(sky, table);
+}
+
+void LuaSkyLoader::loadObjects(Sky &sky, const sol::table &table) const {
+	if (sol::object obj = table["objects"] ; obj.valid()) {
+		sol::table objectsTable = obj.as<sol::table>();
+
+		if (sol::object obj = objectsTable["sun"] ; obj.valid()) {
+			sol::table sunTable = obj.as<sol::table>();
+
+			Sky::SunDefinition sunDefinition;
+			sunDefinition.texture = sunTable["texture"].get_or<std::string>("");
+			sunDefinition.size = sunTable["size"].get_or(256);
+
+			sky.setSunDefinition(sunDefinition);
+		}
+
+		if (sol::object obj = objectsTable["moon"] ; obj.valid()) {
+			sol::table moonTable = obj.as<sol::table>();
+
+			Sky::MoonDefinition moonDefinition;
+			moonDefinition.texture = moonTable["texture"].get_or<std::string>("");
+			moonDefinition.size = moonTable["size"].get_or(256);
+
+			if (sol::object obj = moonTable["phases"] ; obj.valid()) {
+				sol::table phasesTable = obj.as<sol::table>();
+				moonDefinition.phaseCount = phasesTable["count"].get_or(1);
+				moonDefinition.phaseSize = phasesTable["size"].get_or(32);
+			}
+
+			sky.setMoonDefinition(moonDefinition);
+		}
+
+		if (sol::object obj = objectsTable["stars"] ; obj.valid()) {
+			sol::table starsTable = obj.as<sol::table>();
+
+			Sky::StarsDefinition starsDefinition;
+			starsDefinition.count = starsTable["count"].get_or(1000);
+			starsDefinition.size = starsTable["size"].get_or(4);
+
+			sky.setStarsDefinition(starsDefinition);
+		}
+	}
 }
 
