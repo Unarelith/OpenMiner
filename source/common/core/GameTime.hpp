@@ -35,7 +35,7 @@ class GameTime {
 	public:
 		static constexpr float daySpeed = 1.f;
 		static constexpr u32 dayLength = 24000;
-		static constexpr u32 dayStartOffset = 3000;
+		static constexpr u32 dayStartOffset = 0;
 
 		// Note: These 3 functions are only needed in the client
 		static float getCurrentTime(float offset = 0.f, float speed = 1.f);
@@ -49,15 +49,15 @@ class GameTime {
 		static u64 getTicks() { return s_ticks; }
 
 		static u32 getCurrentDay() {
-			return (s_ticks + dayStartOffset + 3000.f) / 1000.f / 24 + 1;
+			return (s_ticks + dayStartOffset + 6000.f) / 1000.f / 24 + 1;
 		}
 
 		static u8 getCurrentHour() {
-			return u64((s_ticks + dayStartOffset + 3000.f) / 1000.f) % 24;
+			return u64((s_ticks + dayStartOffset + 6000.f) / 1000.f) % 24;
 		}
 
 		static u8 getCurrentMinute() {
-			return u64((s_ticks + dayStartOffset + 3000.f) / 1000.f * 60.0f) % 60;
+			return u64((s_ticks + dayStartOffset + 6000.f) / 1000.f * 60.0f) % 60;
 		}
 
 	private:
