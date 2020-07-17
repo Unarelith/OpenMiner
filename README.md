@@ -77,7 +77,9 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 
 ## Project status
 
-This list is non exhaustive.
+This list is non complete.
+
+See also the roadmap for 1.0.0 [here](https://github.com/Unarelith/OpenMiner/wiki/Roadmap).
 
 ### Implemented features
 
@@ -97,15 +99,15 @@ This list is non exhaustive.
 - World loading/saving (see [#26](https://github.com/Unarelith/OpenMiner/issues/26))
 - Texture pack system (partially implemented, see [#34](https://github.com/Unarelith/OpenMiner/issues/34))
 - Entities ([#90](https://github.com/Unarelith/OpenMiner/pull/90))
+- Day/night cycle with sun/moon/stars ([#154](https://github.com/Unarelith/OpenMiner/pull/154))
 
 ### Missing features
 
 - Fluid propagation ([#62](https://github.com/Unarelith/OpenMiner/issues/62))
-- Day/night cycle with sun/moon display ([#73](https://github.com/Unarelith/OpenMiner/issues/73))
 - Seed-based worldgen ([#116](https://github.com/Unarelith/OpenMiner/issues/116))
 - Cave tunnels ([#118](https://github.com/Unarelith/OpenMiner/issues/118))
 - Clouds ([#52](https://github.com/Unarelith/OpenMiner/pull/52))
-- Particle system
+- Particle system ([#155](https://github.com/Unarelith/OpenMiner/issues/155))
 
 ## Screenshots
 
