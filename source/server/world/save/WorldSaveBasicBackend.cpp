@@ -31,6 +31,7 @@
 #include <filesystem.hpp>
 
 #include "ComponentType.hpp"
+#include "GameTime.hpp"
 #include "Network.hpp"
 #include "NetworkComponent.hpp"
 #include "Registry.hpp"
@@ -112,6 +113,10 @@ void WorldSaveBasicBackend::load(const std::string &name) {
 			auto &player = m_playerList.addPlayer(username, false);
 			player.deserialize(save);
 		}
+
+		sf::Uint64 ticks;
+		save >> ticks;
+		GameTime::setTicks(ticks);
 	}
 
 	// gkInfo() << "Loading done.";
@@ -167,6 +172,8 @@ void WorldSaveBasicBackend::save(const std::string &name) {
 		save << it.second.name();
 		save << it.second;
 	}
+
+	save << (sf::Uint64)GameTime::getTicks();
 
 	file.write((const char *)save.getData(), save.getDataSize());
 
