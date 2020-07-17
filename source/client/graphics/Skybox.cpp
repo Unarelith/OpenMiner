@@ -74,10 +74,18 @@ void Skybox::loadSky(const Sky &sky) {
 		auto &star = m_stars.emplace_back();
 		star.setColor(gk::Color{0, 0, 0, 0});
 		star.setSize(stars.size, stars.size);
-		star.setPosition(650 * ((rand() % 2) * 2 - 1), (rand() % 500) * 2 - 500, (rand() % 500) * 2 - 500);
+
+		glm::vec3 v{rand() % 256, rand() % 256, rand() % 256};
+		v = glm::normalize(v);
+		v *= 600 * (rand() % 2 * 2 - 1);
+		star.setPosition(v.x, v.y, v.z);
+		// star.setPosition(650 * ((rand() % 2) * 2 - 1), (rand() % 500) * 2 - 500, (rand() % 500) * 2 - 500);
+
 		star.setRotationOffset(rand() % GameTime::dayLength);
-		star.setRotationAxis({rand() % 100 / 100.f, rand() % 100 / 100.f, rand() % 100 / 100.f});
 		star.setRotationSpeed(sky.daylightCycleSpeed());
+		star.setRotationAxis({0, 1, 0});
+		// Maybe sometimes stars could have a random axis?
+		// star.setRotationAxis({rand() % 100 / 100.f, rand() % 100 / 100.f, rand() % 100 / 100.f});
 	}
 }
 
@@ -108,8 +116,6 @@ void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 		target.draw(m_moon, states);
 
 	if (Config::isStarRenderingEnabled && skyColor != starColor) {
-		glDisable(GL_CULL_FACE);
-
 		for (auto &it : m_stars)
 			target.draw(it, states);
 	}
