@@ -50,7 +50,7 @@ bool Config::isCrosshairVisible = true;
 
 // Graphics
 u16 Config::renderDistance = 8;
-u8 Config::ambientOcclusion = 2;
+u8 Config::ambientOcclusion = 1;
 bool Config::isSmoothLightingEnabled = true;
 bool Config::isWireframeModeEnabled = false;
 bool Config::isFullscreenModeEnabled = false;

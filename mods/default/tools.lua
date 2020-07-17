@@ -49,7 +49,7 @@ function register_tool(name, material, mining_speed, harvest_capability)
 	elseif name == "shovel" then
 		tool_def.effective_on = {
 			"group:om_material_dirt",
-			"group:om_material:sand"
+			"group:om_material_sand"
 		}
 
 		tool_def.on_item_activated = function(pos, block, player, world, client, server)
