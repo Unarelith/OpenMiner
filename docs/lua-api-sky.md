@@ -88,7 +88,7 @@ fog_color = {
 
 Attributes:
 
-- `day`: gog color at midday
+- `day`: fog color at midday
 
 ### `id`
 
