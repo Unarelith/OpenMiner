@@ -280,6 +280,7 @@ mod:block {
 	name = "Cactus",
 	tiles = {"cactus_top.png", "cactus_bottom.png", "cactus_side.png"},
 	hardness = 0,
+	is_opaque = false,
 
 	draw_type = "cactus",
 	bounding_box = {1/16, 1/16, 0, 14/16, 14/16, 1};
