@@ -91,15 +91,15 @@ bool CraftingWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractIn
 	return false;
 }
 
-bool CraftingWidget::receiveItemStack(const ItemWidget *itemStack, AbstractInventoryWidget *) {
-	bool stackAdded = m_craftingInventory.addStack(itemStack->stack().item().stringID(), itemStack->stack().amount());
+ItemStack CraftingWidget::receiveItemStack(const ItemWidget *itemStack, AbstractInventoryWidget *) {
+	ItemStack stackRet = m_craftingInventory.addStack(itemStack->stack().item().stringID(), itemStack->stack().amount());
 
-	if (stackAdded) {
+	if (stackRet.amount() != itemStack->stack().amount()) {
 		m_craftingInventoryWidget.update();
 		m_craftingInventoryWidget.sendUpdatePacket();
 	}
 
-	return stackAdded;
+	return stackRet;
 }
 
 void CraftingWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {

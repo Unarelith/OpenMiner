@@ -30,6 +30,7 @@ function register_tool(name, material, mining_speed, harvest_capability)
 		id = material .. "_" .. name,
 		name = material:gsub("^%l", string.upper) .. " " .. name:gsub("^%l", string.upper),
 		tiles = material .. "_" .. name .. ".png",
+		max_stack_size = 1,
 	}
 
 	if mining_speed then

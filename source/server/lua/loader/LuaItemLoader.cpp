@@ -29,6 +29,7 @@
 #include "LuaItemLoader.hpp"
 #include "LuaMod.hpp"
 #include "Registry.hpp"
+#include "ServerConfig.hpp"
 #include "ServerItem.hpp"
 
 void LuaItemLoader::loadItem(const sol::table &table) const {
@@ -42,6 +43,7 @@ void LuaItemLoader::loadItem(const sol::table &table) const {
 	item.setHarvestCapability(table["harvest_capability"].get_or(0));
 	item.setMiningSpeed(table["mining_speed"].get_or(1));
 	item.setOnItemActivated(table["on_item_activated"]);
+	item.setMaxStackSize(table["max_stack_size"].get_or(ServerConfig::maxItemStackSize));
 
 	sol::object groupsObject = table["groups"];
 	if (groupsObject.valid()) {

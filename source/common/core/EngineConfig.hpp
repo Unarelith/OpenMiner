@@ -59,6 +59,8 @@ namespace {
 	static_assert(CHUNK_DEPTH >= -128 && CHUNK_DEPTH < 128, "CHUNK_DEPTH out of range");
 
 	constexpr int SEALEVEL = 4;
+
+	constexpr const char *BLOCK_AIR = "_:air";
 }
 
 #endif // ENGINECONFIG_HPP_

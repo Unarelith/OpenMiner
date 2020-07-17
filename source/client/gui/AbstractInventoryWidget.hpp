@@ -35,7 +35,7 @@ class AbstractInventoryWidget : public Widget {
 			: Widget(parent), m_isReadOnly(isReadOnly) {}
 
 		virtual bool sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) = 0;
-		virtual bool receiveItemStack(const ItemWidget *itemStack, AbstractInventoryWidget *src) = 0;
+		virtual ItemStack receiveItemStack(const ItemWidget *itemStack, AbstractInventoryWidget *src) = 0;
 
 		const std::vector<std::string> &shiftDestination() const { return m_shiftDestination; }
 		void setShiftDestination(const std::string &shiftDestination);

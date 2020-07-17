@@ -109,8 +109,9 @@ void LuaMod::despawnEntity(EntityWrapper &entity) {
 void LuaMod::giveItemStack(ServerPlayer &player, ItemStack *itemStack) {
 	if (itemStack) {
 		// FIXME: This should probably be moved to a mod
-		if (!player.inventory().addStack(itemStack->item().stringID(), itemStack->amount(), 9, 24, true))
-			player.inventory().addStack(itemStack->item().stringID(), itemStack->amount(), 0, 9);
+		ItemStack stackRet = player.inventory().addStack(itemStack->item().stringID(), itemStack->amount(), 9, 24, true);
+		if (stackRet.amount() != 0)
+			player.inventory().addStack(stackRet.item().stringID(), stackRet.amount(), 0, 9);
 
 		m_worldController.server()->sendPlayerInvUpdate(player.clientID(), player.client());
 	}

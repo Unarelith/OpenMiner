@@ -73,7 +73,7 @@
 
 ## Inventory
 
-- `void add_stack(string name, u16 amount)`
+- `ItemStack add_stack(string name, u16 amount)`
 - `ItemStack get_stack(u16 x, u16 y)`
 - `void set_stack(u16 x, u16 y, string name, u16 amount)`
 

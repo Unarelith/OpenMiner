@@ -24,6 +24,7 @@
  *
  * =====================================================================================
  */
+#include "EngineConfig.hpp"
 #include "InventoryWidget.hpp"
 #include "MouseItemWidget.hpp"
 
@@ -81,7 +82,7 @@ void MouseItemWidget::leftClickBehaviour() {
 			if (!m_currentInventoryWidget->inventory()->isUnlimited())
 				swapItems(*currentItemWidget, m_currentInventoryWidget->isReadOnly());
 			else if (getStack().amount() == 0 && currentItemWidget->stack().amount() != 0)
-				setStack(currentItemWidget->stack().item().stringID(), 64);
+				setStack(currentItemWidget->stack().item().stringID(), currentItemWidget->stack().item().maxStackSize());
 
 			m_currentInventoryWidget->sendUpdatePacket();
 		}
@@ -198,12 +199,19 @@ void MouseItemWidget::swapItems(ItemWidget &widget, bool isReadOnly) {
 			setStack(widgetItemName, widgetItemAmount);
 		}
 		else if (!isReadOnly) {
-			widget.setStack(widgetItemName, widgetItemAmount + stack().amount());
-			setStack("", 0);
+			u16 sum = widgetItemAmount + stack().amount();
+			if (sum > stack().item().maxStackSize()) {
+				widget.setStack(widgetItemName, stack().item().maxStackSize());
+				setStack(widgetItemName, sum - stack().item().maxStackSize());
+			}
+			else {
+				widget.setStack(widgetItemName, sum);
+				setStack(BLOCK_AIR, 0);
+			}
 		}
 		else {
 			setStack(stack().item().stringID(), stack().amount() + widgetItemAmount);
-			widget.setStack("", 0);
+			widget.setStack(BLOCK_AIR, 0);
 		}
 	}
 }

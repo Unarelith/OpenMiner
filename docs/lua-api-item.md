@@ -70,6 +70,17 @@ Example:
 mining_speed = 1 -- this is the default value
 ```
 
+### `max_stack_size`
+
+Max amount of items in a stack.
+
+Example:
+```lua
+max_stack_size = 64
+```
+
+If not defined, it defaults to the server config.
+
 ### `name`
 
 Label of the item. **Mandatory field.**

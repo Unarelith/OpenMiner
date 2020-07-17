@@ -76,6 +76,9 @@ class Item : public gk::ISerializable {
 		const std::vector<std::string> &effectiveOn() const { return m_effectiveOn; }
 		void addEffectiveBlock(const std::string &blockID) { m_effectiveOn.emplace_back(blockID); }
 
+		u16 maxStackSize() const { return m_maxStackSize; }
+		void setMaxStackSize(u16 maxStackSize) { m_maxStackSize = maxStackSize; }
+
 		static void initUsertype(sol::state &lua);
 
 	protected:
@@ -96,6 +99,8 @@ class Item : public gk::ISerializable {
 		std::unordered_map<std::string, u16> m_groups;
 
 		std::vector<std::string> m_effectiveOn;
+
+		u16 m_maxStackSize = 64;
 };
 
 #endif // ITEM_HPP_

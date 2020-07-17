@@ -80,31 +80,32 @@ void InventoryWidget::update() {
 }
 
 bool InventoryWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) {
-	if (dest->doItemMatchFilter(itemStack->stack().item()) && dest->receiveItemStack(itemStack, this)) {
-		if (dest != this)
-			m_inventory->clearStack(itemStack->x(), itemStack->y());
+	if (dest->doItemMatchFilter(itemStack->stack().item())) {
+		ItemStack stackRet = dest->receiveItemStack(itemStack, this);
+		if (stackRet.amount() != itemStack->stack().amount()) {
+			if (dest != this && stackRet.amount() == 0)
+				m_inventory->clearStack(itemStack->x(), itemStack->y());
 
-		update();
-		sendUpdatePacket();
-		return true;
+			update();
+			sendUpdatePacket();
+			return true;
+		}
 	}
 
 	return false;
 }
 
-bool InventoryWidget::receiveItemStack(const ItemWidget *itemStack, AbstractInventoryWidget *src) {
-	ItemStack stack = itemStack->stack();
+ItemStack InventoryWidget::receiveItemStack(const ItemWidget *itemStack, AbstractInventoryWidget *src) {
+	const ItemStack &stack = itemStack->stack();
 	if (src == this)
 		m_inventory->clearStack(itemStack->x(), itemStack->y());
 
-	bool stackAdded = m_inventory->addStack(stack.item().stringID(), stack.amount(), m_offset, m_size);
+	ItemStack stackRet = m_inventory->addStack(stack.item().stringID(), stack.amount(), m_offset, m_size);
 
-	if (stackAdded)
+	if (stackRet.amount() != stack.amount())
 		sendUpdatePacket();
-	else if (src == this)
-		m_inventory->setStack(itemStack->x(), itemStack->y(), stack.item().stringID(), stack.amount());
 
-	return stackAdded;
+	return stackRet;
 }
 
 void InventoryWidget::sendUpdatePacket() {

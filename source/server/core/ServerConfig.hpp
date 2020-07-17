@@ -37,6 +37,7 @@
 namespace ServerConfig {
 	// Server
 	extern u8 maxPlayers;
+	extern u16 maxItemStackSize;
 
 	// Mod-defined options
 	extern std::unordered_map<std::string, sol::object> options;

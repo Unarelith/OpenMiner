@@ -32,25 +32,44 @@ void Inventory::setStack(u16 x, u16 y, const std::string &stringID, u16 amount) 
 	m_hasChanged = true;
 }
 
-bool Inventory::addStack(const std::string &stringID, u16 amount, u16 offset, u16 size, bool mergeOnly) {
-	for (std::size_t i = offset ; i < (size ? offset + size : m_items.size()) ; ++i) {
-		if (m_items[i].item().id() == 0 && !mergeOnly) {
-			m_items[i] = ItemStack(stringID, amount);
+ItemStack Inventory::addStack(const std::string &stringID, u16 amount, u16 offset, u16 size, bool mergeOnly) {
+	ItemStack ret{stringID, amount};
+	for (std::size_t i = offset ; ret.amount() && i < (size ? offset + size : m_items.size()) ; ++i) {
+		const Item &item = m_items[i].item();
+		if (item.id() == 0 && !mergeOnly) {
+			if (ret.amount() > item.maxStackSize()) {
+				m_items[i] = ItemStack(stringID, item.maxStackSize());
+				ret.setAmount(ret.amount() - item.maxStackSize());
+			}
+			else {
+				m_items[i] = ItemStack(stringID, ret.amount());
+				ret.setAmount(0);
+			}
 			m_hasChanged = true;
-			return true;
 		}
-		else if (m_items[i].item().stringID() == stringID) {
-			m_items[i] = ItemStack(stringID, m_items[i].amount() + amount);
+		else if (item.stringID() == stringID) {
+			u16 sum = m_items[i].amount() + ret.amount();
+			if (sum > item.maxStackSize()) {
+				m_items[i] = ItemStack(stringID, item.maxStackSize());
+				ret.setAmount(sum - item.maxStackSize());
+			}
+			else {
+				m_items[i] = ItemStack(stringID, sum);
+				ret.setAmount(0);
+			}
+
 			m_hasChanged = true;
-			return true;
 		}
 	}
 
-	return false;
+	if (!m_hasChanged && mergeOnly && ret.amount())
+		return addStack(ret.item().stringID(), ret.amount(), offset, size);
+
+	return ret;
 }
 
 // NOTE: This fonction is only used by Lua since default parameters don't work properly
-bool Inventory::addStack2(const std::string &stringID, u16 amount) {
+ItemStack Inventory::addStack2(const std::string &stringID, u16 amount) {
 	return addStack(stringID, amount, 0, 0);
 }
 

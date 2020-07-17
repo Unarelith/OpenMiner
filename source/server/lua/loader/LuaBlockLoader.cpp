@@ -30,6 +30,7 @@
 #include "LuaMod.hpp"
 #include "Registry.hpp"
 #include "ServerBlock.hpp"
+#include "ServerConfig.hpp"
 
 void LuaBlockLoader::loadBlock(const sol::table &table) const {
 	std::string stringID = m_mod.id() + ":" + table["id"].get<std::string>();
@@ -57,6 +58,7 @@ void LuaBlockLoader::loadBlock(const sol::table &table) const {
 	}
 
 	item->setIsBlock(true);
+	item->setMaxStackSize(table["max_stack_size"].get_or(ServerConfig::maxItemStackSize));
 
 	loadGroups(block, table, item);
 
