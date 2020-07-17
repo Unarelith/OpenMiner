@@ -32,9 +32,9 @@ void Inventory::setStack(u16 x, u16 y, const std::string &stringID, u16 amount) 
 	m_hasChanged = true;
 }
 
-bool Inventory::addStack(const std::string &stringID, u16 amount, u16 offset, u16 size) {
+bool Inventory::addStack(const std::string &stringID, u16 amount, u16 offset, u16 size, bool mergeOnly) {
 	for (std::size_t i = offset ; i < (size ? offset + size : m_items.size()) ; ++i) {
-		if (m_items[i].item().id() == 0) {
+		if (m_items[i].item().id() == 0 && !mergeOnly) {
 			m_items[i] = ItemStack(stringID, amount);
 			m_hasChanged = true;
 			return true;
