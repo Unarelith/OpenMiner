@@ -168,9 +168,12 @@ void ClientCommandHandler::setupCallbacks() {
 		}
 	});
 
-	m_client.setCommandCallback(Network::Command::ServerTick, [this](Network::Packet &) {
-		if (!m_isSingleplayer) // FIXME
-			GameTime::incrementTicks();
+	m_client.setCommandCallback(Network::Command::ServerTick, [this](Network::Packet &packet) {
+		if (!m_isSingleplayer) { // FIXME
+			sf::Uint64 ticks;
+			packet >> ticks;
+			GameTime::setTicks(ticks);
+		}
 	});
 
 	m_client.setCommandCallback(Network::Command::ServerClosed, [this](Network::Packet &packet) {

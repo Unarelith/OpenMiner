@@ -35,18 +35,30 @@ class GameTime {
 	public:
 		static constexpr float daySpeed = 1.f;
 		static constexpr u32 dayLength = 24000;
+		static constexpr u32 dayStartOffset = 3000;
 
-		// Note: These functions are only needed in the client
+		// Note: These 3 functions are only needed in the client
 		static float getCurrentTime(float offset = 0.f, float speed = 1.f);
 		static float getSunlightIntensityFromTime(float time);
 		static gk::Color getSkyColorFromTime(const Sky &sky, float time);
 
-		// Note: These functions are only needed in the server
 		static void incrementTicks();
-		static u16 getTicksPerSecond();
+		static void setTicks(u64 ticks) { s_ticks = ticks; }
+
+		static u16 getTicksPerSecond() { return s_ticksPerSecond; }
 		static u64 getTicks() { return s_ticks; }
 
+		static u8 getCurrentHour() {
+			return u64((s_ticks + dayStartOffset + 3000.f) / 1000.f) % 24;
+		}
+
+		static u8 getCurrentMinute() {
+			return u64((s_ticks + dayStartOffset + 3000.f) / 1000.f * 60.0f) % 60;
+		}
+
 	private:
+		static void updateTpsCounter();
+
 		static u64 s_ticks;
 		static u16 s_ticksPerSecond;
 };
