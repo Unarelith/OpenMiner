@@ -69,7 +69,7 @@ void WorldSaveBasicBackend::load(const std::string &name) {
 				int cx, cy, cz;
 				save >> cx >> cy >> cz;
 
-				ServerChunk &chunk = world.createChunk(cx, cy, cz);
+				ServerChunk &chunk = world.getOrCreateChunk(cx, cy, cz);
 				for (u8 z = 0 ; z < Chunk::height ; ++z) {
 					for (u8 y = 0 ; y < Chunk::depth ; ++y) {
 						for (u8 x = 0 ; x < Chunk::width ; ++x) {

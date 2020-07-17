@@ -134,10 +134,7 @@ void ServerWorld::sendChunkData(const ClientInfo &client, ServerChunk &chunk) {
 }
 
 void ServerWorld::sendRequestedData(ClientInfo &client, int cx, int cy, int cz) {
-	ServerChunk &chunk = createChunk(cx, cy, cz);
-
-	// Create our neighbours so that we can generate and process lights correctly
-	createChunkNeighbours(chunk);
+	ServerChunk &chunk = getOrCreateChunk(cx, cy, cz);
 
 	// Generate our chunk
 	if (!chunk.isInitialized()) {
@@ -151,11 +148,14 @@ void ServerWorld::sendRequestedData(ClientInfo &client, int cx, int cy, int cz) 
 	sendChunkData(client, chunk);
 }
 
-ServerChunk &ServerWorld::createChunk(s32 cx, s32 cy, s32 cz) {
+ServerChunk &ServerWorld::getOrCreateChunk(s32 cx, s32 cy, s32 cz) {
 	ServerChunk *chunk = (ServerChunk *)getChunk(cx, cy, cz);
 	if (!chunk) {
 		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ServerChunk(cx, cy, cz, *this));
 		chunk = it.first->second.get();
+
+		// Create our neighbours so that we can generate and process lights correctly
+		createChunkNeighbours(*chunk);
 	}
 
 	return *chunk;
