@@ -30,6 +30,7 @@
 #include <sol/sol.hpp>
 
 class LuaMod;
+class Sky;
 
 class LuaSkyLoader {
 	public:
@@ -38,6 +39,8 @@ class LuaSkyLoader {
 		void loadSky(const sol::table &table) const;
 
 	private:
+		void loadObjects(Sky &sky, const sol::table &table) const;
+
 		LuaMod &m_mod;
 };
 

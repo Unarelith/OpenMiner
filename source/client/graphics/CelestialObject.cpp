@@ -37,6 +37,8 @@ CelestialObject::CelestialObject() {
 }
 
 void CelestialObject::setTexture(const std::string &textureName) {
+	if (textureName.empty()) return;
+
 	m_texture = &gk::ResourceHandler::getInstance().get<gk::Texture>(textureName);
 
 	m_isUpdateNeeded = true;
