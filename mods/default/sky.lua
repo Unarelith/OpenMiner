@@ -36,6 +36,10 @@ mod:sky {
 		day = {50, 153, 204},
 	},
 
+	daylight_cycle = {
+		speed = 1.0
+	},
+
 	objects = {
 		sun = {
 			texture = "texture-sun", -- FIXME: Use a path instead like block attribute 'tiles'

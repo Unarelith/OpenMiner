@@ -74,6 +74,9 @@ class Sky : public gk::ISerializable {
 		void setMoonDefinition(const MoonDefinition &moonDefinition) { m_moonDefinition = moonDefinition; }
 		void setStarsDefinition(const StarsDefinition &starsDefinition) { m_starsDefinition = starsDefinition; }
 
+		float daylightCycleSpeed() const { return m_daylightCycleSpeed; }
+		void setDaylightCycleSpeed(float daylightCycleSpeed) { m_daylightCycleSpeed = daylightCycleSpeed; }
+
 	private:
 		u16 m_id;
 		std::string m_stringID;
@@ -84,6 +87,8 @@ class Sky : public gk::ISerializable {
 		SunDefinition m_sunDefinition;
 		MoonDefinition m_moonDefinition;
 		StarsDefinition m_starsDefinition;
+
+		float m_daylightCycleSpeed = 0.f;
 };
 
 #endif // SKY_HPP_

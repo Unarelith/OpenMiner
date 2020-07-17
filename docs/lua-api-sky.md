@@ -14,6 +14,10 @@ mod:sky {
 		day = {50, 153, 204},
 	},
 
+	daylight_cycle = {
+		speed = 1.0
+	},
+
 	objects = {
 		sun = {
 			texture = "texture-sun",
@@ -50,9 +54,26 @@ color = {
 }
 ```
 
-Possible values:
+Attributes:
 
-- `day`: Sky color at midday
+- `day`: sky color at midday
+
+### `daylight_cycle`
+
+Day/night cycle parameters.
+
+Example:
+```lua
+daylight_cycle = {
+	speed = 1.0
+}
+```
+
+The example above is the minimal code required to add a day/night cycle to a sky.
+
+Attributes:
+
+- `speed`: speed of the cycle (default: `1.0`)
 
 ### `fog_color`
 
@@ -65,9 +86,9 @@ fog_color = {
 }
 ```
 
-Possible values:
+Attributes:
 
-- `day`: Fog color at midday
+- `day`: gog color at midday
 
 ### `id`
 
@@ -84,7 +105,9 @@ IDs are usually of the form `mod:sky` but the `mod:` prefix is prepended automat
 
 #### `moon`
 
-Moon attributes table. Example:
+Moon attributes table.
+
+Example:
 ```lua
 moon = {
 	texture = "texture-moon_phases"
@@ -106,7 +129,9 @@ Attributes:
 
 #### `sun`
 
-Sun attribute table. Example:
+Sun attribute table.
+
+Example:
 ```lua
 sun = {
 	texture = "texture-sun",
@@ -121,7 +146,9 @@ Attributes:
 
 #### `stars`
 
-Stars attribute table. Example:
+Stars attribute table.
+
+Example:
 ```lua
 stars = {
 	count = 1000,

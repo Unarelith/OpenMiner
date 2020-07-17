@@ -210,13 +210,22 @@ void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	gk::Shader::bind(&m_shader);
 
-	float time = GameTime::getCurrentTime();
 	if (m_world.sky()) {
-		const gk::Color &color = GameTime::getSkyColorFromTime(*m_world.sky(), time);
-		glClearColor(color.r, color.g, color.b, color.a);
+		if (m_world.sky()->daylightCycleSpeed()) {
+			float time = GameTime::getCurrentTime(0, m_world.sky()->daylightCycleSpeed());
+			const gk::Color &color = GameTime::getSkyColorFromTime(*m_world.sky(), time);
+			glClearColor(color.r, color.g, color.b, color.a);
 
-		m_shader.setUniform("u_skyColor", color);
-		m_shader.setUniform("u_sunlightIntensity", GameTime::getSunlightIntensityFromTime(time));
+			m_shader.setUniform("u_skyColor", color);
+			m_shader.setUniform("u_sunlightIntensity", GameTime::getSunlightIntensityFromTime(time));
+		}
+		else {
+			const gk::Color &color = m_world.sky()->color();
+			glClearColor(color.r, color.g, color.b, color.a);
+
+			m_shader.setUniform("u_skyColor", m_world.sky()->color());
+			m_shader.setUniform("u_sunlightIntensity", 1.f);
+		}
 	}
 
 	gk::Shader::bind(nullptr);

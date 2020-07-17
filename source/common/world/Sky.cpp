@@ -37,7 +37,8 @@ void Sky::serialize(sf::Packet &packet) const {
 		<< m_sunDefinition.texture << m_sunDefinition.size
 		<< m_moonDefinition.texture << m_moonDefinition.size
 		<< m_moonDefinition.phaseCount << m_moonDefinition.phaseSize
-		<< m_starsDefinition.count << m_starsDefinition.size;
+		<< m_starsDefinition.count << m_starsDefinition.size
+		<< m_daylightCycleSpeed;
 }
 
 void Sky::deserialize(sf::Packet &packet) {
@@ -45,6 +46,7 @@ void Sky::deserialize(sf::Packet &packet) {
 		>> m_sunDefinition.texture >> m_sunDefinition.size
 		>> m_moonDefinition.texture >> m_moonDefinition.size
 		>> m_moonDefinition.phaseCount >> m_moonDefinition.phaseSize
-		>> m_starsDefinition.count >> m_starsDefinition.size;
+		>> m_starsDefinition.count >> m_starsDefinition.size
+		>> m_daylightCycleSpeed;
 }
 
