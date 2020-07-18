@@ -130,7 +130,7 @@ See [entity page](lua-api-entity.md#entity-spawn-parameters) for more informatio
 
 ## Registration functions
 
-### `config`
+### `option`
 
 Defines a config option.
 
