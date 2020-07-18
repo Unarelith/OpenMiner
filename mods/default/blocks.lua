@@ -433,6 +433,31 @@ mod:block {
 	end
 }
 
+mod:block {
+	id = "andesite",
+	name = "Andesite",
+	tiles = "andesite.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "granite",
+	name = "Granite",
+	tiles = "granite.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+mod:block {
+	id = "diorite",
+	name = "Diorite",
+	tiles = "diorite.png",
+	hardness = 1.5,
+	harvest_requirements = 1
+}
+
+
 dofile("blocks/workbench.lua")
 dofile("blocks/furnace.lua")
 dofile("blocks/door.lua")

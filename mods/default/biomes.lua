@@ -34,6 +34,12 @@ mod:biome {
 		precipitation = 0.3
 	},
 
+	undergroundBiomeBlocks = {
+		"default:granite",
+		"default:diorite",
+		"default:andesite"
+	},
+
 	blocks = {
 		top = "default:grass",
 		ground = "default:dirt",
@@ -93,6 +99,9 @@ mod:biome {
 		temperature = -0.3,
 		precipitation = -0.7
 	},
+	
+	undergroundBiomeBlocks = {
+	},
 
 	blocks = {
 		top = "default:sand",
@@ -127,6 +136,9 @@ mod:biome {
 	params = {
 		temperature = -0.3,
 		precipitation = -1
+	},
+
+	undergroundBiomeBlocks = {
 	},
 
 	blocks = {
