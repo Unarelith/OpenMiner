@@ -46,6 +46,8 @@ namespace GameKey {
 
 		Shift,
 
+		BlockInfoToggle,
+
 		KeyCount
 	};
 }

@@ -35,20 +35,22 @@
 #include "KeyboardHandler.hpp"
 
 KeyboardHandler::KeyboardHandler() {
-	addKey(GameKey::Left,            "Left",            SDLK_a);
-	addKey(GameKey::Right,           "Right",           SDLK_d);
-	addKey(GameKey::Forward,         "Forward",         SDLK_w);
-	addKey(GameKey::Back,            "Back",            SDLK_s);
+	addKey(GameKey::Left,            "Left",              SDLK_a);
+	addKey(GameKey::Right,           "Right",             SDLK_d);
+	addKey(GameKey::Forward,         "Forward",           SDLK_w);
+	addKey(GameKey::Back,            "Back",              SDLK_s);
 
-	addKey(GameKey::Jump,            "Jump",            SDLK_SPACE);
-	addKey(GameKey::Fly,             "Fly",             SDLK_x);
-	addKey(GameKey::Sneak,           "Sneak",           SDLK_LSHIFT);
-	addKey(GameKey::Sprint,          "Sprint",          SDLK_LCTRL);
+	addKey(GameKey::Jump,            "Jump",              SDLK_SPACE);
+	addKey(GameKey::Fly,             "Fly",               SDLK_x);
+	addKey(GameKey::Sneak,           "Sneak",             SDLK_LSHIFT);
+	addKey(GameKey::Sprint,          "Sprint",            SDLK_LCTRL);
 
-	addKey(GameKey::Chat,            "Chat",            SDLK_t);
-	addKey(GameKey::Command,         "Command",         SDLK_KP_DIVIDE);
+	addKey(GameKey::Chat,            "Chat",              SDLK_t);
+	addKey(GameKey::Command,         "Command",           SDLK_KP_DIVIDE);
 
-	addKey(GameKey::Shift,           "Shift",           SDLK_LSHIFT);
+	addKey(GameKey::Shift,           "Shift",             SDLK_LSHIFT);
+
+	addKey(GameKey::BlockInfoToggle, "Block info toggle", SDLK_p);
 }
 
 void KeyboardHandler::loadKeysFromFile(const std::string &filename) {

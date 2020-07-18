@@ -73,6 +73,7 @@ cp /usr/lib/ld-linux-x86-64.so.2 \
 /usr/lib/libXdmcp.so.6 \
 /usr/lib/libzstd.so.1 \
     deploy/linux64/bin/openminer/lib && \
+strip deploy/linux64/bin/openminer/lib/*.so.* && \
 echo -e "#!/bin/bash\n./lib/ld-linux-x86-64.so.2 --library-path lib ./bin/openminer \$*" > deploy/linux64/bin/openminer/openminer && \
 echo -e "#!/bin/bash\n./lib/ld-linux-x86-64.so.2 --library-path lib ./bin/openminer_server \$*" > deploy/linux64/bin/openminer/openminer_server && \
 chmod +x deploy/linux64/bin/openminer/openminer deploy/linux64/bin/openminer/openminer_server && \
