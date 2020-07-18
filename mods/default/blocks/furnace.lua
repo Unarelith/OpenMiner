@@ -215,7 +215,7 @@ mod:block {
 			else
 				item_progress = 0
 			end
-		elseif ticks_remaining == 0 then
+		elseif ticks_remaining == 0 and current_state ~= 0 then
 			current_burn_time = 0
 			world:set_block_state(pos.x, pos.y, pos.z, 0)
 		end
