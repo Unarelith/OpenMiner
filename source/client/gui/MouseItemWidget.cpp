@@ -148,7 +148,7 @@ void MouseItemWidget::draggingBehaviour(ItemWidget *newItemWidget) {
 				}
 			}
 
-			u16 remainingAmount = (m_draggedStack.amount() == 1) ? 0 : m_draggedStack.amount() % m_draggedSlots.size();
+			u16 remainingAmount = (m_draggedStack.amount() == 1) ? 0 : m_draggedStack.amount() % std::min<u16>(m_draggedSlots.size(), m_draggedStack.amount());
 
 			setStack(remainingAmount ? m_draggedStack.item().stringID() : BLOCK_AIR, remainingAmount);
 		}
