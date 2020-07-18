@@ -83,6 +83,8 @@ void MouseItemWidget::leftClickBehaviour() {
 				swapItems(*currentItemWidget, m_currentInventoryWidget->isReadOnly());
 			else if (getStack().amount() == 0 && currentItemWidget->stack().amount() != 0)
 				setStack(currentItemWidget->stack().item().stringID(), currentItemWidget->stack().item().maxStackSize());
+			else
+				setStack(BLOCK_AIR, 0);
 
 			m_currentInventoryWidget->sendUpdatePacket();
 		}
