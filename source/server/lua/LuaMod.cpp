@@ -111,7 +111,7 @@ void LuaMod::giveItemStack(ServerPlayer &player, ItemStack *itemStack) {
 		// FIXME: This should probably be moved to a mod
 		ItemStack stackRet = player.inventory().addStack(itemStack->item().stringID(), itemStack->amount(), 9, 24, true);
 		if (stackRet.amount() != 0)
-			player.inventory().addStack(stackRet.item().stringID(), stackRet.amount(), 0, 9);
+			player.inventory().addStack(stackRet.item().stringID(), stackRet.amount(), 0, 9, true);
 
 		m_worldController.server()->sendPlayerInvUpdate(player.clientID(), player.client());
 	}
