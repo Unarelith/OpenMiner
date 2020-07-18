@@ -286,7 +286,7 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		// Our screen coordinates are +X right, +Y up, and for a right-handed
 		// coordinate system, depth must be negative Z, so anything with a
 		// positive Z is behind the camera.
-		if (center.z > CHUNK_MAXSIZE / 2) {
+		if (center.z > CHUNK_MAXSIZE) {
 			continue;
 		}
 
