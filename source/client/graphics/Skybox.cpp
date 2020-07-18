@@ -75,13 +75,23 @@ void Skybox::loadSky(const Sky &sky) {
 		star.setColor(gk::Color{0, 0, 0, 0});
 		star.setSize(stars.size, stars.size);
 
-		glm::vec3 v{rand() % 256, rand() % 256, rand() % 256};
-		v = glm::normalize(v);
-		v *= 600 * (rand() % 2 * 2 - 1);
-		star.setPosition(v.x, v.y, v.z);
-		// star.setPosition(650 * ((rand() % 2) * 2 - 1), (rand() % 500) * 2 - 500, (rand() % 500) * 2 - 500);
+		// This formula makes the distribution uniform
+		glm::vec3 v{0.f, 0.f, 0.f};
+		// Generate a uniform random coordinate
+		// NOTE: MUST NOT USE FAST MATH!
+		// Otherwise it risks taking the square root of a negative!
+		v.y = (rand() % 32768 - 16383.5f) / 16383.5f;
+		// Project it to the +X semicircle in the XY plane
+		v.x = sqrtf(1.f - v.y*v.y);
+		v *= 600.f;
 
+		star.setPosition(v.x, v.y, v.z);
+		// Rotate the star to make it face the camera
+		star.rotate(atan2f(v.y, v.x) * float(180./M_PI), gk::Vector3f{0.f, 0.f, 1.f});
+
+		// Set a random rotation in the day cycle
 		star.setRotationOffset(rand() % GameTime::dayLength);
+
 		star.setRotationSpeed(sky.daylightCycleSpeed());
 		star.setRotationAxis({0, 1, 0});
 		// Maybe sometimes stars could have a random axis?
