@@ -338,7 +338,7 @@ glm::ivec4 BlockCursor::findSelectedBlock() const {
 	if (double(bestX) == position.x && double(bestY) == position.y) {
 		for (int y = -1; y <= 0; y++) {
 			for (int x = -1; x <= 0; x++) {
-				const BlockState *blockState = m_world.getBlockState(bestX, bestY, bestZ);
+				const BlockState *blockState = m_world.getBlockState(bestX + x, bestY + y, bestZ);
 				if (blockState && blockState->block().id() && blockState->drawType() != BlockDrawType::Liquid) {
 					return glm::ivec4{bestX + x, bestY + y, bestZ, 6};
 				}
