@@ -29,6 +29,9 @@
 // Pre-game configuration
 std::string GameConfig::worldName = "";
 
+// In-game variables
+bool GameConfig::isGameRunning = false;
+
 // Screen effects
 u16 GameConfig::currentScreenEffect = 0;
 float GameConfig::fogDepth = 0;

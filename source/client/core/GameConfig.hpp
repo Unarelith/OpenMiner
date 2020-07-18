@@ -36,6 +36,9 @@ namespace GameConfig {
 	// Pre-game configuration
 	extern std::string worldName;
 
+	// In-game variables
+	extern bool isGameRunning;
+
 	// Screen effects
 	extern u16 currentScreenEffect;
 	extern float fogDepth;

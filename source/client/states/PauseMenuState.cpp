@@ -63,6 +63,8 @@ PauseMenuState::PauseMenuState(Client &client, gk::ApplicationState *parent)
 		if (!m_client.isSingleplayer() || GameConfig::worldName.empty()) {
 			m_client.disconnect();
 
+			GameConfig::isGameRunning = false;
+
 			m_stateStack->clear();
 			m_stateStack->push<TitleScreenState>();
 		}

@@ -32,6 +32,7 @@
 
 #include "Config.hpp"
 #include "ConnectionErrorState.hpp"
+#include "GameConfig.hpp"
 #include "GameState.hpp"
 #include "Events.hpp"
 #include "ServerLoadingState.hpp"
@@ -92,6 +93,8 @@ void ServerLoadingState::update() {
 
 			gk::Mouse::setCursorVisible(false);
 			gk::Mouse::setCursorGrabbed(true);
+
+			GameConfig::isGameRunning = true;
 		}
 		else if (!m_game.textureAtlas().isReady()) {
 			try {

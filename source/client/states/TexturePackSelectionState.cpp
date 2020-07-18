@@ -30,6 +30,7 @@
 #include <filesystem.hpp>
 
 #include "Config.hpp"
+#include "GameConfig.hpp"
 #include "TextureAtlas.hpp"
 #include "TexturePackSelectionState.hpp"
 #include "World.hpp"
@@ -57,9 +58,11 @@ TexturePackSelectionState::TexturePackSelectionState(gk::ApplicationState *paren
 			if (Config::texturePack != texturePack) {
 				Config::texturePack = texturePack;
 
-				auto &atlas = gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks");
-				atlas.clear();
-				atlas.loadFromRegistry(Config::texturePack);
+				if (GameConfig::isGameRunning) {
+					auto &atlas = gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks");
+					atlas.clear();
+					atlas.loadFromRegistry(Config::texturePack);
+				}
 
 				World::isReloadRequested = true;
 			}

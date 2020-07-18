@@ -37,6 +37,7 @@
 #include "ConnectionErrorState.hpp"
 #include "DrawableComponent.hpp"
 #include "DrawableDef.hpp"
+#include "GameConfig.hpp"
 #include "GameTime.hpp"
 #include "LuaGUIState.hpp"
 #include "NetworkComponent.hpp"
@@ -179,6 +180,8 @@ void ClientCommandHandler::setupCallbacks() {
 	m_client.setCommandCallback(Network::Command::ServerClosed, [this](Network::Packet &packet) {
 		std::string message;
 		packet >> message;
+
+		GameConfig::isGameRunning = false;
 
 		gk::ApplicationStateStack::getInstance().clear();
 		gk::ApplicationStateStack::getInstance().push<ConnectionErrorState>(message, m_client.serverAddress().toString(), m_client.serverPort(), nullptr);
