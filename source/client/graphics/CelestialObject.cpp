@@ -33,9 +33,6 @@
 #include "GameTime.hpp"
 #include "Vertex.hpp"
 
-CelestialObject::CelestialObject() {
-}
-
 void CelestialObject::setTexture(const std::string &textureName) {
 	if (textureName.empty()) return;
 

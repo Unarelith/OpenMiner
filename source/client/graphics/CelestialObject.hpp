@@ -34,7 +34,7 @@
 
 class CelestialObject : public gk::Drawable, public gk::Transformable  {
 	public:
-		CelestialObject();
+		CelestialObject() = default;
 
 		float width() const { return m_width; }
 		float height() const { return m_height; }

@@ -64,7 +64,7 @@ void Skybox::loadSky(const Sky &sky) {
 	}
 	catch (...) {
 		m_moon.setColor(gk::Color{240, 240, 240});
-		gkWarning() << "Failed to load moon texture" << sun.texture;
+		gkWarning() << "Failed to load moon texture" << moon.texture;
 	}
 
 	const Sky::StarsDefinition &stars = sky.starsDefinition();
