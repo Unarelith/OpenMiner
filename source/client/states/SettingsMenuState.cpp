@@ -121,18 +121,18 @@ void SettingsMenuState::updateWidgetPosition() {
 	m_filter2.setPosition(0, topBorderSize);
 
 	m_title.setPosition(
-		Config::screenWidth / 2.0f - m_title.getSize().x * Config::guiScale / 2.0f,
-		topBorderSize / 2.0f - m_title.getSize().y * Config::guiScale / 2.0f
+		roundf(Config::screenWidth / 2.0f - m_title.getSize().x * Config::guiScale / 2.0f),
+		roundf(topBorderSize / 2.0f - m_title.getSize().y * Config::guiScale / 2.0f)
 	);
 
 	m_doneButton.setPosition(
-		Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().sizeX / 2.0f,
-		Config::screenHeight - bottomBorderSize / 2.0f - m_doneButton.getGlobalBounds().sizeY / 2.0
+		roundf(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().sizeX / 2.0f),
+		roundf(Config::screenHeight - bottomBorderSize / 2.0f - m_doneButton.getGlobalBounds().sizeY / 2.0)
 	);
 
 	m_menuWidget.setPosition(
-		Config::screenWidth / 2.0 - m_menuWidget.getGlobalBounds().sizeX / 2.0,
-		topBorderSize + 5 * Config::guiScale
+		roundf(Config::screenWidth / 2.0 - m_menuWidget.getGlobalBounds().sizeX / 2.0),
+		roundf(topBorderSize + 5 * Config::guiScale)
 	);
 }
 

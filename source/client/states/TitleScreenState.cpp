@@ -153,27 +153,27 @@ void TitleScreenState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 
 void TitleScreenState::updateWidgetPosition() {
 	m_background.setPosition(
-		Config::screenWidth / 2.0f - m_background.width() / 2.0f,
-		Config::screenHeight / 2.0f - m_background.height() / 2.0f
+		roundf(Config::screenWidth / 2.0f - m_background.width() / 2.0f),
+		roundf(Config::screenHeight / 2.0f - m_background.height() / 2.0f)
 	);
 
 	m_menuWidget.setPosition(
-		Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2.0f,
-		Config::screenHeight / 2.0f - m_menuWidget.getGlobalBounds().sizeY / 2.0f
+		roundf(Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2.0f),
+		roundf(Config::screenHeight / 2.0f - m_menuWidget.getGlobalBounds().sizeY / 2.0f)
 	);
 
 	m_titleText.setPosition(
-		Config::screenWidth / 2.0f - m_titleText.getSize().x * m_titleText.getScale().x / 2.0f,
-		0.04 * Config::screenHeight * Config::guiScale
+		roundf(Config::screenWidth / 2.0f - m_titleText.getSize().x * m_titleText.getScale().x / 2.0f),
+		roundf(0.04 * Config::screenHeight * Config::guiScale)
 	);
 	m_versionText.setPosition(Config::guiScale, Config::screenHeight - m_versionText.getSize().y * Config::guiScale);
 	m_copyrightText.setPosition(
-		Config::screenWidth - m_copyrightText.getSize().x * Config::guiScale - Config::guiScale,
-		Config::screenHeight - m_copyrightText.getSize().y * Config::guiScale
+		roundf(Config::screenWidth - m_copyrightText.getSize().x * Config::guiScale - Config::guiScale),
+		roundf(Config::screenHeight - m_copyrightText.getSize().y * Config::guiScale)
 	);
 	m_licenseText.setPosition(
-		Config::screenWidth - m_licenseText.getSize().x * Config::guiScale - Config::guiScale,
-		Config::screenHeight - (m_copyrightText.getSize().y + m_licenseText.getSize().y + 2) * Config::guiScale
+		roundf(Config::screenWidth - m_licenseText.getSize().x * Config::guiScale - Config::guiScale),
+		roundf(Config::screenHeight - (m_copyrightText.getSize().y + m_licenseText.getSize().y + 2) * Config::guiScale)
 	);
 }
 
