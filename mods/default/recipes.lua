@@ -582,7 +582,7 @@ mod:smelting_recipe {
 -- Iron Ingot
 mod:smelting_recipe {
 	input = {id = "default:redstone_ore", amount = 1},
-	output = {id = "default:redstone", amount = 1}
+	output = {id = "default:redstone_dust", amount = 1}
 }
 
 -- Iron Ingot
@@ -858,7 +858,7 @@ mod:crafting_recipe {
 		"###",
 		"###"
 	},
-	keys = {["#"] = "default:redstone"}
+	keys = {["#"] = "default:redstone_dust"}
 }
 
 -- Diamond Block
@@ -940,7 +940,7 @@ mod:crafting_recipe {
 -- Redstone
 mod:crafting_recipe {
 	result = {
-		id = "default:redstone",
+		id = "default:redstone_dust",
 		amount = 9
 	},
 	pattern = {
@@ -1024,13 +1024,13 @@ mod:crafting_recipe {
 		"N#",
 		"#N"
 	},
-	keys = {["#"] = "default:nether_bricks", ["N"] = "default:nether_wart"}
+	keys = {["#"] = "default:netherbrick", ["N"] = "default:nether_wart"}
 }
 
 -- Redstone Lamp
 mod:crafting_recipe {
 	result = {
-		id = "default:redstone_lamp_off",
+		id = "default:redstone_lamp",
 		amount = 1
 	},
 	pattern = {
@@ -1038,7 +1038,7 @@ mod:crafting_recipe {
 		"#G#",
 		" # "
 	},
-	keys = {["#"] = "default:redstone", ["G"] = "default:glowstone"}
+	keys = {["#"] = "default:redstone_dust", ["G"] = "default:glowstone"}
 }
 
 -- Slime Block
@@ -1175,7 +1175,7 @@ mod:crafting_recipe {
 -- Golden Apple
 mod:crafting_recipe {
 	result = {
-		id = "default:golden_apple",
+		id = "default:apple_golden",
 		amount = 1
 	},
 	pattern = {

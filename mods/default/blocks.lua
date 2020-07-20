@@ -327,7 +327,7 @@ mod:block {
 	id = "reeds",
 	name = "Sugar Canes",
 	tiles = "reeds.png",
-	inventory_image = "sugar_cane.png",
+	inventory_image = "reeds_item.png",
 
 	draw_type = "xshape",
 	hardness = 0,
@@ -391,37 +391,35 @@ mod:block {
 	id = "nether_wart",
 	name = "Nether Wart",
 	tiles = "nether_wart_stage_0.png",
-	alt_tiles = "nether_wart_stage_2.png",
 	draw_type = "xshape",
 	inventory_image = "nether_wart.png",
 	hardness = 0,
 
+	bounding_box = {0, 0, 0, 1, 1, 4.0 / 16.0},
+	draw_offset = {0, 0, -1.0 / 16.0},
+
+	states = {
+		{ tiles = "nether_wart_stage_1.png", bounding_box = {0, 0, 0, 1, 1, 8.0 / 16.0}, },  -- 1
+		{ tiles = "nether_wart_stage_2.png", bounding_box = {0, 0, 0, 1, 1, 12.0 / 16.0}, },  -- 2
+	},
+
 	tick_randomly = true,
 	tick_probability = 0.01,
 
-	on_block_placed = function(pos, world)
-		world:add_block_data(pos.x, pos.y, pos.z, 0, 0)
-	end,
-
-	on_tick = function(pos, chunk, world)
-		local data = world:get_block_data(pos.x, pos.y, pos.z)
-		if not data then return end
-
-		local growth_stage = data.meta:get_int("growth_stage") or 0
-		if growth_stage < 2 then
-			data.use_alt_tiles = true
-			data.meta:set_int("growth_stage", 2)
+	on_tick = function(pos, block, chunk, world)
+		local block_param = world:get_data(pos.x, pos.y, pos.z)
+		local current_state = block:param():get_param(BlockParamType.State, block_param)
+		if current_state < 2 then
+			world:set_data(pos.x, pos.y, pos.z, current_state + 1)
 		end
 	end,
 
-	on_block_activated = function(pos, player, world, client, server, screen_width, screen_height, gui_scale)
-		local data = world:get_block_data(pos.x, pos.y, pos.z)
-		if not data then return end
-
-		local growth_stage = data.meta:get_int("growth_stage") or 0
-		if growth_stage >= 2 then
-			data.use_alt_tiles = false
-			data.meta:set_int("growth_stage", 0)
+	on_block_activated = function(pos, block, player, world, client, server)
+		local block_param = world:get_data(pos.x, pos.y, pos.z)
+		local current_state = block:param():get_param(BlockParamType.State, block_param)
+		if current_state >= 2 then
+			world:set_data(pos.x, pos.y, pos.z,
+				block:param():set_param(BlockParamType.State, block_param, 0))
 
 			-- FIXME: It should drop the item if 'default:use_item_drops' is enabled
 			local item_stack = ItemStack.new("default:nether_wart", 1)
@@ -485,7 +483,7 @@ mod:block {
 	is_opaque = false,
 	draw_type = "boundingbox",
 	bounding_box = {7 / 16, 7 / 16, 0, 2 / 16, 2 / 16, 10 / 16},
-
+mod:block {
 	id = "stone_andesite",
 	name = "Andesite",
 	tiles = "stone_andesite.png",
@@ -524,7 +522,7 @@ mod:block {
 mod:block {
 	id = "bookshelf",
 	name = "Bookshelf",
-	tiles = "bookshelf.png",
+	tiles = {"oak_planks.png", "oak_planks.png", "bookshelf.png"},
 }
 
 mod:block {
@@ -713,6 +711,7 @@ mod:block {
 	id = "slime",
 	name = "Slime Block",
 	tiles = "slime.png",
+	draw_type = "glass",
 }
 
 mod:block {
@@ -749,7 +748,7 @@ mod:block {
 
 mod:block {
 	id = "hay_block",
-	name = "End Stone Bricks",
+	name = "Hay Bale",
 	tiles = {"hay_block_top.png", "hay_block_top.png", "hay_block_side.png"},
 	hardness = 2,
 	harvest_requirements = 1,

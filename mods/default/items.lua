@@ -118,9 +118,9 @@ mod:item {
 }
 
 mod:item {
-	id = "golden_apple",
+	id = "apple_golden",
 	name = "Golden Apple",
-	tiles = "golden_apple.png",
+	tiles = "apple_golden.png",
 }
 
 mod:item {
@@ -178,9 +178,9 @@ mod:item {
 }
 
 mod:item {
-	id = "redstone",
+	id = "redstone_dust",
 	name = "Redstone Dust",
-	tiles = "redstone.png",
+	tiles = "redstone_dust.png",
 }
 
 mod:item {
@@ -286,9 +286,15 @@ mod:item {
 }
 
 mod:item {
-	id = "pumpkin_seeds",
+	id = "seeds_pumpkin",
 	name = "Pumpkin Seeds",
-	tiles = "pumpkin_seeds.png",
+	tiles = "seeds_pumpkin.png",
+}
+
+mod:item {
+	id = "seeds_melon",
+	name = "Melon Seeds",
+	tiles = "seeds_melon.png",
 }
 
 mod:item {
