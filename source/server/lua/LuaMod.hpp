@@ -67,7 +67,7 @@ class LuaMod {
 		void spawnEntity(const std::string &entityID, const sol::table &table);
 		void despawnEntity(EntityWrapper &entity);
 
-		void giveItemStack(ServerPlayer &player, ItemStack *itemStack);
+		ItemStack giveItemStack(ServerPlayer &player, ItemStack *itemStack);
 
 		enum class DefinitionType {
 			Block,

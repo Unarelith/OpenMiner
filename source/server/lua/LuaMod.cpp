@@ -106,16 +106,19 @@ void LuaMod::despawnEntity(EntityWrapper &entity) {
 		gkError() << "In mod '" + m_id + "': Failed to despawn entity: Missing position and network components";
 }
 
-void LuaMod::giveItemStack(ServerPlayer &player, ItemStack *itemStack) {
-	if (itemStack) {
-		// FIXME: This should probably be moved to a mod
-		ItemStack stackRet = player.inventory().addStack(itemStack->item().stringID(), itemStack->amount(), 9, 24, true);
-		if (stackRet.amount() != 0)
-			player.inventory().addStack(stackRet.item().stringID(), stackRet.amount(), 0, 9, true);
-
-		m_worldController.server()->sendPlayerInvUpdate(player.clientID(), player.client());
-	}
-	else
+ItemStack LuaMod::giveItemStack(ServerPlayer &player, ItemStack *itemStack) {
+	if (!itemStack) {
 		gkError() << "In mod '" + m_id + "': Failed to add stack to player";
+		return ItemStack::Empty;
+	}
+
+	// FIXME: This should probably be moved to a mod
+	ItemStack stackRet = player.inventory().addStack(itemStack->item().stringID(), itemStack->amount(), 9, 24, true);
+	if (stackRet.amount() != 0)
+		stackRet = player.inventory().addStack(stackRet.item().stringID(), stackRet.amount(), 0, 9, true);
+
+	m_worldController.server()->sendPlayerInvUpdate(player.clientID(), player.client());
+
+	return stackRet;
 }
 

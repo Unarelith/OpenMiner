@@ -46,6 +46,8 @@ class ItemStack {
 
 		static void initUsertype(sol::state &lua);
 
+		static const ItemStack Empty;
+
 	private:
 		std::string m_stringID{BLOCK_AIR};
 

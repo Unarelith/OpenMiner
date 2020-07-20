@@ -27,6 +27,8 @@
 #include "ItemStack.hpp"
 #include "Registry.hpp"
 
+const ItemStack ItemStack::Empty{BLOCK_AIR, 0};
+
 const Item &ItemStack::item() const {
 	return Registry::getInstance().getItemFromStringID(m_stringID);
 }

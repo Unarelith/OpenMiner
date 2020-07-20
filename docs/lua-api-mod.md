@@ -109,8 +109,10 @@ Give an item stack to a player.
 
 Example:
 ```lua
-mod:give_item_stack(player, item_stack)
+local items_left = mod:give_item_stack(player, item_stack)
 ```
+
+This function returns an `ItemStack` containing the items it couldn't place into player's inventory.
 
 ### `spawn_entity`
 
