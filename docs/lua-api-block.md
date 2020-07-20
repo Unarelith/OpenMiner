@@ -299,7 +299,7 @@ Table format:
 
 The textures will be loaded from `mods/<your-mod>/textures/blocks`
 
-**Note:** Currently, you can only use textures of the exact same size (16x16, 32x32) than the other block/item textures in the game.
+**Note:** Currently, you can only use textures of the exact same size (16x16, 32x32) as the other block/item textures in the game.
 
 ## Draw types
 
