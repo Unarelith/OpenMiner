@@ -157,7 +157,7 @@ void ChatCommandHandler::timeCommand(const std::vector<std::string> &command, Cl
 	}
 	else if (command.at(1) == "add") {
 		try {
-			u64 ticks = std::stoull(command.at(2));
+			s64 ticks = std::stoll(command.at(2));
 
 			GameTime::setTicks(GameTime::getTicks() + ticks);
 
