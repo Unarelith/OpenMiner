@@ -79,8 +79,10 @@ void TextButton::onEvent(const SDL_Event &event) {
 void TextButton::setText(const std::string &text) {
 	m_text.setString(text);
 	m_text.updateVertexBuffer();
-	m_text.setPosition(m_width / 2 - m_text.getSize().x / 2,
-			m_height / 2 - m_text.getSize().y / 2, 0);
+	m_text.setPosition(
+		std::roundf(m_width  / 2.f - m_text.getSize().x / 2.f),
+		std::roundf(m_height / 2.f - m_text.getSize().y / 2.f)
+	);
 }
 
 void TextButton::draw(gk::RenderTarget &target, gk::RenderStates states) const {
