@@ -84,365 +84,407 @@ mod:item {
 mod:item {
 	id = "wheat",
 	name = "Wheat",
-	tiles = "wheat.png"
+	tiles = "wheat.png",
 }
 
 mod:item {
 	id = "bread",
 	name = "Bread",
-	tiles = "bread.png"
+	tiles = "bread.png",
 }
 
 mod:item {
-	id = "nether_brick",
+	id = "netherbrick",
 	name = "Nether Brick",
-	tiles = "nether_brick.png"
-}
-
-mod:item {
-	id = "nether_wart",
-	name = "Nether Wart",
-	tiles = "nether_wart.png"
+	tiles = "netherbrick.png",
 }
 
 mod:item {
 	id = "snowball",
 	name = "Snowball",
-	tiles = "snowball.png"
+	tiles = "snowball.png",
 }
 
 mod:item {
-	id = "slime_ball",
+	id = "slimeball",
 	name = "Slimeball",
-	tiles = "slime_ball.png"
+	tiles = "slimeball.png",
 }
 
 mod:item {
 	id = "apple",
 	name = "Apple",
-	tiles = "apple.png"
+	tiles = "apple.png",
 }
 
 mod:item {
 	id = "golden_apple",
 	name = "Golden Apple",
-	tiles = "golden_apple.png"
+	tiles = "golden_apple.png",
 }
 
 mod:item {
 	id = "glowstone_dust",
 	name = "Glowstone Dust",
-	tiles = "glowstone_dust.png"
+	tiles = "glowstone_dust.png",
 }
 
 mod:item {
-	id = "melon_slice",
+	id = "melon",
 	name = "Melon Slice",
-	tiles = "melon_slice.png"
+	tiles = "melon.png",
 }
 
 mod:item {
-	id = "glistering_melon_slice",
+	id = "melon_speckled",
 	name = "Glistering Melon Slice",
-	tiles = "glistering_melon_slice.png"
+	tiles = "melon_speckled.png",
 }
 
 mod:item {
 	id = "magma_cream",
 	name = "Magma Cream",
-	tiles = "magma_cream.png"
+	tiles = "magma_cream.png",
 }
 
 mod:item {
 	id = "iron_nugget",
 	name = "Iron Nugget",
-	tiles = "iron_nugget.png"
+	tiles = "iron_nugget.png",
 }
 
 mod:item {
 	id = "gold_nugget",
 	name = "Gold Nugget",
-	tiles = "gold_nugget.png"
+	tiles = "gold_nugget.png",
 }
 
 mod:item {
 	id = "paper",
 	name = "Paper",
-	tiles = "paper.png"
+	tiles = "paper.png",
 }
 
 mod:item {
 	id = "egg",
 	name = "Egg",
-	tiles = "egg.png"
+	tiles = "egg.png",
 }
 
 mod:item {
 	id = "spider_eye",
 	name = "Spider Eye",
-	tiles = "spider_eye.png"
+	tiles = "spider_eye.png",
 }
 
 mod:item {
 	id = "redstone",
 	name = "Redstone Dust",
-	tiles = "redstone.png"
+	tiles = "redstone.png",
 }
 
 mod:item {
-	id = "pufferfish",
+	id = "fish_pufferfish_raw",
 	name = "Pufferfish",
-	tiles = "pufferfish.png"
+	tiles = "fish_pufferfish_raw.png",
 }
 
 mod:item {
 	id = "emerald",
 	name = "Emerald",
-	tiles = "emerald.png"
+	tiles = "emerald.png",
 }
 
 mod:item {
-	id = "book",
+	id = "book_normal",
 	name = "Book",
-	tiles = "book.png"
+	tiles = "book_normal.png",
 }
 
 mod:item {
 	id = "bone",
 	name = "Bone",
-	tiles = "bone.png"
+	tiles = "bone.png",
 }
 
 mod:item {
 	id = "bone_meal",
 	name = "Bone Meal",
-	tiles = "bone_meal.png"
+	tiles = "bone_meal.png",
 }
 
 mod:item {
 	id = "cookie",
 	name = "Cookie",
-	tiles = "cookie.png"
+	tiles = "cookie.png",
 }
 
 mod:item {
 	id = "carrot",
 	name = "Carrot",
-	tiles = "carrot.png"
+	tiles = "carrot.png",
 }
 
 mod:item {
 	id = "sugar",
 	name = "Sugar",
-	tiles = "sugar.png"
+	tiles = "sugar.png",
 }
 
 mod:item {
 	id = "string",
 	name = "String",
-	tiles = "string.png"
+	tiles = "string.png",
 }
 
 mod:item {
 	id = "blaze_rod",
 	name = "Blaze Rod",
-	tiles = "blaze_rod.png"
+	tiles = "blaze_rod.png",
 }
 
 mod:item {
 	id = "blaze_powder",
 	name = "Blaze Powder",
-	tiles = "blaze_powder.png"
+	tiles = "blaze_powder.png",
 }
 
 mod:item {
 	id = "bowl",
 	name = "Bowl",
-	tiles = "bowl.png"
+	tiles = "bowl.png",
 }
 
 mod:item {
 	id = "beetroot_seeds",
 	name = "Beetroot Seeds",
-	tiles = "beetroot_seeds.png"
+	tiles = "beetroot_seeds.png",
 }
 
 mod:item {
 	id = "beetroot",
 	name = "Beetroot",
-	tiles = "beetroot.png"
+	tiles = "beetroot.png",
 }
 
 mod:item {
 	id = "beetroot_soup",
 	name = "Beetroot Soup",
-	tiles = "beetroot_soup.png"
+	tiles = "beetroot_soup.png",
 }
 
 mod:item {
 	id = "arrow",
 	name = "Arrow",
-	tiles = "arrow.png"
+	tiles = "arrow.png",
 }
 
 mod:item {
 	id = "rotten_flesh",
 	name = "Rotten Flesh",
-	tiles = "rotten_flesh.png"
+	tiles = "rotten_flesh.png",
 }
 
 mod:item {
 	id = "pumpkin_seeds",
 	name = "Pumpkin Seeds",
-	tiles = "pumpkin_seeds.png"
+	tiles = "pumpkin_seeds.png",
 }
 
 mod:item {
 	id = "pumpkin_pie",
 	name = "Pumpkin Pie",
-	tiles = "pumpkin_pie.png"
+	tiles = "pumpkin_pie.png",
 }
 
 mod:item {
-	id = "mutton",
+	id = "mutton_raw",
 	name = "Mutton",
-	tiles = "mutton.png"
+	tiles = "mutton_raw.png",
 }
 
 mod:item {
-	id = "cooked_mutton",
+	id = "mutton_cooked",
 	name = "Cooked Mutton",
-	tiles = "cooked_mutton.png"
+	tiles = "mutton_cooked.png",
 }
 
 mod:item {
-	id = "chicken",
+	id = "porkchop_raw",
+	name = "Porkchop",
+	tiles = "porkchop_raw.png",
+}
+
+mod:item {
+	id = "porkchop_cooked",
+	name = "Cooked Porkchop",
+	tiles  = "porkchop_cooked.png",
+}
+
+mod:item {
+	id = "rabbit_raw",
+	name = "Rabbit",
+	tiles = "rabbit_raw.png",
+}
+
+mod:item {
+	id = "rabbit_cooked",
+	name = "Cooked Rabbit",
+	tiles = "rabbit_cooked.png",
+}
+
+mod:item {
+	id = "chicken_raw",
+	name = "Chicken",
+	tiles = "chicken_raw.png",
+}
+
+mod:item {
+	id = "chicken_cooked",
 	name = "Cooked Chicken",
-	tiles = "chicken.png"
+	tiles = "chicken_cooked.png",
 }
 
 mod:item {
-	id = "beef",
+	id = "fish_clownfish_raw",
+	name = "Salmon",
+	tiles = "fish_clownfish_raw.png",
+}
+
+mod:item {
+	id = "fish_salmon_raw",
+	name = "Salmon",
+	tiles = "fish_salmon_raw.png",
+}
+
+mod:item {
+	id = "fish_salmon_cooked",
+	name = "Cooked Salmon",
+	tiles = "fish_salmon_cooked.png",
+}
+
+mod:item {
+	id = "beef_raw",
 	name = "Beef",
-	tiles = "beef.png"
+	tiles = "beef_raw.png",
 }
 
 mod:item {
-	id = "cod",
+	id = "beef_cooked",
+	name = "Cooked Beef",
+	tiles = "beef_cooked.png",
+}
+
+mod:item {
+	id = "fish_cod_raw",
 	name = "Cod",
-	tiles = "cod.png"
+	tiles = "fish_cod_raw.png",
 }
 
 mod:item {
-	id = "cooked_cod",
+	id = "fish_cod_cooked",
 	name = "Cooked Cod",
-	tiles = "cooked_cod.png"
+	tiles = "fish_cod_cooked.png",
 }
 
 mod:item {
-	id = "bucket",
+	id = "bucket_empty",
 	name = "Bucket",
-	tiles = "bucket.png"
+	tiles = "bucket_empty.png",
 }
 
 mod:item {
 	id = "flint",
 	name = "Flint",
-	tiles = "flint.png"
+	tiles = "flint.png",
 }
 
 mod:item {
-	id = "poisonous_potato",
+	id = "potato_poisonous",
 	name = "Poisonous Potato",
-	tiles = "poisonous_potato.png"
+	tiles = "potato_poisonous.png",
 }
 
 mod:item {
-	id = "baked_potato",
+	id = "potato_baked",
 	name = "Baked Potato",
-	tiles = "baked_potato.png"
+	tiles = "potato_baked.png",
 }
 
 mod:item {
 	id = "potato",
 	name = "Potato",
-	tiles = "potato.png"
+	tiles = "potato.png",
 }
 
 mod:item {
 	id = "feather",
 	name = "Feather",
-	tiles = "feather.png"
+	tiles = "feather.png",
 }
 
 mod:item {
-	id = "fermented_spider_eye",
+	id = "spider_eye_fermented",
 	name = "Fermented Spider Eye",
-	tiles = "fermented_spider_eye.png"
+	tiles = "spider_eye_fermented.png",
 }
 
 mod:item {
 	id = "golden_carrot",
 	name = "Golden Carrot",
-	tiles = "golden_carrot.png"
+	tiles = "golden_carrot.png",
 }
 
 mod:item {
 	id = "lapis_lazuli",
 	name = "Lapis Lazuli",
-	tiles = "lapis_lazuli.png"
+	tiles = "lapis_lazuli.png",
 }
 
 mod:item {
-	id = "lava_bucket",
+	id = "bucket_lava",
 	name = "Lava Bucket",
-	tiles = "lava_bucket.png"
+	tiles = "bucket_lava.png",
 }
 
 mod:item {
-	id = "water_bucket",
+	id = "bucket_water",
 	name = "Water Bucket",
-	tiles = "water_bucket.png"
+	tiles = "bucket_water.png",
 }
 
 mod:item {
-	id = "milk_bucket",
+	id = "bucket_milk",
 	name = "Milk Bucket",
-	tiles = "milk_bucket.png"
+	tiles = "bucket_milk.png",
 }
 
 mod:item {
 	id = "rabbit_foot",
 	name = "Rabbit Foot",
-	tiles = "rabbit_foot.png"
+	tiles = "rabbit_foot.png",
 }
 
 mod:item {
 	id = "rabbit_hide",
 	name = "Rabbit Hide",
-	tiles = "rabbit_hide.png"
+	tiles = "rabbit_hide.png",
 }
 
 mod:item {
 	id = "rabbit_stew",
 	name = "Rabbit Stew",
-	tiles = "rabbit_stew.png"
+	tiles = "rabbit_stew.png",
 }
 
 mod:item {
 	id = "mushroom_stew",
 	name = "Mushroom Stew",
-	tiles = "mushroom_stew.png"
+	tiles = "mushroom_stew.png",
 }
 
 mod:item {
 	id = "leather",
 	name = "Leather",
-	tiles = "leather.png"
-}
-
-mod:item {
-	id = "sugar_cane",
-	name = "Sugar Cane",
-	tiles = "sugar_cane.png"
+	tiles = "leather.png",
 }

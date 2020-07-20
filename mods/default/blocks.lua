@@ -185,9 +185,9 @@ mod:block {
 }
 
 mod:block {
-	id = "stone_bricks",
+	id = "stonebrick",
 	name = "Stone Bricks",
-	tiles = "stone_bricks.png",
+	tiles = "stonebrick.png",
 	hardness = 2,
 	harvest_requirements = 1,
 }
@@ -327,7 +327,7 @@ mod:block {
 	id = "reeds",
 	name = "Sugar Canes",
 	tiles = "reeds.png",
-	inventory_image = "reeds_item.png",
+	inventory_image = "sugar_cane.png",
 
 	draw_type = "xshape",
 	hardness = 0,
@@ -388,6 +388,49 @@ mod:block {
 }
 
 mod:block {
+	id = "nether_wart",
+	name = "Nether Wart",
+	tiles = "nether_wart_stage_0.png",
+	alt_tiles = "nether_wart_stage_2.png",
+	draw_type = "xshape",
+	inventory_image = "nether_wart.png",
+	hardness = 0,
+
+	tick_randomly = true,
+	tick_probability = 0.01,
+
+	on_block_placed = function(pos, world)
+		world:add_block_data(pos.x, pos.y, pos.z, 0, 0)
+	end,
+
+	on_tick = function(pos, chunk, world)
+		local data = world:get_block_data(pos.x, pos.y, pos.z)
+		if not data then return end
+
+		local growth_stage = data.meta:get_int("growth_stage") or 0
+		if growth_stage < 2 then
+			data.use_alt_tiles = true
+			data.meta:set_int("growth_stage", 2)
+		end
+	end,
+
+	on_block_activated = function(pos, player, world, client, server, screen_width, screen_height, gui_scale)
+		local data = world:get_block_data(pos.x, pos.y, pos.z)
+		if not data then return end
+
+		local growth_stage = data.meta:get_int("growth_stage") or 0
+		if growth_stage >= 2 then
+			data.use_alt_tiles = false
+			data.meta:set_int("growth_stage", 0)
+
+			-- FIXME: It should drop the item if 'default:use_item_drops' is enabled
+			local item_stack = ItemStack.new("default:nether_wart", 1)
+			mods["default"]:give_item_stack(player, item_stack)
+		end
+	end
+}
+
+mod:block {
 	id = "seeds",
 	name = "Seeds",
 	tiles = "wheat_stage_0.png",
@@ -443,70 +486,77 @@ mod:block {
 	draw_type = "boundingbox",
 	bounding_box = {7 / 16, 7 / 16, 0, 2 / 16, 2 / 16, 10 / 16},
 
-mod:block{
-	id = "andesite",
+	id = "stone_andesite",
 	name = "Andesite",
-	tiles = "andesite.png",
+	tiles = "stone_andesite.png",
 	hardness = 1.5,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
-	id = "granite",
+	id = "stone_granite",
 	name = "Granite",
-	tiles = "granite.png",
+	tiles = "stone_granite.png",
 	hardness = 1.5,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
-	id = "diorite",
+	id = "stone_diorite",
 	name = "Diorite",
-	tiles = "diorite.png",
+	tiles = "stone_diorite.png",
 	hardness = 1.5,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
 	id = "ice",
 	name = "Ice",
-	tiles = "ice.png"
+	tiles = "ice.png",
 }
 
 mod:block {
 	id = "snow",
 	name = "Snow",
-	tiles = "snow.png"
+	tiles = "snow.png",
 }
 
 mod:block {
 	id = "bookshelf",
 	name = "Bookshelf",
-	tiles = "bookshelf.png"
+	tiles = "bookshelf.png",
 }
 
 mod:block {
-	id = "mossy_stone_bricks",
+	id = "stonebrick_mossy",
 	name = "Mossy Stone Bricks",
-	tiles = "mossy_stone_bricks.png",
+	tiles = "stonebrick_mossy.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
-	id = "cracked_stone_bricks",
+	id = "stonebrick_cracked",
 	name = "Cracked Stone Bricks",
-	tiles = "cracked_stone_bricks.png",
+	tiles = "stonebrick_cracked.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
-	id = "mossy_cobblestone",
-	name = "Mossy Cobblestone",
-	tiles = "mossy_cobblestone.png",
+	id = "stonebrick_carved",
+	name = "Carved Stone Bricks",
+	tiles = "stonebrick_carved.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
+}
+
+mod:block {
+	id = "cobblestone_mossy",
+	name = "Mossy Cobblestone",
+	tiles = "cobblestone_mossy.png",
+	hardness = 2,
+	harvest_requirements = 1,
 }
 
 mod:block {
@@ -514,7 +564,7 @@ mod:block {
 	name = "Coal Block",
 	tiles = "coal_block.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
@@ -522,7 +572,7 @@ mod:block {
 	name = "Diamond Block",
 	tiles = "diamond_block.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
@@ -530,7 +580,7 @@ mod:block {
 	name = "Gold Block",
 	tiles = "gold_block.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
@@ -538,7 +588,7 @@ mod:block {
 	name = "Lapis Lazuli Block",
 	tiles = "lapis_block.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
@@ -546,7 +596,7 @@ mod:block {
 	name = "Iron Block",
 	tiles = "iron_block.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
@@ -554,7 +604,7 @@ mod:block {
 	name = "Redstone Block",
 	tiles = "redstone_block.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
@@ -562,7 +612,7 @@ mod:block {
 	name = "Emerald Block",
 	tiles = "emerald_block.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
@@ -570,7 +620,7 @@ mod:block {
 	name = "Emerald Ore",
 	tiles = "emerald_ore.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
@@ -578,7 +628,7 @@ mod:block {
 	name = "Gold Ore",
 	tiles = "gold_ore.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
@@ -586,7 +636,7 @@ mod:block {
 	name = "Diamond Ore",
 	tiles = "diamond_ore.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
@@ -594,7 +644,7 @@ mod:block {
 	name = "Redstone Ore",
 	tiles = "redstone_ore.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
@@ -602,51 +652,67 @@ mod:block {
 	name = "Lapis Lazuli Ore",
 	tiles = "lapis_ore.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
-	id = "cut_red_sandstone",
-	name = "Cut Red Sandstone",
-	tiles = "cut_red_sandstone.png",
+	id = "red_sandstone_smooth",
+	name = "Smooth Red Sandstone",
+	tiles = "red_sandstone_smooth.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
-	id = "cut_sandstone",
-	name = "Cut Sandstone",
-	tiles = "cut_sandstone.png",
+	id = "sandstone_smooth",
+	name = "Smooth Sandstone",
+	tiles = "sandstone_smooth.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
+}
+
+mod:block {
+	id = "red_sandstone_carved",
+	name = "Carved Red Sandstone",
+	tiles = "red_sandstone_carved.png",
+	hardness = 2,
+	harvest_requirements = 1,
+}
+
+mod:block {
+	id = "sandstone_carved",
+	name = "Carved Sandstone",
+	tiles = "sandstone_carved.png",
+	hardness = 2,
+	harvest_requirements = 1,
 }
 
 mod:block {
 	id = "red_sandstone",
 	name = "Red Sandstone",
-	tiles = {"red_sandstone_top.png", "red_sandstone_bottom.png", "red_sandstone.png"},
+	tiles = {"red_sandstone_top.png", "red_sandstone_bottom.png", "red_sandstone_normal.png"},
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
 	id = "sandstone",
 	name = "Sandstone",
-	tiles = {"sandstone_top.png", "sandstone_bottom.png", "sandstone.png"},
+	tiles = {"sandstone_top.png", "sandstone_bottom.png", "sandstone_normal.png"},
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
 	id = "red_sand",
 	name = "Red Sand",
-	tiles = "red_sand.png"
+	tiles = "red_sand.png",
 }
 
 mod:block {
-	id = "slime_block",
+	id = "slime",
 	name = "Slime Block",
-	tiles = "slime_block.png"
+	tiles = "slime.png",
 }
 
 mod:block {
@@ -654,15 +720,15 @@ mod:block {
 	name = "Nether Bricks",
 	tiles = "nether_bricks.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
-	id = "red_nether_bricks",
+	id = "red_nether_brick",
 	name = "Red Nether Bricks",
-	tiles = "red_nether_bricks.png",
+	tiles = "red_nether_brick.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
@@ -670,15 +736,23 @@ mod:block {
 	name = "End Stone",
 	tiles = "end_stone.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
 }
 
 mod:block {
-	id = "end_stone_bricks",
+	id = "end_bricks",
 	name = "End Stone Bricks",
-	tiles = "end_stone_bricks.png",
+	tiles = "end_bricks.png",
 	hardness = 2,
-	harvest_requirements = 1
+	harvest_requirements = 1,
+}
+
+mod:block {
+	id = "hay_block",
+	name = "End Stone Bricks",
+	tiles = {"hay_block_top.png", "hay_block_top.png", "hay_block_side.png"},
+	hardness = 2,
+	harvest_requirements = 1,
 }
 
 dofile("blocks/workbench.lua")
