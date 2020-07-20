@@ -128,6 +128,7 @@ class BlockState : public gk::ISerializable {
 			attr_fogDepth             = 1 << 12,
 			attr_fogColor             = 1 << 13,
 			attr_drawOffset           = 1 << 14,
+			attr_isCollidable         = 1 << 15,
 		};
 
 		BLOCK_ATTR(std::string, label);
@@ -153,6 +154,8 @@ class BlockState : public gk::ISerializable {
 		BLOCK_ATTR_V(gk::Color, fogColor, gk::Color::White);
 
 		BLOCK_ATTR_V(gk::Vector3f, drawOffset, (gk::Vector3f{0, 0, 0}));
+
+		BLOCK_ATTR_V(bool, isCollidable, true);
 
 		u32 m_attrs = 0;
 

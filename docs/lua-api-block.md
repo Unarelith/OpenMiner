@@ -123,6 +123,17 @@ If you set this parameter the block will be displayed as an item in the inventor
 
 The texture is loaded from `mods/<your-mod>/textures/items/`.
 
+### `is_collidable`
+
+Defines if the block can block the player or not.
+
+Example:
+```lua
+is_collidable = true -- this is the default value
+```
+
+The default value changes to `false` if the draw type is `liquid` or `xshape`.
+
 ### `is_light_source`
 
 Defines if the block is the light source or not.

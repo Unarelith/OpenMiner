@@ -186,7 +186,7 @@ void ClientPlayer::checkCollisions(const ClientWorld &world) {
 
 bool passable(const ClientWorld &world, double x, double y, double z) {
 	const BlockState *blockState = world.getBlockState(floor(x), floor(y), floor(z));
-	return !blockState || !blockState->block().id() || blockState->drawType() == BlockDrawType::Liquid || blockState->drawType() == BlockDrawType::XShape;
+	return !blockState || !blockState->block().id() || !blockState->isCollidable();
 }
 
 void ClientPlayer::testPoint(const ClientWorld &world, double x, double y, double z, glm::vec3 &vel) {

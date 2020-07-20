@@ -71,9 +71,9 @@ void LuaBlockLoader::loadBlockState(BlockState &state, const sol::table &table, 
 	if (!tiles.textureFilenames().empty())
 		state.tiles(tiles);
 
+	loadDrawType(state, table, block);
 	loadProperties(state, table);
 	loadBoundingBox(state, table);
-	loadDrawType(state, table, block);
 	loadItemDrop(state, table);
 	loadColorMultiplier(state, table);
 
@@ -121,6 +121,9 @@ inline void LuaBlockLoader::loadProperties(BlockState &state, const sol::table &
 			drawOffset.value().get<float>(3),
 		});
 	}
+
+	if (table["is_collidable"].get_type() == sol::type::boolean)
+		state.isCollidable(table["is_collidable"].get<bool>());
 }
 
 inline void LuaBlockLoader::loadBoundingBox(BlockState &state, const sol::table &table) const {
@@ -160,6 +163,10 @@ inline void LuaBlockLoader::loadDrawType(BlockState &state, const sol::table &ta
 		}
 		else
 			gkError() << "In" << block.stringID() << " definition: Block draw type must be a string";
+	}
+
+	if (state.drawType() == BlockDrawType::Liquid || state.drawType() == BlockDrawType::XShape) {
+		state.isCollidable(false);
 	}
 }
 
