@@ -354,10 +354,10 @@ inline u8 ChunkBuilder::getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::Vecto
 	};
 
 	bool blockPresence[4] = {
-		blocks[0] && blocks[0]->block().id() != 0 && blocks[0]->isOpaque() && !blocks[0]->isLightSource(),
-		blocks[1] && blocks[1]->block().id() != 0 && blocks[1]->isOpaque() && !blocks[1]->isLightSource(),
-		blocks[2] && blocks[2]->block().id() != 0 && blocks[2]->isOpaque() && !blocks[2]->isLightSource(),
-		blocks[3] && blocks[3]->block().id() != 0 && blocks[3]->isOpaque() && !blocks[3]->isLightSource()
+		blocks[0] && blocks[0]->block().id() != 0 && blocks[0]->isOpaque(),
+		blocks[1] && blocks[1]->block().id() != 0 && blocks[1]->isOpaque(),
+		blocks[2] && blocks[2]->block().id() != 0 && blocks[2]->isOpaque(),
+		blocks[3] && blocks[3]->block().id() != 0 && blocks[3]->isOpaque()
 	};
 
 	bool side1 = blockPresence[(minOffset.x != 0) ? 2 : 1];

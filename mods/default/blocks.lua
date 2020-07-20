@@ -439,6 +439,7 @@ mod:block {
 	tiles = "torch_on.png",
 	is_light_source = true,
 	is_collidable = false,
+	is_opaque = false,
 	draw_type = "boundingbox",
 	bounding_box = {7 / 16, 7 / 16, 0, 2 / 16, 2 / 16, 10 / 16},
 }

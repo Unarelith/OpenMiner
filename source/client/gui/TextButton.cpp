@@ -80,8 +80,8 @@ void TextButton::setText(const std::string &text) {
 	m_text.setString(text);
 	m_text.updateVertexBuffer();
 	m_text.setPosition(
-		std::roundf(m_width  / 2.f - m_text.getSize().x / 2.f) + 0.5f,
-		std::roundf(m_height / 2.f - m_text.getSize().y / 2.f) + 0.5f
+		std::roundf(m_width  / 2.f - m_text.getSize().x / 2.f),
+		std::roundf(m_height / 2.f - m_text.getSize().y / 2.f)
 	);
 }
 
