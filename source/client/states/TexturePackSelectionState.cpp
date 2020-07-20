@@ -33,7 +33,6 @@
 #include "GameConfig.hpp"
 #include "TextureAtlas.hpp"
 #include "TexturePackSelectionState.hpp"
-#include "World.hpp"
 
 namespace fs = ghc::filesystem;
 
@@ -63,8 +62,6 @@ TexturePackSelectionState::TexturePackSelectionState(gk::ApplicationState *paren
 					atlas.clear();
 					atlas.loadFromRegistry(Config::texturePack);
 				}
-
-				World::isReloadRequested = true;
 			}
 		}
 
