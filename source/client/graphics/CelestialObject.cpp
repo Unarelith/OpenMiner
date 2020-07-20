@@ -49,10 +49,10 @@ void CelestialObject::updateVertexBuffer() const {
 
 	Vertex vertices[4] = {
 		// Rectangle vertices
-		{{0, m_width,        0, -1}},
-		{{0,       0,        0, -1}},
-		{{0,       0, m_height, -1}},
-		{{0, m_width, m_height, -1}},
+		{{0,  m_width / 2.f, -m_height / 2.f, -1}},
+		{{0, -m_width / 2.f, -m_height / 2.f, -1}},
+		{{0, -m_width / 2.f,  m_height / 2.f, -1}},
+		{{0,  m_width / 2.f,  m_height / 2.f, -1}},
 	};
 
 	for (u8 i = 0 ; i < 4 ; ++i) {

@@ -40,7 +40,7 @@ void Skybox::loadSky(const Sky &sky) {
 	const Sky::SunDefinition &sun = sky.sunDefinition();
 	m_sun = CelestialObject{};
 	m_sun.setSize(sun.size, sun.size);
-	m_sun.setPosition(500, -m_sun.width() / 2, -m_sun.height() / 2);
+	m_sun.setPosition(500, 0, 0);
 	m_sun.setRotationSpeed(sky.daylightCycleSpeed());
 
 	try {
@@ -54,7 +54,7 @@ void Skybox::loadSky(const Sky &sky) {
 	const Sky::MoonDefinition &moon = sky.moonDefinition();
 	m_moon = CelestialObject{};
 	m_moon.setSize(moon.size, moon.size);
-	m_moon.setPosition(-500, -m_moon.width() / 2, -m_moon.height() / 2);
+	m_moon.setPosition(-500, 0, 0);
 	m_moon.setPhaseCount(moon.phaseCount, moon.phaseSize);
 	m_moon.setCurrentPhase(0);
 	m_moon.setRotationSpeed(sky.daylightCycleSpeed());
