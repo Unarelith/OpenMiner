@@ -127,12 +127,12 @@ void SettingsMenuState::updateWidgetPosition() {
 
 	m_doneButton.setPosition(
 		roundf(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().sizeX / 2.0f),
-		roundf(Config::screenHeight - bottomBorderSize / 2.0f - m_doneButton.getGlobalBounds().sizeY / 2.0)
+		roundf(Config::screenHeight - bottomBorderSize / 2.0f - m_doneButton.getGlobalBounds().sizeY / 2.0f)
 	);
 
 	m_menuWidget.setPosition(
-		roundf(Config::screenWidth / 2.0 - m_menuWidget.getGlobalBounds().sizeX / 2.0),
-		roundf(topBorderSize + 5 * Config::guiScale)
+		roundf(Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2.0f),
+		roundf(topBorderSize + 5.0f * Config::guiScale)
 	);
 }
 

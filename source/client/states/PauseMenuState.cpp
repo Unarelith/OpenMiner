@@ -118,8 +118,8 @@ void PauseMenuState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 
 void PauseMenuState::updateWidgetPosition() {
 	m_menuWidget.setPosition(
-		roundf(Config::screenWidth / 2.0 - m_menuWidget.getGlobalBounds().sizeX / 2.0),
-		roundf(Config::screenHeight / 2.0 - m_menuWidget.getGlobalBounds().sizeY / 2.0)
+		roundf(Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2.0f),
+		roundf(Config::screenHeight / 2.0f - m_menuWidget.getGlobalBounds().sizeY / 2.0f)
 	);
 }
 
