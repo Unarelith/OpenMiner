@@ -483,6 +483,8 @@ mod:block {
 	is_opaque = false,
 	draw_type = "boundingbox",
 	bounding_box = {7 / 16, 7 / 16, 0, 2 / 16, 2 / 16, 10 / 16},
+}
+
 mod:block {
 	id = "stone_andesite",
 	name = "Andesite",
