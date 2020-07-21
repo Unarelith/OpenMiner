@@ -22,9 +22,9 @@ include_directories(external)
 #------------------------------------------------------------------------------
 # Compiler flags
 #------------------------------------------------------------------------------
-set(DEBUG_GCC_FLAGS -g -Og -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
-set(RELEASE_GCC_FLAGS -O3)
-set(RELWITHDEB_GCC_FLAGS -g -O3 -Wall -Wextra -Wfatal-errors -Wno-variadic-macros)
+set(DEBUG_GCC_FLAGS -g -Og -Wall -Wextra -Wfatal-errors)
+set(RELEASE_GCC_FLAGS -O3 -Wall -Wextra -Wfatal-errors)
+set(RELWITHDEB_GCC_FLAGS -g -O3 -Wall -Wextra -Wfatal-errors)
 
 set(CMAKE_CXX_STANDARD 17)
 

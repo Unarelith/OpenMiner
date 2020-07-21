@@ -11,7 +11,7 @@ rm -rf deploy/*.zip deploy/html_docs && \
 mkdocs build -d deploy/html_docs && \
 
 # Win32
-i686-w64-mingw32-cmake -B deploy/win32 . && \
+i686-w64-mingw32-cmake -DCMAKE_BUILD_TYPE=Release -B deploy/win32 . && \
 cp /usr/i686-w64-mingw32/bin/libssp-0.dll deploy/win32 && \
 cmake --build deploy/win32 -j8 && \
 i686-w64-mingw32-strip deploy/win32/openminer.exe deploy/win32/openminer_server.exe && \
@@ -32,7 +32,7 @@ zip -T -r ../../OpenMiner-$version-win32.zip openminer &&
 cd ../../.. && \
 
 # Win64
-x86_64-w64-mingw32-cmake -B deploy/win64 . && \
+x86_64-w64-mingw32-cmake -DCMAKE_BUILD_TYPE=Release -B deploy/win64 . && \
 cp /usr/x86_64-w64-mingw32/bin/libssp-0.dll deploy/win64 && \
 cmake --build deploy/win64 -j8 && \
 x86_64-w64-mingw32-strip deploy/win64/openminer.exe deploy/win64/openminer_server.exe && \
@@ -53,7 +53,7 @@ zip -T -r ../../OpenMiner-$version-win64.zip openminer &&
 cd ../../.. && \
 
 # Linux64
-cmake -B deploy/linux64 . && \
+cmake -DCMAKE_BUILD_TYPE=Release -B deploy/linux64 . && \
 cmake --build deploy/linux64 -j8 && \
 strip deploy/linux64/openminer deploy/linux64/openminer_server && \
 mkdir -p deploy/linux64/bin/openminer/bin deploy/linux64/bin/openminer/lib && \

@@ -299,7 +299,7 @@ void ChunkLightmap::setSunlight(int x, int y, int z, u8 val) {
 
 		updateSurroundingChunks(x, y, z);
 	}
-};
+}
 
 void ChunkLightmap::setTorchlight(int x, int y, int z, u8 val) {
 	if(x < 0)             { if(m_chunk->getSurroundingChunk(0)) m_chunk->getSurroundingChunk(0)->lightmap().setTorchlight(x + CHUNK_WIDTH, y, z, val); return; }
