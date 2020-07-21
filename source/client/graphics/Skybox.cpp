@@ -125,7 +125,7 @@ void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (m_moon.width() && m_moon.height())
 		target.draw(m_moon, states);
 
-	if (Config::isStarRenderingEnabled && skyColor != starColor) {
+	if (Config::isStarRenderingEnabled && skyColor != starColor && m_world.sky()->starsDefinition().size) {
 		for (auto &it : m_stars)
 			target.draw(it, states);
 	}

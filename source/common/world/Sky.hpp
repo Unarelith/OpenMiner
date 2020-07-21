@@ -78,15 +78,15 @@ class Sky : public gk::ISerializable {
 		void setDaylightCycleSpeed(float daylightCycleSpeed) { m_daylightCycleSpeed = daylightCycleSpeed; }
 
 	private:
-		u16 m_id;
+		u16 m_id = 0;
 		std::string m_stringID;
 
-		gk::Color m_color;
-		gk::Color m_fogColor;
+		gk::Color m_color = gk::Color::Blue;
+		gk::Color m_fogColor = gk::Color::Blue;
 
-		SunDefinition m_sunDefinition;
-		MoonDefinition m_moonDefinition;
-		StarsDefinition m_starsDefinition;
+		SunDefinition m_sunDefinition{"", 0};
+		MoonDefinition m_moonDefinition{"", 0.f, 0, 0};
+		StarsDefinition m_starsDefinition{0, 0.f};
 
 		float m_daylightCycleSpeed = 0.f;
 };
