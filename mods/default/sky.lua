@@ -43,12 +43,12 @@ mod:sky {
 	objects = {
 		sun = {
 			texture = "texture-sun", -- FIXME: Use a path instead like block attribute 'tiles'
-			size = 256,
+			size = 512,
 		},
 
 		moon = {
 			texture = "texture-moon_phases", -- FIXME: ^
-			size = 256,
+			size = 512,
 			phases = {
 				count = 8,
 				size = 32

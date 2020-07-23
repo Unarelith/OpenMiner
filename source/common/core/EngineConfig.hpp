@@ -35,8 +35,11 @@ namespace {
 	constexpr unsigned char VERSION_MINOR = 0;
 	constexpr unsigned char VERSION_PATCH = 9;
 
-	constexpr float DIST_NEAR = 0.1f;
-	constexpr float DIST_FAR  = 1000.0f;
+	constexpr float DIST_NEAR  = 0.1f;
+	constexpr float DIST_FAR   = 1000.0f;
+	constexpr float DIST_SUN   = 950.0f;
+	constexpr float DIST_MOON  = 950.0f;
+	constexpr float DIST_STARS = 975.0f;
 
 	constexpr float DIST_2D_NEAR = -512.0f;
 	constexpr float DIST_2D_FAR  = 512.0f;

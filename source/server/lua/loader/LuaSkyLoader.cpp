@@ -68,7 +68,7 @@ void LuaSkyLoader::loadObjects(Sky &sky, const sol::table &table) const {
 
 			Sky::SunDefinition sunDefinition;
 			sunDefinition.texture = sunTable["texture"].get_or<std::string>("");
-			sunDefinition.size = sunTable["size"].get_or(256);
+			sunDefinition.size = sunTable["size"].get_or(512);
 
 			sky.setSunDefinition(sunDefinition);
 		}
@@ -78,7 +78,7 @@ void LuaSkyLoader::loadObjects(Sky &sky, const sol::table &table) const {
 
 			Sky::MoonDefinition moonDefinition;
 			moonDefinition.texture = moonTable["texture"].get_or<std::string>("");
-			moonDefinition.size = moonTable["size"].get_or(256);
+			moonDefinition.size = moonTable["size"].get_or(512);
 
 			if (sol::object obj = moonTable["phases"] ; obj.valid()) {
 				sol::table phasesTable = obj.as<sol::table>();

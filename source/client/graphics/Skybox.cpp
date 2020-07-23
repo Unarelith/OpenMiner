@@ -40,7 +40,7 @@ void Skybox::loadSky(const Sky &sky) {
 	const Sky::SunDefinition &sun = sky.sunDefinition();
 	m_sun = CelestialObject{};
 	m_sun.setSize(sun.size, sun.size);
-	m_sun.setPosition(500, 0, 0);
+	m_sun.setPosition(DIST_SUN, 0, 0);
 	m_sun.setRotationSpeed(sky.daylightCycleSpeed());
 
 	try {
@@ -54,7 +54,7 @@ void Skybox::loadSky(const Sky &sky) {
 	const Sky::MoonDefinition &moon = sky.moonDefinition();
 	m_moon = CelestialObject{};
 	m_moon.setSize(moon.size, moon.size);
-	m_moon.setPosition(-500, 0, 0);
+	m_moon.setPosition(-DIST_MOON, 0, 0);
 	m_moon.setPhaseCount(moon.phaseCount, moon.phaseSize);
 	m_moon.setCurrentPhase(0);
 	m_moon.setRotationSpeed(sky.daylightCycleSpeed());
@@ -83,7 +83,7 @@ void Skybox::loadSky(const Sky &sky) {
 		v.y = (rand() % 32768 - 16383.5f) / 16383.5f;
 		// Project it to the +X semicircle in the XY plane
 		v.x = sqrtf(1.f - v.y*v.y);
-		v *= 600.f;
+		v *= DIST_STARS;
 
 		star.setPosition(v.x, v.y, v.z);
 		// Rotate the star to make it face the camera
