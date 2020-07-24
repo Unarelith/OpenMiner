@@ -106,7 +106,7 @@ mod:block {
 		end
 	end,
 
-	on_block_activated = function(pos, player, world, client, server, screen_width, screen_height, gui_scale)
+	on_block_activated = function(pos, block, player, world, client, server)
 		open_door(pos, world)
 		open_door({x = pos.x, y = pos.y, z = pos.z + 1}, world)
 	end

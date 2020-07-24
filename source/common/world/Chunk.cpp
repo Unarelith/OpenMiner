@@ -69,7 +69,8 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 	if(z < 0)              { if(m_surroundingChunks[4]) m_surroundingChunks[4]->setBlock(x, y, z + Chunk::height, type); return; }
 	if(z >= Chunk::height) { if(m_surroundingChunks[5]) m_surroundingChunks[5]->setBlock(x, y, z - Chunk::height, type); return; }
 
-	if ((m_data[z][y][x] & 0xffff) == type) return;
+	u16 currentBlockID = m_data[z][y][x] & 0xffff;
+	if (currentBlockID == type) return;
 
 	u16 blockParam = getData(x, y, z);
 	const Block &block = Registry::getInstance().getBlock(type);
@@ -86,12 +87,12 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 	onBlockPlaced(x, y, z, block);
 	m_world.onBlockPlaced(x + m_x * width, y + m_y * depth, z + m_z * height, block);
 
-	if ((m_data[z][y][x] & 0xffff) != 0) {
-		const Block &oldBlock = Registry::getInstance().getBlock(m_data[z][y][x] & 0xffff);
+	setBlockRaw(x, y, z, type);
+
+	if (currentBlockID != 0) {
+		const Block &oldBlock = Registry::getInstance().getBlock(currentBlockID);
 		onBlockDestroyed(x, y, z, oldBlock);
 	}
-
-	setBlockRaw(x, y, z, type);
 
 	if(x == 0          && m_surroundingChunks[West])   { m_surroundingChunks[West]->m_hasChanged = true; }
 	if(x == width - 1  && m_surroundingChunks[East])   { m_surroundingChunks[East]->m_hasChanged = true; }
