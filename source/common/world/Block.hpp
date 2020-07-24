@@ -80,13 +80,16 @@ class Block : public gk::ISerializable {
 			return it->second;
 		}
 
-		const BlockParam &param() const { return m_param; }
-		BlockParam &param() { return m_param; }
-
 		BlockState &addState();
 		BlockState &getState(u16 id);
 		const BlockState &getState(u16 id) const;
 		const std::deque<BlockState> &states() const { return m_states; }
+
+		const BlockParam &param() const { return m_param; }
+		BlockParam &param() { return m_param; }
+
+		u8 customParamBits() const { return m_customParamBits; }
+		void setCustomParamBits(u8 customParamBits) { m_customParamBits = customParamBits; }
 
 		static void initUsertype(sol::state &lua);
 
@@ -107,6 +110,8 @@ class Block : public gk::ISerializable {
 		std::deque<BlockState> m_states;
 
 		BlockParam m_param{*this};
+
+		u8 m_customParamBits = 0;
 };
 
 #endif // BLOCK_HPP_

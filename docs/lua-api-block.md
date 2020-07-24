@@ -38,6 +38,19 @@ color_multiplier = {1, 1, 1, 1} -- full white, this is the default value
 
 Only the pure gray parts (red == green == blue) will be affected by this multiplier.
 
+### `custom_param_bits`
+
+Allocate a certain number of bits in block param for custom data.
+
+**Note:** Block param is limited to 16 bits.
+
+Example:
+```lua
+custom_param_bits = 2 -- uses 2 bits
+```
+
+Default value is `0`.
+
 ### `draw_offset`
 
 Draw offset of the block.

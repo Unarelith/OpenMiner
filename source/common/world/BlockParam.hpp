@@ -49,6 +49,7 @@ class BlockParam : public gk::ISerializable {
 		enum Type {
 			Rotation,
 			State,
+			Custom,
 
 			Count
 		};

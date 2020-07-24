@@ -44,6 +44,7 @@ void LuaBlockLoader::loadBlock(const sol::table &table) const {
 	block.setOnBlockDestroyed(table["on_block_destroyed"]);
 	block.setTickRandomly(table["tick_randomly"].get_or(false));
 	block.setTickProbability(table["tick_probability"].get_or(0.f));
+	block.setCustomParamBits(table["custom_param_bits"].get_or<u8>(0));
 
 	BlockState &defaultState = block.getState(0);
 	loadBlockState(defaultState, table, block);
@@ -241,6 +242,10 @@ inline void LuaBlockLoader::loadParams(ServerBlock &block) const {
 		while (index >>= 1)
 			++bits;
 		block.param().allocateBits(BlockParam::Type::State, bits);
+	}
+
+	if (block.customParamBits()) {
+		block.param().allocateBits(BlockParam::Type::Custom, block.customParamBits());
 	}
 }
 
