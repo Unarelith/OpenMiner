@@ -49,6 +49,8 @@ class HUD : public gk::Transformable, public gk::Drawable {
 
 		void update();
 
+		void pause() { m_blockCursor.resetDestroyAnimation(); }
+
 		const BlockCursor &blockCursor() const { return m_blockCursor; }
 
 		Chat &chat() { return m_chat; }

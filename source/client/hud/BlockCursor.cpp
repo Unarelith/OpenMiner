@@ -130,7 +130,7 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 		}
 	}
 	else if (event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_LEFT) {
-		m_animationStart = 0;
+		resetDestroyAnimation();
 	}
 }
 
