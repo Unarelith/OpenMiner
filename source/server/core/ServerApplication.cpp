@@ -160,7 +160,9 @@ int ServerApplication::run(bool isProtected) {
 
 			m_serverCommandHandler.sendServerClosed(std::string("Server error ") + e.what());
 
-			m_registry.clear();
+			if (!m_server.isSingleplayer()) // Needed to prevent a crash when using '/stop'
+				m_registry.clear();
+
 			m_worldController.clearEntities();
 
 			return 1;
@@ -187,9 +189,11 @@ int ServerApplication::run(bool isProtected) {
 
 		m_registry.clear();
 		m_worldController.clearEntities();
-	}
 
-	return 0;
+		return 0;
+	}
+	else
+		return 1;
 }
 
 void ServerApplication::update() {

@@ -35,7 +35,7 @@ class ClientApplication : public gk::CoreApplication {
 	public:
 		ClientApplication(int argc, char **argv);
 
-		void init() override;
+		bool init() override;
 
 	private:
 		void handleEvents() override;

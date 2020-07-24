@@ -34,6 +34,7 @@
 class Scene {
 	public:
 		Scene();
+		virtual ~Scene() = default;
 
 		virtual void update();
 

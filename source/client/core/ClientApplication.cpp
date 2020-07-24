@@ -47,7 +47,7 @@ ClientApplication::ClientApplication(int argc, char **argv) : gk::CoreApplicatio
 	BlockGeometry::initOrientation();
 }
 
-void ClientApplication::init() {
+bool ClientApplication::init() {
 	m_argumentParser.addArgument("host",         {"-h", "--host",         "Select the host to connect to.", "host"});
 	m_argumentParser.addArgument("port",         {"-p", "--port",         "Select the port to use.", "port"});
 	m_argumentParser.addArgument("singleplayer", {"-s", "--singleplayer", "Start in singleplayer mode."});
@@ -69,7 +69,7 @@ void ClientApplication::init() {
 	m_window.addVertexAttribute(VertexAttribute::AmbientOcclusion, "ambientOcclusion", 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, ambientOcclusion)));
 
 	if (m_argumentParser.getArgument("help").isFound)
-		return;
+		return true;
 
 	if (m_argumentParser.getArgument("log-level").isFound) {
 		std::unordered_map<std::string, gk::LogLevel> levels = {
@@ -120,6 +120,8 @@ void ClientApplication::init() {
 		titleScreen.startSingleplayer(false);
 	else if (m_argumentParser.getArgument("multiplayer").isFound)
 		titleScreen.startMultiplayer(m_host);
+
+	return true;
 }
 
 void ClientApplication::handleEvents() {

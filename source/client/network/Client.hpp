@@ -44,7 +44,7 @@ class ClientConnectException {
 		ClientConnectException(const std::string &str)
 			: m_str(str) {}
 
-		virtual const char *what() const noexcept {
+		const char *what() const noexcept {
 			return m_str.c_str();
 		}
 
