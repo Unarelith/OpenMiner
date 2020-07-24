@@ -44,7 +44,7 @@ end
 
 mod:block {
 	id = "door_wood_upper",
-	name = "Wooden Door",
+	name = "Wooden Door (WIP)",
 	tiles = "door_wood_upper.png",
 	inventory_image = "door_wood.png",
 	groups = {
@@ -77,7 +77,7 @@ mod:block {
 
 mod:block {
 	id = "door_wood_lower",
-	name = "Wooden Door",
+	name = "Wooden Door (WIP)",
 	tiles = "door_wood_lower.png",
 	inventory_image = "door_wood.png",
 

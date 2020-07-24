@@ -389,7 +389,7 @@ mod:block {
 
 mod:block {
 	id = "seeds",
-	name = "Seeds",
+	name = "Seeds (WIP)",
 	tiles = "wheat_stage_0.png",
 	draw_type = "xshape",
 	inventory_image = "seeds_wheat.png",
@@ -435,7 +435,7 @@ mod:block {
 
 mod:block {
 	id = "torch",
-	name = "Torch",
+	name = "Torch (WIP)",
 	tiles = "torch_on.png",
 	is_light_source = true,
 	is_collidable = false,
