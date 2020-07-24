@@ -71,6 +71,10 @@ void GameState::init() {
 	m_eventHandler->addListener<GuiScaleChangedEvent>(&GameState::onGuiScaleChanged, this);
 }
 
+void GameState::onStateInactive() {
+	m_hud.pause();
+}
+
 void GameState::connect(const std::string &host, int port, const std::string &username) {
 	m_player.setName(username.empty() ? "Player" : username);
 	m_client.connect(host, port, m_player);
@@ -101,7 +105,6 @@ void GameState::onEvent(const SDL_Event &event) {
 		}
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 			m_stateStack->push<PauseMenuState>(m_client, this);
-			m_hud.pause();
 		}
 		else if (event.type == SDL_WINDOWEVENT) {
 			if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
