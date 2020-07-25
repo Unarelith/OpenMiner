@@ -29,6 +29,10 @@
 #include "Sky.hpp"
 #include "Skybox.hpp"
 
+#ifndef M_PI
+# define M_PI 3.14159265358979323846
+#endif
+
 Skybox::Skybox(gk::Camera &camera, ClientWorld &world) : m_camera(camera), m_world(world) {
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/skybox.v.glsl");

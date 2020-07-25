@@ -24,6 +24,7 @@
  *
  * =====================================================================================
  */
+#include <algorithm>
 #include <cmath>
 
 #include <gk/core/GameClock.hpp>
