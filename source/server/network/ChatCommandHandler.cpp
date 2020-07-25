@@ -124,48 +124,94 @@ void ChatCommandHandler::stopCommand(const std::vector<std::string> &command, Cl
 }
 
 void ChatCommandHandler::timeCommand(const std::vector<std::string> &command, ClientInfo &client) const {
-	if (command.size() != 3 || (command.at(1) != "set" && command.at(1) != "add")) {
-		m_server.sendChatMessage(0, "Usage: /time <set|add> <value>", &client);
-	}
-	else if (command.at(1) == "set") {
-		static const std::unordered_map<std::string, u64> values = {
-			{"day",       1000},
-			{"noon",      6000},
-			{"sunset",   11000},
-			{"night",    13000},
-			{"midnight", 18000},
-			{"sunrise",   1000},
-		};
-
-		if (auto it = values.find(command.at(2)) ; it != values.end()) {
-			GameTime::setTicks(it->second);
-
-			m_server.sendChatMessage(0, "Time set to " + std::to_string(it->second), &client);
+	std::string subcommand;
+	std::string param;
+	if (command.size() == 2) {
+		subcommand = command.at(1);
+		if (subcommand != "set" && subcommand != "add" && subcommand != "help") {
+			subcommand = "set";
+			param = command.at(1);
 		}
 		else {
-			try {
-				u64 ticks = std::stoull(command.at(2));
+			// "/time set" or "/time add" aren't meaningful without a param
+			subcommand = "help";
+		}
+	}
+	else if (command.size() == 3) {
+		subcommand = command.at(1);
+		param = command.at(2);
+	}
+	else {
+		subcommand = "help";
+	}
+	s64 ticks = 0;
+	bool gotTicks = false;
+	if (!param.empty()) {
+		if (subcommand == "set") {
+			static const std::unordered_map<std::string, u64> values = {
+				{"day",       1000},
+				{"noon",      6000},
+				{"sunset",   11000},
+				{"night",    13000},
+				{"midnight", 18000},
+				{"sunrise",   1000},
+			};
 
-				GameTime::setTicks(ticks);
-
-				m_server.sendChatMessage(0, "Time set to " + std::to_string(ticks), &client);
+			if (auto it = values.find(param) ; it != values.end()) {
+				ticks = it->second;
+				gotTicks = true;
 			}
-			catch (...) {
-				m_server.sendChatMessage(0, "Invalid time", &client);
+		}
+		if (!gotTicks) {
+			size_t dot_pos = param.find(':');
+			if (dot_pos != std::string::npos) {
+				bool minus_sign = param[0] == '-';
+				if (minus_sign) {
+					param = param.substr(1);
+					--dot_pos;
+				}
+				try {
+					u64 hours = std::stoull(param);
+					u64 mins = std::stoull(param.substr(dot_pos + 1));
+					ticks = (hours * 1000 + mins * 1000 / 60);
+					if (subcommand == "set") {
+						ticks = (ticks + 18000) % 24000;
+					}
+					else if (minus_sign) {
+						ticks = -ticks;
+					}
+					gotTicks = true;
+				}
+				catch (...) {
+					m_server.sendChatMessage(0, "Invalid time", &client);
+					return;
+				}
+			}
+			else {
+				try {
+					ticks = std::stoull(param);
+					gotTicks = true;
+				}
+				catch (...) {
+					m_server.sendChatMessage(0, "Invalid time", &client);
+					return;
+				}
 			}
 		}
 	}
-	else if (command.at(1) == "add") {
-		try {
-			s64 ticks = std::stoll(command.at(2));
 
-			GameTime::setTicks(GameTime::getTicks() + ticks);
+	if (gotTicks && subcommand == "set") {
+		GameTime::setTicks(ticks);
 
-			m_server.sendChatMessage(0, "Added " + std::to_string(ticks) + " to the time", &client);
-		}
-		catch (...) {
-			m_server.sendChatMessage(0, "Invalid time", &client);
-		}
+		m_server.sendChatMessage(0, "Time set to " + std::to_string(ticks), &client);
+	}
+	else if (gotTicks && subcommand == "add") {
+		GameTime::setTicks(GameTime::getTicks() + ticks);
+
+		m_server.sendChatMessage(0, "Added " + std::to_string(ticks) + " to the time", &client);
+	}
+	else {
+		m_server.sendChatMessage(0, "Usage: /time [set|add] <value>", &client);
 	}
 }
 
