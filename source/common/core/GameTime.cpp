@@ -36,21 +36,21 @@ u64 GameTime::s_ticks = 0;
 u16 GameTime::s_ticksPerSecond = 0;
 
 float GameTime::getCurrentTime(float offset, float speed) {
-	return std::fmod((s_ticks + dayStartOffset) * daySpeed * speed + offset, dayLength) / dayLength;
+	return float(fmod(double(s_ticks + dayStartOffset) * daySpeed * speed + offset, dayLength)) / dayLength;
 }
 
 float GameTime::getSunlightIntensityFromTime(float time) {
 	static const float pi = 3.1415927f;
-	return std::clamp(0.5f + std::sin(2 * pi * time) * 2.0f, 0.0f, 1.0f);
+	return std::clamp(0.5f + sinf(2 * pi * time) * 2.f, 0.f, 1.f);
 }
 
 gk::Color GameTime::getSkyColorFromTime(const Sky &sky, float time) {
 	float sunlight = getSunlightIntensityFromTime(time);
 
 	gk::Color skyColor = sky.color();
-	skyColor.r = std::clamp(sunlight - (1.f - skyColor.r), 0.0f, skyColor.r);
-	skyColor.g = std::clamp(sunlight - (1.f - skyColor.g), 0.0f, skyColor.g);
-	skyColor.b = std::clamp(sunlight - (1.f - skyColor.b), 0.0f, skyColor.b);
+	skyColor.r = std::clamp(sunlight - (1.f - skyColor.r), 0.f, skyColor.r);
+	skyColor.g = std::clamp(sunlight - (1.f - skyColor.g), 0.f, skyColor.g);
+	skyColor.b = std::clamp(sunlight - (1.f - skyColor.b), 0.f, skyColor.b);
 	skyColor.a = 1.f;
 
 	return skyColor;
@@ -64,8 +64,9 @@ void GameTime::updateTpsCounter() {
 		tpsStart = s_ticks;
 
 	u64 currentClockTicks = gk::GameClock::getInstance().getTicks(true);
-	if (currentClockTicks - tpsTimer > 1000) {
-		s_ticksPerSecond = floor((s_ticks - tpsStart) / ((currentClockTicks - tpsTimer) / 1000.0f) + 0.5f);
+	u32 elapsed = currentClockTicks - tpsTimer;
+	if (elapsed >= 1000) {
+		s_ticksPerSecond = ((s_ticks - tpsStart) * 1000 + elapsed / 2) / elapsed;
 		tpsTimer = currentClockTicks;
 		tpsStart = s_ticks;
 	}
