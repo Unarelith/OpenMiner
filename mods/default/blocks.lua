@@ -528,6 +528,8 @@ mod:block {
 	id = "ice",
 	name = "Ice",
 	tiles = "ice.png",
+	draw_type = "glass",
+	is_opaque = false
 }
 
 mod:block {
