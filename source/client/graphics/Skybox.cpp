@@ -119,9 +119,12 @@ void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	states.shader = &m_shader;
 
-	// Subtract the camera position - see comment in ClientWorld::draw()
-	const gk::Vector3d &cameraPosition = m_camera.getDPosition();
-	states.transform.translate(cameraPosition.x, cameraPosition.y, cameraPosition.z + SKYBOX_OFFSET_Z);
+	// Set the camera temporarily to zero - see comment in ClientWorld::draw()
+	gk::Vector3d cameraPos(m_camera.getDPosition());
+	m_camera.setDPosition(0, 0, 0);  // Temporarily move the camera to the origin
+
+	// Move the centre of the skybox under the horizon
+	states.transform.translate(0, 0, SKYBOX_OFFSET_Z);
 
 	if (m_sun.width() && m_sun.height())
 		target.draw(m_sun, states);
@@ -133,5 +136,7 @@ void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 		for (auto &it : m_stars)
 			target.draw(it, states);
 	}
+
+	m_camera.setDPosition(cameraPos);  // Restore the camera to its original position
 }
 
