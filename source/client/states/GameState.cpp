@@ -68,7 +68,12 @@ GameState::GameState()
 }
 
 void GameState::init() {
+	m_world.setEventHandler(*m_eventHandler);
+
 	m_eventHandler->addListener<GuiScaleChangedEvent>(&GameState::onGuiScaleChanged, this);
+
+	m_eventHandler->addListener<ChunkCreatedEvent>(&Minimap::onChunkCreatedEvent, &m_hud.minimap());
+	m_eventHandler->addListener<ChunkRemovedEvent>(&Minimap::onChunkRemovedEvent, &m_hud.minimap());
 }
 
 void GameState::onStateInactive() {

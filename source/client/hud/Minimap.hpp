@@ -24,63 +24,38 @@
  *
  * =====================================================================================
  */
-#ifndef HUD_HPP_
-#define HUD_HPP_
+#ifndef MINIMAP_HPP_
+#define MINIMAP_HPP_
 
-#include <gk/gl/Shader.hpp>
+#include <gk/gl/Drawable.hpp>
+#include <gk/gl/Transformable.hpp>
+#include <gk/graphics/RectangleShape.hpp>
 
-#include "BlockCursor.hpp"
-#include "BlockInfoWidget.hpp"
-#include "Chat.hpp"
-#include "Crosshair.hpp"
-#include "DebugOverlay.hpp"
-#include "Hotbar.hpp"
-#include "Minimap.hpp"
+#include "Events.hpp"
 
-struct GuiScaleChangedEvent;
+class ClientPlayer;
 
-class HUD : public gk::Transformable, public gk::Drawable {
+class Minimap : public gk::Drawable, public gk::Transformable {
 	public:
-		HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client);
+		Minimap();
 
-		void setup();
+		void update(const ClientPlayer &player);
 
-		void onEvent(const SDL_Event &event);
-		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
+		void onChunkCreatedEvent(const ChunkCreatedEvent &event);
+		void onChunkRemovedEvent(const ChunkRemovedEvent &event);
 
-		void update();
-
-		void pause() { m_blockCursor.resetDestroyAnimation(); }
-
-		const BlockCursor &blockCursor() const { return m_blockCursor; }
-
-		Chat &chat() { return m_chat; }
-
-		Minimap &minimap() { return m_minimap; }
+		static const u16 chunkSize = 2;
+		static const u16 minimapSize = 50;
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		ClientPlayer &m_player;
+		std::unordered_map<gk::Vector3i, gk::RectangleShape> m_chunks;
 
-		gk::Shader m_shader;
-		glm::mat4 m_orthoMatrix;
+		gk::RectangleShape m_border;
 
-		Hotbar m_hotbar;
-
-		BlockCursor m_blockCursor;
-		Crosshair m_crosshair;
-
-		DebugOverlay m_debugOverlay;
-		bool m_isDebugOverlayVisible = false;
-
-		BlockInfoWidget m_blockInfoWidget;
-
-		Text m_fpsText;
-
-		Chat m_chat;
-
-		Minimap m_minimap;
+		gk::Vector3i m_playerChunkPos;
+		gk::RectangleShape m_playerChunk;
 };
 
-#endif // HUD_HPP_
+#endif // MINIMAP_HPP_

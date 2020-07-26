@@ -29,8 +29,9 @@
 
 #include <unordered_map>
 
-#include <gk/gl/Camera.hpp>
 #include <gk/core/Vector4.hpp>
+#include <gk/core/EventHandler.hpp>
+#include <gk/gl/Camera.hpp>
 
 #include "ClientChunk.hpp"
 #include "ClientScene.hpp"
@@ -65,6 +66,7 @@ class ClientWorld : public World, public gk::Drawable {
 
 		void setClient(ClientCommandHandler &client) { m_client = &client; }
 		void setCamera(gk::Camera &camera) { m_camera = &camera; m_scene.setCamera(camera); }
+		void setEventHandler(gk::EventHandler &eventHandler) { m_eventHandler = &eventHandler; }
 
 		std::size_t loadedChunkCount() const { return m_chunks.size(); }
 
@@ -85,6 +87,7 @@ class ClientWorld : public World, public gk::Drawable {
 
 		ClientCommandHandler *m_client = nullptr;
 		gk::Camera *m_camera = nullptr;
+		gk::EventHandler *m_eventHandler = nullptr;
 
 		mutable gk::Vector4d m_closestInitializedChunk{0, 0, 0, 1000000};
 

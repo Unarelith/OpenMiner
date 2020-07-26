@@ -34,6 +34,7 @@
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
+#include "Events.hpp"
 #include "Registry.hpp"
 #include "Sky.hpp"
 #include "TextureAtlas.hpp"
@@ -157,6 +158,9 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 
 	chunk->setInitialized(true);
 
+	if (m_eventHandler)
+		m_eventHandler->emplaceEvent<ChunkCreatedEvent>(gk::Vector3i{cx, cy, cz}, true);
+
 	// if (cx == 2 && cy == 0 && cz == 1)
 	// 	std::cout << "Chunk at (" << cx << ", " << cy << ", " << cz << ") received" << std::endl;
 }
@@ -170,6 +174,9 @@ void ClientWorld::removeChunk(ChunkMap::iterator &it) {
 		(ClientChunk *)it->second->getSurroundingChunk(4),
 		(ClientChunk *)it->second->getSurroundingChunk(5)
 	};
+
+	if (m_eventHandler)
+		m_eventHandler->emplaceEvent<ChunkRemovedEvent>(gk::Vector3i{it->second->x(), it->second->y(), it->second->z()});
 
 	it = m_chunks.erase(it);
 
@@ -212,6 +219,9 @@ void ClientWorld::createChunkNeighbours(ClientChunk *chunk) {
 		if (!neighbour) {
 			auto it = m_chunks.emplace(gk::Vector3i{scx, scy, scz}, new ClientChunk(scx, scy, scz, *m_dimension, *this, m_textureAtlas));
 			neighbour = it.first->second.get();
+
+			if (m_eventHandler)
+				m_eventHandler->emplaceEvent<ChunkCreatedEvent>(gk::Vector3i{scx, scy, scz}, false);
 		}
 
 		chunk->setSurroundingChunk(i, neighbour);

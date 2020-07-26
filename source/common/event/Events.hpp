@@ -28,14 +28,26 @@
 #define EVENTS_HPP_
 
 #include <gk/core/IntTypes.hpp>
+#include <gk/core/Vector3.hpp>
 
 struct ServerOnlineEvent {
 	bool isOnline;
 	int port;
 };
 
+// Client-only events
+
 struct GuiScaleChangedEvent {
 	u8 guiScale;
+};
+
+struct ChunkCreatedEvent {
+	gk::Vector3<s32> chunkPos;
+	bool isLoaded;
+};
+
+struct ChunkRemovedEvent {
+	gk::Vector3<s32> chunkPos;
 };
 
 #endif // EVENTS_HPP_
