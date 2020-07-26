@@ -107,7 +107,7 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 					const BlockState &newBlockState = newBlock.getState(0); // FIXME: Get state from item stack
 					gk::FloatBox boundingBox = newBlockState.boundingBox() + gk::Vector3f(x - m_player.x(), y - m_player.y(), z - m_player.z());
 					gk::FloatBox playerBoundingBox = m_player.hitbox();
-					if (!boundingBox.intersects(playerBoundingBox)) {
+					if (!boundingBox.intersects(playerBoundingBox) && newBlock.placementConstraints().check(m_world, {x, y, z})) {
 						u32 block = hotbar.currentItem().id();
 						if (newBlock.isRotatable()) {
 							u16 data = m_player.getOppositeDirection() & 0x3;

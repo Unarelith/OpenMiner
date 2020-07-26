@@ -39,6 +39,7 @@
 #include <gk/graphics/Color.hpp>
 
 #include "BlockParam.hpp"
+#include "BlockPlacementConstraints.hpp"
 #include "BlockState.hpp"
 #include "ItemStack.hpp"
 #include "TilesDef.hpp"
@@ -91,6 +92,9 @@ class Block : public gk::ISerializable {
 		u8 customParamBits() const { return m_customParamBits; }
 		void setCustomParamBits(u8 customParamBits) { m_customParamBits = customParamBits; }
 
+		BlockPlacementConstraints &placementConstraints() { return m_placementConstraints; }
+		const BlockPlacementConstraints &placementConstraints() const { return m_placementConstraints; }
+
 		static void initUsertype(sol::state &lua);
 
 	protected:
@@ -112,6 +116,8 @@ class Block : public gk::ISerializable {
 		BlockParam m_param{*this};
 
 		u8 m_customParamBits = 0;
+
+		BlockPlacementConstraints m_placementConstraints;
 };
 
 #endif // BLOCK_HPP_

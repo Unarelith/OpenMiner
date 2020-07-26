@@ -208,6 +208,21 @@ name = "Cobblestone"
 
 This label is the name that will appear everywhere in the game.
 
+### `placement_constraints`
+
+Constraints for the placement of the block.
+
+Example:
+```lua
+placement_constraints = {
+	-- ensure that the block below is farmland
+	[{0, 0, -1}] = {
+		block = "default:farmland",
+		is_whitelist = true
+	}
+}
+```
+
 ### `states`
 
 Optional table containing block state definitions.

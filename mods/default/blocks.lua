@@ -364,6 +364,7 @@ mod:block {
 	is_opaque = false,
 	groups = {
 		om_material_dirt = 1,
+		om_farmland = 1
 	},
 
 	states = {
@@ -394,6 +395,13 @@ mod:block {
 	draw_type = "xshape",
 	inventory_image = "nether_wart.png",
 	hardness = 0,
+
+	placement_constraints = {
+		[{0, 0, -1}] = {
+			block = "default:soul_sand",
+			is_whitelist = true
+		}
+	},
 
 	bounding_box = {0, 0, 0, 1, 1, 4.0 / 16.0},
 	draw_offset = {0, 0, -1.0 / 16.0},
@@ -435,6 +443,13 @@ mod:block {
 	draw_type = "xshape",
 	inventory_image = "seeds_wheat.png",
 	hardness = 0,
+
+	placement_constraints = {
+		[{0, 0, -1}] = {
+			block = "default:farmland",
+			is_whitelist = true
+		}
+	},
 
 	bounding_box = {0, 0, 0, 1, 1, 1.0 / 16.0},
 	draw_offset = {0, 0, -1.0 / 16.0},

@@ -24,35 +24,38 @@
  *
  * =====================================================================================
  */
-#ifndef LUABLOCKLOADER_HPP_
-#define LUABLOCKLOADER_HPP_
+#ifndef BLOCKPLACEMENTCONSTRAINTS_HPP_
+#define BLOCKPLACEMENTCONSTRAINTS_HPP_
 
-#include <sol/sol.hpp>
+#include <vector>
 
-class Item;
-class LuaMod;
-class BlockState;
-class ServerBlock;
+#include <gk/core/ISerializable.hpp>
+#include <gk/core/Vector3.hpp>
 
-class LuaBlockLoader {
-	public:
-		LuaBlockLoader(LuaMod &mod) : m_mod(mod) {}
+#include "NetworkUtils.hpp"
 
-		void loadBlock(const sol::table &table) const;
+struct BlockPlacementConstraint : public gk::ISerializable {
+	gk::Vector3i blockOffset{0, 0, 0};
+	std::string blockID;
+	bool isWhitelist = true;
 
-	private:
-		void loadBlockState(BlockState &state, const sol::table &table, ServerBlock &block) const;
-		void loadProperties(BlockState &state, const sol::table &table) const;
-		void loadBoundingBox(BlockState &state, const sol::table &table) const;
-		void loadDrawType(BlockState &state, const sol::table &table, const ServerBlock &block) const;
-		void loadItemDrop(BlockState &state, const sol::table &table) const;
-		void loadColorMultiplier(BlockState &state, const sol::table &table) const;
-		void loadStates(ServerBlock &block, BlockState &state, const sol::table &table) const;
-		void loadPlacementConstraints(ServerBlock &block, const sol::table &table) const;
-		void loadGroups(ServerBlock &block, const sol::table &table, Item *item = nullptr) const;
-		void loadParams(ServerBlock &block) const;
-
-		LuaMod &m_mod;
+	void serialize(sf::Packet &packet) const override { packet << blockOffset << blockID << isWhitelist; }
+	void deserialize(sf::Packet &packet) override { packet >> blockOffset >> blockID >> isWhitelist; }
 };
 
-#endif // LUABLOCKLOADER_HPP_
+class World;
+
+class BlockPlacementConstraints : public gk::ISerializable {
+	public:
+		bool check(const World &world, const gk::Vector3i &pos) const;
+
+		void addConstraint(const BlockPlacementConstraint &constraint) { m_constraints.emplace_back(constraint); }
+
+		void serialize(sf::Packet &packet) const override;
+		void deserialize(sf::Packet &packet) override;
+
+	private:
+		std::vector<BlockPlacementConstraint> m_constraints;
+};
+
+#endif // BLOCKPLACEMENTCONSTRAINTS_HPP_

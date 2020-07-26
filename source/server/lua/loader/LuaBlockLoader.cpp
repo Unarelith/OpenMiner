@@ -26,6 +26,7 @@
  */
 #include <gk/core/Debug.hpp>
 
+#include "BlockPlacementConstraints.hpp"
 #include "LuaBlockLoader.hpp"
 #include "LuaMod.hpp"
 #include "Registry.hpp"
@@ -77,6 +78,7 @@ void LuaBlockLoader::loadBlockState(BlockState &state, const sol::table &table, 
 	loadBoundingBox(state, table);
 	loadItemDrop(state, table);
 	loadColorMultiplier(state, table);
+	loadPlacementConstraints(block, table);
 
 	loadStates(block, state, table);
 }
@@ -210,6 +212,39 @@ inline void LuaBlockLoader::loadStates(ServerBlock &block, BlockState &state, co
 		}
 		else
 			gkError() << "For block" << state.block().stringID() << ": 'states' must be a table";
+	}
+}
+
+inline void LuaBlockLoader::loadPlacementConstraints(ServerBlock &block, const sol::table &table) const {
+	sol::object constraintsObject = table["placement_constraints"];
+	if (constraintsObject.valid()) {
+		if (constraintsObject.get_type() == sol::type::table) {
+			sol::table constraintsTable = constraintsObject.as<sol::table>();
+			for (auto &constraintsObject : constraintsTable) {
+				BlockPlacementConstraint constraint;
+
+				sol::optional<sol::table> blockOffset = constraintsObject.first.as<sol::table>();
+				if (blockOffset != sol::nullopt) {
+					constraint.blockOffset.x = blockOffset.value().get<u32>(1);
+					constraint.blockOffset.y = blockOffset.value().get<u32>(2);
+					constraint.blockOffset.z = blockOffset.value().get<u32>(3);
+				}
+				else
+					gkError() << "For block" << block.stringID() << ": 'placement_constraints' offset is wrong";
+
+				sol::optional<sol::table> constraintTable = constraintsObject.second.as<sol::table>();
+				if (constraintTable != sol::nullopt) {
+					constraint.blockID = constraintTable.value()["block"].get<std::string>();
+					constraint.isWhitelist = constraintTable.value()["is_whitelist"].get<bool>();
+				}
+				else
+					gkError() << "For block" << block.stringID() << ": 'placement_constraints' table is wrong";
+
+				block.placementConstraints().addConstraint(constraint);
+			}
+		}
+		else
+			gkError() << "For block" << block.stringID() << ": 'placement_constraints' must be a table";
 	}
 }
 

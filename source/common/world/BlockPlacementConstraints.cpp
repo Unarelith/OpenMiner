@@ -24,35 +24,32 @@
  *
  * =====================================================================================
  */
-#ifndef LUABLOCKLOADER_HPP_
-#define LUABLOCKLOADER_HPP_
+#include "BlockPlacementConstraints.hpp"
+#include "Registry.hpp"
+#include "World.hpp"
 
-#include <sol/sol.hpp>
+bool BlockPlacementConstraints::check(const World &world, const gk::Vector3i &pos) const {
+	bool isValid = true;
+	for (auto &it : m_constraints) {
+		const Block &block = Registry::getInstance().getBlockFromStringID(it.blockID);
+		u16 blockIDToCheck = world.getBlock(
+			pos.x + it.blockOffset.x,
+			pos.y + it.blockOffset.y,
+			pos.z + it.blockOffset.z);
+		const Block &blockToCheck = Registry::getInstance().getBlock(blockIDToCheck);
+		bool isSameBlock = (block.id() == blockToCheck.id());
+		if ((it.isWhitelist && !isSameBlock) || (!it.isWhitelist && isSameBlock))
+			isValid = false;
+	}
 
-class Item;
-class LuaMod;
-class BlockState;
-class ServerBlock;
+	return isValid;
+}
 
-class LuaBlockLoader {
-	public:
-		LuaBlockLoader(LuaMod &mod) : m_mod(mod) {}
+void BlockPlacementConstraints::serialize(sf::Packet &packet) const {
+	packet << m_constraints;
+}
 
-		void loadBlock(const sol::table &table) const;
+void BlockPlacementConstraints::deserialize(sf::Packet &packet) {
+	packet >> m_constraints;
+}
 
-	private:
-		void loadBlockState(BlockState &state, const sol::table &table, ServerBlock &block) const;
-		void loadProperties(BlockState &state, const sol::table &table) const;
-		void loadBoundingBox(BlockState &state, const sol::table &table) const;
-		void loadDrawType(BlockState &state, const sol::table &table, const ServerBlock &block) const;
-		void loadItemDrop(BlockState &state, const sol::table &table) const;
-		void loadColorMultiplier(BlockState &state, const sol::table &table) const;
-		void loadStates(ServerBlock &block, BlockState &state, const sol::table &table) const;
-		void loadPlacementConstraints(ServerBlock &block, const sol::table &table) const;
-		void loadGroups(ServerBlock &block, const sol::table &table, Item *item = nullptr) const;
-		void loadParams(ServerBlock &block) const;
-
-		LuaMod &m_mod;
-};
-
-#endif // LUABLOCKLOADER_HPP_

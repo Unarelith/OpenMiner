@@ -49,13 +49,15 @@ const TilesDef &Block::tiles(u16 stateID) const {
 
 void Block::serialize(sf::Packet &packet) const {
 	packet << u32(m_id) << m_stringID << m_canUpdate << m_canBeActivated
-		<< m_isRotatable << m_groups << m_states << m_param << m_customParamBits;
+		<< m_isRotatable << m_groups << m_states << m_param << m_customParamBits
+		<< m_placementConstraints;
 }
 
 void Block::deserialize(sf::Packet &packet) {
 	u32 id;
 	packet >> id >> m_stringID >> m_canUpdate >> m_canBeActivated
-		>> m_isRotatable >> m_groups >> m_states >> m_param >> m_customParamBits;
+		>> m_isRotatable >> m_groups >> m_states >> m_param >> m_customParamBits
+		>> m_placementConstraints;
 	m_id = id;
 
 	for (auto &it : m_states) {
