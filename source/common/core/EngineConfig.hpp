@@ -27,6 +27,8 @@
 #ifndef ENGINECONFIG_HPP_
 #define ENGINECONFIG_HPP_
 
+#define ABS(x) ((x) < 0? -(x) : (x))
+
 namespace {
 	// Only used in Client
 	constexpr const char *APP_NAME = "OpenMiner";
@@ -37,9 +39,11 @@ namespace {
 
 	constexpr float DIST_NEAR  = 0.1f;
 	constexpr float DIST_FAR   = 1000.0f;
-	constexpr float DIST_SUN   = 950.0f;
-	constexpr float DIST_MOON  = 950.0f;
-	constexpr float DIST_STARS = 975.0f;
+
+	constexpr float SKYBOX_OFFSET_Z = -50.f;
+	constexpr float DIST_SUN   = DIST_FAR - ABS(SKYBOX_OFFSET_Z) - 50.f;
+	constexpr float DIST_MOON  = DIST_FAR - ABS(SKYBOX_OFFSET_Z) - 50.f;
+	constexpr float DIST_STARS = DIST_FAR - ABS(SKYBOX_OFFSET_Z) - 25.f;
 
 	constexpr float DIST_2D_NEAR = -512.0f;
 	constexpr float DIST_2D_FAR  = 512.0f;

@@ -121,7 +121,7 @@ void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	// Subtract the camera position - see comment in ClientWorld::draw()
 	const gk::Vector3d &cameraPosition = m_camera.getDPosition();
-	states.transform.translate(cameraPosition.x, cameraPosition.y, cameraPosition.z - 50);
+	states.transform.translate(cameraPosition.x, cameraPosition.y, cameraPosition.z + SKYBOX_OFFSET_Z);
 
 	if (m_sun.width() && m_sun.height())
 		target.draw(m_sun, states);
