@@ -269,6 +269,8 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 	std::vector<std::pair<ClientChunk*, gk::Transform>> chunks;
 	for(auto &it : m_chunks) {
+		it.second->setHasBeenDrawn(false);
+
 		gk::Transform tf = glm::translate(glm::mat4(1.0f),
 		                                  glm::vec3(it.second->x() * CHUNK_WIDTH  - cameraPos.x,
 		                                            it.second->y() * CHUNK_DEPTH  - cameraPos.y,
@@ -327,6 +329,8 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		for (auto &it : chunks) {
 			states.transform = it.second;
 			it.first->drawLayer(target, states, i);
+
+			it.first->setHasBeenDrawn(true);
 		}
 	}
 

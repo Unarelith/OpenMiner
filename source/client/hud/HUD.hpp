@@ -62,6 +62,7 @@ class HUD : public gk::Transformable, public gk::Drawable {
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		ClientPlayer &m_player;
+		ClientWorld &m_world;
 
 		gk::Shader m_shader;
 		glm::mat4 m_orthoMatrix;

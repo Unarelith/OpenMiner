@@ -39,7 +39,7 @@ class Minimap : public gk::Drawable, public gk::Transformable {
 	public:
 		Minimap();
 
-		void update(const ClientPlayer &player);
+		void update(const ClientPlayer &player, class ClientWorld &world);
 
 		void onChunkCreatedEvent(const ChunkCreatedEvent &event);
 		void onChunkRemovedEvent(const ChunkRemovedEvent &event);

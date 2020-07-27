@@ -35,7 +35,8 @@
 #include "HUD.hpp"
 
 HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
-	: m_player(player), m_hotbar(player, client),
+	: m_player(player), m_world(world),
+	m_hotbar(player, client),
 	m_blockCursor(player, world, client),
 	m_debugOverlay(player, world),
 	m_chat(client.client())
@@ -103,7 +104,7 @@ void HUD::update() {
 			m_blockInfoWidget.setCurrentBlock(m_blockCursor.currentBlock());
 	}
 
-	m_minimap.update(m_player);
+	m_minimap.update(m_player, m_world);
 }
 
 void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
