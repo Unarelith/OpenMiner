@@ -27,7 +27,7 @@
 #ifndef ENGINECONFIG_HPP_
 #define ENGINECONFIG_HPP_
 
-#define ABS(x) ((x) < 0? -(x) : (x))
+#include <gk/math/Math.hpp>
 
 namespace {
 	// Only used in Client
@@ -41,9 +41,9 @@ namespace {
 	constexpr float DIST_FAR   = 1000.0f;
 
 	constexpr float SKYBOX_OFFSET_Z = -50.f;
-	constexpr float DIST_SUN   = DIST_FAR - ABS(SKYBOX_OFFSET_Z) - 50.f;
-	constexpr float DIST_MOON  = DIST_FAR - ABS(SKYBOX_OFFSET_Z) - 50.f;
-	constexpr float DIST_STARS = DIST_FAR - ABS(SKYBOX_OFFSET_Z) - 25.f;
+	constexpr float DIST_SUN   = DIST_FAR - gk::abs(SKYBOX_OFFSET_Z) - 50.f;
+	constexpr float DIST_MOON  = DIST_FAR - gk::abs(SKYBOX_OFFSET_Z) - 50.f;
+	constexpr float DIST_STARS = DIST_FAR - gk::abs(SKYBOX_OFFSET_Z) - 25.f;
 
 	constexpr float DIST_2D_NEAR = -512.0f;
 	constexpr float DIST_2D_FAR  = 512.0f;
