@@ -46,10 +46,11 @@ class CelestialObject : public gk::Drawable, public gk::Transformable  {
 		void setCurrentPhase(u16 currentPhase) const { if (m_currentPhase != currentPhase) { m_currentPhase = currentPhase; m_isUpdateNeeded = true; } }
 		void setRotationOffset(u16 rotationOffset) { m_rotationOffset = rotationOffset; }
 		void setRotationSpeed(float rotationSpeed) { m_rotationSpeed = rotationSpeed; }
-		void setRotationAxis(const gk::Vector3f &rotationAxis) { m_rotationAxis = rotationAxis; }
+		void setRotationAxis(const gk::Vector3f &rotationAxis) { m_rotationAxis = rotationAxis; m_axisXfNeedsUpdate = true; }
 
 	private:
 		void updateVertexBuffer() const;
+		void updateAxisTransform() const;
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
@@ -63,6 +64,7 @@ class CelestialObject : public gk::Drawable, public gk::Transformable  {
 		const gk::Texture *m_texture = nullptr;
 
 		mutable bool m_isUpdateNeeded = true;
+		mutable bool m_axisXfNeedsUpdate = true;
 
 		u16 m_phaseCount = 0;
 		u16 m_phaseSize = 0;
@@ -71,6 +73,7 @@ class CelestialObject : public gk::Drawable, public gk::Transformable  {
 		u16 m_rotationOffset = 0;
 		float m_rotationSpeed = 1.f;
 		gk::Vector3f m_rotationAxis{0, 1, 0};
+		mutable glm::mat4 m_rotAxisTransform;
 };
 
 #endif // CELESTIALOBJECT_HPP_

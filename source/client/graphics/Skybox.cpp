@@ -80,13 +80,17 @@ void Skybox::loadSky(const Sky &sky) {
 		star.setSize(stars.size, stars.size);
 
 		// This formula makes the distribution uniform
-		glm::vec3 v{0.f, 0.f, 0.f};
-		// Generate a uniform random coordinate
-		// NOTE: MUST NOT USE FAST MATH!
-		// Otherwise it risks taking the square root of a negative!
-		v.y = (rand() % 32768 - 16383.5f) / 16383.5f;
-		// Project it to the +X semicircle in the XY plane
-		v.x = sqrtf(1.f - v.y*v.y);
+		glm::vec3 v{0.f, 1.f, 0.f};
+		// i = 0 adds a Polaris star for reference. m_rotationAxis will point
+		// to this star all the time.
+		if (i != 0) {
+			// Generate a uniform random coordinate
+			// NOTE: MUST NOT USE FAST MATH!
+			// Otherwise it risks taking the square root of a negative!
+			v.y = (rand() % 32768 - 16383.5f) / 16383.5f;
+			// Project it to the +X semicircle in the XY plane
+			v.x = sqrtf(1.f - v.y*v.y);
+		}
 		v *= DIST_STARS;
 
 		star.setPosition(v.x, v.y, v.z);
@@ -97,7 +101,6 @@ void Skybox::loadSky(const Sky &sky) {
 		star.setRotationOffset(rand() % GameTime::dayLength);
 
 		star.setRotationSpeed(sky.daylightCycleSpeed());
-		star.setRotationAxis({0, 1, 0});
 		// Maybe sometimes stars could have a random axis?
 		// star.setRotationAxis({rand() % 100 / 100.f, rand() % 100 / 100.f, rand() % 100 / 100.f});
 	}
@@ -124,7 +127,9 @@ void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	m_camera.setDPosition(0, 0, 0);  // Temporarily move the camera to the origin
 
 	// Move the centre of the skybox under the horizon
-	states.transform.translate(0, 0, SKYBOX_OFFSET_Z);
+	glm::mat4 trans{1};
+	trans[3].z = SKYBOX_OFFSET_Z;
+	states.transform = trans * states.transform;
 
 	if (m_sun.width() && m_sun.height())
 		target.draw(m_sun, states);
