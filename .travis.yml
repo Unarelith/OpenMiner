@@ -27,9 +27,9 @@ addons:
 script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake -DOM_BUILD_TESTS:BOOL=ON ..
   - make -j8
-  # - ./openminer_tests
+  - ./openminer_tests
 
 notifications:
   email: false
