@@ -67,6 +67,9 @@ bool ServerApplication::init() {
 	gk::LoggerHandler::setInstance(m_loggerHandler);
 	m_loggerHandler.setName("server");
 
+	fs::create_directory("logs");
+	m_loggerHandler.openLogFile("logs/openminer_server.log");
+
 	BlockGeometry::initOrientation();
 
 	m_argumentParser.addArgument("port", {"-p", "--port", "Select the port to use.", "port"});
