@@ -1,5 +1,13 @@
 #!/bin/bash
 
+echo -n "Did you update version number in EngineConfig? "
+read answer
+
+if [ "${answer}" != "y" ];
+then
+	exit
+fi
+
 echo -n "Which version are you deploying? "
 read version
 

@@ -65,11 +65,15 @@ TitleScreenState::TitleScreenState(u16 port) : m_port(port) {
 
 	std::string versionString = APP_NAME;
 	versionString.append(" ");
-	versionString.append(1, '0' + VERSION_MAJOR);
+	versionString.append(std::to_string(VERSION_MAJOR));
 	versionString.append(".");
-	versionString.append(1, '0' + VERSION_MINOR);
+	versionString.append(std::to_string(VERSION_MINOR));
 	versionString.append(".");
-	versionString.append(1, '0' + VERSION_PATCH);
+	versionString.append(std::to_string(VERSION_PATCH));
+	if (VERSION_SUFFIX[0]) {
+		versionString.append("-");
+		versionString.append(VERSION_SUFFIX);
+	}
 	m_versionText.setString(versionString);
 	m_versionText.setScale(Config::guiScale, Config::guiScale);
 	m_versionText.updateVertexBuffer();
