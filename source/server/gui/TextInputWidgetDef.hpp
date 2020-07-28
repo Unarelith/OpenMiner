@@ -24,24 +24,27 @@
  *
  * =====================================================================================
  */
-#ifndef LUAWIDGET_HPP_
-#define LUAWIDGET_HPP_
+#ifndef TEXTINPUTWIDGETDEF_HPP_
+#define TEXTINPUTWIDGETDEF_HPP_
 
-#include <gk/core/IntTypes.hpp>
+#include "WidgetDef.hpp"
 
-namespace LuaWidget {
-	enum : u8 {
-		Undefined         = 0,
+class TextInputWidgetDef : public WidgetDef {
+	public:
+		TextInputWidgetDef() : WidgetDef(LuaWidget::TextInput) {}
 
-		Image             = 1,
-		TextButton        = 2,
-		InventoryWidget   = 3,
-		CraftingWidget    = 4,
-		ProgressBarWidget = 5,
-		ScrollBarWidget   = 6,
-		TextInput         = 7,
-		Inventory         = 8,
-	};
-}
+		void serialize(sf::Packet &packet) const override;
 
-#endif // LUAWIDGET_HPP_
+		void loadFromLuaTable(const sol::table &table) override;
+
+	private:
+		u16 m_width = 0;
+		u16 m_height = 0;
+
+		std::string m_placeholder;
+		gk::Color m_placeholderColor;
+
+		std::string m_inventory;
+};
+
+#endif // TEXTINPUTWIDGETDEF_HPP_

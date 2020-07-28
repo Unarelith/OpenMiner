@@ -46,6 +46,7 @@ class LuaGUI {
 		void addCraftingWidget(const sol::table &table);
 		void addProgressBarWidget(const sol::table &table);
 		void addScrollBarWidget(const sol::table &table);
+		void addTextInput(const sol::table &table);
 		void addInventory(const sol::table &table);
 
 		void setSize(u16 width, u16 height) { m_width = width; m_height = height; }

@@ -38,6 +38,7 @@
 #include "ProgressBarWidgetDef.hpp"
 #include "ScrollBarWidgetDef.hpp"
 #include "TextButtonWidgetDef.hpp"
+#include "TextInputWidgetDef.hpp"
 
 void LuaGUI::addImage(const sol::table &table) {
 	m_widgetDefinitions.emplace_back(new ImageWidgetDef);
@@ -66,6 +67,11 @@ void LuaGUI::addProgressBarWidget(const sol::table &table) {
 
 void LuaGUI::addScrollBarWidget(const sol::table &table) {
 	m_widgetDefinitions.emplace_back(new ScrollBarWidgetDef);
+	m_widgetDefinitions.back()->loadFromLuaTable(table);
+}
+
+void LuaGUI::addTextInput(const sol::table &table) {
+	m_widgetDefinitions.emplace_back(new TextInputWidgetDef);
 	m_widgetDefinitions.back()->loadFromLuaTable(table);
 }
 
@@ -116,6 +122,7 @@ void LuaGUI::initUsertype(sol::state &lua) {
 		"crafting",       &LuaGUI::addCraftingWidget,
 		"progress_bar",   &LuaGUI::addProgressBarWidget,
 		"scroll_bar",     &LuaGUI::addScrollBarWidget,
+		"text_input",     &LuaGUI::addTextInput,
 		"inventory_data", &LuaGUI::addInventory,
 
 		"set_size",       &LuaGUI::setSize,

@@ -47,6 +47,8 @@ class InventoryWidget : public AbstractInventoryWidget {
 
 		void update() override;
 
+		void applySearch(const std::string &search);
+
 		bool sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) override;
 		ItemStack receiveItemStack(const ItemWidget *itemStack, AbstractInventoryWidget *src) override;
 
@@ -59,7 +61,7 @@ class InventoryWidget : public AbstractInventoryWidget {
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		void loadItemWidgets(u16 offset, u16 size);
+		void loadItemWidgets(u16 offset, u16 size, std::string search = "");
 
 		ClientCommandHandler &m_client;
 
@@ -75,6 +77,8 @@ class InventoryWidget : public AbstractInventoryWidget {
 		ItemWidget *m_currentItemWidget = nullptr;
 
 		gk::RectangleShape m_selectedItemBackground{16, 16, gk::Color{255, 255, 255, 80}};
+
+		std::string m_lastSearch;
 };
 
 #endif // INVENTORYWIDGET_HPP_

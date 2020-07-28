@@ -30,12 +30,13 @@
 #include <gk/core/SDLHeaders.hpp>
 
 #include "Text.hpp"
+#include "Widget.hpp"
 
-class TextInput : public gk::Drawable, public gk::Transformable {
+class TextInput : public Widget {
 	public:
-		TextInput();
+		TextInput(Widget *parent = nullptr);
 
-		void onEvent(const SDL_Event &event);
+		void onEvent(const SDL_Event &event) override;
 
 		const std::string &string() const { return m_content; }
 		void setString(const std::string &string);
@@ -43,14 +44,20 @@ class TextInput : public gk::Drawable, public gk::Transformable {
 		gk::Vector2f getBackgroundSize() const { return m_text.getBackgroundSize(); }
 
 		void setBackgroundColor(const gk::Color &color) { m_text.setBackgroundColor(color); }
-		void setBackgroundSize(unsigned int width, unsigned int height) { m_text.setBackgroundSize(width, height); }
 		void setBackgroundOutline(int thickness, const gk::Color &color) { m_text.setBackgroundOutline(thickness, color); }
+		void setBackgroundSize(unsigned int width, unsigned int height) {
+			m_text.setBackgroundSize(width, height);
+			m_width = width;
+			m_height = height;
+		}
 
 		void setPadding(int x, int y) { m_text.setPadding(x, y); m_cursor.setPadding(x, y); m_placeholder.setPadding(x, y); }
 		void setCharacterLimit(u16 characterLimit) { m_characterLimit = characterLimit; }
 
 		void setPlaceholder(const std::string &placeholder) { m_placeholder.setString(placeholder); }
+		void setPlaceholderColor(const gk::Color &color) { m_placeholder.setColor(color); }
 
+		bool hasFocus() const { return m_hasFocus; }
 		void setFocus(bool hasFocus) { m_hasFocus = hasFocus; }
 
 	private:

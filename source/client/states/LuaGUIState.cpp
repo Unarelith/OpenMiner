@@ -77,13 +77,25 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 
 	if (event.type == SDL_KEYDOWN && (event.key.keysym.sym == SDLK_ESCAPE
 	 || (m_keyID >= 0 && event.key.keysym.sym == Registry::getInstance().getKey(m_keyID).keycode()))) {
-		gk::Mouse::setCursorGrabbed(true);
-		gk::Mouse::setCursorVisible(false);
-		gk::Mouse::resetToWindowCenter();
+		bool ignoreExit = false;
+		for (auto &it : m_textInputs) {
+			if (it.second.hasFocus()) {
+				ignoreExit = true;
 
-		isActive = false;
+				if (event.key.keysym.sym == SDLK_ESCAPE)
+					it.second.setFocus(false);
+			}
+		}
 
-		m_stateStack->pop();
+		if (!ignoreExit) {
+			gk::Mouse::setCursorGrabbed(true);
+			gk::Mouse::setCursorVisible(false);
+			gk::Mouse::resetToWindowCenter();
+
+			isActive = false;
+
+			m_stateStack->pop();
+		}
 	}
 
 	for (auto &it : m_widgets)
@@ -123,10 +135,22 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 
 		m_mouseItemWidget.onEvent(event);
 	}
+
+	for (auto &it : m_textInputs)
+		it.second.onEvent(event);
 }
 
 void LuaGUIState::update() {
 	InterfaceState::update();
+
+	for (auto &it : m_textInputInventories) {
+		auto inv = m_inventoryWidgets.find(it.second);
+		if (inv != m_inventoryWidgets.end()) {
+			inv->second.applySearch(m_textInputs.at(it.first).string());
+		}
+		else
+			gkError() << "Can't find linked inventory" << it.second << "for text input" << it.first;
+	}
 
 	for (auto &it : m_widgets)
 		it->update();
@@ -177,6 +201,9 @@ void LuaGUIState::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 	for (auto &it : m_craftingWidgets)
 		target.draw(it.second, states);
 
+	for (auto &it : m_textInputs)
+		target.draw(it.second, states);
+
 	target.draw(m_mouseItemWidget, states);
 }
 
@@ -201,6 +228,8 @@ void LuaGUIState::loadGUI(sf::Packet &packet) {
 		loadCraftingWidget(name, x, y, packet);
 	else if (type == LuaWidget::ScrollBarWidget)
 		loadScrollBarWidget(name, x, y, packet);
+	else if (type == LuaWidget::TextInput)
+		loadTextInput(name, x, y, packet);
 	else if (type == LuaWidget::Inventory)
 		loadInventory(name, packet);
 }
@@ -368,6 +397,23 @@ void LuaGUIState::loadScrollBarWidget(const std::string &, s32 x, s32 y, sf::Pac
 	scrollBarWidget->init(texture, clipRect, minY, maxY, m_inventoryWidgets.at(widget));
 
 	m_widgets.emplace_back(scrollBarWidget);
+}
+
+void LuaGUIState::loadTextInput(const std::string &name, s32 x, s32 y, sf::Packet &packet) {
+	u16 width, height;
+	std::string placeholder, inventory;
+	gk::Color placeholderColor;
+	packet >> width >> height >> placeholder >> placeholderColor >> inventory;
+
+	TextInput textInput{&m_mainWidget};
+	textInput.setPosition(x, y);
+	textInput.setFocus(false);
+	textInput.setBackgroundSize(width, height);
+	textInput.setPlaceholder(placeholder);
+	textInput.setPlaceholderColor(placeholderColor);
+
+	m_textInputs.emplace(name, std::move(textInput));
+	m_textInputInventories.emplace(name, inventory);
 }
 
 void LuaGUIState::loadInventory(const std::string &name, sf::Packet &packet) {

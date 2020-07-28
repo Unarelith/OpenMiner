@@ -79,6 +79,13 @@ void InventoryWidget::update() {
 		sendUpdatePacket();
 }
 
+void InventoryWidget::applySearch(const std::string &search) {
+	if (search != m_lastSearch) {
+		loadItemWidgets(m_offset, m_size, search);
+		m_lastSearch = search;
+	}
+}
+
 bool InventoryWidget::sendItemStackToDest(const ItemWidget *itemStack, AbstractInventoryWidget *dest) {
 	if (dest->doItemMatchFilter(itemStack->stack().item())) {
 		ItemStack stackRet = dest->receiveItemStack(itemStack, this);
@@ -128,15 +135,25 @@ void InventoryWidget::draw(gk::RenderTarget &target, gk::RenderStates states) co
 		target.draw(m_selectedItemBackground, states);
 }
 
-void InventoryWidget::loadItemWidgets(u16 offset, u16 size) {
+void InventoryWidget::loadItemWidgets(u16 offset, u16 size, std::string search) {
 	m_itemWidgets.clear();
 
+	u16 itemCounter = 0;
 	for (u16 i = 0 ; i < size ; ++i) {
-		m_itemWidgets.emplace_back(*m_inventory, (i + offset) % m_inventory->width(), (i + offset) / m_inventory->width(), this);
+		u16 x = (i + offset) % m_inventory->width();
+		u16 y = (i + offset) / m_inventory->width();
+		std::string label = m_inventory->getStack(x, y).item().label();
+		std::transform(label.begin(), label.end(), label.begin(), [](unsigned char c) { return std::tolower(c); });
+		std::transform(search.begin(), search.end(), search.begin(), [](unsigned char c) { return std::tolower(c); });
+		if (search.empty() || label.find(search) != std::string::npos) {
+			m_itemWidgets.emplace_back(*m_inventory, x, y, this);
 
-		ItemWidget &widget = m_itemWidgets.back();
-		widget.update();
-		widget.setPosition((i % m_inventory->width()) * 18, (i / m_inventory->width()) * 18, 0);
+			ItemWidget &widget = m_itemWidgets.back();
+			widget.update();
+			widget.setPosition((itemCounter % m_inventory->width()) * 18, (itemCounter / m_inventory->width()) * 18, 0);
+
+			itemCounter++;
+		}
 	}
 }
 

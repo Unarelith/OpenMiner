@@ -28,7 +28,7 @@
 
 #include "TextInput.hpp"
 
-TextInput::TextInput() {
+TextInput::TextInput(Widget *parent) : Widget(parent) {
 	m_cursor.setString("_");
 
 	m_placeholder.setColor(gk::Color(150, 150, 150));
@@ -36,14 +36,7 @@ TextInput::TextInput() {
 
 void TextInput::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_MOUSEBUTTONDOWN) {
-		gk::FloatRect rect{
-			getPosition().x,
-			getPosition().y,
-			getBackgroundSize().x * getScale().x,
-			getBackgroundSize().y * getScale().y
-		};
-
-		m_hasFocus = rect.contains(event.button.x, event.button.y);
+		m_hasFocus = isPointInWidget(event.button.x, event.button.y);
 	}
 	else if (m_hasFocus) {
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_BACKSPACE && !m_content.empty()) {

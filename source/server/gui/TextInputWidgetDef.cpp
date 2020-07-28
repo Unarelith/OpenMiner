@@ -24,24 +24,32 @@
  *
  * =====================================================================================
  */
-#ifndef LUAWIDGET_HPP_
-#define LUAWIDGET_HPP_
+#include "TextInputWidgetDef.hpp"
 
-#include <gk/core/IntTypes.hpp>
+void TextInputWidgetDef::serialize(sf::Packet &packet) const {
+	WidgetDef::serialize(packet);
 
-namespace LuaWidget {
-	enum : u8 {
-		Undefined         = 0,
-
-		Image             = 1,
-		TextButton        = 2,
-		InventoryWidget   = 3,
-		CraftingWidget    = 4,
-		ProgressBarWidget = 5,
-		ScrollBarWidget   = 6,
-		TextInput         = 7,
-		Inventory         = 8,
-	};
+	packet << m_width << m_height << m_placeholder << m_placeholderColor << m_inventory;
 }
 
-#endif // LUAWIDGET_HPP_
+void TextInputWidgetDef::loadFromLuaTable(const sol::table &table) {
+	WidgetDef::loadFromLuaTable(table);
+
+	m_width = table["width"].get<u16>();
+	m_height = table["height"].get<u16>();
+
+	m_placeholder = table["placeholder"].get_or<std::string>("");
+
+	sol::optional<sol::table> placeholderColor = table["placeholder_color"];
+	if (placeholderColor != sol::nullopt) {
+		m_placeholderColor = gk::Color{
+			placeholderColor.value().get<u8>(1),
+			placeholderColor.value().get<u8>(2),
+			placeholderColor.value().get<u8>(3),
+			placeholderColor.value().get_or<u8>(4, 255)
+		};
+	}
+
+	m_inventory = table["inventory"].get<std::string>();
+}
+

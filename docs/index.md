@@ -19,6 +19,7 @@
     - [Inventory widget](lua-api-gui-inventory.md)
     - [Progress bar](lua-api-gui-progress-bar.md)
     - [Scroll bar](lua-api-gui-scroll-bar.md)
+    - [Text input](lua-api-gui-text-input.md)
 
 # Misc
 

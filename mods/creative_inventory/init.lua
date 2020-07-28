@@ -91,6 +91,19 @@ mod:key {
 			size = {x = 9, y = 7}
 		}
 
+		gui:text_input {
+			name = "inv_input_filter",
+			pos = {x = 82, y = 6},
+
+			width = 86,
+			height = 8,
+
+			placeholder = "Search...",
+			placeholder_color = {192, 192, 192},
+
+			inventory = "inv_creative_items"
+		}
+
 		gui:scroll_bar {
 			name = "scroll_bar",
 			pos = {x = 175, y = 18},

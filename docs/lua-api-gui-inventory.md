@@ -28,7 +28,7 @@ gui:inventory {
 Use a group as a filter for this inventory widget.
 
 Example:
-```
+```lua
 filter = "group:om_fuel"
 ```
 
