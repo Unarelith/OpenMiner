@@ -33,7 +33,7 @@ void Inventory::setStack(u16 x, u16 y, const std::string &stringID, u16 amount) 
 	m_hasChanged = true;
 }
 
-ItemStack Inventory::addStack(const std::string &stringID, u16 amount, u16 offset, u16 size, bool mergeOnly) {
+ItemStack Inventory::addStack(const std::string &stringID, u16 amount, u16 offset, u16 size, bool mergeOnly, bool retryAfterMerge) {
 	if (stringID.empty() || stringID == BLOCK_AIR || amount == 0)
 		return ItemStack::Empty;
 
@@ -69,7 +69,7 @@ ItemStack Inventory::addStack(const std::string &stringID, u16 amount, u16 offse
 		}
 	}
 
-	if (!hasChanged && mergeOnly && ret.amount())
+	if (!hasChanged && mergeOnly && retryAfterMerge && ret.amount())
 		return addStack(ret.item().stringID(), ret.amount(), offset, size);
 	else if (hasChanged)
 		m_hasChanged = hasChanged;
