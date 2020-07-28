@@ -108,9 +108,18 @@ Default value is `1.0`, any value under this will increase mining speed, and any
 
 ### `harvest_requirements`
 
-Set which tools are more effective.
+Set a required tool type.
 
-**Note:** This attribute would need more doc but it'll probably get removed soon.
+Example:
+```lua
+harvest_requirements = Capability.Pickaxe
+```
+
+Possible values:
+
+- `Capability.Pickaxe`
+- `Capability.Shovel`
+- `Capability.Axe`
 
 ### `id`
 

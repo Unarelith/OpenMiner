@@ -33,7 +33,7 @@ mod:block {
 	is_rotatable = true,
 
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 
 	states = {
 		{

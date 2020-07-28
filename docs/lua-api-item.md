@@ -46,9 +46,18 @@ Available engine groups:
 
 ### `harvest_capability`
 
-For a tool, set which blocks are easier to mine.
+For a tool, set which type of blocks it's allowed to mine.
 
-**Note:** This attribute would need more doc but it'll probably get removed soon.
+Example:
+```lua
+harvest_capability = Capability.Pickaxe
+```
+
+Possible values:
+
+- `Capability.Pickaxe`
+- `Capability.Shovel`
+- `Capability.Axe`
 
 ### `id`
 

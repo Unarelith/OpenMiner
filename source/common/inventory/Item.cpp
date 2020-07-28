@@ -49,6 +49,12 @@ void Item::deserialize(sf::Packet &packet) {
 
 // Please update 'docs/lua-api-cpp.md' if you change this
 void Item::initUsertype(sol::state &lua) {
+	lua["Capability"] = lua.create_table_with(
+		"Pickaxe", 1,
+		"Shovel", 2,
+		"Axe", 4
+	);
+
 	lua.new_usertype<Item>("Item",
 		"id", &Item::id,
 		"string_id", &Item::stringID,

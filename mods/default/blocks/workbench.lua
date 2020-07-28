@@ -35,7 +35,7 @@ mod:block {
 	},
 
 	hardness = 1,
-	harvest_requirements = 4,
+	harvest_requirements = Capability.Axe,
 
 	on_block_placed = function(pos, world)
 		world:add_block_data(pos.x, pos.y, pos.z, 3, 3)

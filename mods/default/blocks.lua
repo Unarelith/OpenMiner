@@ -40,7 +40,7 @@ mod:block {
 	tiles = "cobblestone.png",
 
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -84,7 +84,7 @@ mod:block {
 	name = "Stone",
 	tiles = "stone.png",
 	hardness = 1.5,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 	item_drop = {
 		id = mod:id()..":cobblestone",
 		amount = 1
@@ -127,7 +127,7 @@ mod:block {
 	name = "Coal Ore",
 	tiles = "coal_ore.png",
 	hardness = 3,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 	item_drop = {
 		id = mod:id()..":coal",
 		amount = 1
@@ -162,7 +162,7 @@ mod:block {
 	name = "Iron Ore",
 	tiles = "iron_ore.png",
 	hardness = 3,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -189,7 +189,7 @@ mod:block {
 	name = "Stone Bricks",
 	tiles = "stonebrick.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -197,7 +197,7 @@ mod:block {
 	name = "Bricks",
 	tiles = "bricks.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -250,7 +250,7 @@ mod:block {
 	id = "netherrack",
 	name = "Netherrack",
 	tiles = "netherrack.png",
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -320,7 +320,7 @@ mod:block {
 	tiles = "obsidian.png",
 
 	hardness = 8,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -512,7 +512,7 @@ mod:block {
 	name = "Andesite",
 	tiles = "stone_andesite.png",
 	hardness = 1.5,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -520,7 +520,7 @@ mod:block {
 	name = "Granite",
 	tiles = "stone_granite.png",
 	hardness = 1.5,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -528,7 +528,7 @@ mod:block {
 	name = "Diorite",
 	tiles = "stone_diorite.png",
 	hardness = 1.5,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -556,7 +556,7 @@ mod:block {
 	name = "Mossy Stone Bricks",
 	tiles = "stonebrick_mossy.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -564,7 +564,7 @@ mod:block {
 	name = "Cracked Stone Bricks",
 	tiles = "stonebrick_cracked.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -572,7 +572,7 @@ mod:block {
 	name = "Carved Stone Bricks",
 	tiles = "stonebrick_carved.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -580,7 +580,7 @@ mod:block {
 	name = "Mossy Cobblestone",
 	tiles = "cobblestone_mossy.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -588,7 +588,7 @@ mod:block {
 	name = "Coal Block",
 	tiles = "coal_block.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -596,7 +596,7 @@ mod:block {
 	name = "Diamond Block",
 	tiles = "diamond_block.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -604,7 +604,7 @@ mod:block {
 	name = "Gold Block",
 	tiles = "gold_block.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -612,7 +612,7 @@ mod:block {
 	name = "Lapis Lazuli Block",
 	tiles = "lapis_block.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -620,7 +620,7 @@ mod:block {
 	name = "Iron Block",
 	tiles = "iron_block.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -628,7 +628,7 @@ mod:block {
 	name = "Redstone Block",
 	tiles = "redstone_block.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -636,7 +636,7 @@ mod:block {
 	name = "Emerald Block",
 	tiles = "emerald_block.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -644,7 +644,7 @@ mod:block {
 	name = "Emerald Ore",
 	tiles = "emerald_ore.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -652,7 +652,7 @@ mod:block {
 	name = "Gold Ore",
 	tiles = "gold_ore.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -660,7 +660,7 @@ mod:block {
 	name = "Diamond Ore",
 	tiles = "diamond_ore.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -668,7 +668,7 @@ mod:block {
 	name = "Redstone Ore",
 	tiles = "redstone_ore.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -676,7 +676,7 @@ mod:block {
 	name = "Lapis Lazuli Ore",
 	tiles = "lapis_ore.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -684,7 +684,7 @@ mod:block {
 	name = "Smooth Red Sandstone",
 	tiles = "red_sandstone_smooth.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -692,7 +692,7 @@ mod:block {
 	name = "Smooth Sandstone",
 	tiles = "sandstone_smooth.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -700,7 +700,7 @@ mod:block {
 	name = "Carved Red Sandstone",
 	tiles = "red_sandstone_carved.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -708,7 +708,7 @@ mod:block {
 	name = "Carved Sandstone",
 	tiles = "sandstone_carved.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -716,7 +716,7 @@ mod:block {
 	name = "Red Sandstone",
 	tiles = {"red_sandstone_top.png", "red_sandstone_bottom.png", "red_sandstone_normal.png"},
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -724,7 +724,7 @@ mod:block {
 	name = "Sandstone",
 	tiles = {"sandstone_top.png", "sandstone_bottom.png", "sandstone_normal.png"},
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -745,7 +745,7 @@ mod:block {
 	name = "Nether Bricks",
 	tiles = "nether_bricks.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -753,7 +753,7 @@ mod:block {
 	name = "Red Nether Bricks",
 	tiles = "red_nether_brick.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -761,7 +761,7 @@ mod:block {
 	name = "End Stone",
 	tiles = "end_stone.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -769,7 +769,7 @@ mod:block {
 	name = "End Stone Bricks",
 	tiles = "end_bricks.png",
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 mod:block {
@@ -777,7 +777,7 @@ mod:block {
 	name = "Hay Bale",
 	tiles = {"hay_block_top.png", "hay_block_top.png", "hay_block_side.png"},
 	hardness = 2,
-	harvest_requirements = 1,
+	harvest_requirements = Capability.Pickaxe,
 }
 
 dofile("blocks/workbench.lua")

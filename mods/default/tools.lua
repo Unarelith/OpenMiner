@@ -73,7 +73,7 @@ function register_tool(name, material, mining_speed, harvest_capability)
 	mod:item(tool_def)
 end
 
-local tools = {axe = 4, hoe = 0, pickaxe = 1, shovel = 2, sword = 0}
+local tools = {axe = Capability.Axe, hoe = 0, pickaxe = Capability.Pickaxe, shovel = Capability.Shovel, sword = 0}
 local materials = {"wooden", "stone", "iron", "golden", "diamond"}
 
 for i, m in ipairs(materials) do
