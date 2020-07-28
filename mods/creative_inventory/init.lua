@@ -70,7 +70,7 @@ mod:key {
 			name = "inv_data",
 
 			width = 9,
-			height = #items / 9,
+			height = math.ceil(#items / 9),
 
 			items = items,
 

@@ -43,13 +43,16 @@ void InventoryWidget::init(Inventory &inventory, u16 offset, u16 size) {
 }
 
 void InventoryWidget::scroll(float scrolling) {
+	if (m_itemWidgets.size() < m_size)
+		return;
+
 	u16 offset = m_offset + floor((m_inventory->height() - m_size / m_inventory->width()) * scrolling) * m_inventory->width();
 	u16 size = m_size;
 
 	if (offset + size > m_inventory->width() * m_inventory->height())
 		size = m_inventory->width() * m_inventory->height() - offset;
 
-	loadItemWidgets(offset, size);
+	loadItemWidgets(offset, size, m_lastSearch);
 }
 
 void InventoryWidget::onEvent(const SDL_Event &event) {
@@ -139,9 +142,12 @@ void InventoryWidget::loadItemWidgets(u16 offset, u16 size, std::string search) 
 	m_itemWidgets.clear();
 
 	u16 itemCounter = 0;
-	for (u16 i = 0 ; i < size ; ++i) {
+	for (u16 i = 0 ; itemCounter < size ; ++i) {
 		u16 x = (i + offset) % m_inventory->width();
 		u16 y = (i + offset) / m_inventory->width();
+		if (x >= m_inventory->width() || y >= m_inventory->height())
+			break;
+
 		std::string label = m_inventory->getStack(x, y).item().label();
 		std::transform(label.begin(), label.end(), label.begin(), [](unsigned char c) { return std::tolower(c); });
 		std::transform(search.begin(), search.end(), search.begin(), [](unsigned char c) { return std::tolower(c); });

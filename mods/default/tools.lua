@@ -82,3 +82,22 @@ for i, m in ipairs(materials) do
 	end
 end
 
+mod:item {
+	id = "shears",
+	name = "Shears",
+	tiles = "shears.png",
+
+	max_stack_size = 1,
+
+	on_item_activated = function(pos, block, player, world, client, server)
+		-- FIXME: It should drop the item if 'default:use_item_drops' is enabled
+		if block:string_id() == "default:tallgrass" then
+			world:set_block(pos.x, pos.y, pos.z, 0)
+			mods["default"]:give_item_stack(player, ItemStack.new("default:tallgrass", 1))
+		elseif block:string_id() == "default:oak_leaves" then
+			world:set_block(pos.x, pos.y, pos.z, 0)
+			mods["default"]:give_item_stack(player, ItemStack.new("default:oak_leaves", 1))
+		end
+	end
+}
+
