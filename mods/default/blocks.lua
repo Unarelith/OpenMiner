@@ -498,6 +498,8 @@ mod:block {
 	is_collidable = false,
 	is_opaque = false,
 
+	inventory_image = "../blocks/torch_on.png",
+
 	draw_type = "boundingbox",
 
 	bounding_box = {7 / 16, 7 / 16, 0, 2 / 16, 2 / 16, 10 / 16},
