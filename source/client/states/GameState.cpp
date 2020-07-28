@@ -167,7 +167,7 @@ void GameState::onEvent(const SDL_Event &event) {
 
 void GameState::update() {
 	m_world.checkPlayerChunk(m_player.x(), m_player.y(), m_player.z());
-	m_world.update(!m_stateStack->empty() && &m_stateStack->top() == this);
+	m_world.update(!m_stateStack->empty() && (&m_stateStack->top() == this || m_stateStack->top().parent() == this));
 
 	if (m_camera.getFieldOfView() != Config::cameraFOV)
 		m_camera.setFieldOfView(Config::cameraFOV);
