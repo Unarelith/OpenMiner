@@ -51,8 +51,8 @@ InventoryCube::InventoryCube(float size, bool isEntity)
 		// NOTE: intrinsic rotations! The axis is the local axis of the object.
 		// Note also that we start looking at the bottom of the cube due to how
 		// glm::ortho is used (see comment below).
-		m_transform.rotate(120.f, {1, 0, 0});
-		m_transform.rotate(-45.f, {0, 0, 1});
+		m_transform.rotateX(120.f);
+		m_transform.rotateZ(-45.f);
 	}
 }
 

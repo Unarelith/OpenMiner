@@ -101,7 +101,7 @@ void CelestialObject::updateAxisTransform() const {
 		// The axis is completely vertical. This does not make much sense,
 		// because the sun and the moon will rotate horizontally following
 		// the horizon, but let's not crash! There are infinite rotations
-		// thatcan keep the sun and moon in the horizon. Let's pick one:
+		// that can keep the sun and moon in the horizon. Let's pick one:
 		// local X axis pointing to world's X, local Y axis pointing to
 		// world's Z, and local Z axis pointing to world's -Y. That places
 		// Polaris at the top, and the sun to the East at 6:00 and to the

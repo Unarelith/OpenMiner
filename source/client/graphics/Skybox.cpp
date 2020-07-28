@@ -95,7 +95,7 @@ void Skybox::loadSky(const Sky &sky) {
 
 		star.setPosition(v.x, v.y, v.z);
 		// Rotate the star to make it face the camera
-		star.rotate(atan2f(v.y, v.x) * float(180./M_PI), gk::Vector3f{0.f, 0.f, 1.f});
+		star.rotateZ(atan2f(v.y, v.x) * float(180./M_PI));
 
 		// Set a random rotation in the day cycle
 		star.setRotationOffset(rand() % GameTime::dayLength);
