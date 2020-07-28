@@ -48,6 +48,8 @@ class Minimap : public gk::Drawable, public gk::Transformable {
 		static const u16 minimapSize = 50;
 
 	private:
+		void updatePlayerFovVertexBuffer();
+
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		std::unordered_map<gk::Vector3i, gk::RectangleShape> m_chunks;

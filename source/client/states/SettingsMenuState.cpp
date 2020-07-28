@@ -274,6 +274,11 @@ void SettingsMenuState::addGraphicsButtons() {
 
 	addToggleButton("Star Rendering", Config::isStarRenderingEnabled, false);
 
+	m_menuWidget.addSlider("FOV: " + std::to_string((int)Config::cameraFOV), [] (SliderWidget &slider, u32) {
+		Config::cameraFOV = slider.getCurrentValue();
+		slider.setText("FOV: " + std::to_string((int)Config::cameraFOV));
+	}, 45, 135, Config::cameraFOV);
+
 	updateWidgetPosition();
 }
 

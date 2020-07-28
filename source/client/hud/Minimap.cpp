@@ -39,28 +39,7 @@ Minimap::Minimap() {
 	m_playerChunk.setSize(chunkSize, chunkSize);
 	m_playerChunk.setFillColor(gk::Color::Red);
 
-	// FOV/render distance viewer
-	gk::Vertex vertices[3];
-	vertices[0].coord3d[0] = 0.f;
-	vertices[0].coord3d[1] = 0.f;
-
-	vertices[1].coord3d[0] = -sin(glm::radians(Config::cameraFOV / 2.f)) * Config::renderDistance * (chunkSize + 2) / cos(glm::radians(Config::cameraFOV / 2.f));
-	vertices[1].coord3d[1] = -(Config::renderDistance * (chunkSize + 2));
-
-	vertices[2].coord3d[0] = sin(glm::radians(Config::cameraFOV / 2.f)) * Config::renderDistance * (chunkSize + 2) / cos(glm::radians(Config::cameraFOV / 2.f));
-	vertices[2].coord3d[1] = -(Config::renderDistance * (chunkSize + 2));
-
-	gk::Color color = gk::Color::Blue;
-	for (u8 i = 0 ; i < 3 ; ++i) {
-		vertices[i].color[0] = color.r;
-		vertices[i].color[1] = color.g;
-		vertices[i].color[2] = color.b;
-		vertices[i].color[3] = color.a;
-	}
-
-	gk::VertexBuffer::bind(&m_vbo);
-	m_vbo.setData(sizeof(vertices), vertices, GL_STATIC_DRAW);
-	gk::VertexBuffer::bind(nullptr);
+	updatePlayerFovVertexBuffer();
 }
 
 void Minimap::update(const ClientPlayer &player, class ClientWorld &world) {
@@ -94,6 +73,16 @@ void Minimap::update(const ClientPlayer &player, class ClientWorld &world) {
 
 	m_playerFovRotationTransform = gk::Transform::Identity;
 	m_playerFovRotationTransform.rotate(player.cameraYaw() - 90.f, {0, 0, -1});
+
+	static float oldCameraFov = Config::cameraFOV;
+	static u16 oldRenderDistance = Config::renderDistance;
+
+	if (oldCameraFov != Config::cameraFOV || oldRenderDistance != Config::renderDistance) {
+		updatePlayerFovVertexBuffer();
+
+		oldCameraFov = Config::cameraFOV;
+		oldRenderDistance = Config::renderDistance;
+	}
 }
 
 void Minimap::onChunkCreatedEvent(const ChunkCreatedEvent &event) {
@@ -107,6 +96,31 @@ void Minimap::onChunkCreatedEvent(const ChunkCreatedEvent &event) {
 
 void Minimap::onChunkRemovedEvent(const ChunkRemovedEvent &event) {
 	m_chunks.erase(event.chunkPos);
+}
+
+void Minimap::updatePlayerFovVertexBuffer() {
+	// FOV/render distance viewer
+	gk::Vertex vertices[3];
+	vertices[0].coord3d[0] = 0.f;
+	vertices[0].coord3d[1] = 0.f;
+
+	vertices[1].coord3d[0] = -sin(glm::radians(Config::cameraFOV / 2.f)) * Config::renderDistance * (chunkSize + 2) / cos(glm::radians(Config::cameraFOV / 2.f));
+	vertices[1].coord3d[1] = -(Config::renderDistance * (chunkSize + 2));
+
+	vertices[2].coord3d[0] = sin(glm::radians(Config::cameraFOV / 2.f)) * Config::renderDistance * (chunkSize + 2) / cos(glm::radians(Config::cameraFOV / 2.f));
+	vertices[2].coord3d[1] = -(Config::renderDistance * (chunkSize + 2));
+
+	gk::Color color = gk::Color::Blue;
+	for (u8 i = 0 ; i < 3 ; ++i) {
+		vertices[i].color[0] = color.r;
+		vertices[i].color[1] = color.g;
+		vertices[i].color[2] = color.b;
+		vertices[i].color[3] = color.a;
+	}
+
+	gk::VertexBuffer::bind(&m_vbo);
+	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+	gk::VertexBuffer::bind(nullptr);
 }
 
 void Minimap::draw(gk::RenderTarget &target, gk::RenderStates states) const {
