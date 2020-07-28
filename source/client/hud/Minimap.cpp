@@ -24,6 +24,8 @@
  *
  * =====================================================================================
  */
+#include <gk/gl/Vertex.hpp>
+
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "Minimap.hpp"
@@ -36,6 +38,29 @@ Minimap::Minimap() {
 
 	m_playerChunk.setSize(chunkSize, chunkSize);
 	m_playerChunk.setFillColor(gk::Color::Red);
+
+	// FOV/render distance viewer
+	gk::Vertex vertices[3];
+	vertices[0].coord3d[0] = 0.f;
+	vertices[0].coord3d[1] = 0.f;
+
+	vertices[1].coord3d[0] = -sin(glm::radians(Config::cameraFOV / 2.f)) * Config::renderDistance * (chunkSize + 2) / cos(glm::radians(Config::cameraFOV / 2.f));
+	vertices[1].coord3d[1] = -(Config::renderDistance * (chunkSize + 2));
+
+	vertices[2].coord3d[0] = sin(glm::radians(Config::cameraFOV / 2.f)) * Config::renderDistance * (chunkSize + 2) / cos(glm::radians(Config::cameraFOV / 2.f));
+	vertices[2].coord3d[1] = -(Config::renderDistance * (chunkSize + 2));
+
+	gk::Color color = gk::Color::Blue;
+	for (u8 i = 0 ; i < 3 ; ++i) {
+		vertices[i].color[0] = color.r;
+		vertices[i].color[1] = color.g;
+		vertices[i].color[2] = color.b;
+		vertices[i].color[3] = color.a;
+	}
+
+	gk::VertexBuffer::bind(&m_vbo);
+	m_vbo.setData(sizeof(vertices), vertices, GL_STATIC_DRAW);
+	gk::VertexBuffer::bind(nullptr);
 }
 
 void Minimap::update(const ClientPlayer &player, class ClientWorld &world) {
@@ -66,6 +91,9 @@ void Minimap::update(const ClientPlayer &player, class ClientWorld &world) {
 			}
 		}
 	}
+
+	m_playerFovRotationTransform = gk::Transform::Identity;
+	m_playerFovRotationTransform.rotate(player.cameraYaw() - 90.f, {0, 0, -1});
 }
 
 void Minimap::onChunkCreatedEvent(const ChunkCreatedEvent &event) {
@@ -85,6 +113,15 @@ void Minimap::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_border, states);
+
+	{
+		gk::RenderStates states2 = states;
+		states2.vertexAttributes = gk::VertexAttribute::All;
+		states2.transform.translate(minimapSize / 2 + chunkSize / 2, minimapSize / 2 + chunkSize / 2);
+		states2.transform *= m_playerFovRotationTransform;
+
+		target.draw(m_vbo, GL_TRIANGLES, 0, 3, states2);
+	}
 
 	states.transform.translate(-m_playerChunkPos.x * (chunkSize + 2) + minimapSize / 2.f, m_playerChunkPos.y * (chunkSize + 2) + minimapSize / 2.f);
 

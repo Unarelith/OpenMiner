@@ -56,6 +56,9 @@ class Minimap : public gk::Drawable, public gk::Transformable {
 
 		gk::Vector3i m_playerChunkPos;
 		gk::RectangleShape m_playerChunk;
+
+		gk::VertexBuffer m_vbo;
+		gk::Transform m_playerFovRotationTransform = gk::Transform::Identity;
 };
 
 #endif // MINIMAP_HPP_
