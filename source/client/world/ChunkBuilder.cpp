@@ -252,8 +252,10 @@ inline void ChunkBuilder::addFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk 
 
 		if (Config::isSmoothLightingEnabled && !blockState.isLightSource())
 			vertices[v].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, *neighbourOfs[v], normal, chunk);
-		else
+		else if (blockState.isOpaque())
 			vertices[v].lightValue[1] = chunk.lightmap().getTorchlight(x + normal.x, y + normal.y, z + normal.z);
+		else
+			vertices[v].lightValue[1] = chunk.lightmap().getTorchlight(x, y, z);
 
 		vertices[v].ambientOcclusion = getAmbientOcclusion(x, y, z, *neighbourOfs[v], normal, chunk);
 	}
