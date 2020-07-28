@@ -65,6 +65,9 @@ u8 Config::mipmapLevels = 0;
 // Input
 u8 Config::mouseSensitivity = 8;
 
+// Debug
+bool Config::isChunkMinimapEnabled = false;
+
 // Other
 std::string Config::defaultUsername = "";
 std::string Config::defaultServerAddress = "localhost:4242";
@@ -106,6 +109,8 @@ void Config::loadConfigFromFile(const char *filename) {
 
 			mouseSensitivity = lua["mouseSensitivity"].get_or(mouseSensitivity);
 
+			isChunkMinimapEnabled = lua["isChunkMinimapEnabled"].get_or(isChunkMinimapEnabled);
+
 			defaultUsername = lua["defaultUsername"].get_or(defaultUsername);
 			defaultServerAddress = lua["defaultServerAddress"].get_or(defaultServerAddress);
 			texturePack = lua["texturePack"].get_or(texturePack);
@@ -143,6 +148,8 @@ void Config::saveConfigToFile(const char *filename) {
 	file << "mipmapLevels = " << (u16)mipmapLevels << std::endl;
 	file << std::endl;
 	file << "mouseSensitivity = " << (u16)mouseSensitivity << std::endl;
+	file << std::endl;
+	file << "isChunkMinimapEnabled = " << (isChunkMinimapEnabled ? "true" : "false") << std::endl;
 	file << std::endl;
 	file << "defaultUsername = \"" << defaultUsername << "\"" << std::endl;
 	file << "defaultServerAddress = \"" << defaultServerAddress << "\"" << std::endl;

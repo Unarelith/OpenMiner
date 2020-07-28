@@ -65,7 +65,6 @@ void HUD::setup() {
 	m_chat.setPosition(2, Config::screenHeight / Config::guiScale - 50);
 
 	m_minimap.setPosition(Config::screenWidth / Config::guiScale - Minimap::minimapSize - 15, 15);
-	// m_minimap.setPosition(Config::screenWidth / Config::guiScale - Minimap::minimapSize - 10 - Minimap::minimapSize / 2, 10 - Minimap::minimapSize / 2);
 }
 
 void HUD::onEvent(const SDL_Event &event) {
@@ -104,7 +103,8 @@ void HUD::update() {
 			m_blockInfoWidget.setCurrentBlock(m_blockCursor.currentBlock());
 	}
 
-	m_minimap.update(m_player, m_world);
+	if (Config::isChunkMinimapEnabled)
+		m_minimap.update(m_player, m_world);
 }
 
 void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -129,7 +129,8 @@ void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (Config::isFpsCounterEnabled)
 		target.draw(m_fpsText, states);
 
-	target.draw(m_minimap, states);
+	if (Config::isChunkMinimapEnabled)
+		target.draw(m_minimap, states);
 
 	target.draw(m_chat, states);
 

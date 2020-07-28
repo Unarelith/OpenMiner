@@ -56,6 +56,7 @@ class SettingsMenuState : public InterfaceState {
 		void addInterfaceButtons();
 		void addGraphicsButtons();
 		void addInputButtons();
+		void addDebugButtons();
 
 		TextButton &addToggleButton(const std::string &text, bool &configOption, bool worldReloadRequested = false);
 
@@ -78,7 +79,8 @@ class SettingsMenuState : public InterfaceState {
 			Main,
 			Gameplay,
 			Graphics,
-			Input
+			Input,
+			Debug
 		};
 
 		MenuState m_state = MenuState::Main;

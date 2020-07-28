@@ -168,6 +168,11 @@ void SettingsMenuState::addMainButtons() {
 		addInputButtons();
 	});
 
+	m_menuWidget.addButton("Debug...", [this] (TextButton &) {
+		m_state = MenuState::Debug;
+		addDebugButtons();
+	});
+
 	m_menuWidget.addButton("Texture Pack...", [this] (TextButton &) {
 		m_stateStack->push<TexturePackSelectionState>(this);
 	});
@@ -289,6 +294,14 @@ void SettingsMenuState::addInputButtons() {
 		Config::mouseSensitivity = slider.getCurrentValue();
 		slider.setText("Mouse Sensitivity: " + std::to_string(Config::mouseSensitivity));
 	}, 4, 32, Config::mouseSensitivity);
+
+	updateWidgetPosition();
+}
+
+void SettingsMenuState::addDebugButtons() {
+	m_menuWidget.reset(1, 8);
+
+	addToggleButton("Show chunk minimap", Config::isChunkMinimapEnabled, false);
 
 	updateWidgetPosition();
 }

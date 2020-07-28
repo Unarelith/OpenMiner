@@ -60,6 +60,9 @@ namespace Config {
 	// Input
 	extern u8 mouseSensitivity;
 
+	// Debug
+	extern bool isChunkMinimapEnabled;
+
 	// Other
 	extern std::string defaultUsername;
 	extern std::string defaultServerAddress;
