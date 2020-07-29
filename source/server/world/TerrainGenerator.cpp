@@ -38,10 +38,7 @@ void TerrainGenerator::generate(ServerChunk &chunk) const {
 }
 
 void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
-	FastNoise noise;
-	noise.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
-	noise.SetFrequency(1 / 256.0f);
-	noise.SetFractalOctaves(4);
+	HeightmapChunk &heightmap = m_heightmap.getOrCreateChunk(chunk.x(), chunk.y());
 
 	Random_t rand;
 	rand.seed(chunk.x() + chunk.y() * CHUNK_WIDTH + chunk.z() * CHUNK_WIDTH * CHUNK_HEIGHT + 1337);
@@ -53,11 +50,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 			const Biome &biome = Registry::getInstance().getBiome(biomeIndex);
 
 			// Land height
-			double n = noise.GetNoise(-x - chunk.x() * CHUNK_WIDTH, y + chunk.y() * CHUNK_DEPTH);
-			double h = 10 + n * 20;
-
-			// double n = noise2d((x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 4, 0.5) * 4;
-			// double h = 10 + n * 2;
+			double h = heightmap.landHeightAt(x, y);
 
 			// Land blocks
 			for(int z = 0 ; z < CHUNK_HEIGHT ; z++) {

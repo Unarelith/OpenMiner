@@ -97,8 +97,8 @@ class LuaMod {
 		LuaSkyLoader m_skyLoader{*this};
 		LuaBiomeLoader m_biomeLoader{*this};
 		LuaDimensionLoader m_dimensionLoader{*this};
-		LuaEntityLoader m_entityLoader{*this, m_worldController};
 		LuaKeyLoader m_keyLoader{*this};
+		LuaEntityLoader m_entityLoader{*this, m_worldController};
 };
 
 #endif // LUAMOD_HPP_

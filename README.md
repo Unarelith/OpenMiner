@@ -77,7 +77,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 
 ## Project status
 
-This list is non complete.
+This list is not complete.
 
 See also the roadmap for 1.0.0 [here](https://github.com/Unarelith/OpenMiner/wiki/Roadmap).
 

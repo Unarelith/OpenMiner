@@ -33,6 +33,7 @@
 
 #include <sol/sol.hpp>
 
+#include "Heightmap.hpp"
 #include "TerrainBiomeSampler.hpp"
 
 using Random_t = effolkronium::random_local;
@@ -43,7 +44,8 @@ class ServerChunk;
 
 class TerrainGenerator {
 	public:
-		TerrainGenerator(const Dimension &dimension) : m_biomeSampler(dimension) {}
+		TerrainGenerator(Heightmap &heightmap, const Dimension &dimension)
+			: m_biomeSampler(dimension), m_heightmap(heightmap) {}
 
 		void generate(ServerChunk &chunk) const;
 
@@ -64,6 +66,8 @@ class TerrainGenerator {
 		static float noise3d_abs(double x, double y, double z, int octaves, float persistence);
 
 		TerrainBiomeSampler m_biomeSampler;
+
+		Heightmap &m_heightmap;
 };
 
 #endif // TERRAINGENERATOR_HPP_

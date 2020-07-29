@@ -49,7 +49,7 @@ class ServerWorld : public World {
 
 	public:
 		ServerWorld(PlayerList &players, const Dimension &dimension, gk::GameClock &clock)
-			: m_players(players), m_dimension(dimension), m_terrainGenerator(dimension), m_clock(clock), m_scene(players) {}
+			: m_players(players), m_dimension(dimension), m_terrainGenerator(m_heightmap, dimension), m_clock(clock), m_scene(players) {}
 
 		void update(bool doTick);
 
@@ -80,6 +80,7 @@ class ServerWorld : public World {
 
 		ChunkMap m_chunks;
 
+		Heightmap m_heightmap;
 		TerrainGenerator m_terrainGenerator;
 
 		ServerCommandHandler *m_server = nullptr;
