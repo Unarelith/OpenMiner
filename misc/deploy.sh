@@ -31,7 +31,6 @@ cp /usr/i686-w64-mingw32/bin/libssp-0.dll deploy/win32/bin/openminer && \
 cp /usr/i686-w64-mingw32/bin/zlib1.dll deploy/win32/bin/openminer && \
 cp /usr/i686-w64-mingw32/bin/libgcc_s_dw2-1.dll deploy/win32/bin/openminer && \
 cp deploy/win32/libjpeg.dll deploy/win32/bin/openminer && \
-cp deploy/win32/libpng16.dll deploy/win32/bin/openminer && \
 mkdir -p deploy/win32/bin/openminer/docs/markdown && \
 cp docs/*.md deploy/win32/bin/openminer/docs/markdown/ && \
 cp -r deploy/html_docs deploy/win32/bin/openminer/docs/html && \
@@ -52,7 +51,6 @@ cp /usr/x86_64-w64-mingw32/bin/libssp-0.dll deploy/win64/bin/openminer && \
 cp /usr/x86_64-w64-mingw32/bin/zlib1.dll deploy/win64/bin/openminer && \
 cp /usr/x86_64-w64-mingw32/bin/libgcc_s_seh-1.dll deploy/win64/bin/openminer && \
 cp deploy/win64/libjpeg.dll deploy/win64/bin/openminer && \
-cp deploy/win64/libpng16.dll deploy/win64/bin/openminer && \
 mkdir -p deploy/win64/bin/openminer/docs/markdown && \
 cp docs/*.md deploy/win64/bin/openminer/docs/markdown/ && \
 cp -r deploy/html_docs deploy/win64/bin/openminer/docs/html && \
