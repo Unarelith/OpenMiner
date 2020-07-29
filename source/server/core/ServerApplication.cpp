@@ -123,6 +123,7 @@ bool ServerApplication::init() {
 	BlockState &blockState = m_registry.registerBlock<ServerBlock>(BLOCK_AIR).getState(0);
 	blockState.label("Air");
 	blockState.isOpaque(false);
+	blockState.isCollidable(false);
 	m_registry.registerItem<Item>({}, BLOCK_AIR, "Air").setIsBlock(true);
 
 	m_modLoader.loadMods();

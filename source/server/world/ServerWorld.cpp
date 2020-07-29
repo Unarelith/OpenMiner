@@ -136,14 +136,7 @@ void ServerWorld::sendChunkData(const ClientInfo &client, ServerChunk &chunk) {
 void ServerWorld::sendRequestedData(ClientInfo &client, int cx, int cy, int cz) {
 	ServerChunk &chunk = getOrCreateChunk(cx, cy, cz);
 
-	// Generate our chunk
-	if (!chunk.isInitialized()) {
-		m_terrainGenerator.generate(chunk);
-
-		chunk.setInitialized(true);
-	}
-
-	chunk.updateLights();
+	generateChunk(chunk);
 
 	sendChunkData(client, chunk);
 }
@@ -153,10 +146,10 @@ ServerChunk &ServerWorld::getOrCreateChunk(s32 cx, s32 cy, s32 cz) {
 	if (!chunk) {
 		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ServerChunk(cx, cy, cz, *this));
 		chunk = it.first->second.get();
-
-		// Create our neighbours so that we can generate and process lights correctly
-		createChunkNeighbours(*chunk);
 	}
+
+	// Create our neighbours
+	createChunkNeighbours(*chunk);
 
 	return *chunk;
 }
@@ -167,6 +160,16 @@ Chunk *ServerWorld::getChunk(int cx, int cy, int cz) const {
 		return nullptr;
 
 	return it->second.get();
+}
+
+void ServerWorld::generateChunk(ServerChunk &chunk) {
+	if (!chunk.isInitialized()) {
+		m_terrainGenerator.generate(chunk);
+
+		chunk.setInitialized(true);
+	}
+
+	chunk.updateLights();
 }
 
 // Please update 'docs/lua-api-cpp.md' if you change this

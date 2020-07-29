@@ -55,7 +55,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 			// Land blocks
 			for(int z = 0 ; z < CHUNK_HEIGHT ; z++) {
 				// Are we above "ground" level?
-				if(z + chunk.z() * CHUNK_HEIGHT > h) {
+				if(z + chunk.z() * CHUNK_HEIGHT >= h) {
 					// If we are not yet up to sea level, fill with water blocks
 					if (z + chunk.z() * CHUNK_HEIGHT < SEALEVEL) {
 						chunk.setBlockRaw(x, y, z, biome.getLiquidBlockID());
@@ -67,7 +67,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 					}
 				}
 				else {
-					bool isGeneratingTopBlock = z + chunk.z() * CHUNK_HEIGHT >= h - 1 && z + chunk.z() * CHUNK_HEIGHT > SEALEVEL - 1;
+					bool isGeneratingTopBlock = z + chunk.z() * CHUNK_HEIGHT == h - 1 && z + chunk.z() * CHUNK_HEIGHT > SEALEVEL - 1;
 					if (isGeneratingTopBlock)
 						chunk.setBlockRaw(x, y, z, biome.getTopBlockID());
 					else if (z + chunk.z() * CHUNK_HEIGHT <= SEALEVEL - 1 && h < SEALEVEL && z + chunk.z() * CHUNK_HEIGHT > h - 3)
@@ -78,7 +78,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 						chunk.setBlockRaw(x, y, z, biome.getDeepBlockID());
 
 					// Caves
-					generateCaves(chunk, x, y, z, h);
+					generateCaves(chunk, x, y, z, h, heightmap);
 
 					// Populate ores.
 					generateOres(chunk, x, y, z, biome, rand);
@@ -259,7 +259,7 @@ void TerrainGenerator::oreFloodFill(ServerChunk &chunk, double x, double y, doub
 		oreFloodFill(chunk, x - 1, y - 1, z - 1, toReplace, replaceWith, depth - 1, rand);
 }
 
-inline void TerrainGenerator::generateCaves(ServerChunk &chunk, int x, int y, int z, int h) const {
+inline void TerrainGenerator::generateCaves(ServerChunk &chunk, int x, int y, int z, int h, HeightmapChunk &heightmap) const {
 	float n2 = noise2d(-(x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
 	float r2 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 512.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 0.1);
 	float r3 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 128.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 1);
@@ -268,6 +268,10 @@ inline void TerrainGenerator::generateCaves(ServerChunk &chunk, int x, int y, in
 		chunk.setBlockRaw(x, y, z - 1, 0);
 		chunk.setBlockRaw(x, y, z, 0);
 		chunk.setBlockRaw(x, y, z + 1, 0);
+
+		s32 landHeight = heightmap.landHeightAt(x, y);
+		if (landHeight == z + 1 || landHeight == z || landHeight == z - 1)
+			heightmap.setLandHeight(x, y, z - 2);
 	}
 }
 

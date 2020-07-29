@@ -61,9 +61,13 @@ class ServerWorld : public World {
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
 
+		void generateChunk(ServerChunk &chunk);
+
 		const Dimension &dimension() const { return m_dimension; }
 
 		const ChunkMap &chunks() const { return m_chunks; }
+
+		Heightmap &heightmap() { return m_heightmap; }
 
 		TerrainGenerator &terrainGenerator() { return m_terrainGenerator; }
 

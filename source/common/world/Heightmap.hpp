@@ -27,6 +27,7 @@
 #ifndef HEIGHTMAP_HPP_
 #define HEIGHTMAP_HPP_
 
+#include <cstring>
 #include <unordered_map>
 
 #include <gk/core/IntTypes.hpp>
@@ -37,22 +38,28 @@
 class HeightmapChunk {
 	public:
 		HeightmapChunk(s32 x, s32 y)
-			: m_x(x), m_y(y) {}
+			: m_x(x), m_y(y) {
+				std::memset(m_map, 0, CHUNK_WIDTH * CHUNK_DEPTH * sizeof(s32));
+		}
 
 		void generate();
 
 		s32 landHeightAt(s8 x, s8 y) const;
+		void setLandHeight(s8 x, s8 y, s32 height);
 
 	private:
 		s32 m_x = 0;
 		s32 m_y = 0;
 
-		s32 m_map[CHUNK_DEPTH][CHUNK_WIDTH];
+		s32 m_map[CHUNK_WIDTH * CHUNK_DEPTH];
 };
 
 class Heightmap {
 	public:
-		HeightmapChunk &getOrCreateChunk(s32 x, s32 y);
+		HeightmapChunk &getOrCreateChunk(s32 chunkX, s32 chunkY);
+
+		int getHighestBlockAt(s32 blockX, s32 blockY);
+		int getHighestChunkAt(s32 blockX, s32 blockY);
 
 	private:
 		std::unordered_map<gk::Vector2i, HeightmapChunk> m_chunks;

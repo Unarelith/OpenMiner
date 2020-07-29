@@ -192,8 +192,53 @@ void ServerCommandHandler::setupCallbacks() {
 			return;
 		}
 
+		// FIXME: Spawn chunk hardcoded here
+		s32 spawnChunkX = 1;
+		s32 spawnChunkY = 1;
+
 		if (player->isNewPlayer()) {
-			player->setPosition(m_spawnPosition.x, m_spawnPosition.y, m_spawnPosition.z);
+			// FIXME: Default dimension hardcoded here
+			ServerWorld &world = m_worldController.getWorld(0);
+			Heightmap &heightmap = world.heightmap();
+
+			bool hasFoundPosition = false;
+			for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
+				for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
+					int maxChunkZ = heightmap.getHighestChunkAt(x + spawnChunkX * CHUNK_WIDTH, y + spawnChunkY * CHUNK_DEPTH);
+					int worldZ = heightmap.getHighestBlockAt(x + spawnChunkX * CHUNK_WIDTH, y + spawnChunkY * CHUNK_DEPTH);
+					int z = gk::pmod(worldZ, CHUNK_WIDTH);
+
+					world.generateChunk(world.getOrCreateChunk(spawnChunkX - 1, spawnChunkY,     maxChunkZ));
+					world.generateChunk(world.getOrCreateChunk(spawnChunkX + 1, spawnChunkY,     maxChunkZ));
+					world.generateChunk(world.getOrCreateChunk(spawnChunkX,     spawnChunkY - 1, maxChunkZ));
+					world.generateChunk(world.getOrCreateChunk(spawnChunkX,     spawnChunkY + 1, maxChunkZ));
+					world.generateChunk(world.getOrCreateChunk(spawnChunkX,     spawnChunkY,     maxChunkZ - 1));
+					world.generateChunk(world.getOrCreateChunk(spawnChunkX,     spawnChunkY,     maxChunkZ + 1));
+
+					ServerChunk &chunk = world.getOrCreateChunk(spawnChunkX, spawnChunkY, maxChunkZ);
+					world.generateChunk(chunk);
+
+					const BlockState *blockBelow = chunk.getBlockState(x, y, z - 1);
+					const Block &blockFeet = m_registry.getBlock(chunk.getBlock(x, y, z));
+					const Block &blockHead = m_registry.getBlock(chunk.getBlock(x, y, z + 1));
+
+					if (blockFeet.id() == 0 && blockHead.id() == 0
+					&& blockBelow && blockBelow->isCollidable()
+					&& blockBelow->drawType() != BlockDrawType::Leaves)
+					{
+						player->setPosition(x + spawnChunkX * CHUNK_WIDTH + .5, y + spawnChunkY * CHUNK_DEPTH + .5, worldZ + 1.2);
+						hasFoundPosition = true;
+						break;
+					}
+				}
+
+				if (hasFoundPosition)
+					break;
+			}
+
+			if (!hasFoundPosition)
+				gkError() << "Can't find a good position for the player";
+
 			player->setHeldItemSlot(0);
 		}
 

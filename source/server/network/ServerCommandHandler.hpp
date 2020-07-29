@@ -94,8 +94,6 @@ class ServerCommandHandler {
 
 		Registry &m_registry;
 
-		gk::Vector3d m_spawnPosition{19.5, 14.5, 19.};
-
 		ChatCommandHandler m_chatCommandHandler{*this, m_worldController};
 };
 

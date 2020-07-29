@@ -26,6 +26,7 @@
  */
 #include "FastNoise.hpp"
 #include "Heightmap.hpp"
+#include "World.hpp"
 
 void HeightmapChunk::generate() {
 	FastNoise noise;
@@ -36,28 +37,48 @@ void HeightmapChunk::generate() {
 	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
 			double n = noise.GetNoise(-x - m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
-			m_map[y][x] = 10 + n * 20;
+			m_map[x + y * CHUNK_WIDTH] = 10 + n * 20;
 		}
 	}
 }
 
 s32 HeightmapChunk::landHeightAt(s8 x, s8 y) const {
-	return m_map[y][x];
+	return m_map[x + y * CHUNK_WIDTH];
 }
 
-HeightmapChunk &Heightmap::getOrCreateChunk(s32 x, s32 y) {
+void HeightmapChunk::setLandHeight(s8 x, s8 y, s32 height) {
+	m_map[x + y * CHUNK_WIDTH] = height;
+}
+
+HeightmapChunk &Heightmap::getOrCreateChunk(s32 chunkX, s32 chunkY) {
 	HeightmapChunk *chunk = nullptr;
 
-	auto it = m_chunks.find({x, y});
+	auto it = m_chunks.find({chunkX, chunkY});
 	if (it == m_chunks.end()) {
-		m_chunks.emplace(gk::Vector2i{x, y}, HeightmapChunk{x, y});
+		m_chunks.emplace(gk::Vector2i{chunkX, chunkY}, HeightmapChunk{chunkX, chunkY});
 
-		chunk = &m_chunks.at({x, y});
+		chunk = &m_chunks.at({chunkX, chunkY});
 		chunk->generate();
 	}
 	else
 		chunk = &it->second;
 
 	return *chunk;
+}
+
+int Heightmap::getHighestBlockAt(s32 blockX, s32 blockY) {
+	s32 chunkX = (blockX & -CHUNK_WIDTH) / CHUNK_WIDTH;
+	s32 chunkY = (blockY & -CHUNK_DEPTH) / CHUNK_DEPTH;
+
+	s32 blockZ = getOrCreateChunk(chunkX, chunkY).landHeightAt(
+		gk::pmod(blockX, CHUNK_WIDTH),
+		gk::pmod(blockY, CHUNK_DEPTH)
+	);
+
+	return blockZ;
+}
+
+int Heightmap::getHighestChunkAt(s32 blockX, s32 blockY) {
+	return (getHighestBlockAt(blockX, blockY) & -CHUNK_HEIGHT) / CHUNK_HEIGHT;
 }
 
