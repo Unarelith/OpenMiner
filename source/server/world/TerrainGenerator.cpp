@@ -55,7 +55,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 			// Land blocks
 			for(int z = 0 ; z < CHUNK_HEIGHT ; z++) {
 				// Are we above "ground" level?
-				if(z + chunk.z() * CHUNK_HEIGHT >= h) {
+				if(z + chunk.z() * CHUNK_HEIGHT > h) {
 					// If we are not yet up to sea level, fill with water blocks
 					if (z + chunk.z() * CHUNK_HEIGHT < SEALEVEL) {
 						chunk.setBlockRaw(x, y, z, biome.getLiquidBlockID());
@@ -67,7 +67,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 					}
 				}
 				else {
-					bool isGeneratingTopBlock = z + chunk.z() * CHUNK_HEIGHT == h - 1 && z + chunk.z() * CHUNK_HEIGHT > SEALEVEL - 1;
+					bool isGeneratingTopBlock = z + chunk.z() * CHUNK_HEIGHT == h && z + chunk.z() * CHUNK_HEIGHT > SEALEVEL - 1;
 					if (isGeneratingTopBlock)
 						chunk.setBlockRaw(x, y, z, biome.getTopBlockID());
 					else if (z + chunk.z() * CHUNK_HEIGHT <= SEALEVEL - 1 && h < SEALEVEL && z + chunk.z() * CHUNK_HEIGHT > h - 3)

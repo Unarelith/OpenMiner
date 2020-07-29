@@ -205,7 +205,7 @@ void ServerCommandHandler::setupCallbacks() {
 			for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
 				for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
 					int maxChunkZ = heightmap.getHighestChunkAt(x + spawnChunkX * CHUNK_WIDTH, y + spawnChunkY * CHUNK_DEPTH);
-					int worldZ = heightmap.getHighestBlockAt(x + spawnChunkX * CHUNK_WIDTH, y + spawnChunkY * CHUNK_DEPTH);
+					int worldZ = heightmap.getHighestBlockAt(x + spawnChunkX * CHUNK_WIDTH, y + spawnChunkY * CHUNK_DEPTH) + 1;
 					int z = gk::pmod(worldZ, CHUNK_WIDTH);
 
 					world.generateChunk(world.getOrCreateChunk(spawnChunkX - 1, spawnChunkY,     maxChunkZ));
@@ -226,7 +226,7 @@ void ServerCommandHandler::setupCallbacks() {
 					&& blockBelow && blockBelow->isCollidable()
 					&& blockBelow->drawType() != BlockDrawType::Leaves)
 					{
-						player->setPosition(x + spawnChunkX * CHUNK_WIDTH + .5, y + spawnChunkY * CHUNK_DEPTH + .5, worldZ + 1.2);
+						player->setPosition(x + spawnChunkX * CHUNK_WIDTH + .5, y + spawnChunkY * CHUNK_DEPTH + .5, worldZ + .2);
 						hasFoundPosition = true;
 						break;
 					}
