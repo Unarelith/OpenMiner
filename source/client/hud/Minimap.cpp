@@ -86,16 +86,20 @@ void Minimap::update(const ClientPlayer &player, class ClientWorld &world) {
 }
 
 void Minimap::onChunkCreatedEvent(const ChunkCreatedEvent &event) {
-	auto &rect = m_chunks[event.chunkPos];
-	rect.setSize(chunkSize, chunkSize);
-	rect.setPosition(event.chunkPos.x * (chunkSize + 2), -event.chunkPos.y * (chunkSize + 2));
-	rect.setFillColor(event.isLoaded ? gk::Color{224, 224, 224} : gk::Color{127, 127, 127});
-	rect.setOutlineThickness(1);
-	rect.setOutlineColor(gk::Color::Transparent);
+	if (Config::isChunkMinimapEnabled) {
+		auto &rect = m_chunks[event.chunkPos];
+		rect.setSize(chunkSize, chunkSize);
+		rect.setPosition(event.chunkPos.x * (chunkSize + 2), -event.chunkPos.y * (chunkSize + 2));
+		rect.setFillColor(event.isLoaded ? gk::Color{224, 224, 224} : gk::Color{127, 127, 127});
+		rect.setOutlineThickness(1);
+		rect.setOutlineColor(gk::Color::Transparent);
+	}
 }
 
 void Minimap::onChunkRemovedEvent(const ChunkRemovedEvent &event) {
-	m_chunks.erase(event.chunkPos);
+	if (Config::isChunkMinimapEnabled) {
+		m_chunks.erase(event.chunkPos);
+	}
 }
 
 void Minimap::updatePlayerFovVertexBuffer() {
