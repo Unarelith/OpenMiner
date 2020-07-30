@@ -25,6 +25,7 @@
  * =====================================================================================
  */
 #include <gk/core/ApplicationStateStack.hpp>
+#include <gk/core/Debug.hpp>
 #include <gk/core/Utils.hpp>
 
 #include <filesystem.hpp>
@@ -34,9 +35,16 @@
 #include "WorldCreationState.hpp"
 #include "WorldSelectionState.hpp"
 
+#include <random.hpp>
+
+using Random = effolkronium::random_static;
+
 namespace fs = ghc::filesystem;
 
 WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std::string &originalName) : InterfaceState(titleScreen) {
+	if (!originalName.empty())
+		m_isEdition = true;
+
 	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
 
 	m_filter.setFillColor(gk::Color(0, 0, 0, 192));
@@ -45,21 +53,34 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 	m_title.setString(originalName.empty() ? "Create New World" : "Edit World");
 	m_title.updateVertexBuffer();
 
-	m_textInput.setString(originalName);
-	m_textInput.setCharacterLimit(32);
-	m_textInput.setBackgroundSize(150, 20);
-	m_textInput.setBackgroundOutline(1, gk::Color::White);
-	m_textInput.setPadding(5, 6);
-	m_textInput.setScale(Config::guiScale, Config::guiScale);
-	m_textInput.setFocus(false);
-	m_textInput.setPlaceholder("World Name");
+	m_nameInput.setString(originalName);
+	m_nameInput.setCharacterLimit(32);
+	m_nameInput.setBackgroundSize(150, 20);
+	m_nameInput.setBackgroundOutline(1, gk::Color::White);
+	m_nameInput.setPadding(5, 6);
+	m_nameInput.setScale(Config::guiScale, Config::guiScale);
+	m_nameInput.setFocus(false);
+	m_nameInput.setPlaceholder("World Name");
+
+	if (!m_isEdition) {
+		m_seedInput.setString(originalName);
+		m_seedInput.setCharacterLimit(32);
+		m_seedInput.setBackgroundSize(150, 20);
+		m_seedInput.setBackgroundOutline(1, gk::Color::White);
+		m_seedInput.setPadding(5, 6);
+		m_seedInput.setScale(Config::guiScale, Config::guiScale);
+		m_seedInput.setFocus(false);
+		m_seedInput.setPlaceholder("Seed (random if blank)");
+		// m_seedInput.setString(std::to_string(originalSeed));
+		// FIXME: Find a way to retrieve original seed
+	}
 
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
 	m_menuWidget.addButton(originalName.empty() ? "Create New World" : "Save World", [this, titleScreen, originalName](TextButton &) {
-		std::string worldName = m_textInput.string();
+		std::string worldName = m_nameInput.string();
 		if (!fs::exists("saves/" + worldName + ".dat")) {
 			if (gk::regexMatch(worldName, "^[A-Za-z0-9_]+$") && worldName[0] != '_') {
-				if (!originalName.empty()) {
+				if (m_isEdition) {
 					fs::copy_file("saves/" + originalName + ".dat", "saves/" + worldName  + ".dat");
 					fs::remove("saves/" + originalName + ".dat");
 
@@ -72,8 +93,20 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 				else
 					m_stateStack->pop();
 
-				if (originalName.empty())
-					titleScreen->startSingleplayer(true, worldName);
+				if (!m_isEdition) {
+					Random::seed(time(nullptr));
+					s32 seed = Random::get<s32>(std::numeric_limits<s32>::min(), std::numeric_limits<s32>::max());
+					if (!m_seedInput.string().empty()) {
+						try {
+							seed = std::stoi(m_seedInput.string());
+						}
+						catch (...) {
+							gkError() << "Invalid seed, using random one:" << seed;
+						}
+					}
+
+					titleScreen->startSingleplayer(true, worldName, seed);
+				}
 			}
 			else {
 				m_errorText.setString("Invalid world name");
@@ -102,7 +135,10 @@ void WorldCreationState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
-		m_textInput.onEvent(event);
+		m_nameInput.onEvent(event);
+
+		if (!m_isEdition)
+			m_seedInput.onEvent(event);
 
 		m_menuWidget.onEvent(event);
 	}
@@ -122,10 +158,23 @@ void WorldCreationState::updateWidgetPosition() {
 		12.5f * Config::guiScale - m_title.getSize().y * Config::guiScale / 2.0f
 	);
 
-	m_textInput.setPosition(
-		Config::screenWidth / 2.0f - m_textInput.getBackgroundSize().x * Config::guiScale / 2.0f,
-		Config::screenHeight / 2.0f - m_textInput.getBackgroundSize().y * Config::guiScale / 2.0f
-	);
+	if (!m_isEdition) {
+		m_nameInput.setPosition(
+			Config::screenWidth / 2.0f - m_nameInput.getBackgroundSize().x * Config::guiScale / 2.0f,
+			Config::screenHeight / 2.0f - m_nameInput.getBackgroundSize().y * Config::guiScale / 2.0f - 30 * Config::guiScale
+		);
+
+		m_seedInput.setPosition(
+			Config::screenWidth / 2.0f - m_seedInput.getBackgroundSize().x * Config::guiScale / 2.0f,
+			Config::screenHeight / 2.0f - m_seedInput.getBackgroundSize().y * Config::guiScale / 2.0f
+		);
+	}
+	else {
+		m_nameInput.setPosition(
+			Config::screenWidth / 2.0f - m_nameInput.getBackgroundSize().x * Config::guiScale / 2.0f,
+			Config::screenHeight / 2.0f - m_nameInput.getBackgroundSize().y * Config::guiScale / 2.0f
+		);
+	}
 
 	m_menuWidget.setPosition(
 		Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2.0f,
@@ -147,7 +196,10 @@ void WorldCreationState::draw(gk::RenderTarget &target, gk::RenderStates states)
 
 		target.draw(m_title, states);
 
-		target.draw(m_textInput, states);
+		target.draw(m_nameInput, states);
+
+		if (!m_isEdition)
+			target.draw(m_seedInput, states);
 
 		target.draw(m_menuWidget, states);
 

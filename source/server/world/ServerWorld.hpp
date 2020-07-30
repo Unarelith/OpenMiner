@@ -75,6 +75,7 @@ class ServerWorld : public World {
 		void setServer(ServerCommandHandler *server) { m_server = server; m_scene.setServer(server); }
 
 		s32 seed() const { return m_seed; }
+		void setSeed(s32 seed) { m_seed = seed; m_terrainGenerator.setSeed(seed); m_heightmap.setSeed(seed); }
 
 		static void initUsertype(sol::state &lua);
 

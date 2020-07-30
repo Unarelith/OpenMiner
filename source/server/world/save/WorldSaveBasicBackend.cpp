@@ -61,7 +61,10 @@ void WorldSaveBasicBackend::load(const std::string &name) {
 
 		for (auto &world : m_worldList) {
 			unsigned int chunkCount;
-			save >> chunkCount;
+			s32 seed;
+			save >> chunkCount >> seed;
+
+			world.setSeed(seed);
 
 			// gkInfo() << "Loading dimension" << world.dimension().id() << "| Chunk count:" << chunkCount;
 
@@ -160,7 +163,7 @@ void WorldSaveBasicBackend::save(const std::string &name) {
 
 		// gkInfo() << "Saving dimension" << world.dimension().id() << "| Chunk count:" << chunkCount;
 
-		save << chunkCount;
+		save << chunkCount << world.seed();
 		save.append(chunks.getData(), chunks.getDataSize());
 
 		saveEntities(save, world);

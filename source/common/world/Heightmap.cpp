@@ -51,23 +51,21 @@ Heightmap::Heightmap(s32 seed) {
 	noise1.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
 	noise1.SetFrequency(1 / 256.0f);
 	noise1.SetFractalOctaves(4);
-	noise1.SetSeed(seed);
 
 	noise2.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
 	noise2.SetFrequency(1 / 256.0f);
 	noise2.SetFractalOctaves(4);
-	noise2.SetSeed(seed);
 
 	noise3.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
 	noise3.SetFrequency(1 / 256.0f);
 	noise3.SetFractalOctaves(4);
-	noise3.SetSeed(seed);
 
 	noise4.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
 	noise4.SetFractalType(FastNoise::FractalType::Billow);
 	noise4.SetFrequency(1 / 1024.0f);
 	noise4.SetFractalOctaves(1);
-	noise4.SetSeed(seed);
+
+	setSeed(seed);
 }
 
 HeightmapChunk &Heightmap::getOrCreateChunk(s32 chunkX, s32 chunkY) {
@@ -100,5 +98,12 @@ int Heightmap::getHighestBlockAt(s32 blockX, s32 blockY) {
 
 int Heightmap::getHighestChunkAt(s32 blockX, s32 blockY) {
 	return (getHighestBlockAt(blockX, blockY) & -CHUNK_HEIGHT) / CHUNK_HEIGHT;
+}
+
+void Heightmap::setSeed(s32 seed) {
+	noise1.SetSeed(seed);
+	noise2.SetSeed(seed);
+	noise3.SetSeed(seed);
+	noise4.SetSeed(seed);
 }
 

@@ -51,11 +51,14 @@ class WorldCreationState : public InterfaceState {
 
 		Text m_title;
 
-		TextInput m_textInput;
+		TextInput m_nameInput;
+		TextInput m_seedInput;
 
 		MenuWidget m_menuWidget{2, 1};
 
 		Text m_errorText;
+
+		bool m_isEdition = false;
 };
 
 #endif // WORLDCREATIONSTATE_HPP_

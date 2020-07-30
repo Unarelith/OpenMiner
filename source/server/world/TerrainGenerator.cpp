@@ -38,7 +38,8 @@ TerrainGenerator::TerrainGenerator(Heightmap &heightmap, const Dimension &dimens
 {
 	m_caveNoise.SetFrequency(1.0 / 128.0);
 	m_caveNoise.SetFractalOctaves(2);
-	m_caveNoise.SetSeed(seed);
+
+	setSeed(seed);
 }
 
 void TerrainGenerator::generate(ServerChunk &chunk) const {

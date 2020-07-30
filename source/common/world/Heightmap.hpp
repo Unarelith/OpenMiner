@@ -68,6 +68,8 @@ class Heightmap {
 		int getHighestBlockAt(s32 blockX, s32 blockY);
 		int getHighestChunkAt(s32 blockX, s32 blockY);
 
+		void setSeed(s32 seed);
+
 		FastNoise noise1;
 		FastNoise noise2;
 		FastNoise noise3;

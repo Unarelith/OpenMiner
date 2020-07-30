@@ -48,6 +48,8 @@ class TerrainGenerator {
 
 		void generate(ServerChunk &chunk) const;
 
+		void setSeed(s32 seed) { m_caveNoise.SetSeed(seed); }
+
 	private:
 		void fastNoiseGeneration(ServerChunk &chunk) const;
 
