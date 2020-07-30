@@ -44,12 +44,18 @@ void MenuWidget::reset(u16 width, u16 height) {
 }
 
 void MenuWidget::onEvent(const SDL_Event &event) {
+	std::size_t sliderCount = m_sliders.size();
+	std::size_t buttonCount = m_buttons.size();
+
 	for (auto &it : m_sliders) {
 		it.first.onEvent(event);
 
 		if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 			updateWidgetPosition(it.first, it.second.x, it.second.y);
 		}
+
+		if (sliderCount != m_sliders.size())
+			break;
 	}
 
 	for (auto &it : m_buttons) {
@@ -58,6 +64,9 @@ void MenuWidget::onEvent(const SDL_Event &event) {
 		if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 			updateWidgetPosition(it.first, it.second.x, it.second.y);
 		}
+
+		if (buttonCount != m_buttons.size())
+			break;
 	}
 }
 
