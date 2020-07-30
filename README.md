@@ -26,6 +26,7 @@ The long-term goal of this project is to provide a viable alternative to Minecra
 
 - [Getting started](https://github.com/Unarelith/OpenMiner/wiki/Getting-Started)
     - [Contributing](https://github.com/Unarelith/OpenMiner/blob/master/CONTRIBUTING.md)
+    - [How to use git](https://github.com/Unarelith/OpenMiner/wiki/How-to-use-git)
     - [Roadmap](https://github.com/Unarelith/OpenMiner/wiki/Roadmap)
     - [Coding style](https://github.com/Unarelith/OpenMiner/wiki/Coding-Style)
 - [Lua API](https://openminer.readthedocs.io/en/latest/)
