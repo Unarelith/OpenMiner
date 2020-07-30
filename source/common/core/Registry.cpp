@@ -126,7 +126,7 @@ entt::entity Registry::registerEntity(const std::string &stringID) {
 		return entity;
 	}
 	else
-		gkError() << "Redefinition of entity '" + stringID + "', keeping the first one";
+		gkError() << "Registry Error: Redefinition of entity '" + stringID + "', keeping the first one";
 
 	return entt::null;
 }
@@ -139,7 +139,7 @@ const Block &Registry::getBlockFromStringID(const std::string &stringID) {
 	if (stringID.empty()) return getBlock(0);
 	auto it = m_blocksID.find(stringID);
 	if (it == m_blocksID.end())
-		throw EXCEPTION("Unknown block:", stringID);
+		throw EXCEPTION("Registry Error: Unknown block:", stringID);
 	return getBlock(it->second);
 }
 
@@ -147,52 +147,52 @@ const Item &Registry::getItemFromStringID(const std::string &stringID) {
 	if (stringID.empty()) return getItem(0);
 	auto it = m_itemsID.find(stringID);
 	if (it == m_itemsID.end())
-		throw EXCEPTION("Unknown item:", stringID);
+		throw EXCEPTION("Registry Error: Unknown item:", stringID);
 	return getItem(it->second);
 }
 
 const Sky &Registry::getSkyFromStringID(const std::string &stringID) {
 	if (stringID.empty())
-		throw EXCEPTION("Trying to get sky from empty string ID.");
+		throw EXCEPTION("Registry Error: Trying to get sky from empty string ID.");
 
 	auto it = m_skiesID.find(stringID);
 	if (it == m_skiesID.end())
-		throw EXCEPTION("Unknown sky:", stringID);
+		throw EXCEPTION("Registry Error: Unknown sky:", stringID);
 
 	return getSky(it->second);
 }
 
 const Tree &Registry::getTreeFromStringID(const std::string &stringID) {
 	if (stringID.empty())
-		throw EXCEPTION("Trying to get tree from empty string ID.");
+		throw EXCEPTION("Registry Error: Trying to get tree from empty string ID.");
 
 	auto it = m_treesID.find(stringID);
 	if (it == m_treesID.end())
-		throw EXCEPTION("Unknown tree:", stringID);
+		throw EXCEPTION("Registry Error: Unknown tree:", stringID);
 
 	return getTree(it->second);
 }
 
 const Biome &Registry::getBiomeFromStringID(const std::string &stringID) {
 	if (stringID.empty())
-		throw EXCEPTION("Trying to get biome from empty string ID.");
+		throw EXCEPTION("Registry Error: Trying to get biome from empty string ID.");
 
 	auto it = m_biomesID.find(stringID);
 	if (it == m_biomesID.end())
-		throw EXCEPTION("Unknown biome:", stringID);
+		throw EXCEPTION("Registry Error: Unknown biome:", stringID);
 
 	return getBiome(it->second);
 }
 
 entt::entity Registry::getEntityFromStringID(const std::string &stringID) {
 	if (stringID.empty()) {
-		gkError() << "Failed to get entity from empty string ID";
+		gkError() << "Registry Error: Failed to get entity from empty string ID";
 		return entt::null;
 	}
 
 	auto it = m_entities.find(stringID);
 	if (it == m_entities.end()) {
-		gkError() << "Failed to get entity '" + stringID + "': Not found";
+		gkError() << ("Registry Error: Failed to get entity '" + stringID + "': Not found").c_str();
 		return entt::null;
 	}
 

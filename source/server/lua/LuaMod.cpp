@@ -103,12 +103,12 @@ void LuaMod::despawnEntity(EntityWrapper &entity) {
 	}
 	else
 		// FIXME: Maybe improve this message with the type of entity that caused the error
-		gkError() << "In mod '" + m_id + "': Failed to despawn entity: Missing position and network components";
+		gkError() << ("In mod '" + m_id + "': Failed to despawn entity: Missing position and network components").c_str();
 }
 
 ItemStack LuaMod::giveItemStack(ServerPlayer &player, ItemStack *itemStack) {
 	if (!itemStack) {
-		gkError() << "In mod '" + m_id + "': Failed to add stack to player";
+		gkError() << ("In mod '" + m_id + "': Failed to add stack to player").c_str();
 		return ItemStack::Empty;
 	}
 
