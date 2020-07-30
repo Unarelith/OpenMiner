@@ -259,7 +259,7 @@ void TerrainGenerator::oreFloodFill(ServerChunk &chunk, double x, double y, doub
 		oreFloodFill(chunk, x - 1, y - 1, z - 1, toReplace, replaceWith, depth - 1, rand);
 }
 
-inline void TerrainGenerator::generateCaves(ServerChunk &chunk, int x, int y, int z, int h, HeightmapChunk &heightmap) const {
+inline void TerrainGenerator::generateCavesOld(ServerChunk &chunk, int x, int y, int z, int h, HeightmapChunk &heightmap) const {
 	float n2 = noise2d(-(x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
 	float r2 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 512.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 0.1);
 	float r3 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 128.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 1);
@@ -272,6 +272,26 @@ inline void TerrainGenerator::generateCaves(ServerChunk &chunk, int x, int y, in
 		s32 landHeight = heightmap.landHeightAt(x, y);
 		if (landHeight == z + 1 || landHeight == z || landHeight == z - 1)
 			heightmap.setLandHeight(x, y, z - 2);
+	}
+}
+
+inline void TerrainGenerator::generateCaves(ServerChunk &chunk, int x, int y, int z, int h, HeightmapChunk &heightmap) const {
+	static FastNoise noise;
+	noise.SetFrequency(1.0 / 128.0);
+	noise.SetFractalOctaves(2);
+
+	int rx = x + chunk.x() * CHUNK_WIDTH;
+	int ry = y + chunk.y() * CHUNK_DEPTH;
+	int rz = z + chunk.z() * CHUNK_HEIGHT;
+
+	// Density map (not textured image)
+	double n1 = noise.GetSimplexFractal(rx, ry, rz);
+	double n2 = noise.GetSimplexFractal(rx, ry + 88.0, rz);
+	double finalNoise = n1 * n1 + n2 * n2;
+
+	if (finalNoise < 0.02) {
+		// FIXME: Update heightmap
+		chunk.setBlockRaw(x, y, z, 0);
 	}
 }
 
@@ -302,4 +322,3 @@ inline float TerrainGenerator::noise3d_abs(double x, double y, double z, int oct
 
 	return sum;
 }
-

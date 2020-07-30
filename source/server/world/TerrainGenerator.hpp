@@ -57,6 +57,7 @@ class TerrainGenerator {
 		bool tryPlacePortal(ServerChunk &chunk, int x, int y, int z, const Biome &biome, Random_t &rand) const;
 
 		void generateOres(ServerChunk &chunk, int x, int y, int z, const Biome &biome, Random_t &rand) const;
+		void generateCavesOld(ServerChunk &chunk, int x, int y, int z, int h, HeightmapChunk &heightmap) const;
 		void generateCaves(ServerChunk &chunk, int x, int y, int z, int h, HeightmapChunk &heightmap) const;
 
 		void randomWalkOrePlace(ServerChunk &chunk, int x, int y, int z, Random_t &rand, u16 oreBlock, u16 deepBlock, int size) const;
