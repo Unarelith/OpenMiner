@@ -29,15 +29,34 @@
 #include "World.hpp"
 
 void HeightmapChunk::generate() {
-	FastNoise noise;
-	noise.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
-	noise.SetFrequency(1 / 256.0f);
-	noise.SetFractalOctaves(4);
+	FastNoise noise1;
+	noise1.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
+	noise1.SetFrequency(1 / 256.0f);
+	noise1.SetFractalOctaves(4);
+
+	FastNoise noise2;
+	noise2.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
+	noise2.SetFrequency(1 / 256.0f);
+	noise2.SetFractalOctaves(4);
+
+	FastNoise noise3;
+	noise3.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
+	noise3.SetFrequency(1 / 256.0f);
+	noise3.SetFractalOctaves(4);
+
+	FastNoise noise4;
+	noise4.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
+	noise4.SetFractalType(FastNoise::FractalType::Billow);
+	noise4.SetFrequency(1 / 1024.0f);
+	noise4.SetFractalOctaves(1);
 
 	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
-			double n = noise.GetNoise(-x - m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
-			m_map[x + y * CHUNK_WIDTH] = 10 + n * 20;
+			double n1 = noise1.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
+			double n2 = noise2.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
+			double n3 = noise3.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
+			double n4 = noise4.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
+			m_map[x + y * CHUNK_WIDTH] = (n1 + (n2 * n3 * (n4 * 2 - 1))) * 64 + 64;
 		}
 	}
 }

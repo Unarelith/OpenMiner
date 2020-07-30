@@ -36,7 +36,7 @@ namespace {
 	constexpr unsigned char VERSION_MAJOR = 0;
 	constexpr unsigned char VERSION_MINOR = 0;
 	constexpr unsigned char VERSION_PATCH = 10;
-	constexpr const char *VERSION_SUFFIX = "pre6";
+	constexpr const char *VERSION_SUFFIX = "pre7";
 
 	constexpr float DIST_NEAR  = 0.1f;
 	constexpr float DIST_FAR   = 1000.0f;
@@ -66,7 +66,7 @@ namespace {
 	static_assert(CHUNK_HEIGHT >= -128 && CHUNK_HEIGHT < 128, "CHUNK_HEIGHT out of range");
 	static_assert(CHUNK_DEPTH >= -128 && CHUNK_DEPTH < 128, "CHUNK_DEPTH out of range");
 
-	constexpr int SEALEVEL = 4;
+	constexpr int SEALEVEL = 48;
 
 	constexpr const char *BLOCK_AIR = "_:air";
 }
