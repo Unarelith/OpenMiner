@@ -43,7 +43,7 @@ class WorldController {
 		WorldController(Registry &registry, gk::GameClock &clock)
 			: m_registry(registry), m_clock(clock) {}
 
-		void init(PlayerList &players);
+		void init(PlayerList &players, s32 seed);
 
 		void clearEntities();
 

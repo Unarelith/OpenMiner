@@ -44,8 +44,7 @@ class ServerChunk;
 
 class TerrainGenerator {
 	public:
-		TerrainGenerator(Heightmap &heightmap, const Dimension &dimension)
-			: m_biomeSampler(dimension), m_heightmap(heightmap) {}
+		TerrainGenerator(Heightmap &heightmap, const Dimension &dimension, s32 seed);
 
 		void generate(ServerChunk &chunk) const;
 
@@ -58,7 +57,7 @@ class TerrainGenerator {
 
 		void generateOres(ServerChunk &chunk, int x, int y, int z, const Biome &biome, Random_t &rand) const;
 		void generateCavesOld(ServerChunk &chunk, int x, int y, int z, int h, HeightmapChunk &heightmap) const;
-		void generateCaves(ServerChunk &chunk, int x, int y, int z, int h, HeightmapChunk &heightmap) const;
+		void generateCaves(ServerChunk &chunk, int x, int y, int z) const;
 
 		void randomWalkOrePlace(ServerChunk &chunk, int x, int y, int z, Random_t &rand, u16 oreBlock, u16 deepBlock, int size) const;
 		void oreFloodFill(ServerChunk &chunk, double x, double y, double z, u16 toReplace, u16 replaceWith, int depth, Random_t &rand) const;
@@ -69,6 +68,8 @@ class TerrainGenerator {
 		TerrainBiomeSampler m_biomeSampler;
 
 		Heightmap &m_heightmap;
+
+		FastNoise m_caveNoise;
 };
 
 #endif // TERRAINGENERATOR_HPP_

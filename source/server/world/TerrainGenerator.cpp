@@ -33,6 +33,14 @@
 #include <glm/gtc/noise.hpp>
 #include "FastNoise.hpp"
 
+TerrainGenerator::TerrainGenerator(Heightmap &heightmap, const Dimension &dimension, s32 seed)
+	: m_biomeSampler(dimension, seed), m_heightmap(heightmap)
+{
+	m_caveNoise.SetFrequency(1.0 / 128.0);
+	m_caveNoise.SetFractalOctaves(2);
+	m_caveNoise.SetSeed(seed);
+}
+
 void TerrainGenerator::generate(ServerChunk &chunk) const {
 	fastNoiseGeneration(chunk);
 }
@@ -78,7 +86,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 						chunk.setBlockRaw(x, y, z, biome.getDeepBlockID());
 
 					// Caves
-					generateCaves(chunk, x, y, z, h, heightmap);
+					generateCaves(chunk, x, y, z);
 
 					// Populate ores.
 					generateOres(chunk, x, y, z, biome, rand);
@@ -275,18 +283,14 @@ inline void TerrainGenerator::generateCavesOld(ServerChunk &chunk, int x, int y,
 	}
 }
 
-inline void TerrainGenerator::generateCaves(ServerChunk &chunk, int x, int y, int z, int h, HeightmapChunk &heightmap) const {
-	static FastNoise noise;
-	noise.SetFrequency(1.0 / 128.0);
-	noise.SetFractalOctaves(2);
-
+inline void TerrainGenerator::generateCaves(ServerChunk &chunk, int x, int y, int z) const {
 	int rx = x + chunk.x() * CHUNK_WIDTH;
 	int ry = y + chunk.y() * CHUNK_DEPTH;
 	int rz = z + chunk.z() * CHUNK_HEIGHT;
 
 	// Density map (not textured image)
-	double n1 = noise.GetSimplexFractal(rx, ry, rz);
-	double n2 = noise.GetSimplexFractal(rx, ry + 88.0, rz);
+	double n1 = m_caveNoise.GetSimplexFractal(rx, ry, rz);
+	double n2 = m_caveNoise.GetSimplexFractal(rx, ry + 88.0, rz);
 	double finalNoise = n1 * n1 + n2 * n2;
 
 	if (finalNoise < 0.02) {

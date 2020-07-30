@@ -29,14 +29,14 @@
 #include "ServerWorld.hpp"
 #include "TerrainBiomeSampler.hpp"
 
-TerrainBiomeSampler::TerrainBiomeSampler(const Dimension &dimension) : m_dimension(dimension) {
+TerrainBiomeSampler::TerrainBiomeSampler(const Dimension &dimension, s32 seed) : m_dimension(dimension) {
 	for (u8 i = 0; i < biomeParamCount; i++) {
 		m_paramNoises.emplace_back();
 
 		m_paramNoises.back().SetNoiseType(FastNoise::NoiseType::SimplexFractal);
 		m_paramNoises.back().SetFrequency(1 / 800.0f);
 		m_paramNoises.back().SetFractalOctaves(5);
-		m_paramNoises.back().SetSeed(i);
+		m_paramNoises.back().SetSeed(seed + i);
 	}
 }
 

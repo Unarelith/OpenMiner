@@ -37,7 +37,7 @@ class Dimension;
 
 class TerrainBiomeSampler {
 	public:
-		TerrainBiomeSampler(const Dimension &dimension);
+		TerrainBiomeSampler(const Dimension &dimension, s32 seed);
 
 		u16 getBiomeIndexAt(s32 x, s32 y) const;
 

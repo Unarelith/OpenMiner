@@ -36,6 +36,17 @@
 #include "ServerPlayer.hpp"
 #include "ServerWorld.hpp"
 
+ServerWorld::ServerWorld(PlayerList &players, const Dimension &dimension, gk::GameClock &clock, s32 seed)
+	: m_players(players),
+	  m_dimension(dimension),
+	  m_heightmap(seed),
+	  m_terrainGenerator(m_heightmap, dimension, seed),
+	  m_clock(clock),
+	  m_scene(players),
+	  m_seed(seed)
+{
+}
+
 void ServerWorld::update(bool doTick) {
 	for (auto &it : m_chunks) {
 		if (doTick)

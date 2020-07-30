@@ -48,8 +48,7 @@ class ServerWorld : public World {
 	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ServerChunk>>;
 
 	public:
-		ServerWorld(PlayerList &players, const Dimension &dimension, gk::GameClock &clock)
-			: m_players(players), m_dimension(dimension), m_terrainGenerator(m_heightmap, dimension), m_clock(clock), m_scene(players) {}
+		ServerWorld(PlayerList &players, const Dimension &dimension, gk::GameClock &clock, s32 seed);
 
 		void update(bool doTick);
 
@@ -75,6 +74,8 @@ class ServerWorld : public World {
 
 		void setServer(ServerCommandHandler *server) { m_server = server; m_scene.setServer(server); }
 
+		s32 seed() const { return m_seed; }
+
 		static void initUsertype(sol::state &lua);
 
 	private:
@@ -92,6 +93,8 @@ class ServerWorld : public World {
 		gk::GameClock &m_clock;
 
 		ServerScene m_scene;
+
+		s32 m_seed = 0;
 };
 
 #endif // SERVERWORLD_HPP_

@@ -34,11 +34,14 @@
 #include <gk/core/Vector2.hpp>
 
 #include "EngineConfig.hpp"
+#include "FastNoise.hpp"
+
+class Heightmap;
 
 class HeightmapChunk {
 	public:
-		HeightmapChunk(s32 x, s32 y)
-			: m_x(x), m_y(y) {
+		HeightmapChunk(Heightmap &heightmap, s32 x, s32 y)
+			: m_heightmap(heightmap), m_x(x), m_y(y) {
 				std::memset(m_map, 0, CHUNK_WIDTH * CHUNK_DEPTH * sizeof(s32));
 		}
 
@@ -48,6 +51,8 @@ class HeightmapChunk {
 		void setLandHeight(s8 x, s8 y, s32 height);
 
 	private:
+		Heightmap &m_heightmap;
+
 		s32 m_x = 0;
 		s32 m_y = 0;
 
@@ -56,10 +61,17 @@ class HeightmapChunk {
 
 class Heightmap {
 	public:
+		Heightmap(s32 seed);
+
 		HeightmapChunk &getOrCreateChunk(s32 chunkX, s32 chunkY);
 
 		int getHighestBlockAt(s32 blockX, s32 blockY);
 		int getHighestChunkAt(s32 blockX, s32 blockY);
+
+		FastNoise noise1;
+		FastNoise noise2;
+		FastNoise noise3;
+		FastNoise noise4;
 
 	private:
 		std::unordered_map<gk::Vector2i, HeightmapChunk> m_chunks;

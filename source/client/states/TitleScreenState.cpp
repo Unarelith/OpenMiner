@@ -123,6 +123,8 @@ void TitleScreenState::startSingleplayer(bool showLoadingState, const std::strin
 	if (m_thread.joinable())
 		m_thread.join();
 
+	const s32 seed = 1337; // FIXME
+
 	gk::LogLevel logLevel = gk::LoggerHandler::getInstance().maxLevel();
 	m_thread = std::thread([this, worldName, logLevel] () {
 		ServerApplication app{*m_eventHandler};
@@ -133,6 +135,7 @@ void TitleScreenState::startSingleplayer(bool showLoadingState, const std::strin
 		app.setLogLevel(logLevel);
 		app.setSingleplayer(true);
 		app.setPort(sf::Socket::AnyPort);
+		app.setSeed(seed);
 		app.run();
 	});
 }

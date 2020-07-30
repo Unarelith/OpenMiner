@@ -24,38 +24,16 @@
  *
  * =====================================================================================
  */
-#include "FastNoise.hpp"
 #include "Heightmap.hpp"
 #include "World.hpp"
 
 void HeightmapChunk::generate() {
-	FastNoise noise1;
-	noise1.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
-	noise1.SetFrequency(1 / 256.0f);
-	noise1.SetFractalOctaves(4);
-
-	FastNoise noise2;
-	noise2.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
-	noise2.SetFrequency(1 / 256.0f);
-	noise2.SetFractalOctaves(4);
-
-	FastNoise noise3;
-	noise3.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
-	noise3.SetFrequency(1 / 256.0f);
-	noise3.SetFractalOctaves(4);
-
-	FastNoise noise4;
-	noise4.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
-	noise4.SetFractalType(FastNoise::FractalType::Billow);
-	noise4.SetFrequency(1 / 1024.0f);
-	noise4.SetFractalOctaves(1);
-
 	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
-			double n1 = noise1.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
-			double n2 = noise2.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
-			double n3 = noise3.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
-			double n4 = noise4.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
+			double n1 = m_heightmap.noise1.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
+			double n2 = m_heightmap.noise2.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
+			double n3 = m_heightmap.noise3.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
+			double n4 = m_heightmap.noise4.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
 			m_map[x + y * CHUNK_WIDTH] = (n1 + (n2 * n3 * (n4 * 2 - 1))) * 64 + 64;
 		}
 	}
@@ -69,12 +47,35 @@ void HeightmapChunk::setLandHeight(s8 x, s8 y, s32 height) {
 	m_map[x + y * CHUNK_WIDTH] = height;
 }
 
+Heightmap::Heightmap(s32 seed) {
+	noise1.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
+	noise1.SetFrequency(1 / 256.0f);
+	noise1.SetFractalOctaves(4);
+	noise1.SetSeed(seed);
+
+	noise2.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
+	noise2.SetFrequency(1 / 256.0f);
+	noise2.SetFractalOctaves(4);
+	noise2.SetSeed(seed);
+
+	noise3.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
+	noise3.SetFrequency(1 / 256.0f);
+	noise3.SetFractalOctaves(4);
+	noise3.SetSeed(seed);
+
+	noise4.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
+	noise4.SetFractalType(FastNoise::FractalType::Billow);
+	noise4.SetFrequency(1 / 1024.0f);
+	noise4.SetFractalOctaves(1);
+	noise4.SetSeed(seed);
+}
+
 HeightmapChunk &Heightmap::getOrCreateChunk(s32 chunkX, s32 chunkY) {
 	HeightmapChunk *chunk = nullptr;
 
 	auto it = m_chunks.find({chunkX, chunkY});
 	if (it == m_chunks.end()) {
-		m_chunks.emplace(gk::Vector2i{chunkX, chunkY}, HeightmapChunk{chunkX, chunkY});
+		m_chunks.emplace(gk::Vector2i{chunkX, chunkY}, HeightmapChunk{*this, chunkX, chunkY});
 
 		chunk = &m_chunks.at({chunkX, chunkY});
 		chunk->generate();

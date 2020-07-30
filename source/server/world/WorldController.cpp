@@ -28,9 +28,9 @@
 #include "WorldController.hpp"
 #include "WorldSaveBasicBackend.hpp"
 
-void WorldController::init(PlayerList &players) {
+void WorldController::init(PlayerList &players, s32 seed) {
 	for (const Dimension &dimension : m_registry.dimensions()) {
-		m_worldList.emplace_back(players, dimension, m_clock);
+		m_worldList.emplace_back(players, dimension, m_clock, seed);
 		m_worldList.back().setServer(m_server);
 	}
 

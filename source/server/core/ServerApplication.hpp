@@ -53,6 +53,7 @@ class ServerApplication {
 		void setPort(u16 port) { m_port = port; }
 		void setWorldName(const std::string &worldName) { m_worldName = worldName; }
 		void setLogLevel(gk::LogLevel logLevel) { m_loggerHandler.setMaxLevel(logLevel); }
+		void setSeed(s32 seed) { m_seed = seed; }
 
 	private:
 		void update();
@@ -77,6 +78,8 @@ class ServerApplication {
 
 		Server m_server;
 		ServerCommandHandler m_serverCommandHandler{m_scriptEngine, m_server, m_worldController, m_players, m_registry};
+
+		s32 m_seed = 1337; // FIXME
 };
 
 #endif // SERVERAPPLICATION_HPP_
