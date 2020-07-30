@@ -173,19 +173,22 @@ void BlockCursor::activateBlock(const Hotbar &hotbar) {
 		s32 y = m_selectedBlock.y;
 		s32 z = m_selectedBlock.z;
 
-		// FIXME: Document where these face numbers come from
-		if (face == 0) ++x;
-		if (face == 3) --x;
-		if (face == 1) ++y;
-		if (face == 4) --y;
-		if (face == 2) ++z;
-		if (face == 5) --z;
+		const BlockState *blockState = m_world.getBlockState(x, y, z);
+
+		if (blockState->drawType() != BlockDrawType::XShape) {
+			// FIXME: Document where these face numbers come from
+			if (face == 0) ++x;
+			if (face == 3) --x;
+			if (face == 1) ++y;
+			if (face == 4) --y;
+			if (face == 2) ++z;
+			if (face == 5) --z;
+
+			blockState = m_world.getBlockState(x, y, z);
+		}
 
 		// First, we check if the new block is not replacing another block
-		// u32 blockId = m_world.getBlock(x, y, z);
-		// const Block &block = Registry::getInstance().getBlock(blockId);
-		const BlockState *blockState = m_world.getBlockState(x, y, z);
-		if (blockState && (!blockState->block().id() || blockState->drawType() == BlockDrawType::Liquid)) {
+		if (blockState && (!blockState->block().id() || blockState->drawType() == BlockDrawType::Liquid || blockState->drawType() == BlockDrawType::XShape)) {
 			// Second, we check if the new block is not inside the player
 			const Block &newBlock = Registry::getInstance().getBlock(hotbar.currentItem().id());
 			const BlockState &newBlockState = newBlock.getState(0); // FIXME: Get state from item stack
