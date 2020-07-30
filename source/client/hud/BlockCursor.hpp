@@ -50,6 +50,8 @@ class BlockCursor : public gk::Drawable {
 		const BlockState *currentBlock() const { return m_currentBlock; }
 
 	private:
+		void activateBlock(const Hotbar &hotbar);
+
 		void updateVertexBuffer(const BlockState &blockState, const u8f orientation);
 		void updateAnimationVertexBuffer(const BlockState &blockState, const u8f orientation, int animationPos = -1);
 		void updateVBOCoords(Vertex vertices[BlockGeometry::nFaces][BlockGeometry::nVertsPerFace],
@@ -72,6 +74,9 @@ class BlockCursor : public gk::Drawable {
 		const ItemStack *m_currentTool = nullptr;
 
 		gk::Texture *m_blockDestroyTexture = nullptr;
+
+		const u16 m_activationRepeatDelay = 250;
+		u16 m_activationRepeat = 0;
 };
 
 #endif // BLOCKCURSOR_HPP_

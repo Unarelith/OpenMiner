@@ -48,97 +48,37 @@ BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommand
 }
 
 void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
-	int cursorPos = hotbar.cursorPos();
-	if (cursorPos == -1) return;
+	if (hotbar.cursorPos() == -1) return;
+
+	if (m_activationRepeat
+	&& gk::GameClock::getInstance().getTicks() > m_activationRepeat + m_activationRepeatDelay)
+		activateBlock(hotbar);
 
 	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
 			m_animationStart = gk::GameClock::getInstance().getTicks();
-				m_currentTool = &m_player.inventory().getStack(cursorPos, 0);
+			m_currentTool = &m_player.inventory().getStack(hotbar.cursorPos(), 0);
 		}
 		else if (event.button.button == SDL_BUTTON_RIGHT) {
-			if (m_animationStart != 0)
-				m_animationStart = 0;
-
-			u32 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
-			const Block &block = Registry::getInstance().getBlock(blockId);
-			const Item &item = hotbar.currentItem();
-
-			bool itemActivationSent = false;
-			bool sneakedItemActivation = false;
-			if (item.id() && item.canBeActivated()) {
-				if (!gk::GamePad::isKeyPressed(GameKey::Sneak)) {
-					m_client.sendItemActivated(m_selectedBlock);
-					itemActivationSent = true;
-				}
-				else
-					sneakedItemActivation = true;
-			}
-
-			bool blockActivationSent = false;
-			if (!itemActivationSent && block.id() && block.canBeActivated()
-			&& (!gk::GamePad::isKeyPressed(GameKey::Sneak) || sneakedItemActivation)) {
-				m_client.sendBlockActivated(m_selectedBlock);
-				blockActivationSent = true;
-			}
-
-			if (block.id() && !itemActivationSent && !blockActivationSent && hotbar.currentItem().id() && item.isBlock()) {
-				s8 face = m_selectedBlock.w;
-
-				s32 x = m_selectedBlock.x;
-				s32 y = m_selectedBlock.y;
-				s32 z = m_selectedBlock.z;
-
-				// FIXME: Document where these face numbers come from
-				if (face == 0) ++x;
-				if (face == 3) --x;
-				if (face == 1) ++y;
-				if (face == 4) --y;
-				if (face == 2) ++z;
-				if (face == 5) --z;
-
-				// First, we check if the new block is not replacing another block
-				// u32 blockId = m_world.getBlock(x, y, z);
-				// const Block &block = Registry::getInstance().getBlock(blockId);
-				const BlockState *blockState = m_world.getBlockState(x, y, z);
-				if (blockState && (!blockState->block().id() || blockState->drawType() == BlockDrawType::Liquid)) {
-					// Second, we check if the new block is not inside the player
-					const Block &newBlock = Registry::getInstance().getBlock(hotbar.currentItem().id());
-					const BlockState &newBlockState = newBlock.getState(0); // FIXME: Get state from item stack
-					gk::FloatBox boundingBox = newBlockState.boundingBox() + gk::Vector3f(x - m_player.x(), y - m_player.y(), z - m_player.z());
-					gk::FloatBox playerBoundingBox = m_player.hitbox();
-					if (!boundingBox.intersects(playerBoundingBox) && newBlock.placementConstraints().check(m_world, {x, y, z})) {
-						u32 block = hotbar.currentItem().id();
-						if (newBlock.isRotatable()) {
-							u16 data = m_player.getOppositeDirection() & 0x3;
-							m_world.setData(x, y, z, data);
-
-							block |= data << 16;
-						}
-
-						m_world.setBlock(x, y, z, hotbar.currentItem().id());
-
-						m_client.sendPlayerPlaceBlock(x, y, z, block);
-
-						const ItemStack &currentStack = m_player.inventory().getStack(cursorPos, 0);
-						m_player.inventory().setStack(cursorPos, 0, currentStack.amount() > 1 ? currentStack.item().stringID() : "", currentStack.amount() - 1);
-
-						m_client.sendPlayerInvUpdate();
-					}
-				}
-			}
+			activateBlock(hotbar);
 		}
 	}
-	else if (event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_LEFT) {
-		resetDestroyAnimation();
+	else if (event.type == SDL_MOUSEBUTTONUP) {
+		if (event.button.button == SDL_BUTTON_LEFT)
+			resetDestroyAnimation();
+		else if (event.button.button == SDL_BUTTON_RIGHT)
+			m_activationRepeat = 0;
 	}
 }
 
 void BlockCursor::update(const Hotbar &hotbar) {
 	bool selectedBlockChanged = false;
 	glm::ivec4 selectedBlock = findSelectedBlock();
-	if (selectedBlock.x != m_selectedBlock.x || selectedBlock.y != m_selectedBlock.y || selectedBlock.z != m_selectedBlock.z)
+	if (selectedBlock.x != m_selectedBlock.x || selectedBlock.y != m_selectedBlock.y || selectedBlock.z != m_selectedBlock.z) {
 		selectedBlockChanged = true;
+		if (m_activationRepeat != 0)
+			m_activationRepeat = 1;
+	}
 
 	m_selectedBlock = selectedBlock;
 
@@ -196,6 +136,81 @@ void BlockCursor::update(const Hotbar &hotbar) {
 		updateVertexBuffer(*m_currentBlock, orientation);
 	else
 		m_currentBlock = nullptr;
+}
+
+void BlockCursor::activateBlock(const Hotbar &hotbar) {
+	if (m_animationStart != 0)
+		m_animationStart = 0;
+
+	m_activationRepeat = gk::GameClock::getInstance().getTicks();
+
+	u32 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
+	const Block &block = Registry::getInstance().getBlock(blockId);
+	const Item &item = hotbar.currentItem();
+
+	bool itemActivationSent = false;
+	bool sneakedItemActivation = false;
+	if (item.id() && item.canBeActivated()) {
+		if (!gk::GamePad::isKeyPressed(GameKey::Sneak)) {
+			m_client.sendItemActivated(m_selectedBlock);
+			itemActivationSent = true;
+		}
+		else
+			sneakedItemActivation = true;
+	}
+
+	bool blockActivationSent = false;
+	if (!itemActivationSent && block.id() && block.canBeActivated()
+	&& (!gk::GamePad::isKeyPressed(GameKey::Sneak) || sneakedItemActivation)) {
+		m_client.sendBlockActivated(m_selectedBlock);
+		blockActivationSent = true;
+	}
+
+	if (block.id() && !itemActivationSent && !blockActivationSent && hotbar.currentItem().id() && item.isBlock()) {
+		s8 face = m_selectedBlock.w;
+
+		s32 x = m_selectedBlock.x;
+		s32 y = m_selectedBlock.y;
+		s32 z = m_selectedBlock.z;
+
+		// FIXME: Document where these face numbers come from
+		if (face == 0) ++x;
+		if (face == 3) --x;
+		if (face == 1) ++y;
+		if (face == 4) --y;
+		if (face == 2) ++z;
+		if (face == 5) --z;
+
+		// First, we check if the new block is not replacing another block
+		// u32 blockId = m_world.getBlock(x, y, z);
+		// const Block &block = Registry::getInstance().getBlock(blockId);
+		const BlockState *blockState = m_world.getBlockState(x, y, z);
+		if (blockState && (!blockState->block().id() || blockState->drawType() == BlockDrawType::Liquid)) {
+			// Second, we check if the new block is not inside the player
+			const Block &newBlock = Registry::getInstance().getBlock(hotbar.currentItem().id());
+			const BlockState &newBlockState = newBlock.getState(0); // FIXME: Get state from item stack
+			gk::FloatBox boundingBox = newBlockState.boundingBox() + gk::Vector3f(x - m_player.x(), y - m_player.y(), z - m_player.z());
+			gk::FloatBox playerBoundingBox = m_player.hitbox();
+			if (!boundingBox.intersects(playerBoundingBox) && newBlock.placementConstraints().check(m_world, {x, y, z})) {
+				u32 block = hotbar.currentItem().id();
+				if (newBlock.isRotatable()) {
+					u16 data = m_player.getOppositeDirection() & 0x3;
+					m_world.setData(x, y, z, data);
+
+					block |= data << 16;
+				}
+
+				m_world.setBlock(x, y, z, hotbar.currentItem().id());
+
+				m_client.sendPlayerPlaceBlock(x, y, z, block);
+
+				const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
+				m_player.inventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().stringID() : "", currentStack.amount() - 1);
+
+				m_client.sendPlayerInvUpdate();
+			}
+		}
+	}
 }
 
 using namespace BlockGeometry;
