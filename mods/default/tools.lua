@@ -46,7 +46,9 @@ function register_tool(name, material, mining_speed, harvest_capability)
 	if name == "hoe" then
 		tool_def.on_item_activated = function(pos, block, player, world, client, server)
 			if block:string_id() == "default:grass" or block:string_id() == "default:dirt" then
-				world:set_block_from_str(pos.x, pos.y, pos.z, "default:farmland")
+				if world:get_block(pos.x, pos.y, pos.z + 1) == 0 then
+					world:set_block_from_str(pos.x, pos.y, pos.z, "default:farmland")
+				end
 			end
 		end
 	elseif name == "shovel" then
