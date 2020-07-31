@@ -73,8 +73,11 @@ void SettingsMenuState::init() {
 void SettingsMenuState::onEvent(const SDL_Event &event) {
 	InterfaceState::onEvent(event);
 
-	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED && &m_stateStack->top() != this) {
-		m_menuWidget.onEvent(event);
+	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+		if (&m_stateStack->top() != this)
+			m_menuWidget.onEvent(event);
+		else if (m_state == MenuState::Graphics && m_resolutionButton)
+			m_resolutionButton->setText("Resolution: " + std::to_string(Config::screenWidth) + "x" + std::to_string(Config::screenHeight));
 	}
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
@@ -138,6 +141,7 @@ void SettingsMenuState::updateWidgetPosition() {
 
 void SettingsMenuState::doneButtonAction() {
 	if (m_state != MenuState::Main) {
+		m_resolutionButton = nullptr;
 		m_state = MenuState::Main;
 		addMainButtons();
 	} else {
@@ -244,8 +248,7 @@ void SettingsMenuState::addGraphicsButtons() {
 		}
 	}, 1, 3, Config::guiScale);
 
-	addToggleButton("Fullscreen", Config::isFullscreenModeEnabled, false);
-	m_menuWidget.addButton("Resolution: " + std::to_string(Config::screenWidth) + "x" + std::to_string(Config::screenHeight), [] (TextButton &button) {
+	m_resolutionButton = &m_menuWidget.addButton("Resolution: " + std::to_string(Config::screenWidth) + "x" + std::to_string(Config::screenHeight), [] (TextButton &button) {
 		if (Config::isFullscreenModeEnabled) return;
 
 		// FIXME: Find a better way to do this
@@ -263,6 +266,15 @@ void SettingsMenuState::addGraphicsButtons() {
 		}
 
 		button.setText("Resolution: " + std::to_string(Config::screenWidth) + "x" + std::to_string(Config::screenHeight));
+	});
+
+	m_resolutionButton->setEnabled(!Config::isFullscreenModeEnabled);
+
+	m_menuWidget.addButton(std::string("Fullscreen: ") + (Config::isFullscreenModeEnabled ? "ON" : "OFF"), [&, aoValueNames] (TextButton &button) {
+		Config::isFullscreenModeEnabled = !Config::isFullscreenModeEnabled;
+		button.setText(std::string("Fullscreen: ") + (Config::isFullscreenModeEnabled ? "ON" : "OFF"));
+
+		m_resolutionButton->setEnabled(!Config::isFullscreenModeEnabled);
 	});
 
 	addToggleButton("Use VSync", Config::isVerticalSyncEnabled, false);
