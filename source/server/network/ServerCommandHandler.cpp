@@ -198,9 +198,9 @@ void ServerCommandHandler::setupCallbacks() {
 			Heightmap &heightmap = world.heightmap();
 
 			bool hasFoundPosition = false;
-			for (s32 spawnChunkX = 0 ; spawnChunkX < 16 ; ++spawnChunkX) {
-				for (s32 spawnChunkY = 0 ; spawnChunkY < 16 ; ++spawnChunkY) {
-					for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
+			for (s32 spawnChunkX = 0 ; spawnChunkX < 16 && !hasFoundPosition ; ++spawnChunkX) {
+				for (s32 spawnChunkY = 0 ; spawnChunkY < 16 && !hasFoundPosition ; ++spawnChunkY) {
+					for(int y = 0 ; y < CHUNK_DEPTH && !hasFoundPosition ; y++) {
 						for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
 							int maxChunkZ = heightmap.getHighestChunkAt(x + spawnChunkX * CHUNK_WIDTH, y + spawnChunkY * CHUNK_DEPTH);
 							int worldZ = heightmap.getHighestBlockAt(x + spawnChunkX * CHUNK_WIDTH, y + spawnChunkY * CHUNK_DEPTH) + 1;
@@ -229,9 +229,6 @@ void ServerCommandHandler::setupCallbacks() {
 								break;
 							}
 						}
-
-						if (hasFoundPosition)
-							break;
 					}
 				}
 			}
