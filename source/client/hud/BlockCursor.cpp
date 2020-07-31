@@ -61,7 +61,7 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 	}
 	else if (event.type == SDL_MOUSEBUTTONUP) {
 		if (event.button.button == SDL_BUTTON_LEFT)
-			resetDestroyAnimation();
+			reset();
 		else if (event.button.button == SDL_BUTTON_RIGHT)
 			m_activationRepeat = 0;
 	}

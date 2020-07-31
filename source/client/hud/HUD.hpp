@@ -50,7 +50,7 @@ class HUD : public gk::Transformable, public gk::Drawable {
 
 		void update();
 
-		void pause() { m_blockCursor.resetDestroyAnimation(); }
+		void pause() { m_blockCursor.reset(); }
 
 		const BlockCursor &blockCursor() const { return m_blockCursor; }
 

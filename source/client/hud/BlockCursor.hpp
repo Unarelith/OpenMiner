@@ -45,7 +45,7 @@ class BlockCursor : public gk::Drawable {
 
 		void update(const Hotbar &hotbar);
 
-		void resetDestroyAnimation() { m_animationStart = 0; }
+		void reset() { m_animationStart = 0; m_activationRepeat = 0; }
 
 		const BlockState *currentBlock() const { return m_currentBlock; }
 
