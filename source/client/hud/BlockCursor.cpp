@@ -50,10 +50,6 @@ BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommand
 void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 	if (hotbar.cursorPos() == -1) return;
 
-	if (m_activationRepeat
-	&& gk::GameClock::getInstance().getTicks() > m_activationRepeat + m_activationRepeatDelay)
-		activateBlock(hotbar);
-
 	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
 			m_animationStart = gk::GameClock::getInstance().getTicks();
@@ -76,8 +72,6 @@ void BlockCursor::update(const Hotbar &hotbar) {
 	glm::ivec4 selectedBlock = findSelectedBlock();
 	if (selectedBlock.x != m_selectedBlock.x || selectedBlock.y != m_selectedBlock.y || selectedBlock.z != m_selectedBlock.z) {
 		selectedBlockChanged = true;
-		if (m_activationRepeat != 0)
-			m_activationRepeat = 1;
 	}
 
 	m_selectedBlock = selectedBlock;
@@ -136,6 +130,10 @@ void BlockCursor::update(const Hotbar &hotbar) {
 		updateVertexBuffer(*m_currentBlock, orientation);
 	else
 		m_currentBlock = nullptr;
+
+	if (m_activationRepeat
+	&& gk::GameClock::getInstance().getTicks() > m_activationRepeat + m_activationRepeatDelay)
+		activateBlock(hotbar);
 }
 
 void BlockCursor::activateBlock(const Hotbar &hotbar) {
