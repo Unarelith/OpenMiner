@@ -74,8 +74,8 @@ class ClientChunk : public Chunk {
 
 		ChunkBuilder m_builder;
 
-		std::array<gk::VertexBuffer, ChunkBuilder::layers> m_vbo{};
-		std::array<std::size_t, ChunkBuilder::layers> m_verticesCount{};
+		ChunkBuilder::VertexBufferArray m_vbo{};
+		ChunkBuilder::VertexCountArray m_verticesCount{};
 
 		bool m_isReadyForMeshing = false;
 		bool m_isTooFar = false;
