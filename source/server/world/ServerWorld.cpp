@@ -187,7 +187,7 @@ void ServerWorld::sendChunkData(const ClientInfo &client, ServerChunk &chunk) {
 	chunk.setSent(true);
 	chunk.setChanged(false);
 
-	gkDebug() << "Chunk at" << chunk.x() << chunk.y() << chunk.z() << "sent to client";
+	// gkDebug() << "Chunk at" << chunk.x() << chunk.y() << chunk.z() << "sent to client";
 }
 
 void ServerWorld::sendRequestedData(const ClientInfo &client, int cx, int cy, int cz) {

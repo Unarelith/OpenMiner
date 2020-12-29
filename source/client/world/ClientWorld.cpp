@@ -56,7 +56,7 @@ void ClientWorld::update(bool allowWorldReload) {
 			if (World::isReloadRequested && allowWorldReload)
 				it->second->setChanged(true);
 
-			// if (it->second->areAllNeighboursInitialized())
+			if (it->second->areAllNeighboursInitialized())
 				it->second->update();
 
 			++it;
@@ -82,7 +82,7 @@ void ClientWorld::sendChunkRequests() {
 		ClientChunk *chunk = (ClientChunk *)getChunk(ux, uy, uz);
 		if(chunk && !chunk->hasBeenRequested()) {
 			// Send a chunk request to the server
-			m_client->sendChunkRequest(ux, uy, uz);
+			// m_client->sendChunkRequest(ux, uy, uz);
 			chunk->setHasBeenRequested(true);
 
 			// std::cout << "Chunk at (" << ux << ", " << uy << ", " << uz << ") requested" << std::endl;
@@ -161,8 +161,7 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 	if (m_eventHandler)
 		m_eventHandler->emplaceEvent<ChunkCreatedEvent>(gk::Vector3i{cx, cy, cz}, true);
 
-	// if (cx == 2 && cy == 0 && cz == 1)
-	gkDebug() << "Chunk at" << cx << cy << cz << "received";
+	// gkDebug() << "Chunk at" << cx << cy << cz << "received";
 }
 
 void ClientWorld::removeChunk(ChunkMap::iterator &it) {
@@ -269,6 +268,8 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 	std::vector<std::pair<ClientChunk*, gk::Transform>> chunks;
 	for(auto &it : m_chunks) {
+		if (!it.second->isInitialized()) continue;
+
 		it.second->setHasBeenDrawn(false);
 
 		gk::Transform tf = glm::translate(glm::mat4(1.0f),
@@ -310,7 +311,7 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		}
 
 		// If this chunk is not initialized, skip it
-		if(!it.second->isInitialized() && !it.second->hasBeenRequested()) {
+		if(!it.second->hasBeenRequested()) {
 			// But if it is the closest to the camera, mark it for initialization
 			if(d < m_closestInitializedChunk.w) {
 				m_closestInitializedChunk.w = d;
