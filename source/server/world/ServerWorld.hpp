@@ -98,8 +98,6 @@ class ServerWorld : public World {
 		s32 m_seed = 0;
 
 		std::queue<std::pair<gk::Vector3i, ServerPlayer &>> m_chunksToSend;
-
-		std::unordered_map<u16, std::queue<gk::Vector3i>> m_chunkQueues;
 };
 
 #endif // SERVERWORLD_HPP_
