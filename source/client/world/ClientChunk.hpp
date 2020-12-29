@@ -56,6 +56,9 @@ class ClientChunk : public Chunk {
 		bool hasBeenDrawn() const { return m_hasBeenDrawn; }
 		void setHasBeenDrawn(bool hasBeenDrawn) { m_hasBeenDrawn = hasBeenDrawn; }
 
+		bool canDraw() const { return m_canDraw; }
+		void setCanDraw(bool canDraw) { m_canDraw = canDraw; }
+
 		bool areAllNeighboursTooFar() const;
 
 		static u32 chunkUpdatesPerSec;
@@ -75,6 +78,7 @@ class ClientChunk : public Chunk {
 		bool m_hasBeenRequested = false;
 		bool m_isTooFar = false;
 		bool m_hasBeenDrawn = false;
+		bool m_canDraw = false;
 };
 
 #endif // CLIENTCHUNK_HPP_
