@@ -122,8 +122,8 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 				m_velocity.z = -m_jumpSpeed;
 		}
 	}
-	else {
-		// Block player until the chunk loads
+	else if (!Config::isNoClipEnabled) {
+		// Block player until the chunk loads, unless "no clip" mode is enabled
 		m_velocity = glm::vec3{0.f, 0.f, 0.f};
 	}
 

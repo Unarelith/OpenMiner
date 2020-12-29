@@ -28,7 +28,6 @@
 #include "Registry.hpp"
 #include "ServerConfig.hpp"
 #include "ServerModLoader.hpp"
-#include "ServerWorld.hpp"
 
 void LuaCore::addListener(LuaEventType eventType, const sol::function &listener) {
 	m_listeners.emplace(eventType, listener);
