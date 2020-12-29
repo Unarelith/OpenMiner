@@ -41,6 +41,14 @@ u8 Player::getOppositeDirection() const {
 	return getDirection() ^ 2;
 }
 
+gk::Vector3i Player::getCurrentChunk() const {
+	return {
+		(static_cast<s32>(m_x) & -CHUNK_WIDTH)  / CHUNK_WIDTH,
+		(static_cast<s32>(m_y) & -CHUNK_DEPTH)  / CHUNK_DEPTH,
+		(static_cast<s32>(m_z) & -CHUNK_HEIGHT) / CHUNK_HEIGHT
+	};
+}
+
 void Player::serialize(sf::Packet &packet) const {
 	packet << m_x << m_y << m_z << m_dimension << m_viewAngleH << m_viewAngleV << m_viewAngleRoll << m_inventory << m_heldItemSlot;
 }

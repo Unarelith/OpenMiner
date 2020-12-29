@@ -54,7 +54,7 @@ class ServerWorld : public World {
 
 		void createChunkNeighbours(ServerChunk &chunk);
 		void sendChunkData(const ClientInfo &client, ServerChunk &chunk);
-		void sendRequestedData(ClientInfo &client, s32 cx, s32 cy, s32 cz);
+		void sendRequestedData(const ClientInfo &client, s32 cx, s32 cy, s32 cz);
 
 		ServerChunk &getOrCreateChunk(s32 cx, s32 cy, s32 cz);
 
@@ -96,6 +96,10 @@ class ServerWorld : public World {
 		ServerScene m_scene;
 
 		s32 m_seed = 0;
+
+		std::queue<std::pair<gk::Vector3i, ServerPlayer &>> m_chunksToSend;
+
+		std::unordered_map<u16, std::queue<gk::Vector3i>> m_chunkQueues;
 };
 
 #endif // SERVERWORLD_HPP_

@@ -51,6 +51,7 @@ std::string Network::commandToString(Network::Command command) {
 		{Network::Command::PlayerSpawn,           "PlayerSpawn"},
 		{Network::Command::PlayerChangeDimension, "PlayerChangeDimension"},
 		{Network::Command::PlayerHeldItemChanged, "PlayerHeldItemChanged"},
+		{Network::Command::PlayerReady,           "PlayerReady"},
 
 		{Network::Command::BlockUpdate,           "BlockUpdate"},
 		{Network::Command::BlockActivated,        "BlockActivated"},

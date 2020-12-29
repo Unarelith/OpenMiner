@@ -91,6 +91,12 @@ void ClientCommandHandler::sendPlayerHeldItemChanged(u8 hotbarSlot, u16 itemID) 
 	m_client.send(packet);
 }
 
+void ClientCommandHandler::sendPlayerReady() {
+	Network::Packet packet;
+	packet << Network::Command::PlayerReady;
+	m_client.send(packet);
+}
+
 void ClientCommandHandler::sendBlockActivated(const glm::ivec4 &selectedBlock) {
 	Network::Packet packet;
 	packet << Network::Command::BlockActivated

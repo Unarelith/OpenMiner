@@ -192,6 +192,7 @@ void ServerCommandHandler::setupCallbacks() {
 			return;
 		}
 
+		// Try to find a valid spawn point (WIP)
 		if (player->isNewPlayer()) {
 			// FIXME: Default dimension hardcoded here
 			ServerWorld &world = m_worldController.getWorld(0);
@@ -239,6 +240,7 @@ void ServerCommandHandler::setupCallbacks() {
 			player->setHeldItemSlot(0);
 		}
 
+		// Send the registry
 		Network::Packet packet;
 		packet << Network::Command::RegistryData;
 		m_registry.serialize(packet);
@@ -253,9 +255,11 @@ void ServerCommandHandler::setupCallbacks() {
 			client.tcpSocket->send(spawnPacket);
 		}
 
+		// Triggers the 'PlayerConnected' Lua event
 		if (player->isNewPlayer())
 			m_scriptEngine.luaCore().onEvent(LuaEventType::PlayerConnected, glm::ivec3{player->x(), player->y(), player->z()}, player, client, *this);
 
+		// Send inventory
 		sendPlayerInvUpdate(client.id, &client);
 
 		// Send spawn packet to all clients for this player
@@ -277,7 +281,7 @@ void ServerCommandHandler::setupCallbacks() {
 		s32 cx, cy, cz;
 		packet >> cx >> cy >> cz;
 
-		getWorldForClient(client.id).sendRequestedData(client, cx, cy, cz);
+		// getWorldForClient(client.id).sendRequestedData(client, cx, cy, cz);
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerInvUpdate, [this](ClientInfo &client, Network::Packet &packet) {
@@ -368,6 +372,15 @@ void ServerCommandHandler::setupCallbacks() {
 				gkWarning() << "PlayerHeldItemChanged:" << "Desync of item ID between client and server";
 
 			player->setHeldItemSlot(hotbarSlot);
+		}
+		else
+			gkError() << ("Failed to change held item of player " + std::to_string(client.id) + ": Player not found").c_str();
+	});
+
+	m_server.setCommandCallback(Network::Command::PlayerReady, [this](ClientInfo &client, Network::Packet &) {
+		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+		if (player) {
+			player->setReady(true);
 		}
 		else
 			gkError() << ("Failed to change held item of player " + std::to_string(client.id) + ": Player not found").c_str();
