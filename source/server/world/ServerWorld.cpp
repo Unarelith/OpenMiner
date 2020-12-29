@@ -54,7 +54,6 @@ void ServerWorld::update(bool doTick) {
 				gk::Vector3i currentChunk = it.second.getCurrentChunk();
 				if (!it.second.isChunkLoaded(currentChunk) || it.second.lastChunkUpdate != currentChunk) {
 					m_chunksToSend.emplace(std::make_pair(currentChunk, std::ref(it.second)));
-					it.second.addLoadedChunk(currentChunk);
 					it.second.lastChunkUpdate = currentChunk;
 				}
 			}
@@ -70,16 +69,16 @@ void ServerWorld::update(bool doTick) {
 			if (!player.isChunkLoaded(chunkPos)) {
 				sendRequestedData(*player.client(), chunkPos.x, chunkPos.y, chunkPos.z);
 				player.addLoadedChunk(chunkPos);
-			}
 
-			gk::Vector3i playerChunkPos = player.getCurrentChunk();
-			if ((playerChunkPos - chunkPos).length() <= ServerConfig::renderDistance) {
-				addChunkToSend(chunkPos,  1,  0,  0, player);
-				addChunkToSend(chunkPos, -1,  0,  0, player);
-				addChunkToSend(chunkPos,  0,  1,  0, player);
-				addChunkToSend(chunkPos,  0, -1,  0, player);
-				addChunkToSend(chunkPos,  0,  0,  1, player);
-				addChunkToSend(chunkPos,  0,  0, -1, player);
+				gk::Vector3i playerChunkPos = player.getCurrentChunk();
+				if ((playerChunkPos - chunkPos).length() <= ServerConfig::renderDistance) {
+					addChunkToSend(chunkPos,  1,  0,  0, player);
+					addChunkToSend(chunkPos, -1,  0,  0, player);
+					addChunkToSend(chunkPos,  0,  1,  0, player);
+					addChunkToSend(chunkPos,  0, -1,  0, player);
+					addChunkToSend(chunkPos,  0,  0,  1, player);
+					addChunkToSend(chunkPos,  0,  0, -1, player);
+				}
 			}
 
 			m_chunksToSend.pop();
