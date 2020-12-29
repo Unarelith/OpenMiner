@@ -260,6 +260,12 @@ Packet sent at the beginning of every server tick.
 | Hotbar slot   | u8          | ID of the current hotbar slot                        |
 | Item ID       | u16         | Current item ID (to check match with server)         |
 
+#### PlayerReady
+
+Packet sent from a client when it is ready to receive chunks.
+
+_This packet has no field._
+
 #### BlockActivated
 
 | Field name    | Field type  | Notes                                                |

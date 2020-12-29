@@ -56,7 +56,7 @@ void ClientWorld::update(bool allowWorldReload) {
 			if (World::isReloadRequested && allowWorldReload)
 				it->second->setChanged(true);
 
-			if (it->second->areAllNeighboursInitialized())
+			// if (it->second->areAllNeighboursInitialized())
 				it->second->update();
 
 			++it;
@@ -162,7 +162,7 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 		m_eventHandler->emplaceEvent<ChunkCreatedEvent>(gk::Vector3i{cx, cy, cz}, true);
 
 	// if (cx == 2 && cy == 0 && cz == 1)
-	// 	std::cout << "Chunk at (" << cx << ", " << cy << ", " << cz << ") received" << std::endl;
+	gkDebug() << "Chunk at" << cx << cy << cz << "received";
 }
 
 void ClientWorld::removeChunk(ChunkMap::iterator &it) {

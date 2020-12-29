@@ -84,10 +84,12 @@ void ServerLoadingState::update() {
 
 	if (m_game.clientCommandHandler().isRegistryInitialized()) {
 		if (m_game.textureAtlas().isReady() && (m_hasBeenRendered || !m_showLoadingState)) {
+			m_game.world().changeDimension(m_game.player().dimension());
+
 			if (m_showLoadingState)
 				std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-			m_game.world().changeDimension(m_game.player().dimension());
+			m_game.clientCommandHandler().sendPlayerReady();
 
 			m_stateStack->pop();
 

@@ -35,6 +35,9 @@
 u8 ServerConfig::maxPlayers = 5;
 u16 ServerConfig::maxItemStackSize = 64;
 
+// World
+u8 ServerConfig::renderDistance = 10;
+
 // Mod-defined options
 std::unordered_map<std::string, sol::object> ServerConfig::options;
 
@@ -47,6 +50,8 @@ void ServerConfig::loadConfigFromFile(const char *file) {
 
 			maxPlayers = lua["max_players"].get_or(maxPlayers);
 			maxItemStackSize = lua["max_item_stack_size"].get_or(maxItemStackSize);
+
+			renderDistance = lua["render_distance"].get_or(renderDistance);
 
 			if (lua["mod_options"].valid() && lua["mod_options"].get_type() == sol::type::table) {
 				for (auto &it : lua["mod_options"].get<sol::table>()) {
@@ -66,6 +71,7 @@ void ServerConfig::saveConfigToFile(const char *filename) {
 	std::ofstream file{filename, std::ofstream::out | std::ofstream::trunc};
 	file << "max_players = " << (u16)maxPlayers << std::endl;
 	file << "max_item_stack_size = " << maxItemStackSize << std::endl;
+	file << "render_distance = " << (u16)renderDistance << std::endl;
 	file << "mod_options = {" << std::endl;
 
 	for (auto &it : options) {

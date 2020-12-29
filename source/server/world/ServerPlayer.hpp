@@ -27,6 +27,8 @@
 #ifndef SERVERPLAYER_HPP_
 #define SERVERPLAYER_HPP_
 
+#include <unordered_set>
+
 #include <gk/core/Debug.hpp>
 
 #include "ClientInfo.hpp"
@@ -46,12 +48,25 @@ class ServerPlayer : public Player {
 		bool isNewPlayer() const { return m_isNewPlayer; }
 		void setNewPlayer(bool isNewPlayer) { m_isNewPlayer = isNewPlayer; }
 
+		bool isReady() const { return m_isReady; }
+		void setReady(bool isReady) { m_isReady = isReady; }
+
+		bool isChunkLoaded(const gk::Vector3i &chunk) { return m_loadedChunks.find(chunk) != m_loadedChunks.end(); }
+		void addLoadedChunk(const gk::Vector3i &chunk) { m_loadedChunks.emplace(chunk); }
+		void removeLoadedChunk(const gk::Vector3i &chunk) { m_loadedChunks.erase(chunk); }
+
 		static void initUsertype(sol::state &lua);
+
+	public:
+		gk::Vector3i lastChunkUpdate{0, 0, 0}; // FIXME
 
 	private:
 		ClientInfo *m_client = nullptr;
 
 		bool m_isNewPlayer = false;
+		bool m_isReady = false; // Is player ready to receive chunks?
+
+		std::unordered_set<gk::Vector3i> m_loadedChunks;
 };
 
 #endif // SERVERPLAYER_HPP_
