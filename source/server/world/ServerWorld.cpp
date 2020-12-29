@@ -55,6 +55,7 @@ void ServerWorld::update(bool doTick) {
 				if (!it.second.isChunkLoaded(currentChunk) || it.second.lastChunkUpdate != currentChunk) {
 					m_chunksToSend.emplace(std::make_pair(currentChunk, std::ref(it.second)));
 					it.second.lastChunkUpdate = currentChunk;
+					gkWarning() << "coucou";
 				}
 			}
 		}
@@ -71,7 +72,7 @@ void ServerWorld::update(bool doTick) {
 				player.addLoadedChunk(chunkPos);
 
 				gk::Vector3i playerChunkPos = player.getCurrentChunk();
-				if ((playerChunkPos - chunkPos).length() <= ServerConfig::renderDistance) {
+				if ((playerChunkPos - chunkPos).length() < ServerConfig::renderDistance) {
 					addChunkToSend(chunkPos,  1,  0,  0, player);
 					addChunkToSend(chunkPos, -1,  0,  0, player);
 					addChunkToSend(chunkPos,  0,  1,  0, player);
