@@ -41,7 +41,9 @@ mod:dimension {
 	biomes = {"default:netherland"},
 
 	sky = "default:sky_nether",
-
-	gravity = 1.4,
+	
+	player_physics = {
+		gravity = 1.4,
+	}
 }
 

@@ -38,8 +38,38 @@ void LuaDimensionLoader::loadDimension(const sol::table &table) const {
 	if (biomesObject.valid() && biomesObject.get_type() == sol::type::table) {
 		Dimension &dimension = Registry::getInstance().registerDimension(id, name);
 		dimension.setSky(table["sky"].get<std::string>());
-		dimension.setGravity(table["gravity"].get_or(1.f));
 
+		sol::object dimensionPhysicsObject = table["player_physics"];
+		if (dimensionPhysicsObject.valid()) {
+			if(dimensionPhysicsObject.get_type() == sol::type::table) {
+				sol::table dimensionPhysicsTable = dimensionPhysicsObject.as<sol::table>();
+				
+				DimensionPhysics dimensionPhysics;
+				
+				dimensionPhysics.gravity = table["gravity"].get_or(1.f);
+				dimensionPhysics.jumpSpeed = table["jump_speed"].get_or(0.05f);
+				
+				dimensionPhysics.jumpAntigravity = table["jump_antigravity"].get_or(0.3f);
+				dimensionPhysics.glideGravity = table["glide_gravity"].get_or(0.04f);
+
+				dimensionPhysics.horizontalSprintMod = table["horizontal_sprint_mod"].get_or(1.5f);
+				dimensionPhysics.verticalSprintMod = table["vertical_sprint_mod"].get_or(1.5f);
+
+				dimensionPhysics.moveSpeed = table["move_speed"].get_or(0.04f);
+				dimensionPhysics.airSpeedMod = table["air_speed_mod"].get_or(0.75f);
+
+				dimensionPhysics.flySpeed = table["fly_speed"].get_or(0.1f);
+				dimensionPhysics.sneakVerticalSpeed = table["sneak_vertical_speed"].get_or(0.1f);
+				dimensionPhysics.sneakHorizontalMod = table["sneak_horizontal_mod"].get_or(0.5f);
+
+				dimensionPhysics.isSneakAlwaysMod = table["is_sneak_always_mod"].get_or(false);
+				
+				dimension.setPhysics(dimensionPhysics);
+			}
+			else
+				gkError() << "For dimension" << name << ": Invalid player physics table";
+		}
+		
 		sol::table biomesTable = biomesObject.as<sol::table>();
 		for (auto &it : biomesTable) {
 			if (it.second.get_type() == sol::type::string)

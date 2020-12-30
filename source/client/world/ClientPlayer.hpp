@@ -34,6 +34,7 @@
 #include <gk/gl/Camera.hpp>
 
 #include "Player.hpp"
+#include "Dimension.hpp"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -54,9 +55,9 @@ class ClientPlayer : public Player {
 
 		void updateCamera();
 
-		void move(float direction);
+		void move(const Dimension &dimension, float direction);
 
-		void processInputs();
+		void processInputs(const Dimension &dimension);
 		void updatePosition(const ClientWorld &world);
 
 		void checkCollisions(const ClientWorld &world);
@@ -86,8 +87,7 @@ class ClientPlayer : public Player {
 
 		glm::vec3 m_velocity{0.f};
 		bool m_isJumping = false;
-
-		const float m_jumpSpeed = 0.06f;
+		bool m_isGliding = false;
 };
 
 #endif // CLIENTPLAYER_HPP_
