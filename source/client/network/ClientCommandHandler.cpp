@@ -125,9 +125,9 @@ void ClientCommandHandler::sendItemActivated(const glm::ivec4 &selectedBlock) {
 	m_client.send(packet);
 }
 
-void ClientCommandHandler::sendChunkRequest(s32 chunkX, s32 chunkY, s32 chunkZ) {
+void ClientCommandHandler::sendChunkUnload(s32 chunkX, s32 chunkY, s32 chunkZ) {
 	Network::Packet packet;
-	packet << Network::Command::ChunkRequest;
+	packet << Network::Command::ChunkUnload;
 	packet << chunkX << chunkY << chunkZ;
 	m_client.send(packet);
 }

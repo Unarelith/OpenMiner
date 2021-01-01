@@ -49,6 +49,8 @@ void ClientWorld::update(bool allowWorldReload) {
 	for (auto it = m_chunks.begin() ; it != m_chunks.end() ;) {
 		// If chunk is too far, remove it
 		if (it->second->isTooFar() && (it->second->isInitialized() || it->second->areAllNeighboursTooFar())) {
+			// gkDebug() << "Chunk removed at" << it->second->x() << it->second->y() << it->second->z();
+			m_client->sendChunkUnload(it->second->x(), it->second->y(), it->second->z());
 			removeChunk(it);
 		}
 		// Otherwise, update the chunk
@@ -284,7 +286,10 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 		// Nope, too far, don't render it
 		if(glm::length(center) > (Config::renderDistance + 1) * CHUNK_WIDTH) {
-			it.second->setTooFar(true);
+			// If it is way too far, mark it for deletion
+			if(glm::length(center) > (Config::renderDistance + 3) * CHUNK_WIDTH)
+				it.second->setTooFar(true);
+			// gkDebug() << "Chunk at" << it.second->x() << it.second->y() << it.second->z() << "is too far:" << glm::length(center) << ">" << ((Config::renderDistance + 1) * CHUNK_WIDTH);
 			continue;
 		}
 

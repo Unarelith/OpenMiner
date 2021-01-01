@@ -36,7 +36,7 @@ u8 ServerConfig::maxPlayers = 5;
 u16 ServerConfig::maxItemStackSize = 64;
 
 // World
-u8 ServerConfig::renderDistance = 5;
+u8 ServerConfig::renderDistance = 8;
 
 // Mod-defined options
 std::unordered_map<std::string, sol::object> ServerConfig::options;

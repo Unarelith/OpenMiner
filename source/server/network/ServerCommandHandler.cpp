@@ -277,11 +277,16 @@ void ServerCommandHandler::setupCallbacks() {
 		m_players.disconnectPlayer(client.playerName);
 	});
 
-	m_server.setCommandCallback(Network::Command::ChunkRequest, [this](ClientInfo &client, Network::Packet &packet) {
+	m_server.setCommandCallback(Network::Command::ChunkUnload, [this](ClientInfo &client, Network::Packet &packet) {
 		s32 cx, cy, cz;
 		packet >> cx >> cy >> cz;
 
-		// getWorldForClient(client.id).sendRequestedData(client, cx, cy, cz);
+		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+		if (player) {
+			player->removeLoadedChunk(gk::Vector3i{cx, cy, cz});
+		}
+		else
+			gkError() << ("Failed to unload chunk for player " + std::to_string(client.id) + ": Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerInvUpdate, [this](ClientInfo &client, Network::Packet &packet) {

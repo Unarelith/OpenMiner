@@ -57,6 +57,7 @@ class ClientCommandHandler {
 		void sendBlockInvUpdate(Inventory &inventory);
 		void sendItemActivated(const glm::ivec4 &selectedBlock);
 		void sendChunkRequest(s32 chunkX, s32 chunkY, s32 chunkZ);
+		void sendChunkUnload(s32 chunkX, s32 chunkY, s32 chunkZ);
 		void sendChatMessage(const std::string &message);
 		void sendKeyPressed(u16 keyID);
 
