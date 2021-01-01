@@ -44,7 +44,7 @@ namespace Network {
 		ServerClosed          = 0x11,
 
 		ChunkData             = 0x20,
-		ChunkRequest          = 0x21,
+		ChunkUnload           = 0x21,
 
 		PlayerPlaceBlock      = 0x30,
 		PlayerDigBlock        = 0x31,

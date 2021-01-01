@@ -51,13 +51,12 @@ void ServerWorld::update(bool doTick) {
 	{
 		for (auto &it : m_players) {
 			if (it.second.isReady() && it.second.dimension() == m_dimension.id()) {
-				it.second.sentChunks.clear();
-
 				gk::Vector3i currentChunk = it.second.getCurrentChunk();
 				if (!it.second.isChunkLoaded(currentChunk) || it.second.lastChunkUpdate != currentChunk) {
+					it.second.sentChunks.clear();
 					m_chunksToSend.emplace(std::make_pair(currentChunk, std::ref(it.second)));
 					it.second.lastChunkUpdate = currentChunk;
-					gkWarning() << "coucou";
+					gkWarning() << "Player changed chunk";
 				}
 			}
 		}
@@ -75,8 +74,18 @@ void ServerWorld::update(bool doTick) {
 					player.addLoadedChunk(chunkPos);
 				}
 
-				gk::Vector3i playerChunkPos = player.getCurrentChunk();
-				if ((playerChunkPos - chunkPos).length() < ServerConfig::renderDistance) {
+				glm::dvec3 chunkWorldPos{
+					chunkPos.x * CHUNK_WIDTH + CHUNK_WIDTH / 2.f,
+					chunkPos.y * CHUNK_DEPTH + CHUNK_DEPTH / 2.f,
+					chunkPos.z * CHUNK_HEIGHT + CHUNK_HEIGHT / 2.f
+				};
+				glm::dvec3 playerPos{
+					player.x(),
+					player.y(),
+					player.z()
+				};
+				if (glm::length(playerPos - chunkWorldPos) < (ServerConfig::renderDistance + 1) * CHUNK_WIDTH) {
+					// gkDebug() << "OK for chunk" << chunkPos.x << chunkPos.y << chunkPos.z << ":" << glm::length(playerPos - chunkWorldPos) << "<" << (int)ServerConfig::renderDistance * CHUNK_WIDTH;
 					addChunkToSend(chunkPos,  1,  0,  0, player);
 					addChunkToSend(chunkPos, -1,  0,  0, player);
 					addChunkToSend(chunkPos,  0,  1,  0, player);

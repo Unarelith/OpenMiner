@@ -41,7 +41,7 @@ std::string Network::commandToString(Network::Command command) {
 		{Network::Command::ServerClosed,          "ServerClosed"},
 
 		{Network::Command::ChunkData,             "ChunkData"},
-		{Network::Command::ChunkRequest,          "ChunkRequest"},
+		{Network::Command::ChunkUnload,           "ChunkUnload"},
 
 		{Network::Command::PlayerPlaceBlock,      "PlayerPlaceBlock"},
 		{Network::Command::PlayerDigBlock,        "PlayerDigBlock"},
