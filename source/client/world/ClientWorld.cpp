@@ -45,25 +45,17 @@ ClientWorld::ClientWorld() : m_textureAtlas(gk::ResourceHandler::getInstance().g
 }
 
 void ClientWorld::update(bool allowWorldReload) {
+	// Delete unused chunks
+	for (auto &it : m_chunksToRemove)
+		m_chunks.erase(it);
+
 	// Update loaded chunks
-	for (auto it = m_chunks.begin() ; it != m_chunks.end() ;) {
-		// If chunk is too far, remove it
-		if (it->second->isTooFar() && (it->second->isInitialized() || it->second->areAllNeighboursTooFar())) {
-			// gkDebug() << "Chunk removed at" << it->second->x() << it->second->y() << it->second->z()
-			// 	<< "because" << (it->second->isInitialized() ? "too far and initialized" : "all neighbours are too far");
-			m_client->sendChunkUnload(it->second->x(), it->second->y(), it->second->z());
-			removeChunk(it);
-		}
-		// Otherwise, update the chunk
-		else {
-			if (World::isReloadRequested && allowWorldReload)
-				it->second->setChanged(true);
+	for (auto &it : m_chunks) {
+		if (World::isReloadRequested && allowWorldReload)
+			it.second->setChanged(true);
 
-			if (it->second->areAllNeighboursInitialized() && it->second->isReadyForMeshing())
-				it->second->update();
-
-			++it;
-		}
+		if (it.second->isReadyForMeshing())
+			it.second->update();
 	}
 
 	if (allowWorldReload)
@@ -84,11 +76,9 @@ void ClientWorld::requestClosestChunkMeshing() {
 	if (ud < 1000000.0) {
 		ClientChunk *chunk = (ClientChunk *)getChunk(ux, uy, uz);
 		if(chunk && !chunk->isReadyForMeshing()) {
-			// Send a chunk request to the server
-			// m_client->sendChunkRequest(ux, uy, uz);
 			chunk->setReadyForMeshing(true);
 
-			// std::cout << "Chunk at (" << ux << ", " << uy << ", " << uz << ") requested" << std::endl;
+			// gkDebug() << "Chunk at" << ux << uy << uz << "is ready for meshing";
 		}
 	}
 }
@@ -288,9 +278,14 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		// Nope, too far, don't render it
 		if(glm::length(center) > (Config::renderDistance + 1) * CHUNK_WIDTH) {
 			// If it is way too far, mark it for deletion
-			if(glm::length(center) > (Config::renderDistance + 3) * CHUNK_WIDTH)
-				it.second->setTooFar(true);
-			// gkDebug() << "Chunk at" << it.second->x() << it.second->y() << it.second->z() << "is too far:" << glm::length(center) << ">" << ((Config::renderDistance + 1) * CHUNK_WIDTH);
+			if(floor(glm::length(center)) > (Config::renderDistance + 3) * CHUNK_WIDTH
+			&& (it.second->isInitialized() || it.second->areAllNeighboursTooFar())) {
+				// gkDebug() << "Chunk at" << it.second->x() << it.second->y() << it.second->z() << "is too far:" << glm::length(center) << ">" << ((Config::renderDistance + 3) * CHUNK_WIDTH);
+				m_chunksToRemove.emplace(it.first);
+			}
+
+			it.second->setTooFar(true);
+
 			continue;
 		}
 

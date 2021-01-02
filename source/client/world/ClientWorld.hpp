@@ -28,6 +28,7 @@
 #define CLIENTWORLD_HPP_
 
 #include <unordered_map>
+#include <unordered_set>
 
 #include <gk/core/Vector4.hpp>
 #include <gk/core/EventHandler.hpp>
@@ -92,6 +93,8 @@ class ClientWorld : public World, public gk::Drawable {
 		mutable gk::Vector4d m_closestInitializedChunk{0, 0, 0, 1000000};
 
 		const Sky *m_sky = nullptr;
+
+		mutable std::unordered_set<gk::Vector3i> m_chunksToRemove;
 };
 
 #endif // CLIENTWORLD_HPP_
