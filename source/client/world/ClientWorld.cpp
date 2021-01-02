@@ -49,7 +49,8 @@ void ClientWorld::update(bool allowWorldReload) {
 	for (auto it = m_chunks.begin() ; it != m_chunks.end() ;) {
 		// If chunk is too far, remove it
 		if (it->second->isTooFar() && (it->second->isInitialized() || it->second->areAllNeighboursTooFar())) {
-			// gkDebug() << "Chunk removed at" << it->second->x() << it->second->y() << it->second->z();
+			// gkDebug() << "Chunk removed at" << it->second->x() << it->second->y() << it->second->z()
+			// 	<< "because" << (it->second->isInitialized() ? "too far and initialized" : "all neighbours are too far");
 			m_client->sendChunkUnload(it->second->x(), it->second->y(), it->second->z());
 			removeChunk(it);
 		}
