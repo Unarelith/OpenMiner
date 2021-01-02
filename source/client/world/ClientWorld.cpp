@@ -59,7 +59,7 @@ void ClientWorld::update(bool allowWorldReload) {
 			if (World::isReloadRequested && allowWorldReload)
 				it->second->setChanged(true);
 
-			if (it->second->areAllNeighboursInitialized())
+			if (it->second->areAllNeighboursInitialized() && it->second->isReadyForMeshing())
 				it->second->update();
 
 			++it;
@@ -69,12 +69,12 @@ void ClientWorld::update(bool allowWorldReload) {
 	if (allowWorldReload)
 		World::isReloadRequested = false;
 
-	sendChunkRequests();
+	requestClosestChunkMeshing();
 
 	m_scene.update();
 }
 
-void ClientWorld::sendChunkRequests() {
+void ClientWorld::requestClosestChunkMeshing() {
 	s32 ux = m_closestInitializedChunk.x;
 	s32 uy = m_closestInitializedChunk.y;
 	s32 uz = m_closestInitializedChunk.z;
@@ -83,10 +83,10 @@ void ClientWorld::sendChunkRequests() {
 	// If we have a chunk marked for initialization
 	if (ud < 1000000.0) {
 		ClientChunk *chunk = (ClientChunk *)getChunk(ux, uy, uz);
-		if(chunk && !chunk->hasBeenRequested()) {
+		if(chunk && !chunk->isReadyForMeshing()) {
 			// Send a chunk request to the server
 			// m_client->sendChunkRequest(ux, uy, uz);
-			chunk->setHasBeenRequested(true);
+			chunk->setReadyForMeshing(true);
 
 			// std::cout << "Chunk at (" << ux << ", " << uy << ", " << uz << ") requested" << std::endl;
 		}
@@ -317,7 +317,7 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		}
 
 		// If this chunk is not initialized, skip it
-		if(!it.second->hasBeenRequested()) {
+		if(!it.second->isReadyForMeshing()) {
 			// But if it is the closest to the camera, mark it for initialization
 			if(d < m_closestInitializedChunk.w) {
 				m_closestInitializedChunk.w = d;

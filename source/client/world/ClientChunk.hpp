@@ -47,17 +47,14 @@ class ClientChunk : public Chunk {
 
 		const Dimension &dimension() const { return m_dimension; }
 
-		bool hasBeenRequested() const { return m_hasBeenRequested; }
-		void setHasBeenRequested(bool hasBeenRequested) { m_hasBeenRequested = hasBeenRequested; }
+		bool isReadyForMeshing() const { return m_isReadyForMeshing; }
+		void setReadyForMeshing(bool isReadyForMeshing) { m_isReadyForMeshing = isReadyForMeshing; }
 
 		bool isTooFar() const { return m_isTooFar; }
 		void setTooFar(bool isTooFar) { m_isTooFar = isTooFar; }
 
 		bool hasBeenDrawn() const { return m_hasBeenDrawn; }
 		void setHasBeenDrawn(bool hasBeenDrawn) { m_hasBeenDrawn = hasBeenDrawn; }
-
-		bool canDraw() const { return m_canDraw; }
-		void setCanDraw(bool canDraw) { m_canDraw = canDraw; }
 
 		bool areAllNeighboursTooFar() const;
 
@@ -75,10 +72,9 @@ class ClientChunk : public Chunk {
 		std::array<gk::VertexBuffer, ChunkBuilder::layers> m_vbo{};
 		std::array<std::size_t, ChunkBuilder::layers> m_verticesCount{};
 
-		bool m_hasBeenRequested = false;
+		bool m_isReadyForMeshing = false;
 		bool m_isTooFar = false;
 		bool m_hasBeenDrawn = false;
-		bool m_canDraw = false;
 };
 
 #endif // CLIENTCHUNK_HPP_

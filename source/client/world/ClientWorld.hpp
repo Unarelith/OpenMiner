@@ -49,7 +49,7 @@ class ClientWorld : public World, public gk::Drawable {
 		ClientWorld();
 
 		void update(bool allowWorldReload);
-		void sendChunkRequests();
+		void requestClosestChunkMeshing();
 		void checkPlayerChunk(double playerX, double playerY, double playerZ);
 
 		void clear();
