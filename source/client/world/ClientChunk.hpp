@@ -41,6 +41,8 @@ class ClientChunk : public Chunk {
 		ClientChunk(s32 x, s32 y, s32 z, const Dimension &dimension, World &world, TextureAtlas &textureAtlas)
 			: Chunk(x, y, z, world), m_dimension(dimension), m_textureAtlas(textureAtlas), m_builder{textureAtlas} {}
 
+		bool isMeshingTime();
+
 		void update();
 
 		void drawLayer(gk::RenderTarget &target, gk::RenderStates states, u8 layer) const;
@@ -75,6 +77,8 @@ class ClientChunk : public Chunk {
 		bool m_isReadyForMeshing = false;
 		bool m_isTooFar = false;
 		bool m_hasBeenDrawn = false;
+
+		u32 m_lastMeshingTime = 0;
 };
 
 #endif // CLIENTCHUNK_HPP_

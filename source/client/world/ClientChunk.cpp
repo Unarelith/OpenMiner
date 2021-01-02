@@ -24,6 +24,7 @@
  *
  * =====================================================================================
  */
+#include <gk/core/GameClock.hpp>
 #include <gk/gl/GLCheck.hpp>
 
 #include "ClientChunk.hpp"
@@ -33,6 +34,13 @@ u32 ClientChunk::chunkUpdatesPerSec = 0;
 u32 ClientChunk::chunkUpdateCounter = 0;
 u64 ClientChunk::chunkUpdateTime = 0;
 
+bool ClientChunk::isMeshingTime() {
+	u32 currentTime = gk::GameClock::getInstance().getTicks(true);
+	if (m_lastMeshingTime == 0)
+		m_lastMeshingTime = currentTime;
+	return (currentTime - m_lastMeshingTime > 1000); // Only one chunk update every second
+}
+
 void ClientChunk::update() {
 	u64 time = std::time(nullptr);
 	if (time > ClientChunk::chunkUpdateTime) {
@@ -41,13 +49,15 @@ void ClientChunk::update() {
 		ClientChunk::chunkUpdateTime = time;
 	}
 
-	if (m_lightmap.updateLights() || m_hasChanged || m_hasLightChanged) {
+	if (isMeshingTime() && (m_lightmap.updateLights() || m_hasChanged || m_hasLightChanged)) {
 		m_hasChanged = false;
 		m_hasLightChanged = false;
 
 		m_verticesCount = m_builder.buildChunk(*this, m_vbo);
 
 		++ClientChunk::chunkUpdateCounter;
+
+		m_lastMeshingTime = gk::GameClock::getInstance().getTicks(true);
 	}
 }
 
