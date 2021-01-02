@@ -56,7 +56,7 @@ void ServerWorld::update(bool doTick) {
 					it.second.sentChunks.clear();
 					m_chunksToSend.emplace(std::make_pair(currentChunk, std::ref(it.second)));
 					it.second.lastChunkUpdate = currentChunk;
-					gkWarning() << "Player changed chunk";
+					// gkWarning() << "Player changed chunk";
 				}
 			}
 		}
@@ -66,7 +66,7 @@ void ServerWorld::update(bool doTick) {
 			m_chunksToSend.emplace(std::make_pair(pos, std::ref(player)));
 		};
 
-		while (!m_chunksToSend.empty()) {
+		for (int i = 0 ; i < 100 && !m_chunksToSend.empty() ; ++i) {
 			auto &[chunkPos, player] = m_chunksToSend.front();
 			if (player.sentChunks.find(chunkPos) == player.sentChunks.end()) {
 				if (!player.isChunkLoaded(chunkPos)) {
@@ -109,15 +109,16 @@ void ServerWorld::update(bool doTick) {
 			it.second->updateLights();
 		}
 
-		// if (it.second->isInitialized() && !it.second->isSent()) {
-		// 	for (auto &client : m_server->server().info().clients()) {
-		// 		ServerPlayer *player = m_players.getPlayer(client.playerName);
-		// 		if (player->isReady() && player->dimension() == m_dimension.id())
-		// 			sendChunkData(client, *it.second.get());
-		// 	}
-        //
-		// 	// gkDebug() << "Chunk updated at" << it.second->x() << it.second->y() << it.second->z();
-		// }
+		if (it.second->isInitialized() && !it.second->isSent()) {
+			for (auto &client : m_server->server().info().clients()) {
+				ServerPlayer *player = m_players.getPlayer(client.playerName);
+				bool isChunkLoaded = player->isChunkLoaded({it.second->x(), it.second->y(), it.second->z()});
+				if (player->isReady() && isChunkLoaded && player->dimension() == m_dimension.id())
+					sendChunkData(client, *it.second.get());
+			}
+
+			// gkDebug() << "Chunk updated at" << it.second->x() << it.second->y() << it.second->z();
+		}
 	}
 
 	if (doTick)
