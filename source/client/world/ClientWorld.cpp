@@ -156,7 +156,7 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 	if (m_eventHandler)
 		m_eventHandler->emplaceEvent<ChunkCreatedEvent>(gk::Vector3i{cx, cy, cz}, true);
 
-	gkDebug() << "Chunk at" << cx << cy << cz << "received";
+	// gkDebug() << "Chunk at" << cx << cy << cz << "received";
 }
 
 void ClientWorld::removeChunk(const gk::Vector3i &chunkPos) {
@@ -189,7 +189,7 @@ void ClientWorld::removeChunk(const gk::Vector3i &chunkPos) {
 		}
 	}
 
-	gkDebug() << "Chunk at" << chunkPos.x << chunkPos.y << chunkPos.z << "removed";
+	// gkDebug() << "Chunk at" << chunkPos.x << chunkPos.y << chunkPos.z << "removed";
 }
 
 Chunk *ClientWorld::getChunk(int cx, int cy, int cz) const {
@@ -290,7 +290,7 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 				it.second->setTooFar(true);
 
 				if (it.second->isInitialized() || it.second->areAllNeighboursTooFar()) {
-					gkDebug() << "Chunk at" << it.second->x() << it.second->y() << it.second->z() << "is too far:" << glm::length(center) << ">" << ((Config::renderDistance + 3) * CHUNK_WIDTH);
+					// gkDebug() << "Chunk at" << it.second->x() << it.second->y() << it.second->z() << "is too far:" << glm::length(center) << ">" << ((Config::renderDistance + 3) * CHUNK_WIDTH);
 					m_chunksToRemove.emplace(it.first);
 				}
 			}

@@ -67,6 +67,7 @@ void ServerWorld::update(bool doTick) {
 		};
 
 		for (int i = 0 ; i < 100 && !m_chunksToSend.empty() ; ++i) {
+		// while (!m_chunksToSend.empty()) {
 			auto &[chunkPos, player] = m_chunksToSend.front();
 			if (player.sentChunks.find(chunkPos) == player.sentChunks.end()) {
 				glm::dvec3 chunkWorldPos{
@@ -83,7 +84,8 @@ void ServerWorld::update(bool doTick) {
 
 				if (glm::length(playerPos - chunkWorldPos) < (ServerConfig::renderDistance + 1) * CHUNK_WIDTH) {
 					if (player.isOnline() && !player.isChunkLoaded(chunkPos)) {
-						sendRequestedData(*player.client(), chunkPos.x, chunkPos.y, chunkPos.z);
+						ServerChunk &chunk = getOrCreateChunk(chunkPos.x, chunkPos.y, chunkPos.z);
+						generateChunk(chunk);
 						player.addLoadedChunk(chunkPos);
 					}
 
@@ -111,7 +113,7 @@ void ServerWorld::update(bool doTick) {
 			it.second->updateLights();
 		}
 
-		if (it.second->isInitialized() && !it.second->isSent()) {
+		if (it.second->isInitialized() && it.second->areAllNeighboursInitialized() && !it.second->isSent()) {
 			for (auto &client : m_server->server().info().clients()) {
 				ServerPlayer *player = m_players.getPlayer(client.playerName);
 				bool isChunkLoaded = player->isChunkLoaded({it.second->x(), it.second->y(), it.second->z()});
@@ -119,7 +121,7 @@ void ServerWorld::update(bool doTick) {
 					sendChunkData(client, *it.second.get());
 			}
 
-			gkDebug() << "Chunk updated at" << it.second->x() << it.second->y() << it.second->z();
+			// gkDebug() << "Chunk updated at" << it.second->x() << it.second->y() << it.second->z();
 		}
 	}
 
