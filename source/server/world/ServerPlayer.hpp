@@ -54,6 +54,7 @@ class ServerPlayer : public Player {
 		bool isChunkLoaded(const gk::Vector3i &chunk) { return m_loadedChunks.find(chunk) != m_loadedChunks.end(); }
 		void addLoadedChunk(const gk::Vector3i &chunk) { m_loadedChunks.emplace(chunk); }
 		void removeLoadedChunk(const gk::Vector3i &chunk) { m_loadedChunks.erase(chunk); }
+		void clearLoadedChunks() { m_loadedChunks.clear(); }
 
 		static void initUsertype(sol::state &lua);
 

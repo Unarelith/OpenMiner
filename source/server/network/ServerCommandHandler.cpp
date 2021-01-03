@@ -274,6 +274,7 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::ClientDisconnect, [this](ClientInfo &client, Network::Packet &) {
+		m_players.getPlayerFromClientID(client.id)->clearLoadedChunks();
 		m_players.disconnectPlayer(client.playerName);
 	});
 

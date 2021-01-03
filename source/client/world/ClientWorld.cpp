@@ -46,8 +46,10 @@ ClientWorld::ClientWorld() : m_textureAtlas(gk::ResourceHandler::getInstance().g
 
 void ClientWorld::update(bool allowWorldReload) {
 	// Delete unused chunks
-	for (auto &it : m_chunksToRemove)
-		m_chunks.erase(it);
+	for (auto it = m_chunksToRemove.begin() ; it != m_chunksToRemove.end() ;) {
+		removeChunk(*it);
+		it = m_chunksToRemove.erase(it);
+	}
 
 	// Update loaded chunks
 	for (auto &it : m_chunks) {
@@ -154,10 +156,16 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 	if (m_eventHandler)
 		m_eventHandler->emplaceEvent<ChunkCreatedEvent>(gk::Vector3i{cx, cy, cz}, true);
 
-	// gkDebug() << "Chunk at" << cx << cy << cz << "received";
+	gkDebug() << "Chunk at" << cx << cy << cz << "received";
 }
 
-void ClientWorld::removeChunk(ChunkMap::iterator &it) {
+void ClientWorld::removeChunk(const gk::Vector3i &chunkPos) {
+	auto it = m_chunks.find(chunkPos);
+	if (it == m_chunks.end()) {
+		gkWarning() << "Tried to remove unloaded chunk at" << chunkPos.x << chunkPos.y << chunkPos.z;
+		return;
+	}
+
 	ClientChunk *surroundingChunks[6] = {
 		(ClientChunk *)it->second->getSurroundingChunk(0),
 		(ClientChunk *)it->second->getSurroundingChunk(1),
@@ -170,7 +178,7 @@ void ClientWorld::removeChunk(ChunkMap::iterator &it) {
 	if (m_eventHandler)
 		m_eventHandler->emplaceEvent<ChunkRemovedEvent>(gk::Vector3i{it->second->x(), it->second->y(), it->second->z()});
 
-	it = m_chunks.erase(it);
+	m_chunks.erase(it);
 
 	for (u8 i = 0 ; i < 6 ; ++i) {
 		if (surroundingChunks[i]) {
@@ -180,6 +188,8 @@ void ClientWorld::removeChunk(ChunkMap::iterator &it) {
 				createChunkNeighbours(surroundingChunks[i]);
 		}
 	}
+
+	gkDebug() << "Chunk at" << chunkPos.x << chunkPos.y << chunkPos.z << "removed";
 }
 
 Chunk *ClientWorld::getChunk(int cx, int cy, int cz) const {
@@ -261,8 +271,6 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 	std::vector<std::pair<ClientChunk*, gk::Transform>> chunks;
 	for(auto &it : m_chunks) {
-		if (!it.second->isInitialized()) continue;
-
 		it.second->setHasBeenDrawn(false);
 
 		gk::Transform tf = glm::translate(glm::mat4(1.0f),
@@ -278,18 +286,21 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		// Nope, too far, don't render it
 		if(glm::length(center) > (Config::renderDistance + 1) * CHUNK_WIDTH) {
 			// If it is way too far, mark it for deletion
-			if(floor(glm::length(center)) > (Config::renderDistance + 3) * CHUNK_WIDTH
-			&& (it.second->isInitialized() || it.second->areAllNeighboursTooFar())) {
-				// gkDebug() << "Chunk at" << it.second->x() << it.second->y() << it.second->z() << "is too far:" << glm::length(center) << ">" << ((Config::renderDistance + 3) * CHUNK_WIDTH);
-				m_chunksToRemove.emplace(it.first);
-			}
+			if(floor(glm::length(center)) > (Config::renderDistance + 3) * CHUNK_WIDTH) {
+				it.second->setTooFar(true);
 
-			it.second->setTooFar(true);
+				if (it.second->isInitialized() || it.second->areAllNeighboursTooFar()) {
+					gkDebug() << "Chunk at" << it.second->x() << it.second->y() << it.second->z() << "is too far:" << glm::length(center) << ">" << ((Config::renderDistance + 3) * CHUNK_WIDTH);
+					m_chunksToRemove.emplace(it.first);
+				}
+			}
 
 			continue;
 		}
 
 		it.second->setTooFar(false);
+
+		if (!it.second->isInitialized()) continue;
 
 		// Is this chunk's centre on the screen?
 		float d = glm::length2(center);
