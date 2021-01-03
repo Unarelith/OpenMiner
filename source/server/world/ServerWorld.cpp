@@ -50,7 +50,7 @@ ServerWorld::ServerWorld(PlayerList &players, const Dimension &dimension, gk::Ga
 void ServerWorld::update(bool doTick) {
 	{
 		for (auto &it : m_players) {
-			if (it.second.isReady() && it.second.dimension() == m_dimension.id()) {
+			if (it.second.isReady() && it.second.isOnline() && it.second.dimension() == m_dimension.id()) {
 				gk::Vector3i currentChunk = it.second.getCurrentChunk();
 				if (!it.second.isChunkLoaded(currentChunk) || it.second.lastChunkUpdate != currentChunk) {
 					it.second.sentChunks.clear();
@@ -69,22 +69,24 @@ void ServerWorld::update(bool doTick) {
 		for (int i = 0 ; i < 100 && !m_chunksToSend.empty() ; ++i) {
 			auto &[chunkPos, player] = m_chunksToSend.front();
 			if (player.sentChunks.find(chunkPos) == player.sentChunks.end()) {
-				if (!player.isChunkLoaded(chunkPos)) {
-					sendRequestedData(*player.client(), chunkPos.x, chunkPos.y, chunkPos.z);
-					player.addLoadedChunk(chunkPos);
-				}
-
 				glm::dvec3 chunkWorldPos{
 					chunkPos.x * CHUNK_WIDTH + CHUNK_WIDTH / 2.f,
 					chunkPos.y * CHUNK_DEPTH + CHUNK_DEPTH / 2.f,
 					chunkPos.z * CHUNK_HEIGHT + CHUNK_HEIGHT / 2.f
 				};
+
 				glm::dvec3 playerPos{
 					player.x(),
 					player.y(),
 					player.z()
 				};
+
 				if (glm::length(playerPos - chunkWorldPos) < (ServerConfig::renderDistance + 1) * CHUNK_WIDTH) {
+					if (player.isOnline() && !player.isChunkLoaded(chunkPos)) {
+						sendRequestedData(*player.client(), chunkPos.x, chunkPos.y, chunkPos.z);
+						player.addLoadedChunk(chunkPos);
+					}
+
 					// gkDebug() << "OK for chunk" << chunkPos.x << chunkPos.y << chunkPos.z << ":" << glm::length(playerPos - chunkWorldPos) << "<" << (int)ServerConfig::renderDistance * CHUNK_WIDTH;
 					addChunkToSend(chunkPos,  1,  0,  0, player);
 					addChunkToSend(chunkPos, -1,  0,  0, player);
@@ -117,7 +119,7 @@ void ServerWorld::update(bool doTick) {
 					sendChunkData(client, *it.second.get());
 			}
 
-			// gkDebug() << "Chunk updated at" << it.second->x() << it.second->y() << it.second->z();
+			gkDebug() << "Chunk updated at" << it.second->x() << it.second->y() << it.second->z();
 		}
 	}
 

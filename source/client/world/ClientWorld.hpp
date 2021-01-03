@@ -58,7 +58,7 @@ class ClientWorld : public World, public gk::Drawable {
 		void changeDimension(u16 dimensionID);
 
 		void receiveChunkData(Network::Packet &packet);
-		void removeChunk(ChunkMap::iterator &it);
+		void removeChunk(const gk::Vector3i &chunkPos);
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
 
