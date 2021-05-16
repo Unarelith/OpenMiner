@@ -93,8 +93,6 @@ class ClientWorld : public World, public gk::Drawable {
 		mutable gk::Vector4d m_closestInitializedChunk{0, 0, 0, 1000000};
 
 		const Sky *m_sky = nullptr;
-
-		mutable std::unordered_set<gk::Vector3i> m_chunksToRemove;
 };
 
 #endif // CLIENTWORLD_HPP_
