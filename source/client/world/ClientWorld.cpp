@@ -46,13 +46,20 @@ ClientWorld::ClientWorld() : m_textureAtlas(gk::ResourceHandler::getInstance().g
 
 void ClientWorld::update(bool allowWorldReload) {
 	// Update loaded chunks
+	std::list<gk::Vector3i> chunksToRemove;
 	for (auto &it : m_chunks) {
 		if (World::isReloadRequested && allowWorldReload)
 			it.second->setChanged(true);
 
 		if (it.second->isReadyForMeshing())
 			it.second->update();
+
+		if (it.second->isTooFar() && !it.second->isInitialized())
+			chunksToRemove.emplace_back(gk::Vector3i{it.second->x(), it.second->y(), it.second->z()});
 	}
+
+	for (auto &it : chunksToRemove)
+		removeChunk(it);
 
 	if (allowWorldReload)
 		World::isReloadRequested = false;
@@ -174,14 +181,9 @@ void ClientWorld::removeChunk(const gk::Vector3i &chunkPos) {
 
 	m_chunks.erase(it);
 
-	for (u8 i = 0 ; i < 6 ; ++i) {
-		if (surroundingChunks[i]) {
+	for (u8 i = 0 ; i < 6 ; ++i)
+		if (surroundingChunks[i])
 			surroundingChunks[i]->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, nullptr);
-
-			if (!surroundingChunks[i]->isTooFar())
-				createChunkNeighbours(surroundingChunks[i]);
-		}
-	}
 
 	// gkDebug() << "Chunk at" << chunkPos.x << chunkPos.y << chunkPos.z << "removed";
 }
