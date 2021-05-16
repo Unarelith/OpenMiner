@@ -52,15 +52,15 @@ class ServerWorld : public World {
 
 		void update(bool doTick);
 
+		void updatePlayerChunks(ServerPlayer &player, s32 cx, s32 cy, s32 cz);
 		void createChunkNeighbours(ServerChunk &chunk);
-		void sendChunkData(const ClientInfo &client, ServerChunk &chunk);
 		void sendRequestedData(const ClientInfo &client, s32 cx, s32 cy, s32 cz);
 
 		ServerChunk &getOrCreateChunk(s32 cx, s32 cy, s32 cz);
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
 
-		void generateChunk(ServerChunk &chunk);
+		void generateChunk(ServerChunk &chunk, bool updateLights = true);
 
 		const Dimension &dimension() const { return m_dimension; }
 
