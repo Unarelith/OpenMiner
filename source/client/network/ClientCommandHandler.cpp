@@ -97,6 +97,14 @@ void ClientCommandHandler::sendPlayerReady() {
 	m_client.send(packet);
 }
 
+void ClientCommandHandler::sendPlayerChunkPosUpdate() const {
+	Network::Packet packet;
+	const gk::Vector3i &chunkPos = m_player.getCurrentChunk();
+	packet << Network::Command::PlayerChunkPosUpdate
+		<< s32(chunkPos.x) << s32(chunkPos.y) << s32(chunkPos.z);
+	m_client.send(packet);
+}
+
 void ClientCommandHandler::sendBlockActivated(const glm::ivec4 &selectedBlock) {
 	Network::Packet packet;
 	packet << Network::Command::BlockActivated
