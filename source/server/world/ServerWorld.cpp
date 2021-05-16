@@ -49,6 +49,7 @@ ServerWorld::ServerWorld(PlayerList &players, const Dimension &dimension, gk::Ga
 
 void ServerWorld::update(bool doTick) {
 	{
+		// FIXME: Add a packet UpdateViewPosition(cx, cy, cz) to remove this loop
 		for (auto &it : m_players) {
 			if (it.second.isReady() && it.second.isOnline() && it.second.dimension() == m_dimension.id()) {
 				gk::Vector3i currentChunk = it.second.getCurrentChunk();
@@ -58,6 +59,29 @@ void ServerWorld::update(bool doTick) {
 					it.second.lastChunkUpdate = currentChunk;
 					// gkWarning() << "Player changed chunk";
 				}
+
+				std::list<gk::Vector3i> chunksToRemove;
+				for (auto &chunkPos : it.second.loadedChunks()) {
+					glm::dvec3 chunkWorldPos{
+						chunkPos.x * CHUNK_WIDTH + CHUNK_WIDTH / 2.f,
+						chunkPos.y * CHUNK_DEPTH + CHUNK_DEPTH / 2.f,
+						chunkPos.z * CHUNK_HEIGHT + CHUNK_HEIGHT / 2.f
+					};
+
+					glm::dvec3 playerPos{
+						it.second.x(),
+						it.second.y(),
+						it.second.z()
+					};
+
+					if (glm::length(playerPos - chunkWorldPos) >= (ServerConfig::renderDistance + 1) * CHUNK_WIDTH) {
+						m_server->sendChunkUnload(chunkPos.x, chunkPos.y, chunkPos.z, it.second.client());
+						chunksToRemove.emplace_back(chunkPos);
+					}
+				}
+
+				for (auto &chunkPos : chunksToRemove)
+					it.second.removeLoadedChunk(chunkPos);
 			}
 		}
 
@@ -66,8 +90,8 @@ void ServerWorld::update(bool doTick) {
 			m_chunksToSend.emplace(std::make_pair(pos, std::ref(player)));
 		};
 
-		for (int i = 0 ; i < 100 && !m_chunksToSend.empty() ; ++i) {
-		// while (!m_chunksToSend.empty()) {
+		// for (int i = 0 ; i < 100 && !m_chunksToSend.empty() ; ++i) {
+		while (!m_chunksToSend.empty()) {
 			auto &[chunkPos, player] = m_chunksToSend.front();
 			if (player.sentChunks.find(chunkPos) == player.sentChunks.end()) {
 				glm::dvec3 chunkWorldPos{
