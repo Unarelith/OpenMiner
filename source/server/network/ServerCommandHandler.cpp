@@ -58,6 +58,16 @@ void ServerCommandHandler::sendServerClosed(const std::string &message, const Cl
 		client->tcpSocket->send(packet);
 }
 
+void ServerCommandHandler::sendChunkUnload(s32 chunkX, s32 chunkY, s32 chunkZ, const ClientInfo *client) const {
+	Network::Packet packet;
+	packet << Network::Command::ChunkUnload << chunkX << chunkY << chunkZ;
+
+	if (!client)
+		m_server.sendToAllClients(packet);
+	else
+		client->tcpSocket->send(packet);
+}
+
 void ServerCommandHandler::sendBlockDataUpdate(s32 x, s32 y, s32 z, const BlockData *blockData, const ClientInfo *client) const {
 	Network::Packet packet;
 	packet << Network::Command::BlockDataUpdate << x << y << z << blockData->meta;
