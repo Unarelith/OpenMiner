@@ -111,6 +111,7 @@ void ServerWorld::update(bool doTick) {
 						ServerChunk &chunk = getOrCreateChunk(chunkPos.x, chunkPos.y, chunkPos.z);
 						generateChunk(chunk);
 						player.addLoadedChunk(chunkPos);
+						sendChunkData(*player.client(), chunk);
 					}
 
 					// gkDebug() << "OK for chunk" << chunkPos.x << chunkPos.y << chunkPos.z << ":" << glm::length(playerPos - chunkWorldPos) << "<" << (int)ServerConfig::renderDistance * CHUNK_WIDTH;
