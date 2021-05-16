@@ -43,7 +43,7 @@ openminer:add_listener(Event.PlayerConnected, function(pos, player, client, serv
 	player:inventory():add_stack("default:stone_axe", 1)
 
 	server:send_chat_message(0, "Welcome to OpenMiner!", client)
-	server:send_chat_message(0, "Press E to show inventory", client)
-	server:send_chat_message(0, "Press H to show creative inventory", client)
+	server:send_chat_message(0, "Press E to open inventory", client)
+	server:send_chat_message(0, "Press H to open creative inventory", client)
 end)
 
