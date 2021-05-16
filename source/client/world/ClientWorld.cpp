@@ -45,12 +45,6 @@ ClientWorld::ClientWorld() : m_textureAtlas(gk::ResourceHandler::getInstance().g
 }
 
 void ClientWorld::update(bool allowWorldReload) {
-	// Delete unused chunks
-	for (auto it = m_chunksToRemove.begin() ; it != m_chunksToRemove.end() ;) {
-		removeChunk(*it);
-		it = m_chunksToRemove.erase(it);
-	}
-
 	// Update loaded chunks
 	for (auto &it : m_chunks) {
 		if (World::isReloadRequested && allowWorldReload)
@@ -285,15 +279,8 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 		// Nope, too far, don't render it
 		if(glm::length(center) > (Config::renderDistance + 1) * CHUNK_WIDTH) {
-			// If it is way too far, mark it for deletion
-			if(floor(glm::length(center)) > (Config::renderDistance + 3) * CHUNK_WIDTH) {
+			if(floor(glm::length(center)) > (Config::renderDistance + 3) * CHUNK_WIDTH)
 				it.second->setTooFar(true);
-
-				if (it.second->isInitialized() || it.second->areAllNeighboursTooFar()) {
-					// gkDebug() << "Chunk at" << it.second->x() << it.second->y() << it.second->z() << "is too far:" << glm::length(center) << ">" << ((Config::renderDistance + 3) * CHUNK_WIDTH);
-					m_chunksToRemove.emplace(it.first);
-				}
-			}
 
 			continue;
 		}
