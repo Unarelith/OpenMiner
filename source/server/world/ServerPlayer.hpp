@@ -55,6 +55,7 @@ class ServerPlayer : public Player {
 		void addLoadedChunk(const gk::Vector3i &chunk) { m_loadedChunks.emplace(chunk); }
 		void removeLoadedChunk(const gk::Vector3i &chunk) { m_loadedChunks.erase(chunk); }
 		void clearLoadedChunks() { m_loadedChunks.clear(); }
+		const std::unordered_set<gk::Vector3i> &loadedChunks() const { return m_loadedChunks; }
 
 		static void initUsertype(sol::state &lua);
 
