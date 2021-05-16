@@ -24,6 +24,8 @@
  *
  * =====================================================================================
  */
+#include "ClientInfo.hpp"
+#include "Network.hpp"
 #include "Player.hpp"
 #include "ServerBlock.hpp"
 #include "ServerChunk.hpp"
@@ -79,5 +81,35 @@ void ServerChunk::tick(World &world, ServerCommandHandler &server) {
 			}
 		}
 	}
+}
+
+void ServerChunk::sendData(const ClientInfo &client, ServerCommandHandler &server) {
+	Network::Packet packet;
+	packet << Network::Command::ChunkData;
+	packet << m_x << m_y << m_z;
+	for (u16 z = 0 ; z < CHUNK_HEIGHT ; ++z) {
+		for (u16 y = 0 ; y < CHUNK_DEPTH ; ++y) {
+			for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
+				packet << data(x, y, z);
+				packet << m_lightmap.getLightData(x, y, z);
+
+				BlockData *blockData = getBlockData(x, y, z);
+				if (blockData) {
+					s32 globalX = x + m_x * CHUNK_WIDTH;
+					s32 globalY = y + m_y * CHUNK_DEPTH;
+					s32 globalZ = z + m_z * CHUNK_HEIGHT;
+
+					server.sendBlockDataUpdate(globalX, globalY, globalZ, blockData, &client);
+					server.sendBlockInvUpdate(globalX, globalY, globalZ, blockData->inventory, &client);
+				}
+			}
+		}
+	}
+
+	client.tcpSocket->send(packet);
+	m_hasChanged = false;
+	m_isSent = true;
+
+	// gkDebug() << "Chunk at" << chunk.x() << chunk.y() << chunk.z() << "sent to client";
 }
 

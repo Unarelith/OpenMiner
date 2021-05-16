@@ -60,8 +60,6 @@ class ServerPlayer : public Player {
 		static void initUsertype(sol::state &lua);
 
 	public:
-		gk::Vector3i lastChunkUpdate{0, 0, 0}; // FIXME
-
 		std::unordered_set<gk::Vector3i> sentChunks; // Cleared every tick
 
 	private:

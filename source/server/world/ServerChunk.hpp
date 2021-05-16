@@ -37,6 +37,7 @@
 
 using Random_t = effolkronium::random_local;
 
+class ClientInfo;
 class ServerBlock;
 class ServerCommandHandler;
 class ServerPlayer;
@@ -51,6 +52,8 @@ class ServerChunk : public Chunk {
 		void onBlockDestroyed(int x, int y, int z, const Block &block) override;
 
 		void tick(World &world, ServerCommandHandler &server);
+
+		void sendData(const ClientInfo &client, ServerCommandHandler &server);
 
 		bool isSent() const { return m_isSent; }
 		void setSent(bool isSent) { m_isSent = isSent; }

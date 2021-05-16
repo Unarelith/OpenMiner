@@ -402,6 +402,19 @@ void ServerCommandHandler::setupCallbacks() {
 			gkError() << ("Failed to change held item of player " + std::to_string(client.id) + ": Player not found").c_str();
 	});
 
+	m_server.setCommandCallback(Network::Command::PlayerChunkPosUpdate, [this](ClientInfo &client, Network::Packet &packet) {
+		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+		if (player) {
+			s32 chunkX, chunkY, chunkZ;
+			packet >> chunkX >> chunkY >> chunkZ;
+
+			ServerWorld &world = getWorldForClient(client.id);
+			world.updatePlayerChunks(*player, chunkX, chunkY, chunkZ);
+		}
+		else
+			gkError() << ("Failed to update chunk position of player " + std::to_string(client.id) + ": Player not found").c_str();
+	});
+
 	m_server.setCommandCallback(Network::Command::BlockActivated, [this](ClientInfo &client, Network::Packet &packet) {
 		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
 		if (player) {

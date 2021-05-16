@@ -48,86 +48,48 @@ ServerWorld::ServerWorld(PlayerList &players, const Dimension &dimension, gk::Ga
 }
 
 void ServerWorld::update(bool doTick) {
-	{
-		// FIXME: Add a packet UpdateViewPosition(cx, cy, cz) to remove this loop
-		for (auto &it : m_players) {
-			if (it.second.isReady() && it.second.isOnline() && it.second.dimension() == m_dimension.id()) {
-				gk::Vector3i currentChunk = it.second.getCurrentChunk();
-				if (!it.second.isChunkLoaded(currentChunk) || it.second.lastChunkUpdate != currentChunk) {
-					it.second.sentChunks.clear();
-					m_chunksToSend.emplace(std::make_pair(currentChunk, std::ref(it.second)));
-					it.second.lastChunkUpdate = currentChunk;
-					// gkWarning() << "Player changed chunk";
+	while (!m_chunksToSend.empty()) {
+		auto &[chunkPos, player] = m_chunksToSend.front();
+		if (player.sentChunks.find(chunkPos) == player.sentChunks.end()) {
+			glm::dvec3 chunkWorldPos{
+				chunkPos.x * CHUNK_WIDTH + CHUNK_WIDTH / 2.f,
+				chunkPos.y * CHUNK_DEPTH + CHUNK_DEPTH / 2.f,
+				chunkPos.z * CHUNK_HEIGHT + CHUNK_HEIGHT / 2.f
+			};
+
+			glm::dvec3 playerPos{
+				player.x(),
+				player.y(),
+				player.z()
+			};
+
+			if (glm::length(playerPos - chunkWorldPos) < (ServerConfig::renderDistance + 1) * CHUNK_WIDTH) {
+				if (player.isOnline() && !player.isChunkLoaded(chunkPos)) {
+					ServerChunk &chunk = getOrCreateChunk(chunkPos.x, chunkPos.y, chunkPos.z);
+					generateChunk(chunk);
+					player.addLoadedChunk(chunkPos);
+					chunk.sendData(*player.client(), *m_server); // FIXME: Shouldn't be sent here
 				}
 
-				std::list<gk::Vector3i> chunksToRemove;
-				for (auto &chunkPos : it.second.loadedChunks()) {
-					glm::dvec3 chunkWorldPos{
-						chunkPos.x * CHUNK_WIDTH + CHUNK_WIDTH / 2.f,
-						chunkPos.y * CHUNK_DEPTH + CHUNK_DEPTH / 2.f,
-						chunkPos.z * CHUNK_HEIGHT + CHUNK_HEIGHT / 2.f
-					};
+				// gkDebug() << "OK for chunk" << chunkPos.x << chunkPos.y << chunkPos.z << ":" << glm::length(playerPos - chunkWorldPos) << "<" << (int)ServerConfig::renderDistance * CHUNK_WIDTH;
 
-					glm::dvec3 playerPos{
-						it.second.x(),
-						it.second.y(),
-						it.second.z()
-					};
-
-					if (glm::length(playerPos - chunkWorldPos) >= (ServerConfig::renderDistance + 1) * CHUNK_WIDTH) {
-						m_server->sendChunkUnload(chunkPos.x, chunkPos.y, chunkPos.z, it.second.client());
-						chunksToRemove.emplace_back(chunkPos);
-					}
-				}
-
-				for (auto &chunkPos : chunksToRemove)
-					it.second.removeLoadedChunk(chunkPos);
-			}
-		}
-
-		auto addChunkToSend = [this](gk::Vector3i pos, s8 dx, s8 dy, s8 dz, ServerPlayer &player) {
-			pos.x += dx; pos.y += dy; pos.z += dz;
-			m_chunksToSend.emplace(std::make_pair(pos, std::ref(player)));
-		};
-
-		// for (int i = 0 ; i < 100 && !m_chunksToSend.empty() ; ++i) {
-		while (!m_chunksToSend.empty()) {
-			auto &[chunkPos, player] = m_chunksToSend.front();
-			if (player.sentChunks.find(chunkPos) == player.sentChunks.end()) {
-				glm::dvec3 chunkWorldPos{
-					chunkPos.x * CHUNK_WIDTH + CHUNK_WIDTH / 2.f,
-					chunkPos.y * CHUNK_DEPTH + CHUNK_DEPTH / 2.f,
-					chunkPos.z * CHUNK_HEIGHT + CHUNK_HEIGHT / 2.f
+				auto addChunkToSend = [this](gk::Vector3i pos, s8 dx, s8 dy, s8 dz, ServerPlayer &player) {
+					pos.x += dx; pos.y += dy; pos.z += dz;
+					m_chunksToSend.emplace(std::make_pair(pos, std::ref(player)));
 				};
 
-				glm::dvec3 playerPos{
-					player.x(),
-					player.y(),
-					player.z()
-				};
-
-				if (glm::length(playerPos - chunkWorldPos) < (ServerConfig::renderDistance + 1) * CHUNK_WIDTH) {
-					if (player.isOnline() && !player.isChunkLoaded(chunkPos)) {
-						ServerChunk &chunk = getOrCreateChunk(chunkPos.x, chunkPos.y, chunkPos.z);
-						generateChunk(chunk);
-						player.addLoadedChunk(chunkPos);
-						sendChunkData(*player.client(), chunk);
-					}
-
-					// gkDebug() << "OK for chunk" << chunkPos.x << chunkPos.y << chunkPos.z << ":" << glm::length(playerPos - chunkWorldPos) << "<" << (int)ServerConfig::renderDistance * CHUNK_WIDTH;
-					addChunkToSend(chunkPos,  1,  0,  0, player);
-					addChunkToSend(chunkPos, -1,  0,  0, player);
-					addChunkToSend(chunkPos,  0,  1,  0, player);
-					addChunkToSend(chunkPos,  0, -1,  0, player);
-					addChunkToSend(chunkPos,  0,  0,  1, player);
-					addChunkToSend(chunkPos,  0,  0, -1, player);
-				}
-
-				player.sentChunks.emplace(chunkPos);
+				addChunkToSend(chunkPos,  1,  0,  0, player);
+				addChunkToSend(chunkPos, -1,  0,  0, player);
+				addChunkToSend(chunkPos,  0,  1,  0, player);
+				addChunkToSend(chunkPos,  0, -1,  0, player);
+				addChunkToSend(chunkPos,  0,  0,  1, player);
+				addChunkToSend(chunkPos,  0,  0, -1, player);
 			}
 
-			m_chunksToSend.pop();
+			player.sentChunks.emplace(chunkPos);
 		}
+
+		m_chunksToSend.pop();
 	}
 
 	for (auto &it : m_chunks) {
@@ -143,7 +105,7 @@ void ServerWorld::update(bool doTick) {
 				ServerPlayer *player = m_players.getPlayer(client.playerName);
 				bool isChunkLoaded = player->isChunkLoaded({it.second->x(), it.second->y(), it.second->z()});
 				if (player->isReady() && isChunkLoaded && player->dimension() == m_dimension.id())
-					sendChunkData(client, *it.second.get());
+					it.second->sendData(client, *m_server);
 			}
 
 			// gkDebug() << "Chunk updated at" << it.second->x() << it.second->y() << it.second->z();
@@ -152,6 +114,53 @@ void ServerWorld::update(bool doTick) {
 
 	if (doTick)
 		m_scene.update();
+}
+
+void ServerWorld::updatePlayerChunks(ServerPlayer &player, s32 cx, s32 cy, s32 cz) {
+	gk::Vector3i currentChunk{cx, cy, cz};
+	if (!player.isChunkLoaded(currentChunk)) {
+		int i = 0;
+		gkDebug() << "Generating chunks for player" << player.name();
+		auto begin = std::chrono::system_clock::now();
+		for (s32 x = cx - 4 ; x < cx + 4 ; ++x) {
+			for (s32 y = cy - 4 ; y < cy + 4 ; ++y) {
+				for (s32 z = cz - 4 ; z < cz + 4 ; ++z) {
+					ServerChunk &chunk = getOrCreateChunk(x, y, z);
+					generateChunk(chunk, false);
+					++i;
+				}
+			}
+		}
+		auto end = std::chrono::system_clock::now();
+		gkDebug() << "Generated" << i << "chunks for player" << player.name() << "in"
+			<< std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "ms";
+	}
+
+	player.sentChunks.clear();
+	m_chunksToSend.emplace(std::make_pair(currentChunk, std::ref(player)));
+
+	std::list<gk::Vector3i> chunksToRemove;
+	for (auto &chunkPos : player.loadedChunks()) {
+		glm::dvec3 chunkWorldPos{
+			chunkPos.x * CHUNK_WIDTH + CHUNK_WIDTH / 2.f,
+			chunkPos.y * CHUNK_DEPTH + CHUNK_DEPTH / 2.f,
+			chunkPos.z * CHUNK_HEIGHT + CHUNK_HEIGHT / 2.f
+		};
+
+		glm::dvec3 playerPos{
+			player.x(),
+			player.y(),
+			player.z()
+		};
+
+		if (glm::length(playerPos - chunkWorldPos) >= (ServerConfig::renderDistance + 1) * CHUNK_WIDTH) {
+			m_server->sendChunkUnload(chunkPos.x, chunkPos.y, chunkPos.z, player.client());
+			chunksToRemove.emplace_back(chunkPos);
+		}
+	}
+
+	for (auto &chunkPos : chunksToRemove)
+		player.removeLoadedChunk(chunkPos);
 }
 
 void ServerWorld::createChunkNeighbours(ServerChunk &chunk) {
@@ -199,42 +208,12 @@ void ServerWorld::createChunkNeighbours(ServerChunk &chunk) {
 	}
 }
 
-void ServerWorld::sendChunkData(const ClientInfo &client, ServerChunk &chunk) {
-	Network::Packet packet;
-	packet << Network::Command::ChunkData;
-	packet << chunk.x() << chunk.y() << chunk.z();
-	for (u16 z = 0 ; z < CHUNK_HEIGHT ; ++z) {
-		for (u16 y = 0 ; y < CHUNK_DEPTH ; ++y) {
-			for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
-				packet << chunk.data(x, y, z);
-				packet << chunk.lightmap().getLightData(x, y, z);
-
-				BlockData *blockData = chunk.getBlockData(x, y, z);
-				if (blockData) {
-					s32 globalX = x + chunk.x() * CHUNK_WIDTH;
-					s32 globalY = y + chunk.y() * CHUNK_DEPTH;
-					s32 globalZ = z + chunk.z() * CHUNK_HEIGHT;
-
-					m_server->sendBlockDataUpdate(globalX, globalY, globalZ, blockData, &client);
-					m_server->sendBlockInvUpdate(globalX, globalY, globalZ, blockData->inventory, &client);
-				}
-			}
-		}
-	}
-
-	client.tcpSocket->send(packet);
-	chunk.setSent(true);
-	chunk.setChanged(false);
-
-	// gkDebug() << "Chunk at" << chunk.x() << chunk.y() << chunk.z() << "sent to client";
-}
-
 void ServerWorld::sendRequestedData(const ClientInfo &client, int cx, int cy, int cz) {
 	ServerChunk &chunk = getOrCreateChunk(cx, cy, cz);
 
 	generateChunk(chunk);
 
-	sendChunkData(client, chunk);
+	chunk.sendData(client, *m_server);
 }
 
 ServerChunk &ServerWorld::getOrCreateChunk(s32 cx, s32 cy, s32 cz) {
@@ -258,14 +237,15 @@ Chunk *ServerWorld::getChunk(int cx, int cy, int cz) const {
 	return it->second.get();
 }
 
-void ServerWorld::generateChunk(ServerChunk &chunk) {
+void ServerWorld::generateChunk(ServerChunk &chunk, bool updateLights) {
 	if (!chunk.isInitialized()) {
 		m_terrainGenerator.generate(chunk);
 
 		chunk.setInitialized(true);
 	}
 
-	chunk.updateLights();
+	if (updateLights)
+		chunk.updateLights();
 }
 
 // Please update 'docs/lua-api-cpp.md' if you change this
