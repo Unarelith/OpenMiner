@@ -88,6 +88,8 @@ class ClientPlayer : public Player {
 		bool m_isJumping = false;
 
 		const float m_jumpSpeed = 0.06f;
+
+		std::optional<gk::Vector3i> m_lastChunkPos;
 };
 
 #endif // CLIENTPLAYER_HPP_

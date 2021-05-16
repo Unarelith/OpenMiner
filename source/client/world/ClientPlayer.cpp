@@ -29,6 +29,7 @@
 #include <gk/core/input/GamePad.hpp>
 #include <gk/core/Mouse.hpp>
 
+#include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "GameConfig.hpp"
@@ -152,6 +153,12 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 	}
 	else {
 		GameConfig::currentScreenEffect = 0;
+	}
+
+	// Sending PlayerChunkPosUpdate if needed
+	if (!m_lastChunkPos.has_value() || m_lastChunkPos.value() != getCurrentChunk()) {
+		world.client().sendPlayerChunkPosUpdate();
+		m_lastChunkPos = getCurrentChunk();
 	}
 }
 

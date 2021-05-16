@@ -274,6 +274,14 @@ Packet sent from a client when it is ready to receive chunks.
 
 _This packet has no field._
 
+#### PlayerChunkPosUpdate
+
+| Field name    | Field type  | Notes                                                |
+| ------------- | ----------- | ---------------------------------------------------- |
+| Chunk X       | s32         | Chunk X coordinate                                   |
+| Chunk Y       | s32         | Chunk Y coordinate                                   |
+| Chunk Z       | s32         | Chunk Z coordinate                                   |
+
 #### BlockActivated
 
 | Field name    | Field type  | Notes                                                |

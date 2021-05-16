@@ -65,6 +65,8 @@ class ClientWorld : public World, public gk::Drawable {
 		const ClientScene &scene() const { return m_scene; }
 		ClientScene &scene() { return m_scene; }
 
+		const ClientCommandHandler &client() const { return *m_client; }
+
 		void setClient(ClientCommandHandler &client) { m_client = &client; }
 		void setCamera(gk::Camera &camera) { m_camera = &camera; m_scene.setCamera(camera); }
 		void setEventHandler(gk::EventHandler &eventHandler) { m_eventHandler = &eventHandler; }

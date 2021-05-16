@@ -55,6 +55,7 @@ namespace Network {
 		PlayerChangeDimension = 0x36,
 		PlayerHeldItemChanged = 0x37,
 		PlayerReady           = 0x38,
+		PlayerChunkPosUpdate  = 0x39,
 
 		BlockUpdate           = 0x40,
 		BlockActivated        = 0x41,
