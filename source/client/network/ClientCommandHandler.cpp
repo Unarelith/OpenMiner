@@ -125,13 +125,6 @@ void ClientCommandHandler::sendItemActivated(const glm::ivec4 &selectedBlock) {
 	m_client.send(packet);
 }
 
-void ClientCommandHandler::sendChunkUnload(s32 chunkX, s32 chunkY, s32 chunkZ) {
-	Network::Packet packet;
-	packet << Network::Command::ChunkUnload;
-	packet << chunkX << chunkY << chunkZ;
-	m_client.send(packet);
-}
-
 void ClientCommandHandler::sendChatMessage(const std::string &message) {
 	Network::Packet packet;
 	packet << Network::Command::ChatMessage;
@@ -203,6 +196,12 @@ void ClientCommandHandler::setupCallbacks() {
 
 	m_client.setCommandCallback(Network::Command::ChunkData, [this](Network::Packet &packet) {
 		m_world.receiveChunkData(packet);
+	});
+
+	m_client.setCommandCallback(Network::Command::ChunkUnload, [this](Network::Packet &packet) {
+		s32 chunkX, chunkY, chunkZ;
+		packet >> chunkX >> chunkY >> chunkZ;
+		m_world.removeChunk({chunkX, chunkY, chunkZ});
 	});
 
 	m_client.setCommandCallback(Network::Command::BlockUpdate, [this](Network::Packet &packet) {

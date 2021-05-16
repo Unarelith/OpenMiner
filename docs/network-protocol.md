@@ -72,6 +72,14 @@ Packet sent at the beginning of every server tick.
 | - Block data  | u32         | Block ID and data                                    |
 | - Light value | u8          | Sunlight and torchlight values                       |
 
+#### ChunkUnload
+
+| Field name    | Field type  | Notes                                                |
+| ------------- | ----------- | ---------------------------------------------------- |
+| Chunk X       | s32         | Chunk X coordinate                                   |
+| Chunk Y       | s32         | Chunk Y coordinate                                   |
+| Chunk Z       | s32         | Chunk Z coordinate                                   |
+
 #### PlayerInvUpdate (clientbound)
 
 | Field name    | Field type  | Notes                                                |
