@@ -43,18 +43,16 @@ u64 ClientChunk::chunkUpdateTime = 0;
 // }
 
 void ClientChunk::update() {
-	bool lightUpdated = m_lightmap.updateLights();
-	if ((lightUpdated || m_hasChanged || m_lightmap.hasChanged()) && m_isReadyForMeshing) {
-		if (m_x == 0 && m_y == -9 && m_z == 2)
-			gkDebug() << lightUpdated << m_hasChanged << m_lightmap.hasChanged();
+	m_lightmap.updateLights();
+
+	if ((m_hasChanged || m_lightmap.hasChanged()) && m_isReadyForMeshing) {
+		// gkDebug() << "Chunk update at" << m_x << m_y << m_z << "| D:" << m_hasChanged << "| L:" << m_lightmap.hasChanged();
 
 		m_hasChanged = false;
 		m_lightmap.resetChangedFlag();
 
 		m_world.addChunkToProcess(this);
 	}
-	// else if (lightUpdated && !m_isReadyForMeshing)
-	// 	m_hasChanged = true;
 }
 
 void ClientChunk::process() {
