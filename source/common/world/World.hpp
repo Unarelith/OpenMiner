@@ -28,12 +28,15 @@
 #define WORLD_HPP_
 
 #include <memory>
+#include <set>
 
 #include "Chunk.hpp"
 
 class World {
 	public:
 		virtual ~World() = default;
+
+		void update();
 
 		virtual Chunk *getChunk(int cx, int cy, int cz) const = 0;
 		Chunk *getChunkAtBlockPos(int x, int y, int z) const;
@@ -49,11 +52,32 @@ class World {
 		u16 getData(int x, int y, int z) const;
 		void setData(int x, int y, int z, u16 data) const;
 
+		bool addChunkToUpdate(Chunk *chunk) {
+			auto [it, res] = m_chunksToUpdate.emplace(chunk);
+			if (res)
+				m_chunkUpdateQueue.emplace(chunk);
+			return res;
+		}
+
+		bool addChunkToProcess(Chunk *chunk) {
+			auto [it, res] = m_chunksToProcess.emplace(chunk);
+			if (res)
+				m_chunkProcessQueue.emplace(chunk);
+			return res;
+		}
+
 		virtual void onBlockPlaced(int, int, int, const Block &) {}
 
 		static void initUsertype(sol::state &lua);
 
 		static bool isReloadRequested;
+
+	private:
+		std::set<Chunk *> m_chunksToUpdate;
+		std::queue<Chunk *> m_chunkUpdateQueue;
+
+		std::set<Chunk *> m_chunksToProcess;
+		std::queue<Chunk *> m_chunkProcessQueue;
 };
 
 #endif // WORLD_HPP_

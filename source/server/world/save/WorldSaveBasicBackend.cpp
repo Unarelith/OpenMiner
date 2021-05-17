@@ -100,7 +100,6 @@ void WorldSaveBasicBackend::load(const std::string &name) {
 				}
 
 				chunk.setInitialized(true);
-				chunk.setSent(false);
 				chunk.setModified(true);
 			}
 

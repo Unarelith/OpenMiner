@@ -54,24 +54,22 @@ class ServerWorld : public World {
 
 		void updatePlayerChunks(ServerPlayer &player, s32 cx, s32 cy, s32 cz);
 		void createChunkNeighbours(ServerChunk &chunk);
-		void sendRequestedData(const ClientInfo &client, s32 cx, s32 cy, s32 cz);
 
 		ServerChunk &getOrCreateChunk(s32 cx, s32 cy, s32 cz);
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
 
-		void generateChunk(ServerChunk &chunk, bool updateLights = true);
+		void generateChunk(ServerChunk &chunk);
 
+		const PlayerList &players() const { return m_players; }
 		const Dimension &dimension() const { return m_dimension; }
-
 		const ChunkMap &chunks() const { return m_chunks; }
 
 		Heightmap &heightmap() { return m_heightmap; }
-
 		TerrainGenerator &terrainGenerator() { return m_terrainGenerator; }
-
 		ServerScene &scene() { return m_scene; }
 
+		ServerCommandHandler *server() const { return m_server; }
 		void setServer(ServerCommandHandler *server) { m_server = server; m_scene.setServer(server); }
 
 		s32 seed() const { return m_seed; }

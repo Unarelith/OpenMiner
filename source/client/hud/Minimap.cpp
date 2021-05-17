@@ -56,17 +56,19 @@ void Minimap::update(const ClientPlayer &player, class ClientWorld &world) {
 			ClientChunk *chunk = (ClientChunk *)world.getChunk(it.first.x, it.first.y, it.first.z);
 			if (chunk) {
 				if (chunk->hasBeenDrawn()) {
-					it.second.setFillColor(gk::Color::Green);
+					it.second.first.setFillColor(gk::Color::Green);
 				}
 				else if (chunk->isInitialized()) {
-					it.second.setFillColor(gk::Color{224, 224, 224});
+					it.second.first.setFillColor(gk::Color{224, 224, 224});
 				}
 				else {
-					it.second.setFillColor(gk::Color{127, 127, 127});
+					it.second.first.setFillColor(gk::Color{127, 127, 127});
 				}
+
+				it.second.second.setString(std::to_string(chunk->debugTimesReceived));
 			}
 			else {
-				it.second.setFillColor(gk::Color::Blue);
+				it.second.first.setFillColor(gk::Color::Blue);
 			}
 		}
 	}
@@ -87,12 +89,18 @@ void Minimap::update(const ClientPlayer &player, class ClientWorld &world) {
 
 void Minimap::onChunkCreatedEvent(const ChunkCreatedEvent &event) {
 	if (Config::isChunkMinimapEnabled) {
-		auto &rect = m_chunks[event.chunkPos];
+		auto &[rect, text] = m_chunks[event.chunkPos];
 		rect.setSize(chunkSize, chunkSize);
 		rect.setPosition(event.chunkPos.x * (chunkSize + 2), -event.chunkPos.y * (chunkSize + 2));
 		rect.setFillColor(event.isLoaded ? gk::Color{224, 224, 224} : gk::Color{127, 127, 127});
 		rect.setOutlineThickness(1);
 		rect.setOutlineColor(gk::Color::Transparent);
+
+		text.setBackgroundSize(chunkSize, chunkSize);
+		text.setScale(0.5f, 0.5f);
+		text.setShadowEnabled(true);
+		text.setPosition(rect.getPosition());
+		text.setString("0");
 	}
 }
 
@@ -144,8 +152,10 @@ void Minimap::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	states.transform.translate(-m_playerChunkPos.x * (chunkSize + 2) + minimapSize / 2.f, m_playerChunkPos.y * (chunkSize + 2) + minimapSize / 2.f);
 
 	for (auto &it : m_chunks)
-		if (it.first.z == m_playerChunkPos.z)
-			target.draw(it.second, states);
+		if (it.first.z == m_playerChunkPos.z) {
+			// target.draw(it.second.first, states);
+			target.draw(it.second.second, states);
+		}
 
 	target.draw(m_playerChunk, states);
 }

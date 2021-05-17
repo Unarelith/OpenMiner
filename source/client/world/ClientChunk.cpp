@@ -29,36 +29,55 @@
 
 #include "ClientChunk.hpp"
 #include "TextureAtlas.hpp"
+#include "World.hpp"
 
 u32 ClientChunk::chunkUpdatesPerSec = 0;
 u32 ClientChunk::chunkUpdateCounter = 0;
 u64 ClientChunk::chunkUpdateTime = 0;
 
-bool ClientChunk::isMeshingTime() {
-	u32 currentTime = gk::GameClock::getInstance().getTicks(true);
-	if (m_lastMeshingTime == 0)
-		m_lastMeshingTime = currentTime;
-	return (currentTime - m_lastMeshingTime > 1000); // Only one chunk update every second
-}
+// bool ClientChunk::isMeshingTime() {
+// 	u32 currentTime = gk::GameClock::getInstance().getTicks(true);
+// 	if (m_lastMeshingTime == 0)
+// 		m_lastMeshingTime = currentTime;
+// 	return (currentTime - m_lastMeshingTime > 1000); // Only one chunk update every second
+// }
 
 void ClientChunk::update() {
-	u64 time = std::time(nullptr);
-	if (time > ClientChunk::chunkUpdateTime) {
-		ClientChunk::chunkUpdatesPerSec = ClientChunk::chunkUpdateCounter;
-		ClientChunk::chunkUpdateCounter = 0;
-		ClientChunk::chunkUpdateTime = time;
-	}
+	bool lightUpdated = m_lightmap.updateLights();
+	if ((lightUpdated || m_hasChanged || m_lightmap.hasChanged()) && m_isReadyForMeshing) {
+		if (m_x == 0 && m_y == -9 && m_z == 2)
+			gkDebug() << lightUpdated << m_hasChanged << m_lightmap.hasChanged();
 
-	if (isMeshingTime() && (m_lightmap.updateLights() || m_hasChanged || m_hasLightChanged)) {
 		m_hasChanged = false;
-		m_hasLightChanged = false;
+		m_lightmap.resetChangedFlag();
 
-		m_verticesCount = m_builder.buildChunk(*this, m_vbo);
-
-		++ClientChunk::chunkUpdateCounter;
-
-		m_lastMeshingTime = gk::GameClock::getInstance().getTicks(true);
+		m_world.addChunkToProcess(this);
 	}
+	// else if (lightUpdated && !m_isReadyForMeshing)
+	// 	m_hasChanged = true;
+}
+
+void ClientChunk::process() {
+	m_verticesCount = m_builder.buildChunk(*this, m_vbo);
+
+	++ClientChunk::chunkUpdateCounter;
+
+	m_lastMeshingTime = gk::GameClock::getInstance().getTicks(true);
+}
+
+void ClientChunk::onBlockPlaced(int x, int y, int z, const Block &) {
+	auto addSurroundingChunkToProcess = [this](u8 i) {
+		Chunk *surroundingChunk = m_surroundingChunks[i];
+		if (surroundingChunk)
+			m_world.addChunkToProcess(surroundingChunk);
+	};
+
+	if(x == 0         ) addSurroundingChunkToProcess(West);
+	if(x == width  - 1) addSurroundingChunkToProcess(East);
+	if(y == 0         ) addSurroundingChunkToProcess(South);
+	if(y == depth  - 1) addSurroundingChunkToProcess(North);
+	if(z == 0         ) addSurroundingChunkToProcess(Bottom);
+	if(z == height - 1) addSurroundingChunkToProcess(Top);
 }
 
 void ClientChunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u8 layer) const {

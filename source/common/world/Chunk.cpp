@@ -93,38 +93,36 @@ void Chunk::setBlock(int x, int y, int z, u16 type) {
 		const Block &oldBlock = Registry::getInstance().getBlock(currentBlockID);
 		onBlockDestroyed(x, y, z, oldBlock);
 	}
-
-	if(x == 0          && m_surroundingChunks[West])   { m_surroundingChunks[West]->m_hasChanged = true; }
-	if(x == width - 1  && m_surroundingChunks[East])   { m_surroundingChunks[East]->m_hasChanged = true; }
-	if(y == 0          && m_surroundingChunks[South])  { m_surroundingChunks[South]->m_hasChanged = true; }
-	if(y == depth - 1  && m_surroundingChunks[North])  { m_surroundingChunks[North]->m_hasChanged = true; }
-	if(z == 0          && m_surroundingChunks[Bottom]) { m_surroundingChunks[Bottom]->m_hasChanged = true; }
-	if(z == height - 1 && m_surroundingChunks[Top])    { m_surroundingChunks[Top]->m_hasChanged = true; }
 }
 
-void Chunk::setData(int x, int y, int z, u16 data) {
-	if(x < 0)              { if(m_surroundingChunks[0]) m_surroundingChunks[0]->setData(x + Chunk::width, y, z, data); return; }
-	if(x >= Chunk::width)  { if(m_surroundingChunks[1]) m_surroundingChunks[1]->setData(x - Chunk::width, y, z, data); return; }
-	if(y < 0)              { if(m_surroundingChunks[2]) m_surroundingChunks[2]->setData(x, y + Chunk::depth, z, data); return; }
-	if(y >= Chunk::depth)  { if(m_surroundingChunks[3]) m_surroundingChunks[3]->setData(x, y - Chunk::depth, z, data); return; }
-	if(z < 0)              { if(m_surroundingChunks[4]) m_surroundingChunks[4]->setData(x, y, z + Chunk::height, data); return; }
-	if(z >= Chunk::height) { if(m_surroundingChunks[5]) m_surroundingChunks[5]->setData(x, y, z - Chunk::height, data); return; }
+bool Chunk::setData(int x, int y, int z, u16 data) {
+	if(x < 0)              return m_surroundingChunks[0] ? m_surroundingChunks[0]->setData(x + Chunk::width, y, z, data) : false;
+	if(x >= Chunk::width)  return m_surroundingChunks[1] ? m_surroundingChunks[1]->setData(x - Chunk::width, y, z, data) : false;
+	if(y < 0)              return m_surroundingChunks[2] ? m_surroundingChunks[2]->setData(x, y + Chunk::depth, z, data) : false;
+	if(y >= Chunk::depth)  return m_surroundingChunks[3] ? m_surroundingChunks[3]->setData(x, y - Chunk::depth, z, data) : false;
+	if(z < 0)              return m_surroundingChunks[4] ? m_surroundingChunks[4]->setData(x, y, z + Chunk::height, data) : false;
+	if(z >= Chunk::height) return m_surroundingChunks[5] ? m_surroundingChunks[5]->setData(x, y, z - Chunk::height, data) : false;
+
+	if (((m_data[z][y][x] >> 16) & 0xffff) == data) return false;
 
 	m_data[z][y][x] &= 0xffff;
 	m_data[z][y][x] |= (data << 16);
 
 	m_hasChanged = true;
+	m_world.addChunkToUpdate(this);
+
+	return true;
 }
 
-void Chunk::setBlockRaw(int x, int y, int z, u16 type) {
-	if(x < 0)              { if(m_surroundingChunks[0]) m_surroundingChunks[0]->setBlockRaw(x + Chunk::width, y, z, type); return; }
-	if(x >= Chunk::width)  { if(m_surroundingChunks[1]) m_surroundingChunks[1]->setBlockRaw(x - Chunk::width, y, z, type); return; }
-	if(y < 0)              { if(m_surroundingChunks[2]) m_surroundingChunks[2]->setBlockRaw(x, y + Chunk::depth, z, type); return; }
-	if(y >= Chunk::depth)  { if(m_surroundingChunks[3]) m_surroundingChunks[3]->setBlockRaw(x, y - Chunk::depth, z, type); return; }
-	if(z < 0)              { if(m_surroundingChunks[4]) m_surroundingChunks[4]->setBlockRaw(x, y, z + Chunk::height, type); return; }
-	if(z >= Chunk::height) { if(m_surroundingChunks[5]) m_surroundingChunks[5]->setBlockRaw(x, y, z - Chunk::height, type); return; }
+bool Chunk::setBlockRaw(int x, int y, int z, u16 type) {
+	if(x < 0)              return m_surroundingChunks[0] ? m_surroundingChunks[0]->setBlockRaw(x + Chunk::width, y, z, type) : false;
+	if(x >= Chunk::width)  return m_surroundingChunks[1] ? m_surroundingChunks[1]->setBlockRaw(x - Chunk::width, y, z, type) : false;
+	if(y < 0)              return m_surroundingChunks[2] ? m_surroundingChunks[2]->setBlockRaw(x, y + Chunk::depth, z, type) : false;
+	if(y >= Chunk::depth)  return m_surroundingChunks[3] ? m_surroundingChunks[3]->setBlockRaw(x, y - Chunk::depth, z, type) : false;
+	if(z < 0)              return m_surroundingChunks[4] ? m_surroundingChunks[4]->setBlockRaw(x, y, z + Chunk::height, type) : false;
+	if(z >= Chunk::height) return m_surroundingChunks[5] ? m_surroundingChunks[5]->setBlockRaw(x, y, z - Chunk::height, type) : false;
 
-	if ((m_data[z][y][x] & 0xffff) == type) return;
+	if ((m_data[z][y][x] & 0xffff) == type) return false;
 
 	if (type == 0) {
 		auto it = m_blockData.find(gk::Vector3i{x, y, z});
@@ -136,6 +134,9 @@ void Chunk::setBlockRaw(int x, int y, int z, u16 type) {
 	m_data[z][y][x] |= type;
 
 	m_hasChanged = true;
+	m_world.addChunkToUpdate(this);
+
+	return true;
 }
 
 const BlockState *Chunk::getBlockState(int x, int y, int z) const {
@@ -222,14 +223,14 @@ BlockData *Chunk::addBlockData(int x, int y, int z, int inventoryWidth, int inve
 	return it->second.get();
 }
 
-bool Chunk::areAllNeighboursLoaded() const {
-	return m_surroundingChunks[Chunk::West]
-		&& m_surroundingChunks[Chunk::East]
-		&& m_surroundingChunks[Chunk::South]
-		&& m_surroundingChunks[Chunk::North]
-		&& m_surroundingChunks[Chunk::Bottom]
-		&& m_surroundingChunks[Chunk::Top];
-}
+// bool Chunk::areAllNeighboursLoaded() const {
+// 	return m_surroundingChunks[Chunk::West]
+// 		&& m_surroundingChunks[Chunk::East]
+// 		&& m_surroundingChunks[Chunk::South]
+// 		&& m_surroundingChunks[Chunk::North]
+// 		&& m_surroundingChunks[Chunk::Bottom]
+// 		&& m_surroundingChunks[Chunk::Top];
+// }
 
 bool Chunk::areAllNeighboursInitialized() const {
 	return m_surroundingChunks[Chunk::West]   && m_surroundingChunks[Chunk::West]->isInitialized()

@@ -48,6 +48,8 @@ ServerWorld::ServerWorld(PlayerList &players, const Dimension &dimension, gk::Ga
 }
 
 void ServerWorld::update(bool doTick) {
+	World::update();
+
 	while (!m_chunksToSend.empty()) {
 		auto &[chunkPos, player] = m_chunksToSend.front();
 		if (player.sentChunks.find(chunkPos) == player.sentChunks.end()) {
@@ -68,7 +70,7 @@ void ServerWorld::update(bool doTick) {
 					ServerChunk &chunk = getOrCreateChunk(chunkPos.x, chunkPos.y, chunkPos.z);
 					generateChunk(chunk);
 					player.addLoadedChunk(chunkPos);
-					chunk.sendData(*player.client(), *m_server); // FIXME: Shouldn't be sent here
+					addChunkToUpdate(&chunk);
 				}
 
 				// gkDebug() << "OK for chunk" << chunkPos.x << chunkPos.y << chunkPos.z << ":" << glm::length(playerPos - chunkWorldPos) << "<" << (int)ServerConfig::renderDistance * CHUNK_WIDTH;
@@ -92,50 +94,16 @@ void ServerWorld::update(bool doTick) {
 		m_chunksToSend.pop();
 	}
 
-	for (auto &it : m_chunks) {
-		if (doTick)
-			it.second->tick(*this, *m_server);
+	if (doTick) {
+		for (auto &it : m_chunks)
+			it.second->tick();
 
-		if (it.second->areAllNeighboursLoaded()) {
-			it.second->updateLights();
-		}
-
-		if (it.second->isInitialized() && it.second->areAllNeighboursInitialized() && !it.second->isSent()) {
-			for (auto &client : m_server->server().info().clients()) {
-				ServerPlayer *player = m_players.getPlayer(client.playerName);
-				bool isChunkLoaded = player->isChunkLoaded({it.second->x(), it.second->y(), it.second->z()});
-				if (player->isReady() && isChunkLoaded && player->dimension() == m_dimension.id())
-					it.second->sendData(client, *m_server);
-			}
-
-			// gkDebug() << "Chunk updated at" << it.second->x() << it.second->y() << it.second->z();
-		}
-	}
-
-	if (doTick)
 		m_scene.update();
+	}
 }
 
 void ServerWorld::updatePlayerChunks(ServerPlayer &player, s32 cx, s32 cy, s32 cz) {
 	gk::Vector3i currentChunk{cx, cy, cz};
-	if (!player.isChunkLoaded(currentChunk)) {
-		int i = 0;
-		gkDebug() << "Generating chunks for player" << player.name();
-		auto begin = std::chrono::system_clock::now();
-		for (s32 x = cx - 4 ; x < cx + 4 ; ++x) {
-			for (s32 y = cy - 4 ; y < cy + 4 ; ++y) {
-				for (s32 z = cz - 4 ; z < cz + 4 ; ++z) {
-					ServerChunk &chunk = getOrCreateChunk(x, y, z);
-					generateChunk(chunk, false);
-					++i;
-				}
-			}
-		}
-		auto end = std::chrono::system_clock::now();
-		gkDebug() << "Generated" << i << "chunks for player" << player.name() << "in"
-			<< std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "ms";
-	}
-
 	player.sentChunks.clear();
 	m_chunksToSend.emplace(std::make_pair(currentChunk, std::ref(player)));
 
@@ -156,6 +124,8 @@ void ServerWorld::updatePlayerChunks(ServerPlayer &player, s32 cx, s32 cy, s32 c
 		if (glm::length(playerPos - chunkWorldPos) >= (ServerConfig::renderDistance + 1) * CHUNK_WIDTH) {
 			m_server->sendChunkUnload(chunkPos.x, chunkPos.y, chunkPos.z, player.client());
 			chunksToRemove.emplace_back(chunkPos);
+
+			// gkDebug() << "Chunk at" << chunkPos.x << chunkPos.y << chunkPos.z << "unloaded for player" << player.name();
 		}
 	}
 
@@ -208,14 +178,6 @@ void ServerWorld::createChunkNeighbours(ServerChunk &chunk) {
 	}
 }
 
-void ServerWorld::sendRequestedData(const ClientInfo &client, int cx, int cy, int cz) {
-	ServerChunk &chunk = getOrCreateChunk(cx, cy, cz);
-
-	generateChunk(chunk);
-
-	chunk.sendData(client, *m_server);
-}
-
 ServerChunk &ServerWorld::getOrCreateChunk(s32 cx, s32 cy, s32 cz) {
 	ServerChunk *chunk = (ServerChunk *)getChunk(cx, cy, cz);
 	if (!chunk) {
@@ -237,15 +199,12 @@ Chunk *ServerWorld::getChunk(int cx, int cy, int cz) const {
 	return it->second.get();
 }
 
-void ServerWorld::generateChunk(ServerChunk &chunk, bool updateLights) {
+void ServerWorld::generateChunk(ServerChunk &chunk) {
 	if (!chunk.isInitialized()) {
 		m_terrainGenerator.generate(chunk);
 
 		chunk.setInitialized(true);
 	}
-
-	if (updateLights)
-		chunk.updateLights();
 }
 
 // Please update 'docs/lua-api-cpp.md' if you change this

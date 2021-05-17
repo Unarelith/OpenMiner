@@ -51,7 +51,7 @@ class ServerPlayer : public Player {
 		bool isReady() const { return m_isReady; }
 		void setReady(bool isReady) { m_isReady = isReady; }
 
-		bool isChunkLoaded(const gk::Vector3i &chunk) { return m_loadedChunks.find(chunk) != m_loadedChunks.end(); }
+		bool isChunkLoaded(const gk::Vector3i &chunk) const { return m_loadedChunks.find(chunk) != m_loadedChunks.end(); }
 		void addLoadedChunk(const gk::Vector3i &chunk) { m_loadedChunks.emplace(chunk); }
 		void removeLoadedChunk(const gk::Vector3i &chunk) { m_loadedChunks.erase(chunk); }
 		void clearLoadedChunks() { m_loadedChunks.clear(); }

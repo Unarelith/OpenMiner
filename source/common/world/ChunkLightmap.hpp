@@ -67,8 +67,11 @@ class ChunkLightmap {
 		u8 getSunlight(int x, int y, int z) const;
 		u8 getTorchlight(int x, int y, int z) const;
 
-		void setLightData(int x, int y, int z, u8 val);
+		bool setLightData(int x, int y, int z, u8 val);
 		void setSunlight(int x, int y, int z, u8 val);
+
+		bool hasChanged() const { return m_hasChanged; }
+		void resetChangedFlag() { m_hasChanged = false; }
 
 	private:
 		void setTorchlight(int x, int y, int z, u8 val);
@@ -84,6 +87,8 @@ class ChunkLightmap {
 		std::queue<LightNode> m_sunlightBfsQueue;
 		std::queue<LightRemovalNode> m_torchlightRemovalBfsQueue;
 		std::queue<LightRemovalNode> m_sunlightRemovalBfsQueue;
+
+		bool m_hasChanged = false;
 };
 
 #endif // CHUNKLIGHTMAP_HPP_

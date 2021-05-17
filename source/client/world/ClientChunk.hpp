@@ -41,9 +41,12 @@ class ClientChunk : public Chunk {
 		ClientChunk(s32 x, s32 y, s32 z, const Dimension &dimension, World &world, TextureAtlas &textureAtlas)
 			: Chunk(x, y, z, world), m_dimension(dimension), m_textureAtlas(textureAtlas), m_builder{textureAtlas} {}
 
-		bool isMeshingTime();
+		// bool isMeshingTime();
 
-		void update();
+		void update() final;
+		void process() final;
+
+		void onBlockPlaced(int x, int y, int z, const Block &block) override;
 
 		void drawLayer(gk::RenderTarget &target, gk::RenderStates states, u8 layer) const;
 
@@ -59,6 +62,8 @@ class ClientChunk : public Chunk {
 		void setHasBeenDrawn(bool hasBeenDrawn) { m_hasBeenDrawn = hasBeenDrawn; }
 
 		bool areAllNeighboursTooFar() const;
+
+		int debugTimesReceived = 0; // FIXME: To remove
 
 		static u32 chunkUpdatesPerSec;
 		static u32 chunkUpdateCounter;

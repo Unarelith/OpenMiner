@@ -25,22 +25,41 @@
  * =====================================================================================
  */
 #include "ClientInfo.hpp"
+#include "Dimension.hpp"
 #include "Network.hpp"
 #include "Player.hpp"
+#include "PlayerList.hpp"
+#include "Server.hpp"
 #include "ServerBlock.hpp"
 #include "ServerChunk.hpp"
 #include "ServerCommandHandler.hpp"
+#include "ServerWorld.hpp"
 #include "World.hpp"
 
-ServerChunk::ServerChunk(s32 x, s32 y, s32 z, World &world) : Chunk(x, y, z, world) {
+ServerChunk::ServerChunk(s32 x, s32 y, s32 z, ServerWorld &world) : Chunk(x, y, z, world), m_world(world) {
 	m_random.seed(std::time(nullptr));
 }
 
-void ServerChunk::updateLights() {
-	if (m_lightmap.updateLights() || m_hasChanged || m_hasLightChanged) {
-		m_isSent = false;
+void ServerChunk::update() {
+	bool lightUpdated = m_lightmap.updateLights();
+	if (lightUpdated || m_hasChanged || m_lightmap.hasChanged()) {
+		if (m_x == 0 && m_y == -9 && m_z == 2)
+			gkDebug() << lightUpdated << m_hasChanged << m_lightmap.hasChanged();
+
 		m_hasChanged = false;
-		m_hasLightChanged = false;
+		m_lightmap.resetChangedFlag();
+
+		if (m_isInitialized)
+			m_world.addChunkToProcess(this);
+	}
+}
+
+void ServerChunk::process() {
+	for (auto &client : m_world.server()->server().info().clients()) {
+		const ServerPlayer *player = m_world.players().getPlayer(client.playerName);
+		bool isChunkLoaded = player->isChunkLoaded({m_x, m_y, m_z});
+		if (player->isReady() && isChunkLoaded && player->dimension() == m_world.dimension().id())
+			sendData(client);
 	}
 }
 
@@ -67,7 +86,7 @@ void ServerChunk::onBlockDestroyed(int x, int y, int z, const Block &block) {
 	m_hasBeenModified = true;
 }
 
-void ServerChunk::tick(World &world, ServerCommandHandler &server) {
+void ServerChunk::tick() {
 	if (!m_tickingBlocks.empty()) {
 		for (auto &it : m_tickingBlocks) {
 			if (!it.second.isTickingRandomly() || m_random.get<bool>(it.second.tickProbability())) {
@@ -77,13 +96,13 @@ void ServerChunk::tick(World &world, ServerCommandHandler &server) {
 						it.first.y + m_y * depth,
 						it.first.z + m_z * height
 					},
-				*this, (ServerWorld &)world, server);
+				*this, m_world, *m_world.server());
 			}
 		}
 	}
 }
 
-void ServerChunk::sendData(const ClientInfo &client, ServerCommandHandler &server) {
+void ServerChunk::sendData(const ClientInfo &client) {
 	Network::Packet packet;
 	packet << Network::Command::ChunkData;
 	packet << m_x << m_y << m_z;
@@ -99,16 +118,14 @@ void ServerChunk::sendData(const ClientInfo &client, ServerCommandHandler &serve
 					s32 globalY = y + m_y * CHUNK_DEPTH;
 					s32 globalZ = z + m_z * CHUNK_HEIGHT;
 
-					server.sendBlockDataUpdate(globalX, globalY, globalZ, blockData, &client);
-					server.sendBlockInvUpdate(globalX, globalY, globalZ, blockData->inventory, &client);
+					m_world.server()->sendBlockDataUpdate(globalX, globalY, globalZ, blockData, &client);
+					m_world.server()->sendBlockInvUpdate(globalX, globalY, globalZ, blockData->inventory, &client);
 				}
 			}
 		}
 	}
 
 	client.tcpSocket->send(packet);
-	m_hasChanged = false;
-	m_isSent = true;
 
 	// gkDebug() << "Chunk at" << chunk.x() << chunk.y() << chunk.z() << "sent to client";
 }
