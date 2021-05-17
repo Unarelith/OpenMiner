@@ -59,7 +59,7 @@ class ServerWorld : public World {
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
 
-		void generateChunk(ServerChunk &chunk);
+		bool generateChunk(ServerChunk &chunk);
 
 		const PlayerList &players() const { return m_players; }
 		const Dimension &dimension() const { return m_dimension; }
@@ -78,6 +78,8 @@ class ServerWorld : public World {
 		static void initUsertype(sol::state &lua);
 
 	private:
+		void processSendRequests();
+
 		PlayerList &m_players;
 
 		const Dimension &m_dimension;
