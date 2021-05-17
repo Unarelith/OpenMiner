@@ -54,22 +54,10 @@ void ClientWorld::update(bool allowWorldReload) {
 		ClientChunk::chunkUpdateTime = time;
 	}
 
-	// FIXME
-	// Update loaded chunks
-	// std::list<gk::Vector3i> chunksToRemove;
-	// for (auto &it : m_chunks) {
-	// 	if (World::isReloadRequested && allowWorldReload)
-	// 		it.second->setChanged(true);
-    //
-	// 	if (it.second->isReadyForMeshing())
-	// 		it.second->update();
-    //
-	// 	if (it.second->isTooFar() && !it.second->isInitialized())
-	// 		chunksToRemove.emplace_back(gk::Vector3i{it.second->x(), it.second->y(), it.second->z()});
-	// }
-    //
-	// for (auto &it : chunksToRemove)
-	// 	removeChunk(it);
+	for (auto it = m_chunksToRemove.begin() ; it != m_chunksToRemove.end() ;) {
+		removeChunk(*it);
+		it = m_chunksToRemove.erase(it);
+	}
 
 	if (allowWorldReload) {
 		if (World::isReloadRequested) {
@@ -317,8 +305,12 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 		// Nope, too far, don't render it
 		if(glm::length(center) > (Config::renderDistance + 1) * CHUNK_WIDTH) {
-			if(floor(glm::length(center)) > (Config::renderDistance + 3) * CHUNK_WIDTH)
+			if(floor(glm::length(center)) > (Config::renderDistance + 2) * CHUNK_WIDTH) {
 				it.second->setTooFar(true);
+
+				if (!it.second->isInitialized())
+					m_chunksToRemove.emplace(gk::Vector3i{it.second->x(), it.second->y(), it.second->z()});
+			}
 
 			continue;
 		}
