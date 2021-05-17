@@ -57,12 +57,15 @@ class Chunk : public gk::NonCopyable {
 		Chunk(s32 x, s32 y, s32 z, World &world);
 		virtual ~Chunk() = default;
 
+		virtual void update() = 0;
+		virtual void process() = 0;
+
 		u16 getBlock(int x, int y, int z) const;
 		u16 getData(int x, int y, int z) const;
 		void setBlock(int x, int y, int z, u16 type);
-		void setData(int x, int y, int z, u16 data);
+		bool setData(int x, int y, int z, u16 data);
 
-		void setBlockRaw(int x, int y, int z, u16 block);
+		bool setBlockRaw(int x, int y, int z, u16 block);
 
 		const BlockState *getBlockState(int x, int y, int z) const;
 		void setBlockState(int x, int y, int z, u16 stateID);
@@ -83,17 +86,13 @@ class Chunk : public gk::NonCopyable {
 		const Chunk *getSurroundingChunk(u8 i) const { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
 		void setSurroundingChunk(u8 i, Chunk *chunk) { if (i < 6) m_surroundingChunks[i] = chunk; }
 
-		bool areAllNeighboursLoaded() const;
+		// bool areAllNeighboursLoaded() const;
 		bool areAllNeighboursInitialized() const;
-
-		bool hasChanged() const { return m_hasChanged; }
-		void setChanged(bool hasChanged) { m_hasChanged = hasChanged; }
-
-		bool hasLightChanged() const { return m_hasLightChanged; }
-		void setLightChanged(bool hasLightChanged) { m_hasLightChanged = hasLightChanged; }
 
 		bool isInitialized() const { return m_isInitialized; }
 		void setInitialized(bool isInitialized) { m_isInitialized = isInitialized; }
+
+		void setChanged() { m_hasChanged = true; }
 
 		ChunkLightmap &lightmap() { return m_lightmap; }
 		const ChunkLightmap &lightmap() const { return m_lightmap; }
@@ -123,9 +122,8 @@ class Chunk : public gk::NonCopyable {
 
 		Chunk *m_surroundingChunks[6]{nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 
-		std::atomic_bool m_hasChanged{false};
-		std::atomic_bool m_hasLightChanged{false};
-		std::atomic_bool m_isInitialized{false};
+		bool m_isInitialized = false;
+		bool m_hasChanged = false;
 
 		std::unordered_map<gk::Vector3i, std::unique_ptr<BlockData>> m_blockData;
 };

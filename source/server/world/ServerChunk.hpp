@@ -27,8 +27,6 @@
 #ifndef SERVERCHUNK_HPP_
 #define SERVERCHUNK_HPP_
 
-#include <atomic>
-
 #include <gk/core/IntTypes.hpp>
 
 #include <random.hpp>
@@ -39,24 +37,22 @@ using Random_t = effolkronium::random_local;
 
 class ClientInfo;
 class ServerBlock;
-class ServerCommandHandler;
 class ServerPlayer;
+class ServerWorld;
 
 class ServerChunk : public Chunk {
 	public:
-		ServerChunk(s32 x, s32 y, s32 z, World &world);
+		ServerChunk(s32 x, s32 y, s32 z, ServerWorld &world);
 
-		void updateLights();
+		void update() final;
+		void process() final;
 
 		void onBlockPlaced(int x, int y, int z, const Block &block) override;
 		void onBlockDestroyed(int x, int y, int z, const Block &block) override;
 
-		void tick(World &world, ServerCommandHandler &server);
+		void tick();
 
-		void sendData(const ClientInfo &client, ServerCommandHandler &server);
-
-		bool isSent() const { return m_isSent; }
-		void setSent(bool isSent) { m_isSent = isSent; }
+		void sendData(const ClientInfo &client);
 
 		bool hasBeenModified() const { return m_hasBeenModified; }
 		void setModified(bool hasBeenModified) { m_hasBeenModified = hasBeenModified; }
@@ -64,8 +60,9 @@ class ServerChunk : public Chunk {
 		void addTickingBlock(int x, int y, int z, const ServerBlock &block) { m_tickingBlocks.emplace(gk::Vector3i{x, y, z}, block); }
 
 	private:
-		std::atomic_bool m_isSent{false};
-		std::atomic_bool m_hasBeenModified{false};
+		ServerWorld &m_world;
+
+		bool m_hasBeenModified = false;
 
 		Random_t m_random;
 

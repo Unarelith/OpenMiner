@@ -31,6 +31,7 @@
 #include "Chunk.hpp"
 #include "ChunkLightmap.hpp"
 #include "Registry.hpp"
+#include "World.hpp"
 
 ChunkLightmap::ChunkLightmap(Chunk *chunk) : m_chunk(chunk) {
 	std::memset(m_lightMap, 0, sizeof(m_lightMap));
@@ -274,14 +275,17 @@ u8 ChunkLightmap::getTorchlight(int x, int y, int z) const {
 	return m_lightMap[z][y][x] & 0xf;
 }
 
-void ChunkLightmap::setLightData(int x, int y, int z, u8 val) {
-	if (m_lightMap[z][y][x] != val) {
-		m_lightMap[z][y][x] = val;
+bool ChunkLightmap::setLightData(int x, int y, int z, u8 val) {
+	if (m_lightMap[z][y][x] == val) return false;
 
-		m_chunk->setLightChanged(true);
+	m_lightMap[z][y][x] = val;
 
-		updateSurroundingChunks(x, y, z);
-	}
+	m_hasChanged = true;
+	m_chunk->world().addChunkToUpdate(m_chunk);
+
+	updateSurroundingChunks(x, y, z);
+
+	return true;
 }
 
 void ChunkLightmap::setSunlight(int x, int y, int z, u8 val) {
@@ -295,7 +299,8 @@ void ChunkLightmap::setSunlight(int x, int y, int z, u8 val) {
 	if ((m_lightMap[z][y][x] & 0xf0) != (val << 4)) {
 		m_lightMap[z][y][x] = (m_lightMap[z][y][x] & 0xf) | (val << 4);
 
-		m_chunk->setLightChanged(true);
+		m_hasChanged = true;
+		m_chunk->world().addChunkToUpdate(m_chunk);
 
 		updateSurroundingChunks(x, y, z);
 	}
@@ -312,18 +317,30 @@ void ChunkLightmap::setTorchlight(int x, int y, int z, u8 val) {
 	if ((m_lightMap[z][y][x] & 0xf) != val << 4) {
 		m_lightMap[z][y][x] = (m_lightMap[z][y][x] & 0xf0) | val;
 
-		m_chunk->setLightChanged(true);
+		m_hasChanged = true;
+		m_chunk->world().addChunkToUpdate(m_chunk);
+
+		// if (m_chunk->x() == 0 && m_chunk->y() == -9 && m_chunk->z() == 2)
+		// 	gkDebug() << "setTorchlight" << x << y << z << val;
 
 		updateSurroundingChunks(x, y, z);
 	}
 }
 
 void ChunkLightmap::updateSurroundingChunks(int x, int y, int z) {
-	if(x == 0                && m_chunk->getSurroundingChunk(Chunk::West))   { m_chunk->getSurroundingChunk(Chunk::West)->setLightChanged(true); }
-	if(x == CHUNK_WIDTH - 1  && m_chunk->getSurroundingChunk(Chunk::East))  { m_chunk->getSurroundingChunk(Chunk::East)->setLightChanged(true); }
-	if(y == 0                && m_chunk->getSurroundingChunk(Chunk::Bottom)) { m_chunk->getSurroundingChunk(Chunk::Bottom)->setLightChanged(true); }
-	if(y == CHUNK_DEPTH - 1  && m_chunk->getSurroundingChunk(Chunk::Top))    { m_chunk->getSurroundingChunk(Chunk::Top)->setLightChanged(true); }
-	if(z == 0                && m_chunk->getSurroundingChunk(Chunk::South))  { m_chunk->getSurroundingChunk(Chunk::South)->setLightChanged(true); }
-	if(z == CHUNK_HEIGHT - 1 && m_chunk->getSurroundingChunk(Chunk::North))   { m_chunk->getSurroundingChunk(Chunk::North)->setLightChanged(true); }
+	auto addSurroundingChunkToUpdate = [this](u8 i) {
+		Chunk *surroundingChunk = m_chunk->getSurroundingChunk(i);
+		if (surroundingChunk) {
+			// surroundingChunk->lightmap().m_hasChanged = true;
+			m_chunk->world().addChunkToUpdate(surroundingChunk);
+		}
+	};
+
+	if(x == 0               ) addSurroundingChunkToUpdate(Chunk::West);
+	if(x == CHUNK_WIDTH  - 1) addSurroundingChunkToUpdate(Chunk::East);
+	if(y == 0               ) addSurroundingChunkToUpdate(Chunk::Bottom);
+	if(y == CHUNK_DEPTH  - 1) addSurroundingChunkToUpdate(Chunk::Top);
+	if(z == 0               ) addSurroundingChunkToUpdate(Chunk::South);
+	if(z == CHUNK_HEIGHT - 1) addSurroundingChunkToUpdate(Chunk::North);
 }
 

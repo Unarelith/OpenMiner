@@ -45,24 +45,42 @@ ClientWorld::ClientWorld() : m_textureAtlas(gk::ResourceHandler::getInstance().g
 }
 
 void ClientWorld::update(bool allowWorldReload) {
-	// Update loaded chunks
-	std::list<gk::Vector3i> chunksToRemove;
-	for (auto &it : m_chunks) {
-		if (World::isReloadRequested && allowWorldReload)
-			it.second->setChanged(true);
+	World::update();
 
-		if (it.second->isReadyForMeshing())
-			it.second->update();
-
-		if (it.second->isTooFar() && !it.second->isInitialized())
-			chunksToRemove.emplace_back(gk::Vector3i{it.second->x(), it.second->y(), it.second->z()});
+	u64 time = std::time(nullptr);
+	if (time > ClientChunk::chunkUpdateTime) {
+		ClientChunk::chunkUpdatesPerSec = ClientChunk::chunkUpdateCounter;
+		ClientChunk::chunkUpdateCounter = 0;
+		ClientChunk::chunkUpdateTime = time;
 	}
 
-	for (auto &it : chunksToRemove)
-		removeChunk(it);
+	// FIXME
+	// Update loaded chunks
+	// std::list<gk::Vector3i> chunksToRemove;
+	// for (auto &it : m_chunks) {
+	// 	if (World::isReloadRequested && allowWorldReload)
+	// 		it.second->setChanged(true);
+    //
+	// 	if (it.second->isReadyForMeshing())
+	// 		it.second->update();
+    //
+	// 	if (it.second->isTooFar() && !it.second->isInitialized())
+	// 		chunksToRemove.emplace_back(gk::Vector3i{it.second->x(), it.second->y(), it.second->z()});
+	// }
+    //
+	// for (auto &it : chunksToRemove)
+	// 	removeChunk(it);
 
-	if (allowWorldReload)
-		World::isReloadRequested = false;
+	if (allowWorldReload) {
+		if (World::isReloadRequested) {
+			for (auto &[pos, chunk] : m_chunks) {
+				chunk->setChanged();
+				addChunkToUpdate(chunk.get());
+			}
+
+			World::isReloadRequested = false;
+		}
+	}
 
 	requestClosestChunkMeshing();
 
@@ -80,6 +98,8 @@ void ClientWorld::requestClosestChunkMeshing() {
 		ClientChunk *chunk = (ClientChunk *)getChunk(ux, uy, uz);
 		if(chunk && !chunk->isReadyForMeshing()) {
 			chunk->setReadyForMeshing(true);
+			chunk->setChanged();
+			addChunkToUpdate(chunk);
 
 			// gkDebug() << "Chunk at" << ux << uy << uz << "is ready for meshing";
 		}
@@ -128,6 +148,7 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 	createChunkNeighbours(chunk);
 
 	// Receive chunk data
+	bool hasUpdatedChunk = false;
 	for (u16 z = 0 ; z < CHUNK_HEIGHT ; ++z) {
 		for (u16 y = 0 ; y < CHUNK_DEPTH ; ++y) {
 			for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
@@ -136,23 +157,38 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 
 				packet >> block >> light;
 
-				chunk->setBlockRaw(x, y, z, block & 0xffff);
-				chunk->setData(x, y, z, block >> 16);
-				chunk->lightmap().setLightData(x, y, z, light);
+				bool updatedBlock = chunk->setBlockRaw(x, y, z, block & 0xffff);
+				bool updatedData = chunk->setData(x, y, z, block >> 16);
+				bool updatedLight = chunk->lightmap().setLightData(x, y, z, light);
+				if (updatedBlock || updatedData || updatedLight)
+					hasUpdatedChunk = true;
 			}
 		}
 	}
 
-	if (!chunk->isInitialized()) {
-		chunk->getSurroundingChunk(0)->setChanged(true);
-		chunk->getSurroundingChunk(1)->setChanged(true);
-		chunk->getSurroundingChunk(2)->setChanged(true);
-		chunk->getSurroundingChunk(3)->setChanged(true);
-		chunk->getSurroundingChunk(4)->setChanged(true);
-		chunk->getSurroundingChunk(5)->setChanged(true);
-	}
+	if (!hasUpdatedChunk)
+		gkWarning() << "Received chunk at" << cx << cy << cz << "without any updates";
 
-	chunk->setInitialized(true);
+	++chunk->debugTimesReceived;
+
+	if (!chunk->isInitialized()) {
+		auto addSurroundingChunkToUpdate = [this, chunk](u8 i) {
+			Chunk *surroundingChunk = chunk->getSurroundingChunk(i);
+			if (surroundingChunk) {
+				surroundingChunk->setChanged();
+				addChunkToUpdate(surroundingChunk);
+			}
+		};
+
+		addSurroundingChunkToUpdate(0);
+		addSurroundingChunkToUpdate(1);
+		addSurroundingChunkToUpdate(2);
+		addSurroundingChunkToUpdate(3);
+		addSurroundingChunkToUpdate(4);
+		addSurroundingChunkToUpdate(5);
+
+		chunk->setInitialized(true);
+	}
 
 	if (m_eventHandler)
 		m_eventHandler->emplaceEvent<ChunkCreatedEvent>(gk::Vector3i{cx, cy, cz}, true);

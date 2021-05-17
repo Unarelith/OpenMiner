@@ -32,6 +32,7 @@
 #include <gk/graphics/RectangleShape.hpp>
 
 #include "Events.hpp"
+#include "Text.hpp"
 
 class ClientPlayer;
 
@@ -52,7 +53,7 @@ class Minimap : public gk::Drawable, public gk::Transformable {
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		std::unordered_map<gk::Vector3i, gk::RectangleShape> m_chunks;
+		std::unordered_map<gk::Vector3i, std::pair<gk::RectangleShape, Text>> m_chunks;
 
 		gk::RectangleShape m_border;
 

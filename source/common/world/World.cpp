@@ -34,6 +34,21 @@
 
 bool World::isReloadRequested = false;
 
+void World::update() {
+	while (!m_chunkUpdateQueue.empty()) {
+		m_chunkUpdateQueue.front()->update();
+		m_chunkUpdateQueue.pop();
+	}
+
+	while (!m_chunkProcessQueue.empty()) {
+		m_chunkProcessQueue.front()->process();
+		m_chunkProcessQueue.pop();
+	}
+
+	m_chunksToUpdate.clear();
+	m_chunksToProcess.clear();
+}
+
 Chunk *World::getChunkAtBlockPos(int x, int y, int z) const {
 	return getChunk(
 		(x & -CHUNK_WIDTH)  / CHUNK_WIDTH,
