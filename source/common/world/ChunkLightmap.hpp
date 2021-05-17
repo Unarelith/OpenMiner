@@ -54,29 +54,29 @@ class ChunkLightmap {
 	public:
 		ChunkLightmap(Chunk *chunk);
 
-		void addTorchlight(int x, int y, int z, int val);
-		void addSunlight(int x, int y, int z, int val);
-		void removeTorchlight(int x, int y, int z);
-		void removeSunlight(int x, int y, int z);
+		bool addTorchlight(int x, int y, int z, int val);
+		bool addSunlight(int x, int y, int z, int val);
+		bool removeTorchlight(int x, int y, int z);
+		bool removeSunlight(int x, int y, int z);
 
-		bool updateLights();
-		bool updateTorchlight();
-		bool updateSunlight();
+		void updateLights();
+		void updateTorchlight();
+		void updateSunlight();
 
 		u8 getLightData(int x, int y, int z) const { return m_lightMap[z][y][x]; }
 		u8 getSunlight(int x, int y, int z) const;
 		u8 getTorchlight(int x, int y, int z) const;
 
 		bool setLightData(int x, int y, int z, u8 val);
-		void setSunlight(int x, int y, int z, u8 val);
+		bool setSunlight(int x, int y, int z, u8 val);
 
 		bool hasChanged() const { return m_hasChanged; }
 		void resetChangedFlag() { m_hasChanged = false; }
 
 	private:
-		void setTorchlight(int x, int y, int z, u8 val);
+		bool setTorchlight(int x, int y, int z, u8 val);
 
-		void updateSurroundingChunks(int x, int y, int z);
+		// void updateSurroundingChunks(int x, int y, int z);
 
 		Chunk *m_chunk = nullptr;
 

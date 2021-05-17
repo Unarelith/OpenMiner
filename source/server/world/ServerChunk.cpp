@@ -41,10 +41,10 @@ ServerChunk::ServerChunk(s32 x, s32 y, s32 z, ServerWorld &world) : Chunk(x, y, 
 }
 
 void ServerChunk::update() {
-	bool lightUpdated = m_lightmap.updateLights();
-	if (lightUpdated || m_hasChanged || m_lightmap.hasChanged()) {
-		if (m_x == 0 && m_y == -9 && m_z == 2)
-			gkDebug() << lightUpdated << m_hasChanged << m_lightmap.hasChanged();
+	m_lightmap.updateLights();
+
+	if (m_hasChanged || m_lightmap.hasChanged()) {
+		// gkDebug() << "Chunk update at" << m_x << m_y << m_z << "| D:" << m_hasChanged << "| L:" << m_lightmap.hasChanged();
 
 		m_hasChanged = false;
 		m_lightmap.resetChangedFlag();
