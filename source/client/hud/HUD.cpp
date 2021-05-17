@@ -39,7 +39,8 @@ HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 	m_hotbar(player, client),
 	m_blockCursor(player, world, client),
 	m_debugOverlay(player, world),
-	m_chat(client.client())
+	m_chat(client.client()),
+	m_debugLightmapViewer(player)
 {
 	setScale(Config::guiScale, Config::guiScale, 1);
 
@@ -65,6 +66,8 @@ void HUD::setup() {
 	m_chat.setPosition(2, Config::screenHeight / Config::guiScale - 50);
 
 	m_minimap.setPosition(Config::screenWidth / Config::guiScale - Minimap::minimapSize - 15, 15);
+
+	m_debugLightmapViewer.setPosition(0, Config::screenHeight / Config::guiScale - DebugLightmapViewer::totalSize);
 }
 
 void HUD::onEvent(const SDL_Event &event) {
@@ -105,6 +108,9 @@ void HUD::update() {
 
 	if (Config::isChunkMinimapEnabled)
 		m_minimap.update(m_player, m_world);
+
+	if (Config::isLightmapViewerEnabled)
+		m_debugLightmapViewer.update(m_world);
 }
 
 void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -131,6 +137,9 @@ void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	if (Config::isChunkMinimapEnabled)
 		target.draw(m_minimap, states);
+
+	if (Config::isLightmapViewerEnabled)
+		target.draw(m_debugLightmapViewer, states);
 
 	target.draw(m_chat, states);
 

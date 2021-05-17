@@ -319,6 +319,7 @@ void SettingsMenuState::addDebugButtons() {
 	m_menuWidget.reset(1, 8);
 
 	addToggleButton("Show chunk minimap", Config::isChunkMinimapEnabled, false);
+	addToggleButton("Show lightmap viewer", Config::isLightmapViewerEnabled, false);
 
 	updateWidgetPosition();
 }

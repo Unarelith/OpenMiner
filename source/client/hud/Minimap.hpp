@@ -27,8 +27,6 @@
 #ifndef MINIMAP_HPP_
 #define MINIMAP_HPP_
 
-#include <gk/gl/Drawable.hpp>
-#include <gk/gl/Transformable.hpp>
 #include <gk/graphics/RectangleShape.hpp>
 
 #include "Events.hpp"

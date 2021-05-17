@@ -43,11 +43,7 @@ Minimap::Minimap() {
 }
 
 void Minimap::update(const ClientPlayer &player, class ClientWorld &world) {
-	m_playerChunkPos = gk::Vector3i{
-		((int)player.x() & -CHUNK_WIDTH)  / CHUNK_WIDTH,
-		((int)player.y() & -CHUNK_DEPTH)  / CHUNK_DEPTH,
-		((int)player.z() & -CHUNK_HEIGHT) / CHUNK_HEIGHT
-	};
+	m_playerChunkPos = player.getCurrentChunk();
 
 	m_playerChunk.setPosition(m_playerChunkPos.x * (chunkSize + 2), -m_playerChunkPos.y * (chunkSize + 2));
 
