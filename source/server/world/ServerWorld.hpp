@@ -95,7 +95,16 @@ class ServerWorld : public World {
 
 		s32 m_seed = 0;
 
-		std::queue<std::pair<gk::Vector3i, ServerPlayer &>> m_chunksToSend;
+		struct ChunkSendRequest {
+			ChunkSendRequest(const gk::Vector3i &chunkPos_, ServerPlayer &player_, u64 timestamp_)
+				: chunkPos(chunkPos_), player(player_), timestamp(timestamp_) {}
+
+			gk::Vector3i chunkPos;
+			ServerPlayer &player;
+			u64 timestamp;
+		};
+
+		std::queue<ChunkSendRequest> m_chunkSendRequestQueue;
 };
 
 #endif // SERVERWORLD_HPP_
