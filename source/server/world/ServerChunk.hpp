@@ -57,12 +57,15 @@ class ServerChunk : public Chunk {
 		bool hasBeenModified() const { return m_hasBeenModified; }
 		void setModified(bool hasBeenModified) { m_hasBeenModified = hasBeenModified; }
 
+		void setReadyToSend() { m_isReadyToSend = true; }
+
 		void addTickingBlock(int x, int y, int z, const ServerBlock &block) { m_tickingBlocks.emplace(gk::Vector3i{x, y, z}, block); }
 
 	private:
 		ServerWorld &m_world;
 
 		bool m_hasBeenModified = false;
+		bool m_isReadyToSend = false;
 
 		Random_t m_random;
 
