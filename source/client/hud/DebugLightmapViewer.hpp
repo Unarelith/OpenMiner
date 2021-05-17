@@ -24,67 +24,35 @@
  *
  * =====================================================================================
  */
-#ifndef HUD_HPP_
-#define HUD_HPP_
+#ifndef DEBUGLIGHTMAPVIEWER_HPP_
+#define DEBUGLIGHTMAPVIEWER_HPP_
 
-#include <gk/gl/Shader.hpp>
+#include <gk/graphics/RectangleShape.hpp>
 
-#include "BlockCursor.hpp"
-#include "BlockInfoWidget.hpp"
-#include "Chat.hpp"
-#include "Crosshair.hpp"
-#include "DebugLightmapViewer.hpp"
-#include "DebugOverlay.hpp"
-#include "Hotbar.hpp"
-#include "Minimap.hpp"
+#include "EngineConfig.hpp"
+#include "Text.hpp"
 
-struct GuiScaleChangedEvent;
+class ClientPlayer;
+class ClientWorld;
 
-class HUD : public gk::Transformable, public gk::Drawable {
+class DebugLightmapViewer : public gk::Transformable, public gk::Drawable {
 	public:
-		HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client);
+		DebugLightmapViewer(const ClientPlayer &player);
 
-		void setup();
+		void update(const ClientWorld &world);
 
-		void onEvent(const SDL_Event &event);
-		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
-
-		void update();
-
-		void pause() { m_blockCursor.reset(); }
-
-		const BlockCursor &blockCursor() const { return m_blockCursor; }
-
-		Chat &chat() { return m_chat; }
-
-		Minimap &minimap() { return m_minimap; }
+		static constexpr s32 totalSize = CHUNK_WIDTH * 8;
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		ClientPlayer &m_player;
-		ClientWorld &m_world;
+		const ClientPlayer &m_player;
 
-		gk::Shader m_shader;
-		glm::mat4 m_orthoMatrix;
+		Text m_chunkLightmapValues[CHUNK_WIDTH][CHUNK_DEPTH][CHUNK_HEIGHT];
 
-		Hotbar m_hotbar;
+		std::optional<gk::Vector3i> m_playerChunkPos;
 
-		BlockCursor m_blockCursor;
-		Crosshair m_crosshair;
-
-		DebugOverlay m_debugOverlay;
-		bool m_isDebugOverlayVisible = false;
-
-		BlockInfoWidget m_blockInfoWidget;
-
-		Text m_fpsText;
-
-		Chat m_chat;
-
-		Minimap m_minimap;
-
-		DebugLightmapViewer m_debugLightmapViewer;
+		gk::RectangleShape m_playerRect;
 };
 
-#endif // HUD_HPP_
+#endif // DEBUGLIGHTMAPVIEWER_HPP_

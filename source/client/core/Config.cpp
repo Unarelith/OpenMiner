@@ -67,6 +67,7 @@ u8 Config::mouseSensitivity = 8;
 
 // Debug
 bool Config::isChunkMinimapEnabled = false;
+bool Config::isLightmapViewerEnabled = false;
 
 // Other
 std::string Config::defaultUsername = "";
@@ -110,6 +111,7 @@ void Config::loadConfigFromFile(const char *filename) {
 			mouseSensitivity = lua["mouseSensitivity"].get_or(mouseSensitivity);
 
 			isChunkMinimapEnabled = lua["isChunkMinimapEnabled"].get_or(isChunkMinimapEnabled);
+			isLightmapViewerEnabled = lua["isLightmapViewerEnabled"].get_or(isLightmapViewerEnabled);
 
 			defaultUsername = lua["defaultUsername"].get_or(defaultUsername);
 			defaultServerAddress = lua["defaultServerAddress"].get_or(defaultServerAddress);
@@ -150,6 +152,7 @@ void Config::saveConfigToFile(const char *filename) {
 	file << "mouseSensitivity = " << (u16)mouseSensitivity << std::endl;
 	file << std::endl;
 	file << "isChunkMinimapEnabled = " << (isChunkMinimapEnabled ? "true" : "false") << std::endl;
+	file << "isLightmapViewerEnabled = " << (isLightmapViewerEnabled ? "true" : "false") << std::endl;
 	file << std::endl;
 	file << "defaultUsername = \"" << defaultUsername << "\"" << std::endl;
 	file << "defaultServerAddress = \"" << defaultServerAddress << "\"" << std::endl;

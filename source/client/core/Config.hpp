@@ -62,6 +62,7 @@ namespace Config {
 
 	// Debug
 	extern bool isChunkMinimapEnabled;
+	extern bool isLightmapViewerEnabled;
 
 	// Other
 	extern std::string defaultUsername;
