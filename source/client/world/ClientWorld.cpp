@@ -84,7 +84,7 @@ void ClientWorld::requestClosestChunkMeshing() {
 	// If we have a chunk marked for initialization
 	if (ud < 1000000.0) {
 		ClientChunk *chunk = (ClientChunk *)getChunk(ux, uy, uz);
-		if(chunk && !chunk->isReadyForMeshing()) {
+		if(chunk && !chunk->isReadyForMeshing() && chunk->areAllNeighboursInitialized()) {
 			chunk->setReadyForMeshing(true);
 			chunk->setChanged();
 			addChunkToUpdate(chunk);

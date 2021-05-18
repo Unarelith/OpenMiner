@@ -56,11 +56,13 @@ void ClientChunk::update() {
 }
 
 void ClientChunk::process() {
-	m_verticesCount = m_builder.buildChunk(*this, m_vbo);
+	if (m_isReadyForMeshing) {
+		m_verticesCount = m_builder.buildChunk(*this, m_vbo);
 
-	++ClientChunk::chunkUpdateCounter;
+		++ClientChunk::chunkUpdateCounter;
 
-	m_lastMeshingTime = gk::GameClock::getInstance().getTicks(true);
+		m_lastMeshingTime = gk::GameClock::getInstance().getTicks(true);
+	}
 }
 
 void ClientChunk::onBlockPlaced(int x, int y, int z, const Block &) {
