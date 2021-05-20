@@ -303,10 +303,11 @@ void ClientCommandHandler::setupCallbacks() {
 
 		if (clientId == m_client.id()) {
 			m_player.setDimension(dimension);
-			m_player.setPosition(x, y, z);
+			m_player.setPosition(x + 0.5, y + 0.5, z + 0.5);
 			m_world.clear();
 			m_world.changeDimension(dimension);
 			m_entityMap.clear();
+			sendPlayerChunkPosUpdate();
 		}
 	});
 

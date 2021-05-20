@@ -241,8 +241,6 @@ mod:block {
 		}
 
 		server:send_player_change_dimension(client.id, pos.x, pos.y, pos.z, dim, client)
-		player:set_dimension(dim)
-		-- player:set_position(pos.x, pos.y, pos.z)
 	end,
 }
 

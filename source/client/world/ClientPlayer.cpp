@@ -163,10 +163,6 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 }
 
 void ClientPlayer::setPosition(double x, double y, double z) {
-	m_x = x;
-	m_y = y;
-	m_z = z;
-
 	Player::setPosition(x, y, z);
 
 	gk::Vector3f camPos = m_cameraLocalPos;

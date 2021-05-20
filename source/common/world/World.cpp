@@ -116,6 +116,17 @@ void World::setData(int x, int y, int z, u16 data) const {
 		chunk->setData(x & (CHUNK_WIDTH - 1), y & (CHUNK_DEPTH - 1), z & (CHUNK_HEIGHT - 1), data);
 }
 
+void World::clearUpdateQueues() {
+	while (!m_chunkUpdateQueue.empty())
+		m_chunkUpdateQueue.pop();
+
+	while (!m_chunkProcessQueue.empty())
+		m_chunkProcessQueue.pop();
+
+	m_chunksToUpdate.clear();
+	m_chunksToProcess.clear();
+}
+
 // Please update 'docs/lua-api-cpp.md' if you change this
 void World::initUsertype(sol::state &lua) {
 	lua.new_usertype<World>("World",
