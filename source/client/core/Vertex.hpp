@@ -40,15 +40,15 @@ struct Vertex {
 
 namespace VertexAttribute {
 	enum {
-		Coord3d          = 3,
-		TexCoord         = 4,
-		Color            = 5,
-		Normal           = 6,
-		LightValue       = 7,
-		AmbientOcclusion = 8,
+		Coord3d          = 8,
+		TexCoord         = 16,
+		Color            = 32,
+		Normal           = 64,
+		LightValue       = 128,
+		AmbientOcclusion = 256,
 
-		Basic            = (1 << Coord3d) | (1 << TexCoord) | (1 << Color),
-		All              = Basic | (1 << Normal) | (1 << LightValue) | (1 << AmbientOcclusion)
+		Basic            = Coord3d | TexCoord | Color,
+		All              = Basic | Normal | LightValue | AmbientOcclusion
 	};
 }
 
