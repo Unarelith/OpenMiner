@@ -111,6 +111,8 @@ void ClientWorld::clear() {
 }
 
 void ClientWorld::changeDimension(u16 dimensionID) {
+	World::clearUpdateQueues();
+
 	const Dimension &dimension = Registry::getInstance().getDimension(dimensionID);
 	m_dimension = &dimension;
 

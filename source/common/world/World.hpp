@@ -72,6 +72,9 @@ class World {
 
 		static bool isReloadRequested;
 
+	protected:
+		void clearUpdateQueues();
+
 	private:
 		std::set<Chunk *> m_chunksToUpdate;
 		std::queue<Chunk *> m_chunkUpdateQueue;

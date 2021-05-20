@@ -140,20 +140,30 @@ void ServerCommandHandler::sendPlayerInvUpdate(u16 clientID, const ClientInfo *c
 }
 
 void ServerCommandHandler::sendPlayerChangeDimension(u16 clientID, s32 x, s32 y, s32 z, u16 dimension, const ClientInfo *client) const {
-	Network::Packet packet;
-	packet << Network::Command::PlayerChangeDimension;
-	packet << clientID << x << y << z << dimension;
+	ServerPlayer *player = m_players.getPlayerFromClientID(clientID);
+	if (player) {
+		Network::Packet packet;
+		packet << Network::Command::PlayerChangeDimension;
+		packet << clientID << x << y << z << dimension;
 
-	if (!client)
-		m_server.sendToAllClients(packet);
+		if (client) {
+			client->tcpSocket->send(packet);
+
+			// FIXME: sendPlayerChangeDimension shouldn't be exposed to Lua
+			//        Instead, there should be a changePlayerDimension function that sends
+			//        the packet above + the entities (instead of doing that here)
+			//        also, it should change player dimension and position accordingly
+			m_worldController.getWorld(dimension).scene().sendEntities(*client);
+
+			player->setPosition(x + 0.5, y + 0.5, z + 0.5);
+			player->setDimension(dimension);
+			player->clearLoadedChunks();
+		}
+		else
+			m_server.sendToAllClients(packet);
+	}
 	else
-		client->tcpSocket->send(packet);
-
-	// FIXME: sendPlayerChangeDimension shouldn't be exposed to Lua
-	//        Instead, there should be a world.changePlayerDimension function that sends
-	//        the packet above + the entities (instead of doing that here)
-	if (client)
-		m_worldController.getWorld(dimension).scene().sendEntities(*client);
+		gkError() << ("Failed to send dimension change for player " + std::to_string(clientID) + ": Player not found").c_str();
 }
 
 void ServerCommandHandler::sendChatMessage(u16 clientID, const std::string &message, const ClientInfo *client) const {

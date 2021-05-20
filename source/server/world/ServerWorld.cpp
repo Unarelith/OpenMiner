@@ -177,6 +177,9 @@ void ServerWorld::processSendRequests() {
 	// u64 chunksTooOld = 0;
 	// u64 startQueueSize = m_chunkSendRequestQueue.size();
 
+	if (!m_chunkSendRequestQueue.empty())
+		gkDebug() << "Processing send requests...";
+
 	u64 start = gk::GameClock::getInstance().getTicks(true);
 	u64 now = start;
 	while (/* now - start < 100 &&  */!m_chunkSendRequestQueue.empty()) {
@@ -251,8 +254,8 @@ void ServerWorld::processSendRequests() {
 		now = gk::GameClock::getInstance().getTicks(true);
 	}
 
-	if (m_dimension.id() == 0 && now - start > 0) {
-		gkDebug() << "Took" << now - start << "ms"
+	if (now - start > 0) {
+		gkDebug() << "Done in" << now - start << "ms for dim" << m_dimension.id()
 			<< "| Gen:" << chunksGenerated
 			<< "| Sent:" << chunksSent;
 			// << "| BTQ:" << chunksBackToQueue
