@@ -35,6 +35,7 @@
 
 #include "Player.hpp"
 
+
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -54,7 +55,12 @@ class ClientPlayer : public Player {
 
 		void updateCamera();
 
+		double maxSpeed = 4;
+
 		void move(float direction);
+
+		void applyVelocity();
+		void applyFriction();
 
 		void processInputs();
 		void updatePosition(const ClientWorld &world);
@@ -64,6 +70,8 @@ class ClientPlayer : public Player {
 		float dirTargetedX() const { return m_forwardDir.x; }
 		float dirTargetedY() const { return m_forwardDir.y; }
 		float dirTargetedZ() const { return m_forwardDir.z; }
+
+		gk::Vector3d inertiaBuffer = gk::Vector3d();
 
 		static ClientPlayer &getInstance() { return *s_instance; }
 		static void setInstance(ClientPlayer *instance) { s_instance = instance; }
