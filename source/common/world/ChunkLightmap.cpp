@@ -73,10 +73,9 @@ bool ChunkLightmap::removeTorchlight(int x, int y, int z) {
 	if(z < 0)             return m_chunk->getSurroundingChunk(4) ? m_chunk->getSurroundingChunk(4)->lightmap().removeTorchlight(x, y, z + CHUNK_HEIGHT): false;
 	if(z >= CHUNK_HEIGHT) return m_chunk->getSurroundingChunk(5) ? m_chunk->getSurroundingChunk(5)->lightmap().removeTorchlight(x, y, z - CHUNK_HEIGHT): false;
 
-	if (!setTorchlight(x, y, z, 0)) return false;
-
 	m_torchlightRemovalBfsQueue.emplace(x, y, z, getTorchlight(x, y, z));
-	return true;
+
+	return setTorchlight(x, y, z, 0);
 }
 
 bool ChunkLightmap::removeSunlight(int x, int y, int z) {
@@ -87,10 +86,9 @@ bool ChunkLightmap::removeSunlight(int x, int y, int z) {
 	if(z < 0)             return m_chunk->getSurroundingChunk(4) ? m_chunk->getSurroundingChunk(4)->lightmap().removeSunlight(x, y, z + CHUNK_HEIGHT): false;
 	if(z >= CHUNK_HEIGHT) return m_chunk->getSurroundingChunk(5) ? m_chunk->getSurroundingChunk(5)->lightmap().removeSunlight(x, y, z - CHUNK_HEIGHT): false;
 
-	if (!setSunlight(x, y, z, 0)) return false;
-
 	m_sunlightRemovalBfsQueue.emplace(x, y, z, getSunlight(x, y, z));
-	return true;
+
+	return setSunlight(x, y, z, 0);
 }
 
 void ChunkLightmap::updateLights() {
