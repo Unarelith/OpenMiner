@@ -27,6 +27,7 @@
 #include <gk/core/GameClock.hpp>
 #include <gk/gl/GLCheck.hpp>
 #include <gk/gl/Texture.hpp>
+#include <gk/gl/Vertex.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "CelestialObject.hpp"
@@ -47,7 +48,7 @@ void CelestialObject::updateVertexBuffer() const {
 		return;
 	}
 
-	Vertex vertices[4] = {
+	gk::Vertex vertices[4] = {
 		// Rectangle vertices
 		{{0,  m_width / 2.f, -m_height / 2.f, -1}},
 		{{0, -m_width / 2.f, -m_height / 2.f, -1}},
@@ -160,7 +161,7 @@ void CelestialObject::draw(gk::RenderTarget &target, gk::RenderStates states) co
 	states.transform.rotateY(-GameTime::getCurrentTime(m_rotationOffset, m_rotationSpeed) * 360.f);
 	states.transform *= getTransform();
 
-	states.vertexAttributes = VertexAttribute::All;
+	states.vertexAttributes = gk::VertexAttribute::All;
 
 	if (m_texture)
 		states.texture = m_texture;
