@@ -138,7 +138,7 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 	createChunkNeighbours(chunk);
 
 	// Receive chunk data
-	bool hasUpdatedChunk = false;
+	// bool hasUpdatedChunk = false;
 	for (u16 z = 0 ; z < CHUNK_HEIGHT ; ++z) {
 		for (u16 y = 0 ; y < CHUNK_DEPTH ; ++y) {
 			for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
@@ -147,17 +147,21 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 
 				packet >> block >> light;
 
-				bool updatedBlock = chunk->setBlockRaw(x, y, z, block & 0xffff);
-				bool updatedData = chunk->setData(x, y, z, block >> 16);
-				bool updatedLight = chunk->lightmap().setLightData(x, y, z, light);
-				if (updatedBlock || updatedData || updatedLight)
-					hasUpdatedChunk = true;
+				chunk->setBlockRaw(x, y, z, block & 0xffff);
+				chunk->setData(x, y, z, block >> 16);
+				chunk->lightmap().setLightData(x, y, z, light);
+
+				// bool updatedBlock = chunk->setBlockRaw(x, y, z, block & 0xffff);
+				// bool updatedData = chunk->setData(x, y, z, block >> 16);
+				// bool updatedLight = chunk->lightmap().setLightData(x, y, z, light);
+				// if (updatedBlock || updatedData || updatedLight)
+				// 	hasUpdatedChunk = true;
 			}
 		}
 	}
 
-	if (!hasUpdatedChunk)
-		gkWarning() << "Received chunk at" << cx << cy << cz << "without any updates";
+	// if (!hasUpdatedChunk)
+	// 	gkWarning() << "Received chunk at" << cx << cy << cz << "without any updates";
 
 	++chunk->debugTimesReceived;
 
