@@ -30,7 +30,6 @@ cp /usr/i686-w64-mingw32/bin/libwinpthread-1.dll deploy/win32/bin/openminer && \
 cp /usr/i686-w64-mingw32/bin/libssp-0.dll deploy/win32/bin/openminer && \
 cp /usr/i686-w64-mingw32/bin/zlib1.dll deploy/win32/bin/openminer && \
 cp /usr/i686-w64-mingw32/bin/libgcc_s_dw2-1.dll deploy/win32/bin/openminer && \
-cp deploy/win32/libjpeg.dll deploy/win32/bin/openminer && \
 mkdir -p deploy/win32/bin/openminer/docs/markdown && \
 cp docs/*.md deploy/win32/bin/openminer/docs/markdown/ && \
 cp -r deploy/html_docs deploy/win32/bin/openminer/docs/html && \
@@ -50,7 +49,6 @@ cp /usr/x86_64-w64-mingw32/bin/libwinpthread-1.dll deploy/win64/bin/openminer &&
 cp /usr/x86_64-w64-mingw32/bin/libssp-0.dll deploy/win64/bin/openminer && \
 cp /usr/x86_64-w64-mingw32/bin/zlib1.dll deploy/win64/bin/openminer && \
 cp /usr/x86_64-w64-mingw32/bin/libgcc_s_seh-1.dll deploy/win64/bin/openminer && \
-cp deploy/win64/libjpeg.dll deploy/win64/bin/openminer && \
 mkdir -p deploy/win64/bin/openminer/docs/markdown && \
 cp docs/*.md deploy/win64/bin/openminer/docs/markdown/ && \
 cp -r deploy/html_docs deploy/win64/bin/openminer/docs/html && \
@@ -75,7 +73,6 @@ cp /usr/lib/ld-linux-x86-64.so.2 \
 /usr/lib/libglib-2.0.so.0 \
 /usr/lib/libGLU.so.1 \
 /usr/lib/libGLX.so.0 \
-/usr/lib/libjpeg.so.8 \
 /usr/lib/libm.so.6 \
 /usr/lib/libpcre.so.1 \
 /usr/lib/libpthread.so.0 \
