@@ -203,11 +203,17 @@ void GameState::update() {
 }
 
 void GameState::initShaders() {
-	m_shader.createProgram();
+	m_shader.createProgram(false);
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/game.v.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/light.f.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/fog.f.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/game.f.glsl");
+	m_shader.bindAttributeLocation(VertexAttribute::Coord3d, "coord3d");
+	m_shader.bindAttributeLocation(VertexAttribute::TexCoord, "texCoord");
+	m_shader.bindAttributeLocation(VertexAttribute::Color, "color");
+	m_shader.bindAttributeLocation(VertexAttribute::Normal, "normal");
+	m_shader.bindAttributeLocation(VertexAttribute::LightValue, "lightValue");
+	m_shader.bindAttributeLocation(VertexAttribute::AmbientOcclusion, "ambientOcclusion");
 	m_shader.linkProgram();
 
 	m_fbo.loadShader("screen");
