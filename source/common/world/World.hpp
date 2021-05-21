@@ -53,17 +53,21 @@ class World {
 		void setData(int x, int y, int z, u16 data) const;
 
 		bool addChunkToUpdate(Chunk *chunk) {
-			auto [it, res] = m_chunksToUpdate.emplace(chunk);
-			if (res)
+			if (m_chunksToUpdate.count(chunk) < 1) {
+				m_chunksToUpdate.emplace(chunk);
 				m_chunkUpdateQueue.emplace(chunk);
-			return res;
+				return true;
+			}
+			return false;
 		}
 
 		bool addChunkToProcess(Chunk *chunk) {
-			auto [it, res] = m_chunksToProcess.emplace(chunk);
-			if (res)
+			if (m_chunksToProcess.count(chunk) < 1) {
+				m_chunksToProcess.emplace(chunk);
 				m_chunkProcessQueue.emplace(chunk);
-			return res;
+				return true;
+			}
+			return false;
 		}
 
 		virtual void onBlockPlaced(int, int, int, const Block &) {}
