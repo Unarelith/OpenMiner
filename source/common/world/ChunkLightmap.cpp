@@ -129,13 +129,8 @@ void ChunkLightmap::updateTorchlight() {
 
 		// If this block is opaque, don't propagate the light
 		const BlockState *blockState = m_chunk->getBlockState(node.x, node.y, node.z);
-		if (blockState && blockState->isOpaque() && !blockState->isLightSource()) {
-			// FIXME: This only reverts an addTorchlight that added light in a non-generated chunk
-			//        I should avoid setting the torchlight rather than reverting it
-			setTorchlight(node.x, node.y, node.z, 0);
-
+		if (blockState && blockState->isOpaque() && !blockState->isLightSource())
 			continue;
-		}
 
 		gk::Vector3i surroundingNodes[6] = {
 			{node.x - 1, node.y,     node.z},
@@ -191,13 +186,8 @@ void ChunkLightmap::updateSunlight() {
 
 		// If this block is opaque, don't propagate the light
 		const BlockState *blockState = m_chunk->getBlockState(node.x, node.y, node.z);
-		if (blockState && blockState->isOpaque()) {
-			// FIXME: This only reverts an addSunlight that added light in a non-generated chunk
-			//        I should avoid setting the sunlight rather than reverting it
-			setSunlight(node.x, node.y, node.z, 0);
-
+		if (blockState && blockState->isOpaque())
 			continue;
-		}
 
 		gk::Vector3i surroundingNodes[6] = {
 			{node.x - 1, node.y,     node.z},
