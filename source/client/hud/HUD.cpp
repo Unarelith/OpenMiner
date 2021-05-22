@@ -78,6 +78,9 @@ void HUD::onEvent(const SDL_Event &event) {
 		m_hotbar.onEvent(event);
 
 	m_blockCursor.onEvent(event, m_hotbar);
+
+	if (Config::isChunkMinimapEnabled)
+		m_minimap.onEvent(event);
 }
 
 void HUD::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
