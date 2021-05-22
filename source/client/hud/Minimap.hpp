@@ -27,6 +27,7 @@
 #ifndef MINIMAP_HPP_
 #define MINIMAP_HPP_
 
+#include <gk/core/SDLHeaders.hpp>
 #include <gk/graphics/RectangleShape.hpp>
 
 #include "Events.hpp"
@@ -39,6 +40,8 @@ class Minimap : public gk::Drawable, public gk::Transformable {
 		Minimap();
 
 		void update(const ClientPlayer &player, class ClientWorld &world);
+
+		void onEvent(const SDL_Event &event);
 
 		void onChunkCreatedEvent(const ChunkCreatedEvent &event);
 		void onChunkRemovedEvent(const ChunkRemovedEvent &event);
@@ -60,6 +63,8 @@ class Minimap : public gk::Drawable, public gk::Transformable {
 
 		gk::VertexBuffer m_vbo;
 		gk::Transform m_playerFovRotationTransform = gk::Transform::Identity;
+
+		bool m_displayTimesReceived = false;
 };
 
 #endif // MINIMAP_HPP_

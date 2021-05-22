@@ -83,6 +83,12 @@ void Minimap::update(const ClientPlayer &player, class ClientWorld &world) {
 	}
 }
 
+void Minimap::onEvent(const SDL_Event &event) {
+	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_m) {
+		m_displayTimesReceived ^= 1;
+	}
+}
+
 void Minimap::onChunkCreatedEvent(const ChunkCreatedEvent &event) {
 	if (Config::isChunkMinimapEnabled) {
 		auto &[rect, text] = m_chunks[event.chunkPos];
@@ -149,8 +155,12 @@ void Minimap::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	for (auto &it : m_chunks)
 		if (it.first.z == m_playerChunkPos.z) {
-			// target.draw(it.second.first, states);
-			target.draw(it.second.second, states);
+			if (!m_displayTimesReceived) {
+				target.draw(it.second.first, states);
+			}
+			else {
+				target.draw(it.second.second, states);
+			}
 		}
 
 	target.draw(m_playerChunk, states);
