@@ -55,15 +55,14 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 			m_animationStart = gk::GameClock::getInstance().getTicks();
 			m_currentTool = &m_player.inventory().getStack(hotbar.cursorPos(), 0);
 		}
-		else if (event.button.button == SDL_BUTTON_RIGHT) {
+		else if (event.button.button == SDL_BUTTON_RIGHT)
 			activateBlock(hotbar);
-		}
 	}
 	else if (event.type == SDL_MOUSEBUTTONUP) {
 		if (event.button.button == SDL_BUTTON_LEFT)
 			reset();
 		else if (event.button.button == SDL_BUTTON_RIGHT)
-			m_activationRepeat = 0;
+			m_lastActivationTime.reset();
 	}
 }
 
@@ -131,8 +130,10 @@ void BlockCursor::update(const Hotbar &hotbar) {
 	else
 		m_currentBlock = nullptr;
 
-	if (m_activationRepeat
-	&& gk::GameClock::getInstance().getTicks() > m_activationRepeat + m_activationRepeatDelay)
+	// Repeat block activation when right click is held
+	u64 now = gk::GameClock::getInstance().getTicks();
+	u64 last = m_lastActivationTime.value_or(now);
+	if (now - last > m_activationRepeatDelay)
 		activateBlock(hotbar);
 }
 
@@ -140,7 +141,7 @@ void BlockCursor::activateBlock(const Hotbar &hotbar) {
 	if (m_animationStart != 0)
 		m_animationStart = 0;
 
-	m_activationRepeat = gk::GameClock::getInstance().getTicks();
+	m_lastActivationTime = gk::GameClock::getInstance().getTicks();
 
 	u32 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
 	const Block &block = Registry::getInstance().getBlock(blockId);

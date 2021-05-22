@@ -45,7 +45,7 @@ class BlockCursor : public gk::Drawable {
 
 		void update(const Hotbar &hotbar);
 
-		void reset() { m_animationStart = 0; m_activationRepeat = 0; }
+		void reset() { m_animationStart = 0; m_lastActivationTime.reset(); }
 
 		const BlockState *currentBlock() const { return m_currentBlock; }
 
@@ -76,7 +76,7 @@ class BlockCursor : public gk::Drawable {
 		gk::Texture *m_blockDestroyTexture = nullptr;
 
 		const u16 m_activationRepeatDelay = 250;
-		u16 m_activationRepeat = 0;
+		std::optional<u64> m_lastActivationTime = 0;
 };
 
 #endif // BLOCKCURSOR_HPP_
