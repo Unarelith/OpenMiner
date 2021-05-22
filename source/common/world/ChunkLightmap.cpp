@@ -298,20 +298,3 @@ bool ChunkLightmap::setTorchlight(int x, int y, int z, u8 val) {
 	return true;
 }
 
-// void ChunkLightmap::updateSurroundingChunks(int x, int y, int z) {
-// 	auto addSurroundingChunkToUpdate = [this](u8 i) {
-// 		Chunk *surroundingChunk = m_chunk->getSurroundingChunk(i);
-// 		if (surroundingChunk) {
-// 			// surroundingChunk->lightmap().m_hasChanged = true;
-// 			m_chunk->world().addChunkToUpdate(surroundingChunk);
-// 		}
-// 	};
-//
-// 	if(x == 0               ) addSurroundingChunkToUpdate(Chunk::West);
-// 	if(x == CHUNK_WIDTH  - 1) addSurroundingChunkToUpdate(Chunk::East);
-// 	if(y == 0               ) addSurroundingChunkToUpdate(Chunk::Bottom);
-// 	if(y == CHUNK_DEPTH  - 1) addSurroundingChunkToUpdate(Chunk::Top);
-// 	if(z == 0               ) addSurroundingChunkToUpdate(Chunk::South);
-// 	if(z == CHUNK_HEIGHT - 1) addSurroundingChunkToUpdate(Chunk::North);
-// }
-

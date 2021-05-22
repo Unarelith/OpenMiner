@@ -61,7 +61,7 @@ class ClientChunk : public Chunk {
 
 		bool areAllNeighboursTooFar() const;
 
-		int debugTimesReceived = 0; // FIXME: To remove
+		int debugTimesReceived = 0; // Only used by Minimap
 
 		static u32 chunkUpdatesPerSec;
 		static u32 chunkUpdateCounter;
