@@ -76,8 +76,6 @@ class ChunkLightmap {
 	private:
 		bool setTorchlight(int x, int y, int z, u8 val);
 
-		// void updateSurroundingChunks(int x, int y, int z);
-
 		Chunk *m_chunk = nullptr;
 
 		using LightMapArray = u8[CHUNK_HEIGHT][CHUNK_DEPTH][CHUNK_WIDTH];

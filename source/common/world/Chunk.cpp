@@ -223,15 +223,6 @@ BlockData *Chunk::addBlockData(int x, int y, int z, int inventoryWidth, int inve
 	return it->second.get();
 }
 
-// bool Chunk::areAllNeighboursLoaded() const {
-// 	return m_surroundingChunks[Chunk::West]
-// 		&& m_surroundingChunks[Chunk::East]
-// 		&& m_surroundingChunks[Chunk::South]
-// 		&& m_surroundingChunks[Chunk::North]
-// 		&& m_surroundingChunks[Chunk::Bottom]
-// 		&& m_surroundingChunks[Chunk::Top];
-// }
-
 bool Chunk::areAllNeighboursInitialized() const {
 	return m_surroundingChunks[Chunk::West]   && m_surroundingChunks[Chunk::West]->isInitialized()
 		&& m_surroundingChunks[Chunk::East]   && m_surroundingChunks[Chunk::East]->isInitialized()

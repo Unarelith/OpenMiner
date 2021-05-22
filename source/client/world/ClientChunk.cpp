@@ -24,7 +24,6 @@
  *
  * =====================================================================================
  */
-#include <gk/core/GameClock.hpp>
 #include <gk/gl/GLCheck.hpp>
 
 #include "ClientChunk.hpp"
