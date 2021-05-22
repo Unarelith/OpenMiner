@@ -35,13 +35,6 @@ u32 ClientChunk::chunkUpdatesPerSec = 0;
 u32 ClientChunk::chunkUpdateCounter = 0;
 u64 ClientChunk::chunkUpdateTime = 0;
 
-// bool ClientChunk::isMeshingTime() {
-// 	u32 currentTime = gk::GameClock::getInstance().getTicks(true);
-// 	if (m_lastMeshingTime == 0)
-// 		m_lastMeshingTime = currentTime;
-// 	return (currentTime - m_lastMeshingTime > 1000); // Only one chunk update every second
-// }
-
 void ClientChunk::update() {
 	m_lightmap.updateLights();
 
@@ -60,8 +53,6 @@ void ClientChunk::process() {
 		m_verticesCount = m_builder.buildChunk(*this, m_vbo);
 
 		++ClientChunk::chunkUpdateCounter;
-
-		m_lastMeshingTime = gk::GameClock::getInstance().getTicks(true);
 	}
 }
 
