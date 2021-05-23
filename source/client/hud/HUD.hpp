@@ -75,6 +75,7 @@ class HUD : public gk::Transformable, public gk::Drawable {
 
 		DebugOverlay m_debugOverlay;
 		bool m_isDebugOverlayVisible = false;
+		bool m_printOpenGLInfo = false;
 
 		BlockInfoWidget m_blockInfoWidget;
 

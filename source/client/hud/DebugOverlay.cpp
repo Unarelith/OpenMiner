@@ -58,7 +58,7 @@ DebugOverlay::DebugOverlay(const ClientPlayer &player, const ClientWorld &world)
 	m_positionText.setColor(gk::Color::White);
 }
 
-void DebugOverlay::update() {
+void DebugOverlay::update(bool printOpenGLInfo) {
 	s32 px = std::floor(m_player.x());
 	s32 py = std::floor(m_player.y());
 	s32 pz = std::floor(m_player.z());
@@ -101,7 +101,19 @@ void DebugOverlay::update() {
 	u16 minute = GameTime::getCurrentMinute();
 	stream << "Day " << day << " ";
 	stream << (hour < 10 ? "0" : "") << hour << ":";
-	stream << (minute < 10 ? "0" : "") << minute;
+	stream << (minute < 10 ? "0" : "") << minute << '\n';
+
+	if (printOpenGLInfo) {
+		GLint major, minor;
+		glGetIntegerv(GL_MAJOR_VERSION, &major);
+		glGetIntegerv(GL_MINOR_VERSION, &minor);
+
+		stream << "GL Vendor: " << glGetString(GL_VENDOR) << '\n';
+		stream << "GL Renderer: " << glGetString(GL_RENDERER) << '\n';
+		stream << "GL Version (string): " << glGetString(GL_VERSION) << '\n';
+		stream << "GL Version (integer): " << major << "." << minor << '\n';
+		stream << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << '\n';
+	}
 
 	m_positionText.setString(stream.str());
 }

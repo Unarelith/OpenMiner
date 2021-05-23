@@ -71,8 +71,10 @@ void HUD::setup() {
 }
 
 void HUD::onEvent(const SDL_Event &event) {
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_F3)
+	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_F3) {
 		m_isDebugOverlayVisible ^= 1;
+		m_printOpenGLInfo = event.key.keysym.mod & KMOD_SHIFT;
+	}
 
 	if (Config::isHotbarVisible)
 		m_hotbar.onEvent(event);
@@ -100,7 +102,7 @@ void HUD::update() {
 	m_blockCursor.update(m_hotbar);
 
 	if (m_isDebugOverlayVisible)
-		m_debugOverlay.update();
+		m_debugOverlay.update(m_printOpenGLInfo);
 
 	if (Config::isBlockInfoWidgetEnabled) {
 		m_blockInfoWidget.update();
