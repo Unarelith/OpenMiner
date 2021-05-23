@@ -43,6 +43,22 @@ void Server::disconnectAllClients() {
 		disconnectClient(it);
 }
 
+void Server::disconnectClient(ClientInfo &client) {
+	Network::Packet packet;
+	packet << Network::Command::ClientDisconnect << client.id;
+	sendToAllClients(packet);
+
+	m_commands[Network::Command::ClientDisconnect](client, packet);
+
+	m_selector.remove(*client.tcpSocket);
+	m_info.removeClient(client.id);
+
+	if (m_isSingleplayer && m_info.clients().size() == 0) {
+		m_tcpListener.close();
+		m_isRunning = false;
+	}
+}
+
 void Server::handleGameEvents() {
 	if (m_selector.wait(sf::milliseconds(10))) {
 		if (m_selector.isReady(m_tcpListener)) {
@@ -118,22 +134,6 @@ void Server::handleClientMessages() {
 				--i;
 			}
 		}
-	}
-}
-
-void Server::disconnectClient(ClientInfo &client) {
-	Network::Packet packet;
-	packet << Network::Command::ClientDisconnect << client.id;
-	sendToAllClients(packet);
-
-	m_commands[Network::Command::ClientDisconnect](client, packet);
-
-	m_selector.remove(*client.tcpSocket);
-	m_info.removeClient(client.id);
-
-	if (m_isSingleplayer && m_info.clients().size() == 0) {
-		m_tcpListener.close();
-		m_isRunning = false;
 	}
 }
 

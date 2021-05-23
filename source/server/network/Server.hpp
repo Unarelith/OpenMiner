@@ -44,6 +44,7 @@ class Server {
 		void init(u16 port = 4242);
 
 		void disconnectAllClients();
+		void disconnectClient(ClientInfo &client);
 
 		void handleGameEvents();
 
@@ -65,8 +66,6 @@ class Server {
 	private:
 		void handleNewConnections();
 		void handleClientMessages();
-
-		void disconnectClient(ClientInfo &client);
 
 		bool m_isRunning = false;
 		bool m_isSingleplayer = false;

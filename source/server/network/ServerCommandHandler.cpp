@@ -48,14 +48,18 @@ void ServerCommandHandler::sendServerTick(const ClientInfo *client) const {
 		client->tcpSocket->send(packet);
 }
 
-void ServerCommandHandler::sendServerClosed(const std::string &message, const ClientInfo *client) const {
+void ServerCommandHandler::sendServerClosed(const std::string &message, ClientInfo *client) const {
 	Network::Packet packet;
 	packet << Network::Command::ServerClosed << message;
 
-	if (!client)
+	if (!client) {
 		m_server.sendToAllClients(packet);
-	else
+		m_server.disconnectAllClients();
+	}
+	else {
 		client->tcpSocket->send(packet);
+		m_server.disconnectClient(*client);
+	}
 }
 
 void ServerCommandHandler::sendChunkUnload(s32 chunkX, s32 chunkY, s32 chunkZ, const ClientInfo *client) const {
@@ -294,8 +298,11 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::ClientDisconnect, [this](ClientInfo &client, Network::Packet &) {
-		m_players.getPlayerFromClientID(client.id)->clearLoadedChunks();
-		m_players.disconnectPlayer(client.playerName);
+		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
+		if (player) {
+			player->clearLoadedChunks();
+			m_players.disconnectPlayer(client.playerName);
+		}
 	});
 
 	m_server.setCommandCallback(Network::Command::ChunkUnload, [this](ClientInfo &client, Network::Packet &packet) {
