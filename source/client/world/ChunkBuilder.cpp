@@ -287,15 +287,23 @@ inline void ChunkBuilder::addBlockFace(s8f x, s8f y, s8f z, s8f f, const ClientC
 		bool useFancyAO = (Config::ambientOcclusion == 2
 			&& blockState.drawType() != BlockDrawType::SubBoxes);
 
-		if (Config::isSmoothLightingEnabled)
-			vertices[v].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, *neighbourOfs[v], normal, chunk, useFancyAO);
+		if (Config::isSmoothLightingEnabled) {
+			if (blockState.drawType() != BlockDrawType::SubBoxes)
+				vertices[v].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, *neighbourOfs[v], normal, chunk, useFancyAO);
+			else
+				vertices[v].lightValue[0] = getLightForVertex(Light::Sun, x - normal.x, y - normal.y, z - normal.z, *neighbourOfs[v], normal, chunk, useFancyAO);
+		}
 		else if (blockState.isOpaque())
 			vertices[v].lightValue[0] = chunk.lightmap().getSunlight(x + normal.x, y + normal.y, z + normal.z);
 		else
 			vertices[v].lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
 
-		if (Config::isSmoothLightingEnabled && !blockState.isLightSource())
-			vertices[v].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, *neighbourOfs[v], normal, chunk, useFancyAO);
+		if (Config::isSmoothLightingEnabled && !blockState.isLightSource()) {
+			if (blockState.drawType() != BlockDrawType::SubBoxes)
+				vertices[v].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, *neighbourOfs[v], normal, chunk, useFancyAO);
+			else
+				vertices[v].lightValue[1] = getLightForVertex(Light::Torch, x - normal.x, y - normal.y, z - normal.z, *neighbourOfs[v], normal, chunk, useFancyAO);
+		}
 		else if (blockState.isOpaque())
 			vertices[v].lightValue[1] = chunk.lightmap().getTorchlight(x + normal.x, y + normal.y, z + normal.z);
 		else
