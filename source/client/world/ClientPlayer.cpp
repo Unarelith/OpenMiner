@@ -75,43 +75,85 @@ void ClientPlayer::updateCamera() {
 
 void ClientPlayer::move(float direction) {
 	direction += m_viewAngleH;
+	inertiaBuffer.x += 0.001 * cosf(direction * RADIANS_PER_DEGREES);
+	inertiaBuffer.y += 0.001 * sinf(direction * RADIANS_PER_DEGREES);
 
-	m_velocity.x = 0.04f * cosf(direction * RADIANS_PER_DEGREES);
-	m_velocity.y = 0.04f * sinf(direction * RADIANS_PER_DEGREES);
+	glm::dvec2 test = glm::dvec2(inertiaBuffer.x, inertiaBuffer.y);
+	double testSpeed = glm::length(test);
+
+	//limit speed
+	if (testSpeed > maxSpeed){
+
+		test = glm::normalize(test);
+    	test *= (maxSpeed + testSpeed) / 20;
+
+		//smooth transition
+		inertiaBuffer.x -= test.x;
+		inertiaBuffer.y -= test.y;
+	}
 }
 
+void ClientPlayer::applyFriction(){
+	inertiaBuffer.x /= 1.05;
+	inertiaBuffer.y /= 1.05;
+}
+
+void ClientPlayer::applyVelocity(){
+	m_velocity.x = inertiaBuffer.x;
+	m_velocity.y = inertiaBuffer.y;
+}
+
+
+
 void ClientPlayer::processInputs() {
+
+
 	if(gk::GamePad::isKeyPressed(GameKey::Jump) && !m_isJumping) {
 		m_isJumping = true;
 		m_velocity.z = m_jumpSpeed;
 	}
 
-	if(gk::GamePad::isKeyPressed(GameKey::Fly)) {
-		m_velocity.z = 0.1;
-	}
-
-	if(gk::GamePad::isKeyPressed(GameKey::Sneak)) {
-		m_velocity.z = -0.1;
-	}
-
-	if(gk::GamePad::isKeyPressed(GameKey::Forward))    move(0.0f);
-	else if(gk::GamePad::isKeyPressed(GameKey::Back))  move(180.0f);
-
-	if(gk::GamePad::isKeyPressed(GameKey::Left))       move(90.0f);
-	else if(gk::GamePad::isKeyPressed(GameKey::Right)) move(-90.0f);
-
-	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Forward)) move(45.0f);
-	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Forward)) move(-45.0f);
-	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Back))    move(135.0f);
-	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Back))    move(-135.0f);
-
 	if (gk::GamePad::isKeyPressed(GameKey::Sprint)) {
-		m_velocity.x *= 1.5f;
-		m_velocity.y *= 1.5f;
+		maxSpeed = 0.05;
+	}
+	//sneak overrides sprint
+	else if(gk::GamePad::isKeyPressed(GameKey::Sneak)) {
+		maxSpeed = 0.01;
+	} else {
+		maxSpeed = 0.03;
+	}
+
+	bool hasPressed = false;
+
+	if(gk::GamePad::isKeyPressed(GameKey::Forward)){
+		move(0.0f);
+		hasPressed = true;
+	}
+
+	if(gk::GamePad::isKeyPressed(GameKey::Back)){
+		move(180.0f);
+		hasPressed = true;
+	}
+
+	if(gk::GamePad::isKeyPressed(GameKey::Left)){
+		move(90.0f);
+		hasPressed = true;
+	}
+
+	if(gk::GamePad::isKeyPressed(GameKey::Right)){
+		move(-90.0f);
+		hasPressed = true;
+	}
+
+	applyVelocity();
+
+	if (!hasPressed){
+		applyFriction();		
 	}
 }
 
 void ClientPlayer::updatePosition(const ClientWorld &world) {
+
 	ClientChunk *chunk = (ClientChunk *)world.getChunkAtBlockPos(m_x, m_y, m_z);
 	if (chunk && chunk->isInitialized()) {
 		if (!Config::isFlyModeEnabled) {
