@@ -111,7 +111,7 @@ void ServerChunk::sendData(const ClientInfo &client) {
 		for (u16 y = 0 ; y < CHUNK_DEPTH ; ++y) {
 			for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
 				packet << data(x, y, z);
-				packet << m_lightmap.getLightData(x, y, z);
+				packet << m_lightmap.getLightDataRaw(x, y, z);
 
 				BlockData *blockData = getBlockData(x, y, z);
 				if (blockData) {

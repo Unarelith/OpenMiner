@@ -41,6 +41,16 @@ Chunk::Chunk(s32 x, s32 y, s32 z, World &world) : m_world(world) {
 	std::memset(m_data, 0, sizeof(m_data));
 }
 
+u32 Chunk::getFullBlock(int x, int y, int z) const {
+	if(x < 0)              return m_surroundingChunks[0] ? m_surroundingChunks[0]->getFullBlock(x + Chunk::width, y, z) : 0;
+	if(x >= Chunk::width)  return m_surroundingChunks[1] ? m_surroundingChunks[1]->getFullBlock(x - Chunk::width, y, z) : 0;
+	if(y < 0)              return m_surroundingChunks[2] ? m_surroundingChunks[2]->getFullBlock(x, y + Chunk::depth, z) : 0;
+	if(y >= Chunk::depth)  return m_surroundingChunks[3] ? m_surroundingChunks[3]->getFullBlock(x, y - Chunk::depth, z) : 0;
+	if(z < 0)              return m_surroundingChunks[4] ? m_surroundingChunks[4]->getFullBlock(x, y, z + Chunk::height) : 0;
+	if(z >= Chunk::height) return m_surroundingChunks[5] ? m_surroundingChunks[5]->getFullBlock(x, y, z - Chunk::height) : 0;
+	return m_data[z][y][x];
+}
+
 u16 Chunk::getBlock(int x, int y, int z) const {
 	if(x < 0)              return m_surroundingChunks[0] ? m_surroundingChunks[0]->getBlock(x + Chunk::width, y, z) : 0;
 	if(x >= Chunk::width)  return m_surroundingChunks[1] ? m_surroundingChunks[1]->getBlock(x - Chunk::width, y, z) : 0;

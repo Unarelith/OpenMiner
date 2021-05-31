@@ -60,6 +60,8 @@ class Chunk : public gk::NonCopyable {
 		virtual void update() = 0;
 		virtual void process() = 0;
 
+		u32 getFullBlock(int x, int y, int z) const;
+
 		u16 getBlock(int x, int y, int z) const;
 		u16 getData(int x, int y, int z) const;
 		void setBlock(int x, int y, int z, u16 type);

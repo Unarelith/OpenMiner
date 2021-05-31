@@ -219,6 +219,17 @@ void ChunkLightmap::updateSunlight() {
 	}
 }
 
+u8 ChunkLightmap::getLightData(int x, int y, int z) const {
+	if(x < 0)             return m_chunk->getSurroundingChunk(0) ? m_chunk->getSurroundingChunk(0)->lightmap().getLightData(x + CHUNK_WIDTH, y, z) : 15;
+	if(x >= CHUNK_WIDTH)  return m_chunk->getSurroundingChunk(1) ? m_chunk->getSurroundingChunk(1)->lightmap().getLightData(x - CHUNK_WIDTH, y, z) : 15;
+	if(y < 0)             return m_chunk->getSurroundingChunk(2) ? m_chunk->getSurroundingChunk(2)->lightmap().getLightData(x, y + CHUNK_DEPTH, z) : 15;
+	if(y >= CHUNK_DEPTH)  return m_chunk->getSurroundingChunk(3) ? m_chunk->getSurroundingChunk(3)->lightmap().getLightData(x, y - CHUNK_DEPTH, z) : 15;
+	if(z < 0)             return m_chunk->getSurroundingChunk(4) ? m_chunk->getSurroundingChunk(4)->lightmap().getLightData(x, y, z + CHUNK_HEIGHT) : 15;
+	if(z >= CHUNK_HEIGHT) return m_chunk->getSurroundingChunk(5) ? m_chunk->getSurroundingChunk(5)->lightmap().getLightData(x, y, z - CHUNK_HEIGHT) : 15;
+
+	return m_lightMap[z][y][x];
+}
+
 u8 ChunkLightmap::getSunlight(int x, int y, int z) const {
 	if(x < 0)             return m_chunk->getSurroundingChunk(0) ? m_chunk->getSurroundingChunk(0)->lightmap().getSunlight(x + CHUNK_WIDTH, y, z) : 15;
 	if(x >= CHUNK_WIDTH)  return m_chunk->getSurroundingChunk(1) ? m_chunk->getSurroundingChunk(1)->lightmap().getSunlight(x - CHUNK_WIDTH, y, z) : 15;

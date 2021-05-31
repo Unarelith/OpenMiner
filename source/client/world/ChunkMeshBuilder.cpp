@@ -37,18 +37,8 @@ void ChunkMeshBuilder::addMeshBuildingJob(const Chunk &chunk, const TextureAtlas
 	job.textureAtlas = &textureAtlas;
 	job.chunkData.loadFromChunk(chunk);
 
-	// Initialize chunk neighbours
-	for (u8f i = 0 ; i < 6 ; ++i)
-		if (const Chunk *neighbour = chunk.getSurroundingChunk(i) ; neighbour)
-			job.neighbourData[i].emplace().loadFromChunk(*neighbour);
-
 	// Send the job to the thread pool
 	auto future = m_threadPool.submit([](ChunkMeshBuildingJob job) {
-		// Tell the chunk where to find its neighbours
-		for (u8f i = 0 ; i < 6 ; ++i)
-			if (job.neighbourData[i].has_value())
-				job.chunkData.neighbours[i] = &job.neighbourData[i].value();
-
 		// For each block, generate its vertices and add them to the list
 		for (s8f z = 0 ; z < CHUNK_HEIGHT ; z++) {
 			for (s8f y = 0 ; y < CHUNK_DEPTH ; y++) {

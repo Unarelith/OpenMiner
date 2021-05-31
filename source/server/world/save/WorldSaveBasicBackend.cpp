@@ -152,7 +152,7 @@ void WorldSaveBasicBackend::save(const std::string &name) {
 							chunks << false;
 
 						chunks << u32(data[z][y][x])
-							<< u8(it.second->lightmap().getLightData(x, y, z));
+							<< u8(it.second->lightmap().getLightDataRaw(x, y, z));
 					}
 				}
 			}
