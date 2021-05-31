@@ -63,7 +63,8 @@ class ChunkLightmap {
 		void updateTorchlight();
 		void updateSunlight();
 
-		u8 getLightData(int x, int y, int z) const { return m_lightMap[z][y][x]; }
+		u8 getLightDataRaw(int x, int y, int z) const { return m_lightMap[z][y][x]; }
+		u8 getLightData(int x, int y, int z) const;
 		u8 getSunlight(int x, int y, int z) const;
 		u8 getTorchlight(int x, int y, int z) const;
 
