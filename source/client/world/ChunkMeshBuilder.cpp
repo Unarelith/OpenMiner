@@ -24,58 +24,76 @@
  *
  * =====================================================================================
  */
-#include <gk/math/Math.hpp>
-
 #include "BlockGeometry.hpp"
-#include "ClientChunk.hpp"
-#include "ChunkBuilder.hpp"
-#include "Registry.hpp"
+#include "ChunkMeshBuilder.hpp"
+#include "ClientWorld.hpp"
 #include "TextureAtlas.hpp"
 
 using namespace BlockGeometry;
 
-std::array<std::size_t, ChunkBuilder::layers> ChunkBuilder::buildChunk(const ClientChunk &chunk,
-                                                                       const std::array<gk::VertexBuffer, layers> &vbo)
-{
-	for (s8f i = 0 ; i < layers ; ++i)
-		m_vertices[i].reserve(CHUNK_WIDTH * CHUNK_DEPTH * CHUNK_HEIGHT * nFaces * nVertsPerFace);
+void ChunkMeshBuilder::addMeshBuildingJob(const Chunk &chunk, const TextureAtlas &textureAtlas) {
+	ChunkMeshBuildingJob job;
+	job.textureAtlas = &textureAtlas;
 
-	for (s8f z = 0 ; z < CHUNK_HEIGHT ; z++) {
-		for (s8f y = 0 ; y < CHUNK_DEPTH ; y++) {
-			for (s8f x = 0 ; x < CHUNK_WIDTH ; x++) {
-				u16 blockID = chunk.getBlock(x, y, z);
-				const Block &block = Registry::getInstance().getBlock(blockID);
-				if (!blockID) continue;
+	job.chunkData.x = chunk.x();
+	job.chunkData.y = chunk.y();
+	job.chunkData.z = chunk.z();
 
-				u16 blockParam = chunk.getData(x, y, z);
-				const BlockState &blockState = block.getState(block.param().hasParam(BlockParam::State)
-					? block.param().getParam(BlockParam::State, blockParam) : 0);
+	std::memcpy(&job.chunkData.data, &chunk.data(), sizeof(Chunk::DataArray));
+	std::memcpy(&job.chunkData.lightData, &chunk.lightmap().data(), sizeof(ChunkLightmap::LightMapArray));
 
-				if (blockState.drawType() == BlockDrawType::XShape)
-					addCross(x, y, z, chunk, blockState);
-				else
-					addCube(x, y, z, chunk, blockState, blockParam);
+	auto future = m_threadPool.submit([](ChunkMeshBuildingJob job) {
+		for (s8f z = 0 ; z < CHUNK_HEIGHT ; z++) {
+			for (s8f y = 0 ; y < CHUNK_DEPTH ; y++) {
+				for (s8f x = 0 ; x < CHUNK_WIDTH ; x++) {
+					u16 blockID = job.chunkData.getBlockID(x, y, z);
+					if (!blockID) continue;
+
+					u16 blockParam = job.chunkData.getBlockParam(x, y, z);
+					const BlockState &blockState = job.chunkData.getBlockState(blockID, blockParam);
+
+					if (blockState.drawType() == BlockDrawType::XShape)
+						addCross(x, y, z, job, blockState);
+					else
+						addCube(x, y, z, job, blockState, blockParam);
+				}
 			}
 		}
-	}
 
-	std::array<std::size_t, layers> verticesCount;
-	for (u8 i = 0 ; i < layers ; ++i) {
-		m_vertices[i].shrink_to_fit();
+		return job;
+	}, job);
 
-		gk::VertexBuffer::bind(&vbo[i]);
-		vbo[i].setData(m_vertices[i].size() * sizeof(Vertex), m_vertices[i].data(), GL_DYNAMIC_DRAW);
-		gk::VertexBuffer::bind(nullptr);
-
-		verticesCount[i] = m_vertices[i].size();
-
-		m_vertices[i].clear();
-	}
-
-	return verticesCount;
+	m_futures.emplace_back(std::move(future));
 }
 
-inline void ChunkBuilder::addCube(s8f x, s8f y, s8f z, const ClientChunk &chunk, const BlockState &blockState, u16 blockParam) {
+void ChunkMeshBuilder::update() {
+	for (auto it = m_futures.begin() ; it != m_futures.end() ; ) {
+		if (it->future().valid() && it->future().wait_for(std::chrono::milliseconds(0)) == std::future_status::ready) {
+			ChunkMeshBuildingJob job = it->get();
+
+			ClientChunk *chunk = (ClientChunk *)m_world.getChunk(job.chunkData.x, job.chunkData.y, job.chunkData.z);
+			if (chunk) {
+				for (u8 i = 0 ; i < ChunkBuilder::layers ; ++i) {
+					job.vertices[i].shrink_to_fit();
+
+					const gk::VertexBuffer &vbo = chunk->getVertexBuffer(i);
+
+					gk::VertexBuffer::bind(&vbo);
+					vbo.setData(job.vertices[i].size() * sizeof(Vertex), job.vertices[i].data(), GL_DYNAMIC_DRAW);
+					gk::VertexBuffer::bind(nullptr);
+
+					chunk->setVerticesCount(i, job.vertices[i].size());
+				}
+			}
+
+			it = m_futures.erase(it);
+		}
+		else
+			++it;
+	}
+}
+
+inline void ChunkMeshBuilder::addCube(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job, const BlockState &blockState, u16 blockParam) {
 	const gk::FloatBox &boundingBox = blockState.boundingBox();
 
 	u8f orientation = blockState.block().isRotatable()
@@ -139,16 +157,22 @@ inline void ChunkBuilder::addCube(s8f x, s8f y, s8f z, const ClientChunk &chunk,
 
 		const gk::Vector3i *vFaceNeighbours[nVertsPerFace]{&corner0, &corner1, &corner2, &corner3};
 
-		addCubeFace(x, y, z, f, chunk, blockState, normal, faceVerts, vFaceNeighbours);
+		addCubeFace(x, y, z, f, job, blockState, normal, faceVerts, vFaceNeighbours);
 	}
 }
 
-inline void ChunkBuilder::addCubeFace(s8f x, s8f y, s8f z, s8f f, const ClientChunk &chunk, const BlockState &blockState,
-                                      const gk::Vector3i &normal, const glm::vec3 *const vertexPos[nVertsPerFace],
-                                      const gk::Vector3i *const neighbourOfs[nVertsPerFace])
+inline void ChunkMeshBuilder::addCubeFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob &job,
+                                          const BlockState &blockState,
+                                          const gk::Vector3i &normal,
+                                          const glm::vec3 *const vertexPos[nVertsPerFace],
+                                          const gk::Vector3i *const neighbourOfs[nVertsPerFace])
 {
 	// Get surrounding block for the face
-	const BlockState *surroundingBlockState = chunk.getBlockState(x + normal.x, y + normal.y, z + normal.z);
+	s8f sx = x + normal.x;
+	s8f sy = y + normal.y;
+	s8f sz = z + normal.z;
+
+	const BlockState *surroundingBlockState = job.chunkData.getBlockState(sx, sy, sz);
 
 	// Skip hidden faces
 	if (surroundingBlockState && surroundingBlockState->block().id()
@@ -161,7 +185,7 @@ inline void ChunkBuilder::addCubeFace(s8f x, s8f y, s8f z, s8f f, const ClientCh
 	const gk::FloatBox &boundingBox = blockState.boundingBox();
 
 	const std::string &texture = blockState.tiles().getTextureForFace(f);
-	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(texture);
+	const gk::FloatRect &blockTexCoords = job.textureAtlas->getTexCoords(texture);
 
 	// Calculate UV's
 	// These are tough to obtain. Note that texture Y grows in the up-down direction, and so does V.
@@ -228,18 +252,18 @@ inline void ChunkBuilder::addCubeFace(s8f x, s8f y, s8f z, s8f f, const ClientCh
 		vertices[v].texCoord[1] = gk::qlerp(blockTexCoords.y, blockTexCoords.y + blockTexCoords.sizeY, V);
 
 		if (Config::isSmoothLightingEnabled)
-			vertices[v].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, *neighbourOfs[v], normal, chunk);
+			vertices[v].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, *neighbourOfs[v], normal, job.chunkData);
 		else
-			vertices[v].lightValue[0] = chunk.lightmap().getSunlight(x + normal.x, y + normal.y, z + normal.z);
+			vertices[v].lightValue[0] = job.chunkData.getSunlight(sx, sy, sz);
 
 		if (Config::isSmoothLightingEnabled && !blockState.isLightSource())
-			vertices[v].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, *neighbourOfs[v], normal, chunk);
+			vertices[v].lightValue[1] = getLightForVertex(Light::Torch, x, y, z, *neighbourOfs[v], normal, job.chunkData);
 		else if (blockState.isOpaque())
-			vertices[v].lightValue[1] = chunk.lightmap().getTorchlight(x + normal.x, y + normal.y, z + normal.z);
+			vertices[v].lightValue[1] = job.chunkData.getTorchlight(sx, sy, sz);
 		else
-			vertices[v].lightValue[1] = chunk.lightmap().getTorchlight(x, y, z);
+			vertices[v].lightValue[1] = job.chunkData.getTorchlight(x, y, z);
 
-		vertices[v].ambientOcclusion = getAmbientOcclusion(x, y, z, *neighbourOfs[v], normal, chunk);
+		vertices[v].ambientOcclusion = getAmbientOcclusion(x, y, z, *neighbourOfs[v], normal, job.chunkData);
 	}
 
 	auto addVertex = [&](u8 v) {
@@ -247,13 +271,13 @@ inline void ChunkBuilder::addCubeFace(s8f x, s8f y, s8f z, s8f f, const ClientCh
 			vertices[v].ambientOcclusion = 5;
 
 		if (blockState.drawType() == BlockDrawType::Liquid)
-			m_vertices[Layer::Liquid].emplace_back(vertices[v]);
+			job.vertices[Layer::Liquid].emplace_back(vertices[v]);
 		else if (blockState.drawType() == BlockDrawType::Glass)
-			m_vertices[Layer::Glass].emplace_back(vertices[v]);
+			job.vertices[Layer::Glass].emplace_back(vertices[v]);
 		else if (blockState.colorMultiplier() != gk::Color::White)
-			m_vertices[Layer::NoMipMap].emplace_back(vertices[v]);
+			job.vertices[Layer::NoMipMap].emplace_back(vertices[v]);
 		else
-			m_vertices[Layer::Solid].emplace_back(vertices[v]);
+			job.vertices[Layer::Solid].emplace_back(vertices[v]);
 	};
 
 	// Flipping quad to fix anisotropy issue
@@ -275,7 +299,7 @@ inline void ChunkBuilder::addCubeFace(s8f x, s8f y, s8f z, s8f f, const ClientCh
 	}
 }
 
-inline void ChunkBuilder::addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk, const BlockState &blockState) {
+inline void ChunkMeshBuilder::addCross(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job, const BlockState &blockState) {
 	glm::vec3 vertexPos[nVertsPerCube]{
 		{0, 0, 0},
 		{1, 0, 0},
@@ -295,7 +319,7 @@ inline void ChunkBuilder::addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk
 	};
 
 	const std::string &texture = blockState.tiles().getTextureForFace(0);
-	const gk::FloatRect &blockTexCoords = m_textureAtlas.getTexCoords(texture);
+	const gk::FloatRect &blockTexCoords = job.textureAtlas->getTexCoords(texture);
 
 	float faceTexCoords[nVertsPerFace][nCoordsPerUV] = {
 		{blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.sizeY},
@@ -325,23 +349,23 @@ inline void ChunkBuilder::addCross(s8f x, s8f y, s8f z, const ClientChunk &chunk
 			vertices[v].texCoord[0] = faceTexCoords[v][0];
 			vertices[v].texCoord[1] = faceTexCoords[v][1];
 
-			vertices[v].lightValue[0] = chunk.lightmap().getSunlight(x, y, z);
-			vertices[v].lightValue[1] = chunk.lightmap().getTorchlight(x, y, z);
+			vertices[v].lightValue[0] = job.chunkData.getSunlight(x, y, z);
+			vertices[v].lightValue[1] = job.chunkData.getTorchlight(x, y, z);
 
 			vertices[v].ambientOcclusion = 5;
 		}
 
-		m_vertices[Layer::Flora].emplace_back(vertices[0]);
-		m_vertices[Layer::Flora].emplace_back(vertices[1]);
-		m_vertices[Layer::Flora].emplace_back(vertices[3]);
-		m_vertices[Layer::Flora].emplace_back(vertices[3]);
-		m_vertices[Layer::Flora].emplace_back(vertices[1]);
-		m_vertices[Layer::Flora].emplace_back(vertices[2]);
+		job.vertices[Layer::Flora].emplace_back(vertices[0]);
+		job.vertices[Layer::Flora].emplace_back(vertices[1]);
+		job.vertices[Layer::Flora].emplace_back(vertices[3]);
+		job.vertices[Layer::Flora].emplace_back(vertices[3]);
+		job.vertices[Layer::Flora].emplace_back(vertices[1]);
+		job.vertices[Layer::Flora].emplace_back(vertices[2]);
 	}
 }
 
 // Based on this article: https://0fps.net/2013/07/03/ambient-occlusion-for-minecraft-like-worlds/
-inline u8 ChunkBuilder::getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::Vector3i &offset, const gk::Vector3i &normal, const ClientChunk &chunk) {
+inline u8 ChunkMeshBuilder::getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::Vector3i &offset, const gk::Vector3i &normal, const ChunkData &chunk) {
 	gk::Vector3i minOffset{
 		(normal.x != 0) ? offset.x : 0,
 		(normal.y != 0) ? offset.y : 0,
@@ -369,19 +393,23 @@ inline u8 ChunkBuilder::getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::Vecto
 	return (side1 && side2) ? 0 : 3 - (side1 + side2 + corner);
 }
 
-inline u8 ChunkBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, const gk::Vector3i &offset, const gk::Vector3i &normal, const ClientChunk &chunk) {
-	std::function<s8(const Chunk *chunk, s8, s8, s8)> getLight = [&](const Chunk *chunk, s8 x, s8 y, s8 z) -> s8 {
-		if (x < 0)             return chunk->getSurroundingChunk(0) && chunk->getSurroundingChunk(0)->isInitialized() ? getLight(chunk->getSurroundingChunk(0), x + CHUNK_WIDTH, y, z) : -1;
-		if (x >= CHUNK_WIDTH)  return chunk->getSurroundingChunk(1) && chunk->getSurroundingChunk(1)->isInitialized() ? getLight(chunk->getSurroundingChunk(1), x - CHUNK_WIDTH, y, z) : -1;
-		if (y < 0)             return chunk->getSurroundingChunk(2) && chunk->getSurroundingChunk(2)->isInitialized() ? getLight(chunk->getSurroundingChunk(2), x, y + CHUNK_DEPTH, z) : -1;
-		if (y >= CHUNK_DEPTH)  return chunk->getSurroundingChunk(3) && chunk->getSurroundingChunk(3)->isInitialized() ? getLight(chunk->getSurroundingChunk(3), x, y - CHUNK_DEPTH, z) : -1;
-		if (z < 0)             return chunk->getSurroundingChunk(4) && chunk->getSurroundingChunk(4)->isInitialized() ? getLight(chunk->getSurroundingChunk(4), x, y, z + CHUNK_HEIGHT) : -1;
-		if (z >= CHUNK_HEIGHT) return chunk->getSurroundingChunk(5) && chunk->getSurroundingChunk(5)->isInitialized() ? getLight(chunk->getSurroundingChunk(5), x, y, z - CHUNK_HEIGHT) : -1;
+inline u8 ChunkMeshBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, const gk::Vector3i &offset, const gk::Vector3i &normal, const ChunkData &chunk) {
+	std::function<s8(const ChunkData &chunk, s8, s8, s8)> getLight = [&](const ChunkData &chunk, s8 x, s8 y, s8 z) -> s8 {
+		// if (x < 0)             return chunk->getSurroundingChunk(0) && chunk->getSurroundingChunk(0)->isInitialized() ? getLight(chunk->getSurroundingChunk(0), x + CHUNK_WIDTH, y, z) : -1;
+		// if (x >= CHUNK_WIDTH)  return chunk->getSurroundingChunk(1) && chunk->getSurroundingChunk(1)->isInitialized() ? getLight(chunk->getSurroundingChunk(1), x - CHUNK_WIDTH, y, z) : -1;
+		// if (y < 0)             return chunk->getSurroundingChunk(2) && chunk->getSurroundingChunk(2)->isInitialized() ? getLight(chunk->getSurroundingChunk(2), x, y + CHUNK_DEPTH, z) : -1;
+		// if (y >= CHUNK_DEPTH)  return chunk->getSurroundingChunk(3) && chunk->getSurroundingChunk(3)->isInitialized() ? getLight(chunk->getSurroundingChunk(3), x, y - CHUNK_DEPTH, z) : -1;
+		// if (z < 0)             return chunk->getSurroundingChunk(4) && chunk->getSurroundingChunk(4)->isInitialized() ? getLight(chunk->getSurroundingChunk(4), x, y, z + CHUNK_HEIGHT) : -1;
+		// if (z >= CHUNK_HEIGHT) return chunk->getSurroundingChunk(5) && chunk->getSurroundingChunk(5)->isInitialized() ? getLight(chunk->getSurroundingChunk(5), x, y, z - CHUNK_HEIGHT) : -1;
+        //
+		// if (light == Light::Sun)
+		// 	return chunk->isInitialized() ? chunk->lightmap().getSunlight(x, y, z) : -1;
+		// else
+		// 	return chunk->isInitialized() ? chunk->lightmap().getTorchlight(x, y, z) : -1;
 
-		if (light == Light::Sun)
-			return chunk->isInitialized() ? chunk->lightmap().getSunlight(x, y, z) : -1;
-		else
-			return chunk->isInitialized() ? chunk->lightmap().getTorchlight(x, y, z) : -1;
+		return (light == Light::Sun)
+			? chunk.getSunlight(x, y, z)
+			: chunk.getTorchlight(x, y, z);
 	};
 
 	gk::Vector3i minOffset{
@@ -399,10 +427,10 @@ inline u8 ChunkBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, cons
 
 	// Get light values for surrounding nodes
 	s8 lightValues[4] = {
-		getLight(&chunk, surroundingBlocks[0].x, surroundingBlocks[0].y, surroundingBlocks[0].z),
-		getLight(&chunk, surroundingBlocks[1].x, surroundingBlocks[1].y, surroundingBlocks[1].z),
-		getLight(&chunk, surroundingBlocks[2].x, surroundingBlocks[2].y, surroundingBlocks[2].z),
-		getLight(&chunk, surroundingBlocks[3].x, surroundingBlocks[3].y, surroundingBlocks[3].z),
+		getLight(chunk, surroundingBlocks[0].x, surroundingBlocks[0].y, surroundingBlocks[0].z),
+		getLight(chunk, surroundingBlocks[1].x, surroundingBlocks[1].y, surroundingBlocks[1].z),
+		getLight(chunk, surroundingBlocks[2].x, surroundingBlocks[2].y, surroundingBlocks[2].z),
+		getLight(chunk, surroundingBlocks[3].x, surroundingBlocks[3].y, surroundingBlocks[3].z),
 	};
 
 	float count = 0, total = 0;

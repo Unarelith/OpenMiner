@@ -34,12 +34,14 @@
 #include "Config.hpp"
 #include "Dimension.hpp"
 
+class ClientWorld;
 class TextureAtlas;
 
 class ClientChunk : public Chunk {
 	public:
-		ClientChunk(s32 x, s32 y, s32 z, const Dimension &dimension, World &world, TextureAtlas &textureAtlas)
-			: Chunk(x, y, z, world), m_dimension(dimension), m_textureAtlas(textureAtlas), m_builder{textureAtlas} {}
+		ClientChunk(s32 x, s32 y, s32 z, const Dimension &dimension, ClientWorld &world, TextureAtlas &textureAtlas)
+			: Chunk(x, y, z, (World &)world), m_world(world), m_dimension(dimension),
+			  m_textureAtlas(textureAtlas), m_builder(textureAtlas) {}
 
 		void update() final;
 		void process() final;
@@ -61,6 +63,10 @@ class ClientChunk : public Chunk {
 
 		bool areAllNeighboursTooFar() const;
 
+		const gk::VertexBuffer &getVertexBuffer(u8 layer) { return m_vbo[layer]; }
+
+		void setVerticesCount(u8 layer, std::size_t count) { m_verticesCount[layer] = count; }
+
 		int debugTimesReceived = 0; // Only used by Minimap
 
 		static u32 chunkUpdatesPerSec;
@@ -68,6 +74,8 @@ class ClientChunk : public Chunk {
 		static u64 chunkUpdateTime;
 
 	private:
+		ClientWorld &m_world;
+
 		const Dimension &m_dimension;
 
 		TextureAtlas &m_textureAtlas;
