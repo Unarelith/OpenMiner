@@ -38,29 +38,79 @@ struct ChunkData {
 	Chunk::DataArray data;
 	ChunkLightmap::LightMapArray lightData;
 
-	u16 getBlockID(s8f x, s8f y, s8f z) const { return data[z][y][x] & 0xffff; }
-	u16 getBlockParam(s8f x, s8f y, s8f z) const { return (data[z][y][x] >> 16) & 0xffff; }
+	ChunkData *neighbours[6]{nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 
-	u8 getTorchlight(s8f x, s8f y, s8f z) const { return lightData[z][y][x] & 0xf; }
-	u8 getSunlight(s8f x, s8f y, s8f z) const { return (lightData[z][y][x] >> 4) & 0xf; }
+	void loadFromChunk(const Chunk &chunk) {
+		x = chunk.x();
+		y = chunk.y();
+		z = chunk.z();
 
-	const BlockState &getBlockState(u16 blockID, u16 blockParam) const {
-		const Block &block = Registry::getInstance().getBlock(blockID);
-		return block.getState(block.param().hasParam(BlockParam::State) ?
-			block.param().getParam(BlockParam::State, blockParam) : 0);
+		std::memcpy(&data, &chunk.data(), sizeof(Chunk::DataArray));
+		std::memcpy(&lightData, &chunk.lightmap().data(), sizeof(ChunkLightmap::LightMapArray));
+	}
+
+	u16 getBlockID(s8f x, s8f y, s8f z) const {
+		if(x < 0)              return neighbours[0] ? neighbours[0]->getBlockID(x + Chunk::width, y, z) : 0;
+		if(x >= Chunk::width)  return neighbours[1] ? neighbours[1]->getBlockID(x - Chunk::width, y, z) : 0;
+		if(y < 0)              return neighbours[2] ? neighbours[2]->getBlockID(x, y + Chunk::depth, z) : 0;
+		if(y >= Chunk::depth)  return neighbours[3] ? neighbours[3]->getBlockID(x, y - Chunk::depth, z) : 0;
+		if(z < 0)              return neighbours[4] ? neighbours[4]->getBlockID(x, y, z + Chunk::height) : 0;
+		if(z >= Chunk::height) return neighbours[5] ? neighbours[5]->getBlockID(x, y, z - Chunk::height) : 0;
+
+		return data[z][y][x] & 0xffff;
+	}
+
+	u16 getBlockParam(s8f x, s8f y, s8f z) const {
+		if(x < 0)              return neighbours[0] ? neighbours[0]->getBlockParam(x + Chunk::width, y, z) : 0;
+		if(x >= Chunk::width)  return neighbours[1] ? neighbours[1]->getBlockParam(x - Chunk::width, y, z) : 0;
+		if(y < 0)              return neighbours[2] ? neighbours[2]->getBlockParam(x, y + Chunk::depth, z) : 0;
+		if(y >= Chunk::depth)  return neighbours[3] ? neighbours[3]->getBlockParam(x, y - Chunk::depth, z) : 0;
+		if(z < 0)              return neighbours[4] ? neighbours[4]->getBlockParam(x, y, z + Chunk::height) : 0;
+		if(z >= Chunk::height) return neighbours[5] ? neighbours[5]->getBlockParam(x, y, z - Chunk::height) : 0;
+
+		return (data[z][y][x] >> 16) & 0xffff;
+	}
+
+	u8 getTorchlight(s8f x, s8f y, s8f z) const {
+		if(x < 0)              return neighbours[0] ? neighbours[0]->getTorchlight(x + Chunk::width, y, z) : 0;
+		if(x >= Chunk::width)  return neighbours[1] ? neighbours[1]->getTorchlight(x - Chunk::width, y, z) : 0;
+		if(y < 0)              return neighbours[2] ? neighbours[2]->getTorchlight(x, y + Chunk::depth, z) : 0;
+		if(y >= Chunk::depth)  return neighbours[3] ? neighbours[3]->getTorchlight(x, y - Chunk::depth, z) : 0;
+		if(z < 0)              return neighbours[4] ? neighbours[4]->getTorchlight(x, y, z + Chunk::height) : 0;
+		if(z >= Chunk::height) return neighbours[5] ? neighbours[5]->getTorchlight(x, y, z - Chunk::height) : 0;
+
+		return lightData[z][y][x] & 0xf;
+	}
+
+	u8 getSunlight(s8f x, s8f y, s8f z) const {
+		if(x < 0)              return neighbours[0] ? neighbours[0]->getSunlight(x + Chunk::width, y, z) : 15;
+		if(x >= Chunk::width)  return neighbours[1] ? neighbours[1]->getSunlight(x - Chunk::width, y, z) : 15;
+		if(y < 0)              return neighbours[2] ? neighbours[2]->getSunlight(x, y + Chunk::depth, z) : 15;
+		if(y >= Chunk::depth)  return neighbours[3] ? neighbours[3]->getSunlight(x, y - Chunk::depth, z) : 15;
+		if(z < 0)              return neighbours[4] ? neighbours[4]->getSunlight(x, y, z + Chunk::height) : 15;
+		if(z >= Chunk::height) return neighbours[5] ? neighbours[5]->getSunlight(x, y, z - Chunk::height) : 15;
+
+		return (lightData[z][y][x] >> 4) & 0xf;
 	}
 
 	const BlockState *getBlockState(s8f x, s8f y, s8f z) const {
-		if (x >= 0 && x < CHUNK_WIDTH
-		 && y >= 0 && y < CHUNK_DEPTH
-		 && z >= 0 && z < CHUNK_HEIGHT) {
-			u16 blockID = getBlockID(x, y, z);
-			u16 blockParam = getBlockParam(x, y, z);
+		if(x < 0)              return neighbours[0] ? neighbours[0]->getBlockState(x + Chunk::width, y, z) : nullptr;
+		if(x >= Chunk::width)  return neighbours[1] ? neighbours[1]->getBlockState(x - Chunk::width, y, z) : nullptr;
+		if(y < 0)              return neighbours[2] ? neighbours[2]->getBlockState(x, y + Chunk::depth, z) : nullptr;
+		if(y >= Chunk::depth)  return neighbours[3] ? neighbours[3]->getBlockState(x, y - Chunk::depth, z) : nullptr;
+		if(z < 0)              return neighbours[4] ? neighbours[4]->getBlockState(x, y, z + Chunk::height) : nullptr;
+		if(z >= Chunk::height) return neighbours[5] ? neighbours[5]->getBlockState(x, y, z - Chunk::height) : nullptr;
 
-			return &getBlockState(blockID, blockParam);
-		}
+		u16 blockID = getBlockID(x, y, z);
+		u16 blockParam = getBlockParam(x, y, z);
 
-		return nullptr;
+		return &getBlockState(blockID, blockParam);
+	}
+
+	static const BlockState &getBlockState(u16 blockID, u16 blockParam) {
+		const Block &block = Registry::getInstance().getBlock(blockID);
+		return block.getState(block.param().hasParam(BlockParam::State) ?
+			block.param().getParam(BlockParam::State, blockParam) : 0);
 	}
 };
 
@@ -68,6 +118,8 @@ struct ChunkMeshBuildingJob {
 	using VerticesArray = std::array<std::vector<Vertex>, ChunkBuilder::layers>;
 
 	ChunkData chunkData;
+
+	std::array<std::optional<ChunkData>, 6> neighbourData;
 
 	VerticesArray vertices;
 

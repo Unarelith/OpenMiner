@@ -32,17 +32,24 @@
 using namespace BlockGeometry;
 
 void ChunkMeshBuilder::addMeshBuildingJob(const Chunk &chunk, const TextureAtlas &textureAtlas) {
+	// Creating the job (creates a copy of the chunk to send it to the thread)
 	ChunkMeshBuildingJob job;
 	job.textureAtlas = &textureAtlas;
+	job.chunkData.loadFromChunk(chunk);
 
-	job.chunkData.x = chunk.x();
-	job.chunkData.y = chunk.y();
-	job.chunkData.z = chunk.z();
+	// Initialize chunk neighbours
+	for (u8f i = 0 ; i < 6 ; ++i)
+		if (const Chunk *neighbour = chunk.getSurroundingChunk(i) ; neighbour)
+			job.neighbourData[i].emplace().loadFromChunk(*neighbour);
 
-	std::memcpy(&job.chunkData.data, &chunk.data(), sizeof(Chunk::DataArray));
-	std::memcpy(&job.chunkData.lightData, &chunk.lightmap().data(), sizeof(ChunkLightmap::LightMapArray));
-
+	// Send the job to the thread pool
 	auto future = m_threadPool.submit([](ChunkMeshBuildingJob job) {
+		// Tell the chunk where to find its neighbours
+		for (u8f i = 0 ; i < 6 ; ++i)
+			if (job.neighbourData[i].has_value())
+				job.chunkData.neighbours[i] = &job.neighbourData[i].value();
+
+		// For each block, generate its vertices and add them to the list
 		for (s8f z = 0 ; z < CHUNK_HEIGHT ; z++) {
 			for (s8f y = 0 ; y < CHUNK_DEPTH ; y++) {
 				for (s8f x = 0 ; x < CHUNK_WIDTH ; x++) {
@@ -50,7 +57,7 @@ void ChunkMeshBuilder::addMeshBuildingJob(const Chunk &chunk, const TextureAtlas
 					if (!blockID) continue;
 
 					u16 blockParam = job.chunkData.getBlockParam(x, y, z);
-					const BlockState &blockState = job.chunkData.getBlockState(blockID, blockParam);
+					const BlockState &blockState = ChunkData::getBlockState(blockID, blockParam);
 
 					if (blockState.drawType() == BlockDrawType::XShape)
 						addCross(x, y, z, job, blockState);
