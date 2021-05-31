@@ -40,14 +40,10 @@ class TextureAtlas {
 	public:
 		TextureAtlas() = default;
 
-		void addFile(const std::string &path, const std::string &filename);
-		void packTextures();
-
 		void clear();
 
 		void loadFromRegistry(const std::string &texturePack = "");
 
-		u16 getTextureID(const std::string &filename) const;
 		gk::FloatRect getTexCoords(const std::string &filename, bool normalized = true) const;
 
 		const gk::Texture &texture() const { return m_texture; }
@@ -55,6 +51,12 @@ class TextureAtlas {
 		bool isReady() const { return m_isReady; }
 
 	private:
+		void addFile(const std::string &path, const std::string &filename);
+
+		u16 getTextureID(const std::string &filename) const;
+
+		void packTextures();
+
 		// Expected texture size
 		u16 m_tileSize = 0;
 

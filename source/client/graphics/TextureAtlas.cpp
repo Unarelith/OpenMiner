@@ -31,6 +31,79 @@
 #include "Registry.hpp"
 #include "TextureAtlas.hpp"
 
+void TextureAtlas::clear() {
+	m_tileSize = 0;
+
+	m_textureMap.clear();
+	m_textures.clear();
+
+	m_isReady = false;
+}
+
+void TextureAtlas::loadFromRegistry(const std::string &texturePack) {
+	if (!texturePack.empty() && !gk::Filesystem::fileExists("texturepacks/" + texturePack))
+		throw EXCEPTION("Texture pack '" + texturePack +"' doesn't exist");
+
+	// FIXME: Undefined texture should be created from current texture size
+	if (texturePack.empty())
+		addFile("mods/default/textures/blocks/", "undefined.png");
+	else
+		addFile("texturepacks/" + texturePack + "/blocks/", "undefined.png");
+
+	for (auto &block : Registry::getInstance().blocks()) {
+		std::string path;
+		if (texturePack.empty())
+			path = "mods/" + block->modName() + "/textures/blocks/";
+		else
+			path = "texturepacks/" + texturePack + "/blocks/";
+
+		for (auto &state : block->states()) {
+			const TilesDef &tiles = state.tiles();
+			for (auto &textureFilename : tiles.textureFilenames())
+				addFile(path, textureFilename);
+		}
+	}
+
+	for (auto &item : Registry::getInstance().items()) {
+		if (!item->isBlock() || !item->tiles().textureFilenames().empty()) {
+			std::string path;
+			if (texturePack.empty())
+				path = "mods/" + item->modName() + "/textures/items/";
+			else
+				path = "texturepacks/" + texturePack + "/items/";
+
+			const TilesDef &tiles = item->tiles();
+			for (auto &textureFilename : tiles.textureFilenames())
+				addFile(path, textureFilename);
+		}
+	}
+
+	packTextures();
+}
+
+gk::FloatRect TextureAtlas::getTexCoords(const std::string &filename, bool normalized) const {
+	if (filename.empty()) return gk::FloatRect{0, 0, 0, 0};
+
+	if (!m_isReady)
+		throw EXCEPTION("Can't get texture coordinates from empty atlas");
+
+	u16 textureID = getTextureID(filename);
+
+	float textureX = (textureID % (m_texture.getSize().x / m_tileSize)) * m_tileSize;
+	float textureY = (textureID / (m_texture.getSize().x / m_tileSize)) * m_tileSize;
+
+	if (normalized)
+		return gk::FloatRect{textureX / m_texture.getSize().x,
+							 textureY / m_texture.getSize().y,
+							 (float)m_tileSize / m_texture.getSize().x,
+							 (float)m_tileSize / m_texture.getSize().y};
+	else
+		return gk::FloatRect{textureX,
+							 textureY,
+							 (float)m_tileSize,
+							 (float)m_tileSize};
+}
+
 void TextureAtlas::addFile(const std::string &path, const std::string &filename) {
 	if (filename.empty()) return;
 
@@ -52,6 +125,15 @@ void TextureAtlas::addFile(const std::string &path, const std::string &filename)
 
 	m_textureMap.emplace(filename, m_textures.size());
 	m_textures.emplace_back(std::move(surface));
+}
+
+u16 TextureAtlas::getTextureID(const std::string &filename) const {
+	auto it = m_textureMap.find(filename);
+	if (it == m_textureMap.end()) {
+		return 0;
+	}
+
+	return it->second;
 }
 
 void TextureAtlas::packTextures() {
@@ -118,86 +200,3 @@ void TextureAtlas::packTextures() {
 
 	gk::Texture::bind(nullptr);
 }
-
-void TextureAtlas::clear() {
-	m_tileSize = 0;
-
-	m_textureMap.clear();
-	m_textures.clear();
-
-	m_isReady = false;
-}
-
-void TextureAtlas::loadFromRegistry(const std::string &texturePack) {
-	if (!texturePack.empty() && !gk::Filesystem::fileExists("texturepacks/" + texturePack))
-		throw EXCEPTION("Texture pack '" + texturePack +"' doesn't exist");
-
-	// FIXME: Undefined texture should be created from current texture size
-	if (texturePack.empty())
-		addFile("mods/default/textures/blocks/", "undefined.png");
-	else
-		addFile("texturepacks/" + texturePack + "/blocks/", "undefined.png");
-
-	for (auto &block : Registry::getInstance().blocks()) {
-		std::string path;
-		if (texturePack.empty())
-			path = "mods/" + block->modName() + "/textures/blocks/";
-		else
-			path = "texturepacks/" + texturePack + "/blocks/";
-
-		for (auto &state : block->states()) {
-			const TilesDef &tiles = state.tiles();
-			for (auto &textureFilename : tiles.textureFilenames())
-				addFile(path, textureFilename);
-		}
-	}
-
-	for (auto &item : Registry::getInstance().items()) {
-		if (!item->isBlock() || !item->tiles().textureFilenames().empty()) {
-			std::string path;
-			if (texturePack.empty())
-				path = "mods/" + item->modName() + "/textures/items/";
-			else
-				path = "texturepacks/" + texturePack + "/items/";
-
-			const TilesDef &tiles = item->tiles();
-			for (auto &textureFilename : tiles.textureFilenames())
-				addFile(path, textureFilename);
-		}
-	}
-
-	packTextures();
-}
-
-u16 TextureAtlas::getTextureID(const std::string &filename) const {
-	auto it = m_textureMap.find(filename);
-	if (it == m_textureMap.end()) {
-		return 0;
-	}
-
-	return it->second;
-}
-
-gk::FloatRect TextureAtlas::getTexCoords(const std::string &filename, bool normalized) const {
-	if (filename.empty()) return gk::FloatRect{0, 0, 0, 0};
-
-	if (!m_isReady)
-		throw EXCEPTION("Can't get texture coordinates from empty atlas");
-
-	u16 textureID = getTextureID(filename);
-
-	float textureX = (textureID % (m_texture.getSize().x / m_tileSize)) * m_tileSize;
-	float textureY = (textureID / (m_texture.getSize().x / m_tileSize)) * m_tileSize;
-
-	if (normalized)
-		return gk::FloatRect{textureX / m_texture.getSize().x,
-							 textureY / m_texture.getSize().y,
-							 (float)m_tileSize / m_texture.getSize().x,
-							 (float)m_tileSize / m_texture.getSize().y};
-	else
-		return gk::FloatRect{textureX,
-							 textureY,
-							 (float)m_tileSize,
-							 (float)m_tileSize};
-}
-
