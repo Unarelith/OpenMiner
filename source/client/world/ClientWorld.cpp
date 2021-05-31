@@ -73,6 +73,8 @@ void ClientWorld::update(bool allowWorldReload) {
 	requestClosestChunkMeshing();
 
 	m_scene.update();
+
+	m_chunkMeshBuilder.update();
 }
 
 void ClientWorld::requestClosestChunkMeshing() {

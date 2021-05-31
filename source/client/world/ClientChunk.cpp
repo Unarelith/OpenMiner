@@ -27,6 +27,7 @@
 #include <gk/gl/GLCheck.hpp>
 
 #include "ClientChunk.hpp"
+#include "ClientWorld.hpp"
 #include "TextureAtlas.hpp"
 #include "World.hpp"
 
@@ -49,7 +50,8 @@ void ClientChunk::update() {
 
 void ClientChunk::process() {
 	if (m_isReadyForMeshing) {
-		m_verticesCount = m_builder.buildChunk(*this, m_vbo);
+		// m_verticesCount = m_builder.buildChunk(*this, m_vbo);
+		m_world.buildChunk(*this);
 
 		++ClientChunk::chunkUpdateCounter;
 	}

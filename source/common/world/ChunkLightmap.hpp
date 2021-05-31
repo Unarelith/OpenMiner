@@ -73,12 +73,14 @@ class ChunkLightmap {
 		bool hasChanged() const { return m_hasChanged; }
 		void resetChangedFlag() { m_hasChanged = false; }
 
+		using LightMapArray = u8[CHUNK_HEIGHT][CHUNK_DEPTH][CHUNK_WIDTH];
+		const LightMapArray &data() const { return m_lightMap; }
+
 	private:
 		bool setTorchlight(int x, int y, int z, u8 val);
 
 		Chunk *m_chunk = nullptr;
 
-		using LightMapArray = u8[CHUNK_HEIGHT][CHUNK_DEPTH][CHUNK_WIDTH];
 		LightMapArray m_lightMap;
 
 		std::queue<LightNode> m_torchlightBfsQueue;

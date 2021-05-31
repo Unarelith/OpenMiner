@@ -34,6 +34,7 @@
 #include <gk/core/EventHandler.hpp>
 #include <gk/gl/Camera.hpp>
 
+#include "ChunkMeshBuilder.hpp"
 #include "ClientChunk.hpp"
 #include "ClientScene.hpp"
 #include "Network.hpp"
@@ -61,6 +62,8 @@ class ClientWorld : public World, public gk::Drawable {
 		void removeChunk(const gk::Vector3i &chunkPos);
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
+
+		void buildChunk(Chunk &chunk) { m_chunkMeshBuilder.addMeshBuildingJob(chunk, m_textureAtlas); }
 
 		const ClientScene &scene() const { return m_scene; }
 		ClientScene &scene() { return m_scene; }
@@ -97,6 +100,8 @@ class ClientWorld : public World, public gk::Drawable {
 		const Sky *m_sky = nullptr;
 
 		mutable std::set<gk::Vector3i> m_chunksToRemove;
+
+		ChunkMeshBuilder m_chunkMeshBuilder{*this};
 };
 
 #endif // CLIENTWORLD_HPP_
