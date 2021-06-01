@@ -51,7 +51,7 @@ class ClientWorld : public World, public gk::Drawable {
 		ClientWorld();
 
 		void update(bool allowWorldReload);
-		void requestClosestChunkMeshing();
+		void requestChunkMeshing();
 		void checkPlayerChunk(double playerX, double playerY, double playerZ);
 
 		void clear();
@@ -95,11 +95,10 @@ class ClientWorld : public World, public gk::Drawable {
 		gk::Camera *m_camera = nullptr;
 		gk::EventHandler *m_eventHandler = nullptr;
 
-		mutable gk::Vector4d m_closestInitializedChunk{0, 0, 0, 1000000};
-
 		const Sky *m_sky = nullptr;
 
 		mutable std::set<gk::Vector3i> m_chunksToRemove;
+		mutable std::multimap<float, gk::Vector3i> m_chunksToMesh;
 
 		ChunkMeshBuilder m_chunkMeshBuilder{*this};
 };
