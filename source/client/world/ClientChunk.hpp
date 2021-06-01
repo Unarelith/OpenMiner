@@ -30,7 +30,7 @@
 #include <gk/gl/Drawable.hpp>
 
 #include "Chunk.hpp"
-#include "ChunkBuilder.hpp"
+#include "ChunkMeshLayer.hpp"
 #include "Config.hpp"
 #include "Dimension.hpp"
 
@@ -41,7 +41,7 @@ class ClientChunk : public Chunk {
 	public:
 		ClientChunk(s32 x, s32 y, s32 z, const Dimension &dimension, ClientWorld &world, TextureAtlas &textureAtlas)
 			: Chunk(x, y, z, (World &)world), m_world(world), m_dimension(dimension),
-			  m_textureAtlas(textureAtlas), m_builder(textureAtlas) {}
+			  m_textureAtlas(textureAtlas) {}
 
 		void update() final;
 		void process() final;
@@ -80,10 +80,8 @@ class ClientChunk : public Chunk {
 
 		TextureAtlas &m_textureAtlas;
 
-		ChunkBuilder m_builder;
-
-		std::array<gk::VertexBuffer, ChunkBuilder::layers> m_vbo{};
-		std::array<std::size_t, ChunkBuilder::layers> m_verticesCount{};
+		std::array<gk::VertexBuffer, ChunkMeshLayer::Count> m_vbo{};
+		std::array<std::size_t, ChunkMeshLayer::Count> m_verticesCount{};
 
 		bool m_isReadyForMeshing = false;
 		bool m_isTooFar = false;

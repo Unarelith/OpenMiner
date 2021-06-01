@@ -46,7 +46,7 @@ void ChunkMeshBuilder::addMeshBuildingJob(const Chunk &chunk, const TextureAtlas
 	job.chunkData.loadFromChunk(chunk);
 
 	// Send the job to the thread pool
-	auto future = m_threadPool.submit([](ChunkMeshBuildingJob job) {
+	auto future = thread::DefaultThreadPool::submitJob([](ChunkMeshBuildingJob job) {
 		// For each block, generate its vertices and add them to the list
 		for (s8f z = 0 ; z < CHUNK_HEIGHT ; z++) {
 			for (s8f y = 0 ; y < CHUNK_DEPTH ; y++) {
@@ -78,7 +78,7 @@ void ChunkMeshBuilder::update() {
 
 			ClientChunk *chunk = (ClientChunk *)m_world.getChunk(job.chunkData.x, job.chunkData.y, job.chunkData.z);
 			if (chunk) {
-				for (u8 i = 0 ; i < ChunkBuilder::layers ; ++i) {
+				for (u8 i = 0 ; i < ChunkMeshLayer::Count ; ++i) {
 					job.vertices[i].shrink_to_fit();
 
 					const gk::VertexBuffer &vbo = chunk->getVertexBuffer(i);
@@ -276,13 +276,13 @@ inline void ChunkMeshBuilder::addCubeFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshB
 			vertices[v].ambientOcclusion = 5;
 
 		if (blockState.drawType() == BlockDrawType::Liquid)
-			job.vertices[Layer::Liquid].emplace_back(vertices[v]);
+			job.vertices[ChunkMeshLayer::Liquid].emplace_back(vertices[v]);
 		else if (blockState.drawType() == BlockDrawType::Glass)
-			job.vertices[Layer::Glass].emplace_back(vertices[v]);
+			job.vertices[ChunkMeshLayer::Glass].emplace_back(vertices[v]);
 		else if (blockState.colorMultiplier() != gk::Color::White)
-			job.vertices[Layer::NoMipMap].emplace_back(vertices[v]);
+			job.vertices[ChunkMeshLayer::NoMipMap].emplace_back(vertices[v]);
 		else
-			job.vertices[Layer::Solid].emplace_back(vertices[v]);
+			job.vertices[ChunkMeshLayer::Solid].emplace_back(vertices[v]);
 	};
 
 	// Flipping quad to fix anisotropy issue
@@ -360,12 +360,12 @@ inline void ChunkMeshBuilder::addCross(s8f x, s8f y, s8f z, ChunkMeshBuildingJob
 			vertices[v].ambientOcclusion = 5;
 		}
 
-		job.vertices[Layer::Flora].emplace_back(vertices[0]);
-		job.vertices[Layer::Flora].emplace_back(vertices[1]);
-		job.vertices[Layer::Flora].emplace_back(vertices[3]);
-		job.vertices[Layer::Flora].emplace_back(vertices[3]);
-		job.vertices[Layer::Flora].emplace_back(vertices[1]);
-		job.vertices[Layer::Flora].emplace_back(vertices[2]);
+		job.vertices[ChunkMeshLayer::Flora].emplace_back(vertices[0]);
+		job.vertices[ChunkMeshLayer::Flora].emplace_back(vertices[1]);
+		job.vertices[ChunkMeshLayer::Flora].emplace_back(vertices[3]);
+		job.vertices[ChunkMeshLayer::Flora].emplace_back(vertices[3]);
+		job.vertices[ChunkMeshLayer::Flora].emplace_back(vertices[1]);
+		job.vertices[ChunkMeshLayer::Flora].emplace_back(vertices[2]);
 	}
 }
 

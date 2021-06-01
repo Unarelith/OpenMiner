@@ -30,8 +30,10 @@
 #include <thread/ThreadPool.hpp>
 
 #include "Chunk.hpp"
-#include "ChunkBuilder.hpp"
+#include "ChunkMeshLayer.hpp"
 #include "Registry.hpp"
+#include "TextureAtlas.hpp"
+#include "Vertex.hpp"
 
 struct ChunkData {
 	s32 x, y, z;
@@ -84,7 +86,7 @@ struct ChunkData {
 };
 
 struct ChunkMeshBuildingJob {
-	using VerticesArray = std::array<std::vector<Vertex>, ChunkBuilder::layers>;
+	using VerticesArray = std::array<std::vector<Vertex>, ChunkMeshLayer::Count>;
 
 	ChunkData chunkData;
 
@@ -102,16 +104,6 @@ class ChunkMeshBuilder {
 		void addMeshBuildingJob(const Chunk &chunk, const TextureAtlas &textureAtlas);
 
 		void update();
-
-		enum Layer {
-			Solid,
-			NoMipMap,
-			Flora,
-			Glass,
-			Liquid,
-
-			Count
-		};
 
 	private:
 		static void addCross(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job, const BlockState &blockState);
@@ -134,8 +126,6 @@ class ChunkMeshBuilder {
 		                            const gk::Vector3i &normal, const ChunkData &chunk);
 
 		ClientWorld &m_world;
-
-		thread::ThreadPool m_threadPool;
 
 		std::vector<thread::ThreadPool::TaskFuture<ChunkMeshBuildingJob>> m_futures;
 };
