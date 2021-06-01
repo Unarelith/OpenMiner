@@ -411,6 +411,7 @@ inline u8 ChunkMeshBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, 
 		// 	return chunk->isInitialized() ? chunk->lightmap().getSunlight(x, y, z) : -1;
 		// else
 		// 	return chunk->isInitialized() ? chunk->lightmap().getTorchlight(x, y, z) : -1;
+		// FIXME
 
 		return (light == Light::Sun)
 			? chunk.getSunlight(x, y, z)

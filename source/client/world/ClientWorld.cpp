@@ -70,22 +70,16 @@ void ClientWorld::update(bool allowWorldReload) {
 		}
 	}
 
-	requestClosestChunkMeshing();
+	requestChunkMeshing();
 
 	m_scene.update();
 
 	m_chunkMeshBuilder.update();
 }
 
-void ClientWorld::requestClosestChunkMeshing() {
-	s32 ux = m_closestInitializedChunk.x;
-	s32 uy = m_closestInitializedChunk.y;
-	s32 uz = m_closestInitializedChunk.z;
-	float ud = m_closestInitializedChunk.w;
-
-	// If we have a chunk marked for initialization
-	if (ud < 1000000.0) {
-		ClientChunk *chunk = (ClientChunk *)getChunk(ux, uy, uz);
+void ClientWorld::requestChunkMeshing() {
+	for (auto &[d, chunkPos] : m_chunksToMesh) {
+		ClientChunk *chunk = (ClientChunk *)getChunk(chunkPos.x, chunkPos.y, chunkPos.z);
 		if(chunk && !chunk->isReadyForMeshing() && chunk->areAllNeighboursInitialized()) {
 			chunk->setReadyForMeshing(true);
 			chunk->setChanged();
@@ -94,6 +88,8 @@ void ClientWorld::requestClosestChunkMeshing() {
 			// gkDebug() << "Chunk at" << ux << uy << uz << "is ready for meshing";
 		}
 	}
+
+	m_chunksToMesh.clear();
 }
 
 void ClientWorld::checkPlayerChunk(double playerX, double playerY, double playerZ) {
@@ -276,8 +272,6 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 	gk::Shader::bind(nullptr);
 
-	m_closestInitializedChunk = gk::Vector4f{0, 0, 0, 1000000};
-
 	// Changing the values sent to the GPU to double precision is suicidal,
 	// performance wise, if possible at all. Therefore we want to keep the
 	// GL rendering numbers in single precision format. But that introduces
@@ -347,15 +341,9 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 			//continue;
 		}
 
-		// If this chunk is not initialized, skip it
+		// If this chunk is not initialized, skip it and request meshing
 		if(!it.second->isReadyForMeshing()) {
-			// But if it is the closest to the camera, mark it for initialization
-			if(d < m_closestInitializedChunk.w) {
-				m_closestInitializedChunk.w = d;
-				m_closestInitializedChunk.x = it.second->x();
-				m_closestInitializedChunk.y = it.second->y();
-				m_closestInitializedChunk.z = it.second->z();
-			}
+			m_chunksToMesh.emplace(d, gk::Vector3i{it.second->x(), it.second->y(), it.second->z()});
 
 			continue;
 		}
