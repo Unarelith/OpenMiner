@@ -27,8 +27,8 @@
 #ifndef BLOCKPARAM_HPP_
 #define BLOCKPARAM_HPP_
 
+#include <map>
 #include <string>
-#include <unordered_map>
 
 #include <gk/core/IntTypes.hpp>
 #include <gk/core/ISerializable.hpp>
@@ -80,7 +80,7 @@ class BlockParam : public gk::ISerializable {
 			u8 size;
 		};
 
-		std::unordered_map<u8, Param> m_allocatedBits;
+		std::map<u8, Param> m_allocatedBits;
 };
 
 #endif // BLOCKPARAM_HPP_
