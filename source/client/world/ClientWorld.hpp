@@ -27,6 +27,7 @@
 #ifndef CLIENTWORLD_HPP_
 #define CLIENTWORLD_HPP_
 
+#include <map>
 #include <unordered_map>
 #include <unordered_set>
 

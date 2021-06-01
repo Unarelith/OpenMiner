@@ -252,6 +252,11 @@ u8 ChunkLightmap::getTorchlight(int x, int y, int z) const {
 	return m_lightMap[z][y][x] & 0xf;
 }
 
+void ChunkLightmap::setLightDataRaw(int x, int y, int z, u8 val) {
+	m_lightMap[z][y][x] = val;
+	m_hasChanged = true;
+}
+
 bool ChunkLightmap::setLightData(int x, int y, int z, u8 val) {
 	if (m_lightMap[z][y][x] == val) return false;
 

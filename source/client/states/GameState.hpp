@@ -87,8 +87,6 @@ class GameState : public gk::ApplicationState {
 
 		Client m_client;
 
-		ClientWorld m_world;
-
 		std::unordered_map<u16, PlayerBox> m_playerBoxes;
 
 		ClientCommandHandler m_clientCommandHandler{m_client, m_world, m_player, m_playerBoxes};
@@ -98,6 +96,8 @@ class GameState : public gk::ApplicationState {
 		TextureAtlas &m_textureAtlas;
 
 		Registry m_registry;
+
+		ClientWorld m_world;
 
 		KeyboardHandler *m_keyboardHandler;
 		bool m_areModKeysLoaded = false;

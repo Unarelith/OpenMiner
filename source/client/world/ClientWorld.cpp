@@ -145,9 +145,8 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 
 				packet >> block >> light;
 
-				chunk->setBlockRaw(x, y, z, block & 0xffff);
-				chunk->setData(x, y, z, block >> 16);
-				chunk->lightmap().setLightData(x, y, z, light);
+				chunk->setDataRaw(x, y, z, block);
+				chunk->lightmap().setLightDataRaw(x, y, z, light);
 
 				// bool updatedBlock = chunk->setBlockRaw(x, y, z, block & 0xffff);
 				// bool updatedData = chunk->setData(x, y, z, block >> 16);
@@ -157,6 +156,8 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 			}
 		}
 	}
+
+	addChunkToUpdate(chunk);
 
 	// if (!hasUpdatedChunk)
 	// 	gkWarning() << "Received chunk at" << cx << cy << cz << "without any updates";
