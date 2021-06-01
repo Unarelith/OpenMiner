@@ -31,6 +31,14 @@
 
 using namespace BlockGeometry;
 
+// NOTE: TextureAtlas and Registry are accessed from different threads.
+//
+//       This is not a problem currently since both shouldn’t change during the execution,
+//       but if they do, a lot of problems will occur.
+//
+//       Also, Registry is accessed from server too when running a singleplayer game,
+//       so if it changes during the execution, that would cause problems there too.
+//
 void ChunkMeshBuilder::addMeshBuildingJob(const Chunk &chunk, const TextureAtlas &textureAtlas) {
 	// Creating the job (creates a copy of the chunk to send it to the thread)
 	ChunkMeshBuildingJob job;
