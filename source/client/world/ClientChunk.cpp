@@ -50,7 +50,6 @@ void ClientChunk::update() {
 
 void ClientChunk::process() {
 	if (m_isReadyForMeshing) {
-		// m_verticesCount = m_builder.buildChunk(*this, m_vbo);
 		m_world.buildChunk(*this);
 
 		++ClientChunk::chunkUpdateCounter;
@@ -77,13 +76,13 @@ void ClientChunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u
 
 	states.texture = &m_textureAtlas.texture();
 
-	if (layer == ChunkBuilder::Layer::Flora || (layer == ChunkBuilder::Layer::Liquid && areAllNeighboursInitialized()))
+	if (layer == ChunkMeshLayer::Flora || (layer == ChunkMeshLayer::Liquid && areAllNeighboursInitialized()))
 		glCheck(glDisable(GL_CULL_FACE));
 	else
 		glCheck(glEnable(GL_CULL_FACE));
 
 	gk::Texture::bind(states.texture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, (layer == ChunkBuilder::Layer::NoMipMap || layer == ChunkBuilder::Layer::Flora) ? 0 : Config::mipmapLevels);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, (layer == ChunkMeshLayer::NoMipMap || layer == ChunkMeshLayer::Flora) ? 0 : Config::mipmapLevels);
 	gk::Texture::bind(nullptr);
 
 	glCheck(glEnable(GL_DEPTH_TEST));
