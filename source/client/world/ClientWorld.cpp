@@ -78,8 +78,8 @@ void ClientWorld::update(bool allowWorldReload) {
 }
 
 void ClientWorld::requestChunkMeshing() {
-	for (auto &[d, chunkPos] : m_chunksToMesh) {
-		ClientChunk *chunk = (ClientChunk *)getChunk(chunkPos.x, chunkPos.y, chunkPos.z);
+	for (auto it = m_chunksToMesh.begin() ; it != m_chunksToMesh.end() ; ) {
+		ClientChunk *chunk = (ClientChunk *)getChunk(it->second.x, it->second.y, it->second.z);
 		if(chunk && !chunk->isReadyForMeshing() && chunk->areAllNeighboursInitialized()) {
 			chunk->setReadyForMeshing(true);
 			chunk->setChanged();
@@ -87,9 +87,9 @@ void ClientWorld::requestChunkMeshing() {
 
 			// gkDebug() << "Chunk at" << ux << uy << uz << "is ready for meshing";
 		}
-	}
 
-	m_chunksToMesh.clear();
+		it = m_chunksToMesh.erase(it);
+	}
 }
 
 void ClientWorld::checkPlayerChunk(double playerX, double playerY, double playerZ) {
