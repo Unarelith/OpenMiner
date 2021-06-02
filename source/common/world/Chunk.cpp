@@ -51,11 +51,6 @@ u32 Chunk::getFullBlock(int x, int y, int z) const {
 	return m_data[z][y][x];
 }
 
-void Chunk::setDataRaw(u8 x, u8 y, u8 z, u32 data) {
-	m_data[z][y][x] = data;
-	m_hasChanged = true;
-}
-
 u16 Chunk::getBlock(int x, int y, int z) const {
 	if(x < 0)              return m_surroundingChunks[0] ? m_surroundingChunks[0]->getBlock(x + Chunk::width, y, z) : 0;
 	if(x >= Chunk::width)  return m_surroundingChunks[1] ? m_surroundingChunks[1]->getBlock(x - Chunk::width, y, z) : 0;

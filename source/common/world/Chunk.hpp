@@ -61,7 +61,7 @@ class Chunk : public gk::NonCopyable {
 		virtual void process() = 0;
 
 		u32 getFullBlock(int x, int y, int z) const;
-		void setDataRaw(u8 x, u8 y, u8 z, u32 data);
+		void setDataRaw(u8 x, u8 y, u8 z, u32 data) { m_data[z][y][x] = data; m_hasChanged = true; }
 
 		u16 getBlock(int x, int y, int z) const;
 		u16 getData(int x, int y, int z) const;
