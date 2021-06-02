@@ -45,9 +45,9 @@ struct ChunkData {
 		y = chunk.y();
 		z = chunk.z();
 
-		for (s8f x = -1 ; x <= CHUNK_WIDTH ; ++x) {
+		for (s8f z = -1 ; z <= CHUNK_HEIGHT ; ++z) {
 			for (s8f y = -1 ; y <= CHUNK_DEPTH ; ++y) {
-				for (s8f z = -1 ; z <= CHUNK_HEIGHT ; ++z) {
+				for (s8f x = -1 ; x <= CHUNK_WIDTH ; ++x) {
 					data[z + 1][y + 1][x + 1] = chunk.getFullBlock(x, y, z);
 					lightData[z + 1][y + 1][x + 1] = chunk.lightmap().getLightData(x, y, z);
 				}
