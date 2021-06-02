@@ -135,8 +135,8 @@ class Registry : public gk::ISerializable {
 
 		static void initUsertype(sol::state &lua);
 
-		const std::vector<std::unique_ptr<Block>> &blocks() const { return m_blocks; }
-		const std::vector<std::unique_ptr<Item>> &items() const { return m_items; }
+		const std::vector<std::shared_ptr<Block>> &blocks() const { return m_blocks; }
+		const std::vector<std::shared_ptr<Item>> &items() const { return m_items; }
 		const std::vector<Tree> &trees() const { return m_trees; }
 		const std::vector<Biome> &biomes() const { return m_biomes; }
 		const std::vector<Dimension> &dimensions() const { return m_dimensions; }
@@ -148,9 +148,9 @@ class Registry : public gk::ISerializable {
 	private:
 		static Registry *s_instance;
 
-		std::vector<std::unique_ptr<Block>> m_blocks;
-		std::vector<std::unique_ptr<Item>> m_items;
-		std::vector<std::unique_ptr<Recipe>> m_recipes;
+		std::vector<std::shared_ptr<Block>> m_blocks;
+		std::vector<std::shared_ptr<Item>> m_items;
+		std::vector<std::shared_ptr<Recipe>> m_recipes;
 		std::vector<Sky> m_skies;
 		std::vector<Tree> m_trees;
 		std::vector<Biome> m_biomes;
