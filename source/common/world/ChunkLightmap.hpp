@@ -27,6 +27,7 @@
 #ifndef CHUNKLIGHTMAP_HPP_
 #define CHUNKLIGHTMAP_HPP_
 
+#include <optional>
 #include <queue>
 
 #include <gk/core/IntTypes.hpp>
@@ -63,6 +64,7 @@ class ChunkLightmap {
 		void updateTorchlight();
 		void updateSunlight();
 
+		std::optional<u8> tryGetLightData(int x, int y, int z) const;
 		u8 getLightDataRaw(int x, int y, int z) const { return m_lightMap[z][y][x]; }
 		u8 getLightData(int x, int y, int z) const;
 		u8 getSunlight(int x, int y, int z) const;

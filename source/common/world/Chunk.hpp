@@ -85,11 +85,13 @@ class Chunk : public gk::NonCopyable {
 
 		World &world() { return m_world; }
 
+		bool hasSurroundingChunk(u8 i) { return (i > 5) ? false : m_surroundingChunkPresence[i]; }
 		Chunk *getSurroundingChunk(u8 i) { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
 		const Chunk *getSurroundingChunk(u8 i) const { return (i > 5) ? nullptr : m_surroundingChunks[i]; }
-		void setSurroundingChunk(u8 i, Chunk *chunk) { if (i < 6) m_surroundingChunks[i] = chunk; }
+		void setSurroundingChunk(u8 i, Chunk *chunk);
 
 		bool areAllNeighboursInitialized() const;
+		bool areAllNeighboursLoaded() const { return m_surroundingChunkPresence.all(); }
 
 		bool isInitialized() const { return m_isInitialized; }
 		void setInitialized(bool isInitialized) { m_isInitialized = isInitialized; }
@@ -123,6 +125,7 @@ class Chunk : public gk::NonCopyable {
 		ChunkLightmap m_lightmap{this};
 
 		Chunk *m_surroundingChunks[6]{nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+		std::bitset<6> m_surroundingChunkPresence;
 
 		bool m_isInitialized = false;
 		bool m_hasChanged = false;

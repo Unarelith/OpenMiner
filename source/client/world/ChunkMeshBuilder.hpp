@@ -38,7 +38,7 @@
 struct ChunkData {
 	s32 x, y, z;
 	u32 data[CHUNK_HEIGHT + 2][CHUNK_DEPTH + 2][CHUNK_WIDTH + 2];
-	u8 lightData[CHUNK_HEIGHT + 2][CHUNK_DEPTH + 2][CHUNK_WIDTH + 2];
+	std::optional<u8> lightData[CHUNK_HEIGHT + 2][CHUNK_DEPTH + 2][CHUNK_WIDTH + 2];
 
 	void loadFromChunk(const Chunk &chunk) {
 		x = chunk.x();
@@ -49,7 +49,7 @@ struct ChunkData {
 			for (s8f y = -1 ; y <= CHUNK_DEPTH ; ++y) {
 				for (s8f x = -1 ; x <= CHUNK_WIDTH ; ++x) {
 					data[z + 1][y + 1][x + 1] = chunk.getFullBlock(x, y, z);
-					lightData[z + 1][y + 1][x + 1] = chunk.lightmap().getLightData(x, y, z);
+					lightData[z + 1][y + 1][x + 1] = chunk.lightmap().tryGetLightData(x, y, z);
 				}
 			}
 		}
@@ -63,12 +63,14 @@ struct ChunkData {
 		return (data[z + 1][y + 1][x + 1] >> 16) & 0xffff;
 	}
 
-	u8 getTorchlight(s8f x, s8f y, s8f z) const {
-		return lightData[z + 1][y + 1][x + 1] & 0xf;
+	s8 getTorchlight(s8f x, s8f y, s8f z) const {
+		auto torchlight = lightData[z + 1][y + 1][x + 1];
+		return torchlight ? torchlight.value() & 0xf : -1;
 	}
 
-	u8 getSunlight(s8f x, s8f y, s8f z) const {
-		return (lightData[z + 1][y + 1][x + 1] >> 4) & 0xf;
+	s8 getSunlight(s8f x, s8f y, s8f z) const {
+		auto sunlight = lightData[z + 1][y + 1][x + 1];
+		return sunlight ? (sunlight.value() >> 4) & 0xf : -1;
 	}
 
 	const BlockState *getBlockState(s8f x, s8f y, s8f z) const {

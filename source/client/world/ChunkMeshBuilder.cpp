@@ -399,25 +399,6 @@ inline u8 ChunkMeshBuilder::getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::V
 }
 
 inline u8 ChunkMeshBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, const gk::Vector3i &offset, const gk::Vector3i &normal, const ChunkData &chunk) {
-	std::function<s8(const ChunkData &chunk, s8, s8, s8)> getLight = [&](const ChunkData &chunk, s8 x, s8 y, s8 z) -> s8 {
-		// if (x < 0)             return chunk->getSurroundingChunk(0) && chunk->getSurroundingChunk(0)->isInitialized() ? getLight(chunk->getSurroundingChunk(0), x + CHUNK_WIDTH, y, z) : -1;
-		// if (x >= CHUNK_WIDTH)  return chunk->getSurroundingChunk(1) && chunk->getSurroundingChunk(1)->isInitialized() ? getLight(chunk->getSurroundingChunk(1), x - CHUNK_WIDTH, y, z) : -1;
-		// if (y < 0)             return chunk->getSurroundingChunk(2) && chunk->getSurroundingChunk(2)->isInitialized() ? getLight(chunk->getSurroundingChunk(2), x, y + CHUNK_DEPTH, z) : -1;
-		// if (y >= CHUNK_DEPTH)  return chunk->getSurroundingChunk(3) && chunk->getSurroundingChunk(3)->isInitialized() ? getLight(chunk->getSurroundingChunk(3), x, y - CHUNK_DEPTH, z) : -1;
-		// if (z < 0)             return chunk->getSurroundingChunk(4) && chunk->getSurroundingChunk(4)->isInitialized() ? getLight(chunk->getSurroundingChunk(4), x, y, z + CHUNK_HEIGHT) : -1;
-		// if (z >= CHUNK_HEIGHT) return chunk->getSurroundingChunk(5) && chunk->getSurroundingChunk(5)->isInitialized() ? getLight(chunk->getSurroundingChunk(5), x, y, z - CHUNK_HEIGHT) : -1;
-        //
-		// if (light == Light::Sun)
-		// 	return chunk->isInitialized() ? chunk->lightmap().getSunlight(x, y, z) : -1;
-		// else
-		// 	return chunk->isInitialized() ? chunk->lightmap().getTorchlight(x, y, z) : -1;
-		// FIXME
-
-		return (light == Light::Sun)
-			? chunk.getSunlight(x, y, z)
-			: chunk.getTorchlight(x, y, z);
-	};
-
 	gk::Vector3i minOffset{
 		(normal.x != 0) ? offset.x : 0,
 		(normal.y != 0) ? offset.y : 0,
@@ -429,6 +410,10 @@ inline u8 ChunkMeshBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, 
 		{x + offset.x,    y + minOffset.y, z + minOffset.z},
 		{x + minOffset.x, y + offset.y,    z + minOffset.z},
 		{x + offset.x,    y + offset.y,    z + offset.z}
+	};
+
+	auto getLight = [&](const ChunkData &chunk, s8 x, s8 y, s8 z) -> s8 {
+		return (light == Light::Sun) ? chunk.getSunlight(x, y, z) : chunk.getTorchlight(x, y, z);
 	};
 
 	// Get light values for surrounding nodes

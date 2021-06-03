@@ -80,7 +80,7 @@ void ClientWorld::update(bool allowWorldReload) {
 void ClientWorld::requestChunkMeshing() {
 	for (auto it = m_chunksToMesh.begin() ; it != m_chunksToMesh.end() ; ) {
 		ClientChunk *chunk = (ClientChunk *)getChunk(it->second.x, it->second.y, it->second.z);
-		if(chunk && !chunk->isReadyForMeshing() && chunk->areAllNeighboursInitialized()) {
+		if(chunk && !chunk->isReadyForMeshing() && chunk->areAllNeighboursLoaded()) {
 			chunk->setReadyForMeshing(true);
 			chunk->setChanged();
 			addChunkToUpdate(chunk);
@@ -133,7 +133,7 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 		chunk = it.first->second.get();
 	}
 
-	createChunkNeighbours(chunk);
+	linkChunkNeighbours(chunk);
 
 	// Receive chunk data
 	// bool hasUpdatedChunk = false;
@@ -225,7 +225,7 @@ Chunk *ClientWorld::getChunk(int cx, int cy, int cz) const {
 	return it->second.get();
 }
 
-void ClientWorld::createChunkNeighbours(ClientChunk *chunk) {
+void ClientWorld::linkChunkNeighbours(ClientChunk *chunk) {
 	gk::Vector3i surroundingChunks[6] = {
 		{chunk->x() - 1, chunk->y(),     chunk->z()},
 		{chunk->x() + 1, chunk->y(),     chunk->z()},
@@ -242,14 +242,6 @@ void ClientWorld::createChunkNeighbours(ClientChunk *chunk) {
 		const s32 scz = surroundingChunks[i].z;
 
 		ClientChunk *neighbour = (ClientChunk *)getChunk(scx, scy, scz);
-		// if (!neighbour) {
-		// 	auto it = m_chunks.emplace(gk::Vector3i{scx, scy, scz}, new ClientChunk(scx, scy, scz, *m_dimension, *this, m_textureAtlas));
-		// 	neighbour = it.first->second.get();
-
-		// 	if (m_eventHandler)
-		// 		m_eventHandler->emplaceEvent<ChunkCreatedEvent>(gk::Vector3i{scx, scy, scz}, false);
-		// }
-
 		if (neighbour) {
 			chunk->setSurroundingChunk(i, neighbour);
 			neighbour->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, chunk);
