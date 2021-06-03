@@ -64,16 +64,18 @@ struct ChunkData {
 	}
 
 	s8 getTorchlight(s8f x, s8f y, s8f z) const {
-		auto torchlight = lightData[z + 1][y + 1][x + 1];
-		return torchlight ? torchlight.value() & 0xf : -1;
+		auto light = lightData[z + 1][y + 1][x + 1];
+		return light ? light.value() & 0xf : -1;
 	}
 
 	s8 getSunlight(s8f x, s8f y, s8f z) const {
-		auto sunlight = lightData[z + 1][y + 1][x + 1];
-		return sunlight ? (sunlight.value() >> 4) & 0xf : -1;
+		auto light = lightData[z + 1][y + 1][x + 1];
+		return light ? (light.value() >> 4) & 0xf : -1;
 	}
 
 	const BlockState *getBlockState(s8f x, s8f y, s8f z) const {
+		if (!lightData[z + 1][y + 1][x + 1]) return nullptr;
+
 		u16 blockID = getBlockID(x, y, z);
 		u16 blockParam = getBlockParam(x, y, z);
 
