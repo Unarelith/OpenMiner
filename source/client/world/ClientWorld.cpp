@@ -236,23 +236,24 @@ void ClientWorld::createChunkNeighbours(ClientChunk *chunk) {
 	};
 
 	// Create entries in the map for surrounding chunks
-	// That will allow draw() to mark them for initialization
 	for (u8 i = 0 ; i < 6 ; ++i) {
 		const s32 scx = surroundingChunks[i].x;
 		const s32 scy = surroundingChunks[i].y;
 		const s32 scz = surroundingChunks[i].z;
 
 		ClientChunk *neighbour = (ClientChunk *)getChunk(scx, scy, scz);
-		if (!neighbour) {
-			auto it = m_chunks.emplace(gk::Vector3i{scx, scy, scz}, new ClientChunk(scx, scy, scz, *m_dimension, *this, m_textureAtlas));
-			neighbour = it.first->second.get();
+		// if (!neighbour) {
+		// 	auto it = m_chunks.emplace(gk::Vector3i{scx, scy, scz}, new ClientChunk(scx, scy, scz, *m_dimension, *this, m_textureAtlas));
+		// 	neighbour = it.first->second.get();
 
-			if (m_eventHandler)
-				m_eventHandler->emplaceEvent<ChunkCreatedEvent>(gk::Vector3i{scx, scy, scz}, false);
+		// 	if (m_eventHandler)
+		// 		m_eventHandler->emplaceEvent<ChunkCreatedEvent>(gk::Vector3i{scx, scy, scz}, false);
+		// }
+
+		if (neighbour) {
+			chunk->setSurroundingChunk(i, neighbour);
+			neighbour->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, chunk);
 		}
-
-		chunk->setSurroundingChunk(i, neighbour);
-		neighbour->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, chunk);
 	}
 }
 
