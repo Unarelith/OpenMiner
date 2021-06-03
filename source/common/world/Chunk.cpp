@@ -233,6 +233,13 @@ BlockData *Chunk::addBlockData(int x, int y, int z, int inventoryWidth, int inve
 	return it->second.get();
 }
 
+void Chunk::setSurroundingChunk(u8 i, Chunk *chunk) {
+	if (i < 6) {
+		m_surroundingChunkPresence.set(i, chunk != nullptr);
+		m_surroundingChunks[i] = chunk;
+	}
+}
+
 bool Chunk::areAllNeighboursInitialized() const {
 	return m_surroundingChunks[Chunk::West]   && m_surroundingChunks[Chunk::West]->isInitialized()
 		&& m_surroundingChunks[Chunk::East]   && m_surroundingChunks[Chunk::East]->isInitialized()

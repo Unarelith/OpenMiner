@@ -80,7 +80,7 @@ class ClientWorld : public World, public gk::Drawable {
 		const Sky *sky() const { return m_sky; }
 
 	private:
-		void createChunkNeighbours(ClientChunk *chunk);
+		void linkChunkNeighbours(ClientChunk *chunk);
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
