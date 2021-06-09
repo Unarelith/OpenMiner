@@ -66,7 +66,9 @@ class ClientPlayer : public Player {
 		gk::Camera &camera() { return m_camera; }
 
 	private:
-		void testPoint(const ClientWorld &world, double x, double y, double z, glm::vec3 &vel);
+		void testPoint(const ClientWorld &world, double x, double y, double z, gk::Vector3f &vel);
+
+		void applyViewBobbing(float &viewAngleH, float &viewAngleV, float &viewAngleRoll);
 
 		static ClientPlayer *s_instance;
 
@@ -76,9 +78,13 @@ class ClientPlayer : public Player {
 
 		gk::Vector3f m_cameraLocalPos;
 
-		glm::vec3 m_velocity{0.f};
-		bool m_isJumping = false;
+		gk::Vector3f m_velocity = gk::Vector3f::Zero;
 
+		// For view bobbing only
+		bool m_isMoving = false;
+		u64 m_movementStartTime = 0;
+
+		bool m_isJumping = false;
 		const float m_jumpSpeed = 0.06f;
 
 		std::optional<gk::Vector3i> m_lastChunkPos;

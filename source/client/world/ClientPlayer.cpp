@@ -27,6 +27,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <gk/core/input/GamePad.hpp>
+#include <gk/core/GameClock.hpp>
 #include <gk/core/Mouse.hpp>
 
 #include "ClientCommandHandler.hpp"
@@ -51,22 +52,29 @@ void ClientPlayer::turnH(float angle) {
 	if (m_viewAngleH >= 180.f) m_viewAngleH -= 360.f;
 	if (m_viewAngleH < -180.f) m_viewAngleH += 360.f;
 
-	updateCamera();
+	// updateCamera();
 }
 
 void ClientPlayer::turnViewV(float angle) {
 	m_viewAngleV = std::max(std::min(m_viewAngleV + angle, 90.f), -90.f);
 
-	updateCamera();
+	// updateCamera();
 }
 
 void ClientPlayer::updateCamera() {
-	float ch = cosf(m_viewAngleH * gk::DEG_TO_RADf);
-	float sh = sinf(m_viewAngleH * gk::DEG_TO_RADf);
-	float cv = cosf(m_viewAngleV * gk::DEG_TO_RADf);
-	float sv = sinf(m_viewAngleV * gk::DEG_TO_RADf);
-	float cr = cosf(m_viewAngleRoll * gk::DEG_TO_RADf);
-	float sr = sinf(m_viewAngleRoll * gk::DEG_TO_RADf);
+	float viewAngleH = m_viewAngleH;
+	float viewAngleV = m_viewAngleV;
+	float viewAngleRoll = m_viewAngleRoll;
+
+	if (Config::isViewBobbingEnabled)
+		applyViewBobbing(viewAngleH, viewAngleV, viewAngleRoll);
+
+	float ch = cosf(viewAngleH * gk::DEG_TO_RADf);
+	float sh = sinf(viewAngleH * gk::DEG_TO_RADf);
+	float cv = cosf(viewAngleV * gk::DEG_TO_RADf);
+	float sv = sinf(viewAngleV * gk::DEG_TO_RADf);
+	float cr = cosf(viewAngleRoll * gk::DEG_TO_RADf);
+	float sr = sinf(viewAngleRoll * gk::DEG_TO_RADf);
 
 	m_forwardDir = gk::Vector3f{ch * cv, sh * cv, sv};
 	m_camera.setDirection(m_forwardDir);
@@ -76,8 +84,10 @@ void ClientPlayer::updateCamera() {
 void ClientPlayer::move(float direction) {
 	direction += m_viewAngleH;
 
-	m_velocity.x = 0.04f * cosf(direction * gk::DEG_TO_RADf);
-	m_velocity.y = 0.04f * sinf(direction * gk::DEG_TO_RADf);
+	constexpr float playerSpeed = 0.0275f;
+
+	m_velocity.x = playerSpeed * cosf(direction * gk::DEG_TO_RADf);
+	m_velocity.y = playerSpeed * sinf(direction * gk::DEG_TO_RADf);
 }
 
 void ClientPlayer::processInputs() {
@@ -119,22 +129,32 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 
 			m_isJumping = true;
 
-			if (m_velocity.z < -m_jumpSpeed) // Limit max vertical speed to jump speed
+			// Limit max vertical speed to jump speed
+			if (m_velocity.z < -m_jumpSpeed)
 				m_velocity.z = -m_jumpSpeed;
 		}
 	}
+	// Block player until the chunk loads, unless "no clip" mode is enabled
 	else if (!Config::isNoClipEnabled) {
-		// Block player until the chunk loads, unless "no clip" mode is enabled
-		m_velocity = glm::vec3{0.f, 0.f, 0.f};
+		m_velocity = gk::Vector3f::Zero;
 	}
 
 	if (!Config::isNoClipEnabled)
 		checkCollisions(world);
 
+	// Reduce velocity while in the air, unless "fly mode" is enabled
 	if (!Config::isFlyModeEnabled && m_velocity.z != 0.f) {
-		m_velocity.x *= 0.75f;
-		m_velocity.y *= 0.75f;
+		m_velocity.x *= 0.65f;
+		m_velocity.y *= 0.65f;
 	}
+
+	// Increase velocity in fly mode
+	if (Config::isFlyModeEnabled) {
+		m_velocity.x *= 2.f;
+		m_velocity.y *= 2.f;
+	}
+
+	updateCamera();
 
 	setPosition(m_x + m_velocity.x, m_y + m_velocity.y, m_z + m_velocity.z);
 
@@ -192,12 +212,32 @@ bool passable(const ClientWorld &world, double x, double y, double z) {
 	return !blockState || !blockState->block().id() || !blockState->isCollidable();
 }
 
-void ClientPlayer::testPoint(const ClientWorld &world, double x, double y, double z, glm::vec3 &vel) {
+void ClientPlayer::testPoint(const ClientWorld &world, double x, double y, double z, gk::Vector3f &vel) {
 	if(!passable(world, x + vel.x, y, z)) vel.x = 0.f;
 	if(!passable(world, x, y + vel.y, z)) vel.y = 0.f;
 	if(!passable(world, x, y, z + vel.z)) {
 		if(vel.z < 0.f && m_isJumping) m_isJumping = false;
 		vel.z = 0.f;
+	}
+}
+
+void ClientPlayer::applyViewBobbing(float &viewAngleH, float &viewAngleV, float &viewAngleRoll) {
+	if (m_velocity != gk::Vector3f::Zero && m_velocity.z == 0 && !Config::isFlyModeEnabled) {
+		if (!m_isMoving) {
+			m_movementStartTime = gk::GameClock::getInstance().getTicks();
+			m_isMoving = true;
+		}
+	}
+	else {
+		m_isMoving = false;
+	}
+
+	if (m_isMoving) {
+		// float t = (float)(gk::GameClock::getInstance().getTicks());
+		float t = (float)(gk::GameClock::getInstance().getTicks() - m_movementStartTime);
+		viewAngleH += 0.4f * sinf(t / 150.f);
+		viewAngleV += 0.4f * sinf(t / 75.f);
+		viewAngleRoll += 0.3f * -sinf(t / 150.f);
 	}
 }
 

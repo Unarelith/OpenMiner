@@ -291,12 +291,14 @@ void SettingsMenuState::addGraphicsButtons() {
 		slider.setText("Mipmap Levels: " + std::to_string(Config::mipmapLevels));
 	}, 0, 4, Config::mipmapLevels);
 
-	addToggleButton("Star Rendering", Config::isStarRenderingEnabled, false);
-
 	m_menuWidget.addSlider("FOV: " + std::to_string((int)Config::cameraFOV), [] (SliderWidget &slider, u32) {
 		Config::cameraFOV = (float)slider.getCurrentValue();
 		slider.setText("FOV: " + std::to_string((int)Config::cameraFOV));
 	}, 45, 135, (int)Config::cameraFOV);
+
+	addToggleButton("Star Rendering", Config::isStarRenderingEnabled, false);
+
+	addToggleButton("View Bobbing", Config::isViewBobbingEnabled, false);
 
 	updateWidgetPosition();
 }

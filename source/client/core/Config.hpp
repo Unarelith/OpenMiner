@@ -51,6 +51,7 @@ namespace Config {
 	extern bool isFullscreenModeEnabled;
 	extern bool isVerticalSyncEnabled;
 	extern bool isStarRenderingEnabled;
+	extern bool isViewBobbingEnabled;
 	extern float cameraFOV;
 	extern u16 screenWidth;
 	extern u16 screenHeight;
