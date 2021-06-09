@@ -50,10 +50,10 @@ void ChunkRenderer::draw(gk::RenderTarget &target, gk::RenderStates states, cons
 			glCheck(glEnable(GL_CULL_FACE));
 
 		for (auto &it : chunks) {
-			states.shader->setUniform("u_modelMatrix", it.second);
-
 			std::size_t verticesCount = it.first->getVerticesCount(layer);
 			if (verticesCount == 0) continue;
+
+			states.shader->setUniform("u_modelMatrix", it.second);
 
 			target.drawVertexBuffer(it.first->getVBO(layer), GL_TRIANGLES, 0, (GLsizei)verticesCount, states);
 
