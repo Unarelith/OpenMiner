@@ -41,7 +41,7 @@ class Widget : public gk::Drawable, public gk::Transformable {
 		virtual void onEvent(const SDL_Event &) {}
 		virtual void update() {}
 
-		bool isPointInWidget(float x, float y);
+		bool isPointInWidget(int x, int y);
 
 		gk::FloatRect getGlobalBounds() const;
 

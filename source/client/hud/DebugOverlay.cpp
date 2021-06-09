@@ -59,9 +59,9 @@ DebugOverlay::DebugOverlay(const ClientPlayer &player, const ClientWorld &world)
 }
 
 void DebugOverlay::update(bool printOpenGLInfo) {
-	s32 px = std::floor(m_player.x());
-	s32 py = std::floor(m_player.y());
-	s32 pz = std::floor(m_player.z());
+	s32 px = (s32)std::floor(m_player.x());
+	s32 py = (s32)std::floor(m_player.y());
+	s32 pz = (s32)std::floor(m_player.z());
 
 	// Directions is now an angle4
 	const char *directions[4] = {"East", "North", "West", "South"};

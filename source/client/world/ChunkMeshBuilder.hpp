@@ -56,11 +56,11 @@ struct ChunkData {
 	}
 
 	u16 getBlockID(s8f x, s8f y, s8f z) const {
-		return data[z + 1][y + 1][x + 1] & 0xffff;
+		return u16(data[z + 1][y + 1][x + 1] & 0xffff);
 	}
 
 	u16 getBlockParam(s8f x, s8f y, s8f z) const {
-		return (data[z + 1][y + 1][x + 1] >> 16) & 0xffff;
+		return u16((data[z + 1][y + 1][x + 1] >> 16) & 0xffff);
 	}
 
 	s8 getTorchlight(s8f x, s8f y, s8f z) const {
@@ -115,19 +115,19 @@ class ChunkMeshBuilder {
 		static void addCube(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job, const BlockState &blockState, u16 blockParam);
 		static void addCubeFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob &job,
 		             const BlockState &blockState,
-		             const gk::Vector3i &normal, const glm::vec3 *const vertexPos[4],
-		             const gk::Vector3i *const neighbourOfs[4]);
+		             const gk::Vector3<s8f> &normal, const glm::vec3 *const vertexPos[4],
+		             const gk::Vector3<s8f> *const neighbourOfs[4]);
 
 		enum class Light {
 			Sun,
 			Torch
 		};
 
-		static u8 getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::Vector3i &offset,
-		                              const gk::Vector3i &normal, const ChunkData &chunk);
+		static u8 getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::Vector3<s8f> &offset,
+		                              const gk::Vector3<s8f> &normal, const ChunkData &chunk);
 
-		static u8 getLightForVertex(Light light, s8f x, s8f y, s8f z, const gk::Vector3i &offset,
-		                            const gk::Vector3i &normal, const ChunkData &chunk);
+		static u8 getLightForVertex(Light light, s8f x, s8f y, s8f z, const gk::Vector3<s8f> &offset,
+		                            const gk::Vector3<s8f> &normal, const ChunkData &chunk);
 
 		ClientWorld &m_world;
 

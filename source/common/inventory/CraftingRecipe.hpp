@@ -43,7 +43,7 @@ class CraftingRecipe : public Recipe {
 		bool isMatching(const Inventory &inventory) const override;
 
 	private:
-		bool checkMatch(const Inventory &inventory, int offsetX, int offsetY) const;
+		bool checkMatch(const Inventory &inventory, u16 offsetX, u16 offsetY) const;
 
 		std::vector<std::string> m_pattern;
 		std::map<char, std::vector<std::string>> m_keys;

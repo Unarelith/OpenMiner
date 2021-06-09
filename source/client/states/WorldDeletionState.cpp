@@ -38,7 +38,7 @@ namespace fs = ghc::filesystem;
 WorldDeletionState::WorldDeletionState(const std::string &worldName, TitleScreenState *titleScreen) : InterfaceState(titleScreen) {
 	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
 
-	m_filter.setFillColor(gk::Color(0, 0, 0, 176));
+	m_filter.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 176));
 
 	m_text1.setString("Are you sure you want to delete this world?");
 	m_text1.updateVertexBuffer();
@@ -76,20 +76,27 @@ void WorldDeletionState::onEvent(const SDL_Event &event) {
 }
 
 void WorldDeletionState::updateWidgetPosition() {
-	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
-	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+	m_background.setPosRect(0, 0,
+		u16(Config::screenWidth / m_background.getScale().x),
+		u16(Config::screenHeight / m_background.getScale().y)
+	);
+
+	m_background.setClipRect(0, 0,
+		u16(Config::screenWidth / m_background.getScale().x),
+		u16(Config::screenHeight / m_background.getScale().y)
+	);
 
 	m_filter.setSize(Config::screenWidth, Config::screenHeight);
 
-	m_text1.setPosition(Config::screenWidth  / 2 - m_text1.getSize().x * Config::guiScale / 2,
-	                    Config::screenHeight / 2 - 30 * Config::guiScale);
+	m_text1.setPosition(Config::screenWidth  / 2.f - float(m_text1.getSize().x * Config::guiScale) / 2.f,
+	                    Config::screenHeight / 2.f - 30.f * Config::guiScale);
 
-	m_text2.setPosition(Config::screenWidth  / 2 - m_text2.getSize().x * Config::guiScale / 2,
-	                    Config::screenHeight / 2 - m_text2.getSize().y * Config::guiScale / 2);
+	m_text2.setPosition(Config::screenWidth  / 2.f - float(m_text2.getSize().x * Config::guiScale) / 2.f,
+	                    Config::screenHeight / 2.f - float(m_text2.getSize().y * Config::guiScale) / 2.f);
 
 	m_menuWidget.setPosition(
 		Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2,
-		Config::screenHeight - 110 * Config::guiScale
+		Config::screenHeight - 110.f * Config::guiScale
 	);
 }
 

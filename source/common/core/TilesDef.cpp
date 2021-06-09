@@ -30,7 +30,7 @@
 #include "TilesDef.hpp"
 
 const std::string &TilesDef::getTextureForFace(u8 face) const {
-	u8 size = m_textureFilenames.size();
+	u8 size = (u8)m_textureFilenames.size();
 	if (size == 0)
 		throw EXCEPTION("For object '" + m_objectID + "' in state " + std::to_string(m_stateID) + ": Trying to get texture from empty tiles definition");
 

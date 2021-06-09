@@ -60,7 +60,7 @@ class MouseItemWidget : public ItemWidget {
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		void updatePosition(float x, float y);
+		void updatePosition(s32 x, s32 y);
 
 		Inventory m_inventory{1, 1};
 

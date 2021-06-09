@@ -102,7 +102,7 @@ inline void ChunkMeshBuilder::addCube(s8f x, s8f y, s8f z, ChunkMeshBuildingJob 
 	const gk::FloatBox &boundingBox = blockState.boundingBox();
 
 	u8f orientation = blockState.block().isRotatable()
-		? blockState.block().param().getParam(BlockParam::Rotation, blockParam) : 0;
+		? (u8f)blockState.block().param().getParam(BlockParam::Rotation, blockParam) : 0;
 	const glm::mat3 &orientMatrix = orientMatrices[orientation];
 
 	glm::vec3 vertexPos[nVertsPerCube]{
@@ -120,9 +120,9 @@ inline void ChunkMeshBuilder::addCube(s8f x, s8f y, s8f z, ChunkMeshBuildingJob 
 	if (blockState.drawType() == BlockDrawType::Cactus) {
 		// Ignore bounding box, initialize it to full node coordinates
 		for (u8f i = 0; i < nVertsPerCube; ++i) {
-			vertexPos[i].x = (i >> 0) & 1;
-			vertexPos[i].y = (i >> 1) & 1;
-			vertexPos[i].z = (i >> 2) & 1;
+			vertexPos[i].x = float((i >> 0) & 1);
+			vertexPos[i].y = float((i >> 1) & 1);
+			vertexPos[i].z = float((i >> 2) & 1);
 		}
 	}
 
@@ -145,7 +145,7 @@ inline void ChunkMeshBuilder::addCube(s8f x, s8f y, s8f z, ChunkMeshBuildingJob 
 	for (s8f f = 0; f < nFaces ; ++f) {
 		// Construct the normal vector to a face
 		const glm::vec3 glmNormal = orientMatrix * faceNormals[f];
-		const gk::Vector3i normal{int(glmNormal.x), int(glmNormal.y), int(glmNormal.z)};
+		const gk::Vector3<s8f> normal{s8f(glmNormal.x), s8f(glmNormal.y), s8f(glmNormal.z)};
 
 		// Construct an array with the 4 vertex positions of this face
 		glm::vec3 *faceVerts[nVertsPerFace]{
@@ -155,12 +155,12 @@ inline void ChunkMeshBuilder::addCube(s8f x, s8f y, s8f z, ChunkMeshBuildingJob 
 
 		// Construct an array with the 4 vertex neighbours of this face
 		// (as GameKit integer vectors)
-		const gk::Vector3i corner0{int(vNeighbour[cubeVerts[f][0]].x), int(vNeighbour[cubeVerts[f][0]].y), int(vNeighbour[cubeVerts[f][0]].z)};
-		const gk::Vector3i corner1{int(vNeighbour[cubeVerts[f][1]].x), int(vNeighbour[cubeVerts[f][1]].y), int(vNeighbour[cubeVerts[f][1]].z)};
-		const gk::Vector3i corner2{int(vNeighbour[cubeVerts[f][2]].x), int(vNeighbour[cubeVerts[f][2]].y), int(vNeighbour[cubeVerts[f][2]].z)};
-		const gk::Vector3i corner3{int(vNeighbour[cubeVerts[f][3]].x), int(vNeighbour[cubeVerts[f][3]].y), int(vNeighbour[cubeVerts[f][3]].z)};
+		const gk::Vector3<s8f> corner0{s8f(vNeighbour[cubeVerts[f][0]].x), s8f(vNeighbour[cubeVerts[f][0]].y), s8f(vNeighbour[cubeVerts[f][0]].z)};
+		const gk::Vector3<s8f> corner1{s8f(vNeighbour[cubeVerts[f][1]].x), s8f(vNeighbour[cubeVerts[f][1]].y), s8f(vNeighbour[cubeVerts[f][1]].z)};
+		const gk::Vector3<s8f> corner2{s8f(vNeighbour[cubeVerts[f][2]].x), s8f(vNeighbour[cubeVerts[f][2]].y), s8f(vNeighbour[cubeVerts[f][2]].z)};
+		const gk::Vector3<s8f> corner3{s8f(vNeighbour[cubeVerts[f][3]].x), s8f(vNeighbour[cubeVerts[f][3]].y), s8f(vNeighbour[cubeVerts[f][3]].z)};
 
-		const gk::Vector3i *vFaceNeighbours[nVertsPerFace]{&corner0, &corner1, &corner2, &corner3};
+		const gk::Vector3<s8f> *vFaceNeighbours[nVertsPerFace]{&corner0, &corner1, &corner2, &corner3};
 
 		addCubeFace(x, y, z, f, job, blockState, normal, faceVerts, vFaceNeighbours);
 	}
@@ -168,9 +168,9 @@ inline void ChunkMeshBuilder::addCube(s8f x, s8f y, s8f z, ChunkMeshBuildingJob 
 
 inline void ChunkMeshBuilder::addCubeFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob &job,
                                           const BlockState &blockState,
-                                          const gk::Vector3i &normal,
+                                          const gk::Vector3<s8f> &normal,
                                           const glm::vec3 *const vertexPos[nVertsPerFace],
-                                          const gk::Vector3i *const neighbourOfs[nVertsPerFace])
+                                          const gk::Vector3<s8f> *const neighbourOfs[nVertsPerFace])
 {
 	// Get surrounding block for the face
 	s8f sx = x + normal.x;
@@ -217,9 +217,9 @@ inline void ChunkMeshBuilder::addCubeFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshB
 	Vertex vertices[nVertsPerFace];
 	for (s8f v = 0; v < nVertsPerFace; ++v) {
 		if (blockState.drawType() == BlockDrawType::Cactus) {
-			vertices[v].coord3d[0] = x + vertexPos[v]->x - boundingBox.x * normal.x;
-			vertices[v].coord3d[1] = y + vertexPos[v]->y - boundingBox.y * normal.y;
-			vertices[v].coord3d[2] = z + vertexPos[v]->z - boundingBox.z * normal.z;
+			vertices[v].coord3d[0] = x + vertexPos[v]->x - boundingBox.x * (float)normal.x;
+			vertices[v].coord3d[1] = y + vertexPos[v]->y - boundingBox.y * (float)normal.y;
+			vertices[v].coord3d[2] = z + vertexPos[v]->z - boundingBox.z * (float)normal.z;
 		}
 		else {
 			float blockHeight = vertexPos[v]->z;
@@ -241,9 +241,9 @@ inline void ChunkMeshBuilder::addCubeFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshB
 
 		vertices[v].coord3d[3] = f;
 
-		vertices[v].normal[0] = normal.x;
-		vertices[v].normal[1] = normal.y;
-		vertices[v].normal[2] = normal.z;
+		vertices[v].normal[0] = (float)normal.x;
+		vertices[v].normal[1] = (float)normal.y;
+		vertices[v].normal[2] = (float)normal.z;
 
 		const gk::Color colorMultiplier = blockState.colorMultiplier();
 		vertices[v].color[0] = colorMultiplier.r;
@@ -253,8 +253,8 @@ inline void ChunkMeshBuilder::addCubeFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshB
 
 		float U = (v == 0 || v == 3) ? U0 : U1;
 		float V = (v >= 2) ? V0 : V1;
-		vertices[v].texCoord[0] = gk::qlerp(blockTexCoords.x, blockTexCoords.x + blockTexCoords.sizeX, U);
-		vertices[v].texCoord[1] = gk::qlerp(blockTexCoords.y, blockTexCoords.y + blockTexCoords.sizeY, V);
+		vertices[v].texCoord[0] = gk::qlerpf(blockTexCoords.x, blockTexCoords.x + blockTexCoords.sizeX, U);
+		vertices[v].texCoord[1] = gk::qlerpf(blockTexCoords.y, blockTexCoords.y + blockTexCoords.sizeY, V);
 
 		if (Config::isSmoothLightingEnabled)
 			vertices[v].lightValue[0] = getLightForVertex(Light::Sun, x, y, z, *neighbourOfs[v], normal, job.chunkData);
@@ -370,11 +370,11 @@ inline void ChunkMeshBuilder::addCross(s8f x, s8f y, s8f z, ChunkMeshBuildingJob
 }
 
 // Based on this article: https://0fps.net/2013/07/03/ambient-occlusion-for-minecraft-like-worlds/
-inline u8 ChunkMeshBuilder::getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::Vector3i &offset, const gk::Vector3i &normal, const ChunkData &chunk) {
-	gk::Vector3i minOffset{
-		(normal.x != 0) ? offset.x : 0,
-		(normal.y != 0) ? offset.y : 0,
-		(normal.z != 0) ? offset.z : 0
+inline u8 ChunkMeshBuilder::getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::Vector3<s8f> &offset, const gk::Vector3<s8f> &normal, const ChunkData &chunk) {
+	gk::Vector3<s8f> minOffset{
+		s8f((normal.x != 0) ? offset.x : 0),
+		s8f((normal.y != 0) ? offset.y : 0),
+		s8f((normal.z != 0) ? offset.z : 0)
 	};
 
 	const BlockState *blocks[4] = {
@@ -395,24 +395,24 @@ inline u8 ChunkMeshBuilder::getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::V
 	bool side2 = blockPresence[(minOffset.z != 0) ? 2 : 0];
 	bool corner = blockPresence[3];
 
-	return (side1 && side2) ? 0 : 3 - (side1 + side2 + corner);
+	return u8((side1 && side2) ? 0 : 3 - (side1 + side2 + corner));
 }
 
-inline u8 ChunkMeshBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, const gk::Vector3i &offset, const gk::Vector3i &normal, const ChunkData &chunk) {
-	gk::Vector3i minOffset{
-		(normal.x != 0) ? offset.x : 0,
-		(normal.y != 0) ? offset.y : 0,
-		(normal.z != 0) ? offset.z : 0
+inline u8 ChunkMeshBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, const gk::Vector3<s8f> &offset, const gk::Vector3<s8f> &normal, const ChunkData &chunk) {
+	gk::Vector3<s8f> minOffset{
+		(normal.x != 0) ? offset.x : s8f(0),
+		(normal.y != 0) ? offset.y : s8f(0),
+		(normal.z != 0) ? offset.z : s8f(0)
 	};
 
-	gk::Vector3i surroundingBlocks[4]{
-		{x + minOffset.x, y + minOffset.y, z + offset.z},
-		{x + offset.x,    y + minOffset.y, z + minOffset.z},
-		{x + minOffset.x, y + offset.y,    z + minOffset.z},
-		{x + offset.x,    y + offset.y,    z + offset.z}
+	gk::Vector3<s8f> surroundingBlocks[4]{
+		{s8f(x + minOffset.x), s8f(y + minOffset.y), s8f(z + offset.z)},
+		{s8f(x + offset.x),    s8f(y + minOffset.y), s8f(z + minOffset.z)},
+		{s8f(x + minOffset.x), s8f(y + offset.y),    s8f(z + minOffset.z)},
+		{s8f(x + offset.x),    s8f(y + offset.y),    s8f(z + offset.z)}
 	};
 
-	auto getLight = [&](const ChunkData &chunk, s8 x, s8 y, s8 z) -> s8 {
+	auto getLight = [&](const ChunkData &chunk, s8f x, s8f y, s8f z) -> s8 {
 		return (light == Light::Sun) ? chunk.getSunlight(x, y, z) : chunk.getTorchlight(x, y, z);
 	};
 
@@ -439,7 +439,7 @@ inline u8 ChunkMeshBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, 
 	}
 
 	if (count)
-		return total / count;
+		return u8(total / count);
 	else
 		return 0;
 }

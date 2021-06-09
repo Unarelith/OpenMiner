@@ -41,6 +41,8 @@
 
 namespace fs = ghc::filesystem;
 
+using namespace entt::literals;
+
 void WorldSaveBasicBackend::load(const std::string &name) {
 	gkInfo() << ("Loading '" + name + "'...").c_str();
 
@@ -48,7 +50,7 @@ void WorldSaveBasicBackend::load(const std::string &name) {
 
 	if (file.is_open()) {
 		file.seekg(0, file.end);
-		int length = file.tellg();
+		std::size_t length = file.tellg();
 		file.seekg(0, file.beg);
 
 		char *buffer = new char[length];
@@ -88,8 +90,8 @@ void WorldSaveBasicBackend::load(const std::string &name) {
 							u8 light;
 							save >> data >> light;
 
-							chunk.setBlockRaw(x, y, z, data & 0xffff);
-							chunk.setData(x, y, z, data >> 16);
+							chunk.setBlockRaw(x, y, z, u16(data & 0xffff));
+							chunk.setData(x, y, z, u16(data >> 16));
 							chunk.lightmap().setLightData(x, y, z, light);
 
 							const ServerBlock &block = (ServerBlock &)Registry::getInstance().getBlock(data & 0xffff);
@@ -253,7 +255,7 @@ void WorldSaveBasicBackend::saveEntities(sf::Packet &save, ServerWorld &world) {
 		u32 componentCount = 0;
 		Network::Packet entityPacket;
 		registry.visit(entity, [&] (const auto &component_type) {
-			const auto &type = entt::resolve_type(component_type);
+			const auto &type = entt::resolve(component_type);
 			if (type.prop("is_savable"_hs).value().template cast<bool>()) {
 				entityPacket << type.prop("type"_hs).value().template cast<ComponentType>();
 

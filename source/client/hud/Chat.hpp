@@ -43,7 +43,7 @@ class Chat : public gk::Drawable, public gk::Transformable {
 
 		const std::string &getHistoryEntry(u32 id) const { return m_history.at(m_history.size() - id - 1); }
 		void addHistoryEntry(const std::string &entry) { m_history.emplace_back(entry); }
-		u32 historySize() const { return m_history.size(); }
+		u32 historySize() const { return (u32)m_history.size(); }
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;

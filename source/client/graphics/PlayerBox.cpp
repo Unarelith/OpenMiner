@@ -273,7 +273,11 @@ void PlayerBox::updateVertexBuffer() {
 void PlayerBox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	// Subtract the camera position - see comment in ClientWorld::draw()
 	const gk::Vector3d &cameraPosition = m_camera.getDPosition();
-	states.transform.translate(m_x - cameraPosition.x, m_y - cameraPosition.y, m_z - cameraPosition.z);
+	states.transform.translate(
+		static_cast<float>(m_x - cameraPosition.x),
+		static_cast<float>(m_y - cameraPosition.y),
+		static_cast<float>(m_z - cameraPosition.z)
+	);
 	states.transform.rotateZ(m_viewAngleH);
 
 	states.transform *= getTransform();

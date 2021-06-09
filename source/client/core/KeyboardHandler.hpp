@@ -43,12 +43,12 @@ class KeyboardHandler : public gk::InputHandler {
 
 		bool isKeyPressed(gk::GameKey key) override;
 
-		SDL_Keycode getKeycode(gk::GameKey key) { return m_keys[key].keycode(); }
-		std::string getKeyName(gk::GameKey key) { return SDL_GetKeyName(m_keys[key].keycode()); }
-		void setKeycode(gk::GameKey key, SDL_Keycode keycode) { m_keys[key].setKeycode(keycode); }
+		SDL_Keycode getKeycode(gk::GameKey key) const { return m_keys.at(key).keycode(); }
+		std::string getKeyName(gk::GameKey key) const { return SDL_GetKeyName(m_keys.at(key).keycode()); }
+		void setKeycode(gk::GameKey key, SDL_Keycode keycode) { m_keys.at(key).setKeycode(keycode); }
 
 		void addKey(gk::GameKey id, const std::string &name, SDL_Keycode defaultKey, const std::string &stringID = "", Key *key = nullptr);
-		u32 keyCount() { return m_keys.size(); }
+		std::size_t keyCount() const { return m_keys.size(); }
 
 		const std::map<gk::GameKey, Key> &keys() const { return m_keys; }
 

@@ -35,7 +35,7 @@ class CraftingWidget : public AbstractInventoryWidget {
 	public:
 		CraftingWidget(ClientCommandHandler &client, Inventory &craftingInventory, Widget *parent = nullptr);
 
-		void init(unsigned int offset = 0, unsigned int size = 3);
+		void init(u16 offset = 0, u16 size = 3);
 
 		void onEvent(const SDL_Event &event) override;
 

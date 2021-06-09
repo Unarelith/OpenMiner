@@ -47,7 +47,7 @@ void DebugLightmapViewer::update(const ClientWorld &world) {
 					for (u32 z = 0 ; z < CHUNK_HEIGHT ; ++z) {
 						Text &text = m_chunkLightmapValues[x][y][z];
 						text.setString(std::to_string(chunk->lightmap().getSunlight(x, y, z)));
-						text.setPosition(x * 8, (CHUNK_DEPTH - y - 1) * 8);
+						text.setPosition((float)x * 8.f, float(CHUNK_DEPTH - y - 1) * 8.f);
 						text.setScale(0.5f, 0.5f);
 					}
 				}
@@ -55,9 +55,9 @@ void DebugLightmapViewer::update(const ClientWorld &world) {
 		}
 	}
 
-	s32 rx = gk::pmod(std::floor(m_player.x()), CHUNK_WIDTH);
-	s32 ry = gk::pmod(std::floor(m_player.y()), CHUNK_DEPTH);
-	m_playerRect.setPosition(rx * 8, (CHUNK_DEPTH - ry - 1) * 8);
+	u32 rx = gk::pmod((s32)std::floor(m_player.x()), CHUNK_WIDTH);
+	u32 ry = gk::pmod((s32)std::floor(m_player.y()), CHUNK_DEPTH);
+	m_playerRect.setPosition((float)rx * 8.f, float(CHUNK_DEPTH - ry - 1) * 8.f);
 }
 
 void DebugLightmapViewer::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -67,6 +67,6 @@ void DebugLightmapViewer::draw(gk::RenderTarget &target, gk::RenderStates states
 
 	for (u32 x = 0 ; x < CHUNK_WIDTH ; ++x)
 		for (u32 y = 0 ; y < CHUNK_DEPTH ; ++y)
-			target.draw(m_chunkLightmapValues[x][y][gk::pmod(m_player.z(), CHUNK_HEIGHT)], states);
+			target.draw(m_chunkLightmapValues[x][y][gk::pmod((s32)m_player.z(), CHUNK_HEIGHT)], states);
 }
 

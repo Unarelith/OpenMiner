@@ -42,7 +42,7 @@ ChatState::ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, boo
 	m_drawBackground = false;
 
 	m_textInput.setScale(Config::guiScale, Config::guiScale);
-	m_textInput.setBackgroundColor(gk::Color{0, 0, 0, 127});
+	m_textInput.setBackgroundColor(gk::Color::fromRGBA32(0, 0, 0, 127));
 	m_textInput.setPadding(1, 1);
 
 	updateWidgetPosition();
@@ -102,7 +102,7 @@ void ChatState::onEvent(const SDL_Event &event) {
 }
 
 void ChatState::updateWidgetPosition() {
-	m_textInput.setPosition(4, Config::screenHeight - 12 * Config::guiScale);
+	m_textInput.setPosition(4.f, float(Config::screenHeight - 12 * Config::guiScale));
 	m_textInput.setBackgroundSize(Config::screenWidth / Config::guiScale - 4, 10);
 }
 

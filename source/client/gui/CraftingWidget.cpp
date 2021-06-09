@@ -33,7 +33,7 @@ CraftingWidget::CraftingWidget(ClientCommandHandler &client, Inventory &crafting
 {
 }
 
-void CraftingWidget::init(unsigned int offset, unsigned int size) {
+void CraftingWidget::init(u16 offset, u16 size) {
 	m_craftingInventoryWidget.init(m_craftingInventory, offset, size * size);
 	m_craftingResultInventoryWidget.init(m_craftingResultInventory);
 

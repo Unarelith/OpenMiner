@@ -55,8 +55,8 @@ class ChunkLightmap {
 	public:
 		ChunkLightmap(Chunk *chunk);
 
-		bool addTorchlight(int x, int y, int z, int val);
-		bool addSunlight(int x, int y, int z, int val);
+		bool addTorchlight(int x, int y, int z, u8 val);
+		bool addSunlight(int x, int y, int z, u8 val);
 		bool removeTorchlight(int x, int y, int z);
 		bool removeSunlight(int x, int y, int z);
 

@@ -36,6 +36,8 @@
 
 static bool areComponentsRegistered = false;
 
+using namespace entt::literals;
+
 Scene::Scene() {
 	if (!areComponentsRegistered) {
 		registerComponents();
@@ -57,7 +59,7 @@ entt::entity Scene::createEntityFromModel(entt::registry &modelRegistry, entt::e
 
 	auto other = m_registry.create();
 	modelRegistry.visit(modelEntity, [&](const auto &component) {
-		const auto type = entt::resolve_type(component);
+		const auto type = entt::resolve(component);
 		const auto any = type.func("get"_hs).invoke({}, std::ref(modelRegistry), modelEntity);
 		type.func("set"_hs).invoke({}, std::ref(m_registry), other, any);
 	});

@@ -46,7 +46,7 @@ InventoryCube::InventoryCube(float size, bool isEntity)
 	m_isEntity = isEntity;
 
 	if (!m_isEntity) {
-		m_transform.setOrigin(size * 0.5, size * 0.5, size * 0.5);
+		m_transform.setOrigin(size * 0.5f, size * 0.5f, size * 0.5f);
 
 		// NOTE: intrinsic rotations! The axis is the local axis of the object.
 		// Note also that we start looking at the bottom of the cube due to how
@@ -120,8 +120,8 @@ void InventoryCube::updateVertexBuffer(const Block &block, u8 state) {
 
 			float U = (v == 0 || v == 3) ? U0 : U1;
 			float V = (v >= 2) ? V0 : V1;
-			vertices[f][v].texCoord[0] = gk::qlerp(blockTexCoords.x, blockTexCoords.x + blockTexCoords.sizeX, U);
-			vertices[f][v].texCoord[1] = gk::qlerp(blockTexCoords.y, blockTexCoords.y + blockTexCoords.sizeY, V);
+			vertices[f][v].texCoord[0] = gk::qlerpf(blockTexCoords.x, blockTexCoords.x + blockTexCoords.sizeX, U);
+			vertices[f][v].texCoord[1] = gk::qlerpf(blockTexCoords.y, blockTexCoords.y + blockTexCoords.sizeY, V);
 
 			const gk::Color &colorMultiplier = blockState.colorMultiplier();
 			vertices[f][v].color[0] = colorMultiplier.r;

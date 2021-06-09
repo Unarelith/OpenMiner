@@ -70,7 +70,7 @@ void ClientProfiler::dump(u64 tickDurationMin) {
 
 					maxActionDuration[actionName].first = std::max(maxActionDuration[actionName].first, actionDuration);
 
-					float actionPercentTotal = actionDuration / (float)tickDuration * 100.f;
+					float actionPercentTotal = (float)actionDuration / (float)tickDuration * 100.f;
 
 					gkDebug() << "Action" << actionName << j++ << "took" << actionDuration << "ms -" << actionPercentTotal << "% of tick";
 				}

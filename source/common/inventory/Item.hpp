@@ -38,7 +38,7 @@
 class Item : public gk::ISerializable {
 	public:
 		Item() = default;
-		Item(u32 id, const TilesDef &tiles, const std::string &stringID, const std::string &label);
+		Item(u16 id, const TilesDef &tiles, const std::string &stringID, const std::string &label);
 
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
@@ -48,7 +48,7 @@ class Item : public gk::ISerializable {
 
 		std::string modName() const { return m_stringID.substr(0, m_stringID.find_first_of(":")); }
 
-		u32 id() const { return m_id; }
+		u16 id() const { return m_id; }
 		const TilesDef &tiles() const { return m_tiles; }
 
 		bool isBlock() const { return m_isBlock; }
@@ -87,7 +87,7 @@ class Item : public gk::ISerializable {
 		bool m_canBeActivated = false;
 
 	private:
-		u32 m_id = 0;
+		u16 m_id = 0;
 		TilesDef m_tiles;
 
 		std::string m_stringID;

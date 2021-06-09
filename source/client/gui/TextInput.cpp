@@ -31,7 +31,7 @@
 TextInput::TextInput(Widget *parent) : Widget(parent) {
 	m_cursor.setString("_");
 
-	m_placeholder.setColor(gk::Color(150, 150, 150));
+	m_placeholder.setColor(gk::Color::fromRGBA32(150, 150, 150));
 }
 
 void TextInput::onEvent(const SDL_Event &event) {
@@ -44,7 +44,7 @@ void TextInput::onEvent(const SDL_Event &event) {
 
 			m_text.setString(m_content);
 			m_text.updateVertexBuffer();
-			m_cursor.setPosition(m_text.getSize().x, 0);
+			m_cursor.setPosition((float)m_text.getSize().x, 0.f);
 		}
 
 		if (event.type == SDL_TEXTINPUT) {
@@ -56,7 +56,7 @@ void TextInput::onEvent(const SDL_Event &event) {
 
 				m_text.setString(m_content);
 				m_text.updateVertexBuffer();
-				m_cursor.setPosition(m_text.getSize().x, 0);
+				m_cursor.setPosition((float)m_text.getSize().x, 0.f);
 			}
 		}
 	}
@@ -66,7 +66,7 @@ void TextInput::setString(const std::string &string) {
 	m_content = string;
 	m_text.setString(m_content);
 	m_text.updateVertexBuffer();
-	m_cursor.setPosition(m_text.getSize().x, 0);
+	m_cursor.setPosition((float)m_text.getSize().x, 0);
 }
 
 void TextInput::draw(gk::RenderTarget &target, gk::RenderStates states) const {

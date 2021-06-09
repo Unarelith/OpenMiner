@@ -93,7 +93,7 @@ bool CraftingRecipe::isMatching(const Inventory &inventory) const {
 	return false;
 }
 
-bool CraftingRecipe::checkMatch(const Inventory &inventory, int offsetX, int offsetY) const {
+bool CraftingRecipe::checkMatch(const Inventory &inventory, u16 offsetX, u16 offsetY) const {
 	bool itemFound = false;
 	u16 y = 0;
 	for (y = 0 ; y < m_pattern.size() ; ++y) {
@@ -120,7 +120,7 @@ bool CraftingRecipe::checkMatch(const Inventory &inventory, int offsetX, int off
 				return false;
 		}
 
-		for (int x = offsetX - 1 ; x >= 0 ; --x) {
+		for (u16 x = 0 ; x < offsetX ; ++x) {
 			if (inventory.getStack(x, offsetY + y).item().id())
 				return false;
 		}
@@ -132,15 +132,15 @@ bool CraftingRecipe::checkMatch(const Inventory &inventory, int offsetX, int off
 		}
 	}
 
-	for (int y = offsetY - 1 ; y >= 0 ; --y) {
-		for (int x = 0 ; x < inventory.width() ; ++x) {
+	for (u16 y = 0 ; y < offsetY ; ++y) {
+		for (u16 x = 0 ; x < inventory.width() ; ++x) {
 			if (inventory.getStack(x, y).item().id())
 				return false;
 		}
 	}
 
 	while (offsetY + y < inventory.height()) {
-		for (int x = 0 ; x < inventory.width() ; ++x) {
+		for (u16 x = 0 ; x < inventory.width() ; ++x) {
 			if (inventory.getStack(x, offsetY + y).item().id())
 				return false;
 		}

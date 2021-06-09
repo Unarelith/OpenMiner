@@ -68,7 +68,7 @@ u16 BlockParam::getParam(u8 type, u16 data) const {
 		return 0;
 	}
 
-	return (data >> it->second.offset) & ~(~0u << it->second.size);
+	return u16((data >> it->second.offset) & ~(~0u << it->second.size));
 }
 
 u16 BlockParam::setParam(u8 type, u16 data, u16 param) const {
@@ -79,12 +79,12 @@ u16 BlockParam::setParam(u8 type, u16 data, u16 param) const {
 		return 0;
 	}
 
-	u16 mask = ~(~0u << it->second.size) << it->second.offset;
+	u16 mask = u16(~(~0u << it->second.size) << it->second.offset);
 	param <<= it->second.offset;
 	if ((param & ~mask) != 0)
 		gkWarning() << "Block param overflow for type" << getTypeName(type) << "in block" << m_block->stringID();
 
-	return (data & ~mask) | (param & mask);
+	return u16((data & ~mask) | (param & mask));
 }
 
 std::string BlockParam::getTypeName(u8 type) {

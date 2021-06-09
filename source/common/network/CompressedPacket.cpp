@@ -77,7 +77,7 @@ void CompressedPacket::onReceive(const void* data, std::size_t size) {
 
 	// Extract the uncompressed data size from the first two
 	// bytes in the packet so we can use it for the buffer
-	sf::Uint16 uncompressedSize = srcData[1] << 8 | srcData[0];
+	sf::Uint16 uncompressedSize = sf::Uint16(srcData[1] << 8 | srcData[0]);
 
 	// Resize the vector to accomodate the uncompressed data
 	m_compressionBuffer.resize(uncompressedSize);

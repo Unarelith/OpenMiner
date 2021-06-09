@@ -101,7 +101,7 @@ void BlockCursorRaycast::rayCastToAxis(const Axis axis, const glm::dvec3 &positi
 	s32f firstNodeRow = lookAtCoord < 0. ? s32f(floor(posCoord)) : s32f(ceil(posCoord)) - 1;
 	s32f lastNodeRow = s32f(floor(posCoord + lookAtCoord * maxReach));
 
-	int_fast8_t dir = (lookAtCoord > 0.) - (lookAtCoord < 0.);
+	s8f dir = s8f((lookAtCoord > 0.) - (lookAtCoord < 0.));
 	if (!dir) {
 		// Can't cross any planes if it doesn't change in this axis
 		return;
@@ -113,14 +113,14 @@ void BlockCursorRaycast::rayCastToAxis(const Axis axis, const glm::dvec3 &positi
 		isect = intersectAxisPlane(axis, double(nodeRow + (dir < 0)), position, lookAt);
 
 		s32f nx, ny, nz;
-		nx = axis == AXIS_X ? nodeRow : floor(isect.x);
-		ny = axis == AXIS_Y ? nodeRow : floor(isect.y);
-		nz = axis == AXIS_Z ? nodeRow : floor(isect.z);
+		nx = axis == AXIS_X ? nodeRow : (s32f)floor(isect.x);
+		ny = axis == AXIS_Y ? nodeRow : (s32f)floor(isect.y);
+		nz = axis == AXIS_Z ? nodeRow : (s32f)floor(isect.z);
 
-		const BlockState *blockState = world.getBlockState(nx, ny, nz);
+		const BlockState *blockState = world.getBlockState((int)nx, (int)ny, (int)nz);
 		if (!blockState) continue;
 
-		u8f orientation = blockState->block().isRotatable() ? world.getData(nx, ny, nz) & 0x1F : 0;
+		u8f orientation = blockState->block().isRotatable() ? world.getData((int)nx, (int)ny, (int)nz) & 0x1F : 0;
 
 		const gk::FloatBox &boundingBox = blockState->boundingBox();
 		glm::vec3 localCorner1{boundingBox.x, boundingBox.y, boundingBox.z};

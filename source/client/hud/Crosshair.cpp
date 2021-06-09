@@ -36,9 +36,9 @@ void Crosshair::setup() {
 	m_vShape1.setSize(4, 19);
 	m_vShape2.setSize(4, 19);
 
-	m_hShape.setFillColor(gk::Color{200, 200, 200, 180});
-	m_vShape1.setFillColor(gk::Color{200, 200, 200, 180});
-	m_vShape2.setFillColor(gk::Color{200, 200, 200, 180});
+	m_hShape.setFillColor(gk::Color::fromRGBA32(200, 200, 200, 180));
+	m_vShape1.setFillColor(gk::Color::fromRGBA32(200, 200, 200, 180));
+	m_vShape2.setFillColor(gk::Color::fromRGBA32(200, 200, 200, 180));
 
 	m_hShape.setPosition(Config::screenWidth / 2.0f - m_hShape.width() / 2, Config::screenHeight / 2.0f - m_hShape.height() / 2, 0);
 	m_vShape1.setPosition(Config::screenWidth / 2.0f - m_vShape1.width() / 2, Config::screenHeight / 2.0f - m_hShape.height() / 2 - m_vShape1.height(), 0);

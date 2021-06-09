@@ -68,7 +68,7 @@ u16 Chunk::getData(int x, int y, int z) const {
 	if(y >= Chunk::depth)  return m_surroundingChunks[3] ? m_surroundingChunks[3]->getData(x, y - Chunk::depth, z) : 0;
 	if(z < 0)              return m_surroundingChunks[4] ? m_surroundingChunks[4]->getData(x, y, z + Chunk::height) : 0;
 	if(z >= Chunk::height) return m_surroundingChunks[5] ? m_surroundingChunks[5]->getData(x, y, z - Chunk::height) : 0;
-	return (m_data[z][y][x] >> 16) & 0xffff;
+	return u16((m_data[z][y][x] >> 16) & 0xffff);
 }
 
 void Chunk::setBlock(int x, int y, int z, u16 type) {
@@ -213,7 +213,7 @@ BlockData *Chunk::getBlockData(int x, int y, int z) const {
 	return it->second.get();
 }
 
-BlockData *Chunk::addBlockData(int x, int y, int z, int inventoryWidth, int inventoryHeight) {
+BlockData *Chunk::addBlockData(int x, int y, int z, u16 inventoryWidth, u16 inventoryHeight) {
 	if(x < 0)             return m_surroundingChunks[0] ? m_surroundingChunks[0]->addBlockData(x + CHUNK_WIDTH, y, z) : 0;
 	if(x >= CHUNK_WIDTH)  return m_surroundingChunks[1] ? m_surroundingChunks[1]->addBlockData(x - CHUNK_WIDTH, y, z) : 0;
 	if(y < 0)             return m_surroundingChunks[2] ? m_surroundingChunks[2]->addBlockData(x, y + CHUNK_DEPTH, z) : 0;

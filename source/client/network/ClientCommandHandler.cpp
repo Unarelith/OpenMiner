@@ -216,8 +216,8 @@ void ClientCommandHandler::setupCallbacks() {
 		s32 x, y, z;
 		u32 block;
 		packet >> x >> y >> z >> block;
-		m_world.setBlock(x, y, z, block);
-		m_world.setData(x, y, z, block >> 16);
+		m_world.setBlock(x, y, z, u16(block & 0xffff));
+		m_world.setData(x, y, z, u16((block >> 16) & 0xffff));
 	});
 
 	m_client.setCommandCallback(Network::Command::PlayerInvUpdate, [this](Network::Packet &packet) {

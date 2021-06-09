@@ -67,8 +67,8 @@ void CelestialObject::updateVertexBuffer() const {
 		gk::FloatRect texRect{0, 0, 1, 1};
 
 		if (m_phaseCount && m_phaseSize && m_currentPhase < m_phaseCount) {
-			u16 currentPhaseX = m_currentPhase % (m_texture->getSize().x / m_phaseSize);
-			u16 currentPhaseY = m_currentPhase / (m_texture->getSize().x / m_phaseSize);
+			u16 currentPhaseX = u16(m_currentPhase % (m_texture->getSize().x / m_phaseSize));
+			u16 currentPhaseY = u16(m_currentPhase / (m_texture->getSize().x / m_phaseSize));
 			texRect.x = currentPhaseX * m_phaseSize / float(m_texture->getSize().x);
 			texRect.y = currentPhaseY * m_phaseSize / float(m_texture->getSize().y);
 			texRect.sizeX = m_phaseSize / float(m_texture->getSize().x);

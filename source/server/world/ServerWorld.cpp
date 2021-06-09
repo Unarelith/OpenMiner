@@ -69,9 +69,9 @@ void ServerWorld::updatePlayerChunks(ServerPlayer &player, s32 cx, s32 cy, s32 c
 	std::list<gk::Vector3i> chunksToRemove;
 	for (auto &chunkPos : player.loadedChunks()) {
 		glm::dvec3 chunkWorldPos{
-			chunkPos.x * CHUNK_WIDTH + CHUNK_WIDTH / 2.f,
-			chunkPos.y * CHUNK_DEPTH + CHUNK_DEPTH / 2.f,
-			chunkPos.z * CHUNK_HEIGHT + CHUNK_HEIGHT / 2.f
+			chunkPos.x * CHUNK_WIDTH + CHUNK_WIDTH / 2,
+			chunkPos.y * CHUNK_DEPTH + CHUNK_DEPTH / 2,
+			chunkPos.z * CHUNK_HEIGHT + CHUNK_HEIGHT / 2
 		};
 
 		glm::dvec3 playerPos{
@@ -186,9 +186,9 @@ void ServerWorld::processSendRequests() {
 		bool isTooOld = now - timestamp >= 10000;
 		if (!isTooOld && player.sentChunks.find(chunkPos) == player.sentChunks.end()) {
 			glm::dvec3 chunkWorldPos{
-				chunkPos.x * CHUNK_WIDTH + CHUNK_WIDTH / 2.f,
-				chunkPos.y * CHUNK_DEPTH + CHUNK_DEPTH / 2.f,
-				chunkPos.z * CHUNK_HEIGHT + CHUNK_HEIGHT / 2.f
+				chunkPos.x * CHUNK_WIDTH + CHUNK_WIDTH / 2,
+				chunkPos.y * CHUNK_DEPTH + CHUNK_DEPTH / 2,
+				chunkPos.z * CHUNK_HEIGHT + CHUNK_HEIGHT / 2
 			};
 
 			glm::dvec3 playerPos{

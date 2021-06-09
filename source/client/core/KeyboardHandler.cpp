@@ -78,7 +78,7 @@ void KeyboardHandler::loadKeysFromFile(const std::string &filename) {
 						}
 					}
 					else {
-						addKey(m_keys.size(), keyName, keycode, keyID);
+						addKey(gk::GameKey(m_keys.size()), keyName, keycode, keyID);
 					}
 				}
 			}

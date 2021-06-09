@@ -47,16 +47,16 @@ void Hotbar::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_MOUSEWHEEL) {
 		if (event.wheel.y < 0) {
 			m_cursorPos = (m_cursorPos + 1) % 9;
-			m_player.setHeldItemSlot(m_cursorPos);
-			m_client.sendPlayerHeldItemChanged(m_cursorPos, currentItem().id());
+			m_player.setHeldItemSlot((u8)m_cursorPos);
+			m_client.sendPlayerHeldItemChanged((u8)m_cursorPos, currentItem().id());
 		}
 		else if (event.wheel.y > 0) {
 			m_cursorPos = (m_cursorPos == 0) ? 8 : m_cursorPos - 1;
-			m_player.setHeldItemSlot(m_cursorPos);
-			m_client.sendPlayerHeldItemChanged(m_cursorPos, currentItem().id());
+			m_player.setHeldItemSlot((u8)m_cursorPos);
+			m_client.sendPlayerHeldItemChanged((u8)m_cursorPos, currentItem().id());
 		}
 
-		m_cursor.setPosition(-1 + 20 * m_cursorPos, -1, 0);
+		m_cursor.setPosition(-1.f + 20.f * (float)m_cursorPos, -1.f);
 	}
 }
 
@@ -66,7 +66,7 @@ void Hotbar::update() {
 			return;
 
 		m_cursorPos = m_player.heldItemSlot();
-		m_cursor.setPosition(-1 + 20 * m_cursorPos, -1, 0);
+		m_cursor.setPosition(-1.f + 20.f * (float)m_cursorPos, -1.f);
 	}
 
 	for (u16 i = 0 ; i < 9 ; ++i) {
@@ -74,7 +74,7 @@ void Hotbar::update() {
 			m_items.emplace_back(m_player.inventory(), i, 0);
 
 			ItemWidget &widget = m_items.back();
-			widget.setPosition(5 + 20 * i - 3, 2, 0);
+			widget.setPosition(5.f + 20.f * (float)i - 3.f, 2.f);
 		}
 
 		m_items[i].setStack(
@@ -85,7 +85,7 @@ void Hotbar::update() {
 }
 
 const Item &Hotbar::currentItem() const {
-	return m_player.inventory().getStack(m_cursorPos, 0).item();
+	return m_player.inventory().getStack((u16)m_cursorPos, 0).item();
 }
 
 void Hotbar::draw(gk::RenderTarget &target, gk::RenderStates states) const {

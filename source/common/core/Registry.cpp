@@ -85,7 +85,7 @@ Biome &Registry::registerSerializedBiome(sf::Packet &packet) {
 }
 
 Dimension &Registry::registerDimension(const std::string &stringID, const std::string &label) {
-	u16 id = m_dimensions.size();
+	size_t id = m_dimensions.size();
 	m_dimensionsID.emplace(stringID, id);
 	m_dimensions.emplace_back(id, stringID, label);
 	return m_dimensions.back();
@@ -95,14 +95,14 @@ Dimension &Registry::registerSerializedDimension(sf::Packet &packet) {
 	m_dimensions.emplace_back();
 	m_dimensions.back().deserialize(packet);
 
-	u16 id = m_dimensions.size() - 1;
+	size_t id = m_dimensions.size() - 1;
 	m_dimensionsID.emplace(m_dimensions.back().stringID(), id);
 
 	return m_dimensions.back();
 }
 
 Key &Registry::registerKey(const std::string &stringID, const std::string &label) {
-	u16 id = GameKey::KeyCount + m_keys.size();
+	size_t id = GameKey::KeyCount + m_keys.size();
 	m_keysID.emplace(stringID, id);
 	m_keys.emplace_back(id, stringID, label);
 	return m_keys.back();
@@ -112,7 +112,7 @@ Key &Registry::registerSerializedKey(sf::Packet &packet) {
 	m_keys.emplace_back();
 	m_keys.back().deserialize(packet);
 
-	u16 id = GameKey::KeyCount + m_keys.size() - 1;
+	size_t id = GameKey::KeyCount + m_keys.size() - 1;
 	m_keysID.emplace(m_biomes.back().stringID(), id);
 
 	return m_keys.back();

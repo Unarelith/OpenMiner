@@ -39,7 +39,7 @@ class World;
 
 class ServerItem : public Item {
 	public:
-		ServerItem(u32 id, const TilesDef &tiles, const std::string &stringID, const std::string &label)
+		ServerItem(u16 id, const TilesDef &tiles, const std::string &stringID, const std::string &label)
 			: Item(id, tiles, stringID, label) {}
 
 		bool onItemActivated(const glm::ivec3 &pos, Block &block, Player &player, World &world, ClientInfo &client, ServerCommandHandler &server) const;

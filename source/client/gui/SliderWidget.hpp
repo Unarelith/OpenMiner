@@ -43,7 +43,7 @@ class SliderWidget : public Widget {
 
 		void onEvent(const SDL_Event &event) override;
 
-		int getCurrentValue() const { return m_min + (m_max - m_min) * m_percentage; }
+		int getCurrentValue() const { return m_min + int(float(m_max - m_min) * m_percentage); }
 		void setMinMaxValues(int min, int max) { m_min = min; m_max = max; }
 		void setCurrentValue(int currentValue);
 
@@ -58,8 +58,8 @@ class SliderWidget : public Widget {
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
-		const gk::Color m_defaultTextColor{224, 224, 224};
-		const gk::Color m_hoverColor{255, 255, 160};
+		const gk::Color m_defaultTextColor = gk::Color::fromRGBA32(224, 224, 224);
+		const gk::Color m_hoverColor = gk::Color::fromRGBA32(255, 255, 160);
 
 		gk::Image m_slider{"texture-widgets"};
 		gk::Image m_background{"texture-widgets"};

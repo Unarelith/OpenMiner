@@ -53,8 +53,8 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 	rand.seed(chunk.x() + chunk.y() * CHUNK_WIDTH + chunk.z() * CHUNK_WIDTH * CHUNK_HEIGHT + 1337);
 
 	Chunk *topChunk = chunk.getSurroundingChunk(Chunk::Top);
-	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
-		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
+	for(s8 y = 0 ; y < CHUNK_DEPTH ; y++) {
+		for(s8 x = 0 ; x < CHUNK_WIDTH ; x++) {
 			u16 biomeIndex = m_biomeSampler.getBiomeIndexAt(x + chunk.x() * CHUNK_WIDTH, y + chunk.y() * CHUNK_DEPTH);
 			const Biome &biome = Registry::getInstance().getBiome(biomeIndex);
 
@@ -62,7 +62,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 			double h = heightmap.landHeightAt(x, y);
 
 			// Land blocks
-			for(int z = 0 ; z < CHUNK_HEIGHT ; z++) {
+			for(s8 z = 0 ; z < CHUNK_HEIGHT ; z++) {
 				// Are we above "ground" level?
 				if(z + chunk.z() * CHUNK_HEIGHT > h) {
 					// If we are not yet up to sea level, fill with water blocks
@@ -109,7 +109,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) const {
 				}
 
 				if (topChunk && topChunk->isInitialized()) {
-					int sunlightLevel = topChunk->lightmap().getSunlight(x, y, 0);
+					u8 sunlightLevel = topChunk->lightmap().getSunlight(x, y, 0);
 					if (sunlightLevel) {
 						chunk.lightmap().addSunlight(x, y, CHUNK_HEIGHT - 1, sunlightLevel);
 					}
@@ -237,7 +237,7 @@ inline void TerrainGenerator::randomWalkOrePlace(ServerChunk &chunk, int x, int 
 	}
 }
 
-void TerrainGenerator::oreFloodFill(ServerChunk &chunk, double x, double y, double z, u16 toReplace, u16 replaceWith, int depth, Random_t &rand) const {
+void TerrainGenerator::oreFloodFill(ServerChunk &chunk, int x, int y, int z, u16 toReplace, u16 replaceWith, int depth, Random_t &rand) const {
 	if (depth < 0) return;
 	if (chunk.getBlock(x, y, z) == replaceWith) return;
 	if (chunk.getBlock(x, y, z) == toReplace)
@@ -268,10 +268,11 @@ void TerrainGenerator::oreFloodFill(ServerChunk &chunk, double x, double y, doub
 		oreFloodFill(chunk, x - 1, y - 1, z - 1, toReplace, replaceWith, depth - 1, rand);
 }
 
-inline void TerrainGenerator::generateCavesOld(ServerChunk &chunk, int x, int y, int z, int h, HeightmapChunk &heightmap) const {
-	float n2 = noise2d(-(x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 8, 0.3) * 4;
-	float r2 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 512.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 0.1);
-	float r3 = noise3d_abs(-(x + chunk.x() * CHUNK_WIDTH) / 512.0f, (z + chunk.z() * CHUNK_HEIGHT) / 128.0f, (y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 1);
+inline void TerrainGenerator::generateCavesOld(ServerChunk &chunk, s8 x, s8 y, s8 z, int h, HeightmapChunk &heightmap) const {
+	float n2 = noise2d(-(x + chunk.x() * CHUNK_WIDTH) / 256.0, (y + chunk.y() * CHUNK_DEPTH) / 256.0, 8, 0.3f) * 4;
+	float r2 = noise3d_abs(-float(x + chunk.x() * CHUNK_WIDTH) / 512.0f, float(z + chunk.z() * CHUNK_HEIGHT) / 512.0f, float(y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 0.1f);
+	float r3 = noise3d_abs(-float(x + chunk.x() * CHUNK_WIDTH) / 512.0f, float(z + chunk.z() * CHUNK_HEIGHT) / 128.0f, float(y + chunk.y() * CHUNK_DEPTH) / 512.0f, 4, 1.f);
+
 	float r4 = n2 * 5 + r2 * r3 * 20;
 	if (r4 > 6 && r4 < 8 && h > SEALEVEL) {
 		chunk.setBlockRaw(x, y, z - 1, 0);
@@ -301,13 +302,13 @@ inline void TerrainGenerator::generateCaves(ServerChunk &chunk, int x, int y, in
 }
 
 inline float TerrainGenerator::noise2d(double x, double y, int octaves, float persistence) {
-	float sum = 0;
-	float strength = 1.0;
-	float scale = 1.0;
+	float sum = 0.f;
+	float strength = 1.0f;
+	float scale = 1.0f;
 
-	for(int i = 0 ; i < octaves ; i++) {
+	for (int i = 0 ; i < octaves ; i++) {
 		sum += strength * glm::simplex(glm::vec2{x, y} * scale);
-		scale *= 2.0;
+		scale *= 2.0f;
 		strength *= persistence;
 	}
 
@@ -315,13 +316,13 @@ inline float TerrainGenerator::noise2d(double x, double y, int octaves, float pe
 }
 
 inline float TerrainGenerator::noise3d_abs(double x, double y, double z, int octaves, float persistence) {
-	float sum = 0;
-	float strength = 1.0;
-	float scale = 1.0;
+	float sum = 0.f;
+	float strength = 1.0f;
+	float scale = 1.0f;
 
-	for(int i = 0 ; i < octaves ; i++) {
+	for (int i = 0 ; i < octaves ; i++) {
 		sum += strength * fabsf(glm::simplex(glm::vec3{x, y, z} * scale));
-		scale *= 2.0;
+		scale *= 2.0f;
 		strength *= persistence;
 	}
 

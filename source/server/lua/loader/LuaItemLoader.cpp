@@ -40,12 +40,12 @@ void LuaItemLoader::loadItem(const sol::table &table) const {
 	tiles.loadFromLuaTable(table);
 
 	ServerItem &item = Registry::getInstance().registerItem<ServerItem>(tiles, stringID, label);
-	item.setHarvestCapability(table["harvest_capability"].get_or(0));
-	item.setMiningSpeed(table["mining_speed"].get_or(1));
-	item.setOnItemActivated(table["on_item_activated"]);
+	item.setHarvestCapability(u8(table["harvest_capability"].get_or(0)));
+	item.setMiningSpeed(table["mining_speed"].get_or(1.f));
+	item.setOnItemActivated(table["on_item_activated"].get<sol::object>());
 	item.setMaxStackSize(table["max_stack_size"].get_or(ServerConfig::maxItemStackSize));
 
-	sol::object groupsObject = table["groups"];
+	sol::object groupsObject = table["groups"].get<sol::object>();
 	if (groupsObject.valid()) {
 		if (groupsObject.get_type() == sol::type::table) {
 			sol::table groupsTable = groupsObject.as<sol::table>();
@@ -57,7 +57,7 @@ void LuaItemLoader::loadItem(const sol::table &table) const {
 			gkError() << "For item" << stringID << ": 'groups' should be a table";
 	}
 
-	sol::object effectiveOnObject = table["effective_on"];
+	sol::object effectiveOnObject = table["effective_on"].get<sol::object>();
 	if (effectiveOnObject.valid()) {
 		if (effectiveOnObject.get_type() == sol::type::table) {
 			sol::table effectiveOnTable = effectiveOnObject.as<sol::table>();

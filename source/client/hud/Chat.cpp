@@ -46,7 +46,7 @@ void Chat::addChatMessage(u16 clientID, const std::string &message) {
 
 	m_posY += m_chatMessages.back().text().getSize().y + 1;
 
-	move(0, -m_chatMessages.back().text().getSize().y - 1);
+	move(0.f, (float)-m_chatMessages.back().text().getSize().y - 1.f);
 }
 
 void Chat::setMessageVisibility(bool areMessagesVisible) {

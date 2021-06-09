@@ -358,8 +358,8 @@ void ServerCommandHandler::setupCallbacks() {
 			packet >> x >> y >> z >> block;
 
 			ServerWorld &world = getWorldForClient(client.id);
-			world.setData(x, y, z, block >> 16);
-			world.setBlock(x, y, z, block & 0xffff);
+			world.setData(x, y, z, u16(block >> 16));
+			world.setBlock(x, y, z, u16(block & 0xffff));
 
 			const BlockState *blockState = world.getBlockState(x, y, z);
 			if (!blockState) return;

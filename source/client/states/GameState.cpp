@@ -80,7 +80,7 @@ void GameState::onStateInactive() {
 	m_hud.pause();
 }
 
-void GameState::connect(const std::string &host, int port, const std::string &username) {
+void GameState::connect(const std::string &host, u16 port, const std::string &username) {
 	m_player.setName(username.empty() ? "Player" : username);
 	m_client.connect(host, port, m_player);
 	m_player.setClientID(m_client.id());
@@ -101,9 +101,9 @@ void GameState::onEvent(const SDL_Event &event) {
 		KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
 
 		if (event.type == SDL_MOUSEMOTION) {
-			if(Config::screenWidth / 2.0f != event.motion.x || Config::screenHeight / 2.0f != event.motion.y) {
-				m_player.turnH(event.motion.xrel * -0.01 * Config::mouseSensitivity);
-				m_player.turnViewV(event.motion.yrel * -0.01 * Config::mouseSensitivity);
+			if(Config::screenWidth / 2 != event.motion.x || Config::screenHeight / 2 != event.motion.y) {
+				m_player.turnH((float)event.motion.xrel * -0.01f * Config::mouseSensitivity);
+				m_player.turnViewV((float)event.motion.yrel * -0.01f * Config::mouseSensitivity);
 
 				gk::Mouse::resetToWindowCenter();
 			}
@@ -155,8 +155,8 @@ void GameState::onEvent(const SDL_Event &event) {
 	}
 
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-		Config::screenWidth = event.window.data1;
-		Config::screenHeight = event.window.data2;
+		Config::screenWidth = (u16)event.window.data1;
+		Config::screenHeight = (u16)event.window.data2;
 
 		m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
 		m_hud.setup();

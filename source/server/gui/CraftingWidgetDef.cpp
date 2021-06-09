@@ -54,7 +54,7 @@ void CraftingWidgetDef::loadFromLuaTable(const sol::table &table) {
 }
 
 void CraftingWidgetDef::loadInventory(const sol::table &table) {
-	sol::object inventoryObject = table["inventory"];
+	sol::object inventoryObject = table["inventory"].get<sol::object>();
 	if (inventoryObject.valid() && inventoryObject.get_type() == sol::type::table) {
 		sol::table inventoryTable = inventoryObject.as<sol::table>();
 

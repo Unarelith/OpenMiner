@@ -61,12 +61,12 @@ void ClientPlayer::turnViewV(float angle) {
 }
 
 void ClientPlayer::updateCamera() {
-	float ch = cosf(m_viewAngleH * RADIANS_PER_DEGREES);
-	float sh = sinf(m_viewAngleH * RADIANS_PER_DEGREES);
-	float cv = cosf(m_viewAngleV * RADIANS_PER_DEGREES);
-	float sv = sinf(m_viewAngleV * RADIANS_PER_DEGREES);
-	float cr = cosf(m_viewAngleRoll * RADIANS_PER_DEGREES);
-	float sr = sinf(m_viewAngleRoll * RADIANS_PER_DEGREES);
+	float ch = cosf(m_viewAngleH * gk::DEG_TO_RADf);
+	float sh = sinf(m_viewAngleH * gk::DEG_TO_RADf);
+	float cv = cosf(m_viewAngleV * gk::DEG_TO_RADf);
+	float sv = sinf(m_viewAngleV * gk::DEG_TO_RADf);
+	float cr = cosf(m_viewAngleRoll * gk::DEG_TO_RADf);
+	float sr = sinf(m_viewAngleRoll * gk::DEG_TO_RADf);
 
 	m_forwardDir = gk::Vector3f{ch * cv, sh * cv, sv};
 	m_camera.setDirection(m_forwardDir);
@@ -76,8 +76,8 @@ void ClientPlayer::updateCamera() {
 void ClientPlayer::move(float direction) {
 	direction += m_viewAngleH;
 
-	m_velocity.x = 0.04f * cosf(direction * RADIANS_PER_DEGREES);
-	m_velocity.y = 0.04f * sinf(direction * RADIANS_PER_DEGREES);
+	m_velocity.x = 0.04f * cosf(direction * gk::DEG_TO_RADf);
+	m_velocity.y = 0.04f * sinf(direction * gk::DEG_TO_RADf);
 }
 
 void ClientPlayer::processInputs() {
@@ -87,11 +87,11 @@ void ClientPlayer::processInputs() {
 	}
 
 	if(gk::GamePad::isKeyPressed(GameKey::Fly)) {
-		m_velocity.z = 0.1;
+		m_velocity.z = 0.1f;
 	}
 
 	if(gk::GamePad::isKeyPressed(GameKey::Sneak)) {
-		m_velocity.z = -0.1;
+		m_velocity.z = -0.1f;
 	}
 
 	if(gk::GamePad::isKeyPressed(GameKey::Forward))    move(0.0f);
@@ -112,7 +112,7 @@ void ClientPlayer::processInputs() {
 }
 
 void ClientPlayer::updatePosition(const ClientWorld &world) {
-	ClientChunk *chunk = (ClientChunk *)world.getChunkAtBlockPos(m_x, m_y, m_z);
+	ClientChunk *chunk = (ClientChunk *)world.getChunkAtBlockPos((int)m_x, (int)m_y, (int)m_z);
 	if (chunk && chunk->isInitialized()) {
 		if (!Config::isFlyModeEnabled) {
 			m_velocity.z -= chunk->dimension().gravity() * 0.001f;
@@ -145,7 +145,7 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 		m_velocity.z = 0.f;
 
 	// Checking to block at camera position to enable specific effects
-	const BlockState *blockState = world.getBlockState(m_camera.getDPosition().x, m_camera.getDPosition().y, m_camera.getDPosition().z);
+	const BlockState *blockState = world.getBlockState((int)m_camera.getDPosition().x, (int)m_camera.getDPosition().y, (int)m_camera.getDPosition().z);
 	if (blockState && blockState->fogDepth() != 0) {
 		GameConfig::currentScreenEffect = 1;
 		GameConfig::fogDepth = blockState->fogDepth();
@@ -188,7 +188,7 @@ void ClientPlayer::checkCollisions(const ClientWorld &world) {
 }
 
 bool passable(const ClientWorld &world, double x, double y, double z) {
-	const BlockState *blockState = world.getBlockState(floor(x), floor(y), floor(z));
+	const BlockState *blockState = world.getBlockState((int)floor(x), (int)floor(y), (int)floor(z));
 	return !blockState || !blockState->block().id() || !blockState->isCollidable();
 }
 

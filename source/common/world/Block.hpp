@@ -51,7 +51,7 @@ class World;
 class Block : public gk::ISerializable {
 	public:
 		Block() = default;
-		Block(u32 id, const std::string &stringID);
+		Block(u16 id, const std::string &stringID);
 		virtual ~Block() = default;
 
 		void serialize(sf::Packet &packet) const override;

@@ -67,7 +67,7 @@ void Skybox::loadSky(const Sky &sky) {
 		m_moon.setTexture(moon.texture);
 	}
 	catch (...) {
-		m_moon.setColor(gk::Color{240, 240, 240});
+		m_moon.setColor(gk::Color::fromRGBA32(240, 240, 240));
 		gkWarning() << "Failed to load moon texture" << moon.texture;
 	}
 
@@ -76,7 +76,7 @@ void Skybox::loadSky(const Sky &sky) {
 	m_stars.reserve(stars.count);
 	for (int i = 0 ; i < stars.count ; ++i) {
 		auto &star = m_stars.emplace_back();
-		star.setColor(gk::Color{0, 0, 0, 0});
+		star.setColor(gk::Color::fromRGBA32(0, 0, 0, 0));
 		star.setSize(stars.size, stars.size);
 
 		// This formula makes the distribution uniform
@@ -87,7 +87,7 @@ void Skybox::loadSky(const Sky &sky) {
 			// Generate a uniform random coordinate
 			// NOTE: MUST NOT USE FAST MATH!
 			// Otherwise it risks taking the square root of a negative!
-			v.y = (rand() % 32768 - 16383.5f) / 16383.5f;
+			v.y = (float(rand() % 32768) - 16383.5f) / 16383.5f;
 			// Project it to the +X semicircle in the XY plane
 			v.x = sqrtf(1.f - v.y*v.y);
 		}
@@ -98,7 +98,7 @@ void Skybox::loadSky(const Sky &sky) {
 		star.rotateZ(atan2f(v.y, v.x) * float(180./M_PI));
 
 		// Set a random rotation in the day cycle
-		star.setRotationOffset(rand() % GameTime::dayLength);
+		star.setRotationOffset(u16(rand() % GameTime::dayLength));
 
 		star.setRotationSpeed(sky.daylightCycleSpeed());
 		// Maybe sometimes stars could have a random axis?

@@ -40,12 +40,12 @@ Font::Font(const std::string &textureName, const std::string &configPath)
 }
 
 gk::Vector2f Font::getTexCoords(u8 c, u8 x, u8 y) const {
-	u8 tileX = c % (m_texture.getSize().x / m_width);
-	u8 tileY = c / (m_texture.getSize().x / m_width);
+	u8 tileX = u8(c % (m_texture.getSize().x / m_width));
+	u8 tileY = u8(c / (m_texture.getSize().x / m_width));
 
 	gk::Vector2f texCoords{
-		(tileX + x) * m_width  / (float)m_texture.getSize().x,
-		(tileY + y) * m_height / (float)m_texture.getSize().y
+		float(tileX + x) * m_width  / (float)m_texture.getSize().x,
+		float(tileY + y) * m_height / (float)m_texture.getSize().y
 	};
 
 	return texCoords;
@@ -58,17 +58,17 @@ void Font::parseConfig(const std::string &configPath) {
 	while (std::getline(file, line, '\n')) {
 		if (line.empty()) continue;
 
-		u16 dot = line.find_first_of('.');
-		u16 equal = line.find_first_of('=');
+		size_t dot = line.find_first_of('.');
+		size_t equal = line.find_first_of('=');
 
 		std::string propertyName = line.substr(0, dot);
 		if (propertyName != "width")
 			throw EXCEPTION("Unexpected property for font:", propertyName);
 
 		int propertyKey = std::stoi(line.substr(dot + 1, equal - dot - 1));
-		u8 propertyValue = std::stoi(line.substr(equal + 1));
+		int propertyValue = std::stoi(line.substr(equal + 1));
 
-		m_charWidth[propertyKey] = propertyValue;
+		m_charWidth[propertyKey] = (u8)propertyValue;
 	}
 }
 

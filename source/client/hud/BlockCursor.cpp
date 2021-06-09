@@ -53,7 +53,7 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
 			m_animationStart = gk::GameClock::getInstance().getTicks();
-			m_currentTool = &m_player.inventory().getStack(hotbar.cursorPos(), 0);
+			m_currentTool = &m_player.inventory().getStack((u16)hotbar.cursorPos(), 0);
 		}
 		else if (event.button.button == SDL_BUTTON_RIGHT)
 			activateBlock(hotbar);
@@ -95,7 +95,7 @@ void BlockCursor::update(const Hotbar &hotbar) {
 	if (cursorPos != -1) {
 		float timeToBreak = 0;
 		if (m_animationStart) {
-			const ItemStack &currentStack = m_player.inventory().getStack(cursorPos, 0);
+			const ItemStack &currentStack = m_player.inventory().getStack((u16)cursorPos, 0);
 			if (m_currentTool->item().id() != currentStack.item().id()) {
 				m_animationStart = ticks;
 				m_currentTool = &currentStack;
@@ -111,7 +111,7 @@ void BlockCursor::update(const Hotbar &hotbar) {
 
 				timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed(), isEffective);
 
-				if (ticks > m_animationStart + timeToBreak * 1000) {
+				if (ticks > m_animationStart + u32(timeToBreak * 1000)) {
 					m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
 					m_animationStart = ticks;
 
@@ -122,7 +122,7 @@ void BlockCursor::update(const Hotbar &hotbar) {
 
 		if (m_animationStart && m_currentBlock)
 			updateAnimationVertexBuffer(*m_currentBlock, orientation,
-										(ticks - m_animationStart) / (timeToBreak * 100));
+				(ticks - m_animationStart) / u32(timeToBreak * 100));
 	}
 
 	if (m_selectedBlock.w != -1)
@@ -143,7 +143,7 @@ void BlockCursor::activateBlock(const Hotbar &hotbar) {
 
 	m_lastActivationTime = gk::GameClock::getInstance().getTicks();
 
-	u32 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
+	u16 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
 	const Block &block = Registry::getInstance().getBlock(blockId);
 	const Item &item = hotbar.currentItem();
 
@@ -166,7 +166,7 @@ void BlockCursor::activateBlock(const Hotbar &hotbar) {
 	}
 
 	if (block.id() && !itemActivationSent && !blockActivationSent && hotbar.currentItem().id() && item.isBlock()) {
-		s8 face = m_selectedBlock.w;
+		s8 face = (s8)m_selectedBlock.w;
 
 		s32 x = m_selectedBlock.x;
 		s32 y = m_selectedBlock.y;
@@ -191,7 +191,7 @@ void BlockCursor::activateBlock(const Hotbar &hotbar) {
 			// Second, we check if the new block is not inside the player
 			const Block &newBlock = Registry::getInstance().getBlock(hotbar.currentItem().id());
 			const BlockState &newBlockState = newBlock.getState(0); // FIXME: Get state from item stack
-			gk::FloatBox boundingBox = newBlockState.boundingBox() + gk::Vector3f(x - m_player.x(), y - m_player.y(), z - m_player.z());
+			gk::FloatBox boundingBox = newBlockState.boundingBox() + gk::Vector3f(float(x - m_player.x()), float(y - m_player.y()), float(z - m_player.z()));
 			gk::FloatBox playerBoundingBox = m_player.hitbox();
 			if (!boundingBox.intersects(playerBoundingBox) && newBlock.placementConstraints().check(m_world, {x, y, z})) {
 				u32 block = hotbar.currentItem().id();
@@ -206,8 +206,11 @@ void BlockCursor::activateBlock(const Hotbar &hotbar) {
 
 				m_client.sendPlayerPlaceBlock(x, y, z, block);
 
-				const ItemStack &currentStack = m_player.inventory().getStack(hotbar.cursorPos(), 0);
-				m_player.inventory().setStack(hotbar.cursorPos(), 0, currentStack.amount() > 1 ? currentStack.item().stringID() : "", currentStack.amount() - 1);
+				const ItemStack &currentStack = m_player.inventory().getStack((u16)hotbar.cursorPos(), 0);
+				m_player.inventory().setStack((u16)hotbar.cursorPos(), 0, currentStack.amount() > 1
+					? currentStack.item().stringID()
+					: "", currentStack.amount() - 1
+				);
 
 				m_client.sendPlayerInvUpdate();
 			}
@@ -275,7 +278,7 @@ void BlockCursor::updateAnimationVertexBuffer(const BlockState &blockState, u8f 
 			memcpy(&vertices[f][v].color, &color[0], 4 * sizeof(GLfloat));
 
 	if (animationPos != -1) {
-		glm::vec4 blockTexCoords{0.1f * animationPos, 0.0, 0.1f + 0.1f * animationPos, 1.0};
+		glm::vec4 blockTexCoords{0.1f * (float)animationPos, 0.0f, 0.1f + 0.1f * (float)animationPos, 1.0f};
 		float faceTexCoords[nVertsPerFace][nCoordsPerUV] = {
 			{blockTexCoords.x, blockTexCoords.w},
 			{blockTexCoords.z, blockTexCoords.w},
@@ -307,7 +310,11 @@ void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 	// Subtract the camera position - see comment in ClientWorld::draw()
 	const gk::Vector3d &cameraPosition = m_player.camera().getDPosition();
-	states.transform.translate(m_selectedBlock.x - cameraPosition.x, m_selectedBlock.y - cameraPosition.y, m_selectedBlock.z - cameraPosition.z);
+	states.transform.translate(
+		float(m_selectedBlock.x - cameraPosition.x),
+		float(m_selectedBlock.y - cameraPosition.y),
+		float(m_selectedBlock.z - cameraPosition.z)
+	);
 
 	glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 	target.draw(m_vbo, GL_QUADS, 0, nFaces * nVertsPerFace, states);
@@ -337,7 +344,7 @@ glm::ivec4 BlockCursor::findSelectedBlock() const {
 	s32f bestZ = s32f(floor(position.z));
 
 	// Deal with a degenerate case: camera in the middle of a block
-	const BlockState *blockState = m_world.getBlockState(bestX, bestY, bestZ);
+	const BlockState *blockState = m_world.getBlockState((int)bestX, (int)bestY, (int)bestZ);
 	if (blockState && blockState->block().id() && blockState->drawType() != BlockDrawType::Liquid) {
 		// We're inside a node, therefore there's no face, but we still need
 		// to return a valid block. We use face 6 for that. For rightclicks,
@@ -355,7 +362,7 @@ glm::ivec4 BlockCursor::findSelectedBlock() const {
 	if (double(bestX) == position.x && double(bestY) == position.y) {
 		for (int y = -1; y <= 0; y++) {
 			for (int x = -1; x <= 0; x++) {
-				const BlockState *blockState = m_world.getBlockState(bestX + x, bestY + y, bestZ);
+				const BlockState *blockState = m_world.getBlockState((int)bestX + x, (int)bestY + y, (int)bestZ);
 				if (blockState && blockState->block().id() && blockState->drawType() != BlockDrawType::Liquid) {
 					return glm::ivec4{bestX + x, bestY + y, bestZ, 6};
 				}

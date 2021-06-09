@@ -40,8 +40,8 @@ namespace fs = ghc::filesystem;
 TexturePackSelectionState::TexturePackSelectionState(gk::ApplicationState *parent) : InterfaceState(parent) {
 	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
 
-	m_filter1.setFillColor(gk::Color(0, 0, 0, 192));
-	m_filter2.setFillColor(gk::Color(0, 0, 0, 120));
+	m_filter1.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
+	m_filter2.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 120));
 
 	m_title.setScale(Config::guiScale, Config::guiScale);
 	m_title.setString("Select Texture Pack");
@@ -97,29 +97,36 @@ void TexturePackSelectionState::onEvent(const SDL_Event &event) {
 }
 
 void TexturePackSelectionState::updateWidgetPosition() {
-	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
-	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+	m_background.setPosRect(0, 0,
+		u16(Config::screenWidth / m_background.getScale().x),
+		u16(Config::screenHeight / m_background.getScale().y)
+	);
+
+	m_background.setClipRect(0, 0,
+		u16(Config::screenWidth / m_background.getScale().x),
+		u16(Config::screenHeight / m_background.getScale().y)
+	);
 
 	m_filter1.setSize(Config::screenWidth, Config::screenHeight);
 
 	const int topBorderSize = 25 * Config::guiScale;
 	const int bottomBorderSize = 25 * Config::guiScale;
-	m_filter2.setSize(Config::screenWidth, Config::screenHeight - topBorderSize - bottomBorderSize);
-	m_filter2.setPosition(0, topBorderSize);
+	m_filter2.setSize(Config::screenWidth, float(Config::screenHeight - topBorderSize - bottomBorderSize));
+	m_filter2.setPosition(0, (float)topBorderSize);
 
 	m_title.setPosition(
-		Config::screenWidth / 2.0f - m_title.getSize().x * Config::guiScale / 2.0f,
-		topBorderSize / 2.0f - m_title.getSize().y * Config::guiScale / 2.0f
+		Config::screenWidth / 2.0f - float(m_title.getSize().x * Config::guiScale) / 2.0f,
+		(float)topBorderSize / 2.0f - float(m_title.getSize().y * Config::guiScale) / 2.0f
 	);
 
 	m_texturePackList.setPosition(
 		Config::screenWidth / 2.0f - m_texturePackList.getGlobalBounds().sizeX / 2.0f,
-		topBorderSize + 2.0f * Config::guiScale
+		(float)topBorderSize + 2.0f * Config::guiScale
 	);
 
 	m_menuWidget.setPosition(
 		Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2.0f,
-		Config::screenHeight - bottomBorderSize / 2.0f - m_menuWidget.getGlobalBounds().sizeY / 2.0f
+		Config::screenHeight - (float)bottomBorderSize / 2.0f - m_menuWidget.getGlobalBounds().sizeY / 2.0f
 	);
 }
 

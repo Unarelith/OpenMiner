@@ -88,7 +88,7 @@ void ClientChunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u
 	glCheck(glEnable(GL_DEPTH_TEST));
 
 	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
-	target.draw(m_vbo.at(layer), GL_TRIANGLES, 0, m_verticesCount.at(layer), states);
+	target.draw(m_vbo.at(layer), GL_TRIANGLES, 0, (GLsizei)m_verticesCount.at(layer), states);
 	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 }
 

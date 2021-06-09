@@ -32,7 +32,7 @@
 
 Minimap::Minimap() {
 	m_border.setFillColor(gk::Color::Transparent);
-	m_border.setOutlineColor(gk::Color{224, 224, 224});
+	m_border.setOutlineColor(gk::Color::fromRGBA32(224, 224, 224));
 	m_border.setOutlineThickness(1);
 	m_border.setSize(minimapSize, minimapSize);
 
@@ -45,7 +45,10 @@ Minimap::Minimap() {
 void Minimap::update(const ClientPlayer &player, class ClientWorld &world) {
 	m_playerChunkPos = player.getCurrentChunk();
 
-	m_playerChunk.setPosition(m_playerChunkPos.x * (chunkSize + 2), -m_playerChunkPos.y * (chunkSize + 2));
+	m_playerChunk.setPosition(
+		float(m_playerChunkPos.x * (chunkSize + 2)),
+		float(-m_playerChunkPos.y * (chunkSize + 2))
+	);
 
 	for (auto &it : m_chunks) {
 		if (it.first.z == m_playerChunkPos.z) {
@@ -55,10 +58,10 @@ void Minimap::update(const ClientPlayer &player, class ClientWorld &world) {
 					it.second.first.setFillColor(gk::Color::Green);
 				}
 				else if (chunk->isInitialized()) {
-					it.second.first.setFillColor(gk::Color{224, 224, 224});
+					it.second.first.setFillColor(gk::Color::fromRGBA32(224, 224, 224));
 				}
 				else {
-					it.second.first.setFillColor(gk::Color{127, 127, 127});
+					it.second.first.setFillColor(gk::Color::fromRGBA32(127, 127, 127));
 				}
 
 				it.second.second.setString(std::to_string(chunk->debugTimesReceived));
@@ -93,8 +96,8 @@ void Minimap::onChunkCreatedEvent(const ChunkCreatedEvent &event) {
 	if (Config::isChunkMinimapEnabled) {
 		auto &[rect, text] = m_chunks[event.chunkPos];
 		rect.setSize(chunkSize, chunkSize);
-		rect.setPosition(event.chunkPos.x * (chunkSize + 2), -event.chunkPos.y * (chunkSize + 2));
-		rect.setFillColor(event.isLoaded ? gk::Color{224, 224, 224} : gk::Color{127, 127, 127});
+		rect.setPosition(float(event.chunkPos.x * (chunkSize + 2)), float(-event.chunkPos.y * (chunkSize + 2)));
+		rect.setFillColor(event.isLoaded ? gk::Color::fromRGBA32(224, 224, 224) : gk::Color::fromRGBA32(127, 127, 127));
 		rect.setOutlineThickness(1);
 		rect.setOutlineColor(gk::Color::Transparent);
 
@@ -118,10 +121,10 @@ void Minimap::updatePlayerFovVertexBuffer() {
 	vertices[0].coord3d[0] = 0.f;
 	vertices[0].coord3d[1] = 0.f;
 
-	vertices[1].coord3d[0] = -sin(glm::radians(Config::cameraFOV / 2.f)) * Config::renderDistance * (chunkSize + 2) / cos(glm::radians(Config::cameraFOV / 2.f));
+	vertices[1].coord3d[0] = -sinf(glm::radians(Config::cameraFOV / 2.f)) * Config::renderDistance * (chunkSize + 2) / cosf(glm::radians(Config::cameraFOV / 2.f));
 	vertices[1].coord3d[1] = -(Config::renderDistance * (chunkSize + 2));
 
-	vertices[2].coord3d[0] = sin(glm::radians(Config::cameraFOV / 2.f)) * Config::renderDistance * (chunkSize + 2) / cos(glm::radians(Config::cameraFOV / 2.f));
+	vertices[2].coord3d[0] = sinf(glm::radians(Config::cameraFOV / 2.f)) * Config::renderDistance * (chunkSize + 2) / cosf(glm::radians(Config::cameraFOV / 2.f));
 	vertices[2].coord3d[1] = -(Config::renderDistance * (chunkSize + 2));
 
 	gk::Color color = gk::Color::Blue;
@@ -151,7 +154,10 @@ void Minimap::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 		target.draw(m_vbo, GL_TRIANGLES, 0, 3, states2);
 	}
 
-	states.transform.translate(-m_playerChunkPos.x * (chunkSize + 2) + minimapSize / 2.f, m_playerChunkPos.y * (chunkSize + 2) + minimapSize / 2.f);
+	states.transform.translate(
+		float(-m_playerChunkPos.x * (chunkSize + 2)) + minimapSize / 2.f,
+		float(m_playerChunkPos.y * (chunkSize + 2)) + minimapSize / 2.f
+	);
 
 	for (auto &it : m_chunks)
 		if (it.first.z == m_playerChunkPos.z) {

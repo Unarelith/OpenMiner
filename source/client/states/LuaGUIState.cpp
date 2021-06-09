@@ -242,8 +242,8 @@ void LuaGUIState::loadImage(const std::string &, s32 x, s32 y, sf::Packet &packe
 	gk::Texture &texture = loadTexture(textureFilename);
 
 	auto *image = new gk::Image(texture);
-	image->setPosition(x, y);
-	image->setClipRect(clipRect.x, clipRect.y, clipRect.sizeX, clipRect.sizeY);
+	image->setPosition((float)x, (float)y);
+	image->setClipRect(clipRect.x, clipRect.y, (u16)clipRect.sizeX, (u16)clipRect.sizeY);
 	m_drawables.emplace_back(image);
 }
 
@@ -252,7 +252,7 @@ void LuaGUIState::loadTextButton(const std::string &, s32 x, s32 y, sf::Packet &
 	packet >> text;
 
 	auto *button = new TextButton(&m_mainWidget);
-	button->setPosition(x, y);
+	button->setPosition((float)x, (float)y);
 	// button->setCallback(it.on_click);
 	button->setText(text);
 	m_widgets.emplace_back(button);
@@ -306,7 +306,7 @@ void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf:
 		m_inventoryWidgets.emplace(name, InventoryWidget{m_client, isReadOnly, &m_mainWidget});
 
 		auto &inventoryWidget = m_inventoryWidgets.at(name);
-		inventoryWidget.setPosition(x, y);
+		inventoryWidget.setPosition((float)x, (float)y);
 		inventoryWidget.init(*widgetInventory, offset, count);
 		inventoryWidget.setShiftDestination(shiftDestination);
 		inventoryWidget.setFilter(filter);
@@ -348,8 +348,8 @@ void LuaGUIState::loadCraftingWidget(const std::string &name, s32 x, s32 y, sf::
 		auto &craftingWidget = m_craftingWidgets.at(name);
 		craftingWidget.setShiftDestination(shiftDestination);
 		craftingWidget.init(offset, size);
-		craftingWidget.craftingInventoryWidget().setPosition(x, y);
-		craftingWidget.craftingResultInventoryWidget().setPosition(resultX, resultY);
+		craftingWidget.craftingInventoryWidget().setPosition((float)x, (float)y);
+		craftingWidget.craftingResultInventoryWidget().setPosition((float)resultX, (float)resultY);
 	}
 	else {
 		gkError() << "Crafting inventory is invalid";
@@ -393,7 +393,7 @@ void LuaGUIState::loadScrollBarWidget(const std::string &, s32 x, s32 y, sf::Pac
 	gk::Texture &texture = loadTexture(textureFilename);
 
 	ScrollBarWidget *scrollBarWidget = new ScrollBarWidget(&m_mainWidget);
-	scrollBarWidget->setPosition(x, y);
+	scrollBarWidget->setPosition((float)x, (float)y);
 	scrollBarWidget->init(texture, clipRect, minY, maxY, m_inventoryWidgets.at(widget));
 
 	m_widgets.emplace_back(scrollBarWidget);
@@ -406,7 +406,7 @@ void LuaGUIState::loadTextInput(const std::string &name, s32 x, s32 y, sf::Packe
 	packet >> width >> height >> placeholder >> placeholderColor >> inventory;
 
 	TextInput textInput{&m_mainWidget};
-	textInput.setPosition(x, y);
+	textInput.setPosition((float)x, (float)y);
 	textInput.setFocus(false);
 	textInput.setBackgroundSize(width, height);
 	textInput.setPlaceholder(placeholder);
@@ -434,8 +434,8 @@ gk::Texture &LuaGUIState::loadTexture(const std::string &textureFilename) {
 }
 
 void LuaGUIState::centerMainWidget() {
-	int x = floor(Config::screenWidth  / 2.0f - m_width  * Config::guiScale / 2.0f + 0.5f);
-	int y = floor(Config::screenHeight / 2.0f - m_height * Config::guiScale / 2.0f + 0.5f);
+	float x = floorf(Config::screenWidth  / 2.0f - m_width  * Config::guiScale / 2.0f + 0.5f);
+	float y = floorf(Config::screenHeight / 2.0f - m_height * Config::guiScale / 2.0f + 0.5f);
 	m_mainWidget.setPosition(x, y);
 }
 

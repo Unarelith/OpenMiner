@@ -48,7 +48,7 @@ class Registry : public gk::ISerializable {
 	public:
 		template<typename T>
 		auto registerBlock(const std::string &stringID) -> typename std::enable_if<std::is_base_of<Block, T>::value, T&>::type {
-			u32 id = m_blocks.size();
+			size_t id = m_blocks.size();
 			m_blocksID.emplace(stringID, id);
 			m_blocks.emplace_back(std::make_unique<T>(id, stringID));
 			return *static_cast<T*>(m_blocks.back().get());
@@ -59,7 +59,7 @@ class Registry : public gk::ISerializable {
 			m_blocks.emplace_back(std::make_unique<T>());
 			m_blocks.back()->deserialize(packet);
 
-			u32 id = m_blocks.size() - 1;
+			size_t id = m_blocks.size() - 1;
 			m_blocksID.emplace(m_blocks.back()->stringID(), id);
 
 			return *static_cast<T*>(m_blocks.back().get());
@@ -67,7 +67,7 @@ class Registry : public gk::ISerializable {
 
 		template<typename T>
 		auto registerItem(const TilesDef &tiles, const std::string &stringID, const std::string &label) -> typename std::enable_if<std::is_base_of<Item, T>::value, T&>::type {
-			u32 id = m_items.size();
+			size_t id = m_items.size();
 			m_itemsID.emplace(stringID, id);
 			m_items.emplace_back(std::make_unique<T>(id, tiles, stringID, label));
 			return *static_cast<T*>(m_items.back().get());
@@ -78,7 +78,7 @@ class Registry : public gk::ISerializable {
 			m_items.emplace_back(std::make_unique<T>());
 			m_items.back()->deserialize(packet);
 
-			u32 id = m_items.size() - 1;
+			size_t id = m_items.size() - 1;
 			m_itemsID.emplace(m_items.back()->stringID(), id);
 
 			return *static_cast<T*>(m_items.back().get());
@@ -157,8 +157,8 @@ class Registry : public gk::ISerializable {
 		std::vector<Dimension> m_dimensions;
 		std::vector<Key> m_keys;
 
-		std::unordered_map<std::string, u32> m_blocksID;
-		std::unordered_map<std::string, u32> m_itemsID;
+		std::unordered_map<std::string, u16> m_blocksID;
+		std::unordered_map<std::string, u16> m_itemsID;
 		std::unordered_map<std::string, u16> m_skiesID;
 		std::unordered_map<std::string, u16> m_treesID;
 		std::unordered_map<std::string, u16> m_biomesID;

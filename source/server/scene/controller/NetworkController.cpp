@@ -30,6 +30,8 @@
 #include "Server.hpp"
 #include "ServerCommandHandler.hpp"
 
+using namespace entt::literals;
+
 void NetworkController::update(entt::registry &registry) {
 	registry.view<NetworkComponent>().each([&] (auto entity, auto &network) {
 		if (!network.hasSpawned) {
@@ -38,7 +40,7 @@ void NetworkController::update(entt::registry &registry) {
 		}
 
 		registry.visit(entity, [&] (const auto &component_type) {
-			const auto &type = entt::resolve_type(component_type);
+			const auto &type = entt::resolve(component_type);
 			const auto &component = type.func("get"_hs).invoke({}, std::ref(registry), entity);
 			Network::Packet packet = type.func("serialize"_hs).invoke({}, entity, component, true).template cast<Network::Packet>();
 			if (packet.getDataSize())
@@ -54,7 +56,7 @@ void NetworkController::sendEntities(entt::registry &registry, const ClientInfo 
 		// gkDebug() << "sendEntitySpawn" << std::underlying_type_t<entt::entity>(network.entityID);
 
 		registry.visit(entity, [&] (const auto &component_type) {
-			const auto &type = entt::resolve_type(component_type);
+			const auto &type = entt::resolve(component_type);
 			if (type.prop("is_serializable"_hs).value().template cast<bool>()) {
 				const auto &component = type.func("get"_hs).invoke({}, std::ref(registry), entity);
 				Network::Packet packet = type.func("serialize"_hs).invoke({}, entity, component, false).template cast<Network::Packet>();

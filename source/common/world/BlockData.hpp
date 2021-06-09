@@ -31,7 +31,7 @@
 #include "Inventory.hpp"
 
 struct BlockData {
-	BlockData(const gk::Vector3i &pos, int width, int height) : inventory(width, height) {
+	BlockData(const gk::Vector3i &pos, u16 width, u16 height) : inventory(width, height) {
 		inventory.setInBlock(true);
 		inventory.setBlockPos(pos);
 	}

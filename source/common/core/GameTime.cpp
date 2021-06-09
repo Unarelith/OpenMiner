@@ -64,9 +64,9 @@ void GameTime::updateTpsCounter() {
 		tpsStart = s_ticks;
 
 	u64 currentClockTicks = gk::GameClock::getInstance().getTicks(true);
-	u32 elapsed = currentClockTicks - tpsTimer;
+	u32 elapsed = u32(currentClockTicks - tpsTimer);
 	if (elapsed >= 1000) {
-		s_ticksPerSecond = ((s_ticks - tpsStart) * 1000 + elapsed / 2) / elapsed;
+		s_ticksPerSecond = u16(((s_ticks - tpsStart) * 1000 + elapsed / 2) / elapsed);
 		tpsTimer = currentClockTicks;
 		tpsStart = s_ticks;
 	}

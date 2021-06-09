@@ -44,10 +44,10 @@ class ItemWidget : public Widget {
 		void updateImage(const BlockState *blockState = nullptr);
 
 		const ItemStack &stack() const { return m_inventory.getStack(m_x, m_y); }
-		void setStack(const std::string &name, unsigned int amount = 1);
+		void setStack(const std::string &name, u16 amount = 1);
 
-		unsigned int x() const { return m_x; }
-		unsigned int y() const { return m_y; }
+		u16 x() const { return m_x; }
+		u16 y() const { return m_y; }
 
 		bool hasChanged() const { return m_hasChanged; }
 		void setChanged(bool hasChanged) { m_hasChanged = hasChanged; }
@@ -58,8 +58,8 @@ class ItemWidget : public Widget {
 	private:
 		Inventory &m_inventory;
 
-		unsigned int m_x = 0;
-		unsigned int m_y = 0;
+		u16 m_x = 0;
+		u16 m_y = 0;
 
 		TextureAtlas &m_textureAtlas;
 

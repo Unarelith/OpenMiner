@@ -37,7 +37,7 @@ ChunkLightmap::ChunkLightmap(Chunk *chunk) : m_chunk(chunk) {
 	std::memset(m_lightMap, 0, sizeof(m_lightMap));
 }
 
-bool ChunkLightmap::addTorchlight(int x, int y, int z, int val) {
+bool ChunkLightmap::addTorchlight(int x, int y, int z, u8 val) {
 	if(x < 0)             return m_chunk->getSurroundingChunk(0) ? m_chunk->getSurroundingChunk(0)->lightmap().addTorchlight(x + CHUNK_WIDTH, y, z, val) : false;
 	if(x >= CHUNK_WIDTH)  return m_chunk->getSurroundingChunk(1) ? m_chunk->getSurroundingChunk(1)->lightmap().addTorchlight(x - CHUNK_WIDTH, y, z, val) : false;
 	if(y < 0)             return m_chunk->getSurroundingChunk(2) ? m_chunk->getSurroundingChunk(2)->lightmap().addTorchlight(x, y + CHUNK_DEPTH, z, val) : false;
@@ -51,7 +51,7 @@ bool ChunkLightmap::addTorchlight(int x, int y, int z, int val) {
 	return true;
 }
 
-bool ChunkLightmap::addSunlight(int x, int y, int z, int val) {
+bool ChunkLightmap::addSunlight(int x, int y, int z, u8 val) {
 	if(x < 0)             return m_chunk->getSurroundingChunk(0) ? m_chunk->getSurroundingChunk(0)->lightmap().addSunlight(x + CHUNK_WIDTH, y, z, val) : false;
 	if(x >= CHUNK_WIDTH)  return m_chunk->getSurroundingChunk(1) ? m_chunk->getSurroundingChunk(1)->lightmap().addSunlight(x - CHUNK_WIDTH, y, z, val) : false;
 	if(y < 0)             return m_chunk->getSurroundingChunk(2) ? m_chunk->getSurroundingChunk(2)->lightmap().addSunlight(x, y + CHUNK_DEPTH, z, val) : false;
@@ -289,7 +289,7 @@ bool ChunkLightmap::setSunlight(int x, int y, int z, u8 val) {
 
 	if ((m_lightMap[z][y][x] & 0xf0) == ((val << 4) & 0xf0)) return false;
 
-	m_lightMap[z][y][x] = (m_lightMap[z][y][x] & 0xf) | ((val << 4) & 0xf0);
+	m_lightMap[z][y][x] = u8((m_lightMap[z][y][x] & 0xf) | ((val << 4) & 0xf0));
 
 	m_hasChanged = true;
 	m_chunk->world().addChunkToUpdate(m_chunk);

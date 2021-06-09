@@ -77,7 +77,7 @@ class Chunk : public gk::NonCopyable {
 		virtual void onBlockDestroyed(int, int, int, const Block &) {}
 
 		BlockData *getBlockData(int x, int y, int z) const;
-		BlockData *addBlockData(int x, int y, int z, int inventoryWidth = 0, int inventoryHeight = 0);
+		BlockData *addBlockData(int x, int y, int z, u16 inventoryWidth = 0, u16 inventoryHeight = 0);
 
 		s32 x() const { return m_x; }
 		s32 y() const { return m_y; }

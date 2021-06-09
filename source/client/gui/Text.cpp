@@ -76,7 +76,7 @@ void Text::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	if (m_verticesCount == 0) return;
 
-	states.transform.translate(m_padding.x, m_padding.y);
+	states.transform.translate((float)m_padding.x, (float)m_padding.y);
 	states.texture = &m_font.texture();
 	states.vertexAttributes = gk::VertexAttribute::All;
 
@@ -132,7 +132,7 @@ void Text::updateVertexBuffer() const {
 		x += m_font.getCharWidth(c);
 	}
 
-	m_verticesCount = vertices.size();
+	m_verticesCount = (u32)vertices.size();
 
 	gk::VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(gk::Vertex) * m_verticesCount, vertices.data(), GL_DYNAMIC_DRAW);
@@ -141,8 +141,8 @@ void Text::updateVertexBuffer() const {
 	m_size.x = std::max(x, maxX);
 	m_size.y = y + m_font.getTileSize().y + 1;
 
-	u32 backgroundX = std::max<s32>(m_background.getSize().x, m_size.x + m_padding.x);
-	u32 backgroundY = std::max<s32>(m_background.getSize().y, m_size.y + m_padding.y);
+	float backgroundX = std::max(m_background.getSize().x, float(m_size.x + m_padding.x));
+	float backgroundY = std::max(m_background.getSize().y, float(m_size.y + m_padding.y));
 
 	m_background.setSize(backgroundX, backgroundY);
 }
@@ -162,8 +162,8 @@ void Text::addCharacter(u32 x, u32 y, const gk::Color &color, u8 c, std::vector<
 		vertices.emplace_back();
 		gk::Vertex &vertex = vertices.back();
 
-		vertex.coord3d[0] = x + coords[i][0] * m_font.getTileSize().x;
-		vertex.coord3d[1] = y + coords[i][1] * m_font.getTileSize().y;
+		vertex.coord3d[0] = float(x + coords[i][0] * m_font.getTileSize().x);
+		vertex.coord3d[1] = float(y + coords[i][1] * m_font.getTileSize().y);
 		vertex.coord3d[2] = 0;
 		vertex.coord3d[3] = -1;
 

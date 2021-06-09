@@ -95,7 +95,7 @@ bool ClientApplication::init() {
 	if (m_argumentParser.getArgument("host").isFound)
 		m_host = m_argumentParser.getArgument("host").parameter;
 	if (m_argumentParser.getArgument("port").isFound)
-		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
+		m_port = (u16)std::stoi(m_argumentParser.getArgument("port").parameter);
 
 	Config::loadConfigFromFile("config/client.lua");
 

@@ -38,7 +38,7 @@ InterfaceState::InterfaceState(gk::ApplicationState *parent) : gk::ApplicationSt
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
 	m_shader.linkProgram();
 
-	m_background.setFillColor(gk::Color{0, 0, 0, 127});
+	m_background.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 127));
 
 	setup();
 }
@@ -62,8 +62,8 @@ void InterfaceState::onEvent(const SDL_Event &event) {
 
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 		if (!m_parent) {
-			Config::screenWidth = event.window.data1;
-			Config::screenHeight = event.window.data2;
+			Config::screenWidth = (u16)event.window.data1;
+			Config::screenHeight = (u16)event.window.data2;
 		}
 
 		setup();

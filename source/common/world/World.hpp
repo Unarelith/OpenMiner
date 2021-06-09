@@ -42,7 +42,7 @@ class World {
 		Chunk *getChunkAtBlockPos(int x, int y, int z) const;
 
 		BlockData *getBlockData(int x, int y, int z) const;
-		BlockData *addBlockData(int x, int y, int z, int inventoryWidth = 0, int inventoryHeight = 0) const;
+		BlockData *addBlockData(int x, int y, int z, u16 inventoryWidth = 0, u16 inventoryHeight = 0) const;
 
 		const BlockState *getBlockState(int x, int y, int z) const;
 		void setBlockState(int x, int y, int z, u16 stateID);

@@ -40,14 +40,14 @@ ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::
 	m_host = host;
 	m_port = port;
 
-	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
+	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
-	m_filter.setFillColor(gk::Color(0, 0, 0, 192));
+	m_filter.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
 
 	m_text.setString(error);
 	m_text.setColor(gk::Color::Red);
 	m_text.updateVertexBuffer();
-	m_text.setScale(Config::guiScale * 1.5, Config::guiScale * 1.5);
+	m_text.setScale(Config::guiScale * 1.5f, Config::guiScale * 1.5f);
 	m_text.setShadowEnabled(false);
 
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
@@ -81,17 +81,17 @@ void ConnectionErrorState::onEvent(const SDL_Event &event) {
 }
 
 void ConnectionErrorState::updateWidgetPosition() {
-	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
-	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+	m_background.setPosRect(0, 0, u16(Config::screenWidth / m_background.getScale().x), u16(Config::screenHeight / m_background.getScale().y));
+	m_background.setClipRect(0, 0, u16(Config::screenWidth / m_background.getScale().x), u16(Config::screenHeight / m_background.getScale().y));
 
 	m_filter.setSize(Config::screenWidth, Config::screenHeight);
 
-	m_text.setPosition(Config::screenWidth  / 2 - m_text.getSize().x * Config::guiScale * 1.5 / 2,
-	                   Config::screenHeight / 2 - m_text.getSize().y * Config::guiScale * 1.5 / 2);
+	m_text.setPosition(float(Config::screenWidth  / 2 - m_text.getSize().x * Config::guiScale * 1.5 / 2),
+	                   float(Config::screenHeight / 2 - m_text.getSize().y * Config::guiScale * 1.5 / 2));
 
 	m_menuWidget.setPosition(
 		Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2,
-		Config::screenHeight - 110 * Config::guiScale
+		Config::screenHeight - 110.f * Config::guiScale
 	);
 }
 

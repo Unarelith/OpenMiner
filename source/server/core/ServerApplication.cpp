@@ -62,7 +62,7 @@ ServerApplication::ServerApplication(gk::EventHandler &eventHandler) {
 }
 
 bool ServerApplication::init() {
-	std::srand(std::time(nullptr));
+	std::srand((unsigned int)std::time(nullptr));
 
 	gk::LoggerHandler::setInstance(m_loggerHandler);
 	m_loggerHandler.setName("server");
@@ -93,7 +93,7 @@ bool ServerApplication::init() {
 	}
 
 	if (m_argumentParser.getArgument("port").isFound)
-		m_port = std::stoi(m_argumentParser.getArgument("port").parameter);
+		m_port = (u16)std::stoi(m_argumentParser.getArgument("port").parameter);
 
 	if (m_argumentParser.getArgument("world").isFound)
 		m_worldName = m_argumentParser.getArgument("world").parameter;
@@ -155,7 +155,7 @@ int ServerApplication::run(bool isProtected) {
 		}
 		catch(const gk::Exception &e) {
 			if (m_eventHandler)
-				m_eventHandler->emplaceEvent<ServerOnlineEvent>(false, 0);
+				m_eventHandler->emplaceEvent<ServerOnlineEvent>(false, (u16)0);
 
 			gkError() << "Fatal error" << e.what();
 

@@ -70,7 +70,7 @@ void ProgressBarWidgetDef::loadFromLuaTable(const sol::table &table) {
 }
 
 inline void ProgressBarWidgetDef::loadType(const sol::table &table) {
-	sol::object typeObject = table["type"];
+	sol::object typeObject = table["type"].get<sol::object>();
 	if (typeObject.valid()) {
 		if (typeObject.get_type() == sol::type::string) {
 			static const std::unordered_map<std::string, ProgressBarType> types = {

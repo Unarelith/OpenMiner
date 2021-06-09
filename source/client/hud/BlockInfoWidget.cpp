@@ -28,11 +28,11 @@
 #include "BlockInfoWidget.hpp"
 
 BlockInfoWidget::BlockInfoWidget(Widget *parent) : Widget(160, 32, parent) {
-	m_itemWidget.setPosition(5, m_height / 2 - m_itemWidget.height() / 2, 0);
+	m_itemWidget.setPosition(5, float(m_height / 2 - m_itemWidget.height() / 2), 0);
 
-	m_background.setColor(gk::Color{255, 255, 255, 200});
+	m_background.setColor(gk::Color::fromRGBA32(255, 255, 255, 200));
 
-	m_text.setColor(gk::Color{240, 240, 240});
+	m_text.setColor(gk::Color::fromRGBA32(240, 240, 240));
 	m_text.setPosition(26, 8, 0);
 }
 

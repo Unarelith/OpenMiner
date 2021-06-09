@@ -168,17 +168,17 @@ void TitleScreenState::updateWidgetPosition() {
 	);
 
 	m_titleText.setPosition(
-		roundf(Config::screenWidth / 2.0f - m_titleText.getSize().x * m_titleText.getScale().x / 2.0f),
+		roundf(Config::screenWidth / 2.0f - (float)m_titleText.getSize().x * m_titleText.getScale().x / 2.0f),
 		roundf(0.04f * Config::screenHeight * Config::guiScale)
 	);
-	m_versionText.setPosition(Config::guiScale, Config::screenHeight - m_versionText.getSize().y * Config::guiScale);
+	m_versionText.setPosition(Config::guiScale, float(Config::screenHeight - m_versionText.getSize().y * Config::guiScale));
 	m_copyrightText.setPosition(
-		roundf(Config::screenWidth - m_copyrightText.getSize().x * Config::guiScale - Config::guiScale),
-		roundf(Config::screenHeight - m_copyrightText.getSize().y * Config::guiScale)
+		float(Config::screenWidth - m_copyrightText.getSize().x * Config::guiScale - Config::guiScale),
+		float(Config::screenHeight - m_copyrightText.getSize().y * Config::guiScale)
 	);
 	m_licenseText.setPosition(
-		roundf(Config::screenWidth - m_licenseText.getSize().x * Config::guiScale - Config::guiScale),
-		roundf(Config::screenHeight - (m_copyrightText.getSize().y + m_licenseText.getSize().y + 2) * Config::guiScale)
+		float(Config::screenWidth - m_licenseText.getSize().x * Config::guiScale - Config::guiScale),
+		float(Config::screenHeight - (m_copyrightText.getSize().y + m_licenseText.getSize().y + 2) * Config::guiScale)
 	);
 }
 

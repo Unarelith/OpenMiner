@@ -55,19 +55,22 @@ HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 void HUD::setup() {
 	m_orthoMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f, DIST_2D_FAR, DIST_2D_NEAR);
 
-	m_hotbar.setPosition(Config::screenWidth / getScale().x / 2 - m_hotbar.width() / 2, Config::screenHeight / getScale().y - m_hotbar.height(), 0);
+	m_hotbar.setPosition(
+		Config::screenWidth / getScale().x / 2.f - (float)m_hotbar.width() / 2.f,
+		Config::screenHeight / getScale().y - (float)m_hotbar.height()
+	);
 
-	m_blockInfoWidget.setPosition(Config::screenWidth / getScale().x / 2 - m_blockInfoWidget.width() / 2, 2, 0);
+	m_blockInfoWidget.setPosition(Config::screenWidth / getScale().x / 2.f - (float)m_blockInfoWidget.width() / 2.f, 2.f);
 
-	m_fpsText.setPosition(Config::screenWidth / getScale().x - 36, 2);
+	m_fpsText.setPosition(Config::screenWidth / getScale().x - 36.f, 2.f);
 
 	m_crosshair.setup();
 
-	m_chat.setPosition(2, Config::screenHeight / Config::guiScale - 50);
+	m_chat.setPosition(2.f, Config::screenHeight / Config::guiScale - 50.f);
 
-	m_minimap.setPosition(Config::screenWidth / Config::guiScale - Minimap::minimapSize - 15, 15);
+	m_minimap.setPosition(float(Config::screenWidth / Config::guiScale - Minimap::minimapSize) - 15.f, 15.f);
 
-	m_debugLightmapViewer.setPosition(0, Config::screenHeight / Config::guiScale - DebugLightmapViewer::totalSize);
+	m_debugLightmapViewer.setPosition(0.f, float(Config::screenHeight / Config::guiScale - DebugLightmapViewer::totalSize));
 }
 
 void HUD::onEvent(const SDL_Event &event) {

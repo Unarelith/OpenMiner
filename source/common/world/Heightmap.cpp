@@ -34,7 +34,7 @@ void HeightmapChunk::generate() {
 			double n2 = m_heightmap.noise2.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
 			double n3 = m_heightmap.noise3.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
 			double n4 = m_heightmap.noise4.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
-			m_map[x + y * CHUNK_WIDTH] = (n1 + (n2 * n3 * (n4 * 2 - 1))) * 64 + 64;
+			m_map[x + y * CHUNK_WIDTH] = s32((n1 + (n2 * n3 * (n4 * 2 - 1))) * 64 + 64);
 		}
 	}
 }
@@ -89,8 +89,8 @@ int Heightmap::getHighestBlockAt(s32 blockX, s32 blockY) {
 	s32 chunkY = (blockY & -CHUNK_DEPTH) / CHUNK_DEPTH;
 
 	s32 blockZ = getOrCreateChunk(chunkX, chunkY).landHeightAt(
-		gk::pmod(blockX, CHUNK_WIDTH),
-		gk::pmod(blockY, CHUNK_DEPTH)
+		s8(gk::pmod(blockX, CHUNK_WIDTH)),
+		s8(gk::pmod(blockY, CHUNK_DEPTH))
 	);
 
 	return blockZ;

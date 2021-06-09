@@ -89,14 +89,14 @@ gk::FloatRect TextureAtlas::getTexCoords(const std::string &filename, bool norma
 
 	u16 textureID = getTextureID(filename);
 
-	float textureX = (textureID % (m_texture.getSize().x / m_tileSize)) * m_tileSize;
-	float textureY = (textureID / (m_texture.getSize().x / m_tileSize)) * m_tileSize;
+	float textureX = float((textureID % (m_texture.getSize().x / m_tileSize)) * m_tileSize);
+	float textureY = float((textureID / (m_texture.getSize().x / m_tileSize)) * m_tileSize);
 
 	if (normalized)
-		return gk::FloatRect{textureX / m_texture.getSize().x,
-							 textureY / m_texture.getSize().y,
-							 (float)m_tileSize / m_texture.getSize().x,
-							 (float)m_tileSize / m_texture.getSize().y};
+		return gk::FloatRect{textureX / (float)m_texture.getSize().x,
+							 textureY / (float)m_texture.getSize().y,
+							 m_tileSize / (float)m_texture.getSize().x,
+							 m_tileSize / (float)m_texture.getSize().y};
 	else
 		return gk::FloatRect{textureX,
 							 textureY,
@@ -118,7 +118,7 @@ void TextureAtlas::addFile(const std::string &path, const std::string &filename)
 	}
 
 	if (!m_tileSize)
-		m_tileSize = surface->w;
+		m_tileSize = (u16)surface->w;
 
 	if (m_tileSize != surface->w || m_tileSize != surface->h)
 		throw EXCEPTION("Texture size unexpected for", path + filename + ". Got", surface->w, surface->h, "instead of", m_tileSize, m_tileSize);
@@ -144,7 +144,7 @@ void TextureAtlas::packTextures() {
 	const u16 atlasWidth = 16;
 
 	// Max amount of textures on one column
-	const u16 atlasHeight = std::ceil((float)m_textures.size() / atlasWidth);
+	const u16 atlasHeight = (u16)std::ceil((float)m_textures.size() / atlasWidth);
 
 	SurfacePtr atlas{nullptr, &SDL_FreeSurface};
 

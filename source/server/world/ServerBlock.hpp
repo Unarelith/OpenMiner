@@ -37,7 +37,7 @@ class ServerWorld;
 
 class ServerBlock : public Block {
 	public:
-		ServerBlock(u32 id, const std::string &name)
+		ServerBlock(u16 id, const std::string &name)
 			: Block(id, name) {}
 
 		void onTick(const glm::ivec3 &pos, ServerChunk &chunk, ServerWorld &world, ServerCommandHandler &server) const;

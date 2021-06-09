@@ -41,7 +41,7 @@ void ScrollBarWidget::init(const gk::Texture &texture, const gk::FloatRect &clip
 	m_widget = &widget;
 
 	m_image.load(texture);
-	m_image.setClipRect(m_clipRect.x, m_clipRect.y, m_clipRect.sizeX, m_clipRect.sizeY);
+	m_image.setClipRect(m_clipRect.x, m_clipRect.y, (u16)m_clipRect.sizeX, (u16)m_clipRect.sizeY);
 }
 
 void ScrollBarWidget::onEvent(const SDL_Event &event) {
@@ -49,14 +49,14 @@ void ScrollBarWidget::onEvent(const SDL_Event &event) {
 		if (isPointInWidget(event.button.x, event.button.y)) {
 			m_isDragging = true;
 
-			updateScrolling(event.button.y);
+			updateScrolling((u16)event.button.y);
 		}
 	}
 	else if (event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_LEFT) {
 		m_isDragging = false;
 	}
 	else if (event.type == SDL_MOUSEMOTION && m_isDragging) {
-		updateScrolling(event.motion.y);
+		updateScrolling((u16)event.motion.y);
 	}
 }
 
@@ -67,8 +67,8 @@ void ScrollBarWidget::draw(gk::RenderTarget &target, gk::RenderStates states) co
 }
 
 void ScrollBarWidget::updateScrolling(u16 y) {
-	s16 imageY = y - getPosition().y * Config::guiScale - m_parent->getPosition().y;
-	m_image.setPosition(0, glm::clamp<s16>(imageY / Config::guiScale - m_barHeight / 2, m_minY, m_maxY));
+	float imageY = floorf(y - getPosition().y * Config::guiScale - m_parent->getPosition().y);
+	m_image.setPosition(0, glm::clamp<float>(imageY / Config::guiScale - m_barHeight / 2, (float)m_minY, (float)m_maxY));
 
 	m_scrolling = m_image.getPosition().y / (m_maxY - m_minY);
 

@@ -30,7 +30,7 @@
 #include <gk/graphics/Color.hpp>
 
 namespace Color {
-	const gk::Color Blue{32, 168, 248};
+	const gk::Color Blue = gk::Color::fromRGBA32(32, 168, 248);
 }
 
 #endif // COLOR_HPP_

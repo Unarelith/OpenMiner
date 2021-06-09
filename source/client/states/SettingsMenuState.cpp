@@ -46,8 +46,8 @@
 SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : InterfaceState(parent) {
 	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
 
-	m_filter1.setFillColor(gk::Color(0, 0, 0, 192));
-	m_filter2.setFillColor(gk::Color(0, 0, 0, 120));
+	m_filter1.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
+	m_filter2.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 120));
 
 	m_title.setScale(Config::guiScale, Config::guiScale);
 	m_title.setString("Options");
@@ -113,29 +113,36 @@ void SettingsMenuState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 }
 
 void SettingsMenuState::updateWidgetPosition() {
-	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
-	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+	m_background.setPosRect(0, 0,
+		u16(Config::screenWidth / m_background.getScale().x),
+		u16(Config::screenHeight / m_background.getScale().y)
+	);
+
+	m_background.setClipRect(0, 0,
+		u16(Config::screenWidth / m_background.getScale().x),
+		u16(Config::screenHeight / m_background.getScale().y)
+	);
 
 	m_filter1.setSize(Config::screenWidth, Config::screenHeight);
 
 	const int topBorderSize = 25 * Config::guiScale;
 	const int bottomBorderSize = 25 * Config::guiScale;
-	m_filter2.setSize(Config::screenWidth, Config::screenHeight - topBorderSize - bottomBorderSize);
-	m_filter2.setPosition(0, topBorderSize);
+	m_filter2.setSize(Config::screenWidth, float(Config::screenHeight - topBorderSize - bottomBorderSize));
+	m_filter2.setPosition(0, (float)topBorderSize);
 
 	m_title.setPosition(
-		roundf(Config::screenWidth / 2.0f - m_title.getSize().x * Config::guiScale / 2.0f),
-		roundf(topBorderSize / 2.0f - m_title.getSize().y * Config::guiScale / 2.0f)
+		roundf(Config::screenWidth / 2.0f - float(m_title.getSize().x * Config::guiScale) / 2.0f),
+		roundf((float)topBorderSize / 2.0f - float(m_title.getSize().y * Config::guiScale) / 2.0f)
 	);
 
 	m_doneButton.setPosition(
 		roundf(Config::screenWidth / 2.0f - m_doneButton.getGlobalBounds().sizeX / 2.0f),
-		roundf(Config::screenHeight - bottomBorderSize / 2.0f - m_doneButton.getGlobalBounds().sizeY / 2.0f)
+		roundf(Config::screenHeight - (float)bottomBorderSize / 2.0f - m_doneButton.getGlobalBounds().sizeY / 2.0f)
 	);
 
 	m_menuWidget.setPosition(
 		roundf(Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2.0f),
-		roundf(topBorderSize + 5.0f * Config::guiScale)
+		roundf((float)topBorderSize + 5.0f * Config::guiScale)
 	);
 }
 
@@ -191,7 +198,7 @@ void SettingsMenuState::addGameplayButtons() {
 	addToggleButton("No Clip", Config::isNoClipEnabled, false);
 
 	m_menuWidget.addSlider("Max Block Reach: " + std::to_string(Config::maxBlockReach), [] (SliderWidget &slider, u32) {
-		Config::maxBlockReach = slider.getCurrentValue();
+		Config::maxBlockReach = (u16)slider.getCurrentValue();
 		slider.setText("Max Block Reach: " + std::to_string(Config::maxBlockReach));
 	}, 1, 15, Config::maxBlockReach);
 
@@ -213,7 +220,7 @@ void SettingsMenuState::addGraphicsButtons() {
 	m_menuWidget.reset(2, 8);
 
 	m_menuWidget.addSlider("Render Distance: " + std::to_string(Config::renderDistance), [] (SliderWidget &slider, u32) {
-		Config::renderDistance = slider.getCurrentValue();
+		Config::renderDistance = (u16)slider.getCurrentValue();
 		slider.setText("Render Distance: " + std::to_string(Config::renderDistance));
 		World::isReloadRequested = true;
 	}, 4, 16, Config::renderDistance);
@@ -234,7 +241,7 @@ void SettingsMenuState::addGraphicsButtons() {
 	};
 
 	m_menuWidget.addButton(std::string("Ambient Occlusion: ") + aoValueNames[Config::ambientOcclusion], [&, aoValueNames] (TextButton &button) {
-		Config::ambientOcclusion = (Config::ambientOcclusion + 1) % (Config::isSmoothLightingEnabled ? 3 : 2);
+		Config::ambientOcclusion = u8((Config::ambientOcclusion + 1) % (Config::isSmoothLightingEnabled ? 3 : 2));
 		button.setText(std::string("Ambient Occlusion: ") + aoValueNames[Config::ambientOcclusion]);
 
 		World::isReloadRequested = true;
@@ -243,7 +250,7 @@ void SettingsMenuState::addGraphicsButtons() {
 	m_menuWidget.addSlider("GUI Scale: " + std::to_string(Config::guiScale), [this] (SliderWidget &slider, u32 eventType) {
 		slider.setText("GUI Scale: " + std::to_string(slider.getCurrentValue()));
 		if (eventType == SDL_MOUSEBUTTONUP) {
-			Config::guiScale = slider.getCurrentValue();
+			Config::guiScale = (u8)slider.getCurrentValue();
 			m_eventHandler->emplaceEvent<GuiScaleChangedEvent>(Config::guiScale);
 		}
 	}, 1, 3, Config::guiScale);
@@ -280,35 +287,35 @@ void SettingsMenuState::addGraphicsButtons() {
 	addToggleButton("Use VSync", Config::isVerticalSyncEnabled, false);
 
 	m_menuWidget.addSlider("Mipmap Levels: " + std::to_string(Config::mipmapLevels), [] (SliderWidget &slider, u32) {
-		Config::mipmapLevels = slider.getCurrentValue();
+		Config::mipmapLevels = (u8)slider.getCurrentValue();
 		slider.setText("Mipmap Levels: " + std::to_string(Config::mipmapLevels));
 	}, 0, 4, Config::mipmapLevels);
 
 	addToggleButton("Star Rendering", Config::isStarRenderingEnabled, false);
 
 	m_menuWidget.addSlider("FOV: " + std::to_string((int)Config::cameraFOV), [] (SliderWidget &slider, u32) {
-		Config::cameraFOV = slider.getCurrentValue();
+		Config::cameraFOV = (float)slider.getCurrentValue();
 		slider.setText("FOV: " + std::to_string((int)Config::cameraFOV));
-	}, 45, 135, Config::cameraFOV);
+	}, 45, 135, (int)Config::cameraFOV);
 
 	updateWidgetPosition();
 }
 
 void SettingsMenuState::addInputButtons() {
 	KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
-	m_menuWidget.reset(2, keyboardHandler->keyCount() / 2.f + 1.5f);
+	m_menuWidget.reset(2, u16((float)keyboardHandler->keyCount() / 2.f + 1.5f));
 
 	for (auto &it : keyboardHandler->keys()) {
 		m_menuWidget.addButton(it.second.name() + ": " + keyboardHandler->getKeyName(it.first), [this, it] (TextButton &button) {
 			button.setText(it.second.name() + ": ");
-			m_currentKey = it.first;
+			m_currentKey = (u16)it.first;
 			m_currentKeyButton = &button;
 			m_key = const_cast<Key *>(&it.second);
 		});
 	}
 
 	m_menuWidget.addSlider("Mouse Sensitivity: " + std::to_string(Config::mouseSensitivity), [] (SliderWidget &slider, u32) {
-		Config::mouseSensitivity = slider.getCurrentValue();
+		Config::mouseSensitivity = (u8)slider.getCurrentValue();
 		slider.setText("Mouse Sensitivity: " + std::to_string(Config::mouseSensitivity));
 	}, 4, 32, Config::mouseSensitivity);
 

@@ -36,8 +36,8 @@ void ProgressBarWidget::init(const gk::FloatRect &clipRect, const gk::Vector2i &
 	m_clipRect = clipRect;
 	m_position = position;
 
-	m_image.setClipRect(clipRect.x, clipRect.y, clipRect.sizeX, clipRect.sizeY);
-	m_image.setPosition(position.x, position.y);
+	m_image.setClipRect(clipRect.x, clipRect.y, (u16)clipRect.sizeX, (u16)clipRect.sizeY);
+	m_image.setPosition((float)position.x, (float)position.y);
 
 	m_meta = meta;
 	m_maxMetaValue = maxMetaValue;
@@ -47,8 +47,8 @@ void ProgressBarWidget::init(const gk::FloatRect &clipRect, const gk::Vector2i &
 	m_clipRect = clipRect;
 	m_position = position;
 
-	m_image.setClipRect(clipRect.x, clipRect.y, clipRect.sizeX, clipRect.sizeY);
-	m_image.setPosition(position.x, position.y);
+	m_image.setClipRect(clipRect.x, clipRect.y, (u16)clipRect.sizeX, (u16)clipRect.sizeY);
+	m_image.setPosition((float)position.x, (float)position.y);
 
 	m_meta = meta;
 	m_maxMeta = maxMeta;
@@ -63,12 +63,12 @@ void ProgressBarWidget::update() {
 		m_image.setClipRect(0, 0, 0, 0);
 	}
 	else if (m_type == ProgressBarType::ItemProcess) {
-		m_image.setClipRect(m_clipRect.x, m_clipRect.y, (float)metaValue / m_maxMetaValue * m_clipRect.sizeX, m_clipRect.sizeY);
+		m_image.setClipRect(m_clipRect.x, m_clipRect.y, u16((float)metaValue / (float)m_maxMetaValue * m_clipRect.sizeX), (u16)m_clipRect.sizeY);
 	}
 	else if (m_type == ProgressBarType::BurnProcess) {
-		float height = ceil((float)metaValue / m_maxMetaValue * m_clipRect.sizeY);
-		m_image.setPosition(m_position.x, m_position.y + m_clipRect.sizeY - height);
-		m_image.setClipRect(m_clipRect.x, m_clipRect.y + m_clipRect.sizeY - height, m_clipRect.sizeX, height);
+		float height = ceilf((float)metaValue / (float)m_maxMetaValue * m_clipRect.sizeY);
+		m_image.setPosition((float)m_position.x, (float)m_position.y + m_clipRect.sizeY - height);
+		m_image.setClipRect(m_clipRect.x, m_clipRect.y + m_clipRect.sizeY - height, (u16)m_clipRect.sizeX, (u16)height);
 	}
 }
 

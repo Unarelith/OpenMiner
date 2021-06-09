@@ -26,8 +26,8 @@
  */
 #include "Widget.hpp"
 
-bool Widget::isPointInWidget(float x, float y) {
-	return getGlobalBounds().intersects(gk::FloatRect{x, y, 1, 1});
+bool Widget::isPointInWidget(int x, int y) {
+	return getGlobalBounds().intersects(gk::FloatRect{(float)x, (float)y, 1, 1});
 }
 
 gk::FloatRect Widget::getGlobalBounds() const {

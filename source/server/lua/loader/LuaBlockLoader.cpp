@@ -39,10 +39,10 @@ void LuaBlockLoader::loadBlock(const sol::table &table) const {
 	ServerBlock &block = Registry::getInstance().registerBlock<ServerBlock>(stringID);
 	block.setRotatable(table["is_rotatable"].get_or(false));
 
-	block.setOnBlockActivated(table["on_block_activated"]);
-	block.setOnTick(table["on_tick"]);
-	block.setOnBlockPlaced(table["on_block_placed"]);
-	block.setOnBlockDestroyed(table["on_block_destroyed"]);
+	block.setOnBlockActivated(table["on_block_activated"].get<sol::object>());
+	block.setOnTick(table["on_tick"].get<sol::object>());
+	block.setOnBlockPlaced(table["on_block_placed"].get<sol::object>());
+	block.setOnBlockDestroyed(table["on_block_destroyed"].get<sol::object>());
 	block.setTickRandomly(table["tick_randomly"].get_or(false));
 	block.setTickProbability(table["tick_probability"].get_or(0.f));
 	block.setCustomParamBits(table["custom_param_bits"].get_or<u8>(0));
@@ -88,7 +88,7 @@ inline void LuaBlockLoader::loadProperties(BlockState &state, const sol::table &
 		state.label(table["name"].get<std::string>());
 
 	if (table["harvest_requirements"].get_type() == sol::type::number)
-		state.harvestRequirements(table["harvest_requirements"].get<int>());
+		state.harvestRequirements(table["harvest_requirements"].get<u8>());
 
 	if (table["hardness"].get_type() == sol::type::number)
 		state.hardness(table["hardness"].get<float>());
@@ -108,11 +108,11 @@ inline void LuaBlockLoader::loadProperties(BlockState &state, const sol::table &
 	if (state.fogDepth()) {
 		sol::optional<sol::table> fogColor = table["fog_color"];
 		if (fogColor != sol::nullopt) {
-			state.fogColor(gk::Color{
+			state.fogColor(gk::Color::fromRGBA32(
 				fogColor.value().get<u8>(1),
 				fogColor.value().get<u8>(2),
-				fogColor.value().get<u8>(3),
-			});
+				fogColor.value().get<u8>(3)
+			));
 		}
 	}
 
@@ -144,7 +144,7 @@ inline void LuaBlockLoader::loadBoundingBox(BlockState &state, const sol::table 
 }
 
 inline void LuaBlockLoader::loadDrawType(BlockState &state, const sol::table &table, const ServerBlock &block) const {
-	sol::object drawTypeObject = table["draw_type"];
+	sol::object drawTypeObject = table["draw_type"].get<sol::object>();
 	if (drawTypeObject.valid()) {
 		if (drawTypeObject.get_type() == sol::type::string) {
 			static const std::unordered_map<std::string, BlockDrawType> drawTypes = {
@@ -184,17 +184,17 @@ inline void LuaBlockLoader::loadItemDrop(BlockState &state, const sol::table &ta
 inline void LuaBlockLoader::loadColorMultiplier(BlockState &state, const sol::table &table) const {
 	sol::optional<sol::table> colorMultiplier = table["color_multiplier"];
 	if (colorMultiplier != sol::nullopt) {
-		state.colorMultiplier(gk::Color{
+		state.colorMultiplier(gk::Color::fromRGBA32(
 			colorMultiplier.value().get<u8>(1),
 			colorMultiplier.value().get<u8>(2),
 			colorMultiplier.value().get<u8>(3),
 			colorMultiplier.value().get<u8>(4)
-		});
+		));
 	}
 }
 
 inline void LuaBlockLoader::loadStates(ServerBlock &block, BlockState &state, const sol::table &table) const {
-	sol::object statesObject = table["states"];
+	sol::object statesObject = table["states"].get<sol::object>();
 	if (statesObject.valid()) {
 		if (statesObject.get_type() == sol::type::table) {
 			sol::table statesTable = statesObject.as<sol::table>();
@@ -216,7 +216,7 @@ inline void LuaBlockLoader::loadStates(ServerBlock &block, BlockState &state, co
 }
 
 inline void LuaBlockLoader::loadPlacementConstraints(ServerBlock &block, const sol::table &table) const {
-	sol::object constraintsObject = table["placement_constraints"];
+	sol::object constraintsObject = table["placement_constraints"].get<sol::object>();
 	if (constraintsObject.valid()) {
 		if (constraintsObject.get_type() == sol::type::table) {
 			sol::table constraintsTable = constraintsObject.as<sol::table>();
@@ -249,7 +249,7 @@ inline void LuaBlockLoader::loadPlacementConstraints(ServerBlock &block, const s
 }
 
 inline void LuaBlockLoader::loadGroups(ServerBlock &block, const sol::table &table, Item *item) const {
-	sol::object groupsObject = table["groups"];
+	sol::object groupsObject = table["groups"].get<sol::object>();
 	if (groupsObject.valid()) {
 		if (groupsObject.get_type() == sol::type::table) {
 			sol::table groupsTable = groupsObject.as<sol::table>();
@@ -272,8 +272,8 @@ inline void LuaBlockLoader::loadParams(ServerBlock &block) const {
 		block.param().allocateBits(BlockParam::Type::Rotation, 5);
 
 	if (block.states().size() > 1) {
-		int bits = 1;
-		int index = block.states().size();
+		u8 bits = 1;
+		std::size_t index = block.states().size();
 		while (index >>= 1)
 			++bits;
 		block.param().allocateBits(BlockParam::Type::State, bits);

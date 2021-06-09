@@ -31,7 +31,7 @@ TextButton::TextButton(Widget *parent) : TextButton(200, parent) {
 
 TextButton::TextButton(u16 width, Widget *parent) : Widget(width, 20, parent) {
 	m_text.setColor(m_defaultColor);
-	m_text.setShadowColor({56, 56, 56});
+	m_text.setShadowColor(gk::Color::fromRGBA32(56, 56, 56));
 
 	m_background.setClipRect(0, 66, width, 20);
 	m_hoverBackground.setClipRect(0, 86, width, 20);
@@ -80,8 +80,8 @@ void TextButton::setText(const std::string &text) {
 	m_text.setString(text);
 	m_text.updateVertexBuffer();
 	m_text.setPosition(
-		std::roundf(m_width  / 2.f - m_text.getSize().x / 2.f),
-		std::roundf(m_height / 2.f - m_text.getSize().y / 2.f)
+		std::roundf((float)m_width  / 2.f - (float)m_text.getSize().x / 2.f),
+		std::roundf((float)m_height / 2.f - (float)m_text.getSize().y / 2.f)
 	);
 }
 

@@ -83,8 +83,8 @@ void MenuWidget::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 }
 
 TextButton &MenuWidget::addButton(const std::string &text, const TextButton::CppCallback &callback, u16 width) {
-	int x = (m_buttons.size() + m_sliders.size()) % m_width;
-	int y = (m_buttons.size() + m_sliders.size()) / m_width;
+	int x = int((m_buttons.size() + m_sliders.size()) % m_width);
+	int y = int((m_buttons.size() + m_sliders.size()) / m_width);
 
 	m_buttons.emplace_back(std::piecewise_construct,
 		std::forward_as_tuple(width, this), std::forward_as_tuple(x, y));
@@ -106,8 +106,8 @@ void MenuWidget::setButtonEnabled(const std::string &text, bool isEnabled) {
 }
 
 SliderWidget &MenuWidget::addSlider(const std::string &text, const SliderWidget::CppCallback &callback, int min, int max, int initialValue) {
-	int x = (m_buttons.size() + m_sliders.size()) % m_width;
-	int y = (m_buttons.size() + m_sliders.size()) / m_width;
+	int x = int((m_buttons.size() + m_sliders.size()) % m_width);
+	int y = int((m_buttons.size() + m_sliders.size()) / m_width);
 
 	m_sliders.emplace_back(std::piecewise_construct,
 		std::forward_as_tuple(this), std::forward_as_tuple(x, y));
@@ -124,14 +124,14 @@ SliderWidget &MenuWidget::addSlider(const std::string &text, const SliderWidget:
 }
 
 void MenuWidget::updateWidgetPosition(Widget &widget, int x, int y) {
-	widget.setPosition(x * (widget.width() + m_horizontalSpacing),
-	                   y * (widget.height() + m_verticalSpacing));
+	widget.setPosition(float(x * (widget.width() + m_horizontalSpacing)),
+	                   float(y * (widget.height() + m_verticalSpacing)));
 
-	if (widget.getPosition().x + widget.width() > Widget::m_width) {
-		Widget::m_width = widget.getPosition().x + widget.width();
+	if ((unsigned int)widget.getPosition().x + widget.width() > Widget::m_width) {
+		Widget::m_width = (unsigned int)widget.getPosition().x + widget.width();
 	}
-	if (widget.getPosition().y + widget.height() > Widget::m_height) {
-		Widget::m_height = widget.getPosition().y + widget.height();
+	if ((unsigned int)widget.getPosition().y + widget.height() > Widget::m_height) {
+		Widget::m_height = (unsigned int)widget.getPosition().y + widget.height();
 	}
 }
 

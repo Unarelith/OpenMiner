@@ -93,9 +93,9 @@ void ClientWorld::requestChunkMeshing() {
 }
 
 void ClientWorld::checkPlayerChunk(double playerX, double playerY, double playerZ) {
-	int pcx = std::floor(playerX / CHUNK_WIDTH);
-	int pcy = std::floor(playerY / CHUNK_DEPTH);
-	int pcz = std::floor(playerZ / CHUNK_HEIGHT);
+	int pcx = (int)std::floor(playerX / CHUNK_WIDTH);
+	int pcy = (int)std::floor(playerY / CHUNK_DEPTH);
+	int pcz = (int)std::floor(playerZ / CHUNK_HEIGHT);
 
 	ClientChunk *chunk = (ClientChunk *)getChunk(pcx, pcy, pcz);
 	if (!chunk) {
@@ -137,9 +137,9 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 
 	// Receive chunk data
 	// bool hasUpdatedChunk = false;
-	for (u16 z = 0 ; z < CHUNK_HEIGHT ; ++z) {
-		for (u16 y = 0 ; y < CHUNK_DEPTH ; ++y) {
-			for (u16 x = 0 ; x < CHUNK_WIDTH ; ++x) {
+	for (u8 z = 0 ; z < CHUNK_HEIGHT ; ++z) {
+		for (u8 y = 0 ; y < CHUNK_DEPTH ; ++y) {
+			for (u8 x = 0 ; x < CHUNK_WIDTH ; ++x) {
 				u32 block;
 				u8 light;
 
@@ -300,8 +300,8 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		                 * glm::vec4(CHUNK_WIDTH / 2, CHUNK_DEPTH / 2, CHUNK_HEIGHT / 2, 1);
 
 		// Nope, too far, don't render it
-		if(glm::length(center) > (Config::renderDistance + 1) * CHUNK_WIDTH) {
-			if(floor(glm::length(center)) > (Config::renderDistance + 2) * CHUNK_WIDTH) {
+		if(glm::length(center) > (Config::renderDistance + 1.f) * CHUNK_WIDTH) {
+			if(floor(glm::length(center)) > (Config::renderDistance + 2.f) * CHUNK_WIDTH) {
 				it.second->setTooFar(true);
 
 				if (!it.second->isInitialized())

@@ -29,13 +29,13 @@
 #include "MouseItemWidget.hpp"
 
 MouseItemWidget::MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0, parent) {
-	m_tooltipBackground.setColor(gk::Color{255, 255, 255, 240});
+	m_tooltipBackground.setColor(gk::Color::fromRGBA32(255, 255, 255, 240));
 	m_tooltipBackground.setPosition(20, 17, 0);
 
 	m_tooltipText.setPosition(26, 24, 0);
 
 	m_tooltipInfoText.setPosition(26, 35, 0);
-	m_tooltipInfoText.setColor({180, 180, 180});
+	m_tooltipInfoText.setColor(gk::Color::fromRGBA32(180, 180, 180));
 }
 
 void MouseItemWidget::onEvent(const SDL_Event &event) {
@@ -142,7 +142,7 @@ void MouseItemWidget::draggingBehaviour(ItemWidget *newItemWidget) {
 	if (m_draggedSlots.size() > 1) {
 		if (m_isLeftClickDrag) {
 			for (auto &it : m_draggedSlots) {
-				u16 splitAmount = m_draggedStack.amount() / m_draggedSlots.size();
+				u16 splitAmount = u16(m_draggedStack.amount() / m_draggedSlots.size());
 
 				if (splitAmount > 0) {
 					it.first->setStack(m_draggedStack.item().stringID(), it.second.amount() + splitAmount);
@@ -150,7 +150,7 @@ void MouseItemWidget::draggingBehaviour(ItemWidget *newItemWidget) {
 				}
 			}
 
-			u16 remainingAmount = (m_draggedStack.amount() == 1) ? 0 : m_draggedStack.amount() % std::min<u16>(m_draggedSlots.size(), m_draggedStack.amount());
+			u16 remainingAmount = (m_draggedStack.amount() == 1) ? 0 : m_draggedStack.amount() % std::min((u16)m_draggedSlots.size(), m_draggedStack.amount());
 
 			setStack(remainingAmount ? m_draggedStack.item().stringID() : BLOCK_AIR, remainingAmount);
 		}
@@ -193,7 +193,7 @@ void MouseItemWidget::updateCurrentItem(ItemWidget *currentItemWidget) {
 
 void MouseItemWidget::swapItems(ItemWidget &widget, bool isReadOnly) {
 	std::string widgetItemName = widget.stack().item().stringID();
-	u32 widgetItemAmount = widget.stack().amount();
+	u16 widgetItemAmount = widget.stack().amount();
 
 	if (!isReadOnly || stack().item().id() == 0 || stack().item().stringID() == widgetItemName) {
 		if (stack().item().stringID() != widgetItemName) {
@@ -220,8 +220,8 @@ void MouseItemWidget::swapItems(ItemWidget &widget, bool isReadOnly) {
 
 void MouseItemWidget::putItem(ItemWidget &widget) {
 	std::string widgetItemName = widget.stack().item().stringID();
-	u32 widgetItemID = widget.stack().item().id();
-	u32 widgetItemAmount = widget.stack().amount();
+	u16 widgetItemID = widget.stack().item().id();
+	u16 widgetItemAmount = widget.stack().amount();
 
 	if (!widgetItemID && stack().item().id()) {
 		widget.setStack(stack().item().stringID(), 1);
@@ -232,7 +232,7 @@ void MouseItemWidget::putItem(ItemWidget &widget) {
 		setStack(stack().amount() > 1 ? stack().item().stringID() : "", stack().amount() - 1);
 	}
 	else if (stack().item().id() == 0) {
-		setStack(widgetItemName, ceil(widgetItemAmount / 2.0));
+		setStack(widgetItemName, (u16)ceil(widgetItemAmount / 2.0));
 		widget.setStack(widgetItemAmount > 1 ? widgetItemName : "", widgetItemAmount / 2);
 	}
 }
@@ -250,10 +250,10 @@ void MouseItemWidget::draw(gk::RenderTarget &target, gk::RenderStates states) co
 	}
 }
 
-void MouseItemWidget::updatePosition(float x, float y) {
-	x -= m_parent->getPosition().x + 10 * m_parent->getScale().x;
-	y -= m_parent->getPosition().y + 10 * m_parent->getScale().y;
+void MouseItemWidget::updatePosition(s32 x, s32 y) {
+	float posX = (float)x - (m_parent->getPosition().x + 10 * m_parent->getScale().x);
+	float posY = (float)y - (m_parent->getPosition().y + 10 * m_parent->getScale().y);
 
-	setPosition(x / m_parent->getScale().x, y / m_parent->getScale().y, -20);
+	setPosition(posX / m_parent->getScale().x, posY / m_parent->getScale().y, -20.f);
 }
 

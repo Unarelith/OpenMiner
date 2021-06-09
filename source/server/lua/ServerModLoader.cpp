@@ -75,7 +75,7 @@ void ServerModLoader::loadMods() {
 
 					auto it = mods.find(mod.id);
 					if (it == mods.end()) {
-						sol::object dependencies = config["dependencies"];
+						sol::object dependencies = config["dependencies"].get<sol::object>();
 						if (dependencies.get_type() == sol::type::table) {
 							for (auto &it : dependencies.as<sol::table>()) {
 								std::string dependencyID = it.second.as<std::string>();

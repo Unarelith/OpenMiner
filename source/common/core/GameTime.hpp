@@ -49,15 +49,15 @@ class GameTime {
 		static u64 getTicks() { return s_ticks; }
 
 		static u32 getCurrentDay() {
-			return (s_ticks + dayStartOffset + 6000) / dayLength + 1;
+			return u32((s_ticks + dayStartOffset + 6000) / dayLength + 1);
 		}
 
 		static u8 getCurrentHour() {
-			return ((s_ticks + dayStartOffset + 6000) / 1000) % 24;
+			return u8(((s_ticks + dayStartOffset + 6000) / 1000) % 24);
 		}
 
 		static u8 getCurrentMinute() {
-			return ((s_ticks + dayStartOffset + 6000) % 1000) * 60 / 1000;
+			return u8(((s_ticks + dayStartOffset + 6000) % 1000) * 60 / 1000);
 		}
 
 	private:

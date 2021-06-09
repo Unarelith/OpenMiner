@@ -27,7 +27,7 @@
 #include "Item.hpp"
 #include "NetworkUtils.hpp"
 
-Item::Item(u32 id, const TilesDef &tiles, const std::string &stringID, const std::string &label) {
+Item::Item(u16 id, const TilesDef &tiles, const std::string &stringID, const std::string &label) {
 	m_id = id;
 	m_tiles = tiles;
 

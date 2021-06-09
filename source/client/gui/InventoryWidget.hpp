@@ -76,7 +76,7 @@ class InventoryWidget : public AbstractInventoryWidget {
 		std::vector<ItemWidget> m_itemWidgets;
 		ItemWidget *m_currentItemWidget = nullptr;
 
-		gk::RectangleShape m_selectedItemBackground{16, 16, gk::Color{255, 255, 255, 80}};
+		gk::RectangleShape m_selectedItemBackground{16, 16, gk::Color::fromRGBA32(255, 255, 255, 80)};
 
 		std::string m_lastSearch;
 };

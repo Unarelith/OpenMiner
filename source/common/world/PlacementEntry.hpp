@@ -56,7 +56,7 @@ struct Ore : public gk::ISerializable {
 
 	u16 blockID;
 	double probability;
-	double size;
+	u16 size;
 	u8 genType;
 
 	void serialize(sf::Packet &packet) const override {

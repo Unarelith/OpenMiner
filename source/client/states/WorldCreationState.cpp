@@ -47,7 +47,7 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 
 	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
 
-	m_filter.setFillColor(gk::Color(0, 0, 0, 192));
+	m_filter.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
 
 	m_title.setScale(Config::guiScale, Config::guiScale);
 	m_title.setString(originalName.empty() ? "Create New World" : "Edit World");
@@ -148,31 +148,38 @@ void WorldCreationState::update() {
 }
 
 void WorldCreationState::updateWidgetPosition() {
-	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
-	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+	m_background.setPosRect(0, 0,
+		u16(Config::screenWidth / m_background.getScale().x),
+		u16(Config::screenHeight / m_background.getScale().y)
+	);
+
+	m_background.setClipRect(0, 0,
+		u16(Config::screenWidth / m_background.getScale().x),
+		u16(Config::screenHeight / m_background.getScale().y)
+	);
 
 	m_filter.setSize(Config::screenWidth, Config::screenHeight);
 
 	m_title.setPosition(
-		Config::screenWidth / 2.0f - m_title.getSize().x * Config::guiScale / 2.0f,
-		12.5f * Config::guiScale - m_title.getSize().y * Config::guiScale / 2.0f
+		Config::screenWidth / 2.0f - float(m_title.getSize().x * Config::guiScale) / 2.0f,
+		12.5f * Config::guiScale - float(m_title.getSize().y * Config::guiScale) / 2.0f
 	);
 
 	if (!m_isEdition) {
 		m_nameInput.setPosition(
-			Config::screenWidth / 2.0f - m_nameInput.getBackgroundSize().x * Config::guiScale / 2.0f,
-			Config::screenHeight / 2.0f - m_nameInput.getBackgroundSize().y * Config::guiScale / 2.0f - 30 * Config::guiScale
+			Config::screenWidth / 2.0f - float(m_nameInput.getBackgroundSize().x * Config::guiScale) / 2.0f,
+			Config::screenHeight / 2.0f - float(m_nameInput.getBackgroundSize().y * Config::guiScale) / 2.0f - 30 * Config::guiScale
 		);
 
 		m_seedInput.setPosition(
-			Config::screenWidth / 2.0f - m_seedInput.getBackgroundSize().x * Config::guiScale / 2.0f,
-			Config::screenHeight / 2.0f - m_seedInput.getBackgroundSize().y * Config::guiScale / 2.0f
+			Config::screenWidth / 2.0f - float(m_seedInput.getBackgroundSize().x * Config::guiScale) / 2.0f,
+			Config::screenHeight / 2.0f - float(m_seedInput.getBackgroundSize().y * Config::guiScale) / 2.0f
 		);
 	}
 	else {
 		m_nameInput.setPosition(
-			Config::screenWidth / 2.0f - m_nameInput.getBackgroundSize().x * Config::guiScale / 2.0f,
-			Config::screenHeight / 2.0f - m_nameInput.getBackgroundSize().y * Config::guiScale / 2.0f
+			Config::screenWidth / 2.0f - float(m_nameInput.getBackgroundSize().x * Config::guiScale) / 2.0f,
+			Config::screenHeight / 2.0f - float(m_nameInput.getBackgroundSize().y * Config::guiScale) / 2.0f
 		);
 	}
 
@@ -182,7 +189,7 @@ void WorldCreationState::updateWidgetPosition() {
 	);
 
 	m_errorText.setPosition(
-		Config::screenWidth / 2.0f - m_errorText.getSize().x * Config::guiScale / 2.0f,
+		Config::screenWidth / 2.0f - float(m_errorText.getSize().x * Config::guiScale) / 2.0f,
 		Config::screenHeight / 2.0f - 30 * Config::guiScale
 	);
 }

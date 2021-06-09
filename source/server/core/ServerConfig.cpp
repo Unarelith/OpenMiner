@@ -101,7 +101,7 @@ bool ServerConfig::assignOption(const std::string &name, const std::string &valu
 	auto it = options.find(name);
 	if (it != options.end()) {
 		try {
-			sol::object object = lua.load("return " + value)();
+			sol::object object = lua.load("return " + value)().get<sol::object>();
 			if (object.valid()
 				&& (object.get_type() == sol::type::boolean
 				 || object.get_type() == sol::type::number

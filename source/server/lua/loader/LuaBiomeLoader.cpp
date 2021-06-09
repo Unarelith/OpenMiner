@@ -36,7 +36,7 @@ void LuaBiomeLoader::loadTree(const sol::table &table) const {
 	Tree &tree = Registry::getInstance().registerTree(stringID);
 	tree.setLogBlockID(Registry::getInstance().getBlockFromStringID(table["log_block"]).id());
 
-	sol::object trunkHeightObject = table["trunk_height"];
+	sol::object trunkHeightObject = table["trunk_height"].get<sol::object>();
 	if (trunkHeightObject.valid()) {
 		if (trunkHeightObject.get_type() == sol::type::table) {
 			sol::table trunkHeight = trunkHeightObject.as<sol::table>();
@@ -46,7 +46,7 @@ void LuaBiomeLoader::loadTree(const sol::table &table) const {
 			gkError() << "For tree" << stringID << ": 'trunk_height' must be a table";
 	}
 
-	sol::object hasLeavesObject = table["has_leaves"];
+	sol::object hasLeavesObject = table["has_leaves"].get<sol::object>();
 	if (hasLeavesObject.valid()) {
 		if (hasLeavesObject.get_type() == sol::type::boolean) {
 			tree.setHasLeaves(hasLeavesObject.as<bool>());
@@ -55,7 +55,7 @@ void LuaBiomeLoader::loadTree(const sol::table &table) const {
 			gkError() << "For tree" << stringID << ": 'has_leaves' must be a boolean";
 	}
 
-	sol::object leavesBlockObject = table["leaves_block"];
+	sol::object leavesBlockObject = table["leaves_block"].get<sol::object>();
 	if (leavesBlockObject.valid()) {
 		if (leavesBlockObject.get_type() == sol::type::string) {
 			std::string leavesBlock = leavesBlockObject.as<std::string>();
@@ -91,7 +91,7 @@ inline void LuaBiomeLoader::loadBiomeParameters(Biome &biome, const sol::table &
 }
 
 inline void LuaBiomeLoader::loadBiomeBlocks(Biome &biome, const sol::table &table) const {
-	sol::object blocksObject = table["blocks"];
+	sol::object blocksObject = table["blocks"].get<sol::object>();
 	if (blocksObject.valid() && blocksObject.get_type() == sol::type::table) {
 		sol::table table = blocksObject.as<sol::table>();
 		biome.setTopBlockID(Registry::getInstance().getBlockFromStringID(table["top"]).id());

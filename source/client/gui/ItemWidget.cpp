@@ -55,7 +55,7 @@ void ItemWidget::update() {
 		updateImage();
 
 	m_text.setString(std::to_string(stack().amount()));
-	m_text.setPosition(16 - 4 - 6 * floor(log10(stack().amount())), 16 - 6, 0);
+	m_text.setPosition(16.f - 4.f - 6.f * floorf(log10f(stack().amount())), 16.f - 6.f, 0);
 }
 
 void ItemWidget::updateImage(const BlockState *blockState) {
@@ -68,7 +68,7 @@ void ItemWidget::updateImage(const BlockState *blockState) {
 	}
 
 	gk::FloatRect clipRect = m_textureAtlas.getTexCoords(stack().item().tiles().getTextureForFace(0), false);
-	m_image.setClipRect(clipRect.x, clipRect.y, clipRect.sizeX, clipRect.sizeY);
+	m_image.setClipRect(clipRect.x, clipRect.y, (u16)clipRect.sizeX, (u16)clipRect.sizeY);
 	m_image.setScale(16.0f / clipRect.sizeX, 16.0f / clipRect.sizeY);
 
 	if (blockState)
@@ -79,7 +79,7 @@ void ItemWidget::updateImage(const BlockState *blockState) {
 	m_isImage = true;
 }
 
-void ItemWidget::setStack(const std::string &name, unsigned int amount) {
+void ItemWidget::setStack(const std::string &name, u16 amount) {
 	m_inventory.setStack(m_x, m_y, name, amount);
 	update();
 }

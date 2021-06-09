@@ -33,7 +33,7 @@
 ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : InterfaceState(parent) {
 	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
 
-	m_filter.setFillColor(gk::Color(0, 0, 0, 192));
+	m_filter.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
 
 	m_title.setScale(Config::guiScale, Config::guiScale);
 	m_title.setString("Play Multiplayer");
@@ -119,33 +119,40 @@ void ServerConnectState::update() {
 }
 
 void ServerConnectState::updateWidgetPosition() {
-	m_background.setPosRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
-	m_background.setClipRect(0, 0, Config::screenWidth / m_background.getScale().x, Config::screenHeight / m_background.getScale().y);
+	m_background.setPosRect(0, 0,
+		u16(Config::screenWidth / m_background.getScale().x),
+		u16(Config::screenHeight / m_background.getScale().y)
+	);
+
+	m_background.setClipRect(0, 0,
+		u16(Config::screenWidth / m_background.getScale().x),
+		u16(Config::screenHeight / m_background.getScale().y)
+	);
 
 	m_filter.setSize(Config::screenWidth, Config::screenHeight);
 
 	m_title.setPosition(
-		Config::screenWidth / 2.0f - m_title.getSize().x * Config::guiScale / 2.0f,
-		12.5f * Config::guiScale - m_title.getSize().y * Config::guiScale / 2.0f
+		Config::screenWidth / 2.0f - float(m_title.getSize().x * Config::guiScale) / 2.0f,
+		12.5f * Config::guiScale - float(m_title.getSize().y * Config::guiScale) / 2.0f
 	);
 
 	m_usernameInput.setPosition(
-		Config::screenWidth / 2.0f - m_usernameInput.getBackgroundSize().x * Config::guiScale / 2.0f,
-		Config::screenHeight / 2.0f - m_usernameInput.getBackgroundSize().y * Config::guiScale / 2.0f - 30 * Config::guiScale
+		Config::screenWidth / 2.0f - float(m_usernameInput.getBackgroundSize().x * Config::guiScale) / 2.0f,
+		Config::screenHeight / 2.0f - float(m_usernameInput.getBackgroundSize().y * Config::guiScale) / 2.0f - 30 * Config::guiScale
 	);
 
 	m_addressInput.setPosition(
-		Config::screenWidth / 2.0f - m_addressInput.getBackgroundSize().x * Config::guiScale / 2.0f,
-		Config::screenHeight / 2.0f - m_addressInput.getBackgroundSize().y * Config::guiScale / 2.0f
+		Config::screenWidth / 2.0f - float(m_addressInput.getBackgroundSize().x * Config::guiScale) / 2.0f,
+		Config::screenHeight / 2.0f - float(m_addressInput.getBackgroundSize().y * Config::guiScale) / 2.0f
 	);
 
 	m_menuWidget.setPosition(
-		Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2,
-		Config::screenHeight - 0.10 * Config::screenHeight * Config::guiScale
+		Config::screenWidth / 2.0f - m_menuWidget.getGlobalBounds().sizeX / 2.f,
+		Config::screenHeight - 0.10f * Config::screenHeight * Config::guiScale
 	);
 
 	m_errorText.setPosition(
-		Config::screenWidth / 2.0f - m_errorText.getSize().x * Config::guiScale / 2.0f,
+		Config::screenWidth / 2.0f - float(m_errorText.getSize().x * Config::guiScale) / 2.0f,
 		Config::screenHeight / 2.0f + 30 * Config::guiScale
 	);
 }

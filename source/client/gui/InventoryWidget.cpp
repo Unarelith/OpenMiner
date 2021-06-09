@@ -46,11 +46,11 @@ void InventoryWidget::scroll(float scrolling) {
 	if (m_itemWidgets.size() < m_size)
 		return;
 
-	u16 offset = m_offset + floor((m_inventory->height() - m_size / m_inventory->width()) * scrolling) * m_inventory->width();
+	u16 offset = u16(m_offset + std::floor((m_inventory->height() - m_size / m_inventory->width()) * scrolling) * m_inventory->width());
 	u16 size = m_size;
 
 	if (offset + size > m_inventory->width() * m_inventory->height())
-		size = m_inventory->width() * m_inventory->height() - offset;
+		size = u16(m_inventory->width() * m_inventory->height() - offset);
 
 	loadItemWidgets(offset, size, m_lastSearch);
 }
@@ -62,7 +62,10 @@ void InventoryWidget::onEvent(const SDL_Event &event) {
 			if (m_itemWidgets[i].isPointInWidget(event.motion.x, event.motion.y)) {
 				m_currentItemWidget = &m_itemWidgets[i];
 
-				m_selectedItemBackground.setPosition(1 + (i % m_inventoryWidth) * 18, 1 + (i / m_inventoryWidth) * 18, 0);
+				m_selectedItemBackground.setPosition(
+					float(1 + i % m_inventoryWidth * 18),
+					float(1 + i / m_inventoryWidth * 18)
+				);
 			}
 		}
 	}
@@ -143,8 +146,8 @@ void InventoryWidget::loadItemWidgets(u16 offset, u16 size, std::string search) 
 
 	u16 itemCounter = 0;
 	for (u16 i = 0 ; itemCounter < size ; ++i) {
-		u16 x = (i + offset) % m_inventory->width();
-		u16 y = (i + offset) / m_inventory->width();
+		u16 x = u16((i + offset) % m_inventory->width());
+		u16 y = u16((i + offset) / m_inventory->width());
 		if (x >= m_inventory->width() || y >= m_inventory->height())
 			break;
 
