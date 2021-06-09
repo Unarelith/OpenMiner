@@ -27,6 +27,8 @@
 #ifndef DEBUGLIGHTMAPVIEWER_HPP_
 #define DEBUGLIGHTMAPVIEWER_HPP_
 
+#include <optional>
+
 #include <gk/graphics/RectangleShape.hpp>
 
 #include "EngineConfig.hpp"
@@ -48,9 +50,10 @@ class DebugLightmapViewer : public gk::Transformable, public gk::Drawable {
 
 		const ClientPlayer &m_player;
 
-		Text m_chunkLightmapValues[CHUNK_WIDTH][CHUNK_DEPTH][CHUNK_HEIGHT];
+		Text m_chunkLightmapValues[CHUNK_WIDTH][CHUNK_DEPTH];
 
 		std::optional<gk::Vector3i> m_playerChunkPos;
+		std::optional<u32> m_playerRelativeZ;
 
 		gk::RectangleShape m_playerRect;
 };

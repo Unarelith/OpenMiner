@@ -33,30 +33,42 @@ DebugLightmapViewer::DebugLightmapViewer(const ClientPlayer &player) : m_player(
 	m_playerRect.setOutlineThickness(1);
 	m_playerRect.setFillColor(gk::Color::White);
 	m_playerRect.setOutlineColor(gk::Color::Black);
+
+	for (u32 x = 0 ; x < CHUNK_WIDTH ; ++x) {
+		for (u32 y = 0 ; y < CHUNK_DEPTH ; ++y) {
+			Text &text = m_chunkLightmapValues[y][x];
+			text.setPosition((float)x * 8.f, float(CHUNK_DEPTH - y - 1) * 8.f);
+			text.setScale(0.5f, 0.5f);
+		}
+	}
 }
 
 void DebugLightmapViewer::update(const ClientWorld &world) {
 	gk::Vector3i playerChunkPos = m_player.getCurrentChunk();
-	if (!m_playerChunkPos.has_value() || m_playerChunkPos.value() != playerChunkPos) {
+
+	u32 rx = gk::pmod((s32)std::floor(m_player.x()), CHUNK_WIDTH);
+	u32 ry = gk::pmod((s32)std::floor(m_player.y()), CHUNK_DEPTH);
+	u32 rz = gk::pmod((s32)std::floor(m_player.z()), CHUNK_HEIGHT);
+
+	// If this is the first time or if player moved, update the texts
+	if (!m_playerChunkPos.has_value()
+	 || m_playerChunkPos.value() != playerChunkPos
+	 || m_playerRelativeZ.value() != rz)
+	{
 		m_playerChunkPos = playerChunkPos;
+		m_playerRelativeZ = rz;
 
 		Chunk *chunk = world.getChunk(playerChunkPos.x, playerChunkPos.y, playerChunkPos.z);
 		if (chunk) {
 			for (u32 x = 0 ; x < CHUNK_WIDTH ; ++x) {
 				for (u32 y = 0 ; y < CHUNK_DEPTH ; ++y) {
-					for (u32 z = 0 ; z < CHUNK_HEIGHT ; ++z) {
-						Text &text = m_chunkLightmapValues[x][y][z];
-						text.setString(std::to_string(chunk->lightmap().getSunlight(x, y, z)));
-						text.setPosition((float)x * 8.f, float(CHUNK_DEPTH - y - 1) * 8.f);
-						text.setScale(0.5f, 0.5f);
-					}
+					Text &text = m_chunkLightmapValues[x][y];
+					text.setString(std::to_string(chunk->lightmap().getSunlight(x, y, rz)));
 				}
 			}
 		}
 	}
 
-	u32 rx = gk::pmod((s32)std::floor(m_player.x()), CHUNK_WIDTH);
-	u32 ry = gk::pmod((s32)std::floor(m_player.y()), CHUNK_DEPTH);
 	m_playerRect.setPosition((float)rx * 8.f, float(CHUNK_DEPTH - ry - 1) * 8.f);
 }
 
@@ -67,6 +79,6 @@ void DebugLightmapViewer::draw(gk::RenderTarget &target, gk::RenderStates states
 
 	for (u32 x = 0 ; x < CHUNK_WIDTH ; ++x)
 		for (u32 y = 0 ; y < CHUNK_DEPTH ; ++y)
-			target.draw(m_chunkLightmapValues[x][y][gk::pmod((s32)m_player.z(), CHUNK_HEIGHT)], states);
+			target.draw(m_chunkLightmapValues[x][y], states);
 }
 
