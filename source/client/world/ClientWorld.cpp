@@ -40,7 +40,9 @@
 #include "TextureAtlas.hpp"
 #include "World.hpp"
 
-ClientWorld::ClientWorld() : m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
+ClientWorld::ClientWorld()
+	: m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks")),
+	  m_chunkRenderer(m_textureAtlas)
 {
 }
 
@@ -345,14 +347,7 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		chunks.emplace_back(it.second.get(), tf);
 	}
 
-	for (u8 i = 0 ; i < ChunkMeshLayer::Count ; ++i) {
-		for (auto &it : chunks) {
-			states.transform = it.second;
-			it.first->drawLayer(target, states, i);
-
-			it.first->setHasBeenDrawn(true);
-		}
-	}
+	m_chunkRenderer.draw(target, states, chunks);
 
 	m_camera->setDPosition(cameraPos);  // Restore the camera to its original position
 

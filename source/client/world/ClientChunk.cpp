@@ -71,27 +71,6 @@ void ClientChunk::onBlockPlaced(int x, int y, int z, const Block &) {
 	if(z == height - 1) addSurroundingChunkToProcess(Top);
 }
 
-void ClientChunk::drawLayer(gk::RenderTarget &target, gk::RenderStates states, u8 layer) const {
-	if (m_verticesCount.size() <= layer || m_verticesCount.at(layer) == 0) return;
-
-	states.texture = &m_textureAtlas.texture();
-
-	if (layer == ChunkMeshLayer::Flora || (layer == ChunkMeshLayer::Liquid && areAllNeighboursInitialized()))
-		glCheck(glDisable(GL_CULL_FACE));
-	else
-		glCheck(glEnable(GL_CULL_FACE));
-
-	gk::Texture::bind(states.texture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, (layer == ChunkMeshLayer::NoMipMap || layer == ChunkMeshLayer::Flora) ? 0 : Config::mipmapLevels);
-	gk::Texture::bind(nullptr);
-
-	glCheck(glEnable(GL_DEPTH_TEST));
-
-	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
-	target.draw(m_vbo.at(layer), GL_TRIANGLES, 0, (GLsizei)m_verticesCount.at(layer), states);
-	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
-}
-
 bool ClientChunk::areAllNeighboursTooFar() const {
 	return (!m_surroundingChunks[Chunk::West]   || ((ClientChunk *)m_surroundingChunks[Chunk::West])->isTooFar())
 		&& (!m_surroundingChunks[Chunk::East]   || ((ClientChunk *)m_surroundingChunks[Chunk::East])->isTooFar())

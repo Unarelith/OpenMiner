@@ -36,6 +36,7 @@
 #include <gk/gl/Camera.hpp>
 
 #include "ChunkMeshBuilder.hpp"
+#include "ChunkRenderer.hpp"
 #include "ClientChunk.hpp"
 #include "ClientScene.hpp"
 #include "Network.hpp"
@@ -102,6 +103,8 @@ class ClientWorld : public World, public gk::Drawable {
 		mutable std::multimap<float, gk::Vector3i> m_chunksToMesh;
 
 		ChunkMeshBuilder m_chunkMeshBuilder{*this};
+
+		mutable ChunkRenderer m_chunkRenderer;
 };
 
 #endif // CLIENTWORLD_HPP_

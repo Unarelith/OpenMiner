@@ -48,8 +48,6 @@ class ClientChunk : public Chunk {
 
 		void onBlockPlaced(int x, int y, int z, const Block &block) override;
 
-		void drawLayer(gk::RenderTarget &target, gk::RenderStates states, u8 layer) const;
-
 		const Dimension &dimension() const { return m_dimension; }
 
 		bool isReadyForMeshing() const { return m_isReadyForMeshing; }
@@ -65,7 +63,10 @@ class ClientChunk : public Chunk {
 
 		const gk::VertexBuffer &getVertexBuffer(u8 layer) { return m_vbo[layer]; }
 
+		std::size_t getVerticesCount(u8 layer) const { return m_verticesCount[layer]; }
 		void setVerticesCount(u8 layer, std::size_t count) { m_verticesCount[layer] = count; }
+
+		const gk::VertexBuffer &getVBO(u8 layer) const { return m_vbo[layer]; }
 
 		int debugTimesReceived = 0; // Only used by Minimap
 
