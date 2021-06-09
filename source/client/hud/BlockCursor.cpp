@@ -111,7 +111,7 @@ void BlockCursor::update(const Hotbar &hotbar) {
 
 				timeToBreak = m_currentBlock->timeToBreak(currentStack.item().harvestCapability(), currentStack.item().miningSpeed(), isEffective);
 
-				if (ticks > m_animationStart + u32(timeToBreak * 1000)) {
+				if ((float)ticks > (float)m_animationStart + timeToBreak * 1000.f) {
 					m_world.setBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z, 0);
 					m_animationStart = ticks;
 
@@ -122,7 +122,7 @@ void BlockCursor::update(const Hotbar &hotbar) {
 
 		if (m_animationStart && m_currentBlock)
 			updateAnimationVertexBuffer(*m_currentBlock, orientation,
-				(ticks - m_animationStart) / u32(timeToBreak * 100));
+				u32(float(ticks - m_animationStart) / (timeToBreak * 100.f)));
 	}
 
 	if (m_selectedBlock.w != -1)
