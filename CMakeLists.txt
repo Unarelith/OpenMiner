@@ -22,9 +22,24 @@ include_directories(external)
 #------------------------------------------------------------------------------
 # Compiler flags
 #------------------------------------------------------------------------------
-set(DEBUG_GCC_FLAGS -g -Og -Wall -Wextra -Wconversion -Wfatal-errors -Wno-unused-parameter)
-set(RELEASE_GCC_FLAGS -O3 -Wall -Wextra -Wconversion -Wfatal-errors -Wno-unused-parameter)
-set(RELWITHDEB_GCC_FLAGS -g -O3 -Wall -Wextra -Wconversion -Wfatal-errors -Wno-unused-parameter)
+set(DEBUG_GCC_FLAGS
+	-g -Og
+	-Wall -Wextra -Wconversion -Wno-unused-parameter
+	-Wfatal-errors
+	-DGK_DEBUG
+)
+
+set(RELEASE_GCC_FLAGS
+	-O3
+	-Wall -Wextra -Wconversion -Wno-unused-parameter
+	-Wfatal-errors
+)
+
+set(RELWITHDEB_GCC_FLAGS
+	-g -O3
+	-Wall -Wextra -Wconversion -Wno-unused-parameter
+	-Wfatal-errors
+)
 
 set(CMAKE_CXX_STANDARD 17)
 
