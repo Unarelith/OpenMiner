@@ -27,21 +27,37 @@
 #ifndef CHUNKRENDERER_HPP_
 #define CHUNKRENDERER_HPP_
 
-#include <gk/gl/Transform.hpp>
+#include <functional>
+
+#include <gk/gl/Camera.hpp>
 #include <gk/gl/RenderTarget.hpp>
 
+#include "Sky.hpp"
 #include "TextureAtlas.hpp"
 
 class ClientChunk;
 
 class ChunkRenderer {
+	using OnChunkDeletionRequestedCallback = std::function<void(const gk::Vector3i &)>;
+	using OnMeshingRequestedCallback = std::function<void(float, const gk::Vector3i &)>;
+
+	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ClientChunk>>;
+
 	public:
 		ChunkRenderer(const TextureAtlas &textureAtlas) : m_textureAtlas(textureAtlas) {}
 
-		void draw(gk::RenderTarget &target, gk::RenderStates states, const std::vector<std::pair<ClientChunk*, gk::Transform>> &chunks);
+		void draw(gk::RenderTarget &target, gk::RenderStates states, const ChunkMap &chunks, gk::Camera &camera, const Sky *currentSky) const;
+
+		void setOnChunkDeletionRequestedCallback(const OnChunkDeletionRequestedCallback &callback) { m_onChunkDeletionRequested = callback; }
+		void setOnMeshingRequestedCallback(const OnMeshingRequestedCallback &callback) { m_onMeshingRequested = callback; }
 
 	public:
+		void drawChunks(gk::RenderTarget &target, gk::RenderStates states, const std::vector<std::pair<ClientChunk*, gk::Transform>> &chunks, const Sky *currentSky) const;
+
 		const TextureAtlas &m_textureAtlas;
+
+		OnChunkDeletionRequestedCallback m_onChunkDeletionRequested;
+		OnMeshingRequestedCallback m_onMeshingRequested;
 };
 
 #endif // CHUNKRENDERER_HPP_

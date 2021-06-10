@@ -104,7 +104,7 @@ class ClientWorld : public World, public gk::Drawable {
 
 		ChunkMeshBuilder m_chunkMeshBuilder{*this};
 
-		mutable ChunkRenderer m_chunkRenderer;
+		ChunkRenderer m_chunkRenderer;
 };
 
 #endif // CLIENTWORLD_HPP_
