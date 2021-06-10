@@ -118,6 +118,10 @@ bool ClientApplication::init() {
 	m_resourceHandler.add<Font>("font-ascii", "texture-font", "resources/textures/font.properties");
 	m_resourceHandler.add<TextureAtlas>("atlas-blocks");
 
+#ifdef OM_PROFILER_ENABLED
+	ClientProfiler::setInstance(&m_profiler);
+#endif
+
 	auto &titleScreen = m_stateStack.push<TitleScreenState>(m_port);
 	if (m_argumentParser.getArgument("singleplayer").isFound)
 		titleScreen.startSingleplayer(false);
@@ -128,6 +132,8 @@ bool ClientApplication::init() {
 }
 
 void ClientApplication::handleEvents() {
+	OM_PROFILE_START("OS events");
+
 	gk::CoreApplication::handleEvents();
 
 	if ((Config::isFullscreenModeEnabled && m_window.getWindowMode() != gk::Window::Mode::Fullscreen)
@@ -141,6 +147,8 @@ void ClientApplication::handleEvents() {
 
 	if (Config::isVerticalSyncEnabled != m_window.isVerticalSyncEnabled())
 		m_window.setVerticalSyncEnabled(Config::isVerticalSyncEnabled);
+
+	OM_PROFILE_END("OS events");
 }
 
 void ClientApplication::onEvent(const SDL_Event &event) {
@@ -154,6 +162,45 @@ void ClientApplication::onExit() {
 	Config::saveConfigToFile("config/client.lua");
 
 	m_keyboardHandler.saveKeysToFile("config/keys.lua");
+}
+
+void ClientApplication::mainLoop() {
+	m_clock.startFpsTimer();
+
+	// FIXME: The window should probably be closed after the main loop ends
+	while(m_window.isOpen() && !m_stateStack.empty() && !hasBeenInterrupted) {
+		OM_PROFILE_BEGIN_TICK();
+
+		handleEvents();
+
+		m_eventHandler.processEvents();
+
+		m_clock.updateGame([&] {
+			OM_PROFILE_START("Update");
+
+			if (!m_stateStack.empty())
+				m_stateStack.top().update();
+
+			m_stateStack.clearDeletedStates();
+
+			OM_PROFILE_END("Update");
+		});
+
+		m_clock.drawGame([&] {
+			m_window.clear();
+
+			OM_PROFILE_START("Draw");
+
+			if(!m_stateStack.empty())
+				m_window.draw(m_stateStack.top(), m_renderStates);
+
+			OM_PROFILE_END("Draw");
+
+			m_window.display();
+		});
+
+		OM_PROFILE_END_TICK();
+	}
 }
 
 void ClientApplication::initOpenGL() {

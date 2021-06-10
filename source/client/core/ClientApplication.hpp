@@ -29,6 +29,7 @@
 
 #include <gk/core/CoreApplication.hpp>
 
+#include "ClientProfiler.hpp"
 #include "KeyboardHandler.hpp"
 
 class ClientApplication : public gk::CoreApplication {
@@ -43,12 +44,18 @@ class ClientApplication : public gk::CoreApplication {
 		void onEvent(const SDL_Event &event) override;
 		void onExit() override;
 
+		void mainLoop() override;
+
 		static void initOpenGL();
 
 		KeyboardHandler m_keyboardHandler;
 
 		std::string m_host = "localhost";
 		u16 m_port = 4242;
+
+#ifdef OM_PROFILER_ENABLED
+		ClientProfiler m_profiler;
+#endif
 };
 
 #endif // CLIENTAPPLICATION_HPP_

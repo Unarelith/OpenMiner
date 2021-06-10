@@ -30,6 +30,7 @@
 
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
+#include "ClientProfiler.hpp"
 #include "Config.hpp"
 #include "Events.hpp"
 #include "HUD.hpp"
@@ -71,6 +72,8 @@ void HUD::setup() {
 	m_minimap.setPosition(float(Config::screenWidth / Config::guiScale - Minimap::minimapSize) - 15.f, 15.f);
 
 	m_debugLightmapViewer.setPosition(0.f, float(Config::screenHeight / Config::guiScale - DebugLightmapViewer::totalSize));
+
+	m_debugProfilerWindow.setPosition(2.f, 2.f);
 }
 
 void HUD::onEvent(const SDL_Event &event) {
@@ -86,6 +89,9 @@ void HUD::onEvent(const SDL_Event &event) {
 
 	if (Config::isChunkMinimapEnabled)
 		m_minimap.onEvent(event);
+
+	if (Config::isProfilerWindowEnabled)
+		m_debugProfilerWindow.onEvent(event);
 }
 
 void HUD::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
@@ -119,9 +125,14 @@ void HUD::update() {
 
 	if (Config::isLightmapViewerEnabled)
 		m_debugLightmapViewer.update(m_world);
+
+	if (Config::isProfilerWindowEnabled)
+		m_debugProfilerWindow.update();
 }
 
 void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+	OM_PROFILE_START("HUD::draw");
+
 	target.disableView();
 
 	states.shader = &m_shader;
@@ -148,11 +159,16 @@ void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (Config::isLightmapViewerEnabled)
 		target.draw(m_debugLightmapViewer, states);
 
+	if (Config::isProfilerWindowEnabled)
+		target.draw(m_debugProfilerWindow, states);
+
 	target.draw(m_chat, states);
 
 	states.transform = gk::Transform::Identity;
 
 	if (Config::isCrosshairVisible)
 		target.draw(m_crosshair, states);
+
+	OM_PROFILE_END("HUD::draw");
 }
 

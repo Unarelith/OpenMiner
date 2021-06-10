@@ -329,6 +329,7 @@ void SettingsMenuState::addDebugButtons() {
 
 	addToggleButton("Show chunk minimap", Config::isChunkMinimapEnabled, false);
 	addToggleButton("Show lightmap viewer", Config::isLightmapViewerEnabled, false);
+	addToggleButton("Show profiler window", Config::isProfilerWindowEnabled, false);
 
 	updateWidgetPosition();
 }

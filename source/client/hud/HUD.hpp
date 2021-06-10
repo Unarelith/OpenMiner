@@ -35,6 +35,7 @@
 #include "Crosshair.hpp"
 #include "DebugLightmapViewer.hpp"
 #include "DebugOverlay.hpp"
+#include "DebugProfilerWindow.hpp"
 #include "Hotbar.hpp"
 #include "Minimap.hpp"
 
@@ -86,6 +87,8 @@ class HUD : public gk::Transformable, public gk::Drawable {
 		Minimap m_minimap;
 
 		DebugLightmapViewer m_debugLightmapViewer;
+
+		DebugProfilerWindow m_debugProfilerWindow;
 };
 
 #endif // HUD_HPP_

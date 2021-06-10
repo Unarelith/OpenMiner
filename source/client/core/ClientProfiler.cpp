@@ -29,24 +29,27 @@
 
 #include "ClientProfiler.hpp"
 
+u64 ClientProfiler::tickCount = 0;
+
 ClientProfiler *ClientProfiler::s_instance = nullptr;
 
 void ClientProfiler::onBeginTick() {
 	m_ticks.emplace_back();
-	m_ticks.back().begin = gk::GameClock::getInstance().getTicks(true);
+	m_ticks.back().begin = std::chrono::system_clock::now();
 }
 
 void ClientProfiler::onEndTick() {
-	m_ticks.back().end = gk::GameClock::getInstance().getTicks(true);
+	m_ticks.back().end = std::chrono::system_clock::now();
+	++tickCount;
 }
 
 void ClientProfiler::startAction(const std::string &name) {
 	m_ticks.back().actions[name].durations.emplace_back();
-	m_ticks.back().actions[name].durations.back().first = gk::GameClock::getInstance().getTicks(true);
+	m_ticks.back().actions[name].durations.back().first = std::chrono::system_clock::now();
 }
 
 void ClientProfiler::endAction(const std::string &name) {
-	m_ticks.back().actions[name].durations.back().second = gk::GameClock::getInstance().getTicks(true);
+	m_ticks.back().actions[name].durations.back().second = std::chrono::system_clock::now();
 }
 
 void ClientProfiler::dump(u64 tickDurationMin) {
@@ -54,7 +57,7 @@ void ClientProfiler::dump(u64 tickDurationMin) {
 
 	u64 i = 0;
 	for (auto &tick : m_ticks) {
-		u64 tickDuration = tick.end - tick.begin;
+		u64 tickDuration = std::chrono::duration_cast<std::chrono::milliseconds>(tick.end - tick.begin).count();
 		if (tickDuration < tickDurationMin) continue;
 
 		gkDebug() << "Tick" << i++ << "took" << tickDuration << "ms";
@@ -63,7 +66,7 @@ void ClientProfiler::dump(u64 tickDurationMin) {
 			for (auto &[actionName, action] : tick.actions) {
 				u64 j = 0;
 				for (auto &[begin, end] : action.durations) {
-					u64 actionDuration = end - begin;
+					u64 actionDuration = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
 
 					if (maxActionDuration.find(actionName) == maxActionDuration.end())
 						maxActionDuration.emplace(actionName, std::make_pair(actionDuration, 0));

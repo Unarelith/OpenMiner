@@ -26,6 +26,7 @@
  */
 #include "BlockGeometry.hpp"
 #include "ChunkMeshBuilder.hpp"
+#include "ClientProfiler.hpp"
 #include "ClientWorld.hpp"
 #include "TextureAtlas.hpp"
 
@@ -40,6 +41,8 @@ using namespace BlockGeometry;
 //       so if it changes during the execution, that would cause problems there too.
 //
 void ChunkMeshBuilder::addMeshBuildingJob(const Chunk &chunk, const TextureAtlas &textureAtlas) {
+	OM_PROFILE_START("ChunkMeshBuilder::addMeshBuildingJob");
+
 	// Creating the job (creates a copy of the chunk to send it to the thread)
 	ChunkMeshBuildingJob job;
 	job.textureAtlas = &textureAtlas;
@@ -69,6 +72,8 @@ void ChunkMeshBuilder::addMeshBuildingJob(const Chunk &chunk, const TextureAtlas
 	}, job);
 
 	m_futures.emplace_back(std::move(future));
+
+	OM_PROFILE_END("ChunkMeshBuilder::addMeshBuildingJob");
 }
 
 void ChunkMeshBuilder::update() {

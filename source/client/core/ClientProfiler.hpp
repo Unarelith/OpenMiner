@@ -27,19 +27,36 @@
 #ifndef CLIENTPROFILER_HPP_
 #define CLIENTPROFILER_HPP_
 
+#include <chrono>
 #include <deque>
 #include <string>
 #include <unordered_map>
 
 #include <gk/core/IntTypes.hpp>
 
+#ifdef OM_PROFILER_ENABLED
+# define OM_PROFILE_START(name) ClientProfiler::getInstance().startAction(name);
+# define OM_PROFILE_END(name) ClientProfiler::getInstance().endAction(name);
+
+# define OM_PROFILE_BEGIN_TICK() ClientProfiler::getInstance().onBeginTick();
+# define OM_PROFILE_END_TICK() ClientProfiler::getInstance().onEndTick();
+#else
+# define OM_PROFILE_START(name) {}
+# define OM_PROFILE_END(name) {}
+
+# define OM_PROFILE_BEGIN_TICK() {}
+# define OM_PROFILE_END_TICK() {}
+#endif
+
+using TimePoint = std::chrono::time_point<std::chrono::system_clock>;
+
 struct ClientAction {
-	std::deque<std::pair<u64, u64>> durations;
+	std::deque<std::pair<TimePoint, TimePoint>> durations;
 };
 
 struct ClientTick {
-	u64 begin;
-	u64 end;
+	TimePoint begin;
+	TimePoint end;
 	std::unordered_map<std::string, ClientAction> actions;
 };
 
@@ -53,13 +70,20 @@ class ClientProfiler {
 		void startAction(const std::string &name);
 		void endAction(const std::string &name);
 
+		// FIXME: m_ticks.size() - 1 is actually the current tick
+		const ClientTick &getLastTick() const { return m_ticks.at(m_ticks.size() - 2); };
+
+		std::size_t getTickCount() const { return m_ticks.size(); }
+
 		static ClientProfiler &getInstance() { return *s_instance; }
 		static void setInstance(ClientProfiler *instance) { s_instance = instance; }
+
+		static u64 tickCount;
 
 	private:
 		static ClientProfiler *s_instance;
 
-		std::deque<ClientTick> m_ticks;
+		std::deque<ClientTick> m_ticks; // TODO: Use a std::vector
 };
 
 #endif // CLIENTPROFILER_HPP_

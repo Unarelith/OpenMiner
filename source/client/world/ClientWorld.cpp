@@ -33,6 +33,7 @@
 
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
+#include "ClientProfiler.hpp"
 #include "ClientWorld.hpp"
 #include "Events.hpp"
 #include "Registry.hpp"
@@ -125,6 +126,8 @@ void ClientWorld::changeDimension(u16 dimensionID) {
 void ClientWorld::receiveChunkData(Network::Packet &packet) {
 	if (!m_dimension) return;
 
+	OM_PROFILE_START("ClientWorld::receiveChunkData");
+
 	s32 cx, cy, cz;
 	packet >> cx >> cy >> cz;
 
@@ -189,6 +192,8 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 		m_eventHandler->emplaceEvent<ChunkCreatedEvent>(gk::Vector3i{cx, cy, cz}, true);
 
 	// gkDebug() << "Chunk at" << cx << cy << cz << "received";
+
+	OM_PROFILE_END("ClientWorld::receiveChunkData");
 }
 
 void ClientWorld::removeChunk(const gk::Vector3i &chunkPos) {
@@ -256,6 +261,8 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 		gkError() << "Trying to draw world without a camera";
 		return;
 	}
+
+	OM_PROFILE_START("ClientWorld::draw");
 
 	states.vertexAttributes = VertexAttribute::All;
 
@@ -353,5 +360,7 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 	states.transform = gk::Transform::Identity;
 	target.draw(m_scene, states);
+
+	OM_PROFILE_END("ClientWorld::draw");
 }
 
