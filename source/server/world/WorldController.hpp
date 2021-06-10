@@ -32,16 +32,11 @@
 #include "ServerWorld.hpp"
 #include "WorldSaveBackend.hpp"
 
-namespace gk {
-	class GameClock;
-}
-
 class Registry;
 
 class WorldController {
 	public:
-		WorldController(Registry &registry, gk::GameClock &clock)
-			: m_registry(registry), m_clock(clock) {}
+		WorldController(Registry &registry) : m_registry(registry) {}
 
 		void init(PlayerList &players, s32 seed);
 
@@ -61,8 +56,6 @@ class WorldController {
 		std::deque<ServerWorld> m_worldList;
 
 		Registry &m_registry;
-
-		gk::GameClock &m_clock;
 
 		ServerCommandHandler *m_server = nullptr;
 

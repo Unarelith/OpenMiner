@@ -48,7 +48,7 @@ class ServerWorld : public World {
 	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ServerChunk>>;
 
 	public:
-		ServerWorld(PlayerList &players, const Dimension &dimension, gk::GameClock &clock, s32 seed);
+		ServerWorld(PlayerList &players, const Dimension &dimension, s32 seed);
 
 		void update(bool doTick);
 
@@ -90,8 +90,6 @@ class ServerWorld : public World {
 		TerrainGenerator m_terrainGenerator;
 
 		ServerCommandHandler *m_server = nullptr;
-
-		gk::GameClock &m_clock;
 
 		ServerScene m_scene;
 

@@ -39,9 +39,8 @@ class TextureAtlas;
 
 class ClientChunk : public Chunk {
 	public:
-		ClientChunk(s32 x, s32 y, s32 z, const Dimension &dimension, ClientWorld &world, TextureAtlas &textureAtlas)
-			: Chunk(x, y, z, (World &)world), m_world(world), m_dimension(dimension),
-			  m_textureAtlas(textureAtlas) {}
+		ClientChunk(s32 x, s32 y, s32 z, const Dimension &dimension, ClientWorld &world)
+			: Chunk(x, y, z, (World &)world), m_world(world), m_dimension(dimension) {}
 
 		void update() final;
 		void process() final;
@@ -78,8 +77,6 @@ class ClientChunk : public Chunk {
 		ClientWorld &m_world;
 
 		const Dimension &m_dimension;
-
-		TextureAtlas &m_textureAtlas;
 
 		std::array<gk::VertexBuffer, ChunkMeshLayer::Count> m_vbo{};
 		std::array<std::size_t, ChunkMeshLayer::Count> m_verticesCount{};

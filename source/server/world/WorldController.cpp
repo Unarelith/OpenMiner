@@ -30,7 +30,7 @@
 
 void WorldController::init(PlayerList &players, s32 seed) {
 	for (const Dimension &dimension : m_registry.dimensions()) {
-		m_worldList.emplace_back(players, dimension, m_clock, seed);
+		m_worldList.emplace_back(players, dimension, seed);
 		m_worldList.back().setServer(m_server);
 	}
 

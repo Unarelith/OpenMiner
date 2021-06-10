@@ -224,7 +224,7 @@ void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	gk::Shader::bind(&m_shader);
 
 	if (m_world.sky()) {
-		if (m_world.sky()->daylightCycleSpeed()) {
+		if (m_world.sky()->daylightCycleSpeed() > 0.f) {
 			float time = GameTime::getCurrentTime(0, m_world.sky()->daylightCycleSpeed());
 			const gk::Color &color = GameTime::getSkyColorFromTime(*m_world.sky(), time);
 			glClearColor(color.r, color.g, color.b, color.a);

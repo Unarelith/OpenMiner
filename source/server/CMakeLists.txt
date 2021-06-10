@@ -32,10 +32,12 @@ if (NOT MSVC)
 	target_compile_options(${PROJECT_NAME}_lib PRIVATE "$<$<CONFIG:DEBUG>:${DEBUG_GCC_FLAGS}>")
 	target_compile_options(${PROJECT_NAME}_lib PRIVATE "$<$<CONFIG:RELEASE>:${RELEASE_GCC_FLAGS}>")
 	target_compile_options(${PROJECT_NAME}_lib PRIVATE "$<$<CONFIG:RELWITHDEBINFO>:${RELWITHDEB_GCC_FLAGS}>")
+	target_compile_options(${PROJECT_NAME}_lib PRIVATE ${CLANG_FLAGS})
 
 	target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CONFIG:DEBUG>:${DEBUG_GCC_FLAGS}>")
 	target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CONFIG:RELEASE>:${RELEASE_GCC_FLAGS}>")
 	target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CONFIG:RELWITHDEBINFO>:${RELWITHDEB_GCC_FLAGS}>")
+	target_compile_options(${PROJECT_NAME} PRIVATE ${CLANG_FLAGS})
 endif ()
 
 target_compile_options(${PROJECT_NAME}_lib PRIVATE -DGLM_FORCE_RADIANS)

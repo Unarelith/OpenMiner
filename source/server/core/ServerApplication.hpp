@@ -70,11 +70,11 @@ class ServerApplication {
 
 		std::string m_worldName;
 
-		WorldController m_worldController{m_registry, m_clock};
+		WorldController m_worldController{m_registry};
 		PlayerList m_players;
 
 		ScriptEngine m_scriptEngine;
-		ServerModLoader m_modLoader{m_scriptEngine, m_registry, m_worldController, m_players};
+		ServerModLoader m_modLoader{m_scriptEngine, m_worldController};
 
 		Server m_server;
 		ServerCommandHandler m_serverCommandHandler{m_scriptEngine, m_server, m_worldController, m_players, m_registry};

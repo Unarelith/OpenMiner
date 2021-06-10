@@ -131,13 +131,13 @@ void Skybox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	trans[3].z = SKYBOX_OFFSET_Z;
 	states.transform = trans * states.transform;
 
-	if (m_sun.width() && m_sun.height())
+	if (m_sun.width() > 0.f && m_sun.height() > 0.f)
 		target.draw(m_sun, states);
 
-	if (m_moon.width() && m_moon.height())
+	if (m_moon.width() > 0.f && m_moon.height() > 0.f)
 		target.draw(m_moon, states);
 
-	if (Config::isStarRenderingEnabled && skyColor != starColor && m_world.sky()->starsDefinition().size) {
+	if (Config::isStarRenderingEnabled && skyColor != starColor && m_world.sky()->starsDefinition().size > 0.f) {
 		for (auto &it : m_stars)
 			target.draw(it, states);
 	}

@@ -41,6 +41,14 @@ set(RELWITHDEB_GCC_FLAGS
 	-Wfatal-errors
 )
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+	set(CLANG_FLAGS
+		-Wno-sign-conversion
+		-Wno-implicit-int-float-conversion
+		-Wno-nested-anon-types
+	)
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
 
 #------------------------------------------------------------------------------

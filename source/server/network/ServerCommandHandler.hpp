@@ -95,7 +95,7 @@ class ServerCommandHandler {
 
 		Registry &m_registry;
 
-		ChatCommandHandler m_chatCommandHandler{*this, m_worldController};
+		ChatCommandHandler m_chatCommandHandler{*this};
 };
 
 #endif // SERVERCOMMANDHANDLER_HPP_

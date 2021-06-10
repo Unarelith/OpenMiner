@@ -39,8 +39,8 @@ class WorldController;
 
 class ServerModLoader {
 	public:
-		ServerModLoader(ScriptEngine &scriptEngine, Registry &registry, WorldController &worldController, PlayerList &players)
-			: m_scriptEngine(scriptEngine), m_registry(registry), m_worldController(worldController), m_players(players) {}
+		ServerModLoader(ScriptEngine &scriptEngine, WorldController &worldController)
+			: m_scriptEngine(scriptEngine), m_worldController(worldController) {}
 
 		void loadMods();
 
@@ -50,9 +50,7 @@ class ServerModLoader {
 
 	private:
 		ScriptEngine &m_scriptEngine;
-		Registry &m_registry;
 		WorldController &m_worldController;
-		PlayerList &m_players;
 
 		std::unordered_map<std::string, LuaMod> m_mods;
 };

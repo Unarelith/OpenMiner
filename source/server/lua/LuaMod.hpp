@@ -52,8 +52,8 @@ class WorldController;
 // This class is meant to be used ONLY in Lua
 class LuaMod {
 	public:
-		LuaMod(const std::string &id, Registry &registry, WorldController &worldController, PlayerList &players)
-			: m_id(id), m_registry(registry), m_worldController(worldController), m_players(players) {}
+		LuaMod(const std::string &id, WorldController &worldController)
+			: m_id(id), m_worldController(worldController) {}
 
 		void commit();
 
@@ -86,10 +86,7 @@ class LuaMod {
 
 		std::string m_id;
 
-		// TODO: Add registry instance to loaders in order to avoid using singleton
-		Registry &m_registry;
 		WorldController &m_worldController;
-		PlayerList &m_players;
 
 		LuaBlockLoader m_blockLoader{*this};
 		LuaItemLoader m_itemLoader{*this};

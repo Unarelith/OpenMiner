@@ -39,8 +39,8 @@ class ChatCommandHandler {
 	using CommandCallback = void (ChatCommandHandler::*)(const std::vector<std::string> &command, ClientInfo &client) const;
 
 	public:
-		ChatCommandHandler(ServerCommandHandler &server, WorldController &worldController)
-			: m_server(server), m_worldController(worldController) {}
+		ChatCommandHandler(ServerCommandHandler &server)
+			: m_server(server) {}
 
 		void parseCommand(const std::string &str, ClientInfo &client) const;
 
@@ -53,7 +53,6 @@ class ChatCommandHandler {
 		void tpsCommand(const std::vector<std::string> &command, ClientInfo &client) const;
 
 		ServerCommandHandler &m_server;
-		WorldController &m_worldController;
 
 		std::map<std::string, CommandCallback> m_commands = {
 			{"help",   &ChatCommandHandler::helpCommand},

@@ -57,6 +57,7 @@ build_win32
 build_win64
 build_msvc
 build_mingw
+build_clang
 build_debug
 deploy
 openminer

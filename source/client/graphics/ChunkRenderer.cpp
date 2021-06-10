@@ -44,7 +44,7 @@ void ChunkRenderer::draw(gk::RenderTarget &target, gk::RenderStates states, cons
 		glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL,
 			(layer == ChunkMeshLayer::NoMipMap || layer == ChunkMeshLayer::Flora) ? 0 : Config::mipmapLevels));
 
-		if (layer == ChunkMeshLayer::Flora)
+		if (layer == ChunkMeshLayer::Flora || layer == ChunkMeshLayer::Liquid)
 			glCheck(glDisable(GL_CULL_FACE));
 		else
 			glCheck(glEnable(GL_CULL_FACE));

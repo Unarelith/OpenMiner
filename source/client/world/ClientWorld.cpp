@@ -101,7 +101,7 @@ void ClientWorld::checkPlayerChunk(double playerX, double playerY, double player
 
 	ClientChunk *chunk = (ClientChunk *)getChunk(pcx, pcy, pcz);
 	if (!chunk) {
-		m_chunks.emplace(gk::Vector3i{pcx, pcy, pcz}, new ClientChunk(pcx, pcy, pcz, *m_dimension, *this, m_textureAtlas));
+		m_chunks.emplace(gk::Vector3i{pcx, pcy, pcz}, new ClientChunk(pcx, pcy, pcz, *m_dimension, *this));
 	}
 }
 
@@ -131,7 +131,7 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 	// Get the chunk from the map or create it if it doesn't exist
 	ClientChunk *chunk = (ClientChunk *)getChunk(cx, cy, cz);
 	if (!chunk) {
-		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ClientChunk(cx, cy, cz, *m_dimension, *this, m_textureAtlas));
+		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ClientChunk(cx, cy, cz, *m_dimension, *this));
 		chunk = it.first->second.get();
 	}
 

@@ -43,8 +43,8 @@ void CelestialObject::setTexture(const std::string &textureName) {
 }
 
 void CelestialObject::updateVertexBuffer() const {
-	if (!m_width || !m_height) {
-		gkError() << "Can't update vertex buffer for celestial object of size 0";
+	if (m_width <= 0.f || m_height <= 0.f) {
+		gkError() << "Trying to update vertex buffer for celestial object of invalid size";
 		return;
 	}
 

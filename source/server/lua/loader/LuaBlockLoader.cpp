@@ -105,7 +105,7 @@ inline void LuaBlockLoader::loadProperties(BlockState &state, const sol::table &
 	if (table["fog_depth"].get_type() == sol::type::number)
 		state.fogDepth(table["fog_depth"].get<float>());
 
-	if (state.fogDepth()) {
+	if (state.fogDepth() > 0.f) {
 		sol::optional<sol::table> fogColor = table["fog_color"];
 		if (fogColor != sol::nullopt) {
 			state.fogColor(gk::Color::fromRGBA32(
