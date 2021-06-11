@@ -126,7 +126,8 @@ void ChunkRenderer::drawChunks(gk::RenderTarget &target, gk::RenderStates states
 	glCheck(glEnable(GL_DEPTH_TEST));
 
 	states.texture = &m_textureAtlas.texture();
-	target.beginSceneDraw(states);
+
+	target.beginDrawing(states);
 
 	states.shader->setUniform("u_renderDistance", Config::renderDistance * CHUNK_WIDTH);
 
@@ -149,13 +150,11 @@ void ChunkRenderer::drawChunks(gk::RenderTarget &target, gk::RenderStates states
 
 			states.shader->setUniform("u_modelMatrix", it.second);
 
-			target.drawVertexBuffer(it.first->getVBO(layer), GL_TRIANGLES, 0, (GLsizei)verticesCount, states);
+			target.drawVertexBuffer(it.first->getVBO(layer), GL_TRIANGLES, 0, (GLsizei)verticesCount);
 
 			it.first->setHasBeenDrawn(true);
 		}
 	}
-
-	target.endSceneDraw(states);
 
 	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 }

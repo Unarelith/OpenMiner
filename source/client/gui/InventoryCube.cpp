@@ -42,6 +42,16 @@
 InventoryCube::InventoryCube(float size, bool isEntity)
 	: m_textureAtlas(&gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
+	m_vbo.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
+	m_vbo.layout().addAttribute(1, "texCoord", 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, texCoord)));
+	m_vbo.layout().addAttribute(2, "color", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, color)));
+
+	if (isEntity) {
+		m_vbo.layout().addAttribute(3, "normal", 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, normal)));
+		m_vbo.layout().addAttribute(4, "lightValue", 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, lightValue)));
+		m_vbo.layout().addAttribute(5, "ambientOcclusion", 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, ambientOcclusion)));
+	}
+
 	m_size = size;
 	m_isEntity = isEntity;
 
@@ -158,7 +168,6 @@ void InventoryCube::draw(gk::RenderTarget &target, gk::RenderStates states) cons
 	states.projectionMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f, DIST_2D_FAR, DIST_2D_NEAR);
 
 	states.texture = &m_textureAtlas->texture();
-	states.vertexAttributes = VertexAttribute::All;
 
 	glCheck(glEnable(GL_CULL_FACE));
 	glCheck(glEnable(GL_DEPTH_TEST));

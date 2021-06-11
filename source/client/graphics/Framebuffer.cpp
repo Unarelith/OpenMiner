@@ -130,8 +130,8 @@ void Framebuffer::loadShader(const std::string &name) {
 
 void Framebuffer::begin() const {
 	bind(this);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_DEPTH_TEST);
+	glCheck(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+	glCheck(glEnable(GL_DEPTH_TEST));
 }
 
 void Framebuffer::end() const {
@@ -157,23 +157,23 @@ void Framebuffer::end() const {
 
 	gk::VertexBuffer::bind(&m_vbo);
 
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
+	glCheck(glEnableVertexAttribArray(0));
+	glCheck(glEnableVertexAttribArray(1));
 
-	m_vbo.setAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(0 * sizeof(float)));
-	m_vbo.setAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+	glCheck(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(0 * sizeof(float))));
+	glCheck(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float))));
 
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glCheck(glDrawArrays(GL_TRIANGLES, 0, 6));
 
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(0);
+	glCheck(glDisableVertexAttribArray(1));
+	glCheck(glDisableVertexAttribArray(0));
 
 	gk::VertexBuffer::bind(nullptr);
 	gk::Shader::bind(nullptr);
 
-	glActiveTexture(GL_TEXTURE0);
+	glCheck(glActiveTexture(GL_TEXTURE0));
 
-	glEnable(GL_DEPTH_TEST);
+	glCheck(glEnable(GL_DEPTH_TEST));
 }
 
 void Framebuffer::bind(const Framebuffer *framebuffer) {

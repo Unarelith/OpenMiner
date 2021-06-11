@@ -38,18 +38,4 @@ struct Vertex {
 	GLfloat ambientOcclusion = 5;
 };
 
-namespace VertexAttribute {
-	enum {
-		Coord3d          = 8,
-		TexCoord         = 16,
-		Color            = 32,
-		Normal           = 64,
-		LightValue       = 128,
-		AmbientOcclusion = 256,
-
-		Basic            = Coord3d | TexCoord | Color,
-		All              = Basic | Normal | LightValue | AmbientOcclusion
-	};
-}
-
 #endif // VERTEX_HPP_

@@ -45,6 +45,15 @@ BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommand
 	: m_player(player), m_world(world), m_client(client)
 {
 	m_blockDestroyTexture = &gk::ResourceHandler::getInstance().get<gk::Texture>("texture-block_destroy");
+
+	m_vbo.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
+
+	m_animationVBO.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
+	m_animationVBO.layout().addAttribute(1, "texCoord", 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, texCoord)));
+	m_animationVBO.layout().addAttribute(2, "color", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, color)));
+	m_animationVBO.layout().addAttribute(3, "normal", 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, normal)));
+	m_animationVBO.layout().addAttribute(4, "lightValue", 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, lightValue)));
+	m_animationVBO.layout().addAttribute(5, "ambientOcclusion", 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, ambientOcclusion)));
 }
 
 void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
@@ -301,8 +310,6 @@ void BlockCursor::updateAnimationVertexBuffer(const BlockState &blockState, u8f 
 
 void BlockCursor::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 	if (m_selectedBlock.w == -1) return;
-
-	states.vertexAttributes = VertexAttribute::All;
 
 	glCheck(glDisable(GL_POLYGON_OFFSET_FILL));
 	glCheck(glDisable(GL_CULL_FACE));

@@ -250,6 +250,13 @@ PlayerBox::PlayerBox(const gk::Camera &camera)
 	: m_camera(camera),
 	  m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-player"))
 {
+	m_vbo.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
+	m_vbo.layout().addAttribute(1, "texCoord", 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, texCoord)));
+	m_vbo.layout().addAttribute(2, "color", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, color)));
+	m_vbo.layout().addAttribute(3, "normal", 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, normal)));
+	m_vbo.layout().addAttribute(4, "lightValue", 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, lightValue)));
+	m_vbo.layout().addAttribute(5, "ambientOcclusion", 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, ambientOcclusion)));
+
 	updateVertexBuffer();
 }
 
@@ -282,7 +289,6 @@ void PlayerBox::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	states.transform *= getTransform();
 	states.texture = &m_texture;
-	states.vertexAttributes = VertexAttribute::All;
 
 	glCheck(glEnable(GL_CULL_FACE));
 

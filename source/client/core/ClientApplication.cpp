@@ -64,13 +64,6 @@ bool ClientApplication::init() {
 
 	gk::CoreApplication::init();
 
-	m_window.addVertexAttribute(VertexAttribute::Coord3d, 0, "coord3d", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
-	m_window.addVertexAttribute(VertexAttribute::TexCoord, 1, "texCoord", 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, texCoord)));
-	m_window.addVertexAttribute(VertexAttribute::Color, 2, "color", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, color)));
-	m_window.addVertexAttribute(VertexAttribute::Normal, 3, "normal", 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, normal)));
-	m_window.addVertexAttribute(VertexAttribute::LightValue, 4, "lightValue", 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, lightValue)));
-	m_window.addVertexAttribute(VertexAttribute::AmbientOcclusion, 5, "ambientOcclusion", 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, ambientOcclusion)));
-
 	if (m_argumentParser.getArgument("help").isFound)
 		return true;
 

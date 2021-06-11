@@ -39,8 +39,7 @@ class TextureAtlas;
 
 class ClientChunk : public Chunk {
 	public:
-		ClientChunk(s32 x, s32 y, s32 z, const Dimension &dimension, ClientWorld &world)
-			: Chunk(x, y, z, (World &)world), m_world(world), m_dimension(dimension) {}
+		ClientChunk(s32 x, s32 y, s32 z, const Dimension &dimension, ClientWorld &world);
 
 		void update() final;
 		void process() final;

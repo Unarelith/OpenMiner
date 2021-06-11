@@ -31,6 +31,8 @@
 #include "Minimap.hpp"
 
 Minimap::Minimap() {
+	m_vbo.layout().setupDefaultLayout();
+
 	m_border.setFillColor(gk::Color::Transparent);
 	m_border.setOutlineColor(gk::Color::fromRGBA32(224, 224, 224));
 	m_border.setOutlineThickness(1);
@@ -147,7 +149,6 @@ void Minimap::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	{
 		gk::RenderStates states2 = states;
-		states2.vertexAttributes = gk::VertexAttribute::All;
 		states2.transform.translate(minimapSize / 2 + chunkSize / 2, minimapSize / 2 + chunkSize / 2);
 		states2.transform *= m_playerFovRotationTransform;
 

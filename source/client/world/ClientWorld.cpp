@@ -266,11 +266,8 @@ void ClientWorld::draw(gk::RenderTarget &target, gk::RenderStates states) const 
 
 	OM_PROFILE_START("ClientWorld::draw");
 
-	states.vertexAttributes = VertexAttribute::All;
-
 	m_chunkRenderer.draw(target, states, m_chunks, *m_camera, m_sky);
 
-	states.transform = gk::Transform::Identity;
 	target.draw(m_scene, states);
 
 	OM_PROFILE_END("ClientWorld::draw");

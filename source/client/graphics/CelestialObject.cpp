@@ -34,6 +34,10 @@
 #include "GameTime.hpp"
 #include "Vertex.hpp"
 
+CelestialObject::CelestialObject() {
+	m_vbo.layout().setupDefaultLayout();
+}
+
 void CelestialObject::setTexture(const std::string &textureName) {
 	if (textureName.empty()) return;
 
@@ -160,8 +164,6 @@ void CelestialObject::draw(gk::RenderTarget &target, gk::RenderStates states) co
 	states.transform *= m_rotAxisTransform;
 	states.transform.rotateY(-GameTime::getCurrentTime(m_rotationOffset, m_rotationSpeed) * 360.f);
 	states.transform *= getTransform();
-
-	states.vertexAttributes = gk::VertexAttribute::All;
 
 	if (m_texture)
 		states.texture = m_texture;

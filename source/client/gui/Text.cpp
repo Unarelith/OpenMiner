@@ -32,6 +32,8 @@
 #include "Text.hpp"
 
 Text::Text() : m_font(gk::ResourceHandler::getInstance().get<Font>("font-ascii")) {
+	m_vbo.layout().setupDefaultLayout();
+
 	m_background.setFillColor(gk::Color::Transparent);
 }
 
@@ -78,7 +80,6 @@ void Text::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	states.transform.translate((float)m_padding.x, (float)m_padding.y);
 	states.texture = &m_font.texture();
-	states.vertexAttributes = gk::VertexAttribute::All;
 
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
