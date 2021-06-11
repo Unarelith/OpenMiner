@@ -27,6 +27,8 @@
 #ifndef CLIENTCHUNK_HPP_
 #define CLIENTCHUNK_HPP_
 
+#include <numeric>
+
 #include <gk/gl/Drawable.hpp>
 
 #include "Chunk.hpp"
@@ -59,12 +61,11 @@ class ClientChunk : public Chunk {
 
 		bool areAllNeighboursTooFar() const;
 
-		const gk::VertexBuffer &getVertexBuffer(u8 layer) { return m_vbo[layer]; }
+		const gk::VertexBuffer &getVertexBuffer() { return m_vbo; }
+		GLint getBufferOffset(u8 layer) const { return std::accumulate(m_verticesCount.begin(), m_verticesCount.begin() + layer, 0); }
 
 		std::size_t getVerticesCount(u8 layer) const { return m_verticesCount[layer]; }
 		void setVerticesCount(u8 layer, std::size_t count) { m_verticesCount[layer] = count; }
-
-		const gk::VertexBuffer &getVBO(u8 layer) const { return m_vbo[layer]; }
 
 		int debugTimesReceived = 0; // Only used by Minimap
 
@@ -77,7 +78,7 @@ class ClientChunk : public Chunk {
 
 		const Dimension &m_dimension;
 
-		std::array<gk::VertexBuffer, ChunkMeshLayer::Count> m_vbo{};
+		gk::VertexBuffer m_vbo{};
 		std::array<std::size_t, ChunkMeshLayer::Count> m_verticesCount{};
 
 		bool m_isReadyForMeshing = false;

@@ -38,14 +38,12 @@ u64 ClientChunk::chunkUpdateTime = 0;
 ClientChunk::ClientChunk(s32 x, s32 y, s32 z, const Dimension &dimension, ClientWorld &world)
 	: Chunk(x, y, z, (World &)world), m_world(world), m_dimension(dimension)
 {
-	for (auto &vbo : m_vbo) {
-		vbo.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
-		vbo.layout().addAttribute(1, "texCoord", 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, texCoord)));
-		vbo.layout().addAttribute(2, "color", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, color)));
-		vbo.layout().addAttribute(3, "normal", 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, normal)));
-		vbo.layout().addAttribute(4, "lightValue", 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, lightValue)));
-		vbo.layout().addAttribute(5, "ambientOcclusion", 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, ambientOcclusion)));
-	}
+	m_vbo.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
+	m_vbo.layout().addAttribute(1, "texCoord", 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, texCoord)));
+	m_vbo.layout().addAttribute(2, "color", 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, color)));
+	m_vbo.layout().addAttribute(3, "normal", 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, normal)));
+	m_vbo.layout().addAttribute(4, "lightValue", 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, lightValue)));
+	m_vbo.layout().addAttribute(5, "ambientOcclusion", 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, ambientOcclusion)));
 }
 
 void ClientChunk::update() {

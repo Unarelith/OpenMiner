@@ -150,7 +150,7 @@ void ChunkRenderer::drawChunks(gk::RenderTarget &target, gk::RenderStates states
 
 			states.shader->setUniform("u_modelMatrix", it.second);
 
-			target.drawVertexBuffer(it.first->getVBO(layer), GL_TRIANGLES, 0, (GLsizei)verticesCount);
+			target.drawVertexBuffer(it.first->getVertexBuffer(), GL_TRIANGLES, it.first->getBufferOffset(layer), (GLsizei)verticesCount);
 
 			it.first->setHasBeenDrawn(true);
 		}

@@ -97,6 +97,8 @@ struct ChunkMeshBuildingJob {
 	VerticesArray vertices;
 
 	const TextureAtlas *textureAtlas;
+
+	u64 totalVertexCount = 0;
 };
 
 class ClientWorld;

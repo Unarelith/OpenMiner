@@ -83,17 +83,22 @@ void ChunkMeshBuilder::update() {
 
 			ClientChunk *chunk = (ClientChunk *)m_world.getChunk(job.chunkData.x, job.chunkData.y, job.chunkData.z);
 			if (chunk) {
+				const gk::VertexBuffer &vbo = chunk->getVertexBuffer();
+
+				gk::VertexBuffer::bind(&vbo);
+				vbo.setData(job.totalVertexCount * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
+
+				u64 offset = 0;
 				for (u8 i = 0 ; i < ChunkMeshLayer::Count ; ++i) {
 					job.vertices[i].shrink_to_fit();
 
-					const gk::VertexBuffer &vbo = chunk->getVertexBuffer(i);
-
-					gk::VertexBuffer::bind(&vbo);
-					vbo.setData(job.vertices[i].size() * sizeof(Vertex), job.vertices[i].data(), GL_DYNAMIC_DRAW);
-					gk::VertexBuffer::bind(nullptr);
+					vbo.updateData(offset * sizeof(Vertex), job.vertices[i].size() * sizeof(Vertex), job.vertices[i].data());
 
 					chunk->setVerticesCount(i, job.vertices[i].size());
+					offset += job.vertices[i].size();
 				}
+
+				gk::VertexBuffer::bind(nullptr);
 			}
 
 			it = m_futures.erase(it);
@@ -307,6 +312,8 @@ inline void ChunkMeshBuilder::addCubeFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshB
 		addVertex(1);
 		addVertex(2);
 	}
+
+	job.totalVertexCount += 6;
 }
 
 inline void ChunkMeshBuilder::addCross(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job, const BlockState &blockState) {
@@ -371,6 +378,8 @@ inline void ChunkMeshBuilder::addCross(s8f x, s8f y, s8f z, ChunkMeshBuildingJob
 		job.vertices[ChunkMeshLayer::Flora].emplace_back(vertices[3]);
 		job.vertices[ChunkMeshLayer::Flora].emplace_back(vertices[1]);
 		job.vertices[ChunkMeshLayer::Flora].emplace_back(vertices[2]);
+
+		job.totalVertexCount += 6;
 	}
 }
 
