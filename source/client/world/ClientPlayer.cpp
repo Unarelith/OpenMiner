@@ -52,13 +52,15 @@ void ClientPlayer::turnH(float angle) {
 	if (m_viewAngleH >= 180.f) m_viewAngleH -= 360.f;
 	if (m_viewAngleH < -180.f) m_viewAngleH += 360.f;
 
-	// updateCamera();
+	if (!Config::isViewBobbingEnabled)
+		updateCamera();
 }
 
 void ClientPlayer::turnViewV(float angle) {
 	m_viewAngleV = std::max(std::min(m_viewAngleV + angle, 90.f), -90.f);
 
-	// updateCamera();
+	if (!Config::isViewBobbingEnabled)
+		updateCamera();
 }
 
 void ClientPlayer::updateCamera() {
@@ -154,7 +156,8 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 		m_velocity.y *= 2.f;
 	}
 
-	updateCamera();
+	if (Config::isViewBobbingEnabled)
+		updateCamera();
 
 	setPosition(m_x + m_velocity.x, m_y + m_velocity.y, m_z + m_velocity.z);
 
