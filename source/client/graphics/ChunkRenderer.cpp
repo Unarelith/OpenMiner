@@ -134,6 +134,8 @@ void ChunkRenderer::drawChunks(gk::RenderTarget &target, gk::RenderStates states
 	if (currentSky)
 		states.shader->setUniform("u_fogColor", currentSky->fogColor());
 
+	GLint modelMatrixUniform = states.shader->uniform("u_modelMatrix");
+
 	for (u8 layer = 0 ; layer < ChunkMeshLayer::Count ; ++layer) {
 		// Disable mipmaps for specific layers
 		glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL,
@@ -148,9 +150,11 @@ void ChunkRenderer::drawChunks(gk::RenderTarget &target, gk::RenderStates states
 			std::size_t verticesCount = it.first->getVerticesCount(layer);
 			if (verticesCount == 0) continue;
 
-			states.shader->setUniform("u_modelMatrix", it.second);
+			states.shader->setUniform(modelMatrixUniform, it.second);
 
-			target.drawVertexBuffer(it.first->getVertexBuffer(), GL_TRIANGLES, it.first->getBufferOffset(layer), (GLsizei)verticesCount);
+			gk::VertexArray::bind(&it.first->getVertexArray());
+			target.drawArrays(GL_TRIANGLES, it.first->getBufferOffset(layer), (GLsizei)verticesCount);
+			gk::VertexArray::bind(nullptr);
 
 			it.first->setHasBeenDrawn(true);
 		}

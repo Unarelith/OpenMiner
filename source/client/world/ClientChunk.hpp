@@ -30,6 +30,7 @@
 #include <numeric>
 
 #include <gk/gl/Drawable.hpp>
+#include <gk/gl/VertexArray.hpp>
 
 #include "Chunk.hpp"
 #include "ChunkMeshLayer.hpp"
@@ -62,6 +63,7 @@ class ClientChunk : public Chunk {
 		bool areAllNeighboursTooFar() const;
 
 		const gk::VertexBuffer &getVertexBuffer() { return m_vbo; }
+		const gk::VertexArray &getVertexArray() { return m_vao; }
 		GLint getBufferOffset(u8 layer) const { return std::accumulate(m_verticesCount.begin(), m_verticesCount.begin() + layer, 0); }
 
 		std::size_t getVerticesCount(u8 layer) const { return m_verticesCount[layer]; }
@@ -78,7 +80,8 @@ class ClientChunk : public Chunk {
 
 		const Dimension &m_dimension;
 
-		gk::VertexBuffer m_vbo{};
+		gk::VertexBuffer m_vbo;
+		gk::VertexArray m_vao;
 		std::array<std::size_t, ChunkMeshLayer::Count> m_verticesCount{};
 
 		bool m_isReadyForMeshing = false;
