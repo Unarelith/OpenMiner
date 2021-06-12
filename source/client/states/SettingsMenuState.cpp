@@ -231,13 +231,16 @@ void SettingsMenuState::addGraphicsButtons() {
 		Config::isSmoothLightingEnabled = !Config::isSmoothLightingEnabled;
 		button.setText(std::string("Smooth Lighting: ") + (Config::isSmoothLightingEnabled ? "ON" : "OFF"));
 
+		// FIXME: If AO is set to "lighting based" and smooth lighting is set to OFF
+		//        it needs to set AO to Basic and update the button
+
 		World::isReloadRequested = true;
 	});
 
 	const std::string aoValueNames[3] = {
 		"OFF",
-		"Fast",
-		"Fancy"
+		"Basic",
+		"Lighting based"
 	};
 
 	m_menuWidget.addButton(std::string("Ambient Occlusion: ") + aoValueNames[Config::ambientOcclusion], [&, aoValueNames] (TextButton &button) {

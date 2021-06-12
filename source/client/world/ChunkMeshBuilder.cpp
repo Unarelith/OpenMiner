@@ -430,7 +430,7 @@ inline u8 ChunkMeshBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, 
 		return (light == Light::Sun) ? chunk.getSunlight(x, y, z) : chunk.getTorchlight(x, y, z);
 	};
 
-	// Get light values for surrounding nodes
+	// Get light values for surrounding blocks
 	s8 lightValues[4] = {
 		getLight(chunk, surroundingBlocks[0].x, surroundingBlocks[0].y, surroundingBlocks[0].z),
 		getLight(chunk, surroundingBlocks[1].x, surroundingBlocks[1].y, surroundingBlocks[1].z),
@@ -441,8 +441,8 @@ inline u8 ChunkMeshBuilder::getLightForVertex(Light light, s8f x, s8f y, s8f z, 
 	u8 count = 0, total = 0;
 	for (u8 i = 0 ; i < 4 ; ++i) {
 		// Fix light approximation
-		// if (i == 3 && lightValues[i] > lightValues[0] && !lightValues[1] && !lightValues[2])
-		// 	continue;
+		if (i == 3 && lightValues[i] > lightValues[0] && !lightValues[1] && !lightValues[2])
+			continue;
 
 		// If the chunk is initialized, add the light value to the total
 		// But only add dark blocks if AO is set on Smooth Lighting

@@ -66,6 +66,7 @@ void SliderWidget::onEvent(const SDL_Event &event) {
 	else if (event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_LEFT) {
 		if (m_isDragging)
 			m_callback(*this, event.type);
+		setCurrentValue(getCurrentValue());
 		m_isDragging = false;
 	}
 }
