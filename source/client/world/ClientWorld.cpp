@@ -24,6 +24,8 @@
  *
  * =====================================================================================
  */
+#include <algorithm> // std::max
+
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "ClientCommandHandler.hpp"
@@ -52,11 +54,20 @@ ClientWorld::ClientWorld()
 void ClientWorld::update(bool allowWorldReload) {
 	World::update();
 
+	// Debug values only used in DebugOverlay
 	u64 time = std::time(nullptr);
 	if (time > ClientChunk::chunkUpdateTime) {
 		ClientChunk::chunkUpdatesPerSec = ClientChunk::chunkUpdateCounter;
 		ClientChunk::chunkUpdateCounter = 0;
 		ClientChunk::chunkUpdateTime = time;
+	}
+	if (time > ClientChunk::chunkDrawTime) {
+		ClientChunk::chunksRenderedPerFrame = ClientChunk::chunkDrawCounter / std::max(1ul, ClientChunk::frameCounter - ClientChunk::chunkDrawStartFrame);
+		ClientChunk::chunkDrawCallPerFrame = ClientChunk::chunkDrawCallCounter / std::max(1ul, ClientChunk::frameCounter - ClientChunk::chunkDrawStartFrame);
+		ClientChunk::chunkDrawCounter = 0;
+		ClientChunk::chunkDrawCallCounter = 0;
+		ClientChunk::chunkDrawTime = time;
+		ClientChunk::chunkDrawStartFrame = ClientChunk::frameCounter;
 	}
 
 	for (auto it = m_chunksToRemove.begin() ; it != m_chunksToRemove.end() ;) {

@@ -121,6 +121,8 @@ void ChunkRenderer::draw(gk::RenderTarget &target, gk::RenderStates states, cons
 }
 
 void ChunkRenderer::drawChunks(gk::RenderTarget &target, gk::RenderStates states, const std::vector<std::pair<ClientChunk*, gk::Transform>> &chunks, const Sky *currentSky) const {
+	++ClientChunk::frameCounter;
+
 	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 
 	glCheck(glEnable(GL_DEPTH_TEST));
@@ -155,6 +157,11 @@ void ChunkRenderer::drawChunks(gk::RenderTarget &target, gk::RenderStates states
 			gk::VertexArray::bind(&it.first->getVertexArray());
 			target.drawArrays(GL_TRIANGLES, it.first->getBufferOffset(layer), (GLsizei)verticesCount);
 			gk::VertexArray::bind(nullptr);
+
+			if (!it.first->hasBeenDrawn())
+				++ClientChunk::chunkDrawCounter;
+
+			++ClientChunk::chunkDrawCallCounter;
 
 			it.first->setHasBeenDrawn(true);
 		}

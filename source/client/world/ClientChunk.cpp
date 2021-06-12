@@ -31,9 +31,18 @@
 #include "TextureAtlas.hpp"
 #include "World.hpp"
 
+// Debug values only used in DebugOverlay
 u32 ClientChunk::chunkUpdatesPerSec = 0;
 u32 ClientChunk::chunkUpdateCounter = 0;
 u64 ClientChunk::chunkUpdateTime = 0;
+
+u64 ClientChunk::chunksRenderedPerFrame = 0;
+u64 ClientChunk::chunkDrawCallPerFrame = 0;
+u32 ClientChunk::chunkDrawCounter = 0;
+u32 ClientChunk::chunkDrawCallCounter = 0;
+u64 ClientChunk::chunkDrawTime = 0;
+u64 ClientChunk::chunkDrawStartFrame = 0;
+u64 ClientChunk::frameCounter = 0;
 
 ClientChunk::ClientChunk(s32 x, s32 y, s32 z, const Dimension &dimension, ClientWorld &world)
 	: Chunk(x, y, z, (World &)world), m_world(world), m_dimension(dimension)

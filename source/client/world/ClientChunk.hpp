@@ -71,9 +71,18 @@ class ClientChunk : public Chunk {
 
 		int debugTimesReceived = 0; // Only used by Minimap
 
+		// Debug values only used in DebugOverlay
 		static u32 chunkUpdatesPerSec;
 		static u32 chunkUpdateCounter;
 		static u64 chunkUpdateTime;
+
+		static u64 chunksRenderedPerFrame;
+		static u64 chunkDrawCallPerFrame;
+		static u32 chunkDrawCounter;
+		static u32 chunkDrawCallCounter;
+		static u64 chunkDrawTime;
+		static u64 chunkDrawStartFrame;
+		static u64 frameCounter;
 
 	private:
 		ClientWorld &m_world;

@@ -88,7 +88,11 @@ void DebugOverlay::update(bool printOpenGLInfo) {
 	stream << '\n';
 	stream << "Alive entities: " << m_world.scene().registry().alive();
 	stream << '\n';
-	stream << "Chunk updates: " << ClientChunk::chunkUpdatesPerSec;
+	stream << "Chunk updates: " << ClientChunk::chunkUpdatesPerSec << "/sec";
+	stream << '\n';
+	stream << "Chunks rendered: " << ClientChunk::chunksRenderedPerFrame << "/frame";
+	stream << '\n';
+	stream << "Chunk draw calls: " << ClientChunk::chunkDrawCallPerFrame << "/frame";
 	stream << '\n';
 	stream << "Ticks: " << GameTime::getTicks();
 	stream << '\n';
