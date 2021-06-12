@@ -107,6 +107,9 @@ void DebugOverlay::update(bool printOpenGLInfo) {
 	stream << (hour < 10 ? "0" : "") << hour << ":";
 	stream << (minute < 10 ? "0" : "") << minute << '\n';
 
+	if (Config::isProfilerWindowEnabled)
+		stream << "Press F3 to return to profiler\n";
+
 	if (printOpenGLInfo) {
 		GLint major, minor;
 		glGetIntegerv(GL_MAJOR_VERSION, &major);

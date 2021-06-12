@@ -112,6 +112,8 @@ void HUD::update() {
 
 	if (m_isDebugOverlayVisible)
 		m_debugOverlay.update(m_printOpenGLInfo);
+	else if (Config::isProfilerWindowEnabled)
+		m_debugProfilerWindow.update();
 
 	if (Config::isBlockInfoWidgetEnabled) {
 		m_blockInfoWidget.update();
@@ -125,9 +127,6 @@ void HUD::update() {
 
 	if (Config::isLightmapViewerEnabled)
 		m_debugLightmapViewer.update(m_world);
-
-	if (Config::isProfilerWindowEnabled)
-		m_debugProfilerWindow.update();
 }
 
 void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
@@ -143,6 +142,8 @@ void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	if (m_isDebugOverlayVisible)
 		target.draw(m_debugOverlay, states);
+	else if (Config::isProfilerWindowEnabled)
+		target.draw(m_debugProfilerWindow, states);
 
 	if (Config::isBlockInfoWidgetEnabled)
 		target.draw(m_blockInfoWidget, states);
@@ -158,9 +159,6 @@ void HUD::draw(gk::RenderTarget &target, gk::RenderStates states) const {
 
 	if (Config::isLightmapViewerEnabled)
 		target.draw(m_debugLightmapViewer, states);
-
-	if (Config::isProfilerWindowEnabled)
-		target.draw(m_debugProfilerWindow, states);
 
 	target.draw(m_chat, states);
 
