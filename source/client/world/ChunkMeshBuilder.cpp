@@ -233,11 +233,11 @@ inline void ChunkMeshBuilder::addCubeFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshB
 		}
 		else {
 			float blockHeight = vertexPos[v]->z;
-			if (blockState.drawType() == BlockDrawType::Liquid && (f != BlockFace::Bottom || !surroundingBlockState || !surroundingBlockState->block().id())) {
-				if (f == BlockFace::Bottom)
-					blockHeight = vertexPos[v]->z - 2.f / 16.f;
-				else
-					blockHeight = vertexPos[v]->z * 14.f / 16.f;
+			if (blockState.drawType() == BlockDrawType::Liquid) {
+				const BlockState *topBlockState = job.chunkData.getBlockState(x, y, z + 1);
+				if (f != BlockFace::Bottom && (!topBlockState || !topBlockState->block().id())) {
+					blockHeight *= 14.f / 16.f;
+				}
 			}
 
 			vertices[v].coord3d[0] = x + vertexPos[v]->x;
