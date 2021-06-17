@@ -24,29 +24,23 @@
  *
  * =====================================================================================
  */
-#ifndef CHUNKMESHBUILDER_HPP_
-#define CHUNKMESHBUILDER_HPP_
+#ifndef LIGHTUTILS_HPP_
+#define LIGHTUTILS_HPP_
 
-#include <thread/ThreadPool.hpp>
+#include "BlockMesher.hpp"
 
-#include "ChunkMeshBuildingJob.hpp"
+namespace LightUtils {
+	enum LightType {
+		Sun,
+		Torch
+	};
 
-class ClientWorld;
+	u8 getAmbientOcclusion(s8f x, s8f y, s8f z, const gk::Vector3<s8f> &offset,
+	                       const gk::Vector3<s8f> &normal, const ChunkData &chunk);
 
-class ChunkMeshBuilder {
-	public:
-		ChunkMeshBuilder(ClientWorld &world) : m_world(world) {}
-
-		void addMeshBuildingJob(const Chunk &chunk, const TextureAtlas &textureAtlas);
-
-		void update();
-
-	private:
-		static ChunkMeshBuildingJob buildChunkMesh(ChunkMeshBuildingJob job);
-
-		ClientWorld &m_world;
-
-		std::vector<thread::ThreadPool::TaskFuture<ChunkMeshBuildingJob>> m_futures;
+	u8 getLightForVertex(LightType lightType, s8f x, s8f y, s8f z,
+	                     const gk::Vector3<s8f> &offset,
+	                     const gk::Vector3<s8f> &normal, const ChunkData &chunk);
 };
 
-#endif // CHUNKMESHBUILDER_HPP_
+#endif // LIGHTUTILS_HPP_

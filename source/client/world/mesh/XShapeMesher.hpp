@@ -24,29 +24,18 @@
  *
  * =====================================================================================
  */
-#ifndef CHUNKMESHBUILDER_HPP_
-#define CHUNKMESHBUILDER_HPP_
+#ifndef XSHAPEMESHER_HPP_
+#define XSHAPEMESHER_HPP_
 
-#include <thread/ThreadPool.hpp>
+#include <gk/core/IntTypes.hpp>
 
-#include "ChunkMeshBuildingJob.hpp"
+class ChunkMeshBuildingJob;
+class BlockState;
 
-class ClientWorld;
-
-class ChunkMeshBuilder {
+class XShapeMesher {
 	public:
-		ChunkMeshBuilder(ClientWorld &world) : m_world(world) {}
-
-		void addMeshBuildingJob(const Chunk &chunk, const TextureAtlas &textureAtlas);
-
-		void update();
-
-	private:
-		static ChunkMeshBuildingJob buildChunkMesh(ChunkMeshBuildingJob job);
-
-		ClientWorld &m_world;
-
-		std::vector<thread::ThreadPool::TaskFuture<ChunkMeshBuildingJob>> m_futures;
+		static void addCross(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
+		                     const BlockState &blockState);
 };
 
-#endif // CHUNKMESHBUILDER_HPP_
+#endif // XSHAPEMESHER_HPP_

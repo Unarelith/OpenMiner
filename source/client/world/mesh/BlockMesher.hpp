@@ -24,29 +24,20 @@
  *
  * =====================================================================================
  */
-#ifndef CHUNKMESHBUILDER_HPP_
-#define CHUNKMESHBUILDER_HPP_
-
-#include <thread/ThreadPool.hpp>
+#ifndef BLOCKMESHER_HPP_
+#define BLOCKMESHER_HPP_
 
 #include "ChunkMeshBuildingJob.hpp"
 
-class ClientWorld;
-
-class ChunkMeshBuilder {
+class BlockMesher {
 	public:
-		ChunkMeshBuilder(ClientWorld &world) : m_world(world) {}
+		static void addCube(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
+		                    const BlockState &blockState, u16 blockParam);
 
-		void addMeshBuildingJob(const Chunk &chunk, const TextureAtlas &textureAtlas);
-
-		void update();
-
-	private:
-		static ChunkMeshBuildingJob buildChunkMesh(ChunkMeshBuildingJob job);
-
-		ClientWorld &m_world;
-
-		std::vector<thread::ThreadPool::TaskFuture<ChunkMeshBuildingJob>> m_futures;
+		static void addCubeFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob &job,
+		                        const BlockState &blockState,
+		                        const gk::Vector3<s8f> &normal, const glm::vec3 *const vertexPos[4],
+		                        const gk::Vector3<s8f> *const neighbourOfs[4]);
 };
 
-#endif // CHUNKMESHBUILDER_HPP_
+#endif // BLOCKMESHER_HPP_
