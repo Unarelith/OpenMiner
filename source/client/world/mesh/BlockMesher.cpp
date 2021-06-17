@@ -32,8 +32,8 @@
 using namespace BlockGeometry;
 using namespace LightUtils;
 
-void BlockMesher::addCube(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
-                          const BlockState &blockState, u16 blockParam)
+void BlockMesher::addBlock(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
+                           const BlockState &blockState, u16 blockParam)
 {
 	const gk::FloatBox &boundingBox = blockState.boundingBox();
 
@@ -41,6 +41,13 @@ void BlockMesher::addCube(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
 		? (u8f)blockState.block().param().getParam(BlockParam::Rotation, blockParam) : 0;
 	const glm::mat3 &orientMatrix = orientMatrices[orientation];
 
+	addBlock(x, y, z, job, blockState, boundingBox, orientation, orientMatrix);
+}
+
+void BlockMesher::addBlock(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
+                           const BlockState &blockState, const gk::FloatBox &boundingBox,
+                           u8f orientation, const glm::mat3 &orientMatrix)
+{
 	glm::vec3 vertexPos[nVertsPerCube]{
 		// Order is important. It matches the bit order defined in BlockGeometry::cubeVerts.
 		{boundingBox.x,                     boundingBox.y,                     boundingBox.z},
@@ -98,11 +105,11 @@ void BlockMesher::addCube(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
 
 		const gk::Vector3<s8f> *vFaceNeighbours[nVertsPerFace]{&corner0, &corner1, &corner2, &corner3};
 
-		addCubeFace(x, y, z, f, job, blockState, normal, faceVerts, vFaceNeighbours);
+		addBlockFace(x, y, z, f, job, blockState, normal, faceVerts, vFaceNeighbours);
 	}
 }
 
-void BlockMesher::addCubeFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob &job,
+void BlockMesher::addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob &job,
                               const BlockState &blockState,
                               const gk::Vector3<s8f> &normal,
                               const glm::vec3 *const vertexPos[nVertsPerFace],

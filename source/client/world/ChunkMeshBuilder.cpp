@@ -50,7 +50,6 @@ void ChunkMeshBuilder::addMeshBuildingJob(const Chunk &chunk, const TextureAtlas
 
 	// Send the job to the thread pool
 	auto future = thread::DefaultThreadPool::submitJob(&ChunkMeshBuilder::buildChunkMesh, job);
-
 	m_futures.emplace_back(std::move(future));
 
 	OM_PROFILE_END("ChunkMeshBuilder::addMeshBuildingJob");
@@ -102,7 +101,7 @@ ChunkMeshBuildingJob ChunkMeshBuilder::buildChunkMesh(ChunkMeshBuildingJob job) 
 				if (blockState.drawType() == BlockDrawType::XShape)
 					XShapeMesher::addCross(x, y, z, job, blockState);
 				else
-					BlockMesher::addCube(x, y, z, job, blockState, blockParam);
+					BlockMesher::addBlock(x, y, z, job, blockState, blockParam);
 			}
 		}
 	}
