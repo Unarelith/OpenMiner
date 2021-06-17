@@ -48,7 +48,7 @@ void main() {
 	v_texCoord = texCoord;
 	v_lightValue = lightValue;
 
-	if (ambientOcclusion != 5) {
+	if (ambientOcclusion != 4) {
 		const float aovalues[] = float[](0.4, 0.6, 0.8, 1.0);
 		v_ambientOcclusion = aovalues[int(ambientOcclusion)];
 	} else {

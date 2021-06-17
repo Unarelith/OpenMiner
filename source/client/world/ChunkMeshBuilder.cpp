@@ -283,7 +283,7 @@ inline void ChunkMeshBuilder::addCubeFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshB
 
 	auto addVertex = [&](u8 v) {
 		if (Config::ambientOcclusion != 1 || blockState.isLightSource())
-			vertices[v].ambientOcclusion = 5;
+			vertices[v].ambientOcclusion = 4;
 
 		if (blockState.drawType() == BlockDrawType::Liquid)
 			job.vertices[ChunkMeshLayer::Liquid].emplace_back(vertices[v]);
@@ -369,7 +369,7 @@ inline void ChunkMeshBuilder::addCross(s8f x, s8f y, s8f z, ChunkMeshBuildingJob
 			vertices[v].lightValue[0] = job.chunkData.getSunlight(x, y, z);
 			vertices[v].lightValue[1] = job.chunkData.getTorchlight(x, y, z);
 
-			vertices[v].ambientOcclusion = 5;
+			vertices[v].ambientOcclusion = 4;
 		}
 
 		job.vertices[ChunkMeshLayer::Flora].emplace_back(vertices[0]);
