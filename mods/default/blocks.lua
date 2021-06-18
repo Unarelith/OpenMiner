@@ -872,6 +872,33 @@ mod:block {
 	},
 }
 
+mod:block {
+	id = "barrel",
+	name = "Wooden Barrel",
+	tiles = "oak_planks.png",
+	groups = {
+		om_material_wood = 1,
+	},
+
+	draw_type = "multibox",
+
+	bounding_box = {2/16, 2/16, 0, 12/16, 12/16, 14/16},
+
+	multibox = {
+		type = "fixed",
+
+		fixed = {
+			-- Bottom
+			{ 3/16,  3/16,  0, 10/16, 10/16,  1/16},
+			-- Walls
+			{ 2/16,  2/16,  0, 12/16,  1/16, 14/16},
+			{ 2/16, 13/16,  0, 12/16,  1/16, 14/16},
+			{ 2/16,  2/16,  0,  1/16, 12/16, 14/16},
+			{13/16,  2/16,  0,  1/16, 12/16, 14/16},
+		}
+	}
+}
+
 dofile("blocks/workbench.lua")
 dofile("blocks/furnace.lua")
 dofile("blocks/door.lua")
