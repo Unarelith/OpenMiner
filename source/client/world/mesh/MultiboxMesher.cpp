@@ -38,9 +38,8 @@ void MultiboxMesher::addMultibox(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
 	const glm::mat3 &orientMatrix = orientMatrices[orientation];
 
 	if (blockState.multiboxType() != BlockState::WallMounted) {
-		for (auto &it : blockState.multibox()) {
+		for (auto &it : blockState.multibox())
 			BlockMesher::addBlock(x, y, z, job, blockState, it, orientation, orientMatrix);
-		}
 
 		if (blockState.multiboxType() == BlockState::Connected) {
 			u16 neighbours[6 + 1] = {
@@ -55,17 +54,15 @@ void MultiboxMesher::addMultibox(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
 			};
 
 			for (int i = 0 ; i < 6 ; ++i) {
-				auto &boxes = blockState.connectedMultibox()[i];
 				if (neighbours[i] == neighbours[6]) {
-					for (auto &it : boxes) {
+					auto &boxes = blockState.connectedMultibox()[i];
+					for (auto &it : boxes)
 						BlockMesher::addBlock(x, y, z, job, blockState, it, orientation, orientMatrix);
-					}
 				}
 			}
 		}
 	}
-
-	if (blockState.multiboxType() == BlockState::WallMounted) {
+	else {
 		if (blockState.block().param().hasParam(BlockParam::WallMounted)) {
 			u8 wall = (u8)blockState.block().param().getParam(BlockParam::WallMounted, blockParam);
 			auto &boxes = blockState.wallMountedBoxes((BlockState::WallMountedBoxType)wall);

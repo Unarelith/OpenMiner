@@ -105,12 +105,13 @@ void BlockMesher::addBlock(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
 
 		const gk::Vector3<s8f> *vFaceNeighbours[nVertsPerFace]{&corner0, &corner1, &corner2, &corner3};
 
-		addBlockFace(x, y, z, f, job, blockState, normal, faceVerts, vFaceNeighbours);
+		addBlockFace(x, y, z, f, job, blockState, boundingBox, normal, faceVerts, vFaceNeighbours);
 	}
 }
 
 void BlockMesher::addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob &job,
                               const BlockState &blockState,
+                              const gk::FloatBox &boundingBox,
                               const gk::Vector3<s8f> &normal,
                               const glm::vec3 *const vertexPos[nVertsPerFace],
                               const gk::Vector3<s8f> *const neighbourOfs[nVertsPerFace])
@@ -129,8 +130,6 @@ void BlockMesher::addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob 
 	 || (blockState.drawType() == BlockDrawType::Liquid && surroundingBlockState->drawType() == BlockDrawType::Solid)
 	 || (blockState.drawType() == BlockDrawType::Cactus && surroundingBlockState->block().id() == blockState.block().id() && f > 3)))
 		return;
-
-	const gk::FloatBox &boundingBox = blockState.boundingBox();
 
 	const std::string &texture = blockState.tiles().getTextureForFace(f);
 	const gk::FloatRect &blockTexCoords = job.textureAtlas->getTexCoords(texture);
