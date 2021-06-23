@@ -124,10 +124,10 @@ void Minimap::updatePlayerFovVertexBuffer() {
 	vertices[0].coord3d[1] = 0.f;
 
 	vertices[1].coord3d[0] = -sinf(glm::radians(Config::cameraFOV / 2.f)) * Config::renderDistance * (chunkSize + 2) / cosf(glm::radians(Config::cameraFOV / 2.f));
-	vertices[1].coord3d[1] = -(Config::renderDistance * (chunkSize + 2));
+	vertices[1].coord3d[1] = -(Config::renderDistance * (chunkSize + 2.f));
 
 	vertices[2].coord3d[0] = sinf(glm::radians(Config::cameraFOV / 2.f)) * Config::renderDistance * (chunkSize + 2) / cosf(glm::radians(Config::cameraFOV / 2.f));
-	vertices[2].coord3d[1] = -(Config::renderDistance * (chunkSize + 2));
+	vertices[2].coord3d[1] = -(Config::renderDistance * (chunkSize + 2.f));
 
 	gk::Color color = gk::Color::Blue;
 	for (u8 i = 0 ; i < 3 ; ++i) {

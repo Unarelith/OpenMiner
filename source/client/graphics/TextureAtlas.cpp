@@ -123,7 +123,7 @@ void TextureAtlas::addFile(const std::string &path, const std::string &filename)
 	if (m_tileSize != surface->w || m_tileSize != surface->h)
 		throw EXCEPTION("Texture size unexpected for", path + filename + ". Got", surface->w, surface->h, "instead of", m_tileSize, m_tileSize);
 
-	m_textureMap.emplace(filename, m_textures.size());
+	m_textureMap.emplace(filename, (u16)m_textures.size());
 	m_textures.emplace_back(std::move(surface));
 }
 

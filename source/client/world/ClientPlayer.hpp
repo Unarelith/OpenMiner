@@ -78,7 +78,7 @@ class ClientPlayer : public Player {
 
 		gk::Vector3f m_cameraLocalPos;
 
-		gk::Vector3f m_velocity = gk::Vector3f::Zero;
+		gk::Vector3f m_velocity{0, 0, 0};
 
 		// For view bobbing only
 		bool m_isMoving = false;

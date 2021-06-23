@@ -64,7 +64,7 @@ class ClientChunk : public Chunk {
 
 		const gk::VertexBuffer &getVertexBuffer() { return m_vbo; }
 		const gk::VertexArray &getVertexArray() { return m_vao; }
-		GLint getBufferOffset(u8 layer) const { return std::accumulate(m_verticesCount.begin(), m_verticesCount.begin() + layer, 0); }
+		std::size_t getBufferOffset(u8 layer) const { return std::accumulate(m_verticesCount.begin(), m_verticesCount.begin() + layer, std::size_t(0)); }
 
 		std::size_t getVerticesCount(u8 layer) const { return m_verticesCount[layer]; }
 		void setVerticesCount(u8 layer, std::size_t count) { m_verticesCount[layer] = count; }

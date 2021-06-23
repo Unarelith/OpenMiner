@@ -36,7 +36,7 @@
 namespace fs = ghc::filesystem;
 
 WorldDeletionState::WorldDeletionState(const std::string &worldName, TitleScreenState *titleScreen) : InterfaceState(titleScreen) {
-	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
+	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
 	m_filter.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 176));
 

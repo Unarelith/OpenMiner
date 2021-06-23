@@ -41,9 +41,9 @@ TextButton::TextButton(u16 width, Widget *parent) : Widget(width, 20, parent) {
 	m_hoverBackgroundBorder.setClipRect(200 - 2, 86, 2, 20);
 	m_disabledBackgroundBorder.setClipRect(200 - 2, 46, 2, 20);
 
-	m_backgroundBorder.setPosition(width - 2, 0);
-	m_hoverBackgroundBorder.setPosition(width - 2, 0);
-	m_disabledBackgroundBorder.setPosition(width - 2, 0);
+	m_backgroundBorder.setPosition(width - 2.f, 0);
+	m_hoverBackgroundBorder.setPosition(width - 2.f, 0);
+	m_disabledBackgroundBorder.setPosition(width - 2.f, 0);
 }
 
 TextButton::TextButton(const CppCallback &callback, Widget *parent) : TextButton(parent) {

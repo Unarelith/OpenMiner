@@ -59,7 +59,7 @@ TitleScreenState::TitleScreenState(u16 port) : m_port(port) {
 		m_stateStack->pop();
 	});
 
-	m_titleText.setScale(Config::guiScale * 4, Config::guiScale * 4);
+	m_titleText.setScale(Config::guiScale * 4.f, Config::guiScale * 4.f);
 	m_titleText.setString(APP_NAME);
 	m_titleText.updateVertexBuffer();
 
@@ -148,7 +148,7 @@ void TitleScreenState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 	m_menuWidget.setScale(event.guiScale, event.guiScale);
 	m_menuWidget.onGuiScaleChanged(event);
 
-	m_titleText.setScale(event.guiScale * 4, event.guiScale * 4);
+	m_titleText.setScale(event.guiScale * 4.f, event.guiScale * 4.f);
 	m_versionText.setScale(event.guiScale, event.guiScale);
 	m_copyrightText.setScale(event.guiScale, event.guiScale);
 	m_licenseText.setScale(event.guiScale, event.guiScale);

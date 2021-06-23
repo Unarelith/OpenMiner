@@ -300,7 +300,7 @@ void ChunkRenderer::drawChunks(gk::RenderTarget &target, gk::RenderStates states
 			states.shader->setUniform(modelMatrixUniform, it.second);
 
 			gk::VertexArray::bind(&it.first->getVertexArray());
-			target.drawArrays(GL_TRIANGLES, it.first->getBufferOffset(layer), (GLsizei)verticesCount);
+			target.drawArrays(GL_TRIANGLES, (GLint)it.first->getBufferOffset(layer), (GLsizei)verticesCount);
 			gk::VertexArray::bind(nullptr);
 
 			if (!it.first->hasBeenDrawn())

@@ -62,8 +62,8 @@ void ClientWorld::update(bool allowWorldReload) {
 		ClientChunk::chunkUpdateTime = time;
 	}
 	if (time > ClientChunk::chunkDrawTime) {
-		ClientChunk::chunksRenderedPerFrame = ClientChunk::chunkDrawCounter / std::max(1ul, ClientChunk::frameCounter - ClientChunk::chunkDrawStartFrame);
-		ClientChunk::chunkDrawCallPerFrame = ClientChunk::chunkDrawCallCounter / std::max(1ul, ClientChunk::frameCounter - ClientChunk::chunkDrawStartFrame);
+		ClientChunk::chunksRenderedPerFrame = ClientChunk::chunkDrawCounter / std::max<u64>(1, ClientChunk::frameCounter - ClientChunk::chunkDrawStartFrame);
+		ClientChunk::chunkDrawCallPerFrame = ClientChunk::chunkDrawCallCounter / std::max<u64>(1, ClientChunk::frameCounter - ClientChunk::chunkDrawStartFrame);
 		ClientChunk::chunkDrawCounter = 0;
 		ClientChunk::chunkDrawCallCounter = 0;
 		ClientChunk::chunkDrawTime = time;

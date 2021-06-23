@@ -44,7 +44,7 @@
 #include "World.hpp"
 
 SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : InterfaceState(parent) {
-	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
+	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
 	m_filter1.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
 	m_filter2.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 120));
@@ -101,7 +101,7 @@ void SettingsMenuState::onEvent(const SDL_Event &event) {
 }
 
 void SettingsMenuState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
-	m_background.setScale(event.guiScale * 2, event.guiScale * 2);
+	m_background.setScale(event.guiScale * 2.f, event.guiScale * 2.f);
 	m_title.setScale(event.guiScale, event.guiScale);
 
 	m_menuWidget.setScale(event.guiScale, event.guiScale);

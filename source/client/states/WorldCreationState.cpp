@@ -45,7 +45,7 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 	if (!originalName.empty())
 		m_isEdition = true;
 
-	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
+	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
 	m_filter.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
 
@@ -94,7 +94,7 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 					m_stateStack->pop();
 
 				if (!m_isEdition) {
-					Random::seed(time(nullptr));
+					Random::seed((unsigned int)std::time(nullptr));
 					s32 seed = Random::get<s32>(std::numeric_limits<s32>::min(), std::numeric_limits<s32>::max());
 					if (!m_seedInput.string().empty()) {
 						try {

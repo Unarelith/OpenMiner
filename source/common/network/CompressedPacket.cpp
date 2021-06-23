@@ -43,7 +43,7 @@ const void* CompressedPacket::onSend(std::size_t& size) {
 	const Bytef* srcData = static_cast<const Bytef*>(getData());
 
 	// Get the size of the packet to send
-	uLong srcSize = getDataSize();
+	uLong srcSize = (uLong)getDataSize();
 
 	// Compute the size of the compressed data
 	uLong dstSize = compressBound(srcSize);
@@ -86,7 +86,7 @@ void CompressedPacket::onReceive(const void* data, std::size_t size) {
 	uLong dstSize = uncompressedSize;
 
 	// Uncompress the data (remove the first two bytes)
-	int result = uncompress(m_compressionBuffer.data(), &dstSize, (srcData + 2), size - 2);
+	int result = uncompress(m_compressionBuffer.data(), &dstSize, (srcData + 2), (uLong)(size - 2));
 	if (result != Z_OK)
 		gkError() << "Failed to uncompress packet";
 

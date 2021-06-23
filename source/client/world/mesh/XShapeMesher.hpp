@@ -29,7 +29,7 @@
 
 #include <gk/core/IntTypes.hpp>
 
-class ChunkMeshBuildingJob;
+struct ChunkMeshBuildingJob;
 class BlockState;
 
 class XShapeMesher {

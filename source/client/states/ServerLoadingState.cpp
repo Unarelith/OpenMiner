@@ -41,14 +41,14 @@
 ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, const std::string &host, u16 port, gk::ApplicationState *parent)
 	: InterfaceState(parent), m_game(game), m_showLoadingState(showLoadingState)
 {
-	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
+	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
 	m_filter.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
 
 	m_text.setString("Loading world...");
 	m_text.setColor(gk::Color::White);
 	m_text.updateVertexBuffer();
-	m_text.setScale(Config::guiScale * 2, Config::guiScale * 2);
+	m_text.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
 	updateWidgetPosition();
 

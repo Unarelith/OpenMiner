@@ -41,7 +41,7 @@ SliderWidget::SliderWidget(u16 width, Widget *parent) : Widget(width, 20, parent
 	m_backgroundBorder.setClipRect(200 - 2, 46, 2, 20);
 
 	m_sliderBorder.setPosition(8 - 2, 0);
-	m_backgroundBorder.setPosition(width - 2, 0);
+	m_backgroundBorder.setPosition(width - 2.f, 0);
 }
 
 void SliderWidget::onEvent(const SDL_Event &event) {

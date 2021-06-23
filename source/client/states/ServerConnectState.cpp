@@ -31,7 +31,7 @@
 #include "ServerLoadingState.hpp"
 
 ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : InterfaceState(parent) {
-	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
+	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
 	m_filter.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
 
@@ -68,7 +68,7 @@ ServerConnectState::ServerConnectState(gk::ApplicationState *parent) : Interface
 			try {
 				port = std::stoi(m_addressInput.string().substr(sep + 1));
 			}
-			catch (const std::invalid_argument &e) {
+			catch (std::invalid_argument &) {
 				isPortInvalid = true;
 			}
 		}

@@ -37,7 +37,7 @@
 #include "World.hpp"
 
 ServerChunk::ServerChunk(s32 x, s32 y, s32 z, ServerWorld &world) : Chunk(x, y, z, world), m_world(world) {
-	m_random.seed(std::time(nullptr));
+	m_random.seed((unsigned int)std::time(nullptr));
 }
 
 void ServerChunk::update() {

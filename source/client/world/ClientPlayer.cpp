@@ -138,7 +138,7 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 	}
 	// Block player until the chunk loads, unless "no clip" mode is enabled
 	else if (!Config::isNoClipEnabled) {
-		m_velocity = gk::Vector3f::Zero;
+		m_velocity.reset(0, 0, 0);
 	}
 
 	if (!Config::isNoClipEnabled)
@@ -225,7 +225,7 @@ void ClientPlayer::testPoint(const ClientWorld &world, double x, double y, doubl
 }
 
 void ClientPlayer::applyViewBobbing(float &viewAngleH, float &viewAngleV, float &viewAngleRoll) {
-	if (m_velocity != gk::Vector3f::Zero && m_velocity.z == 0 && !Config::isFlyModeEnabled) {
+	if (!m_velocity.isZero() && m_velocity.z == 0 && !Config::isFlyModeEnabled) {
 		if (!m_isMoving) {
 			m_movementStartTime = gk::GameClock::getInstance().getTicks();
 			m_isMoving = true;

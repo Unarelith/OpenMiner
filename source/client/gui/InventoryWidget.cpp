@@ -159,7 +159,7 @@ void InventoryWidget::loadItemWidgets(u16 offset, u16 size, std::string search) 
 
 			ItemWidget &widget = m_itemWidgets.back();
 			widget.update();
-			widget.setPosition((itemCounter % m_inventory->width()) * 18, (itemCounter / m_inventory->width()) * 18, 0);
+			widget.setPosition((itemCounter % m_inventory->width()) * 18.f, (itemCounter / m_inventory->width()) * 18.f, 0);
 
 			itemCounter++;
 		}

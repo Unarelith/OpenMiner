@@ -36,14 +36,14 @@ WorldSavingState::WorldSavingState(Client &client, bool closeClient, gk::Applica
 {
 	m_closeClient = closeClient;
 
-	m_background.setScale(Config::guiScale * 2, Config::guiScale * 2);
+	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
 	m_filter.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
 
 	m_text.setString("Saving world...");
 	m_text.setColor(gk::Color::White);
 	m_text.updateVertexBuffer();
-	m_text.setScale(Config::guiScale * 2, Config::guiScale * 2);
+	m_text.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
 	m_client.setCommandCallback(Network::Command::ServerClosed, [&](sf::Packet &) {
 		m_isWorldSaved = true;

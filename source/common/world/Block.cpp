@@ -67,9 +67,9 @@ void Block::deserialize(sf::Packet &packet) {
 
 BlockState &Block::addState() {
 	if (!m_states.empty())
-		m_states.emplace_back(m_states.size(), this, &getState(0));
+		m_states.emplace_back((u16)m_states.size(), this, &getState(0));
 	else
-		m_states.emplace_back(m_states.size(), this, nullptr);
+		m_states.emplace_back((u16)m_states.size(), this, nullptr);
 	return m_states.back();
 }
 

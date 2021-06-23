@@ -84,7 +84,7 @@ void ScrollableList::onEvent(const SDL_Event &event) {
 }
 
 void ScrollableList::addElement(const std::string &line1, const std::string &line2, const std::string &line3, bool isSelected) {
-	m_elements.emplace_back(m_elements.size(), line1, line2, line3, this);
+	m_elements.emplace_back((u16)m_elements.size(), line1, line2, line3, this);
 
 	ScrollableListElement &element = m_elements.back();
 	element.setPosition(0.f, float(m_elements.size() - 1) * float(m_elements.back().height() + 4) + 2.f);
