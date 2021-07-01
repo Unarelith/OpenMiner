@@ -200,21 +200,43 @@ void BlockMesher::addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob 
 		vertices[v].texCoord[0] = gk::qlerpf(blockTexCoords.x, blockTexCoords.x + blockTexCoords.sizeX, U);
 		vertices[v].texCoord[1] = gk::qlerpf(blockTexCoords.y, blockTexCoords.y + blockTexCoords.sizeY, V);
 
+		// Lighting-based implementation
+		bool useAO = Config::ambientOcclusion == 2 && blockState.drawType() != BlockDrawType::Multibox;
+
 		if (Config::isSmoothLightingEnabled)
-			vertices[v].lightValue[0] = getLightForVertex(LightType::Sun, x, y, z, *neighbourOfs[v], normal, job.chunkData);
+			vertices[v].lightValue[0] = getLightForVertex(LightType::Sun, x, y, z, *neighbourOfs[v], normal, job.chunkData, useAO);
 		else if (blockState.isOpaque())
 			vertices[v].lightValue[0] = job.chunkData.getSunlight(sx, sy, sz);
 		else
 			vertices[v].lightValue[0] = job.chunkData.getSunlight(x, y, z);
 
 		if (Config::isSmoothLightingEnabled && !blockState.isLightSource())
-			vertices[v].lightValue[1] = getLightForVertex(LightType::Torch, x, y, z, *neighbourOfs[v], normal, job.chunkData);
+			vertices[v].lightValue[1] = getLightForVertex(LightType::Torch, x, y, z, *neighbourOfs[v], normal, job.chunkData, useAO);
 		else if (blockState.isOpaque())
 			vertices[v].lightValue[1] = job.chunkData.getTorchlight(sx, sy, sz);
 		else
 			vertices[v].lightValue[1] = job.chunkData.getTorchlight(x, y, z);
 
 		vertices[v].ambientOcclusion = getAmbientOcclusion(x, y, z, *neighbourOfs[v], normal, job.chunkData);
+	}
+
+	// Fix basic ambient occlusion for multibox draw type
+	if (blockState.drawType() == BlockDrawType::Multibox) {
+		float aoValues[nVertsPerFace] = {
+			vertices[0].ambientOcclusion,
+			vertices[1].ambientOcclusion,
+			vertices[2].ambientOcclusion,
+			vertices[3].ambientOcclusion
+		};
+
+		for (u8f v = 0; v < nVertsPerFace; ++v) {
+			float U = (v == 0 || v == 3) ? U0 : U1;
+			float V = 1.f - ((v >= 2) ? V0 : V1);
+
+			float a = gk::lerpf(aoValues[0], aoValues[1], U);
+			float b = gk::lerpf(aoValues[3], aoValues[2], U);
+			vertices[v].ambientOcclusion = gk::lerpf(a, b, V);
+		}
 	}
 
 	auto addVertex = [&](u8 v) {

@@ -40,7 +40,7 @@ namespace LightUtils {
 
 	u8 getLightForVertex(LightType lightType, s8f x, s8f y, s8f z,
 	                     const gk::Vector3<s8f> &offset,
-	                     const gk::Vector3<s8f> &normal, const ChunkData &chunk);
+	                     const gk::Vector3<s8f> &normal, const ChunkData &chunk, bool useAO);
 };
 
 #endif // LIGHTUTILS_HPP_

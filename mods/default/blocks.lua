@@ -880,6 +880,8 @@ mod:block {
 		om_material_wood = 1,
 	},
 
+	is_opaque = false,
+
 	draw_type = "multibox",
 
 	bounding_box = {2/16, 2/16, 0, 12/16, 12/16, 14/16},
