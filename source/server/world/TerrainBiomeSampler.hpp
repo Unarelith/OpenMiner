@@ -31,7 +31,7 @@
 
 #include <gk/core/IntTypes.hpp>
 
-#include "FastNoise.hpp"
+#include "FastNoiseLite.hpp"
 
 class Dimension;
 
@@ -39,7 +39,7 @@ class TerrainBiomeSampler {
 	public:
 		TerrainBiomeSampler(const Dimension &dimension, s32 seed);
 
-		u16 getBiomeIndexAt(s32 x, s32 y) const;
+		u16 getBiomeIndexAt(s32 x, s32 y);
 
 		// std::vector<WeightedIndex> getWeightedBiomeIndicesAt(double x, double y);
 
@@ -49,7 +49,7 @@ class TerrainBiomeSampler {
 
 		const Dimension &m_dimension;
 
-		std::vector<FastNoise> m_paramNoises;
+		std::vector<FastNoiseLite> m_paramNoises;
 };
 
 #endif // TERRAINBIOMESAMPLER_HPP_

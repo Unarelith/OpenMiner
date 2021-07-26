@@ -148,6 +148,11 @@ include_directories(external/lua/src)
 add_subdirectory(external/sol2)
 
 #------------------------------------------------------------------------------
+# - FastNoiseLite
+#------------------------------------------------------------------------------
+include_directories(SYSTEM external/FastNoiseLite)
+
+#------------------------------------------------------------------------------
 # Subdirectories
 #------------------------------------------------------------------------------
 add_subdirectory(source/common)

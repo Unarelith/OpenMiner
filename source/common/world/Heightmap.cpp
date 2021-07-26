@@ -30,10 +30,10 @@
 void HeightmapChunk::generate() {
 	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
 		for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
-			double n1 = m_heightmap.noise1.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
-			double n2 = m_heightmap.noise2.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
-			double n3 = m_heightmap.noise3.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
-			double n4 = m_heightmap.noise4.GetNoise(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
+			double n1 = m_heightmap.noise1.GetNoise<double>(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
+			double n2 = m_heightmap.noise2.GetNoise<double>(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
+			double n3 = m_heightmap.noise3.GetNoise<double>(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
+			double n4 = m_heightmap.noise4.GetNoise<double>(x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH);
 			m_map[x + y * CHUNK_WIDTH] = s32((n1 + (n2 * n3 * (n4 * 2 - 1))) * 64 + 64);
 		}
 	}
@@ -48,22 +48,25 @@ void HeightmapChunk::setLandHeight(s8 x, s8 y, s32 height) {
 }
 
 Heightmap::Heightmap(s32 seed) {
-	noise1.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
-	noise1.SetFrequency(1 / 256.0f);
+	noise1.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+	noise1.SetFractalType(FastNoiseLite::FractalType_FBm);
 	noise1.SetFractalOctaves(4);
+	noise1.SetFrequency(1 / 256.0f);
 
-	noise2.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
-	noise2.SetFrequency(1 / 256.0f);
+	noise2.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+	noise2.SetFractalType(FastNoiseLite::FractalType_FBm);
 	noise2.SetFractalOctaves(4);
+	noise2.SetFrequency(1 / 256.0f);
 
-	noise3.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
-	noise3.SetFrequency(1 / 256.0f);
+	noise3.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+	noise3.SetFractalType(FastNoiseLite::FractalType_FBm);
 	noise3.SetFractalOctaves(4);
+	noise3.SetFrequency(1 / 256.0f);
 
-	noise4.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
-	noise4.SetFractalType(FastNoise::FractalType::Billow);
+	noise4.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+	// noise4.SetFractalType(FastNoiseLite::FractalType_FBm);
+	// noise4.SetFractalOctaves(1);
 	noise4.SetFrequency(1 / 1024.0f);
-	noise4.SetFractalOctaves(1);
 
 	setSeed(seed);
 }
