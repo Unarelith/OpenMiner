@@ -34,7 +34,7 @@
 #include <gk/core/Vector2.hpp>
 
 #include "EngineConfig.hpp"
-#include "FastNoise.hpp"
+#include "FastNoiseLite.hpp"
 
 class Heightmap;
 
@@ -70,10 +70,10 @@ class Heightmap {
 
 		void setSeed(s32 seed);
 
-		FastNoise noise1;
-		FastNoise noise2;
-		FastNoise noise3;
-		FastNoise noise4;
+		FastNoiseLite noise1;
+		FastNoiseLite noise2;
+		FastNoiseLite noise3;
+		FastNoiseLite noise4;
 
 	private:
 		std::unordered_map<gk::Vector2i, HeightmapChunk> m_chunks;
