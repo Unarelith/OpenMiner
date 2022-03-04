@@ -24,9 +24,12 @@
  *
  * =====================================================================================
  */
+#include <gk/core/Debug.hpp>
+
 #include "EngineConfig.hpp"
 #include "Inventory.hpp"
 #include "Network.hpp"
+#include "Registry.hpp"
 
 void Inventory::setStack(u16 x, u16 y, const std::string &stringID, u16 amount) {
 	m_items.at(x + y * m_width) = ItemStack(stringID, amount);
@@ -120,7 +123,12 @@ void Inventory::deserialize(sf::Packet &packet) {
 	u8 x, y;
 	while (i < itemListSize) {
 		packet >> name >> amount >> x >> y;
-		setStack(x, y, name, amount);
+
+		if (Registry::getInstance().hasItem(name))
+			setStack(x, y, name, amount);
+		else
+			gkError() << "Inventory::deserialize: Failed to find item in registry:" << name;
+
 		++i;
 	}
 }

@@ -116,6 +116,9 @@ class Registry : public gk::ISerializable {
 		const Dimension &getDimension(u16 id) const { return m_dimensions.at(id); }
 		const Key &getKey(u16 id) const;
 
+		bool hasBlock(const std::string &stringID) const { return m_blocksID.find(stringID) != m_blocksID.end(); }
+		bool hasItem(const std::string &stringID) const { return m_itemsID.find(stringID) != m_itemsID.end(); }
+
 		const Block &getBlockFromStringID(const std::string &stringID);
 		const Item &getItemFromStringID(const std::string &stringID);
 		const Sky &getSkyFromStringID(const std::string &stringID);

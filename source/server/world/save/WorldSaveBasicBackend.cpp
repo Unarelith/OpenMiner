@@ -48,6 +48,9 @@ void WorldSaveBasicBackend::load(const std::string &name) {
 
 	std::ifstream file("saves/" + name + ".dat", std::ofstream::binary);
 
+	// Note: Registry should be saved, otherwise blocks won't match since they're stored using
+	//       their integer ID (not string ID), so we need to add a check for that
+
 	if (file.is_open()) {
 		file.seekg(0, file.end);
 		std::size_t length = file.tellg();
