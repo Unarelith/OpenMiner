@@ -98,58 +98,7 @@ void GameState::onEvent(const SDL_Event &event) {
 	}
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
-		KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
-
-		if (event.type == SDL_MOUSEMOTION) {
-			if(Config::screenWidth / 2 != event.motion.x || Config::screenHeight / 2 != event.motion.y) {
-				m_player.turnH((float)event.motion.xrel * -0.01f * Config::mouseSensitivity);
-				m_player.turnViewV((float)event.motion.yrel * -0.01f * Config::mouseSensitivity);
-
-				gk::Mouse::resetToWindowCenter();
-			}
-		}
-		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-			m_stateStack->push<PauseMenuState>(m_client, this);
-		}
-		else if (event.type == SDL_WINDOWEVENT) {
-			if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
-				m_stateStack->push<PauseMenuState>(m_client, this);
-
-				gk::Mouse::setCursorGrabbed(false);
-				gk::Mouse::setCursorVisible(true);
-			}
-			else if (event.type == SDL_WINDOWEVENT_FOCUS_GAINED) {
-				gk::Mouse::setCursorGrabbed(true);
-				gk::Mouse::setCursorVisible(false);
-			}
-		}
-		else if (event.type == SDL_KEYDOWN) {
-			if (event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Chat)
-			 || event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Command)) {
-				m_stateStack->push<ChatState>(m_clientCommandHandler, m_hud.chat(), event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Command), this);
-			}
-			else if (event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::BlockInfoToggle)) {
-				Config::isBlockInfoWidgetEnabled = !Config::isBlockInfoWidgetEnabled;
-			}
-			else if (event.key.keysym.sym == SDLK_F2) {
-				std::time_t now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-
-				char filename[100];
-				std::strftime(filename, sizeof(filename), "Screenshot-%Y-%m-%d-%H-%M-%S.png", std::localtime(&now));
-
-				bool isScreenshotSaved = gk::Window::saveScreenshot(0, 0, Config::screenWidth, Config::screenHeight, filename);
-				if (isScreenshotSaved)
-					m_hud.chat().addChatMessage(0, "Screenshot saved: " + std::string(filename));
-				else
-					m_hud.chat().addChatMessage(0, "Failed to save screenshot");
-			}
-
-			for (auto &key : Registry::getInstance().keys()) {
-				if (event.key.keysym.sym == key.keycode()) {
-					m_clientCommandHandler.sendKeyPressed(key.id());
-				}
-			}
-		}
+		m_inputSystem.onEvent(event, m_stateStack, this);
 
 		m_hud.onEvent(event);
 	}
@@ -158,34 +107,7 @@ void GameState::onEvent(const SDL_Event &event) {
 }
 
 void GameState::update() {
-	m_world.checkPlayerChunk(m_player.x(), m_player.y(), m_player.z());
-	m_world.update(!m_stateStack->empty() && (&m_stateStack->top() == this || m_stateStack->top().parent() == this));
-
-	if (m_camera.getFieldOfView() != Config::cameraFOV)
-		m_camera.setFieldOfView(Config::cameraFOV);
-
-	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
-		m_player.processInputs();
-	}
-
-	if (!m_areModKeysLoaded) {
-		for (auto &it : Registry::getInstance().keys()) {
-			m_keyboardHandler->addKey(it.id(), it.name(), it.keycode(), it.stringID(), &it);
-		}
-
-		m_areModKeysLoaded = true;
-	}
-
-	m_player.updatePosition(m_world);
-
-	m_hud.update();
-
-	if (gk::GameClock::getInstance().getTicks() % 100 < 10) {
-		m_clientCommandHandler.sendPlayerPosUpdate();
-		m_clientCommandHandler.sendPlayerRotUpdate();
-	}
-
-	m_client.update();
+	m_inputSystem.update(m_stateStack, this);
 
 	static const Sky *sky = nullptr;
 	if (sky != m_world.sky() && m_world.sky()) {

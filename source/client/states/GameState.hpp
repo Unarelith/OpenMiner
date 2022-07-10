@@ -39,6 +39,7 @@
 #include "ClientWorld.hpp"
 #include "Config.hpp"
 #include "HUD.hpp"
+#include "InputSystem.hpp"
 #include "KeyboardHandler.hpp"
 #include "PlayerBox.hpp"
 #include "Registry.hpp"
@@ -94,10 +95,10 @@ class GameState : public gk::ApplicationState {
 		ClientWorld m_world;
 
 		KeyboardHandler *m_keyboardHandler;
-		bool m_areModKeysLoaded = false;
 
 		Skybox m_skybox{m_camera, m_world};
 
+		InputSystem m_inputSystem{m_camera, m_world, m_skybox, m_hud, m_player, m_client, m_clientCommandHandler};
 		RenderingSystem m_renderingSystem{m_camera, m_world, m_skybox, m_playerBoxes, m_hud, m_player};
 };
 
