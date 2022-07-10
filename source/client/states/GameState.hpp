@@ -38,11 +38,11 @@
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "Config.hpp"
-#include "Framebuffer.hpp"
 #include "HUD.hpp"
 #include "KeyboardHandler.hpp"
 #include "PlayerBox.hpp"
 #include "Registry.hpp"
+#include "RenderingSystem.hpp"
 #include "Skybox.hpp"
 
 class TextureAtlas;
@@ -72,15 +72,9 @@ class GameState : public gk::ApplicationState {
 		}
 
 	private:
-		void initShaders();
-
 		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
 
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
-
-		gk::Shader m_shader;
-
-		Framebuffer m_fbo{Config::screenWidth, Config::screenHeight};
 
 		gk::Camera m_camera{70.0f, DIST_NEAR, DIST_FAR};
 		ClientPlayer m_player{m_camera};
@@ -103,6 +97,8 @@ class GameState : public gk::ApplicationState {
 		bool m_areModKeysLoaded = false;
 
 		Skybox m_skybox{m_camera, m_world};
+
+		RenderingSystem m_renderingSystem{m_camera, m_world, m_skybox, m_playerBoxes, m_hud, m_player};
 };
 
 #endif // GAMESTATE_HPP_

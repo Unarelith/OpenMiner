@@ -54,7 +54,7 @@ GameState::GameState()
 {
 	Registry::setInstance(m_registry);
 
-	initShaders();
+	m_renderingSystem.initShaders();
 
 	m_clientCommandHandler.setupCallbacks();
 
@@ -154,15 +154,7 @@ void GameState::onEvent(const SDL_Event &event) {
 		m_hud.onEvent(event);
 	}
 
-	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-		Config::screenWidth = (u16)event.window.data1;
-		Config::screenHeight = (u16)event.window.data2;
-
-		m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
-		m_hud.setup();
-
-		m_fbo.init(Config::screenWidth, Config::screenHeight);
-	}
+	m_renderingSystem.onEvent(event);
 }
 
 void GameState::update() {
@@ -202,64 +194,11 @@ void GameState::update() {
 	}
 }
 
-void GameState::initShaders() {
-	m_shader.createProgram();
-	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/game.v.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/light.f.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/fog.f.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/game.f.glsl");
-	m_shader.bindAttributeLocation(3, "normal");
-	m_shader.bindAttributeLocation(4, "lightValue");
-	m_shader.bindAttributeLocation(5, "ambientOcclusion");
-	m_shader.linkProgram();
-
-	m_fbo.loadShader("screen");
-}
-
 void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 	m_hud.onGuiScaleChanged(event);
 }
 
 void GameState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
-	gk::Shader::bind(&m_shader);
-
-	if (m_world.sky()) {
-		if (m_world.sky()->daylightCycleSpeed() > 0.f) {
-			float time = GameTime::getCurrentTime(0, m_world.sky()->daylightCycleSpeed());
-			const gk::Color &color = GameTime::getSkyColorFromTime(*m_world.sky(), time);
-			glClearColor(color.r, color.g, color.b, color.a);
-
-			m_shader.setUniform("u_skyColor", color);
-			m_shader.setUniform("u_sunlightIntensity", GameTime::getSunlightIntensityFromTime(time));
-		}
-		else {
-			const gk::Color &color = m_world.sky()->color();
-			glClearColor(color.r, color.g, color.b, color.a);
-
-			m_shader.setUniform("u_skyColor", m_world.sky()->color());
-			m_shader.setUniform("u_sunlightIntensity", 1.f);
-		}
-	}
-
-	gk::Shader::bind(nullptr);
-
-	m_fbo.begin();
-
-	states.shader = &m_shader;
-
-	target.setView(m_camera);
-
-	target.draw(m_skybox, states);
-	target.draw(m_world, states);
-
-	for (auto &it : m_playerBoxes)
-		if (it.second.dimension() == m_player.dimension())
-			target.draw(it.second, states);
-
-	target.draw(m_hud.blockCursor(), states);
-
-	m_fbo.end();
-
-	target.draw(m_hud, states);
+	target.draw(m_renderingSystem, states);
 }
 
