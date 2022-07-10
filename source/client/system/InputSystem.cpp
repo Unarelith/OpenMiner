@@ -33,22 +33,22 @@
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "GameKey.hpp"
+#include "GameplaySystem.hpp"
+#include "HUD.hpp"
 #include "InputSystem.hpp"
 #include "KeyboardHandler.hpp"
 #include "Skybox.hpp"
-
-#include "ChatState.hpp"
-#include "PauseMenuState.hpp"
 
 void InputSystem::onEvent(const SDL_Event &event) {
 	KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
 
 	if (event.type == SDL_MOUSEMOTION) {
-		rotateCamera(event);
+		m_gameplaySystem.rotateCamera(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
 	}
 	else if (event.type == SDL_WINDOWEVENT) {
 		if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
-			pauseGame();
+			m_gameplaySystem.pauseGame();
+
 			ungrabMouseCursor();
 		}
 		else if (event.type == SDL_WINDOWEVENT_FOCUS_GAINED) {
@@ -57,19 +57,19 @@ void InputSystem::onEvent(const SDL_Event &event) {
 	}
 	else if (event.type == SDL_KEYDOWN) {
 		if (event.key.keysym.sym == SDLK_ESCAPE) {
-			pauseGame();
+			m_gameplaySystem.pauseGame();
 		}
 		if (event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Chat)) {
-			openChat(false);
+			m_gameplaySystem.openChat(false);
 		}
 		else if (event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Command)) {
-			openChat(true);
+			m_gameplaySystem.openChat(true);
 		}
 		else if (event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::BlockInfoToggle)) {
 			Config::isBlockInfoWidgetEnabled = !Config::isBlockInfoWidgetEnabled;
 		}
 		else if (event.key.keysym.sym == SDLK_F2) {
-			takeScreenshot();
+			m_gameplaySystem.takeScreenshot();
 		}
 
 		sendKeyPressEventToServer(event);
@@ -84,19 +84,6 @@ void InputSystem::update() {
 	updateClient();
 }
 
-void InputSystem::rotateCamera(const SDL_Event &event) {
-	if(Config::screenWidth / 2 != event.motion.x || Config::screenHeight / 2 != event.motion.y) {
-		m_player.turnH((float)event.motion.xrel * -0.01f * Config::mouseSensitivity);
-		m_player.turnViewV((float)event.motion.yrel * -0.01f * Config::mouseSensitivity);
-
-		gk::Mouse::resetToWindowCenter();
-	}
-}
-
-void InputSystem::pauseGame() {
-	m_stateStack->push<PauseMenuState>(m_client, m_currentState);
-}
-
 void InputSystem::grabMouseCursor() {
 	gk::Mouse::setCursorGrabbed(true);
 	gk::Mouse::setCursorVisible(false);
@@ -105,23 +92,6 @@ void InputSystem::grabMouseCursor() {
 void InputSystem::ungrabMouseCursor() {
 	gk::Mouse::setCursorGrabbed(false);
 	gk::Mouse::setCursorVisible(true);
-}
-
-void InputSystem::openChat(bool addSlash) {
-	m_stateStack->push<ChatState>(m_clientCommandHandler, m_hud.chat(), addSlash, m_currentState);
-}
-
-void InputSystem::takeScreenshot() {
-	std::time_t now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-
-	char filename[100];
-	std::strftime(filename, sizeof(filename), "Screenshot-%Y-%m-%d-%H-%M-%S.png", std::localtime(&now));
-
-	bool isScreenshotSaved = gk::Window::saveScreenshot(0, 0, Config::screenWidth, Config::screenHeight, filename);
-	if (isScreenshotSaved)
-		m_hud.chat().addChatMessage(0, "Screenshot saved: " + std::string(filename));
-	else
-		m_hud.chat().addChatMessage(0, "Failed to save screenshot");
 }
 
 void InputSystem::sendKeyPressEventToServer(const SDL_Event &event) {

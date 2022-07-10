@@ -34,16 +34,20 @@
 
 #include "Config.hpp"
 #include "Framebuffer.hpp"
-#include "HUD.hpp"
 #include "PlayerBox.hpp"
 
+class Client;
+class ClientCommandHandler;
+class ClientPlayer;
 class ClientWorld;
+class GameplaySystem;
+class HUD;
 class Skybox;
 
 class InputSystem {
 	public:
-		InputSystem(gk::Camera &camera, ClientWorld &world, Skybox &skybox, HUD &hud, ClientPlayer &player, Client &client, ClientCommandHandler &clientCommandHandler)
-			: m_camera(camera), m_world(world), m_skybox(skybox), m_hud(hud), m_player(player), m_client(client), m_clientCommandHandler(clientCommandHandler) {}
+		InputSystem(gk::Camera &camera, ClientWorld &world, Skybox &skybox, HUD &hud, ClientPlayer &player, Client &client, ClientCommandHandler &clientCommandHandler, GameplaySystem &GameplaySystem)
+			: m_camera(camera), m_world(world), m_skybox(skybox), m_hud(hud), m_player(player), m_client(client), m_clientCommandHandler(clientCommandHandler), m_gameplaySystem(GameplaySystem) {}
 
 		void setStateInfo(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState) {
 			m_stateStack = stateStack;
@@ -56,12 +60,8 @@ class InputSystem {
 
 	private:
 		// Event actions
-		void rotateCamera(const SDL_Event &event);
-		void pauseGame();
 		void grabMouseCursor();
 		void ungrabMouseCursor();
-		void openChat(bool addSlash);
-		void takeScreenshot();
 		void sendKeyPressEventToServer(const SDL_Event &event);
 
 		// Update process
@@ -77,6 +77,7 @@ class InputSystem {
 		ClientPlayer &m_player;
 		Client &m_client;
 		ClientCommandHandler &m_clientCommandHandler;
+		GameplaySystem &m_gameplaySystem;
 
 		gk::ApplicationStateStack *m_stateStack;
 		gk::ApplicationState *m_currentState;

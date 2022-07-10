@@ -38,6 +38,7 @@
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "Config.hpp"
+#include "GameplaySystem.hpp"
 #include "HUD.hpp"
 #include "InputSystem.hpp"
 #include "KeyboardHandler.hpp"
@@ -98,7 +99,8 @@ class GameState : public gk::ApplicationState {
 
 		Skybox m_skybox{m_camera, m_world};
 
-		InputSystem m_inputSystem{m_camera, m_world, m_skybox, m_hud, m_player, m_client, m_clientCommandHandler};
+		GameplaySystem m_gameplaySystem{m_player, m_client, m_clientCommandHandler, m_hud};
+		InputSystem m_inputSystem{m_camera, m_world, m_skybox, m_hud, m_player, m_client, m_clientCommandHandler, m_gameplaySystem};
 		RenderingSystem m_renderingSystem{m_camera, m_world, m_skybox, m_playerBoxes, m_hud, m_player};
 };
 
