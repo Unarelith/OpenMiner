@@ -111,12 +111,10 @@ void GameState::onEvent(const SDL_Event &event) {
 
 void GameState::update() {
 	m_inputSystem.update();
+	m_gameplaySystem.update();
+	m_renderingSystem.update();
 
-	static const Sky *sky = nullptr;
-	if (sky != m_world.sky() && m_world.sky()) {
-		sky = m_world.sky();
-		m_skybox.loadSky(*sky);
-	}
+	m_messageBus.update();
 }
 
 void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {

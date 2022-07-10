@@ -27,8 +27,15 @@
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "GameTime.hpp"
+#include "MessageBus.hpp"
 #include "RenderingSystem.hpp"
 #include "Skybox.hpp"
+
+RenderingSystem::RenderingSystem(MessageBus &messageBus, gk::Camera &camera, ClientWorld &world, HUD &hud, Skybox &skybox)
+	: m_messageBus(messageBus), m_camera(camera), m_world(world), m_hud(hud), m_skybox(skybox)
+{
+	m_messageBus.subscribe<RenderingEvent::DrawObjects>(*this, &RenderingSystem::onDrawObjects);
+}
 
 void RenderingSystem::initShaders() {
 	m_shader.createProgram();
@@ -42,6 +49,17 @@ void RenderingSystem::initShaders() {
 	m_shader.linkProgram();
 
 	m_fbo.loadShader("screen");
+}
+
+void RenderingSystem::update() {
+	if (m_camera.getFieldOfView() != Config::cameraFOV)
+		m_camera.setFieldOfView(Config::cameraFOV);
+
+	static const Sky *sky = nullptr;
+	if (sky != m_world.sky() && m_world.sky()) {
+		sky = m_world.sky();
+		m_skybox.loadSky(*sky);
+	}
 }
 
 void RenderingSystem::onEvent(const SDL_Event &event) {
@@ -60,23 +78,26 @@ void RenderingSystem::draw(gk::RenderTarget &target, gk::RenderStates states) co
 	setSkyColor();
 
 	m_fbo.begin();
+	{
+		states.shader = &m_shader;
 
-	states.shader = &m_shader;
+		target.setView(m_camera);
 
-	target.setView(m_camera);
-
-	target.draw(m_skybox, states);
-	target.draw(m_world, states);
-
-	for (auto &it : m_playerBoxes)
-		if (it.second.dimension() == m_player.dimension())
-			target.draw(it.second, states);
-
-	target.draw(m_hud.blockCursor(), states);
-
+		for (const gk::Drawable *drawable : m_events[0].objects)
+			target.draw(*drawable, states);
+	}
 	m_fbo.end();
 
-	target.draw(m_hud, states);
+	for (const gk::Drawable *drawable : m_events[1].objects) {
+		target.draw(*drawable, states);
+	}
+}
+
+void RenderingSystem::onDrawObjects(const RenderingEvent::DrawObjects &event) {
+	if (event.inFramebuffer)
+		m_events[0] = std::move(event);
+	else
+		m_events[1] = std::move(event);
 }
 
 void RenderingSystem::setSkyColor() const {

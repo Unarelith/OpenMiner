@@ -37,32 +37,46 @@
 #include "PlayerBox.hpp"
 
 class ClientWorld;
+class MessageBus;
 class Skybox;
+
+namespace RenderingEvent {
+	struct DrawObjects {
+		std::vector<const gk::Drawable *> objects;
+		bool inFramebuffer;
+	};
+}
 
 class RenderingSystem : public gk::Drawable {
 	public:
-		RenderingSystem(gk::Camera &camera, ClientWorld &world, Skybox &skybox, std::unordered_map<u16, PlayerBox> &playerBoxes, HUD &hud, ClientPlayer &player)
-			: m_camera(camera), m_world(world), m_skybox(skybox), m_playerBoxes(playerBoxes), m_hud(hud), m_player(player) {}
+		RenderingSystem(MessageBus &messageBus, gk::Camera &camera, ClientWorld &world, HUD &hud, Skybox &skybox);
 
 		void initShaders();
+
+		void update();
 
 		void onEvent(const SDL_Event &event);
 
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
+		void onDrawObjects(const RenderingEvent::DrawObjects &event);
+
 		void setSkyColor() const;
+
+		MessageBus &m_messageBus;
 
 		gk::Shader m_shader;
 
 		Framebuffer m_fbo{Config::screenWidth, Config::screenHeight};
 
-		gk::Camera &m_camera;
-		ClientWorld &m_world;
-		Skybox &m_skybox;
-		std::unordered_map<u16, PlayerBox> &m_playerBoxes;
-		HUD &m_hud;
-		ClientPlayer &m_player;
+		gk::Camera &m_camera; // to draw the world
+		ClientWorld &m_world; // for the sky
+		HUD &m_hud; // hud resize on window size change
+		Skybox &m_skybox; // load sky
+
+		// event 0: with framebuffer | event 1: without framebuffer
+		RenderingEvent::DrawObjects m_events[2];
 };
 
 #endif // RENDERINGSYSTEM_HPP_

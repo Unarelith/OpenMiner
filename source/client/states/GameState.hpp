@@ -42,6 +42,7 @@
 #include "HUD.hpp"
 #include "InputSystem.hpp"
 #include "KeyboardHandler.hpp"
+#include "MessageBus.hpp"
 #include "PlayerBox.hpp"
 #include "Registry.hpp"
 #include "RenderingSystem.hpp"
@@ -99,9 +100,10 @@ class GameState : public gk::ApplicationState {
 
 		Skybox m_skybox{m_camera, m_world};
 
-		GameplaySystem m_gameplaySystem{m_player, m_client, m_clientCommandHandler, m_hud};
-		InputSystem m_inputSystem{m_camera, m_world, m_skybox, m_hud, m_player, m_client, m_clientCommandHandler, m_gameplaySystem};
-		RenderingSystem m_renderingSystem{m_camera, m_world, m_skybox, m_playerBoxes, m_hud, m_player};
+		MessageBus m_messageBus;
+		InputSystem m_inputSystem{m_camera, m_world, m_skybox, m_hud, m_player, m_client, m_clientCommandHandler, m_messageBus};
+		GameplaySystem m_gameplaySystem{m_player, m_client, m_clientCommandHandler, m_hud, m_messageBus, m_skybox, m_world, m_playerBoxes};
+		RenderingSystem m_renderingSystem{m_messageBus, m_camera, m_world, m_hud, m_skybox};
 };
 
 #endif // GAMESTATE_HPP_

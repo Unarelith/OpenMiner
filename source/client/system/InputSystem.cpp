@@ -35,6 +35,7 @@
 #include "GameKey.hpp"
 #include "GameplaySystem.hpp"
 #include "HUD.hpp"
+#include "MessageBus.hpp"
 #include "InputSystem.hpp"
 #include "KeyboardHandler.hpp"
 #include "Skybox.hpp"
@@ -43,12 +44,14 @@ void InputSystem::onEvent(const SDL_Event &event) {
 	KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
 
 	if (event.type == SDL_MOUSEMOTION) {
-		m_gameplaySystem.rotateCamera(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
+		m_messageBus.publish<GameplayEvent::RotateCamera>(
+			event.motion.x, event.motion.y,
+			event.motion.xrel, event.motion.yrel
+		);
 	}
 	else if (event.type == SDL_WINDOWEVENT) {
 		if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
-			m_gameplaySystem.pauseGame();
-
+			m_messageBus.publish<GameplayEvent::PauseGame>();
 			ungrabMouseCursor();
 		}
 		else if (event.type == SDL_WINDOWEVENT_FOCUS_GAINED) {
@@ -57,19 +60,19 @@ void InputSystem::onEvent(const SDL_Event &event) {
 	}
 	else if (event.type == SDL_KEYDOWN) {
 		if (event.key.keysym.sym == SDLK_ESCAPE) {
-			m_gameplaySystem.pauseGame();
+			m_messageBus.publish<GameplayEvent::PauseGame>();
 		}
 		if (event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Chat)) {
-			m_gameplaySystem.openChat(false);
+			m_messageBus.publish<GameplayEvent::OpenChat>(false);
 		}
 		else if (event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Command)) {
-			m_gameplaySystem.openChat(true);
+			m_messageBus.publish<GameplayEvent::OpenChat>(true);
 		}
 		else if (event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::BlockInfoToggle)) {
 			Config::isBlockInfoWidgetEnabled = !Config::isBlockInfoWidgetEnabled;
 		}
 		else if (event.key.keysym.sym == SDLK_F2) {
-			m_gameplaySystem.takeScreenshot();
+			m_messageBus.publish<GameplayEvent::TakeScreenshot>();
 		}
 
 		sendKeyPressEventToServer(event);
@@ -77,7 +80,8 @@ void InputSystem::onEvent(const SDL_Event &event) {
 }
 
 void InputSystem::update() {
-	setupInputsOnceIfNeeded();
+	if (!m_areModKeysLoaded)
+		setupInputs();
 
 	updateWorld();
 	updateScene();
@@ -102,16 +106,14 @@ void InputSystem::sendKeyPressEventToServer(const SDL_Event &event) {
 	}
 }
 
-void InputSystem::setupInputsOnceIfNeeded() {
-	if (!m_areModKeysLoaded) {
-		KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
+void InputSystem::setupInputs() {
+	KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
 
-		for (auto &it : Registry::getInstance().keys()) {
-			keyboardHandler->addKey(it.id(), it.name(), it.keycode(), it.stringID(), &it);
-		}
-
-		m_areModKeysLoaded = true;
+	for (auto &it : Registry::getInstance().keys()) {
+		keyboardHandler->addKey(it.id(), it.name(), it.keycode(), it.stringID(), &it);
 	}
+
+	m_areModKeysLoaded = true;
 }
 
 void InputSystem::updateWorld() {
@@ -124,19 +126,7 @@ void InputSystem::updateWorld() {
 	m_world.update(allowWorldReload);
 }
 
-void InputSystem::updateClient() {
-	if (gk::GameClock::getInstance().getTicks() % 100 < 10) {
-		m_clientCommandHandler.sendPlayerPosUpdate();
-		m_clientCommandHandler.sendPlayerRotUpdate();
-	}
-
-	m_client.update();
-}
-
 void InputSystem::updateScene() {
-	if (m_camera.getFieldOfView() != Config::cameraFOV)
-		m_camera.setFieldOfView(Config::cameraFOV);
-
 	if (!m_stateStack->empty() && &m_stateStack->top() == m_currentState) {
 		m_player.processInputs();
 	}
@@ -144,5 +134,14 @@ void InputSystem::updateScene() {
 	m_player.updatePosition(m_world);
 
 	m_hud.update();
+}
+
+void InputSystem::updateClient() {
+	if (gk::GameClock::getInstance().getTicks() % 100 < 10) {
+		m_clientCommandHandler.sendPlayerPosUpdate();
+		m_clientCommandHandler.sendPlayerRotUpdate();
+	}
+
+	m_client.update();
 }
 

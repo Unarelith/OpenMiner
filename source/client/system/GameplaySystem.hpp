@@ -24,17 +24,10 @@
  *
  * =====================================================================================
  */
-#ifndef INPUTSYSTEM_HPP_
-#define INPUTSYSTEM_HPP_
+#ifndef GAMEPLAYSYSTEM_HPP_
+#define GAMEPLAYSYSTEM_HPP_
 
 #include <gk/core/ApplicationStateStack.hpp>
-#include <gk/gl/Camera.hpp>
-#include <gk/gl/Drawable.hpp>
-#include <gk/gl/Shader.hpp>
-
-#include "Config.hpp"
-#include "Framebuffer.hpp"
-#include "PlayerBox.hpp"
 
 class Client;
 class ClientCommandHandler;
@@ -42,47 +35,57 @@ class ClientPlayer;
 class ClientWorld;
 class HUD;
 class MessageBus;
+class PlayerBox;
 class Skybox;
 
-class InputSystem {
+namespace GameplayEvent {
+	struct RotateCamera {
+		int x, y;
+		int xrel, yrel;
+	};
+
+	struct PauseGame {};
+
+	struct OpenChat {
+		bool addSlash;
+	};
+
+	struct TakeScreenshot {};
+}
+
+class GameplaySystem {
 	public:
-		InputSystem(gk::Camera &camera, ClientWorld &world, Skybox &skybox, HUD &hud, ClientPlayer &player, Client &client, ClientCommandHandler &clientCommandHandler, MessageBus &messageBus)
-			: m_camera(camera), m_world(world), m_skybox(skybox), m_hud(hud), m_player(player), m_client(client), m_clientCommandHandler(clientCommandHandler), m_messageBus(messageBus) {}
+		GameplaySystem(ClientPlayer &player, Client &client, ClientCommandHandler &clientCommandHandler, HUD &hud, MessageBus &messageBus, Skybox &skybox, ClientWorld &world, std::unordered_map<u16, PlayerBox> &playerBoxes);
+
+		void update();
 
 		void setStateInfo(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState) {
 			m_stateStack = stateStack;
 			m_currentState = currentState;
 		}
 
-		void onEvent(const SDL_Event &event);
-
-		void update();
+	// private:
+	public:
+		void onRotateCamera(const GameplayEvent::RotateCamera &event);
+		void onPauseGame();
+		void onOpenChat(const GameplayEvent::OpenChat &event);
+		void onTakeScreenshot();
 
 	private:
-		// Event actions
-		void grabMouseCursor();
-		void ungrabMouseCursor();
-		void sendKeyPressEventToServer(const SDL_Event &event);
+		ClientPlayer &m_player; // dimension and camera
+		Client &m_client; // pause menu
+		ClientCommandHandler &m_clientCommandHandler; // chat
+		HUD &m_hud; // draw events and chat
 
-		// Update process
-		void setupInputs();
-		void updateWorld();
-		void updateScene();
-		void updateClient();
-
-		gk::Camera &m_camera;
-		ClientWorld &m_world;
-		Skybox &m_skybox;
-		HUD &m_hud;
-		ClientPlayer &m_player;
-		Client &m_client;
-		ClientCommandHandler &m_clientCommandHandler;
 		MessageBus &m_messageBus;
+
+		// Those three are only needed to send the draw events
+		Skybox &m_skybox;
+		ClientWorld &m_world;
+		std::unordered_map<u16, PlayerBox> &m_playerBoxes;
 
 		gk::ApplicationStateStack *m_stateStack;
 		gk::ApplicationState *m_currentState;
-
-		bool m_areModKeysLoaded = false;
 };
 
-#endif // INPUTSYSTEM_HPP_
+#endif // GAMEPLAYSYSTEM_HPP_
