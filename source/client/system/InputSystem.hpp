@@ -50,6 +50,21 @@ class InputSystem {
 		void update(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState);
 
 	private:
+		// Event actions
+		void rotateCamera(const SDL_Event &event);
+		void pauseGame(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState);
+		void grabCursor();
+		void ungrabCursor();
+		void openChat(bool addSlash, gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState);
+		void takeScreenshot();
+		void sendKeyPressToServer(const SDL_Event &event);
+
+		// Update process
+		void setupInputs();
+		void updateWorld(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState);
+		void updateScene(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState);
+		void updateClient();
+
 		gk::Camera &m_camera;
 		ClientWorld &m_world;
 		Skybox &m_skybox;
