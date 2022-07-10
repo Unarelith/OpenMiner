@@ -40,7 +40,7 @@
 #include "ChatState.hpp"
 #include "PauseMenuState.hpp"
 
-void InputSystem::onEvent(const SDL_Event &event, gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState) {
+void InputSystem::onEvent(const SDL_Event &event) {
 	KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
 
 	if (event.type == SDL_MOUSEMOTION) {
@@ -48,22 +48,22 @@ void InputSystem::onEvent(const SDL_Event &event, gk::ApplicationStateStack *sta
 	}
 	else if (event.type == SDL_WINDOWEVENT) {
 		if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
-			pauseGame(stateStack, currentState);
-			ungrabCursor();
+			pauseGame();
+			ungrabMouseCursor();
 		}
 		else if (event.type == SDL_WINDOWEVENT_FOCUS_GAINED) {
-			grabCursor();
+			grabMouseCursor();
 		}
 	}
 	else if (event.type == SDL_KEYDOWN) {
 		if (event.key.keysym.sym == SDLK_ESCAPE) {
-			pauseGame(stateStack, currentState);
+			pauseGame();
 		}
 		if (event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Chat)) {
-			openChat(false, stateStack, currentState);
+			openChat(false);
 		}
 		else if (event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Command)) {
-			openChat(true, stateStack, currentState);
+			openChat(true);
 		}
 		else if (event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::BlockInfoToggle)) {
 			Config::isBlockInfoWidgetEnabled = !Config::isBlockInfoWidgetEnabled;
@@ -72,17 +72,15 @@ void InputSystem::onEvent(const SDL_Event &event, gk::ApplicationStateStack *sta
 			takeScreenshot();
 		}
 
-		sendKeyPressToServer(event);
+		sendKeyPressEventToServer(event);
 	}
 }
 
-void InputSystem::update(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState) {
-	setupInputs();
+void InputSystem::update() {
+	setupInputsOnceIfNeeded();
 
-	updateWorld(stateStack, currentState);
-
-	updateScene(stateStack, currentState);
-
+	updateWorld();
+	updateScene();
 	updateClient();
 }
 
@@ -95,22 +93,22 @@ void InputSystem::rotateCamera(const SDL_Event &event) {
 	}
 }
 
-void InputSystem::pauseGame(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState) {
-	stateStack->push<PauseMenuState>(m_client, currentState);
+void InputSystem::pauseGame() {
+	m_stateStack->push<PauseMenuState>(m_client, m_currentState);
 }
 
-void InputSystem::grabCursor() {
+void InputSystem::grabMouseCursor() {
 	gk::Mouse::setCursorGrabbed(true);
 	gk::Mouse::setCursorVisible(false);
 }
 
-void InputSystem::ungrabCursor() {
+void InputSystem::ungrabMouseCursor() {
 	gk::Mouse::setCursorGrabbed(false);
 	gk::Mouse::setCursorVisible(true);
 }
 
-void InputSystem::openChat(bool addSlash, gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState) {
-	stateStack->push<ChatState>(m_clientCommandHandler, m_hud.chat(), addSlash, currentState);
+void InputSystem::openChat(bool addSlash) {
+	m_stateStack->push<ChatState>(m_clientCommandHandler, m_hud.chat(), addSlash, m_currentState);
 }
 
 void InputSystem::takeScreenshot() {
@@ -126,7 +124,7 @@ void InputSystem::takeScreenshot() {
 		m_hud.chat().addChatMessage(0, "Failed to save screenshot");
 }
 
-void InputSystem::sendKeyPressToServer(const SDL_Event &event) {
+void InputSystem::sendKeyPressEventToServer(const SDL_Event &event) {
 	for (auto &key : Registry::getInstance().keys()) {
 		if (event.key.keysym.sym == key.keycode()) {
 			m_clientCommandHandler.sendKeyPressed(key.id());
@@ -134,7 +132,7 @@ void InputSystem::sendKeyPressToServer(const SDL_Event &event) {
 	}
 }
 
-void InputSystem::setupInputs() {
+void InputSystem::setupInputsOnceIfNeeded() {
 	if (!m_areModKeysLoaded) {
 		KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
 
@@ -146,11 +144,13 @@ void InputSystem::setupInputs() {
 	}
 }
 
-void InputSystem::updateWorld(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState) {
+void InputSystem::updateWorld() {
 	m_world.checkPlayerChunk(m_player.x(), m_player.y(), m_player.z());
 
-	bool allowWorldReload = !stateStack->empty()
-		&& (&stateStack->top() == currentState || stateStack->top().parent() == currentState);
+	bool allowWorldReload = !m_stateStack->empty()
+		&& (&m_stateStack->top() == m_currentState
+		  || m_stateStack->top().parent() == m_currentState);
+
 	m_world.update(allowWorldReload);
 }
 
@@ -163,11 +163,11 @@ void InputSystem::updateClient() {
 	m_client.update();
 }
 
-void InputSystem::updateScene(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState) {
+void InputSystem::updateScene() {
 	if (m_camera.getFieldOfView() != Config::cameraFOV)
 		m_camera.setFieldOfView(Config::cameraFOV);
 
-	if (!stateStack->empty() && &stateStack->top() == currentState) {
+	if (!m_stateStack->empty() && &m_stateStack->top() == m_currentState) {
 		m_player.processInputs();
 	}
 

@@ -45,24 +45,29 @@ class InputSystem {
 		InputSystem(gk::Camera &camera, ClientWorld &world, Skybox &skybox, HUD &hud, ClientPlayer &player, Client &client, ClientCommandHandler &clientCommandHandler)
 			: m_camera(camera), m_world(world), m_skybox(skybox), m_hud(hud), m_player(player), m_client(client), m_clientCommandHandler(clientCommandHandler) {}
 
-		void onEvent(const SDL_Event &event, gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState);
+		void setStateInfo(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState) {
+			m_stateStack = stateStack;
+			m_currentState = currentState;
+		}
 
-		void update(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState);
+		void onEvent(const SDL_Event &event);
+
+		void update();
 
 	private:
 		// Event actions
 		void rotateCamera(const SDL_Event &event);
-		void pauseGame(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState);
-		void grabCursor();
-		void ungrabCursor();
-		void openChat(bool addSlash, gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState);
+		void pauseGame();
+		void grabMouseCursor();
+		void ungrabMouseCursor();
+		void openChat(bool addSlash);
 		void takeScreenshot();
-		void sendKeyPressToServer(const SDL_Event &event);
+		void sendKeyPressEventToServer(const SDL_Event &event);
 
 		// Update process
-		void setupInputs();
-		void updateWorld(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState);
-		void updateScene(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState);
+		void setupInputsOnceIfNeeded();
+		void updateWorld();
+		void updateScene();
 		void updateClient();
 
 		gk::Camera &m_camera;
@@ -72,6 +77,9 @@ class InputSystem {
 		ClientPlayer &m_player;
 		Client &m_client;
 		ClientCommandHandler &m_clientCommandHandler;
+
+		gk::ApplicationStateStack *m_stateStack;
+		gk::ApplicationState *m_currentState;
 
 		bool m_areModKeysLoaded = false;
 };

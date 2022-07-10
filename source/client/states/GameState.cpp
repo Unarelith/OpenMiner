@@ -74,6 +74,8 @@ void GameState::init() {
 
 	m_eventHandler->addListener<ChunkCreatedEvent>(&Minimap::onChunkCreatedEvent, &m_hud.minimap());
 	m_eventHandler->addListener<ChunkRemovedEvent>(&Minimap::onChunkRemovedEvent, &m_hud.minimap());
+
+	m_inputSystem.setStateInfo(m_stateStack, this);
 }
 
 void GameState::onStateInactive() {
@@ -98,7 +100,7 @@ void GameState::onEvent(const SDL_Event &event) {
 	}
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
-		m_inputSystem.onEvent(event, m_stateStack, this);
+		m_inputSystem.onEvent(event);
 
 		m_hud.onEvent(event);
 	}
@@ -107,7 +109,7 @@ void GameState::onEvent(const SDL_Event &event) {
 }
 
 void GameState::update() {
-	m_inputSystem.update(m_stateStack, this);
+	m_inputSystem.update();
 
 	static const Sky *sky = nullptr;
 	if (sky != m_world.sky() && m_world.sky()) {
