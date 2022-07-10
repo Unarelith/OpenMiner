@@ -32,6 +32,7 @@
 #include "HUD.hpp"
 #include "MessageBus.hpp"
 #include "RenderingSystem.hpp"
+#include "Skybox.hpp"
 
 #include "ChatState.hpp"
 #include "PauseMenuState.hpp"
@@ -39,31 +40,31 @@
 GameplaySystem::GameplaySystem(ClientPlayer &player, Client &client, ClientCommandHandler &clientCommandHandler, HUD &hud, MessageBus &messageBus, Skybox &skybox, ClientWorld &world, std::unordered_map<u16, PlayerBox> &playerBoxes)
 	: m_player(player), m_client(client), m_clientCommandHandler(clientCommandHandler), m_hud(hud), m_messageBus(messageBus), m_skybox(skybox), m_world(world), m_playerBoxes(playerBoxes)
 {
-	m_messageBus.subscribe<GameplayEvent::RotateCamera>(*this, &GameplaySystem::onRotateCamera);
-	m_messageBus.subscribe<GameplayEvent::PauseGame>(*this, &GameplaySystem::onPauseGame);
-	m_messageBus.subscribe<GameplayEvent::OpenChat>(*this, &GameplaySystem::onOpenChat);
-	m_messageBus.subscribe<GameplayEvent::TakeScreenshot>(*this, &GameplaySystem::onTakeScreenshot);
+	m_messageBus.subscribe<GameplayEvent::RotateCamera, &GameplaySystem::onRotateCamera>(*this);
+	m_messageBus.subscribe<GameplayEvent::PauseGame, &GameplaySystem::onPauseGame>(*this);
+	m_messageBus.subscribe<GameplayEvent::OpenChat, &GameplaySystem::onOpenChat>(*this);
+	m_messageBus.subscribe<GameplayEvent::TakeScreenshot, &GameplaySystem::onTakeScreenshot>(*this);
 }
 
 void GameplaySystem::update() {
 	RenderingEvent::DrawObjects event;
 	{
 		event.inFramebuffer = true;
-		event.objects.emplace_back(m_skybox);
-		event.objects.emplace_back(m_world);
+		event.objects.emplace_back(&m_skybox);
+		event.objects.emplace_back(&m_world);
 
 		for (auto &it : m_playerBoxes)
 			if (it.second.dimension() == m_player.dimension())
-				event.objects.emplace_back(it.second);
+				event.objects.emplace_back(&it.second);
 
-		event.objects.emplace_back(m_hud.blockCursor());
+		event.objects.emplace_back(&m_hud.blockCursor());
 	}
 	m_messageBus.publish(event);
 
 	RenderingEvent::DrawObjects event2;
 	{
-		event2.inFramebuffer = true;
-		event2.objects.emplace_back(m_hud);
+		event2.inFramebuffer = false;
+		event2.objects.emplace_back(&m_hud);
 	}
 	m_messageBus.publish(event2);
 }

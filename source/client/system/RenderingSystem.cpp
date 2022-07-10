@@ -34,7 +34,7 @@
 RenderingSystem::RenderingSystem(MessageBus &messageBus, gk::Camera &camera, ClientWorld &world, HUD &hud, Skybox &skybox)
 	: m_messageBus(messageBus), m_camera(camera), m_world(world), m_hud(hud), m_skybox(skybox)
 {
-	m_messageBus.subscribe<RenderingEvent::DrawObjects>(*this, &RenderingSystem::onDrawObjects);
+	m_messageBus.subscribe<RenderingEvent::DrawObjects, &RenderingSystem::onDrawObjects>(*this);
 }
 
 void RenderingSystem::initShaders() {
@@ -95,9 +95,9 @@ void RenderingSystem::draw(gk::RenderTarget &target, gk::RenderStates states) co
 
 void RenderingSystem::onDrawObjects(const RenderingEvent::DrawObjects &event) {
 	if (event.inFramebuffer)
-		m_events[0] = std::move(event);
+		m_events[0] = event;
 	else
-		m_events[1] = std::move(event);
+		m_events[1] = event;
 }
 
 void RenderingSystem::setSkyColor() const {

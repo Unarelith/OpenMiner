@@ -77,6 +77,8 @@ void InputSystem::onEvent(const SDL_Event &event) {
 
 		sendKeyPressEventToServer(event);
 	}
+
+	m_hud.onEvent(event);
 }
 
 void InputSystem::update() {

@@ -100,11 +100,8 @@ void GameState::onEvent(const SDL_Event &event) {
 		m_stateStack->clear();
 	}
 
-	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
+	if (!m_stateStack->empty() && &m_stateStack->top() == this)
 		m_inputSystem.onEvent(event);
-
-		m_hud.onEvent(event);
-	}
 
 	m_renderingSystem.onEvent(event);
 }

@@ -31,12 +31,9 @@
 
 class MessageBus {
 	public:
-		template<typename EventType, typename Listener>
-		using Callback = void (Listener::*)(const EventType &type);
-
-		template<typename EventType, typename Listener>
-		void subscribe(Listener &listener, Callback<EventType, Listener> callback) {
-			m_dispatcher.sink<EventType>().connect<callback>(listener);
+		template<typename EventType, auto callback, typename Listener>
+		void subscribe(Listener &listener) {
+			m_dispatcher.sink<EventType>().template connect<callback>(listener);
 		}
 
 		template<typename EventType>
