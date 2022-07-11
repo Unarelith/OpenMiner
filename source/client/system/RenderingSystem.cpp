@@ -103,30 +103,24 @@ void RenderingSystem::onDrawObjects(const RenderingEvent::DrawObjects &event) {
 void RenderingSystem::setSkyColor() const {
 	gk::Shader::bind(&m_shader);
 
+	gk::Color color{50, 153, 204};
+	float sunlightIntensity = 1.f;
+
 	if (m_world.sky()) {
 		if (m_world.sky()->daylightCycleSpeed() > 0.f) {
 			float time = GameTime::getCurrentTime(0, m_world.sky()->daylightCycleSpeed());
-			const gk::Color &color = GameTime::getSkyColorFromTime(*m_world.sky(), time);
-			glClearColor(color.r, color.g, color.b, color.a);
-
-			m_shader.setUniform("u_skyColor", color);
-			m_shader.setUniform("u_sunlightIntensity", GameTime::getSunlightIntensityFromTime(time));
+			color = GameTime::getSkyColorFromTime(*m_world.sky(), time);
+			sunlightIntensity = GameTime::getSunlightIntensityFromTime(time);
 		}
 		else {
-			const gk::Color &color = m_world.sky()->color();
-			glClearColor(color.r, color.g, color.b, color.a);
-
-			m_shader.setUniform("u_skyColor", m_world.sky()->color());
-			m_shader.setUniform("u_sunlightIntensity", 1.f);
+			color = m_world.sky()->color();
 		}
 	}
-	else {
-		gk::Color color{50, 153, 204};
-		glClearColor(color.r, color.g, color.b, color.a);
 
-		m_shader.setUniform("u_skyColor", color);
-		m_shader.setUniform("u_sunlightIntensity", 1.f);
-	}
+	glClearColor(color.r, color.g, color.b, color.a);
+
+	m_shader.setUniform("u_skyColor", color);
+	m_shader.setUniform("u_sunlightIntensity", sunlightIntensity);
 
 	gk::Shader::bind(nullptr);
 }
