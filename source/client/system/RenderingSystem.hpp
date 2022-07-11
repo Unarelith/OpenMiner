@@ -45,6 +45,11 @@ namespace RenderingEvent {
 		std::vector<const gk::Drawable *> objects;
 		bool inFramebuffer;
 	};
+
+	struct WindowSizeChanged {
+		u16 width;
+		u16 height;
+	};
 }
 
 class RenderingSystem : public gk::Drawable {
@@ -55,12 +60,11 @@ class RenderingSystem : public gk::Drawable {
 
 		void update();
 
-		void onEvent(const SDL_Event &event);
-
 	private:
 		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
 
 		void onDrawObjects(const RenderingEvent::DrawObjects &event);
+		void onWindowSizeChanged(const RenderingEvent::WindowSizeChanged &event);
 
 		void setSkyColor() const;
 
@@ -70,9 +74,9 @@ class RenderingSystem : public gk::Drawable {
 
 		Framebuffer m_fbo{Config::screenWidth, Config::screenHeight};
 
-		gk::Camera &m_camera; // to draw the world
-		ClientWorld &m_world; // for the sky
-		HUD &m_hud; // hud resize on window size change
+		gk::Camera &m_camera; // used as a view for rendering (also used to setup FOV and aspect ratio)
+		ClientWorld &m_world; // for the sky definition
+		HUD &m_hud; // hud update on window size change
 		Skybox &m_skybox; // load sky
 
 		// event 0: with framebuffer | event 1: without framebuffer

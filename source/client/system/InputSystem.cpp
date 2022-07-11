@@ -39,6 +39,7 @@
 #include "InputSystem.hpp"
 #include "KeyboardHandler.hpp"
 #include "Skybox.hpp"
+#include "RenderingSystem.hpp"
 
 void InputSystem::onEvent(const SDL_Event &event) {
 	KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
@@ -51,22 +52,34 @@ void InputSystem::onEvent(const SDL_Event &event) {
 	}
 	else if (event.type == SDL_WINDOWEVENT) {
 		if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
-			m_messageBus.publish<GameplayEvent::PauseGame>();
-			ungrabMouseCursor();
+			m_messageBus.publish<GameplayEvent::PauseGame>(m_stateStack, m_currentState);
+
+			gk::Mouse::setCursorGrabbed(false);
+			gk::Mouse::setCursorVisible(true);
 		}
 		else if (event.type == SDL_WINDOWEVENT_FOCUS_GAINED) {
-			grabMouseCursor();
+			gk::Mouse::setCursorGrabbed(true);
+			gk::Mouse::setCursorVisible(false);
+		}
+		else if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+			Config::screenWidth = (u16)event.window.data1;
+			Config::screenHeight = (u16)event.window.data2;
+
+			m_messageBus.publish<RenderingEvent::WindowSizeChanged>(
+				Config::screenWidth,
+				Config::screenHeight
+			);
 		}
 	}
 	else if (event.type == SDL_KEYDOWN) {
 		if (event.key.keysym.sym == SDLK_ESCAPE) {
-			m_messageBus.publish<GameplayEvent::PauseGame>();
+			m_messageBus.publish<GameplayEvent::PauseGame>(m_stateStack, m_currentState);
 		}
 		if (event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Chat)) {
-			m_messageBus.publish<GameplayEvent::OpenChat>(false);
+			m_messageBus.publish<GameplayEvent::OpenChat>(false, m_stateStack, m_currentState);
 		}
 		else if (event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::Command)) {
-			m_messageBus.publish<GameplayEvent::OpenChat>(true);
+			m_messageBus.publish<GameplayEvent::OpenChat>(true, m_stateStack, m_currentState);
 		}
 		else if (event.key.keysym.sym == keyboardHandler->getKeycode(GameKey::BlockInfoToggle)) {
 			Config::isBlockInfoWidgetEnabled = !Config::isBlockInfoWidgetEnabled;
@@ -75,37 +88,35 @@ void InputSystem::onEvent(const SDL_Event &event) {
 			m_messageBus.publish<GameplayEvent::TakeScreenshot>();
 		}
 
-		sendKeyPressEventToServer(event);
+		// Forward key press events to server
+		for (auto &key : Registry::getInstance().keys()) {
+			if (event.key.keysym.sym == key.keycode()) {
+				m_clientCommandHandler.sendKeyPressed(key.id());
+			}
+		}
 	}
 
 	m_hud.onEvent(event);
 }
 
 void InputSystem::update() {
-	if (!m_areModKeysLoaded)
+	if (!m_areModKeysLoaded) {
 		setupInputs();
-
-	updateWorld();
-	updateScene();
-	updateClient();
-}
-
-void InputSystem::grabMouseCursor() {
-	gk::Mouse::setCursorGrabbed(true);
-	gk::Mouse::setCursorVisible(false);
-}
-
-void InputSystem::ungrabMouseCursor() {
-	gk::Mouse::setCursorGrabbed(false);
-	gk::Mouse::setCursorVisible(true);
-}
-
-void InputSystem::sendKeyPressEventToServer(const SDL_Event &event) {
-	for (auto &key : Registry::getInstance().keys()) {
-		if (event.key.keysym.sym == key.keycode()) {
-			m_clientCommandHandler.sendKeyPressed(key.id());
-		}
+		m_areModKeysLoaded = true;
 	}
+
+	bool allowWorldReload = !m_stateStack->empty()
+		&& (&m_stateStack->top() == m_currentState
+		  || m_stateStack->top().parent() == m_currentState);
+
+	bool processPlayerInputs = !m_stateStack->empty() && &m_stateStack->top() == m_currentState;
+	bool sendPlayerPosRotUpdate = gk::GameClock::getInstance().getTicks() % 100 < 10;
+
+	m_messageBus.publish<GameplayEvent::GameUpdate>(
+		allowWorldReload,
+		processPlayerInputs,
+		sendPlayerPosRotUpdate
+	);
 }
 
 void InputSystem::setupInputs() {
@@ -114,36 +125,5 @@ void InputSystem::setupInputs() {
 	for (auto &it : Registry::getInstance().keys()) {
 		keyboardHandler->addKey(it.id(), it.name(), it.keycode(), it.stringID(), &it);
 	}
-
-	m_areModKeysLoaded = true;
-}
-
-void InputSystem::updateWorld() {
-	m_world.checkPlayerChunk(m_player.x(), m_player.y(), m_player.z());
-
-	bool allowWorldReload = !m_stateStack->empty()
-		&& (&m_stateStack->top() == m_currentState
-		  || m_stateStack->top().parent() == m_currentState);
-
-	m_world.update(allowWorldReload);
-}
-
-void InputSystem::updateScene() {
-	if (!m_stateStack->empty() && &m_stateStack->top() == m_currentState) {
-		m_player.processInputs();
-	}
-
-	m_player.updatePosition(m_world);
-
-	m_hud.update();
-}
-
-void InputSystem::updateClient() {
-	if (gk::GameClock::getInstance().getTicks() % 100 < 10) {
-		m_clientCommandHandler.sendPlayerPosUpdate();
-		m_clientCommandHandler.sendPlayerRotUpdate();
-	}
-
-	m_client.update();
 }
 

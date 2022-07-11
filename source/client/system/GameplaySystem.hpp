@@ -44,13 +44,25 @@ namespace GameplayEvent {
 		int xrel, yrel;
 	};
 
-	struct PauseGame {};
+	struct PauseGame {
+		gk::ApplicationStateStack *stateStack;
+		gk::ApplicationState *currentState;
+	};
 
 	struct OpenChat {
 		bool addSlash;
+
+		gk::ApplicationStateStack *stateStack;
+		gk::ApplicationState *currentState;
 	};
 
 	struct TakeScreenshot {};
+
+	struct GameUpdate {
+		bool allowWorldReload;
+		bool processPlayerInputs;
+		bool sendPlayerPosRotUpdate;
+	};
 }
 
 class GameplaySystem {
@@ -67,9 +79,10 @@ class GameplaySystem {
 	// private:
 	public:
 		void onRotateCamera(const GameplayEvent::RotateCamera &event);
-		void onPauseGame();
+		void onPauseGame(const GameplayEvent::PauseGame &event);
 		void onOpenChat(const GameplayEvent::OpenChat &event);
 		void onTakeScreenshot();
+		void onGameUpdate(const GameplayEvent::GameUpdate &event);
 
 	private:
 		ClientPlayer &m_player; // dimension and camera

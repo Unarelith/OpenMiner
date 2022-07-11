@@ -28,7 +28,6 @@
 #define INPUTSYSTEM_HPP_
 
 #include <gk/core/ApplicationStateStack.hpp>
-#include <gk/gl/Camera.hpp>
 #include <gk/gl/Drawable.hpp>
 #include <gk/gl/Shader.hpp>
 
@@ -46,8 +45,8 @@ class Skybox;
 
 class InputSystem {
 	public:
-		InputSystem(gk::Camera &camera, ClientWorld &world, Skybox &skybox, HUD &hud, ClientPlayer &player, Client &client, ClientCommandHandler &clientCommandHandler, MessageBus &messageBus)
-			: m_camera(camera), m_world(world), m_skybox(skybox), m_hud(hud), m_player(player), m_client(client), m_clientCommandHandler(clientCommandHandler), m_messageBus(messageBus) {}
+		InputSystem(HUD &hud, ClientCommandHandler &clientCommandHandler, MessageBus &messageBus)
+			: m_hud(hud), m_clientCommandHandler(clientCommandHandler), m_messageBus(messageBus) {}
 
 		void setStateInfo(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState) {
 			m_stateStack = stateStack;
@@ -59,29 +58,18 @@ class InputSystem {
 		void update();
 
 	private:
-		// Event actions
-		void grabMouseCursor();
-		void ungrabMouseCursor();
-		void sendKeyPressEventToServer(const SDL_Event &event);
-
-		// Update process
 		void setupInputs();
-		void updateWorld();
-		void updateScene();
-		void updateClient();
 
-		gk::Camera &m_camera;
-		ClientWorld &m_world;
-		Skybox &m_skybox;
-		HUD &m_hud;
-		ClientPlayer &m_player;
-		Client &m_client;
-		ClientCommandHandler &m_clientCommandHandler;
+		HUD &m_hud; // forward events (will be a dedicated GUI system later)
+		ClientCommandHandler &m_clientCommandHandler; // forward key press events to server (there will probably be a network system later)
+
 		MessageBus &m_messageBus;
 
+		// Required for some checks
 		gk::ApplicationStateStack *m_stateStack;
 		gk::ApplicationState *m_currentState;
 
+		// Required for the initial loading of mod-defined key bindings
 		bool m_areModKeysLoaded = false;
 };
 

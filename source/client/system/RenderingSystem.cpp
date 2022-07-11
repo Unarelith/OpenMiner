@@ -35,6 +35,7 @@ RenderingSystem::RenderingSystem(MessageBus &messageBus, gk::Camera &camera, Cli
 	: m_messageBus(messageBus), m_camera(camera), m_world(world), m_hud(hud), m_skybox(skybox)
 {
 	m_messageBus.subscribe<RenderingEvent::DrawObjects, &RenderingSystem::onDrawObjects>(*this);
+	m_messageBus.subscribe<RenderingEvent::WindowSizeChanged, &RenderingSystem::onWindowSizeChanged>(*this);
 }
 
 void RenderingSystem::initShaders() {
@@ -59,18 +60,6 @@ void RenderingSystem::update() {
 	if (sky != m_world.sky() && m_world.sky()) {
 		sky = m_world.sky();
 		m_skybox.loadSky(*sky);
-	}
-}
-
-void RenderingSystem::onEvent(const SDL_Event &event) {
-	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-		Config::screenWidth = (u16)event.window.data1;
-		Config::screenHeight = (u16)event.window.data2;
-
-		m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
-		m_hud.setup();
-
-		m_fbo.init(Config::screenWidth, Config::screenHeight);
 	}
 }
 
@@ -100,10 +89,15 @@ void RenderingSystem::onDrawObjects(const RenderingEvent::DrawObjects &event) {
 		m_events[1] = event;
 }
 
-void RenderingSystem::setSkyColor() const {
-	gk::Shader::bind(&m_shader);
+void RenderingSystem::onWindowSizeChanged(const RenderingEvent::WindowSizeChanged &event) {
+	m_camera.setAspectRatio((float)event.width / event.height);
+	m_hud.setup();
 
-	gk::Color color{50, 153, 204};
+	m_fbo.init(event.width, event.height);
+}
+
+void RenderingSystem::setSkyColor() const {
+	gk::Color color = gk::Color::fromRGBA32(50, 153, 204);
 	float sunlightIntensity = 1.f;
 
 	if (m_world.sky()) {
@@ -118,6 +112,8 @@ void RenderingSystem::setSkyColor() const {
 	}
 
 	glClearColor(color.r, color.g, color.b, color.a);
+
+	gk::Shader::bind(&m_shader);
 
 	m_shader.setUniform("u_skyColor", color);
 	m_shader.setUniform("u_sunlightIntensity", sunlightIntensity);

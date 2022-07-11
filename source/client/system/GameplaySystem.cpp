@@ -26,6 +26,8 @@
  */
 #include <gk/core/Mouse.hpp>
 
+#include "Client.hpp"
+#include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "Config.hpp"
 #include "GameplaySystem.hpp"
@@ -44,6 +46,7 @@ GameplaySystem::GameplaySystem(ClientPlayer &player, Client &client, ClientComma
 	m_messageBus.subscribe<GameplayEvent::PauseGame, &GameplaySystem::onPauseGame>(*this);
 	m_messageBus.subscribe<GameplayEvent::OpenChat, &GameplaySystem::onOpenChat>(*this);
 	m_messageBus.subscribe<GameplayEvent::TakeScreenshot, &GameplaySystem::onTakeScreenshot>(*this);
+	m_messageBus.subscribe<GameplayEvent::GameUpdate, &GameplaySystem::onGameUpdate>(*this);
 }
 
 void GameplaySystem::update() {
@@ -82,12 +85,12 @@ void GameplaySystem::onRotateCamera(const GameplayEvent::RotateCamera &event) {
 	}
 }
 
-void GameplaySystem::onPauseGame() {
-	m_stateStack->push<PauseMenuState>(m_client, m_currentState);
+void GameplaySystem::onPauseGame(const GameplayEvent::PauseGame &event) {
+	event.stateStack->push<PauseMenuState>(m_client, event.currentState);
 }
 
 void GameplaySystem::onOpenChat(const GameplayEvent::OpenChat &event) {
-	m_stateStack->push<ChatState>(m_clientCommandHandler, m_hud.chat(), event.addSlash, m_currentState);
+	event.stateStack->push<ChatState>(m_clientCommandHandler, m_hud.chat(), event.addSlash, event.currentState);
 }
 
 void GameplaySystem::onTakeScreenshot() {
@@ -102,4 +105,27 @@ void GameplaySystem::onTakeScreenshot() {
 	else
 		m_hud.chat().addChatMessage(0, "Failed to save screenshot");
 }
+
+void GameplaySystem::onGameUpdate(const GameplayEvent::GameUpdate &event) {
+	// Update world
+	m_world.checkPlayerChunk(m_player.x(), m_player.y(), m_player.z());
+	m_world.update(event.allowWorldReload);
+
+	// Update player
+	if (event.processPlayerInputs) {
+		m_player.processInputs();
+	}
+	m_player.updatePosition(m_world);
+
+	// Update HUD
+	m_hud.update();
+
+	// Update client
+	if (event.sendPlayerPosRotUpdate) {
+		m_clientCommandHandler.sendPlayerPosUpdate();
+		m_clientCommandHandler.sendPlayerRotUpdate();
+	}
+	m_client.update();
+}
+
 
