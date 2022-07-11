@@ -38,7 +38,8 @@ RenderingSystem::RenderingSystem(MessageBus &messageBus, gk::Camera &camera, Cli
 	m_messageBus.subscribe<RenderingEvent::WindowSizeChanged, &RenderingSystem::onWindowSizeChanged>(*this);
 }
 
-void RenderingSystem::initShaders() {
+void RenderingSystem::init() {
+	// Shaders
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/game.v.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/light.f.glsl");
@@ -49,7 +50,12 @@ void RenderingSystem::initShaders() {
 	m_shader.bindAttributeLocation(5, "ambientOcclusion");
 	m_shader.linkProgram();
 
+	// Framebuffer
 	m_fbo.loadShader("screen");
+
+	// Camera
+	m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
+	m_camera.setFarClippingPlane(1000.0f);
 }
 
 void RenderingSystem::update() {

@@ -38,12 +38,9 @@ GameState::GameState()
 {
 	Registry::setInstance(m_registry);
 
-	m_renderingSystem.initShaders();
+	m_renderingSystem.init();
 
 	m_clientCommandHandler.setupCallbacks();
-
-	m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
-	m_camera.setFarClippingPlane(1000.0f);
 
 	m_world.setClient(m_clientCommandHandler);
 	m_world.setCamera(m_player.camera());

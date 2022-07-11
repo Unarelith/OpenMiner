@@ -56,7 +56,7 @@ class RenderingSystem : public gk::Drawable {
 	public:
 		RenderingSystem(MessageBus &messageBus, gk::Camera &camera, ClientWorld &world, HUD &hud, Skybox &skybox);
 
-		void initShaders();
+		void init();
 
 		void update();
 
