@@ -28,12 +28,6 @@
 #define INPUTSYSTEM_HPP_
 
 #include <gk/core/ApplicationStateStack.hpp>
-#include <gk/gl/Drawable.hpp>
-#include <gk/gl/Shader.hpp>
-
-#include "Config.hpp"
-#include "Framebuffer.hpp"
-#include "PlayerBox.hpp"
 
 class Client;
 class ClientCommandHandler;
@@ -58,8 +52,6 @@ class InputSystem {
 		void update();
 
 	private:
-		void setupInputs();
-
 		HUD &m_hud; // forward events (will be a dedicated GUI system later)
 		ClientCommandHandler &m_clientCommandHandler; // forward key press events to server (there will probably be a network system later)
 

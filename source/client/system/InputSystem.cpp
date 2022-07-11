@@ -33,12 +33,13 @@
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "GameKey.hpp"
-#include "GameplaySystem.hpp"
 #include "HUD.hpp"
-#include "MessageBus.hpp"
 #include "InputSystem.hpp"
 #include "KeyboardHandler.hpp"
+#include "MessageBus.hpp"
 #include "Skybox.hpp"
+
+#include "GameplaySystem.hpp"
 #include "RenderingSystem.hpp"
 
 void InputSystem::onEvent(const SDL_Event &event) {
@@ -100,8 +101,14 @@ void InputSystem::onEvent(const SDL_Event &event) {
 }
 
 void InputSystem::update() {
+	// Initialize mod-defined key bindings if needed
 	if (!m_areModKeysLoaded) {
-		setupInputs();
+		KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
+
+		for (auto &it : Registry::getInstance().keys()) {
+			keyboardHandler->addKey(it.id(), it.name(), it.keycode(), it.stringID(), &it);
+		}
+
 		m_areModKeysLoaded = true;
 	}
 
@@ -117,13 +124,5 @@ void InputSystem::update() {
 		processPlayerInputs,
 		sendPlayerPosRotUpdate
 	);
-}
-
-void InputSystem::setupInputs() {
-	KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
-
-	for (auto &it : Registry::getInstance().keys()) {
-		keyboardHandler->addKey(it.id(), it.name(), it.keycode(), it.stringID(), &it);
-	}
 }
 
