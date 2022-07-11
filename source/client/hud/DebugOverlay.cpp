@@ -64,7 +64,7 @@ void DebugOverlay::update(bool printOpenGLInfo) {
 	s32 pz = (s32)std::floor(m_player.z());
 
 	// Directions is now an angle4
-	const char *directions[4] = {"East", "North", "West", "South"};
+	static const char *directions[4] = {"East", "North", "West", "South"};
 	const char *direction = directions[m_player.getDirection()];
 
 	std::stringstream stream;
