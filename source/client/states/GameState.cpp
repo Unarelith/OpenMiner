@@ -24,28 +24,12 @@
  *
  * =====================================================================================
  */
-#include <algorithm>
-#include <cmath>
-#include <iostream>
-
-#include <glm/gtc/matrix_transform.hpp>
-
-#include <gk/core/input/GamePad.hpp>
 #include <gk/core/ApplicationStateStack.hpp>
-#include <gk/core/Exception.hpp>
-#include <gk/core/GameClock.hpp>
 #include <gk/core/Mouse.hpp>
-#include <gk/gl/OpenGL.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
-#include "ChatState.hpp"
 #include "Events.hpp"
-#include "GameKey.hpp"
 #include "GameState.hpp"
-#include "GameTime.hpp"
-#include "KeyboardHandler.hpp"
-#include "LuaGUIState.hpp"
-#include "PauseMenuState.hpp"
 #include "Registry.hpp"
 #include "TextureAtlas.hpp"
 
@@ -63,8 +47,6 @@ GameState::GameState()
 
 	m_world.setClient(m_clientCommandHandler);
 	m_world.setCamera(m_player.camera());
-
-	m_keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
 }
 
 void GameState::init() {
@@ -105,10 +87,12 @@ void GameState::onEvent(const SDL_Event &event) {
 }
 
 void GameState::update() {
+	// Update systems
 	m_inputSystem.update();
 	m_gameplaySystem.update();
 	m_renderingSystem.update();
 
+	// Process events
 	m_messageBus.update();
 }
 

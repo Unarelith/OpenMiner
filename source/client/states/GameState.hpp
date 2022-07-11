@@ -27,26 +27,22 @@
 #ifndef GAMESTATE_HPP_
 #define GAMESTATE_HPP_
 
-#include <glm/glm.hpp>
-
 #include <gk/core/ApplicationState.hpp>
-#include <gk/gl/RenderTarget.hpp>
 
 #include "Client.hpp"
 #include "ClientChunk.hpp"
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
-#include "Config.hpp"
-#include "GameplaySystem.hpp"
 #include "HUD.hpp"
-#include "InputSystem.hpp"
-#include "KeyboardHandler.hpp"
-#include "MessageBus.hpp"
 #include "PlayerBox.hpp"
 #include "Registry.hpp"
-#include "RenderingSystem.hpp"
 #include "Skybox.hpp"
+
+#include "MessageBus.hpp"
+#include "InputSystem.hpp"
+#include "GameplaySystem.hpp"
+#include "RenderingSystem.hpp"
 
 class TextureAtlas;
 
@@ -95,8 +91,6 @@ class GameState : public gk::ApplicationState {
 		Registry m_registry;
 
 		ClientWorld m_world;
-
-		KeyboardHandler *m_keyboardHandler;
 
 		Skybox m_skybox{m_camera, m_world};
 
