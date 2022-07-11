@@ -55,7 +55,6 @@ void GameState::init() {
 	m_eventHandler->addListener<ChunkRemovedEvent>(&Minimap::onChunkRemovedEvent, &m_hud.minimap());
 
 	m_inputSystem.setStateInfo(m_stateStack, this);
-	m_gameplaySystem.setStateInfo(m_stateStack, this);
 }
 
 void GameState::onStateInactive() {

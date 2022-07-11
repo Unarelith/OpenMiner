@@ -128,4 +128,3 @@ void GameplaySystem::onGameUpdate(const GameplayEvent::GameUpdate &event) {
 	m_client.update();
 }
 
-

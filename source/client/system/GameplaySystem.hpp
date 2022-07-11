@@ -71,11 +71,6 @@ class GameplaySystem {
 
 		void update();
 
-		void setStateInfo(gk::ApplicationStateStack *stateStack, gk::ApplicationState *currentState) {
-			m_stateStack = stateStack;
-			m_currentState = currentState;
-		}
-
 	// private:
 	public:
 		void onRotateCamera(const GameplayEvent::RotateCamera &event);
@@ -96,9 +91,6 @@ class GameplaySystem {
 		Skybox &m_skybox;
 		ClientWorld &m_world;
 		std::unordered_map<u16, PlayerBox> &m_playerBoxes;
-
-		gk::ApplicationStateStack *m_stateStack;
-		gk::ApplicationState *m_currentState;
 };
 
 #endif // GAMEPLAYSYSTEM_HPP_
