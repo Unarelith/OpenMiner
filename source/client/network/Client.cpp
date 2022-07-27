@@ -62,6 +62,9 @@ void Client::connect(sf::IpAddress serverAddress, u16 serverPort, Player &player
 	m_tcpSocket->setBlocking(false);
 
 	m_isConnected = true;
+
+	player.setClientID(m_id);
+	addPlayer(player);
 }
 
 void Client::disconnect() {

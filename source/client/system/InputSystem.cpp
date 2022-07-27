@@ -30,6 +30,7 @@
 
 #include "Client.hpp"
 #include "ClientCommandHandler.hpp"
+#include "ClientEvents.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "GameKey.hpp"
@@ -38,9 +39,6 @@
 #include "KeyboardHandler.hpp"
 #include "MessageBus.hpp"
 #include "Skybox.hpp"
-
-#include "GameplaySystem.hpp"
-#include "RenderingSystem.hpp"
 
 void InputSystem::onEvent(const SDL_Event &event) {
 	KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();

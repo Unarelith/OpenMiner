@@ -27,7 +27,7 @@
 #ifndef GAMEPLAYSYSTEM_HPP_
 #define GAMEPLAYSYSTEM_HPP_
 
-#include <gk/core/ApplicationStateStack.hpp>
+#include "ClientEvents.hpp"
 
 class Client;
 class ClientCommandHandler;
@@ -38,48 +38,19 @@ class MessageBus;
 class PlayerBox;
 class Skybox;
 
-namespace GameplayEvent {
-	struct RotateCamera {
-		int x, y;
-		int xrel, yrel;
-	};
-
-	struct PauseGame {
-		gk::ApplicationStateStack *stateStack;
-		gk::ApplicationState *currentState;
-	};
-
-	struct OpenChat {
-		bool addSlash;
-
-		gk::ApplicationStateStack *stateStack;
-		gk::ApplicationState *currentState;
-	};
-
-	struct TakeScreenshot {};
-
-	struct GameUpdate {
-		bool allowWorldReload;
-		bool processPlayerInputs;
-		bool sendPlayerPosRotUpdate;
-	};
-}
-
 class GameplaySystem {
 	public:
 		GameplaySystem(ClientPlayer &player, Client &client, ClientCommandHandler &clientCommandHandler, HUD &hud, MessageBus &messageBus, Skybox &skybox, ClientWorld &world, std::unordered_map<u16, PlayerBox> &playerBoxes);
 
 		void update();
 
-	// private:
-	public:
+	private:
 		void onRotateCamera(const GameplayEvent::RotateCamera &event);
 		void onPauseGame(const GameplayEvent::PauseGame &event);
 		void onOpenChat(const GameplayEvent::OpenChat &event);
 		void onTakeScreenshot();
 		void onGameUpdate(const GameplayEvent::GameUpdate &event);
 
-	private:
 		ClientPlayer &m_player; // dimension and camera
 		Client &m_client; // pause menu
 		ClientCommandHandler &m_clientCommandHandler; // chat

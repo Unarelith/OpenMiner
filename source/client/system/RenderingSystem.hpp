@@ -40,18 +40,6 @@ class ClientWorld;
 class MessageBus;
 class Skybox;
 
-namespace RenderingEvent {
-	struct DrawObjects {
-		std::vector<const gk::Drawable *> objects;
-		bool inFramebuffer;
-	};
-
-	struct WindowSizeChanged {
-		u16 width;
-		u16 height;
-	};
-}
-
 class RenderingSystem : public gk::Drawable {
 	public:
 		RenderingSystem(MessageBus &messageBus, gk::Camera &camera, ClientWorld &world, HUD &hud, Skybox &skybox);

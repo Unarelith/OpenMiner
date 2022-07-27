@@ -33,7 +33,6 @@
 #include "GameplaySystem.hpp"
 #include "HUD.hpp"
 #include "MessageBus.hpp"
-#include "RenderingSystem.hpp"
 #include "Skybox.hpp"
 
 #include "ChatState.hpp"

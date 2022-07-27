@@ -24,6 +24,7 @@
  *
  * =====================================================================================
  */
+#include "ClientEvents.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "GameTime.hpp"
