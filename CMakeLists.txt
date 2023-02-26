@@ -52,6 +52,12 @@ endif()
 
 set(CMAKE_CXX_STANDARD 17)
 
+
+if (MSVC)
+	# NOTE: STD ON MSVC DEBUG BUILDS IS ABSOLUTELY SLOW WHEN THE ITERATOR DEBUGGGING SUPPORT IS ENABLED. 
+	add_compile_definitions($<$<CONFIG:Debug>:_ITERATOR_DEBUG_LEVEL=0>)
+endif ()
+
 #------------------------------------------------------------------------------
 # Setting default build type
 #------------------------------------------------------------------------------
