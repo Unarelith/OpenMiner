@@ -52,6 +52,11 @@ endif()
 
 set(CMAKE_CXX_STANDARD 17)
 
+if (MSVC)
+	# Disable iterator debug, improves performance of debug builds
+	add_compile_definitions($<$<CONFIG:Debug>:_ITERATOR_DEBUG_LEVEL=0>)
+endif ()
+
 #------------------------------------------------------------------------------
 # Setting default build type
 #------------------------------------------------------------------------------
