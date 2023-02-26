@@ -62,9 +62,9 @@ add_subdirectory(gamekit)
 #------------------------------------------------------------------------------
 # - zlib
 #------------------------------------------------------------------------------
-set(ZLIB_STATIC ON)
+#set(ZLIB_STATIC ON)
 
-add_subdirectory(zlib ${CMAKE_CURRENT_BINARY_DIR}/external/zlib)
+#add_subdirectory(zlib ${CMAKE_CURRENT_BINARY_DIR}/external/zlib)
 
 #------------------------------------------------------------------------------
 # - lua

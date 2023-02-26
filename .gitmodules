@@ -5,10 +5,6 @@
 [submodule "external/gamekit"]
 	path = external/gamekit
 	url = https://github.com/Unarelith/GameKit.git
-[submodule "external/zlib"]
-	path = external/zlib
-	url = https://github.com/Unarelith/zlib.git
-	ignore = dirty
 [submodule "external/sol2"]
 	path = external/sol2
 	url = https://github.com/ThePhD/sol2.git

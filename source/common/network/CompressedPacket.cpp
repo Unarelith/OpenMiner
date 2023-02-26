@@ -29,6 +29,7 @@
 #include <gk/core/Debug.hpp>
 
 #include "CompressedPacket.hpp"
+#include "../miniz/miniz.h"
 
 // Note: This class was implemented thanks to this SFML forum topic:
 // https://en.sfml-dev.org/forums/index.php?topic=14344.0

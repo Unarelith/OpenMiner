@@ -30,8 +30,7 @@
 #include <gk/core/IntTypes.hpp>
 
 #include <SFML/Network/Packet.hpp>
-
-#include <zlib.h>
+#include "../miniz/miniz.h"
 
 class CompressedPacket : public sf::Packet {
 	private:
