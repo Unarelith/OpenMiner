@@ -66,6 +66,8 @@ set(ZLIB_STATIC ON)
 
 add_subdirectory(zlib ${CMAKE_CURRENT_BINARY_DIR}/external/zlib)
 
+target_include_directories(zlib PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/external/zlib)
+
 #------------------------------------------------------------------------------
 # - lua
 #------------------------------------------------------------------------------
