@@ -80,3 +80,5 @@ add_subdirectory(source/server)
 add_subdirectory(source/client)
 
 add_subdirectory(tests)
+
+include(vs_folders)
