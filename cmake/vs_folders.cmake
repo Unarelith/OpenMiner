@@ -1,3 +1,4 @@
+# Setup folders
 set_target_properties(aob                              PROPERTIES FOLDER "external/misc")
 set_target_properties(buildvm                          PROPERTIES FOLDER "external/misc")
 set_target_properties(buildvm_arch_h                   PROPERTIES FOLDER "external/misc")
@@ -27,3 +28,6 @@ set_target_properties(${CMAKE_PROJECT_NAME}            PROPERTIES FOLDER "source
 set_target_properties(${CMAKE_PROJECT_NAME}_common     PROPERTIES FOLDER "source")
 set_target_properties(${CMAKE_PROJECT_NAME}_server     PROPERTIES FOLDER "source")
 set_target_properties(${CMAKE_PROJECT_NAME}_server_lib PROPERTIES FOLDER "source")
+
+# Set startup project
+set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${CMAKE_PROJECT_NAME})
