@@ -66,8 +66,6 @@ mod:block {
 	hardness = 0,
 	draw_type = "leaves",
 	-- is_opaque = false, -- FIXME
-
-	item_drop = {},
 }
 
 mod:block {
@@ -181,7 +179,6 @@ mod:block {
 	color_multiplier = {129, 191, 91, 255},
 	hardness = 0,
 	draw_type = "xshape",
-	item_drop = {},
 }
 
 mod:block {
