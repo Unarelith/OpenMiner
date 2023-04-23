@@ -6,24 +6,30 @@ set(PROJECT_NAME ${PROJECT_NAME}_server)
 #------------------------------------------------------------------------------
 # Get source files
 #------------------------------------------------------------------------------
-file(GLOB_RECURSE SOURCE_FILES */*.cpp ../../external/FastNoise.cpp)
-file(GLOB_RECURSE HEADER_FILES *.hpp ../common/*.hpp)
+file(GLOB_RECURSE SOURCE_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} */*.cpp)
+file(GLOB_RECURSE HEADER_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.hpp)
 
-include_directories(../../external ../../external/entt/single_include)
-
-foreach(HEADER_FILE ${HEADER_FILES})
-	get_filename_component(HEADER_DIRECTORY ${HEADER_FILE} DIRECTORY)
-	include_directories(${HEADER_DIRECTORY})
-endforeach(HEADER_FILE)
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Header Files" FILES ${HEADER_FILES})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Source Files" FILES ${SOURCE_FILES} main.cpp)
 
 #------------------------------------------------------------------------------
 # Add executables
 #------------------------------------------------------------------------------
-add_library(${PROJECT_NAME}_lib STATIC ${SOURCE_FILES})
+add_library(${PROJECT_NAME}_lib STATIC ${HEADER_FILES} ${SOURCE_FILES})
 add_executable(${PROJECT_NAME} main.cpp)
 
 add_dependencies(${PROJECT_NAME}_lib ${CMAKE_PROJECT_NAME}_common)
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_lib)
+
+#------------------------------------------------------------------------------
+# Setup include directories
+#------------------------------------------------------------------------------
+target_include_directories(${PROJECT_NAME}_lib PUBLIC ../../external ../../external/entt/single_include)
+
+foreach(HEADER_FILE ${HEADER_FILES})
+	get_filename_component(HEADER_DIRECTORY ${HEADER_FILE} DIRECTORY)
+	target_include_directories(${PROJECT_NAME}_lib PUBLIC ${HEADER_DIRECTORY})
+endforeach(HEADER_FILE)
 
 #------------------------------------------------------------------------------
 # Compiler flags

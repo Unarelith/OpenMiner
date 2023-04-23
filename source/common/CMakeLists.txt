@@ -6,28 +6,24 @@ set(PROJECT_NAME ${CMAKE_PROJECT_NAME}_common)
 #------------------------------------------------------------------------------
 # Get source files
 #------------------------------------------------------------------------------
-file(GLOB_RECURSE SOURCE_FILES *.cpp)
-file(GLOB_RECURSE HEADER_FILES *.hpp)
+file(GLOB_RECURSE SOURCE_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
+file(GLOB_RECURSE HEADER_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.hpp)
 
-foreach(HEADER_FILE ${HEADER_FILES})
-	get_filename_component(HEADER_DIRECTORY ${HEADER_FILE} DIRECTORY)
-	include_directories(${HEADER_DIRECTORY})
-endforeach(HEADER_FILE)
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Header Files" FILES ${HEADER_FILES})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Source Files" FILES ${SOURCE_FILES})
 
 #------------------------------------------------------------------------------
 # Add library
 #------------------------------------------------------------------------------
-add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
+add_library(${PROJECT_NAME} STATIC ${HEADER_FILES} ${SOURCE_FILES})
 
-add_dependencies(${PROJECT_NAME}
-	sfml-network
-	sfml-system
-	zlib
-	EnTT
-	gamekit
-	libluajit
-	sol2
-)
+#------------------------------------------------------------------------------
+# Setup include directories
+#------------------------------------------------------------------------------
+foreach(HEADER_FILE ${HEADER_FILES})
+	get_filename_component(HEADER_DIRECTORY ${HEADER_FILE} DIRECTORY)
+	target_include_directories(${PROJECT_NAME} PUBLIC ${HEADER_DIRECTORY})
+endforeach(HEADER_FILE)
 
 # FIXME: Use target_include_directories(PUBLIC ...) in gamekit/zlib/lua
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${PROJECT_SOURCE_DIR}/external/entt/src)
@@ -63,6 +59,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 	libluajit
 	gamekit
 	zlib
+	EnTT
 	${OPENGL_LIBRARIES}
 	${UNIX_LIBS}
 )
