@@ -44,9 +44,9 @@ void ChunkMeshBuilder::addMeshBuildingJob(const Chunk &chunk, const TextureAtlas
 	OM_PROFILE_START("ChunkMeshBuilder::addMeshBuildingJob");
 
 	// Creating the job (creates a copy of the chunk to send it to the thread)
-	ChunkMeshBuildingJob job;
-	job.textureAtlas = &textureAtlas;
-	job.chunkData.loadFromChunk(chunk);
+	ChunkMeshBuildingJob *job = new ChunkMeshBuildingJob;
+	job->textureAtlas = &textureAtlas;
+	job->chunkData.loadFromChunk(chunk);
 
 	// Send the job to the thread pool
 	auto future = thread::DefaultThreadPool::submitJob(&ChunkMeshBuilder::buildChunkMesh, job);
@@ -58,27 +58,29 @@ void ChunkMeshBuilder::addMeshBuildingJob(const Chunk &chunk, const TextureAtlas
 void ChunkMeshBuilder::update() {
 	for (auto it = m_futures.begin() ; it != m_futures.end() ; ) {
 		if (it->future().valid() && it->future().wait_for(std::chrono::milliseconds(0)) == std::future_status::ready) {
-			ChunkMeshBuildingJob job = it->get();
+			ChunkMeshBuildingJob *job = it->get();
 
-			ClientChunk *chunk = (ClientChunk *)m_world.getChunk(job.chunkData.x, job.chunkData.y, job.chunkData.z);
+			ClientChunk *chunk = (ClientChunk *)m_world.getChunk(job->chunkData.x, job->chunkData.y, job->chunkData.z);
 			if (chunk) {
 				const gk::VertexBuffer &vbo = chunk->getVertexBuffer();
 
 				gk::VertexBuffer::bind(&vbo);
-				vbo.setData(job.totalVertexCount * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
+				vbo.setData(job->totalVertexCount * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
 
 				u64 offset = 0;
 				for (u8 i = 0 ; i < ChunkMeshLayer::Count ; ++i) {
-					job.vertices[i].shrink_to_fit();
+					job->vertices[i].shrink_to_fit();
 
-					vbo.updateData(offset * sizeof(Vertex), job.vertices[i].size() * sizeof(Vertex), job.vertices[i].data());
+					vbo.updateData(offset * sizeof(Vertex), job->vertices[i].size() * sizeof(Vertex), job->vertices[i].data());
 
-					chunk->setVerticesCount(i, job.vertices[i].size());
-					offset += job.vertices[i].size();
+					chunk->setVerticesCount(i, job->vertices[i].size());
+					offset += job->vertices[i].size();
 				}
 
 				gk::VertexBuffer::bind(nullptr);
 			}
+
+			delete job;
 
 			it = m_futures.erase(it);
 		}
@@ -87,21 +89,21 @@ void ChunkMeshBuilder::update() {
 	}
 }
 
-ChunkMeshBuildingJob ChunkMeshBuilder::buildChunkMesh(ChunkMeshBuildingJob job) {
+ChunkMeshBuildingJob *ChunkMeshBuilder::buildChunkMesh(ChunkMeshBuildingJob *job) {
 	// For each block, generate its vertices and add them to the list
 	for (s8f z = 0 ; z < CHUNK_HEIGHT ; z++) {
 		for (s8f y = 0 ; y < CHUNK_DEPTH ; y++) {
 			for (s8f x = 0 ; x < CHUNK_WIDTH ; x++) {
-				u16 blockID = job.chunkData.getBlockID(x, y, z);
+				u16 blockID = job->chunkData.getBlockID(x, y, z);
 				if (!blockID) continue;
 
-				u16 blockParam = job.chunkData.getBlockParam(x, y, z);
+				u16 blockParam = job->chunkData.getBlockParam(x, y, z);
 				const BlockState &blockState = ChunkData::getBlockState(blockID, blockParam);
 
 				if (blockState.drawType() == BlockDrawType::XShape)
-					XShapeMesher::addCross(x, y, z, job, blockState);
+					XShapeMesher::addCross(x, y, z, *job, blockState);
 				else
-					BlockMesher::addBlock(x, y, z, job, blockState, blockParam);
+					BlockMesher::addBlock(x, y, z, *job, blockState, blockParam);
 			}
 		}
 	}

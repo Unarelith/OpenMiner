@@ -42,11 +42,11 @@ class ChunkMeshBuilder {
 		void update();
 
 	private:
-		static ChunkMeshBuildingJob buildChunkMesh(ChunkMeshBuildingJob job);
+		static ChunkMeshBuildingJob *buildChunkMesh(ChunkMeshBuildingJob *job);
 
 		ClientWorld &m_world;
 
-		std::vector<thread::ThreadPool::TaskFuture<ChunkMeshBuildingJob>> m_futures;
+		std::vector<thread::ThreadPool::TaskFuture<ChunkMeshBuildingJob *>> m_futures;
 };
 
 #endif // CHUNKMESHBUILDER_HPP_
