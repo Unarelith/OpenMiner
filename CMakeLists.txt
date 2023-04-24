@@ -81,4 +81,6 @@ add_subdirectory(source/client)
 
 add_subdirectory(tests)
 
-include(vs_folders)
+if (MSVC)
+	include(vs_folders)
+endif()
