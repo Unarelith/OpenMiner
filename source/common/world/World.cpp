@@ -116,6 +116,24 @@ void World::setData(int x, int y, int z, u16 data) const {
 		chunk->setData(x & (CHUNK_WIDTH - 1), y & (CHUNK_DEPTH - 1), z & (CHUNK_HEIGHT - 1), data);
 }
 
+bool World::addChunkToUpdate(Chunk *chunk) {
+	if (m_chunksToUpdate.find(chunk) == m_chunksToUpdate.end()) {
+		m_chunksToUpdate.emplace(chunk);
+		m_chunkUpdateQueue.emplace(chunk);
+		return true;
+	}
+	return false;
+}
+
+bool World::addChunkToProcess(Chunk *chunk) {
+	if (m_chunksToProcess.find(chunk) == m_chunksToProcess.end()) {
+		m_chunksToProcess.emplace(chunk);
+		m_chunkProcessQueue.emplace(chunk);
+		return true;
+	}
+	return false;
+}
+
 void World::clearUpdateQueues() {
 	while (!m_chunkUpdateQueue.empty())
 		m_chunkUpdateQueue.pop();
