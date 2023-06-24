@@ -54,6 +54,20 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) {
 	Random_t rand;
 	rand.seed(chunk.x() + chunk.y() * CHUNK_WIDTH + chunk.z() * CHUNK_WIDTH * CHUNK_HEIGHT + 1337);
 
+	FastNoiseLite cave1;
+	cave1.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+	cave1.SetFractalType(FastNoiseLite::FractalType::FractalType_FBm);
+	cave1.SetFrequency(1);
+	cave1.SetFractalOctaves(1);
+	cave1.SetSeed(1337);
+
+	FastNoiseLite cave2;
+	cave2.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+	cave2.SetFractalType(FastNoiseLite::FractalType::FractalType_FBm);
+	cave2.SetFrequency(1);
+	cave1.SetFractalOctaves(1);
+	cave2.SetSeed(1338);
+
 	Chunk *topChunk = chunk.getSurroundingChunk(Chunk::Top);
 	for(s8 y = 0 ; y < CHUNK_DEPTH ; y++) {
 		for(s8 x = 0 ; x < CHUNK_WIDTH ; x++) {
@@ -89,7 +103,7 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) {
 						chunk.setBlockRaw(x, y, z, biome.getDeepBlockID());
 
 					// Caves
-					generateCaves(chunk, x, y, z);
+					//generateCaves(chunk, x, y, z);
 
 					// Populate ores.
 					generateOres(chunk, x, y, z, biome, rand);
@@ -119,6 +133,83 @@ void TerrainGenerator::fastNoiseGeneration(ServerChunk &chunk) {
 			}
 		}
 	}
+
+
+	for(s8 y = 0 ; y < CHUNK_DEPTH ; y++) {
+		for(s8 x = 0 ; x < CHUNK_WIDTH ; x++) {
+			for(s8 z = 0 ; z < CHUNK_HEIGHT ; z++) {
+				float c1 = cave1.GetNoise((x + chunk.x() * CHUNK_WIDTH) / 70.0, (y + chunk.y() * CHUNK_DEPTH) / 70.0, (z + chunk.z() * CHUNK_HEIGHT) / 50.0);
+				float c2 = cave2.GetNoise((x + chunk.x() * CHUNK_WIDTH) / 70.0, (y + chunk.y() * CHUNK_DEPTH) / 70.0, (z + chunk.z() * CHUNK_HEIGHT) / 50.0);
+				float d = c1 * c1 + c2 * c2;
+				if (d < 0.001)
+				{
+					float radius = 3.f;
+					gk::Vector3i d;
+					for (int zz = z - radius ; zz <= z + radius; ++zz) { d.z = zz - z;
+					for (int yy = y - radius ; yy <= y + radius; ++yy) { d.y = yy - y;
+					for (int xx = x - radius ; xx <= x + radius; ++xx) { d.x = xx - x;
+						if (d.x * d.x + d.y * d.y + 2 * d.z * d.z < radius * radius)
+							chunk.setBlockRaw(xx, yy, zz, 0);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//auto randomFloat = [&](){ return rand.get<int>(0, 512) / 512.f; };
+
+	//float height = CHUNK_HEIGHT;
+
+	//gk::Vector3i cavePos{rand.get<int>() % CHUNK_WIDTH, rand.get<int>() % CHUNK_DEPTH, rand.get<int>() % CHUNK_HEIGHT};
+	//int caveLength = randomFloat() * randomFloat() * 200.0f;
+
+	//double n = m_caveNoise.GetNoise<double>(cavePos.x, cavePos.y, cavePos.z);
+
+	//float theta = randomFloat() * M_PI * 2.0f;
+	//float deltaTheta = 0.0f;
+
+	//float phi = randomFloat() * M_PI * 2.0f;
+	//float deltaPhi = 0.0f;
+
+	//float caveRadius = randomFloat() * randomFloat();
+
+	//for (int len = 0 ; len < caveLength ; ++len) {
+	//	cavePos.x += std::sin(theta) * std::cos(phi);
+	//	cavePos.y += std::cos(theta) * std::cos(phi);
+	//	cavePos.z += std::sin(phi);
+
+	//	theta += deltaTheta * 0.2f;
+	//	deltaTheta = deltaTheta * 0.9f + randomFloat() - randomFloat();
+
+	//	phi = phi * 0.5f + deltaPhi * 0.25f;
+	//	deltaPhi = deltaPhi * 0.75f + randomFloat() - randomFloat();
+
+	//	if (randomFloat() >= 0.25f) {
+	//		gk::Vector3i centerPos;
+	//		centerPos.x = cavePos.x + ((rand.get<int>() % 4) - 2) * 0.2f;
+	//		centerPos.y = cavePos.y + ((rand.get<int>() % 4) - 2) * 0.2f;
+	//		centerPos.z = cavePos.z + ((rand.get<int>() % 4) - 2) * 0.2f;
+
+	//		float radius = (height - centerPos.y) / height;
+	//		radius = 1.2f + (radius * 3.5f + 1.0f) * caveRadius;
+	//		radius *= std::sin(len * M_PI / caveLength);
+
+	//		gk::Vector3f begin{centerPos.x - radius, centerPos.y - radius, centerPos.z - radius};
+	//		gk::Vector3f end{centerPos.x + radius, centerPos.y + radius, centerPos.z + radius};
+	//		float radiusSq = radius * radius;
+	//		gk::Vector3i d;
+	//		for (int zz = begin.z ; zz <= end.z ; ++zz) { d.z = zz - centerPos.z;
+	//			for (int yy = begin.y ; yy <= end.y ; ++yy) { d.y = yy - centerPos.y;
+	//				for (int xx = begin.x ; xx <= end.x ; ++xx) { d.x = xx - centerPos.x;
+	//					if (d.x * d.x + d.y * d.y + 2 * d.z * d.z < radiusSq)
+	//						chunk.setBlockRaw(xx, yy, zz, 0);
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 }
 
 inline bool TerrainGenerator::tryPlaceTree(ServerChunk &chunk, int x, int y, int z, const Biome &biome, Random_t &rand) const {
