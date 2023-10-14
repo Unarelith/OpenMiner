@@ -33,7 +33,6 @@
 #include <SFML/Network/IpAddress.hpp>
 #include <SFML/Network/TcpSocket.hpp>
 
-#include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/Timer.hpp>
 
 #include "Network.hpp"

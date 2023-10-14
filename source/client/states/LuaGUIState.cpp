@@ -26,11 +26,11 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/Debug.hpp>
 #include <gk/core/input/GamePad.hpp>
 #include <gk/graphics/Color.hpp>
 
+#include "ApplicationStateStack.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "Config.hpp"

@@ -24,8 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/ApplicationStateStack.hpp>
-
+#include "ApplicationStateStack.hpp"
 #include "GameState.hpp"
 #include "ServerConnectState.hpp"
 #include "ServerLoadingState.hpp"

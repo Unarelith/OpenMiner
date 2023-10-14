@@ -57,7 +57,7 @@ bool CoreApplication::init() {
 
 	Mouse::setWindow(&m_window);
 
-	gk::ApplicationStateStack::setInstance(m_stateStack);
+	ApplicationStateStack::setInstance(m_stateStack);
 	gk::GameClock::setInstance(m_clock);
 	gk::ResourceHandler::setInstance(m_resourceHandler);
 	gk::LoggerHandler::setInstance(m_loggerHandler);

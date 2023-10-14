@@ -24,8 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/ApplicationStateStack.hpp>
-
+#include "ApplicationStateStack.hpp"
 #include "Config.hpp"
 #include "Events.hpp"
 #include "GameConfig.hpp"

@@ -24,8 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/ApplicationStateStack.hpp>
-
+#include "ApplicationStateStack.hpp"
 #include "Chat.hpp"
 #include "ChatState.hpp"
 #include "ClientCommandHandler.hpp"

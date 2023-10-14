@@ -26,8 +26,7 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/ApplicationStateStack.hpp>
-
+#include "ApplicationStateStack.hpp"
 #include "Config.hpp"
 #include "EngineConfig.hpp"
 #include "InterfaceState.hpp"

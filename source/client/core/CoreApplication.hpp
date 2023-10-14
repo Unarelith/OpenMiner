@@ -27,13 +27,13 @@
 #ifndef COREAPPLICATION_HPP_
 #define COREAPPLICATION_HPP_
 
-#include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/ArgumentParser.hpp>
 #include <gk/core/EventHandler.hpp>
 #include <gk/core/GameClock.hpp>
 #include <gk/core/SDLLoader.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
+#include "ApplicationStateStack.hpp"
 #include "Window.hpp"
 
 class CoreApplication {
@@ -61,7 +61,7 @@ class CoreApplication {
 		gk::SDLLoader m_sdlLoader;
 		bool m_loadSDL = true;
 
-		gk::ApplicationStateStack m_stateStack;
+		ApplicationStateStack m_stateStack;
 
 		gk::GameClock m_clock;
 
@@ -77,7 +77,7 @@ class CoreApplication {
 
 		gk::LoggerHandler m_loggerHandler;
 
-		gk::ApplicationState *m_currentState = nullptr;
+		ApplicationState *m_currentState = nullptr;
 };
 
 #endif // COREAPPLICATION_HPP_

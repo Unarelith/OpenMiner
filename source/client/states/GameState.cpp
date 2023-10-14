@@ -31,12 +31,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <gk/core/input/GamePad.hpp>
-#include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/Exception.hpp>
 #include <gk/core/GameClock.hpp>
 #include <gk/gl/OpenGL.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
+#include "ApplicationStateStack.hpp"
 #include "ChatState.hpp"
 #include "Events.hpp"
 #include "GameKey.hpp"

@@ -24,11 +24,11 @@
  *
  * =====================================================================================
  */
-#include <gk/core/ApplicationStateStack.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include <filesystem.hpp>
 
+#include "ApplicationStateStack.hpp"
 #include "Config.hpp"
 #include "GameConfig.hpp"
 #include "TextureAtlas.hpp"
