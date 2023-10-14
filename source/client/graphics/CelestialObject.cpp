@@ -89,9 +89,9 @@ void CelestialObject::updateVertexBuffer() const {
 		vertices[3].texCoord[1] = texRect.y + texRect.sizeY;
 	}
 
-	gk::VertexBuffer::bind(&m_vbo);
+	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_STATIC_DRAW);
-	gk::VertexBuffer::bind(nullptr);
+	VertexBuffer::bind(nullptr);
 
 	m_isUpdateNeeded = false;
 }

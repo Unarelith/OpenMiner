@@ -137,9 +137,9 @@ void Minimap::updatePlayerFovVertexBuffer() {
 		vertices[i].color[3] = color.a;
 	}
 
-	gk::VertexBuffer::bind(&m_vbo);
+	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	gk::VertexBuffer::bind(nullptr);
+	VertexBuffer::bind(nullptr);
 }
 
 void Minimap::draw(RenderTarget &target, RenderStates states) const {

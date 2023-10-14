@@ -134,9 +134,9 @@ void Text::updateVertexBuffer() const {
 
 	m_verticesCount = (u32)vertices.size();
 
-	gk::VertexBuffer::bind(&m_vbo);
+	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(gk::Vertex) * m_verticesCount, vertices.data(), GL_DYNAMIC_DRAW);
-	gk::VertexBuffer::bind(nullptr);
+	VertexBuffer::bind(nullptr);
 
 	m_size.x = std::max(x, maxX);
 	m_size.y = y + m_font.getTileSize().y + 1;

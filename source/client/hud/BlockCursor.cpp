@@ -272,9 +272,9 @@ void BlockCursor::updateVertexBuffer(const BlockState &blockState, u8f orientati
 	Vertex vertices[nFaces][nVertsPerFace];
 	updateVBOCoords(vertices, blockState, -1, orientation);
 
-	gk::VertexBuffer::bind(&m_vbo);
+	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	gk::VertexBuffer::bind(nullptr);
+	VertexBuffer::bind(nullptr);
 }
 
 void BlockCursor::updateAnimationVertexBuffer(const BlockState &blockState, u8f orientation, int animationPos) {
@@ -303,9 +303,9 @@ void BlockCursor::updateAnimationVertexBuffer(const BlockState &blockState, u8f 
 		}
 	}
 
-	gk::VertexBuffer::bind(&m_animationVBO);
+	VertexBuffer::bind(&m_animationVBO);
 	m_animationVBO.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	gk::VertexBuffer::bind(nullptr);
+	VertexBuffer::bind(nullptr);
 }
 
 void BlockCursor::draw(RenderTarget &target, RenderStates states) const {

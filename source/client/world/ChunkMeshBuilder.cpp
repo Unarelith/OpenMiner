@@ -62,9 +62,9 @@ void ChunkMeshBuilder::update() {
 
 			ClientChunk *chunk = (ClientChunk *)m_world.getChunk(job->chunkData.x, job->chunkData.y, job->chunkData.z);
 			if (chunk) {
-				const gk::VertexBuffer &vbo = chunk->getVertexBuffer();
+				const VertexBuffer &vbo = chunk->getVertexBuffer();
 
-				gk::VertexBuffer::bind(&vbo);
+				VertexBuffer::bind(&vbo);
 				vbo.setData(job->totalVertexCount * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
 
 				u64 offset = 0;
@@ -77,7 +77,7 @@ void ChunkMeshBuilder::update() {
 					offset += job->vertices[i].size();
 				}
 
-				gk::VertexBuffer::bind(nullptr);
+				VertexBuffer::bind(nullptr);
 			}
 
 			delete job;

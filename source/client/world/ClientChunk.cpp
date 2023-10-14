@@ -57,7 +57,7 @@ ClientChunk::ClientChunk(s32 x, s32 y, s32 z, const Dimension &dimension, Client
 
 	// Prepare VAO
 	gk::VertexArray::bind(&m_vao);
-	gk::VertexBuffer::bind(&m_vbo);
+	VertexBuffer::bind(&m_vbo);
 	m_vbo.layout().enableLayout();
 	gk::VertexArray::bind(nullptr);
 }

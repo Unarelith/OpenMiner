@@ -28,7 +28,8 @@
 #define FRAMEBUFFER_HPP_
 
 #include <gk/gl/Shader.hpp>
-#include <gk/gl/VertexBuffer.hpp>
+
+#include "VertexBuffer.hpp"
 
 class Framebuffer : public gk::NonCopyable {
 	public:
@@ -57,7 +58,7 @@ class Framebuffer : public gk::NonCopyable {
 		GLuint m_rbo = 0;
 
 		gk::Shader m_shader;
-		gk::VertexBuffer m_vbo;
+		VertexBuffer m_vbo;
 };
 
 #endif // FRAMEBUFFER_HPP_

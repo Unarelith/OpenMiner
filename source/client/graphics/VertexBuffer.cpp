@@ -24,38 +24,48 @@
  *
  * =====================================================================================
  */
-#ifndef INVENTORYCUBE_HPP_
-#define INVENTORYCUBE_HPP_
+#include <gk/gl/GLCheck.hpp>
 
-#include <gk/gl/Transformable.hpp>
-
-#include "Drawable.hpp"
 #include "VertexBuffer.hpp"
 
-class Block;
-class TextureAtlas;
+VertexBuffer::VertexBuffer() {
+	glCheck(glGenBuffers(1, &m_id));
+}
 
-class InventoryCube : public Drawable, public gk::Transformable {
-	public:
-		InventoryCube(float size = 1.0f, bool isEntity = false);
+VertexBuffer::VertexBuffer(VertexBuffer &&vertexBuffer) {
+	m_id = vertexBuffer.m_id;
+	vertexBuffer.m_id = 0;
 
-		void updateVertexBuffer(const Block &block, u8 state = 0);
+	m_layout = std::move(vertexBuffer.m_layout);
+}
 
-		float size() const { return m_size; }
+VertexBuffer::~VertexBuffer() noexcept {
+	if (m_id != 0)
+		glCheck(glDeleteBuffers(1, &m_id));
+}
 
-	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+VertexBuffer &VertexBuffer::operator=(VertexBuffer &&vertexBuffer) {
+	m_id = vertexBuffer.m_id;
+	vertexBuffer.m_id = 0;
 
-		float m_size = 1.0f;
+	m_layout = std::move(vertexBuffer.m_layout);
 
-		const TextureAtlas *m_textureAtlas;
+	return *this;
+}
 
-		VertexBuffer m_vbo;
-		bool m_isVboInitialized = false;
+void VertexBuffer::setData(GLsizeiptr size, const GLvoid *data, GLenum usage) const {
+	glCheck(glBufferData(GL_ARRAY_BUFFER, size, data, usage));
+}
 
-		gk::Transformable m_transform;
+void VertexBuffer::updateData(GLintptr offset, GLsizeiptr size, const GLvoid *data) const {
+	glCheck(glBufferSubData(GL_ARRAY_BUFFER, offset, size, data));
+}
 
-		bool m_isEntity = false;
-};
+void VertexBuffer::bind(const VertexBuffer *vertexBuffer) {
+	if(vertexBuffer) {
+		glCheck(glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->m_id));
+	} else {
+		glCheck(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	}
+}
 
-#endif // INVENTORYCUBE_HPP_
