@@ -157,7 +157,7 @@ void ServerConnectState::updateWidgetPosition() {
 	);
 }
 
-void ServerConnectState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void ServerConnectState::draw(gk::RenderTarget &target, RenderStates states) const {
 	if (&m_stateStack->top() == this) {
 		prepareDraw(target, states);
 

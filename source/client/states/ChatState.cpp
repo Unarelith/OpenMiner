@@ -106,7 +106,7 @@ void ChatState::updateWidgetPosition() {
 	m_textInput.setBackgroundSize(Config::screenWidth / Config::guiScale - 4, 10);
 }
 
-void ChatState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void ChatState::draw(gk::RenderTarget &target, RenderStates states) const {
 	if (m_parent)
 		target.draw(*m_parent, states);
 

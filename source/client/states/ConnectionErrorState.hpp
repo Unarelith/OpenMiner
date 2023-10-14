@@ -39,7 +39,7 @@ class ConnectionErrorState : public InterfaceState {
 	private:
 		void updateWidgetPosition() override;
 
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		std::string m_host;
 		u16 m_port;

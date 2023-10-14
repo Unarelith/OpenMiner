@@ -41,7 +41,7 @@ class BlockInfoWidget : public Widget {
 		void setCurrentBlock(const BlockState *blockState);
 
 	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		Inventory m_inventory{1, 1};
 		ItemWidget m_itemWidget{m_inventory, 0, 0, this};

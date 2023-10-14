@@ -69,7 +69,7 @@ class CoreApplication {
 
 		Window m_window;
 
-		gk::RenderStates m_renderStates = gk::RenderStates::Default;
+		RenderStates m_renderStates = RenderStates::Default;
 
 		gk::ArgumentParser m_argumentParser;
 

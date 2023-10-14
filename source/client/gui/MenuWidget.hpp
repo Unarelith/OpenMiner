@@ -56,7 +56,7 @@ class MenuWidget : public Widget {
 	private:
 		void updateWidgetPosition(Widget &widget, int x, int y);
 
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		u16 m_verticalSpacing = 5;
 		u16 m_horizontalSpacing = 5;

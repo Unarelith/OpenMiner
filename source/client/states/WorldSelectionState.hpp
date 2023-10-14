@@ -43,7 +43,7 @@ class WorldSelectionState : public InterfaceState {
 		void updateWidgetPosition() override;
 		void loadSaveList();
 
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		TitleScreenState *m_titleScreen = nullptr;
 

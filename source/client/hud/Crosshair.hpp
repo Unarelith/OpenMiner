@@ -36,7 +36,7 @@ class Crosshair : public Drawable {
 		void setup();
 
 	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		gk::RectangleShape m_hShape;
 		gk::RectangleShape m_vShape1;

@@ -142,13 +142,13 @@ void Minimap::updatePlayerFovVertexBuffer() {
 	gk::VertexBuffer::bind(nullptr);
 }
 
-void Minimap::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void Minimap::draw(gk::RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_border, states);
 
 	{
-		gk::RenderStates states2 = states;
+		RenderStates states2 = states;
 		states2.transform.translate(minimapSize / 2 + chunkSize / 2, minimapSize / 2 + chunkSize / 2);
 		states2.transform *= m_playerFovRotationTransform;
 

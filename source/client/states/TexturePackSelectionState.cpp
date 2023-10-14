@@ -166,7 +166,7 @@ void TexturePackSelectionState::loadTexturePackList() {
 	}
 }
 
-void TexturePackSelectionState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void TexturePackSelectionState::draw(gk::RenderTarget &target, RenderStates states) const {
 	if (&m_stateStack->top() == this) {
 		prepareDraw(target, states);
 

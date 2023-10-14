@@ -72,7 +72,7 @@ void DebugLightmapViewer::update(const ClientWorld &world) {
 	m_playerRect.setPosition((float)rx * 8.f, float(CHUNK_DEPTH - ry - 1) * 8.f);
 }
 
-void DebugLightmapViewer::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void DebugLightmapViewer::draw(gk::RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_playerRect, states);

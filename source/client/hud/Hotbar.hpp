@@ -47,7 +47,7 @@ class Hotbar : public Widget {
 		const Item &currentItem() const;
 
 	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		gk::Image m_background;
 

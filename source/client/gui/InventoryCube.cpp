@@ -154,7 +154,7 @@ void InventoryCube::updateVertexBuffer(const Block &block, u8 state) {
 	m_isVboInitialized = true;
 }
 
-void InventoryCube::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void InventoryCube::draw(gk::RenderTarget &target, RenderStates states) const {
 	if (!m_isVboInitialized) return;
 
 	states.transform *= getTransform();

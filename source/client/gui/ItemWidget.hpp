@@ -53,7 +53,7 @@ class ItemWidget : public Widget {
 		void setChanged(bool hasChanged) { m_hasChanged = hasChanged; }
 
 	protected:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 	private:
 		Inventory &m_inventory;

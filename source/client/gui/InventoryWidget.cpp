@@ -130,7 +130,7 @@ void InventoryWidget::sendUpdatePacket() {
 	}
 }
 
-void InventoryWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void InventoryWidget::draw(gk::RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
 	for (std::size_t i = 0 ; i < m_itemWidgets.size() ; ++i) {

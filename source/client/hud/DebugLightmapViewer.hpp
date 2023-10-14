@@ -46,7 +46,7 @@ class DebugLightmapViewer : public gk::Transformable, public Drawable {
 		static constexpr s32 totalSize = CHUNK_WIDTH * 8;
 
 	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		const ClientPlayer &m_player;
 

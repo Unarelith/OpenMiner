@@ -72,7 +72,7 @@ void ProgressBarWidget::update() {
 	}
 }
 
-void ProgressBarWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void ProgressBarWidget::draw(gk::RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_image, states);

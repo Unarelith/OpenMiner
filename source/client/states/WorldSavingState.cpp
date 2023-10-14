@@ -85,7 +85,7 @@ void WorldSavingState::updateWidgetPosition() {
 	                   Config::screenHeight / 2.f - float(m_text.getSize().y * Config::guiScale) * 2.f / 2.f);
 }
 
-void WorldSavingState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void WorldSavingState::draw(gk::RenderTarget &target, RenderStates states) const {
 	if (&m_stateStack->top() == this) {
 		prepareDraw(target, states);
 

@@ -40,7 +40,7 @@ class ScrollBarWidget : public Widget {
 		void onEvent(const SDL_Event &event) override;
 
 	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		void updateScrolling(u16 y);
 
