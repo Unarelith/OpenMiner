@@ -30,8 +30,6 @@
 #include <deque>
 #include <memory>
 
-#include <gk/graphics/RectangleShape.hpp>
-
 #include "CraftingWidget.hpp"
 #include "InterfaceState.hpp"
 #include "InventoryWidget.hpp"

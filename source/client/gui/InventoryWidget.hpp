@@ -27,10 +27,9 @@
 #ifndef INVENTORYWIDGET_HPP_
 #define INVENTORYWIDGET_HPP_
 
-#include <gk/graphics/RectangleShape.hpp>
-
 #include "AbstractInventoryWidget.hpp"
 #include "MouseItemWidget.hpp"
+#include "RectangleShape.hpp"
 
 class ClientCommandHandler;
 
@@ -76,7 +75,7 @@ class InventoryWidget : public AbstractInventoryWidget {
 		std::vector<ItemWidget> m_itemWidgets;
 		ItemWidget *m_currentItemWidget = nullptr;
 
-		gk::RectangleShape m_selectedItemBackground{16, 16, gk::Color::fromRGBA32(255, 255, 255, 80)};
+		RectangleShape m_selectedItemBackground{16, 16, gk::Color::fromRGBA32(255, 255, 255, 80)};
 
 		std::string m_lastSearch;
 };

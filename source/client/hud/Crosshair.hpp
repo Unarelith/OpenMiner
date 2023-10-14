@@ -27,7 +27,7 @@
 #ifndef CROSSHAIR_HPP_
 #define CROSSHAIR_HPP_
 
-#include <gk/graphics/RectangleShape.hpp>
+#include "RectangleShape.hpp"
 
 class Crosshair : public Drawable {
 	public:
@@ -38,9 +38,9 @@ class Crosshair : public Drawable {
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		gk::RectangleShape m_hShape;
-		gk::RectangleShape m_vShape1;
-		gk::RectangleShape m_vShape2;
+		RectangleShape m_hShape;
+		RectangleShape m_vShape1;
+		RectangleShape m_vShape2;
 };
 
 #endif // CROSSHAIR_HPP_

@@ -29,7 +29,8 @@
 
 #include <gk/core/ApplicationState.hpp>
 #include <gk/gl/Shader.hpp>
-#include <gk/graphics/RectangleShape.hpp>
+
+#include "RectangleShape.hpp"
 
 class InterfaceState : public gk::ApplicationState {
 	public:
@@ -53,7 +54,7 @@ class InterfaceState : public gk::ApplicationState {
 
 		glm::mat4 m_projectionMatrix;
 
-		gk::RectangleShape m_background;
+		RectangleShape m_background;
 };
 
 #endif // INTERFACESTATE_HPP_

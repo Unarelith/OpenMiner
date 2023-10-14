@@ -48,8 +48,8 @@ class WorldSelectionState : public InterfaceState {
 		TitleScreenState *m_titleScreen = nullptr;
 
 		gk::Image m_background{"texture-menu_background"};
-		gk::RectangleShape m_filter1;
-		gk::RectangleShape m_filter2;
+		RectangleShape m_filter1;
+		RectangleShape m_filter2;
 
 		Text m_title;
 

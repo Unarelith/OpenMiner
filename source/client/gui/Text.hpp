@@ -31,7 +31,8 @@
 #include <vector>
 
 #include <gk/gl/Vertex.hpp>
-#include <gk/graphics/RectangleShape.hpp>
+
+#include "RectangleShape.hpp"
 
 class Font;
 
@@ -81,7 +82,7 @@ class Text : public Drawable, public gk::Transformable {
 
 		gk::Color m_color = gk::Color::White;
 
-		mutable gk::RectangleShape m_background;
+		mutable RectangleShape m_background;
 
 		u32 m_maxLineLength = 0;
 };

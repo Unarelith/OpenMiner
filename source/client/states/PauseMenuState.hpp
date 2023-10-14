@@ -27,8 +27,6 @@
 #ifndef PAUSEMENUSTATE_HPP_
 #define PAUSEMENUSTATE_HPP_
 
-#include <gk/graphics/RectangleShape.hpp>
-
 #include "InterfaceState.hpp"
 #include "MenuWidget.hpp"
 
