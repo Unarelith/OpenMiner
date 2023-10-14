@@ -31,9 +31,9 @@
 
 #include <gk/graphics/Color.hpp>
 #include <gk/gl/Transformable.hpp>
-#include <gk/gl/VertexBuffer.hpp>
 
 #include "Drawable.hpp"
+#include "VertexBuffer.hpp"
 
 class RectangleShape : public Drawable, public gk::Transformable {
 	public:
@@ -68,7 +68,7 @@ class RectangleShape : public Drawable, public gk::Transformable {
 		float m_width = 0;
 		float m_height = 0;
 
-		gk::VertexBuffer m_vbo;
+		VertexBuffer m_vbo;
 
 		gk::Color m_outlineColor{gk::Color::White};
 		int m_outlineThickness = 0;

@@ -33,7 +33,6 @@
 #include <vector>
 
 #include <gk/core/Vector3.hpp>
-#include <gk/gl/VertexBuffer.hpp>
 #include <gk/utils/NonCopyable.hpp>
 
 #include "Block.hpp"

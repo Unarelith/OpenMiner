@@ -132,9 +132,9 @@ void Image::updateVertexBuffer() const {
 		vertices[i].color[3] = m_color.a;
 	}
 
-	gk::VertexBuffer::bind(&m_vbo);
+	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	gk::VertexBuffer::bind(nullptr);
+	VertexBuffer::bind(nullptr);
 }
 
 void Image::draw(RenderTarget &target, RenderStates states) const {

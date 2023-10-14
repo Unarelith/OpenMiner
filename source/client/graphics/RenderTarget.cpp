@@ -27,10 +27,10 @@
 #include <gk/gl/GLCheck.hpp>
 #include <gk/gl/Shader.hpp>
 #include <gk/gl/Texture.hpp>
-#include <gk/gl/VertexBuffer.hpp>
 
 #include "Drawable.hpp"
 #include "RenderTarget.hpp"
+#include "VertexBuffer.hpp"
 
 const RenderStates RenderStates::Default{};
 
@@ -38,10 +38,10 @@ void RenderTarget::draw(const Drawable &drawable, const RenderStates &states) {
 	drawable.draw(*this, states);
 }
 
-void RenderTarget::draw(const gk::VertexBuffer &vertexBuffer, GLenum mode, GLint firstVertex, GLsizei vertexCount, const RenderStates &states) {
+void RenderTarget::draw(const VertexBuffer &vertexBuffer, GLenum mode, GLint firstVertex, GLsizei vertexCount, const RenderStates &states) {
 	beginDrawing(states);
 
-	gk::VertexBuffer::bind(&vertexBuffer);
+	VertexBuffer::bind(&vertexBuffer);
 
 	vertexBuffer.layout().enableLayout();
 	states.shader->setUniform("u_modelMatrix", states.transform);
@@ -50,13 +50,13 @@ void RenderTarget::draw(const gk::VertexBuffer &vertexBuffer, GLenum mode, GLint
 
 	vertexBuffer.layout().disableLayout();
 
-	gk::VertexBuffer::bind(nullptr);
+	VertexBuffer::bind(nullptr);
 }
 
-void RenderTarget::drawElements(const gk::VertexBuffer &vertexBuffer, GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, const RenderStates &states) {
+void RenderTarget::drawElements(const VertexBuffer &vertexBuffer, GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, const RenderStates &states) {
 	beginDrawing(states);
 
-	gk::VertexBuffer::bind(&vertexBuffer);
+	VertexBuffer::bind(&vertexBuffer);
 
 	vertexBuffer.layout().enableLayout();
 	states.shader->setUniform("u_modelMatrix", states.transform);
@@ -65,7 +65,7 @@ void RenderTarget::drawElements(const gk::VertexBuffer &vertexBuffer, GLenum mod
 
 	vertexBuffer.layout().disableLayout();
 
-	gk::VertexBuffer::bind(nullptr);
+	VertexBuffer::bind(nullptr);
 }
 
 void RenderTarget::drawArrays(GLenum mode, GLint firstVertex, GLsizei vertexCount) {

@@ -272,9 +272,9 @@ void PlayerBox::updateVertexBuffer() {
 		vertices[i].texCoord[1] = 1.f - modelCoords[i][4];
 	}
 
-	gk::VertexBuffer::bind(&m_vbo);
+	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	gk::VertexBuffer::bind(nullptr);
+	VertexBuffer::bind(nullptr);
 }
 
 void PlayerBox::draw(RenderTarget &target, RenderStates states) const {

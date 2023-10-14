@@ -31,9 +31,9 @@
 #include <gk/core/Rect.hpp>
 #include <gk/gl/Texture.hpp>
 #include <gk/gl/Transformable.hpp>
-#include <gk/gl/VertexBuffer.hpp>
 
 #include "Drawable.hpp"
+#include "VertexBuffer.hpp"
 
 class Image : public Drawable, public gk::Transformable {
 	public:
@@ -68,7 +68,7 @@ class Image : public Drawable, public gk::Transformable {
 
 		const gk::Texture *m_texture = nullptr;
 
-		gk::VertexBuffer m_vbo;
+		VertexBuffer m_vbo;
 
 	private:
 		u16 m_width = 0;

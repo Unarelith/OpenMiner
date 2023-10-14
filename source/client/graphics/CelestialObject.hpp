@@ -28,10 +28,10 @@
 #define CELESTIALOBJECT_HPP_
 
 #include <gk/gl/Transformable.hpp>
-#include <gk/gl/VertexBuffer.hpp>
 #include <gk/graphics/Color.hpp>
 
 #include "Drawable.hpp"
+#include "VertexBuffer.hpp"
 
 class CelestialObject : public Drawable, public gk::Transformable  {
 	public:
@@ -55,7 +55,7 @@ class CelestialObject : public Drawable, public gk::Transformable  {
 
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		gk::VertexBuffer m_vbo;
+		VertexBuffer m_vbo;
 
 		gk::Color m_color = gk::Color::White;
 

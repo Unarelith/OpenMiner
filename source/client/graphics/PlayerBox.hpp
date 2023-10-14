@@ -30,10 +30,10 @@
 #include <gk/gl/Camera.hpp>
 #include <gk/gl/Texture.hpp>
 #include <gk/gl/Transformable.hpp>
-#include <gk/gl/VertexBuffer.hpp>
 
 #include "Drawable.hpp"
 #include "Player.hpp"
+#include "VertexBuffer.hpp"
 
 class PlayerBox : public Drawable, public gk::Transformable, public Player {
 	public:
@@ -48,7 +48,7 @@ class PlayerBox : public Drawable, public gk::Transformable, public Player {
 
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		gk::VertexBuffer m_vbo;
+		VertexBuffer m_vbo;
 
 		const gk::Camera &m_camera;
 

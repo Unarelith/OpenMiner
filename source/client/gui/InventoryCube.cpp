@@ -147,9 +147,9 @@ void InventoryCube::updateVertexBuffer(const Block &block, u8 state) {
 		}
 	}
 
-	gk::VertexBuffer::bind(&m_vbo);
+	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	gk::VertexBuffer::bind(nullptr);
+	VertexBuffer::bind(nullptr);
 
 	m_isVboInitialized = true;
 }

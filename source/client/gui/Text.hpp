@@ -73,7 +73,7 @@ class Text : public Drawable, public gk::Transformable {
 
 		Font &m_font;
 
-		gk::VertexBuffer m_vbo;
+		VertexBuffer m_vbo;
 		mutable u32 m_verticesCount = 0;
 		mutable bool m_isUpdateNeeded = true;
 

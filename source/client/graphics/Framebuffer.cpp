@@ -89,9 +89,9 @@ void Framebuffer::init(u16 width, u16 height) {
 		 1.0f,  1.0f,  1.0f, 1.0f
 	};
 
-	gk::VertexBuffer::bind(&m_vbo);
+	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(quad), &quad, GL_STATIC_DRAW);
-	gk::VertexBuffer::bind(nullptr);
+	VertexBuffer::bind(nullptr);
 }
 
 void Framebuffer::clear() {
@@ -155,7 +155,7 @@ void Framebuffer::end() const {
 	m_shader.setUniform("u_fogDepth", GameConfig::fogDepth);
 	m_shader.setUniform("u_fogColor", GameConfig::fogColor);
 
-	gk::VertexBuffer::bind(&m_vbo);
+	VertexBuffer::bind(&m_vbo);
 
 	glCheck(glEnableVertexAttribArray(0));
 	glCheck(glEnableVertexAttribArray(1));
@@ -168,7 +168,7 @@ void Framebuffer::end() const {
 	glCheck(glDisableVertexAttribArray(1));
 	glCheck(glDisableVertexAttribArray(0));
 
-	gk::VertexBuffer::bind(nullptr);
+	VertexBuffer::bind(nullptr);
 	gk::Shader::bind(nullptr);
 
 	glCheck(glActiveTexture(GL_TEXTURE0));

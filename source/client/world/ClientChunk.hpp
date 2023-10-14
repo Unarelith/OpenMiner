@@ -35,6 +35,7 @@
 #include "ChunkMeshLayer.hpp"
 #include "Config.hpp"
 #include "Dimension.hpp"
+#include "VertexBuffer.hpp"
 
 class ClientWorld;
 class TextureAtlas;
@@ -61,7 +62,7 @@ class ClientChunk : public Chunk {
 
 		bool areAllNeighboursTooFar() const;
 
-		const gk::VertexBuffer &getVertexBuffer() { return m_vbo; }
+		const VertexBuffer &getVertexBuffer() { return m_vbo; }
 		const gk::VertexArray &getVertexArray() { return m_vao; }
 		std::size_t getBufferOffset(u8 layer) const { return std::accumulate(m_verticesCount.begin(), m_verticesCount.begin() + layer, std::size_t(0)); }
 
@@ -88,7 +89,7 @@ class ClientChunk : public Chunk {
 
 		const Dimension &m_dimension;
 
-		gk::VertexBuffer m_vbo;
+		VertexBuffer m_vbo;
 		gk::VertexArray m_vao;
 		std::array<std::size_t, ChunkMeshLayer::Count> m_verticesCount{};
 

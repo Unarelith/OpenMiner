@@ -24,38 +24,32 @@
  *
  * =====================================================================================
  */
-#ifndef INVENTORYCUBE_HPP_
-#define INVENTORYCUBE_HPP_
+#ifndef VERTEXBUFFER_HPP_
+#define VERTEXBUFFER_HPP_
 
-#include <gk/gl/Transformable.hpp>
+#include <gk/gl/VertexBufferLayout.hpp>
+#include <gk/utils/NonCopyable.hpp>
 
-#include "Drawable.hpp"
-#include "VertexBuffer.hpp"
-
-class Block;
-class TextureAtlas;
-
-class InventoryCube : public Drawable, public gk::Transformable {
+class VertexBuffer : public gk::NonCopyable {
 	public:
-		InventoryCube(float size = 1.0f, bool isEntity = false);
+		VertexBuffer();
+		VertexBuffer(VertexBuffer &&);
+		~VertexBuffer() noexcept;
 
-		void updateVertexBuffer(const Block &block, u8 state = 0);
+		VertexBuffer &operator=(VertexBuffer &&);
 
-		float size() const { return m_size; }
+		void setData(GLsizeiptr size, const GLvoid *data, GLenum usage) const;
+		void updateData(GLintptr offset, GLsizeiptr size, const GLvoid *data) const;
+
+		static void bind(const VertexBuffer *vertexBuffer);
+
+		gk::VertexBufferLayout &layout() { return m_layout; }
+		const gk::VertexBufferLayout &layout() const { return m_layout; }
 
 	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		GLuint m_id = 0;
 
-		float m_size = 1.0f;
-
-		const TextureAtlas *m_textureAtlas;
-
-		VertexBuffer m_vbo;
-		bool m_isVboInitialized = false;
-
-		gk::Transformable m_transform;
-
-		bool m_isEntity = false;
+		gk::VertexBufferLayout m_layout;
 };
 
-#endif // INVENTORYCUBE_HPP_
+#endif // VERTEXBUFFER_HPP_

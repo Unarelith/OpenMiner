@@ -24,7 +24,6 @@
  *
  * =====================================================================================
  */
-#define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <gk/gl/GLCheck.hpp>
@@ -97,9 +96,9 @@ void RectangleShape::updateVertexBuffer() const {
 		vertices[i].color[3] = m_outlineColor.a;
 	}
 
-	gk::VertexBuffer::bind(&m_vbo);
+	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	gk::VertexBuffer::bind(nullptr);
+	VertexBuffer::bind(nullptr);
 }
 
 void RectangleShape::draw(RenderTarget &target, RenderStates states) const {

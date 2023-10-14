@@ -34,18 +34,15 @@
 #include "RenderStates.hpp"
 
 class Drawable;
-
-namespace gk {
-	class VertexBuffer;
-}
+class VertexBuffer;
 
 class RenderTarget {
 	public:
 		virtual ~RenderTarget() = default;
 
 		void draw(const Drawable &drawable, const RenderStates &states = RenderStates::Default);
-		void draw(const gk::VertexBuffer &vertexBuffer, GLenum mode, GLint firstVertex, GLsizei vertexCount, const RenderStates &states = RenderStates::Default);
-		void drawElements(const gk::VertexBuffer &vertexBuffer, GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, const RenderStates &states = RenderStates::Default);
+		void draw(const VertexBuffer &vertexBuffer, GLenum mode, GLint firstVertex, GLsizei vertexCount, const RenderStates &states = RenderStates::Default);
+		void drawElements(const VertexBuffer &vertexBuffer, GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, const RenderStates &states = RenderStates::Default);
 
 		void drawArrays(GLenum mode, GLint firstVertex, GLsizei vertexCount);
 
