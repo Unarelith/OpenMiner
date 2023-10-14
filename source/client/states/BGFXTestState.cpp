@@ -115,7 +115,7 @@ Cube::Cube()
 	m_ibh = bgfx::createIndexBuffer(bgfx::makeRef(s_cubeTriList, sizeof(s_cubeTriList)));
 
 	// Shader
-	auto loadShader = [](const char *path) {
+	auto loadShader = [](const std::string &path) {
 		std::ifstream file(path, std::ios::binary);
 		file.seekg(0, std::ios::end);
 		u32 fileSize = (u32)file.tellg();
@@ -128,8 +128,14 @@ Cube::Cube()
 		return bgfx::createShader(bgfx::copy(str.data(), fileSize));
 	};
 
-	bgfx::ShaderHandle shader_vs = loadShader("resources/shaders/bgfx_test.vs.bin");
-	bgfx::ShaderHandle shader_fs = loadShader("resources/shaders/bgfx_test.fs.bin");
+	std::string suffix;
+	if (bgfx::getRendererType() == bgfx::RendererType::OpenGL)
+		suffix = "120";
+	else if (bgfx::getRendererType() == bgfx::RendererType::Vulkan)
+		suffix = "spirv";
+
+	bgfx::ShaderHandle shader_vs = loadShader("resources/shaders/bgfx_test." + suffix + ".vs.bin");
+	bgfx::ShaderHandle shader_fs = loadShader("resources/shaders/bgfx_test." + suffix + ".fs.bin");
 	m_program = bgfx::createProgram(shader_vs, shader_fs, true);
 }
 
