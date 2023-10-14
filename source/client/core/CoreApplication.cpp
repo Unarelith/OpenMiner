@@ -148,30 +148,3 @@ void CoreApplication::onEvent(const SDL_Event &event) {
 		m_currentState->onEvent(event);
 }
 
-void CoreApplication::mainLoop() {
-	m_clock.startFpsTimer();
-
-	// FIXME: The window should probably be closed after the main loop ends
-	while(m_window.isOpen() && !m_stateStack.empty() && !hasBeenInterrupted) {
-		handleEvents();
-
-		m_eventHandler.processEvents();
-
-		m_clock.updateGame([&] {
-			if (!m_stateStack.empty())
-				m_stateStack.top().update();
-
-			m_stateStack.clearDeletedStates();
-		});
-
-		m_clock.drawGame([&] {
-			m_window.clear();
-
-			if(!m_stateStack.empty())
-				m_window.draw(m_stateStack.top(), m_renderStates);
-
-			m_window.display();
-		});
-	}
-}
-

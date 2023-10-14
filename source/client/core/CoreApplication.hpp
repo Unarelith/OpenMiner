@@ -56,7 +56,7 @@ class CoreApplication {
 
 		virtual void handleEvents();
 
-		virtual void mainLoop();
+		virtual void mainLoop() = 0;
 
 		gk::SDLLoader m_sdlLoader;
 		bool m_loadSDL = true;
