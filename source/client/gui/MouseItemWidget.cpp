@@ -237,7 +237,7 @@ void MouseItemWidget::putItem(ItemWidget &widget) {
 	}
 }
 
-void MouseItemWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void MouseItemWidget::draw(gk::RenderTarget &target, RenderStates states) const {
 	if (getStack().amount() > 0)
 		ItemWidget::draw(target, states);
 

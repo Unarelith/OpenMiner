@@ -44,7 +44,7 @@ ChatMessage::ChatMessage(const std::string &message, u32 posY, const Player *pla
 	m_timer.start();
 }
 
-void ChatMessage::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void ChatMessage::draw(gk::RenderTarget &target, RenderStates states) const {
 	if (m_timer.time() <= 10000 || m_isVisible)
 		target.draw(m_text, states);
 }

@@ -46,7 +46,7 @@ class Chat : public Drawable, public gk::Transformable {
 		u32 historySize() const { return (u32)m_history.size(); }
 
 	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		Client &m_client;
 

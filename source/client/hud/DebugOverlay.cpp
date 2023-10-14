@@ -125,7 +125,7 @@ void DebugOverlay::update(bool printOpenGLInfo) {
 	m_positionText.setString(stream.str());
 }
 
-void DebugOverlay::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void DebugOverlay::draw(gk::RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_versionText, states);

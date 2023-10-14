@@ -45,7 +45,7 @@ void Crosshair::setup() {
 	m_vShape2.setPosition(Config::screenWidth / 2.0f - m_vShape2.width() / 2, Config::screenHeight / 2.0f + m_hShape.height() / 2, 0);
 }
 
-void Crosshair::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void Crosshair::draw(gk::RenderTarget &target, RenderStates states) const {
 	target.draw(m_hShape, states);
 	target.draw(m_vShape1, states);
 	target.draw(m_vShape2, states);

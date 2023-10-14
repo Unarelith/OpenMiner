@@ -41,7 +41,7 @@ class InterfaceState : public gk::ApplicationState {
 
 		void update() override;
 
-		void prepareDraw(gk::RenderTarget &target, gk::RenderStates &states) const;
+		void prepareDraw(gk::RenderTarget &target, RenderStates &states) const;
 
 		bool m_drawBackground = true;
 

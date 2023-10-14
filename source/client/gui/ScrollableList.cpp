@@ -56,7 +56,7 @@ ScrollableListElement::ScrollableListElement(u16 id, const std::string &line1, c
 	m_line3.move(m_icon.posRect().sizeX + 3, 0);
 }
 
-void ScrollableListElement::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void ScrollableListElement::draw(gk::RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_icon, states);
@@ -102,7 +102,7 @@ void ScrollableList::selectElement(ScrollableListElement &element) {
 	m_selectedElement = &element;
 }
 
-void ScrollableList::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void ScrollableList::draw(gk::RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
 	for (auto &it : m_elements)

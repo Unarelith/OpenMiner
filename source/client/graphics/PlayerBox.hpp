@@ -46,7 +46,7 @@ class PlayerBox : public Drawable, public gk::Transformable, public Player {
 	private:
 		void updateVertexBuffer();
 
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		gk::VertexBuffer m_vbo;
 

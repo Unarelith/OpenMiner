@@ -140,7 +140,7 @@ class DebugProfilerWindow : public gk::Transformable, public Drawable {
 		void update();
 
 	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		Text m_text;
 

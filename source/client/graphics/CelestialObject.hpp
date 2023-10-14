@@ -52,7 +52,7 @@ class CelestialObject : public Drawable, public gk::Transformable  {
 		void updateVertexBuffer() const;
 		void updateAxisTransform() const;
 
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		gk::VertexBuffer m_vbo;
 

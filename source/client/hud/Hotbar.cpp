@@ -88,7 +88,7 @@ const Item &Hotbar::currentItem() const {
 	return m_player.inventory().getStack((u16)m_cursorPos, 0).item();
 }
 
-void Hotbar::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void Hotbar::draw(gk::RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_background, states);

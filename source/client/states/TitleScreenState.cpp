@@ -182,7 +182,7 @@ void TitleScreenState::updateWidgetPosition() {
 	);
 }
 
-void TitleScreenState::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void TitleScreenState::draw(gk::RenderTarget &target, RenderStates states) const {
 	prepareDraw(target, states);
 
 	target.draw(m_background, states);

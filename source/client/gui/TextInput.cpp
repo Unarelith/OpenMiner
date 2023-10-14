@@ -69,7 +69,7 @@ void TextInput::setString(const std::string &string) {
 	m_cursor.setPosition((float)m_text.getSize().x, 0);
 }
 
-void TextInput::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void TextInput::draw(gk::RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_text, states);

@@ -49,13 +49,13 @@ void RenderingController::update(entt::registry &registry) {
 	});
 }
 
-void RenderingController::draw(entt::registry &registry, gk::RenderTarget &target, gk::RenderStates states) {
+void RenderingController::draw(entt::registry &registry, gk::RenderTarget &target, RenderStates states) {
 	registry.view<DrawableComponent, PositionComponent, RotationComponent>().each([&](auto, auto &drawable, auto &position, auto &rotation) {
 		gk::Transformable transformable;
 		transformable.setPosition((float)position.x, (float)position.y, (float)position.z);
 		transformable.getRotationTransform().getMatrix() = glm::toMat4(rotation.quat);
 
-		gk::RenderStates drawStates = states;
+		RenderStates drawStates = states;
 		drawStates.transform *= transformable.getTransform();
 		drawable.draw(target, drawStates);
 	});

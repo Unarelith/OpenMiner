@@ -49,7 +49,7 @@ BGFXTestState::BGFXTestState()
 	bgfx::setViewRect(0, 0, 0, (uint16_t)windowSize.x, (uint16_t)windowSize.y);
 }
 
-void BGFXTestState::draw(gk::RenderTarget &target, gk::RenderStates states) const
+void BGFXTestState::draw(gk::RenderTarget &target, RenderStates states) const
 {
 	m_cube.draw();
 }

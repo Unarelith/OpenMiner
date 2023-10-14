@@ -39,7 +39,7 @@ class DrawableComponent {
 			return *std::static_pointer_cast<T>(m_drawable);
 		}
 
-		void draw(gk::RenderTarget &target, gk::RenderStates states) {
+		void draw(gk::RenderTarget &target, RenderStates states) {
 			if (m_drawable)
 				target.draw(*m_drawable, states);
 		}

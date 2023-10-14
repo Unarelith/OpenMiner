@@ -54,7 +54,7 @@ void Chat::setMessageVisibility(bool areMessagesVisible) {
 		it.setVisible(areMessagesVisible);
 }
 
-void Chat::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void Chat::draw(gk::RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
 	for (auto &it : m_chatMessages)

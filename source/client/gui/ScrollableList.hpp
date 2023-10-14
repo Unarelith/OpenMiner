@@ -43,7 +43,7 @@ class ScrollableListElement : public Widget {
 		const std::string &line1() const { return m_line1.string(); }
 
 	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		u16 m_id = 0;
 
@@ -66,7 +66,7 @@ class ScrollableList : public Widget {
 
 	private:
 		void selectElement(ScrollableListElement &element);
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		std::vector<ScrollableListElement> m_elements;
 

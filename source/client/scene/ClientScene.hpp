@@ -46,7 +46,7 @@ class ClientScene : public Scene, public Drawable {
 		void setCamera(gk::Camera &camera) { m_camera = &camera; }
 
 	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		gk::Camera *m_camera = nullptr;
 };

@@ -46,13 +46,13 @@ class ChunkRenderer {
 	public:
 		ChunkRenderer(const TextureAtlas &textureAtlas) : m_textureAtlas(textureAtlas) {}
 
-		void draw(gk::RenderTarget &target, gk::RenderStates states, const ChunkMap &chunks, gk::Camera &camera, const Sky *currentSky) const;
+		void draw(gk::RenderTarget &target, RenderStates states, const ChunkMap &chunks, gk::Camera &camera, const Sky *currentSky) const;
 
 		void setOnChunkDeletionRequestedCallback(const OnChunkDeletionRequestedCallback &callback) { m_onChunkDeletionRequested = callback; }
 		void setOnMeshingRequestedCallback(const OnMeshingRequestedCallback &callback) { m_onMeshingRequested = callback; }
 
 	public:
-		void drawChunks(gk::RenderTarget &target, gk::RenderStates states, const std::vector<std::pair<ClientChunk*, gk::Transform>> &chunks, const Sky *currentSky) const;
+		void drawChunks(gk::RenderTarget &target, RenderStates states, const std::vector<std::pair<ClientChunk*, gk::Transform>> &chunks, const Sky *currentSky) const;
 
 		const TextureAtlas &m_textureAtlas;
 

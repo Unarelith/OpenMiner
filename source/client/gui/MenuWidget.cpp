@@ -135,7 +135,7 @@ void MenuWidget::updateWidgetPosition(Widget &widget, int x, int y) {
 	}
 }
 
-void MenuWidget::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void MenuWidget::draw(gk::RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
 	for (auto &it : m_buttons) {

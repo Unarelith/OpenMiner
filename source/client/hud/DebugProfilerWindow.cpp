@@ -109,7 +109,7 @@ void DebugProfilerWindow::update() {
 #endif
 }
 
-void DebugProfilerWindow::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void DebugProfilerWindow::draw(gk::RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_text, states);

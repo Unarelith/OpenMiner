@@ -49,7 +49,7 @@ class BGFXTestState : public gk::ApplicationState {
 		BGFXTestState();
 
 	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		Cube m_cube;
 };

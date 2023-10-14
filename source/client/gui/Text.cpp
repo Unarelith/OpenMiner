@@ -66,7 +66,7 @@ void Text::setMaxLineLength(unsigned int maxLineLength) {
 	}
 }
 
-void Text::draw(gk::RenderTarget &target, gk::RenderStates states) const {
+void Text::draw(gk::RenderTarget &target, RenderStates states) const {
 	if (m_isUpdateNeeded) {
 		updateVertexBuffer();
 		m_isUpdateNeeded = false;

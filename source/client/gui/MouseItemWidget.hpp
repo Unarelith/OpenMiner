@@ -58,7 +58,7 @@ class MouseItemWidget : public ItemWidget {
 		const ItemStack &getStack() const { return m_inventory.getStack(0, 0); }
 
 	private:
-		void draw(gk::RenderTarget &target, gk::RenderStates states) const override;
+		void draw(gk::RenderTarget &target, RenderStates states) const override;
 
 		void updatePosition(s32 x, s32 y);
 
