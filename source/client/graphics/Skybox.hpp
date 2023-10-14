@@ -35,7 +35,7 @@
 class ClientWorld;
 class Sky;
 
-class Skybox : public gk::Drawable, public gk::Transformable {
+class Skybox : public Drawable, public gk::Transformable {
 	public:
 		Skybox(gk::Camera &camera, ClientWorld &world);
 

@@ -46,7 +46,7 @@ class ClientCommandHandler;
 class Sky;
 class TextureAtlas;
 
-class ClientWorld : public World, public gk::Drawable {
+class ClientWorld : public World, public Drawable {
 	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ClientChunk>>;
 
 	public:

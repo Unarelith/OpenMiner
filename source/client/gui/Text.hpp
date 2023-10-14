@@ -35,7 +35,7 @@
 
 class Font;
 
-class Text : public gk::Drawable, public gk::Transformable {
+class Text : public Drawable, public gk::Transformable {
 	public:
 		Text();
 

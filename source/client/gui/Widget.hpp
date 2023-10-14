@@ -32,7 +32,7 @@
 #include <gk/gl/Drawable.hpp>
 #include <gk/gl/Transformable.hpp>
 
-class Widget : public gk::Drawable, public gk::Transformable {
+class Widget : public Drawable, public gk::Transformable {
 	public:
 		Widget(Widget *parent = nullptr) : m_parent(parent) {}
 		Widget(unsigned int width, unsigned int height, Widget *parent = nullptr)

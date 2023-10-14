@@ -78,7 +78,7 @@ class LuaGUIState : public InterfaceState {
 		std::unordered_map<std::string, CraftingWidget> m_craftingWidgets;
 		std::unordered_map<std::string, InventoryWidget> m_inventoryWidgets;
 		std::vector<std::unique_ptr<Widget>> m_widgets;
-		std::vector<std::unique_ptr<gk::Drawable>> m_drawables;
+		std::vector<std::unique_ptr<Drawable>> m_drawables;
 		std::unordered_map<std::string, Inventory> m_inventories;
 		std::unordered_map<std::string, gk::Texture> m_textures;
 		std::unordered_map<std::string, TextInput> m_textInputs;

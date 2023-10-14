@@ -32,7 +32,7 @@
 #include <gk/gl/VertexBuffer.hpp>
 #include <gk/graphics/Color.hpp>
 
-class CelestialObject : public gk::Drawable, public gk::Transformable  {
+class CelestialObject : public Drawable, public gk::Transformable  {
 	public:
 		CelestialObject();
 

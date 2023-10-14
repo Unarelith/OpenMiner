@@ -34,7 +34,7 @@
 class Block;
 class TextureAtlas;
 
-class InventoryCube : public gk::Drawable, public gk::Transformable {
+class InventoryCube : public Drawable, public gk::Transformable {
 	public:
 		InventoryCube(float size = 1.0f, bool isEntity = false);
 

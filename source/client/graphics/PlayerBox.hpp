@@ -35,7 +35,7 @@
 
 #include "Player.hpp"
 
-class PlayerBox : public gk::Drawable, public gk::Transformable, public Player {
+class PlayerBox : public Drawable, public gk::Transformable, public Player {
 	public:
 		PlayerBox(const gk::Camera &camera);
 
