@@ -13,6 +13,7 @@ texturepacks/*
 *.a
 *.d
 *.so
+*.bin
 a.out
 
 # Debug stuff
