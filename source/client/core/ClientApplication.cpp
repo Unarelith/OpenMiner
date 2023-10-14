@@ -39,6 +39,7 @@
 #include "TextureLoader.hpp"
 #include "Vertex.hpp"
 
+#include "BGFXTestState.hpp"
 #include "TitleScreenState.hpp"
 
 namespace fs = ghc::filesystem;
@@ -113,11 +114,12 @@ bool ClientApplication::init() {
 	ClientProfiler::setInstance(&m_profiler);
 #endif
 
-	auto &titleScreen = m_stateStack.push<TitleScreenState>(m_port);
-	if (m_argumentParser.getArgument("singleplayer").isFound)
-		titleScreen.startSingleplayer(false);
-	else if (m_argumentParser.getArgument("multiplayer").isFound)
-		titleScreen.startMultiplayer(m_host);
+	// auto &titleScreen = m_stateStack.push<TitleScreenState>(m_port);
+	// if (m_argumentParser.getArgument("singleplayer").isFound)
+	// 	titleScreen.startSingleplayer(false);
+	// else if (m_argumentParser.getArgument("multiplayer").isFound)
+	// 	titleScreen.startMultiplayer(m_host);
+	m_stateStack.push<BGFXTestState>();
 
 	return true;
 }

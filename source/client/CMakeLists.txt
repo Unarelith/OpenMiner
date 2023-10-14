@@ -50,8 +50,10 @@ endif()
 # Link options
 #------------------------------------------------------------------------------
 target_link_libraries(${PROJECT_NAME} PRIVATE
-	bgfx
 	${CMAKE_PROJECT_NAME}_server_lib
+
+	bgfx
+	bx
 )
 
 add_dependencies(${PROJECT_NAME} shaders)
