@@ -106,7 +106,10 @@ int CoreApplication::run(bool isProtected) {
 	}
 
 	if (hasBeenInterrupted)
+	{
 		m_stateStack.clear();
+		m_stateStack.clearDeletedStates();
+	}
 
 	if (isInitSuccessful) {
 		onExit();
