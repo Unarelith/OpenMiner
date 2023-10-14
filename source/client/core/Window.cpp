@@ -24,84 +24,64 @@
  *
  * =====================================================================================
  */
+#include <bgfx/bgfx.h>
+
 #include <gk/core/Config.hpp>
 #include <gk/core/Utils.hpp>
-#include <gk/gl/GLCheck.hpp>
-#include <gk/gl/OpenGL.hpp>
 #include <gk/core/Exception.hpp>
 
+#include "CoreApplication.hpp"
 #include "Window.hpp"
 
 void Window::open(const std::string &caption, u16 width, u16 height) {
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-
-	m_window.reset(SDL_CreateWindow(caption.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN));
+	m_window.reset(SDL_CreateWindow(caption.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN));
 	if(!m_window) {
 		throw EXCEPTION("Window initialization failed:", SDL_GetError());
-	}
-
-	m_context.reset(SDL_GL_CreateContext(m_window.get()));
-	if(!m_context) {
-		throw EXCEPTION("OpenGL context creation failed:", SDL_GetError());
 	}
 
 	m_size.x = width;
 	m_size.y = height;
 
+	initBGFX();
+
 	m_defaultView.reset(gk::FloatRect{0, 0, (float)width, (float)height});
 	setView(m_defaultView);
 
 	m_isOpen = true;
+}
 
-#ifdef GK_SYSTEM_WINDOWS
-#ifdef USE_GLAD
-	if(!gladLoadGL()) {
-		throw EXCEPTION("glad init failed");
-	}
-#else
-	if(glewInit() != GLEW_OK) {
-		throw EXCEPTION("glew init failed");
-	}
-#endif
-#endif
+void Window::close() {
+	bgfx::shutdown();
 
-	glCheck(glEnable(GL_BLEND));
-	glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-
-	glCheck(glEnable(GL_TEXTURE_2D));
+	m_window.reset(nullptr);
+	m_isOpen = false;
 }
 
 void Window::clear() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	bgfx::touch(0);
 }
 
 void Window::display() {
-	SDL_GL_SwapWindow(m_window.get());
+	bgfx::frame();
 }
 
 void Window::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-		glViewport(0, 0, event.window.data1, event.window.data2);
+		bgfx::setViewRect(0, 0, 0, (uint16_t)event.window.data1, (uint16_t)event.window.data2);
 
 		m_size.x = (unsigned int)event.window.data1;
 		m_size.y = (unsigned int)event.window.data2;
 	}
+
+	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE) {
+		CoreApplication::hasBeenInterrupted = true;
+	}
 }
 
 void Window::setVerticalSyncEnabled(bool isVerticalSyncEnabled) {
-	if (isVerticalSyncEnabled && !m_isVerticalSyncEnabled) {
-		// Note: Adaptative sync (-1) causes stuttering in some cases
-		if (/* SDL_GL_SetSwapInterval(-1) == -1 && */ SDL_GL_SetSwapInterval(1) == -1)
-			gkWarning() << "Can't enable VSync";
-
-	}
-	else if (!isVerticalSyncEnabled && m_isVerticalSyncEnabled) {
-		if (SDL_GL_SetSwapInterval(0) == -1)
-			gkWarning() << "Can't disable VSync";
-	}
-
 	m_isVerticalSyncEnabled = isVerticalSyncEnabled;
+
+	gkWarning() << "Vsync not implemented yet";
 }
 
 void Window::setWindowMode(Mode mode) {
@@ -180,3 +160,20 @@ bool Window::saveScreenshot(int x, int y, int w, int h, const std::string &filen
 	return true;
 }
 
+void Window::initBGFX()
+{
+	bgfx::Init init;
+	init.resolution.width = m_size.x;
+	init.resolution.height = m_size.y;
+	init.resolution.reset = BGFX_RESET_VSYNC;
+	init.type = bgfx::RendererType::Vulkan;
+
+	extern bool BGFX_setupPlatformData(SDL_Window *window, bgfx::PlatformData &pd);
+	if (!BGFX_setupPlatformData(m_window.get(), init.platformData)) {
+		throw EXCEPTION("Platform data setup failed:", SDL_GetError());
+	}
+
+	bgfx::init(init);
+
+	bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH);
+}
