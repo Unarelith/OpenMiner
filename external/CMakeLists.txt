@@ -78,3 +78,13 @@ add_subdirectory(lua)
 #------------------------------------------------------------------------------
 add_subdirectory(sol2)
 
+#-----------------------------------------------------------------------------------------
+# BGFX
+#-----------------------------------------------------------------------------------------
+set(BGFX_BUILD_TOOLS    ON  CACHE BOOL "Build bgfx tools."                   FORCE)
+set(BGFX_BUILD_EXAMPLES OFF CACHE BOOL "Build bgfx examples."                FORCE)
+set(BGFX_INSTALL        OFF CACHE BOOL "Create installation target."         FORCE)
+set(BGFX_CUSTOM_TARGETS OFF CACHE BOOL "Include convenience custom targets." FORCE)
+
+add_subdirectory(bgfx.cmake)
+

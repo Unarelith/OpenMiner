@@ -20,3 +20,6 @@
 [submodule "external/SFML"]
 	path = external/SFML
 	url = https://github.com/SFML/SFML
+[submodule "external/bgfx.cmake"]
+	path = external/bgfx.cmake
+	url = https://github.com/bkaradzic/bgfx.cmake
