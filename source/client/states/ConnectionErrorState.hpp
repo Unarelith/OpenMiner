@@ -44,7 +44,7 @@ class ConnectionErrorState : public InterfaceState {
 		std::string m_host;
 		u16 m_port;
 
-		gk::Image m_background{"texture-menu_background"};
+		Image m_background{"texture-menu_background"};
 		RectangleShape m_filter;
 
 		Text m_text;

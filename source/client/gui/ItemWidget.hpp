@@ -27,8 +27,7 @@
 #ifndef ITEMWIDGET_HPP_
 #define ITEMWIDGET_HPP_
 
-#include <gk/graphics/Image.hpp>
-
+#include "Image.hpp"
 #include "Inventory.hpp"
 #include "InventoryCube.hpp"
 #include "Text.hpp"
@@ -63,7 +62,7 @@ class ItemWidget : public Widget {
 
 		TextureAtlas &m_textureAtlas;
 
-		gk::Image m_image;
+		Image m_image;
 		Text m_text;
 
 		InventoryCube m_cube{10};

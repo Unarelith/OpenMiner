@@ -27,9 +27,8 @@
 #ifndef PROGRESSBARWIDGET_HPP_
 #define PROGRESSBARWIDGET_HPP_
 
-#include <gk/graphics/Image.hpp>
-
 #include "BlockData.hpp"
+#include "Image.hpp"
 #include "Widget.hpp"
 
 // Duplicated in ProgressBarWidgetDef
@@ -59,7 +58,7 @@ class ProgressBarWidget : public Widget {
 		std::string m_maxMeta;
 		unsigned int m_maxMetaValue = 0;
 
-		gk::Image m_image;
+		Image m_image;
 
 		ProgressBarType m_type;
 };

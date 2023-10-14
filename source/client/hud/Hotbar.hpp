@@ -49,9 +49,9 @@ class Hotbar : public Widget {
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		gk::Image m_background;
+		Image m_background;
 
-		gk::Image m_cursor;
+		Image m_cursor;
 		int m_cursorPos = -1;
 
 		ClientPlayer &m_player;
