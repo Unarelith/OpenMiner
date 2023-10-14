@@ -24,7 +24,6 @@
  *
  * =====================================================================================
  */
-#include <gk/gl/RenderStates.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "Color.hpp"

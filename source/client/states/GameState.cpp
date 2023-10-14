@@ -47,6 +47,7 @@
 #include "Mouse.hpp"
 #include "PauseMenuState.hpp"
 #include "Registry.hpp"
+#include "RenderTarget.hpp"
 #include "TextureAtlas.hpp"
 
 GameState::GameState()

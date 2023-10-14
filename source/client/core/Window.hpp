@@ -32,7 +32,8 @@
 
 #include <gk/core/IntTypes.hpp>
 #include <gk/core/SDLHeaders.hpp>
-#include <gk/gl/RenderTarget.hpp>
+
+#include "RenderTarget.hpp"
 
 class Window : public RenderTarget {
 	public:

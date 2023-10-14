@@ -31,10 +31,10 @@
 #include <memory>
 
 #include <gk/gl/Camera.hpp>
-#include <gk/gl/Drawable.hpp>
 
 #include <entt/entt.hpp>
 
+#include "Drawable.hpp"
 #include "Scene.hpp"
 
 class ClientPlayer;

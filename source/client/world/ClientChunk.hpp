@@ -29,7 +29,6 @@
 
 #include <numeric>
 
-#include <gk/gl/Drawable.hpp>
 #include <gk/gl/VertexArray.hpp>
 
 #include "Chunk.hpp"

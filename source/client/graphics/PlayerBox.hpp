@@ -28,11 +28,11 @@
 #define PLAYERBOX_HPP_
 
 #include <gk/gl/Camera.hpp>
-#include <gk/gl/Drawable.hpp>
 #include <gk/gl/Texture.hpp>
 #include <gk/gl/Transformable.hpp>
 #include <gk/gl/VertexBuffer.hpp>
 
+#include "Drawable.hpp"
 #include "Player.hpp"
 
 class PlayerBox : public Drawable, public gk::Transformable, public Player {
