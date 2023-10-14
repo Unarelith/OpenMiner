@@ -28,12 +28,12 @@
 
 #include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/EventHandler.hpp>
-#include <gk/core/Mouse.hpp>
 
 #include "Client.hpp"
 #include "Config.hpp"
 #include "Events.hpp"
 #include "GameConfig.hpp"
+#include "Mouse.hpp"
 #include "PauseMenuState.hpp"
 #include "SettingsMenuState.hpp"
 #include "TitleScreenState.hpp"
@@ -42,15 +42,15 @@
 PauseMenuState::PauseMenuState(Client &client, gk::ApplicationState *parent)
 	: InterfaceState(parent), m_client(client)
 {
-	gk::Mouse::setCursorGrabbed(false);
-	gk::Mouse::setCursorVisible(true);
-	gk::Mouse::resetToWindowCenter();
+	Mouse::setCursorGrabbed(false);
+	Mouse::setCursorVisible(true);
+	Mouse::resetToWindowCenter();
 
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale, 1);
 
 	m_menuWidget.addButton("Back to Game", [this] (TextButton &) {
-		gk::Mouse::setCursorGrabbed(true);
-		gk::Mouse::setCursorVisible(false);
+		Mouse::setCursorGrabbed(true);
+		Mouse::setCursorVisible(false);
 
 		m_stateStack->pop();
 	});
@@ -101,9 +101,9 @@ void PauseMenuState::onEvent(const SDL_Event &event) {
 		m_menuWidget.onEvent(event);
 
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-			gk::Mouse::setCursorGrabbed(true);
-			gk::Mouse::setCursorVisible(false);
-			gk::Mouse::resetToWindowCenter();
+			Mouse::setCursorGrabbed(true);
+			Mouse::setCursorVisible(false);
+			Mouse::resetToWindowCenter();
 
 			m_stateStack->pop();
 		}

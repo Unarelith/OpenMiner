@@ -25,17 +25,17 @@
  * =====================================================================================
  */
 #include <gk/core/ApplicationStateStack.hpp>
-#include <gk/core/Mouse.hpp>
 
 #include "Config.hpp"
 #include "ConnectionErrorState.hpp"
 #include "GameState.hpp"
+#include "Mouse.hpp"
 #include "ServerLoadingState.hpp"
 #include "TitleScreenState.hpp"
 
 ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::string &host, u16 port, gk::ApplicationState *parent) : InterfaceState(parent) {
-	gk::Mouse::setCursorGrabbed(false);
-	gk::Mouse::setCursorVisible(true);
+	Mouse::setCursorGrabbed(false);
+	Mouse::setCursorVisible(true);
 
 	m_host = host;
 	m_port = port;

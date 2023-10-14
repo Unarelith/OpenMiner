@@ -27,10 +27,10 @@
 #include <ctime>
 
 #include <gk/core/Config.hpp>
-#include <gk/core/Mouse.hpp>
 #include <gk/core/Exception.hpp>
 
 #include "CoreApplication.hpp"
+#include "Mouse.hpp"
 
 bool CoreApplication::hasBeenInterrupted = false;
 
@@ -55,7 +55,7 @@ CoreApplication::CoreApplication(int argc, char **argv) : m_argumentParser(argc,
 bool CoreApplication::init() {
 	std::srand((unsigned int)std::time(nullptr));
 
-	gk::Mouse::setWindow(&m_window);
+	Mouse::setWindow(&m_window);
 
 	gk::ApplicationStateStack::setInstance(m_stateStack);
 	gk::GameClock::setInstance(m_clock);

@@ -29,7 +29,6 @@
 #include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/Debug.hpp>
 #include <gk/core/input/GamePad.hpp>
-#include <gk/core/Mouse.hpp>
 #include <gk/graphics/Color.hpp>
 
 #include "ClientPlayer.hpp"
@@ -39,6 +38,7 @@
 #include "InventoryWidget.hpp"
 #include "LuaGUIState.hpp"
 #include "LuaWidget.hpp"
+#include "Mouse.hpp"
 #include "Network.hpp"
 #include "NetworkUtils.hpp"
 #include "Player.hpp"
@@ -52,9 +52,9 @@ bool LuaGUIState::isActive = false;
 LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent)
 	: InterfaceState(parent), m_client(client), m_player(player), m_world(world)
 {
-	gk::Mouse::setCursorGrabbed(false);
-	gk::Mouse::setCursorVisible(true);
-	gk::Mouse::resetToWindowCenter();
+	Mouse::setCursorGrabbed(false);
+	Mouse::setCursorVisible(true);
+	Mouse::resetToWindowCenter();
 
 	m_mainWidget.setScale(Config::guiScale, Config::guiScale);
 
@@ -88,9 +88,9 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 		}
 
 		if (!ignoreExit) {
-			gk::Mouse::setCursorGrabbed(true);
-			gk::Mouse::setCursorVisible(false);
-			gk::Mouse::resetToWindowCenter();
+			Mouse::setCursorGrabbed(true);
+			Mouse::setCursorVisible(false);
+			Mouse::resetToWindowCenter();
 
 			isActive = false;
 

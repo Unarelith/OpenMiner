@@ -34,7 +34,6 @@
 #include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/Exception.hpp>
 #include <gk/core/GameClock.hpp>
-#include <gk/core/Mouse.hpp>
 #include <gk/gl/OpenGL.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
@@ -45,6 +44,7 @@
 #include "GameTime.hpp"
 #include "KeyboardHandler.hpp"
 #include "LuaGUIState.hpp"
+#include "Mouse.hpp"
 #include "PauseMenuState.hpp"
 #include "Registry.hpp"
 #include "TextureAtlas.hpp"
@@ -86,8 +86,8 @@ void GameState::connect(const std::string &host, u16 port, const std::string &us
 	m_player.setClientID(m_client.id());
 	m_client.addPlayer(m_player);
 
-	gk::Mouse::setCursorVisible(false);
-	gk::Mouse::setCursorGrabbed(true);
+	Mouse::setCursorVisible(false);
+	Mouse::setCursorGrabbed(true);
 }
 
 void GameState::onEvent(const SDL_Event &event) {
@@ -105,7 +105,7 @@ void GameState::onEvent(const SDL_Event &event) {
 				m_player.turnH((float)event.motion.xrel * -0.01f * Config::mouseSensitivity);
 				m_player.turnViewV((float)event.motion.yrel * -0.01f * Config::mouseSensitivity);
 
-				gk::Mouse::resetToWindowCenter();
+				Mouse::resetToWindowCenter();
 			}
 		}
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
@@ -115,12 +115,12 @@ void GameState::onEvent(const SDL_Event &event) {
 			if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
 				m_stateStack->push<PauseMenuState>(m_client, this);
 
-				gk::Mouse::setCursorGrabbed(false);
-				gk::Mouse::setCursorVisible(true);
+				Mouse::setCursorGrabbed(false);
+				Mouse::setCursorVisible(true);
 			}
 			else if (event.type == SDL_WINDOWEVENT_FOCUS_GAINED) {
-				gk::Mouse::setCursorGrabbed(true);
-				gk::Mouse::setCursorVisible(false);
+				Mouse::setCursorGrabbed(true);
+				Mouse::setCursorVisible(false);
 			}
 		}
 		else if (event.type == SDL_KEYDOWN) {
