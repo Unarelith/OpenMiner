@@ -48,7 +48,7 @@ class ProgressBarWidget : public Widget {
 		void update() override;
 
 	private:
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		BlockData &m_blockData;
 

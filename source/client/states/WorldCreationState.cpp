@@ -194,7 +194,7 @@ void WorldCreationState::updateWidgetPosition() {
 	);
 }
 
-void WorldCreationState::draw(gk::RenderTarget &target, RenderStates states) const {
+void WorldCreationState::draw(RenderTarget &target, RenderStates states) const {
 	if (&m_stateStack->top() == this) {
 		prepareDraw(target, states);
 

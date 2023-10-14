@@ -52,7 +52,7 @@ class Widget : public Drawable, public gk::Transformable {
 		unsigned int height() const { return m_height; }
 
 	protected:
-		void draw(gk::RenderTarget &, RenderStates) const override {}
+		void draw(RenderTarget &, RenderStates) const override {}
 
 		Widget *m_parent = nullptr;
 

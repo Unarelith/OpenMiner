@@ -52,7 +52,7 @@ class Minimap : public Drawable, public gk::Transformable {
 	private:
 		void updatePlayerFovVertexBuffer();
 
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		std::unordered_map<gk::Vector3i, std::pair<gk::RectangleShape, Text>> m_chunks;
 

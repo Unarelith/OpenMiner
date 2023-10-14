@@ -123,7 +123,7 @@ void PauseMenuState::updateWidgetPosition() {
 	);
 }
 
-void PauseMenuState::draw(gk::RenderTarget &target, RenderStates states) const {
+void PauseMenuState::draw(RenderTarget &target, RenderStates states) const {
 	if (m_parent)
 		target.draw(*m_parent, states);
 

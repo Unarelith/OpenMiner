@@ -77,7 +77,7 @@ void InterfaceState::update() {
 		m_parent->update();
 }
 
-void InterfaceState::prepareDraw(gk::RenderTarget &target, RenderStates &states) const {
+void InterfaceState::prepareDraw(RenderTarget &target, RenderStates &states) const {
 	states.transform *= getTransform();
 	states.shader = &m_shader;
 	// states.vertexAttributes = gk::VertexAttribute::Only2d;

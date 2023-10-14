@@ -132,7 +132,7 @@ void ServerLoadingState::updateWidgetPosition() {
 	                   Config::screenHeight / 2.f - float(m_text.getSize().y * Config::guiScale) * 2.f / 2.f);
 }
 
-void ServerLoadingState::draw(gk::RenderTarget &target, RenderStates states) const {
+void ServerLoadingState::draw(RenderTarget &target, RenderStates states) const {
 	if (m_showLoadingState) {
 		prepareDraw(target, states);
 

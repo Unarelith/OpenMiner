@@ -180,7 +180,7 @@ void LuaGUIState::update() {
 	m_mouseItemWidget.updateCurrentItem(currentItemWidget);
 }
 
-void LuaGUIState::draw(gk::RenderTarget &target, RenderStates states) const {
+void LuaGUIState::draw(RenderTarget &target, RenderStates states) const {
 	if (m_parent)
 		target.draw(*m_parent, states);
 

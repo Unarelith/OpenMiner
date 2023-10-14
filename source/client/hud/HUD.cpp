@@ -129,7 +129,7 @@ void HUD::update() {
 		m_debugLightmapViewer.update(m_world);
 }
 
-void HUD::draw(gk::RenderTarget &target, RenderStates states) const {
+void HUD::draw(RenderTarget &target, RenderStates states) const {
 	OM_PROFILE_START("HUD::draw");
 
 	target.disableView();

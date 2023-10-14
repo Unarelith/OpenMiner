@@ -61,7 +61,7 @@ class HUD : public gk::Transformable, public Drawable {
 		Minimap &minimap() { return m_minimap; }
 
 	private:
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		ClientPlayer &m_player;
 		ClientWorld &m_world;

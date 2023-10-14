@@ -220,7 +220,7 @@ void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 	m_hud.onGuiScaleChanged(event);
 }
 
-void GameState::draw(gk::RenderTarget &target, RenderStates states) const {
+void GameState::draw(RenderTarget &target, RenderStates states) const {
 	gk::Shader::bind(&m_shader);
 
 	if (m_world.sky()) {

@@ -76,7 +76,7 @@ class GameState : public gk::ApplicationState {
 
 		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
 
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		gk::Shader m_shader;
 

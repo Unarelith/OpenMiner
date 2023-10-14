@@ -277,7 +277,7 @@ void PlayerBox::updateVertexBuffer() {
 	gk::VertexBuffer::bind(nullptr);
 }
 
-void PlayerBox::draw(gk::RenderTarget &target, RenderStates states) const {
+void PlayerBox::draw(RenderTarget &target, RenderStates states) const {
 	// Subtract the camera position - see comment in ClientWorld::draw()
 	const gk::Vector3d &cameraPosition = m_camera.getDPosition();
 	states.transform.translate(

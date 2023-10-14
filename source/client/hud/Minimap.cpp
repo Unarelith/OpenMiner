@@ -142,7 +142,7 @@ void Minimap::updatePlayerFovVertexBuffer() {
 	gk::VertexBuffer::bind(nullptr);
 }
 
-void Minimap::draw(gk::RenderTarget &target, RenderStates states) const {
+void Minimap::draw(RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_border, states);

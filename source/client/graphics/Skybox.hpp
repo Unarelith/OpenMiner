@@ -42,7 +42,7 @@ class Skybox : public Drawable, public gk::Transformable {
 		void loadSky(const Sky &sky);
 
 	private:
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		gk::Camera &m_camera;
 		ClientWorld &m_world;

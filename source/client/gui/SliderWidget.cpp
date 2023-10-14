@@ -100,7 +100,7 @@ void SliderWidget::updateSliderPosition() {
 	m_sliderBorder.setPosition(m_percentage * float(m_width - 8) + 6.f, 0.f);
 }
 
-void SliderWidget::draw(gk::RenderTarget &target, RenderStates states) const {
+void SliderWidget::draw(RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_background, states);

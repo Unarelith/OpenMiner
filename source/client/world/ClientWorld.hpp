@@ -83,7 +83,7 @@ class ClientWorld : public World, public Drawable {
 	private:
 		void linkChunkNeighbours(ClientChunk *chunk);
 
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		const Dimension *m_dimension = nullptr;
 

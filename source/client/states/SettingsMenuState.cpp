@@ -347,7 +347,7 @@ TextButton &SettingsMenuState::addToggleButton(const std::string &text, bool &co
 	});
 }
 
-void SettingsMenuState::draw(gk::RenderTarget &target, RenderStates states) const {
+void SettingsMenuState::draw(RenderTarget &target, RenderStates states) const {
 	prepareDraw(target, states);
 
 	target.draw(m_background, states);
