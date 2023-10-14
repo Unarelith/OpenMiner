@@ -75,6 +75,8 @@ endif()
 #------------------------------------------------------------------------------
 add_subdirectory(external)
 
+add_subdirectory(resources/shaders)
+
 add_subdirectory(source/common)
 add_subdirectory(source/server)
 add_subdirectory(source/client)
