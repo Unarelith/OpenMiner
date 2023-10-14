@@ -28,9 +28,9 @@
 #define MINIMAP_HPP_
 
 #include <gk/core/SDLHeaders.hpp>
-#include <gk/graphics/RectangleShape.hpp>
 
 #include "Events.hpp"
+#include "RectangleShape.hpp"
 #include "Text.hpp"
 
 class ClientPlayer;
@@ -54,12 +54,12 @@ class Minimap : public Drawable, public gk::Transformable {
 
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		std::unordered_map<gk::Vector3i, std::pair<gk::RectangleShape, Text>> m_chunks;
+		std::unordered_map<gk::Vector3i, std::pair<RectangleShape, Text>> m_chunks;
 
-		gk::RectangleShape m_border;
+		RectangleShape m_border;
 
 		gk::Vector3i m_playerChunkPos;
-		gk::RectangleShape m_playerChunk;
+		RectangleShape m_playerChunk;
 
 		gk::VertexBuffer m_vbo;
 		gk::Transform m_playerFovRotationTransform = gk::Transform::Identity;

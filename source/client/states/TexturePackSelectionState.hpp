@@ -47,8 +47,8 @@ class TexturePackSelectionState : public InterfaceState {
 		void draw(RenderTarget &target, RenderStates states) const override;
 
 		gk::Image m_background{"texture-menu_background"};
-		gk::RectangleShape m_filter1;
-		gk::RectangleShape m_filter2;
+		RectangleShape m_filter1;
+		RectangleShape m_filter2;
 
 		Text m_title;
 

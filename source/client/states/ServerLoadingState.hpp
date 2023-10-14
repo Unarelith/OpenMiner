@@ -53,7 +53,7 @@ class ServerLoadingState : public InterfaceState {
 		void draw(RenderTarget &target, RenderStates states) const override;
 
 		gk::Image m_background{"texture-menu_background"};
-		gk::RectangleShape m_filter;
+		RectangleShape m_filter;
 
 		Text m_text;
 

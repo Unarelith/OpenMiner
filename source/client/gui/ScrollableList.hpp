@@ -70,7 +70,7 @@ class ScrollableList : public Widget {
 
 		std::vector<ScrollableListElement> m_elements;
 
-		gk::RectangleShape m_cursor;
+		RectangleShape m_cursor;
 		ScrollableListElement *m_selectedElement = nullptr;
 };
 

@@ -45,7 +45,7 @@ class ConnectionErrorState : public InterfaceState {
 		u16 m_port;
 
 		gk::Image m_background{"texture-menu_background"};
-		gk::RectangleShape m_filter;
+		RectangleShape m_filter;
 
 		Text m_text;
 

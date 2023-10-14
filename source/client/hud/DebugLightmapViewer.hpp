@@ -29,9 +29,8 @@
 
 #include <optional>
 
-#include <gk/graphics/RectangleShape.hpp>
-
 #include "EngineConfig.hpp"
+#include "RectangleShape.hpp"
 #include "Text.hpp"
 
 class ClientPlayer;
@@ -55,7 +54,7 @@ class DebugLightmapViewer : public gk::Transformable, public Drawable {
 		std::optional<gk::Vector3i> m_playerChunkPos;
 		std::optional<u32> m_playerRelativeZ;
 
-		gk::RectangleShape m_playerRect;
+		RectangleShape m_playerRect;
 };
 
 #endif // DEBUGLIGHTMAPVIEWER_HPP_
