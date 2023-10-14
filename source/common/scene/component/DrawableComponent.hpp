@@ -29,7 +29,7 @@
 
 #include <memory>
 
-#include <gk/gl/Drawable.hpp>
+#include "Drawable.hpp"
 
 class DrawableComponent {
 	public:

@@ -27,9 +27,10 @@
 #ifndef INVENTORYCUBE_HPP_
 #define INVENTORYCUBE_HPP_
 
-#include <gk/gl/Drawable.hpp>
 #include <gk/gl/Transformable.hpp>
 #include <gk/gl/VertexBuffer.hpp>
+
+#include "Drawable.hpp"
 
 class Block;
 class TextureAtlas;

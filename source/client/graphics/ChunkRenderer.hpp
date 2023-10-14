@@ -30,12 +30,13 @@
 #include <functional>
 
 #include <gk/gl/Camera.hpp>
-#include <gk/gl/RenderTarget.hpp>
 
+#include "RenderStates.hpp"
 #include "Sky.hpp"
 #include "TextureAtlas.hpp"
 
 class ClientChunk;
+class RenderTarget;
 
 class ChunkRenderer {
 	using OnChunkDeletionRequestedCallback = std::function<void(const gk::Vector3i &)>;

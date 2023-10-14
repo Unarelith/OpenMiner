@@ -32,6 +32,7 @@
 
 #include "ChunkRenderer.hpp"
 #include "ClientChunk.hpp"
+#include "RenderTarget.hpp"
 
 inline static bool bbIntersects(const glm::vec3 &a0, const glm::vec3 &a1, const glm::vec3 &b0, const glm::vec3 &b1) {
 	return (std::max(a0.x, b0.x) <= std::min(a1.x, b1.x))

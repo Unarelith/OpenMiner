@@ -29,8 +29,9 @@
 
 #include <gk/core/Rect.hpp>
 #include <gk/core/SDLHeaders.hpp>
-#include <gk/gl/Drawable.hpp>
 #include <gk/gl/Transformable.hpp>
+
+#include "Drawable.hpp"
 
 class Widget : public Drawable, public gk::Transformable {
 	public:

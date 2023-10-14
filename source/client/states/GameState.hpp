@@ -30,7 +30,6 @@
 #include <glm/glm.hpp>
 
 #include <gk/core/ApplicationState.hpp>
-#include <gk/gl/RenderTarget.hpp>
 
 #include "Client.hpp"
 #include "ClientChunk.hpp"
@@ -45,6 +44,7 @@
 #include "Registry.hpp"
 #include "Skybox.hpp"
 
+class RenderTarget;
 class TextureAtlas;
 
 class GameState : public gk::ApplicationState {

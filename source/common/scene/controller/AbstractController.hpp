@@ -27,10 +27,10 @@
 #ifndef ABSTRACTCONTROLLER_HPP_
 #define ABSTRACTCONTROLLER_HPP_
 
-#include <gk/gl/RenderStates.hpp>
-#include <gk/gl/RenderTarget.hpp>
-
 #include <entt/entt.hpp>
+
+#include "RenderStates.hpp"
+#include "RenderTarget.hpp"
 
 class AbstractController {
 	public:
