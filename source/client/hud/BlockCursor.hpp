@@ -57,7 +57,7 @@ class BlockCursor : public Drawable {
 		void updateVBOCoords(Vertex vertices[BlockGeometry::nFaces][BlockGeometry::nVertsPerFace],
 		                     const BlockState &blockState, float face, u8f orientation);
 
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		glm::ivec4 findSelectedBlock() const;
 

@@ -49,7 +49,7 @@ void RenderingController::update(entt::registry &registry) {
 	});
 }
 
-void RenderingController::draw(entt::registry &registry, gk::RenderTarget &target, RenderStates states) {
+void RenderingController::draw(entt::registry &registry, RenderTarget &target, RenderStates states) {
 	registry.view<DrawableComponent, PositionComponent, RotationComponent>().each([&](auto, auto &drawable, auto &position, auto &rotation) {
 		gk::Transformable transformable;
 		transformable.setPosition((float)position.x, (float)position.y, (float)position.z);

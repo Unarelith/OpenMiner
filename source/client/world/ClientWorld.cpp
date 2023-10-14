@@ -269,7 +269,7 @@ void ClientWorld::linkChunkNeighbours(ClientChunk *chunk) {
 	}
 }
 
-void ClientWorld::draw(gk::RenderTarget &target, RenderStates states) const {
+void ClientWorld::draw(RenderTarget &target, RenderStates states) const {
 	if (!target.getView() || !m_camera) {
 		gkError() << "Trying to draw world without a camera";
 		return;

@@ -60,7 +60,7 @@ void ScrollBarWidget::onEvent(const SDL_Event &event) {
 	}
 }
 
-void ScrollBarWidget::draw(gk::RenderTarget &target, RenderStates states) const {
+void ScrollBarWidget::draw(RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_image, states);

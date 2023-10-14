@@ -61,7 +61,7 @@ class Text : public Drawable, public gk::Transformable {
 		void updateVertexBuffer() const;
 
 	private:
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		void addCharacter(u32 x, u32 y, const gk::Color &color, u8 c, std::vector<gk::Vertex> &vertices) const;
 

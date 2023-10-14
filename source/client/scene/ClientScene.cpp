@@ -33,7 +33,7 @@ ClientScene::ClientScene() {
 	m_controllers.emplace_back(new RenderingController);
 }
 
-void ClientScene::draw(gk::RenderTarget &target, RenderStates states) const {
+void ClientScene::draw(RenderTarget &target, RenderStates states) const {
 	if (!m_camera) return;
 
 	// Subtract the camera position - see comment in ClientWorld::draw()

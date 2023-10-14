@@ -52,7 +52,7 @@ class LuaGUIState : public InterfaceState {
 		static bool isActive;
 
 	private:
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		void loadGUI(sf::Packet &packet);
 		void loadImage(const std::string &name, s32 x, s32 y, sf::Packet &packet);

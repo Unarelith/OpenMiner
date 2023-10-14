@@ -308,7 +308,7 @@ void BlockCursor::updateAnimationVertexBuffer(const BlockState &blockState, u8f 
 	gk::VertexBuffer::bind(nullptr);
 }
 
-void BlockCursor::draw(gk::RenderTarget &target, RenderStates states) const {
+void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 	if (m_selectedBlock.w == -1) return;
 
 	glCheck(glDisable(GL_POLYGON_OFFSET_FILL));

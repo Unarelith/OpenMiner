@@ -52,7 +52,7 @@ class TitleScreenState : public InterfaceState {
 
 		void updateWidgetPosition() override;
 
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		MenuWidget m_menuWidget{1, 3};
 

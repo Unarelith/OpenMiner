@@ -59,7 +59,7 @@ class InventoryWidget : public AbstractInventoryWidget {
 		ItemWidget *currentItemWidget() const { return m_currentItemWidget; }
 
 	private:
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		void loadItemWidgets(u16 offset, u16 size, std::string search = "");
 

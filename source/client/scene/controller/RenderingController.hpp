@@ -33,7 +33,7 @@ class RenderingController : public AbstractController {
 	public:
 		void update(entt::registry &registry) override;
 
-		void draw(entt::registry &registry, gk::RenderTarget &target, RenderStates states) override;
+		void draw(entt::registry &registry, RenderTarget &target, RenderStates states) override;
 };
 
 #endif // RENDERINGCONTROLLER_HPP_

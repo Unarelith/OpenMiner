@@ -106,7 +106,7 @@ void Skybox::loadSky(const Sky &sky) {
 	}
 }
 
-void Skybox::draw(gk::RenderTarget &target, RenderStates states) const {
+void Skybox::draw(RenderTarget &target, RenderStates states) const {
 	if (!m_world.sky()) return;
 
 	float time = GameTime::getCurrentTime(0, m_world.sky()->daylightCycleSpeed());

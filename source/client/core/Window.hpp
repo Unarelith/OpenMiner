@@ -34,7 +34,7 @@
 #include <gk/core/SDLHeaders.hpp>
 #include <gk/gl/RenderTarget.hpp>
 
-class Window : public gk::RenderTarget {
+class Window : public RenderTarget {
 	public:
 		enum Mode {
 			Windowed,

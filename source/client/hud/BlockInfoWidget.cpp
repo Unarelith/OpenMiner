@@ -53,7 +53,7 @@ void BlockInfoWidget::setCurrentBlock(const BlockState *blockState) {
 	}
 }
 
-void BlockInfoWidget::draw(gk::RenderTarget &target, RenderStates states) const {
+void BlockInfoWidget::draw(RenderTarget &target, RenderStates states) const {
 	if (m_isVisible) {
 		states.transform *= getTransform();
 

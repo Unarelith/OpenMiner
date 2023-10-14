@@ -42,7 +42,7 @@ class ServerConnectState : public InterfaceState {
 	private:
 		void updateWidgetPosition() override;
 
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		gk::Image m_background{"texture-menu_background"};
 		gk::RectangleShape m_filter;

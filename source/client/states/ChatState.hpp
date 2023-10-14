@@ -42,7 +42,7 @@ class ChatState : public InterfaceState {
 	private:
 		void updateWidgetPosition() override;
 
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		TextInput m_textInput;
 

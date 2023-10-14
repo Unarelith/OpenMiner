@@ -95,7 +95,7 @@ void ConnectionErrorState::updateWidgetPosition() {
 	);
 }
 
-void ConnectionErrorState::draw(gk::RenderTarget &target, RenderStates states) const {
+void ConnectionErrorState::draw(RenderTarget &target, RenderStates states) const {
 	if (&m_stateStack->top() == this) {
 		prepareDraw(target, states);
 

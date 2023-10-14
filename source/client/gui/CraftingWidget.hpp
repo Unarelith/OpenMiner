@@ -51,7 +51,7 @@ class CraftingWidget : public AbstractInventoryWidget {
 		InventoryWidget &craftingResultInventoryWidget() { return m_craftingResultInventoryWidget; }
 
 	private:
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		ClientCommandHandler &m_client;
 

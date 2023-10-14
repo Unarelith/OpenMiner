@@ -103,7 +103,7 @@ ItemStack CraftingWidget::receiveItemStack(const ItemWidget *itemStack, Abstract
 	return stackRet;
 }
 
-void CraftingWidget::draw(gk::RenderTarget &target, RenderStates states) const {
+void CraftingWidget::draw(RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
 	target.draw(m_craftingInventoryWidget, states);

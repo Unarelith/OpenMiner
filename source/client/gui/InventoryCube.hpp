@@ -43,7 +43,7 @@ class InventoryCube : public Drawable, public gk::Transformable {
 		float size() const { return m_size; }
 
 	private:
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		float m_size = 1.0f;
 

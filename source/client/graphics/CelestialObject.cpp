@@ -154,7 +154,7 @@ void CelestialObject::updateAxisTransform() const {
 	m_axisXfNeedsUpdate = false;
 }
 
-void CelestialObject::draw(gk::RenderTarget &target, RenderStates states) const {
+void CelestialObject::draw(RenderTarget &target, RenderStates states) const {
 	if (m_isUpdateNeeded)
 		updateVertexBuffer();
 

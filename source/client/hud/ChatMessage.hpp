@@ -42,7 +42,7 @@ class ChatMessage : public Drawable, public gk::Transformable {
 		const Text &text() const { return m_text; }
 
 	private:
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		Text m_text;
 

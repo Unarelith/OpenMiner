@@ -61,7 +61,7 @@ class TextInput : public Widget {
 		void setFocus(bool hasFocus) { m_hasFocus = hasFocus; }
 
 	private:
-		void draw(gk::RenderTarget &target, RenderStates states) const override;
+		void draw(RenderTarget &target, RenderStates states) const override;
 
 		Text m_text;
 		std::string m_content;

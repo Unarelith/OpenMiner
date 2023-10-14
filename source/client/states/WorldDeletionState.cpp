@@ -100,7 +100,7 @@ void WorldDeletionState::updateWidgetPosition() {
 	);
 }
 
-void WorldDeletionState::draw(gk::RenderTarget &target, RenderStates states) const {
+void WorldDeletionState::draw(RenderTarget &target, RenderStates states) const {
 	if (m_parent)
 		target.draw(*m_parent, states);
 
