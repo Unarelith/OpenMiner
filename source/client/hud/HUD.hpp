@@ -41,7 +41,7 @@
 
 struct GuiScaleChangedEvent;
 
-class HUD : public gk::Transformable, public gk::Drawable {
+class HUD : public gk::Transformable, public Drawable {
 	public:
 		HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client);
 

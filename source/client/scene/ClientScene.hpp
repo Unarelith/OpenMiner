@@ -39,7 +39,7 @@
 
 class ClientPlayer;
 
-class ClientScene : public Scene, public gk::Drawable {
+class ClientScene : public Scene, public Drawable {
 	public:
 		ClientScene();
 

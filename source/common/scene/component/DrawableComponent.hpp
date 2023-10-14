@@ -34,7 +34,7 @@
 class DrawableComponent {
 	public:
 		template<typename T, typename... Args>
-		auto setDrawable(Args &&...args) -> typename std::enable_if<std::is_base_of<gk::Drawable, T>::value, T &>::type {
+		auto setDrawable(Args &&...args) -> typename std::enable_if<std::is_base_of<Drawable, T>::value, T &>::type {
 			m_drawable = std::make_shared<T>(std::forward<Args>(args)...);
 			return *std::static_pointer_cast<T>(m_drawable);
 		}
@@ -45,7 +45,7 @@ class DrawableComponent {
 		}
 
 	private:
-		std::shared_ptr<gk::Drawable> m_drawable;
+		std::shared_ptr<Drawable> m_drawable;
 };
 
 #endif // DRAWABLECOMPONENT_HPP_

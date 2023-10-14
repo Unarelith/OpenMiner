@@ -32,7 +32,7 @@
 class ClientPlayer;
 class ClientWorld;
 
-class DebugOverlay : public gk::Transformable, public gk::Drawable {
+class DebugOverlay : public gk::Transformable, public Drawable {
 	public:
 		DebugOverlay(const ClientPlayer &player, const ClientWorld &world);
 

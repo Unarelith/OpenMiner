@@ -29,7 +29,7 @@
 
 #include <gk/graphics/RectangleShape.hpp>
 
-class Crosshair : public gk::Drawable {
+class Crosshair : public Drawable {
 	public:
 		Crosshair();
 

@@ -35,7 +35,7 @@
 
 class ClientPlayer;
 
-class Minimap : public gk::Drawable, public gk::Transformable {
+class Minimap : public Drawable, public gk::Transformable {
 	public:
 		Minimap();
 

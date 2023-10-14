@@ -37,7 +37,7 @@
 class ClientPlayer;
 class ClientWorld;
 
-class DebugLightmapViewer : public gk::Transformable, public gk::Drawable {
+class DebugLightmapViewer : public gk::Transformable, public Drawable {
 	public:
 		DebugLightmapViewer(const ClientPlayer &player);
 
