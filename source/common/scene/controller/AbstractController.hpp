@@ -29,15 +29,19 @@
 
 #include <entt/entt.hpp>
 
+#ifdef OM_NOT_IMPLEMENTED
 #include "RenderStates.hpp"
 #include "RenderTarget.hpp"
+#endif // OM_NOT_IMPLEMENTED
 
 class AbstractController {
 	public:
 		virtual ~AbstractController() = default;
 
 		virtual void update(entt::registry &) {}
+#ifdef OM_NOT_IMPLEMENTED
 		virtual void draw(entt::registry &, RenderTarget &, RenderStates) {}
+#endif // OM_NOT_IMPLEMENTED
 };
 
 #endif // ABSTRACTCONTROLLER_HPP_
