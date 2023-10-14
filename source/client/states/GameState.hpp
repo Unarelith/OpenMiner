@@ -29,14 +29,13 @@
 
 #include <glm/glm.hpp>
 
-#include <gk/core/ApplicationState.hpp>
-
 #include "Client.hpp"
 #include "ClientChunk.hpp"
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "Config.hpp"
+#include "DrawableState.hpp"
 #include "Framebuffer.hpp"
 #include "HUD.hpp"
 #include "KeyboardHandler.hpp"
@@ -47,7 +46,7 @@
 class RenderTarget;
 class TextureAtlas;
 
-class GameState : public gk::ApplicationState {
+class GameState : public DrawableState {
 	public:
 		GameState();
 

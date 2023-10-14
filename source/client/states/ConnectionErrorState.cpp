@@ -33,7 +33,7 @@
 #include "ServerLoadingState.hpp"
 #include "TitleScreenState.hpp"
 
-ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::string &host, u16 port, gk::ApplicationState *parent) : InterfaceState(parent) {
+ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::string &host, u16 port, ApplicationState *parent) : InterfaceState(parent) {
 	Mouse::setCursorGrabbed(false);
 	Mouse::setCursorVisible(true);
 

@@ -102,7 +102,7 @@ void WorldDeletionState::updateWidgetPosition() {
 
 void WorldDeletionState::draw(RenderTarget &target, RenderStates states) const {
 	if (m_parent)
-		target.draw(*m_parent, states);
+		target.draw(*(DrawableState *)m_parent, states);
 
 	if (&m_stateStack->top() == this) {
 		prepareDraw(target, states);

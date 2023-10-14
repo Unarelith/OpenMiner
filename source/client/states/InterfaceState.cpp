@@ -32,7 +32,7 @@
 #include "EngineConfig.hpp"
 #include "InterfaceState.hpp"
 
-InterfaceState::InterfaceState(gk::ApplicationState *parent) : gk::ApplicationState(parent) {
+InterfaceState::InterfaceState(ApplicationState *parent) : DrawableState(parent) {
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");

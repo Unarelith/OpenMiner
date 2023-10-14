@@ -43,7 +43,7 @@
 #include "TexturePackSelectionState.hpp"
 #include "World.hpp"
 
-SettingsMenuState::SettingsMenuState(gk::ApplicationState *parent) : InterfaceState(parent) {
+SettingsMenuState::SettingsMenuState(DrawableState *parent) : InterfaceState(parent) {
 	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
 	m_filter1.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));

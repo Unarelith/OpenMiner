@@ -32,7 +32,7 @@
 #include "Config.hpp"
 #include "Mouse.hpp"
 
-ChatState::ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, bool addSlash, gk::ApplicationState *parent)
+ChatState::ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, bool addSlash, DrawableState *parent)
 	: InterfaceState(parent), m_clientCommandHandler(clientCommandHandler), m_chat(chat)
 {
 	Mouse::setCursorGrabbed(false);
@@ -108,7 +108,7 @@ void ChatState::updateWidgetPosition() {
 
 void ChatState::draw(RenderTarget &target, RenderStates states) const {
 	if (m_parent)
-		target.draw(*m_parent, states);
+		target.draw(*(DrawableState *)m_parent, states);
 
 	if (&m_stateStack->top() == this) {
 		prepareDraw(target, states);

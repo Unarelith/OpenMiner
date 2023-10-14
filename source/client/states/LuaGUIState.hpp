@@ -41,7 +41,7 @@ class ClientWorld;
 
 class LuaGUIState : public InterfaceState {
 	public:
-		LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent = nullptr);
+		LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, ApplicationState *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 

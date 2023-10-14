@@ -35,7 +35,7 @@
 
 class TexturePackSelectionState : public InterfaceState {
 	public:
-		TexturePackSelectionState(gk::ApplicationState *parent = nullptr);
+		TexturePackSelectionState(DrawableState *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 

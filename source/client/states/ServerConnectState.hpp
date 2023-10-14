@@ -33,7 +33,7 @@
 
 class ServerConnectState : public InterfaceState {
 	public:
-		ServerConnectState(gk::ApplicationState *parent = nullptr);
+		ServerConnectState(DrawableState *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 
