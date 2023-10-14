@@ -24,33 +24,29 @@
  *
  * =====================================================================================
  */
-#ifndef VERTEXBUFFER_HPP_
-#define VERTEXBUFFER_HPP_
+#include <gk/gl/GLCheck.hpp>
+#include <gk/gl/RenderStates.hpp>
+#include <gk/gl/VertexBufferLayout.hpp>
 
-#include <gk/utils/NonCopyable.hpp>
-
+#include "Vertex.hpp"
 #include "VertexLayout.hpp"
 
-class VertexBuffer : public gk::NonCopyable {
-	public:
-		VertexBuffer();
-		VertexBuffer(VertexBuffer &&);
-		~VertexBuffer() noexcept;
+void VertexBufferLayout::setupDefaultLayout() {
+	addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
+	addAttribute(1, "texCoord", 2, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, texCoord)));
+	addAttribute(2, "color", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, color)));
+}
 
-		VertexBuffer &operator=(VertexBuffer &&);
+void VertexBufferLayout::enableLayout() const {
+	assert(!m_attributes.empty());
 
-		void setData(GLsizeiptr size, const GLvoid *data, GLenum usage) const;
-		void updateData(GLintptr offset, GLsizeiptr size, const GLvoid *data) const;
+	for (auto &attr : m_attributes) {
+		glCheck(glEnableVertexAttribArray(attr.id));
+		glCheck(glVertexAttribPointer(attr.id, attr.size, attr.type, attr.normalized, attr.stride, attr.offset));
+	}
+}
 
-		static void bind(const VertexBuffer *vertexBuffer);
-
-		VertexBufferLayout &layout() { return m_layout; }
-		const VertexBufferLayout &layout() const { return m_layout; }
-
-	private:
-		GLuint m_id = 0;
-
-		VertexBufferLayout m_layout;
-};
-
-#endif // VERTEXBUFFER_HPP_
+void VertexBufferLayout::disableLayout() const {
+	for (auto &attr : m_attributes)
+		glCheck(glDisableVertexAttribArray(attr.id));
+}
