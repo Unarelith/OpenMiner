@@ -27,7 +27,6 @@
 #include <thread>
 
 #include <gk/core/ApplicationStateStack.hpp>
-#include <gk/core/Mouse.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "Config.hpp"
@@ -35,6 +34,7 @@
 #include "GameConfig.hpp"
 #include "GameState.hpp"
 #include "Events.hpp"
+#include "Mouse.hpp"
 #include "ServerLoadingState.hpp"
 #include "TextureAtlas.hpp"
 
@@ -55,8 +55,8 @@ ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, c
 	m_host = host;
 	m_port = port;
 
-	gk::Mouse::setCursorVisible(true);
-	gk::Mouse::setCursorGrabbed(false);
+	Mouse::setCursorVisible(true);
+	Mouse::setCursorGrabbed(false);
 
 	m_game.textureAtlas().clear();
 }
@@ -93,8 +93,8 @@ void ServerLoadingState::update() {
 
 			m_stateStack->pop();
 
-			gk::Mouse::setCursorVisible(false);
-			gk::Mouse::setCursorGrabbed(true);
+			Mouse::setCursorVisible(false);
+			Mouse::setCursorGrabbed(true);
 
 			GameConfig::isGameRunning = true;
 		}

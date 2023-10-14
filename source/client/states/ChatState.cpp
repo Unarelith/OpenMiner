@@ -25,19 +25,19 @@
  * =====================================================================================
  */
 #include <gk/core/ApplicationStateStack.hpp>
-#include <gk/core/Mouse.hpp>
 
 #include "Chat.hpp"
 #include "ChatState.hpp"
 #include "ClientCommandHandler.hpp"
 #include "Config.hpp"
+#include "Mouse.hpp"
 
 ChatState::ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, bool addSlash, gk::ApplicationState *parent)
 	: InterfaceState(parent), m_clientCommandHandler(clientCommandHandler), m_chat(chat)
 {
-	gk::Mouse::setCursorGrabbed(false);
-	gk::Mouse::setCursorVisible(true);
-	gk::Mouse::resetToWindowCenter();
+	Mouse::setCursorGrabbed(false);
+	Mouse::setCursorVisible(true);
+	Mouse::resetToWindowCenter();
 
 	m_drawBackground = false;
 
@@ -59,9 +59,9 @@ void ChatState::onEvent(const SDL_Event &event) {
 	m_textInput.onEvent(event);
 
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-		gk::Mouse::setCursorGrabbed(true);
-		gk::Mouse::setCursorVisible(false);
-		gk::Mouse::resetToWindowCenter();
+		Mouse::setCursorGrabbed(true);
+		Mouse::setCursorVisible(false);
+		Mouse::resetToWindowCenter();
 
 		m_chat.setMessageVisibility(false);
 
@@ -75,9 +75,9 @@ void ChatState::onEvent(const SDL_Event &event) {
 			m_chat.addHistoryEntry(m_textInput.string());
 		}
 
-		gk::Mouse::setCursorGrabbed(true);
-		gk::Mouse::setCursorVisible(false);
-		gk::Mouse::resetToWindowCenter();
+		Mouse::setCursorGrabbed(true);
+		Mouse::setCursorVisible(false);
+		Mouse::resetToWindowCenter();
 
 		m_chat.setMessageVisibility(false);
 
