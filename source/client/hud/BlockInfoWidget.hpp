@@ -27,9 +27,8 @@
 #ifndef BLOCKINFOWIDGET_HPP_
 #define BLOCKINFOWIDGET_HPP_
 
-#include <gk/graphics/Sprite.hpp>
-
 #include "ItemWidget.hpp"
+#include "Sprite.hpp"
 
 class BlockInfoWidget : public Widget {
 	public:
@@ -46,7 +45,7 @@ class BlockInfoWidget : public Widget {
 		Inventory m_inventory{1, 1};
 		ItemWidget m_itemWidget{m_inventory, 0, 0, this};
 
-		gk::Sprite m_background{"texture-toasts", 160, 32};
+		Sprite m_background{"texture-toasts", 160, 32};
 		Text m_text;
 
 		bool m_isVisible = false;

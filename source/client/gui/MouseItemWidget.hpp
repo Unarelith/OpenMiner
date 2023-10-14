@@ -27,9 +27,8 @@
 #ifndef MOUSEITEMWIDGET_HPP_
 #define MOUSEITEMWIDGET_HPP_
 
-#include <gk/graphics/Sprite.hpp>
-
 #include "ItemWidget.hpp"
+#include "Sprite.hpp"
 #include "Text.hpp"
 
 class InventoryWidget;
@@ -67,7 +66,7 @@ class MouseItemWidget : public ItemWidget {
 		ItemWidget *m_currentItemWidget = nullptr;
 		InventoryWidget *m_currentInventoryWidget = nullptr;
 
-		gk::Sprite m_tooltipBackground{"texture-toasts", 160, 32};
+		Sprite m_tooltipBackground{"texture-toasts", 160, 32};
 		Text m_tooltipText;
 		Text m_tooltipInfoText;
 
