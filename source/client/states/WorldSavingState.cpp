@@ -24,8 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/ApplicationStateStack.hpp>
-
+#include "ApplicationStateStack.hpp"
 #include "Client.hpp"
 #include "Config.hpp"
 #include "TitleScreenState.hpp"

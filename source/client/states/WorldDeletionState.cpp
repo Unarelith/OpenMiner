@@ -24,10 +24,9 @@
  *
  * =====================================================================================
  */
-#include <gk/core/ApplicationStateStack.hpp>
-
 #include <filesystem.hpp>
 
+#include "ApplicationStateStack.hpp"
 #include "Config.hpp"
 #include "TitleScreenState.hpp"
 #include "WorldDeletionState.hpp"

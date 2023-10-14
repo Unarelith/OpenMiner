@@ -26,9 +26,9 @@
  */
 #include <thread>
 
-#include <gk/core/ApplicationStateStack.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
+#include "ApplicationStateStack.hpp"
 #include "Config.hpp"
 #include "ConnectionErrorState.hpp"
 #include "GameConfig.hpp"

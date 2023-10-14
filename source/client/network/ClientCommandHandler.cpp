@@ -30,6 +30,7 @@
 #include <entt/entt.hpp>
 
 #include "AnimationComponent.hpp"
+#include "ApplicationStateStack.hpp"
 #include "Client.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
@@ -190,8 +191,8 @@ void ClientCommandHandler::setupCallbacks() {
 
 		GameConfig::isGameRunning = false;
 
-		gk::ApplicationStateStack::getInstance().clear();
-		gk::ApplicationStateStack::getInstance().push<ConnectionErrorState>(message, m_client.serverAddress().toString(), m_client.serverPort(), nullptr);
+		ApplicationStateStack::getInstance().clear();
+		ApplicationStateStack::getInstance().push<ConnectionErrorState>(message, m_client.serverAddress().toString(), m_client.serverPort(), nullptr);
 	});
 
 	m_client.setCommandCallback(Network::Command::RegistryData, [this](Network::Packet &packet) {
@@ -313,7 +314,7 @@ void ClientCommandHandler::setupCallbacks() {
 
 	m_client.setCommandCallback(Network::Command::BlockGUIData, [this](Network::Packet &packet) {
 		if (!LuaGUIState::isActive)
-			gk::ApplicationStateStack::getInstance().push<LuaGUIState>(*this, m_player, m_world, packet, &gk::ApplicationStateStack::getInstance().top());
+			ApplicationStateStack::getInstance().push<LuaGUIState>(*this, m_player, m_world, packet, &ApplicationStateStack::getInstance().top());
 	});
 
 	m_client.setCommandCallback(Network::Command::BlockInvUpdate, [this](Network::Packet &packet) {

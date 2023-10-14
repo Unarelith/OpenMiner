@@ -26,9 +26,9 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/EventHandler.hpp>
 
+#include "ApplicationStateStack.hpp"
 #include "Client.hpp"
 #include "Config.hpp"
 #include "Events.hpp"

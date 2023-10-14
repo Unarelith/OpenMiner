@@ -24,11 +24,11 @@
  *
  * =====================================================================================
  */
-#include <gk/core/ApplicationStateStack.hpp>
 #include <gk/core/Debug.hpp>
 
 #include <filesystem.hpp>
 
+#include "ApplicationStateStack.hpp"
 #include "Config.hpp"
 #include "TitleScreenState.hpp"
 #include "WorldCreationState.hpp"
