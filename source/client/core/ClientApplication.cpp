@@ -43,7 +43,7 @@
 
 namespace fs = ghc::filesystem;
 
-ClientApplication::ClientApplication(int argc, char **argv) : gk::CoreApplication(argc, argv) {
+ClientApplication::ClientApplication(int argc, char **argv) : CoreApplication(argc, argv) {
 	BlockGeometry::initOrientation();
 }
 
@@ -62,7 +62,7 @@ bool ClientApplication::init() {
 	fs::create_directory("logs");
 	m_loggerHandler.openLogFile("logs/openminer.log");
 
-	gk::CoreApplication::init();
+	CoreApplication::init();
 
 	if (m_argumentParser.getArgument("help").isFound)
 		return true;
@@ -127,7 +127,7 @@ bool ClientApplication::init() {
 void ClientApplication::handleEvents() {
 	OM_PROFILE_START("OS events");
 
-	gk::CoreApplication::handleEvents();
+	CoreApplication::handleEvents();
 
 	if ((Config::isFullscreenModeEnabled && m_window.getWindowMode() != gk::Window::Mode::Fullscreen)
 	|| (!Config::isFullscreenModeEnabled && m_window.getWindowMode() != gk::Window::Mode::Windowed)) {
@@ -145,7 +145,7 @@ void ClientApplication::handleEvents() {
 }
 
 void ClientApplication::onEvent(const SDL_Event &event) {
-	gk::CoreApplication::onEvent(event);
+	CoreApplication::onEvent(event);
 
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_F11)
 		Config::isFullscreenModeEnabled ^= 1;

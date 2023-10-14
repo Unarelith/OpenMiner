@@ -27,12 +27,11 @@
 #ifndef CLIENTAPPLICATION_HPP_
 #define CLIENTAPPLICATION_HPP_
 
-#include <gk/core/CoreApplication.hpp>
-
 #include "ClientProfiler.hpp"
+#include "CoreApplication.hpp"
 #include "KeyboardHandler.hpp"
 
-class ClientApplication : public gk::CoreApplication {
+class ClientApplication : public CoreApplication {
 	public:
 		ClientApplication(int argc, char **argv);
 
