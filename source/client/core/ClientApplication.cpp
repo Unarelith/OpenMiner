@@ -129,9 +129,9 @@ void ClientApplication::handleEvents() {
 
 	CoreApplication::handleEvents();
 
-	if ((Config::isFullscreenModeEnabled && m_window.getWindowMode() != gk::Window::Mode::Fullscreen)
-	|| (!Config::isFullscreenModeEnabled && m_window.getWindowMode() != gk::Window::Mode::Windowed)) {
-		m_window.setWindowMode(Config::isFullscreenModeEnabled ? gk::Window::Mode::Fullscreen : gk::Window::Mode::Windowed);
+	if ((Config::isFullscreenModeEnabled && m_window.getWindowMode() != Window::Mode::Fullscreen)
+	|| (!Config::isFullscreenModeEnabled && m_window.getWindowMode() != Window::Mode::Windowed)) {
+		m_window.setWindowMode(Config::isFullscreenModeEnabled ? Window::Mode::Fullscreen : Window::Mode::Windowed);
 	}
 
 	if (Config::screenWidth != m_window.getSize().x || Config::screenHeight != m_window.getSize().y) {

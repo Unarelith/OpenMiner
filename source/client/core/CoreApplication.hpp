@@ -32,8 +32,9 @@
 #include <gk/core/EventHandler.hpp>
 #include <gk/core/GameClock.hpp>
 #include <gk/core/SDLLoader.hpp>
-#include <gk/core/Window.hpp>
 #include <gk/resource/ResourceHandler.hpp>
+
+#include "Window.hpp"
 
 class CoreApplication {
 	public:
@@ -66,7 +67,7 @@ class CoreApplication {
 
 		gk::ResourceHandler m_resourceHandler;
 
-		gk::Window m_window;
+		Window m_window;
 
 		gk::RenderStates m_renderStates = gk::RenderStates::Default;
 
