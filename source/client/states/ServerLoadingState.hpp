@@ -36,7 +36,7 @@ struct ServerOnlineEvent;
 
 class ServerLoadingState : public InterfaceState {
 	public:
-		ServerLoadingState(GameState &game, bool showLoadingState, const std::string &host, u16 port, gk::ApplicationState *parent = nullptr);
+		ServerLoadingState(GameState &game, bool showLoadingState, const std::string &host, u16 port, ApplicationState *parent = nullptr);
 
 		void init() override;
 

@@ -35,7 +35,7 @@ class Client;
 
 class WorldSavingState : public InterfaceState {
 	public:
-		WorldSavingState(Client &client, bool closeClient, gk::ApplicationState *parent = nullptr);
+		WorldSavingState(Client &client, bool closeClient, DrawableState *parent = nullptr);
 
 		void update() override;
 

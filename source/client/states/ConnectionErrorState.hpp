@@ -32,7 +32,7 @@
 
 class ConnectionErrorState : public InterfaceState {
 	public:
-		ConnectionErrorState(const std::string &error, const std::string &host, u16 port, gk::ApplicationState *parent = nullptr);
+		ConnectionErrorState(const std::string &error, const std::string &host, u16 port, ApplicationState *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 

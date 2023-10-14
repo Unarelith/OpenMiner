@@ -38,7 +38,7 @@
 #include "ServerLoadingState.hpp"
 #include "TextureAtlas.hpp"
 
-ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, const std::string &host, u16 port, gk::ApplicationState *parent)
+ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, const std::string &host, u16 port, ApplicationState *parent)
 	: InterfaceState(parent), m_game(game), m_showLoadingState(showLoadingState)
 {
 	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);

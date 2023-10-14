@@ -37,7 +37,7 @@ class Key;
 
 class SettingsMenuState : public InterfaceState {
 	public:
-		SettingsMenuState(gk::ApplicationState *parent = nullptr);
+		SettingsMenuState(DrawableState *parent = nullptr);
 
 		void init() override;
 

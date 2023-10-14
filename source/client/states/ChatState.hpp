@@ -35,7 +35,7 @@ class Chat;
 
 class ChatState : public InterfaceState {
 	public:
-		ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, bool addSlash, gk::ApplicationState *parent = nullptr);
+		ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, bool addSlash, DrawableState *parent = nullptr);
 
 		void onEvent(const SDL_Event &event) override;
 

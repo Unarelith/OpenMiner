@@ -31,7 +31,7 @@
 #include "TitleScreenState.hpp"
 #include "WorldSavingState.hpp"
 
-WorldSavingState::WorldSavingState(Client &client, bool closeClient, gk::ApplicationState *parent)
+WorldSavingState::WorldSavingState(Client &client, bool closeClient, DrawableState *parent)
 	: InterfaceState(parent), m_client(client)
 {
 	m_closeClient = closeClient;

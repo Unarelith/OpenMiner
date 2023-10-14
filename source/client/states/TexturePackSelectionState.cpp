@@ -37,7 +37,7 @@
 
 namespace fs = ghc::filesystem;
 
-TexturePackSelectionState::TexturePackSelectionState(gk::ApplicationState *parent) : InterfaceState(parent) {
+TexturePackSelectionState::TexturePackSelectionState(DrawableState *parent) : InterfaceState(parent) {
 	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
 	m_filter1.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));

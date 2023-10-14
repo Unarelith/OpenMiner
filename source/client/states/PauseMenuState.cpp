@@ -39,7 +39,7 @@
 #include "TitleScreenState.hpp"
 #include "WorldSavingState.hpp"
 
-PauseMenuState::PauseMenuState(Client &client, gk::ApplicationState *parent)
+PauseMenuState::PauseMenuState(Client &client, DrawableState *parent)
 	: InterfaceState(parent), m_client(client)
 {
 	Mouse::setCursorGrabbed(false);
@@ -125,7 +125,7 @@ void PauseMenuState::updateWidgetPosition() {
 
 void PauseMenuState::draw(RenderTarget &target, RenderStates states) const {
 	if (m_parent)
-		target.draw(*m_parent, states);
+		target.draw(*(DrawableState *)m_parent, states);
 
 	if (&m_stateStack->top() == this) {
 		prepareDraw(target, states);

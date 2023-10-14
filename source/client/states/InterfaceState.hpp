@@ -27,14 +27,14 @@
 #ifndef INTERFACESTATE_HPP_
 #define INTERFACESTATE_HPP_
 
-#include <gk/core/ApplicationState.hpp>
 #include <gk/gl/Shader.hpp>
 
+#include "DrawableState.hpp"
 #include "RectangleShape.hpp"
 
-class InterfaceState : public gk::ApplicationState {
+class InterfaceState : public DrawableState {
 	public:
-		InterfaceState(gk::ApplicationState *parent = nullptr);
+		InterfaceState(ApplicationState *parent = nullptr);
 
 	protected:
 		void setup();

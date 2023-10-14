@@ -49,7 +49,7 @@
 
 bool LuaGUIState::isActive = false;
 
-LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, gk::ApplicationState *parent)
+LuaGUIState::LuaGUIState(ClientCommandHandler &client, ClientPlayer &player, ClientWorld &world, sf::Packet &packet, ApplicationState *parent)
 	: InterfaceState(parent), m_client(client), m_player(player), m_world(world)
 {
 	Mouse::setCursorGrabbed(false);
@@ -182,7 +182,7 @@ void LuaGUIState::update() {
 
 void LuaGUIState::draw(RenderTarget &target, RenderStates states) const {
 	if (m_parent)
-		target.draw(*m_parent, states);
+		target.draw(*(DrawableState *)m_parent, states);
 
 	prepareDraw(target, states);
 

@@ -185,7 +185,7 @@ void ClientApplication::mainLoop() {
 			OM_PROFILE_START("Draw");
 
 			if(!m_stateStack.empty())
-				m_window.draw(m_stateStack.top(), m_renderStates);
+				m_window.draw((const DrawableState &)m_stateStack.top(), m_renderStates);
 
 			OM_PROFILE_END("Draw");
 

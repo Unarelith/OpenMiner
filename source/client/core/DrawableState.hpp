@@ -24,33 +24,18 @@
  *
  * =====================================================================================
  */
-#ifndef PAUSEMENUSTATE_HPP_
-#define PAUSEMENUSTATE_HPP_
+#ifndef DRAWABLESTATE_HPP_
+#define DRAWABLESTATE_HPP_
 
-#include "InterfaceState.hpp"
-#include "MenuWidget.hpp"
+#include "ApplicationState.hpp"
+#include "Drawable.hpp"
 
-class Client;
-struct GuiScaleChangedEvent;
-
-class PauseMenuState : public InterfaceState {
+class DrawableState : public ApplicationState, public Drawable {
 	public:
-		PauseMenuState(Client &client, DrawableState *parent = nullptr);
-
-		void init() override;
-
-		void onEvent(const SDL_Event &event) override;
+		DrawableState(ApplicationState *parent = nullptr) : ApplicationState(parent) {}
 
 	private:
-		void onGuiScaleChanged(const GuiScaleChangedEvent &event);
-
-		void updateWidgetPosition() override;
-
-		void draw(RenderTarget &target, RenderStates states) const override;
-
-		MenuWidget m_menuWidget{1, 4};
-
-		Client &m_client;
+		void draw(RenderTarget &, RenderStates) const override {}
 };
 
-#endif // PAUSEMENUSTATE_HPP_
+#endif // DRAWABLESTATE_HPP_

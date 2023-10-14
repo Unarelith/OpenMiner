@@ -27,9 +27,9 @@
 #ifndef BGFXTESTSTATE_HPP_
 #define BGFXTESTSTATE_HPP_
 
-#include <gk/core/ApplicationState.hpp>
-
 #include <bgfx/bgfx.h>
+
+#include "DrawableState.hpp"
 
 class Cube {
 	public:
@@ -44,7 +44,7 @@ class Cube {
 		bgfx::ProgramHandle m_program;
 };
 
-class BGFXTestState : public gk::ApplicationState {
+class BGFXTestState : public DrawableState {
 	public:
 		BGFXTestState();
 
