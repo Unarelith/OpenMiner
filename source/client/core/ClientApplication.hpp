@@ -45,8 +45,6 @@ class ClientApplication : public CoreApplication {
 
 		void mainLoop() override;
 
-		static void initOpenGL();
-
 		KeyboardHandler m_keyboardHandler;
 
 		std::string m_host = "localhost";

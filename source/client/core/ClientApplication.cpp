@@ -105,8 +105,6 @@ bool ClientApplication::init() {
 	m_window.setVerticalSyncEnabled(Config::isVerticalSyncEnabled);
 	m_window.disableView();
 
-	initOpenGL();
-
 	m_resourceHandler.loadConfigFile<TextureLoader>("resources/config/textures.xml");
 	m_resourceHandler.add<Font>("font-ascii", "texture-font", "resources/textures/font.properties");
 	m_resourceHandler.add<TextureAtlas>("atlas-blocks");
@@ -194,24 +192,5 @@ void ClientApplication::mainLoop() {
 
 		OM_PROFILE_END_TICK();
 	}
-}
-
-void ClientApplication::initOpenGL() {
-	// Enable textures
-	glCheck(glEnable(GL_TEXTURE_2D));
-
-	// Enable transparency
-	glCheck(glEnable(GL_BLEND));
-	glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-
-	// Enable depth and hide backside of faces
-	glCheck(glEnable(GL_DEPTH_TEST));
-	glCheck(glEnable(GL_CULL_FACE));
-
-	// Set best quality for mipmaps
-	glCheck(glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST));
-
-	glCheck(glEnable(GL_POLYGON_OFFSET_FILL));
-	glCheck(glPolygonOffset(1, 1));
 }
 
