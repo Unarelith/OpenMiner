@@ -71,10 +71,7 @@ class Window : public gk::RenderTarget {
 		void initBGFX();
 
 		using SDL_WindowPtr = std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)>;
-		using SDL_GLContextPtr = std::unique_ptr<void, decltype(&SDL_GL_DeleteContext)>;
-
 		SDL_WindowPtr m_window{nullptr, SDL_DestroyWindow};
-		SDL_GLContextPtr m_context{nullptr, SDL_GL_DeleteContext};
 
 		gk::Vector2u m_size;
 		gk::Vector2u m_baseSize{0, 0};
