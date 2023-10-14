@@ -56,7 +56,7 @@ class TitleScreenState : public InterfaceState {
 
 		MenuWidget m_menuWidget{1, 3};
 
-		gk::Image m_background{"texture-title_screen"};
+		Image m_background{"texture-title_screen"};
 
 		std::thread m_thread;
 

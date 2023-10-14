@@ -31,8 +31,7 @@
 
 #include <sol/sol.hpp>
 
-#include <gk/graphics/Image.hpp>
-
+#include "Image.hpp"
 #include "Text.hpp"
 #include "Widget.hpp"
 
@@ -66,13 +65,13 @@ class TextButton : public Widget {
 		const gk::Color m_hoverColor = gk::Color::fromRGBA32(255, 255, 160);
 		const gk::Color m_disabledColor = gk::Color::fromRGBA32(160, 160, 160);
 
-		gk::Image m_background{"texture-widgets"};
-		gk::Image m_hoverBackground{"texture-widgets"};
-		gk::Image m_disabledBackground{"texture-widgets"};
+		Image m_background{"texture-widgets"};
+		Image m_hoverBackground{"texture-widgets"};
+		Image m_disabledBackground{"texture-widgets"};
 
-		gk::Image m_backgroundBorder{"texture-widgets"};
-		gk::Image m_hoverBackgroundBorder{"texture-widgets"};
-		gk::Image m_disabledBackgroundBorder{"texture-widgets"};
+		Image m_backgroundBorder{"texture-widgets"};
+		Image m_hoverBackgroundBorder{"texture-widgets"};
+		Image m_disabledBackgroundBorder{"texture-widgets"};
 
 		Text m_text;
 

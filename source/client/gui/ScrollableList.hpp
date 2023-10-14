@@ -27,8 +27,7 @@
 #ifndef SCROLLABLELIST_HPP_
 #define SCROLLABLELIST_HPP_
 
-#include <gk/graphics/Image.hpp>
-
+#include "Image.hpp"
 #include "Text.hpp"
 #include "Widget.hpp"
 
@@ -47,7 +46,7 @@ class ScrollableListElement : public Widget {
 
 		u16 m_id = 0;
 
-		gk::Image m_icon{"texture-world_icon"};
+		Image m_icon{"texture-world_icon"};
 
 		Text m_line1;
 		Text m_line2;

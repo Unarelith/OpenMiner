@@ -27,8 +27,7 @@
 #ifndef SCROLLBARWIDGET_HPP_
 #define SCROLLBARWIDGET_HPP_
 
-#include <gk/graphics/Image.hpp>
-
+#include "Image.hpp"
 #include "InventoryWidget.hpp"
 
 class ScrollBarWidget : public Widget {
@@ -44,7 +43,7 @@ class ScrollBarWidget : public Widget {
 
 		void updateScrolling(u16 y);
 
-		gk::Image m_image;
+		Image m_image;
 
 		gk::FloatRect m_clipRect;
 

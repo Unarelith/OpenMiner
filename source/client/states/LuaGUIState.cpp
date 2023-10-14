@@ -241,7 +241,7 @@ void LuaGUIState::loadImage(const std::string &, s32 x, s32 y, sf::Packet &packe
 
 	gk::Texture &texture = loadTexture(textureFilename);
 
-	auto *image = new gk::Image(texture);
+	auto *image = new Image(texture);
 	image->setPosition((float)x, (float)y);
 	image->setClipRect(clipRect.x, clipRect.y, (u16)clipRect.sizeX, (u16)clipRect.sizeY);
 	m_drawables.emplace_back(image);

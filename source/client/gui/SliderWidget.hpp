@@ -29,8 +29,7 @@
 
 #include <functional>
 
-#include <gk/graphics/Image.hpp>
-
+#include "Image.hpp"
 #include "Text.hpp"
 #include "Widget.hpp"
 
@@ -61,11 +60,11 @@ class SliderWidget : public Widget {
 		const gk::Color m_defaultTextColor = gk::Color::fromRGBA32(224, 224, 224);
 		const gk::Color m_hoverColor = gk::Color::fromRGBA32(255, 255, 160);
 
-		gk::Image m_slider{"texture-widgets"};
-		gk::Image m_background{"texture-widgets"};
+		Image m_slider{"texture-widgets"};
+		Image m_background{"texture-widgets"};
 
-		gk::Image m_sliderBorder{"texture-widgets"};
-		gk::Image m_backgroundBorder{"texture-widgets"};
+		Image m_sliderBorder{"texture-widgets"};
+		Image m_backgroundBorder{"texture-widgets"};
 
 		Text m_text;
 

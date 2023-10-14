@@ -27,8 +27,7 @@
 #ifndef WORLDSAVINGSTATE_HPP_
 #define WORLDSAVINGSTATE_HPP_
 
-#include <gk/graphics/Image.hpp>
-
+#include "Image.hpp"
 #include "InterfaceState.hpp"
 #include "Text.hpp"
 
@@ -45,7 +44,7 @@ class WorldSavingState : public InterfaceState {
 
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		gk::Image m_background{"texture-menu_background"};
+		Image m_background{"texture-menu_background"};
 		RectangleShape m_filter;
 
 		Client &m_client;
