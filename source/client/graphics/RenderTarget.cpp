@@ -55,6 +55,15 @@ void RenderTarget::draw(const VertexBuffer &vertexBuffer, uint64_t mode, uint32_
 
 	bgfx::setTransform(states.transform.getRawMatrix());
 
+	bgfx::setState(
+	     BGFX_STATE_WRITE_RGB
+	   | BGFX_STATE_WRITE_A
+	   | BGFX_STATE_WRITE_Z
+	   // | BGFX_STATE_DEPTH_TEST_LESS
+	   | BGFX_STATE_CULL_CW
+	   | BGFX_STATE_MSAA
+	);
+
 	bgfx::submit(0, states.shader->program());
 }
 
@@ -69,6 +78,15 @@ void RenderTarget::drawElements(const VertexBuffer &vertexBuffer, const IndexBuf
 		indexBuffer.enable(0, count);
 
 	bgfx::setTransform(states.transform.getRawMatrix());
+
+	bgfx::setState(
+	     BGFX_STATE_WRITE_RGB
+	   | BGFX_STATE_WRITE_A
+	   | BGFX_STATE_WRITE_Z
+	   // | BGFX_STATE_DEPTH_TEST_LESS
+	   | BGFX_STATE_CULL_CW
+	   | BGFX_STATE_MSAA
+	);
 
 	bgfx::submit(0, states.shader->program());
 }
