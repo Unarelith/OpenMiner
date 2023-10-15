@@ -24,10 +24,7 @@
  *
  * =====================================================================================
  */
-#include <glm/gtc/matrix_transform.hpp>
-
 #include <gk/graphics/Color.hpp>
-#include <gk/gl/GLCheck.hpp>
 #include <gk/math/Math.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
@@ -42,16 +39,7 @@
 InventoryCube::InventoryCube(float size, bool isEntity)
 	: m_textureAtlas(&gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
-#ifdef OM_NOT_IMPLEMENTED
-	m_vbo.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
-	m_vbo.layout().addAttribute(1, "texCoord", 2, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, texCoord)));
-	m_vbo.layout().addAttribute(2, "color", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, color)));
-
-	if (isEntity) {
-		m_vbo.layout().addAttribute(3, "normal", 3, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, normal)));
-		m_vbo.layout().addAttribute(4, "lightValue", 2, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, lightValue)));
-		m_vbo.layout().addAttribute(5, "ambientOcclusion", 1, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, ambientOcclusion)));
-	}
+	m_vbo.setupDefaultLayout();
 
 	m_size = size;
 	m_isEntity = isEntity;
@@ -65,13 +53,14 @@ InventoryCube::InventoryCube(float size, bool isEntity)
 		m_transform.rotateX(120.f);
 		m_transform.rotateZ(-45.f);
 	}
-#endif // OM_NOT_IMPLEMENTED
+
+	m_view.setSize((float)Config::screenWidth, (float)Config::screenHeight);
+	m_view.setCenter((float)Config::screenWidth / 2.f, (float)Config::screenHeight / 2.f);
 }
 
 using namespace BlockGeometry;
 
 void InventoryCube::updateVertexBuffer(const Block &block, u8 state) {
-#ifdef OM_NOT_IMPLEMENTED
 	if (!block.id()) return;
 
 	const BlockState &blockState = block.getState(state);
@@ -150,33 +139,49 @@ void InventoryCube::updateVertexBuffer(const Block &block, u8 state) {
 		}
 	}
 
-	VertexBuffer::bind(&m_vbo);
-	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	VertexBuffer::bind(nullptr);
+	m_vbo.init(vertices, sizeof(vertices), true);
 
-	m_isVboInitialized = true;
-#endif // OM_NOT_IMPLEMENTED
+	const u16 indices[nFaces * (nVertsPerFace + 2)] = {
+		0, 1, 2,
+		2, 3, 0,
+
+		4, 5, 6,
+		6, 7, 4,
+
+		8, 9, 10,
+		10, 11, 8,
+
+		12, 13, 14,
+		14, 15, 12,
+
+		16, 17, 18,
+		18, 19, 16,
+
+		20, 21, 22,
+		22, 23, 20,
+	};
+
+	m_ibo.init(indices, sizeof(indices), true);
 }
 
 void InventoryCube::draw(RenderTarget &target, RenderStates states) const {
-#ifdef OM_NOT_IMPLEMENTED
-	if (!m_isVboInitialized) return;
+	if (!m_vbo.isValid()) return;
 
 	states.transform *= getTransform();
 	states.transform *= m_transform.getTransform();
 
-	states.viewMatrix = gk::Transform::Identity;
-
 	// NOTE: This matrix has Y inverted as well as Z. This means that
 	// negative Z is closer to the user, and that the bottom side is visible
 	// at start.
-	states.projectionMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f, DIST_2D_FAR, DIST_2D_NEAR);
+	target.setView(m_view);
+	states.view = 1;
 
 	states.texture = &m_textureAtlas->texture();
 
+#ifdef OM_NOT_IMPLEMENTED
 	glCheck(glEnable(GL_CULL_FACE));
 	glCheck(glEnable(GL_DEPTH_TEST));
-
-	target.draw(m_vbo, GL_QUADS, 0, nFaces * nVertsPerFace, states);
 #endif // OM_NOT_IMPLEMENTED
+
+	target.drawElements(m_vbo, m_ibo, 0, nFaces * (nVertsPerFace + 2), states);
 }
