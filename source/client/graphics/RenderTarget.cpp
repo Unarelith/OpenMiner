@@ -48,7 +48,10 @@ void RenderTarget::draw(const Drawable &drawable, const RenderStates &states) {
 void RenderTarget::draw(const VertexBuffer &vertexBuffer, uint64_t mode, uint32_t firstVertex, uint32_t vertexCount, const RenderStates &states) {
 	beginDrawing(states);
 
-	vertexBuffer.enable(firstVertex, vertexCount);
+	if (firstVertex == 0 && vertexCount == 0)
+		vertexBuffer.enable();
+	else
+		vertexBuffer.enable(firstVertex, vertexCount);
 
 	bgfx::setTransform(states.transform.getRawMatrix());
 
@@ -58,12 +61,12 @@ void RenderTarget::draw(const VertexBuffer &vertexBuffer, uint64_t mode, uint32_
 void RenderTarget::drawElements(const VertexBuffer &vertexBuffer, const IndexBuffer &indexBuffer, uint64_t mode, uint32_t count, const RenderStates &states) {
 	beginDrawing(states);
 
-	if (count == 0)
-		vertexBuffer.enable();
-	else
-		vertexBuffer.enable(0, count);
+	vertexBuffer.enable();
 
-	indexBuffer.enable();
+	if (count == 0)
+		indexBuffer.enable();
+	else
+		indexBuffer.enable(0, count);
 
 	bgfx::setTransform(states.transform.getRawMatrix());
 
