@@ -30,6 +30,7 @@
 #include <gk/core/GameClock.hpp>
 #include <gk/core/Mouse.hpp>
 
+#include "Camera.hpp"
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
@@ -39,7 +40,7 @@
 
 ClientPlayer *ClientPlayer::s_instance = nullptr;
 
-ClientPlayer::ClientPlayer(gk::Camera &camera) : m_camera(camera) {
+ClientPlayer::ClientPlayer(Camera &camera) : m_camera(camera) {
 	m_cameraLocalPos = gk::Vector3f{0.f, 0.f, 1.625f};
 
 	updateCamera();

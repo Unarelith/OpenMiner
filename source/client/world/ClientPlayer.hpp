@@ -31,15 +31,14 @@
 
 #include <glm/glm.hpp>
 
-#include <gk/gl/Camera.hpp>
-
 #include "Player.hpp"
 
+class Camera;
 class ClientWorld;
 
 class ClientPlayer : public Player {
 	public:
-		ClientPlayer(gk::Camera &camera);
+		ClientPlayer(Camera &camera);
 
 		void turnH(float angle);
 		void turnViewV(float angle);
@@ -63,7 +62,7 @@ class ClientPlayer : public Player {
 		void setPosition(double x, double y, double z);
 		void setCameraRoll(float angle) { m_viewAngleRoll = angle; updateCamera(); };
 
-		gk::Camera &camera() { return m_camera; }
+		Camera &camera() { return m_camera; }
 
 	private:
 		void testPoint(const ClientWorld &world, double x, double y, double z, gk::Vector3f &vel);
@@ -72,7 +71,7 @@ class ClientPlayer : public Player {
 
 		static ClientPlayer *s_instance;
 
-		gk::Camera &m_camera;
+		Camera &m_camera;
 
 		gk::Vector3f m_forwardDir;
 

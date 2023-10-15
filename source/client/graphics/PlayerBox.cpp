@@ -27,6 +27,7 @@
 #include <gk/gl/GLCheck.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
+#include "Camera.hpp"
 #include "PlayerBox.hpp"
 #include "Vertex.hpp"
 
@@ -246,7 +247,7 @@ static constexpr float modelCoords[NUM_QUADS * NUM_VERTICES_PER_QUAD][NUM_VERTEX
 	{-0.2f,  0.2f, 1.75f,   16.f/64.f, 32.f/32.f},
 };
 
-PlayerBox::PlayerBox(const gk::Camera &camera)
+PlayerBox::PlayerBox(const Camera &camera)
 	: m_camera(camera),
 	  m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-player"))
 {

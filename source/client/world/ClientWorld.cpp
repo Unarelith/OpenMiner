@@ -28,6 +28,7 @@
 
 #include <gk/resource/ResourceHandler.hpp>
 
+#include "Camera.hpp"
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientProfiler.hpp"

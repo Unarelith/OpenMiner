@@ -81,7 +81,7 @@ class GameState : public DrawableState {
 
 		Framebuffer m_fbo{Config::screenWidth, Config::screenHeight};
 
-		gk::Camera m_camera{70.0f, DIST_NEAR, DIST_FAR};
+		Camera m_camera{70.0f, DIST_NEAR, DIST_FAR};
 		ClientPlayer m_player{m_camera};
 
 		Client m_client;

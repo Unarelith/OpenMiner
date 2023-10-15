@@ -27,17 +27,17 @@
 #ifndef PLAYERBOX_HPP_
 #define PLAYERBOX_HPP_
 
-#include <gk/gl/Camera.hpp>
 #include <gk/gl/Texture.hpp>
 #include <gk/gl/Transformable.hpp>
 
+#include "Camera.hpp"
 #include "Drawable.hpp"
 #include "Player.hpp"
 #include "VertexBuffer.hpp"
 
 class PlayerBox : public Drawable, public gk::Transformable, public Player {
 	public:
-		PlayerBox(const gk::Camera &camera);
+		PlayerBox(const Camera &camera);
 
 		void setPosition(double x, double y, double z) {
 			Player::setPosition(x, y, z);
@@ -50,7 +50,7 @@ class PlayerBox : public Drawable, public gk::Transformable, public Player {
 
 		VertexBuffer m_vbo;
 
-		const gk::Camera &m_camera;
+		const Camera &m_camera;
 
 		gk::Texture &m_texture;
 };

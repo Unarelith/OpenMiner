@@ -33,10 +33,7 @@
 
 #include "PlayerBox.hpp"
 
-namespace gk {
-	class Camera;
-}
-
+class Camera;
 class Client;
 class ClientPlayer;
 class ClientWorld;

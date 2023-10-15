@@ -25,12 +25,12 @@
  * =====================================================================================
  */
 #include <gk/core/Debug.hpp>
-#include <gk/gl/Camera.hpp>
 
 #include <entt/entt.hpp>
 
 #include "AnimationComponent.hpp"
 #include "ApplicationStateStack.hpp"
+#include "Camera.hpp"
 #include "Client.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
