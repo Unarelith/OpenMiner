@@ -127,7 +127,6 @@ void IndexBuffer::enable(uint32_t startIndex, uint32_t numIndices) const {
 	}
 }
 
-bool IndexBuffer::isValid() {
+bool IndexBuffer::isValid() const {
 	return bgfx::isValid(m_staticHandle) || bgfx::isValid(m_dynamicHandle);
 }
-
