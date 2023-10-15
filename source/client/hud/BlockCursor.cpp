@@ -325,7 +325,6 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 	if (m_selectedBlock.w == -1) return;
 
 #ifdef OM_NOT_IMPLEMENTED
-	glCheck(glDisable(GL_POLYGON_OFFSET_FILL));
 	glCheck(glDisable(GL_CULL_FACE));
 	glCheck(glEnable(GL_DEPTH_TEST));
 #endif // OM_NOT_IMPLEMENTED
@@ -338,13 +337,7 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 		float(m_selectedBlock.z - cameraPosition.z)
 	);
 
-#ifdef OM_NOT_IMPLEMENTED
-	glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
-#endif // OM_NOT_IMPLEMENTED
-	target.drawElements(m_vbo, m_ibo, 0, nFaces * nVertsPerFace, states);
-#ifdef OM_NOT_IMPLEMENTED
-	glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
-#endif // OM_NOT_IMPLEMENTED
+	target.drawElements(m_vbo, m_ibo, BGFX_STATE_PT_LINES, nFaces * (nVertsPerFace + 2), states);
 
 	if (m_animationStart > 0) {
 #ifdef OM_NOT_IMPLEMENTED
@@ -354,16 +347,12 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 
 		states.texture = m_blockDestroyTexture;
 
-		target.drawElements(m_animationVBO, m_ibo, 0, nFaces * nVertsPerFace, states);
+		target.drawElements(m_animationVBO, m_ibo, 0, nFaces * (nVertsPerFace + 2), states);
 
 #ifdef OM_NOT_IMPLEMENTED
 		glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 #endif // OM_NOT_IMPLEMENTED
 	}
-
-#ifdef OM_NOT_IMPLEMENTED
-	glCheck(glEnable(GL_POLYGON_OFFSET_FILL));
-#endif // OM_NOT_IMPLEMENTED
 }
 
 glm::ivec4 BlockCursor::findSelectedBlock() const {
