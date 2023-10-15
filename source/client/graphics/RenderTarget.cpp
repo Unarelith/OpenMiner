@@ -116,7 +116,7 @@ void RenderTarget::beginDrawing(const RenderStates &states) {
 		states.texture->enable(0, m_samplerUniform);
 }
 
-gk::IntRect RenderTarget::getViewport(const gk::View& view) const {
+gk::IntRect RenderTarget::getViewport(const View& view) const {
 	float width  = static_cast<float>(getSize().x);
 	float height = static_cast<float>(getSize().y);
 	const gk::FloatRect& viewport = view.getViewport();

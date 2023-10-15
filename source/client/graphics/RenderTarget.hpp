@@ -28,11 +28,11 @@
 #define RENDERTARGET_HPP_
 
 #include <gk/core/Rect.hpp>
-#include <gk/gl/View.hpp>
 
 #include <bgfx/bgfx.h>
 
 #include "RenderStates.hpp"
+#include "View.hpp"
 
 class Drawable;
 class IndexBuffer;
@@ -54,20 +54,20 @@ class RenderTarget {
 
 		virtual gk::Vector2u getSize() const = 0;
 
-		virtual const gk::View &getDefaultView() const = 0;
+		virtual const View &getDefaultView() const = 0;
 
-		gk::View *getView() { return m_view; }
-		const gk::View *getView() const { return m_view; }
-		void setView(const gk::View &view) { m_view = const_cast<gk::View*>(&view); m_viewChanged = true; }
+		View *getView() { return m_view; }
+		const View *getView() const { return m_view; }
+		void setView(const View &view) { m_view = const_cast<View*>(&view); m_viewChanged = true; }
 		void disableView() { m_view = nullptr; }
 
 	private:
-		gk::IntRect getViewport(const gk::View &view) const;
+		gk::IntRect getViewport(const View &view) const;
 
 		void applyCurrentView(const RenderStates &states);
 
 		bool m_viewChanged = false;
-		gk::View *m_view = nullptr;
+		View *m_view = nullptr;
 
 		bgfx::UniformHandle m_samplerUniform = BGFX_INVALID_HANDLE;
 };
