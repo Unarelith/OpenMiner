@@ -76,7 +76,7 @@ void InterfaceState::prepareDraw(RenderTarget &target, RenderStates &states) con
 	states.shader = &m_shader;
 
 	target.setView(m_view);
-	states.view = 2;
+	states.view = 3;
 
 	if (m_parent && m_drawBackground)
 		target.draw(m_background, states);
