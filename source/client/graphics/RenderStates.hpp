@@ -43,6 +43,8 @@ struct RenderStates {
 	const Texture *texture = nullptr;
 	const Shader *shader = nullptr;
 
+	uint16_t view = 0;
+
 	static const RenderStates Default; // Defined in RenderTarget.cpp
 };
 
