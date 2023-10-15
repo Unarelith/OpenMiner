@@ -174,7 +174,6 @@ void InventoryCube::draw(RenderTarget &target, RenderStates states) const {
 	// negative Z is closer to the user, and that the bottom side is visible
 	// at start.
 	target.setView(m_view);
-	states.view = 1;
 
 	states.texture = &m_textureAtlas->texture();
 
