@@ -138,15 +138,17 @@ void Text::updateVertexBuffer() const {
 
 	m_verticesCount = (u32)vertices.size();
 
-	m_vbo.init(vertices.data(), sizeof(Vertex) * m_verticesCount, true);
+	if (m_verticesCount) {
+		m_vbo.init(vertices.data(), sizeof(Vertex) * m_verticesCount, true);
 
-	m_size.x = std::max(x, maxX);
-	m_size.y = y + m_font.getTileSize().y + 1;
+		m_size.x = std::max(x, maxX);
+		m_size.y = y + m_font.getTileSize().y + 1;
 
-	float backgroundX = std::max(m_background.getSize().x, float(m_size.x + m_padding.x));
-	float backgroundY = std::max(m_background.getSize().y, float(m_size.y + m_padding.y));
+		float backgroundX = std::max(m_background.getSize().x, float(m_size.x + m_padding.x));
+		float backgroundY = std::max(m_background.getSize().y, float(m_size.y + m_padding.y));
 
-	m_background.setSize(backgroundX, backgroundY);
+		m_background.setSize(backgroundX, backgroundY);
+	}
 }
 
 void Text::addCharacter(u32 x, u32 y, const gk::Color &color, u8 c, std::vector<Vertex> &vertices) const {
