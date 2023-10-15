@@ -34,6 +34,7 @@
 #include "RenderStates.hpp"
 
 class Drawable;
+class IndexBuffer;
 class VertexBuffer;
 
 class RenderTarget {
@@ -41,10 +42,9 @@ class RenderTarget {
 		virtual ~RenderTarget() = default;
 
 		void draw(const Drawable &drawable, const RenderStates &states = RenderStates::Default);
-		void draw(const VertexBuffer &vertexBuffer, GLenum mode, GLint firstVertex, GLsizei vertexCount, const RenderStates &states = RenderStates::Default);
-		void drawElements(const VertexBuffer &vertexBuffer, GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, const RenderStates &states = RenderStates::Default);
 
-		void drawArrays(GLenum mode, GLint firstVertex, GLsizei vertexCount);
+		void draw(const VertexBuffer &vertexBuffer, uint64_t mode, uint32_t firstVertex, uint32_t vertexCount, const RenderStates &states = RenderStates::Default);
+		void drawElements(const VertexBuffer &vertexBuffer, const IndexBuffer &indexBuffer, uint64_t mode, uint32_t count, const RenderStates &states = RenderStates::Default);
 
 		void beginDrawing(const RenderStates &states);
 
