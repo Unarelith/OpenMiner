@@ -26,6 +26,8 @@
  */
 #include <cassert>
 
+#include <gk/core/Debug.hpp>
+
 #include <bx/bx.h>
 
 #include "VertexBuffer.hpp"
@@ -44,8 +46,8 @@ VertexBuffer::VertexBuffer(VertexBuffer &&vertexBuffer) {
 
 	m_isDynamic = vertexBuffer.m_isDynamic;
 
-	m_data = vertexBuffer.m_data;
-	vertexBuffer.m_data = nullptr;
+	m_size = vertexBuffer.m_size;
+	vertexBuffer.m_size = 0;
 }
 
 VertexBuffer::~VertexBuffer() {
@@ -63,8 +65,8 @@ VertexBuffer &VertexBuffer::operator=(VertexBuffer &&vertexBuffer) {
 
 	m_isDynamic = vertexBuffer.m_isDynamic;
 
-	m_data = vertexBuffer.m_data;
-	vertexBuffer.m_data = nullptr;
+	m_size = vertexBuffer.m_size;
+	vertexBuffer.m_size = 0;
 
 	return *this;
 }
@@ -80,33 +82,42 @@ void VertexBuffer::setupDefaultLayout() {
 	        .end();
 }
 
-void VertexBuffer::init(const void *data, uint32_t size, bool isDynamic) {
+void VertexBuffer::init(const void *data, u32 size, bool isDynamic) {
 	assert(size != 0);
 
-	if (isDynamic || data == nullptr) {
-		if (isValid() && data) {
-			update(data, size);
+	auto createBuffer = [this](const void *data, u32 size, bool isDynamic) {
+		m_size = size;
+		m_isDynamic = (data == nullptr || isDynamic);
+
+		if (m_isDynamic) {
+			auto *mem = (data ? bgfx::copy(data, size) : bgfx::alloc(size));
+			m_dynamicHandle = bgfx::createDynamicVertexBuffer(mem, m_layout);
 		}
 		else {
-			if (isValid())
-				free();
+			auto *mem = bgfx::copy(data, size);
+			m_staticHandle = bgfx::createVertexBuffer(mem, m_layout);
+		}
+	};
 
-			m_isDynamic = true;
-			m_data = (data ? bgfx::copy(data, size) : bgfx::alloc(size));
-			m_dynamicHandle = bgfx::createDynamicVertexBuffer(m_data, m_layout);
+	if (isValid()) {
+		// Reallocate a new buffer if size increased
+		if (size > m_size) {
+			free();
+			createBuffer(data, size, isDynamic);
+		}
+		else if (data != nullptr) {
+			update(data, size);
 		}
 	}
 	else {
-		assert(!isValid());
-
-		m_isDynamic = false;
-		m_data = bgfx::copy(data, size);
-		m_staticHandle = bgfx::createVertexBuffer(m_data, m_layout);
+		createBuffer(data, size, isDynamic);
 	}
 }
 
-void VertexBuffer::update(const void *data, uint32_t size, uint32_t offset) const {
+void VertexBuffer::update(const void *data, u32 size, u32 offset) const {
+	assert(data);
 	assert(size != 0);
+	assert(offset + size <= m_size);
 	assert(m_isDynamic);
 	assert(bgfx::isValid(m_dynamicHandle));
 
@@ -135,7 +146,7 @@ void VertexBuffer::enable() const {
 	}
 }
 
-void VertexBuffer::enable(uint32_t startVertex, uint32_t numVertices) const {
+void VertexBuffer::enable(u32 startVertex, u32 numVertices) const {
 	if (!m_isDynamic) {
 		assert(bgfx::isValid(m_staticHandle));
 		bgfx::setVertexBuffer(0, m_staticHandle, startVertex, numVertices);

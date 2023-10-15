@@ -27,6 +27,7 @@
 #ifndef VERTEXBUFFER_HPP_
 #define VERTEXBUFFER_HPP_
 
+#include <gk/core/IntTypes.hpp>
 #include <gk/utils/NonCopyable.hpp>
 
 #include <bgfx/bgfx.h>
@@ -39,12 +40,12 @@ class VertexBuffer : public gk::NonCopyable {
 
 		VertexBuffer &operator=(VertexBuffer &&);
 
-		void init(const void *data, uint32_t size, bool isDynamic = false);
-		void update(const void *data, uint32_t size, uint32_t offset = 0) const;
+		void init(const void *data, u32 size, bool isDynamic = false);
+		void update(const void *data, u32 size, u32 offset = 0) const;
 		void free();
 
 		void enable() const;
-		void enable(uint32_t startVertex, uint32_t numVertices) const;
+		void enable(u32 startVertex, u32 numVertices) const;
 
 		bool isValid();
 
@@ -60,7 +61,7 @@ class VertexBuffer : public gk::NonCopyable {
 
 		bool m_isDynamic;
 
-		const bgfx::Memory *m_data = nullptr;
+		u32 m_size = 0;
 };
 
 #endif // VERTEXBUFFER_HPP_
