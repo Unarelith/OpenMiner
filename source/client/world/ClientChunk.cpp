@@ -47,21 +47,7 @@ u64 ClientChunk::frameCounter = 0;
 ClientChunk::ClientChunk(s32 x, s32 y, s32 z, const Dimension &dimension, ClientWorld &world)
 	: Chunk(x, y, z, (World &)world), m_world(world), m_dimension(dimension)
 {
-#ifdef OM_NOT_IMPLEMENTED
-	// Setup VBO attributes
-	m_vbo.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
-	m_vbo.layout().addAttribute(1, "texCoord", 2, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, texCoord)));
-	m_vbo.layout().addAttribute(2, "color", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, color)));
-	m_vbo.layout().addAttribute(3, "normal", 3, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, normal)));
-	m_vbo.layout().addAttribute(4, "lightValue", 2, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, lightValue)));
-	m_vbo.layout().addAttribute(5, "ambientOcclusion", 1, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, ambientOcclusion)));
-
-	// Prepare VAO
-	gk::VertexArray::bind(&m_vao);
-	VertexBuffer::bind(&m_vbo);
-	m_vbo.layout().enableLayout();
-	gk::VertexArray::bind(nullptr);
-#endif // OM_NOT_IMPLEMENTED
+	m_vbo.setupDefaultLayout();
 }
 
 void ClientChunk::update() {
