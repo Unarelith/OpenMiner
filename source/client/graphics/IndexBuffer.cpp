@@ -57,6 +57,8 @@ IndexBuffer &IndexBuffer::operator=(IndexBuffer &&vertexBuffer) {
 	m_dynamicHandle = vertexBuffer.m_dynamicHandle;
 	vertexBuffer.m_dynamicHandle.idx = bgfx::kInvalidHandle;
 
+	m_isDynamic = vertexBuffer.m_isDynamic;
+
 	m_data = vertexBuffer.m_data;
 	vertexBuffer.m_data = nullptr;
 
@@ -107,14 +109,14 @@ void IndexBuffer::enable() const {
 	}
 }
 
-void IndexBuffer::enable(uint32_t startIndex, uint32_t numVertices) const {
+void IndexBuffer::enable(uint32_t startIndex, uint32_t numIndices) const {
 	if (!m_isDynamic) {
 		assert(bgfx::isValid(m_staticHandle));
-		bgfx::setIndexBuffer(m_staticHandle, startIndex, numVertices);
+		bgfx::setIndexBuffer(m_staticHandle, startIndex, numIndices);
 	}
 	else {
 		assert(bgfx::isValid(m_dynamicHandle));
-		bgfx::setIndexBuffer(m_dynamicHandle, startIndex, numVertices);
+		bgfx::setIndexBuffer(m_dynamicHandle, startIndex, numIndices);
 	}
 }
 

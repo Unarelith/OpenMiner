@@ -44,7 +44,7 @@ class IndexBuffer : public gk::NonCopyable {
 		void free();
 
 		void enable() const;
-		void enable(uint32_t startIndex, uint32_t numVertices) const;
+		void enable(uint32_t startIndex, uint32_t numIndices) const;
 
 		bool isValid();
 

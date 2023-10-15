@@ -30,18 +30,18 @@
 RectangleShape::RectangleShape() {
 	m_vbo.setupDefaultLayout();
 
-	std::array<int, 6 * 5> m_indices{{
+	std::array<u16, 6 * 5> m_indices{{
 		0, 1, 3,
 		3, 1, 2
 	}};
 
 	for (u8 i = 1 ; i < 5 ; ++i) {
 		for (u8 j = 0 ; j < 6 ; ++j) {
-			m_indices[i * 6 + j] = m_indices[j] + 4 * i;
+			m_indices[i * 6 + j] = u16(m_indices[j] + 4 * i);
 		}
 	}
 
-	m_ibo.init(m_indices.data(), 6 * 5 * sizeof(int));
+	m_ibo.init(m_indices.data(), 6 * 5 * sizeof(u16));
 }
 
 RectangleShape::RectangleShape(float width, float height, const gk::Color &color) : RectangleShape() {
