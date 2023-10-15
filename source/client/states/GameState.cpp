@@ -222,6 +222,7 @@ void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 }
 
 void GameState::draw(RenderTarget &target, RenderStates states) const {
+#ifdef OM_NOT_IMPLEMENTED
 	gk::Shader::bind(&m_shader);
 
 	if (m_world.sky()) {
@@ -262,5 +263,6 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 	m_fbo.end();
 
 	target.draw(m_hud, states);
+#endif // OM_NOT_IMPLEMENTED
 }
 

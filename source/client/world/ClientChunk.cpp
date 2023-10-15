@@ -47,6 +47,7 @@ u64 ClientChunk::frameCounter = 0;
 ClientChunk::ClientChunk(s32 x, s32 y, s32 z, const Dimension &dimension, ClientWorld &world)
 	: Chunk(x, y, z, (World &)world), m_world(world), m_dimension(dimension)
 {
+#ifdef OM_NOT_IMPLEMENTED
 	// Setup VBO attributes
 	m_vbo.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
 	m_vbo.layout().addAttribute(1, "texCoord", 2, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, texCoord)));
@@ -60,6 +61,7 @@ ClientChunk::ClientChunk(s32 x, s32 y, s32 z, const Dimension &dimension, Client
 	VertexBuffer::bind(&m_vbo);
 	m_vbo.layout().enableLayout();
 	gk::VertexArray::bind(nullptr);
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void ClientChunk::update() {

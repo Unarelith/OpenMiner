@@ -34,10 +34,12 @@
 #endif
 
 Skybox::Skybox(gk::Camera &camera, ClientWorld &world) : m_camera(camera), m_world(world) {
+#ifdef OM_NOT_IMPLEMENTED
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/skybox.v.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/skybox.f.glsl");
 	m_shader.linkProgram();
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void Skybox::loadSky(const Sky &sky) {
@@ -107,6 +109,7 @@ void Skybox::loadSky(const Sky &sky) {
 }
 
 void Skybox::draw(RenderTarget &target, RenderStates states) const {
+#ifdef OM_NOT_IMPLEMENTED
 	if (!m_world.sky()) return;
 
 	float time = GameTime::getCurrentTime(0, m_world.sky()->daylightCycleSpeed());
@@ -143,5 +146,6 @@ void Skybox::draw(RenderTarget &target, RenderStates states) const {
 	}
 
 	m_camera.setDPosition(cameraPos);  // Restore the camera to its original position
+#endif // OM_NOT_IMPLEMENTED
 }
 

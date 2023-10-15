@@ -269,6 +269,7 @@ void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkM
 void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const std::vector<std::pair<ClientChunk*, gk::Transform>> &chunks, const Sky *currentSky) const {
 	++ClientChunk::frameCounter;
 
+#ifdef OM_NOT_IMPLEMENTED
 	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 
 	glCheck(glEnable(GL_DEPTH_TEST));
@@ -314,5 +315,6 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 	}
 
 	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+#endif // OM_NOT_IMPLEMENTED
 }
 

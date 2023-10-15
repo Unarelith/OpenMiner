@@ -31,7 +31,9 @@
 #include "Text.hpp"
 
 Text::Text() : m_font(gk::ResourceHandler::getInstance().get<Font>("font-ascii")) {
+#ifdef OM_NOT_IMPLEMENTED
 	m_vbo.layout().setupDefaultLayout();
+#endif // OM_NOT_IMPLEMENTED
 
 	m_background.setFillColor(gk::Color::Transparent);
 }
@@ -87,6 +89,7 @@ void Text::draw(RenderTarget &target, RenderStates states) const {
 }
 
 void Text::updateVertexBuffer() const {
+#ifdef OM_NOT_IMPLEMENTED
 	if (!m_isUpdateNeeded) return;
 
 	std::vector<gk::Vertex> vertices;
@@ -145,6 +148,7 @@ void Text::updateVertexBuffer() const {
 	float backgroundY = std::max(m_background.getSize().y, float(m_size.y + m_padding.y));
 
 	m_background.setSize(backgroundX, backgroundY);
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void Text::addCharacter(u32 x, u32 y, const gk::Color &color, u8 c, std::vector<gk::Vertex> &vertices) const {

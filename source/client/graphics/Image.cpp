@@ -31,7 +31,9 @@
 #include "Image.hpp"
 
 Image::Image() {
+#ifdef OM_NOT_IMPLEMENTED
 	m_vbo.layout().setupDefaultLayout();
+#endif // OM_NOT_IMPLEMENTED
 }
 
 Image::Image(const std::string &textureName) : Image() {
@@ -90,6 +92,7 @@ void Image::setPosRect(float x, float y, u16 width, u16 height) {
 }
 
 void Image::updateVertexBuffer() const {
+#ifdef OM_NOT_IMPLEMENTED
 	gk::Vertex vertices[4] = {
 		{{m_posRect.x + m_posRect.sizeX, m_posRect.y,                   0, -1}},
 		{{m_posRect.x,                   m_posRect.y,                   0, -1}},
@@ -135,6 +138,7 @@ void Image::updateVertexBuffer() const {
 	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	VertexBuffer::bind(nullptr);
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void Image::draw(RenderTarget &target, RenderStates states) const {
@@ -142,6 +146,7 @@ void Image::draw(RenderTarget &target, RenderStates states) const {
 
 	states.texture = m_texture;
 
+#ifdef OM_NOT_IMPLEMENTED
 	glCheck(glDisable(GL_CULL_FACE));
 	glCheck(glDisable(GL_DEPTH_TEST));
 
@@ -151,4 +156,5 @@ void Image::draw(RenderTarget &target, RenderStates states) const {
 	};
 
 	target.drawElements(m_vbo, GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices, states);
+#endif // OM_NOT_IMPLEMENTED
 }

@@ -46,6 +46,7 @@ BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommand
 {
 	m_blockDestroyTexture = &gk::ResourceHandler::getInstance().get<gk::Texture>("texture-block_destroy");
 
+#ifdef OM_NOT_IMPLEMENTED
 	m_vbo.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
 
 	m_animationVBO.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
@@ -54,6 +55,7 @@ BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommand
 	m_animationVBO.layout().addAttribute(3, "normal", 3, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, normal)));
 	m_animationVBO.layout().addAttribute(4, "lightValue", 2, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, lightValue)));
 	m_animationVBO.layout().addAttribute(5, "ambientOcclusion", 1, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, ambientOcclusion)));
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
@@ -269,15 +271,18 @@ void BlockCursor::updateVBOCoords(Vertex vertices[nFaces][nVertsPerFace], const 
 }
 
 void BlockCursor::updateVertexBuffer(const BlockState &blockState, u8f orientation) {
+#ifdef OM_NOT_IMPLEMENTED
 	Vertex vertices[nFaces][nVertsPerFace];
 	updateVBOCoords(vertices, blockState, -1, orientation);
 
 	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	VertexBuffer::bind(nullptr);
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void BlockCursor::updateAnimationVertexBuffer(const BlockState &blockState, u8f orientation, int animationPos) {
+#ifdef OM_NOT_IMPLEMENTED
 	Vertex vertices[nFaces][nVertsPerFace];
 	updateVBOCoords(vertices, blockState, -2, orientation);
 
@@ -306,9 +311,11 @@ void BlockCursor::updateAnimationVertexBuffer(const BlockState &blockState, u8f 
 	VertexBuffer::bind(&m_animationVBO);
 	m_animationVBO.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	VertexBuffer::bind(nullptr);
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
+#ifdef OM_NOT_IMPLEMENTED
 	if (m_selectedBlock.w == -1) return;
 
 	glCheck(glDisable(GL_POLYGON_OFFSET_FILL));
@@ -339,6 +346,7 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 	}
 
 	glCheck(glEnable(GL_POLYGON_OFFSET_FILL));
+#endif // OM_NOT_IMPLEMENTED
 }
 
 glm::ivec4 BlockCursor::findSelectedBlock() const {

@@ -130,6 +130,7 @@ void HUD::update() {
 }
 
 void HUD::draw(RenderTarget &target, RenderStates states) const {
+#ifdef OM_NOT_IMPLEMENTED
 	OM_PROFILE_START("HUD::draw");
 
 	target.disableView();
@@ -168,5 +169,6 @@ void HUD::draw(RenderTarget &target, RenderStates states) const {
 		target.draw(m_crosshair, states);
 
 	OM_PROFILE_END("HUD::draw");
+#endif // OM_NOT_IMPLEMENTED
 }
 
