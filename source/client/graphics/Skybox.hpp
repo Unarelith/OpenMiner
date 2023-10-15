@@ -37,6 +37,7 @@ class Sky;
 class Skybox : public Drawable, public gk::Transformable {
 	public:
 		Skybox(Camera &camera, ClientWorld &world);
+		~Skybox();
 
 		void loadSky(const Sky &sky);
 
@@ -52,6 +53,8 @@ class Skybox : public Drawable, public gk::Transformable {
 		CelestialObject m_moon;
 
 		std::vector<CelestialObject> m_stars;
+
+		bgfx::UniformHandle m_starColor = BGFX_INVALID_HANDLE;
 };
 
 #endif // SKYBOX_HPP_

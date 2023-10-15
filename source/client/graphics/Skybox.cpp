@@ -35,9 +35,13 @@
 #endif
 
 Skybox::Skybox(Camera &camera, ClientWorld &world) : m_camera(camera), m_world(world) {
-#ifdef OM_NOT_IMPLEMENTED
 	m_shader.loadFromFile("skybox");
-#endif // OM_NOT_IMPLEMENTED
+
+	m_starColor = bgfx::createUniform("u_starColor", bgfx::UniformType::Vec4);
+}
+
+Skybox::~Skybox() {
+	bgfx::destroy(m_starColor);
 }
 
 void Skybox::loadSky(const Sky &sky) {
@@ -107,15 +111,14 @@ void Skybox::loadSky(const Sky &sky) {
 }
 
 void Skybox::draw(RenderTarget &target, RenderStates states) const {
-#ifdef OM_NOT_IMPLEMENTED
 	if (!m_world.sky()) return;
 
 	float time = GameTime::getCurrentTime(0, m_world.sky()->daylightCycleSpeed());
 	gk::Color skyColor = GameTime::getSkyColorFromTime(*m_world.sky(), time);
 	gk::Color starColor = m_world.sky()->color();
 
-	m_shader.setUniform("u_skyColor", skyColor);
-	m_shader.setUniform("u_starColor", starColor);
+	float starColorPtr[4] = {starColor.r, starColor.g, starColor.b, starColor.a};
+	bgfx::setUniform(m_starColor, starColorPtr);
 
 	m_moon.setCurrentPhase((GameTime::getTicks() / GameTime::dayLength) % 8);
 
@@ -142,6 +145,5 @@ void Skybox::draw(RenderTarget &target, RenderStates states) const {
 	}
 
 	m_camera.setDPosition(cameraPos);  // Restore the camera to its original position
-#endif // OM_NOT_IMPLEMENTED
 }
 
