@@ -30,7 +30,6 @@ vec4 light(vec4 position, vec4 normal, vec4 color, vec3 lightColor, vec4 lightPo
 	return color * vec4(ambientColor + diffuseColor, 1.0);
 }
 
-
 // Apply fog
 vec4 fog(vec4 color, float fogCoord, float fogStart, float fogEnd) {
 	float fog = clamp((fogEnd - fogCoord) / (fogEnd - fogStart), 0.0, 1.0);
@@ -60,7 +59,6 @@ void main() {
 	// Very cheap "transparency": don't draw pixels with a low alpha value
 	if(color.a < 0.3 && blockFace > -1.) discard;
 
-#ifdef OM_NOT_IMPLEMENTED
 	float minBrightness = 2.0 / 16.0;
 	if (lightCheck != -1.) {
 		float sunlight = clamp(v_lightValue.x * u_sunlightIntensity.x, 3, 15);
@@ -86,7 +84,6 @@ void main() {
 	color.rgb *= v_ambientOcclusion;
 
 	color = fog(color, v_dist, u_renderDistance.x - 32, u_renderDistance.x);
-#endif // OM_NOT_IMPLEMENTED
 
 	gl_FragColor = color;
 }
