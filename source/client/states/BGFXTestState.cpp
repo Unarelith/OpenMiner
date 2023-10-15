@@ -50,7 +50,7 @@ BGFXTestState::BGFXTestState()
 	m_camera.setFarClippingPlane(100.0f);
 
 	m_view.setSize((float)windowSize.x, (float)windowSize.y);
-	m_view.setCenter(windowSize.x / 2.f, windowSize.y / 2.f);
+	m_view.setCenter((float)windowSize.x / 2.f, (float)windowSize.y / 2.f);
 
 	// Set view 0 default viewport.
 	bgfx::setViewRect(0, 0, 0, (uint16_t)windowSize.x, (uint16_t)windowSize.y);

@@ -2,16 +2,13 @@ $input v_color0, v_color1, v_texcoord0
 
 #include <bgfx_shader.sh>
 
-#ifdef OM_NOT_IMPLEMENTED
 SAMPLER2D(u_tex, 0);
 
 // uniform int u_renderType;
-#endif // OM_NOT_IMPLEMENTED
 
 void main() {
 	vec4 color = v_color0;
 
-#ifdef OM_NOT_IMPLEMENTED
 	if (v_texcoord0.x != -1 && v_texcoord0.y != -1) {
 		color = texture2D(u_tex, v_texcoord0);
 
@@ -27,6 +24,7 @@ void main() {
 
 	if (color.a < 0.3) discard;
 
+#ifdef OM_NOT_IMPLEMENTED
 	if (v_color1 == 2) {
 		// color -= vec4(0.25, 0.25, 0.25, 0.0);
 		color.rgb /= 2.3;

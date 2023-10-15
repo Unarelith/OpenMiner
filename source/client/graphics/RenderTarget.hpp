@@ -28,8 +28,9 @@
 #define RENDERTARGET_HPP_
 
 #include <gk/core/Rect.hpp>
-#include <gk/gl/OpenGL.hpp>
 #include <gk/gl/View.hpp>
+
+#include <bgfx/bgfx.h>
 
 #include "RenderStates.hpp"
 
@@ -40,6 +41,9 @@ class VertexBuffer;
 class RenderTarget {
 	public:
 		virtual ~RenderTarget() = default;
+
+		void init();
+		void free();
 
 		void draw(const Drawable &drawable, const RenderStates &states = RenderStates::Default);
 
@@ -67,6 +71,8 @@ class RenderTarget {
 		gk::View *m_view = nullptr;
 
 		gk::IntRect m_previousViewport;
+
+		bgfx::UniformHandle m_samplerUniform = BGFX_INVALID_HANDLE;
 };
 
 #endif // RENDERTARGET_HPP_

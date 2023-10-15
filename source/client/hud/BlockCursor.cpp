@@ -44,7 +44,7 @@
 BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 	: m_player(player), m_world(world), m_client(client)
 {
-	m_blockDestroyTexture = &gk::ResourceHandler::getInstance().get<gk::Texture>("texture-block_destroy");
+	m_blockDestroyTexture = &gk::ResourceHandler::getInstance().get<Texture>("texture-block_destroy");
 
 #ifdef OM_NOT_IMPLEMENTED
 	m_vbo.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));

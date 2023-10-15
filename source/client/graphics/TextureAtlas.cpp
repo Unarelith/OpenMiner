@@ -188,8 +188,7 @@ void TextureAtlas::packTextures() {
 
 	m_texture.loadFromSurface(atlas.get());
 
-	gk::Texture::bind(&m_texture);
-
+#ifdef OM_NOT_IMPLEMENTED
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
@@ -197,6 +196,5 @@ void TextureAtlas::packTextures() {
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	gk::Texture::bind(nullptr);
+#endif // OM_NOT_IMPLEMENTED
 }

@@ -44,6 +44,8 @@ void Window::open(const std::string &caption, u16 width, u16 height) {
 
 	initBGFX();
 
+	RenderTarget::init();
+
 	m_defaultView.reset(gk::FloatRect{0, 0, (float)width, (float)height});
 	setView(m_defaultView);
 
@@ -51,6 +53,8 @@ void Window::open(const std::string &caption, u16 width, u16 height) {
 }
 
 void Window::close() {
+	RenderTarget::free();
+
 	bgfx::shutdown();
 
 	m_window.reset(nullptr);
@@ -130,6 +134,7 @@ void Window::resize(unsigned int width, unsigned int height) {
 
 // From: https://stackoverflow.com/a/23091336/1392477
 bool Window::saveScreenshot(int x, int y, int w, int h, const std::string &filename) noexcept {
+#ifdef OM_NOT_IMPLEMENTED
 	unsigned char *pixels = new unsigned char[(unsigned int)(w * h) * 4];
 	glReadPixels(x, y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
@@ -158,6 +163,9 @@ bool Window::saveScreenshot(int x, int y, int w, int h, const std::string &filen
 	SDL_FreeSurface(surf);
 	delete[] pixels;
 	return true;
+#else
+	return false;
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void Window::initBGFX()

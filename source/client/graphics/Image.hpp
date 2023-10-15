@@ -29,23 +29,23 @@
 
 #include <gk/graphics/Color.hpp>
 #include <gk/core/Rect.hpp>
-#include <gk/gl/Texture.hpp>
 #include <gk/gl/Transformable.hpp>
 
 #include "Drawable.hpp"
+#include "Texture.hpp"
 #include "VertexBuffer.hpp"
 
 class Image : public Drawable, public gk::Transformable {
 	public:
 		Image();
 		Image(const std::string &textureName);
-		Image(const gk::Texture &texture);
+		Image(const Texture &texture);
 
 		void load(const Image &image);
 		void load(const std::string &textureName);
-		void load(const gk::Texture &texture);
+		void load(const Texture &texture);
 
-		const gk::Texture *texture() const { return m_texture; }
+		const Texture *texture() const { return m_texture; }
 		void setTexture(const std::string &textureName);
 
 		const gk::FloatRect &clipRect() const { return m_clipRect; }
@@ -66,7 +66,7 @@ class Image : public Drawable, public gk::Transformable {
 
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		const gk::Texture *m_texture = nullptr;
+		const Texture *m_texture = nullptr;
 
 		VertexBuffer m_vbo;
 

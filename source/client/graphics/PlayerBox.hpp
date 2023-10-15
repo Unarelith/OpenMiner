@@ -27,7 +27,6 @@
 #ifndef PLAYERBOX_HPP_
 #define PLAYERBOX_HPP_
 
-#include <gk/gl/Texture.hpp>
 #include <gk/gl/Transformable.hpp>
 
 #include "Camera.hpp"
@@ -52,7 +51,7 @@ class PlayerBox : public Drawable, public gk::Transformable, public Player {
 
 		const Camera &m_camera;
 
-		gk::Texture &m_texture;
+		Texture &m_texture;
 };
 
 #endif // PLAYERBOX_HPP_

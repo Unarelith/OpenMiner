@@ -24,43 +24,31 @@
  *
  * =====================================================================================
  */
-#ifndef PROGRESSBARWIDGET_HPP_
-#define PROGRESSBARWIDGET_HPP_
+#include <gk/core/XMLFile.hpp>
+#include <gk/resource/ResourceHandler.hpp>
 
-#include "BlockData.hpp"
-#include "Image.hpp"
-#include "Widget.hpp"
+#include "Texture.hpp"
+#include "TextureLoader.hpp"
 
-// Duplicated in ProgressBarWidgetDef
-enum class ProgressBarType : u8 {
-	ItemProcess = 0,
-	BurnProcess = 1
-};
+void TextureLoader::load(const char *xmlFilename, gk::ResourceHandler &handler) {
+	gk::XMLFile doc(xmlFilename);
 
-class ProgressBarWidget : public Widget {
-	public:
-		ProgressBarWidget(const Texture &texture, BlockData &blockData, ProgressBarType type, Widget *parent = nullptr);
+	tinyxml2::XMLElement *textureElement = doc.FirstChildElement("textures").FirstChildElement("texture").ToElement();
+	while (textureElement) {
+		std::string name = textureElement->Attribute("name");
+		std::string path = textureElement->Attribute("path");
 
-		void init(const gk::FloatRect &clipRect, const gk::Vector2i &position, const std::string &meta, unsigned int maxMetaValue);
-		void init(const gk::FloatRect &clipRect, const gk::Vector2i &position, const std::string &meta, const std::string &maxMeta);
+		auto &texture = handler.add<Texture>("texture-" + name);
+		texture.loadFromFile(path);
 
-		void update() override;
+		if (textureElement->Attribute("repeat", "true")) {
+#ifdef OM_NOT_IMPLEMENTED
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+#endif // OM_NOT_IMPLEMENTED
+		}
 
-	private:
-		void draw(RenderTarget &target, RenderStates states) const override;
+		textureElement = textureElement->NextSiblingElement("texture");
+	}
+}
 
-		BlockData &m_blockData;
-
-		gk::FloatRect m_clipRect;
-		gk::Vector2i m_position;
-
-		std::string m_meta;
-		std::string m_maxMeta;
-		unsigned int m_maxMetaValue = 0;
-
-		Image m_image;
-
-		ProgressBarType m_type;
-};
-
-#endif // PROGRESSBARWIDGET_HPP_

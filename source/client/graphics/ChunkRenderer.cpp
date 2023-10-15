@@ -26,18 +26,16 @@
  */
 #include <glm/gtx/norm.hpp>
 
-#include <gk/gl/GLCheck.hpp>
-#include <gk/gl/Texture.hpp>
-
 #include "Camera.hpp"
 #include "ChunkRenderer.hpp"
 #include "ClientChunk.hpp"
 #include "RenderTarget.hpp"
+#include "Texture.hpp"
 
 inline static bool bbIntersects(const glm::vec3 &a0, const glm::vec3 &a1, const glm::vec3 &b0, const glm::vec3 &b1) {
 	return (std::max(a0.x, b0.x) <= std::min(a1.x, b1.x))
-	     & (std::max(a0.y, b0.y) <= std::min(a1.y, b1.y))
-	     & (std::max(a0.z, b0.z) <= std::min(a1.z, b1.z));
+	    && (std::max(a0.y, b0.y) <= std::min(a1.y, b1.y))
+	    && (std::max(a0.z, b0.z) <= std::min(a1.z, b1.z));
 }
 
 inline static bool isOutside(const glm::vec3 &v, const glm::vec3 &n) {

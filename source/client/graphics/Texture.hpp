@@ -24,32 +24,45 @@
  *
  * =====================================================================================
  */
-#include <gk/core/XMLFile.hpp>
-#include <gk/gl/OpenGL.hpp>
-#include <gk/gl/Texture.hpp>
-#include <gk/resource/ResourceHandler.hpp>
+#ifndef TEXTURE_HPP_
+#define TEXTURE_HPP_
 
-#include "TextureLoader.hpp"
+#include <string>
 
-void TextureLoader::load(const char *xmlFilename, gk::ResourceHandler &handler) {
-	gk::XMLFile doc(xmlFilename);
+#include <gk/core/IntTypes.hpp>
+#include <gk/core/SDLHeaders.hpp>
+#include <gk/core/Vector2.hpp>
+#include <gk/utils/NonCopyable.hpp>
 
-	tinyxml2::XMLElement *textureElement = doc.FirstChildElement("textures").FirstChildElement("texture").ToElement();
-	while (textureElement) {
-		std::string name = textureElement->Attribute("name");
-		std::string path = textureElement->Attribute("path");
+#include <bgfx/bgfx.h>
 
-		auto &texture = handler.add<gk::Texture>("texture-" + name);
-		texture.loadFromFile(path);
+class Texture : public gk::NonCopyable {
+	public:
+		Texture() = default;
+		Texture(const std::string &filename);
+		Texture(SDL_Surface *surface);
+		Texture(Texture &&texture);
+		~Texture();
 
-		if (textureElement->Attribute("repeat", "true")) {
-			gk::Texture::bind(&texture);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			gk::Texture::bind(nullptr);
-		}
+		Texture &operator=(Texture &&texture);
 
-		textureElement = textureElement->NextSiblingElement("texture");
-	}
-}
+		void loadFromFile(const std::string &filename);
+		void loadFromSurface(SDL_Surface *surface);
 
+		const std::string &filename() const { return m_filename; }
+
+		const gk::Vector2u &getSize() const { return m_size; }
+
+		void enable(u8 unit, bgfx::UniformHandle handle) const;
+
+	private:
+		static const Texture *s_boundTexture;
+
+		std::string m_filename;
+
+		gk::Vector2u m_size;
+
+		bgfx::TextureHandle m_handle = BGFX_INVALID_HANDLE;
+};
+
+#endif // TEXTURE_HPP_

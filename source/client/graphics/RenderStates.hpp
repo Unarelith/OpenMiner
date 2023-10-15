@@ -33,17 +33,14 @@
 #include <gk/gl/Transform.hpp>
 
 class Shader;
-
-namespace gk {
-	class Texture;
-}
+class Texture;
 
 struct RenderStates {
 	gk::Transform projectionMatrix;
 	gk::Transform viewMatrix;
 	gk::Transform transform;
 
-	const gk::Texture *texture = nullptr;
+	const Texture *texture = nullptr;
 	const Shader *shader = nullptr;
 
 	static const RenderStates Default; // Defined in RenderTarget.cpp

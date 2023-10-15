@@ -73,7 +73,7 @@ class BlockCursor : public Drawable {
 		const BlockState *m_currentBlock = nullptr;
 		const ItemStack *m_currentTool = nullptr;
 
-		gk::Texture *m_blockDestroyTexture = nullptr;
+		Texture *m_blockDestroyTexture = nullptr;
 
 		const u16 m_activationRepeatDelay = 250;
 		std::optional<u64> m_lastActivationTime = 0;

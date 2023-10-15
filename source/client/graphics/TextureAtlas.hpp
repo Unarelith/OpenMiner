@@ -34,7 +34,8 @@
 
 #include <gk/core/IntTypes.hpp>
 #include <gk/core/Rect.hpp>
-#include <gk/gl/Texture.hpp>
+
+#include "Texture.hpp"
 
 class TextureAtlas {
 	public:
@@ -46,7 +47,7 @@ class TextureAtlas {
 
 		gk::FloatRect getTexCoords(const std::string &filename, bool normalized = true) const;
 
-		const gk::Texture &texture() const { return m_texture; }
+		const Texture &texture() const { return m_texture; }
 
 		bool isReady() const { return m_isReady; }
 
@@ -68,7 +69,7 @@ class TextureAtlas {
 		std::vector<SurfacePtr> m_textures;
 
 		// Packed texture
-		gk::Texture m_texture;
+		Texture m_texture;
 
 		// Is the texture atlas ready to use?
 		bool m_isReady = false;

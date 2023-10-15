@@ -30,6 +30,7 @@
 #include "Camera.hpp"
 #include "PlayerBox.hpp"
 #include "Vertex.hpp"
+#include "Texture.hpp"
 
 constexpr int NUM_QUADS = 34;
 constexpr int NUM_VERTICES_PER_QUAD = 4;
@@ -249,7 +250,7 @@ static constexpr float modelCoords[NUM_QUADS * NUM_VERTICES_PER_QUAD][NUM_VERTEX
 
 PlayerBox::PlayerBox(const Camera &camera)
 	: m_camera(camera),
-	  m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-player"))
+	  m_texture(gk::ResourceHandler::getInstance().get<Texture>("texture-player"))
 {
 #ifdef OM_NOT_IMPLEMENTED
 	m_vbo.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));

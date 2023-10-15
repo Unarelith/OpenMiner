@@ -62,7 +62,7 @@ class CelestialObject : public Drawable, public gk::Transformable  {
 		float m_width = 0.f;
 		float m_height = 0.f;
 
-		const gk::Texture *m_texture = nullptr;
+		const Texture *m_texture = nullptr;
 
 		mutable bool m_isUpdateNeeded = true;
 		mutable bool m_axisXfNeedsUpdate = true;
