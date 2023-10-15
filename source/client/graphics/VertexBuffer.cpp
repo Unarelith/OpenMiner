@@ -83,7 +83,7 @@ void VertexBuffer::init(const void *data, uint32_t size, bool isDynamic) {
 			update(data, size);
 		else {
 			m_isDynamic = true;
-			m_data = (data ? bgfx::makeRef(data, size) : bgfx::alloc(size));
+			m_data = (data ? bgfx::copy(data, size) : bgfx::alloc(size));
 			m_dynamicHandle = bgfx::createDynamicVertexBuffer(m_data, m_layout);
 		}
 	}
@@ -91,7 +91,7 @@ void VertexBuffer::init(const void *data, uint32_t size, bool isDynamic) {
 		assert(!isValid());
 
 		m_isDynamic = false;
-		m_data = bgfx::makeRef(data, size);
+		m_data = bgfx::copy(data, size);
 		m_staticHandle = bgfx::createVertexBuffer(m_data, m_layout);
 	}
 }
@@ -100,7 +100,7 @@ void VertexBuffer::update(const void *data, uint32_t size, uint32_t offset) cons
 	assert(m_isDynamic);
 	assert(bgfx::isValid(m_dynamicHandle));
 
-	bgfx::update(m_dynamicHandle, offset, bgfx::makeRef(data, size));
+	bgfx::update(m_dynamicHandle, offset, bgfx::copy(data, size));
 }
 
 void VertexBuffer::free() {

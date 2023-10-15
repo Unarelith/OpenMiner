@@ -69,11 +69,11 @@ void IndexBuffer::init(const void *data, uint32_t size, bool isDynamic) {
 	m_isDynamic = isDynamic || (data == nullptr);
 
 	if (m_isDynamic) {
-		m_data = (data ? bgfx::makeRef(data, size) :  bgfx::alloc(size));
+		m_data = (data ? bgfx::copy(data, size) :  bgfx::alloc(size));
 		m_dynamicHandle = bgfx::createDynamicIndexBuffer(m_data);
 	}
 	else {
-		m_data = bgfx::makeRef(data, size);
+		m_data = bgfx::copy(data, size);
 		m_staticHandle = bgfx::createIndexBuffer(m_data);
 	}
 }
@@ -82,7 +82,7 @@ void IndexBuffer::update(const void *data, uint32_t size, uint32_t offset) const
 	assert(m_isDynamic);
 	assert(bgfx::isValid(m_dynamicHandle));
 
-	bgfx::update(m_dynamicHandle, offset, bgfx::makeRef(data, size));
+	bgfx::update(m_dynamicHandle, offset, bgfx::copy(data, size));
 }
 
 void IndexBuffer::free() {
