@@ -30,18 +30,20 @@
 #include <bgfx/bgfx.h>
 
 #include "DrawableState.hpp"
+#include "IndexBuffer.hpp"
+#include "Shader.hpp"
+#include "VertexBuffer.hpp"
 
-class Cube {
+class Cube : public Drawable {
 	public:
 		Cube();
-		~Cube();
-
-		void draw() const;
 
 	private:
-		bgfx::VertexBufferHandle m_vbh;
-		bgfx::IndexBufferHandle m_ibh;
-		bgfx::ProgramHandle m_program;
+		void draw(RenderTarget &target, RenderStates states) const override;
+
+		Shader m_shader;
+		VertexBuffer m_vbo;
+		IndexBuffer m_ibo;
 };
 
 class BGFXTestState : public DrawableState {
