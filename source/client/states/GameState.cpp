@@ -66,6 +66,14 @@ GameState::GameState()
 	m_world.setCamera(m_player.camera());
 
 	m_keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
+
+	m_skyColor = bgfx::createUniform("u_skyColor", bgfx::UniformType::Vec4);
+	m_sunlightIntensity = bgfx::createUniform("u_sunlightIntensity", bgfx::UniformType::Vec4);
+}
+
+GameState::~GameState() {
+	bgfx::destroy(m_sunlightIntensity);
+	bgfx::destroy(m_skyColor);
 }
 
 void GameState::init() {
@@ -216,25 +224,35 @@ void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 }
 
 void GameState::draw(RenderTarget &target, RenderStates states) const {
-#ifdef OM_NOT_IMPLEMENTED
 	if (m_world.sky()) {
 		if (m_world.sky()->daylightCycleSpeed() > 0.f) {
 			float time = GameTime::getCurrentTime(0, m_world.sky()->daylightCycleSpeed());
 			const gk::Color &color = GameTime::getSkyColorFromTime(*m_world.sky(), time);
-			glClearColor(color.r, color.g, color.b, color.a);
 
-			m_shader.setUniform("u_skyColor", color);
-			m_shader.setUniform("u_sunlightIntensity", GameTime::getSunlightIntensityFromTime(time));
+			u32 iColor = (color.r255() << 24) | (color.g255() << 16) | (color.b255() << 8) | color.a255();
+			bgfx::setViewClear(states.view, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, iColor);
+
+			float colorPtr[4] = {color.r, color.g, color.b, color.a};
+			bgfx::setUniform(m_skyColor, colorPtr);
+
+			float sunlightIntensity[4] = {GameTime::getSunlightIntensityFromTime(time), 0, 0, 0};
+			bgfx::setUniform(m_sunlightIntensity, sunlightIntensity);
 		}
 		else {
 			const gk::Color &color = m_world.sky()->color();
-			glClearColor(color.r, color.g, color.b, color.a);
 
-			m_shader.setUniform("u_skyColor", m_world.sky()->color());
-			m_shader.setUniform("u_sunlightIntensity", 1.f);
+			u32 iColor = (color.r255() << 24) | (color.g255() << 16) | (color.b255() << 8) | color.a255();
+			bgfx::setViewClear(states.view, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, iColor);
+
+			float colorPtr[4] = {color.r, color.g, color.b, color.a};
+			bgfx::setUniform(m_skyColor, colorPtr);
+
+			float sunlightIntensity[4] = {1.f, 0.f, 0.f, 0.f};
+			bgfx::setUniform(m_sunlightIntensity, &sunlightIntensity);
 		}
 	}
 
+#ifdef OM_NOT_IMPLEMENTED
 	m_fbo.begin();
 #endif // OM_NOT_IMPLEMENTED
 
@@ -242,9 +260,7 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 
 	target.setView(m_camera);
 
-#ifdef OM_NOT_IMPLEMENTED
 	target.draw(m_skybox, states);
-#endif // OM_NOT_IMPLEMENTED
 	target.draw(m_world, states);
 
 	for (auto &it : m_playerBoxes)

@@ -49,6 +49,7 @@ class TextureAtlas;
 class GameState : public DrawableState {
 	public:
 		GameState();
+		~GameState() override;
 
 		void init() override;
 		void onStateInactive() override;
@@ -102,6 +103,9 @@ class GameState : public DrawableState {
 		bool m_areModKeysLoaded = false;
 
 		Skybox m_skybox{m_camera, m_world};
+
+		bgfx::UniformHandle m_skyColor = BGFX_INVALID_HANDLE;
+		bgfx::UniformHandle m_sunlightIntensity = BGFX_INVALID_HANDLE;
 };
 
 #endif // GAMESTATE_HPP_
