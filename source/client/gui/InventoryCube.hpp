@@ -28,8 +28,10 @@
 #define INVENTORYCUBE_HPP_
 
 #include <gk/gl/Transformable.hpp>
+#include <gk/gl/View.hpp>
 
 #include "Drawable.hpp"
+#include "IndexBuffer.hpp"
 #include "VertexBuffer.hpp"
 
 class Block;
@@ -51,11 +53,13 @@ class InventoryCube : public Drawable, public gk::Transformable {
 		const TextureAtlas *m_textureAtlas;
 
 		VertexBuffer m_vbo;
-		bool m_isVboInitialized = false;
+		IndexBuffer m_ibo;
 
 		gk::Transformable m_transform;
 
 		bool m_isEntity = false;
+
+		gk::View m_view;
 };
 
 #endif // INVENTORYCUBE_HPP_
