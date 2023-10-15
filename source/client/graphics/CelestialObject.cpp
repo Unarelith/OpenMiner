@@ -25,8 +25,6 @@
  * =====================================================================================
  */
 #include <gk/core/GameClock.hpp>
-#include <gk/gl/GLCheck.hpp>
-#include <gk/gl/Vertex.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "CelestialObject.hpp"
@@ -35,9 +33,14 @@
 #include "Vertex.hpp"
 
 CelestialObject::CelestialObject() {
-#ifdef OM_NOT_IMPLEMENTED
-	m_vbo.layout().setupDefaultLayout();
-#endif // OM_NOT_IMPLEMENTED
+	m_vbo.setupDefaultLayout();
+
+	static const u16 indices[] = {
+		0, 1, 3,
+		3, 1, 2
+	};
+
+	m_ibo.init(indices, sizeof(indices));
 }
 
 void CelestialObject::setTexture(const std::string &textureName) {
@@ -49,13 +52,12 @@ void CelestialObject::setTexture(const std::string &textureName) {
 }
 
 void CelestialObject::updateVertexBuffer() const {
-#ifdef OM_NOT_IMPLEMENTED
 	if (m_width <= 0.f || m_height <= 0.f) {
 		gkError() << "Trying to update vertex buffer for celestial object of invalid size";
 		return;
 	}
 
-	gk::Vertex vertices[4] = {
+	Vertex vertices[4] = {
 		// Rectangle vertices
 		{{0,  m_width / 2.f, -m_height / 2.f, -1}},
 		{{0, -m_width / 2.f, -m_height / 2.f, -1}},
@@ -92,12 +94,9 @@ void CelestialObject::updateVertexBuffer() const {
 		vertices[3].texCoord[1] = texRect.y + texRect.sizeY;
 	}
 
-	VertexBuffer::bind(&m_vbo);
-	m_vbo.setData(sizeof(vertices), vertices, GL_STATIC_DRAW);
-	VertexBuffer::bind(nullptr);
+	m_vbo.init(vertices, sizeof(vertices), true);
 
 	m_isUpdateNeeded = false;
-#endif // OM_NOT_IMPLEMENTED
 }
 
 void CelestialObject::updateAxisTransform() const {
@@ -155,11 +154,11 @@ void CelestialObject::updateAxisTransform() const {
 		m_rotAxisTransform[3].z = 0.f;
 		m_rotAxisTransform[3].w = 1.f;
 	}
+
 	m_axisXfNeedsUpdate = false;
 }
 
 void CelestialObject::draw(RenderTarget &target, RenderStates states) const {
-#ifdef OM_NOT_IMPLEMENTED
 	if (m_isUpdateNeeded)
 		updateVertexBuffer();
 
@@ -173,12 +172,5 @@ void CelestialObject::draw(RenderTarget &target, RenderStates states) const {
 	if (m_texture)
 		states.texture = m_texture;
 
-	static const GLubyte indices[] = {
-		0, 1, 3,
-		3, 1, 2
-	};
-
-	target.drawElements(m_vbo, GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices, states);
-#endif // OM_NOT_IMPLEMENTED
+	target.drawElements(m_vbo, m_ibo, 0, 0, states);
 }
-
