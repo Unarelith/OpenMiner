@@ -27,6 +27,8 @@
 #ifndef HUD_HPP_
 #define HUD_HPP_
 
+#include <gk/gl/View.hpp>
+
 #include "BlockCursor.hpp"
 #include "BlockInfoWidget.hpp"
 #include "Chat.hpp"
@@ -66,7 +68,7 @@ class HUD : public gk::Transformable, public Drawable {
 		ClientWorld &m_world;
 
 		Shader m_shader;
-		glm::mat4 m_orthoMatrix;
+		gk::View m_view;
 
 		Hotbar m_hotbar;
 
