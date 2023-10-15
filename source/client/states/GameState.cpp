@@ -204,17 +204,11 @@ void GameState::update() {
 }
 
 void GameState::initShaders() {
-	m_shader.createProgram();
-	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/game.v.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/light.f.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/fog.f.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/game.f.glsl");
-	m_shader.bindAttributeLocation(3, "normal");
-	m_shader.bindAttributeLocation(4, "lightValue");
-	m_shader.bindAttributeLocation(5, "ambientOcclusion");
-	m_shader.linkProgram();
+	m_shader.loadFromFile("game");
 
+#ifdef OM_NOT_IMPLEMENTED
 	m_fbo.loadShader("screen");
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
@@ -223,8 +217,6 @@ void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 
 void GameState::draw(RenderTarget &target, RenderStates states) const {
 #ifdef OM_NOT_IMPLEMENTED
-	gk::Shader::bind(&m_shader);
-
 	if (m_world.sky()) {
 		if (m_world.sky()->daylightCycleSpeed() > 0.f) {
 			float time = GameTime::getCurrentTime(0, m_world.sky()->daylightCycleSpeed());
@@ -243,17 +235,19 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 		}
 	}
 
-	gk::Shader::bind(nullptr);
-
 	m_fbo.begin();
+#endif // OM_NOT_IMPLEMENTED
 
 	states.shader = &m_shader;
 
 	target.setView(m_camera);
 
+#ifdef OM_NOT_IMPLEMENTED
 	target.draw(m_skybox, states);
+#endif // OM_NOT_IMPLEMENTED
 	target.draw(m_world, states);
 
+#ifdef OM_NOT_IMPLEMENTED
 	for (auto &it : m_playerBoxes)
 		if (it.second.dimension() == m_player.dimension())
 			target.draw(it.second, states);
