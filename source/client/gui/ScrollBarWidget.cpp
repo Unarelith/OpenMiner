@@ -29,7 +29,7 @@
 #include "Config.hpp"
 #include "ScrollBarWidget.hpp"
 
-void ScrollBarWidget::init(const gk::Texture &texture, const gk::FloatRect &clipRect, u16 minY, u16 maxY, InventoryWidget &widget) {
+void ScrollBarWidget::init(const Texture &texture, const gk::FloatRect &clipRect, u16 minY, u16 maxY, InventoryWidget &widget) {
 	m_clipRect = clipRect;
 
 	m_minY = minY;

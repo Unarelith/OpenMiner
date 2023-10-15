@@ -24,16 +24,22 @@
  *
  * =====================================================================================
  */
-#include <gk/gl/GLCheck.hpp>
-#include <gk/gl/Texture.hpp>
-
 #include "Drawable.hpp"
 #include "IndexBuffer.hpp"
 #include "RenderTarget.hpp"
 #include "Shader.hpp"
+#include "Texture.hpp"
 #include "VertexBuffer.hpp"
 
 const RenderStates RenderStates::Default{};
+
+void RenderTarget::init() {
+	m_samplerUniform = bgfx::createUniform("u_tex", bgfx::UniformType::Sampler);
+}
+
+void RenderTarget::free() {
+	bgfx::destroy(m_samplerUniform);
+}
 
 void RenderTarget::draw(const Drawable &drawable, const RenderStates &states) {
 	drawable.draw(*this, states);
@@ -86,7 +92,7 @@ void RenderTarget::beginDrawing(const RenderStates &states) {
 	// Texture
 	//----------------------------------------------------------------------------
 	if (states.texture)
-		gk::Texture::bind(states.texture);
+		states.texture->enable(0, m_samplerUniform);
 }
 
 gk::IntRect RenderTarget::getViewport(const gk::View& view) const {

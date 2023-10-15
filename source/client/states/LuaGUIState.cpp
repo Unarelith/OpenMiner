@@ -239,7 +239,7 @@ void LuaGUIState::loadImage(const std::string &, s32 x, s32 y, sf::Packet &packe
 	gk::FloatRect clipRect;
 	packet >> textureFilename >> clipRect.x >> clipRect.y >> clipRect.sizeX >> clipRect.sizeY;
 
-	gk::Texture &texture = loadTexture(textureFilename);
+	Texture &texture = loadTexture(textureFilename);
 
 	auto *image = new Image(texture);
 	image->setPosition((float)x, (float)y);
@@ -372,7 +372,7 @@ void LuaGUIState::loadProgressBarWidget(const std::string &, s32 x, s32 y, sf::P
 		return;
 	}
 
-	gk::Texture &texture = loadTexture(textureFilename);
+	Texture &texture = loadTexture(textureFilename);
 
 	ProgressBarWidget *widget = new ProgressBarWidget(texture, *data, ProgressBarType(type));
 	if (!maxMeta.empty())
@@ -390,7 +390,7 @@ void LuaGUIState::loadScrollBarWidget(const std::string &, s32 x, s32 y, sf::Pac
 	std::string widget;
 	packet >> textureFilename >> clipRect >> minY >> maxY >> widget;
 
-	gk::Texture &texture = loadTexture(textureFilename);
+	Texture &texture = loadTexture(textureFilename);
 
 	ScrollBarWidget *scrollBarWidget = new ScrollBarWidget(&m_mainWidget);
 	scrollBarWidget->setPosition((float)x, (float)y);
@@ -422,10 +422,10 @@ void LuaGUIState::loadInventory(const std::string &name, sf::Packet &packet) {
 	packet >> m_inventories.at(name);
 }
 
-gk::Texture &LuaGUIState::loadTexture(const std::string &textureFilename) {
+Texture &LuaGUIState::loadTexture(const std::string &textureFilename) {
 	auto it = m_textures.find(textureFilename);
 	if (it == m_textures.end()) {
-		m_textures.emplace(textureFilename, gk::Texture{}).first->second.loadFromFile(textureFilename);
+		m_textures.emplace(textureFilename, Texture{}).first->second.loadFromFile(textureFilename);
 		return m_textures.at(textureFilename);
 	}
 	else {
