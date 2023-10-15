@@ -29,6 +29,7 @@
 
 #include <bgfx/bgfx.h>
 
+#include "Camera.hpp"
 #include "DrawableState.hpp"
 #include "IndexBuffer.hpp"
 #include "Shader.hpp"
@@ -54,6 +55,11 @@ class BGFXTestState : public DrawableState {
 		void draw(RenderTarget &target, RenderStates states) const override;
 
 		Cube m_cube;
+
+		Camera m_camera;
+
+		float m_view[16];
+		float m_proj[16];
 };
 
 #endif // BGFXTESTSTATE_HPP_

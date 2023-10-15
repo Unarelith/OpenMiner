@@ -31,6 +31,7 @@
 
 class Camera : public gk::View {
 	public:
+		Camera() = default;
 		Camera(float fov, float near, float far);
 		virtual ~Camera() = default;
 
