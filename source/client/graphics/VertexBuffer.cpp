@@ -107,11 +107,11 @@ void VertexBuffer::update(const void *data, uint32_t size, uint32_t offset) cons
 }
 
 void VertexBuffer::free() {
-	if (!m_isDynamic) {
+	if (!m_isDynamic && bgfx::isValid(m_staticHandle)) {
 		bgfx::destroy(m_staticHandle);
 		m_staticHandle.idx = bgfx::kInvalidHandle;
 	}
-	else {
+	else if (m_isDynamic && bgfx::isValid(m_dynamicHandle)) {
 		bgfx::destroy(m_dynamicHandle);
 		m_dynamicHandle.idx = bgfx::kInvalidHandle;
 	}
