@@ -37,4 +37,5 @@ endfunction()
 compile_shaders(
 	basic
 	game
+	skybox
 )
