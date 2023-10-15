@@ -58,7 +58,6 @@ class RenderTarget {
 
 		gk::View *getView() { return m_view; }
 		const gk::View *getView() const { return m_view; }
-		// FIXME: const_cast shouldn't be used here but it's required for OpenMiner
 		void setView(const gk::View &view) { m_view = const_cast<gk::View*>(&view); m_viewChanged = true; }
 		void disableView() { m_view = nullptr; }
 
@@ -69,8 +68,6 @@ class RenderTarget {
 
 		bool m_viewChanged = false;
 		gk::View *m_view = nullptr;
-
-		gk::IntRect m_previousViewport;
 
 		bgfx::UniformHandle m_samplerUniform = BGFX_INVALID_HANDLE;
 };
