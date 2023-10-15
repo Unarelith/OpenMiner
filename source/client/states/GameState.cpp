@@ -255,8 +255,8 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 	target.draw(m_hud.blockCursor(), states);
 
 	m_fbo.end();
+#endif // OM_NOT_IMPLEMENTED
 
 	target.draw(m_hud, states);
-#endif // OM_NOT_IMPLEMENTED
 }
 

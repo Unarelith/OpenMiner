@@ -45,10 +45,7 @@ HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 {
 	setScale(Config::guiScale, Config::guiScale, 1);
 
-	m_shader.createProgram();
-	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
-	m_shader.linkProgram();
+	m_shader.loadFromFile("basic");
 
 	setup();
 }
@@ -130,7 +127,6 @@ void HUD::update() {
 }
 
 void HUD::draw(RenderTarget &target, RenderStates states) const {
-#ifdef OM_NOT_IMPLEMENTED
 	OM_PROFILE_START("HUD::draw");
 
 	target.disableView();
@@ -141,6 +137,7 @@ void HUD::draw(RenderTarget &target, RenderStates states) const {
 
 	states.transform *= getTransform();
 
+#ifdef OM_NOT_IMPLEMENTED
 	if (m_isDebugOverlayVisible)
 		target.draw(m_debugOverlay, states);
 	else if (Config::isProfilerWindowEnabled)
@@ -162,13 +159,15 @@ void HUD::draw(RenderTarget &target, RenderStates states) const {
 		target.draw(m_debugLightmapViewer, states);
 
 	target.draw(m_chat, states);
+#endif // OM_NOT_IMPLEMENTED
 
 	states.transform = gk::Transform::Identity;
+
+	states.view = 1;
 
 	if (Config::isCrosshairVisible)
 		target.draw(m_crosshair, states);
 
 	OM_PROFILE_END("HUD::draw");
-#endif // OM_NOT_IMPLEMENTED
 }
 
