@@ -35,5 +35,5 @@ function(compile_shaders)
 endfunction()
 
 compile_shaders(
-	bgfx_test
+	basic
 )

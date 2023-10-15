@@ -59,7 +59,7 @@ BGFXTestState::BGFXTestState()
 	m_rect.setSize(100, 100);
 	m_rect.setPosition(0, 0);
 
-	m_shader.loadFromFile("bgfx_test");
+	m_shader.loadFromFile("basic");
 }
 
 void BGFXTestState::draw(RenderTarget &target, RenderStates states) const
