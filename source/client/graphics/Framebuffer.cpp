@@ -127,10 +127,8 @@ void Framebuffer::loadShader(const std::string &name) {
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/" + name + ".f.glsl");
 	m_shader.linkProgram();
 
-	gk::Shader::bind(&m_shader);
 	m_shader.setUniform("screenTexture", 0);
 	m_shader.setUniform("depthTexture", 1);
-	gk::Shader::bind(nullptr);
 #endif // OM_NOT_IMPLEMENTED
 }
 
@@ -159,7 +157,6 @@ void Framebuffer::end() const {
 		glBindTexture(GL_TEXTURE_2D, m_depthTexID);
 	}
 
-	gk::Shader::bind(&m_shader);
 	m_shader.setUniform("u_effectType", GameConfig::currentScreenEffect);
 	m_shader.setUniform("u_fogDepth", GameConfig::fogDepth);
 	m_shader.setUniform("u_fogColor", GameConfig::fogColor);
@@ -178,7 +175,6 @@ void Framebuffer::end() const {
 	glCheck(glDisableVertexAttribArray(0));
 
 	VertexBuffer::bind(nullptr);
-	gk::Shader::bind(nullptr);
 
 	glCheck(glActiveTexture(GL_TEXTURE0));
 
