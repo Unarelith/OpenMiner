@@ -41,7 +41,6 @@
 //       so if it changes during the execution, that would cause problems there too.
 //
 void ChunkMeshBuilder::addMeshBuildingJob(const Chunk &chunk, const TextureAtlas &textureAtlas) {
-#ifdef OM_NOT_IMPLEMENTED
 	OM_PROFILE_START("ChunkMeshBuilder::addMeshBuildingJob");
 
 	// Creating the job (creates a copy of the chunk to send it to the thread)
@@ -54,33 +53,32 @@ void ChunkMeshBuilder::addMeshBuildingJob(const Chunk &chunk, const TextureAtlas
 	m_futures.emplace_back(std::move(future));
 
 	OM_PROFILE_END("ChunkMeshBuilder::addMeshBuildingJob");
-#endif // OM_NOT_IMPLEMENTED
 }
 
 void ChunkMeshBuilder::update() {
-#ifdef OM_NOT_IMPLEMENTED
 	for (auto it = m_futures.begin() ; it != m_futures.end() ; ) {
 		if (it->future().valid() && it->future().wait_for(std::chrono::milliseconds(0)) == std::future_status::ready) {
 			ChunkMeshBuildingJob *job = it->get();
 
 			ClientChunk *chunk = (ClientChunk *)m_world.getChunk(job->chunkData.x, job->chunkData.y, job->chunkData.z);
-			if (chunk) {
-				const VertexBuffer &vbo = chunk->getVertexBuffer();
+			if (chunk && job->totalVertexCount) {
+				VertexBuffer &vbo = chunk->getVertexBuffer();
 
-				VertexBuffer::bind(&vbo);
-				vbo.setData(job->totalVertexCount * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
+				vbo.init(nullptr, job->totalVertexCount * sizeof(Vertex));
 
 				u64 offset = 0;
 				for (u8 i = 0 ; i < ChunkMeshLayer::Count ; ++i) {
-					job->vertices[i].shrink_to_fit();
+					u32 vertexCount = job->vertices[i].size();
+					chunk->setVerticesCount(i, vertexCount);
 
-					vbo.updateData(offset * sizeof(Vertex), job->vertices[i].size() * sizeof(Vertex), job->vertices[i].data());
+					if (vertexCount) {
+						job->vertices[i].shrink_to_fit();
 
-					chunk->setVerticesCount(i, job->vertices[i].size());
-					offset += job->vertices[i].size();
+						vbo.update(job->vertices[i].data(), vertexCount * sizeof(Vertex), offset);
+
+						offset += vertexCount;
+					}
 				}
-
-				VertexBuffer::bind(nullptr);
 			}
 
 			delete job;
@@ -90,7 +88,6 @@ void ChunkMeshBuilder::update() {
 		else
 			++it;
 	}
-#endif // OM_NOT_IMPLEMENTED
 }
 
 ChunkMeshBuildingJob *ChunkMeshBuilder::buildChunkMesh(ChunkMeshBuildingJob *job) {
