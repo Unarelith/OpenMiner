@@ -62,10 +62,11 @@ void Skybox::loadSky(const Sky &sky) {
 	const Sky::MoonDefinition &moon = sky.moonDefinition();
 	m_moon = CelestialObject{};
 	m_moon.setSize(moon.size, moon.size);
-	m_moon.setPosition(-DIST_MOON, 0, 0);
+	m_moon.setPosition(DIST_MOON, 0, 0);
 	m_moon.setPhaseCount(moon.phaseCount, moon.phaseSize);
 	m_moon.setCurrentPhase(0);
 	m_moon.setRotationSpeed(sky.daylightCycleSpeed());
+	m_moon.setRotationOffset(GameTime::dayLength / 2.f);
 
 	try {
 		m_moon.setTexture(moon.texture);
