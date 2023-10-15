@@ -71,9 +71,12 @@ VertexBuffer &VertexBuffer::operator=(VertexBuffer &&vertexBuffer) {
 
 void VertexBuffer::setupDefaultLayout() {
 	m_layout.begin()
-	        .add(bgfx::Attrib::Position, 4, bgfx::AttribType::Float, false)
+	        .add(bgfx::Attrib::Position,  4, bgfx::AttribType::Float, false)
 	        .add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float, false)
-	        .add(bgfx::Attrib::Color0, 4, bgfx::AttribType::Float, false)
+	        .add(bgfx::Attrib::Color0,    4, bgfx::AttribType::Float, false)
+	        .add(bgfx::Attrib::Normal,    3, bgfx::AttribType::Float, false)
+	        .add(bgfx::Attrib::TexCoord1, 2, bgfx::AttribType::Float, false) // lightValue
+	        .add(bgfx::Attrib::TexCoord2, 1, bgfx::AttribType::Float, false) // ambientOcclusion
 	        .end();
 }
 
