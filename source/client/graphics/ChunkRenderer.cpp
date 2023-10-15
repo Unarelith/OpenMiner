@@ -286,8 +286,6 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 
 	states.texture = &m_textureAtlas.texture();
 
-	target.beginDrawing(states);
-
 	float renderDistance[4] = {(float)Config::renderDistance * CHUNK_WIDTH, 0.f, 0.f, 0.f};
 	bgfx::setUniform(m_renderDistance, renderDistance);
 
@@ -316,6 +314,8 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 		for (auto &it : chunks) {
 			std::size_t verticesCount = it.first->getVerticesCount(layer);
 			if (verticesCount == 0) continue;
+
+			target.beginDrawing(states);
 
 			bgfx::setTransform(it.second.getRawMatrix());
 
