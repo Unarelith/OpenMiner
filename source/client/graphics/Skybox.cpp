@@ -36,10 +36,7 @@
 
 Skybox::Skybox(Camera &camera, ClientWorld &world) : m_camera(camera), m_world(world) {
 #ifdef OM_NOT_IMPLEMENTED
-	m_shader.createProgram();
-	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/skybox.v.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/skybox.f.glsl");
-	m_shader.linkProgram();
+	m_shader.loadFromFile("skybox");
 #endif // OM_NOT_IMPLEMENTED
 }
 
@@ -117,10 +114,8 @@ void Skybox::draw(RenderTarget &target, RenderStates states) const {
 	gk::Color skyColor = GameTime::getSkyColorFromTime(*m_world.sky(), time);
 	gk::Color starColor = m_world.sky()->color();
 
-	gk::Shader::bind(&m_shader);
 	m_shader.setUniform("u_skyColor", skyColor);
 	m_shader.setUniform("u_starColor", starColor);
-	gk::Shader::bind(nullptr);
 
 	m_moon.setCurrentPhase((GameTime::getTicks() / GameTime::dayLength) % 8);
 
