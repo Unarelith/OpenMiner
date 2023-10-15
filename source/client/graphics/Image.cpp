@@ -24,16 +24,20 @@
  *
  * =====================================================================================
  */
-#include <gk/gl/GLCheck.hpp>
-#include <gk/gl/Vertex.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "Image.hpp"
+#include "Vertex.hpp"
 
 Image::Image() {
-#ifdef OM_NOT_IMPLEMENTED
-	m_vbo.layout().setupDefaultLayout();
-#endif // OM_NOT_IMPLEMENTED
+	m_vbo.setupDefaultLayout();
+
+	static const u16 indices[] = {
+		0, 1, 3,
+		3, 1, 2
+	};
+
+	m_ibo.init(indices, sizeof(indices));
 }
 
 Image::Image(const std::string &textureName) : Image() {
@@ -91,9 +95,8 @@ void Image::setPosRect(float x, float y, u16 width, u16 height) {
 	updateVertexBuffer();
 }
 
-void Image::updateVertexBuffer() const {
-#ifdef OM_NOT_IMPLEMENTED
-	gk::Vertex vertices[4] = {
+void Image::updateVertexBuffer() {
+	Vertex vertices[4] = {
 		{{m_posRect.x + m_posRect.sizeX, m_posRect.y,                   0, -1}},
 		{{m_posRect.x,                   m_posRect.y,                   0, -1}},
 		{{m_posRect.x,                   m_posRect.y + m_posRect.sizeY, 0, -1}},
@@ -135,10 +138,7 @@ void Image::updateVertexBuffer() const {
 		vertices[i].color[3] = m_color.a;
 	}
 
-	VertexBuffer::bind(&m_vbo);
-	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	VertexBuffer::bind(nullptr);
-#endif // OM_NOT_IMPLEMENTED
+	m_vbo.init(vertices, sizeof(vertices), true);
 }
 
 void Image::draw(RenderTarget &target, RenderStates states) const {
@@ -146,15 +146,5 @@ void Image::draw(RenderTarget &target, RenderStates states) const {
 
 	states.texture = m_texture;
 
-#ifdef OM_NOT_IMPLEMENTED
-	glCheck(glDisable(GL_CULL_FACE));
-	glCheck(glDisable(GL_DEPTH_TEST));
-
-	static const GLubyte indices[] = {
-		0, 1, 3,
-		3, 1, 2
-	};
-
-	target.drawElements(m_vbo, GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices, states);
-#endif // OM_NOT_IMPLEMENTED
+	target.drawElements(m_vbo, m_ibo, 0, 0, states);
 }
