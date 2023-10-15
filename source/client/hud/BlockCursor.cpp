@@ -49,6 +49,28 @@ BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommand
 	m_vbo.setupDefaultLayout();
 
 	m_animationVBO.setupDefaultLayout();
+
+	const u16 indices[BlockGeometry::nFaces * (BlockGeometry::nVertsPerFace + 2)] = {
+		0, 1, 2,
+		2, 3, 0,
+
+		4, 5, 6,
+		6, 7, 4,
+
+		8, 9, 10,
+		10, 11, 8,
+
+		12, 13, 14,
+		14, 15, 12,
+
+		16, 17, 18,
+		18, 19, 16,
+
+		20, 21, 22,
+		22, 23, 20,
+	};
+
+	m_ibo.init(indices, sizeof(indices), true);
 }
 
 void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
@@ -319,7 +341,7 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 #ifdef OM_NOT_IMPLEMENTED
 	glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 #endif // OM_NOT_IMPLEMENTED
-	target.draw(m_vbo, GL_QUADS, 0, nFaces * nVertsPerFace, states);
+	target.drawElements(m_vbo, m_ibo, 0, nFaces * nVertsPerFace, states);
 #ifdef OM_NOT_IMPLEMENTED
 	glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 #endif // OM_NOT_IMPLEMENTED
@@ -332,7 +354,7 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 
 		states.texture = m_blockDestroyTexture;
 
-		target.draw(m_animationVBO, GL_QUADS, 0, nFaces * nVertsPerFace, states);
+		target.drawElements(m_animationVBO, m_ibo, 0, nFaces * nVertsPerFace, states);
 
 #ifdef OM_NOT_IMPLEMENTED
 		glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));

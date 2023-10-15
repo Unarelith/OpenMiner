@@ -29,9 +29,10 @@
 
 #include <gk/core/SDLHeaders.hpp>
 
-#include "ClientWorld.hpp"
-#include "Inventory.hpp"
 #include "BlockGeometry.hpp"
+#include "ClientWorld.hpp"
+#include "IndexBuffer.hpp"
+#include "Inventory.hpp"
 
 class ClientCommandHandler;
 class ClientPlayer;
@@ -67,6 +68,7 @@ class BlockCursor : public Drawable {
 
 		VertexBuffer m_vbo;
 		VertexBuffer m_animationVBO;
+		IndexBuffer m_ibo;
 
 		unsigned int m_animationStart = 0;
 		glm::ivec4 m_selectedBlock{0, 0, 0, -1};
