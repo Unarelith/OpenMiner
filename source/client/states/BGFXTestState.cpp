@@ -76,8 +76,8 @@ void BGFXTestState::draw(RenderTarget &target, RenderStates states) const
 	states.shader = &m_shader;
 
 	target.draw(m_cube, states);
-
 	target.draw(m_rect, states);
+	target.draw(m_image, states);
 }
 
 //==============================================================================

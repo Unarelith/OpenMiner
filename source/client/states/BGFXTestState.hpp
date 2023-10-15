@@ -31,6 +31,7 @@
 
 #include "Camera.hpp"
 #include "DrawableState.hpp"
+#include "Image.hpp"
 #include "IndexBuffer.hpp"
 #include "RectangleShape.hpp"
 #include "Shader.hpp"
@@ -56,6 +57,7 @@ class BGFXTestState : public DrawableState {
 
 		Cube m_cube;
 		RectangleShape m_rect;
+		Image m_image{"texture-title_screen"};
 
 		Camera m_camera;
 		gk::View m_view;
