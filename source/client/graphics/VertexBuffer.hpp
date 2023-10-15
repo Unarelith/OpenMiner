@@ -59,7 +59,7 @@ class VertexBuffer : public gk::NonCopyable {
 
 		bgfx::VertexLayout m_layout;
 
-		bool m_isDynamic;
+		bool m_isDynamic = false;
 
 		u32 m_size = 0;
 };
