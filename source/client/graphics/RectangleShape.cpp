@@ -28,15 +28,20 @@
 #include "Vertex.hpp"
 
 RectangleShape::RectangleShape() {
-#ifdef OM_NOT_IMPLEMENTED
 	m_vbo.setupDefaultLayout();
+
+	std::array<int, 6 * 5> m_indices{{
+		0, 1, 3,
+		3, 1, 2
+	}};
 
 	for (u8 i = 1 ; i < 5 ; ++i) {
 		for (u8 j = 0 ; j < 6 ; ++j) {
 			m_indices[i * 6 + j] = m_indices[j] + 4 * i;
 		}
 	}
-#endif // OM_NOT_IMPLEMENTED
+
+	m_ibo.init(m_indices.data(), 6 * 5 * sizeof(int));
 }
 
 RectangleShape::RectangleShape(float width, float height, const gk::Color &color) : RectangleShape() {
@@ -45,10 +50,9 @@ RectangleShape::RectangleShape(float width, float height, const gk::Color &color
 	setSize(width, height);
 }
 
-void RectangleShape::updateVertexBuffer() const {
-#ifdef OM_NOT_IMPLEMENTED
+void RectangleShape::updateVertexBuffer() {
 	float o = (float)m_outlineThickness;
-	gk::Vertex vertices[4 + 4 * 4] = {
+	Vertex vertices[4 + 4 * 4] = {
 		// Rectangle vertices
 		{{m_width, 0,        0, -1}},
 		{{0,       0,        0, -1}},
@@ -94,10 +98,7 @@ void RectangleShape::updateVertexBuffer() const {
 		vertices[i].color[3] = m_outlineColor.a;
 	}
 
-	VertexBuffer::bind(&m_vbo);
-	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	VertexBuffer::bind(nullptr);
-#endif // OM_NOT_IMPLEMENTED
+	m_vbo.init(vertices, sizeof(vertices), true);
 }
 
 void RectangleShape::draw(RenderTarget &target, RenderStates states) const {
@@ -106,9 +107,13 @@ void RectangleShape::draw(RenderTarget &target, RenderStates states) const {
 #ifdef OM_NOT_IMPLEMENTED
 	glCheck(glDisable(GL_CULL_FACE));
 	glCheck(glDisable(GL_DEPTH_TEST));
+#endif // OM_NOT_IMPLEMENTED
 
+#ifdef OM_NOT_IMPLEMENTED
 	if(m_wireframeMode) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
-	target.drawElements(m_vbo, GL_TRIANGLES, 6 * 5, GL_UNSIGNED_BYTE, m_indices.data(), states);
+#endif // OM_NOT_IMPLEMENTED
+	target.drawElements(m_vbo, m_ibo, 0, 0, states);
+#ifdef OM_NOT_IMPLEMENTED
 	if(m_wireframeMode) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 #endif // OM_NOT_IMPLEMENTED
 }
