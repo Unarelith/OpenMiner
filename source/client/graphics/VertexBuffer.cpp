@@ -42,7 +42,7 @@ VertexBuffer::VertexBuffer(VertexBuffer &&vertexBuffer) {
 	m_dynamicHandle = vertexBuffer.m_dynamicHandle;
 	vertexBuffer.m_dynamicHandle.idx = bgfx::kInvalidHandle;
 
-	m_layout = bx::move(m_layout);
+	m_layout = bx::move(vertexBuffer.m_layout);
 
 	m_isDynamic = vertexBuffer.m_isDynamic;
 
@@ -61,7 +61,7 @@ VertexBuffer &VertexBuffer::operator=(VertexBuffer &&vertexBuffer) {
 	m_dynamicHandle = vertexBuffer.m_dynamicHandle;
 	vertexBuffer.m_dynamicHandle.idx = bgfx::kInvalidHandle;
 
-	m_layout = bx::move(m_layout);
+	m_layout = bx::move(vertexBuffer.m_layout);
 
 	m_isDynamic = vertexBuffer.m_isDynamic;
 
@@ -84,6 +84,7 @@ void VertexBuffer::setupDefaultLayout() {
 
 void VertexBuffer::init(const void *data, u32 size, bool isDynamic) {
 	assert(size != 0);
+	assert(m_layout.m_stride != 0);
 
 	auto createBuffer = [this](const void *data, u32 size, bool isDynamic) {
 		m_size = size;
