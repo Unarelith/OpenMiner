@@ -51,7 +51,7 @@ BGFXTestState::BGFXTestState()
 
 void BGFXTestState::draw(RenderTarget &target, RenderStates states) const
 {
-	m_cube.draw();
+	target.draw(m_cube, states);
 }
 
 //==============================================================================
@@ -62,20 +62,7 @@ struct PosColorVertex
 	float m_y;
 	float m_z;
 	uint32_t m_abgr;
-
-	static void init()
-	{
-		ms_layout
-			.begin()
-			.add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
-			.add(bgfx::Attrib::Color0,   4, bgfx::AttribType::Uint8, true)
-			.end();
-	};
-
-	static bgfx::VertexLayout ms_layout;
 };
-
-bgfx::VertexLayout PosColorVertex::ms_layout;
 
 static PosColorVertex s_cubeVertices[] =
 {
@@ -105,60 +92,30 @@ static const uint16_t s_cubeTriList[] =
 	6, 3, 7,
 };
 
-#include <fstream>
-
 Cube::Cube()
 {
-	// Vertices
-	PosColorVertex::init();
-	m_vbh = bgfx::createVertexBuffer(bgfx::makeRef(s_cubeVertices, sizeof(s_cubeVertices)), PosColorVertex::ms_layout);
-	m_ibh = bgfx::createIndexBuffer(bgfx::makeRef(s_cubeTriList, sizeof(s_cubeTriList)));
+	m_vbo.layout()
+	     .begin()
+	     .add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
+	     .add(bgfx::Attrib::Color0,   4, bgfx::AttribType::Uint8, true)
+	     .end();
 
-	// Shader
-	auto loadShader = [](const std::string &path) {
-		std::ifstream file(path, std::ios::binary);
-		file.seekg(0, std::ios::end);
-		u32 fileSize = (u32)file.tellg();
-		file.seekg(0, std::ios::beg);
+	m_vbo.init(s_cubeVertices, sizeof(s_cubeVertices));
+	m_ibo.init(s_cubeTriList, sizeof(s_cubeTriList));
 
-		std::string str;
-		str.reserve(fileSize);
-		str.assign((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-
-		return bgfx::createShader(bgfx::copy(str.data(), fileSize));
-	};
-
-	std::string suffix;
-	if (bgfx::getRendererType() == bgfx::RendererType::OpenGL)
-		suffix = "120";
-	else if (bgfx::getRendererType() == bgfx::RendererType::Vulkan)
-		suffix = "spirv";
-
-	bgfx::ShaderHandle shader_vs = loadShader("resources/shaders/bgfx_test." + suffix + ".vs.bin");
-	bgfx::ShaderHandle shader_fs = loadShader("resources/shaders/bgfx_test." + suffix + ".fs.bin");
-	m_program = bgfx::createProgram(shader_vs, shader_fs, true);
+	m_shader.loadFromFile("bgfx_test");
 }
 
-Cube::~Cube()
-{
-	bgfx::destroy(m_vbh);
-	bgfx::destroy(m_ibh);
-	bgfx::destroy(m_program);
-}
-
-void Cube::draw() const
+void Cube::draw(RenderTarget &target, RenderStates states) const
 {
 	static float tick = 0.f;
-
-	float mtx[16];
-	bx::mtxIdentity(mtx);
-	bx::mtxRotateXY(mtx, 2.234f + tick * 0.001f, 0.934f + tick * 0.001f);
-	bgfx::setTransform(mtx);
-
-	bgfx::setVertexBuffer(0, m_vbh);
-	bgfx::setIndexBuffer(m_ibh);
-	bgfx::submit(0, m_program);
-
+	states.transform.rotateX(glm::degrees(2.234f + tick * 0.001f));
+	states.transform.rotateY(glm::degrees(0.934f + tick * 0.001f));
+	states.transform = glm::transpose(states.transform.getMatrix());
 	tick++;
+
+	states.shader = &m_shader;
+
+	target.drawElements(m_vbo, m_ibo, 0, 0, states);
 }
 
