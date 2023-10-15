@@ -29,28 +29,38 @@
 
 #include <gk/utils/NonCopyable.hpp>
 
-#include "VertexLayout.hpp"
+#include <bgfx/bgfx.h>
 
 class VertexBuffer : public gk::NonCopyable {
 	public:
 		VertexBuffer();
 		VertexBuffer(VertexBuffer &&);
-		~VertexBuffer() noexcept;
+		~VertexBuffer();
 
 		VertexBuffer &operator=(VertexBuffer &&);
 
-		void setData(GLsizeiptr size, const GLvoid *data, GLenum usage) const;
-		void updateData(GLintptr offset, GLsizeiptr size, const GLvoid *data) const;
+		void init(const void *data, uint32_t size, bool isDynamic = false);
+		void update(const void *data, uint32_t size, uint32_t offset = 0) const;
+		void free();
 
-		static void bind(const VertexBuffer *vertexBuffer);
+		void enable() const;
+		void enable(uint32_t startVertex, uint32_t numVertices) const;
 
-		VertexBufferLayout &layout() { return m_layout; }
-		const VertexBufferLayout &layout() const { return m_layout; }
+		bool isValid();
+
+		bgfx::VertexLayout &layout() { return m_layout; }
+
+		void setupDefaultLayout();
 
 	private:
-		GLuint m_id = 0;
+		bgfx::VertexBufferHandle m_staticHandle = BGFX_INVALID_HANDLE;
+		bgfx::DynamicVertexBufferHandle m_dynamicHandle = BGFX_INVALID_HANDLE;
 
-		VertexBufferLayout m_layout;
+		bgfx::VertexLayout m_layout;
+
+		bool m_isDynamic;
+
+		const bgfx::Memory *m_data = nullptr;
 };
 
 #endif // VERTEXBUFFER_HPP_
