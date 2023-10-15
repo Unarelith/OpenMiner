@@ -36,14 +36,18 @@ BGFXTestState::BGFXTestState()
 
 	const bx::Vec3 at  = { 0.0f, 0.0f,   0.0f };
 	const bx::Vec3 eye = { 0.0f, 0.0f, -35.0f };
+	const bx::Vec3 up  = { 0.0f, 1.0f,   0.0f };
+	bx::mtxLookAt(m_view, eye, at, up);
+	bx::mtxProj(m_proj, 60.0f, float(windowSize.x) / float(windowSize.y), 0.1f, 100.0f, bgfx::getCaps()->homogeneousDepth);
 
-	// Set view and projection matrix for view 0.
-	float view[16];
-	bx::mtxLookAt(view, eye, at);
+	m_camera.setPosition(0.f, 0.f, 0.f);
+	m_camera.setDirection(0.f, 0.f, -35.f);
+	m_camera.setUpVector(0.f, 1.f, 0.f);
 
-	float proj[16];
-	bx::mtxProj(proj, 60.0f, float(windowSize.x) / float(windowSize.y), 0.1f, 100.0f, bgfx::getCaps()->homogeneousDepth);
-	bgfx::setViewTransform(0, view, proj);
+	m_camera.setFieldOfView(60.0f);
+	m_camera.setAspectRatio(float(windowSize.x) / float(windowSize.y));
+	m_camera.setNearClippingPlane(0.1f);
+	m_camera.setFarClippingPlane(100.0f);
 
 	// Set view 0 default viewport.
 	bgfx::setViewRect(0, 0, 0, (uint16_t)windowSize.x, (uint16_t)windowSize.y);
@@ -51,6 +55,13 @@ BGFXTestState::BGFXTestState()
 
 void BGFXTestState::draw(RenderTarget &target, RenderStates states) const
 {
+	states.projectionMatrix = m_camera.getTransform();
+	states.viewMatrix = m_camera.getViewTransform();
+	// states.projectionMatrix = glm::transpose(m_camera.getTransform().getMatrix());
+	// states.viewMatrix = glm::transpose(m_camera.getViewTransform().getMatrix());
+	// states.projectionMatrix = glm::make_mat4(m_proj);
+	// states.viewMatrix = glm::make_mat4(m_view);
+
 	target.draw(m_cube, states);
 }
 

@@ -40,9 +40,7 @@ void RenderTarget::draw(const Drawable &drawable, const RenderStates &states) {
 }
 
 void RenderTarget::draw(const VertexBuffer &vertexBuffer, uint64_t mode, uint32_t firstVertex, uint32_t vertexCount, const RenderStates &states) {
-#ifdef OM_NOT_IMPLEMENTED
 	beginDrawing(states);
-#endif // OM_NOT_IMPLEMENTED
 
 	vertexBuffer.enable(firstVertex, vertexCount);
 
@@ -52,9 +50,7 @@ void RenderTarget::draw(const VertexBuffer &vertexBuffer, uint64_t mode, uint32_
 }
 
 void RenderTarget::drawElements(const VertexBuffer &vertexBuffer, const IndexBuffer &indexBuffer, uint64_t mode, uint32_t count, const RenderStates &states) {
-#ifdef OM_NOT_IMPLEMENTED
 	beginDrawing(states);
-#endif // OM_NOT_IMPLEMENTED
 
 	if (count == 0)
 		vertexBuffer.enable();
