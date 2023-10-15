@@ -29,11 +29,10 @@
 #include "Color.hpp"
 #include "Font.hpp"
 #include "Text.hpp"
+#include "Vertex.hpp"
 
 Text::Text() : m_font(gk::ResourceHandler::getInstance().get<Font>("font-ascii")) {
-#ifdef OM_NOT_IMPLEMENTED
-	m_vbo.layout().setupDefaultLayout();
-#endif // OM_NOT_IMPLEMENTED
+	m_vbo.setupDefaultLayout();
 
 	m_background.setFillColor(gk::Color::Transparent);
 }
@@ -75,24 +74,26 @@ void Text::draw(RenderTarget &target, RenderStates states) const {
 
 	states.transform *= getTransform();
 
-	target.draw(m_background, states);
+	if (m_background.color() != gk::Color::Transparent)
+		target.draw(m_background, states);
 
 	if (m_verticesCount == 0) return;
 
 	states.transform.translate((float)m_padding.x, (float)m_padding.y);
 	states.texture = &m_font.texture();
 
+#ifdef OM_NOT_IMPLEMENTED
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
+#endif // OM_NOT_IMPLEMENTED
 
-	target.draw(m_vbo, GL_TRIANGLES, 0, m_verticesCount, states);
+	target.draw(m_vbo, 0, 0, m_verticesCount, states);
 }
 
 void Text::updateVertexBuffer() const {
-#ifdef OM_NOT_IMPLEMENTED
 	if (!m_isUpdateNeeded) return;
 
-	std::vector<gk::Vertex> vertices;
+	std::vector<Vertex> vertices;
 
 	u32 x = 0;
 	u32 y = 0;
@@ -137,9 +138,7 @@ void Text::updateVertexBuffer() const {
 
 	m_verticesCount = (u32)vertices.size();
 
-	VertexBuffer::bind(&m_vbo);
-	m_vbo.setData(sizeof(gk::Vertex) * m_verticesCount, vertices.data(), GL_DYNAMIC_DRAW);
-	VertexBuffer::bind(nullptr);
+	m_vbo.init(vertices.data(), sizeof(Vertex) * m_verticesCount, true);
 
 	m_size.x = std::max(x, maxX);
 	m_size.y = y + m_font.getTileSize().y + 1;
@@ -148,10 +147,9 @@ void Text::updateVertexBuffer() const {
 	float backgroundY = std::max(m_background.getSize().y, float(m_size.y + m_padding.y));
 
 	m_background.setSize(backgroundX, backgroundY);
-#endif // OM_NOT_IMPLEMENTED
 }
 
-void Text::addCharacter(u32 x, u32 y, const gk::Color &color, u8 c, std::vector<gk::Vertex> &vertices) const {
+void Text::addCharacter(u32 x, u32 y, const gk::Color &color, u8 c, std::vector<Vertex> &vertices) const {
 	static const u8 coords[6][2] = {
 		{1, 0},
 		{0, 0},
@@ -164,7 +162,7 @@ void Text::addCharacter(u32 x, u32 y, const gk::Color &color, u8 c, std::vector<
 
 	for (int i = 0 ; i < 6 ; ++i) {
 		vertices.emplace_back();
-		gk::Vertex &vertex = vertices.back();
+		Vertex &vertex = vertices.back();
 
 		vertex.coord3d[0] = float(x + coords[i][0] * m_font.getTileSize().x);
 		vertex.coord3d[1] = float(y + coords[i][1] * m_font.getTileSize().y);
