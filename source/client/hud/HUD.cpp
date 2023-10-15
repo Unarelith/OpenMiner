@@ -51,7 +51,8 @@ HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 }
 
 void HUD::setup() {
-	m_orthoMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f, DIST_2D_FAR, DIST_2D_NEAR);
+	m_view.setSize((float)Config::screenWidth, (float)Config::screenHeight);
+	m_view.setCenter((float)Config::screenWidth / 2.f, (float)Config::screenHeight / 2.f);
 
 	m_hotbar.setPosition(
 		Config::screenWidth / getScale().x / 2.f - (float)m_hotbar.width() / 2.f,
@@ -129,15 +130,13 @@ void HUD::update() {
 void HUD::draw(RenderTarget &target, RenderStates states) const {
 	OM_PROFILE_START("HUD::draw");
 
-	target.disableView();
+	target.setView(m_view);
+	states.view = 1;
 
 	states.shader = &m_shader;
-	states.projectionMatrix = m_orthoMatrix;
-	states.viewMatrix = gk::Transform::Identity;
 
 	states.transform *= getTransform();
 
-#ifdef OM_NOT_IMPLEMENTED
 	if (m_isDebugOverlayVisible)
 		target.draw(m_debugOverlay, states);
 	else if (Config::isProfilerWindowEnabled)
@@ -146,11 +145,13 @@ void HUD::draw(RenderTarget &target, RenderStates states) const {
 	if (Config::isBlockInfoWidgetEnabled)
 		target.draw(m_blockInfoWidget, states);
 
+#ifdef OM_NOT_IMPLEMENTED
 	if (Config::isHotbarVisible)
 		target.draw(m_hotbar, states);
 
 	if (Config::isFpsCounterEnabled)
 		target.draw(m_fpsText, states);
+#endif // OM_NOT_IMPLEMENTED
 
 	if (Config::isChunkMinimapEnabled)
 		target.draw(m_minimap, states);
@@ -159,11 +160,8 @@ void HUD::draw(RenderTarget &target, RenderStates states) const {
 		target.draw(m_debugLightmapViewer, states);
 
 	target.draw(m_chat, states);
-#endif // OM_NOT_IMPLEMENTED
 
 	states.transform = gk::Transform::Identity;
-
-	states.view = 1;
 
 	if (Config::isCrosshairVisible)
 		target.draw(m_crosshair, states);
