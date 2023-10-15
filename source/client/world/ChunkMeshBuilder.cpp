@@ -41,6 +41,7 @@
 //       so if it changes during the execution, that would cause problems there too.
 //
 void ChunkMeshBuilder::addMeshBuildingJob(const Chunk &chunk, const TextureAtlas &textureAtlas) {
+#ifdef OM_NOT_IMPLEMENTED
 	OM_PROFILE_START("ChunkMeshBuilder::addMeshBuildingJob");
 
 	// Creating the job (creates a copy of the chunk to send it to the thread)
@@ -53,9 +54,11 @@ void ChunkMeshBuilder::addMeshBuildingJob(const Chunk &chunk, const TextureAtlas
 	m_futures.emplace_back(std::move(future));
 
 	OM_PROFILE_END("ChunkMeshBuilder::addMeshBuildingJob");
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void ChunkMeshBuilder::update() {
+#ifdef OM_NOT_IMPLEMENTED
 	for (auto it = m_futures.begin() ; it != m_futures.end() ; ) {
 		if (it->future().valid() && it->future().wait_for(std::chrono::milliseconds(0)) == std::future_status::ready) {
 			ChunkMeshBuildingJob *job = it->get();
@@ -87,6 +90,7 @@ void ChunkMeshBuilder::update() {
 		else
 			++it;
 	}
+#endif // OM_NOT_IMPLEMENTED
 }
 
 ChunkMeshBuildingJob *ChunkMeshBuilder::buildChunkMesh(ChunkMeshBuildingJob *job) {

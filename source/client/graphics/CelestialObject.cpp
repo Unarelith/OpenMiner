@@ -35,7 +35,9 @@
 #include "Vertex.hpp"
 
 CelestialObject::CelestialObject() {
+#ifdef OM_NOT_IMPLEMENTED
 	m_vbo.layout().setupDefaultLayout();
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void CelestialObject::setTexture(const std::string &textureName) {
@@ -47,6 +49,7 @@ void CelestialObject::setTexture(const std::string &textureName) {
 }
 
 void CelestialObject::updateVertexBuffer() const {
+#ifdef OM_NOT_IMPLEMENTED
 	if (m_width <= 0.f || m_height <= 0.f) {
 		gkError() << "Trying to update vertex buffer for celestial object of invalid size";
 		return;
@@ -94,6 +97,7 @@ void CelestialObject::updateVertexBuffer() const {
 	VertexBuffer::bind(nullptr);
 
 	m_isUpdateNeeded = false;
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void CelestialObject::updateAxisTransform() const {
@@ -155,6 +159,7 @@ void CelestialObject::updateAxisTransform() const {
 }
 
 void CelestialObject::draw(RenderTarget &target, RenderStates states) const {
+#ifdef OM_NOT_IMPLEMENTED
 	if (m_isUpdateNeeded)
 		updateVertexBuffer();
 
@@ -174,5 +179,6 @@ void CelestialObject::draw(RenderTarget &target, RenderStates states) const {
 	};
 
 	target.drawElements(m_vbo, GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices, states);
+#endif // OM_NOT_IMPLEMENTED
 }
 

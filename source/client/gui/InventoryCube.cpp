@@ -42,6 +42,7 @@
 InventoryCube::InventoryCube(float size, bool isEntity)
 	: m_textureAtlas(&gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
+#ifdef OM_NOT_IMPLEMENTED
 	m_vbo.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
 	m_vbo.layout().addAttribute(1, "texCoord", 2, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, texCoord)));
 	m_vbo.layout().addAttribute(2, "color", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, color)));
@@ -64,11 +65,13 @@ InventoryCube::InventoryCube(float size, bool isEntity)
 		m_transform.rotateX(120.f);
 		m_transform.rotateZ(-45.f);
 	}
+#endif // OM_NOT_IMPLEMENTED
 }
 
 using namespace BlockGeometry;
 
 void InventoryCube::updateVertexBuffer(const Block &block, u8 state) {
+#ifdef OM_NOT_IMPLEMENTED
 	if (!block.id()) return;
 
 	const BlockState &blockState = block.getState(state);
@@ -152,9 +155,11 @@ void InventoryCube::updateVertexBuffer(const Block &block, u8 state) {
 	VertexBuffer::bind(nullptr);
 
 	m_isVboInitialized = true;
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void InventoryCube::draw(RenderTarget &target, RenderStates states) const {
+#ifdef OM_NOT_IMPLEMENTED
 	if (!m_isVboInitialized) return;
 
 	states.transform *= getTransform();
@@ -173,4 +178,5 @@ void InventoryCube::draw(RenderTarget &target, RenderStates states) const {
 	glCheck(glEnable(GL_DEPTH_TEST));
 
 	target.draw(m_vbo, GL_QUADS, 0, nFaces * nVertsPerFace, states);
+#endif // OM_NOT_IMPLEMENTED
 }

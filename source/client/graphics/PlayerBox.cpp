@@ -250,17 +250,20 @@ PlayerBox::PlayerBox(const gk::Camera &camera)
 	: m_camera(camera),
 	  m_texture(gk::ResourceHandler::getInstance().get<gk::Texture>("texture-player"))
 {
+#ifdef OM_NOT_IMPLEMENTED
 	m_vbo.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
 	m_vbo.layout().addAttribute(1, "texCoord", 2, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, texCoord)));
 	m_vbo.layout().addAttribute(2, "color", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, color)));
 	m_vbo.layout().addAttribute(3, "normal", 3, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, normal)));
 	m_vbo.layout().addAttribute(4, "lightValue", 2, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, lightValue)));
 	m_vbo.layout().addAttribute(5, "ambientOcclusion", 1, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, ambientOcclusion)));
+#endif // OM_NOT_IMPLEMENTED
 
 	updateVertexBuffer();
 }
 
 void PlayerBox::updateVertexBuffer() {
+#ifdef OM_NOT_IMPLEMENTED
 	Vertex vertices[NUM_QUADS * NUM_VERTICES_PER_QUAD];
 	for (u8 i = 0 ; i < NUM_QUADS * NUM_VERTICES_PER_QUAD ; ++i) {
 		vertices[i].coord3d[0] = modelCoords[i][0];
@@ -275,6 +278,7 @@ void PlayerBox::updateVertexBuffer() {
 	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	VertexBuffer::bind(nullptr);
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void PlayerBox::draw(RenderTarget &target, RenderStates states) const {
@@ -290,8 +294,10 @@ void PlayerBox::draw(RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 	states.texture = &m_texture;
 
+#ifdef OM_NOT_IMPLEMENTED
 	glCheck(glEnable(GL_CULL_FACE));
 
 	target.draw(m_vbo, GL_QUADS, 0, NUM_QUADS * NUM_VERTICES_PER_QUAD, states);
+#endif // OM_NOT_IMPLEMENTED
 }
 

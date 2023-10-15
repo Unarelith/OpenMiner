@@ -24,22 +24,19 @@
  *
  * =====================================================================================
  */
-#include <glm/gtc/matrix_transform.hpp>
-
-#include <gk/gl/GLCheck.hpp>
-#include <gk/gl/Shader.hpp>
-#include <gk/gl/Vertex.hpp>
-
 #include "RectangleShape.hpp"
+#include "Vertex.hpp"
 
 RectangleShape::RectangleShape() {
-	m_vbo.layout().setupDefaultLayout();
+#ifdef OM_NOT_IMPLEMENTED
+	m_vbo.setupDefaultLayout();
 
 	for (u8 i = 1 ; i < 5 ; ++i) {
 		for (u8 j = 0 ; j < 6 ; ++j) {
-			m_indices[i * 6 + j] = u8(m_indices[j] + 4 * i);
+			m_indices[i * 6 + j] = m_indices[j] + 4 * i;
 		}
 	}
+#endif // OM_NOT_IMPLEMENTED
 }
 
 RectangleShape::RectangleShape(float width, float height, const gk::Color &color) : RectangleShape() {
@@ -49,6 +46,7 @@ RectangleShape::RectangleShape(float width, float height, const gk::Color &color
 }
 
 void RectangleShape::updateVertexBuffer() const {
+#ifdef OM_NOT_IMPLEMENTED
 	float o = (float)m_outlineThickness;
 	gk::Vertex vertices[4 + 4 * 4] = {
 		// Rectangle vertices
@@ -99,15 +97,18 @@ void RectangleShape::updateVertexBuffer() const {
 	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	VertexBuffer::bind(nullptr);
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void RectangleShape::draw(RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
+#ifdef OM_NOT_IMPLEMENTED
 	glCheck(glDisable(GL_CULL_FACE));
 	glCheck(glDisable(GL_DEPTH_TEST));
 
 	if(m_wireframeMode) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 	target.drawElements(m_vbo, GL_TRIANGLES, 6 * 5, GL_UNSIGNED_BYTE, m_indices.data(), states);
 	if(m_wireframeMode) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+#endif // OM_NOT_IMPLEMENTED
 }

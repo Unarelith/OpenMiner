@@ -77,6 +77,7 @@ void InterfaceState::update() {
 }
 
 void InterfaceState::prepareDraw(RenderTarget &target, RenderStates &states) const {
+#ifdef OM_NOT_IMPLEMENTED
 	states.transform *= getTransform();
 	states.shader = &m_shader;
 	// states.vertexAttributes = gk::VertexAttribute::Only2d;
@@ -87,5 +88,6 @@ void InterfaceState::prepareDraw(RenderTarget &target, RenderStates &states) con
 
 	if (m_parent && m_drawBackground)
 		target.draw(m_background, states);
+#endif // OM_NOT_IMPLEMENTED
 }
 

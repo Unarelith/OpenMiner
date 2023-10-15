@@ -39,6 +39,7 @@ Framebuffer::~Framebuffer() {
 }
 
 void Framebuffer::init(u16 width, u16 height) {
+#ifdef OM_NOT_IMPLEMENTED
 	if (m_id)
 		clear();
 
@@ -92,9 +93,11 @@ void Framebuffer::init(u16 width, u16 height) {
 	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(quad), &quad, GL_STATIC_DRAW);
 	VertexBuffer::bind(nullptr);
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void Framebuffer::clear() {
+#ifdef OM_NOT_IMPLEMENTED
 	if (m_id) {
 		glCheck(glDeleteFramebuffers(1, &m_id));
 		m_id = 0;
@@ -114,9 +117,11 @@ void Framebuffer::clear() {
 		glCheck(glDeleteRenderbuffers(1, &m_rbo));
 		m_rbo = 0;
 	}
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void Framebuffer::loadShader(const std::string &name) {
+#ifdef OM_NOT_IMPLEMENTED
 	m_shader.createProgram();
 	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/" + name + ".v.glsl");
 	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/" + name + ".f.glsl");
@@ -126,15 +131,19 @@ void Framebuffer::loadShader(const std::string &name) {
 	m_shader.setUniform("screenTexture", 0);
 	m_shader.setUniform("depthTexture", 1);
 	gk::Shader::bind(nullptr);
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void Framebuffer::begin() const {
+#ifdef OM_NOT_IMPLEMENTED
 	bind(this);
 	glCheck(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	glCheck(glEnable(GL_DEPTH_TEST));
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void Framebuffer::end() const {
+#ifdef OM_NOT_IMPLEMENTED
 	bind(nullptr);
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -174,12 +183,15 @@ void Framebuffer::end() const {
 	glCheck(glActiveTexture(GL_TEXTURE0));
 
 	glCheck(glEnable(GL_DEPTH_TEST));
+#endif // OM_NOT_IMPLEMENTED
 }
 
 void Framebuffer::bind(const Framebuffer *framebuffer) {
+#ifdef OM_NOT_IMPLEMENTED
 	if (framebuffer)
 		glCheck(glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->m_id));
 	else
 		glCheck(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+#endif // OM_NOT_IMPLEMENTED
 }
 
