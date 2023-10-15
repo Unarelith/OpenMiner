@@ -64,7 +64,7 @@ void RenderTarget::draw(const VertexBuffer &vertexBuffer, uint64_t mode, uint32_
 	   | BGFX_STATE_MSAA
 	);
 
-	bgfx::submit(0, states.shader->program());
+	bgfx::submit(states.view, states.shader->program());
 }
 
 void RenderTarget::drawElements(const VertexBuffer &vertexBuffer, const IndexBuffer &indexBuffer, uint64_t mode, uint32_t count, const RenderStates &states) {
@@ -88,7 +88,7 @@ void RenderTarget::drawElements(const VertexBuffer &vertexBuffer, const IndexBuf
 	   | BGFX_STATE_MSAA
 	);
 
-	bgfx::submit(0, states.shader->program());
+	bgfx::submit(states.view, states.shader->program());
 }
 
 void RenderTarget::beginDrawing(const RenderStates &states) {
@@ -100,7 +100,7 @@ void RenderTarget::beginDrawing(const RenderStates &states) {
 	static const Shader *previousShader = nullptr;
 
 	if (!m_view) {
-		bgfx::setViewTransform(0,
+		bgfx::setViewTransform(states.view,
 			states.viewMatrix.getRawMatrix(),
 			states.projectionMatrix.getRawMatrix());
 	}
@@ -131,11 +131,11 @@ void RenderTarget::applyCurrentView(const RenderStates &states) {
 	gk::IntRect viewport = getViewport(*m_view);
 	if (viewport != m_previousViewport) {
 		int top = getSize().y - (viewport.y + viewport.sizeY);
-		bgfx::setViewRect(0, (uint16_t)viewport.x, (uint16_t)top, (uint16_t)viewport.sizeX, (uint16_t)viewport.sizeY);
+		bgfx::setViewRect(states.view, (uint16_t)viewport.x, (uint16_t)top, (uint16_t)viewport.sizeX, (uint16_t)viewport.sizeY);
 		m_previousViewport = viewport;
 	}
 
-	bgfx::setViewTransform(0,
+	bgfx::setViewTransform(states.view,
 		m_view->getViewTransform().getRawMatrix(),
 		m_view->getTransform().getRawMatrix());
 

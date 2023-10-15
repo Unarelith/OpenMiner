@@ -323,7 +323,7 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 
 			bgfx::setState(BGFX_STATE_DEFAULT);
 
-			bgfx::submit(0, states.shader->program());
+			bgfx::submit(states.view, states.shader->program());
 
 			if (!it.first->hasBeenDrawn())
 				++ClientChunk::chunkDrawCounter;
