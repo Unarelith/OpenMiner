@@ -35,7 +35,8 @@ Shader::Shader(const std::string &name) {
 }
 
 Shader::~Shader() {
-	bgfx::destroy(m_program);
+	if (bgfx::isValid(m_program))
+		bgfx::destroy(m_program);
 }
 
 void Shader::loadFromFile(const std::string &name) {
