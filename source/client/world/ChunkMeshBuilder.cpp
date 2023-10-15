@@ -64,17 +64,17 @@ void ChunkMeshBuilder::update() {
 			if (chunk && job->totalVertexCount) {
 				VertexBuffer &vbo = chunk->getVertexBuffer();
 
-				vbo.init(nullptr, job->totalVertexCount * sizeof(Vertex));
+				vbo.init(nullptr, (u32)job->totalVertexCount * sizeof(Vertex));
 
 				u64 offset = 0;
 				for (u8 i = 0 ; i < ChunkMeshLayer::Count ; ++i) {
-					u32 vertexCount = job->vertices[i].size();
+					u32 vertexCount = (u32)job->vertices[i].size();
 					chunk->setVerticesCount(i, vertexCount);
 
 					if (vertexCount) {
 						job->vertices[i].shrink_to_fit();
 
-						vbo.update(job->vertices[i].data(), vertexCount * sizeof(Vertex), offset);
+						vbo.update(job->vertices[i].data(), vertexCount * sizeof(Vertex), (u32)offset);
 
 						offset += vertexCount;
 					}
