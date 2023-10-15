@@ -157,7 +157,6 @@ void VertexBuffer::enable(u32 startVertex, u32 numVertices) const {
 	}
 }
 
-bool VertexBuffer::isValid() {
+bool VertexBuffer::isValid() const {
 	return bgfx::isValid(m_staticHandle) || bgfx::isValid(m_dynamicHandle);
 }
-

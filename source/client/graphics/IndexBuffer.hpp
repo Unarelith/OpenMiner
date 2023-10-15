@@ -46,7 +46,7 @@ class IndexBuffer : public gk::NonCopyable {
 		void enable() const;
 		void enable(uint32_t startIndex, uint32_t numIndices) const;
 
-		bool isValid();
+		bool isValid() const;
 
 	private:
 		bgfx::IndexBufferHandle m_staticHandle = BGFX_INVALID_HANDLE;

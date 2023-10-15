@@ -47,7 +47,7 @@ class VertexBuffer : public gk::NonCopyable {
 		void enable() const;
 		void enable(u32 startVertex, u32 numVertices) const;
 
-		bool isValid();
+		bool isValid() const;
 
 		bgfx::VertexLayout &layout() { return m_layout; }
 
