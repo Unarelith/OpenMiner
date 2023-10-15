@@ -1,11 +1,11 @@
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/shaders")
 
-function(compile_shaders shader_names)
+function(compile_shaders)
 	set(platform linux)
 	set(PROFILES 120 spirv)
 
 	foreach(profile IN LISTS PROFILES)
-		foreach(shader_name IN LISTS shader_names)
+		foreach(shader_name IN LISTS ARGN)
 			set(IN_VERTEX    "${CMAKE_SOURCE_DIR}/resources/shaders/${shader_name}.vs.sc")
 			set(IN_FRAGMENT  "${CMAKE_SOURCE_DIR}/resources/shaders/${shader_name}.fs.sc")
 			set(IN_DEF       "${CMAKE_SOURCE_DIR}/resources/shaders/${shader_name}.def.sc")
@@ -37,4 +37,3 @@ endfunction()
 compile_shaders(
 	bgfx_test
 )
-
