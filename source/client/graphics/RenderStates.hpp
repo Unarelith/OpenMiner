@@ -32,8 +32,9 @@
 #include <gk/core/IntTypes.hpp>
 #include <gk/gl/Transform.hpp>
 
+class Shader;
+
 namespace gk {
-	class Shader;
 	class Texture;
 }
 
@@ -43,7 +44,7 @@ struct RenderStates {
 	gk::Transform transform;
 
 	const gk::Texture *texture = nullptr;
-	const gk::Shader *shader = nullptr;
+	const Shader *shader = nullptr;
 
 	static const RenderStates Default; // Defined in RenderTarget.cpp
 };

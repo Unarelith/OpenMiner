@@ -25,11 +25,12 @@
  * =====================================================================================
  */
 #include <gk/gl/GLCheck.hpp>
-#include <gk/gl/Shader.hpp>
 #include <gk/gl/Texture.hpp>
 
 #include "Drawable.hpp"
+#include "IndexBuffer.hpp"
 #include "RenderTarget.hpp"
+#include "Shader.hpp"
 #include "VertexBuffer.hpp"
 
 const RenderStates RenderStates::Default{};
@@ -38,38 +39,33 @@ void RenderTarget::draw(const Drawable &drawable, const RenderStates &states) {
 	drawable.draw(*this, states);
 }
 
-void RenderTarget::draw(const VertexBuffer &vertexBuffer, GLenum mode, GLint firstVertex, GLsizei vertexCount, const RenderStates &states) {
+void RenderTarget::draw(const VertexBuffer &vertexBuffer, uint64_t mode, uint32_t firstVertex, uint32_t vertexCount, const RenderStates &states) {
+#ifdef OM_NOT_IMPLEMENTED
 	beginDrawing(states);
+#endif // OM_NOT_IMPLEMENTED
 
-	VertexBuffer::bind(&vertexBuffer);
+	vertexBuffer.enable(firstVertex, vertexCount);
 
-	vertexBuffer.layout().enableLayout();
-	states.shader->setUniform("u_modelMatrix", states.transform);
+	bgfx::setTransform(states.transform.getRawMatrix());
 
-	glCheck(::glDrawArrays(mode, firstVertex, vertexCount));
-
-	vertexBuffer.layout().disableLayout();
-
-	VertexBuffer::bind(nullptr);
+	bgfx::submit(0, states.shader->program());
 }
 
-void RenderTarget::drawElements(const VertexBuffer &vertexBuffer, GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, const RenderStates &states) {
+void RenderTarget::drawElements(const VertexBuffer &vertexBuffer, const IndexBuffer &indexBuffer, uint64_t mode, uint32_t count, const RenderStates &states) {
+#ifdef OM_NOT_IMPLEMENTED
 	beginDrawing(states);
+#endif // OM_NOT_IMPLEMENTED
 
-	VertexBuffer::bind(&vertexBuffer);
+	if (count == 0)
+		vertexBuffer.enable();
+	else
+		vertexBuffer.enable(0, count);
 
-	vertexBuffer.layout().enableLayout();
-	states.shader->setUniform("u_modelMatrix", states.transform);
+	indexBuffer.enable();
 
-	glCheck(glDrawElements(mode, count, type, indices));
+	bgfx::setTransform(states.transform.getRawMatrix());
 
-	vertexBuffer.layout().disableLayout();
-
-	VertexBuffer::bind(nullptr);
-}
-
-void RenderTarget::drawArrays(GLenum mode, GLint firstVertex, GLsizei vertexCount) {
-	glCheck(::glDrawArrays(mode, firstVertex, vertexCount));
+	bgfx::submit(0, states.shader->program());
 }
 
 void RenderTarget::beginDrawing(const RenderStates &states) {
@@ -78,13 +74,12 @@ void RenderTarget::beginDrawing(const RenderStates &states) {
 	//----------------------------------------------------------------------------
 	if (!states.shader) return;
 
-	static const gk::Shader *previousShader = nullptr;
-
-	gk::Shader::bind(states.shader);
+	static const Shader *previousShader = nullptr;
 
 	if (!m_view) {
-		states.shader->setUniform("u_projectionMatrix", states.projectionMatrix);
-		states.shader->setUniform("u_viewMatrix", states.viewMatrix);
+		bgfx::setViewTransform(0,
+			states.viewMatrix.getRawMatrix(),
+			states.projectionMatrix.getRawMatrix());
 	}
 	else if (m_viewChanged || states.shader != previousShader)
 		applyCurrentView(states);
@@ -113,12 +108,13 @@ void RenderTarget::applyCurrentView(const RenderStates &states) {
 	gk::IntRect viewport = getViewport(*m_view);
 	if (viewport != m_previousViewport) {
 		int top = getSize().y - (viewport.y + viewport.sizeY);
-		glViewport(viewport.x, top, viewport.sizeX, viewport.sizeY);
+		bgfx::setViewRect(0, (uint16_t)viewport.x, (uint16_t)top, (uint16_t)viewport.sizeX, (uint16_t)viewport.sizeY);
 		m_previousViewport = viewport;
 	}
 
-	states.shader->setUniform("u_projectionMatrix", m_view->getTransform());
-	states.shader->setUniform("u_viewMatrix", m_view->getViewTransform());
+	bgfx::setViewTransform(0,
+		m_view->getViewTransform().getRawMatrix(),
+		m_view->getTransform().getRawMatrix());
 
 	m_viewChanged = false;
 }
