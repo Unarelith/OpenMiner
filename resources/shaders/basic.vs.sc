@@ -5,7 +5,7 @@ $output v_color0, v_color1, v_texcoord0
 
 void main() {
 	v_color0 = a_color0;
-	v_color1 = a_position.w;
+	v_color1 = a_position.w; // face
 
 	v_texcoord0 = a_texcoord0;
 
