@@ -37,8 +37,8 @@ BGFXTestState::BGFXTestState()
 	const bx::Vec3 at  = { 0.0f, 0.0f,   0.0f };
 	const bx::Vec3 eye = { 0.0f, 0.0f, -35.0f };
 	const bx::Vec3 up  = { 0.0f, 1.0f,   0.0f };
-	bx::mtxLookAt(m_view, eye, at, up);
-	bx::mtxProj(m_proj, 60.0f, float(windowSize.x) / float(windowSize.y), 0.1f, 100.0f, bgfx::getCaps()->homogeneousDepth);
+	bx::mtxLookAt(m_viewMtx, eye, at, up);
+	bx::mtxProj(m_projMtx, 60.0f, float(windowSize.x) / float(windowSize.y), 0.1f, 100.0f, bgfx::getCaps()->homogeneousDepth);
 
 	m_camera.setPosition(0.f, 0.f, 0.f);
 	m_camera.setDirection(0.f, 0.f, -35.f);
@@ -49,20 +49,35 @@ BGFXTestState::BGFXTestState()
 	m_camera.setNearClippingPlane(0.1f);
 	m_camera.setFarClippingPlane(100.0f);
 
+	m_view.setSize((float)windowSize.x, (float)windowSize.y);
+	m_view.setCenter(windowSize.x / 2.f, windowSize.y / 2.f);
+
 	// Set view 0 default viewport.
 	bgfx::setViewRect(0, 0, 0, (uint16_t)windowSize.x, (uint16_t)windowSize.y);
+
+	m_rect.setFillColor(gk::Color::White);
+	m_rect.setSize(100, 100);
+	m_rect.setPosition(0, 0);
+
+	m_shader.loadFromFile("bgfx_test");
 }
 
 void BGFXTestState::draw(RenderTarget &target, RenderStates states) const
 {
-	states.projectionMatrix = m_camera.getTransform();
-	states.viewMatrix = m_camera.getViewTransform();
+	// states.projectionMatrix = m_camera.getTransform();
+	// states.viewMatrix = m_camera.getViewTransform();
 	// states.projectionMatrix = glm::transpose(m_camera.getTransform().getMatrix());
 	// states.viewMatrix = glm::transpose(m_camera.getViewTransform().getMatrix());
-	// states.projectionMatrix = glm::make_mat4(m_proj);
-	// states.viewMatrix = glm::make_mat4(m_view);
+	// states.projectionMatrix = glm::make_mat4(m_projMtx);
+	// states.viewMatrix = glm::make_mat4(m_viewMtx);
+	states.projectionMatrix = m_view.getTransform();
+	states.viewMatrix = m_view.getViewTransform();
+
+	states.shader = &m_shader;
 
 	target.draw(m_cube, states);
+
+	target.draw(m_rect, states);
 }
 
 //==============================================================================
@@ -113,8 +128,6 @@ Cube::Cube()
 
 	m_vbo.init(s_cubeVertices, sizeof(s_cubeVertices));
 	m_ibo.init(s_cubeTriList, sizeof(s_cubeTriList));
-
-	m_shader.loadFromFile("bgfx_test");
 }
 
 void Cube::draw(RenderTarget &target, RenderStates states) const
@@ -124,8 +137,6 @@ void Cube::draw(RenderTarget &target, RenderStates states) const
 	states.transform.rotateY(glm::degrees(0.934f + tick * 0.001f));
 	states.transform = glm::transpose(states.transform.getMatrix());
 	tick++;
-
-	states.shader = &m_shader;
 
 	target.drawElements(m_vbo, m_ibo, 0, 0, states);
 }
