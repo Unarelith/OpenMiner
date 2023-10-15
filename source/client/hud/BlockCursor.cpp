@@ -46,16 +46,9 @@ BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommand
 {
 	m_blockDestroyTexture = &gk::ResourceHandler::getInstance().get<Texture>("texture-block_destroy");
 
-#ifdef OM_NOT_IMPLEMENTED
-	m_vbo.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
+	m_vbo.setupDefaultLayout();
 
-	m_animationVBO.layout().addAttribute(0, "coord3d", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, coord3d)));
-	m_animationVBO.layout().addAttribute(1, "texCoord", 2, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, texCoord)));
-	m_animationVBO.layout().addAttribute(2, "color", 4, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, color)));
-	m_animationVBO.layout().addAttribute(3, "normal", 3, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, normal)));
-	m_animationVBO.layout().addAttribute(4, "lightValue", 2, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, lightValue)));
-	m_animationVBO.layout().addAttribute(5, "ambientOcclusion", 1, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(Vertex), reinterpret_cast<GLvoid *>(offsetof(Vertex, ambientOcclusion)));
-#endif // OM_NOT_IMPLEMENTED
+	m_animationVBO.setupDefaultLayout();
 }
 
 void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
@@ -271,18 +264,13 @@ void BlockCursor::updateVBOCoords(Vertex vertices[nFaces][nVertsPerFace], const 
 }
 
 void BlockCursor::updateVertexBuffer(const BlockState &blockState, u8f orientation) {
-#ifdef OM_NOT_IMPLEMENTED
 	Vertex vertices[nFaces][nVertsPerFace];
 	updateVBOCoords(vertices, blockState, -1, orientation);
 
-	VertexBuffer::bind(&m_vbo);
-	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	VertexBuffer::bind(nullptr);
-#endif // OM_NOT_IMPLEMENTED
+	m_vbo.init(vertices, sizeof(vertices), true);
 }
 
 void BlockCursor::updateAnimationVertexBuffer(const BlockState &blockState, u8f orientation, int animationPos) {
-#ifdef OM_NOT_IMPLEMENTED
 	Vertex vertices[nFaces][nVertsPerFace];
 	updateVBOCoords(vertices, blockState, -2, orientation);
 
@@ -308,19 +296,17 @@ void BlockCursor::updateAnimationVertexBuffer(const BlockState &blockState, u8f 
 		}
 	}
 
-	VertexBuffer::bind(&m_animationVBO);
-	m_animationVBO.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	VertexBuffer::bind(nullptr);
-#endif // OM_NOT_IMPLEMENTED
+	m_animationVBO.init(vertices, sizeof(vertices), true);
 }
 
 void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
-#ifdef OM_NOT_IMPLEMENTED
 	if (m_selectedBlock.w == -1) return;
 
+#ifdef OM_NOT_IMPLEMENTED
 	glCheck(glDisable(GL_POLYGON_OFFSET_FILL));
 	glCheck(glDisable(GL_CULL_FACE));
 	glCheck(glEnable(GL_DEPTH_TEST));
+#endif // OM_NOT_IMPLEMENTED
 
 	// Subtract the camera position - see comment in ClientWorld::draw()
 	const gk::Vector3d &cameraPosition = m_player.camera().getDPosition();
@@ -330,21 +316,30 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 		float(m_selectedBlock.z - cameraPosition.z)
 	);
 
+#ifdef OM_NOT_IMPLEMENTED
 	glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+#endif // OM_NOT_IMPLEMENTED
 	target.draw(m_vbo, GL_QUADS, 0, nFaces * nVertsPerFace, states);
+#ifdef OM_NOT_IMPLEMENTED
 	glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+#endif // OM_NOT_IMPLEMENTED
 
 	if (m_animationStart > 0) {
+#ifdef OM_NOT_IMPLEMENTED
 		glCheck(glEnable(GL_CULL_FACE));
 		glCheck(glBlendFunc(GL_DST_COLOR, GL_ZERO));
+#endif // OM_NOT_IMPLEMENTED
 
 		states.texture = m_blockDestroyTexture;
 
 		target.draw(m_animationVBO, GL_QUADS, 0, nFaces * nVertsPerFace, states);
 
+#ifdef OM_NOT_IMPLEMENTED
 		glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+#endif // OM_NOT_IMPLEMENTED
 	}
 
+#ifdef OM_NOT_IMPLEMENTED
 	glCheck(glEnable(GL_POLYGON_OFFSET_FILL));
 #endif // OM_NOT_IMPLEMENTED
 }
