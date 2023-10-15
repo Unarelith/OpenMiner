@@ -77,7 +77,7 @@ class GameState : public DrawableState {
 
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		gk::Shader m_shader;
+		Shader m_shader;
 
 		Framebuffer m_fbo{Config::screenWidth, Config::screenHeight};
 
