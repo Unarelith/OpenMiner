@@ -30,7 +30,18 @@
 #include "ChunkRenderer.hpp"
 #include "ClientChunk.hpp"
 #include "RenderTarget.hpp"
+#include "Shader.hpp"
 #include "Texture.hpp"
+
+ChunkRenderer::ChunkRenderer(const TextureAtlas &textureAtlas) : m_textureAtlas(textureAtlas) {
+	m_renderDistance = bgfx::createUniform("u_renderDistance", bgfx::UniformType::Vec4);
+	m_fogColor = bgfx::createUniform("u_fogColor", bgfx::UniformType::Vec4);
+}
+
+ChunkRenderer::~ChunkRenderer() {
+	bgfx::destroy(m_fogColor);
+	bgfx::destroy(m_renderDistance);
+}
 
 inline static bool bbIntersects(const glm::vec3 &a0, const glm::vec3 &a1, const glm::vec3 &b0, const glm::vec3 &b1) {
 	return (std::max(a0.x, b0.x) <= std::min(a1.x, b1.x))
@@ -271,19 +282,27 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 
 	glCheck(glEnable(GL_DEPTH_TEST));
+#endif // OM_NOT_IMPLEMENTED
 
 	states.texture = &m_textureAtlas.texture();
 
 	target.beginDrawing(states);
 
-	states.shader->setUniform("u_renderDistance", Config::renderDistance * CHUNK_WIDTH);
+	float renderDistance[4] = {(float)Config::renderDistance * CHUNK_WIDTH, 0.f, 0.f, 0.f};
+	bgfx::setUniform(m_renderDistance, renderDistance);
 
-	if (currentSky)
-		states.shader->setUniform("u_fogColor", currentSky->fogColor());
-
-	GLint modelMatrixUniform = states.shader->uniform("u_modelMatrix");
+	if (currentSky) {
+		float fogColor[4] = {
+			currentSky->fogColor().r,
+			currentSky->fogColor().g,
+			currentSky->fogColor().b,
+			currentSky->fogColor().a
+		};
+		bgfx::setUniform(m_fogColor, fogColor);
+	}
 
 	for (u8 layer = 0 ; layer < ChunkMeshLayer::Count ; ++layer) {
+#ifdef OM_NOT_IMPLEMENTED
 		// Disable mipmaps for specific layers
 		glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL,
 			(layer == ChunkMeshLayer::NoMipMap || layer == ChunkMeshLayer::Flora) ? 0 : Config::mipmapLevels));
@@ -292,16 +311,19 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 			glCheck(glDisable(GL_CULL_FACE));
 		else
 			glCheck(glEnable(GL_CULL_FACE));
+#endif // OM_NOT_IMPLEMENTED
 
 		for (auto &it : chunks) {
 			std::size_t verticesCount = it.first->getVerticesCount(layer);
 			if (verticesCount == 0) continue;
 
-			states.shader->setUniform(modelMatrixUniform, it.second);
+			bgfx::setTransform(it.second.getRawMatrix());
 
-			gk::VertexArray::bind(&it.first->getVertexArray());
-			target.drawArrays(GL_TRIANGLES, (GLint)it.first->getBufferOffset(layer), (GLsizei)verticesCount);
-			gk::VertexArray::bind(nullptr);
+			it.first->getVertexBuffer().enable((u32)it.first->getBufferOffset(layer), (u32)verticesCount);
+
+			bgfx::setState(BGFX_STATE_DEFAULT);
+
+			bgfx::submit(0, states.shader->program());
 
 			if (!it.first->hasBeenDrawn())
 				++ClientChunk::chunkDrawCounter;
@@ -312,6 +334,7 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 		}
 	}
 
+#ifdef OM_NOT_IMPLEMENTED
 	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 #endif // OM_NOT_IMPLEMENTED
 }

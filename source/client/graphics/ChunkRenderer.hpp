@@ -44,7 +44,8 @@ class ChunkRenderer {
 	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ClientChunk>>;
 
 	public:
-		ChunkRenderer(const TextureAtlas &textureAtlas) : m_textureAtlas(textureAtlas) {}
+		ChunkRenderer(const TextureAtlas &textureAtlas);
+		~ChunkRenderer();
 
 		void draw(RenderTarget &target, RenderStates states, const ChunkMap &chunks, Camera &camera, const Sky *currentSky) const;
 
@@ -58,6 +59,9 @@ class ChunkRenderer {
 
 		OnChunkDeletionRequestedCallback m_onChunkDeletionRequested;
 		OnMeshingRequestedCallback m_onMeshingRequested;
+
+		bgfx::UniformHandle m_renderDistance = BGFX_INVALID_HANDLE;
+		bgfx::UniformHandle m_fogColor = BGFX_INVALID_HANDLE;
 };
 
 #endif // CHUNKRENDERER_HPP_
