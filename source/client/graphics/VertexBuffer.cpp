@@ -84,11 +84,13 @@ void VertexBuffer::init(const void *data, uint32_t size, bool isDynamic) {
 	assert(size != 0);
 
 	if (isDynamic || data == nullptr) {
-		if (isValid()) {
-			if (data)
-				update(data, size);
+		if (isValid() && data) {
+			update(data, size);
 		}
 		else {
+			if (isValid())
+				free();
+
 			m_isDynamic = true;
 			m_data = (data ? bgfx::copy(data, size) : bgfx::alloc(size));
 			m_dynamicHandle = bgfx::createDynamicVertexBuffer(m_data, m_layout);
