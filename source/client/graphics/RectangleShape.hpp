@@ -33,6 +33,7 @@
 #include <gk/gl/Transformable.hpp>
 
 #include "Drawable.hpp"
+#include "IndexBuffer.hpp"
 #include "VertexBuffer.hpp"
 
 class RectangleShape : public Drawable, public gk::Transformable {
@@ -57,7 +58,7 @@ class RectangleShape : public Drawable, public gk::Transformable {
 		void setOutlineThickness(int outlineThickness) { m_outlineThickness = outlineThickness; updateVertexBuffer(); }
 
 	private:
-		void updateVertexBuffer() const;
+		void updateVertexBuffer();
 
 		void draw(RenderTarget &target, RenderStates states) const override;
 
@@ -69,14 +70,10 @@ class RectangleShape : public Drawable, public gk::Transformable {
 		float m_height = 0;
 
 		VertexBuffer m_vbo;
+		IndexBuffer m_ibo;
 
 		gk::Color m_outlineColor{gk::Color::White};
 		int m_outlineThickness = 0;
-
-		std::array<GLubyte, 6 * 5> m_indices{{
-			0, 1, 3,
-			3, 1, 2
-		}};
 };
 
 #endif // RECTANGLESHAPE_HPP_
