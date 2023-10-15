@@ -25,6 +25,7 @@
  * =====================================================================================
  */
 #include "AnimationController.hpp"
+#include "Camera.hpp"
 #include "ClientScene.hpp"
 #include "RenderingController.hpp"
 

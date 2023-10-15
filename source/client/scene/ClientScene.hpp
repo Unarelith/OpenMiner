@@ -30,25 +30,24 @@
 #include <deque>
 #include <memory>
 
-#include <gk/gl/Camera.hpp>
-
 #include <entt/entt.hpp>
 
 #include "Drawable.hpp"
 #include "Scene.hpp"
 
+class Camera;
 class ClientPlayer;
 
 class ClientScene : public Scene, public Drawable {
 	public:
 		ClientScene();
 
-		void setCamera(gk::Camera &camera) { m_camera = &camera; }
+		void setCamera(Camera &camera) { m_camera = &camera; }
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		gk::Camera *m_camera = nullptr;
+		Camera *m_camera = nullptr;
 };
 
 #endif // CLIENTSCENE_HPP_

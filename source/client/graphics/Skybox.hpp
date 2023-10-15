@@ -27,27 +27,26 @@
 #ifndef SKYBOX_HPP_
 #define SKYBOX_HPP_
 
-#include <gk/gl/Camera.hpp>
-#include <gk/gl/Shader.hpp>
-
 #include "CelestialObject.hpp"
+#include "Shader.hpp"
 
+class Camera;
 class ClientWorld;
 class Sky;
 
 class Skybox : public Drawable, public gk::Transformable {
 	public:
-		Skybox(gk::Camera &camera, ClientWorld &world);
+		Skybox(Camera &camera, ClientWorld &world);
 
 		void loadSky(const Sky &sky);
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		gk::Camera &m_camera;
+		Camera &m_camera;
 		ClientWorld &m_world;
 
-		gk::Shader m_shader;
+		Shader m_shader;
 
 		CelestialObject m_sun;
 		CelestialObject m_moon;

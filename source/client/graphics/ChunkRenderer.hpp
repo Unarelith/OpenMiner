@@ -29,12 +29,11 @@
 
 #include <functional>
 
-#include <gk/gl/Camera.hpp>
-
 #include "RenderStates.hpp"
 #include "Sky.hpp"
 #include "TextureAtlas.hpp"
 
+class Camera;
 class ClientChunk;
 class RenderTarget;
 
@@ -47,7 +46,7 @@ class ChunkRenderer {
 	public:
 		ChunkRenderer(const TextureAtlas &textureAtlas) : m_textureAtlas(textureAtlas) {}
 
-		void draw(RenderTarget &target, RenderStates states, const ChunkMap &chunks, gk::Camera &camera, const Sky *currentSky) const;
+		void draw(RenderTarget &target, RenderStates states, const ChunkMap &chunks, Camera &camera, const Sky *currentSky) const;
 
 		void setOnChunkDeletionRequestedCallback(const OnChunkDeletionRequestedCallback &callback) { m_onChunkDeletionRequested = callback; }
 		void setOnMeshingRequestedCallback(const OnMeshingRequestedCallback &callback) { m_onMeshingRequested = callback; }

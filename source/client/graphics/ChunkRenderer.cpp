@@ -27,9 +27,9 @@
 #include <glm/gtx/norm.hpp>
 
 #include <gk/gl/GLCheck.hpp>
-#include <gk/gl/Shader.hpp>
 #include <gk/gl/Texture.hpp>
 
+#include "Camera.hpp"
 #include "ChunkRenderer.hpp"
 #include "ClientChunk.hpp"
 #include "RenderTarget.hpp"
@@ -61,7 +61,7 @@ static bool fullyOutside(const glm::vec3 &v1, const glm::vec3 &v2, const glm::ve
 		&& isOutside(glm::vec3{v1.x, v1.y, v2.z}, n);
 }
 
-void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkMap &chunks, gk::Camera &camera, const Sky *currentSky) const {
+void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkMap &chunks, Camera &camera, const Sky *currentSky) const {
 	// Changing the values sent to the GPU to double precision is suicidal,
 	// performance wise, if possible at all. Therefore we want to keep the
 	// GL rendering numbers in single precision format. But that introduces
