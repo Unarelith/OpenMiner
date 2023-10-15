@@ -24,7 +24,6 @@ void main() {
 
 	if (color.a < 0.3) discard;
 
-#ifdef OM_NOT_IMPLEMENTED
 	if (v_color1 == 2) {
 		// color -= vec4(0.25, 0.25, 0.25, 0.0);
 		color.rgb /= 2.3;
@@ -35,7 +34,6 @@ void main() {
 		color.rgb /= 1.6;
 		color.a = v_color0.a;
 	}
-#endif // OM_NOT_IMPLEMENTED
 
 	gl_FragColor = color;
 }
