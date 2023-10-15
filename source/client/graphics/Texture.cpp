@@ -96,15 +96,12 @@ void Texture::loadFromSurface(SDL_Surface *surface) {
 		return;
 	}
 
+	u64 flags = BGFX_TEXTURE_NONE
+	          | BGFX_SAMPLER_MIN_POINT
+	          | BGFX_SAMPLER_MAG_POINT;
+
 	u32 size = m_size.y * surface->pitch;
-	m_handle = bgfx::createTexture2D((u16)m_size.x, (u16)m_size.y, false, 1, format, BGFX_TEXTURE_NONE | BGFX_SAMPLER_NONE, bgfx::copy(surface->pixels, size));
-
-#ifdef OM_NOT_IMPLEMENTED
-	glCheck(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_size.x, m_size.y, 0, format, GL_UNSIGNED_BYTE, surface->pixels));
-
-	glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
-	glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
-#endif // OM_NOT_IMPLEMENTED
+	m_handle = bgfx::createTexture2D((u16)m_size.x, (u16)m_size.y, false, 1, format, flags, bgfx::copy(surface->pixels, size));
 }
 
 void Texture::enable(u8 unit, bgfx::UniformHandle handle) const {
