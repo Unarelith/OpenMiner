@@ -32,6 +32,7 @@
 #include "Camera.hpp"
 #include "DrawableState.hpp"
 #include "IndexBuffer.hpp"
+#include "RectangleShape.hpp"
 #include "Shader.hpp"
 #include "VertexBuffer.hpp"
 
@@ -42,7 +43,6 @@ class Cube : public Drawable {
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		Shader m_shader;
 		VertexBuffer m_vbo;
 		IndexBuffer m_ibo;
 };
@@ -55,11 +55,15 @@ class BGFXTestState : public DrawableState {
 		void draw(RenderTarget &target, RenderStates states) const override;
 
 		Cube m_cube;
+		RectangleShape m_rect;
 
 		Camera m_camera;
+		gk::View m_view;
 
-		float m_view[16];
-		float m_proj[16];
+		Shader m_shader;
+
+		float m_viewMtx[16];
+		float m_projMtx[16];
 };
 
 #endif // BGFXTESTSTATE_HPP_
