@@ -93,8 +93,10 @@ void Hotbar::draw(RenderTarget &target, RenderStates states) const {
 
 	target.draw(m_background, states);
 
+#ifdef OM_NOT_IMPLEMENTED
 	for (auto &it : m_items)
 		target.draw(it, states);
+#endif // OM_NOT_IMPLEMENTED
 
 	target.draw(m_cursor, states);
 }

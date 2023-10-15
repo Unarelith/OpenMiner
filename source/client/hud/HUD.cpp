@@ -145,13 +145,11 @@ void HUD::draw(RenderTarget &target, RenderStates states) const {
 	if (Config::isBlockInfoWidgetEnabled)
 		target.draw(m_blockInfoWidget, states);
 
-#ifdef OM_NOT_IMPLEMENTED
 	if (Config::isHotbarVisible)
 		target.draw(m_hotbar, states);
 
 	if (Config::isFpsCounterEnabled)
 		target.draw(m_fpsText, states);
-#endif // OM_NOT_IMPLEMENTED
 
 	if (Config::isChunkMinimapEnabled)
 		target.draw(m_minimap, states);
