@@ -62,6 +62,7 @@ void RenderTarget::draw(const VertexBuffer &vertexBuffer, uint64_t mode, uint32_
 	   // | BGFX_STATE_DEPTH_TEST_LESS
 	   | BGFX_STATE_CULL_CW
 	   | BGFX_STATE_MSAA
+	   | BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA)
 	);
 
 	bgfx::submit(states.view, states.shader->program());
@@ -86,6 +87,7 @@ void RenderTarget::drawElements(const VertexBuffer &vertexBuffer, const IndexBuf
 	   // | BGFX_STATE_DEPTH_TEST_LESS
 	   | BGFX_STATE_CULL_CW
 	   | BGFX_STATE_MSAA
+	   | BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA)
 	);
 
 	bgfx::submit(states.view, states.shader->program());

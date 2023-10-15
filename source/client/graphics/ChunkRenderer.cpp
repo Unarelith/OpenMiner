@@ -285,6 +285,7 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 #endif // OM_NOT_IMPLEMENTED
 
 	states.texture = &m_textureAtlas.texture();
+	states.view = 1;
 
 	float renderDistance[4] = {(float)Config::renderDistance * CHUNK_WIDTH, 0.f, 0.f, 0.f};
 	bgfx::setUniform(m_renderDistance, renderDistance);
