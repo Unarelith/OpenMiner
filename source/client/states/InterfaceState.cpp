@@ -32,10 +32,7 @@
 #include "InterfaceState.hpp"
 
 InterfaceState::InterfaceState(ApplicationState *parent) : DrawableState(parent) {
-	m_shader.createProgram();
-	m_shader.addShader(GL_VERTEX_SHADER, "resources/shaders/basic.v.glsl");
-	m_shader.addShader(GL_FRAGMENT_SHADER, "resources/shaders/basic.f.glsl");
-	m_shader.linkProgram();
+	m_shader.loadFromFile("basic");
 
 	m_background.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 127));
 
@@ -43,12 +40,10 @@ InterfaceState::InterfaceState(ApplicationState *parent) : DrawableState(parent)
 }
 
 void InterfaceState::setup() {
-	m_projectionMatrix = glm::ortho(0.0f, (float)Config::screenWidth, (float)Config::screenHeight, 0.0f, DIST_2D_FAR, DIST_2D_NEAR);
+	m_view.setSize((float)Config::screenWidth, (float)Config::screenHeight);
+	m_view.setCenter((float)Config::screenWidth / 2.f, (float)Config::screenHeight / 2.f);
 
 	m_background.setSize(Config::screenWidth, Config::screenHeight);
-
-	// m_view.setSize(Config::screenWidth, Config::screenHeight);
-	// m_view.setCenter(Config::screenWidth / 2.0f, Config::screenHeight / 2.0f);
 }
 
 void InterfaceState::onEvent(const SDL_Event &event) {
@@ -77,17 +72,12 @@ void InterfaceState::update() {
 }
 
 void InterfaceState::prepareDraw(RenderTarget &target, RenderStates &states) const {
-#ifdef OM_NOT_IMPLEMENTED
 	states.transform *= getTransform();
 	states.shader = &m_shader;
-	// states.vertexAttributes = gk::VertexAttribute::Only2d;
 
-	states.projectionMatrix = m_projectionMatrix;
-
-	// target.setView(m_view);
+	target.setView(m_view);
 
 	if (m_parent && m_drawBackground)
 		target.draw(m_background, states);
-#endif // OM_NOT_IMPLEMENTED
 }
 

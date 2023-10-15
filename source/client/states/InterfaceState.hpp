@@ -27,10 +27,9 @@
 #ifndef INTERFACESTATE_HPP_
 #define INTERFACESTATE_HPP_
 
-#include <gk/gl/Shader.hpp>
-
 #include "DrawableState.hpp"
 #include "RectangleShape.hpp"
+#include "Shader.hpp"
 
 class InterfaceState : public DrawableState {
 	public:
@@ -49,10 +48,9 @@ class InterfaceState : public DrawableState {
 	private:
 		virtual void updateWidgetPosition() {}
 
-		gk::Shader m_shader;
-		// gk::View m_view;
+		Shader m_shader;
 
-		glm::mat4 m_projectionMatrix;
+		gk::View m_view;
 
 		RectangleShape m_background;
 };
