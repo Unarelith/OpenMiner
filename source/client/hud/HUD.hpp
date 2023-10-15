@@ -27,8 +27,6 @@
 #ifndef HUD_HPP_
 #define HUD_HPP_
 
-#include <gk/gl/Shader.hpp>
-
 #include "BlockCursor.hpp"
 #include "BlockInfoWidget.hpp"
 #include "Chat.hpp"
@@ -38,6 +36,7 @@
 #include "DebugProfilerWindow.hpp"
 #include "Hotbar.hpp"
 #include "Minimap.hpp"
+#include "Shader.hpp"
 
 struct GuiScaleChangedEvent;
 
@@ -66,7 +65,7 @@ class HUD : public gk::Transformable, public Drawable {
 		ClientPlayer &m_player;
 		ClientWorld &m_world;
 
-		gk::Shader m_shader;
+		Shader m_shader;
 		glm::mat4 m_orthoMatrix;
 
 		Hotbar m_hotbar;
