@@ -24,48 +24,119 @@
  *
  * =====================================================================================
  */
-#include <gk/gl/GLCheck.hpp>
+#include <cassert>
+
+#include <bx/bx.h>
 
 #include "VertexBuffer.hpp"
 
 VertexBuffer::VertexBuffer() {
-	glCheck(glGenBuffers(1, &m_id));
 }
 
 VertexBuffer::VertexBuffer(VertexBuffer &&vertexBuffer) {
-	m_id = vertexBuffer.m_id;
-	vertexBuffer.m_id = 0;
+	m_staticHandle = vertexBuffer.m_staticHandle;
+	vertexBuffer.m_staticHandle.idx = bgfx::kInvalidHandle;
 
-	m_layout = std::move(vertexBuffer.m_layout);
+	m_dynamicHandle = vertexBuffer.m_dynamicHandle;
+	vertexBuffer.m_dynamicHandle.idx = bgfx::kInvalidHandle;
+
+	m_layout = bx::move(m_layout);
+
+	m_isDynamic = vertexBuffer.m_isDynamic;
+
+	m_data = vertexBuffer.m_data;
+	vertexBuffer.m_data = nullptr;
 }
 
-VertexBuffer::~VertexBuffer() noexcept {
-	if (m_id != 0)
-		glCheck(glDeleteBuffers(1, &m_id));
+VertexBuffer::~VertexBuffer() {
+	free();
 }
 
 VertexBuffer &VertexBuffer::operator=(VertexBuffer &&vertexBuffer) {
-	m_id = vertexBuffer.m_id;
-	vertexBuffer.m_id = 0;
+	m_staticHandle = vertexBuffer.m_staticHandle;
+	vertexBuffer.m_staticHandle.idx = bgfx::kInvalidHandle;
 
-	m_layout = std::move(vertexBuffer.m_layout);
+	m_dynamicHandle = vertexBuffer.m_dynamicHandle;
+	vertexBuffer.m_dynamicHandle.idx = bgfx::kInvalidHandle;
+
+	m_layout = bx::move(m_layout);
+
+	m_isDynamic = vertexBuffer.m_isDynamic;
+
+	m_data = vertexBuffer.m_data;
+	vertexBuffer.m_data = nullptr;
 
 	return *this;
 }
 
-void VertexBuffer::setData(GLsizeiptr size, const GLvoid *data, GLenum usage) const {
-	glCheck(glBufferData(GL_ARRAY_BUFFER, size, data, usage));
+void VertexBuffer::setupDefaultLayout() {
+	m_layout.begin()
+	        .add(bgfx::Attrib::Position, 4, bgfx::AttribType::Float, false)
+	        .add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float, false)
+	        .add(bgfx::Attrib::Color0, 4, bgfx::AttribType::Float, false)
+	        .end();
 }
 
-void VertexBuffer::updateData(GLintptr offset, GLsizeiptr size, const GLvoid *data) const {
-	glCheck(glBufferSubData(GL_ARRAY_BUFFER, offset, size, data));
-}
-
-void VertexBuffer::bind(const VertexBuffer *vertexBuffer) {
-	if(vertexBuffer) {
-		glCheck(glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->m_id));
-	} else {
-		glCheck(glBindBuffer(GL_ARRAY_BUFFER, 0));
+void VertexBuffer::init(const void *data, uint32_t size, bool isDynamic) {
+	if (isDynamic || data == nullptr) {
+		if (isValid())
+			update(data, size);
+		else {
+			m_isDynamic = true;
+			m_data = (data ? bgfx::makeRef(data, size) : bgfx::alloc(size));
+			m_dynamicHandle = bgfx::createDynamicVertexBuffer(m_data, m_layout);
+		}
 	}
+	else {
+		assert(!isValid());
+
+		m_isDynamic = false;
+		m_data = bgfx::makeRef(data, size);
+		m_staticHandle = bgfx::createVertexBuffer(m_data, m_layout);
+	}
+}
+
+void VertexBuffer::update(const void *data, uint32_t size, uint32_t offset) const {
+	assert(m_isDynamic);
+	assert(bgfx::isValid(m_dynamicHandle));
+
+	bgfx::update(m_dynamicHandle, offset, bgfx::makeRef(data, size));
+}
+
+void VertexBuffer::free() {
+	if (!m_isDynamic) {
+		bgfx::destroy(m_staticHandle);
+		m_staticHandle.idx = bgfx::kInvalidHandle;
+	}
+	else {
+		bgfx::destroy(m_dynamicHandle);
+		m_dynamicHandle.idx = bgfx::kInvalidHandle;
+	}
+}
+
+void VertexBuffer::enable() const {
+	if (!m_isDynamic) {
+		assert(bgfx::isValid(m_staticHandle));
+		bgfx::setVertexBuffer(0, m_staticHandle);
+	}
+	else {
+		assert(bgfx::isValid(m_dynamicHandle));
+		bgfx::setVertexBuffer(0, m_dynamicHandle);
+	}
+}
+
+void VertexBuffer::enable(uint32_t startVertex, uint32_t numVertices) const {
+	if (!m_isDynamic) {
+		assert(bgfx::isValid(m_staticHandle));
+		bgfx::setVertexBuffer(0, m_staticHandle, startVertex, numVertices);
+	}
+	else {
+		assert(bgfx::isValid(m_dynamicHandle));
+		bgfx::setVertexBuffer(0, m_dynamicHandle, startVertex, numVertices);
+	}
+}
+
+bool VertexBuffer::isValid() {
+	return bgfx::isValid(m_staticHandle) || bgfx::isValid(m_dynamicHandle);
 }
 
