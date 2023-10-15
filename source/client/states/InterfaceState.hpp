@@ -50,7 +50,7 @@ class InterfaceState : public DrawableState {
 
 		Shader m_shader;
 
-		gk::View m_view;
+		View m_view;
 
 		RectangleShape m_background;
 };

@@ -27,9 +27,9 @@
 #ifndef CAMERA_HPP_
 #define CAMERA_HPP_
 
-#include <gk/gl/View.hpp>
+#include "View.hpp"
 
-class Camera : public gk::View {
+class Camera : public View {
 	public:
 		Camera() = default;
 		Camera(float fov, float near, float far);

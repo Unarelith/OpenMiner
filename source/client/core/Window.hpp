@@ -64,7 +64,7 @@ class Window : public RenderTarget {
 
 		SDL_Window *window() const { return m_window.get(); }
 
-		const gk::View &getDefaultView() const override { return m_defaultView; }
+		const View &getDefaultView() const override { return m_defaultView; }
 
 		static bool saveScreenshot(int x, int y, int w, int h, const std::string &filename) noexcept;
 
@@ -80,7 +80,7 @@ class Window : public RenderTarget {
 
 		bool m_isOpen;
 
-		gk::View m_defaultView;
+		View m_defaultView;
 
 		Mode m_windowMode = Mode::Windowed;
 
