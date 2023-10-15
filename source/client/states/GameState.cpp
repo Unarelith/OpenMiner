@@ -247,13 +247,13 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 #endif // OM_NOT_IMPLEMENTED
 	target.draw(m_world, states);
 
-#ifdef OM_NOT_IMPLEMENTED
 	for (auto &it : m_playerBoxes)
 		if (it.second.dimension() == m_player.dimension())
 			target.draw(it.second, states);
 
 	target.draw(m_hud.blockCursor(), states);
 
+#ifdef OM_NOT_IMPLEMENTED
 	m_fbo.end();
 #endif // OM_NOT_IMPLEMENTED
 
