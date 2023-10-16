@@ -31,7 +31,6 @@
 #include <gk/graphics/Color.hpp>
 
 #include "Drawable.hpp"
-#include "IndexBuffer.hpp"
 #include "VertexBuffer.hpp"
 
 class CelestialObject : public Drawable, public gk::Transformable  {
@@ -57,7 +56,6 @@ class CelestialObject : public Drawable, public gk::Transformable  {
 		void draw(RenderTarget &target, RenderStates states) const override;
 
 		mutable VertexBuffer m_vbo;
-		IndexBuffer m_ibo;
 
 		gk::Color m_color = gk::Color::White;
 
