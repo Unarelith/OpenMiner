@@ -29,6 +29,7 @@
 
 #include <gk/core/Rect.hpp>
 
+#include "IndexBuffer.hpp"
 #include "RenderStates.hpp"
 #include "View.hpp"
 
@@ -60,7 +61,11 @@ class RenderTarget {
 		void setView(const View &view) { m_view = const_cast<View*>(&view); m_viewChanged = true; }
 		void disableView() { m_view = nullptr; }
 
+		const IndexBuffer &defaultIndexBuffer() const { return m_defaultIndexBuffer; }
+
 	private:
+		void initDefaultIndexBuffer();
+
 		gk::IntRect getViewport(const View &view) const;
 
 		void applyCurrentView(const RenderStates &states);
@@ -69,6 +74,8 @@ class RenderTarget {
 		View *m_view = nullptr;
 
 		bgfx::UniformHandle m_samplerUniform = BGFX_INVALID_HANDLE;
+
+		IndexBuffer m_defaultIndexBuffer;
 };
 
 #endif // RENDERTARGET_HPP_
