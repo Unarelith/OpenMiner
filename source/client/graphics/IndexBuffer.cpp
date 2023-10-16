@@ -33,28 +33,28 @@
 IndexBuffer::IndexBuffer() {
 }
 
-IndexBuffer::IndexBuffer(IndexBuffer &&vertexBuffer) {
-	m_staticHandle = vertexBuffer.m_staticHandle;
-	vertexBuffer.m_staticHandle.idx = bgfx::kInvalidHandle;
+IndexBuffer::IndexBuffer(IndexBuffer &&indexBuffer) {
+	m_staticHandle = indexBuffer.m_staticHandle;
+	indexBuffer.m_staticHandle.idx = bgfx::kInvalidHandle;
 
-	m_dynamicHandle = vertexBuffer.m_dynamicHandle;
-	vertexBuffer.m_dynamicHandle.idx = bgfx::kInvalidHandle;
+	m_dynamicHandle = indexBuffer.m_dynamicHandle;
+	indexBuffer.m_dynamicHandle.idx = bgfx::kInvalidHandle;
 
-	m_isDynamic = vertexBuffer.m_isDynamic;
+	m_isDynamic = indexBuffer.m_isDynamic;
 }
 
 IndexBuffer::~IndexBuffer() {
 	free();
 }
 
-IndexBuffer &IndexBuffer::operator=(IndexBuffer &&vertexBuffer) {
-	m_staticHandle = vertexBuffer.m_staticHandle;
-	vertexBuffer.m_staticHandle.idx = bgfx::kInvalidHandle;
+IndexBuffer &IndexBuffer::operator=(IndexBuffer &&indexBuffer) {
+	m_staticHandle = indexBuffer.m_staticHandle;
+	indexBuffer.m_staticHandle.idx = bgfx::kInvalidHandle;
 
-	m_dynamicHandle = vertexBuffer.m_dynamicHandle;
-	vertexBuffer.m_dynamicHandle.idx = bgfx::kInvalidHandle;
+	m_dynamicHandle = indexBuffer.m_dynamicHandle;
+	indexBuffer.m_dynamicHandle.idx = bgfx::kInvalidHandle;
 
-	m_isDynamic = vertexBuffer.m_isDynamic;
+	m_isDynamic = indexBuffer.m_isDynamic;
 
 	return *this;
 }
