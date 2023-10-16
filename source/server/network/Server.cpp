@@ -87,7 +87,7 @@ void Server::handleNewConnections() {
 			Network::Packet outPacket;
 			outPacket << Network::Command::ClientOk << client.id << m_isSingleplayer;
 			client.tcpSocket->send(outPacket);
-			// client.tcpSocket->setBlocking(false);
+			client.tcpSocket->setBlocking(false);
 
 			if (m_connectionCallback)
 				m_connectionCallback(client, packet);
@@ -108,31 +108,36 @@ void Server::handleClientMessages() {
 		ClientInfo &client = m_info.clients()[i];
 		if (m_selector.isReady(*client.tcpSocket)) {
 			Network::Packet packet;
-			sf::Socket::Status status = client.tcpSocket->receive(packet);
-			if (status == sf::Socket::Done) {
-				Network::Command command;
-				packet >> command;
+			sf::Socket::Status status;
+			int packetsProcessed = 0;
+			do {
+				status = client.tcpSocket->receive(packet);
+				if (status == sf::Socket::Done) {
+					Network::Command command;
+					packet >> command;
 
-				// gkDebug() << "TCP message received:" << Network::commandToString(command);
+					// gkDebug() << "TCP message received:" << Network::commandToString(command);
 
-				if (m_isRunning) {
-					for (auto &it : m_commands) {
-						if (command == it.first)
-							it.second(client, packet);
+					if (m_isRunning) {
+						for (auto &it : m_commands) {
+							if (command == it.first)
+								it.second(client, packet);
 
-						if (command == Network::Command::ClientDisconnect) {
-							disconnectClient(client);
-							--i;
+							if (command == Network::Command::ClientDisconnect) {
+								disconnectClient(client);
+								--i;
 
-							break;
+								break;
+							}
 						}
 					}
 				}
+				else if (status == sf::Socket::Disconnected) {
+					disconnectClient(client);
+					--i;
+				}
 			}
-			else if (status == sf::Socket::Disconnected) {
-				disconnectClient(client);
-				--i;
-			}
+			while ((status == sf::Socket::Done || status == sf::Socket::Disconnected) && packetsProcessed++ < 100);
 		}
 	}
 }
