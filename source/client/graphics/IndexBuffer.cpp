@@ -59,7 +59,7 @@ IndexBuffer &IndexBuffer::operator=(IndexBuffer &&indexBuffer) {
 	return *this;
 }
 
-void IndexBuffer::init(const void *data, uint32_t size, bool isDynamic) {
+void IndexBuffer::init(const void *data, u32 size, bool isDynamic) {
 	assert(size != 0);
 
 	if (isDynamic || data == nullptr) {
@@ -81,7 +81,7 @@ void IndexBuffer::init(const void *data, uint32_t size, bool isDynamic) {
 	}
 }
 
-void IndexBuffer::update(const void *data, uint32_t size, uint32_t offset) const {
+void IndexBuffer::update(const void *data, u32 size, u32 offset) const {
 	assert(size != 0);
 	assert(m_isDynamic);
 	assert(bgfx::isValid(m_dynamicHandle));
@@ -111,7 +111,7 @@ void IndexBuffer::enable() const {
 	}
 }
 
-void IndexBuffer::enable(uint32_t startIndex, uint32_t numIndices) const {
+void IndexBuffer::enable(u32 startIndex, u32 numIndices) const {
 	if (!m_isDynamic) {
 		assert(bgfx::isValid(m_staticHandle));
 		bgfx::setIndexBuffer(m_staticHandle, startIndex, numIndices);

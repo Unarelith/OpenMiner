@@ -27,6 +27,7 @@
 #ifndef INDEXBUFFER_HPP_
 #define INDEXBUFFER_HPP_
 
+#include <gk/core/IntTypes.hpp>
 #include <gk/utils/NonCopyable.hpp>
 
 #include <bgfx/bgfx.h>
@@ -39,12 +40,12 @@ class IndexBuffer : public gk::NonCopyable {
 
 		IndexBuffer &operator=(IndexBuffer &&);
 
-		void init(const void *data, uint32_t size, bool isDynamic = false);
-		void update(const void *data, uint32_t size, uint32_t offset = 0) const;
+		void init(const void *data, u32 size, bool isDynamic = false);
+		void update(const void *data, u32 size, u32 offset = 0) const;
 		void free();
 
 		void enable() const;
-		void enable(uint32_t startIndex, uint32_t numIndices) const;
+		void enable(u32 startIndex, u32 numIndices) const;
 
 		bool isValid() const;
 
