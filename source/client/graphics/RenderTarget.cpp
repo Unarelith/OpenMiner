@@ -35,9 +35,13 @@ const RenderStates RenderStates::Default{};
 
 void RenderTarget::init() {
 	m_samplerUniform = bgfx::createUniform("u_tex", bgfx::UniformType::Sampler);
+
+	initDefaultIndexBuffer();
 }
 
 void RenderTarget::free() {
+	m_defaultIndexBuffer.free();
+
 	bgfx::destroy(m_samplerUniform);
 }
 
@@ -140,4 +144,19 @@ void RenderTarget::applyCurrentView(const RenderStates &states) {
 		m_view->getTransform().getRawMatrix());
 
 	m_viewChanged = false;
+}
+
+void RenderTarget::initDefaultIndexBuffer() {
+	u16 indices[6 * 5]{
+		0, 1, 3,
+		3, 1, 2
+	};
+
+	for (u8 i = 1 ; i < 5 ; ++i) {
+		for (u8 j = 0 ; j < 6 ; ++j) {
+			indices[i * 6 + j] = u16(indices[j] + 4 * i);
+		}
+	}
+
+	m_defaultIndexBuffer.init(indices, 6 * 5 * sizeof(u16));
 }
