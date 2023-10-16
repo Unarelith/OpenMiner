@@ -36,10 +36,10 @@ VertexBuffer::VertexBuffer() {
 }
 
 VertexBuffer::VertexBuffer(VertexBuffer &&vertexBuffer) {
-	m_staticHandle = vertexBuffer.m_staticHandle;
+	m_staticHandle.idx = vertexBuffer.m_staticHandle.idx;
 	vertexBuffer.m_staticHandle.idx = bgfx::kInvalidHandle;
 
-	m_dynamicHandle = vertexBuffer.m_dynamicHandle;
+	m_dynamicHandle.idx = vertexBuffer.m_dynamicHandle.idx;
 	vertexBuffer.m_dynamicHandle.idx = bgfx::kInvalidHandle;
 
 	m_layout = bx::move(vertexBuffer.m_layout);
@@ -55,10 +55,10 @@ VertexBuffer::~VertexBuffer() {
 }
 
 VertexBuffer &VertexBuffer::operator=(VertexBuffer &&vertexBuffer) {
-	m_staticHandle = vertexBuffer.m_staticHandle;
+	m_staticHandle.idx = vertexBuffer.m_staticHandle.idx;
 	vertexBuffer.m_staticHandle.idx = bgfx::kInvalidHandle;
 
-	m_dynamicHandle = vertexBuffer.m_dynamicHandle;
+	m_dynamicHandle.idx = vertexBuffer.m_dynamicHandle.idx;
 	vertexBuffer.m_dynamicHandle.idx = bgfx::kInvalidHandle;
 
 	m_layout = bx::move(vertexBuffer.m_layout);

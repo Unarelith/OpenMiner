@@ -34,10 +34,10 @@ IndexBuffer::IndexBuffer() {
 }
 
 IndexBuffer::IndexBuffer(IndexBuffer &&indexBuffer) {
-	m_staticHandle = indexBuffer.m_staticHandle;
+	m_staticHandle.idx = indexBuffer.m_staticHandle.idx;
 	indexBuffer.m_staticHandle.idx = bgfx::kInvalidHandle;
 
-	m_dynamicHandle = indexBuffer.m_dynamicHandle;
+	m_dynamicHandle.idx = indexBuffer.m_dynamicHandle.idx;
 	indexBuffer.m_dynamicHandle.idx = bgfx::kInvalidHandle;
 
 	m_isDynamic = indexBuffer.m_isDynamic;
@@ -48,10 +48,10 @@ IndexBuffer::~IndexBuffer() {
 }
 
 IndexBuffer &IndexBuffer::operator=(IndexBuffer &&indexBuffer) {
-	m_staticHandle = indexBuffer.m_staticHandle;
+	m_staticHandle.idx = indexBuffer.m_staticHandle.idx;
 	indexBuffer.m_staticHandle.idx = bgfx::kInvalidHandle;
 
-	m_dynamicHandle = indexBuffer.m_dynamicHandle;
+	m_dynamicHandle.idx = indexBuffer.m_dynamicHandle.idx;
 	indexBuffer.m_dynamicHandle.idx = bgfx::kInvalidHandle;
 
 	m_isDynamic = indexBuffer.m_isDynamic;
