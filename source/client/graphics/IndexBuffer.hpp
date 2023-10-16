@@ -49,6 +49,8 @@ class IndexBuffer : public gk::NonCopyable {
 
 		bool isValid() const;
 
+		u16 handle() const { return (!m_isDynamic) ? m_staticHandle.idx : m_dynamicHandle.idx; }
+
 	private:
 		bgfx::IndexBufferHandle m_staticHandle = BGFX_INVALID_HANDLE;
 		bgfx::DynamicIndexBufferHandle m_dynamicHandle = BGFX_INVALID_HANDLE;

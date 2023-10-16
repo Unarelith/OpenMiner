@@ -49,6 +49,8 @@ class VertexBuffer : public gk::NonCopyable {
 
 		bool isValid() const;
 
+		u16 handle() const { return (!m_isDynamic) ? m_staticHandle.idx : m_dynamicHandle.idx; }
+
 		bgfx::VertexLayout &layout() { return m_layout; }
 
 		void setupDefaultLayout();
