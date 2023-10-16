@@ -249,8 +249,9 @@ using namespace BlockGeometry;
 void BlockCursor::updateVBOCoords(Vertex vertices[nFaces][nVertsPerFace], const BlockState &blockState,
 	float face, u8f orientation)
 {
-	glm::vec3 bottomLeft{blockState.boundingBox().x, blockState.boundingBox().y, blockState.boundingBox().z};
-	glm::vec3 topRight{blockState.boundingBox().sizeX, blockState.boundingBox().sizeY, blockState.boundingBox().sizeZ};
+	float epsilon = 0.01f; // Prevent Z-fighting
+	glm::vec3 bottomLeft{blockState.boundingBox().x - epsilon, blockState.boundingBox().y - epsilon, blockState.boundingBox().z - epsilon};
+	glm::vec3 topRight{blockState.boundingBox().sizeX + epsilon, blockState.boundingBox().sizeY + epsilon, blockState.boundingBox().sizeZ + epsilon};
 	topRight += bottomLeft;
 
 	const glm::mat3 &orientMatrix = orientMatrices[orientation];
@@ -342,6 +343,7 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 
 		states.texture = m_blockDestroyTexture;
 
+		states.view = 1; // Use chunk view for proper blending
 		states.primitiveType = 0; // Defaults to triangles
 
 		target.drawElements(m_animationVBO, m_ibo, nFaces * (nVertsPerFace + 2), states);
