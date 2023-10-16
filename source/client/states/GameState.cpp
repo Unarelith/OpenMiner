@@ -146,11 +146,8 @@ void GameState::onEvent(const SDL_Event &event) {
 				char filename[100];
 				std::strftime(filename, sizeof(filename), "Screenshot-%Y-%m-%d-%H-%M-%S.png", std::localtime(&now));
 
-				bool isScreenshotSaved = Window::saveScreenshot(0, 0, Config::screenWidth, Config::screenHeight, filename);
-				if (isScreenshotSaved)
-					m_hud.chat().addChatMessage(0, "Screenshot saved: " + std::string(filename));
-				else
-					m_hud.chat().addChatMessage(0, "Failed to save screenshot");
+				Window::saveScreenshot(filename);
+				m_hud.chat().addChatMessage(0, "Screenshot saved: " + std::string(filename));
 			}
 
 			for (auto &key : Registry::getInstance().keys()) {
