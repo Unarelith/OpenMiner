@@ -49,14 +49,14 @@ class Framebuffer : public gk::NonCopyable {
 		static void bind(const Framebuffer *framebuffer);
 
 	private:
-#ifdef OM_NOT_IMPLEMENTED
+#ifdef OM_NOT_IMPLEMENTED_GL_FRAMEBUFFER
 		GLuint m_id = 0;
 
 		GLuint m_colorTexID = 0;
 		GLuint m_depthTexID = 0;
 
 		GLuint m_rbo = 0;
-#endif // OM_NOT_IMPLEMENTED
+#endif // OM_NOT_IMPLEMENTED_GL_FRAMEBUFFER
 
 		Shader m_shader;
 		VertexBuffer m_vbo;

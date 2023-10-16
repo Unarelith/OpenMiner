@@ -278,9 +278,9 @@ void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkM
 void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const std::vector<std::tuple<ClientChunk*, gk::Transform, float>> &chunks, const Sky *currentSky) const {
 	++ClientChunk::frameCounter;
 
-#ifdef OM_NOT_IMPLEMENTED
+#ifdef OM_NOT_IMPLEMENTED_GL_WIREFRAME
 	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
-#endif // OM_NOT_IMPLEMENTED
+#endif // OM_NOT_IMPLEMENTED_GL_WIREFRAME
 
 	states.isDepthTestEnabled = true;
 
@@ -303,11 +303,11 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 	}
 
 	for (u8 layer = 0 ; layer < ChunkMeshLayer::Count ; ++layer) {
-#ifdef OM_NOT_IMPLEMENTED
+#ifdef OM_NOT_IMPLEMENTED_GL_TEXTURE
 		// Disable mipmaps for specific layers
 		glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL,
 			(layer == ChunkMeshLayer::NoMipMap || layer == ChunkMeshLayer::Flora) ? 0 : Config::mipmapLevels));
-#endif // OM_NOT_IMPLEMENTED
+#endif // OM_NOT_IMPLEMENTED_GL_TEXTURE
 
 		if (layer == ChunkMeshLayer::Flora || layer == ChunkMeshLayer::Liquid)
 			states.isCullFaceEnabled = false;
@@ -335,8 +335,8 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 		}
 	}
 
-#ifdef OM_NOT_IMPLEMENTED
+#ifdef OM_NOT_IMPLEMENTED_GL_WIREFRAME
 	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
-#endif // OM_NOT_IMPLEMENTED
+#endif // OM_NOT_IMPLEMENTED_GL_WIREFRAME
 }
 

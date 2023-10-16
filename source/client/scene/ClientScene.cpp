@@ -35,7 +35,7 @@ ClientScene::ClientScene() {
 }
 
 void ClientScene::draw(RenderTarget &target, RenderStates states) const {
-#ifdef OM_NOT_IMPLEMENTED
+#ifdef OM_NOT_IMPLEMENTED_SCENE_DRAW
 	if (!m_camera) return;
 
 	// Subtract the camera position - see comment in ClientWorld::draw()
@@ -44,6 +44,6 @@ void ClientScene::draw(RenderTarget &target, RenderStates states) const {
 
 	for (auto &controller : m_controllers)
 		controller->draw(m_registry, target, states);
-#endif // OM_NOT_IMPLEMENTED
+#endif // OM_NOT_IMPLEMENTED_SCENE_DRAW
 }
 

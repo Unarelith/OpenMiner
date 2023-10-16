@@ -31,9 +31,7 @@
 #include "Minimap.hpp"
 
 Minimap::Minimap() {
-#ifdef OM_NOT_IMPLEMENTED
-	m_vbo.layout().setupDefaultLayout();
-#endif // OM_NOT_IMPLEMENTED
+	m_vbo.setupDefaultLayout();
 
 	m_border.setFillColor(gk::Color::Transparent);
 	m_border.setOutlineColor(gk::Color::fromRGBA32(224, 224, 224));
@@ -120,7 +118,7 @@ void Minimap::onChunkRemovedEvent(const ChunkRemovedEvent &event) {
 }
 
 void Minimap::updatePlayerFovVertexBuffer() {
-#ifdef OM_NOT_IMPLEMENTED
+#ifdef OM_NOT_IMPLEMENTED_MINIMAP
 	// FOV/render distance viewer
 	gk::Vertex vertices[3];
 	vertices[0].coord3d[0] = 0.f;
@@ -143,11 +141,11 @@ void Minimap::updatePlayerFovVertexBuffer() {
 	VertexBuffer::bind(&m_vbo);
 	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 	VertexBuffer::bind(nullptr);
-#endif // OM_NOT_IMPLEMENTED
+#endif // OM_NOT_IMPLEMENTED_MINIMAP
 }
 
 void Minimap::draw(RenderTarget &target, RenderStates states) const {
-#ifdef OM_NOT_IMPLEMENTED
+#ifdef OM_NOT_IMPLEMENTED_MINIMAP
 	states.transform *= getTransform();
 
 	target.draw(m_border, states);
@@ -176,6 +174,6 @@ void Minimap::draw(RenderTarget &target, RenderStates states) const {
 		}
 
 	target.draw(m_playerChunk, states);
-#endif // OM_NOT_IMPLEMENTED
+#endif // OM_NOT_IMPLEMENTED_MINIMAP
 }
 

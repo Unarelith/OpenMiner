@@ -42,10 +42,10 @@ void TextureLoader::load(const char *xmlFilename, gk::ResourceHandler &handler) 
 		texture.loadFromFile(path);
 
 		if (textureElement->Attribute("repeat", "true")) {
-#ifdef OM_NOT_IMPLEMENTED
+#ifdef OM_NOT_IMPLEMENTED_GL_TEXTURE
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-#endif // OM_NOT_IMPLEMENTED
+#endif // OM_NOT_IMPLEMENTED_GL_TEXTURE
 		}
 
 		textureElement = textureElement->NextSiblingElement("texture");

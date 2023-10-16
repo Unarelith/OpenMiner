@@ -49,7 +49,7 @@ void RenderingController::update(entt::registry &registry) {
 	});
 }
 
-#ifdef OM_NOT_IMPLEMENTED
+#ifdef OM_NOT_IMPLEMENTED_SCENE_DRAW
 void RenderingController::draw(entt::registry &registry, RenderTarget &target, RenderStates states) {
 	registry.view<DrawableComponent, PositionComponent, RotationComponent>().each([&](auto, auto &drawable, auto &position, auto &rotation) {
 		gk::Transformable transformable;
@@ -61,4 +61,4 @@ void RenderingController::draw(entt::registry &registry, RenderTarget &target, R
 		drawable.draw(target, drawStates);
 	});
 }
-#endif // OM_NOT_IMPLEMENTED
+#endif // OM_NOT_IMPLEMENTED_SCENE_DRAW

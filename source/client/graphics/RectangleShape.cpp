@@ -107,11 +107,11 @@ void RectangleShape::draw(RenderTarget &target, RenderStates states) const {
 	states.isCullFaceEnabled = false;
 	states.isDepthTestEnabled = false;
 
-#ifdef OM_NOT_IMPLEMENTED
+#ifdef OM_NOT_IMPLEMENTED_GL_WIREFRAME
 	if(m_wireframeMode) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
-#endif // OM_NOT_IMPLEMENTED
+#endif // OM_NOT_IMPLEMENTED_GL_WIREFRAME
 	target.drawElements(m_vbo, m_ibo, 0, states);
-#ifdef OM_NOT_IMPLEMENTED
+#ifdef OM_NOT_IMPLEMENTED_GL_WIREFRAME
 	if(m_wireframeMode) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
-#endif // OM_NOT_IMPLEMENTED
+#endif // OM_NOT_IMPLEMENTED_GL_WIREFRAME
 }
