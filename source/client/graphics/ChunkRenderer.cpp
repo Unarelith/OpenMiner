@@ -156,7 +156,7 @@ void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkM
 	}
 
 	// Prepare a list of chunks to draw
-	std::vector<std::pair<ClientChunk*, gk::Transform>> chunksToDraw;
+	std::vector<std::tuple<ClientChunk*, gk::Transform, float>> chunksToDraw;
 	for(auto &it : chunks) {
 		if (!it.second->isInitialized()) continue;
 
@@ -266,7 +266,7 @@ void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkM
 		                   0.f, 0.f, 1.f, 0.f,
 		                   chunkBB0.x, chunkBB0.y, chunkBB0.z, 1.f};
 
-		chunksToDraw.emplace_back(it.second.get(), tf);
+		chunksToDraw.emplace_back(it.second.get(), tf, dist);
 	}
 
 	drawChunks(target, states, chunksToDraw, currentSky);
@@ -275,7 +275,7 @@ void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkM
 	camera.setDPosition(cameraPos);
 }
 
-void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const std::vector<std::pair<ClientChunk*, gk::Transform>> &chunks, const Sky *currentSky) const {
+void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const std::vector<std::tuple<ClientChunk*, gk::Transform, float>> &chunks, const Sky *currentSky) const {
 	++ClientChunk::frameCounter;
 
 #ifdef OM_NOT_IMPLEMENTED
@@ -286,6 +286,8 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 
 	states.texture = &m_textureAtlas.texture();
 	states.view = 1;
+
+	bgfx::setViewMode(states.view, bgfx::ViewMode::DepthDescending);
 
 	float renderDistance[4] = {(float)Config::renderDistance * CHUNK_WIDTH, 0.f, 0.f, 0.f};
 	bgfx::setUniform(m_renderDistance, renderDistance);
@@ -313,23 +315,23 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 			states.isCullFaceEnabled = true;
 
 		for (auto &it : chunks) {
-			std::size_t verticesCount = it.first->getVerticesCount(layer);
+			std::size_t verticesCount = std::get<0>(it)->getVerticesCount(layer);
 			if (verticesCount == 0) continue;
 
 			target.beginDrawing(states);
 
-			bgfx::setTransform(it.second.getRawMatrix());
+			bgfx::setTransform(std::get<1>(it).getRawMatrix());
 
-			it.first->getVertexBuffer().enable((u32)it.first->getBufferOffset(layer), (u32)verticesCount);
+			std::get<0>(it)->getVertexBuffer().enable((u32)std::get<0>(it)->getBufferOffset(layer), (u32)verticesCount);
 
-			bgfx::submit(states.view, states.shader->program());
+			bgfx::submit(states.view, states.shader->program(), (u32)(std::get<2>(it) * 2.f));
 
-			if (!it.first->hasBeenDrawn())
+			if (!std::get<0>(it)->hasBeenDrawn())
 				++ClientChunk::chunkDrawCounter;
 
 			++ClientChunk::chunkDrawCallCounter;
 
-			it.first->setHasBeenDrawn(true);
+			std::get<0>(it)->setHasBeenDrawn(true);
 		}
 	}
 
