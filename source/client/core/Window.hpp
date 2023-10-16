@@ -33,6 +33,7 @@
 #include <gk/core/IntTypes.hpp>
 #include <gk/core/SDLHeaders.hpp>
 
+#include "BgfxCallback.hpp"
 #include "RenderTarget.hpp"
 
 class Window : public RenderTarget {
@@ -85,6 +86,8 @@ class Window : public RenderTarget {
 		Mode m_windowMode = Mode::Windowed;
 
 		bool m_isVerticalSyncEnabled = false;
+
+		BgfxCallback m_callback;
 };
 
 #endif // WINDOW_HPP_

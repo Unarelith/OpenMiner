@@ -142,6 +142,7 @@ void Window::initBGFX() {
 	init.resolution.height = m_size.y;
 	init.resolution.reset = BGFX_RESET_VSYNC;
 	init.type = bgfx::RendererType::OpenGL;
+	init.callback = &m_callback;
 
 	extern bool BGFX_setupPlatformData(SDL_Window *window, bgfx::PlatformData &pd);
 	if (!BGFX_setupPlatformData(m_window.get(), init.platformData)) {
