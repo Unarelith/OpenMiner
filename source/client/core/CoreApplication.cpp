@@ -88,7 +88,7 @@ int CoreApplication::run(bool isProtected) {
 			runGame();
 		}
 		catch(const gk::Exception &e) {
-			gkDebug() << "Fatal error" << e.what();
+			gkError() << "Fatal error" << e.what();
 			exit();
 			return 1;
 		}
