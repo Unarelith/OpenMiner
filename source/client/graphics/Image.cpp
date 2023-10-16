@@ -142,5 +142,5 @@ void Image::draw(RenderTarget &target, RenderStates states) const {
 
 	states.texture = m_texture;
 
-	target.drawElements(m_vbo, target.defaultIndexBuffer(), 6, states);
+	target.drawElements(m_vbo, target.defaultIndexBuffer(), 0, 6, states);
 }

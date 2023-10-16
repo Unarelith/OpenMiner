@@ -95,7 +95,7 @@ void RectangleShape::draw(RenderTarget &target, RenderStates states) const {
 	states.isDepthTestEnabled = false;
 
 	if (m_outlineThickness > 0)
-		target.drawElements(m_vbo, target.defaultIndexBuffer(), 0, states);
+		target.drawElements(m_vbo, target.defaultIndexBuffer(), 0, 0, states);
 	else
-		target.drawElements(m_vbo, target.defaultIndexBuffer(), 6, states);
+		target.drawElements(m_vbo, target.defaultIndexBuffer(), 0, 6, states);
 }
