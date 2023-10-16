@@ -74,7 +74,7 @@ void Text::draw(RenderTarget &target, RenderStates states) const {
 
 	states.transform *= getTransform();
 
-	if (m_background.color() != gk::Color::Transparent)
+	if (m_background.color() != gk::Color::Transparent || m_background.outlineThickness() > 0)
 		target.draw(m_background, states);
 
 	if (m_verticesCount == 0) return;
