@@ -140,28 +140,6 @@ void InventoryCube::updateVertexBuffer(const Block &block, u8 state) {
 	}
 
 	m_vbo.init(vertices, sizeof(vertices), true);
-
-	const u16 indices[nFaces * (nVertsPerFace + 2)] = {
-		0, 1, 2,
-		2, 3, 0,
-
-		4, 5, 6,
-		6, 7, 4,
-
-		8, 9, 10,
-		10, 11, 8,
-
-		12, 13, 14,
-		14, 15, 12,
-
-		16, 17, 18,
-		18, 19, 16,
-
-		20, 21, 22,
-		22, 23, 20,
-	};
-
-	m_ibo.init(indices, sizeof(indices), true);
 }
 
 void InventoryCube::draw(RenderTarget &target, RenderStates states) const {
@@ -179,5 +157,5 @@ void InventoryCube::draw(RenderTarget &target, RenderStates states) const {
 
 	states.isDepthTestEnabled = false;
 
-	target.drawElements(m_vbo, m_ibo, 0, 0, states);
+	target.drawElements(m_vbo, target.cubeIndexBuffer(), 0, 0, states);
 }

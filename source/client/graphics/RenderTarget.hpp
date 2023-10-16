@@ -62,9 +62,11 @@ class RenderTarget {
 		void disableView() { m_view = nullptr; }
 
 		const IndexBuffer &defaultIndexBuffer() const { return m_defaultIndexBuffer; }
+		const IndexBuffer &cubeIndexBuffer() const { return m_cubeIndexBuffer; }
 
 	private:
 		void initDefaultIndexBuffer();
+		void initCubeIndexBuffer();
 
 		gk::IntRect getViewport(const View &view) const;
 
@@ -76,6 +78,7 @@ class RenderTarget {
 		bgfx::UniformHandle m_samplerUniform = BGFX_INVALID_HANDLE;
 
 		IndexBuffer m_defaultIndexBuffer;
+		IndexBuffer m_cubeIndexBuffer;
 };
 
 #endif // RENDERTARGET_HPP_
