@@ -36,14 +36,6 @@ TextButton::TextButton(u16 width, Widget *parent) : Widget(width, 20, parent) {
 	m_background.setClipRect(0, 66, width, 20);
 	m_hoverBackground.setClipRect(0, 86, width, 20);
 	m_disabledBackground.setClipRect(0, 46, width, 20);
-
-	m_backgroundBorder.setClipRect(200 - 2, 66, 2, 20);
-	m_hoverBackgroundBorder.setClipRect(200 - 2, 86, 2, 20);
-	m_disabledBackgroundBorder.setClipRect(200 - 2, 46, 2, 20);
-
-	m_backgroundBorder.setPosition(width - 2.f, 0);
-	m_hoverBackgroundBorder.setPosition(width - 2.f, 0);
-	m_disabledBackgroundBorder.setPosition(width - 2.f, 0);
 }
 
 TextButton::TextButton(const CppCallback &callback, Widget *parent) : TextButton(parent) {
@@ -90,15 +82,12 @@ void TextButton::draw(RenderTarget &target, RenderStates states) const {
 
 	if (!m_isEnabled) {
 		target.draw(m_disabledBackground, states);
-		target.draw(m_disabledBackgroundBorder, states);
 	}
 	else if (m_isHovered) {
 		target.draw(m_hoverBackground, states);
-		target.draw(m_hoverBackgroundBorder, states);
 	}
 	else {
 		target.draw(m_background, states);
-		target.draw(m_backgroundBorder, states);
 	}
 
 	target.draw(m_text, states);

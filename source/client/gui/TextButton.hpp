@@ -69,10 +69,6 @@ class TextButton : public Widget {
 		Image m_hoverBackground{"texture-widgets"};
 		Image m_disabledBackground{"texture-widgets"};
 
-		Image m_backgroundBorder{"texture-widgets"};
-		Image m_hoverBackgroundBorder{"texture-widgets"};
-		Image m_disabledBackgroundBorder{"texture-widgets"};
-
 		Text m_text;
 
 		CppCallback m_cppCallback;
