@@ -34,13 +34,6 @@
 
 CelestialObject::CelestialObject() {
 	m_vbo.setupDefaultLayout();
-
-	static const u16 indices[] = {
-		0, 1, 3,
-		3, 1, 2
-	};
-
-	m_ibo.init(indices, sizeof(indices));
 }
 
 void CelestialObject::setTexture(const std::string &textureName) {
@@ -172,5 +165,5 @@ void CelestialObject::draw(RenderTarget &target, RenderStates states) const {
 	if (m_texture)
 		states.texture = m_texture;
 
-	target.drawElements(m_vbo, m_ibo, 0, 0, states);
+	target.drawElements(m_vbo, target.defaultIndexBuffer(), 0, 6, states);
 }
