@@ -273,6 +273,7 @@ void PlayerBox::updateVertexBuffer() {
 }
 
 void PlayerBox::draw(RenderTarget &target, RenderStates states) const {
+#ifdef OM_NOT_IMPLEMENTED
 	// Subtract the camera position - see comment in ClientWorld::draw()
 	const gk::Vector3d &cameraPosition = m_camera.getDPosition();
 	states.transform.translate(
@@ -285,6 +286,6 @@ void PlayerBox::draw(RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 	states.texture = &m_texture;
 
-	target.draw(m_vbo, GL_QUADS, 0, NUM_QUADS * NUM_VERTICES_PER_QUAD, states);
+	target.draw(m_vbo, 0, NUM_QUADS * NUM_VERTICES_PER_QUAD, states);
+#endif // OM_NOT_IMPLEMENTED
 }
-

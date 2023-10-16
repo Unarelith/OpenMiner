@@ -45,7 +45,7 @@ void RenderTarget::draw(const Drawable &drawable, const RenderStates &states) {
 	drawable.draw(*this, states);
 }
 
-void RenderTarget::draw(const VertexBuffer &vertexBuffer, uint64_t mode, uint32_t firstVertex, uint32_t vertexCount, const RenderStates &states) {
+void RenderTarget::draw(const VertexBuffer &vertexBuffer, u32 firstVertex, u32 vertexCount, const RenderStates &states) {
 	beginDrawing(states);
 
 	if (firstVertex == 0 && vertexCount == 0)
@@ -55,21 +55,10 @@ void RenderTarget::draw(const VertexBuffer &vertexBuffer, uint64_t mode, uint32_
 
 	bgfx::setTransform(states.transform.getRawMatrix());
 
-	bgfx::setState(
-	     BGFX_STATE_WRITE_RGB
-	   | BGFX_STATE_WRITE_A
-	   | BGFX_STATE_WRITE_Z
-	   // | BGFX_STATE_DEPTH_TEST_LESS
-	   | BGFX_STATE_CULL_CW
-	   | BGFX_STATE_MSAA
-	   | BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA)
-	   | mode
-	);
-
 	bgfx::submit(states.view, states.shader->program());
 }
 
-void RenderTarget::drawElements(const VertexBuffer &vertexBuffer, const IndexBuffer &indexBuffer, uint64_t mode, uint32_t count, const RenderStates &states) {
+void RenderTarget::drawElements(const VertexBuffer &vertexBuffer, const IndexBuffer &indexBuffer, u32 count, const RenderStates &states) {
 	beginDrawing(states);
 
 	vertexBuffer.enable();
@@ -116,6 +105,8 @@ void RenderTarget::setBgfxState(const RenderStates &states) {
 
 	if (states.isBlendingEnabled)
 	   state |= BGFX_STATE_BLEND_FUNC(states.blendFuncSrc, states.blendFuncDst);
+
+	state |= states.primitiveType;
 
 	bgfx::setState(state);
 }
