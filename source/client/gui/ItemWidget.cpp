@@ -85,6 +85,8 @@ void ItemWidget::setStack(const std::string &name, u16 amount) {
 }
 
 void ItemWidget::draw(RenderTarget &target, RenderStates states) const {
+	if (stack().amount() == 0) return;
+
 	states.transform *= getTransform();
 
 	if (stack().item().id()) {
