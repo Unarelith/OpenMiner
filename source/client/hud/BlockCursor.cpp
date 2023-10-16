@@ -324,11 +324,6 @@ void BlockCursor::updateAnimationVertexBuffer(const BlockState &blockState, u8f 
 void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 	if (m_selectedBlock.w == -1) return;
 
-#ifdef OM_NOT_IMPLEMENTED
-	glCheck(glDisable(GL_CULL_FACE));
-	glCheck(glEnable(GL_DEPTH_TEST));
-#endif // OM_NOT_IMPLEMENTED
-
 	// Subtract the camera position - see comment in ClientWorld::draw()
 	const gk::Vector3d &cameraPosition = m_player.camera().getDPosition();
 	states.transform.translate(
@@ -340,18 +335,12 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 	target.drawElements(m_vbo, m_ibo, BGFX_STATE_PT_LINES, nFaces * (nVertsPerFace + 2), states);
 
 	if (m_animationStart > 0) {
-#ifdef OM_NOT_IMPLEMENTED
-		glCheck(glEnable(GL_CULL_FACE));
-		glCheck(glBlendFunc(GL_DST_COLOR, GL_ZERO));
-#endif // OM_NOT_IMPLEMENTED
+		states.blendFuncSrc = BGFX_STATE_BLEND_DST_COLOR;
+		states.blendFuncDst = BGFX_STATE_BLEND_ZERO;
 
 		states.texture = m_blockDestroyTexture;
 
 		target.drawElements(m_animationVBO, m_ibo, 0, nFaces * (nVertsPerFace + 2), states);
-
-#ifdef OM_NOT_IMPLEMENTED
-		glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-#endif // OM_NOT_IMPLEMENTED
 	}
 }
 

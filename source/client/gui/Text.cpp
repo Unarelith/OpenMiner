@@ -82,10 +82,8 @@ void Text::draw(RenderTarget &target, RenderStates states) const {
 	states.transform.translate((float)m_padding.x, (float)m_padding.y);
 	states.texture = &m_font.texture();
 
-#ifdef OM_NOT_IMPLEMENTED
-	glDisable(GL_CULL_FACE);
-	glDisable(GL_DEPTH_TEST);
-#endif // OM_NOT_IMPLEMENTED
+	states.isCullFaceEnabled = false;
+	states.isDepthTestEnabled = false;
 
 	target.draw(m_vbo, 0, 0, m_verticesCount, states);
 }

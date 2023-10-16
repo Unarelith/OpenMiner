@@ -29,8 +29,6 @@
 
 #include <gk/core/Rect.hpp>
 
-#include <bgfx/bgfx.h>
-
 #include "RenderStates.hpp"
 #include "View.hpp"
 
@@ -51,6 +49,7 @@ class RenderTarget {
 		void drawElements(const VertexBuffer &vertexBuffer, const IndexBuffer &indexBuffer, uint64_t mode, uint32_t count, const RenderStates &states = RenderStates::Default);
 
 		void beginDrawing(const RenderStates &states);
+		void setBgfxState(const RenderStates &states);
 
 		virtual gk::Vector2u getSize() const = 0;
 

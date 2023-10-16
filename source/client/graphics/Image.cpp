@@ -144,6 +144,9 @@ void Image::updateVertexBuffer() {
 void Image::draw(RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
+	states.isCullFaceEnabled = false;
+	states.isDepthTestEnabled = false;
+
 	states.texture = m_texture;
 
 	target.drawElements(m_vbo, m_ibo, 0, 0, states);

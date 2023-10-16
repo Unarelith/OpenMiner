@@ -81,24 +81,10 @@ void RenderTarget::drawElements(const VertexBuffer &vertexBuffer, const IndexBuf
 
 	bgfx::setTransform(states.transform.getRawMatrix());
 
-	bgfx::setState(
-	     BGFX_STATE_WRITE_RGB
-	   | BGFX_STATE_WRITE_A
-	   | BGFX_STATE_WRITE_Z
-	   // | BGFX_STATE_DEPTH_TEST_LESS
-	   | BGFX_STATE_CULL_CW
-	   | BGFX_STATE_MSAA
-	   | BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA)
-	   | mode
-	);
-
 	bgfx::submit(states.view, states.shader->program());
 }
 
 void RenderTarget::beginDrawing(const RenderStates &states) {
-	//----------------------------------------------------------------------------
-	// Shader & uniforms
-	//----------------------------------------------------------------------------
 	if (!states.shader) return;
 
 	static const Shader *previousShader = nullptr;
@@ -113,11 +99,25 @@ void RenderTarget::beginDrawing(const RenderStates &states) {
 
 	previousShader = states.shader;
 
-	//----------------------------------------------------------------------------
-	// Texture
-	//----------------------------------------------------------------------------
 	if (states.texture)
 		states.texture->enable(0, m_samplerUniform);
+
+	setBgfxState(states);
+}
+
+void RenderTarget::setBgfxState(const RenderStates &states) {
+	u64 state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_WRITE_Z | BGFX_STATE_MSAA;
+
+	if (states.isDepthTestEnabled)
+		state |= BGFX_STATE_DEPTH_TEST_LESS;
+
+	if (states.isCullFaceEnabled)
+		state |= BGFX_STATE_CULL_CW;
+
+	if (states.isBlendingEnabled)
+	   state |= BGFX_STATE_BLEND_FUNC(states.blendFuncSrc, states.blendFuncDst);
+
+	bgfx::setState(state);
 }
 
 gk::IntRect RenderTarget::getViewport(const View& view) const {
