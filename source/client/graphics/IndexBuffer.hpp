@@ -53,8 +53,6 @@ class IndexBuffer : public gk::NonCopyable {
 		bgfx::DynamicIndexBufferHandle m_dynamicHandle = BGFX_INVALID_HANDLE;
 
 		bool m_isDynamic = false;
-
-		const bgfx::Memory *m_data = nullptr;
 };
 
 #endif // INDEXBUFFER_HPP_

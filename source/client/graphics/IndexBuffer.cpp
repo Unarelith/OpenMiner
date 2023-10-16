@@ -41,9 +41,6 @@ IndexBuffer::IndexBuffer(IndexBuffer &&vertexBuffer) {
 	vertexBuffer.m_dynamicHandle.idx = bgfx::kInvalidHandle;
 
 	m_isDynamic = vertexBuffer.m_isDynamic;
-
-	m_data = vertexBuffer.m_data;
-	vertexBuffer.m_data = nullptr;
 }
 
 IndexBuffer::~IndexBuffer() {
@@ -59,9 +56,6 @@ IndexBuffer &IndexBuffer::operator=(IndexBuffer &&vertexBuffer) {
 
 	m_isDynamic = vertexBuffer.m_isDynamic;
 
-	m_data = vertexBuffer.m_data;
-	vertexBuffer.m_data = nullptr;
-
 	return *this;
 }
 
@@ -73,8 +67,8 @@ void IndexBuffer::init(const void *data, uint32_t size, bool isDynamic) {
 			update(data, size);
 		else {
 			m_isDynamic = true;
-			m_data = (data ? bgfx::copy(data, size) : bgfx::alloc(size));
-			m_dynamicHandle = bgfx::createDynamicIndexBuffer(m_data);
+			const bgfx::Memory *mem = (data ? bgfx::copy(data, size) : bgfx::alloc(size));
+			m_dynamicHandle = bgfx::createDynamicIndexBuffer(mem);
 			assert(bgfx::isValid(m_dynamicHandle));
 		}
 	}
@@ -82,8 +76,7 @@ void IndexBuffer::init(const void *data, uint32_t size, bool isDynamic) {
 		assert(!isValid());
 
 		m_isDynamic = false;
-		m_data = bgfx::copy(data, size);
-		m_staticHandle = bgfx::createIndexBuffer(m_data);
+		m_staticHandle = bgfx::createIndexBuffer(bgfx::copy(data, size));
 		assert(bgfx::isValid(m_staticHandle));
 	}
 }
