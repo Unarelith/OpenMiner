@@ -322,8 +322,6 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 
 			it.first->getVertexBuffer().enable((u32)it.first->getBufferOffset(layer), (u32)verticesCount);
 
-			bgfx::setState(BGFX_STATE_DEFAULT);
-
 			bgfx::submit(states.view, states.shader->program());
 
 			if (!it.first->hasBeenDrawn())
