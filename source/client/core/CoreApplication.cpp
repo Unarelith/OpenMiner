@@ -89,7 +89,7 @@ int CoreApplication::run(bool isProtected) {
 		}
 		catch(const gk::Exception &e) {
 			gkDebug() << "Fatal error" << e.what();
-			m_window.close();
+			exit();
 			return 1;
 		}
 		// catch(const std::exception &e) {
@@ -105,25 +105,20 @@ int CoreApplication::run(bool isProtected) {
 		runGame();
 	}
 
-	if (hasBeenInterrupted)
-	{
-		m_stateStack.clear();
-		m_stateStack.clearDeletedStates();
-	}
-
-	if (isInitSuccessful) {
+	if (isInitSuccessful)
 		onExit();
 
-		m_resourceHandler.clear();
+	exit();
 
-		m_window.close();
+	return !isInitSuccessful;
+}
 
-		return 0;
-	}
+void CoreApplication::exit() {
+	m_stateStack.clearAll();
+
+	m_resourceHandler.clear();
 
 	m_window.close();
-
-	return 1;
 }
 
 void CoreApplication::createWindow(u16 width, u16 height, const std::string &title) {

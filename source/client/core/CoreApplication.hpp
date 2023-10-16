@@ -48,6 +48,8 @@ class CoreApplication {
 	protected:
 		virtual bool init();
 
+		void exit();
+
 		void createWindow(u16 width, u16 height, const std::string &title);
 
 		virtual void onEvent(const SDL_Event &event);
