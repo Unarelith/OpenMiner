@@ -75,6 +75,7 @@ void IndexBuffer::init(const void *data, uint32_t size, bool isDynamic) {
 			m_isDynamic = true;
 			m_data = (data ? bgfx::copy(data, size) : bgfx::alloc(size));
 			m_dynamicHandle = bgfx::createDynamicIndexBuffer(m_data);
+			assert(bgfx::isValid(m_dynamicHandle));
 		}
 	}
 	else {
@@ -83,6 +84,7 @@ void IndexBuffer::init(const void *data, uint32_t size, bool isDynamic) {
 		m_isDynamic = false;
 		m_data = bgfx::copy(data, size);
 		m_staticHandle = bgfx::createIndexBuffer(m_data);
+		assert(bgfx::isValid(m_staticHandle));
 	}
 }
 
