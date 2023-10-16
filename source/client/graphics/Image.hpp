@@ -32,7 +32,6 @@
 #include <gk/gl/Transformable.hpp>
 
 #include "Drawable.hpp"
-#include "IndexBuffer.hpp"
 #include "Texture.hpp"
 #include "VertexBuffer.hpp"
 
@@ -70,7 +69,6 @@ class Image : public Drawable, public gk::Transformable {
 		const Texture *m_texture = nullptr;
 
 		VertexBuffer m_vbo;
-		IndexBuffer m_ibo;
 
 	private:
 		u16 m_width = 0;

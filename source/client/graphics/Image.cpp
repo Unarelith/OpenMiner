@@ -31,13 +31,6 @@
 
 Image::Image() {
 	m_vbo.setupDefaultLayout();
-
-	static const u16 indices[] = {
-		0, 1, 3,
-		3, 1, 2
-	};
-
-	m_ibo.init(indices, sizeof(indices));
 }
 
 Image::Image(const std::string &textureName) : Image() {
@@ -149,5 +142,5 @@ void Image::draw(RenderTarget &target, RenderStates states) const {
 
 	states.texture = m_texture;
 
-	target.drawElements(m_vbo, m_ibo, 0, states);
+	target.drawElements(m_vbo, target.defaultIndexBuffer(), 6, states);
 }
