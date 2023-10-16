@@ -62,15 +62,15 @@ void RenderTarget::draw(const VertexBuffer &vertexBuffer, u32 firstVertex, u32 v
 	bgfx::submit(states.view, states.shader->program());
 }
 
-void RenderTarget::drawElements(const VertexBuffer &vertexBuffer, const IndexBuffer &indexBuffer, u32 count, const RenderStates &states) {
+void RenderTarget::drawElements(const VertexBuffer &vertexBuffer, const IndexBuffer &indexBuffer, u32 firstVertex, u32 vertexCount, const RenderStates &states) {
 	beginDrawing(states);
 
 	vertexBuffer.enable();
 
-	if (count == 0)
+	if (firstVertex == 0 && vertexCount == 0)
 		indexBuffer.enable();
 	else
-		indexBuffer.enable(0, count);
+		indexBuffer.enable(firstVertex, vertexCount);
 
 	bgfx::setTransform(states.transform.getRawMatrix());
 

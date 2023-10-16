@@ -47,7 +47,7 @@ class RenderTarget {
 		void draw(const Drawable &drawable, const RenderStates &states = RenderStates::Default);
 
 		void draw(const VertexBuffer &vertexBuffer, u32 firstVertex, u32 vertexCount, const RenderStates &states = RenderStates::Default);
-		void drawElements(const VertexBuffer &vertexBuffer, const IndexBuffer &indexBuffer, u32 count, const RenderStates &states = RenderStates::Default);
+		void drawElements(const VertexBuffer &vertexBuffer, const IndexBuffer &indexBuffer, u32 firstVertex, u32 vertexCount, const RenderStates &states = RenderStates::Default);
 
 		void beginDrawing(const RenderStates &states);
 		void setBgfxState(const RenderStates &states);

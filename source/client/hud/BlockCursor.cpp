@@ -348,7 +348,7 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 
 	states.primitiveType = BGFX_STATE_PT_LINES;
 
-	target.drawElements(m_vbo, m_ibo, nFaces * (nVertsPerFace + 2), states);
+	target.drawElements(m_vbo, m_ibo, 0, 0, states);
 
 	if (m_animationStart > 0) {
 		states.blendFuncSrc = BGFX_STATE_BLEND_DST_COLOR;
@@ -359,7 +359,7 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 		states.view = 1; // Use chunk view for proper blending
 		states.primitiveType = 0; // Defaults to triangles
 
-		target.drawElements(m_animationVBO, m_animationIBO, nFaces * (nVertsPerFace + 2), states);
+		target.drawElements(m_animationVBO, m_animationIBO, 0, 0, states);
 	}
 }
 
