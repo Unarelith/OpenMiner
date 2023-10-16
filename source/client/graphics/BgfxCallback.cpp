@@ -86,7 +86,7 @@ void BgfxCallback::screenShot(const char* _filePath, uint32_t _width, uint32_t _
 	const int32_t len = bx::strLen(_filePath)+5;
 	char* filePath = (char*)alloca(len);
 	bx::strCopy(filePath, len, _filePath);
-	bx::strCat(filePath, len, ".tga");
+	bx::strCat(filePath, len, ".png");
 
 	bx::FileWriter writer;
 	if (bx::open(&writer, filePath)) {
