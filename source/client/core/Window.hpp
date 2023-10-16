@@ -66,7 +66,7 @@ class Window : public RenderTarget {
 
 		const View &getDefaultView() const override { return m_defaultView; }
 
-		static bool saveScreenshot(int x, int y, int w, int h, const std::string &filename) noexcept;
+		static void saveScreenshot(const std::string &filename);
 
 	private:
 		void initBGFX();

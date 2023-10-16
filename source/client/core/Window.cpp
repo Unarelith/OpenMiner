@@ -132,44 +132,11 @@ void Window::resize(unsigned int width, unsigned int height) {
 	SDL_SetWindowSize(m_window.get(), (int)width, (int)height);
 }
 
-// From: https://stackoverflow.com/a/23091336/1392477
-bool Window::saveScreenshot(int x, int y, int w, int h, const std::string &filename) noexcept {
-#ifdef OM_NOT_IMPLEMENTED_GL_SCREENSHOT
-	unsigned char *pixels = new unsigned char[(unsigned int)(w * h) * 4];
-	glReadPixels(x, y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-
-	Uint32 rmask, gmask, bmask, amask;
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	rmask = 0xff000000;
-	gmask = 0x00ff0000;
-	bmask = 0x0000ff00;
-	amask = 0x000000ff;
-#else
-	rmask = 0x000000ff;
-	gmask = 0x0000ff00;
-	bmask = 0x00ff0000;
-	amask = 0xff000000;
-#endif
-
-	SDL_Surface *surf = SDL_CreateRGBSurfaceFrom(pixels, w, h, 8 * 4, w * 4, rmask, gmask, bmask, amask);
-	SDL_Surface *flip = gk::flipSDLSurface(surf);
-	if (IMG_SavePNG(flip, filename.c_str()) < 0) {
-		gkError() << "Failed to save texture to:" << filename;
-		gkError() << "Reason:" << IMG_GetError();
-		return false;
-	}
-
-	SDL_FreeSurface(flip);
-	SDL_FreeSurface(surf);
-	delete[] pixels;
-	return true;
-#else
-	return false;
-#endif // OM_NOT_IMPLEMENTED_GL_SCREENSHOT
+void Window::saveScreenshot(const std::string &filename) {
+	bgfx::requestScreenShot(BGFX_INVALID_HANDLE, filename.c_str());
 }
 
-void Window::initBGFX()
-{
+void Window::initBGFX() {
 	bgfx::Init init;
 	init.resolution.width = m_size.x;
 	init.resolution.height = m_size.y;
