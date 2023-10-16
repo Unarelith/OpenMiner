@@ -249,9 +249,9 @@ using namespace BlockGeometry;
 void BlockCursor::updateVBOCoords(Vertex vertices[nFaces][nVertsPerFace], const BlockState &blockState,
 	float face, u8f orientation)
 {
-	float epsilon = 0.01f; // Prevent Z-fighting
+	float epsilon = 0.001f; // Prevent Z-fighting
 	glm::vec3 bottomLeft{blockState.boundingBox().x - epsilon, blockState.boundingBox().y - epsilon, blockState.boundingBox().z - epsilon};
-	glm::vec3 topRight{blockState.boundingBox().sizeX + epsilon, blockState.boundingBox().sizeY + epsilon, blockState.boundingBox().sizeZ + epsilon};
+	glm::vec3 topRight{blockState.boundingBox().sizeX + epsilon * 2.f, blockState.boundingBox().sizeY + epsilon * 2.f, blockState.boundingBox().sizeZ + epsilon * 2.f};
 	topRight += bottomLeft;
 
 	const glm::mat3 &orientMatrix = orientMatrices[orientation];
