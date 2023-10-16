@@ -50,7 +50,20 @@ BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommand
 
 	m_animationVBO.setupDefaultLayout();
 
-	const u16 indices[BlockGeometry::nFaces * (BlockGeometry::nVertsPerFace + 2)] = {
+	const u16 indices[] = {
+		0, 3, 4, 7,
+		8, 11, 12, 15,
+
+		16, 17, 16, 19,
+		18, 17, 18, 19,
+
+		20, 21, 20, 23,
+		22, 21, 22, 23,
+	};
+
+	m_ibo.init(indices, sizeof(indices));
+
+	const u16 animationIndices[BlockGeometry::nFaces * (BlockGeometry::nVertsPerFace + 2)] = {
 		0, 1, 2,
 		2, 3, 0,
 
@@ -70,7 +83,7 @@ BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommand
 		22, 23, 20,
 	};
 
-	m_ibo.init(indices, sizeof(indices), true);
+	m_animationIBO.init(animationIndices, sizeof(animationIndices));
 }
 
 void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
@@ -346,7 +359,7 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 		states.view = 1; // Use chunk view for proper blending
 		states.primitiveType = 0; // Defaults to triangles
 
-		target.drawElements(m_animationVBO, m_ibo, nFaces * (nVertsPerFace + 2), states);
+		target.drawElements(m_animationVBO, m_animationIBO, nFaces * (nVertsPerFace + 2), states);
 	}
 }
 
