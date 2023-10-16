@@ -33,7 +33,6 @@
 #include <gk/gl/Transformable.hpp>
 
 #include "Drawable.hpp"
-#include "IndexBuffer.hpp"
 #include "VertexBuffer.hpp"
 
 class RectangleShape : public Drawable, public gk::Transformable {
@@ -68,7 +67,6 @@ class RectangleShape : public Drawable, public gk::Transformable {
 		float m_height = 0;
 
 		VertexBuffer m_vbo;
-		IndexBuffer m_ibo;
 
 		gk::Color m_outlineColor{gk::Color::White};
 		int m_outlineThickness = 0;
