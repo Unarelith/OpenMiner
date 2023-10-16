@@ -144,10 +144,10 @@ void GameState::onEvent(const SDL_Event &event) {
 				std::time_t now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 
 				char filename[100];
-				std::strftime(filename, sizeof(filename), "Screenshot-%Y-%m-%d-%H-%M-%S.png", std::localtime(&now));
+				std::strftime(filename, sizeof(filename), "Screenshot-%Y-%m-%d-%H-%M-%S", std::localtime(&now));
 
 				Window::saveScreenshot(filename);
-				m_hud.chat().addChatMessage(0, "Screenshot saved: " + std::string(filename));
+				m_hud.chat().addChatMessage(0, "Screenshot saved: " + std::string(filename) + ".png");
 			}
 
 			for (auto &key : Registry::getInstance().keys()) {
