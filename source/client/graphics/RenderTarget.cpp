@@ -103,8 +103,11 @@ void RenderTarget::setBgfxState(const RenderStates &states) {
 	if (states.isCullFaceEnabled)
 		state |= BGFX_STATE_CULL_CW;
 
-	if (states.isBlendingEnabled)
+	if (states.isBlendingEnabled) {
 	   state |= BGFX_STATE_BLEND_FUNC(states.blendFuncSrc, states.blendFuncDst);
+
+		state |= BGFX_STATE_BLEND_EQUATION(states.blendEquation);
+	}
 
 	state |= states.primitiveType;
 
