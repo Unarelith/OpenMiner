@@ -47,7 +47,6 @@ namespace Config {
 	extern u16 renderDistance;
 	extern u8 ambientOcclusion;
 	extern bool isSmoothLightingEnabled;
-	extern bool isWireframeModeEnabled;
 	extern bool isFullscreenModeEnabled;
 	extern bool isVerticalSyncEnabled;
 	extern bool isStarRenderingEnabled;
@@ -65,6 +64,7 @@ namespace Config {
 	extern bool isChunkMinimapEnabled;
 	extern bool isLightmapViewerEnabled;
 	extern bool isProfilerWindowEnabled;
+	extern bool isWireframeModeEnabled;
 
 	// Other
 	extern std::string defaultUsername;

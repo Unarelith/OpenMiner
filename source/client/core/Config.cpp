@@ -52,7 +52,6 @@ bool Config::isCrosshairVisible = true;
 u16 Config::renderDistance = 8;
 u8 Config::ambientOcclusion = 1;
 bool Config::isSmoothLightingEnabled = true;
-bool Config::isWireframeModeEnabled = false;
 bool Config::isFullscreenModeEnabled = false;
 bool Config::isVerticalSyncEnabled = true;
 bool Config::isStarRenderingEnabled = false; // TODO: Set to 'true' once rendering is optimized
@@ -70,6 +69,7 @@ u8 Config::mouseSensitivity = 8;
 bool Config::isChunkMinimapEnabled = false;
 bool Config::isLightmapViewerEnabled = false;
 bool Config::isProfilerWindowEnabled = false;
+bool Config::isWireframeModeEnabled = false;
 
 // Other
 std::string Config::defaultUsername = "";

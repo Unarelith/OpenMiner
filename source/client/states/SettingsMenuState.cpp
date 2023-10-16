@@ -225,8 +225,6 @@ void SettingsMenuState::addGraphicsButtons() {
 		World::isReloadRequested = true;
 	}, 4, 16, Config::renderDistance);
 
-	addToggleButton("Wireframe Mode", Config::isWireframeModeEnabled, false);
-
 	m_menuWidget.addButton(std::string("Smooth Lighting: ") + (Config::isSmoothLightingEnabled ? "ON" : "OFF"), [&] (TextButton &button) {
 		Config::isSmoothLightingEnabled = !Config::isSmoothLightingEnabled;
 		button.setText(std::string("Smooth Lighting: ") + (Config::isSmoothLightingEnabled ? "ON" : "OFF"));
@@ -333,6 +331,18 @@ void SettingsMenuState::addDebugButtons() {
 	addToggleButton("Show chunk minimap", Config::isChunkMinimapEnabled, false);
 	addToggleButton("Show lightmap viewer", Config::isLightmapViewerEnabled, false);
 	addToggleButton("Show profiler window", Config::isProfilerWindowEnabled, false);
+
+#ifdef OM_DEBUG
+	m_menuWidget.addButton(std::string("Wireframe Mode: ") + (Config::isWireframeModeEnabled ? "ON" : "OFF"), [&] (TextButton &button) {
+		Config::isWireframeModeEnabled = !Config::isWireframeModeEnabled;
+		button.setText(std::string("Wireframe Mode: ") + (Config::isWireframeModeEnabled ? "ON" : "OFF"));
+
+		if (Config::isWireframeModeEnabled)
+			bgfx::setDebug(BGFX_DEBUG_WIREFRAME);
+		else
+			bgfx::setDebug(0);
+	});
+#endif // OM_DEBUG
 
 	updateWidgetPosition();
 }

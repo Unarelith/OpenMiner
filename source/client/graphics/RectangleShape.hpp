@@ -44,8 +44,6 @@ class RectangleShape : public Drawable, public gk::Transformable {
 		const gk::Color &color() const { return m_color; }
 		void setFillColor(const gk::Color &color) { m_color = color; updateVertexBuffer(); }
 
-		void setWireframeMode(bool wireframeMode) { m_wireframeMode = wireframeMode; }
-
 		float width() const { return m_width; }
 		float height() const { return m_height; }
 
@@ -63,8 +61,6 @@ class RectangleShape : public Drawable, public gk::Transformable {
 		void draw(RenderTarget &target, RenderStates states) const override;
 
 		gk::Color m_color;
-
-		bool m_wireframeMode = false;
 
 		float m_width = 0;
 		float m_height = 0;
