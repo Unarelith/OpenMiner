@@ -29,6 +29,7 @@
 
 #include <memory>
 #include <stack>
+#include <queue>
 
 #include "ApplicationState.hpp"
 
@@ -55,6 +56,7 @@ class ApplicationStateStack {
 		void pop();
 
 		void clear() { while(!empty()) pop(); }
+		void clearAll() { clear(); clearDeletedStates(); }
 
 		void clearDeletedStates();
 
@@ -80,10 +82,9 @@ class ApplicationStateStack {
 		static ApplicationStateStack *s_instance;
 
 		std::stack<std::shared_ptr<ApplicationState>> m_states;
-		std::stack<std::shared_ptr<ApplicationState>> m_trash;
+		std::queue<std::shared_ptr<ApplicationState>> m_trash;
 
 		gk::EventHandler *m_eventHandler = nullptr;
 };
-
 
 #endif // APPLICATIONSTATESTACK_HPP_
