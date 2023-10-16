@@ -31,6 +31,7 @@
 
 #include "Camera.hpp"
 #include "Drawable.hpp"
+#include "IndexBuffer.hpp"
 #include "Player.hpp"
 #include "VertexBuffer.hpp"
 
@@ -43,11 +44,13 @@ class PlayerBox : public Drawable, public gk::Transformable, public Player {
 		}
 
 	private:
-		void updateVertexBuffer();
+		void initVertexBuffer();
+		void initIndexBuffer();
 
 		void draw(RenderTarget &target, RenderStates states) const override;
 
 		VertexBuffer m_vbo;
+		IndexBuffer m_ibo;
 
 		const Camera &m_camera;
 

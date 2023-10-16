@@ -33,6 +33,7 @@
 #include "Texture.hpp"
 
 constexpr int NUM_QUADS = 34;
+constexpr int NUM_INDICES_PER_QUAD = 6;
 constexpr int NUM_VERTICES_PER_QUAD = 4;
 constexpr int NUM_VERTEX_ELEMENTS = 5;
 
@@ -254,10 +255,11 @@ PlayerBox::PlayerBox(const Camera &camera)
 {
 	m_vbo.setupDefaultLayout();
 
-	updateVertexBuffer();
+	initVertexBuffer();
+	initIndexBuffer();
 }
 
-void PlayerBox::updateVertexBuffer() {
+void PlayerBox::initVertexBuffer() {
 	Vertex vertices[NUM_QUADS * NUM_VERTICES_PER_QUAD];
 	for (u8 i = 0 ; i < NUM_QUADS * NUM_VERTICES_PER_QUAD ; ++i) {
 		vertices[i].coord3d[0] = modelCoords[i][0];
@@ -269,11 +271,28 @@ void PlayerBox::updateVertexBuffer() {
 		vertices[i].texCoord[1] = 1.f - modelCoords[i][4];
 	}
 
-	m_vbo.init(vertices, sizeof(vertices), true);
+	m_vbo.init(vertices, sizeof(vertices));
+}
+
+void PlayerBox::initIndexBuffer() {
+	u16 indices[NUM_QUADS * NUM_INDICES_PER_QUAD] = {
+		0, 1, 2,
+		2, 3, 0,
+	};
+
+	for (u32 i = 1; i < NUM_QUADS; ++i) {
+		indices[i * NUM_INDICES_PER_QUAD + 0] = u16(indices[0] + i * NUM_VERTICES_PER_QUAD);
+		indices[i * NUM_INDICES_PER_QUAD + 1] = u16(indices[1] + i * NUM_VERTICES_PER_QUAD);
+		indices[i * NUM_INDICES_PER_QUAD + 2] = u16(indices[2] + i * NUM_VERTICES_PER_QUAD);
+		indices[i * NUM_INDICES_PER_QUAD + 3] = u16(indices[3] + i * NUM_VERTICES_PER_QUAD);
+		indices[i * NUM_INDICES_PER_QUAD + 4] = u16(indices[4] + i * NUM_VERTICES_PER_QUAD);
+		indices[i * NUM_INDICES_PER_QUAD + 5] = u16(indices[5] + i * NUM_VERTICES_PER_QUAD);
+	}
+
+	m_ibo.init(indices, sizeof(indices));
 }
 
 void PlayerBox::draw(RenderTarget &target, RenderStates states) const {
-#ifdef OM_NOT_IMPLEMENTED_PLAYERBOX
 	// Subtract the camera position - see comment in ClientWorld::draw()
 	const gk::Vector3d &cameraPosition = m_camera.getDPosition();
 	states.transform.translate(
@@ -286,6 +305,7 @@ void PlayerBox::draw(RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 	states.texture = &m_texture;
 
-	target.draw(m_vbo, 0, NUM_QUADS * NUM_VERTICES_PER_QUAD, states);
-#endif // OM_NOT_IMPLEMENTED_PLAYERBOX
+	states.view = 1;
+
+	target.drawElements(m_vbo, m_ibo, 0, 0, states);
 }
