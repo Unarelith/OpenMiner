@@ -33,9 +33,9 @@ class RenderingController : public AbstractController {
 	public:
 		void update(entt::registry &registry) override;
 
-#ifdef OM_NOT_IMPLEMENTED
+#ifdef OM_NOT_IMPLEMENTED_SCENE_DRAW
 		void draw(entt::registry &registry, RenderTarget &target, RenderStates states) override;
-#endif // OM_NOT_IMPLEMENTED
+#endif // OM_NOT_IMPLEMENTED_SCENE_DRAW
 };
 
 #endif // RENDERINGCONTROLLER_HPP_

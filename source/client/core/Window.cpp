@@ -134,7 +134,7 @@ void Window::resize(unsigned int width, unsigned int height) {
 
 // From: https://stackoverflow.com/a/23091336/1392477
 bool Window::saveScreenshot(int x, int y, int w, int h, const std::string &filename) noexcept {
-#ifdef OM_NOT_IMPLEMENTED
+#ifdef OM_NOT_IMPLEMENTED_GL_SCREENSHOT
 	unsigned char *pixels = new unsigned char[(unsigned int)(w * h) * 4];
 	glReadPixels(x, y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
@@ -165,7 +165,7 @@ bool Window::saveScreenshot(int x, int y, int w, int h, const std::string &filen
 	return true;
 #else
 	return false;
-#endif // OM_NOT_IMPLEMENTED
+#endif // OM_NOT_IMPLEMENTED_GL_SCREENSHOT
 }
 
 void Window::initBGFX()
