@@ -85,7 +85,7 @@ void Text::draw(RenderTarget &target, RenderStates states) const {
 	states.isCullFaceEnabled = false;
 	states.isDepthTestEnabled = false;
 
-	target.draw(m_vbo, 0, 0, m_verticesCount, states);
+	target.draw(m_vbo, 0, m_verticesCount, states);
 }
 
 void Text::updateVertexBuffer() const {

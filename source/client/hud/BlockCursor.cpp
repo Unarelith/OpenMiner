@@ -332,7 +332,9 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 		float(m_selectedBlock.z - cameraPosition.z)
 	);
 
-	target.drawElements(m_vbo, m_ibo, BGFX_STATE_PT_LINES, nFaces * (nVertsPerFace + 2), states);
+	states.primitiveType = BGFX_STATE_PT_LINES;
+
+	target.drawElements(m_vbo, m_ibo, nFaces * (nVertsPerFace + 2), states);
 
 	if (m_animationStart > 0) {
 		states.blendFuncSrc = BGFX_STATE_BLEND_DST_COLOR;
@@ -340,7 +342,9 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 
 		states.texture = m_blockDestroyTexture;
 
-		target.drawElements(m_animationVBO, m_ibo, 0, nFaces * (nVertsPerFace + 2), states);
+		states.primitiveType = 0; // Defaults to triangles
+
+		target.drawElements(m_animationVBO, m_ibo, nFaces * (nVertsPerFace + 2), states);
 	}
 }
 

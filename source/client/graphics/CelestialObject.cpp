@@ -172,5 +172,5 @@ void CelestialObject::draw(RenderTarget &target, RenderStates states) const {
 	if (m_texture)
 		states.texture = m_texture;
 
-	target.drawElements(m_vbo, m_ibo, 0, 0, states);
+	target.drawElements(m_vbo, m_ibo, 0, states);
 }

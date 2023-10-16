@@ -110,7 +110,7 @@ void RectangleShape::draw(RenderTarget &target, RenderStates states) const {
 #ifdef OM_NOT_IMPLEMENTED
 	if(m_wireframeMode) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 #endif // OM_NOT_IMPLEMENTED
-	target.drawElements(m_vbo, m_ibo, 0, 0, states);
+	target.drawElements(m_vbo, m_ibo, 0, states);
 #ifdef OM_NOT_IMPLEMENTED
 	if(m_wireframeMode) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 #endif // OM_NOT_IMPLEMENTED

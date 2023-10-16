@@ -179,5 +179,5 @@ void InventoryCube::draw(RenderTarget &target, RenderStates states) const {
 
 	states.isDepthTestEnabled = false;
 
-	target.drawElements(m_vbo, m_ibo, 0, nFaces * (nVertsPerFace + 2), states);
+	target.drawElements(m_vbo, m_ibo, nFaces * (nVertsPerFace + 2), states);
 }
