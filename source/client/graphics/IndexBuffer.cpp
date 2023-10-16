@@ -34,6 +34,8 @@ IndexBuffer::IndexBuffer() {
 }
 
 IndexBuffer::IndexBuffer(IndexBuffer &&indexBuffer) {
+	if (isValid()) free();
+
 	m_staticHandle.idx = indexBuffer.m_staticHandle.idx;
 	indexBuffer.m_staticHandle.idx = bgfx::kInvalidHandle;
 
@@ -48,6 +50,8 @@ IndexBuffer::~IndexBuffer() {
 }
 
 IndexBuffer &IndexBuffer::operator=(IndexBuffer &&indexBuffer) {
+	if (isValid()) free();
+
 	m_staticHandle.idx = indexBuffer.m_staticHandle.idx;
 	indexBuffer.m_staticHandle.idx = bgfx::kInvalidHandle;
 

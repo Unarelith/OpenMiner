@@ -36,6 +36,8 @@ VertexBuffer::VertexBuffer() {
 }
 
 VertexBuffer::VertexBuffer(VertexBuffer &&vertexBuffer) {
+	if (isValid()) free();
+
 	m_staticHandle.idx = vertexBuffer.m_staticHandle.idx;
 	vertexBuffer.m_staticHandle.idx = bgfx::kInvalidHandle;
 
@@ -55,6 +57,8 @@ VertexBuffer::~VertexBuffer() {
 }
 
 VertexBuffer &VertexBuffer::operator=(VertexBuffer &&vertexBuffer) {
+	if (isValid()) free();
+
 	m_staticHandle.idx = vertexBuffer.m_staticHandle.idx;
 	vertexBuffer.m_staticHandle.idx = bgfx::kInvalidHandle;
 
