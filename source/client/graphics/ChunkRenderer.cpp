@@ -278,10 +278,6 @@ void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkM
 void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const std::vector<std::tuple<ClientChunk*, gk::Transform, float>> &chunks, const Sky *currentSky) const {
 	++ClientChunk::frameCounter;
 
-#ifdef OM_NOT_IMPLEMENTED_GL_WIREFRAME
-	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
-#endif // OM_NOT_IMPLEMENTED_GL_WIREFRAME
-
 	states.isDepthTestEnabled = true;
 
 	states.texture = &m_textureAtlas.texture();
@@ -334,9 +330,5 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 			std::get<0>(it)->setHasBeenDrawn(true);
 		}
 	}
-
-#ifdef OM_NOT_IMPLEMENTED_GL_WIREFRAME
-	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
-#endif // OM_NOT_IMPLEMENTED_GL_WIREFRAME
 }
 

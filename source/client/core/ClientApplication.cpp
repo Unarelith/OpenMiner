@@ -105,6 +105,9 @@ bool ClientApplication::init() {
 	m_window.setVerticalSyncEnabled(Config::isVerticalSyncEnabled);
 	m_window.disableView();
 
+	if (Config::isWireframeModeEnabled)
+		bgfx::setDebug(BGFX_DEBUG_WIREFRAME);
+
 	m_resourceHandler.loadConfigFile<TextureLoader>("resources/config/textures.xml");
 	m_resourceHandler.add<Font>("font-ascii", "texture-font", "resources/textures/font.properties");
 	m_resourceHandler.add<TextureAtlas>("atlas-blocks");
