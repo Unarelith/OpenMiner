@@ -27,6 +27,8 @@
 #ifndef MINIMAP_HPP_
 #define MINIMAP_HPP_
 
+#include <unordered_map>
+
 #include <gk/core/SDLHeaders.hpp>
 
 #include "Events.hpp"

@@ -118,9 +118,8 @@ void Minimap::onChunkRemovedEvent(const ChunkRemovedEvent &event) {
 }
 
 void Minimap::updatePlayerFovVertexBuffer() {
-#ifdef OM_NOT_IMPLEMENTED_MINIMAP
 	// FOV/render distance viewer
-	gk::Vertex vertices[3];
+	Vertex vertices[3];
 	vertices[0].coord3d[0] = 0.f;
 	vertices[0].coord3d[1] = 0.f;
 
@@ -138,14 +137,10 @@ void Minimap::updatePlayerFovVertexBuffer() {
 		vertices[i].color[3] = color.a;
 	}
 
-	VertexBuffer::bind(&m_vbo);
-	m_vbo.setData(sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-	VertexBuffer::bind(nullptr);
-#endif // OM_NOT_IMPLEMENTED_MINIMAP
+	m_vbo.init(vertices, sizeof(vertices), true);
 }
 
 void Minimap::draw(RenderTarget &target, RenderStates states) const {
-#ifdef OM_NOT_IMPLEMENTED_MINIMAP
 	states.transform *= getTransform();
 
 	target.draw(m_border, states);
@@ -155,7 +150,7 @@ void Minimap::draw(RenderTarget &target, RenderStates states) const {
 		states2.transform.translate(minimapSize / 2 + chunkSize / 2, minimapSize / 2 + chunkSize / 2);
 		states2.transform *= m_playerFovRotationTransform;
 
-		target.draw(m_vbo, GL_TRIANGLES, 0, 3, states2);
+		target.draw(m_vbo, 0, 3, states2);
 	}
 
 	states.transform.translate(
@@ -174,6 +169,5 @@ void Minimap::draw(RenderTarget &target, RenderStates states) const {
 		}
 
 	target.draw(m_playerChunk, states);
-#endif // OM_NOT_IMPLEMENTED_MINIMAP
 }
 
