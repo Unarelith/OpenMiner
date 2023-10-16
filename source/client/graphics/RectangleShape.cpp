@@ -104,10 +104,8 @@ void RectangleShape::updateVertexBuffer() {
 void RectangleShape::draw(RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 
-#ifdef OM_NOT_IMPLEMENTED
-	glCheck(glDisable(GL_CULL_FACE));
-	glCheck(glDisable(GL_DEPTH_TEST));
-#endif // OM_NOT_IMPLEMENTED
+	states.isCullFaceEnabled = false;
+	states.isDepthTestEnabled = false;
 
 #ifdef OM_NOT_IMPLEMENTED
 	if(m_wireframeMode) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));

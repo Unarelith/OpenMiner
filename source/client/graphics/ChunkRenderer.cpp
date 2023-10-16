@@ -280,9 +280,9 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 
 #ifdef OM_NOT_IMPLEMENTED
 	if(Config::isWireframeModeEnabled) glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
-
-	glCheck(glEnable(GL_DEPTH_TEST));
 #endif // OM_NOT_IMPLEMENTED
+
+	states.isDepthTestEnabled = true;
 
 	states.texture = &m_textureAtlas.texture();
 	states.view = 1;
@@ -305,12 +305,12 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 		// Disable mipmaps for specific layers
 		glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL,
 			(layer == ChunkMeshLayer::NoMipMap || layer == ChunkMeshLayer::Flora) ? 0 : Config::mipmapLevels));
+#endif // OM_NOT_IMPLEMENTED
 
 		if (layer == ChunkMeshLayer::Flora || layer == ChunkMeshLayer::Liquid)
-			glCheck(glDisable(GL_CULL_FACE));
+			states.isCullFaceEnabled = false;
 		else
-			glCheck(glEnable(GL_CULL_FACE));
-#endif // OM_NOT_IMPLEMENTED
+			states.isCullFaceEnabled = true;
 
 		for (auto &it : chunks) {
 			std::size_t verticesCount = it.first->getVerticesCount(layer);

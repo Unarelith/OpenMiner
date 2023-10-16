@@ -177,10 +177,7 @@ void InventoryCube::draw(RenderTarget &target, RenderStates states) const {
 
 	states.texture = &m_textureAtlas->texture();
 
-#ifdef OM_NOT_IMPLEMENTED
-	glCheck(glEnable(GL_CULL_FACE));
-	glCheck(glEnable(GL_DEPTH_TEST));
-#endif // OM_NOT_IMPLEMENTED
+	states.isDepthTestEnabled = false;
 
 	target.drawElements(m_vbo, m_ibo, 0, nFaces * (nVertsPerFace + 2), states);
 }

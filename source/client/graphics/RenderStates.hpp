@@ -32,6 +32,8 @@
 #include <gk/core/IntTypes.hpp>
 #include <gk/gl/Transform.hpp>
 
+#include <bgfx/bgfx.h>
+
 class Shader;
 class Texture;
 
@@ -44,6 +46,13 @@ struct RenderStates {
 	const Shader *shader = nullptr;
 
 	uint16_t view = 0;
+
+	bool isDepthTestEnabled = true;
+	bool isCullFaceEnabled = true;
+	bool isBlendingEnabled = true;
+
+	u64 blendFuncSrc = BGFX_STATE_BLEND_SRC_ALPHA;
+	u64 blendFuncDst = BGFX_STATE_BLEND_INV_SRC_ALPHA;
 
 	static const RenderStates Default; // Defined in RenderTarget.cpp
 };

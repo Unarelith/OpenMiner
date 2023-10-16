@@ -285,10 +285,6 @@ void PlayerBox::draw(RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 	states.texture = &m_texture;
 
-#ifdef OM_NOT_IMPLEMENTED
-	glCheck(glEnable(GL_CULL_FACE));
-#endif // OM_NOT_IMPLEMENTED
-
 	target.draw(m_vbo, GL_QUADS, 0, NUM_QUADS * NUM_VERTICES_PER_QUAD, states);
 }
 
