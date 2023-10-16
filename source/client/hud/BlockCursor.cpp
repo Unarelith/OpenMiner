@@ -62,28 +62,6 @@ BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommand
 	};
 
 	m_ibo.init(indices, sizeof(indices));
-
-	const u16 animationIndices[BlockGeometry::nFaces * (BlockGeometry::nVertsPerFace + 2)] = {
-		0, 1, 2,
-		2, 3, 0,
-
-		4, 5, 6,
-		6, 7, 4,
-
-		8, 9, 10,
-		10, 11, 8,
-
-		12, 13, 14,
-		14, 15, 12,
-
-		16, 17, 18,
-		18, 19, 16,
-
-		20, 21, 22,
-		22, 23, 20,
-	};
-
-	m_animationIBO.init(animationIndices, sizeof(animationIndices));
 }
 
 void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
@@ -359,7 +337,7 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 		states.view = 1; // Use chunk view for proper blending
 		states.primitiveType = 0; // Defaults to triangles
 
-		target.drawElements(m_animationVBO, m_animationIBO, 0, 0, states);
+		target.drawElements(m_animationVBO, target.cubeIndexBuffer(), 0, 0, states);
 	}
 }
 

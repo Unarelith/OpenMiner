@@ -37,9 +37,11 @@ void RenderTarget::init() {
 	m_samplerUniform = bgfx::createUniform("u_tex", bgfx::UniformType::Sampler);
 
 	initDefaultIndexBuffer();
+	initCubeIndexBuffer();
 }
 
 void RenderTarget::free() {
+	m_cubeIndexBuffer.free();
 	m_defaultIndexBuffer.free();
 
 	bgfx::destroy(m_samplerUniform);
@@ -159,4 +161,28 @@ void RenderTarget::initDefaultIndexBuffer() {
 	}
 
 	m_defaultIndexBuffer.init(indices, 6 * 5 * sizeof(u16));
+}
+
+void RenderTarget::initCubeIndexBuffer() {
+	const u16 indices[6 * 6] = {
+		0, 1, 2,
+		2, 3, 0,
+
+		4, 5, 6,
+		6, 7, 4,
+
+		8, 9, 10,
+		10, 11, 8,
+
+		12, 13, 14,
+		14, 15, 12,
+
+		16, 17, 18,
+		18, 19, 16,
+
+		20, 21, 22,
+		22, 23, 20,
+	};
+
+	m_cubeIndexBuffer.init(indices, sizeof(indices));
 }

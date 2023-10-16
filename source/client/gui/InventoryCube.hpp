@@ -30,7 +30,6 @@
 #include <gk/gl/Transformable.hpp>
 
 #include "Drawable.hpp"
-#include "IndexBuffer.hpp"
 #include "VertexBuffer.hpp"
 #include "View.hpp"
 
@@ -53,7 +52,6 @@ class InventoryCube : public Drawable, public gk::Transformable {
 		const TextureAtlas *m_textureAtlas;
 
 		VertexBuffer m_vbo;
-		IndexBuffer m_ibo;
 
 		gk::Transformable m_transform;
 

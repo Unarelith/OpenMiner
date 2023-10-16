@@ -67,10 +67,9 @@ class BlockCursor : public Drawable {
 		ClientCommandHandler &m_client;
 
 		VertexBuffer m_vbo;
-		VertexBuffer m_animationVBO;
-
 		IndexBuffer m_ibo;
-		IndexBuffer m_animationIBO;
+
+		VertexBuffer m_animationVBO;
 
 		unsigned int m_animationStart = 0;
 		glm::ivec4 m_selectedBlock{0, 0, 0, -1};
