@@ -51,12 +51,11 @@ struct RenderStates {
 	bool isCullFaceEnabled = true;
 	bool isBlendingEnabled = true;
 
-	u64 blendFuncSrc = BGFX_STATE_BLEND_SRC_ALPHA;
-	u64 blendFuncDst = BGFX_STATE_BLEND_INV_SRC_ALPHA;
+	u64 blendFuncColorSrc = BGFX_STATE_BLEND_SRC_ALPHA;
+	u64 blendFuncColorDst = BGFX_STATE_BLEND_INV_SRC_ALPHA;
 
-	bool isBlendFuncSeparate = false;
-	u64 blendFuncAlphaSrc = BGFX_STATE_BLEND_SRC_ALPHA;
-	u64 blendFuncAlphaDst = BGFX_STATE_BLEND_INV_SRC_ALPHA;
+	u64 blendFuncAlphaSrc = BGFX_STATE_BLEND_ZERO;
+	u64 blendFuncAlphaDst = BGFX_STATE_BLEND_ONE;
 
 	u64 blendEquation = BGFX_STATE_BLEND_EQUATION_ADD;
 
