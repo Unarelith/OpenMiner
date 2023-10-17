@@ -329,8 +329,8 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 	target.drawElements(m_vbo, m_ibo, 0, 0, states);
 
 	if (m_animationStart > 0) {
-		states.blendFuncSrc = BGFX_STATE_BLEND_DST_COLOR;
-		states.blendFuncDst = BGFX_STATE_BLEND_ZERO;
+		states.blendFuncColorSrc = BGFX_STATE_BLEND_DST_COLOR;
+		states.blendFuncColorDst = BGFX_STATE_BLEND_ZERO;
 
 		states.texture = m_blockDestroyTexture;
 

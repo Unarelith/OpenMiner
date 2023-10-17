@@ -110,12 +110,10 @@ void RenderTarget::setBgfxState(const RenderStates &states) {
 		state |= BGFX_STATE_CULL_CW;
 
 	if (states.isBlendingEnabled) {
-		if (!states.isBlendFuncSeparate) {
-			state |= BGFX_STATE_BLEND_FUNC(states.blendFuncSrc, states.blendFuncDst);
-		}
-		else {
-			state |= BGFX_STATE_BLEND_FUNC_SEPARATE(states.blendFuncSrc, states.blendFuncDst, states.blendFuncAlphaSrc, states.blendFuncAlphaDst);
-		}
+		state |= BGFX_STATE_BLEND_FUNC_SEPARATE(
+			states.blendFuncColorSrc, states.blendFuncColorDst,
+			states.blendFuncAlphaSrc, states.blendFuncAlphaDst
+		);
 
 		state |= BGFX_STATE_BLEND_EQUATION(states.blendEquation);
 	}
