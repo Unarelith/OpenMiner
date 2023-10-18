@@ -1,4 +1,4 @@
-#include <SDL2/SDL_syswm.h>
+#include <SDL_syswm.h>
 
 #include <gk/core/SDLHeaders.hpp>
 
