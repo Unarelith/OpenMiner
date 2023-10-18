@@ -15,16 +15,22 @@ function(compile_shaders)
 
 			set(BGFX_SHADER_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/external/bgfx.cmake/bgfx/src")
 
+			if (UNIX AND NOT APPLE)
+				set(SHADERC "${CMAKE_BINARY_DIR}/shaderc")
+			else()
+				set(SHADERC bgfx::shaderc)
+			endif()
+
 			add_custom_command(
 				OUTPUT ${OUT_VERTEX}
 				DEPENDS ${IN_VERTEX} ${IN_DEF}
-				COMMAND ${CMAKE_BINARY_DIR}/shaderc --type vertex --platform ${platform} --profile ${profile} -f ${IN_VERTEX} --varyingdef ${IN_DEF} -o ${OUT_VERTEX} -i "${BGFX_SHADER_INCLUDE_PATH}"
+				COMMAND ${SHADERC} --type vertex --platform ${platform} --profile ${profile} -f ${IN_VERTEX} --varyingdef ${IN_DEF} -o ${OUT_VERTEX} -i "${BGFX_SHADER_INCLUDE_PATH}"
 			)
 
 			add_custom_command(
 				OUTPUT ${OUT_FRAGMENT}
 				DEPENDS ${IN_FRAGMENT} ${IN_DEF}
-				COMMAND ${CMAKE_BINARY_DIR}/shaderc --type fragment --platform ${platform} --profile ${profile} -f ${IN_FRAGMENT} --varyingdef ${IN_DEF} -o ${OUT_FRAGMENT} -i "${BGFX_SHADER_INCLUDE_PATH}"
+				COMMAND ${SHADERC} --type fragment --platform ${platform} --profile ${profile} -f ${IN_FRAGMENT} --varyingdef ${IN_DEF} -o ${OUT_FRAGMENT} -i "${BGFX_SHADER_INCLUDE_PATH}"
 			)
 
 			list(APPEND SHADER_OUTPUT_LIST ${OUT_VERTEX} ${OUT_FRAGMENT})
