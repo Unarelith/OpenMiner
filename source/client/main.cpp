@@ -26,24 +26,11 @@
  */
 #include "ClientApplication.hpp"
 
-// Use discrete GPU by default in Windows
-// from https://gist.github.com/statico/6809850727c708f08458
-// Thanks to Hopson for pointing this out
-#ifdef _WIN32
-extern "C" {
-	#include <windows.h>
-
-	// http://developer.download.nvidia.com/devzone/devcenter/gamegraphics/files/OptimusRenderingPolicies.pdf
-	__declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
-
-	// https://gpuopen.com/amdpowerxpressrequesthighperformance/
-	__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
-}
-#endif
-
 // Fix the scaling problem encountered with Windows
 // From: https://discourse.libsdl.org/t/sdl-getdesktopdisplaymode-resolution-reported-in-windows-10-when-using-app-scaling/22389/4
 #ifdef _WIN32
+#include <windows.h>
+
 typedef enum PROCESS_DPI_AWARENESS {
 	PROCESS_DPI_UNAWARE = 0,
 	PROCESS_SYSTEM_DPI_AWARE = 1,
