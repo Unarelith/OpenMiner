@@ -69,6 +69,8 @@ GameState::GameState()
 
 	m_skyColor = bgfx::createUniform("u_skyColor", bgfx::UniformType::Vec4);
 	m_sunlightIntensity = bgfx::createUniform("u_sunlightIntensity", bgfx::UniformType::Vec4);
+
+	m_fbo.init(Config::screenWidth, Config::screenHeight);
 }
 
 GameState::~GameState() {
@@ -211,9 +213,7 @@ void GameState::update() {
 void GameState::initShaders() {
 	m_shader.loadFromFile("game");
 
-#ifdef OM_NOT_IMPLEMENTED_GL_FRAMEBUFFER
 	m_fbo.loadShader("screen");
-#endif // OM_NOT_IMPLEMENTED_GL_FRAMEBUFFER
 }
 
 void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
@@ -249,9 +249,7 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 		}
 	}
 
-#ifdef OM_NOT_IMPLEMENTED_GL_FRAMEBUFFER
 	m_fbo.begin();
-#endif // OM_NOT_IMPLEMENTED_GL_FRAMEBUFFER
 
 	states.shader = &m_shader;
 
@@ -266,9 +264,7 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 
 	target.draw(m_hud.blockCursor(), states);
 
-#ifdef OM_NOT_IMPLEMENTED_GL_FRAMEBUFFER
 	m_fbo.end();
-#endif // OM_NOT_IMPLEMENTED_GL_FRAMEBUFFER
 
 	target.draw(m_hud, states);
 }

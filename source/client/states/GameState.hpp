@@ -34,7 +34,6 @@
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
-#include "Config.hpp"
 #include "DrawableState.hpp"
 #include "Framebuffer.hpp"
 #include "HUD.hpp"
@@ -80,7 +79,7 @@ class GameState : public DrawableState {
 
 		Shader m_shader;
 
-		Framebuffer m_fbo{Config::screenWidth, Config::screenHeight};
+		Framebuffer m_fbo;
 
 		Camera m_camera{70.0f, DIST_NEAR, DIST_FAR};
 		ClientPlayer m_player{m_camera};
