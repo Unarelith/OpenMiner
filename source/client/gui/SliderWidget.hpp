@@ -73,7 +73,6 @@ class SliderWidget : public Widget {
 		int m_max = 100;
 
 		float m_percentage = 0.f;
-		int m_previousValue = 0;
 
 		bool m_isDragging = false;
 
