@@ -1,23 +1,23 @@
-#version 120
+$input v_position, v_texcoord0
 
-varying vec2 v_texCoord;
-varying vec2 v_coord2d;
+#include <bgfx_shader.sh>
 
-uniform sampler2D screenTexture;
-uniform sampler2D depthTexture;
+SAMPLER2D(s_colorTexture, 0);
+SAMPLER2D(s_depthTexture, 1);
 
-uniform int u_effectType;
-uniform float u_fogDepth;
-uniform vec4 u_fogColor;
+uniform vec4 u_effectType;
+uniform vec4 u_depthFogColor;
+
+#define u_fogDepth u_effectType.y
 
 void main() {
-	vec4 color = texture2D(screenTexture, v_texCoord);
-	float depth = texture2D(depthTexture, v_texCoord).r;
+	vec4 color = texture2D(s_colorTexture, v_texcoord0).rgba;
+	float depth = texture2D(s_depthTexture, v_texcoord0).r;
 
 	// Underwater effect
-	if (u_effectType == 1) {
+	if (u_effectType.x == 1) {
 		/* color.rgb = mix(color.rgb, vec3(0, 0.5, 1), clamp(pow(depth, 20.0), 0.0, 1.0)); */
-		color.rgb = mix(color.rgb, u_fogColor.rgb, clamp(pow(depth, u_fogDepth), 0.0, 1.0));
+		color.rgb = mix(color.rgb, u_depthFogColor.rgb, clamp(pow(depth, u_fogDepth), 0.0, 1.0));
 	}
 
 	// Grayscale
@@ -26,7 +26,7 @@ void main() {
 	/* color = vec4(average, average, average, 1.0); */
 
 	// Inverted colors
-	/* color = vec4(vec3(1.0 - texture2D(screenTexture, v_texCoord)), 1.0); */
+	/* color = vec4(vec3(1.0 - texture2D(s_colorTexture, v_texcoord0)), 1.0); */
 
 	gl_FragColor = color;
 }
@@ -69,7 +69,7 @@ void main() {
 //
 // 	vec3 sampleTex[9];
 // 	for(int i = 0; i < 9; i++) {
-// 		sampleTex[i] = vec3(texture2D(screenTexture, v_texCoord.st + offsets[i]));
+// 		sampleTex[i] = vec3(texture2D(s_colorTexture, v_texcoord0.st + offsets[i]));
 // 	}
 //
 // 	vec3 col = vec3(0.0);
