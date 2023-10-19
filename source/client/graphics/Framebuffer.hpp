@@ -28,10 +28,12 @@
 #define FRAMEBUFFER_HPP_
 
 #include "Shader.hpp"
+#include "Texture.hpp"
 #include "VertexBuffer.hpp"
 
 class Framebuffer : public gk::NonCopyable {
 	public:
+		Framebuffer();
 		Framebuffer(u16 width, u16 height);
 		Framebuffer(Framebuffer &&) = default;
 		~Framebuffer();
@@ -39,24 +41,25 @@ class Framebuffer : public gk::NonCopyable {
 		Framebuffer &operator=(Framebuffer &&) = default;
 
 		void init(u16 width, u16 height);
-		void clear();
+		void free();
 
 		void loadShader(const std::string &name);
 
 		void begin() const;
 		void end() const;
 
-		static void bind(const Framebuffer *framebuffer);
+		static const u32 view = 2;
 
 	private:
-#ifdef OM_NOT_IMPLEMENTED_GL_FRAMEBUFFER
-		GLuint m_id = 0;
+		bgfx::UniformHandle m_colorTextureSampler = BGFX_INVALID_HANDLE;
+		bgfx::UniformHandle m_depthTextureSampler = BGFX_INVALID_HANDLE;
 
-		GLuint m_colorTexID = 0;
-		GLuint m_depthTexID = 0;
+		bgfx::UniformHandle m_effectTypeUniform = BGFX_INVALID_HANDLE;
+		bgfx::UniformHandle m_depthFogColorUniform = BGFX_INVALID_HANDLE;
 
-		GLuint m_rbo = 0;
-#endif // OM_NOT_IMPLEMENTED_GL_FRAMEBUFFER
+		bgfx::TextureHandle m_textures[2] = {BGFX_INVALID_HANDLE, BGFX_STATE_BLEND_INV_SRC_ALPHA};
+
+		bgfx::FrameBufferHandle m_handle = BGFX_INVALID_HANDLE;
 
 		Shader m_shader;
 		VertexBuffer m_vbo;
