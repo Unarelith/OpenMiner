@@ -30,14 +30,17 @@
 #include "GameConfig.hpp"
 
 Framebuffer::Framebuffer() {
-	float quad[24] = {
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		-1.0f, -1.0f,  0.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f, 0.0f,
+	const float minv = (bgfx::getCaps()->originBottomLeft) ? 0.0f : 1.0f;
+	const float maxv = (bgfx::getCaps()->originBottomLeft) ? 1.0f : 0.0f;
 
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		 1.0f, -1.0f,  1.0f, 0.0f,
-		 1.0f,  1.0f,  1.0f, 1.0f
+	float quad[24] = {
+		-1.0f,  1.0f,  0.0f, maxv,
+		-1.0f, -1.0f,  0.0f, minv,
+		 1.0f, -1.0f,  1.0f, minv,
+
+		-1.0f,  1.0f,  0.0f, maxv,
+		 1.0f, -1.0f,  1.0f, minv,
+		 1.0f,  1.0f,  1.0f, maxv,
 	};
 
 	m_vbo.layout().begin()
