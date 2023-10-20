@@ -13,7 +13,7 @@ $output v_position, v_normal, v_color0, v_texcoord0, v_texcoord1, v_texcoord2
 
 void main() {
 	// Used for lighting
-	v_position = u_model[0] * vec4(a_position.xyz, 1.0);
+	v_position = mul(u_model[0], vec4(a_position.xyz, 1.0));
 	v_normal = vec4(a_normal, 1.0);
 
 	v_color0 = a_color0;
@@ -30,7 +30,7 @@ void main() {
 	v_blockFace = a_position.w;
 
 	// Distance from eye
-	v_dist = length(u_view * v_position);
+	v_dist = length(mul(u_view, v_position));
 
-	gl_Position = u_proj * u_view * v_position;
+	gl_Position = mul(u_proj, mul(u_view, v_position));
 }
