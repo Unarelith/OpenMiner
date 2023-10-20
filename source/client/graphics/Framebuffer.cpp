@@ -84,9 +84,15 @@ void Framebuffer::init(u16 width, u16 height) {
 
 	bgfx::setViewRect(view, 0, 0, width, height);
 	bgfx::setViewClear(view, BGFX_CLEAR_COLOR);
+
+	bgfx::setViewFrameBuffer(0, m_handle);
+	bgfx::setViewFrameBuffer(1, m_handle);
 }
 
 void Framebuffer::free() {
+	bgfx::setViewFrameBuffer(0, BGFX_INVALID_HANDLE);
+	bgfx::setViewFrameBuffer(1, BGFX_INVALID_HANDLE);
+
 	if (bgfx::isValid(m_handle))
 		bgfx::destroy(m_handle);
 
@@ -107,12 +113,7 @@ void Framebuffer::loadShader(const std::string &name) {
 	m_shader.loadFromFile(name);
 }
 
-void Framebuffer::begin() const {
-	bgfx::setViewFrameBuffer(0, m_handle);
-	bgfx::setViewFrameBuffer(1, m_handle);
-}
-
-void Framebuffer::end() const {
+void Framebuffer::draw() const {
 	bgfx::setTexture(0, m_colorTextureSampler, m_textures[0]);
 	bgfx::setTexture(1, m_depthTextureSampler, m_textures[1]);
 
