@@ -249,8 +249,6 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 		}
 	}
 
-	m_fbo.begin();
-
 	states.shader = &m_shader;
 
 	target.setView(m_camera);
@@ -264,8 +262,8 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 
 	target.draw(m_hud.blockCursor(), states);
 
-	m_fbo.end();
-
 	target.draw(m_hud, states);
+
+	m_fbo.draw();
 }
 
