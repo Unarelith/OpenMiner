@@ -29,19 +29,11 @@
 
 #include <entt/entt.hpp>
 
-#ifdef OM_NOT_IMPLEMENTED_SCENE_DRAW
-#include "RenderStates.hpp"
-#include "RenderTarget.hpp"
-#endif // OM_NOT_IMPLEMENTED_SCENE_DRAW
-
 class AbstractController {
 	public:
 		virtual ~AbstractController() = default;
 
 		virtual void update(entt::registry &) {}
-#ifdef OM_NOT_IMPLEMENTED_SCENE_DRAW
-		virtual void draw(entt::registry &, RenderTarget &, RenderStates) {}
-#endif // OM_NOT_IMPLEMENTED_SCENE_DRAW
 };
 
 #endif // ABSTRACTCONTROLLER_HPP_

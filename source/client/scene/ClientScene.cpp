@@ -31,19 +31,24 @@
 
 ClientScene::ClientScene() {
 	m_controllers.emplace_back(new AnimationController);
-	m_controllers.emplace_back(new RenderingController);
+	m_clientControllers.emplace_back(new RenderingController);
+}
+
+void ClientScene::update() {
+	Scene::update();
+
+	for (auto &controller : m_clientControllers)
+		controller->update(m_registry);
 }
 
 void ClientScene::draw(RenderTarget &target, RenderStates states) const {
-#ifdef OM_NOT_IMPLEMENTED_SCENE_DRAW
 	if (!m_camera) return;
 
 	// Subtract the camera position - see comment in ClientWorld::draw()
 	gk::Vector3d cameraPosition = m_camera->getDPosition();
 	states.transform.translate((float)-cameraPosition.x, (float)-cameraPosition.y, (float)-cameraPosition.z);
 
-	for (auto &controller : m_controllers)
+	for (auto &controller : m_clientControllers)
 		controller->draw(m_registry, target, states);
-#endif // OM_NOT_IMPLEMENTED_SCENE_DRAW
 }
 

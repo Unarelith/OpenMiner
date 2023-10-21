@@ -30,8 +30,7 @@
 #include <deque>
 #include <memory>
 
-#include <entt/entt.hpp>
-
+#include "AbstractClientController.hpp"
 #include "Drawable.hpp"
 #include "Scene.hpp"
 
@@ -42,12 +41,16 @@ class ClientScene : public Scene, public Drawable {
 	public:
 		ClientScene();
 
+		void update() override;
+
 		void setCamera(Camera &camera) { m_camera = &camera; }
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
 		Camera *m_camera = nullptr;
+
+		std::deque<std::unique_ptr<AbstractClientController>> m_clientControllers;
 };
 
 #endif // CLIENTSCENE_HPP_
