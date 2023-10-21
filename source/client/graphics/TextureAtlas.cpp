@@ -186,6 +186,7 @@ void TextureAtlas::packTextures() {
 	if (IMG_SavePNG(atlas.get(), "test_atlas.png") < 0)
 		throw EXCEPTION("Failed to save texture to: test_atlas.png. Reason:", IMG_GetError());
 
+	m_texture.free();
 	m_texture.loadFromSurface(atlas.get());
 
 #ifdef OM_NOT_IMPLEMENTED_GL_TEXTURE
