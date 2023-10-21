@@ -44,7 +44,10 @@ void RenderTarget::free() {
 	m_cubeIndexBuffer.free();
 	m_defaultIndexBuffer.free();
 
-	bgfx::destroy(m_samplerUniform);
+	if (bgfx::isValid(m_samplerUniform)) {
+		bgfx::destroy(m_samplerUniform);
+		m_samplerUniform.idx = bgfx::kInvalidHandle;
+	}
 }
 
 void RenderTarget::draw(const Drawable &drawable, const RenderStates &states) {

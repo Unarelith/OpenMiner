@@ -108,6 +108,8 @@ void Texture::enable(u8 unit, bgfx::UniformHandle handle) const {
 }
 
 void Texture::free() {
-	if (bgfx::isValid(m_handle))
+	if (bgfx::isValid(m_handle)) {
 		bgfx::destroy(m_handle);
+		m_handle.idx = bgfx::kInvalidHandle;
+	}
 }

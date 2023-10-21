@@ -35,8 +35,10 @@ Shader::Shader(const std::string &name) {
 }
 
 Shader::~Shader() {
-	if (bgfx::isValid(m_program))
+	if (bgfx::isValid(m_program)) {
 		bgfx::destroy(m_program);
+		m_program.idx = bgfx::kInvalidHandle;
+	}
 }
 
 void Shader::loadFromFile(const std::string &name) {

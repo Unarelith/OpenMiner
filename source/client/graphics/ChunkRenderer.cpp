@@ -39,8 +39,15 @@ ChunkRenderer::ChunkRenderer(const TextureAtlas &textureAtlas) : m_textureAtlas(
 }
 
 ChunkRenderer::~ChunkRenderer() {
-	bgfx::destroy(m_fogColor);
-	bgfx::destroy(m_renderDistance);
+	if (bgfx::isValid(m_fogColor)) {
+		bgfx::destroy(m_fogColor);
+		m_fogColor.idx = bgfx::kInvalidHandle;
+	}
+
+	if (bgfx::isValid(m_renderDistance)) {
+		bgfx::destroy(m_renderDistance);
+		m_renderDistance.idx = bgfx::kInvalidHandle;
+	}
 }
 
 inline static bool bbIntersects(const glm::vec3 &a0, const glm::vec3 &a1, const glm::vec3 &b0, const glm::vec3 &b1) {
