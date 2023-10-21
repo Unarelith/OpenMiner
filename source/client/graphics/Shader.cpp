@@ -45,6 +45,9 @@ void Shader::loadFromFile(const std::string &name) {
 		suffix = "120";
 	else if (bgfx::getRendererType() == bgfx::RendererType::Vulkan)
 		suffix = "spirv";
+	else if (bgfx::getRendererType() == bgfx::RendererType::Direct3D11
+		  || bgfx::getRendererType() == bgfx::RendererType::Direct3D12)
+		suffix = "s_5_0";
 
 	m_vertexShader = loadShader("resources/shaders/" + name + "." + suffix + ".vs.bin");
 	m_fragmentShader = loadShader("resources/shaders/" + name + "." + suffix + ".fs.bin");
