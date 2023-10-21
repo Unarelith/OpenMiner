@@ -170,13 +170,15 @@ void GameState::onEvent(const SDL_Event &event) {
 	}
 
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-		Config::screenWidth = (u16)event.window.data1;
-		Config::screenHeight = (u16)event.window.data2;
+		if (event.window.data1 != 0 && event.window.data2 != 0) {
+			Config::screenWidth = (u16)event.window.data1;
+			Config::screenHeight = (u16)event.window.data2;
 
-		m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
-		m_hud.setup();
+			m_camera.setAspectRatio((float)Config::screenWidth / Config::screenHeight);
+			m_hud.setup();
 
-		m_fbo.init(Config::screenWidth, Config::screenHeight);
+			m_fbo.init(Config::screenWidth, Config::screenHeight);
+		}
 	}
 }
 
