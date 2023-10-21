@@ -74,8 +74,15 @@ GameState::GameState()
 }
 
 GameState::~GameState() {
-	bgfx::destroy(m_sunlightIntensity);
-	bgfx::destroy(m_skyColor);
+	if (bgfx::isValid(m_sunlightIntensity)) {
+		bgfx::destroy(m_sunlightIntensity);
+		m_sunlightIntensity.idx = bgfx::kInvalidHandle;
+	}
+
+	if (bgfx::isValid(m_skyColor)) {
+		bgfx::destroy(m_skyColor);
+		m_skyColor.idx = bgfx::kInvalidHandle;
+	}
 }
 
 void GameState::init() {

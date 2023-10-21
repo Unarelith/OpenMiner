@@ -93,20 +93,30 @@ void Framebuffer::free() {
 	bgfx::setViewFrameBuffer(0, BGFX_INVALID_HANDLE);
 	bgfx::setViewFrameBuffer(1, BGFX_INVALID_HANDLE);
 
-	if (bgfx::isValid(m_handle))
+	if (bgfx::isValid(m_handle)) {
 		bgfx::destroy(m_handle);
+		m_handle.idx = bgfx::kInvalidHandle;
+	}
 
-	if (bgfx::isValid(m_depthFogColorUniform))
+	if (bgfx::isValid(m_depthFogColorUniform)) {
 		bgfx::destroy(m_depthFogColorUniform);
+		m_depthFogColorUniform.idx = bgfx::kInvalidHandle;
+	}
 
-	if (bgfx::isValid(m_effectTypeUniform))
+	if (bgfx::isValid(m_effectTypeUniform)) {
 		bgfx::destroy(m_effectTypeUniform);
+		m_effectTypeUniform.idx = bgfx::kInvalidHandle;
+	}
 
-	if (bgfx::isValid(m_depthTextureSampler))
+	if (bgfx::isValid(m_depthTextureSampler)) {
 		bgfx::destroy(m_depthTextureSampler);
+		m_depthTextureSampler.idx = bgfx::kInvalidHandle;
+	}
 
-	if (bgfx::isValid(m_colorTextureSampler))
+	if (bgfx::isValid(m_colorTextureSampler)) {
 		bgfx::destroy(m_colorTextureSampler);
+		m_colorTextureSampler.idx = bgfx::kInvalidHandle;
+	}
 }
 
 void Framebuffer::loadShader(const std::string &name) {

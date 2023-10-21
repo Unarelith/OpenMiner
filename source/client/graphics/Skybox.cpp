@@ -41,7 +41,10 @@ Skybox::Skybox(Camera &camera, ClientWorld &world) : m_camera(camera), m_world(w
 }
 
 Skybox::~Skybox() {
-	bgfx::destroy(m_starColor);
+	if (bgfx::isValid(m_starColor)) {
+		bgfx::destroy(m_starColor);
+		m_starColor.idx = bgfx::kInvalidHandle;
+	}
 }
 
 void Skybox::loadSky(const Sky &sky) {
