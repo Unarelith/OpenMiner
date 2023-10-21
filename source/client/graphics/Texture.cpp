@@ -50,8 +50,7 @@ Texture::Texture(Texture &&texture) {
 }
 
 Texture::~Texture() {
-	if (bgfx::isValid(m_handle))
-		bgfx::destroy(m_handle);
+	free();
 }
 
 Texture &Texture::operator=(Texture &&texture) {
@@ -106,4 +105,9 @@ void Texture::loadFromSurface(SDL_Surface *surface) {
 
 void Texture::enable(u8 unit, bgfx::UniformHandle handle) const {
 	bgfx::setTexture(unit, handle, m_handle);
+}
+
+void Texture::free() {
+	if (bgfx::isValid(m_handle))
+		bgfx::destroy(m_handle);
 }
