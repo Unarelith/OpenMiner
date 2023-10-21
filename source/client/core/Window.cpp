@@ -71,7 +71,8 @@ void Window::display() {
 
 void Window::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-		bgfx::setViewRect(0, 0, 0, (uint16_t)event.window.data1, (uint16_t)event.window.data2);
+		for (int i = 0; i < 8; ++i)
+			bgfx::setViewRect(i, 0, 0, (uint16_t)event.window.data1, (uint16_t)event.window.data2);
 
 		m_size.x = (unsigned int)event.window.data1;
 		m_size.y = (unsigned int)event.window.data2;
