@@ -24,16 +24,19 @@
  *
  * =====================================================================================
  */
-#ifndef RENDERINGCONTROLLER_HPP_
-#define RENDERINGCONTROLLER_HPP_
+#ifndef ABSTRACTCLIENTCONTROLLER_HPP_
+#define ABSTRACTCLIENTCONTROLLER_HPP_
 
-#include "AbstractClientController.hpp"
+#include "AbstractController.hpp"
+#include "RenderStates.hpp"
+#include "RenderTarget.hpp"
 
-class RenderingController : public AbstractClientController {
+class AbstractClientController : public AbstractController {
 	public:
-		void update(entt::registry &registry) override;
+		virtual ~AbstractClientController() = default;
 
-		void draw(entt::registry &registry, RenderTarget &target, RenderStates states) override;
+		virtual void draw(entt::registry &, RenderTarget &, RenderStates) {}
 };
 
-#endif // RENDERINGCONTROLLER_HPP_
+
+#endif // ABSTRACTCLIENTCONTROLLER_HPP_
