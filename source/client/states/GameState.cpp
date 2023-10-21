@@ -238,7 +238,7 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 			u32 iColor = (color.r255() << 24) | (color.g255() << 16) | (color.b255() << 8) | color.a255();
 			bgfx::setViewClear(states.view, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, iColor);
 
-			float colorPtr[4] = {color.r, color.g, color.b, color.a};
+			float colorPtr[4] = {color.r255() / 255.f, color.g255() / 255.f, color.b255() / 255.f, color.a255() / 255.f};
 			bgfx::setUniform(m_skyColor, colorPtr);
 
 			float sunlightIntensity[4] = {GameTime::getSunlightIntensityFromTime(time), 0, 0, 0};
@@ -250,7 +250,7 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 			u32 iColor = (color.r255() << 24) | (color.g255() << 16) | (color.b255() << 8) | color.a255();
 			bgfx::setViewClear(states.view, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, iColor);
 
-			float colorPtr[4] = {color.r, color.g, color.b, color.a};
+			float colorPtr[4] = {color.r255() / 255.f, color.g255() / 255.f, color.b255() / 255.f, color.a255() / 255.f};
 			bgfx::setUniform(m_skyColor, colorPtr);
 
 			float sunlightIntensity[4] = {1.f, 0.f, 0.f, 0.f};
