@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include <glm/gtc/matrix_transform.hpp>
+#include <bx/math.h>
 
 #include "EngineConfig.hpp"
 #include "View.hpp"
@@ -83,7 +83,7 @@ void View::move(float offsetX, float offsetY, float offsetZ) {
 
 const gk::Transform &View::getTransform() const {
 	if (!m_transformUpdated) {
-		m_transform = glm::ortho(0.0f, m_size.x, m_size.y, 0.0f, DIST_2D_NEAR, DIST_2D_FAR);
+		bx::mtxOrtho((float *)m_transform.getRawMatrix(), 0.0f, m_size.x, m_size.y, 0.0f, DIST_2D_NEAR, DIST_2D_FAR, 0, false);
 
 		m_transformUpdated = true;
 	}
