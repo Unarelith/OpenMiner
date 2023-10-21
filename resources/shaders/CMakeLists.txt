@@ -1,8 +1,13 @@
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/shaders")
 
 function(compile_shaders)
-	set(platform linux)
-	set(PROFILES 120 spirv)
+	if(UNIX AND NOT APPLE)
+		set(platform linux)
+		set(PROFILES 120 spirv)
+	else()
+		set(platform windows)
+		set(PROFILES 120 spirv s_5_0)
+	endif()
 
 	foreach(profile IN LISTS PROFILES)
 		foreach(shader_name IN LISTS ARGN)
@@ -29,11 +34,15 @@ function(compile_shaders)
 				COMMAND ${BGFX_SHADERC} --type fragment --platform ${platform} --profile ${profile} -f ${IN_FRAGMENT} --varyingdef ${IN_DEF} -o ${OUT_FRAGMENT} -i "${BGFX_SHADER_INCLUDE_PATH}"
 			)
 
+			list(APPEND SHADER_SOURCE_LIST ${IN_VERTEX} ${IN_FRAGMENT} ${IN_DEF})
 			list(APPEND SHADER_OUTPUT_LIST ${OUT_VERTEX} ${OUT_FRAGMENT})
 		endforeach()
 	endforeach()
 
 	add_custom_target(shaders DEPENDS ${SHADER_OUTPUT_LIST})
+
+	source_group(TREE "${CMAKE_SOURCE_DIR}/resources/shaders/" PREFIX "Shader Files" FILES ${SHADER_SOURCE_LIST})
+	target_sources(shaders PRIVATE ${SHADER_SOURCE_LIST})
 endfunction()
 
 compile_shaders(
