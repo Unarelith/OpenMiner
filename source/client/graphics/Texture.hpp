@@ -48,6 +48,7 @@ class Texture : public gk::NonCopyable {
 
 		void loadFromFile(const std::string &filename);
 		void loadFromSurface(SDL_Surface *surface);
+		void free();
 
 		const std::string &filename() const { return m_filename; }
 
