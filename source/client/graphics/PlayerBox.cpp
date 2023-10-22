@@ -24,7 +24,6 @@
  *
  * =====================================================================================
  */
-#include <gk/gl/GLCheck.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "Camera.hpp"

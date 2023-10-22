@@ -24,8 +24,6 @@
  *
  * =====================================================================================
  */
-#include <gk/gl/GLCheck.hpp>
-
 #include "ClientChunk.hpp"
 #include "ClientWorld.hpp"
 #include "TextureAtlas.hpp"
