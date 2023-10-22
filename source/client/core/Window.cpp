@@ -71,7 +71,7 @@ void Window::display() {
 
 void Window::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-		for (int i = 0; i < 8; ++i)
+		for (bgfx::ViewId i = 0; i < 8; ++i)
 			bgfx::setViewRect(i, 0, 0, (uint16_t)event.window.data1, (uint16_t)event.window.data2);
 
 		m_size.x = (unsigned int)event.window.data1;
@@ -142,7 +142,7 @@ void Window::initBGFX() {
 	init.resolution.width = m_size.x;
 	init.resolution.height = m_size.y;
 	init.resolution.reset = BGFX_RESET_VSYNC;
-	init.type = bgfx::RendererType::Vulkan;
+	init.type = bgfx::RendererType::OpenGL;
 	init.callback = &m_callback;
 
 	extern bool BGFX_setupPlatformData(SDL_Window *window, bgfx::PlatformData &pd);
