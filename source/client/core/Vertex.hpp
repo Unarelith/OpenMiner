@@ -27,15 +27,13 @@
 #ifndef VERTEX_HPP_
 #define VERTEX_HPP_
 
-#include <gk/gl/OpenGL.hpp>
-
 struct Vertex {
-	GLfloat coord3d[4]      = {0, 0, 0, 1};
-	GLfloat texCoord[2]     = {-1, -1};
-	GLfloat color[4]        = {0, 0, 0, 1};
-	GLfloat normal[3]       = {0, 0, 0};
-	GLfloat lightValue[2]   = {-1, -1};
-	GLfloat ambientOcclusion = 4;
+	float coord3d[4]       = {0, 0, 0, 1};
+	float texCoord[2]      = {-1, -1};
+	float color[4]         = {0, 0, 0, 1};
+	float normal[3]        = {0, 0, 0};
+	float lightValue[2]    = {-1, -1};
+	float ambientOcclusion = 4;
 };
 
 #endif // VERTEX_HPP_

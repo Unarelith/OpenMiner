@@ -26,7 +26,6 @@
  */
 #include <gk/core/Exception.hpp>
 #include <gk/core/Filesystem.hpp>
-#include <gk/gl/OpenGL.hpp>
 
 #include "Registry.hpp"
 #include "TextureAtlas.hpp"

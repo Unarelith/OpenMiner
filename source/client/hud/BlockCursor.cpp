@@ -287,10 +287,10 @@ void BlockCursor::updateAnimationVertexBuffer(const BlockState &blockState, u8f 
 	Vertex vertices[nFaces][nVertsPerFace];
 	updateVBOCoords(vertices, blockState, -2, orientation);
 
-	GLfloat color[4] = {1, 1, 1, 0.5};
+	float color[4] = {1, 1, 1, 0.5};
 	for (u8f f = 0; f < nFaces; ++f)
 		for (u8f v = 0; v < nVertsPerFace; ++v)
-			memcpy(&vertices[f][v].color, &color[0], 4 * sizeof(GLfloat));
+			memcpy(&vertices[f][v].color, &color[0], 4 * sizeof(float));
 
 	if (animationPos != -1) {
 		glm::vec4 blockTexCoords{0.1f * (float)animationPos, 0.0f, 0.1f + 0.1f * (float)animationPos, 1.0f};

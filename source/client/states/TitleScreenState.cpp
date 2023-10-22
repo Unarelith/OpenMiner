@@ -38,8 +38,6 @@
 #include "ServerApplication.hpp" // For ServerOnlineEvent
 
 TitleScreenState::TitleScreenState(u16 port) : m_port(port) {
-	glClearColor(0.0, 0.0, 0.0, 1.0);
-
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
 
 	m_menuWidget.addButton("Singleplayer", [this] (TextButton &) {

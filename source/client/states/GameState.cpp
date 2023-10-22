@@ -33,7 +33,6 @@
 #include <gk/core/input/GamePad.hpp>
 #include <gk/core/Exception.hpp>
 #include <gk/core/GameClock.hpp>
-#include <gk/gl/OpenGL.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "ApplicationStateStack.hpp"
