@@ -80,7 +80,7 @@ static bool fullyOutside(const glm::vec3 &v1, const glm::vec3 &v2, const glm::ve
 void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkMap &chunks, Camera &camera, const Sky *currentSky) const {
 	// Changing the values sent to the GPU to double precision is suicidal,
 	// performance wise, if possible at all. Therefore we want to keep the
-	// GL rendering numbers in single precision format. But that introduces
+	// BGFX rendering numbers in single precision format. But that introduces
 	// an issue at larger coordinates, because the precision of floats
 	// quickly degrades as the numbers grow, with a random wobbling being
 	// very noticeable at e.g. coordinates >= 65536 or so, and the waving

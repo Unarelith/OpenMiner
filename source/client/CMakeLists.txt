@@ -35,7 +35,6 @@ if (NOT MSVC)
 	target_compile_options(${PROJECT_NAME} PRIVATE ${CLANG_FLAGS})
 endif ()
 
-target_compile_options(${PROJECT_NAME} PRIVATE -DGLM_FORCE_RADIANS)
 target_compile_options(${PROJECT_NAME} PRIVATE -D_USE_MATH_DEFINES)
 target_compile_options(${PROJECT_NAME} PRIVATE -DSOL_CHECK_ARGUMENTS -DSOL_PRINT_ERRORS=0)
 
