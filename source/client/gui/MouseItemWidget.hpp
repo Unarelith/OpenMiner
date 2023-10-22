@@ -49,15 +49,15 @@ class MouseItemWidget : public ItemWidget {
 		const ItemWidget *currentItemWidget() const { return m_currentItemWidget; }
 		void updateCurrentItem(ItemWidget *currentItemWidget);
 
-		void swapItems(ItemWidget &widget, bool isReadOnly = false);
-		void putItem(ItemWidget &widget);
-
 		void setCurrentInventoryWidget(InventoryWidget *inventoryWidget) { m_currentInventoryWidget = inventoryWidget; }
 
 		const ItemStack &getStack() const { return m_inventory.getStack(0, 0); }
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
+
+		void swapItems(ItemWidget &widget, bool isReadOnly = false);
+		void putItem(ItemWidget &widget);
 
 		void updatePosition(s32 x, s32 y);
 

@@ -79,14 +79,16 @@ void MouseItemWidget::leftClickBehaviour() {
 	if (m_currentInventoryWidget && m_currentInventoryWidget->currentItemWidget() && m_currentInventoryWidget->inventory()) {
 		if (m_currentInventoryWidget->doItemMatchFilter(m_inventory.getStack(0, 0).item())) {
 			ItemWidget *currentItemWidget = m_currentInventoryWidget->currentItemWidget();
-			if (!m_currentInventoryWidget->inventory()->isUnlimited())
-				swapItems(*currentItemWidget, m_currentInventoryWidget->isReadOnly());
-			else if (getStack().amount() == 0 && currentItemWidget->stack().amount() != 0)
-				setStack(currentItemWidget->stack().item().stringID(), currentItemWidget->stack().item().maxStackSize());
-			else
-				setStack(BLOCK_AIR, 0);
+			if (currentItemWidget->isEnabled()) {
+				if (!m_currentInventoryWidget->inventory()->isUnlimited())
+					swapItems(*currentItemWidget, m_currentInventoryWidget->isReadOnly());
+				else if (getStack().amount() == 0 && currentItemWidget->stack().amount() != 0)
+					setStack(currentItemWidget->stack().item().stringID(), currentItemWidget->stack().item().maxStackSize());
+				else
+					setStack(BLOCK_AIR, 0);
 
-			m_currentInventoryWidget->sendUpdatePacket();
+				m_currentInventoryWidget->sendUpdatePacket();
+			}
 		}
 	}
 }
@@ -96,10 +98,12 @@ void MouseItemWidget::rightClickBehaviour() {
 		if (!m_currentInventoryWidget->isReadOnly()) {
 			if (m_currentInventoryWidget->doItemMatchFilter(m_inventory.getStack(0, 0).item())) {
 				ItemWidget *currentItemWidget = m_currentInventoryWidget->currentItemWidget();
-				if (!m_currentInventoryWidget->inventory()->isUnlimited())
-					putItem(*currentItemWidget);
-				else if (getStack().amount() == 0 && currentItemWidget->stack().amount() != 0)
-					setStack(currentItemWidget->stack().item().stringID(), 1);
+				if (currentItemWidget->isEnabled()) {
+					if (!m_currentInventoryWidget->inventory()->isUnlimited())
+						putItem(*currentItemWidget);
+					else if (getStack().amount() == 0 && currentItemWidget->stack().amount() != 0)
+						setStack(currentItemWidget->stack().item().stringID(), 1);
+				}
 			}
 
 			m_currentInventoryWidget->sendUpdatePacket();
@@ -113,7 +117,7 @@ void MouseItemWidget::startDragging(bool isLeftClickDrag) {
 	m_draggedStack = getStack();
 	m_dragOrigin = nullptr;
 
-	if (m_currentItemWidget && (m_currentItemWidget->stack().amount() == 0 || m_currentItemWidget->stack().item().stringID() == m_draggedStack.item().stringID())) {
+	if (m_currentItemWidget && m_currentItemWidget->isEnabled() && (m_currentItemWidget->stack().amount() == 0 || m_currentItemWidget->stack().item().stringID() == m_draggedStack.item().stringID())) {
 		m_dragOrigin = m_currentItemWidget;
 		m_draggedSlots[m_currentItemWidget] = m_currentItemWidget->stack();
 	}
@@ -173,7 +177,7 @@ void MouseItemWidget::draggingBehaviour(ItemWidget *newItemWidget) {
 }
 
 void MouseItemWidget::updateCurrentItem(ItemWidget *currentItemWidget) {
-	if (currentItemWidget) {
+	if (currentItemWidget && currentItemWidget->isEnabled()) {
 		bool doItemMatchFilter = !m_currentInventoryWidget || (m_currentInventoryWidget->doItemMatchFilter(m_draggedStack.item()) && !m_currentInventoryWidget->isReadOnly());
 		if (m_isDragging && currentItemWidget != m_currentItemWidget && doItemMatchFilter)
 			draggingBehaviour(currentItemWidget);

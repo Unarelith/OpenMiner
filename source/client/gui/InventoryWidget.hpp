@@ -60,7 +60,8 @@ class InventoryWidget : public AbstractInventoryWidget {
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		void loadItemWidgets(u16 offset, u16 size, std::string search = "");
+		void loadItemWidgets(u16 offset, u16 size);
+		void updateItemWidgets(u16 offset, u16 size, std::string search = "");
 
 		ClientCommandHandler &m_client;
 
