@@ -54,21 +54,29 @@ void ItemWidget::disable() {
 void ItemWidget::update() {
 	if (!m_isEnabled) return;
 
-	if (stack().item().isBlock()) {
-		const Block &block = Registry::getInstance().getBlock(stack().item().id());
-		const BlockState &blockState = block.getState(0); // FIXME: Get state from item stack
-		if (blockState.drawType() != BlockDrawType::XShape && blockState.inventoryImage().empty()) {
-			m_cube.updateVertexBuffer(block);
-			m_isImage = false;
+	if (m_itemID != stack().item().id()) {
+		if (stack().item().isBlock()) {
+			const Block &block = Registry::getInstance().getBlock(stack().item().id());
+			const BlockState &blockState = block.getState(0); // FIXME: Get state from item stack
+			if (blockState.drawType() != BlockDrawType::XShape && blockState.inventoryImage().empty()) {
+				m_cube.updateVertexBuffer(block);
+				m_isImage = false;
+			}
+			else
+				updateImage(&blockState);
 		}
 		else
-			updateImage(&blockState);
-	}
-	else
-		updateImage();
+			updateImage();
 
-	m_text.setString(std::to_string(stack().amount()));
-	m_text.setPosition(16.f - 4.f - 6.f * floorf(log10f(stack().amount())), 16.f - 6.f, 0);
+		m_itemID = stack().item().id();
+	}
+
+	if (m_itemAmount != stack().amount()) {
+		m_text.setString(std::to_string(stack().amount()));
+		m_text.setPosition(16.f - 4.f - 6.f * floorf(log10f(stack().amount())), 16.f - 6.f, 0);
+
+		m_itemAmount = stack().amount();
+	}
 }
 
 void ItemWidget::updateImage(const BlockState *blockState) {

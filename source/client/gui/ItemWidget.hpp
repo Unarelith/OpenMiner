@@ -79,6 +79,9 @@ class ItemWidget : public Widget {
 		std::string m_oldTexturePack{""};
 
 		bool m_isEnabled = true;
+
+		u16 m_itemID = 0;
+		u16 m_itemAmount = 0;
 };
 
 #endif // ITEMWIDGET_HPP_
