@@ -27,7 +27,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <gk/core/input/GamePad.hpp>
-#include <gk/gl/GLCheck.hpp>
 #include <gk/gl/Vertex.hpp>
 #include <gk/core/GameClock.hpp>
 #include <gk/resource/ResourceHandler.hpp>

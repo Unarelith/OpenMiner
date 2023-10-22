@@ -28,7 +28,6 @@
 
 #include <gk/core/input/GamePad.hpp>
 #include <gk/core/Mouse.hpp>
-#include <gk/gl/GLCheck.hpp>
 
 #include "BlockGeometry.hpp"
 #include "ClientApplication.hpp"

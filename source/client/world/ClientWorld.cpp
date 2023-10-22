@@ -133,8 +133,6 @@ void ClientWorld::changeDimension(u16 dimensionID) {
 
 	const Sky &sky = Registry::getInstance().getSkyFromStringID(dimension.sky());
 	m_sky = &sky;
-
-	// glCheck(glClearColor(sky.color().r, sky.color().g, sky.color().b, sky.color().a));
 }
 
 void ClientWorld::receiveChunkData(Network::Packet &packet) {
