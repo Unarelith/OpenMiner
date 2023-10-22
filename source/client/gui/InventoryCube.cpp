@@ -61,7 +61,10 @@ InventoryCube::InventoryCube(float size, bool isEntity)
 using namespace BlockGeometry;
 
 void InventoryCube::updateVertexBuffer(const Block &block, u8 state) {
-	if (!block.id()) return;
+	if (!block.id() || (block.id() == m_blockID && state == m_blockState)) return;
+
+	m_blockID = block.id();
+	m_blockState = state;
 
 	const BlockState &blockState = block.getState(state);
 

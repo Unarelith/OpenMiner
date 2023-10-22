@@ -58,6 +58,9 @@ class InventoryCube : public Drawable, public gk::Transformable {
 		bool m_isEntity = false;
 
 		View m_view;
+
+		u16 m_blockID = 0;
+		u16 m_blockState = 0;
 };
 
 #endif // INVENTORYCUBE_HPP_
