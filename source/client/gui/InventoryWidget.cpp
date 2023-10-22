@@ -52,7 +52,7 @@ void InventoryWidget::scroll(float scrolling) {
 	if (offset + size > m_inventory->width() * m_inventory->height())
 		size = u16(m_inventory->width() * m_inventory->height() - offset);
 
-	loadItemWidgets(offset, size, m_lastSearch);
+	updateItemWidgets(offset, size, m_lastSearch);
 }
 
 void InventoryWidget::onEvent(const SDL_Event &event) {
@@ -87,7 +87,7 @@ void InventoryWidget::update() {
 
 void InventoryWidget::applySearch(const std::string &search) {
 	if (search != m_lastSearch) {
-		loadItemWidgets(m_offset, m_size, search);
+		updateItemWidgets(m_offset, m_size, search);
 		m_lastSearch = search;
 	}
 }
@@ -141,7 +141,7 @@ void InventoryWidget::draw(RenderTarget &target, RenderStates states) const {
 		target.draw(m_selectedItemBackground, states);
 }
 
-void InventoryWidget::loadItemWidgets(u16 offset, u16 size, std::string search) {
+void InventoryWidget::loadItemWidgets(u16 offset, u16 size) {
 	m_itemWidgets.clear();
 
 	u16 itemCounter = 0;
@@ -151,18 +151,36 @@ void InventoryWidget::loadItemWidgets(u16 offset, u16 size, std::string search) 
 		if (x >= m_inventory->width() || y >= m_inventory->height())
 			break;
 
+		m_itemWidgets.emplace_back(*m_inventory, x, y, this);
+
+		ItemWidget &widget = m_itemWidgets.back();
+		widget.update();
+		widget.setPosition((itemCounter % m_inventory->width()) * 18.f, (itemCounter / m_inventory->width()) * 18.f, 0);
+
+		itemCounter++;
+	}
+}
+
+void InventoryWidget::updateItemWidgets(u16 offset, u16 size, std::string search)
+{
+	u16 itemCounter = 0;
+	for (u16 i = 0; itemCounter < size; ++i) {
+		u16 x = u16((i + offset) % m_inventory->width());
+		u16 y = u16((i + offset) / m_inventory->width());
+		if (x >= m_inventory->width() || y >= m_inventory->height())
+			break;
+
 		std::string label = m_inventory->getStack(x, y).item().label();
 		std::transform(label.begin(), label.end(), label.begin(), [](unsigned char c) { return std::tolower(c); });
 		std::transform(search.begin(), search.end(), search.begin(), [](unsigned char c) { return std::tolower(c); });
 		if (search.empty() || label.find(search) != std::string::npos) {
-			m_itemWidgets.emplace_back(*m_inventory, x, y, this);
-
-			ItemWidget &widget = m_itemWidgets.back();
-			widget.update();
-			widget.setPosition((itemCounter % m_inventory->width()) * 18.f, (itemCounter / m_inventory->width()) * 18.f, 0);
+			m_itemWidgets[itemCounter].changeItem(x, y);
+			m_itemWidgets[itemCounter].update();
 
 			itemCounter++;
 		}
 	}
-}
 
+	for (u16 i = itemCounter; i < m_itemWidgets.size(); ++i)
+		m_itemWidgets[i].disable();
+}

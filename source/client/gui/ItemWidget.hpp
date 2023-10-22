@@ -42,6 +42,9 @@ class ItemWidget : public Widget {
 		void update() override;
 		void updateImage(const BlockState *blockState = nullptr);
 
+		void changeItem(u16 x, u16 y);
+		void disable();
+
 		const ItemStack &stack() const { return m_inventory.getStack(m_x, m_y); }
 		void setStack(const std::string &name, u16 amount = 1);
 
@@ -50,6 +53,8 @@ class ItemWidget : public Widget {
 
 		bool hasChanged() const { return m_hasChanged; }
 		void setChanged(bool hasChanged) { m_hasChanged = hasChanged; }
+
+		bool isEnabled() const { return m_isEnabled; }
 
 	protected:
 		void draw(RenderTarget &target, RenderStates states) const override;
@@ -72,6 +77,8 @@ class ItemWidget : public Widget {
 		bool m_hasChanged = false;
 
 		std::string m_oldTexturePack{""};
+
+		bool m_isEnabled = true;
 };
 
 #endif // ITEMWIDGET_HPP_

@@ -40,7 +40,20 @@ ItemWidget::ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent)
 	// m_cube.setRotation(-172, glm::vec3{0.42, -0.2, 1});
 }
 
+void ItemWidget::changeItem(u16 x, u16 y) {
+	m_x = x;
+	m_y = y;
+
+	m_isEnabled = true;
+}
+
+void ItemWidget::disable() {
+	m_isEnabled = false;
+}
+
 void ItemWidget::update() {
+	if (!m_isEnabled) return;
+
 	if (stack().item().isBlock()) {
 		const Block &block = Registry::getInstance().getBlock(stack().item().id());
 		const BlockState &blockState = block.getState(0); // FIXME: Get state from item stack
@@ -85,7 +98,7 @@ void ItemWidget::setStack(const std::string &name, u16 amount) {
 }
 
 void ItemWidget::draw(RenderTarget &target, RenderStates states) const {
-	if (stack().amount() == 0) return;
+	if (!m_isEnabled || stack().amount() == 0) return;
 
 	states.transform *= getTransform();
 
