@@ -58,7 +58,7 @@ DebugOverlay::DebugOverlay(const ClientPlayer &player, const ClientWorld &world)
 	m_positionText.setColor(gk::Color::White);
 }
 
-void DebugOverlay::update(bool printOpenGLInfo) {
+void DebugOverlay::update(bool printRendererInfo) {
 	s32 px = (s32)std::floor(m_player.x());
 	s32 py = (s32)std::floor(m_player.y());
 	s32 pz = (s32)std::floor(m_player.z());
@@ -110,16 +110,16 @@ void DebugOverlay::update(bool printOpenGLInfo) {
 	if (Config::isProfilerWindowEnabled)
 		stream << "Press F3 to return to profiler\n";
 
-	if (printOpenGLInfo) {
-		GLint major, minor;
-		glGetIntegerv(GL_MAJOR_VERSION, &major);
-		glGetIntegerv(GL_MINOR_VERSION, &minor);
-
-		stream << "GL Vendor: " << glGetString(GL_VENDOR) << '\n';
-		stream << "GL Renderer: " << glGetString(GL_RENDERER) << '\n';
-		stream << "GL Version (string): " << glGetString(GL_VERSION) << '\n';
-		stream << "GL Version (integer): " << major << "." << minor << '\n';
-		stream << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << '\n';
+	if (printRendererInfo) {
+		auto rendererType = bgfx::getRendererType();
+		if (rendererType == bgfx::RendererType::OpenGL)
+			stream << "BGFX renderer: OpenGL" << '\n';
+		else if (rendererType == bgfx::RendererType::Vulkan)
+			stream << "BGFX renderer: Vulkan" << '\n';
+		else if (rendererType == bgfx::RendererType::Direct3D11)
+			stream << "BGFX renderer: D3D11" << '\n';
+		else if (rendererType == bgfx::RendererType::Direct3D12)
+			stream << "BGFX renderer: D3D12" << '\n';
 	}
 
 	m_positionText.setString(stream.str());

@@ -36,7 +36,7 @@ class DebugOverlay : public gk::Transformable, public Drawable {
 	public:
 		DebugOverlay(const ClientPlayer &player, const ClientWorld &world);
 
-		void update(bool printOpenGLInfo);
+		void update(bool printRendererInfo);
 
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
