@@ -97,10 +97,27 @@ void Texture::loadFromSurface(SDL_Surface *surface) {
 
 	u64 flags = BGFX_TEXTURE_NONE
 	          | BGFX_SAMPLER_MIN_POINT
-	          | BGFX_SAMPLER_MAG_POINT;
+	          | BGFX_SAMPLER_MAG_POINT
+	          | BGFX_SAMPLER_MIP_POINT
+	          ;
 
 	u32 size = m_size.y * surface->pitch;
 	m_handle = bgfx::createTexture2D((u16)m_size.x, (u16)m_size.y, false, 1, format, flags, bgfx::copy(surface->pixels, size));
+}
+
+void Texture::loadFromMemory(const bgfx::Memory *mem, int width, int height) {
+	m_size.x = width;
+	m_size.y = height;
+
+	u64 flags = BGFX_TEXTURE_NONE
+	          | BGFX_SAMPLER_MIN_POINT
+	          | BGFX_SAMPLER_MAG_POINT
+	          | BGFX_SAMPLER_MIP_POINT
+	          ;
+
+	auto format = bgfx::TextureFormat::RGBA8;
+
+	m_handle = bgfx::createTexture2D((u16)m_size.x, (u16)m_size.y, true, 1, format, flags, mem);
 }
 
 void Texture::enable(u8 unit, bgfx::UniformHandle handle) const {
