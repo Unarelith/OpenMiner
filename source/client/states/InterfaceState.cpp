@@ -27,6 +27,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "ApplicationStateStack.hpp"
+#include "BgfxView.hpp"
 #include "Config.hpp"
 #include "EngineConfig.hpp"
 #include "InterfaceState.hpp"
@@ -76,7 +77,7 @@ void InterfaceState::prepareDraw(RenderTarget &target, RenderStates &states) con
 	states.shader = &m_shader;
 
 	target.setView(m_view);
-	states.view = 4;
+	states.view = BgfxView::UI;
 
 	if (m_parent && m_drawBackground)
 		target.draw(m_background, states);

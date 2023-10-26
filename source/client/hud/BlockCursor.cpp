@@ -333,7 +333,6 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 
 		states.texture = m_blockDestroyTexture;
 
-		states.view = 1; // Use chunk view for proper blending
 		states.primitiveType = 0; // Defaults to triangles
 
 		target.drawElements(m_animationVBO, target.cubeIndexBuffer(), 0, 0, states);
