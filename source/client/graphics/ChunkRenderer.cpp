@@ -36,9 +36,15 @@
 ChunkRenderer::ChunkRenderer(const TextureAtlas &textureAtlas) : m_textureAtlas(textureAtlas) {
 	m_renderDistance = bgfx::createUniform("u_renderDistance", bgfx::UniformType::Vec4);
 	m_fogColor = bgfx::createUniform("u_fogColor", bgfx::UniformType::Vec4);
+	m_mipLevel = bgfx::createUniform("u_mipLevel", bgfx::UniformType::Vec4);
 }
 
 ChunkRenderer::~ChunkRenderer() {
+	if (bgfx::isValid(m_mipLevel)) {
+		bgfx::destroy(m_mipLevel);
+		m_mipLevel.idx = bgfx::kInvalidHandle;
+	}
+
 	if (bgfx::isValid(m_fogColor)) {
 		bgfx::destroy(m_fogColor);
 		m_fogColor.idx = bgfx::kInvalidHandle;
@@ -306,11 +312,11 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 	}
 
 	for (u8 layer = 0 ; layer < ChunkMeshLayer::Count ; ++layer) {
-#ifdef OM_NOT_IMPLEMENTED_GL_TEXTURE
-		// Disable mipmaps for specific layers
-		glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL,
-			(layer == ChunkMeshLayer::NoMipMap || layer == ChunkMeshLayer::Flora) ? 0 : Config::mipmapLevels));
-#endif // OM_NOT_IMPLEMENTED_GL_TEXTURE
+		float mipLevel[4] = {0.f,
+			(layer == ChunkMeshLayer::NoMipMap || layer == ChunkMeshLayer::Flora)
+				? 0.f : (float)Config::mipmapLevels,
+			0.f, 0.f
+		};
 
 		if (layer == ChunkMeshLayer::Flora || layer == ChunkMeshLayer::Liquid)
 			states.isCullFaceEnabled = false;
@@ -320,6 +326,8 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 		for (auto &it : chunks) {
 			std::size_t verticesCount = std::get<0>(it)->getVerticesCount(layer);
 			if (verticesCount == 0) continue;
+
+			bgfx::setUniform(m_mipLevel, mipLevel);
 
 			target.beginDrawing(states);
 
