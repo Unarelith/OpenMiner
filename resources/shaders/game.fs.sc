@@ -13,6 +13,7 @@ uniform vec4 u_renderDistance;
 uniform vec4 u_fogColor;
 uniform vec4 u_skyColor;
 uniform vec4 u_sunlightIntensity;
+uniform vec4 u_mipLevel;
 
 // Get light color
 vec4 light(vec4 position, vec4 normal, vec4 color, vec3 lightColor, vec4 lightPosition, float ambientIntensity, float diffuseIntensity) {
@@ -50,7 +51,7 @@ void main() {
 	// Get current pixel color and apply multiplier on grayscale textures
 	vec4 color = v_color0;
 	if (v_texcoord0.x > -0.99 && v_texcoord0.y > -0.99) {
-		color = texture2D(u_tex, v_texcoord0);
+		color = texture2DLod(u_tex, v_texcoord0, clamp(mix(u_mipLevel.x, u_mipLevel.y, v_dist / u_renderDistance.x), u_mipLevel.x, u_mipLevel.y));
 		if (blockFace > -1 && color.r == color.g && color.g == color.b) {
 			color *= v_color0;
 		}

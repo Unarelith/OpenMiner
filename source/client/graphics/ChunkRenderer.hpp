@@ -62,6 +62,7 @@ class ChunkRenderer {
 
 		bgfx::UniformHandle m_renderDistance = BGFX_INVALID_HANDLE;
 		bgfx::UniformHandle m_fogColor = BGFX_INVALID_HANDLE;
+		bgfx::UniformHandle m_mipLevel = BGFX_INVALID_HANDLE;
 };
 
 #endif // CHUNKRENDERER_HPP_
