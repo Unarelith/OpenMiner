@@ -26,6 +26,7 @@
  */
 #include <gk/core/Exception.hpp>
 
+#include "BgfxView.hpp"
 #include "Framebuffer.hpp"
 #include "GameConfig.hpp"
 
@@ -82,16 +83,16 @@ void Framebuffer::init(u16 width, u16 height) {
 	if (!bgfx::isValid(m_handle))
 		throw EXCEPTION("Failed to create framebuffer");
 
-	bgfx::setViewRect(view, 0, 0, width, height);
-	bgfx::setViewClear(view, BGFX_CLEAR_COLOR);
+	bgfx::setViewRect(BgfxView::Effect, 0, 0, width, height);
+	bgfx::setViewClear(BgfxView::Effect, BGFX_CLEAR_COLOR);
 
-	bgfx::setViewFrameBuffer(0, m_handle);
-	bgfx::setViewFrameBuffer(1, m_handle);
+	bgfx::setViewFrameBuffer(BgfxView::Sky, m_handle);
+	bgfx::setViewFrameBuffer(BgfxView::World, m_handle);
 }
 
 void Framebuffer::free() {
-	bgfx::setViewFrameBuffer(0, BGFX_INVALID_HANDLE);
-	bgfx::setViewFrameBuffer(1, BGFX_INVALID_HANDLE);
+	bgfx::setViewFrameBuffer(BgfxView::Sky, BGFX_INVALID_HANDLE);
+	bgfx::setViewFrameBuffer(BgfxView::World, BGFX_INVALID_HANDLE);
 
 	if (bgfx::isValid(m_handle)) {
 		bgfx::destroy(m_handle);
@@ -142,5 +143,5 @@ void Framebuffer::draw() const {
 
 	bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A);
 
-	bgfx::submit(view, m_shader.program());
+	bgfx::submit(BgfxView::Effect, m_shader.program());
 }

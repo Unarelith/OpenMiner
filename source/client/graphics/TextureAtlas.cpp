@@ -202,8 +202,6 @@ void TextureAtlas::packTextures() {
 		int width = (atlasWidth * m_tileSize) / (1 << i);
 		int height = (atlasHeight * m_tileSize) / (1 << i);
 
-		gkDebug() << width << height;
-
 		atlas[i].reset(SDL_CreateRGBSurface(0, width, height, 32, rmask, gmask, bmask, amask));
 		if (!atlas[i])
 			throw EXCEPTION("Failed to create surface:", SDL_GetError());

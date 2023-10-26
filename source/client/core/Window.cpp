@@ -30,6 +30,7 @@
 #include <gk/core/Utils.hpp>
 #include <gk/core/Exception.hpp>
 
+#include "BgfxView.hpp"
 #include "CoreApplication.hpp"
 #include "Window.hpp"
 
@@ -71,7 +72,7 @@ void Window::display() {
 
 void Window::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-		for (bgfx::ViewId i = 0; i < 8; ++i)
+		for (bgfx::ViewId i = 0; i < BgfxView::Count; ++i)
 			bgfx::setViewRect(i, 0, 0, (uint16_t)event.window.data1, (uint16_t)event.window.data2);
 
 		m_size.x = (unsigned int)event.window.data1;

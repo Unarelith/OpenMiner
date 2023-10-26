@@ -131,7 +131,6 @@ void HUD::draw(RenderTarget &target, RenderStates states) const {
 	OM_PROFILE_START("HUD::draw");
 
 	target.setView(m_view);
-	states.view = 3;
 
 	states.shader = &m_shader;
 

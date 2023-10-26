@@ -24,42 +24,19 @@
  *
  * =====================================================================================
  */
-#ifndef FRAMEBUFFER_HPP_
-#define FRAMEBUFFER_HPP_
+#ifndef BGFXVIEW_HPP_
+#define BGFXVIEW_HPP_
 
-#include "Shader.hpp"
-#include "Texture.hpp"
-#include "VertexBuffer.hpp"
+namespace BgfxView {
+	enum Enum {
+		Sky,
+		World,
+		Effect,
+		HUD,
+		UI,
 
-class Framebuffer : public gk::NonCopyable {
-	public:
-		Framebuffer();
-		Framebuffer(u16 width, u16 height);
-		Framebuffer(Framebuffer &&) = default;
-		~Framebuffer();
+		Count
+	};
+}
 
-		Framebuffer &operator=(Framebuffer &&) = default;
-
-		void init(u16 width, u16 height);
-		void free();
-
-		void loadShader(const std::string &name);
-
-		void draw() const;
-
-	private:
-		bgfx::UniformHandle m_colorTextureSampler = BGFX_INVALID_HANDLE;
-		bgfx::UniformHandle m_depthTextureSampler = BGFX_INVALID_HANDLE;
-
-		bgfx::UniformHandle m_effectTypeUniform = BGFX_INVALID_HANDLE;
-		bgfx::UniformHandle m_depthFogColorUniform = BGFX_INVALID_HANDLE;
-
-		bgfx::TextureHandle m_textures[2] = {BGFX_INVALID_HANDLE, BGFX_STATE_BLEND_INV_SRC_ALPHA};
-
-		bgfx::FrameBufferHandle m_handle = BGFX_INVALID_HANDLE;
-
-		Shader m_shader;
-		VertexBuffer m_vbo;
-};
-
-#endif // FRAMEBUFFER_HPP_
+#endif // BGFXVIEW_HPP_

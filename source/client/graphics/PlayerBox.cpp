@@ -304,7 +304,5 @@ void PlayerBox::draw(RenderTarget &target, RenderStates states) const {
 	states.transform *= getTransform();
 	states.texture = &m_texture;
 
-	states.view = 1;
-
 	target.drawElements(m_vbo, m_ibo, 0, 0, states);
 }

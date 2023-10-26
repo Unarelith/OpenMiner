@@ -294,7 +294,6 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 	states.isDepthTestEnabled = true;
 
 	states.texture = &m_textureAtlas.texture();
-	states.view = 1;
 
 	bgfx::setViewMode(states.view, bgfx::ViewMode::DepthDescending);
 

@@ -32,6 +32,7 @@
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "ApplicationStateStack.hpp"
+#include "BgfxView.hpp"
 #include "ChatState.hpp"
 #include "Events.hpp"
 #include "GameKey.hpp"
@@ -231,7 +232,7 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 			const gk::Color &color = GameTime::getSkyColorFromTime(*m_world.sky(), time);
 
 			u32 iColor = (color.r255() << 24) | (color.g255() << 16) | (color.b255() << 8) | color.a255();
-			bgfx::setViewClear(states.view, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, iColor);
+			bgfx::setViewClear(BgfxView::Sky, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, iColor);
 
 			float colorPtr[4] = {color.r255() / 255.f, color.g255() / 255.f, color.b255() / 255.f, color.a255() / 255.f};
 			bgfx::setUniform(m_skyColor, colorPtr);
@@ -243,7 +244,7 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 			const gk::Color &color = m_world.sky()->color();
 
 			u32 iColor = (color.r255() << 24) | (color.g255() << 16) | (color.b255() << 8) | color.a255();
-			bgfx::setViewClear(states.view, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, iColor);
+			bgfx::setViewClear(BgfxView::Sky, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, iColor);
 
 			float colorPtr[4] = {color.r255() / 255.f, color.g255() / 255.f, color.b255() / 255.f, color.a255() / 255.f};
 			bgfx::setUniform(m_skyColor, colorPtr);
@@ -257,16 +258,26 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 
 	target.setView(m_camera);
 
-	target.draw(m_skybox, states);
-	target.draw(m_world, states);
+	states.view = BgfxView::Sky;
+	{
+		target.draw(m_skybox, states);
+	}
 
-	for (auto &it : m_playerBoxes)
-		if (it.second.dimension() == m_player.dimension())
-			target.draw(it.second, states);
+	states.view = BgfxView::World;
+	{
+		target.draw(m_world, states);
 
-	target.draw(m_hud.blockCursor(), states);
+		for (auto &it : m_playerBoxes)
+			if (it.second.dimension() == m_player.dimension())
+				target.draw(it.second, states);
 
-	target.draw(m_hud, states);
+		target.draw(m_hud.blockCursor(), states);
+	}
+
+	states.view = BgfxView::HUD;
+	{
+		target.draw(m_hud, states);
+	}
 
 	m_fbo.draw();
 }
