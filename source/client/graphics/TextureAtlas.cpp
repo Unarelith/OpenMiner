@@ -139,14 +139,6 @@ void TextureAtlas::packTextures() {
 	if (!m_tileSize)
 		throw EXCEPTION("Cannot pack zero-sized textures!");
 
-	// Max amount of textures on one line
-	const u16 atlasWidth = 16;
-
-	// Max amount of textures on one column
-	const u16 atlasHeight = (u16)std::ceil((float)m_textures.size() / atlasWidth);
-
-	SurfacePtr atlas{nullptr, &SDL_FreeSurface};
-
 	Uint32 rmask, gmask, bmask, amask;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	rmask = 0xff000000;
@@ -160,8 +152,31 @@ void TextureAtlas::packTextures() {
 	amask = 0xff000000;
 #endif
 
-	atlas.reset(SDL_CreateRGBSurface(0, atlasWidth * m_tileSize, atlasHeight * m_tileSize, 32, rmask, gmask, bmask, amask));
-	if (!atlas) {
+	// Max amount of textures on one line
+	const u16 atlasWidth = 32;
+
+	// Max amount of textures on one column
+	// const u16 atlasHeight = (u16)std::ceil((float)m_textures.size() / atlasWidth);
+	const u16 atlasHeight = 32;
+
+#define MIPMAP_LEVELS 11
+
+	SurfacePtr atlas[MIPMAP_LEVELS] = {
+		{nullptr, &SDL_FreeSurface},
+		{nullptr, &SDL_FreeSurface},
+		{nullptr, &SDL_FreeSurface},
+		{nullptr, &SDL_FreeSurface},
+		{nullptr, &SDL_FreeSurface},
+		{nullptr, &SDL_FreeSurface},
+		{nullptr, &SDL_FreeSurface},
+		{nullptr, &SDL_FreeSurface},
+		{nullptr, &SDL_FreeSurface},
+		{nullptr, &SDL_FreeSurface},
+		{nullptr, &SDL_FreeSurface},
+	};
+
+	atlas[0].reset(SDL_CreateRGBSurface(0, atlasWidth * m_tileSize, atlasHeight * m_tileSize, 32, rmask, gmask, bmask, amask));
+	if (!atlas[0]) {
 		throw EXCEPTION("Failed to create surface:", SDL_GetError());
 	}
 
@@ -173,28 +188,59 @@ void TextureAtlas::packTextures() {
 		outRect.w = m_tileSize;
 		outRect.h = m_tileSize;
 
-		SDL_BlitSurface(it.get(), nullptr, atlas.get(), &outRect);
+		SDL_UpperBlit(it.get(), nullptr, atlas[0].get(), &outRect);
 
 		++i;
 	}
 
+	int size[MIPMAP_LEVELS];
+	size[0] = atlas[0]->h * atlas[0]->pitch;
+	int totalSize = size[0];
+
+	// Generate mipmaps
+	for (int i = 1; i < MIPMAP_LEVELS; ++i) {
+		int width = (atlasWidth * m_tileSize) / (1 << i);
+		int height = (atlasHeight * m_tileSize) / (1 << i);
+
+		gkDebug() << width << height;
+
+		atlas[i].reset(SDL_CreateRGBSurface(0, width, height, 32, rmask, gmask, bmask, amask));
+		if (!atlas[i])
+			throw EXCEPTION("Failed to create surface:", SDL_GetError());
+
+		size[i] = atlas[i]->h * atlas[i]->pitch;
+		totalSize += size[i];
+
+		u8 *src = (u8 *)atlas[i - 1]->pixels;
+		u8 *dst = (u8 *)atlas[i]->pixels;
+		for (int j = 0; j < size[i] / 4; ++j) {
+			int srcX = (j % width) * 2;
+			int srcY = (j / width) * 2;
+			int srcPos1 = srcX + srcY * width * 2;
+			int srcPos2 = (srcX + 1) + srcY * width * 2;
+			int srcPos3 = srcX + (srcY + 1) * width * 2;
+			int srcPos4 = (srcX + 1) + (srcY + 1) * width * 2;
+			dst[j * 4 + 0] = (u8)(((int)src[srcPos1 * 4 + 0] + src[srcPos2 * 4 + 0] + src[srcPos3 * 4 + 0] + src[srcPos4 * 4 + 0]) / 4);
+			dst[j * 4 + 1] = (u8)(((int)src[srcPos1 * 4 + 1] + src[srcPos2 * 4 + 1] + src[srcPos3 * 4 + 1] + src[srcPos4 * 4 + 1]) / 4);
+			dst[j * 4 + 2] = (u8)(((int)src[srcPos1 * 4 + 2] + src[srcPos2 * 4 + 2] + src[srcPos3 * 4 + 2] + src[srcPos4 * 4 + 2]) / 4);
+			dst[j * 4 + 3] = (u8)(((int)src[srcPos1 * 4 + 3] + src[srcPos2 * 4 + 3] + src[srcPos3 * 4 + 3] + src[srcPos4 * 4 + 3]) / 4);
+		}
+	}
+
 	m_textures.clear();
+
+	const bgfx::Memory *mem = bgfx::alloc(totalSize);
+	int offset = 0;
+	for (int i = 0; i < MIPMAP_LEVELS; ++i) {
+		std::memcpy(mem->data + offset, atlas[i]->pixels, size[i]);
+		offset += size[i];
+	}
 
 	m_isReady = true;
 
-	if (IMG_SavePNG(atlas.get(), "test_atlas.png") < 0)
-		throw EXCEPTION("Failed to save texture to: test_atlas.png. Reason:", IMG_GetError());
+	if (IMG_SavePNG(atlas[2].get(), "test_atlas.png") < 0)
+		gkError() << "Failed to save texture to: test_atlas.png. Reason:" << IMG_GetError();
 
 	m_texture.free();
-	m_texture.loadFromSurface(atlas.get());
-
-#ifdef OM_NOT_IMPLEMENTED_GL_TEXTURE
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-#endif // OM_NOT_IMPLEMENTED_GL_TEXTURE
+	m_texture.loadFromMemory(mem, atlas[0]->w, atlas[0]->h);
 }
