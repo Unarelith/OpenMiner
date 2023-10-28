@@ -30,6 +30,7 @@
 #include <gk/core/Utils.hpp>
 #include <gk/core/Exception.hpp>
 
+#include "Config.hpp"
 #include "BgfxView.hpp"
 #include "CoreApplication.hpp"
 #include "Window.hpp"
@@ -64,6 +65,16 @@ void Window::close() {
 
 void Window::clear() {
 	bgfx::touch(0);
+
+	if (m_hasChanged) {
+		uint32_t flags = (m_isVerticalSyncEnabled) ? BGFX_RESET_VSYNC : BGFX_RESET_NONE;
+		bgfx::reset(m_size.x, m_size.y, flags);
+
+		for (bgfx::ViewId i = 0; i < BgfxView::Count; ++i)
+			bgfx::setViewRect(i, 0, 0, (u16)m_size.x, (u16)m_size.y);
+
+		m_hasChanged = false;
+	}
 }
 
 void Window::display() {
@@ -72,11 +83,10 @@ void Window::display() {
 
 void Window::onEvent(const SDL_Event &event) {
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-		for (bgfx::ViewId i = 0; i < BgfxView::Count; ++i)
-			bgfx::setViewRect(i, 0, 0, (uint16_t)event.window.data1, (uint16_t)event.window.data2);
-
 		m_size.x = (unsigned int)event.window.data1;
 		m_size.y = (unsigned int)event.window.data2;
+
+		m_hasChanged = true;
 	}
 
 	if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE) {
@@ -87,7 +97,7 @@ void Window::onEvent(const SDL_Event &event) {
 void Window::setVerticalSyncEnabled(bool isVerticalSyncEnabled) {
 	m_isVerticalSyncEnabled = isVerticalSyncEnabled;
 
-	gkWarning() << "Vsync not implemented yet";
+	m_hasChanged = true;
 }
 
 void Window::setWindowMode(Mode mode) {
@@ -142,7 +152,7 @@ void Window::initBGFX() {
 	bgfx::Init init;
 	init.resolution.width = m_size.x;
 	init.resolution.height = m_size.y;
-	init.resolution.reset = BGFX_RESET_VSYNC;
+	init.resolution.reset = (Config::isVerticalSyncEnabled) ? BGFX_RESET_VSYNC : BGFX_RESET_NONE;
 	init.type = bgfx::RendererType::OpenGL;
 	init.callback = &m_callback;
 

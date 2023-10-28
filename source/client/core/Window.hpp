@@ -88,6 +88,8 @@ class Window : public RenderTarget {
 		bool m_isVerticalSyncEnabled = false;
 
 		BgfxCallback m_callback;
+
+		bool m_hasChanged = false;
 };
 
 #endif // WINDOW_HPP_

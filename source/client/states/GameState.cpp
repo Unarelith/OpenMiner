@@ -258,6 +258,8 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 
 	target.setView(m_camera);
 
+	m_fbo.prepareDraw();
+
 	states.view = BgfxView::Sky;
 	{
 		target.draw(m_skybox, states);

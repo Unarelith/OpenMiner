@@ -29,11 +29,11 @@
 
 namespace BgfxView {
 	enum Enum {
-		Sky,
-		World,
-		Effect,
-		HUD,
-		UI,
+		Sky    = 0,
+		World  = 1,
+		Effect = 2,
+		HUD    = 3,
+		UI     = 4,
 
 		Count
 	};

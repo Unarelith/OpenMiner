@@ -45,6 +45,7 @@ class Framebuffer : public gk::NonCopyable {
 
 		void loadShader(const std::string &name);
 
+		void prepareDraw() const;
 		void draw() const;
 
 	private:
