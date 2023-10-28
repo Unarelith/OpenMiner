@@ -78,6 +78,9 @@ void Framebuffer::init(u16 width, u16 height) {
 	if (!bgfx::isValid(m_textures[1]))
 		throw EXCEPTION("Framebuffer error: Unable to create depth texture with format D24S8");
 
+	if (bgfx::isValid(m_handle))
+		bgfx::destroy(m_handle);
+
 	m_handle = bgfx::createFrameBuffer(2, m_textures, true);
 
 	if (!bgfx::isValid(m_handle))
@@ -85,15 +88,9 @@ void Framebuffer::init(u16 width, u16 height) {
 
 	bgfx::setViewRect(BgfxView::Effect, 0, 0, width, height);
 	bgfx::setViewClear(BgfxView::Effect, BGFX_CLEAR_COLOR);
-
-	bgfx::setViewFrameBuffer(BgfxView::Sky, m_handle);
-	bgfx::setViewFrameBuffer(BgfxView::World, m_handle);
 }
 
 void Framebuffer::free() {
-	bgfx::setViewFrameBuffer(BgfxView::Sky, BGFX_INVALID_HANDLE);
-	bgfx::setViewFrameBuffer(BgfxView::World, BGFX_INVALID_HANDLE);
-
 	if (bgfx::isValid(m_handle)) {
 		bgfx::destroy(m_handle);
 		m_handle.idx = bgfx::kInvalidHandle;
@@ -122,6 +119,11 @@ void Framebuffer::free() {
 
 void Framebuffer::loadShader(const std::string &name) {
 	m_shader.loadFromFile(name);
+}
+
+void Framebuffer::prepareDraw() const {
+	bgfx::setViewFrameBuffer(BgfxView::Sky, m_handle);
+	bgfx::setViewFrameBuffer(BgfxView::World, m_handle);
 }
 
 void Framebuffer::draw() const {
