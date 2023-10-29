@@ -51,11 +51,11 @@ Framebuffer::Framebuffer() {
 
 	m_vbo.init(quad, sizeof(quad));
 
-	m_colorTextureSampler = bgfx::createUniform("s_colorTexture", bgfx::UniformType::Sampler);
-	m_depthTextureSampler = bgfx::createUniform("s_depthTexture", bgfx::UniformType::Sampler);
+	m_colorTextureSampler.init("s_colorTexture", bgfx::UniformType::Sampler);
+	m_depthTextureSampler.init("s_depthTexture", bgfx::UniformType::Sampler);
 
-	m_effectTypeUniform = bgfx::createUniform("u_effectType", bgfx::UniformType::Vec4);
-	m_depthFogColorUniform = bgfx::createUniform("u_depthFogColor", bgfx::UniformType::Vec4);
+	m_effectTypeUniform.init("u_effectType", bgfx::UniformType::Vec4);
+	m_depthFogColorUniform.init("u_depthFogColor", bgfx::UniformType::Vec4);
 }
 
 Framebuffer::Framebuffer(u16 width, u16 height) : Framebuffer() {
@@ -95,26 +95,6 @@ void Framebuffer::free() {
 		bgfx::destroy(m_handle);
 		m_handle.idx = bgfx::kInvalidHandle;
 	}
-
-	if (bgfx::isValid(m_depthFogColorUniform)) {
-		bgfx::destroy(m_depthFogColorUniform);
-		m_depthFogColorUniform.idx = bgfx::kInvalidHandle;
-	}
-
-	if (bgfx::isValid(m_effectTypeUniform)) {
-		bgfx::destroy(m_effectTypeUniform);
-		m_effectTypeUniform.idx = bgfx::kInvalidHandle;
-	}
-
-	if (bgfx::isValid(m_depthTextureSampler)) {
-		bgfx::destroy(m_depthTextureSampler);
-		m_depthTextureSampler.idx = bgfx::kInvalidHandle;
-	}
-
-	if (bgfx::isValid(m_colorTextureSampler)) {
-		bgfx::destroy(m_colorTextureSampler);
-		m_colorTextureSampler.idx = bgfx::kInvalidHandle;
-	}
 }
 
 void Framebuffer::loadShader(const std::string &name) {
@@ -127,19 +107,12 @@ void Framebuffer::prepareDraw() const {
 }
 
 void Framebuffer::draw() const {
-	bgfx::setTexture(0, m_colorTextureSampler, m_textures[0]);
-	bgfx::setTexture(1, m_depthTextureSampler, m_textures[1]);
+	bgfx::setTexture(0, m_colorTextureSampler.handle(), m_textures[0]);
+	bgfx::setTexture(1, m_depthTextureSampler.handle(), m_textures[1]);
 
-	float effectType[4] = {(float)GameConfig::currentScreenEffect, GameConfig::fogDepth, 0.f, 0.f};
-	bgfx::setUniform(m_effectTypeUniform, effectType);
+	m_effectTypeUniform.setValue(GameConfig::currentScreenEffect, GameConfig::fogDepth);
 
-	float fogColor[4] = {
-		GameConfig::fogColor.r,
-		GameConfig::fogColor.g,
-		GameConfig::fogColor.b,
-		GameConfig::fogColor.a,
-	};
-	bgfx::setUniform(m_depthFogColorUniform, fogColor);
+	m_depthFogColorUniform.setValue(GameConfig::fogColor);
 
 	m_vbo.enable();
 

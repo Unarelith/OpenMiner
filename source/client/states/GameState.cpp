@@ -63,22 +63,10 @@ GameState::GameState()
 
 	m_keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
 
-	m_skyColor = bgfx::createUniform("u_skyColor", bgfx::UniformType::Vec4);
-	m_sunlightIntensity = bgfx::createUniform("u_sunlightIntensity", bgfx::UniformType::Vec4);
+	m_skyColor.init("u_skyColor", bgfx::UniformType::Vec4);
+	m_sunlightIntensity.init("u_sunlightIntensity", bgfx::UniformType::Vec4);
 
 	m_fbo.init(Config::screenWidth, Config::screenHeight);
-}
-
-GameState::~GameState() {
-	if (bgfx::isValid(m_sunlightIntensity)) {
-		bgfx::destroy(m_sunlightIntensity);
-		m_sunlightIntensity.idx = bgfx::kInvalidHandle;
-	}
-
-	if (bgfx::isValid(m_skyColor)) {
-		bgfx::destroy(m_skyColor);
-		m_skyColor.idx = bgfx::kInvalidHandle;
-	}
 }
 
 void GameState::init() {
@@ -227,31 +215,25 @@ void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 
 void GameState::draw(RenderTarget &target, RenderStates states) const {
 	if (m_world.sky()) {
+		gk::Color color = m_world.sky()->color();
+		float sunlightIntensity = 1.f;
+
 		if (m_world.sky()->daylightCycleSpeed() > 0.f) {
 			float time = GameTime::getCurrentTime(0, m_world.sky()->daylightCycleSpeed());
-			const gk::Color &color = GameTime::getSkyColorFromTime(*m_world.sky(), time);
-
-			u32 iColor = (color.r255() << 24) | (color.g255() << 16) | (color.b255() << 8) | color.a255();
-			bgfx::setViewClear(BgfxView::Sky, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, iColor);
-
-			float colorPtr[4] = {color.r255() / 255.f, color.g255() / 255.f, color.b255() / 255.f, color.a255() / 255.f};
-			bgfx::setUniform(m_skyColor, colorPtr);
-
-			float sunlightIntensity[4] = {GameTime::getSunlightIntensityFromTime(time), 0, 0, 0};
-			bgfx::setUniform(m_sunlightIntensity, sunlightIntensity);
+			color = GameTime::getSkyColorFromTime(*m_world.sky(), time);
+			sunlightIntensity = GameTime::getSunlightIntensityFromTime(time);
 		}
-		else {
-			const gk::Color &color = m_world.sky()->color();
 
-			u32 iColor = (color.r255() << 24) | (color.g255() << 16) | (color.b255() << 8) | color.a255();
-			bgfx::setViewClear(BgfxView::Sky, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, iColor);
+		u32 iColor = (color.r255() << 24)
+		           | (color.g255() << 16)
+		           | (color.b255() << 8)
+		           | color.a255();
 
-			float colorPtr[4] = {color.r255() / 255.f, color.g255() / 255.f, color.b255() / 255.f, color.a255() / 255.f};
-			bgfx::setUniform(m_skyColor, colorPtr);
+		bgfx::setViewClear(BgfxView::Sky, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, iColor);
 
-			float sunlightIntensity[4] = {1.f, 0.f, 0.f, 0.f};
-			bgfx::setUniform(m_sunlightIntensity, &sunlightIntensity);
-		}
+		m_skyColor.setValue(color, true);
+
+		m_sunlightIntensity.setValue(sunlightIntensity);
 	}
 
 	states.shader = &m_shader;

@@ -30,6 +30,7 @@
 #include <functional>
 
 #include "RenderStates.hpp"
+#include "ShaderUniform.hpp"
 #include "Sky.hpp"
 #include "TextureAtlas.hpp"
 
@@ -45,7 +46,6 @@ class ChunkRenderer {
 
 	public:
 		ChunkRenderer(const TextureAtlas &textureAtlas);
-		~ChunkRenderer();
 
 		void draw(RenderTarget &target, RenderStates states, const ChunkMap &chunks, Camera &camera, const Sky *currentSky) const;
 
@@ -60,9 +60,9 @@ class ChunkRenderer {
 		OnChunkDeletionRequestedCallback m_onChunkDeletionRequested;
 		OnMeshingRequestedCallback m_onMeshingRequested;
 
-		bgfx::UniformHandle m_renderDistance = BGFX_INVALID_HANDLE;
-		bgfx::UniformHandle m_fogColor = BGFX_INVALID_HANDLE;
-		bgfx::UniformHandle m_mipLevel = BGFX_INVALID_HANDLE;
+		ShaderUniform m_renderDistance;
+		ShaderUniform m_fogColor;
+		ShaderUniform m_mipLevel;
 };
 
 #endif // CHUNKRENDERER_HPP_
