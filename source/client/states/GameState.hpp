@@ -40,6 +40,7 @@
 #include "KeyboardHandler.hpp"
 #include "PlayerBox.hpp"
 #include "Registry.hpp"
+#include "ShaderUniform.hpp"
 #include "Skybox.hpp"
 
 class RenderTarget;
@@ -48,7 +49,6 @@ class TextureAtlas;
 class GameState : public DrawableState {
 	public:
 		GameState();
-		~GameState() override;
 
 		void init() override;
 		void onStateInactive() override;
@@ -103,8 +103,8 @@ class GameState : public DrawableState {
 
 		Skybox m_skybox{m_camera, m_world};
 
-		bgfx::UniformHandle m_skyColor = BGFX_INVALID_HANDLE;
-		bgfx::UniformHandle m_sunlightIntensity = BGFX_INVALID_HANDLE;
+		ShaderUniform m_skyColor;
+		ShaderUniform m_sunlightIntensity;
 };
 
 #endif // GAMESTATE_HPP_

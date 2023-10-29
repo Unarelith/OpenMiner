@@ -34,26 +34,9 @@
 #include "Texture.hpp"
 
 ChunkRenderer::ChunkRenderer(const TextureAtlas &textureAtlas) : m_textureAtlas(textureAtlas) {
-	m_renderDistance = bgfx::createUniform("u_renderDistance", bgfx::UniformType::Vec4);
-	m_fogColor = bgfx::createUniform("u_fogColor", bgfx::UniformType::Vec4);
-	m_mipLevel = bgfx::createUniform("u_mipLevel", bgfx::UniformType::Vec4);
-}
-
-ChunkRenderer::~ChunkRenderer() {
-	if (bgfx::isValid(m_mipLevel)) {
-		bgfx::destroy(m_mipLevel);
-		m_mipLevel.idx = bgfx::kInvalidHandle;
-	}
-
-	if (bgfx::isValid(m_fogColor)) {
-		bgfx::destroy(m_fogColor);
-		m_fogColor.idx = bgfx::kInvalidHandle;
-	}
-
-	if (bgfx::isValid(m_renderDistance)) {
-		bgfx::destroy(m_renderDistance);
-		m_renderDistance.idx = bgfx::kInvalidHandle;
-	}
+	m_renderDistance.init("u_renderDistance", bgfx::UniformType::Vec4);
+	m_fogColor.init("u_fogColor", bgfx::UniformType::Vec4);
+	m_mipLevel.init("u_mipLevel", bgfx::UniformType::Vec4);
 }
 
 inline static bool bbIntersects(const glm::vec3 &a0, const glm::vec3 &a1, const glm::vec3 &b0, const glm::vec3 &b1) {
@@ -297,25 +280,15 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 
 	bgfx::setViewMode(states.view, bgfx::ViewMode::DepthDescending);
 
-	float renderDistance[4] = {(float)Config::renderDistance * CHUNK_WIDTH, 0.f, 0.f, 0.f};
-	bgfx::setUniform(m_renderDistance, renderDistance);
+	m_renderDistance.setValue(Config::renderDistance * CHUNK_WIDTH);
 
-	if (currentSky) {
-		float fogColor[4] = {
-			currentSky->fogColor().r,
-			currentSky->fogColor().g,
-			currentSky->fogColor().b,
-			currentSky->fogColor().a
-		};
-		bgfx::setUniform(m_fogColor, fogColor);
-	}
+	if (currentSky)
+		m_fogColor.setValue(currentSky->fogColor());
 
 	for (u8 layer = 0 ; layer < ChunkMeshLayer::Count ; ++layer) {
-		float mipLevel[4] = {0.f,
-			(layer == ChunkMeshLayer::NoMipMap || layer == ChunkMeshLayer::Flora)
-				? 0.f : (float)Config::mipmapLevels,
-			0.f, 0.f
-		};
+		float maxMipLevel = 0.f;
+		if (layer == ChunkMeshLayer::NoMipMap || layer == ChunkMeshLayer::Flora)
+			maxMipLevel = Config::mipmapLevels;
 
 		if (layer == ChunkMeshLayer::Flora || layer == ChunkMeshLayer::Liquid)
 			states.isCullFaceEnabled = false;
@@ -326,7 +299,7 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 			std::size_t verticesCount = std::get<0>(it)->getVerticesCount(layer);
 			if (verticesCount == 0) continue;
 
-			bgfx::setUniform(m_mipLevel, mipLevel);
+			m_mipLevel.setValue(0.f, maxMipLevel);
 
 			target.beginDrawing(states);
 
@@ -345,4 +318,3 @@ void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const 
 		}
 	}
 }
-

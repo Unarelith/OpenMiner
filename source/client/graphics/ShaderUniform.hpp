@@ -24,44 +24,37 @@
  *
  * =====================================================================================
  */
-#ifndef FRAMEBUFFER_HPP_
-#define FRAMEBUFFER_HPP_
+#ifndef SHADERUNIFORM_HPP_
+#define SHADERUNIFORM_HPP_
 
-#include "Shader.hpp"
-#include "ShaderUniform.hpp"
-#include "Texture.hpp"
-#include "VertexBuffer.hpp"
+#include <bgfx/bgfx.h>
 
-class Framebuffer : public gk::NonCopyable {
+#include <gk/utils/NonCopyable.hpp>
+
+namespace gk {
+	class Color;
+}
+
+class ShaderUniform : public gk::NonCopyable {
 	public:
-		Framebuffer();
-		Framebuffer(u16 width, u16 height);
-		Framebuffer(Framebuffer &&) = default;
-		~Framebuffer();
+		ShaderUniform() = default;
+		ShaderUniform(ShaderUniform &&);
+		~ShaderUniform();
 
-		Framebuffer &operator=(Framebuffer &&) = default;
+		ShaderUniform &operator=(ShaderUniform &&);
 
-		void init(u16 width, u16 height);
+		void init(const char *uniformName, bgfx::UniformType::Enum type, uint16_t num = 1);
 		void free();
 
-		void loadShader(const std::string &name);
+		void setValue(float x, float y = 0.f, float z = 0.f, float w = 0.f) const;
+		void setValue(const gk::Color &color, bool needsRounding = false) const;
 
-		void prepareDraw() const;
-		void draw() const;
+		const bgfx::UniformHandle &handle() const { return m_handle; }
 
 	private:
-		ShaderUniform m_colorTextureSampler;
-		ShaderUniform m_depthTextureSampler;
+		const char *m_name = nullptr;
 
-		ShaderUniform m_effectTypeUniform;
-		ShaderUniform m_depthFogColorUniform;
-
-		bgfx::TextureHandle m_textures[2] = {BGFX_INVALID_HANDLE, BGFX_STATE_BLEND_INV_SRC_ALPHA};
-
-		bgfx::FrameBufferHandle m_handle = BGFX_INVALID_HANDLE;
-
-		Shader m_shader;
-		VertexBuffer m_vbo;
+		bgfx::UniformHandle m_handle = BGFX_INVALID_HANDLE;
 };
 
-#endif // FRAMEBUFFER_HPP_
+#endif // SHADERUNIFORM_HPP_
