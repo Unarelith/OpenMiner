@@ -92,8 +92,8 @@ int Heightmap::getHighestBlockAt(s32 blockX, s32 blockY) {
 	s32 chunkY = (blockY & -CHUNK_DEPTH) / CHUNK_DEPTH;
 
 	s32 blockZ = getOrCreateChunk(chunkX, chunkY).landHeightAt(
-		s8(gk::pmod(blockX, CHUNK_WIDTH)),
-		s8(gk::pmod(blockY, CHUNK_DEPTH))
+		s8(math::pmod(blockX, CHUNK_WIDTH)),
+		s8(math::pmod(blockY, CHUNK_DEPTH))
 	);
 
 	return blockZ;

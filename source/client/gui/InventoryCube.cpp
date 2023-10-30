@@ -24,8 +24,6 @@
  *
  * =====================================================================================
  */
-#include <gk/graphics/Color.hpp>
-#include <gk/math/Math.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "Block.hpp"
@@ -33,6 +31,7 @@
 #include "Config.hpp"
 #include "EngineConfig.hpp"
 #include "InventoryCube.hpp"
+#include "Math.hpp"
 #include "TextureAtlas.hpp"
 #include "Vertex.hpp"
 
@@ -125,8 +124,8 @@ void InventoryCube::updateVertexBuffer(const Block &block, u8 state) {
 
 			float U = (v == 0 || v == 3) ? U0 : U1;
 			float V = (v >= 2) ? V0 : V1;
-			vertices[f][v].texCoord[0] = gk::qlerpf(blockTexCoords.x, blockTexCoords.x + blockTexCoords.sizeX, U);
-			vertices[f][v].texCoord[1] = gk::qlerpf(blockTexCoords.y, blockTexCoords.y + blockTexCoords.sizeY, V);
+			vertices[f][v].texCoord[0] = math::qlerpf(blockTexCoords.x, blockTexCoords.x + blockTexCoords.sizeX, U);
+			vertices[f][v].texCoord[1] = math::qlerpf(blockTexCoords.y, blockTexCoords.y + blockTexCoords.sizeY, V);
 
 			const Color &colorMultiplier = blockState.colorMultiplier();
 			vertices[f][v].color[0] = colorMultiplier.r;

@@ -229,7 +229,7 @@ void ServerCommandHandler::setupCallbacks() {
 						for(int x = 0 ; x < CHUNK_WIDTH ; x++) {
 							int maxChunkZ = heightmap.getHighestChunkAt(x + spawnChunkX * CHUNK_WIDTH, y + spawnChunkY * CHUNK_DEPTH);
 							int worldZ = heightmap.getHighestBlockAt(x + spawnChunkX * CHUNK_WIDTH, y + spawnChunkY * CHUNK_DEPTH) + 1;
-							int z = gk::pmod(worldZ, CHUNK_WIDTH);
+							int z = math::pmod(worldZ, CHUNK_WIDTH);
 
 							world.generateChunk(world.getOrCreateChunk(spawnChunkX - 1, spawnChunkY,     maxChunkZ));
 							world.generateChunk(world.getOrCreateChunk(spawnChunkX + 1, spawnChunkY,     maxChunkZ));

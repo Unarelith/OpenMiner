@@ -27,9 +27,9 @@
 #include <cassert>
 
 #include <gk/core/Debug.hpp>
-#include <gk/math/Math.hpp>
 
 #include "Color.hpp"
+#include "Math.hpp"
 
 const Color Color::Black       = Color::fromRGBA32(0, 0, 0);
 const Color Color::White       = Color::fromRGBA32(255, 255, 255);
@@ -54,10 +54,10 @@ Color::Color(float r, float g, float b, float a) {
 
 Color Color::mix(const Color &other, float ratio) {
 	Color c;
-	c.r = gk::lerpf(r, other.r, ratio);
-	c.g = gk::lerpf(g, other.g, ratio);
-	c.b = gk::lerpf(b, other.b, ratio);
-	c.a = gk::lerpf(a, other.a, ratio);
+	c.r = math::lerpf(r, other.r, ratio);
+	c.g = math::lerpf(g, other.g, ratio);
+	c.b = math::lerpf(b, other.b, ratio);
+	c.a = math::lerpf(a, other.a, ratio);
 	return c;
 }
 

@@ -72,12 +72,12 @@ void ClientPlayer::updateCamera() {
 	if (Config::isViewBobbingEnabled)
 		applyViewBobbing(viewAngleH, viewAngleV, viewAngleRoll);
 
-	float ch = cosf(viewAngleH * gk::DEG_TO_RADf);
-	float sh = sinf(viewAngleH * gk::DEG_TO_RADf);
-	float cv = cosf(viewAngleV * gk::DEG_TO_RADf);
-	float sv = sinf(viewAngleV * gk::DEG_TO_RADf);
-	float cr = cosf(viewAngleRoll * gk::DEG_TO_RADf);
-	float sr = sinf(viewAngleRoll * gk::DEG_TO_RADf);
+	float ch = cosf(viewAngleH * math::DEG_TO_RADf);
+	float sh = sinf(viewAngleH * math::DEG_TO_RADf);
+	float cv = cosf(viewAngleV * math::DEG_TO_RADf);
+	float sv = sinf(viewAngleV * math::DEG_TO_RADf);
+	float cr = cosf(viewAngleRoll * math::DEG_TO_RADf);
+	float sr = sinf(viewAngleRoll * math::DEG_TO_RADf);
 
 	m_forwardDir = gk::Vector3f{ch * cv, sh * cv, sv};
 	m_camera.setDirection(m_forwardDir);
@@ -89,8 +89,8 @@ void ClientPlayer::move(float direction) {
 
 	constexpr float playerSpeed = 0.0275f;
 
-	m_velocity.x = playerSpeed * cosf(direction * gk::DEG_TO_RADf);
-	m_velocity.y = playerSpeed * sinf(direction * gk::DEG_TO_RADf);
+	m_velocity.x = playerSpeed * cosf(direction * math::DEG_TO_RADf);
+	m_velocity.y = playerSpeed * sinf(direction * math::DEG_TO_RADf);
 }
 
 void ClientPlayer::processInputs() {
