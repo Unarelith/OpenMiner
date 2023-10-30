@@ -30,12 +30,12 @@
 
 #include <gk/core/input/GamePad.hpp>
 #include <gk/core/Debug.hpp>
-#include <gk/core/EventHandler.hpp>
 #include <gk/core/Mouse.hpp>
 #include <gk/core/Utils.hpp>
 
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
+#include "EventHandler.hpp"
 #include "Events.hpp"
 #include "KeyboardHandler.hpp"
 #include "Registry.hpp"

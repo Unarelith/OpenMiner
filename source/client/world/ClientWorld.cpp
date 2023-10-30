@@ -33,6 +33,7 @@
 #include "ClientPlayer.hpp"
 #include "ClientProfiler.hpp"
 #include "ClientWorld.hpp"
+#include "EventHandler.hpp"
 #include "Events.hpp"
 #include "Registry.hpp"
 #include "Sky.hpp"

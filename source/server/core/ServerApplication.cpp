@@ -57,7 +57,7 @@ ServerApplication::ServerApplication(int argc, char **argv) : m_argumentParser(a
 	m_worldName = "_server";
 }
 
-ServerApplication::ServerApplication(gk::EventHandler &eventHandler) {
+ServerApplication::ServerApplication(EventHandler &eventHandler) {
 	m_eventHandler = &eventHandler;
 }
 

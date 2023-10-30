@@ -32,7 +32,6 @@
 #include <unordered_set>
 
 #include <gk/core/Vector4.hpp>
-#include <gk/core/EventHandler.hpp>
 
 #include "ChunkMeshBuilder.hpp"
 #include "ChunkRenderer.hpp"
@@ -43,6 +42,7 @@
 
 class Camera;
 class ClientCommandHandler;
+class EventHandler;
 class Sky;
 class TextureAtlas;
 
@@ -74,7 +74,7 @@ class ClientWorld : public World, public Drawable {
 
 		void setClient(ClientCommandHandler &client) { m_client = &client; }
 		void setCamera(Camera &camera) { m_camera = &camera; m_scene.setCamera(camera); }
-		void setEventHandler(gk::EventHandler &eventHandler) { m_eventHandler = &eventHandler; }
+		void setEventHandler(EventHandler &eventHandler) { m_eventHandler = &eventHandler; }
 
 		std::size_t loadedChunkCount() const { return m_chunks.size(); }
 
@@ -95,7 +95,7 @@ class ClientWorld : public World, public Drawable {
 
 		ClientCommandHandler *m_client = nullptr;
 		Camera *m_camera = nullptr;
-		gk::EventHandler *m_eventHandler = nullptr;
+		EventHandler *m_eventHandler = nullptr;
 
 		const Sky *m_sky = nullptr;
 

@@ -28,9 +28,9 @@
 #define SERVERAPPLICATION_HPP_
 
 #include <gk/core/GameClock.hpp>
-#include <gk/core/EventHandler.hpp>
 
 #include "ArgumentParser.hpp"
+#include "EventHandler.hpp"
 #include "LuaCore.hpp"
 #include "Registry.hpp"
 #include "ScriptEngine.hpp"
@@ -43,7 +43,7 @@
 class ServerApplication {
 	public:
 		ServerApplication(int argc = 0, char **argv = nullptr);
-		ServerApplication(gk::EventHandler &eventHandler);
+		ServerApplication(EventHandler &eventHandler);
 
 		bool init();
 
@@ -61,7 +61,7 @@ class ServerApplication {
 
 		ArgumentParser m_argumentParser;
 		gk::GameClock m_clock;
-		gk::EventHandler *m_eventHandler = nullptr;
+		EventHandler *m_eventHandler = nullptr;
 		gk::LoggerHandler m_loggerHandler;
 
 		Registry m_registry;
