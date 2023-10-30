@@ -24,62 +24,29 @@
  *
  * =====================================================================================
  */
-#ifndef COREAPPLICATION_HPP_
-#define COREAPPLICATION_HPP_
+#include <SDL.h>
+#include <SDL_image.h>
 
-#include <gk/core/GameClock.hpp>
-#include <gk/resource/ResourceHandler.hpp>
+#include <gk/core/Exception.hpp>
 
-#include "ApplicationStateStack.hpp"
-#include "ArgumentParser.hpp"
-#include "EventHandler.hpp"
 #include "SDLLoader.hpp"
-#include "Window.hpp"
 
-class CoreApplication {
-	public:
-		CoreApplication(int argc, char **argv);
-		virtual ~CoreApplication() = default;
+SDLLoader::~SDLLoader() {
+	if(m_imgInitialized) IMG_Quit();
+	if(m_sdlInitialized) SDL_Quit();
+}
 
-		int run(bool isProtected = true);
+void SDLLoader::load() {
+	if(SDL_Init(SDL_INIT_VIDEO) < 0) {
+		throw EXCEPTION("SDL init error:", SDL_GetError());
+	} else {
+		m_sdlInitialized = true;
+	}
 
-		static bool hasBeenInterrupted;
-
-	protected:
-		virtual bool init();
-
-		void exit();
-
-		void createWindow(u16 width, u16 height, const std::string &title);
-
-		virtual void onEvent(const SDL_Event &event);
-
-		virtual void onExit() {}
-
-		virtual void handleEvents();
-
-		virtual void mainLoop() = 0;
-
-		SDLLoader m_sdlLoader;
-		bool m_loadSDL = true;
-
-		ApplicationStateStack m_stateStack;
-
-		gk::GameClock m_clock;
-
-		gk::ResourceHandler m_resourceHandler;
-
-		Window m_window;
-
-		RenderStates m_renderStates = RenderStates::Default;
-
-		ArgumentParser m_argumentParser;
-
-		EventHandler m_eventHandler;
-
-		gk::LoggerHandler m_loggerHandler;
-
-		ApplicationState *m_currentState = nullptr;
-};
-
-#endif // COREAPPLICATION_HPP_
+	int imgFlags = IMG_INIT_PNG;
+	if((!IMG_Init(imgFlags)) & imgFlags) {
+		throw EXCEPTION("SDL_image init error:", IMG_GetError());
+	} else {
+		m_imgInitialized = true;
+	}
+}

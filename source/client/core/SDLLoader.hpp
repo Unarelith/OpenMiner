@@ -24,62 +24,24 @@
  *
  * =====================================================================================
  */
-#ifndef COREAPPLICATION_HPP_
-#define COREAPPLICATION_HPP_
+#ifndef SDLLOADER_HPP_
+#define SDLLOADER_HPP_
 
-#include <gk/core/GameClock.hpp>
-#include <gk/resource/ResourceHandler.hpp>
-
-#include "ApplicationStateStack.hpp"
-#include "ArgumentParser.hpp"
-#include "EventHandler.hpp"
-#include "SDLLoader.hpp"
-#include "Window.hpp"
-
-class CoreApplication {
+class SDLLoader {
 	public:
-		CoreApplication(int argc, char **argv);
-		virtual ~CoreApplication() = default;
+		SDLLoader() = default;
+		SDLLoader(const SDLLoader &) = delete;
+		SDLLoader(SDLLoader &&) = delete;
+		~SDLLoader();
 
-		int run(bool isProtected = true);
+		SDLLoader& operator=(const SDLLoader &) = delete;
+		SDLLoader& operator=(SDLLoader &&) = delete;
 
-		static bool hasBeenInterrupted;
+		void load();
 
-	protected:
-		virtual bool init();
-
-		void exit();
-
-		void createWindow(u16 width, u16 height, const std::string &title);
-
-		virtual void onEvent(const SDL_Event &event);
-
-		virtual void onExit() {}
-
-		virtual void handleEvents();
-
-		virtual void mainLoop() = 0;
-
-		SDLLoader m_sdlLoader;
-		bool m_loadSDL = true;
-
-		ApplicationStateStack m_stateStack;
-
-		gk::GameClock m_clock;
-
-		gk::ResourceHandler m_resourceHandler;
-
-		Window m_window;
-
-		RenderStates m_renderStates = RenderStates::Default;
-
-		ArgumentParser m_argumentParser;
-
-		EventHandler m_eventHandler;
-
-		gk::LoggerHandler m_loggerHandler;
-
-		ApplicationState *m_currentState = nullptr;
+	private:
+		bool m_sdlInitialized = false;
+		bool m_imgInitialized = false;
 };
 
-#endif // COREAPPLICATION_HPP_
+#endif // SDLLOADER_HPP_
