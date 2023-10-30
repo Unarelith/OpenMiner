@@ -27,8 +27,9 @@
 #ifndef WIDGET_HPP_
 #define WIDGET_HPP_
 
+#include <SDL.h>
+
 #include <gk/core/Rect.hpp>
-#include <gk/core/SDLHeaders.hpp>
 #include <gk/gl/Transformable.hpp>
 
 #include "Drawable.hpp"

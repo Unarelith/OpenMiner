@@ -30,12 +30,13 @@
 #include <string>
 
 #include <gk/core/IntTypes.hpp>
-#include <gk/core/SDLHeaders.hpp>
 #include <gk/core/Vector2.hpp>
 
 #include <bgfx/bgfx.h>
 
 #include "NonCopyable.hpp"
+
+struct SDL_Surface;
 
 class Texture : public NonCopyable {
 	public:

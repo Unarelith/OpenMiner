@@ -30,8 +30,9 @@
 #include <memory>
 #include <string>
 
+#include <SDL.h>
+
 #include <gk/core/IntTypes.hpp>
-#include <gk/core/SDLHeaders.hpp>
 
 #include "BgfxCallback.hpp"
 #include "RenderTarget.hpp"

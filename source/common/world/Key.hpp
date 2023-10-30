@@ -29,8 +29,9 @@
 
 #include <string>
 
+#include <SDL.h>
+
 #include <gk/core/IntTypes.hpp>
-#include <gk/core/SDLHeaders.hpp>
 
 #include <sol/sol.hpp>
 

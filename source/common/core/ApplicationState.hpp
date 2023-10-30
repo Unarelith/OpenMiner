@@ -27,7 +27,8 @@
 #ifndef APPLICATIONSTATE_HPP_
 #define APPLICATIONSTATE_HPP_
 
-#include <gk/core/SDLHeaders.hpp>
+#include <SDL.h>
+
 #include <gk/gl/Transformable.hpp>
 
 #include "EventHandler.hpp"

@@ -27,7 +27,7 @@
 #ifndef BLOCKCURSOR_HPP_
 #define BLOCKCURSOR_HPP_
 
-#include <gk/core/SDLHeaders.hpp>
+#include <SDL.h>
 
 #include "BlockGeometry.hpp"
 #include "ClientWorld.hpp"

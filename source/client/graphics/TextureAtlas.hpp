@@ -32,6 +32,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include <SDL.h>
+
 #include <gk/core/IntTypes.hpp>
 #include <gk/core/Rect.hpp>
 

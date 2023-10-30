@@ -27,7 +27,7 @@
 #ifndef TEXTINPUT_HPP_
 #define TEXTINPUT_HPP_
 
-#include <gk/core/SDLHeaders.hpp>
+#include <SDL.h>
 
 #include "Text.hpp"
 #include "Widget.hpp"

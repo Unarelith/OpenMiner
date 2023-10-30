@@ -26,6 +26,9 @@
  */
 #include <cassert>
 
+#include <SDL.h>
+#include <SDL_image.h>
+
 #include <gk/core/Exception.hpp>
 
 #include "Texture.hpp"

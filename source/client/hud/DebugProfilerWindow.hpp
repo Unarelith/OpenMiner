@@ -30,7 +30,7 @@
 #include <chrono>
 #include <limits>
 
-#include <gk/core/SDLHeaders.hpp>
+#include <SDL.h>
 
 #include "ClientProfiler.hpp"
 #include "Text.hpp"

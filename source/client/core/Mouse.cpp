@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/SDLHeaders.hpp>
+#include <SDL.h>
 
 #include "Mouse.hpp"
 

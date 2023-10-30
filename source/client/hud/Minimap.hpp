@@ -29,7 +29,7 @@
 
 #include <unordered_map>
 
-#include <gk/core/SDLHeaders.hpp>
+#include <SDL.h>
 
 #include "Events.hpp"
 #include "RectangleShape.hpp"
