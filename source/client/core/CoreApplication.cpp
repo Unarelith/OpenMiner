@@ -26,15 +26,15 @@
  */
 #include <ctime>
 
-#include <gk/core/Config.hpp>
 #include <gk/core/Exception.hpp>
 
 #include "CoreApplication.hpp"
 #include "Mouse.hpp"
+#include "Platform.hpp"
 
 bool CoreApplication::hasBeenInterrupted = false;
 
-#ifdef GK_SYSTEM_LINUX
+#ifdef OM_PLATFORM_LINUX
 
 #include <stdio.h>
 #include <signal.h>
@@ -44,10 +44,10 @@ static void sigintHandler(int) {
 	CoreApplication::hasBeenInterrupted = true;
 }
 
-#endif // GK_SYSTEM_LINUX
+#endif // OM_PLATFORM_LINUX
 
 CoreApplication::CoreApplication(int argc, char **argv) : m_argumentParser(argc, argv) {
-#ifdef GK_SYSTEM_LINUX
+#ifdef OM_PLATFORM_LINUX
 	signal(SIGINT, sigintHandler);
 #endif
 }
