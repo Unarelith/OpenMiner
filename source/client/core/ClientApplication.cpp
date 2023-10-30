@@ -27,7 +27,6 @@
 #include "filesystem.hpp"
 
 #include <gk/core/input/GamePad.hpp>
-#include <gk/core/Mouse.hpp>
 
 #include "BlockGeometry.hpp"
 #include "ClientApplication.hpp"

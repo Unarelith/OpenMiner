@@ -28,7 +28,6 @@
 
 #include <gk/core/input/GamePad.hpp>
 #include <gk/core/GameClock.hpp>
-#include <gk/core/Mouse.hpp>
 
 #include "Camera.hpp"
 #include "ClientCommandHandler.hpp"
