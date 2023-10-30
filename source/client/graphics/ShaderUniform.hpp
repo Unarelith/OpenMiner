@@ -29,11 +29,11 @@
 
 #include <bgfx/bgfx.h>
 
-#include <gk/utils/NonCopyable.hpp>
+#include "NonCopyable.hpp"
 
 class Color;
 
-class ShaderUniform : public gk::NonCopyable {
+class ShaderUniform : public NonCopyable {
 	public:
 		ShaderUniform() = default;
 		ShaderUniform(ShaderUniform &&);

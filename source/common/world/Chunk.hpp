@@ -33,15 +33,15 @@
 #include <vector>
 
 #include <gk/core/Vector3.hpp>
-#include <gk/utils/NonCopyable.hpp>
 
 #include "Block.hpp"
 #include "BlockData.hpp"
 #include "ChunkLightmap.hpp"
+#include "NonCopyable.hpp"
 
 class World;
 
-class Chunk : public gk::NonCopyable {
+class Chunk : public NonCopyable {
 	public:
 		enum {
 			West,    // cx - 1

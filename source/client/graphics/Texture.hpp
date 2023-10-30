@@ -32,11 +32,12 @@
 #include <gk/core/IntTypes.hpp>
 #include <gk/core/SDLHeaders.hpp>
 #include <gk/core/Vector2.hpp>
-#include <gk/utils/NonCopyable.hpp>
 
 #include <bgfx/bgfx.h>
 
-class Texture : public gk::NonCopyable {
+#include "NonCopyable.hpp"
+
+class Texture : public NonCopyable {
 	public:
 		Texture() = default;
 		Texture(const std::string &filename);

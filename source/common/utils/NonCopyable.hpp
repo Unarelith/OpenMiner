@@ -24,44 +24,17 @@
  *
  * =====================================================================================
  */
-#ifndef FRAMEBUFFER_HPP_
-#define FRAMEBUFFER_HPP_
+#ifndef NONCOPYABLE_HPP_
+#define NONCOPYABLE_HPP_
 
-#include "Shader.hpp"
-#include "ShaderUniform.hpp"
-#include "Texture.hpp"
-#include "VertexBuffer.hpp"
+class NonCopyable {
+	protected:
+		NonCopyable() = default;
+		NonCopyable(const NonCopyable &) = delete;
+		NonCopyable(NonCopyable &&) = default;
 
-class Framebuffer : public NonCopyable {
-	public:
-		Framebuffer();
-		Framebuffer(u16 width, u16 height);
-		Framebuffer(Framebuffer &&) = default;
-		~Framebuffer();
-
-		Framebuffer &operator=(Framebuffer &&) = default;
-
-		void init(u16 width, u16 height);
-		void free();
-
-		void loadShader(const std::string &name);
-
-		void prepareDraw() const;
-		void draw() const;
-
-	private:
-		ShaderUniform m_colorTextureSampler;
-		ShaderUniform m_depthTextureSampler;
-
-		ShaderUniform m_effectTypeUniform;
-		ShaderUniform m_depthFogColorUniform;
-
-		bgfx::TextureHandle m_textures[2] = {BGFX_INVALID_HANDLE, BGFX_STATE_BLEND_INV_SRC_ALPHA};
-
-		bgfx::FrameBufferHandle m_handle = BGFX_INVALID_HANDLE;
-
-		Shader m_shader;
-		VertexBuffer m_vbo;
+		NonCopyable &operator=(const NonCopyable &) = delete;
+		NonCopyable &operator=(NonCopyable &&) = default;
 };
 
-#endif // FRAMEBUFFER_HPP_
+#endif // NONCOPYABLE_HPP_
