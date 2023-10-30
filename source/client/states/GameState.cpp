@@ -26,7 +26,6 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/input/GamePad.hpp>
 #include <gk/core/Exception.hpp>
 #include <gk/core/GameClock.hpp>
 #include <gk/resource/ResourceHandler.hpp>
@@ -36,6 +35,7 @@
 #include "ChatState.hpp"
 #include "Events.hpp"
 #include "GameKey.hpp"
+#include "GamePad.hpp"
 #include "GameState.hpp"
 #include "GameTime.hpp"
 #include "KeyboardHandler.hpp"
@@ -61,7 +61,7 @@ GameState::GameState()
 	m_world.setClient(m_clientCommandHandler);
 	m_world.setCamera(m_player.camera());
 
-	m_keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
+	m_keyboardHandler = dynamic_cast<KeyboardHandler *>(GamePad::getInputHandler());
 
 	m_skyColor.init("u_skyColor", bgfx::UniformType::Vec4);
 	m_sunlightIntensity.init("u_sunlightIntensity", bgfx::UniformType::Vec4);
@@ -100,7 +100,7 @@ void GameState::onEvent(const SDL_Event &event) {
 	}
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
-		KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
+		KeyboardHandler *keyboardHandler = (KeyboardHandler *)GamePad::getInputHandler();
 
 		if (event.type == SDL_MOUSEMOTION) {
 			if(Config::screenWidth / 2 != event.motion.x || Config::screenHeight / 2 != event.motion.y) {

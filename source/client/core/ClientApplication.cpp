@@ -26,13 +26,12 @@
  */
 #include "filesystem.hpp"
 
-#include <gk/core/input/GamePad.hpp>
-
 #include "BlockGeometry.hpp"
 #include "ClientApplication.hpp"
 #include "Config.hpp"
 #include "EngineConfig.hpp"
 #include "Font.hpp"
+#include "GamePad.hpp"
 #include "TextureAtlas.hpp"
 #include "TextureLoader.hpp"
 #include "Vertex.hpp"
@@ -97,7 +96,7 @@ bool ClientApplication::init() {
 		Config::texturePack = m_argumentParser.getArgument("texture-pack").parameter;
 
 	m_keyboardHandler.loadKeysFromFile("config/keys.lua");
-	gk::GamePad::init(m_keyboardHandler);
+	GamePad::init(m_keyboardHandler);
 
 	createWindow(Config::screenWidth, Config::screenHeight, APP_NAME);
 	m_window.setVerticalSyncEnabled(Config::isVerticalSyncEnabled);

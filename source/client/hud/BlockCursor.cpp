@@ -26,7 +26,6 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/input/GamePad.hpp>
 #include <gk/core/GameClock.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
@@ -36,6 +35,7 @@
 #include "ClientPlayer.hpp"
 #include "Config.hpp"
 #include "GameKey.hpp"
+#include "GamePad.hpp"
 #include "Hotbar.hpp"
 #include "Registry.hpp"
 
@@ -165,7 +165,7 @@ void BlockCursor::activateBlock(const Hotbar &hotbar) {
 	bool itemActivationSent = false;
 	bool sneakedItemActivation = false;
 	if (item.id() && item.canBeActivated()) {
-		if (!gk::GamePad::isKeyPressed(GameKey::Sneak)) {
+		if (!GamePad::isKeyPressed(GameKey::Sneak)) {
 			m_client.sendItemActivated(m_selectedBlock);
 			itemActivationSent = true;
 		}
@@ -175,7 +175,7 @@ void BlockCursor::activateBlock(const Hotbar &hotbar) {
 
 	bool blockActivationSent = false;
 	if (!itemActivationSent && block.id() && block.canBeActivated()
-	&& (!gk::GamePad::isKeyPressed(GameKey::Sneak) || sneakedItemActivation)) {
+	&& (!GamePad::isKeyPressed(GameKey::Sneak) || sneakedItemActivation)) {
 		m_client.sendBlockActivated(m_selectedBlock);
 		blockActivationSent = true;
 	}

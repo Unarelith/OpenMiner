@@ -24,7 +24,6 @@
  *
  * =====================================================================================
  */
-#include <gk/core/input/GamePad.hpp>
 #include <gk/core/input/InputHandler.hpp>
 #include <gk/core/GameClock.hpp>
 #include <gk/core/Exception.hpp>

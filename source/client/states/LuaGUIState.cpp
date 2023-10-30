@@ -27,7 +27,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <gk/core/Debug.hpp>
-#include <gk/core/input/GamePad.hpp>
 
 #include "ApplicationStateStack.hpp"
 #include "ClientPlayer.hpp"
@@ -35,6 +34,7 @@
 #include "Color.hpp"
 #include "Config.hpp"
 #include "GameKey.hpp"
+#include "GamePad.hpp"
 #include "InventoryWidget.hpp"
 #include "LuaGUIState.hpp"
 #include "LuaWidget.hpp"
@@ -103,7 +103,7 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 
 	if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT
 	 && m_currentInventoryWidget && !m_currentInventoryWidget->shiftDestination().empty()
-	 && m_mouseItemWidget.currentItemWidget() && gk::GamePad::isKeyPressed(GameKey::Shift)) {
+	 && m_mouseItemWidget.currentItemWidget() && GamePad::isKeyPressed(GameKey::Shift)) {
 		for (const std::string &shiftDestination : m_currentInventoryWidget->shiftDestination()) {
 			AbstractInventoryWidget *dest = nullptr;
 

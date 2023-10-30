@@ -28,13 +28,13 @@
 
 #include <algorithm>
 
-#include <gk/core/input/GamePad.hpp>
 #include <gk/core/Debug.hpp>
 
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
 #include "EventHandler.hpp"
 #include "Events.hpp"
+#include "GamePad.hpp"
 #include "KeyboardHandler.hpp"
 #include "Registry.hpp"
 #include "SettingsMenuState.hpp"
@@ -86,7 +86,7 @@ void SettingsMenuState::onEvent(const SDL_Event &event) {
 			doneButtonAction();
 		}
 		else if (m_currentKeyButton && event.type == SDL_KEYDOWN) {
-			KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
+			KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(GamePad::getInputHandler());
 			keyboardHandler->setKeycode(m_currentKey, event.key.keysym.sym);
 
 			m_key->setKeycode(event.key.keysym.sym);
@@ -303,7 +303,7 @@ void SettingsMenuState::addGraphicsButtons() {
 }
 
 void SettingsMenuState::addInputButtons() {
-	KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
+	KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(GamePad::getInputHandler());
 	m_menuWidget.reset(2, u16((float)keyboardHandler->keyCount() / 2.f + 1.5f));
 
 	for (auto &it : keyboardHandler->keys()) {
