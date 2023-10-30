@@ -28,6 +28,7 @@
 #include "GameState.hpp"
 #include "ServerConnectState.hpp"
 #include "ServerLoadingState.hpp"
+#include "Utils.hpp"
 
 ServerConnectState::ServerConnectState(DrawableState *parent) : InterfaceState(parent) {
 	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
@@ -79,7 +80,7 @@ ServerConnectState::ServerConnectState(DrawableState *parent) : InterfaceState(p
 			m_errorText.updateVertexBuffer();
 			updateWidgetPosition();
 		}
-		else if (!gk::regexMatch(username, "^[A-Za-z0-9_]+$")) {
+		else if (!utils::regexMatch(username, "^[A-Za-z0-9_]+$")) {
 			m_errorText.setString("Error: Invalid username");
 			m_errorText.updateVertexBuffer();
 			updateWidgetPosition();

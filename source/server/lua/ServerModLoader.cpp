@@ -25,13 +25,13 @@
  * =====================================================================================
  */
 #include <gk/core/Exception.hpp>
-#include <gk/core/Utils.hpp>
 
 #include <filesystem.hpp>
 
 #include "LuaMod.hpp"
 #include "ScriptEngine.hpp"
 #include "ServerModLoader.hpp"
+#include "Utils.hpp"
 
 namespace fs = ghc::filesystem;
 
@@ -192,7 +192,7 @@ void ServerModLoader::loadMods() {
 LuaMod &ServerModLoader::registerMod(const std::string &name) {
 	// gkDebug("Registering mod" << mod.id() << "...";
 
-	if (!gk::regexMatch(name, "^[A-Za-z0-9_]+$") || name == "group")
+	if (!utils::regexMatch(name, "^[A-Za-z0-9_]+$") || name == "group")
 		throw std::runtime_error("Mod name '" + name + "' is invalid.");
 
 	auto it = m_mods.find(name);

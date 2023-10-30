@@ -25,13 +25,13 @@
  * =====================================================================================
  */
 #include <gk/core/Debug.hpp>
-#include <gk/core/Utils.hpp>
 
 #include <filesystem.hpp>
 
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
 #include "TitleScreenState.hpp"
+#include "Utils.hpp"
 #include "WorldCreationState.hpp"
 #include "WorldSelectionState.hpp"
 
@@ -79,7 +79,7 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 	m_menuWidget.addButton(originalName.empty() ? "Create New World" : "Save World", [this, titleScreen, originalName](TextButton &) {
 		std::string worldName = m_nameInput.string();
 		if (!fs::exists("saves/" + worldName + ".dat")) {
-			if (gk::regexMatch(worldName, "^[A-Za-z0-9_]+$") && worldName[0] != '_') {
+			if (utils::regexMatch(worldName, "^[A-Za-z0-9_]+$") && worldName[0] != '_') {
 				if (m_isEdition) {
 					fs::copy_file("saves/" + originalName + ".dat", "saves/" + worldName  + ".dat");
 					fs::remove("saves/" + originalName + ".dat");

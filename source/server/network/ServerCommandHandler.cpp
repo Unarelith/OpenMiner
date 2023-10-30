@@ -36,6 +36,7 @@
 #include "ServerBlock.hpp"
 #include "ServerCommandHandler.hpp"
 #include "ServerItem.hpp"
+#include "Utils.hpp"
 #include "WorldController.hpp"
 
 void ServerCommandHandler::sendServerTick(const ClientInfo *client) const {
@@ -205,7 +206,7 @@ void ServerCommandHandler::setupCallbacks() {
 		std::string username;
 		connectionPacket >> username;
 
-		if (!gk::regexMatch(username, "^[A-Za-z0-9_]+$")) {
+		if (!utils::regexMatch(username, "^[A-Za-z0-9_]+$")) {
 			sendServerClosed("Invalid username", &client);
 			return;
 		}

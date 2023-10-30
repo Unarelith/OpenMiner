@@ -26,7 +26,6 @@
  */
 #include <bgfx/bgfx.h>
 
-#include <gk/core/Utils.hpp>
 #include <gk/core/Exception.hpp>
 
 #include "Config.hpp"

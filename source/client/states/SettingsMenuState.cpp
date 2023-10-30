@@ -30,7 +30,6 @@
 
 #include <gk/core/input/GamePad.hpp>
 #include <gk/core/Debug.hpp>
-#include <gk/core/Utils.hpp>
 
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
