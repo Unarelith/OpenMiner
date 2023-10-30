@@ -39,13 +39,13 @@ ScrollableListElement::ScrollableListElement(u16 id, const std::string &line1, c
 	m_line2.setString(line2);
 	m_line2.updateVertexBuffer();
 	m_line2.setPosition(0.f, m_line1.getPosition().y + (float)m_line1.getSize().y + 1.f);
-	m_line2.setColor(gk::Color::fromRGBA32(128, 128, 128));
+	m_line2.setColor(Color::fromRGBA32(128, 128, 128));
 	m_line2.setShadowEnabled(false);
 
 	m_line3.setString(line3);
 	m_line3.updateVertexBuffer();
 	m_line3.setPosition(0.f, m_line2.getPosition().y + (float)m_line2.getSize().y);
-	m_line3.setColor(gk::Color::fromRGBA32(128, 128, 128));
+	m_line3.setColor(Color::fromRGBA32(128, 128, 128));
 	m_line3.setShadowEnabled(false);
 
 	m_height = (unsigned int)m_line3.getPosition().y + m_line3.getSize().y + 2;
@@ -68,8 +68,8 @@ void ScrollableListElement::draw(RenderTarget &target, RenderStates states) cons
 
 ScrollableList::ScrollableList() : Widget(ScrollableListElement::widgetWidth, 0) {
 	m_cursor.setOutlineThickness(1);
-	m_cursor.setOutlineColor(gk::Color::White);
-	m_cursor.setFillColor(gk::Color::Transparent);
+	m_cursor.setOutlineColor(Color::White);
+	m_cursor.setFillColor(Color::Transparent);
 	m_cursor.setSize((float)m_width, (float)m_height);
 }
 

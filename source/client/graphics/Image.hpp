@@ -27,10 +27,10 @@
 #ifndef IMAGE_HPP_
 #define IMAGE_HPP_
 
-#include <gk/graphics/Color.hpp>
 #include <gk/core/Rect.hpp>
 #include <gk/gl/Transformable.hpp>
 
+#include "Color.hpp"
 #include "Drawable.hpp"
 #include "Texture.hpp"
 #include "VertexBuffer.hpp"
@@ -57,7 +57,7 @@ class Image : public Drawable, public gk::Transformable {
 		u16 width() const { return u16(m_width * getScale().x); }
 		u16 height() const { return u16(m_height * getScale().y); }
 
-		void setColor(const gk::Color &color) { m_color = color; updateVertexBuffer(); }
+		void setColor(const Color &color) { m_color = color; updateVertexBuffer(); }
 		void setAlphaMod(u8 alpha) { m_color.a = alpha / 255.0f; updateVertexBuffer(); }
 		void setFlip(bool isFlipped) { m_isFlipped = isFlipped; }
 
@@ -77,7 +77,7 @@ class Image : public Drawable, public gk::Transformable {
 		gk::FloatRect m_clipRect;
 		gk::FloatRect m_posRect;
 
-		gk::Color m_color;
+		Color m_color;
 
 		bool m_isFlipped = false;
 };

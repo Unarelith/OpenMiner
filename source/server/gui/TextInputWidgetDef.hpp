@@ -42,7 +42,7 @@ class TextInputWidgetDef : public WidgetDef {
 		u16 m_height = 0;
 
 		std::string m_placeholder;
-		gk::Color m_placeholderColor;
+		Color m_placeholderColor;
 
 		std::string m_inventory;
 };

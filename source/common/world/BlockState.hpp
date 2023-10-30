@@ -144,14 +144,14 @@ class BlockState : public gk::ISerializable {
 
 		BLOCK_ATTR_V(BlockDrawType, drawType, BlockDrawType::Solid);
 
-		BLOCK_ATTR_V(gk::Color, colorMultiplier, gk::Color::White);
+		BLOCK_ATTR_V(Color, colorMultiplier, Color::White);
 
 		BLOCK_ATTR_V(bool, isLightSource, false);
 
 		BLOCK_ATTR(std::string, inventoryImage);
 
 		BLOCK_ATTR_V(float, fogDepth, 0);
-		BLOCK_ATTR_V(gk::Color, fogColor, gk::Color::White);
+		BLOCK_ATTR_V(Color, fogColor, Color::White);
 
 		BLOCK_ATTR_V(gk::Vector3f, drawOffset, (gk::Vector3f{0, 0, 0}));
 

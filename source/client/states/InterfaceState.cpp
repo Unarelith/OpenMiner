@@ -35,7 +35,7 @@
 InterfaceState::InterfaceState(ApplicationState *parent) : DrawableState(parent) {
 	m_shader.loadFromFile("basic");
 
-	m_background.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 127));
+	m_background.setFillColor(Color::fromRGBA32(0, 0, 0, 127));
 
 	setup();
 }

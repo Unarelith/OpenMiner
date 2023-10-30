@@ -29,19 +29,19 @@
 
 #include <array>
 
-#include <gk/graphics/Color.hpp>
 #include <gk/gl/Transformable.hpp>
 
+#include "Color.hpp"
 #include "Drawable.hpp"
 #include "VertexBuffer.hpp"
 
 class RectangleShape : public Drawable, public gk::Transformable {
 	public:
 		RectangleShape();
-		RectangleShape(float width, float height, const gk::Color &color = gk::Color::White);
+		RectangleShape(float width, float height, const Color &color = Color::White);
 
-		const gk::Color &color() const { return m_color; }
-		void setFillColor(const gk::Color &color) { m_color = color; updateVertexBuffer(); }
+		const Color &color() const { return m_color; }
+		void setFillColor(const Color &color) { m_color = color; updateVertexBuffer(); }
 
 		float width() const { return m_width; }
 		float height() const { return m_height; }
@@ -53,7 +53,7 @@ class RectangleShape : public Drawable, public gk::Transformable {
 
 		int outlineThickness() const { return m_outlineThickness; }
 
-		void setOutlineColor(const gk::Color &color) { m_outlineColor = color; updateVertexBuffer(); }
+		void setOutlineColor(const Color &color) { m_outlineColor = color; updateVertexBuffer(); }
 		void setOutlineThickness(int outlineThickness) { m_outlineThickness = outlineThickness; updateVertexBuffer(); }
 
 	private:
@@ -61,14 +61,14 @@ class RectangleShape : public Drawable, public gk::Transformable {
 
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		gk::Color m_color;
+		Color m_color;
 
 		float m_width = 0;
 		float m_height = 0;
 
 		VertexBuffer m_vbo;
 
-		gk::Color m_outlineColor{gk::Color::White};
+		Color m_outlineColor{Color::White};
 		int m_outlineThickness = 0;
 };
 

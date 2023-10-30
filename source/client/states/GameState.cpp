@@ -215,7 +215,7 @@ void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 
 void GameState::draw(RenderTarget &target, RenderStates states) const {
 	if (m_world.sky()) {
-		gk::Color color = m_world.sky()->color();
+		Color color = m_world.sky()->color();
 		float sunlightIntensity = 1.f;
 
 		if (m_world.sky()->daylightCycleSpeed() > 0.f) {

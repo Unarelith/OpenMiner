@@ -34,7 +34,7 @@ ChatMessage::ChatMessage(const std::string &message, u32 posY, const Player *pla
 		m_text.setString(message);
 
 	m_text.setPosition(0.f, (float)posY);
-	m_text.setBackgroundColor(gk::Color::fromRGBA32(0, 0, 0, 127));
+	m_text.setBackgroundColor(Color::fromRGBA32(0, 0, 0, 127));
 	m_text.setBackgroundSize(300, 10);
 	m_text.setMaxLineLength(300);
 	m_text.setPadding(1, 1);

@@ -36,11 +36,11 @@
 #include <gk/core/Box.hpp>
 #include <gk/core/IntTypes.hpp>
 #include <gk/core/ISerializable.hpp>
-#include <gk/graphics/Color.hpp>
 
 #include "BlockParam.hpp"
 #include "BlockPlacementConstraints.hpp"
 #include "BlockState.hpp"
+#include "Color.hpp"
 #include "ItemStack.hpp"
 #include "TilesDef.hpp"
 

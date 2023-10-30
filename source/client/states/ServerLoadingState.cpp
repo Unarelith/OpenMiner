@@ -43,10 +43,10 @@ ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, c
 {
 	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
-	m_filter.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
+	m_filter.setFillColor(Color::fromRGBA32(0, 0, 0, 192));
 
 	m_text.setString("Loading world...");
-	m_text.setColor(gk::Color::White);
+	m_text.setColor(Color::White);
 	m_text.updateVertexBuffer();
 	m_text.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 

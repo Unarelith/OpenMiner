@@ -32,7 +32,7 @@
 ServerConnectState::ServerConnectState(DrawableState *parent) : InterfaceState(parent) {
 	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
-	m_filter.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
+	m_filter.setFillColor(Color::fromRGBA32(0, 0, 0, 192));
 
 	m_title.setScale(Config::guiScale, Config::guiScale);
 	m_title.setString("Play Multiplayer");
@@ -41,7 +41,7 @@ ServerConnectState::ServerConnectState(DrawableState *parent) : InterfaceState(p
 	m_usernameInput.setString(Config::defaultUsername);
 	m_usernameInput.setCharacterLimit(20);
 	m_usernameInput.setBackgroundSize(150, 20);
-	m_usernameInput.setBackgroundOutline(1, gk::Color::White);
+	m_usernameInput.setBackgroundOutline(1, Color::White);
 	m_usernameInput.setPadding(5, 6);
 	m_usernameInput.setScale(Config::guiScale, Config::guiScale);
 	m_usernameInput.setPlaceholder("Username");
@@ -50,7 +50,7 @@ ServerConnectState::ServerConnectState(DrawableState *parent) : InterfaceState(p
 	m_addressInput.setString(Config::defaultServerAddress);
 	m_addressInput.setCharacterLimit(15 + 1 + 6);
 	m_addressInput.setBackgroundSize(150, 20);
-	m_addressInput.setBackgroundOutline(1, gk::Color::White);
+	m_addressInput.setBackgroundOutline(1, Color::White);
 	m_addressInput.setPadding(5, 6);
 	m_addressInput.setScale(Config::guiScale, Config::guiScale);
 	m_addressInput.setPlaceholder("Server address");
@@ -97,7 +97,7 @@ ServerConnectState::ServerConnectState(DrawableState *parent) : InterfaceState(p
 		m_stateStack->pop();
 	});
 
-	m_errorText.setColor(gk::Color::Red);
+	m_errorText.setColor(Color::Red);
 	m_errorText.setScale(Config::guiScale, Config::guiScale);
 
 	updateWidgetPosition();

@@ -31,8 +31,8 @@
 DebugLightmapViewer::DebugLightmapViewer(const ClientPlayer &player) : m_player(player) {
 	m_playerRect.setSize(7, 7);
 	m_playerRect.setOutlineThickness(1);
-	m_playerRect.setFillColor(gk::Color::White);
-	m_playerRect.setOutlineColor(gk::Color::Black);
+	m_playerRect.setFillColor(Color::White);
+	m_playerRect.setOutlineColor(Color::Black);
 
 	for (u32 x = 0 ; x < CHUNK_WIDTH ; ++x) {
 		for (u32 y = 0 ; y < CHUNK_DEPTH ; ++y) {

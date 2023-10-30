@@ -28,12 +28,6 @@
 #define SHADER_HPP_
 
 #include <string>
-#include <unordered_map>
-#include <vector>
-
-#include <glm/glm.hpp>
-
-#include <gk/graphics/Color.hpp>
 
 #include <bgfx/bgfx.h>
 

@@ -37,10 +37,10 @@ WorldSavingState::WorldSavingState(Client &client, bool closeClient, DrawableSta
 
 	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
-	m_filter.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
+	m_filter.setFillColor(Color::fromRGBA32(0, 0, 0, 192));
 
 	m_text.setString("Saving world...");
-	m_text.setColor(gk::Color::White);
+	m_text.setColor(Color::White);
 	m_text.updateVertexBuffer();
 	m_text.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 

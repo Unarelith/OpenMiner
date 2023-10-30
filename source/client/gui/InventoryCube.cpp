@@ -128,7 +128,7 @@ void InventoryCube::updateVertexBuffer(const Block &block, u8 state) {
 			vertices[f][v].texCoord[0] = gk::qlerpf(blockTexCoords.x, blockTexCoords.x + blockTexCoords.sizeX, U);
 			vertices[f][v].texCoord[1] = gk::qlerpf(blockTexCoords.y, blockTexCoords.y + blockTexCoords.sizeY, V);
 
-			const gk::Color &colorMultiplier = blockState.colorMultiplier();
+			const Color &colorMultiplier = blockState.colorMultiplier();
 			vertices[f][v].color[0] = colorMultiplier.r;
 			vertices[f][v].color[1] = colorMultiplier.g;
 			vertices[f][v].color[2] = colorMultiplier.b;

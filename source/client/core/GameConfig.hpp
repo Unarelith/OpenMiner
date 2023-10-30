@@ -30,7 +30,8 @@
 #include <string>
 
 #include <gk/core/IntTypes.hpp>
-#include <gk/graphics/Color.hpp>
+
+#include "Color.hpp"
 
 namespace GameConfig {
 	// Pre-game configuration
@@ -42,7 +43,7 @@ namespace GameConfig {
 	// Screen effects
 	extern u16 currentScreenEffect;
 	extern float fogDepth;
-	extern gk::Color fogColor;
+	extern Color fogColor;
 }
 
 #endif // GAMECONFIG_HPP_

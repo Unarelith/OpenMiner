@@ -28,11 +28,11 @@
 
 #include <gk/core/Debug.hpp>
 #include <gk/core/input/GamePad.hpp>
-#include <gk/graphics/Color.hpp>
 
 #include "ApplicationStateStack.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
+#include "Color.hpp"
 #include "Config.hpp"
 #include "GameKey.hpp"
 #include "InventoryWidget.hpp"
@@ -402,7 +402,7 @@ void LuaGUIState::loadScrollBarWidget(const std::string &, s32 x, s32 y, sf::Pac
 void LuaGUIState::loadTextInput(const std::string &name, s32 x, s32 y, sf::Packet &packet) {
 	u16 width, height;
 	std::string placeholder, inventory;
-	gk::Color placeholderColor;
+	Color placeholderColor;
 	packet >> width >> height >> placeholder >> placeholderColor >> inventory;
 
 	TextInput textInput{&m_mainWidget};

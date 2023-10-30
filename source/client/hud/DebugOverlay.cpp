@@ -52,10 +52,10 @@ DebugOverlay::DebugOverlay(const ClientPlayer &player, const ClientWorld &world)
 		versionString.append(VERSION_SUFFIX);
 	}
 	m_versionText.setString(versionString);
-	m_versionText.setColor(gk::Color::White);
+	m_versionText.setColor(Color::White);
 
 	m_positionText.setPosition(0, 10, 0);
-	m_positionText.setColor(gk::Color::White);
+	m_positionText.setColor(Color::White);
 }
 
 void DebugOverlay::update(bool printRendererInfo) {

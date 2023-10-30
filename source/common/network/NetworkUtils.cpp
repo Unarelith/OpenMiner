@@ -26,12 +26,12 @@
  */
 #include "NetworkUtils.hpp"
 
-sf::Packet &operator<<(sf::Packet &packet, const gk::Color &color) {
+sf::Packet &operator<<(sf::Packet &packet, const Color &color) {
 	packet << color.r << color.g << color.b << color.a;
 	return packet;
 }
 
-sf::Packet &operator>>(sf::Packet &packet, gk::Color &color) {
+sf::Packet &operator>>(sf::Packet &packet, Color &color) {
 	packet >> color.r >> color.g >> color.b >> color.a;
 	return packet;
 }

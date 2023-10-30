@@ -44,10 +44,10 @@ float GameTime::getSunlightIntensityFromTime(float time) {
 	return std::clamp(0.5f + sinf(2 * pi * time) * 2.f, 0.f, 1.f);
 }
 
-gk::Color GameTime::getSkyColorFromTime(const Sky &sky, float time) {
+Color GameTime::getSkyColorFromTime(const Sky &sky, float time) {
 	float sunlight = getSunlightIntensityFromTime(time);
 
-	gk::Color skyColor = sky.color();
+	Color skyColor = sky.color();
 	skyColor.r = std::clamp(sunlight - (1.f - skyColor.r), 0.f, skyColor.r);
 	skyColor.g = std::clamp(sunlight - (1.f - skyColor.g), 0.f, skyColor.g);
 	skyColor.b = std::clamp(sunlight - (1.f - skyColor.b), 0.f, skyColor.b);

@@ -31,7 +31,7 @@ TextButton::TextButton(Widget *parent) : TextButton(200, parent) {
 
 TextButton::TextButton(u16 width, Widget *parent) : Widget(width, 20, parent) {
 	m_text.setColor(m_defaultColor);
-	m_text.setShadowColor(gk::Color::fromRGBA32(56, 56, 56));
+	m_text.setShadowColor(Color::fromRGBA32(56, 56, 56));
 
 	m_background.setClipRect(0, 66, width, 20);
 	m_hoverBackground.setClipRect(0, 86, width, 20);

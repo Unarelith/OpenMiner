@@ -108,7 +108,7 @@ inline void LuaBlockLoader::loadProperties(BlockState &state, const sol::table &
 	if (state.fogDepth() > 0.f) {
 		sol::optional<sol::table> fogColor = table["fog_color"];
 		if (fogColor != sol::nullopt) {
-			state.fogColor(gk::Color::fromRGBA32(
+			state.fogColor(Color::fromRGBA32(
 				fogColor.value().get<u8>(1),
 				fogColor.value().get<u8>(2),
 				fogColor.value().get<u8>(3)
@@ -184,7 +184,7 @@ inline void LuaBlockLoader::loadItemDrop(BlockState &state, const sol::table &ta
 inline void LuaBlockLoader::loadColorMultiplier(BlockState &state, const sol::table &table) const {
 	sol::optional<sol::table> colorMultiplier = table["color_multiplier"];
 	if (colorMultiplier != sol::nullopt) {
-		state.colorMultiplier(gk::Color::fromRGBA32(
+		state.colorMultiplier(Color::fromRGBA32(
 			colorMultiplier.value().get<u8>(1),
 			colorMultiplier.value().get<u8>(2),
 			colorMultiplier.value().get<u8>(3),

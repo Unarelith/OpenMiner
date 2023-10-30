@@ -42,16 +42,16 @@ class Text : public Drawable, public gk::Transformable {
 		const std::string &string() const { return m_string; }
 		void setString(const std::string &string);
 
-		const gk::Color &color() const { return m_color; }
-		void setColor(const gk::Color &color);
-		void setShadowColor(const gk::Color &color) { m_shadowColor = color; }
+		const Color &color() const { return m_color; }
+		void setColor(const Color &color);
+		void setShadowColor(const Color &color) { m_shadowColor = color; }
 
 		const gk::Vector2i &getSize() const { return m_size; }
 		gk::Vector2f getBackgroundSize() const { return m_background.getSize(); }
 
-		void setBackgroundColor(const gk::Color &color) { m_background.setFillColor(color); }
+		void setBackgroundColor(const Color &color) { m_background.setFillColor(color); }
 		void setBackgroundSize(unsigned int width, unsigned int height) { m_background.setSize((float)width, (float)height); }
-		void setBackgroundOutline(int thickness, const gk::Color &color) { m_background.setOutlineThickness(thickness); m_background.setOutlineColor(color); }
+		void setBackgroundOutline(int thickness, const Color &color) { m_background.setOutlineThickness(thickness); m_background.setOutlineColor(color); }
 		void setShadowEnabled(bool isShadowEnabled) { m_isShadowEnabled = isShadowEnabled; m_isUpdateNeeded = true; }
 
 		void setPadding(int x, int y);
@@ -63,12 +63,12 @@ class Text : public Drawable, public gk::Transformable {
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		void addCharacter(u32 x, u32 y, const gk::Color &color, u8 c, std::vector<Vertex> &vertices) const;
+		void addCharacter(u32 x, u32 y, const Color &color, u8 c, std::vector<Vertex> &vertices) const;
 
 		std::string m_string;
 
 		bool m_isShadowEnabled = true;
-		gk::Color m_shadowColor = gk::Color::fromRGBA32(70, 70, 70);
+		Color m_shadowColor = Color::fromRGBA32(70, 70, 70);
 
 		Font &m_font;
 
@@ -79,7 +79,7 @@ class Text : public Drawable, public gk::Transformable {
 		mutable gk::Vector2i m_size{0, 0};
 		gk::Vector2i m_padding{0, 0};
 
-		gk::Color m_color = gk::Color::White;
+		Color m_color = Color::White;
 
 		mutable RectangleShape m_background;
 

@@ -58,7 +58,7 @@ void Skybox::loadSky(const Sky &sky) {
 		m_sun.setTexture(sun.texture);
 	}
 	catch (...) {
-		m_sun.setColor(gk::Color::Yellow);
+		m_sun.setColor(Color::Yellow);
 		gkWarning() << "Failed to load sun texture" << sun.texture;
 	}
 
@@ -75,7 +75,7 @@ void Skybox::loadSky(const Sky &sky) {
 		m_moon.setTexture(moon.texture);
 	}
 	catch (...) {
-		m_moon.setColor(gk::Color::fromRGBA32(240, 240, 240));
+		m_moon.setColor(Color::fromRGBA32(240, 240, 240));
 		gkWarning() << "Failed to load moon texture" << moon.texture;
 	}
 
@@ -84,7 +84,7 @@ void Skybox::loadSky(const Sky &sky) {
 	m_stars.reserve(stars.count);
 	for (int i = 0 ; i < stars.count ; ++i) {
 		auto &star = m_stars.emplace_back();
-		star.setColor(gk::Color::fromRGBA32(0, 0, 0, 0));
+		star.setColor(Color::fromRGBA32(0, 0, 0, 0));
 		star.setSize(stars.size, stars.size);
 
 		// This formula makes the distribution uniform
@@ -118,8 +118,8 @@ void Skybox::draw(RenderTarget &target, RenderStates states) const {
 	if (!m_world.sky()) return;
 
 	float time = GameTime::getCurrentTime(0, m_world.sky()->daylightCycleSpeed());
-	gk::Color skyColor = GameTime::getSkyColorFromTime(*m_world.sky(), time);
-	gk::Color starColor = m_world.sky()->color();
+	Color skyColor = GameTime::getSkyColorFromTime(*m_world.sky(), time);
+	Color starColor = m_world.sky()->color();
 
 	float starColorPtr[4] = {starColor.r, starColor.g, starColor.b, starColor.a};
 	bgfx::setUniform(m_starColor, starColorPtr);

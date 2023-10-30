@@ -34,7 +34,7 @@
 Text::Text() : m_font(gk::ResourceHandler::getInstance().get<Font>("font-ascii")) {
 	m_vbo.setupDefaultLayout();
 
-	m_background.setFillColor(gk::Color::Transparent);
+	m_background.setFillColor(Color::Transparent);
 }
 
 void Text::setString(const std::string &string) {
@@ -44,7 +44,7 @@ void Text::setString(const std::string &string) {
 	}
 }
 
-void Text::setColor(const gk::Color &color) {
+void Text::setColor(const Color &color) {
 	if (m_color != color) {
 		m_color = color;
 		m_isUpdateNeeded = true;
@@ -74,7 +74,7 @@ void Text::draw(RenderTarget &target, RenderStates states) const {
 
 	states.transform *= getTransform();
 
-	if (m_background.color() != gk::Color::Transparent || m_background.outlineThickness() > 0)
+	if (m_background.color() != Color::Transparent || m_background.outlineThickness() > 0)
 		target.draw(m_background, states);
 
 	if (m_verticesCount == 0) return;
@@ -98,7 +98,7 @@ void Text::updateVertexBuffer() const {
 	u32 maxX = 0;
 
 	if (m_isShadowEnabled) {
-		gk::Color color = m_shadowColor;
+		Color color = m_shadowColor;
 		for(char c : m_string) {
 			if (c == '\n' || (m_maxLineLength && x + m_font.getCharWidth(c) >= m_maxLineLength)) {
 				y += m_font.getTileSize().y + 1;
@@ -114,7 +114,7 @@ void Text::updateVertexBuffer() const {
 
 	x = 0;
 	y = 0;
-	gk::Color color = m_color;
+	Color color = m_color;
 	for(char c : m_string) {
 		if (c == '\n' || (m_maxLineLength && x + m_font.getCharWidth(c) >= m_maxLineLength)) {
 			maxX = std::max(x, maxX);
@@ -124,7 +124,7 @@ void Text::updateVertexBuffer() const {
 		}
 
 		if (c == '[')
-			color = Color::Blue;
+			color = Color::TextBlue;
 
 		addCharacter(x, y, color, c, vertices);
 
@@ -149,7 +149,7 @@ void Text::updateVertexBuffer() const {
 	}
 }
 
-void Text::addCharacter(u32 x, u32 y, const gk::Color &color, u8 c, std::vector<Vertex> &vertices) const {
+void Text::addCharacter(u32 x, u32 y, const Color &color, u8 c, std::vector<Vertex> &vertices) const {
 	static const u8 coords[6][2] = {
 		{1, 0},
 		{0, 0},

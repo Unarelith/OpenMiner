@@ -28,7 +28,7 @@
 #define NETWORKUTILS_HPP_
 
 #include <SFML/Network/Packet.hpp>
-//
+
 //======================================================================================
 // std::vector
 //======================================================================================
@@ -191,12 +191,12 @@ sf::Packet &operator>>(sf::Packet &packet, gk::Vector3<T> &vec) {
 }
 
 //======================================================================================
-// gk::Color
+// Color
 //======================================================================================
-#include <gk/graphics/Color.hpp>
+#include "Color.hpp"
 
-sf::Packet &operator<<(sf::Packet &packet, const gk::Color &color);
-sf::Packet &operator>>(sf::Packet &packet, gk::Color &color);
+sf::Packet &operator<<(sf::Packet &packet, const Color &color);
+sf::Packet &operator>>(sf::Packet &packet, Color &color);
 
 //======================================================================================
 // entt::entity

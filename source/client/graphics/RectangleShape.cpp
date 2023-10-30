@@ -31,7 +31,7 @@ RectangleShape::RectangleShape() {
 	m_vbo.setupDefaultLayout();
 }
 
-RectangleShape::RectangleShape(float width, float height, const gk::Color &color) : RectangleShape() {
+RectangleShape::RectangleShape(float width, float height, const Color &color) : RectangleShape() {
 	m_color = color;
 
 	setSize(width, height);

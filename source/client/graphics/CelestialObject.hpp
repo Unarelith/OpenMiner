@@ -28,8 +28,8 @@
 #define CELESTIALOBJECT_HPP_
 
 #include <gk/gl/Transformable.hpp>
-#include <gk/graphics/Color.hpp>
 
+#include "Color.hpp"
 #include "Drawable.hpp"
 #include "VertexBuffer.hpp"
 
@@ -40,7 +40,7 @@ class CelestialObject : public Drawable, public gk::Transformable  {
 		float width() const { return m_width; }
 		float height() const { return m_height; }
 
-		void setColor(const gk::Color &color) { m_color = color; m_isUpdateNeeded = true; }
+		void setColor(const Color &color) { m_color = color; m_isUpdateNeeded = true; }
 		void setSize(float width, float height) { m_width = width; m_height = height; m_isUpdateNeeded = true; }
 		void setTexture(const std::string &textureName);
 		void setPhaseCount(u16 phaseCount, u16 phaseSize) { m_phaseCount = phaseCount; m_phaseSize = phaseSize; m_isUpdateNeeded = true; }
@@ -57,7 +57,7 @@ class CelestialObject : public Drawable, public gk::Transformable  {
 
 		mutable VertexBuffer m_vbo;
 
-		gk::Color m_color = gk::Color::White;
+		Color m_color = Color::White;
 
 		float m_width = 0.f;
 		float m_height = 0.f;

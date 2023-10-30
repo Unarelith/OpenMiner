@@ -73,7 +73,7 @@ void XShapeMesher::addCross(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
 			vertices[v].normal[1] = 0;
 			vertices[v].normal[2] = 0;
 
-			const gk::Color colorMultiplier = blockState.colorMultiplier();
+			const Color colorMultiplier = blockState.colorMultiplier();
 			vertices[v].color[0] = colorMultiplier.r;
 			vertices[v].color[1] = colorMultiplier.g;
 			vertices[v].color[2] = colorMultiplier.b;

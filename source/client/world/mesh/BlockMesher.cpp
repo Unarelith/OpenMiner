@@ -188,7 +188,7 @@ void BlockMesher::addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob 
 		vertices[v].normal[1] = (float)normal.y;
 		vertices[v].normal[2] = (float)normal.z;
 
-		const gk::Color colorMultiplier = blockState.colorMultiplier();
+		const Color colorMultiplier = blockState.colorMultiplier();
 		vertices[v].color[0] = colorMultiplier.r;
 		vertices[v].color[1] = colorMultiplier.g;
 		vertices[v].color[2] = colorMultiplier.b;
@@ -224,7 +224,7 @@ void BlockMesher::addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob 
 			job.vertices[ChunkMeshLayer::Liquid].emplace_back(vertices[v]);
 		else if (blockState.drawType() == BlockDrawType::Glass)
 			job.vertices[ChunkMeshLayer::Glass].emplace_back(vertices[v]);
-		else if (blockState.colorMultiplier() != gk::Color::White)
+		else if (blockState.colorMultiplier() != Color::White)
 			job.vertices[ChunkMeshLayer::NoMipMap].emplace_back(vertices[v]);
 		else
 			job.vertices[ChunkMeshLayer::Solid].emplace_back(vertices[v]);

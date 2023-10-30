@@ -31,7 +31,7 @@
 TextInput::TextInput(Widget *parent) : Widget(parent) {
 	m_cursor.setString("_");
 
-	m_placeholder.setColor(gk::Color::fromRGBA32(150, 150, 150));
+	m_placeholder.setColor(Color::fromRGBA32(150, 150, 150));
 }
 
 void TextInput::onEvent(const SDL_Event &event) {

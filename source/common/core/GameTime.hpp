@@ -27,7 +27,7 @@
 #ifndef GAMETIME_HPP_
 #define GAMETIME_HPP_
 
-#include <gk/graphics/Color.hpp>
+#include "Color.hpp"
 
 class Sky;
 
@@ -40,7 +40,7 @@ class GameTime {
 		// Note: These 3 functions are only needed in the client
 		static float getCurrentTime(float offset = 0.f, float speed = 1.f);
 		static float getSunlightIntensityFromTime(float time);
-		static gk::Color getSkyColorFromTime(const Sky &sky, float time);
+		static Color getSkyColorFromTime(const Sky &sky, float time);
 
 		static void incrementTicks() { ++s_ticks; updateTpsCounter(); }
 		static void setTicks(u64 ticks) { s_ticks = ticks; updateTpsCounter(); }
