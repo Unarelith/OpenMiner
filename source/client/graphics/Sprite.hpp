@@ -27,9 +27,8 @@
 #ifndef SPRITE_HPP_
 #define SPRITE_HPP_
 
-#include <gk/graphics/SpriteAnimation.hpp>
-
 #include "Image.hpp"
+#include "SpriteAnimation.hpp"
 
 class Sprite : public Image {
 	public:
@@ -41,7 +40,7 @@ class Sprite : public Image {
 
 		void updateAnimations();
 
-		void addAnimation(const gk::SpriteAnimation &animation) { m_animations.emplace_back(animation); }
+		void addAnimation(const SpriteAnimation &animation) { m_animations.emplace_back(animation); }
 
 		u16 currentFrame() const { return m_currentFrame; }
 
@@ -50,11 +49,11 @@ class Sprite : public Image {
 
 		bool hasAnimations() { return m_animations.size() != 0; }
 
-		gk::SpriteAnimation &currentAnimation() { return m_animations.at(m_currentAnimation); }
-		const gk::SpriteAnimation &currentAnimation() const { return m_animations.at(m_currentAnimation); }
+		SpriteAnimation &currentAnimation() { return m_animations.at(m_currentAnimation); }
+		const SpriteAnimation &currentAnimation() const { return m_animations.at(m_currentAnimation); }
 
-		gk::SpriteAnimation &getAnimation(std::size_t i) { return m_animations.at(i); }
-		const gk::SpriteAnimation &getAnimation(std::size_t i) const { return m_animations.at(i); }
+		SpriteAnimation &getAnimation(std::size_t i) { return m_animations.at(i); }
+		const SpriteAnimation &getAnimation(std::size_t i) const { return m_animations.at(i); }
 
 		void setCurrentFrame(u16 currentFrame);
 		void setCurrentAnimation(u16 currentAnimation);
@@ -63,7 +62,7 @@ class Sprite : public Image {
 		void setAnimated(bool isAnimated) { m_isAnimated = isAnimated; }
 
 	private:
-		std::vector<gk::SpriteAnimation> m_animations;
+		std::vector<SpriteAnimation> m_animations;
 
 		u16 m_currentFrame = 0;
 		u16 m_currentAnimation = 0;
