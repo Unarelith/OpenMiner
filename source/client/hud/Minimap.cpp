@@ -24,8 +24,6 @@
  *
  * =====================================================================================
  */
-#include <gk/gl/Vertex.hpp>
-
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "Minimap.hpp"
