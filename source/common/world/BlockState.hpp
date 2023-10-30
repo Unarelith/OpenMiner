@@ -79,7 +79,7 @@ enum class BlockDrawType : u8 {
 		BLOCK_ATTR_SETTER(name)
 
 
-class BlockState : public gk::ISerializable {
+class BlockState : public ISerializable {
 	public:
 		BlockState() = default;
 		BlockState(u16 id, const Block *block, const BlockState *defaultState)

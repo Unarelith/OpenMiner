@@ -30,9 +30,10 @@
 #include <string>
 
 #include <gk/core/IntTypes.hpp>
-#include <gk/core/ISerializable.hpp>
 
-class Tree : public gk::ISerializable {
+#include "ISerializable.hpp"
+
+class Tree : public ISerializable {
 	public:
 		Tree() = default;
 		Tree(u16 id, const std::string &stringID);

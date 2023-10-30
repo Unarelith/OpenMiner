@@ -24,34 +24,14 @@
  *
  * =====================================================================================
  */
-#ifndef WIDGETDEF_HPP_
-#define WIDGETDEF_HPP_
-
-#include <string>
-
-#include <gk/core/IntTypes.hpp>
-
-#include <sol/sol.hpp>
-
 #include "ISerializable.hpp"
-#include "LuaWidget.hpp"
-#include "NetworkUtils.hpp"
 
-class WidgetDef : public ISerializable {
-	public:
-		WidgetDef(u8 type) : m_type(type) {}
+sf::Packet &operator<<(sf::Packet &packet, const ISerializable &s) {
+	s.serialize(packet);
+	return packet;
+}
 
-		void serialize(sf::Packet &packet) const override;
-
-		virtual void loadFromLuaTable(const sol::table &table);
-
-	protected:
-		u8 m_type = 0; // See LuaWidget
-
-		std::string m_name;
-
-		s32 m_x = 0;
-		s32 m_y = 0;
-};
-
-#endif // WIDGETDEF_HPP_
+sf::Packet &operator>>(sf::Packet &packet, ISerializable &s) {
+	s.deserialize(packet);
+	return packet;
+}

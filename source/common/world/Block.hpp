@@ -35,12 +35,12 @@
 
 #include <gk/core/Box.hpp>
 #include <gk/core/IntTypes.hpp>
-#include <gk/core/ISerializable.hpp>
 
 #include "BlockParam.hpp"
 #include "BlockPlacementConstraints.hpp"
 #include "BlockState.hpp"
 #include "Color.hpp"
+#include "ISerializable.hpp"
 #include "ItemStack.hpp"
 #include "TilesDef.hpp"
 
@@ -48,7 +48,7 @@ class Chunk;
 class Player;
 class World;
 
-class Block : public gk::ISerializable {
+class Block : public ISerializable {
 	public:
 		Block() = default;
 		Block(u16 id, const std::string &stringID);

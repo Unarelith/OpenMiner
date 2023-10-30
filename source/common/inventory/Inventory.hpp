@@ -29,12 +29,12 @@
 
 #include <vector>
 
-#include <gk/core/ISerializable.hpp>
 #include <gk/core/Vector3.hpp>
 
+#include "ISerializable.hpp"
 #include "ItemStack.hpp"
 
-class Inventory : public gk::ISerializable {
+class Inventory : public ISerializable {
 	public:
 		Inventory() = default;
 		Inventory(u16 width, u16 height, const std::string &name = "")

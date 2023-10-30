@@ -28,8 +28,8 @@
 #define DRAWABLEDEF_HPP_
 
 #include <gk/core/IntTypes.hpp>
-#include <gk/core/ISerializable.hpp>
 
+#include "ISerializable.hpp"
 #include "InventoryCubeDef.hpp"
 #include "Network.hpp"
 
@@ -40,7 +40,7 @@ namespace DrawableType {
 	};
 }
 
-class DrawableDef : public gk::ISerializable {
+class DrawableDef : public ISerializable {
 	public:
 		InventoryCubeDef &addInventoryCube();
 

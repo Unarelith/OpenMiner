@@ -31,15 +31,15 @@
 #include <string>
 
 #include <gk/core/IntTypes.hpp>
-#include <gk/core/ISerializable.hpp>
 
+#include "ISerializable.hpp"
 #include "NetworkUtils.hpp"
 
 namespace sol { class state; }
 
 class Block;
 
-class BlockParam : public gk::ISerializable {
+class BlockParam : public ISerializable {
 	public:
 		BlockParam(Block &block) : m_block(&block) {}
 
@@ -69,7 +69,7 @@ class BlockParam : public gk::ISerializable {
 		Block *m_block = nullptr;
 		u8 m_totalSize = 0;
 
-		struct Param : public gk::ISerializable {
+		struct Param : public ISerializable {
 			Param() = default;
 			Param(u8 _offset, u8 _size) : offset(_offset), size(_size) {}
 

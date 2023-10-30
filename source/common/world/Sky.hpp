@@ -30,11 +30,11 @@
 #include <string>
 
 #include <gk/core/IntTypes.hpp>
-#include <gk/core/ISerializable.hpp>
 
 #include "Color.hpp"
+#include "ISerializable.hpp"
 
-class Sky : public gk::ISerializable {
+class Sky : public ISerializable {
 	public:
 		Sky() = default;
 		Sky(u16 id, const std::string &stringID);

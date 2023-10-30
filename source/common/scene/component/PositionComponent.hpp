@@ -28,11 +28,11 @@
 #define POSITIONCOMPONENT_HPP_
 
 #include <gk/core/IntTypes.hpp>
-#include <gk/core/ISerializable.hpp>
 
+#include "ISerializable.hpp"
 #include "Network.hpp"
 
-struct PositionComponent : public gk::ISerializable {
+struct PositionComponent : public ISerializable {
 	PositionComponent() = default;
 	PositionComponent(double x_, double y_, double z_, u16 dimension_)
 		: x(x_), y(y_), z(z_), dimension(dimension_) {}

@@ -44,7 +44,7 @@
 #include "Tree.hpp"
 #include "Sky.hpp"
 
-class Registry : public gk::ISerializable {
+class Registry : public ISerializable {
 	public:
 		template<typename T>
 		auto registerBlock(const std::string &stringID) -> typename std::enable_if<std::is_base_of<Block, T>::value, T&>::type {

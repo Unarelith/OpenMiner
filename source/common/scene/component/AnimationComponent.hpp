@@ -30,8 +30,8 @@
 #include <vector>
 
 #include <gk/core/IntTypes.hpp>
-#include <gk/core/ISerializable.hpp>
 
+#include "ISerializable.hpp"
 #include "Network.hpp"
 #include "NetworkUtils.hpp"
 
@@ -40,7 +40,7 @@ enum class AnimationType {
 	Translation,
 };
 
-struct AnimationData : public gk::ISerializable {
+struct AnimationData : public ISerializable {
 	AnimationType type;
 
 	union {
@@ -88,7 +88,7 @@ struct AnimationData : public gk::ISerializable {
 	}
 };
 
-struct AnimationComponent : public gk::ISerializable {
+struct AnimationComponent : public ISerializable {
 	void addRotation(float axisX, float axisY, float axisZ, float angle) {
 		list.emplace_back();
 		AnimationData &data = list.back();

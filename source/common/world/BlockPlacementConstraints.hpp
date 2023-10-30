@@ -29,12 +29,12 @@
 
 #include <vector>
 
-#include <gk/core/ISerializable.hpp>
 #include <gk/core/Vector3.hpp>
 
+#include "ISerializable.hpp"
 #include "NetworkUtils.hpp"
 
-struct BlockPlacementConstraint : public gk::ISerializable {
+struct BlockPlacementConstraint : public ISerializable {
 	gk::Vector3i blockOffset{0, 0, 0};
 	std::string blockID;
 	bool isWhitelist = true;
@@ -45,7 +45,7 @@ struct BlockPlacementConstraint : public gk::ISerializable {
 
 class World;
 
-class BlockPlacementConstraints : public gk::ISerializable {
+class BlockPlacementConstraints : public ISerializable {
 	public:
 		bool check(const World &world, const gk::Vector3i &pos) const;
 

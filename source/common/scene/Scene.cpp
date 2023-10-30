@@ -25,11 +25,11 @@
  * =====================================================================================
  */
 #include <gk/core/Debug.hpp>
-#include <gk/core/ISerializable.hpp>
 
 #include <entt/entt.hpp>
 
 #include "ComponentType.hpp"
+#include "ISerializable.hpp"
 #include "Network.hpp"
 #include "NetworkUtils.hpp"
 #include "Scene.hpp"
@@ -79,7 +79,7 @@ T &set(entt::registry &registry, entt::entity entity, const T &instance) {
 template<typename T>
 Network::Packet serialize(entt::entity entity, T &component, bool useUpdateStatus) {
 	Network::Packet packet;
-	if constexpr(std::is_base_of_v<gk::ISerializable, std::decay_t<T>>) {
+	if constexpr(std::is_base_of_v<ISerializable, std::decay_t<T>>) {
 		if (!useUpdateStatus || component.isUpdated) {
 			packet << component.packetType << entity << component;
 			if (useUpdateStatus)

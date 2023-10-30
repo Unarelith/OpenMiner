@@ -30,14 +30,14 @@
 #include <string>
 
 #include <gk/core/IntTypes.hpp>
-#include <gk/core/ISerializable.hpp>
 #include <gk/core/SDLHeaders.hpp>
 
 #include <sol/sol.hpp>
 
+#include "ISerializable.hpp"
 #include "NetworkUtils.hpp"
 
-class Key : public gk::ISerializable {
+class Key : public ISerializable {
 	public:
 		Key() = default;
 		Key(u16 id, const std::string &stringID, const std::string &name)

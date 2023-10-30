@@ -24,34 +24,20 @@
  *
  * =====================================================================================
  */
-#ifndef WIDGETDEF_HPP_
-#define WIDGETDEF_HPP_
+#ifndef ISERIALIZABLE_HPP_
+#define ISERIALIZABLE_HPP_
 
-#include <string>
+namespace sf { class Packet; }
 
-#include <gk/core/IntTypes.hpp>
-
-#include <sol/sol.hpp>
-
-#include "ISerializable.hpp"
-#include "LuaWidget.hpp"
-#include "NetworkUtils.hpp"
-
-class WidgetDef : public ISerializable {
+class ISerializable {
 	public:
-		WidgetDef(u8 type) : m_type(type) {}
+		virtual ~ISerializable() = default;
 
-		void serialize(sf::Packet &packet) const override;
-
-		virtual void loadFromLuaTable(const sol::table &table);
-
-	protected:
-		u8 m_type = 0; // See LuaWidget
-
-		std::string m_name;
-
-		s32 m_x = 0;
-		s32 m_y = 0;
+		virtual void serialize(sf::Packet &) const {};
+		virtual void deserialize(sf::Packet &) {};
 };
 
-#endif // WIDGETDEF_HPP_
+sf::Packet &operator<<(sf::Packet &packet, const ISerializable &s);
+sf::Packet &operator>>(sf::Packet &packet, ISerializable &s);
+
+#endif // ISERIALIZABLE_HPP_

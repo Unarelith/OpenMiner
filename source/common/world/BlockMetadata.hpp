@@ -35,7 +35,8 @@
 
 #include <gk/core/Exception.hpp>
 #include <gk/core/IntTypes.hpp>
-#include <gk/core/ISerializable.hpp>
+
+#include "ISerializable.hpp"
 
 class BlockMetadataValue {
 	public:
@@ -64,7 +65,7 @@ class BlockMetadataValue {
 		Type m_type = Type::Undefined;
 };
 
-class BlockMetadata : public gk::ISerializable {
+class BlockMetadata : public ISerializable {
 	public:
 		void setString(const std::string &name, const std::string &value);
 		void setInt(const std::string &name, int value);

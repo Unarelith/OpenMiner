@@ -33,9 +33,10 @@
 #include <SFML/Network/Packet.hpp>
 
 #include <gk/core/IntTypes.hpp>
-#include <gk/core/ISerializable.hpp>
 
 #include <sol/sol.hpp>
+
+#include "ISerializable.hpp"
 
 enum BlockFace : u8 {
 	West   = 0,
@@ -46,7 +47,7 @@ enum BlockFace : u8 {
 	Top    = 5,
 };
 
-class TilesDef : public gk::ISerializable {
+class TilesDef : public ISerializable {
 	public:
 		TilesDef() = default;
 		TilesDef(const std::string &objectID, u16 stateID)
