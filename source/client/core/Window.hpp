@@ -79,7 +79,7 @@ class Window : public RenderTarget {
 		gk::Vector2u m_baseSize{0, 0};
 		gk::Vector2i m_basePosition{0, 0};
 
-		bool m_isOpen;
+		bool m_isOpen = false;
 
 		View m_defaultView;
 

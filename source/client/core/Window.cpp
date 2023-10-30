@@ -57,7 +57,8 @@ void Window::open(const std::string &caption, u16 width, u16 height) {
 void Window::close() {
 	RenderTarget::free();
 
-	bgfx::shutdown();
+	if (m_isOpen)
+		bgfx::shutdown();
 
 	m_window.reset(nullptr);
 	m_isOpen = false;
