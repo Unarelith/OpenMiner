@@ -24,48 +24,47 @@
  *
  * =====================================================================================
  */
-#ifndef SPRITEANIMATION_HPP_
-#define SPRITEANIMATION_HPP_
-
-#include <vector>
+#include <gk/core/GameClock.hpp>
 
 #include "Timer.hpp"
 
-class SpriteAnimation {
-	public:
-		SpriteAnimation(u16 delay, bool isRepeated = true)
-			: m_delay(delay), m_isRepeated(isRepeated) {}
+Timer::Timer(bool useRealTime) {
+	m_useRealTime = useRealTime;
+	m_t = gk::GameClock::getInstance().getTicks(m_useRealTime);
+}
 
-		void reset(u16 frameID = 0);
+void Timer::stop() {
+	if(m_isStarted) {
+		m_isStarted = false;
+		m_tick = gk::GameClock::getInstance().getTicks(m_useRealTime) - m_t;
+	}
+}
 
-		void start();
-		void stop();
+void Timer::start() {
+	if(!m_isStarted) {
+		m_isStarted = true;
+		m_t = gk::GameClock::getInstance().getTicks(m_useRealTime) - m_tick;
+	}
+}
 
-		void play();
+void Timer::reset() {
+	m_isStarted = false;
+	m_t = gk::GameClock::getInstance().getTicks(m_useRealTime);
+	m_tick = 0;
+}
 
-		void addFrame(u16 frameID) { m_frames.emplace_back(frameID); }
-		u16 getFrame(u16 frameID) const;
-		u16 currentFrame() const;
-		u16 displayedFramesAmount() const;
+u32 Timer::time() const {
+	if(m_isStarted) {
+		return gk::GameClock::getInstance().getTicks(m_useRealTime) - m_t;
+	} else {
+		return m_tick;
+	}
+}
 
-		bool isPlaying() const { return m_timer.isStarted() && !m_isPaused; }
-		bool isFinished() const { return displayedFramesAmount() >= m_frames.size(); }
-
-		u16 size() const { return (u16)m_frames.size(); }
-
-		u16 delay() const { return m_delay; }
-
-		void setRepeated(bool isRepeated) { m_isRepeated = isRepeated; }
-
-	private:
-		std::vector<u16> m_frames;
-
-		Timer m_timer;
-
-		u16 m_delay = 0;
-
-		bool m_isPaused = false;
-		bool m_isRepeated = true;
-};
-
-#endif // SPRITEANIMATION_HPP_
+void Timer::setTime(u32 time) {
+	if(m_isStarted) {
+		m_t = gk::GameClock::getInstance().getTicks(m_useRealTime) - time;
+	} else {
+		m_tick = time;
+	}
+}

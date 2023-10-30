@@ -24,48 +24,31 @@
  *
  * =====================================================================================
  */
-#ifndef SPRITEANIMATION_HPP_
-#define SPRITEANIMATION_HPP_
+#ifndef TIMER_HPP_
+#define TIMER_HPP_
 
-#include <vector>
+#include <gk/core/IntTypes.hpp>
 
-#include "Timer.hpp"
-
-class SpriteAnimation {
+class Timer {
 	public:
-		SpriteAnimation(u16 delay, bool isRepeated = true)
-			: m_delay(delay), m_isRepeated(isRepeated) {}
+		Timer(bool useRealTime = false);
 
-		void reset(u16 frameID = 0);
-
-		void start();
 		void stop();
+		void start();
+		void reset();
 
-		void play();
+		u32 time() const;
+		void setTime(u32 time);
 
-		void addFrame(u16 frameID) { m_frames.emplace_back(frameID); }
-		u16 getFrame(u16 frameID) const;
-		u16 currentFrame() const;
-		u16 displayedFramesAmount() const;
-
-		bool isPlaying() const { return m_timer.isStarted() && !m_isPaused; }
-		bool isFinished() const { return displayedFramesAmount() >= m_frames.size(); }
-
-		u16 size() const { return (u16)m_frames.size(); }
-
-		u16 delay() const { return m_delay; }
-
-		void setRepeated(bool isRepeated) { m_isRepeated = isRepeated; }
+		bool isStarted() const { return m_isStarted; }
 
 	private:
-		std::vector<u16> m_frames;
+		bool m_useRealTime = false;
 
-		Timer m_timer;
+		bool m_isStarted = false;
 
-		u16 m_delay = 0;
-
-		bool m_isPaused = false;
-		bool m_isRepeated = true;
+		u32 m_t = 0;
+		u32 m_tick = 0;
 };
 
-#endif // SPRITEANIMATION_HPP_
+#endif // TIMER_HPP_
