@@ -24,23 +24,36 @@
  *
  * =====================================================================================
  */
-#ifndef GAMEPAD_HPP_
-#define GAMEPAD_HPP_
+#include <gk/core/GameClock.hpp>
 
 #include "InputHandler.hpp"
 
-class GamePad {
-	public:
-		static void init(InputHandler &_inputHandler) { inputHandler = &_inputHandler; }
+bool InputHandler::isKeyPressedOnce(GameKeyID key) {
+	if(isKeyPressed(key)) {
+		if(!m_keysPressedOnce[key]) {
+			m_keysPressedOnce[key] = true;
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		m_keysPressedOnce[key] = false;
+		return false;
+	}
+}
 
-		static bool isKeyPressed(GameKeyID key);
-		static bool isKeyPressedOnce(GameKeyID key);
-		static bool isKeyPressedWithDelay(GameKeyID key, u16 delay);
+bool InputHandler::isKeyPressedWithDelay(GameKeyID key, u16 delay) {
+	if(isKeyPressed(key) && gk::GameClock::getInstance().getTicks() - m_lastTimePressed[key] > delay) {
+		m_lastTimePressed[key] = gk::GameClock::getInstance().getTicks();
+		return true;
+	} else {
+		if(!isKeyPressed(key)) m_lastTimePressed[key] = 0;
+		return false;
+	}
+}
 
-		static InputHandler *getInputHandler() { return inputHandler; }
-
-	private:
-		static InputHandler *inputHandler;
-};
-
-#endif // GAMEPAD_HPP_
+void InputHandler::addKey(GameKeyID key) {
+	m_keysPressed[key] = false;
+	m_keysPressedOnce[key] = false;
+	m_lastTimePressed[key] = 0;
+}

@@ -24,23 +24,31 @@
  *
  * =====================================================================================
  */
-#ifndef GAMEPAD_HPP_
-#define GAMEPAD_HPP_
+#ifndef INPUTHANDLER_HPP_
+#define INPUTHANDLER_HPP_
 
-#include "InputHandler.hpp"
+#include <map>
 
-class GamePad {
+#include <gk/core/IntTypes.hpp>
+
+using GameKeyID = u32;
+
+class InputHandler {
 	public:
-		static void init(InputHandler &_inputHandler) { inputHandler = &_inputHandler; }
+		virtual ~InputHandler() = default;
 
-		static bool isKeyPressed(GameKeyID key);
-		static bool isKeyPressedOnce(GameKeyID key);
-		static bool isKeyPressedWithDelay(GameKeyID key, u16 delay);
+		virtual bool isKeyPressed(GameKeyID key) { return m_keysPressed[key]; }
+		virtual bool isKeyPressedOnce(GameKeyID key);
+		virtual bool isKeyPressedWithDelay(GameKeyID key, u16 delay);
 
-		static InputHandler *getInputHandler() { return inputHandler; }
+		const std::map<GameKeyID, bool> &keysPressed() const { return m_keysPressed; }
 
-	private:
-		static InputHandler *inputHandler;
+	protected:
+		void addKey(GameKeyID key);
+
+		std::map<GameKeyID, bool> m_keysPressed;
+		std::map<GameKeyID, bool> m_keysPressedOnce;
+		std::map<GameKeyID, u32> m_lastTimePressed;
 };
 
-#endif // GAMEPAD_HPP_
+#endif // INPUTHANDLER_HPP_

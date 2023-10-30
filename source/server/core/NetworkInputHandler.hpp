@@ -27,11 +27,11 @@
 #ifndef NETWORKINPUTHANDLER_HPP_
 #define NETWORKINPUTHANDLER_HPP_
 
-#include <gk/core/input/InputHandler.hpp>
+#include "InputHandler.hpp"
 
-class NetworkInputHandler : public gk::InputHandler {
+class NetworkInputHandler : public InputHandler {
 	public:
-		void setKeyPressed(gk::GameKey key, bool isPressed) {
+		void setKeyPressed(GameKeyID key, bool isPressed) {
 			m_keysPressed[key] = isPressed;
 		}
 };

@@ -26,16 +26,16 @@
  */
 #include "GamePad.hpp"
 
-gk::InputHandler *GamePad::inputHandler = nullptr;
+InputHandler *GamePad::inputHandler = nullptr;
 
-bool GamePad::isKeyPressed(gk::GameKey key) {
+bool GamePad::isKeyPressed(GameKeyID key) {
 	return (inputHandler) ? inputHandler->isKeyPressed(key) : false;
 }
 
-bool GamePad::isKeyPressedOnce(gk::GameKey key) {
+bool GamePad::isKeyPressedOnce(GameKeyID key) {
 	return (inputHandler) ? inputHandler->isKeyPressedOnce(key) : false;
 }
 
-bool GamePad::isKeyPressedWithDelay(gk::GameKey key, u16 delay) {
+bool GamePad::isKeyPressedWithDelay(GameKeyID key, u16 delay) {
 	return (inputHandler) ? inputHandler->isKeyPressedWithDelay(key, delay) : false;
 }

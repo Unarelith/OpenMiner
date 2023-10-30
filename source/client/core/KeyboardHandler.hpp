@@ -30,31 +30,31 @@
 #include <map>
 #include <string>
 
-#include <gk/core/input/InputHandler.hpp>
+#include "InputHandler.hpp"
 
 #include "Key.hpp"
 
-class KeyboardHandler : public gk::InputHandler {
+class KeyboardHandler : public InputHandler {
 	public:
 		KeyboardHandler();
 
 		void loadKeysFromFile(const std::string &filename);
 		void saveKeysToFile(const std::string &filename);
 
-		bool isKeyPressed(gk::GameKey key) override;
+		bool isKeyPressed(GameKeyID key) override;
 
-		SDL_Keycode getKeycode(gk::GameKey key) const { return m_keys.at(key).keycode(); }
-		std::string getKeyName(gk::GameKey key) const { return SDL_GetKeyName(m_keys.at(key).keycode()); }
-		void setKeycode(gk::GameKey key, SDL_Keycode keycode) { m_keys.at(key).setKeycode(keycode); }
+		SDL_Keycode getKeycode(GameKeyID key) const { return m_keys.at(key).keycode(); }
+		std::string getKeyName(GameKeyID key) const { return SDL_GetKeyName(m_keys.at(key).keycode()); }
+		void setKeycode(GameKeyID key, SDL_Keycode keycode) { m_keys.at(key).setKeycode(keycode); }
 
-		void addKey(gk::GameKey id, const std::string &name, SDL_Keycode defaultKey, const std::string &stringID = "", Key *key = nullptr);
+		void addKey(GameKeyID id, const std::string &name, SDL_Keycode defaultKey, const std::string &stringID = "", Key *key = nullptr);
 		std::size_t keyCount() const { return m_keys.size(); }
 
-		const std::map<gk::GameKey, Key> &keys() const { return m_keys; }
+		const std::map<GameKeyID, Key> &keys() const { return m_keys; }
 
 	protected:
-		std::map<gk::GameKey, Key> m_keys;
-		std::map<std::string, gk::GameKey> m_keysID;
+		std::map<GameKeyID, Key> m_keys;
+		std::map<std::string, GameKeyID> m_keysID;
 };
 
 #endif // KEYBOARDHANDLER_HPP_
