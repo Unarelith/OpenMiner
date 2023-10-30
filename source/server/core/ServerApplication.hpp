@@ -27,10 +27,10 @@
 #ifndef SERVERAPPLICATION_HPP_
 #define SERVERAPPLICATION_HPP_
 
-#include <gk/core/ArgumentParser.hpp>
 #include <gk/core/GameClock.hpp>
 #include <gk/core/EventHandler.hpp>
 
+#include "ArgumentParser.hpp"
 #include "LuaCore.hpp"
 #include "Registry.hpp"
 #include "ScriptEngine.hpp"
@@ -59,7 +59,7 @@ class ServerApplication {
 		void update();
 		void mainLoop();
 
-		gk::ArgumentParser m_argumentParser;
+		ArgumentParser m_argumentParser;
 		gk::GameClock m_clock;
 		gk::EventHandler *m_eventHandler = nullptr;
 		gk::LoggerHandler m_loggerHandler;

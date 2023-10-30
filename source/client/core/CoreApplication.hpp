@@ -27,13 +27,13 @@
 #ifndef COREAPPLICATION_HPP_
 #define COREAPPLICATION_HPP_
 
-#include <gk/core/ArgumentParser.hpp>
 #include <gk/core/EventHandler.hpp>
 #include <gk/core/GameClock.hpp>
 #include <gk/core/SDLLoader.hpp>
 #include <gk/resource/ResourceHandler.hpp>
 
 #include "ApplicationStateStack.hpp"
+#include "ArgumentParser.hpp"
 #include "Window.hpp"
 
 class CoreApplication {
@@ -73,7 +73,7 @@ class CoreApplication {
 
 		RenderStates m_renderStates = RenderStates::Default;
 
-		gk::ArgumentParser m_argumentParser;
+		ArgumentParser m_argumentParser;
 
 		gk::EventHandler m_eventHandler;
 
