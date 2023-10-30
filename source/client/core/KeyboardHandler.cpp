@@ -27,12 +27,15 @@
 #include <fstream>
 
 #include <gk/core/Debug.hpp>
-#include <gk/core/Filesystem.hpp>
 
 #include <sol/sol.hpp>
 
+#include <filesystem.hpp>
+
 #include "GameKey.hpp"
 #include "KeyboardHandler.hpp"
+
+namespace fs = ghc::filesystem;
 
 KeyboardHandler::KeyboardHandler() {
 	addKey(GameKey::Left,            "Left",              SDLK_a);
@@ -54,7 +57,7 @@ KeyboardHandler::KeyboardHandler() {
 }
 
 void KeyboardHandler::loadKeysFromFile(const std::string &filename) {
-	if (gk::Filesystem::fileExists(filename)) {
+	if (fs::exists(filename)) {
 		sol::state lua;
 
 		try {

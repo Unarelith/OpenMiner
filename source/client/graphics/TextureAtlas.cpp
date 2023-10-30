@@ -25,10 +25,13 @@
  * =====================================================================================
  */
 #include <gk/core/Exception.hpp>
-#include <gk/core/Filesystem.hpp>
 
 #include "Registry.hpp"
 #include "TextureAtlas.hpp"
+
+#include <filesystem.hpp>
+
+namespace fs = ghc::filesystem;
 
 void TextureAtlas::clear() {
 	m_tileSize = 0;
@@ -40,7 +43,7 @@ void TextureAtlas::clear() {
 }
 
 void TextureAtlas::loadFromRegistry(const std::string &texturePack) {
-	if (!texturePack.empty() && !gk::Filesystem::fileExists("texturepacks/" + texturePack))
+	if (!texturePack.empty() && !fs::exists("texturepacks/" + texturePack))
 		throw EXCEPTION("Texture pack '" + texturePack +"' doesn't exist");
 
 	// FIXME: Undefined texture should be created from current texture size

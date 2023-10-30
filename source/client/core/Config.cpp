@@ -27,7 +27,6 @@
 #include <fstream>
 
 #include <gk/core/Debug.hpp>
-#include <gk/core/Filesystem.hpp>
 
 #include <sol/sol.hpp>
 

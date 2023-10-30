@@ -27,9 +27,12 @@
 #include <fstream>
 
 #include <gk/core/Debug.hpp>
-#include <gk/core/Filesystem.hpp>
+
+#include <filesystem.hpp>
 
 #include "ServerConfig.hpp"
+
+namespace fs = ghc::filesystem;
 
 // Server
 u8 ServerConfig::maxPlayers = 5;
@@ -44,7 +47,7 @@ std::unordered_map<std::string, sol::object> ServerConfig::options;
 static sol::state lua;
 
 void ServerConfig::loadConfigFromFile(const char *file) {
-	if (gk::Filesystem::fileExists(file)) {
+	if (fs::exists(file)) {
 		try {
 			lua.safe_script_file(file);
 
