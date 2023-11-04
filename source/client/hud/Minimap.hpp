@@ -64,7 +64,7 @@ class Minimap : public Drawable, public Transformable {
 		RectangleShape m_playerChunk;
 
 		VertexBuffer m_vbo;
-		gk::Transform m_playerFovRotationTransform = gk::Transform::Identity;
+		Transform m_playerFovRotationTransform = Transform::Identity;
 
 		bool m_displayTimesReceived = false;
 };

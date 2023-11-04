@@ -29,7 +29,8 @@
 
 #include <gk/core/Rect.hpp>
 #include <gk/core/Vector3.hpp>
-#include <gk/gl/Transform.hpp>
+
+#include "Transform.hpp"
 
 class View {
 	public:
@@ -64,8 +65,8 @@ class View {
 
 		void zoom(float factor) { setSize(m_size.x * factor, m_size.y * factor); }
 
-		virtual const gk::Transform &getTransform() const;
-		virtual const gk::Transform &getViewTransform() const;
+		virtual const Transform &getTransform() const;
+		virtual const Transform &getViewTransform() const;
 
 		virtual const gk::Vector3f &getPosition() const { return m_position; }
 
@@ -73,8 +74,8 @@ class View {
 		mutable bool m_transformUpdated = false;
 		mutable bool m_viewTransformUpdated = false;
 
-		mutable gk::Transform m_transform;
-		mutable gk::Transform m_viewTransform;
+		mutable Transform m_transform;
+		mutable Transform m_viewTransform;
 
 		gk::Vector3f m_position;
 

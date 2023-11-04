@@ -57,7 +57,7 @@ void Transformable::setRotation(float angle, const gk::Vector3f &axis) {
 	if (m_rotation < 0)
 		m_rotation += 360.f;
 
-	m_rotationTransform = gk::Transform::Identity;
+	m_rotationTransform = Transform::Identity;
 	m_rotationTransform.rotate(m_rotation, axis);
 
 	m_transformNeedUpdate = true;
@@ -126,15 +126,15 @@ void Transformable::lrotateZ(float angle) {
 	m_transformNeedUpdate = true;
 }
 
-const gk::Transform& Transformable::getTransform() const {
+const Transform& Transformable::getTransform() const {
 	if (m_transformNeedUpdate) {
-		gk::Transform originTransform;
+		Transform originTransform;
 		originTransform.translate(-m_origin);
 
-		gk::Transform scaleTransform;
+		Transform scaleTransform;
 		scaleTransform.scale(m_scale);
 
-		gk::Transform positionTransform;
+		Transform positionTransform;
 		positionTransform.translate(m_position);
 
 		m_transform = positionTransform * scaleTransform * m_rotationTransform * originTransform;

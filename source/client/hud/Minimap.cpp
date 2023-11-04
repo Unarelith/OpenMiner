@@ -72,7 +72,7 @@ void Minimap::update(const ClientPlayer &player, class ClientWorld &world) {
 		}
 	}
 
-	m_playerFovRotationTransform = gk::Transform::Identity;
+	m_playerFovRotationTransform = Transform::Identity;
 	m_playerFovRotationTransform.rotateZ(90.f - player.cameraYaw());
 
 	static float oldCameraFov = Config::cameraFOV;

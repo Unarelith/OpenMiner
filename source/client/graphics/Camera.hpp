@@ -65,8 +65,8 @@ class Camera : public View {
 		void setNearClippingPlane(float distance);
 		void setFarClippingPlane(float distance);
 
-		const gk::Transform &getTransform() const override;
-		const gk::Transform &getViewTransform() const override;
+		const Transform &getTransform() const override;
+		const Transform &getViewTransform() const override;
 
 	private:
 		gk::Vector3d m_position_d{0, 0, 0};

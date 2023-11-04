@@ -81,7 +81,7 @@ void View::move(float offsetX, float offsetY, float offsetZ) {
 	setCenter(m_position.x + offsetX, m_position.y + offsetY, m_position.z + offsetZ);
 }
 
-const gk::Transform &View::getTransform() const {
+const Transform &View::getTransform() const {
 	if (!m_transformUpdated) {
 		bx::mtxOrtho((float *)m_transform.getRawMatrix(), 0.0f, m_size.x, m_size.y, 0.0f, DIST_2D_NEAR, DIST_2D_FAR, 0, false);
 
@@ -91,12 +91,12 @@ const gk::Transform &View::getTransform() const {
 	return m_transform;
 }
 
-const gk::Transform &View::getViewTransform() const {
+const Transform &View::getViewTransform() const {
 	if (!m_viewTransformUpdated) {
-		gk::Transform positionTransform;
+		Transform positionTransform;
 		positionTransform.translate(m_size.x / 2.f - m_position.x, m_size.y / 2.f - m_position.y);
 
-		gk::Transform rotationTransform;
+		Transform rotationTransform;
 		rotationTransform.rotate(m_rotation);
 
 		m_viewTransform = positionTransform * rotationTransform;

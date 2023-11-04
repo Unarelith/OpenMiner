@@ -152,7 +152,7 @@ void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkM
 	}
 
 	// Prepare a list of chunks to draw
-	std::vector<std::tuple<ClientChunk*, gk::Transform, float>> chunksToDraw;
+	std::vector<std::tuple<ClientChunk*, Transform, float>> chunksToDraw;
 	for(auto &it : chunks) {
 		if (!it.second->isInitialized()) continue;
 
@@ -271,7 +271,7 @@ void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkM
 	camera.setDPosition(cameraPos);
 }
 
-void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const std::vector<std::tuple<ClientChunk*, gk::Transform, float>> &chunks, const Sky *currentSky) const {
+void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const std::vector<std::tuple<ClientChunk*, Transform, float>> &chunks, const Sky *currentSky) const {
 	++ClientChunk::frameCounter;
 
 	states.isDepthTestEnabled = true;

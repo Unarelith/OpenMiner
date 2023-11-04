@@ -27,7 +27,7 @@
 #ifndef TRANSFORMABLE_HPP_
 #define TRANSFORMABLE_HPP_
 
-#include <gk/gl/Transform.hpp>
+#include "Transform.hpp"
 
 class Transformable {
 	public:
@@ -65,11 +65,11 @@ class Transformable {
 		void lrotateY(float angle);
 		void lrotateZ(float angle);
 
-		const gk::Transform &getTransform() const;
-		// const gk::Transform &getInverseTransform() const;
+		const Transform &getTransform() const;
+		// const Transform &getInverseTransform() const;
 
-		const gk::Transform &getRotationTransform() const { return m_rotationTransform; }
-		gk::Transform &getRotationTransform() { return m_rotationTransform; }
+		const Transform &getRotationTransform() const { return m_rotationTransform; }
+		Transform &getRotationTransform() { return m_rotationTransform; }
 
 	private:
 		gk::Vector3f m_position{0, 0, 0};
@@ -77,9 +77,9 @@ class Transformable {
 		gk::Vector3f m_scale{1, 1, 1};
 		float m_rotation = 0;
 
-		mutable gk::Transform m_transform;
-		// mutable gk::Transform m_inverseTransform;
-		mutable gk::Transform m_rotationTransform;
+		mutable Transform m_transform;
+		// mutable Transform m_inverseTransform;
+		mutable Transform m_rotationTransform;
 
 		mutable bool m_transformNeedUpdate = true;
 		// mutable bool m_inverseTransformNeedUpdate = true;

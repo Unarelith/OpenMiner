@@ -157,7 +157,7 @@ void HUD::draw(RenderTarget &target, RenderStates states) const {
 
 	target.draw(m_chat, states);
 
-	states.transform = gk::Transform::Identity;
+	states.transform = Transform::Identity;
 
 	if (Config::isCrosshairVisible)
 		target.draw(m_crosshair, states);

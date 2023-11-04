@@ -187,7 +187,7 @@ void LuaGUIState::draw(RenderTarget &target, RenderStates states) const {
 	prepareDraw(target, states);
 
 	states.transform *= m_mainWidget.getTransform();
-	states.viewMatrix = gk::Transform::Identity;
+	states.viewMatrix = Transform::Identity;
 
 	for (auto &it : m_drawables)
 		target.draw(*it, states);

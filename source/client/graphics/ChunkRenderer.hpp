@@ -53,7 +53,7 @@ class ChunkRenderer {
 		void setOnMeshingRequestedCallback(const OnMeshingRequestedCallback &callback) { m_onMeshingRequested = callback; }
 
 	public:
-		void drawChunks(RenderTarget &target, RenderStates states, const std::vector<std::tuple<ClientChunk*, gk::Transform, float>> &chunks, const Sky *currentSky) const;
+		void drawChunks(RenderTarget &target, RenderStates states, const std::vector<std::tuple<ClientChunk*, Transform, float>> &chunks, const Sky *currentSky) const;
 
 		const TextureAtlas &m_textureAtlas;
 
