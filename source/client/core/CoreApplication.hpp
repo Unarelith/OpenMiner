@@ -27,11 +27,10 @@
 #ifndef COREAPPLICATION_HPP_
 #define COREAPPLICATION_HPP_
 
-#include <gk/core/GameClock.hpp>
-
 #include "ApplicationStateStack.hpp"
 #include "ArgumentParser.hpp"
 #include "EventHandler.hpp"
+#include "GameClock.hpp"
 #include "ResourceHandler.hpp"
 #include "SDLLoader.hpp"
 #include "Window.hpp"
@@ -65,7 +64,7 @@ class CoreApplication {
 
 		ApplicationStateStack m_stateStack;
 
-		gk::GameClock m_clock;
+		GameClock m_clock;
 
 		ResourceHandler m_resourceHandler;
 

@@ -24,7 +24,6 @@
  *
  * =====================================================================================
  */
-#include <gk/core/GameClock.hpp>
 #include <gk/core/Exception.hpp>
 
 #include "Client.hpp"

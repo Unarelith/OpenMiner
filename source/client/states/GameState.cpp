@@ -27,12 +27,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <gk/core/Exception.hpp>
-#include <gk/core/GameClock.hpp>
 
 #include "ApplicationStateStack.hpp"
 #include "BgfxView.hpp"
 #include "ChatState.hpp"
 #include "Events.hpp"
+#include "GameClock.hpp"
 #include "GameKey.hpp"
 #include "GamePad.hpp"
 #include "GameState.hpp"
@@ -189,7 +189,7 @@ void GameState::update() {
 
 	m_hud.update();
 
-	if (gk::GameClock::getInstance().getTicks() % 100 < 10) {
+	if (GameClock::getInstance().getTicks() % 100 < 10) {
 		m_clientCommandHandler.sendPlayerPosUpdate();
 		m_clientCommandHandler.sendPlayerRotUpdate();
 	}

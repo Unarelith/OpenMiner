@@ -24,13 +24,10 @@
  *
  * =====================================================================================
  */
-#include <gk/core/GameClock.hpp>
-
 #include "Dimension.hpp"
 #include "EngineConfig.hpp"
-#include "Network.hpp"
+#include "GameClock.hpp"
 #include "PlayerList.hpp"
-#include "Server.hpp"
 #include "ServerCommandHandler.hpp"
 #include "ServerConfig.hpp"
 #include "ServerPlayer.hpp"
@@ -63,7 +60,7 @@ void ServerWorld::updatePlayerChunks(ServerPlayer &player, s32 cx, s32 cy, s32 c
 	gk::Vector3i currentChunk{cx, cy, cz};
 
 	player.sentChunks.clear();
-	m_chunkSendRequestQueue.emplace(currentChunk, player, gk::GameClock::getInstance().getTicks(true));
+	m_chunkSendRequestQueue.emplace(currentChunk, player, GameClock::getInstance().getTicks(true));
 
 	std::list<gk::Vector3i> chunksToRemove;
 	for (auto &chunkPos : player.loadedChunks()) {
@@ -177,7 +174,7 @@ void ServerWorld::processSendRequests() {
 	// if (!m_chunkSendRequestQueue.empty())
 	// 	gkDebug() << "Processing send requests...";
 
-	u64 start = gk::GameClock::getInstance().getTicks(true);
+	u64 start = GameClock::getInstance().getTicks(true);
 	u64 now = start;
 	while (now - start < 500 && !m_chunkSendRequestQueue.empty()) {
 		auto &[chunkPos, player, timestamp] = m_chunkSendRequestQueue.front();
@@ -227,7 +224,7 @@ void ServerWorld::processSendRequests() {
 
 				auto addChunkToQueue = [this](gk::Vector3i pos, s8 dx, s8 dy, s8 dz, ServerPlayer &player) {
 					pos.x += dx; pos.y += dy; pos.z += dz;
-					m_chunkSendRequestQueue.emplace(pos, player, gk::GameClock::getInstance().getTicks(true));
+					m_chunkSendRequestQueue.emplace(pos, player, GameClock::getInstance().getTicks(true));
 				};
 
 				addChunkToQueue(chunkPos,  1,  0,  0, player);
@@ -249,7 +246,7 @@ void ServerWorld::processSendRequests() {
 
 		m_chunkSendRequestQueue.pop();
 
-		now = gk::GameClock::getInstance().getTicks(true);
+		now = GameClock::getInstance().getTicks(true);
 	}
 
 	// if (now - start > 0) {

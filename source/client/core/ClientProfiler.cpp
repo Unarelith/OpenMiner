@@ -25,7 +25,6 @@
  * =====================================================================================
  */
 #include <gk/core/Debug.hpp>
-#include <gk/core/GameClock.hpp>
 
 #include "ClientProfiler.hpp"
 

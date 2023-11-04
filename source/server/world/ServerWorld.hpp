@@ -34,11 +34,6 @@
 #include "TerrainGenerator.hpp"
 #include "World.hpp"
 
-namespace gk {
-	class GameClock;
-}
-
-class ClientInfo;
 class Dimension;
 class PlayerList;
 class ServerCommandHandler;

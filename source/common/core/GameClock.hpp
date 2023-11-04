@@ -24,46 +24,56 @@
  *
  * =====================================================================================
  */
-#include "GameClock.hpp"
-#include "Timer.hpp"
+#ifndef GAMECLOCK_HPP_
+#define GAMECLOCK_HPP_
 
-Timer::Timer(bool useRealTime) {
-	m_useRealTime = useRealTime;
-	m_t = GameClock::getInstance().getTicks(m_useRealTime);
-}
+#include <functional>
+#include <mutex>
 
-void Timer::stop() {
-	if(m_isStarted) {
-		m_isStarted = false;
-		m_tick = GameClock::getInstance().getTicks(m_useRealTime) - m_t;
-	}
-}
+#include <gk/core/IntTypes.hpp>
 
-void Timer::start() {
-	if(!m_isStarted) {
-		m_isStarted = true;
-		m_t = GameClock::getInstance().getTicks(m_useRealTime) - m_tick;
-	}
-}
+class GameClock {
+	public:
+		u32 getTicks(bool realTime = false);
+		u16 getFpsAverage() const { return m_fps; }
 
-void Timer::reset() {
-	m_isStarted = false;
-	m_t = GameClock::getInstance().getTicks(m_useRealTime);
-	m_tick = 0;
-}
+		void updateGame(const std::function<void(void)> &updateFunc);
+		void drawGame(const std::function<void(void)> &drawFunc);
 
-u32 Timer::time() const {
-	if(m_isStarted) {
-		return GameClock::getInstance().getTicks(m_useRealTime) - m_t;
-	} else {
-		return m_tick;
-	}
-}
+		void waitForNextFrame();
 
-void Timer::setTime(u32 time) {
-	if(m_isStarted) {
-		m_t = GameClock::getInstance().getTicks(m_useRealTime) - time;
-	} else {
-		m_tick = time;
-	}
-}
+		void startFpsTimer() {
+			m_fpsTimer = getTicks(true);
+		}
+
+		void setTimestep(u8 timestep) {
+			std::lock_guard<std::mutex> lock(m_mutex);
+			m_timestep = timestep;
+		}
+
+		static GameClock &getInstance() { return *s_instance; }
+		static void setInstance(GameClock &clock) { s_instance = &clock; }
+
+	private:
+		void measureLastFrameDuration();
+		void computeFramesPerSecond();
+
+		static GameClock *s_instance;
+
+		u32 m_ticks = 0;
+		u16 m_fps = 0;
+
+		std::mutex m_mutex;
+
+		u32 m_lastFrameDate = 0;
+		u32 m_lag = 0;
+		u32 m_timeDropped = 0;
+
+		u8 m_timestep = 6;
+		u8 m_numUpdates = 0;
+
+		u32 m_fpsTimer = 0;
+		u16 m_frames = 0;
+};
+
+#endif // GAMECLOCK_HPP_

@@ -24,8 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/GameClock.hpp>
-
+#include "GameClock.hpp"
 #include "InputHandler.hpp"
 
 bool InputHandler::isKeyPressedOnce(GameKeyID key) {
@@ -43,8 +42,8 @@ bool InputHandler::isKeyPressedOnce(GameKeyID key) {
 }
 
 bool InputHandler::isKeyPressedWithDelay(GameKeyID key, u16 delay) {
-	if(isKeyPressed(key) && gk::GameClock::getInstance().getTicks() - m_lastTimePressed[key] > delay) {
-		m_lastTimePressed[key] = gk::GameClock::getInstance().getTicks();
+	if(isKeyPressed(key) && GameClock::getInstance().getTicks() - m_lastTimePressed[key] > delay) {
+		m_lastTimePressed[key] = GameClock::getInstance().getTicks();
 		return true;
 	} else {
 		if(!isKeyPressed(key)) m_lastTimePressed[key] = 0;

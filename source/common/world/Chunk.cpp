@@ -26,10 +26,9 @@
  */
 #include <cstring>
 
-#include <gk/core/GameClock.hpp>
-
 #include "Chunk.hpp"
 #include "EngineConfig.hpp"
+#include "GameClock.hpp"
 #include "Registry.hpp"
 #include "World.hpp"
 

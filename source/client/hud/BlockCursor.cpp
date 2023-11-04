@@ -26,13 +26,12 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/GameClock.hpp>
-
 #include "BlockCursor.hpp"
 #include "BlockCursorRaycast.hpp"
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "Config.hpp"
+#include "GameClock.hpp"
 #include "GameKey.hpp"
 #include "GamePad.hpp"
 #include "Hotbar.hpp"
@@ -67,7 +66,7 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 
 	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
-			m_animationStart = gk::GameClock::getInstance().getTicks();
+			m_animationStart = GameClock::getInstance().getTicks();
 			m_currentTool = &m_player.inventory().getStack((u16)hotbar.cursorPos(), 0);
 		}
 		else if (event.button.button == SDL_BUTTON_RIGHT)
@@ -98,7 +97,7 @@ void BlockCursor::update(const Hotbar &hotbar) {
 
 	if (!m_currentBlock) return;
 
-	u32 ticks = gk::GameClock::getInstance().getTicks();
+	u32 ticks = GameClock::getInstance().getTicks();
 
 	if (selectedBlockChanged)
 		m_animationStart = (m_animationStart) ? ticks : 0;
@@ -146,7 +145,7 @@ void BlockCursor::update(const Hotbar &hotbar) {
 		m_currentBlock = nullptr;
 
 	// Repeat block activation when right click is held
-	u64 now = gk::GameClock::getInstance().getTicks();
+	u64 now = GameClock::getInstance().getTicks();
 	u64 last = m_lastActivationTime.value_or(now);
 	if (now - last > m_activationRepeatDelay)
 		activateBlock(hotbar);
@@ -156,7 +155,7 @@ void BlockCursor::activateBlock(const Hotbar &hotbar) {
 	if (m_animationStart != 0)
 		m_animationStart = 0;
 
-	m_lastActivationTime = gk::GameClock::getInstance().getTicks();
+	m_lastActivationTime = GameClock::getInstance().getTicks();
 
 	u16 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
 	const Block &block = Registry::getInstance().getBlock(blockId);

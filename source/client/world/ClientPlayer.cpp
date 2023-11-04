@@ -26,12 +26,11 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/GameClock.hpp>
-
 #include "Camera.hpp"
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
+#include "GameClock.hpp"
 #include "GameConfig.hpp"
 #include "GameKey.hpp"
 #include "GamePad.hpp"
@@ -227,7 +226,7 @@ void ClientPlayer::testPoint(const ClientWorld &world, double x, double y, doubl
 void ClientPlayer::applyViewBobbing(float &viewAngleH, float &viewAngleV, float &viewAngleRoll) {
 	if (!m_velocity.isZero() && m_velocity.z == 0 && !Config::isFlyModeEnabled) {
 		if (!m_isMoving) {
-			m_movementStartTime = gk::GameClock::getInstance().getTicks();
+			m_movementStartTime = GameClock::getInstance().getTicks();
 			m_isMoving = true;
 		}
 	}
@@ -236,8 +235,8 @@ void ClientPlayer::applyViewBobbing(float &viewAngleH, float &viewAngleV, float 
 	}
 
 	if (m_isMoving) {
-		// float t = (float)(gk::GameClock::getInstance().getTicks());
-		float t = (float)(gk::GameClock::getInstance().getTicks() - m_movementStartTime);
+		// float t = (float)(GameClock::getInstance().getTicks());
+		float t = (float)(GameClock::getInstance().getTicks() - m_movementStartTime);
 		viewAngleH += 0.4f * sinf(t / 150.f);
 		viewAngleV += 0.4f * sinf(t / 75.f);
 		viewAngleRoll += 0.3f * -sinf(t / 150.f);

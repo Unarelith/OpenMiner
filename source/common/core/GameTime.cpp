@@ -27,8 +27,7 @@
 #include <algorithm>
 #include <cmath>
 
-#include <gk/core/GameClock.hpp>
-
+#include "GameClock.hpp"
 #include "GameTime.hpp"
 #include "Sky.hpp"
 
@@ -57,13 +56,13 @@ Color GameTime::getSkyColorFromTime(const Sky &sky, float time) {
 }
 
 void GameTime::updateTpsCounter() {
-	static u64 tpsTimer = gk::GameClock::getInstance().getTicks(true);
+	static u64 tpsTimer = GameClock::getInstance().getTicks(true);
 	static u64 tpsStart = s_ticks;
 
 	if (tpsStart > s_ticks)
 		tpsStart = s_ticks;
 
-	u64 currentClockTicks = gk::GameClock::getInstance().getTicks(true);
+	u64 currentClockTicks = GameClock::getInstance().getTicks(true);
 	u32 elapsed = u32(currentClockTicks - tpsTimer);
 	if (elapsed >= 1000) {
 		s_ticksPerSecond = u16(((s_ticks - tpsStart) * 1000 + elapsed / 2) / elapsed);

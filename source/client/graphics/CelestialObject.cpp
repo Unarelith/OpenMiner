@@ -24,8 +24,6 @@
  *
  * =====================================================================================
  */
-#include <gk/core/GameClock.hpp>
-
 #include "CelestialObject.hpp"
 #include "GameTime.hpp"
 #include "ResourceHandler.hpp"
