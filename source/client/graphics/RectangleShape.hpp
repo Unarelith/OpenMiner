@@ -29,13 +29,12 @@
 
 #include <array>
 
-#include <gk/gl/Transformable.hpp>
-
 #include "Color.hpp"
 #include "Drawable.hpp"
+#include "Transformable.hpp"
 #include "VertexBuffer.hpp"
 
-class RectangleShape : public Drawable, public gk::Transformable {
+class RectangleShape : public Drawable, public Transformable {
 	public:
 		RectangleShape();
 		RectangleShape(float width, float height, const Color &color = Color::White);

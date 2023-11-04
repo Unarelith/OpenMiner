@@ -27,15 +27,14 @@
 #ifndef PLAYERBOX_HPP_
 #define PLAYERBOX_HPP_
 
-#include <gk/gl/Transformable.hpp>
-
 #include "Camera.hpp"
 #include "Drawable.hpp"
 #include "IndexBuffer.hpp"
 #include "Player.hpp"
+#include "Transformable.hpp"
 #include "VertexBuffer.hpp"
 
-class PlayerBox : public Drawable, public gk::Transformable, public Player {
+class PlayerBox : public Drawable, public Transformable, public Player {
 	public:
 		PlayerBox(const Camera &camera);
 

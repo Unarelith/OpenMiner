@@ -33,7 +33,7 @@
 
 class Client;
 
-class Chat : public Drawable, public gk::Transformable {
+class Chat : public Drawable, public Transformable {
 	public:
 		Chat(Client &client);
 

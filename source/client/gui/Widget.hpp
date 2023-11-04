@@ -30,11 +30,11 @@
 #include <SDL.h>
 
 #include <gk/core/Rect.hpp>
-#include <gk/gl/Transformable.hpp>
 
 #include "Drawable.hpp"
+#include "Transformable.hpp"
 
-class Widget : public Drawable, public gk::Transformable {
+class Widget : public Drawable, public Transformable {
 	public:
 		Widget(Widget *parent = nullptr) : m_parent(parent) {}
 		Widget(unsigned int width, unsigned int height, Widget *parent = nullptr)

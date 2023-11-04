@@ -131,7 +131,7 @@ class DebugProfilerSnapshot {
 		std::unordered_map<std::string, DebugProfilerSnapshotValue> m_values;
 };
 
-class DebugProfilerWindow : public gk::Transformable, public Drawable {
+class DebugProfilerWindow : public Transformable, public Drawable {
 	public:
 		DebugProfilerWindow();
 

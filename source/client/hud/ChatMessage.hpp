@@ -32,7 +32,7 @@
 
 class Player;
 
-class ChatMessage : public Drawable, public gk::Transformable {
+class ChatMessage : public Drawable, public Transformable {
 	public:
 		ChatMessage(const std::string &message, u32 posY, const Player *player = nullptr);
 

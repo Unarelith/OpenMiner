@@ -265,4 +265,3 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 
 	m_fbo.draw();
 }
-

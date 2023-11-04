@@ -35,7 +35,7 @@
 class Font;
 class Vertex;
 
-class Text : public Drawable, public gk::Transformable {
+class Text : public Drawable, public Transformable {
 	public:
 		Text();
 

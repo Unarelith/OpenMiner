@@ -27,13 +27,12 @@
 #ifndef CELESTIALOBJECT_HPP_
 #define CELESTIALOBJECT_HPP_
 
-#include <gk/gl/Transformable.hpp>
-
 #include "Color.hpp"
 #include "Drawable.hpp"
+#include "Transformable.hpp"
 #include "VertexBuffer.hpp"
 
-class CelestialObject : public Drawable, public gk::Transformable  {
+class CelestialObject : public Drawable, public Transformable  {
 	public:
 		CelestialObject();
 

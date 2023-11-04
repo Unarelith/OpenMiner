@@ -28,14 +28,14 @@
 #define IMAGE_HPP_
 
 #include <gk/core/Rect.hpp>
-#include <gk/gl/Transformable.hpp>
 
 #include "Color.hpp"
 #include "Drawable.hpp"
 #include "Texture.hpp"
+#include "Transformable.hpp"
 #include "VertexBuffer.hpp"
 
-class Image : public Drawable, public gk::Transformable {
+class Image : public Drawable, public Transformable {
 	public:
 		Image();
 		Image(const std::string &textureName);

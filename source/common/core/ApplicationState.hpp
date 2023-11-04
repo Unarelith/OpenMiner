@@ -29,14 +29,12 @@
 
 #include <SDL.h>
 
-#include <gk/gl/Transformable.hpp>
-
 #include "EventHandler.hpp"
 #include "NonCopyable.hpp"
 
 class ApplicationStateStack;
 
-class ApplicationState : public gk::Transformable, public NonCopyable {
+class ApplicationState : public NonCopyable {
 	public:
 		ApplicationState(ApplicationState *parent = nullptr) : m_parent(parent) {}
 		ApplicationState(ApplicationState &&) = default;
