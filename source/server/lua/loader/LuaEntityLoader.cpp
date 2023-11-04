@@ -157,7 +157,7 @@ void LuaEntityLoader::tryLoadAnimation(const sol::table &table, entt::registry &
 void LuaEntityLoader::tryLoadHitbox(const sol::table &table, entt::registry &registry, entt::entity entity) const {
 	sol::optional<sol::table> hitboxTable = table["hitbox"];
 	if (hitboxTable != sol::nullopt) {
-		registry.emplace<gk::DoubleBox>(entity,
+		registry.emplace<DoubleBox>(entity,
 			hitboxTable.value()[1], hitboxTable.value()[2], hitboxTable.value()[3],
 			hitboxTable.value()[4], hitboxTable.value()[5], hitboxTable.value()[6]
 		);

@@ -132,7 +132,7 @@ inline void LuaBlockLoader::loadProperties(BlockState &state, const sol::table &
 inline void LuaBlockLoader::loadBoundingBox(BlockState &state, const sol::table &table) const {
 	sol::optional<sol::table> boundingBox = table["bounding_box"];
 	if (boundingBox != sol::nullopt) {
-		state.boundingBox(gk::FloatBox{
+		state.boundingBox(FloatBox{
 			boundingBox.value().get<float>(1),
 			boundingBox.value().get<float>(2),
 			boundingBox.value().get<float>(3),

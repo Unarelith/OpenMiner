@@ -35,7 +35,7 @@ using namespace LightUtils;
 void BlockMesher::addBlock(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
                            const BlockState &blockState, u16 blockParam)
 {
-	const gk::FloatBox &boundingBox = blockState.boundingBox();
+	const FloatBox &boundingBox = blockState.boundingBox();
 
 	u8f orientation = blockState.block().isRotatable()
 		? (u8f)blockState.block().param().getParam(BlockParam::Rotation, blockParam) : 0;
@@ -45,7 +45,7 @@ void BlockMesher::addBlock(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
 }
 
 void BlockMesher::addBlock(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
-                           const BlockState &blockState, const gk::FloatBox &boundingBox,
+                           const BlockState &blockState, const FloatBox &boundingBox,
                            u8f orientation, const glm::mat3 &orientMatrix)
 {
 	glm::vec3 vertexPos[nVertsPerCube]{
@@ -130,7 +130,7 @@ void BlockMesher::addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob 
 	 || (blockState.drawType() == BlockDrawType::Cactus && surroundingBlockState->block().id() == blockState.block().id() && f > 3)))
 		return;
 
-	const gk::FloatBox &boundingBox = blockState.boundingBox();
+	const FloatBox &boundingBox = blockState.boundingBox();
 
 	const std::string &texture = blockState.tiles().getTextureForFace(f);
 	const gk::FloatRect &blockTexCoords = job.textureAtlas->getTexCoords(texture);

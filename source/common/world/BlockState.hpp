@@ -30,11 +30,11 @@
 #include <string>
 #include <unordered_map>
 
-#include <gk/core/Box.hpp>
 #include <gk/core/Debug.hpp> // FIXME
 #include <gk/core/IntTypes.hpp>
 
 #include "BlockParam.hpp"
+#include "Box.hpp"
 #include "ItemStack.hpp"
 #include "TilesDef.hpp"
 
@@ -140,7 +140,7 @@ class BlockState : public ISerializable {
 		BLOCK_ATTR_V(u8, harvestRequirements, 0);
 		BLOCK_ATTR_V(float, hardness, 1.0f);
 
-		BLOCK_ATTR_V(gk::FloatBox, boundingBox, (gk::FloatBox{0, 0, 0, 1, 1, 1}));
+		BLOCK_ATTR_V(FloatBox, boundingBox, (FloatBox{0, 0, 0, 1, 1, 1}));
 
 		BLOCK_ATTR_V(BlockDrawType, drawType, BlockDrawType::Solid);
 

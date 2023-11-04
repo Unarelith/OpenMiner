@@ -33,7 +33,6 @@
 
 #include <sol/sol.hpp>
 
-#include <gk/core/Box.hpp>
 #include <gk/core/IntTypes.hpp>
 
 #include "BlockParam.hpp"

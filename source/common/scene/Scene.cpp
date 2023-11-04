@@ -109,9 +109,8 @@ void extend_meta_type(const std::string &name, ComponentType type, bool isSerial
 		.template func<&save<Type>>("save"_hs);
 }
 
-#include <gk/core/Box.hpp>
-
 #include "AnimationComponent.hpp"
+#include "Box.hpp"
 #include "DrawableDef.hpp"
 #include "ItemStack.hpp"
 #include "NetworkComponent.hpp"
@@ -119,7 +118,7 @@ void extend_meta_type(const std::string &name, ComponentType type, bool isSerial
 #include "RotationComponent.hpp"
 
 void Scene::registerComponents() {
-	extend_meta_type<gk::DoubleBox>      ("gk::DoubleBox",      ComponentType::Hitbox,    false, true);
+	extend_meta_type<DoubleBox>          ("DoubleBox",          ComponentType::Hitbox,    false, true);
 	extend_meta_type<AnimationComponent> ("AnimationComponent", ComponentType::Animation, true,  true);
 	extend_meta_type<DrawableDef>        ("DrawableDef",        ComponentType::Drawable,  true,  true);
 	extend_meta_type<ItemStack>          ("ItemStack",          ComponentType::ItemStack, false, true);
@@ -128,4 +127,3 @@ void Scene::registerComponents() {
 	extend_meta_type<RotationComponent>  ("RotationComponent",  ComponentType::Rotation,  true,  true);
 	extend_meta_type<std::string>        ("EntityID",           ComponentType::EntityID,  false, true);
 }
-

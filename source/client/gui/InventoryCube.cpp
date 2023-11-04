@@ -80,7 +80,7 @@ void InventoryCube::updateVertexBuffer(const Block &block, u8 state) {
 		glm::vec3{m_size, m_size, m_size},
 	};
 
-	const gk::FloatBox &boundingBox = blockState.boundingBox();
+	const FloatBox &boundingBox = blockState.boundingBox();
 
 	constexpr s8f faceValue[nFaces]{2, 2, 4, 4, 3, 3};
 

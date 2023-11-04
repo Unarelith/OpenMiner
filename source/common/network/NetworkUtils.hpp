@@ -157,18 +157,18 @@ sf::Packet &operator>>(sf::Packet &packet, gk::Rect<T> &rect) {
 }
 
 //======================================================================================
-// gk::Box
+// Box
 //======================================================================================
-#include <gk/core/Box.hpp>
+#include "Box.hpp"
 
 template<typename T>
-sf::Packet &operator<<(sf::Packet &packet, const gk::Box<T> &box) {
+sf::Packet &operator<<(sf::Packet &packet, const Box<T> &box) {
 	packet << box.x << box.y << box.z << box.sizeX << box.sizeY << box.sizeZ;
 	return packet;
 }
 
 template<typename T>
-sf::Packet &operator>>(sf::Packet &packet, gk::Box<T> &box) {
+sf::Packet &operator>>(sf::Packet &packet, Box<T> &box) {
 	packet >> box.x >> box.y >> box.z >> box.sizeX >> box.sizeY >> box.sizeZ;
 	return packet;
 }

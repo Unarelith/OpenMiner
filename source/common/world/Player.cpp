@@ -28,7 +28,7 @@
 #include "Player.hpp"
 
 Player::Player() {
-	m_hitbox = gk::FloatBox{-0.3125, -0.3125, 0, 0.625, 0.625, 1.75};
+	m_hitbox = FloatBox{-0.3125, -0.3125, 0, 0.625, 0.625, 1.75};
 }
 
 // Note: This function returns an angle4
@@ -77,4 +77,3 @@ void Player::initUsertype(sol::state &lua) {
 		"held_item_stack", &Player::heldItemStack
 	);
 }
-

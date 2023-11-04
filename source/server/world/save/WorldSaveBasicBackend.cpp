@@ -237,7 +237,7 @@ void WorldSaveBasicBackend::loadEntities(sf::Packet &save, ServerWorld &world) {
 				save >> registry.emplace<ItemStack>(entity);
 			}
 			else if (type == ComponentType::Hitbox) {
-				save >> registry.emplace<gk::DoubleBox>(entity);
+				save >> registry.emplace<DoubleBox>(entity);
 			}
 			else if (type == ComponentType::EntityID) {
 				save >> registry.emplace<std::string>(entity);
