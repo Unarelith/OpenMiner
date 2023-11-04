@@ -24,13 +24,12 @@
  *
  * =====================================================================================
  */
-#include <gk/resource/ResourceHandler.hpp>
-
+#include "ResourceHandler.hpp"
 #include "Texture.hpp"
 #include "TextureLoader.hpp"
 #include "XMLFile.hpp"
 
-void TextureLoader::load(const char *xmlFilename, gk::ResourceHandler &handler) {
+void TextureLoader::load(const char *xmlFilename, ResourceHandler &handler) {
 	XMLFile doc(xmlFilename);
 
 	tinyxml2::XMLElement *textureElement = doc.FirstChildElement("textures").FirstChildElement("texture").ToElement();

@@ -25,10 +25,10 @@
  * =====================================================================================
  */
 #include <gk/core/GameClock.hpp>
-#include <gk/resource/ResourceHandler.hpp>
 
 #include "CelestialObject.hpp"
 #include "GameTime.hpp"
+#include "ResourceHandler.hpp"
 #include "Texture.hpp"
 #include "Vertex.hpp"
 
@@ -39,7 +39,7 @@ CelestialObject::CelestialObject() {
 void CelestialObject::setTexture(const std::string &textureName) {
 	if (textureName.empty()) return;
 
-	m_texture = &gk::ResourceHandler::getInstance().get<Texture>(textureName);
+	m_texture = &ResourceHandler::getInstance().get<Texture>(textureName);
 
 	m_isUpdateNeeded = true;
 }

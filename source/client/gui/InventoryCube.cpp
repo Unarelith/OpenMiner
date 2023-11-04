@@ -24,19 +24,18 @@
  *
  * =====================================================================================
  */
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "Block.hpp"
 #include "BlockGeometry.hpp"
 #include "Config.hpp"
 #include "EngineConfig.hpp"
 #include "InventoryCube.hpp"
 #include "Math.hpp"
+#include "ResourceHandler.hpp"
 #include "TextureAtlas.hpp"
 #include "Vertex.hpp"
 
 InventoryCube::InventoryCube(float size, bool isEntity)
-	: m_textureAtlas(&gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
+	: m_textureAtlas(&ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
 	m_vbo.setupDefaultLayout();
 

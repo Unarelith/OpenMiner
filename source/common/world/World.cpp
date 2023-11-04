@@ -26,8 +26,6 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "EngineConfig.hpp"
 #include "Registry.hpp"
 #include "World.hpp"

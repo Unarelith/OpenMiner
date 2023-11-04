@@ -27,7 +27,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <gk/core/GameClock.hpp>
-#include <gk/resource/ResourceHandler.hpp>
 
 #include "BlockCursor.hpp"
 #include "BlockCursorRaycast.hpp"
@@ -38,11 +37,12 @@
 #include "GamePad.hpp"
 #include "Hotbar.hpp"
 #include "Registry.hpp"
+#include "ResourceHandler.hpp"
 
 BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 	: m_player(player), m_world(world), m_client(client)
 {
-	m_blockDestroyTexture = &gk::ResourceHandler::getInstance().get<Texture>("texture-block_destroy");
+	m_blockDestroyTexture = &ResourceHandler::getInstance().get<Texture>("texture-block_destroy");
 
 	m_vbo.setupDefaultLayout();
 

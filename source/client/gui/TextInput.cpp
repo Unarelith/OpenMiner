@@ -24,8 +24,6 @@
  *
  * =====================================================================================
  */
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "TextInput.hpp"
 
 TextInput::TextInput(Widget *parent) : Widget(parent) {
@@ -80,4 +78,3 @@ void TextInput::draw(RenderTarget &target, RenderStates states) const {
 	if (m_content.empty() && !m_hasFocus)
 		target.draw(m_placeholder, states);
 }
-

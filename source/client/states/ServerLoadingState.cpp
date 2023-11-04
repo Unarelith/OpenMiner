@@ -26,8 +26,6 @@
  */
 #include <thread>
 
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
 #include "ConnectionErrorState.hpp"

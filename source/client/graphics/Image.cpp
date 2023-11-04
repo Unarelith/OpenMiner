@@ -24,9 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "Image.hpp"
+#include "ResourceHandler.hpp"
 #include "Vertex.hpp"
 
 Image::Image() {
@@ -34,7 +33,7 @@ Image::Image() {
 }
 
 Image::Image(const std::string &textureName) : Image() {
-	load(gk::ResourceHandler::getInstance().get<Texture>(textureName));
+	load(ResourceHandler::getInstance().get<Texture>(textureName));
 }
 
 Image::Image(const Texture &texture) : Image() {
@@ -56,7 +55,7 @@ void Image::load(const Image &image) {
 }
 
 void Image::load(const std::string &textureName) {
-	load(gk::ResourceHandler::getInstance().get<Texture>(textureName));
+	load(ResourceHandler::getInstance().get<Texture>(textureName));
 }
 
 void Image::load(const Texture &texture) {
@@ -70,7 +69,7 @@ void Image::load(const Texture &texture) {
 }
 
 void Image::setTexture(const std::string &textureName) {
-	m_texture = &gk::ResourceHandler::getInstance().get<Texture>(textureName);
+	m_texture = &ResourceHandler::getInstance().get<Texture>(textureName);
 }
 
 void Image::setClipRect(float x, float y, u16 width, u16 height) {

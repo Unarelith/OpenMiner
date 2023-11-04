@@ -24,13 +24,12 @@
  *
  * =====================================================================================
  */
-#include <gk/resource/ResourceHandler.hpp>
-
 #include <filesystem.hpp>
 
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
 #include "GameConfig.hpp"
+#include "ResourceHandler.hpp"
 #include "TextureAtlas.hpp"
 #include "TexturePackSelectionState.hpp"
 #include "World.hpp"
@@ -59,7 +58,7 @@ TexturePackSelectionState::TexturePackSelectionState(DrawableState *parent) : In
 				Config::texturePack = texturePack;
 
 				if (GameConfig::isGameRunning) {
-					auto &atlas = gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks");
+					auto &atlas = ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks");
 					atlas.clear();
 					atlas.loadFromRegistry(Config::texturePack);
 

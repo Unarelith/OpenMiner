@@ -24,16 +24,15 @@
  *
  * =====================================================================================
  */
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "Config.hpp"
 #include "ItemWidget.hpp"
 #include "Registry.hpp"
+#include "ResourceHandler.hpp"
 #include "TextureAtlas.hpp"
 
 ItemWidget::ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent)
 	: Widget(18, 18, parent), m_inventory(inventory), m_x(x), m_y(y),
-	m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
+	m_textureAtlas(ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
 	m_cube.setPosition(9, 9, 0);
 	// m_cube.setPosition(8.5, 14, 0);

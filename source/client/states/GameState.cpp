@@ -28,7 +28,6 @@
 
 #include <gk/core/Exception.hpp>
 #include <gk/core/GameClock.hpp>
-#include <gk/resource/ResourceHandler.hpp>
 
 #include "ApplicationStateStack.hpp"
 #include "BgfxView.hpp"
@@ -44,10 +43,11 @@
 #include "PauseMenuState.hpp"
 #include "Registry.hpp"
 #include "RenderTarget.hpp"
+#include "ResourceHandler.hpp"
 #include "TextureAtlas.hpp"
 
 GameState::GameState()
-	: m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
+	: m_textureAtlas(ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
 	Registry::setInstance(m_registry);
 

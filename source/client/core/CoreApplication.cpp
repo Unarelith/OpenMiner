@@ -59,7 +59,7 @@ bool CoreApplication::init() {
 
 	ApplicationStateStack::setInstance(m_stateStack);
 	gk::GameClock::setInstance(m_clock);
-	gk::ResourceHandler::setInstance(m_resourceHandler);
+	ResourceHandler::setInstance(m_resourceHandler);
 	gk::LoggerHandler::setInstance(m_loggerHandler);
 
 	m_stateStack.setEventHandler(m_eventHandler);

@@ -24,14 +24,16 @@
  *
  * =====================================================================================
  */
-#ifndef TEXTURELOADER_HPP_
-#define TEXTURELOADER_HPP_
+#ifndef IRESOURCELOADER_HPP_
+#define IRESOURCELOADER_HPP_
 
-#include "IResourceLoader.hpp"
+class ResourceHandler;
 
-class TextureLoader : public IResourceLoader {
+class IResourceLoader {
 	public:
-		void load(const char *xmlFilename, ResourceHandler &handler);
+		virtual ~IResourceLoader() = default;
+
+		virtual void load(const char *xmlFilename, ResourceHandler &handler) = 0;
 };
 
-#endif // TEXTURELOADER_HPP_
+#endif // IRESOURCELOADER_HPP_

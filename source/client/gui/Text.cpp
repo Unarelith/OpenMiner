@@ -24,14 +24,13 @@
  *
  * =====================================================================================
  */
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "Color.hpp"
 #include "Font.hpp"
+#include "ResourceHandler.hpp"
 #include "Text.hpp"
 #include "Vertex.hpp"
 
-Text::Text() : m_font(gk::ResourceHandler::getInstance().get<Font>("font-ascii")) {
+Text::Text() : m_font(ResourceHandler::getInstance().get<Font>("font-ascii")) {
 	m_vbo.setupDefaultLayout();
 
 	m_background.setFillColor(Color::Transparent);

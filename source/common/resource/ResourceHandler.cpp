@@ -24,14 +24,14 @@
  *
  * =====================================================================================
  */
-#ifndef TEXTURELOADER_HPP_
-#define TEXTURELOADER_HPP_
+#include "ResourceHandler.hpp"
 
-#include "IResourceLoader.hpp"
+ResourceHandler *ResourceHandler::instance = nullptr;
 
-class TextureLoader : public IResourceLoader {
-	public:
-		void load(const char *xmlFilename, ResourceHandler &handler);
-};
+ResourceHandler &ResourceHandler::getInstance() {
+	return *instance;
+}
 
-#endif // TEXTURELOADER_HPP_
+void ResourceHandler::setInstance(ResourceHandler &handler) {
+	instance = &handler;
+}

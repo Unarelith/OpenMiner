@@ -24,10 +24,9 @@
  *
  * =====================================================================================
  */
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "Camera.hpp"
 #include "PlayerBox.hpp"
+#include "ResourceHandler.hpp"
 #include "Vertex.hpp"
 #include "Texture.hpp"
 
@@ -250,7 +249,7 @@ static constexpr float modelCoords[NUM_QUADS * NUM_VERTICES_PER_QUAD][NUM_VERTEX
 
 PlayerBox::PlayerBox(const Camera &camera)
 	: m_camera(camera),
-	  m_texture(gk::ResourceHandler::getInstance().get<Texture>("texture-player"))
+	  m_texture(ResourceHandler::getInstance().get<Texture>("texture-player"))
 {
 	m_vbo.setupDefaultLayout();
 

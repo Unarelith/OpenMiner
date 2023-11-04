@@ -26,8 +26,6 @@
  */
 #include <algorithm> // std::max
 
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "Camera.hpp"
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
@@ -36,12 +34,13 @@
 #include "EventHandler.hpp"
 #include "Events.hpp"
 #include "Registry.hpp"
+#include "ResourceHandler.hpp"
 #include "Sky.hpp"
 #include "TextureAtlas.hpp"
 #include "World.hpp"
 
 ClientWorld::ClientWorld()
-	: m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks")),
+	: m_textureAtlas(ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks")),
 	  m_chunkRenderer(m_textureAtlas)
 {
 	m_chunkRenderer.setOnChunkDeletionRequestedCallback([this](const gk::Vector3i &chunkPos) {
