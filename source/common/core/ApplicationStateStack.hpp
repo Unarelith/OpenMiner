@@ -33,10 +33,6 @@
 
 #include "ApplicationState.hpp"
 
-namespace gk {
-	class EventHandler;
-}
-
 class ApplicationStateStack {
 	public:
 		template<typename T, typename... Args>
