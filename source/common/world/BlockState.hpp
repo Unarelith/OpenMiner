@@ -30,10 +30,9 @@
 #include <string>
 #include <unordered_map>
 
-#include <gk/core/IntTypes.hpp>
-
 #include "BlockParam.hpp"
 #include "Box.hpp"
+#include "IntTypes.hpp"
 #include "ItemStack.hpp"
 #include "TilesDef.hpp"
 

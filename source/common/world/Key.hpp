@@ -31,10 +31,9 @@
 
 #include <SDL.h>
 
-#include <gk/core/IntTypes.hpp>
-
 #include <sol/sol.hpp>
 
+#include "IntTypes.hpp"
 #include "ISerializable.hpp"
 #include "NetworkUtils.hpp"
 

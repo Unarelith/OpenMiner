@@ -29,10 +29,9 @@
 
 #include <string>
 
-#include <gk/core/IntTypes.hpp>
-
 #include <bgfx/bgfx.h>
 
+#include "IntTypes.hpp"
 #include "NonCopyable.hpp"
 #include "Vector2.hpp"
 

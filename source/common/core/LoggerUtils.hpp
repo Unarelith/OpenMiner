@@ -29,7 +29,7 @@
 
 #include <ostream>
 
-#include <gk/core/IntTypes.hpp>
+#include "IntTypes.hpp"
 
 enum class LoggerColor : u8 {
 	White = 0,

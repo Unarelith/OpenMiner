@@ -27,10 +27,9 @@
 #ifndef RENDERSTATES_HPP_
 #define RENDERSTATES_HPP_
 
-#include <gk/core/IntTypes.hpp>
-
 #include <bgfx/bgfx.h>
 
+#include "IntTypes.hpp"
 #include "Transform.hpp"
 
 class Shader;

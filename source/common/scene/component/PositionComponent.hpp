@@ -27,8 +27,7 @@
 #ifndef POSITIONCOMPONENT_HPP_
 #define POSITIONCOMPONENT_HPP_
 
-#include <gk/core/IntTypes.hpp>
-
+#include "IntTypes.hpp"
 #include "ISerializable.hpp"
 #include "Network.hpp"
 

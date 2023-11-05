@@ -34,8 +34,7 @@
 
 #include <SDL.h>
 
-#include <gk/core/IntTypes.hpp>
-
+#include "IntTypes.hpp"
 #include "Rect.hpp"
 #include "Texture.hpp"
 

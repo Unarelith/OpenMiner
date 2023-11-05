@@ -29,10 +29,9 @@
 
 #include <string>
 
-#include <gk/core/IntTypes.hpp>
-
 #include <sol/sol.hpp>
 
+#include "IntTypes.hpp"
 #include "ISerializable.hpp"
 #include "LuaWidget.hpp"
 #include "NetworkUtils.hpp"

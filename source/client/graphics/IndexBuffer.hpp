@@ -27,10 +27,9 @@
 #ifndef INDEXBUFFER_HPP_
 #define INDEXBUFFER_HPP_
 
-#include <gk/core/IntTypes.hpp>
-
 #include <bgfx/bgfx.h>
 
+#include "IntTypes.hpp"
 #include "NonCopyable.hpp"
 
 class IndexBuffer : public NonCopyable {

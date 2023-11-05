@@ -32,7 +32,7 @@
 #include <string>
 #include <unordered_map>
 
-#include <gk/core/IntTypes.hpp>
+#include "IntTypes.hpp"
 
 #ifdef OM_PROFILER_ENABLED
 # define OM_PROFILE_START(name) ClientProfiler::getInstance().startAction(name);

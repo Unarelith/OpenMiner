@@ -30,7 +30,7 @@
 #include <stdexcept>
 #include <utility>
 
-#include <gk/core/IntTypes.hpp>
+#include "IntTypes.hpp"
 
 template<typename T>
 class Vector2 {

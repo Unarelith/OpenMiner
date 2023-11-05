@@ -27,7 +27,7 @@
 #ifndef COLOR_HPP_
 #define COLOR_HPP_
 
-#include <gk/core/IntTypes.hpp>
+#include "IntTypes.hpp"
 
 class Color {
 	public:

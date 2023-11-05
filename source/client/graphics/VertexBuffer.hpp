@@ -27,10 +27,9 @@
 #ifndef VERTEXBUFFER_HPP_
 #define VERTEXBUFFER_HPP_
 
-#include <gk/core/IntTypes.hpp>
-
 #include <bgfx/bgfx.h>
 
+#include "IntTypes.hpp"
 #include "NonCopyable.hpp"
 
 class VertexBuffer : public NonCopyable {

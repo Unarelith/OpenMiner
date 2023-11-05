@@ -30,10 +30,9 @@
 #include <string>
 #include <vector>
 
-#include <gk/core/IntTypes.hpp>
-
 #include <sol/sol.hpp>
 
+#include "IntTypes.hpp"
 #include "ISerializable.hpp"
 
 class Dimension : public ISerializable {

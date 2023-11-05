@@ -29,8 +29,7 @@
 
 #include <vector>
 
-#include <gk/core/IntTypes.hpp>
-
+#include "IntTypes.hpp"
 #include "ISerializable.hpp"
 #include "Network.hpp"
 #include "NetworkUtils.hpp"

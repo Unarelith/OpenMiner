@@ -29,8 +29,7 @@
 
 #include <string>
 
-#include <gk/core/IntTypes.hpp>
-
+#include "IntTypes.hpp"
 #include "ISerializable.hpp"
 
 class Tree : public ISerializable {

@@ -27,9 +27,8 @@
 #ifndef DRAWABLEDEF_HPP_
 #define DRAWABLEDEF_HPP_
 
-#include <gk/core/IntTypes.hpp>
-
 #include "ISerializable.hpp"
+#include "IntTypes.hpp"
 #include "InventoryCubeDef.hpp"
 #include "Network.hpp"
 

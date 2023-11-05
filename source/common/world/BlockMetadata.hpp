@@ -33,9 +33,8 @@
 
 #include <sol/sol.hpp>
 
-#include <gk/core/IntTypes.hpp>
-
 #include "Exception.hpp"
+#include "IntTypes.hpp"
 #include "ISerializable.hpp"
 
 class BlockMetadataValue {

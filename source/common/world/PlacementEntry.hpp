@@ -29,8 +29,7 @@
 
 #include <SFML/Network/Packet.hpp>
 
-#include <gk/core/IntTypes.hpp>
-
+#include "IntTypes.hpp"
 #include "ISerializable.hpp"
 
 namespace PlacementEntry {

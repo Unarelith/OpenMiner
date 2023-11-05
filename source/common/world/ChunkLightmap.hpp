@@ -30,9 +30,8 @@
 #include <optional>
 #include <queue>
 
-#include <gk/core/IntTypes.hpp>
-
 #include "EngineConfig.hpp"
+#include "IntTypes.hpp"
 
 struct LightNode {
 	LightNode(int _x, int _y, int _z) : x(_x), y(_y), z(_z) {}

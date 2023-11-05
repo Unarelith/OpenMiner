@@ -27,8 +27,9 @@
 #ifndef BLOCKGEOMETRY_HPP_
 #define BLOCKGEOMETRY_HPP_
 
-#include <gk/core/IntTypes.hpp>
 #include <glm/matrix.hpp>
+
+#include "IntTypes.hpp"
 
 namespace BlockGeometry {
 

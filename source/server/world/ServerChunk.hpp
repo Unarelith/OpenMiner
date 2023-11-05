@@ -27,11 +27,10 @@
 #ifndef SERVERCHUNK_HPP_
 #define SERVERCHUNK_HPP_
 
-#include <gk/core/IntTypes.hpp>
-
 #include <random.hpp>
 
 #include "Chunk.hpp"
+#include "IntTypes.hpp"
 
 using Random_t = effolkronium::random_local;
 

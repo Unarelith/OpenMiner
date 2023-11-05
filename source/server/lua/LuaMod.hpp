@@ -29,10 +29,9 @@
 
 #include <queue>
 
-#include <gk/core/IntTypes.hpp>
-
 #include <entt/entt.hpp>
 
+#include "IntTypes.hpp"
 #include "LuaBiomeLoader.hpp"
 #include "LuaBlockLoader.hpp"
 #include "LuaDimensionLoader.hpp"

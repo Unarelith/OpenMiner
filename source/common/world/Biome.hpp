@@ -30,8 +30,7 @@
 #include <string>
 #include <vector>
 
-#include <gk/core/IntTypes.hpp>
-
+#include "IntTypes.hpp"
 #include "ISerializable.hpp"
 #include "PlacementEntry.hpp"
 

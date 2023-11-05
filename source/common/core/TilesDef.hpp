@@ -32,10 +32,9 @@
 
 #include <SFML/Network/Packet.hpp>
 
-#include <gk/core/IntTypes.hpp>
-
 #include <sol/sol.hpp>
 
+#include "IntTypes.hpp"
 #include "ISerializable.hpp"
 
 enum BlockFace : u8 {

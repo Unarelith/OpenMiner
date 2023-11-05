@@ -33,13 +33,12 @@
 
 #include <sol/sol.hpp>
 
-#include <gk/core/IntTypes.hpp>
-
 #include "BlockParam.hpp"
 #include "BlockPlacementConstraints.hpp"
 #include "BlockState.hpp"
 #include "Color.hpp"
 #include "ISerializable.hpp"
+#include "IntTypes.hpp"
 #include "ItemStack.hpp"
 #include "TilesDef.hpp"
 
