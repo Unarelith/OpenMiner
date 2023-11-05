@@ -51,16 +51,16 @@ class ServerPlayer : public Player {
 		bool isReady() const { return m_isReady; }
 		void setReady(bool isReady) { m_isReady = isReady; }
 
-		bool isChunkLoaded(const gk::Vector3i &chunk) const { return m_loadedChunks.find(chunk) != m_loadedChunks.end(); }
-		void addLoadedChunk(const gk::Vector3i &chunk) { m_loadedChunks.emplace(chunk); }
-		void removeLoadedChunk(const gk::Vector3i &chunk) { m_loadedChunks.erase(chunk); }
+		bool isChunkLoaded(const Vector3i &chunk) const { return m_loadedChunks.find(chunk) != m_loadedChunks.end(); }
+		void addLoadedChunk(const Vector3i &chunk) { m_loadedChunks.emplace(chunk); }
+		void removeLoadedChunk(const Vector3i &chunk) { m_loadedChunks.erase(chunk); }
 		void clearLoadedChunks() { m_loadedChunks.clear(); }
-		const std::unordered_set<gk::Vector3i> &loadedChunks() const { return m_loadedChunks; }
+		const std::unordered_set<Vector3i> &loadedChunks() const { return m_loadedChunks; }
 
 		static void initUsertype(sol::state &lua);
 
 	public:
-		std::unordered_set<gk::Vector3i> sentChunks; // Cleared every tick
+		std::unordered_set<Vector3i> sentChunks; // Cleared every tick
 
 	private:
 		ClientInfo *m_client = nullptr;
@@ -68,7 +68,7 @@ class ServerPlayer : public Player {
 		bool m_isNewPlayer = false;
 		bool m_isReady = false; // Is player ready to receive chunks?
 
-		std::unordered_set<gk::Vector3i> m_loadedChunks;
+		std::unordered_set<Vector3i> m_loadedChunks;
 };
 
 #endif // SERVERPLAYER_HPP_

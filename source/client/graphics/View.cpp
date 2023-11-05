@@ -33,7 +33,7 @@ View::View() {
 	reset(FloatRect(0, 0, 1000, 1000));
 }
 
-View::View(const gk::Vector3f &center, const gk::Vector2f &size) {
+View::View(const Vector3f &center, const Vector2f &size) {
 	reset(FloatRect(center.xy(), size));
 }
 

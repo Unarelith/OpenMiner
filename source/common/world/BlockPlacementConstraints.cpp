@@ -28,7 +28,7 @@
 #include "Registry.hpp"
 #include "World.hpp"
 
-bool BlockPlacementConstraints::check(const World &world, const gk::Vector3i &pos) const {
+bool BlockPlacementConstraints::check(const World &world, const Vector3i &pos) const {
 	bool isValid = true;
 	for (auto &it : m_constraints) {
 		const Block &block = Registry::getInstance().getBlockFromStringID(it.blockID);

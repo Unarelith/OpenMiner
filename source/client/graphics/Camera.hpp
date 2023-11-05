@@ -35,30 +35,30 @@ class Camera : public View {
 		Camera(float fov, float near, float far);
 		virtual ~Camera() = default;
 
-		const gk::Vector3f &getPosition() const override { return m_position; }
-		const gk::Vector3d &getDPosition() const { return m_position_d; }
-		const gk::Vector3f &getDirection() const { return m_direction; }
-		const gk::Vector3f &getUpVector() const { return m_upVector; }
+		const Vector3f &getPosition() const override { return m_position; }
+		const Vector3d &getDPosition() const { return m_position_d; }
+		const Vector3f &getDirection() const { return m_direction; }
+		const Vector3f &getUpVector() const { return m_upVector; }
 
 		float getFieldOfView() const { return m_fieldOfView; }
 		float getAspectRatio() const { return m_aspect; }
 		float getNearClippingPlane() const { return m_nearPlane; }
 		float getFarClippingPlane() const { return m_farPlane; }
 
-		void setPosition(float x, float y, float z) { setPosition(gk::Vector3f(x, y, z)); }
-		void setPosition(const gk::Vector3f &position);
+		void setPosition(float x, float y, float z) { setPosition(Vector3f(x, y, z)); }
+		void setPosition(const Vector3f &position);
 
-		void setDPosition(double x, double y, double z) { setDPosition(gk::Vector3d(x, y, z)); }
-		void setDPosition(const gk::Vector3d &position);
+		void setDPosition(double x, double y, double z) { setDPosition(Vector3d(x, y, z)); }
+		void setDPosition(const Vector3d &position);
 
-		void setDirection(float x, float y, float z) { setDirection(gk::Vector3f(x, y, z)); }
-		void setDirection(const gk::Vector3f &direction);
+		void setDirection(float x, float y, float z) { setDirection(Vector3f(x, y, z)); }
+		void setDirection(const Vector3f &direction);
 
-		void setTargetPosition(float x, float y, float z) { setTargetPosition(gk::Vector3f(x, y, z)); }
-		void setTargetPosition(const gk::Vector3f &target);
+		void setTargetPosition(float x, float y, float z) { setTargetPosition(Vector3f(x, y, z)); }
+		void setTargetPosition(const Vector3f &target);
 
-		void setUpVector(float x, float y, float z) { setUpVector(gk::Vector3f(x, y, z)); }
-		void setUpVector(const gk::Vector3f &upVector);
+		void setUpVector(float x, float y, float z) { setUpVector(Vector3f(x, y, z)); }
+		void setUpVector(const Vector3f &upVector);
 
 		void setFieldOfView(float fov);
 		void setAspectRatio(float aspect);
@@ -69,9 +69,9 @@ class Camera : public View {
 		const Transform &getViewTransform() const override;
 
 	private:
-		gk::Vector3d m_position_d{0, 0, 0};
-		gk::Vector3f m_direction{0, 0, -1};
-		gk::Vector3f m_upVector{0, 1, 0};
+		Vector3d m_position_d{0, 0, 0};
+		Vector3f m_direction{0, 0, -1};
+		Vector3f m_upVector{0, 1, 0};
 
 		float m_fieldOfView = 90.0f;
 		float m_aspect = 1.0f;

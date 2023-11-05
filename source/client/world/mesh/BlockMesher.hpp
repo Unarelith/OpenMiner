@@ -40,8 +40,8 @@ class BlockMesher {
 
 		static void addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob &job,
 		                         const BlockState &blockState,
-		                         const gk::Vector3<s8f> &normal, const glm::vec3 *const vertexPos[4],
-		                         const gk::Vector3<s8f> *const neighbourOfs[4]);
+		                         const Vector3<s8f> &normal, const glm::vec3 *const vertexPos[4],
+		                         const Vector3<s8f> *const neighbourOfs[4]);
 };
 
 #endif // BLOCKMESHER_HPP_

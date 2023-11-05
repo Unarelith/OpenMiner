@@ -205,7 +205,7 @@ void BlockCursor::activateBlock(const Hotbar &hotbar) {
 			// Second, we check if the new block is not inside the player
 			const Block &newBlock = Registry::getInstance().getBlock(hotbar.currentItem().id());
 			const BlockState &newBlockState = newBlock.getState(0); // FIXME: Get state from item stack
-			FloatBox boundingBox = newBlockState.boundingBox() + gk::Vector3f(float(x - m_player.x()), float(y - m_player.y()), float(z - m_player.z()));
+			FloatBox boundingBox = newBlockState.boundingBox() + Vector3f(float(x - m_player.x()), float(y - m_player.y()), float(z - m_player.z()));
 			FloatBox playerBoundingBox = m_player.hitbox();
 			if (!boundingBox.intersects(playerBoundingBox) && newBlock.placementConstraints().check(m_world, {x, y, z})) {
 				u32 block = hotbar.currentItem().id();
@@ -314,7 +314,7 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 	if (m_selectedBlock.w == -1) return;
 
 	// Subtract the camera position - see comment in ClientWorld::draw()
-	const gk::Vector3d &cameraPosition = m_player.camera().getDPosition();
+	const Vector3d &cameraPosition = m_player.camera().getDPosition();
 	states.transform.translate(
 		float(m_selectedBlock.x - cameraPosition.x),
 		float(m_selectedBlock.y - cameraPosition.y),

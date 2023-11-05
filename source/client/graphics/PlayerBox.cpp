@@ -292,7 +292,7 @@ void PlayerBox::initIndexBuffer() {
 
 void PlayerBox::draw(RenderTarget &target, RenderStates states) const {
 	// Subtract the camera position - see comment in ClientWorld::draw()
-	const gk::Vector3d &cameraPosition = m_camera.getDPosition();
+	const Vector3d &cameraPosition = m_camera.getDPosition();
 	states.transform.translate(
 		static_cast<float>(m_x - cameraPosition.x),
 		static_cast<float>(m_y - cameraPosition.y),

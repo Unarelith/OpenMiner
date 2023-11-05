@@ -45,10 +45,10 @@ class RectangleShape : public Drawable, public Transformable {
 		float width() const { return m_width; }
 		float height() const { return m_height; }
 
-		gk::Vector2f getSize() const { return gk::Vector2f{m_width, m_height}; }
+		Vector2f getSize() const { return Vector2f{m_width, m_height}; }
 
 		void setSize(float width, float height) { m_width = width; m_height = height; updateVertexBuffer(); }
-		void setSize(const gk::Vector2f &size) { m_width = size.x; m_height = size.y; updateVertexBuffer(); }
+		void setSize(const Vector2f &size) { m_width = size.x; m_height = size.y; updateVertexBuffer(); }
 
 		int outlineThickness() const { return m_outlineThickness; }
 

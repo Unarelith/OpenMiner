@@ -50,7 +50,7 @@ class InventoryWidgetDef : public WidgetDef {
 		std::string m_player;         // inventory == "player"
 		std::string m_inventoryName;  // inventory == "player" || inventory == "temp"
 
-		gk::Vector3i m_blockPosition; // inventory == "block"
+		Vector3i m_blockPosition; // inventory == "block"
 
 		u16 m_offset = 0;
 		u16 m_count = 0;

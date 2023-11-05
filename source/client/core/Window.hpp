@@ -59,7 +59,7 @@ class Window : public RenderTarget {
 		Mode getWindowMode() const { return m_windowMode; }
 		void setWindowMode(Mode mode);
 
-		gk::Vector2u getSize() const override;
+		Vector2u getSize() const override;
 		void resize(unsigned int width, unsigned int height);
 
 		bool isOpen() const { return m_isOpen; }
@@ -76,9 +76,9 @@ class Window : public RenderTarget {
 		using SDL_WindowPtr = std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)>;
 		SDL_WindowPtr m_window{nullptr, SDL_DestroyWindow};
 
-		gk::Vector2u m_size;
-		gk::Vector2u m_baseSize{0, 0};
-		gk::Vector2i m_basePosition{0, 0};
+		Vector2u m_size;
+		Vector2u m_baseSize{0, 0};
+		Vector2i m_basePosition{0, 0};
 
 		bool m_isOpen = false;
 

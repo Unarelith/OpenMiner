@@ -40,7 +40,7 @@ class ServerCommandHandler;
 class ServerPlayer;
 
 class ServerWorld : public World {
-	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ServerChunk>>;
+	using ChunkMap = std::unordered_map<Vector3i, std::unique_ptr<ServerChunk>>;
 
 	public:
 		ServerWorld(PlayerList &players, const Dimension &dimension, s32 seed);
@@ -91,10 +91,10 @@ class ServerWorld : public World {
 		s32 m_seed = 0;
 
 		struct ChunkSendRequest {
-			ChunkSendRequest(const gk::Vector3i &chunkPos_, ServerPlayer &player_, u64 timestamp_)
+			ChunkSendRequest(const Vector3i &chunkPos_, ServerPlayer &player_, u64 timestamp_)
 				: chunkPos(chunkPos_), player(player_), timestamp(timestamp_) {}
 
-			gk::Vector3i chunkPos;
+			Vector3i chunkPos;
 			ServerPlayer &player;
 			u64 timestamp;
 		};

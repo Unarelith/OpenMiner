@@ -39,7 +39,7 @@ class Mouse {
 		static void setCursorVisible(bool isVisible);
 		static void setCursorGrabbed(bool isGrabbed);
 
-		static gk::Vector2i getPosition();
+		static Vector2i getPosition();
 
 		static bool isInRect(const IntRect &rect);
 

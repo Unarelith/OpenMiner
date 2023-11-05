@@ -56,11 +56,11 @@ class Minimap : public Drawable, public Transformable {
 
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		std::unordered_map<gk::Vector3i, std::pair<RectangleShape, Text>> m_chunks;
+		std::unordered_map<Vector3i, std::pair<RectangleShape, Text>> m_chunks;
 
 		RectangleShape m_border;
 
-		gk::Vector3i m_playerChunkPos;
+		Vector3i m_playerChunkPos;
 		RectangleShape m_playerChunk;
 
 		VertexBuffer m_vbo;

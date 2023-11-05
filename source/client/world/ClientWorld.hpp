@@ -43,7 +43,7 @@ class Sky;
 class TextureAtlas;
 
 class ClientWorld : public World, public Drawable {
-	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ClientChunk>>;
+	using ChunkMap = std::unordered_map<Vector3i, std::unique_ptr<ClientChunk>>;
 
 	public:
 		ClientWorld();
@@ -57,7 +57,7 @@ class ClientWorld : public World, public Drawable {
 		void changeDimension(u16 dimensionID);
 
 		void receiveChunkData(Network::Packet &packet);
-		void removeChunk(const gk::Vector3i &chunkPos);
+		void removeChunk(const Vector3i &chunkPos);
 
 		Chunk *getChunk(int cx, int cy, int cz) const override;
 
@@ -95,8 +95,8 @@ class ClientWorld : public World, public Drawable {
 
 		const Sky *m_sky = nullptr;
 
-		mutable std::set<gk::Vector3i> m_chunksToRemove;
-		mutable std::multimap<float, gk::Vector3i> m_chunksToMesh;
+		mutable std::set<Vector3i> m_chunksToRemove;
+		mutable std::multimap<float, Vector3i> m_chunksToMesh;
 
 		ChunkMeshBuilder m_chunkMeshBuilder{*this};
 

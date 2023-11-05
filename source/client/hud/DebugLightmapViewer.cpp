@@ -44,7 +44,7 @@ DebugLightmapViewer::DebugLightmapViewer(const ClientPlayer &player) : m_player(
 }
 
 void DebugLightmapViewer::update(const ClientWorld &world) {
-	gk::Vector3i playerChunkPos = m_player.getCurrentChunk();
+	Vector3i playerChunkPos = m_player.getCurrentChunk();
 
 	u32 rx = math::pmod((s32)std::floor(m_player.x()), CHUNK_WIDTH);
 	u32 ry = math::pmod((s32)std::floor(m_player.y()), CHUNK_DEPTH);

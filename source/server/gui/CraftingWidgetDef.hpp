@@ -47,7 +47,7 @@ class CraftingWidgetDef : public WidgetDef {
 
 		std::string m_inventory;
 
-		gk::Vector3i m_blockPosition; // inventory == "block"
+		Vector3i m_blockPosition; // inventory == "block"
 
 		u16 m_offset = 0;             // inventory == "block"
 		u16 m_size = 3;               // inventory == "temp" or "block"

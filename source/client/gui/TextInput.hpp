@@ -41,7 +41,7 @@ class TextInput : public Widget {
 		const std::string &string() const { return m_content; }
 		void setString(const std::string &string);
 
-		gk::Vector2f getBackgroundSize() const { return m_text.getBackgroundSize(); }
+		Vector2f getBackgroundSize() const { return m_text.getBackgroundSize(); }
 
 		void setBackgroundColor(const Color &color) { m_text.setBackgroundColor(color); }
 		void setBackgroundOutline(int thickness, const Color &color) { m_text.setBackgroundOutline(thickness, color); }

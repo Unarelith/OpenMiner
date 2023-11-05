@@ -29,7 +29,7 @@
 
 #include <algorithm>
 
-#include <gk/core/Vector2.hpp>
+#include "Vector2.hpp"
 
 template<typename T>
 class Rect {
@@ -38,7 +38,7 @@ class Rect {
 		Rect(T _x, T _y, T _sizeX, T _sizeY)
 			: x(_x), y(_y), sizeX(_sizeX), sizeY(_sizeY) {}
 
-		Rect(const gk::Vector2<T> &position, const gk::Vector2<T> &size)
+		Rect(const Vector2<T> &position, const Vector2<T> &size)
 			: x(position.x), y(position.x), sizeX(size.x), sizeY(size.y) {}
 
 		template<typename U>
@@ -62,7 +62,7 @@ class Rect {
 		// the right or bottom edge of the rectangle, this function
 		// will return false.
 		//--------------------------------------------------------------------------------
-		bool contains(const gk::Vector2<T> &point) const {
+		bool contains(const Vector2<T> &point) const {
 			return contains(point.x, point.y);
 		}
 

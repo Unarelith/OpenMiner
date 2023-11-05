@@ -54,7 +54,7 @@ void LuaEntityLoader::loadEntity(const sol::table &table) const {
 }
 
 void LuaEntityLoader::spawnEntity(const std::string &entityID, const sol::table &table) const {
-	gk::Vector3f pos;
+	Vector3f pos;
 	u16 dim;
 
 	sol::optional<sol::table> position = table["position"];

@@ -70,7 +70,7 @@ void ServerChunk::onBlockPlaced(int x, int y, int z, const Block &block) {
 		addTickingBlock(x, y, z, serverBlock);
 	}
 	else {
-		auto it = m_tickingBlocks.find(gk::Vector3i{x, y, z});
+		auto it = m_tickingBlocks.find(Vector3i{x, y, z});
 		if (it != m_tickingBlocks.end())
 			m_tickingBlocks.erase(it);
 	}

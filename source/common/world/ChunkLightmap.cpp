@@ -101,7 +101,7 @@ void ChunkLightmap::updateTorchlight() {
 		LightRemovalNode node = m_torchlightRemovalBfsQueue.front();
 		m_torchlightRemovalBfsQueue.pop();
 
-		gk::Vector3i surroundingNodes[6] = {
+		Vector3i surroundingNodes[6] = {
 			{node.x - 1, node.y,     node.z},
 			{node.x + 1, node.y,     node.z},
 			{node.x,     node.y - 1, node.z},
@@ -110,7 +110,7 @@ void ChunkLightmap::updateTorchlight() {
 			{node.x,     node.y,     node.z + 1},
 		};
 
-		for (const gk::Vector3i &surroundingNode : surroundingNodes) {
+		for (const Vector3i &surroundingNode : surroundingNodes) {
 			int level = getTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 			if (level != 0 && level < node.value) {
 				setTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, 0);
@@ -132,7 +132,7 @@ void ChunkLightmap::updateTorchlight() {
 		if (blockState && blockState->isOpaque() && !blockState->isLightSource())
 			continue;
 
-		gk::Vector3i surroundingNodes[6] = {
+		Vector3i surroundingNodes[6] = {
 			{node.x - 1, node.y,     node.z},
 			{node.x + 1, node.y,     node.z},
 			{node.x,     node.y - 1, node.z},
@@ -142,7 +142,7 @@ void ChunkLightmap::updateTorchlight() {
 		};
 
 		u8 lightLevel = getTorchlight(node.x, node.y, node.z);
-		for (const gk::Vector3i &surroundingNode : surroundingNodes) {
+		for (const Vector3i &surroundingNode : surroundingNodes) {
 			if (getTorchlight(surroundingNode.x, surroundingNode.y, surroundingNode.z) + 2 <= lightLevel) {
 				const BlockState *blockState = m_chunk->getBlockState(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 				if (blockState && !blockState->isOpaque()) {
@@ -158,7 +158,7 @@ void ChunkLightmap::updateSunlight() {
 		LightRemovalNode node = m_sunlightRemovalBfsQueue.front();
 		m_sunlightRemovalBfsQueue.pop();
 
-		gk::Vector3i surroundingNodes[6] = {
+		Vector3i surroundingNodes[6] = {
 			{node.x - 1, node.y,     node.z},
 			{node.x + 1, node.y,     node.z},
 			{node.x,     node.y - 1, node.z},
@@ -167,7 +167,7 @@ void ChunkLightmap::updateSunlight() {
 			{node.x,     node.y,     node.z + 1},
 		};
 
-		for (const gk::Vector3i &surroundingNode : surroundingNodes) {
+		for (const Vector3i &surroundingNode : surroundingNodes) {
 			int level = getSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 			if ((level == 15 && surroundingNode.z == node.z - 1) || (level != 0 && level < node.value)) {
 				setSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z, 0);
@@ -189,7 +189,7 @@ void ChunkLightmap::updateSunlight() {
 		if (blockState && blockState->isOpaque())
 			continue;
 
-		gk::Vector3i surroundingNodes[6] = {
+		Vector3i surroundingNodes[6] = {
 			{node.x - 1, node.y,     node.z},
 			{node.x + 1, node.y,     node.z},
 			{node.x,     node.y - 1, node.z},
@@ -199,7 +199,7 @@ void ChunkLightmap::updateSunlight() {
 		};
 
 		u8 sunlightLevel = getSunlight(node.x, node.y, node.z);
-		for (const gk::Vector3i &surroundingNode : surroundingNodes) {
+		for (const Vector3i &surroundingNode : surroundingNodes) {
 			u8 neighbourSunlightLevel = getSunlight(surroundingNode.x, surroundingNode.y, surroundingNode.z);
 			if (neighbourSunlightLevel + 2 <= sunlightLevel
 			|| (sunlightLevel == 15 && neighbourSunlightLevel != 15 && surroundingNode.z == node.z - 1)) {

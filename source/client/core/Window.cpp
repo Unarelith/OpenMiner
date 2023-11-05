@@ -125,14 +125,14 @@ void Window::setWindowMode(Mode mode) {
 	}
 }
 
-gk::Vector2u Window::getSize() const {
+Vector2u Window::getSize() const {
 	if (m_windowMode == Mode::Windowed)
 		return m_size;
 	else {
 		int w, h;
 		SDL_GetWindowSize(m_window.get(), &w, &h);
 
-		return gk::Vector2u{
+		return Vector2u{
 			static_cast<unsigned int>(w),
 			static_cast<unsigned int>(h)
 		};

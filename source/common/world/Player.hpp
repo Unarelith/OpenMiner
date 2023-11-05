@@ -42,7 +42,7 @@ class Player : public ISerializable {
 		u8 getDirection() const;
 		u8 getOppositeDirection() const;
 
-		gk::Vector3i getCurrentChunk() const;
+		Vector3i getCurrentChunk() const;
 
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;

@@ -83,7 +83,7 @@ void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkM
 	// vertex coordinates passed to the renderer are all small, and single
 	// precision floats suffice for the drawing.
 
-	const gk::Vector3d cameraPos{camera.getDPosition()};
+	const Vector3d cameraPos{camera.getDPosition()};
 	camera.setDPosition(0, 0, 0);  // Temporarily move the camera to the origin
 
 	// Calculate the Z of the normalized device coordinate of the render distance plane
@@ -250,7 +250,7 @@ void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkM
 
 		// If this chunk is not initialized, skip it and request meshing
 		if(!it.second->isReadyForMeshing()) {
-			m_onMeshingRequested(dist, gk::Vector3i{it.second->x(), it.second->y(), it.second->z()});
+			m_onMeshingRequested(dist, Vector3i{it.second->x(), it.second->y(), it.second->z()});
 
 			continue;
 		}

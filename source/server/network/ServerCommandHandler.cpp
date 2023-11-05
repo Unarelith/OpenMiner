@@ -312,7 +312,7 @@ void ServerCommandHandler::setupCallbacks() {
 
 		ServerPlayer *player = m_players.getPlayerFromClientID(client.id);
 		if (player) {
-			player->removeLoadedChunk(gk::Vector3i{cx, cy, cz});
+			player->removeLoadedChunk(Vector3i{cx, cy, cz});
 		}
 		else
 			gkError() << ("Failed to unload chunk for player " + std::to_string(client.id) + ": Player not found").c_str();
@@ -453,7 +453,7 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::BlockInvUpdate, [this](ClientInfo &client, Network::Packet &packet) {
-		gk::Vector3<s32> pos;
+		Vector3<s32> pos;
 		packet >> pos.x >> pos.y >> pos.z;
 
 		BlockData *data = getWorldForClient(client.id).getBlockData(pos.x, pos.y, pos.z);
@@ -464,7 +464,7 @@ void ServerCommandHandler::setupCallbacks() {
 	});
 
 	m_server.setCommandCallback(Network::Command::BlockDataUpdate, [this](ClientInfo &client, Network::Packet &packet) {
-		gk::Vector3<s32> pos;
+		Vector3<s32> pos;
 		packet >> pos.x >> pos.y >> pos.z;
 
 		BlockData *data = getWorldForClient(client.id).getBlockData(pos.x, pos.y, pos.z);

@@ -57,12 +57,12 @@ void ServerWorld::update(bool doTick) {
 }
 
 void ServerWorld::updatePlayerChunks(ServerPlayer &player, s32 cx, s32 cy, s32 cz) {
-	gk::Vector3i currentChunk{cx, cy, cz};
+	Vector3i currentChunk{cx, cy, cz};
 
 	player.sentChunks.clear();
 	m_chunkSendRequestQueue.emplace(currentChunk, player, GameClock::getInstance().getTicks(true));
 
-	std::list<gk::Vector3i> chunksToRemove;
+	std::list<Vector3i> chunksToRemove;
 	for (auto &chunkPos : player.loadedChunks()) {
 		glm::dvec3 chunkWorldPos{
 			chunkPos.x * CHUNK_WIDTH + CHUNK_WIDTH / 2,
@@ -89,7 +89,7 @@ void ServerWorld::updatePlayerChunks(ServerPlayer &player, s32 cx, s32 cy, s32 c
 }
 
 void ServerWorld::createChunkNeighbours(ServerChunk &chunk) {
-	gk::Vector3i surroundingChunks[6] = {
+	Vector3i surroundingChunks[6] = {
 		{chunk.x() - 1, chunk.y(),     chunk.z()},
 		{chunk.x() + 1, chunk.y(),     chunk.z()},
 		{chunk.x(),     chunk.y() - 1, chunk.z()},
@@ -111,7 +111,7 @@ void ServerWorld::createChunkNeighbours(ServerChunk &chunk) {
 
 		// Create our neighbour
 		auto it = m_chunks.emplace(
-			gk::Vector3i{
+			Vector3i{
 				surroundingChunks[i].x,
 				surroundingChunks[i].y,
 				surroundingChunks[i].z
@@ -136,7 +136,7 @@ void ServerWorld::createChunkNeighbours(ServerChunk &chunk) {
 ServerChunk &ServerWorld::getOrCreateChunk(s32 cx, s32 cy, s32 cz) {
 	ServerChunk *chunk = (ServerChunk *)getChunk(cx, cy, cz);
 	if (!chunk) {
-		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ServerChunk(cx, cy, cz, *this));
+		auto it = m_chunks.emplace(Vector3i{cx, cy, cz}, new ServerChunk(cx, cy, cz, *this));
 		chunk = it.first->second.get();
 	}
 
@@ -222,7 +222,7 @@ void ServerWorld::processSendRequests() {
 
 				// gkDebug() << "OK for chunk" << chunkPos.x << chunkPos.y << chunkPos.z << ":" << glm::length(playerPos - chunkWorldPos) << "<" << (int)ServerConfig::renderDistance * CHUNK_WIDTH;
 
-				auto addChunkToQueue = [this](gk::Vector3i pos, s8 dx, s8 dy, s8 dz, ServerPlayer &player) {
+				auto addChunkToQueue = [this](Vector3i pos, s8 dx, s8 dy, s8 dz, ServerPlayer &player) {
 					pos.x += dx; pos.y += dy; pos.z += dz;
 					m_chunkSendRequestQueue.emplace(pos, player, GameClock::getInstance().getTicks(true));
 				};

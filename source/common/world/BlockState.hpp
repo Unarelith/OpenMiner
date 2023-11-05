@@ -153,7 +153,7 @@ class BlockState : public ISerializable {
 		BLOCK_ATTR_V(float, fogDepth, 0);
 		BLOCK_ATTR_V(Color, fogColor, Color::White);
 
-		BLOCK_ATTR_V(gk::Vector3f, drawOffset, (gk::Vector3f{0, 0, 0}));
+		BLOCK_ATTR_V(Vector3f, drawOffset, (Vector3f{0, 0, 0}));
 
 		BLOCK_ATTR_V(bool, isCollidable, true);
 

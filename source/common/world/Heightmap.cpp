@@ -76,7 +76,7 @@ HeightmapChunk &Heightmap::getOrCreateChunk(s32 chunkX, s32 chunkY) {
 
 	auto it = m_chunks.find({chunkX, chunkY});
 	if (it == m_chunks.end()) {
-		m_chunks.emplace(gk::Vector2i{chunkX, chunkY}, HeightmapChunk{*this, chunkX, chunkY});
+		m_chunks.emplace(Vector2i{chunkX, chunkY}, HeightmapChunk{*this, chunkX, chunkY});
 
 		chunk = &m_chunks.at({chunkX, chunkY});
 		chunk->generate();

@@ -173,7 +173,7 @@ void Text::addCharacter(u32 x, u32 y, const Color &color, u8 c, std::vector<Vert
 		vertex.color[2] = color.b;
 		vertex.color[3] = color.a;
 
-		gk::Vector2f texCoords = m_font.getTexCoords(c, coords[i][0], coords[i][1]);
+		Vector2f texCoords = m_font.getTexCoords(c, coords[i][0], coords[i][1]);
 		vertex.texCoord[0] = texCoords.x;
 		vertex.texCoord[1] = texCoords.y;
 	}

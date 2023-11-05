@@ -51,7 +51,7 @@ class RenderTarget {
 		void beginDrawing(const RenderStates &states);
 		void setBgfxState(const RenderStates &states);
 
-		virtual gk::Vector2u getSize() const = 0;
+		virtual Vector2u getSize() const = 0;
 
 		virtual const View &getDefaultView() const = 0;
 

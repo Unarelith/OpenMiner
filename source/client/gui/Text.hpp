@@ -46,8 +46,8 @@ class Text : public Drawable, public Transformable {
 		void setColor(const Color &color);
 		void setShadowColor(const Color &color) { m_shadowColor = color; }
 
-		const gk::Vector2i &getSize() const { return m_size; }
-		gk::Vector2f getBackgroundSize() const { return m_background.getSize(); }
+		const Vector2i &getSize() const { return m_size; }
+		Vector2f getBackgroundSize() const { return m_background.getSize(); }
 
 		void setBackgroundColor(const Color &color) { m_background.setFillColor(color); }
 		void setBackgroundSize(unsigned int width, unsigned int height) { m_background.setSize((float)width, (float)height); }
@@ -76,8 +76,8 @@ class Text : public Drawable, public Transformable {
 		mutable u32 m_verticesCount = 0;
 		mutable bool m_isUpdateNeeded = true;
 
-		mutable gk::Vector2i m_size{0, 0};
-		gk::Vector2i m_padding{0, 0};
+		mutable Vector2i m_size{0, 0};
+		Vector2i m_padding{0, 0};
 
 		Color m_color = Color::White;
 

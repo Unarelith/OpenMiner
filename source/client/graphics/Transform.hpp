@@ -29,7 +29,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-#include <gk/core/Vector3.hpp>
+#include "Vector3.hpp"
 
 class Transform {
 	public:
@@ -39,11 +39,11 @@ class Transform {
 		Transform& combine(const Transform& transform);
 
 		Transform& translate(float x, float y, float z = 0);
-		Transform& translate(const gk::Vector3f& offset) { return translate(offset.x, offset.y, offset.z); }
+		Transform& translate(const Vector3f& offset) { return translate(offset.x, offset.y, offset.z); }
 
 		// Intrinsic rotation (right multiplication)
 		Transform& rotate(float angle) { return rotate(angle, {0, 0, 1}); }
-		Transform& rotate(float angle, const gk::Vector3f& axis);
+		Transform& rotate(float angle, const Vector3f& axis);
 		Transform& rotateX(float angle);
 		Transform& rotateY(float angle);
 		Transform& rotateZ(float angle);
@@ -53,7 +53,7 @@ class Transform {
 		Transform& lrotateZ(float angle);
 
 		Transform& scale(float scaleX, float scaleY, float scaleZ = 1);
-		Transform& scale(const gk::Vector3f& factors) { return scale(factors.x, factors.y, factors.z); }
+		Transform& scale(const Vector3f& factors) { return scale(factors.x, factors.y, factors.z); }
 
 		const float* getRawMatrix() const { return glm::value_ptr(m_matrix); }
 		const glm::mat4 &getMatrix() const { return m_matrix; }

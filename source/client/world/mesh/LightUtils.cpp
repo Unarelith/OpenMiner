@@ -29,11 +29,11 @@
 
 // Based on this article: https://0fps.net/2013/07/03/ambient-occlusion-for-minecraft-like-worlds/
 u8 LightUtils::getAmbientOcclusion(s8f x, s8f y, s8f z,
-                                   const gk::Vector3<s8f> &offset,
-                                   const gk::Vector3<s8f> &normal,
+                                   const Vector3<s8f> &offset,
+                                   const Vector3<s8f> &normal,
                                    const ChunkData &chunk)
 {
-	gk::Vector3<s8f> minOffset{
+	Vector3<s8f> minOffset{
 		s8f((normal.x != 0) ? offset.x : 0),
 		s8f((normal.y != 0) ? offset.y : 0),
 		s8f((normal.z != 0) ? offset.z : 0)
@@ -61,17 +61,17 @@ u8 LightUtils::getAmbientOcclusion(s8f x, s8f y, s8f z,
 }
 
 u8 LightUtils::getLightForVertex(LightType lightType, s8f x, s8f y, s8f z,
-                                 const gk::Vector3<s8f> &offset,
-                                 const gk::Vector3<s8f> &normal,
+                                 const Vector3<s8f> &offset,
+                                 const Vector3<s8f> &normal,
                                  const ChunkData &chunk)
 {
-	gk::Vector3<s8f> minOffset{
+	Vector3<s8f> minOffset{
 		(normal.x != 0) ? offset.x : s8f(0),
 		(normal.y != 0) ? offset.y : s8f(0),
 		(normal.z != 0) ? offset.z : s8f(0)
 	};
 
-	gk::Vector3<s8f> surroundingBlocks[4]{
+	Vector3<s8f> surroundingBlocks[4]{
 		{s8f(x + minOffset.x), s8f(y + minOffset.y), s8f(z + offset.z)},
 		{s8f(x + offset.x),    s8f(y + minOffset.y), s8f(z + minOffset.z)},
 		{s8f(x + minOffset.x), s8f(y + offset.y),    s8f(z + minOffset.z)},

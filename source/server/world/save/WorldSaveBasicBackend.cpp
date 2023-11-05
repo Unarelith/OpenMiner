@@ -143,7 +143,7 @@ void WorldSaveBasicBackend::save(const std::string &name) {
 		for (auto &it : world.chunks()) {
 			if (!it.second->isInitialized() || !it.second->hasBeenModified()) continue;
 
-			const gk::Vector3i &chunkpos = it.first;
+			const Vector3i &chunkpos = it.first;
 			const Chunk::DataArray &data = it.second->data();
 			chunks << chunkpos.x << chunkpos.y << chunkpos.z;
 

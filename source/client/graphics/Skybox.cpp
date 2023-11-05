@@ -129,7 +129,7 @@ void Skybox::draw(RenderTarget &target, RenderStates states) const {
 	states.shader = &m_shader;
 
 	// Set the camera temporarily to zero - see comment in ClientWorld::draw()
-	gk::Vector3d cameraPos(m_camera.getDPosition());
+	Vector3d cameraPos(m_camera.getDPosition());
 	m_camera.setDPosition(0, 0, 0);  // Temporarily move the camera to the origin
 
 	// Move the centre of the skybox under the horizon

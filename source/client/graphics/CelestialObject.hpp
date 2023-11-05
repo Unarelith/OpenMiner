@@ -46,7 +46,7 @@ class CelestialObject : public Drawable, public Transformable  {
 		void setCurrentPhase(u16 currentPhase) const { if (m_currentPhase != currentPhase) { m_currentPhase = currentPhase; m_isUpdateNeeded = true; } }
 		void setRotationOffset(u16 rotationOffset) { m_rotationOffset = rotationOffset; }
 		void setRotationSpeed(float rotationSpeed) { m_rotationSpeed = rotationSpeed; }
-		void setRotationAxis(const gk::Vector3f &rotationAxis) { m_rotationAxis = rotationAxis; m_axisXfNeedsUpdate = true; }
+		void setRotationAxis(const Vector3f &rotationAxis) { m_rotationAxis = rotationAxis; m_axisXfNeedsUpdate = true; }
 
 	private:
 		void updateVertexBuffer() const;
@@ -72,7 +72,7 @@ class CelestialObject : public Drawable, public Transformable  {
 
 		u16 m_rotationOffset = 0;
 		float m_rotationSpeed = 1.f;
-		gk::Vector3f m_rotationAxis{0, 1, 0};
+		Vector3f m_rotationAxis{0, 1, 0};
 		mutable glm::mat4 m_rotAxisTransform;
 };
 

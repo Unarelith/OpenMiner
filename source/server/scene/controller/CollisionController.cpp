@@ -39,8 +39,8 @@ void CollisionController::update(entt::registry &registry) {
 	registry.view<PositionComponent, DoubleBox, std::string>().each([&](auto entity, auto &position, auto &box, auto &id) {
 		for (auto &it : m_players) {
 			if (it.second.dimension() == position.dimension) {
-				DoubleBox hitbox = box + gk::Vector3d{position.x, position.y, position.z};
-				DoubleBox playerHitbox = it.second.hitbox() + gk::Vector3d{it.second.x(), it.second.y(), it.second.z()};
+				DoubleBox hitbox = box + Vector3d{position.x, position.y, position.z};
+				DoubleBox playerHitbox = it.second.hitbox() + Vector3d{it.second.x(), it.second.y(), it.second.z()};
 				if (hitbox.intersects(playerHitbox)) {
 					EntityWrapper entityWrapper{entity, registry};
 

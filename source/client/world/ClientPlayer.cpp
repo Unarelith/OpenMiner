@@ -39,7 +39,7 @@
 ClientPlayer *ClientPlayer::s_instance = nullptr;
 
 ClientPlayer::ClientPlayer(Camera &camera) : m_camera(camera) {
-	m_cameraLocalPos = gk::Vector3f{0.f, 0.f, 1.625f};
+	m_cameraLocalPos = Vector3f{0.f, 0.f, 1.625f};
 
 	updateCamera();
 
@@ -77,9 +77,9 @@ void ClientPlayer::updateCamera() {
 	float cr = cosf(viewAngleRoll * math::DEG_TO_RADf);
 	float sr = sinf(viewAngleRoll * math::DEG_TO_RADf);
 
-	m_forwardDir = gk::Vector3f{ch * cv, sh * cv, sv};
+	m_forwardDir = Vector3f{ch * cv, sh * cv, sv};
 	m_camera.setDirection(m_forwardDir);
-	m_camera.setUpVector(gk::Vector3f{sh * sr - ch * sv * cr, -ch * sr - sh * sv * cr, cv * cr});
+	m_camera.setUpVector(Vector3f{sh * sr - ch * sv * cr, -ch * sr - sh * sv * cr, cv * cr});
 }
 
 void ClientPlayer::move(float direction) {
@@ -187,12 +187,12 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 void ClientPlayer::setPosition(double x, double y, double z) {
 	Player::setPosition(x, y, z);
 
-	gk::Vector3f camPos = m_cameraLocalPos;
+	Vector3f camPos = m_cameraLocalPos;
 	m_camera.setDPosition(m_x + camPos.x, m_y + camPos.y, m_z + camPos.z);
 }
 
 void ClientPlayer::checkCollisions(const ClientWorld &world) {
-	gk::Vector3d corner{m_x + m_hitbox.x, m_y + m_hitbox.y, m_z + m_hitbox.z};
+	Vector3d corner{m_x + m_hitbox.x, m_y + m_hitbox.y, m_z + m_hitbox.z};
 
 	constexpr int numPointsPerEdge = 3;
 	constexpr int lastPoint = numPointsPerEdge - 1;
@@ -214,7 +214,7 @@ bool passable(const ClientWorld &world, double x, double y, double z) {
 	return !blockState || !blockState->block().id() || !blockState->isCollidable();
 }
 
-void ClientPlayer::testPoint(const ClientWorld &world, double x, double y, double z, gk::Vector3f &vel) {
+void ClientPlayer::testPoint(const ClientWorld &world, double x, double y, double z, Vector3f &vel) {
 	if(!passable(world, x + vel.x, y, z)) vel.x = 0.f;
 	if(!passable(world, x, y + vel.y, z)) vel.y = 0.f;
 	if(!passable(world, x, y, z + vel.z)) {

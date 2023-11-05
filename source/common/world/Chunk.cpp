@@ -134,7 +134,7 @@ bool Chunk::setBlockRaw(int x, int y, int z, u16 type) {
 	if ((m_data[z][y][x] & 0xffff) == type) return false;
 
 	if (type == 0) {
-		auto it = m_blockData.find(gk::Vector3i{x, y, z});
+		auto it = m_blockData.find(Vector3i{x, y, z});
 		if (it != m_blockData.end())
 			m_blockData.erase(it);
 	}
@@ -203,7 +203,7 @@ BlockData *Chunk::getBlockData(int x, int y, int z) const {
 	if(z < 0)             return m_surroundingChunks[4] ? m_surroundingChunks[4]->getBlockData(x, y, z + CHUNK_HEIGHT) : 0;
 	if(z >= CHUNK_HEIGHT) return m_surroundingChunks[5] ? m_surroundingChunks[5]->getBlockData(x, y, z - CHUNK_HEIGHT) : 0;
 
-	gk::Vector3i pos{x, y, z};
+	Vector3i pos{x, y, z};
 	auto it = m_blockData.find(pos);
 	if (it == m_blockData.end()) {
 		return nullptr;
@@ -220,10 +220,10 @@ BlockData *Chunk::addBlockData(int x, int y, int z, u16 inventoryWidth, u16 inve
 	if(z < 0)             return m_surroundingChunks[4] ? m_surroundingChunks[4]->addBlockData(x, y, z + CHUNK_HEIGHT) : 0;
 	if(z >= CHUNK_HEIGHT) return m_surroundingChunks[5] ? m_surroundingChunks[5]->addBlockData(x, y, z - CHUNK_HEIGHT) : 0;
 
-	gk::Vector3i pos{x, y, z};
+	Vector3i pos{x, y, z};
 	auto it = m_blockData.find(pos);
 	if (it == m_blockData.end()) {
-		gk::Vector3i absolutePos{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH, z + m_z * CHUNK_HEIGHT};
+		Vector3i absolutePos{x + m_x * CHUNK_WIDTH, y + m_y * CHUNK_DEPTH, z + m_z * CHUNK_HEIGHT};
 		BlockData *data = new BlockData{absolutePos, inventoryWidth, inventoryHeight};
 		m_blockData.emplace(pos, data);
 		return data;

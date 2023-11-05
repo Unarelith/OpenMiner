@@ -29,10 +29,9 @@
 
 #include <vector>
 
-#include <gk/core/Vector3.hpp>
-
 #include "ISerializable.hpp"
 #include "ItemStack.hpp"
+#include "Vector3.hpp"
 
 class Inventory : public ISerializable {
 	public:
@@ -61,8 +60,8 @@ class Inventory : public ISerializable {
 		bool inBlock() const { return m_inBlock; }
 		void setInBlock(bool inBlock) { m_inBlock = inBlock; }
 
-		const gk::Vector3i &blockPos() const { return m_blockPos; }
-		void setBlockPos(const gk::Vector3i &blockPos) { m_blockPos = blockPos; }
+		const Vector3i &blockPos() const { return m_blockPos; }
+		void setBlockPos(const Vector3i &blockPos) { m_blockPos = blockPos; }
 
 		bool hasChanged() const { return m_hasChanged; }
 		void setChanged(bool hasChanged) { m_hasChanged = hasChanged; }
@@ -81,7 +80,7 @@ class Inventory : public ISerializable {
 		std::vector<ItemStack> m_items;
 
 		bool m_inBlock = false;
-		gk::Vector3i m_blockPos{0, 0, 0};
+		Vector3i m_blockPos{0, 0, 0};
 
 		bool m_hasChanged = false; // Used to send inventory update packets
 		bool m_isUnlimited = false;

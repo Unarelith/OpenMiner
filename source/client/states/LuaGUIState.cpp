@@ -274,7 +274,7 @@ void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf:
 		widgetInventory = &m_player.inventory();
 	}
 	else if (inventory == "block") {
-		gk::Vector3i block;
+		Vector3i block;
 		packet >> block;
 
 		BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
@@ -324,7 +324,7 @@ void LuaGUIState::loadCraftingWidget(const std::string &name, s32 x, s32 y, sf::
 	u16 offset = 0, size;
 	Inventory *craftingInventory = nullptr;
 	if (inventory == "block") {
-		gk::Vector3i block;
+		Vector3i block;
 		packet >> block >> offset >> size;
 
 		BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
@@ -358,7 +358,7 @@ void LuaGUIState::loadCraftingWidget(const std::string &name, s32 x, s32 y, sf::
 
 void LuaGUIState::loadProgressBarWidget(const std::string &, s32 x, s32 y, sf::Packet &packet) {
 	u8 type;
-	gk::Vector3i block;
+	Vector3i block;
 	std::string meta, maxMeta;
 	u32 maxValue;
 	std::string textureFilename;
@@ -376,9 +376,9 @@ void LuaGUIState::loadProgressBarWidget(const std::string &, s32 x, s32 y, sf::P
 
 	ProgressBarWidget *widget = new ProgressBarWidget(texture, *data, ProgressBarType(type));
 	if (!maxMeta.empty())
-		widget->init(clipRect, gk::Vector2i{x, y}, meta, maxMeta);
+		widget->init(clipRect, Vector2i{x, y}, meta, maxMeta);
 	else
-		widget->init(clipRect, gk::Vector2i{x, y}, meta, maxValue);
+		widget->init(clipRect, Vector2i{x, y}, meta, maxValue);
 
 	m_widgets.emplace_back(widget);
 }

@@ -31,10 +31,10 @@
 #include <unordered_map>
 
 #include <gk/core/IntTypes.hpp>
-#include <gk/core/Vector2.hpp>
 
 #include "EngineConfig.hpp"
 #include "FastNoiseLite.hpp"
+#include "Vector2.hpp"
 
 class Heightmap;
 
@@ -76,7 +76,7 @@ class Heightmap {
 		FastNoiseLite noise4;
 
 	private:
-		std::unordered_map<gk::Vector2i, HeightmapChunk> m_chunks;
+		std::unordered_map<Vector2i, HeightmapChunk> m_chunks;
 };
 
 #endif // HEIGHTMAP_HPP_

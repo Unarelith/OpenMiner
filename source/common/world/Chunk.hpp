@@ -32,12 +32,11 @@
 #include <unordered_map>
 #include <vector>
 
-#include <gk/core/Vector3.hpp>
-
 #include "Block.hpp"
 #include "BlockData.hpp"
 #include "ChunkLightmap.hpp"
 #include "NonCopyable.hpp"
+#include "Vector3.hpp"
 
 class World;
 
@@ -129,7 +128,7 @@ class Chunk : public NonCopyable {
 		bool m_isInitialized = false;
 		bool m_hasChanged = false;
 
-		std::unordered_map<gk::Vector3i, std::unique_ptr<BlockData>> m_blockData;
+		std::unordered_map<Vector3i, std::unique_ptr<BlockData>> m_blockData;
 };
 
 #endif // CHUNK_HPP_

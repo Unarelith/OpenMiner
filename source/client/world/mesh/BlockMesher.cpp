@@ -88,7 +88,7 @@ void BlockMesher::addBlock(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
 	for (s8f f = 0; f < nFaces ; ++f) {
 		// Construct the normal vector to a face
 		const glm::vec3 glmNormal = orientMatrix * faceNormals[f];
-		const gk::Vector3<s8f> normal{s8f(glmNormal.x), s8f(glmNormal.y), s8f(glmNormal.z)};
+		const Vector3<s8f> normal{s8f(glmNormal.x), s8f(glmNormal.y), s8f(glmNormal.z)};
 
 		// Construct an array with the 4 vertex positions of this face
 		glm::vec3 *faceVerts[nVertsPerFace]{
@@ -98,12 +98,12 @@ void BlockMesher::addBlock(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
 
 		// Construct an array with the 4 vertex neighbours of this face
 		// (as GameKit integer vectors)
-		const gk::Vector3<s8f> corner0{s8f(vNeighbour[cubeVerts[f][0]].x), s8f(vNeighbour[cubeVerts[f][0]].y), s8f(vNeighbour[cubeVerts[f][0]].z)};
-		const gk::Vector3<s8f> corner1{s8f(vNeighbour[cubeVerts[f][1]].x), s8f(vNeighbour[cubeVerts[f][1]].y), s8f(vNeighbour[cubeVerts[f][1]].z)};
-		const gk::Vector3<s8f> corner2{s8f(vNeighbour[cubeVerts[f][2]].x), s8f(vNeighbour[cubeVerts[f][2]].y), s8f(vNeighbour[cubeVerts[f][2]].z)};
-		const gk::Vector3<s8f> corner3{s8f(vNeighbour[cubeVerts[f][3]].x), s8f(vNeighbour[cubeVerts[f][3]].y), s8f(vNeighbour[cubeVerts[f][3]].z)};
+		const Vector3<s8f> corner0{s8f(vNeighbour[cubeVerts[f][0]].x), s8f(vNeighbour[cubeVerts[f][0]].y), s8f(vNeighbour[cubeVerts[f][0]].z)};
+		const Vector3<s8f> corner1{s8f(vNeighbour[cubeVerts[f][1]].x), s8f(vNeighbour[cubeVerts[f][1]].y), s8f(vNeighbour[cubeVerts[f][1]].z)};
+		const Vector3<s8f> corner2{s8f(vNeighbour[cubeVerts[f][2]].x), s8f(vNeighbour[cubeVerts[f][2]].y), s8f(vNeighbour[cubeVerts[f][2]].z)};
+		const Vector3<s8f> corner3{s8f(vNeighbour[cubeVerts[f][3]].x), s8f(vNeighbour[cubeVerts[f][3]].y), s8f(vNeighbour[cubeVerts[f][3]].z)};
 
-		const gk::Vector3<s8f> *vFaceNeighbours[nVertsPerFace]{&corner0, &corner1, &corner2, &corner3};
+		const Vector3<s8f> *vFaceNeighbours[nVertsPerFace]{&corner0, &corner1, &corner2, &corner3};
 
 		addBlockFace(x, y, z, f, job, blockState, normal, faceVerts, vFaceNeighbours);
 	}
@@ -111,9 +111,9 @@ void BlockMesher::addBlock(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
 
 void BlockMesher::addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob &job,
                               const BlockState &blockState,
-                              const gk::Vector3<s8f> &normal,
+                              const Vector3<s8f> &normal,
                               const glm::vec3 *const vertexPos[nVertsPerFace],
-                              const gk::Vector3<s8f> *const neighbourOfs[nVertsPerFace])
+                              const Vector3<s8f> *const neighbourOfs[nVertsPerFace])
 {
 	// Get surrounding block for the face
 	s8f sx = x + normal.x;

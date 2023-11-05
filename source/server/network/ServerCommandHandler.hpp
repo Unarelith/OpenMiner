@@ -29,13 +29,11 @@
 
 #include <unordered_map>
 
-#include <gk/core/Vector3.hpp>
-
 #include <entt/entt.hpp>
-
 #include <sol/sol.hpp>
 
 #include "ChatCommandHandler.hpp"
+#include "Vector3.hpp"
 
 struct BlockData;
 
