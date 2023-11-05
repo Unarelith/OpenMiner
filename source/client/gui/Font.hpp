@@ -29,7 +29,7 @@
 
 #include <string>
 
-#include <gk/core/Vector2.hpp>
+#include "Vector2.hpp"
 
 class Texture;
 
@@ -37,10 +37,10 @@ class Font {
 	public:
 		Font(const std::string &textureName, const std::string &configPath);
 
-		gk::Vector2f getTexCoords(u8 c, u8 x, u8 y) const;
+		Vector2f getTexCoords(u8 c, u8 x, u8 y) const;
 
 		u8 getCharWidth(u8 c) const { return m_charWidth[c]; }
-		gk::Vector2i getTileSize() const { return {m_width, m_height}; }
+		Vector2i getTileSize() const { return {m_width, m_height}; }
 
 		const Texture &texture() const { return m_texture; }
 

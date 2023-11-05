@@ -36,28 +36,28 @@ Camera::Camera(float fov, float near, float far) {
 	setDPosition(0, 0, 0);
 }
 
-void Camera::setPosition(const gk::Vector3f &position) {
+void Camera::setPosition(const Vector3f &position) {
 	m_position = position;
 	m_viewTransformUpdated = false;
 }
 
-void Camera::setDPosition(const gk::Vector3d &position) {
+void Camera::setDPosition(const Vector3d &position) {
 	m_position_d = position;
-	m_position = gk::Vector3f((float)position.x, (float)position.y, (float)position.z);
+	m_position = Vector3f((float)position.x, (float)position.y, (float)position.z);
 	m_viewTransformUpdated = false;
 }
 
-void Camera::setDirection(const gk::Vector3f &direction) {
+void Camera::setDirection(const Vector3f &direction) {
 	m_direction = direction;
 	m_viewTransformUpdated = false;
 }
 
-void Camera::setTargetPosition(const gk::Vector3f &target) {
+void Camera::setTargetPosition(const Vector3f &target) {
 	m_direction = target - getPosition();
 	m_viewTransformUpdated = false;
 }
 
-void Camera::setUpVector(const gk::Vector3f &upVector) {
+void Camera::setUpVector(const Vector3f &upVector) {
 	m_upVector = upVector;
 	m_viewTransformUpdated = false;
 }
@@ -82,7 +82,7 @@ void Camera::setFarClippingPlane(float distance) {
 	m_transformUpdated = false;
 }
 
-const gk::Transform& Camera::getTransform() const {
+const Transform& Camera::getTransform() const {
 	if (!m_transformUpdated) {
 		m_transform = glm::perspective(glm::radians(m_fieldOfView), m_aspect, m_nearPlane, m_farPlane);
 
@@ -92,7 +92,7 @@ const gk::Transform& Camera::getTransform() const {
 	return m_transform;
 }
 
-const gk::Transform& Camera::getViewTransform() const {
+const Transform& Camera::getViewTransform() const {
 	if (!m_viewTransformUpdated) {
 		m_viewTransform = glm::lookAt(glm::vec3{getPosition().x, getPosition().y, getPosition().z},
 		                              glm::vec3{getPosition().x + m_direction.x, getPosition().y + m_direction.y, getPosition().z + m_direction.z},

@@ -79,7 +79,7 @@ void Server::handleNewConnections() {
 		Network::Command command;
 		packet >> command;
 		if (command != Network::Command::ClientConnect)
-			gkError() << "Network error: Expected 'ClientConnect' packet for new clients.";
+			logError() << "Network error: Expected 'ClientConnect' packet for new clients.";
 		else if (m_info.clients().size() < ServerConfig::maxPlayers) {
 			ClientInfo &client = m_info.addClient(clientSocket);
 			m_selector.add(*client.tcpSocket);
@@ -99,7 +99,7 @@ void Server::handleNewConnections() {
 		}
 	}
 	else {
-		gkWarning() << "Warning: Connection accept failed.";
+		logWarning() << "Warning: Connection accept failed.";
 	}
 }
 
@@ -116,7 +116,7 @@ void Server::handleClientMessages() {
 					Network::Command command;
 					packet >> command;
 
-					// gkDebug() << "TCP message received:" << Network::commandToString(command);
+					// logDebug() << "TCP message received:" << Network::commandToString(command);
 
 					if (m_isRunning) {
 						for (auto &it : m_commands) {

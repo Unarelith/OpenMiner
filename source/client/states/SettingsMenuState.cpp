@@ -28,15 +28,12 @@
 
 #include <algorithm>
 
-#include <gk/core/input/GamePad.hpp>
-#include <gk/core/Debug.hpp>
-#include <gk/core/EventHandler.hpp>
-#include <gk/core/Mouse.hpp>
-#include <gk/core/Utils.hpp>
-
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
+#include "Debug.hpp"
+#include "EventHandler.hpp"
 #include "Events.hpp"
+#include "GamePad.hpp"
 #include "KeyboardHandler.hpp"
 #include "Registry.hpp"
 #include "SettingsMenuState.hpp"
@@ -46,8 +43,8 @@
 SettingsMenuState::SettingsMenuState(DrawableState *parent) : InterfaceState(parent) {
 	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
-	m_filter1.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
-	m_filter2.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 120));
+	m_filter1.setFillColor(Color::fromRGBA32(0, 0, 0, 192));
+	m_filter2.setFillColor(Color::fromRGBA32(0, 0, 0, 120));
 
 	m_title.setScale(Config::guiScale, Config::guiScale);
 	m_title.setString("Options");
@@ -88,7 +85,7 @@ void SettingsMenuState::onEvent(const SDL_Event &event) {
 			doneButtonAction();
 		}
 		else if (m_currentKeyButton && event.type == SDL_KEYDOWN) {
-			KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
+			KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(GamePad::getInputHandler());
 			keyboardHandler->setKeycode(m_currentKey, event.key.keysym.sym);
 
 			m_key->setKeycode(event.key.keysym.sym);
@@ -305,7 +302,7 @@ void SettingsMenuState::addGraphicsButtons() {
 }
 
 void SettingsMenuState::addInputButtons() {
-	KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
+	KeyboardHandler *keyboardHandler = dynamic_cast<KeyboardHandler *>(GamePad::getInputHandler());
 	m_menuWidget.reset(2, u16((float)keyboardHandler->keyCount() / 2.f + 1.5f));
 
 	for (auto &it : keyboardHandler->keys()) {

@@ -26,15 +26,14 @@
  */
 #include <ctime>
 
-#include <gk/core/Config.hpp>
-#include <gk/core/Exception.hpp>
-
 #include "CoreApplication.hpp"
+#include "Exception.hpp"
 #include "Mouse.hpp"
+#include "Platform.hpp"
 
 bool CoreApplication::hasBeenInterrupted = false;
 
-#ifdef GK_SYSTEM_LINUX
+#ifdef OM_PLATFORM_LINUX
 
 #include <stdio.h>
 #include <signal.h>
@@ -44,10 +43,10 @@ static void sigintHandler(int) {
 	CoreApplication::hasBeenInterrupted = true;
 }
 
-#endif // GK_SYSTEM_LINUX
+#endif // OM_PLATFORM_LINUX
 
 CoreApplication::CoreApplication(int argc, char **argv) : m_argumentParser(argc, argv) {
-#ifdef GK_SYSTEM_LINUX
+#ifdef OM_PLATFORM_LINUX
 	signal(SIGINT, sigintHandler);
 #endif
 }
@@ -58,9 +57,9 @@ bool CoreApplication::init() {
 	Mouse::setWindow(&m_window);
 
 	ApplicationStateStack::setInstance(m_stateStack);
-	gk::GameClock::setInstance(m_clock);
-	gk::ResourceHandler::setInstance(m_resourceHandler);
-	gk::LoggerHandler::setInstance(m_loggerHandler);
+	GameClock::setInstance(m_clock);
+	ResourceHandler::setInstance(m_resourceHandler);
+	LoggerHandler::setInstance(m_loggerHandler);
 
 	m_stateStack.setEventHandler(m_eventHandler);
 
@@ -87,8 +86,8 @@ int CoreApplication::run(bool isProtected) {
 		try {
 			runGame();
 		}
-		catch(const gk::Exception &e) {
-			gkError() << "Fatal error" << e.what();
+		catch(const Exception &e) {
+			logError() << "Fatal error" << e.what();
 			exit();
 			return 1;
 		}

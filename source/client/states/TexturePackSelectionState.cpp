@@ -24,13 +24,12 @@
  *
  * =====================================================================================
  */
-#include <gk/resource/ResourceHandler.hpp>
-
 #include <filesystem.hpp>
 
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
 #include "GameConfig.hpp"
+#include "ResourceHandler.hpp"
 #include "TextureAtlas.hpp"
 #include "TexturePackSelectionState.hpp"
 #include "World.hpp"
@@ -40,8 +39,8 @@ namespace fs = ghc::filesystem;
 TexturePackSelectionState::TexturePackSelectionState(DrawableState *parent) : InterfaceState(parent) {
 	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
-	m_filter1.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
-	m_filter2.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 120));
+	m_filter1.setFillColor(Color::fromRGBA32(0, 0, 0, 192));
+	m_filter2.setFillColor(Color::fromRGBA32(0, 0, 0, 120));
 
 	m_title.setScale(Config::guiScale, Config::guiScale);
 	m_title.setString("Select Texture Pack");
@@ -59,7 +58,7 @@ TexturePackSelectionState::TexturePackSelectionState(DrawableState *parent) : In
 				Config::texturePack = texturePack;
 
 				if (GameConfig::isGameRunning) {
-					auto &atlas = gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks");
+					auto &atlas = ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks");
 					atlas.clear();
 					atlas.loadFromRegistry(Config::texturePack);
 

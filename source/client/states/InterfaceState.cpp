@@ -35,7 +35,7 @@
 InterfaceState::InterfaceState(ApplicationState *parent) : DrawableState(parent) {
 	m_shader.loadFromFile("basic");
 
-	m_background.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 127));
+	m_background.setFillColor(Color::fromRGBA32(0, 0, 0, 127));
 
 	setup();
 }
@@ -73,7 +73,6 @@ void InterfaceState::update() {
 }
 
 void InterfaceState::prepareDraw(RenderTarget &target, RenderStates &states) const {
-	states.transform *= getTransform();
 	states.shader = &m_shader;
 
 	target.setView(m_view);
@@ -82,4 +81,3 @@ void InterfaceState::prepareDraw(RenderTarget &target, RenderStates &states) con
 	if (m_parent && m_drawBackground)
 		target.draw(m_background, states);
 }
-

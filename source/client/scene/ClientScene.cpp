@@ -45,7 +45,7 @@ void ClientScene::draw(RenderTarget &target, RenderStates states) const {
 	if (!m_camera) return;
 
 	// Subtract the camera position - see comment in ClientWorld::draw()
-	gk::Vector3d cameraPosition = m_camera->getDPosition();
+	Vector3d cameraPosition = m_camera->getDPosition();
 	states.transform.translate((float)-cameraPosition.x, (float)-cameraPosition.y, (float)-cameraPosition.z);
 
 	for (auto &controller : m_clientControllers)

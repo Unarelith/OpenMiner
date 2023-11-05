@@ -26,15 +26,14 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/Debug.hpp>
-#include <gk/core/input/GamePad.hpp>
-#include <gk/graphics/Color.hpp>
-
 #include "ApplicationStateStack.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
+#include "Color.hpp"
 #include "Config.hpp"
+#include "Debug.hpp"
 #include "GameKey.hpp"
+#include "GamePad.hpp"
 #include "InventoryWidget.hpp"
 #include "LuaGUIState.hpp"
 #include "LuaWidget.hpp"
@@ -103,7 +102,7 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 
 	if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT
 	 && m_currentInventoryWidget && !m_currentInventoryWidget->shiftDestination().empty()
-	 && m_mouseItemWidget.currentItemWidget() && gk::GamePad::isKeyPressed(GameKey::Shift)) {
+	 && m_mouseItemWidget.currentItemWidget() && GamePad::isKeyPressed(GameKey::Shift)) {
 		for (const std::string &shiftDestination : m_currentInventoryWidget->shiftDestination()) {
 			AbstractInventoryWidget *dest = nullptr;
 
@@ -118,7 +117,7 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 			}
 
 			if (!dest) {
-				gkWarning() << "Destination not found:" << shiftDestination;
+				logWarning() << "Destination not found:" << shiftDestination;
 				return;
 			}
 
@@ -149,7 +148,7 @@ void LuaGUIState::update() {
 			inv->second.applySearch(m_textInputs.at(it.first).string());
 		}
 		else
-			gkError() << "Can't find linked inventory" << it.second << "for text input" << it.first;
+			logError() << "Can't find linked inventory" << it.second << "for text input" << it.first;
 	}
 
 	for (auto &it : m_widgets)
@@ -187,7 +186,7 @@ void LuaGUIState::draw(RenderTarget &target, RenderStates states) const {
 	prepareDraw(target, states);
 
 	states.transform *= m_mainWidget.getTransform();
-	states.viewMatrix = gk::Transform::Identity;
+	states.viewMatrix = Transform::Identity;
 
 	for (auto &it : m_drawables)
 		target.draw(*it, states);
@@ -236,7 +235,7 @@ void LuaGUIState::loadGUI(sf::Packet &packet) {
 
 void LuaGUIState::loadImage(const std::string &, s32 x, s32 y, sf::Packet &packet) {
 	std::string textureFilename;
-	gk::FloatRect clipRect;
+	FloatRect clipRect;
 	packet >> textureFilename >> clipRect.x >> clipRect.y >> clipRect.sizeX >> clipRect.sizeY;
 
 	Texture &texture = loadTexture(textureFilename);
@@ -274,12 +273,12 @@ void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf:
 		widgetInventory = &m_player.inventory();
 	}
 	else if (inventory == "block") {
-		gk::Vector3i block;
+		Vector3i block;
 		packet >> block;
 
 		BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
 		if (!data) {
-			gkError() << "No inventory found at" << block.x << block.y << block.z;
+			logError() << "No inventory found at" << block.x << block.y << block.z;
 			return;
 		}
 
@@ -296,7 +295,7 @@ void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf:
 		else {
 			auto it = m_inventories.find(inventoryName);
 			if (it == m_inventories.end())
-				gkError() << "Unable to find inventory" << inventoryName << "for widget" << name;
+				logError() << "Unable to find inventory" << inventoryName << "for widget" << name;
 
 			widgetInventory = &it->second;
 		}
@@ -312,7 +311,7 @@ void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf:
 		inventoryWidget.setFilter(filter);
 	}
 	else {
-		gkError() << "Inventory widget" << name << " is invalid";
+		logError() << "Inventory widget" << name << " is invalid";
 	}
 }
 
@@ -324,12 +323,12 @@ void LuaGUIState::loadCraftingWidget(const std::string &name, s32 x, s32 y, sf::
 	u16 offset = 0, size;
 	Inventory *craftingInventory = nullptr;
 	if (inventory == "block") {
-		gk::Vector3i block;
+		Vector3i block;
 		packet >> block >> offset >> size;
 
 		BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
 		if (!data) {
-			gkError() << "No inventory found at" << block.x << block.y << block.z;
+			logError() << "No inventory found at" << block.x << block.y << block.z;
 		}
 		else {
 			craftingInventory = &data->inventory;
@@ -352,23 +351,23 @@ void LuaGUIState::loadCraftingWidget(const std::string &name, s32 x, s32 y, sf::
 		craftingWidget.craftingResultInventoryWidget().setPosition((float)resultX, (float)resultY);
 	}
 	else {
-		gkError() << "Crafting inventory is invalid";
+		logError() << "Crafting inventory is invalid";
 	}
 }
 
 void LuaGUIState::loadProgressBarWidget(const std::string &, s32 x, s32 y, sf::Packet &packet) {
 	u8 type;
-	gk::Vector3i block;
+	Vector3i block;
 	std::string meta, maxMeta;
 	u32 maxValue;
 	std::string textureFilename;
-	gk::FloatRect clipRect;
+	FloatRect clipRect;
 	packet >> type >> block.x >> block.y >> block.z >> meta >> maxMeta >> maxValue >> textureFilename
 		>> clipRect.x >> clipRect.y >> clipRect.sizeX >> clipRect.sizeY;
 
 	BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
 	if (!data) {
-		gkError() << "No inventory found at" << block.x << block.y << block.z;
+		logError() << "No inventory found at" << block.x << block.y << block.z;
 		return;
 	}
 
@@ -376,16 +375,16 @@ void LuaGUIState::loadProgressBarWidget(const std::string &, s32 x, s32 y, sf::P
 
 	ProgressBarWidget *widget = new ProgressBarWidget(texture, *data, ProgressBarType(type));
 	if (!maxMeta.empty())
-		widget->init(clipRect, gk::Vector2i{x, y}, meta, maxMeta);
+		widget->init(clipRect, Vector2i{x, y}, meta, maxMeta);
 	else
-		widget->init(clipRect, gk::Vector2i{x, y}, meta, maxValue);
+		widget->init(clipRect, Vector2i{x, y}, meta, maxValue);
 
 	m_widgets.emplace_back(widget);
 }
 
 void LuaGUIState::loadScrollBarWidget(const std::string &, s32 x, s32 y, sf::Packet &packet) {
 	std::string textureFilename;
-	gk::FloatRect clipRect;
+	FloatRect clipRect;
 	u16 minY, maxY;
 	std::string widget;
 	packet >> textureFilename >> clipRect >> minY >> maxY >> widget;
@@ -402,7 +401,7 @@ void LuaGUIState::loadScrollBarWidget(const std::string &, s32 x, s32 y, sf::Pac
 void LuaGUIState::loadTextInput(const std::string &name, s32 x, s32 y, sf::Packet &packet) {
 	u16 width, height;
 	std::string placeholder, inventory;
-	gk::Color placeholderColor;
+	Color placeholderColor;
 	packet >> width >> height >> placeholder >> placeholderColor >> inventory;
 
 	TextInput textInput{&m_mainWidget};

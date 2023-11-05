@@ -30,7 +30,7 @@
 #include <chrono>
 #include <limits>
 
-#include <gk/core/SDLHeaders.hpp>
+#include <SDL.h>
 
 #include "ClientProfiler.hpp"
 #include "Text.hpp"
@@ -131,7 +131,7 @@ class DebugProfilerSnapshot {
 		std::unordered_map<std::string, DebugProfilerSnapshotValue> m_values;
 };
 
-class DebugProfilerWindow : public gk::Transformable, public Drawable {
+class DebugProfilerWindow : public Transformable, public Drawable {
 	public:
 		DebugProfilerWindow();
 

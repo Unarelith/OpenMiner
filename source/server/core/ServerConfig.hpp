@@ -30,9 +30,9 @@
 #include <string>
 #include <unordered_map>
 
-#include <gk/core/IntTypes.hpp>
-
 #include <sol/sol.hpp>
+
+#include "IntTypes.hpp"
 
 namespace ServerConfig {
 	// Server

@@ -32,7 +32,7 @@
 #include "Texture.hpp"
 #include "VertexBuffer.hpp"
 
-class Framebuffer : public gk::NonCopyable {
+class Framebuffer : public NonCopyable {
 	public:
 		Framebuffer();
 		Framebuffer(u16 width, u16 height);

@@ -15,7 +15,6 @@ set_target_properties(${CMAKE_PROJECT_NAME}_server_lib PROPERTIES FOLDER "source
 # External libraries
 #-----------------------------------------------------------------------------------------
 set_target_properties(glm_static                       PROPERTIES FOLDER "external")
-set_target_properties(gamekit                          PROPERTIES FOLDER "external")
 set_target_properties(libglew_static                   PROPERTIES FOLDER "external")
 set_target_properties(libluajit                        PROPERTIES FOLDER "external")
 set_target_properties(luajit                           PROPERTIES FOLDER "external")

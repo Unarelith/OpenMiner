@@ -27,7 +27,7 @@
 #ifndef XSHAPEMESHER_HPP_
 #define XSHAPEMESHER_HPP_
 
-#include <gk/core/IntTypes.hpp>
+#include "IntTypes.hpp"
 
 struct ChunkMeshBuildingJob;
 class BlockState;

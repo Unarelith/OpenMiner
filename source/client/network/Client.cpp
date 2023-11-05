@@ -24,12 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/input/GamePad.hpp>
-#include <gk/core/input/InputHandler.hpp>
-#include <gk/core/GameClock.hpp>
-#include <gk/core/Exception.hpp>
-
 #include "Client.hpp"
+#include "Exception.hpp"
 
 void Client::connect(sf::IpAddress serverAddress, u16 serverPort, Player &player) {
 	m_serverAddress = serverAddress;
@@ -85,7 +81,7 @@ void Client::update() {
 		Network::Command command;
 		packet >> command;
 
-		// gkDebug() << "TCP message received:" << Network::commandToString(command);
+		// logDebug() << "TCP message received:" << Network::commandToString(command);
 
 		auto it = m_commands.find(command);
 		if (it != m_commands.end())

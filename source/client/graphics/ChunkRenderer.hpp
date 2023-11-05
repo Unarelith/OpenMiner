@@ -39,10 +39,10 @@ class ClientChunk;
 class RenderTarget;
 
 class ChunkRenderer {
-	using OnChunkDeletionRequestedCallback = std::function<void(const gk::Vector3i &)>;
-	using OnMeshingRequestedCallback = std::function<void(float, const gk::Vector3i &)>;
+	using OnChunkDeletionRequestedCallback = std::function<void(const Vector3i &)>;
+	using OnMeshingRequestedCallback = std::function<void(float, const Vector3i &)>;
 
-	using ChunkMap = std::unordered_map<gk::Vector3i, std::unique_ptr<ClientChunk>>;
+	using ChunkMap = std::unordered_map<Vector3i, std::unique_ptr<ClientChunk>>;
 
 	public:
 		ChunkRenderer(const TextureAtlas &textureAtlas);
@@ -53,7 +53,7 @@ class ChunkRenderer {
 		void setOnMeshingRequestedCallback(const OnMeshingRequestedCallback &callback) { m_onMeshingRequested = callback; }
 
 	public:
-		void drawChunks(RenderTarget &target, RenderStates states, const std::vector<std::tuple<ClientChunk*, gk::Transform, float>> &chunks, const Sky *currentSky) const;
+		void drawChunks(RenderTarget &target, RenderStates states, const std::vector<std::tuple<ClientChunk*, Transform, float>> &chunks, const Sky *currentSky) const;
 
 		const TextureAtlas &m_textureAtlas;
 

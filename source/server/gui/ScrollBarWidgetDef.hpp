@@ -40,7 +40,7 @@ class ScrollBarWidgetDef : public WidgetDef {
 	private:
 		std::string m_texture;
 
-		gk::FloatRect m_clipRect;
+		FloatRect m_clipRect;
 
 		u16 m_minY = 0;
 		u16 m_maxY = 0;

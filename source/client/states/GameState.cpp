@@ -26,16 +26,14 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/input/GamePad.hpp>
-#include <gk/core/Exception.hpp>
-#include <gk/core/GameClock.hpp>
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "ApplicationStateStack.hpp"
 #include "BgfxView.hpp"
 #include "ChatState.hpp"
 #include "Events.hpp"
+#include "Exception.hpp"
+#include "GameClock.hpp"
 #include "GameKey.hpp"
+#include "GamePad.hpp"
 #include "GameState.hpp"
 #include "GameTime.hpp"
 #include "KeyboardHandler.hpp"
@@ -44,10 +42,11 @@
 #include "PauseMenuState.hpp"
 #include "Registry.hpp"
 #include "RenderTarget.hpp"
+#include "ResourceHandler.hpp"
 #include "TextureAtlas.hpp"
 
 GameState::GameState()
-	: m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
+	: m_textureAtlas(ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
 	Registry::setInstance(m_registry);
 
@@ -61,7 +60,7 @@ GameState::GameState()
 	m_world.setClient(m_clientCommandHandler);
 	m_world.setCamera(m_player.camera());
 
-	m_keyboardHandler = dynamic_cast<KeyboardHandler *>(gk::GamePad::getInputHandler());
+	m_keyboardHandler = dynamic_cast<KeyboardHandler *>(GamePad::getInputHandler());
 
 	m_skyColor.init("u_skyColor", bgfx::UniformType::Vec4);
 	m_sunlightIntensity.init("u_sunlightIntensity", bgfx::UniformType::Vec4);
@@ -100,7 +99,7 @@ void GameState::onEvent(const SDL_Event &event) {
 	}
 
 	if (!m_stateStack->empty() && &m_stateStack->top() == this) {
-		KeyboardHandler *keyboardHandler = (KeyboardHandler *)gk::GamePad::getInputHandler();
+		KeyboardHandler *keyboardHandler = (KeyboardHandler *)GamePad::getInputHandler();
 
 		if (event.type == SDL_MOUSEMOTION) {
 			if(Config::screenWidth / 2 != event.motion.x || Config::screenHeight / 2 != event.motion.y) {
@@ -189,7 +188,7 @@ void GameState::update() {
 
 	m_hud.update();
 
-	if (gk::GameClock::getInstance().getTicks() % 100 < 10) {
+	if (GameClock::getInstance().getTicks() % 100 < 10) {
 		m_clientCommandHandler.sendPlayerPosUpdate();
 		m_clientCommandHandler.sendPlayerRotUpdate();
 	}
@@ -215,7 +214,7 @@ void GameState::onGuiScaleChanged(const GuiScaleChangedEvent &event) {
 
 void GameState::draw(RenderTarget &target, RenderStates states) const {
 	if (m_world.sky()) {
-		gk::Color color = m_world.sky()->color();
+		Color color = m_world.sky()->color();
 		float sunlightIntensity = 1.f;
 
 		if (m_world.sky()->daylightCycleSpeed() > 0.f) {
@@ -265,4 +264,3 @@ void GameState::draw(RenderTarget &target, RenderStates states) const {
 
 	m_fbo.draw();
 }
-

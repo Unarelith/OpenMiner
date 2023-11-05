@@ -26,10 +26,9 @@
  */
 #include <cassert>
 
-#include <gk/core/Debug.hpp>
-
 #include <bx/bx.h>
 
+#include "Debug.hpp"
 #include "VertexBuffer.hpp"
 
 VertexBuffer::VertexBuffer() {

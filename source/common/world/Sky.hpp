@@ -29,11 +29,11 @@
 
 #include <string>
 
-#include <gk/core/IntTypes.hpp>
-#include <gk/core/ISerializable.hpp>
-#include <gk/graphics/Color.hpp>
+#include "Color.hpp"
+#include "IntTypes.hpp"
+#include "ISerializable.hpp"
 
-class Sky : public gk::ISerializable {
+class Sky : public ISerializable {
 	public:
 		Sky() = default;
 		Sky(u16 id, const std::string &stringID);
@@ -43,11 +43,11 @@ class Sky : public gk::ISerializable {
 
 		const std::string &stringID() const { return m_stringID; }
 
-		const gk::Color &color() const { return m_color; }
-		const gk::Color &fogColor() const { return m_fogColor; }
+		const Color &color() const { return m_color; }
+		const Color &fogColor() const { return m_fogColor; }
 
-		void setColor(const gk::Color &color) { m_color = color; }
-		void setFogColor(const gk::Color &fogColor) { m_fogColor = fogColor; }
+		void setColor(const Color &color) { m_color = color; }
+		void setFogColor(const Color &fogColor) { m_fogColor = fogColor; }
 
 		struct SunDefinition {
 			std::string texture;
@@ -81,8 +81,8 @@ class Sky : public gk::ISerializable {
 		u16 m_id = 0;
 		std::string m_stringID;
 
-		gk::Color m_color = gk::Color::Blue;
-		gk::Color m_fogColor = gk::Color::Blue;
+		Color m_color = Color::Blue;
+		Color m_fogColor = Color::Blue;
 
 		SunDefinition m_sunDefinition{"", 0};
 		MoonDefinition m_moonDefinition{"", 0.f, 0, 0};

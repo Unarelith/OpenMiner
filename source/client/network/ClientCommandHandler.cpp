@@ -24,8 +24,6 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
 #include <entt/entt.hpp>
 
 #include "AnimationComponent.hpp"
@@ -36,6 +34,7 @@
 #include "ClientWorld.hpp"
 #include "ClientCommandHandler.hpp"
 #include "ConnectionErrorState.hpp"
+#include "Debug.hpp"
 #include "DrawableComponent.hpp"
 #include "DrawableDef.hpp"
 #include "GameConfig.hpp"
@@ -100,7 +99,7 @@ void ClientCommandHandler::sendPlayerReady() {
 
 void ClientCommandHandler::sendPlayerChunkPosUpdate() const {
 	Network::Packet packet;
-	const gk::Vector3i &chunkPos = m_player.getCurrentChunk();
+	const Vector3i &chunkPos = m_player.getCurrentChunk();
 	packet << Network::Command::PlayerChunkPosUpdate
 		<< s32(chunkPos.x) << s32(chunkPos.y) << s32(chunkPos.z);
 	m_client.send(packet);
@@ -156,12 +155,12 @@ static void addComponentCommandCallback(Network::Command command, Client &client
 
 		auto it = entityMap.find(entityID);
 		if (it != entityMap.end()) {
-			// gkDebug() << "Received component" << Network::commandToString(command);
+			// logDebug() << "Received component" << Network::commandToString(command);
 			auto &component = world.scene().registry().get_or_emplace<ComponentType>(it->second);
 			component.deserialize(packet);
 		}
 		else
-			gkError() << Network::commandToString(command) + ": Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
+			logError() << Network::commandToString(command) + ": Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
 	});
 }
 
@@ -272,7 +271,7 @@ void ClientCommandHandler::setupCallbacks() {
 
 	m_client.setCommandCallback(Network::Command::PlayerSpawn, [this](Network::Packet &packet) {
 		u16 clientId;
-		gk::Vector3d pos;
+		Vector3d pos;
 		u16 dimension;
 		std::string username;
 		float cameraYaw, cameraPitch;
@@ -318,7 +317,7 @@ void ClientCommandHandler::setupCallbacks() {
 	});
 
 	m_client.setCommandCallback(Network::Command::BlockInvUpdate, [this](Network::Packet &packet) {
-		gk::Vector3<s32> pos;
+		Vector3<s32> pos;
 		packet >> pos.x >> pos.y >> pos.z;
 
 		BlockData *data = m_world.getBlockData(pos.x, pos.y, pos.z);
@@ -330,7 +329,7 @@ void ClientCommandHandler::setupCallbacks() {
 	});
 
 	m_client.setCommandCallback(Network::Command::BlockDataUpdate, [this](Network::Packet &packet) {
-		gk::Vector3<s32> pos;
+		Vector3<s32> pos;
 		packet >> pos.x >> pos.y >> pos.z;
 
 		Chunk *chunk = m_world.getChunkAtBlockPos(pos.x, pos.y, pos.z);
@@ -356,10 +355,10 @@ void ClientCommandHandler::setupCallbacks() {
 			entt::entity entity = registry.create();
 			m_entityMap.emplace(entityID, entity);
 			registry.emplace<NetworkComponent>(entity, entityID);
-			// gkDebug() << "Entity spawned:" << std::underlying_type_t<entt::entity>(entityID);
+			// logDebug() << "Entity spawned:" << std::underlying_type_t<entt::entity>(entityID);
 		}
 		else if (registry.get<NetworkComponent>(it->second).entityID != entityID) {
-			gkError() << "EntitySpawn: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
+			logError() << "EntitySpawn: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
 		}
 	});
 
@@ -372,7 +371,7 @@ void ClientCommandHandler::setupCallbacks() {
 			m_world.scene().registry().destroy(it->second);
 		}
 		else
-			gkError() << "EntityDespawn: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
+			logError() << "EntityDespawn: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
 	});
 
 	addComponentCommandCallback<PositionComponent>(Network::Command::EntityPosition, m_client, m_entityMap, m_world);

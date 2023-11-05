@@ -29,13 +29,11 @@
 
 #include <bgfx/bgfx.h>
 
-#include <gk/utils/NonCopyable.hpp>
+#include "NonCopyable.hpp"
 
-namespace gk {
-	class Color;
-}
+class Color;
 
-class ShaderUniform : public gk::NonCopyable {
+class ShaderUniform : public NonCopyable {
 	public:
 		ShaderUniform() = default;
 		ShaderUniform(ShaderUniform &&);
@@ -47,7 +45,7 @@ class ShaderUniform : public gk::NonCopyable {
 		void free();
 
 		void setValue(float x, float y = 0.f, float z = 0.f, float w = 0.f) const;
-		void setValue(const gk::Color &color, bool needsRounding = false) const;
+		void setValue(const Color &color, bool needsRounding = false) const;
 
 		const bgfx::UniformHandle &handle() const { return m_handle; }
 

@@ -26,28 +26,28 @@
  */
 #include <algorithm> // std::max
 
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "Camera.hpp"
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientProfiler.hpp"
 #include "ClientWorld.hpp"
+#include "EventHandler.hpp"
 #include "Events.hpp"
 #include "Registry.hpp"
+#include "ResourceHandler.hpp"
 #include "Sky.hpp"
 #include "TextureAtlas.hpp"
 #include "World.hpp"
 
 ClientWorld::ClientWorld()
-	: m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks")),
+	: m_textureAtlas(ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks")),
 	  m_chunkRenderer(m_textureAtlas)
 {
-	m_chunkRenderer.setOnChunkDeletionRequestedCallback([this](const gk::Vector3i &chunkPos) {
+	m_chunkRenderer.setOnChunkDeletionRequestedCallback([this](const Vector3i &chunkPos) {
 		m_chunksToRemove.emplace(chunkPos);
 	});
 
-	m_chunkRenderer.setOnMeshingRequestedCallback([this](float distance, const gk::Vector3i &chunkPos) {
+	m_chunkRenderer.setOnMeshingRequestedCallback([this](float distance, const Vector3i &chunkPos) {
 		m_chunksToMesh.emplace(distance, chunkPos);
 	});
 }
@@ -102,7 +102,7 @@ void ClientWorld::requestChunkMeshing() {
 			chunk->setChanged();
 			addChunkToUpdate(chunk);
 
-			// gkDebug() << "Chunk at" << ux << uy << uz << "is ready for meshing";
+			// logDebug() << "Chunk at" << ux << uy << uz << "is ready for meshing";
 		}
 
 		it = m_chunksToMesh.erase(it);
@@ -116,7 +116,7 @@ void ClientWorld::checkPlayerChunk(double playerX, double playerY, double player
 
 	ClientChunk *chunk = (ClientChunk *)getChunk(pcx, pcy, pcz);
 	if (!chunk) {
-		m_chunks.emplace(gk::Vector3i{pcx, pcy, pcz}, new ClientChunk(pcx, pcy, pcz, *m_dimension, *this));
+		m_chunks.emplace(Vector3i{pcx, pcy, pcz}, new ClientChunk(pcx, pcy, pcz, *m_dimension, *this));
 	}
 }
 
@@ -146,7 +146,7 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 	// Get the chunk from the map or create it if it doesn't exist
 	ClientChunk *chunk = (ClientChunk *)getChunk(cx, cy, cz);
 	if (!chunk) {
-		auto it = m_chunks.emplace(gk::Vector3i{cx, cy, cz}, new ClientChunk(cx, cy, cz, *m_dimension, *this));
+		auto it = m_chunks.emplace(Vector3i{cx, cy, cz}, new ClientChunk(cx, cy, cz, *m_dimension, *this));
 		chunk = it.first->second.get();
 	}
 
@@ -177,7 +177,7 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 	addChunkToUpdate(chunk);
 
 	// if (!hasUpdatedChunk)
-	// 	gkWarning() << "Received chunk at" << cx << cy << cz << "without any updates";
+	// 	logWarning() << "Received chunk at" << cx << cy << cz << "without any updates";
 
 	++chunk->debugTimesReceived;
 
@@ -201,17 +201,17 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 	}
 
 	if (m_eventHandler)
-		m_eventHandler->emplaceEvent<ChunkCreatedEvent>(gk::Vector3i{cx, cy, cz}, true);
+		m_eventHandler->emplaceEvent<ChunkCreatedEvent>(Vector3i{cx, cy, cz}, true);
 
-	// gkDebug() << "Chunk at" << cx << cy << cz << "received";
+	// logDebug() << "Chunk at" << cx << cy << cz << "received";
 
 	OM_PROFILE_END("ClientWorld::receiveChunkData");
 }
 
-void ClientWorld::removeChunk(const gk::Vector3i &chunkPos) {
+void ClientWorld::removeChunk(const Vector3i &chunkPos) {
 	auto it = m_chunks.find(chunkPos);
 	if (it == m_chunks.end()) {
-		gkWarning() << "Tried to remove unloaded chunk at" << chunkPos.x << chunkPos.y << chunkPos.z;
+		logWarning() << "Tried to remove unloaded chunk at" << chunkPos.x << chunkPos.y << chunkPos.z;
 		return;
 	}
 
@@ -225,7 +225,7 @@ void ClientWorld::removeChunk(const gk::Vector3i &chunkPos) {
 	};
 
 	if (m_eventHandler)
-		m_eventHandler->emplaceEvent<ChunkRemovedEvent>(gk::Vector3i{it->second->x(), it->second->y(), it->second->z()});
+		m_eventHandler->emplaceEvent<ChunkRemovedEvent>(Vector3i{it->second->x(), it->second->y(), it->second->z()});
 
 	m_chunks.erase(it);
 
@@ -233,7 +233,7 @@ void ClientWorld::removeChunk(const gk::Vector3i &chunkPos) {
 		if (surroundingChunks[i])
 			surroundingChunks[i]->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, nullptr);
 
-	// gkDebug() << "Chunk at" << chunkPos.x << chunkPos.y << chunkPos.z << "removed";
+	// logDebug() << "Chunk at" << chunkPos.x << chunkPos.y << chunkPos.z << "removed";
 }
 
 Chunk *ClientWorld::getChunk(int cx, int cy, int cz) const {
@@ -245,7 +245,7 @@ Chunk *ClientWorld::getChunk(int cx, int cy, int cz) const {
 }
 
 void ClientWorld::linkChunkNeighbours(ClientChunk *chunk) {
-	gk::Vector3i surroundingChunks[6] = {
+	Vector3i surroundingChunks[6] = {
 		{chunk->x() - 1, chunk->y(),     chunk->z()},
 		{chunk->x() + 1, chunk->y(),     chunk->z()},
 		{chunk->x(),     chunk->y() - 1, chunk->z()},
@@ -270,7 +270,7 @@ void ClientWorld::linkChunkNeighbours(ClientChunk *chunk) {
 
 void ClientWorld::draw(RenderTarget &target, RenderStates states) const {
 	if (!target.getView() || !m_camera) {
-		gkError() << "Trying to draw world without a camera";
+		logError() << "Trying to draw world without a camera";
 		return;
 	}
 

@@ -41,10 +41,10 @@ ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::
 
 	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
-	m_filter.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
+	m_filter.setFillColor(Color::fromRGBA32(0, 0, 0, 192));
 
 	m_text.setString(error);
-	m_text.setColor(gk::Color::Red);
+	m_text.setColor(Color::Red);
 	m_text.updateVertexBuffer();
 	m_text.setScale(Config::guiScale * 1.5f, Config::guiScale * 1.5f);
 	m_text.setShadowEnabled(false);

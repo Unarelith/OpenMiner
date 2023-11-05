@@ -27,12 +27,11 @@
 #ifndef PLAYER_HPP_
 #define PLAYER_HPP_
 
-#include <gk/core/Box.hpp>
-#include <gk/core/ISerializable.hpp>
-
+#include "Box.hpp"
+#include "ISerializable.hpp"
 #include "Inventory.hpp"
 
-class Player : public gk::ISerializable {
+class Player : public ISerializable {
 	public:
 		Player();
 
@@ -43,7 +42,7 @@ class Player : public gk::ISerializable {
 		u8 getDirection() const;
 		u8 getOppositeDirection() const;
 
-		gk::Vector3i getCurrentChunk() const;
+		Vector3i getCurrentChunk() const;
 
 		void serialize(sf::Packet &packet) const override;
 		void deserialize(sf::Packet &packet) override;
@@ -68,7 +67,7 @@ class Player : public gk::ISerializable {
 		void setDimension(u16 dimension) { m_dimension = dimension; }
 		void setClientID(u16 clientID) { m_clientID = clientID; }
 
-		const gk::FloatBox &hitbox() const { return m_hitbox; }
+		const FloatBox &hitbox() const { return m_hitbox; }
 
 		const ItemStack &heldItemStack() { return m_inventory.getStack(m_heldItemSlot, 0); }
 		s8 heldItemSlot() const { return m_heldItemSlot; }
@@ -93,7 +92,7 @@ class Player : public gk::ISerializable {
 
 		Inventory m_inventory{9, 4};
 
-		gk::FloatBox m_hitbox;
+		FloatBox m_hitbox;
 
 		s8 m_heldItemSlot = -1;
 };

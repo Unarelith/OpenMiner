@@ -27,11 +27,11 @@
 #ifndef COMPRESSEDPACKET_HPP_
 #define COMPRESSEDPACKET_HPP_
 
-#include <gk/core/IntTypes.hpp>
-
 #include <SFML/Network/Packet.hpp>
 
 #include <zlib.h>
+
+#include "IntTypes.hpp"
 
 class CompressedPacket : public sf::Packet {
 	private:

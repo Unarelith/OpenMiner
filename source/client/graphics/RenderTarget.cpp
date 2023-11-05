@@ -126,19 +126,19 @@ void RenderTarget::setBgfxState(const RenderStates &states) {
 	bgfx::setState(state);
 }
 
-gk::IntRect RenderTarget::getViewport(const View& view) const {
+IntRect RenderTarget::getViewport(const View& view) const {
 	float width  = static_cast<float>(getSize().x);
 	float height = static_cast<float>(getSize().y);
-	const gk::FloatRect& viewport = view.getViewport();
+	const FloatRect& viewport = view.getViewport();
 
-	return gk::IntRect(static_cast<int>(0.5f + width  * viewport.x),
+	return IntRect(static_cast<int>(0.5f + width  * viewport.x),
 	                   static_cast<int>(0.5f + height * viewport.y),
 	                   static_cast<int>(width  * viewport.sizeX),
 	                   static_cast<int>(height * viewport.sizeY));
 }
 
 void RenderTarget::applyCurrentView(const RenderStates &states) {
-	gk::IntRect viewport = getViewport(*m_view);
+	IntRect viewport = getViewport(*m_view);
 	int top = getSize().y - (viewport.y + viewport.sizeY);
 	bgfx::setViewRect(states.view, (uint16_t)viewport.x, (uint16_t)top, (uint16_t)viewport.sizeX, (uint16_t)viewport.sizeY);
 

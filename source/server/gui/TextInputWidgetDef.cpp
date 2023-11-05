@@ -42,7 +42,7 @@ void TextInputWidgetDef::loadFromLuaTable(const sol::table &table) {
 
 	sol::optional<sol::table> placeholderColor = table["placeholder_color"];
 	if (placeholderColor != sol::nullopt) {
-		m_placeholderColor = gk::Color::fromRGBA32(
+		m_placeholderColor = Color::fromRGBA32(
 			placeholderColor.value().get<u8>(1),
 			placeholderColor.value().get<u8>(2),
 			placeholderColor.value().get<u8>(3),

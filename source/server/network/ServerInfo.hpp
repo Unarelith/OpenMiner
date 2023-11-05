@@ -30,9 +30,8 @@
 #include <algorithm>
 #include <vector>
 
-#include <gk/core/Exception.hpp>
-
 #include "ClientInfo.hpp"
+#include "Exception.hpp"
 
 class ServerInfo {
 	public:

@@ -24,10 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-#include <gk/core/GameClock.hpp>
-
 #include "ClientProfiler.hpp"
+#include "Debug.hpp"
 
 u64 ClientProfiler::tickCount = 0;
 
@@ -60,7 +58,7 @@ void ClientProfiler::dump(u64 tickDurationMin) {
 		u64 tickDuration = std::chrono::duration_cast<std::chrono::milliseconds>(tick.end - tick.begin).count();
 		if (tickDuration < tickDurationMin) continue;
 
-		gkDebug() << "Tick" << i++ << "took" << tickDuration << "ms";
+		logDebug() << "Tick" << i++ << "took" << tickDuration << "ms";
 
 		if (tickDuration > 0) {
 			for (auto &[actionName, action] : tick.actions) {
@@ -75,7 +73,7 @@ void ClientProfiler::dump(u64 tickDurationMin) {
 
 					float actionPercentTotal = (float)actionDuration / (float)tickDuration * 100.f;
 
-					gkDebug() << "Action" << actionName << j++ << "took" << actionDuration << "ms -" << actionPercentTotal << "% of tick";
+					logDebug() << "Action" << actionName << j++ << "took" << actionDuration << "ms -" << actionPercentTotal << "% of tick";
 				}
 
 				maxActionDuration[actionName].second = std::max(maxActionDuration[actionName].second, j);
@@ -84,7 +82,7 @@ void ClientProfiler::dump(u64 tickDurationMin) {
 	}
 
 	for (auto &[actionName, pair] : maxActionDuration) {
-		gkDebug() << "Max duration for action" << actionName << ":" << pair.first << "ms (" << pair.second << ")";
+		logDebug() << "Max duration for action" << actionName << ":" << pair.first << "ms (" << pair.second << ")";
 	}
 }
 

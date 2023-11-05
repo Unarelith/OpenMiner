@@ -30,12 +30,12 @@
 #include <string>
 #include <vector>
 
-#include <gk/core/IntTypes.hpp>
-#include <gk/core/ISerializable.hpp>
-
 #include <sol/sol.hpp>
 
-class Dimension : public gk::ISerializable {
+#include "IntTypes.hpp"
+#include "ISerializable.hpp"
+
+class Dimension : public ISerializable {
 	public:
 		Dimension() = default;
 		Dimension(u16 id, const std::string &stringID, const std::string &name)

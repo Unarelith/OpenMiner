@@ -27,15 +27,14 @@
 #ifndef IMAGE_HPP_
 #define IMAGE_HPP_
 
-#include <gk/graphics/Color.hpp>
-#include <gk/core/Rect.hpp>
-#include <gk/gl/Transformable.hpp>
-
+#include "Color.hpp"
 #include "Drawable.hpp"
+#include "Rect.hpp"
 #include "Texture.hpp"
+#include "Transformable.hpp"
 #include "VertexBuffer.hpp"
 
-class Image : public Drawable, public gk::Transformable {
+class Image : public Drawable, public Transformable {
 	public:
 		Image();
 		Image(const std::string &textureName);
@@ -48,16 +47,16 @@ class Image : public Drawable, public gk::Transformable {
 		const Texture *texture() const { return m_texture; }
 		void setTexture(const std::string &textureName);
 
-		const gk::FloatRect &clipRect() const { return m_clipRect; }
+		const FloatRect &clipRect() const { return m_clipRect; }
 		void setClipRect(float x, float y, u16 width, u16 height);
 
-		const gk::FloatRect &posRect() const { return m_posRect; }
+		const FloatRect &posRect() const { return m_posRect; }
 		void setPosRect(float x, float y, u16 width, u16 height);
 
 		u16 width() const { return u16(m_width * getScale().x); }
 		u16 height() const { return u16(m_height * getScale().y); }
 
-		void setColor(const gk::Color &color) { m_color = color; updateVertexBuffer(); }
+		void setColor(const Color &color) { m_color = color; updateVertexBuffer(); }
 		void setAlphaMod(u8 alpha) { m_color.a = alpha / 255.0f; updateVertexBuffer(); }
 		void setFlip(bool isFlipped) { m_isFlipped = isFlipped; }
 
@@ -74,10 +73,10 @@ class Image : public Drawable, public gk::Transformable {
 		u16 m_width = 0;
 		u16 m_height = 0;
 
-		gk::FloatRect m_clipRect;
-		gk::FloatRect m_posRect;
+		FloatRect m_clipRect;
+		FloatRect m_posRect;
 
-		gk::Color m_color;
+		Color m_color;
 
 		bool m_isFlipped = false;
 };

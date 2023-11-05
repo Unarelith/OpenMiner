@@ -29,14 +29,15 @@
 
 #include <string>
 
-#include <gk/core/IntTypes.hpp>
-#include <gk/core/SDLHeaders.hpp>
-#include <gk/core/Vector2.hpp>
-#include <gk/utils/NonCopyable.hpp>
-
 #include <bgfx/bgfx.h>
 
-class Texture : public gk::NonCopyable {
+#include "IntTypes.hpp"
+#include "NonCopyable.hpp"
+#include "Vector2.hpp"
+
+struct SDL_Surface;
+
+class Texture : public NonCopyable {
 	public:
 		Texture() = default;
 		Texture(const std::string &filename);
@@ -53,7 +54,7 @@ class Texture : public gk::NonCopyable {
 
 		const std::string &filename() const { return m_filename; }
 
-		const gk::Vector2u &getSize() const { return m_size; }
+		const Vector2u &getSize() const { return m_size; }
 
 		void enable(u8 unit, bgfx::UniformHandle handle) const;
 
@@ -62,7 +63,7 @@ class Texture : public gk::NonCopyable {
 
 		std::string m_filename;
 
-		gk::Vector2u m_size;
+		Vector2u m_size;
 
 		bgfx::TextureHandle m_handle = BGFX_INVALID_HANDLE;
 };

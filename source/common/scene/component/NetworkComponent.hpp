@@ -27,13 +27,12 @@
 #ifndef NETWORKCOMPONENT_HPP_
 #define NETWORKCOMPONENT_HPP_
 
-#include <gk/core/ISerializable.hpp>
-
 #include <entt/entt.hpp>
 
+#include "ISerializable.hpp"
 #include "Network.hpp"
 
-struct NetworkComponent : public gk::ISerializable {
+struct NetworkComponent : public ISerializable {
 	entt::entity entityID = entt::null;
 
 	bool hasSpawned = false;

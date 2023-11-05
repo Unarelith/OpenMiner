@@ -33,10 +33,6 @@
 
 #include "ApplicationState.hpp"
 
-namespace gk {
-	class EventHandler;
-}
-
 class ApplicationStateStack {
 	public:
 		template<typename T, typename... Args>
@@ -66,7 +62,7 @@ class ApplicationStateStack {
 
 		std::size_t size() const { return m_states.size(); }
 
-		void setEventHandler(gk::EventHandler &eventHandler) {
+		void setEventHandler(EventHandler &eventHandler) {
 			m_eventHandler = &eventHandler;
 		}
 
@@ -84,7 +80,7 @@ class ApplicationStateStack {
 		std::stack<std::shared_ptr<ApplicationState>> m_states;
 		std::queue<std::shared_ptr<ApplicationState>> m_trash;
 
-		gk::EventHandler *m_eventHandler = nullptr;
+		EventHandler *m_eventHandler = nullptr;
 };
 
 #endif // APPLICATIONSTATESTACK_HPP_

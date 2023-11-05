@@ -30,12 +30,11 @@
 #include <string>
 #include <vector>
 
-#include <gk/core/IntTypes.hpp>
-#include <gk/core/ISerializable.hpp>
-
+#include "IntTypes.hpp"
+#include "ISerializable.hpp"
 #include "PlacementEntry.hpp"
 
-class Biome : public gk::ISerializable {
+class Biome : public ISerializable {
 	public:
 		Biome() = default;
 		Biome(u16 id, const std::string &stringID, const std::string &label);

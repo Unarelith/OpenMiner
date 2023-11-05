@@ -24,11 +24,15 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Exception.hpp>
-#include <gk/core/Filesystem.hpp>
+#include <SDL_image.h>
 
+#include "Exception.hpp"
 #include "Registry.hpp"
 #include "TextureAtlas.hpp"
+
+#include <filesystem.hpp>
+
+namespace fs = ghc::filesystem;
 
 void TextureAtlas::clear() {
 	m_tileSize = 0;
@@ -40,7 +44,7 @@ void TextureAtlas::clear() {
 }
 
 void TextureAtlas::loadFromRegistry(const std::string &texturePack) {
-	if (!texturePack.empty() && !gk::Filesystem::fileExists("texturepacks/" + texturePack))
+	if (!texturePack.empty() && !fs::exists("texturepacks/" + texturePack))
 		throw EXCEPTION("Texture pack '" + texturePack +"' doesn't exist");
 
 	// FIXME: Undefined texture should be created from current texture size
@@ -80,8 +84,8 @@ void TextureAtlas::loadFromRegistry(const std::string &texturePack) {
 	packTextures();
 }
 
-gk::FloatRect TextureAtlas::getTexCoords(const std::string &filename, bool normalized) const {
-	if (filename.empty()) return gk::FloatRect{0, 0, 0, 0};
+FloatRect TextureAtlas::getTexCoords(const std::string &filename, bool normalized) const {
+	if (filename.empty()) return FloatRect{0, 0, 0, 0};
 
 	if (!m_isReady)
 		throw EXCEPTION("Can't get texture coordinates from empty atlas");
@@ -92,12 +96,12 @@ gk::FloatRect TextureAtlas::getTexCoords(const std::string &filename, bool norma
 	float textureY = float((textureID / (m_texture.getSize().x / m_tileSize)) * m_tileSize);
 
 	if (normalized)
-		return gk::FloatRect{textureX / (float)m_texture.getSize().x,
+		return FloatRect{textureX / (float)m_texture.getSize().x,
 							 textureY / (float)m_texture.getSize().y,
 							 m_tileSize / (float)m_texture.getSize().x,
 							 m_tileSize / (float)m_texture.getSize().y};
 	else
-		return gk::FloatRect{textureX,
+		return FloatRect{textureX,
 							 textureY,
 							 (float)m_tileSize,
 							 (float)m_tileSize};
@@ -112,7 +116,7 @@ void TextureAtlas::addFile(const std::string &path, const std::string &filename)
 
 	SurfacePtr surface{IMG_Load((path + filename).c_str()), &SDL_FreeSurface};
 	if(!surface) {
-		gkError() << "Failed to load texture:" << path + filename;
+		logError() << "Failed to load texture:" << path + filename;
 		return;
 	}
 
@@ -237,7 +241,7 @@ void TextureAtlas::packTextures() {
 	m_isReady = true;
 
 	if (IMG_SavePNG(atlas[2].get(), "test_atlas.png") < 0)
-		gkError() << "Failed to save texture to: test_atlas.png. Reason:" << IMG_GetError();
+		logError() << "Failed to save texture to: test_atlas.png. Reason:" << IMG_GetError();
 
 	m_texture.free();
 	m_texture.loadFromMemory(mem, atlas[0]->w, atlas[0]->h);

@@ -24,8 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
+#include "Debug.hpp"
 #include "EngineConfig.hpp"
 #include "Inventory.hpp"
 #include "Network.hpp"
@@ -110,7 +109,7 @@ void Inventory::deserialize(sf::Packet &packet) {
 	packet >> m_width >> m_height >> m_name >> inBlock >> bx >> by >> bz >> m_isUnlimited;
 
 	m_inBlock = inBlock;
-	m_blockPos = gk::Vector3i{bx, by, bz};
+	m_blockPos = Vector3i{bx, by, bz};
 
 	if (m_items.size() != m_width * m_height)
 		m_items.resize(m_width * m_height);
@@ -127,7 +126,7 @@ void Inventory::deserialize(sf::Packet &packet) {
 		if (Registry::getInstance().hasItem(name))
 			setStack(x, y, name, amount);
 		else
-			gkError() << "Inventory::deserialize: Failed to find item in registry:" << name;
+			logError() << "Inventory::deserialize: Failed to find item in registry:" << name;
 
 		++i;
 	}

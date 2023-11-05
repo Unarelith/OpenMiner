@@ -27,8 +27,9 @@
 #ifndef BLOCKCURSORRAYCAST_HPP_
 #define BLOCKCURSORRAYCAST_HPP_
 
-#include <gk/core/IntTypes.hpp>
 #include <glm/vec3.hpp>
+
+#include "IntTypes.hpp"
 
 enum Axis {
 	AXIS_X,

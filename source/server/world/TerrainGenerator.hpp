@@ -27,13 +27,12 @@
 #ifndef TERRAINGENERATOR_HPP_
 #define TERRAINGENERATOR_HPP_
 
-#include <gk/core/IntTypes.hpp>
-
 #include <random.hpp>
 
 #include <sol/sol.hpp>
 
 #include "Heightmap.hpp"
+#include "IntTypes.hpp"
 #include "TerrainBiomeSampler.hpp"
 
 using Random_t = effolkronium::random_local;

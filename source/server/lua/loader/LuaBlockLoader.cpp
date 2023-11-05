@@ -24,9 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
 #include "BlockPlacementConstraints.hpp"
+#include "Debug.hpp"
 #include "LuaBlockLoader.hpp"
 #include "LuaMod.hpp"
 #include "Registry.hpp"
@@ -108,7 +107,7 @@ inline void LuaBlockLoader::loadProperties(BlockState &state, const sol::table &
 	if (state.fogDepth() > 0.f) {
 		sol::optional<sol::table> fogColor = table["fog_color"];
 		if (fogColor != sol::nullopt) {
-			state.fogColor(gk::Color::fromRGBA32(
+			state.fogColor(Color::fromRGBA32(
 				fogColor.value().get<u8>(1),
 				fogColor.value().get<u8>(2),
 				fogColor.value().get<u8>(3)
@@ -118,7 +117,7 @@ inline void LuaBlockLoader::loadProperties(BlockState &state, const sol::table &
 
 	sol::optional<sol::table> drawOffset = table["draw_offset"];
 	if (drawOffset != sol::nullopt) {
-		state.drawOffset(gk::Vector3f{
+		state.drawOffset(Vector3f{
 			drawOffset.value().get<float>(1),
 			drawOffset.value().get<float>(2),
 			drawOffset.value().get<float>(3),
@@ -132,7 +131,7 @@ inline void LuaBlockLoader::loadProperties(BlockState &state, const sol::table &
 inline void LuaBlockLoader::loadBoundingBox(BlockState &state, const sol::table &table) const {
 	sol::optional<sol::table> boundingBox = table["bounding_box"];
 	if (boundingBox != sol::nullopt) {
-		state.boundingBox(gk::FloatBox{
+		state.boundingBox(FloatBox{
 			boundingBox.value().get<float>(1),
 			boundingBox.value().get<float>(2),
 			boundingBox.value().get<float>(3),
@@ -162,10 +161,10 @@ inline void LuaBlockLoader::loadDrawType(BlockState &state, const sol::table &ta
 				state.drawType(it->second);
 			}
 			else
-				gkError() << "In" << block.stringID() << " definition: Block draw type invalid";
+				logError() << "In" << block.stringID() << " definition: Block draw type invalid";
 		}
 		else
-			gkError() << "In" << block.stringID() << " definition: Block draw type must be a string";
+			logError() << "In" << block.stringID() << " definition: Block draw type must be a string";
 	}
 
 	if (state.drawType() == BlockDrawType::Liquid || state.drawType() == BlockDrawType::XShape) {
@@ -184,7 +183,7 @@ inline void LuaBlockLoader::loadItemDrop(BlockState &state, const sol::table &ta
 inline void LuaBlockLoader::loadColorMultiplier(BlockState &state, const sol::table &table) const {
 	sol::optional<sol::table> colorMultiplier = table["color_multiplier"];
 	if (colorMultiplier != sol::nullopt) {
-		state.colorMultiplier(gk::Color::fromRGBA32(
+		state.colorMultiplier(Color::fromRGBA32(
 			colorMultiplier.value().get<u8>(1),
 			colorMultiplier.value().get<u8>(2),
 			colorMultiplier.value().get<u8>(3),
@@ -205,13 +204,13 @@ inline void LuaBlockLoader::loadStates(ServerBlock &block, BlockState &state, co
 					loadBlockState(state, statesObject.second.as<sol::table>(), block);
 				}
 				else {
-					gkError() << ("For block '" + block.stringID() + "':").c_str() << "States must be defined in a correct order starting from 1";
-					gkError() << "StateID:" << stateID << "| States registered:" << block.states().size();
+					logError() << ("For block '" + block.stringID() + "':").c_str() << "States must be defined in a correct order starting from 1";
+					logError() << "StateID:" << stateID << "| States registered:" << block.states().size();
 				}
 			}
 		}
 		else
-			gkError() << "For block" << state.block().stringID() << ": 'states' must be a table";
+			logError() << "For block" << state.block().stringID() << ": 'states' must be a table";
 	}
 }
 
@@ -230,7 +229,7 @@ inline void LuaBlockLoader::loadPlacementConstraints(ServerBlock &block, const s
 					constraint.blockOffset.z = blockOffset.value().get<u32>(3);
 				}
 				else
-					gkError() << "For block" << block.stringID() << ": 'placement_constraints' offset is wrong";
+					logError() << "For block" << block.stringID() << ": 'placement_constraints' offset is wrong";
 
 				sol::optional<sol::table> constraintTable = constraintsObject.second.as<sol::table>();
 				if (constraintTable != sol::nullopt) {
@@ -238,13 +237,13 @@ inline void LuaBlockLoader::loadPlacementConstraints(ServerBlock &block, const s
 					constraint.isWhitelist = constraintTable.value()["is_whitelist"].get<bool>();
 				}
 				else
-					gkError() << "For block" << block.stringID() << ": 'placement_constraints' table is wrong";
+					logError() << "For block" << block.stringID() << ": 'placement_constraints' table is wrong";
 
 				block.placementConstraints().addConstraint(constraint);
 			}
 		}
 		else
-			gkError() << "For block" << block.stringID() << ": 'placement_constraints' must be a table";
+			logError() << "For block" << block.stringID() << ": 'placement_constraints' must be a table";
 	}
 }
 
@@ -263,7 +262,7 @@ inline void LuaBlockLoader::loadGroups(ServerBlock &block, const sol::table &tab
 			}
 		}
 		else
-			gkError() << "For block" << block.stringID() << ": 'groups' must be a table";
+			logError() << "For block" << block.stringID() << ": 'groups' must be a table";
 	}
 }
 

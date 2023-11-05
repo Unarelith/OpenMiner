@@ -27,14 +27,14 @@
 #ifndef APPLICATIONSTATE_HPP_
 #define APPLICATIONSTATE_HPP_
 
-#include <gk/core/EventHandler.hpp>
-#include <gk/core/SDLHeaders.hpp>
-#include <gk/gl/Transformable.hpp>
-#include <gk/utils/NonCopyable.hpp>
+#include <SDL.h>
+
+#include "EventHandler.hpp"
+#include "NonCopyable.hpp"
 
 class ApplicationStateStack;
 
-class ApplicationState : public gk::Transformable, public gk::NonCopyable {
+class ApplicationState : public NonCopyable {
 	public:
 		ApplicationState(ApplicationState *parent = nullptr) : m_parent(parent) {}
 		ApplicationState(ApplicationState &&) = default;
@@ -55,7 +55,7 @@ class ApplicationState : public gk::Transformable, public gk::NonCopyable {
 
 		void setStateStack(ApplicationStateStack *stateStack) { m_stateStack = stateStack; }
 
-		void setEventHandler(gk::EventHandler *eventHandler) { m_eventHandler = eventHandler; }
+		void setEventHandler(EventHandler *eventHandler) { m_eventHandler = eventHandler; }
 
 		virtual void onStateInactive() {}
 
@@ -64,7 +64,7 @@ class ApplicationState : public gk::Transformable, public gk::NonCopyable {
 
 		ApplicationStateStack *m_stateStack = nullptr;
 
-		gk::EventHandler *m_eventHandler = nullptr;
+		EventHandler *m_eventHandler = nullptr;
 };
 
 #endif // APPLICATIONSTATE_HPP_

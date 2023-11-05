@@ -122,7 +122,7 @@ void BlockCursorRaycast::rayCastToAxis(const Axis axis, const glm::dvec3 &positi
 
 		u8f orientation = blockState->block().isRotatable() ? world.getData((int)nx, (int)ny, (int)nz) & 0x1F : 0;
 
-		const gk::FloatBox &boundingBox = blockState->boundingBox();
+		const FloatBox &boundingBox = blockState->boundingBox();
 		glm::vec3 localCorner1{boundingBox.x, boundingBox.y, boundingBox.z};
 		glm::vec3 localCorner2{boundingBox.sizeX, boundingBox.sizeY, boundingBox.sizeZ};
 		localCorner2 += localCorner1;

@@ -27,10 +27,9 @@
 #ifndef SERVERAPPLICATION_HPP_
 #define SERVERAPPLICATION_HPP_
 
-#include <gk/core/ArgumentParser.hpp>
-#include <gk/core/GameClock.hpp>
-#include <gk/core/EventHandler.hpp>
-
+#include "ArgumentParser.hpp"
+#include "EventHandler.hpp"
+#include "GameClock.hpp"
 #include "LuaCore.hpp"
 #include "Registry.hpp"
 #include "ScriptEngine.hpp"
@@ -43,7 +42,7 @@
 class ServerApplication {
 	public:
 		ServerApplication(int argc = 0, char **argv = nullptr);
-		ServerApplication(gk::EventHandler &eventHandler);
+		ServerApplication(EventHandler &eventHandler);
 
 		bool init();
 
@@ -52,17 +51,17 @@ class ServerApplication {
 		void setSingleplayer(bool isSingleplayer) { m_server.setSingleplayer(isSingleplayer); }
 		void setPort(u16 port) { m_port = port; }
 		void setWorldName(const std::string &worldName) { m_worldName = worldName; }
-		void setLogLevel(gk::LogLevel logLevel) { m_loggerHandler.setMaxLevel(logLevel); }
+		void setLogLevel(LogLevel logLevel) { m_loggerHandler.setMaxLevel(logLevel); }
 		void setSeed(s32 seed) { m_seed = seed; }
 
 	private:
 		void update();
 		void mainLoop();
 
-		gk::ArgumentParser m_argumentParser;
-		gk::GameClock m_clock;
-		gk::EventHandler *m_eventHandler = nullptr;
-		gk::LoggerHandler m_loggerHandler;
+		ArgumentParser m_argumentParser;
+		GameClock m_clock;
+		EventHandler *m_eventHandler = nullptr;
+		LoggerHandler m_loggerHandler;
 
 		Registry m_registry;
 

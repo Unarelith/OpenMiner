@@ -27,63 +27,63 @@
 #ifndef VIEW_HPP_
 #define VIEW_HPP_
 
-#include <gk/core/Rect.hpp>
-#include <gk/core/Vector3.hpp>
-#include <gk/gl/Transform.hpp>
+#include "Rect.hpp"
+#include "Transform.hpp"
+#include "Vector3.hpp"
 
 class View {
 	public:
 		View();
-		View(const gk::Vector3f &center, const gk::Vector2f &size);
-		explicit View(const gk::FloatRect &rectangle);
+		View(const Vector3f &center, const Vector2f &size);
+		explicit View(const FloatRect &rectangle);
 		virtual ~View() = default;
 
 		void setCenter(float x, float y, float z = 0);
-		void setCenter(const gk::Vector3f &position) { setCenter(position.x, position.y, position.y); }
+		void setCenter(const Vector3f &position) { setCenter(position.x, position.y, position.y); }
 
 		void setSize(float width, float height);
-		void setSize(const gk::Vector2f &size) { setSize(size.x, size.y); }
+		void setSize(const Vector2f &size) { setSize(size.x, size.y); }
 
 		void setRotation(float angle);
 
-		void setViewport(const gk::FloatRect &viewport) { m_viewport = viewport; }
+		void setViewport(const FloatRect &viewport) { m_viewport = viewport; }
 
-		void reset(const gk::FloatRect &rectangle);
+		void reset(const FloatRect &rectangle);
 
-		const gk::Vector3f &getCenter() const { return m_position; }
-		const gk::Vector2f &getSize() const { return m_size; }
+		const Vector3f &getCenter() const { return m_position; }
+		const Vector2f &getSize() const { return m_size; }
 
 		float getRotation() const { return m_rotation; }
 
-		const gk::FloatRect &getViewport() const { return m_viewport; }
+		const FloatRect &getViewport() const { return m_viewport; }
 
 		void move(float offsetX, float offsetY, float offsetZ = 0);
-		void move(const gk::Vector3f &offset) { setCenter(m_position + offset); }
+		void move(const Vector3f &offset) { setCenter(m_position + offset); }
 
 		void rotate(float angle) { setRotation(m_rotation + angle); }
 
 		void zoom(float factor) { setSize(m_size.x * factor, m_size.y * factor); }
 
-		virtual const gk::Transform &getTransform() const;
-		virtual const gk::Transform &getViewTransform() const;
+		virtual const Transform &getTransform() const;
+		virtual const Transform &getViewTransform() const;
 
-		virtual const gk::Vector3f &getPosition() const { return m_position; }
+		virtual const Vector3f &getPosition() const { return m_position; }
 
 	protected:
 		mutable bool m_transformUpdated = false;
 		mutable bool m_viewTransformUpdated = false;
 
-		mutable gk::Transform m_transform;
-		mutable gk::Transform m_viewTransform;
+		mutable Transform m_transform;
+		mutable Transform m_viewTransform;
 
-		gk::Vector3f m_position;
+		Vector3f m_position;
 
 	private:
-		gk::Vector2f m_size;
+		Vector2f m_size;
 
 		float m_rotation = 0.0f;
 
-		gk::FloatRect m_viewport{0, 0, 1, 1};
+		FloatRect m_viewport{0, 0, 1, 1};
 };
 
 #endif // VIEW_HPP_

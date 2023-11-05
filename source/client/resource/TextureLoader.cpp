@@ -24,14 +24,13 @@
  *
  * =====================================================================================
  */
-#include <gk/core/XMLFile.hpp>
-#include <gk/resource/ResourceHandler.hpp>
-
+#include "ResourceHandler.hpp"
 #include "Texture.hpp"
 #include "TextureLoader.hpp"
+#include "XMLFile.hpp"
 
-void TextureLoader::load(const char *xmlFilename, gk::ResourceHandler &handler) {
-	gk::XMLFile doc(xmlFilename);
+void TextureLoader::load(const char *xmlFilename, ResourceHandler &handler) {
+	XMLFile doc(xmlFilename);
 
 	tinyxml2::XMLElement *textureElement = doc.FirstChildElement("textures").FirstChildElement("texture").ToElement();
 	while (textureElement) {
@@ -44,4 +43,3 @@ void TextureLoader::load(const char *xmlFilename, gk::ResourceHandler &handler) 
 		textureElement = textureElement->NextSiblingElement("texture");
 	}
 }
-

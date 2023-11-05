@@ -26,13 +26,10 @@
  */
 #include <bgfx/bgfx.h>
 
-#include <gk/core/Config.hpp>
-#include <gk/core/Utils.hpp>
-#include <gk/core/Exception.hpp>
-
-#include "Config.hpp"
 #include "BgfxView.hpp"
+#include "Config.hpp"
 #include "CoreApplication.hpp"
+#include "Exception.hpp"
 #include "Window.hpp"
 
 void Window::open(const std::string &caption, u16 width, u16 height) {
@@ -48,7 +45,7 @@ void Window::open(const std::string &caption, u16 width, u16 height) {
 
 	RenderTarget::init();
 
-	m_defaultView.reset(gk::FloatRect{0, 0, (float)width, (float)height});
+	m_defaultView.reset(FloatRect{0, 0, (float)width, (float)height});
 	setView(m_defaultView);
 
 	m_isOpen = true;
@@ -57,7 +54,8 @@ void Window::open(const std::string &caption, u16 width, u16 height) {
 void Window::close() {
 	RenderTarget::free();
 
-	bgfx::shutdown();
+	if (m_isOpen)
+		bgfx::shutdown();
 
 	m_window.reset(nullptr);
 	m_isOpen = false;
@@ -119,21 +117,21 @@ void Window::setWindowMode(Mode mode) {
 				SDL_SetWindowSize(m_window.get(), desktopMode.w, desktopMode.h);
 			}
 			else
-				gkError() << "Failed to set fullscreen mode";
+				logError() << "Failed to set fullscreen mode";
 		}
 
 		m_windowMode = mode;
 	}
 }
 
-gk::Vector2u Window::getSize() const {
+Vector2u Window::getSize() const {
 	if (m_windowMode == Mode::Windowed)
 		return m_size;
 	else {
 		int w, h;
 		SDL_GetWindowSize(m_window.get(), &w, &h);
 
-		return gk::Vector2u{
+		return Vector2u{
 			static_cast<unsigned int>(w),
 			static_cast<unsigned int>(h)
 		};

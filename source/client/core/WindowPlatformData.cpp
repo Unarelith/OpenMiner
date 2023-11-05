@@ -1,6 +1,5 @@
+#include <SDL.h>
 #include <SDL_syswm.h>
-
-#include <gk/core/SDLHeaders.hpp>
 
 #include <bgfx/bgfx.h>
 #include <bx/platform.h>

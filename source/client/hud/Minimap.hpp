@@ -29,7 +29,7 @@
 
 #include <unordered_map>
 
-#include <gk/core/SDLHeaders.hpp>
+#include <SDL.h>
 
 #include "Events.hpp"
 #include "RectangleShape.hpp"
@@ -37,7 +37,7 @@
 
 class ClientPlayer;
 
-class Minimap : public Drawable, public gk::Transformable {
+class Minimap : public Drawable, public Transformable {
 	public:
 		Minimap();
 
@@ -56,15 +56,15 @@ class Minimap : public Drawable, public gk::Transformable {
 
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		std::unordered_map<gk::Vector3i, std::pair<RectangleShape, Text>> m_chunks;
+		std::unordered_map<Vector3i, std::pair<RectangleShape, Text>> m_chunks;
 
 		RectangleShape m_border;
 
-		gk::Vector3i m_playerChunkPos;
+		Vector3i m_playerChunkPos;
 		RectangleShape m_playerChunk;
 
 		VertexBuffer m_vbo;
-		gk::Transform m_playerFovRotationTransform = gk::Transform::Identity;
+		Transform m_playerFovRotationTransform = Transform::Identity;
 
 		bool m_displayTimesReceived = false;
 };

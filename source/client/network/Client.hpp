@@ -33,10 +33,9 @@
 #include <SFML/Network/IpAddress.hpp>
 #include <SFML/Network/TcpSocket.hpp>
 
-#include <gk/core/Timer.hpp>
-
 #include "Network.hpp"
 #include "Player.hpp"
+#include "Timer.hpp"
 
 class ClientConnectException {
 	public:
@@ -89,7 +88,7 @@ class Client {
 
 		std::unique_ptr<sf::TcpSocket> m_tcpSocket;
 
-		gk::Timer m_keyUpdateTimer;
+		Timer m_keyUpdateTimer;
 
 		std::unordered_map<Network::Command, CommandCallback> m_commands;
 

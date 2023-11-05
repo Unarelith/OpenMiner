@@ -27,11 +27,10 @@
 #ifndef SERVERCHUNK_HPP_
 #define SERVERCHUNK_HPP_
 
-#include <gk/core/IntTypes.hpp>
-
 #include <random.hpp>
 
 #include "Chunk.hpp"
+#include "IntTypes.hpp"
 
 using Random_t = effolkronium::random_local;
 
@@ -59,7 +58,7 @@ class ServerChunk : public Chunk {
 
 		void setReadyToSend() { m_isReadyToSend = true; }
 
-		void addTickingBlock(int x, int y, int z, const ServerBlock &block) { m_tickingBlocks.emplace(gk::Vector3i{x, y, z}, block); }
+		void addTickingBlock(int x, int y, int z, const ServerBlock &block) { m_tickingBlocks.emplace(Vector3i{x, y, z}, block); }
 
 	private:
 		ServerWorld &m_world;
@@ -69,7 +68,7 @@ class ServerChunk : public Chunk {
 
 		Random_t m_random;
 
-		std::unordered_map<gk::Vector3i, const ServerBlock &> m_tickingBlocks;
+		std::unordered_map<Vector3i, const ServerBlock &> m_tickingBlocks;
 };
 
 #endif // SERVERCHUNK_HPP_

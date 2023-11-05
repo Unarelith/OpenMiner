@@ -46,10 +46,10 @@ ServerPlayer *PlayerList::connectPlayer(const std::string &name, ClientInfo &cli
 			player = &m_players.at(name);
 			player->setName(name);
 
-			gkInfo() << name << "is online";
+			logInfo() << name << "is online";
 		}
 		else {
-			gkWarning() << "Multiple players in singleplayer mode not handled yet";
+			logWarning() << "Multiple players in singleplayer mode not handled yet";
 			return nullptr;
 		}
 	}
@@ -58,16 +58,16 @@ ServerPlayer *PlayerList::connectPlayer(const std::string &name, ClientInfo &cli
 		if (it != m_players.end()) {
 			if (!it->second.isOnline()) {
 				player = &it->second;
-				gkInfo() << name << "is online";
+				logInfo() << name << "is online";
 			}
 			else {
-				gkWarning() << name << "failed to connect: already online";
+				logWarning() << name << "failed to connect: already online";
 				return nullptr;
 			}
 		}
 		else {
 			player = &addPlayer(name, true);
-			gkInfo() << name << "is online (first connection)";
+			logInfo() << name << "is online (first connection)";
 		}
 	}
 
@@ -87,7 +87,7 @@ void PlayerList::disconnectPlayer(const std::string &name) {
 		it->second.setClient(nullptr);
 		it->second.setNewPlayer(false);
 		it->second.clearLoadedChunks();
-		gkInfo() << name << "is offline";
+		logInfo() << name << "is offline";
 	}
 }
 

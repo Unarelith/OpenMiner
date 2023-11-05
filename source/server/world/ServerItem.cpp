@@ -24,9 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
 #include "Chunk.hpp"
+#include "Debug.hpp"
 #include "Player.hpp"
 #include "ServerCommandHandler.hpp"
 #include "ServerItem.hpp"
@@ -41,7 +40,7 @@ bool ServerItem::onItemActivated(const glm::ivec3 &pos, Block &block, Player &pl
 		}
 	}
 	catch (const sol::error &e) {
-		gkError() << e.what();
+		logError() << e.what();
 	}
 
 	return false;
@@ -51,4 +50,3 @@ void ServerItem::setOnItemActivated(const sol::protected_function &function) {
 	m_onItemActivated = function;
 	m_canBeActivated = m_onItemActivated.valid();
 }
-

@@ -24,16 +24,15 @@
  *
  * =====================================================================================
  */
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "Config.hpp"
 #include "ItemWidget.hpp"
 #include "Registry.hpp"
+#include "ResourceHandler.hpp"
 #include "TextureAtlas.hpp"
 
 ItemWidget::ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent)
 	: Widget(18, 18, parent), m_inventory(inventory), m_x(x), m_y(y),
-	m_textureAtlas(gk::ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
+	m_textureAtlas(ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))
 {
 	m_cube.setPosition(9, 9, 0);
 	// m_cube.setPosition(8.5, 14, 0);
@@ -88,14 +87,14 @@ void ItemWidget::updateImage(const BlockState *blockState) {
 		m_image.setClipRect(0, 0, 0, 0);
 	}
 
-	gk::FloatRect clipRect = m_textureAtlas.getTexCoords(stack().item().tiles().getTextureForFace(0), false);
+	FloatRect clipRect = m_textureAtlas.getTexCoords(stack().item().tiles().getTextureForFace(0), false);
 	m_image.setClipRect(clipRect.x, clipRect.y, (u16)clipRect.sizeX, (u16)clipRect.sizeY);
 	m_image.setScale(16.0f / clipRect.sizeX, 16.0f / clipRect.sizeY);
 
 	if (blockState)
 		m_image.setColor(blockState->colorMultiplier());
 	else
-		m_image.setColor(gk::Color::White);
+		m_image.setColor(Color::White);
 
 	m_isImage = true;
 }

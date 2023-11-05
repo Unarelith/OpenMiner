@@ -24,8 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Exception.hpp>
-
+#include "Exception.hpp"
 #include "NetworkUtils.hpp"
 #include "TilesDef.hpp"
 

@@ -29,9 +29,8 @@
 
 #include <vector>
 
-#include <gk/core/IntTypes.hpp>
-
 #include "FastNoiseLite.hpp"
+#include "IntTypes.hpp"
 
 class Dimension;
 

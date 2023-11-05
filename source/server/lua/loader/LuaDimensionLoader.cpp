@@ -24,8 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
+#include "Debug.hpp"
 #include "LuaDimensionLoader.hpp"
 #include "LuaMod.hpp"
 #include "Registry.hpp"
@@ -45,10 +44,10 @@ void LuaDimensionLoader::loadDimension(const sol::table &table) const {
 			if (it.second.get_type() == sol::type::string)
 				dimension.addBiome(it.second.as<std::string>());
 			else
-				gkError() << "For dimension" << id << ": Invalid biome string";
+				logError() << "For dimension" << id << ": Invalid biome string";
 		}
 	}
 	else
-		gkError() << "For dimension" << id << ": Invalid biome table";
+		logError() << "For dimension" << id << ": Invalid biome table";
 }
 

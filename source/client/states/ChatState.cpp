@@ -41,7 +41,7 @@ ChatState::ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, boo
 	m_drawBackground = false;
 
 	m_textInput.setScale(Config::guiScale, Config::guiScale);
-	m_textInput.setBackgroundColor(gk::Color::fromRGBA32(0, 0, 0, 127));
+	m_textInput.setBackgroundColor(Color::fromRGBA32(0, 0, 0, 127));
 	m_textInput.setPadding(1, 1);
 
 	updateWidgetPosition();

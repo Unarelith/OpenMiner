@@ -24,10 +24,9 @@
  *
  * =====================================================================================
  */
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "Camera.hpp"
 #include "PlayerBox.hpp"
+#include "ResourceHandler.hpp"
 #include "Vertex.hpp"
 #include "Texture.hpp"
 
@@ -250,7 +249,7 @@ static constexpr float modelCoords[NUM_QUADS * NUM_VERTICES_PER_QUAD][NUM_VERTEX
 
 PlayerBox::PlayerBox(const Camera &camera)
 	: m_camera(camera),
-	  m_texture(gk::ResourceHandler::getInstance().get<Texture>("texture-player"))
+	  m_texture(ResourceHandler::getInstance().get<Texture>("texture-player"))
 {
 	m_vbo.setupDefaultLayout();
 
@@ -293,7 +292,7 @@ void PlayerBox::initIndexBuffer() {
 
 void PlayerBox::draw(RenderTarget &target, RenderStates states) const {
 	// Subtract the camera position - see comment in ClientWorld::draw()
-	const gk::Vector3d &cameraPosition = m_camera.getDPosition();
+	const Vector3d &cameraPosition = m_camera.getDPosition();
 	states.transform.translate(
 		static_cast<float>(m_x - cameraPosition.x),
 		static_cast<float>(m_y - cameraPosition.y),

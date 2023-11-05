@@ -52,7 +52,7 @@ void ClientChunk::update() {
 	m_lightmap.updateLights();
 
 	if ((m_hasChanged || m_lightmap.hasChanged()) && m_isReadyForMeshing) {
-		// gkDebug() << "Chunk update at" << m_x << m_y << m_z << "| D:" << m_hasChanged << "| L:" << m_lightmap.hasChanged();
+		// logDebug() << "Chunk update at" << m_x << m_y << m_z << "| D:" << m_hasChanged << "| L:" << m_lightmap.hasChanged();
 
 		m_hasChanged = false;
 		m_lightmap.resetChangedFlag();

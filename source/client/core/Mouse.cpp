@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/SDLHeaders.hpp>
+#include <SDL.h>
 
 #include "Mouse.hpp"
 
@@ -42,13 +42,13 @@ void Mouse::setCursorVisible(bool visible) {
 	SDL_ShowCursor(visible);
 }
 
-gk::Vector2i Mouse::getPosition() {
-	gk::Vector2i pos;
+Vector2i Mouse::getPosition() {
+	Vector2i pos;
 	SDL_GetMouseState(&pos.x, &pos.y);
 	return pos;
 }
 
-bool Mouse::isInRect(const gk::IntRect &rect) {
+bool Mouse::isInRect(const IntRect &rect) {
 	return rect.contains(getPosition());
 }
 

@@ -36,7 +36,7 @@
 class ClientPlayer;
 class ClientWorld;
 
-class DebugLightmapViewer : public gk::Transformable, public Drawable {
+class DebugLightmapViewer : public Transformable, public Drawable {
 	public:
 		DebugLightmapViewer(const ClientPlayer &player);
 
@@ -51,7 +51,7 @@ class DebugLightmapViewer : public gk::Transformable, public Drawable {
 
 		Text m_chunkLightmapValues[CHUNK_WIDTH][CHUNK_DEPTH];
 
-		std::optional<gk::Vector3i> m_playerChunkPos;
+		std::optional<Vector3i> m_playerChunkPos;
 		std::optional<u32> m_playerRelativeZ;
 
 		RectangleShape m_playerRect;

@@ -2,9 +2,6 @@
 	path = external/entt
 	url = https://github.com/skypjack/entt.git
 	ignore = dirty
-[submodule "external/gamekit"]
-	path = external/gamekit
-	url = https://github.com/Unarelith/GameKit.git
 [submodule "external/zlib"]
 	path = external/zlib
 	url = https://github.com/Unarelith/zlib.git
@@ -23,3 +20,15 @@
 [submodule "external/bgfx.cmake"]
 	path = external/bgfx.cmake
 	url = https://github.com/bkaradzic/bgfx.cmake
+[submodule "external/tinyxml2"]
+	path = external/tinyxml2
+	url = https://github.com/Unarelith/tinyxml2
+[submodule "external/glm"]
+	path = external/glm
+	url = https://github.com/g-truc/glm
+[submodule "external/SDL"]
+	path = external/SDL
+	url = https://github.com/libsdl-org/SDL
+[submodule "external/SDL_image"]
+	path = external/SDL_image
+	url = https://github.com/libsdl-org/SDL_image

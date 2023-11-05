@@ -26,14 +26,13 @@
  */
 #include <sstream>
 
-#include <gk/math/Math.hpp>
-
 #include "ClientPlayer.hpp"
 #include "ClientScene.hpp"
 #include "ClientWorld.hpp"
 #include "Config.hpp"
 #include "DebugOverlay.hpp"
 #include "GameTime.hpp"
+#include "Math.hpp"
 
 DebugOverlay::DebugOverlay(const ClientPlayer &player, const ClientWorld &world)
 	: m_player(player), m_world(world)
@@ -52,10 +51,10 @@ DebugOverlay::DebugOverlay(const ClientPlayer &player, const ClientWorld &world)
 		versionString.append(VERSION_SUFFIX);
 	}
 	m_versionText.setString(versionString);
-	m_versionText.setColor(gk::Color::White);
+	m_versionText.setColor(Color::White);
 
 	m_positionText.setPosition(0, 10, 0);
-	m_positionText.setColor(gk::Color::White);
+	m_positionText.setColor(Color::White);
 }
 
 void DebugOverlay::update(bool printRendererInfo) {
@@ -72,9 +71,9 @@ void DebugOverlay::update(bool printRendererInfo) {
 	stream << "y: " << py << " | ";
 	stream << "z: " << pz;
 	stream << '\n';
-	stream << "rx: " << gk::pmod(px, CHUNK_WIDTH) << " | ";
-	stream << "ry: " << gk::pmod(py, CHUNK_DEPTH) << " | ";
-	stream << "rz: " << gk::pmod(pz, CHUNK_HEIGHT);
+	stream << "rx: " << math::pmod(px, CHUNK_WIDTH) << " | ";
+	stream << "ry: " << math::pmod(py, CHUNK_DEPTH) << " | ";
+	stream << "rz: " << math::pmod(pz, CHUNK_HEIGHT);
 	stream << '\n';
 	stream << "cx: " << (px & -CHUNK_WIDTH)  / CHUNK_WIDTH << " | ";
 	stream << "cy: " << (py & -CHUNK_DEPTH)  / CHUNK_DEPTH << " | ";

@@ -27,8 +27,7 @@
 #ifndef MOUSE_HPP_
 #define MOUSE_HPP_
 
-#include <gk/core/Rect.hpp>
-
+#include "Rect.hpp"
 #include "Window.hpp"
 
 class Mouse {
@@ -40,9 +39,9 @@ class Mouse {
 		static void setCursorVisible(bool isVisible);
 		static void setCursorGrabbed(bool isGrabbed);
 
-		static gk::Vector2i getPosition();
+		static Vector2i getPosition();
 
-		static bool isInRect(const gk::IntRect &rect);
+		static bool isInRect(const IntRect &rect);
 
 	private:
 		static Window *s_window;

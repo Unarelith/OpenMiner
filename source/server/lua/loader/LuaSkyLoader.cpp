@@ -39,7 +39,7 @@ void LuaSkyLoader::loadSky(const sol::table &table) const {
 		u8 g = skyColor["day"][2].get<u8>();
 		u8 b = skyColor["day"][3].get<u8>();
 		u8 a = skyColor["day"][4].get_or<u8>(255);
-		sky.setColor(gk::Color::fromRGBA32(r, g, b, a));
+		sky.setColor(Color::fromRGBA32(r, g, b, a));
 	}
 
 	const sol::table &fogColor = table["fog_color"].get<sol::table>();
@@ -48,7 +48,7 @@ void LuaSkyLoader::loadSky(const sol::table &table) const {
 		u8 g = fogColor["day"][2].get<u8>();
 		u8 b = fogColor["day"][3].get<u8>();
 		u8 a = fogColor["day"][4].get_or<u8>(255);
-		sky.setFogColor(gk::Color::fromRGBA32(r, g, b, a));
+		sky.setFogColor(Color::fromRGBA32(r, g, b, a));
 	}
 
 	if (table["daylight_cycle"].valid()) {

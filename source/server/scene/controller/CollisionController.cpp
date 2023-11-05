@@ -24,9 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
 #include "CollisionController.hpp"
+#include "Debug.hpp"
 #include "EntityWrapper.hpp"
 #include "ItemStack.hpp"
 #include "NetworkComponent.hpp"
@@ -36,11 +35,11 @@
 #include "ServerCommandHandler.hpp"
 
 void CollisionController::update(entt::registry &registry) {
-	registry.view<PositionComponent, gk::DoubleBox, std::string>().each([&](auto entity, auto &position, auto &box, auto &id) {
+	registry.view<PositionComponent, DoubleBox, std::string>().each([&](auto entity, auto &position, auto &box, auto &id) {
 		for (auto &it : m_players) {
 			if (it.second.dimension() == position.dimension) {
-				gk::DoubleBox hitbox = box + gk::Vector3d{position.x, position.y, position.z};
-				gk::DoubleBox playerHitbox = it.second.hitbox() + gk::Vector3d{it.second.x(), it.second.y(), it.second.z()};
+				DoubleBox hitbox = box + Vector3d{position.x, position.y, position.z};
+				DoubleBox playerHitbox = it.second.hitbox() + Vector3d{it.second.x(), it.second.y(), it.second.z()};
 				if (hitbox.intersects(playerHitbox)) {
 					EntityWrapper entityWrapper{entity, registry};
 
@@ -51,4 +50,3 @@ void CollisionController::update(entt::registry &registry) {
 		}
 	});
 }
-

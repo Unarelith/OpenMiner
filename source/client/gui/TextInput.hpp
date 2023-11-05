@@ -27,7 +27,7 @@
 #ifndef TEXTINPUT_HPP_
 #define TEXTINPUT_HPP_
 
-#include <gk/core/SDLHeaders.hpp>
+#include <SDL.h>
 
 #include "Text.hpp"
 #include "Widget.hpp"
@@ -41,10 +41,10 @@ class TextInput : public Widget {
 		const std::string &string() const { return m_content; }
 		void setString(const std::string &string);
 
-		gk::Vector2f getBackgroundSize() const { return m_text.getBackgroundSize(); }
+		Vector2f getBackgroundSize() const { return m_text.getBackgroundSize(); }
 
-		void setBackgroundColor(const gk::Color &color) { m_text.setBackgroundColor(color); }
-		void setBackgroundOutline(int thickness, const gk::Color &color) { m_text.setBackgroundOutline(thickness, color); }
+		void setBackgroundColor(const Color &color) { m_text.setBackgroundColor(color); }
+		void setBackgroundOutline(int thickness, const Color &color) { m_text.setBackgroundOutline(thickness, color); }
 		void setBackgroundSize(unsigned int width, unsigned int height) {
 			m_text.setBackgroundSize(width, height);
 			m_width = width;
@@ -55,7 +55,7 @@ class TextInput : public Widget {
 		void setCharacterLimit(u16 characterLimit) { m_characterLimit = characterLimit; }
 
 		void setPlaceholder(const std::string &placeholder) { m_placeholder.setString(placeholder); }
-		void setPlaceholderColor(const gk::Color &color) { m_placeholder.setColor(color); }
+		void setPlaceholderColor(const Color &color) { m_placeholder.setColor(color); }
 
 		bool hasFocus() const { return m_hasFocus; }
 		void setFocus(bool hasFocus) { m_hasFocus = hasFocus; }

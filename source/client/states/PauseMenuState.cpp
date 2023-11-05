@@ -26,11 +26,10 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/EventHandler.hpp>
-
 #include "ApplicationStateStack.hpp"
 #include "Client.hpp"
 #include "Config.hpp"
+#include "EventHandler.hpp"
 #include "Events.hpp"
 #include "GameConfig.hpp"
 #include "Mouse.hpp"

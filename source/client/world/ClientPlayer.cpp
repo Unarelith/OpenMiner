@@ -26,22 +26,20 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/input/GamePad.hpp>
-#include <gk/core/GameClock.hpp>
-#include <gk/core/Mouse.hpp>
-
 #include "Camera.hpp"
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
+#include "GameClock.hpp"
 #include "GameConfig.hpp"
 #include "GameKey.hpp"
+#include "GamePad.hpp"
 #include "Registry.hpp"
 
 ClientPlayer *ClientPlayer::s_instance = nullptr;
 
 ClientPlayer::ClientPlayer(Camera &camera) : m_camera(camera) {
-	m_cameraLocalPos = gk::Vector3f{0.f, 0.f, 1.625f};
+	m_cameraLocalPos = Vector3f{0.f, 0.f, 1.625f};
 
 	updateCamera();
 
@@ -72,16 +70,16 @@ void ClientPlayer::updateCamera() {
 	if (Config::isViewBobbingEnabled)
 		applyViewBobbing(viewAngleH, viewAngleV, viewAngleRoll);
 
-	float ch = cosf(viewAngleH * gk::DEG_TO_RADf);
-	float sh = sinf(viewAngleH * gk::DEG_TO_RADf);
-	float cv = cosf(viewAngleV * gk::DEG_TO_RADf);
-	float sv = sinf(viewAngleV * gk::DEG_TO_RADf);
-	float cr = cosf(viewAngleRoll * gk::DEG_TO_RADf);
-	float sr = sinf(viewAngleRoll * gk::DEG_TO_RADf);
+	float ch = cosf(viewAngleH * math::DEG_TO_RADf);
+	float sh = sinf(viewAngleH * math::DEG_TO_RADf);
+	float cv = cosf(viewAngleV * math::DEG_TO_RADf);
+	float sv = sinf(viewAngleV * math::DEG_TO_RADf);
+	float cr = cosf(viewAngleRoll * math::DEG_TO_RADf);
+	float sr = sinf(viewAngleRoll * math::DEG_TO_RADf);
 
-	m_forwardDir = gk::Vector3f{ch * cv, sh * cv, sv};
+	m_forwardDir = Vector3f{ch * cv, sh * cv, sv};
 	m_camera.setDirection(m_forwardDir);
-	m_camera.setUpVector(gk::Vector3f{sh * sr - ch * sv * cr, -ch * sr - sh * sv * cr, cv * cr});
+	m_camera.setUpVector(Vector3f{sh * sr - ch * sv * cr, -ch * sr - sh * sv * cr, cv * cr});
 }
 
 void ClientPlayer::move(float direction) {
@@ -89,36 +87,36 @@ void ClientPlayer::move(float direction) {
 
 	constexpr float playerSpeed = 0.0275f;
 
-	m_velocity.x = playerSpeed * cosf(direction * gk::DEG_TO_RADf);
-	m_velocity.y = playerSpeed * sinf(direction * gk::DEG_TO_RADf);
+	m_velocity.x = playerSpeed * cosf(direction * math::DEG_TO_RADf);
+	m_velocity.y = playerSpeed * sinf(direction * math::DEG_TO_RADf);
 }
 
 void ClientPlayer::processInputs() {
-	if(gk::GamePad::isKeyPressed(GameKey::Jump) && !m_isJumping) {
+	if(GamePad::isKeyPressed(GameKey::Jump) && !m_isJumping) {
 		m_isJumping = true;
 		m_velocity.z = m_jumpSpeed;
 	}
 
-	if(gk::GamePad::isKeyPressed(GameKey::Fly)) {
+	if(GamePad::isKeyPressed(GameKey::Fly)) {
 		m_velocity.z = 0.1f;
 	}
 
-	if(gk::GamePad::isKeyPressed(GameKey::Sneak)) {
+	if(GamePad::isKeyPressed(GameKey::Sneak)) {
 		m_velocity.z = -0.1f;
 	}
 
-	if(gk::GamePad::isKeyPressed(GameKey::Forward))    move(0.0f);
-	else if(gk::GamePad::isKeyPressed(GameKey::Back))  move(180.0f);
+	if(GamePad::isKeyPressed(GameKey::Forward))    move(0.0f);
+	else if(GamePad::isKeyPressed(GameKey::Back))  move(180.0f);
 
-	if(gk::GamePad::isKeyPressed(GameKey::Left))       move(90.0f);
-	else if(gk::GamePad::isKeyPressed(GameKey::Right)) move(-90.0f);
+	if(GamePad::isKeyPressed(GameKey::Left))       move(90.0f);
+	else if(GamePad::isKeyPressed(GameKey::Right)) move(-90.0f);
 
-	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Forward)) move(45.0f);
-	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Forward)) move(-45.0f);
-	if (gk::GamePad::isKeyPressed(GameKey::Left)  && gk::GamePad::isKeyPressed(GameKey::Back))    move(135.0f);
-	if (gk::GamePad::isKeyPressed(GameKey::Right) && gk::GamePad::isKeyPressed(GameKey::Back))    move(-135.0f);
+	if (GamePad::isKeyPressed(GameKey::Left)  && GamePad::isKeyPressed(GameKey::Forward)) move(45.0f);
+	if (GamePad::isKeyPressed(GameKey::Right) && GamePad::isKeyPressed(GameKey::Forward)) move(-45.0f);
+	if (GamePad::isKeyPressed(GameKey::Left)  && GamePad::isKeyPressed(GameKey::Back))    move(135.0f);
+	if (GamePad::isKeyPressed(GameKey::Right) && GamePad::isKeyPressed(GameKey::Back))    move(-135.0f);
 
-	if (gk::GamePad::isKeyPressed(GameKey::Sprint)) {
+	if (GamePad::isKeyPressed(GameKey::Sprint)) {
 		m_velocity.x *= 1.5f;
 		m_velocity.y *= 1.5f;
 	}
@@ -189,12 +187,12 @@ void ClientPlayer::updatePosition(const ClientWorld &world) {
 void ClientPlayer::setPosition(double x, double y, double z) {
 	Player::setPosition(x, y, z);
 
-	gk::Vector3f camPos = m_cameraLocalPos;
+	Vector3f camPos = m_cameraLocalPos;
 	m_camera.setDPosition(m_x + camPos.x, m_y + camPos.y, m_z + camPos.z);
 }
 
 void ClientPlayer::checkCollisions(const ClientWorld &world) {
-	gk::Vector3d corner{m_x + m_hitbox.x, m_y + m_hitbox.y, m_z + m_hitbox.z};
+	Vector3d corner{m_x + m_hitbox.x, m_y + m_hitbox.y, m_z + m_hitbox.z};
 
 	constexpr int numPointsPerEdge = 3;
 	constexpr int lastPoint = numPointsPerEdge - 1;
@@ -216,7 +214,7 @@ bool passable(const ClientWorld &world, double x, double y, double z) {
 	return !blockState || !blockState->block().id() || !blockState->isCollidable();
 }
 
-void ClientPlayer::testPoint(const ClientWorld &world, double x, double y, double z, gk::Vector3f &vel) {
+void ClientPlayer::testPoint(const ClientWorld &world, double x, double y, double z, Vector3f &vel) {
 	if(!passable(world, x + vel.x, y, z)) vel.x = 0.f;
 	if(!passable(world, x, y + vel.y, z)) vel.y = 0.f;
 	if(!passable(world, x, y, z + vel.z)) {
@@ -228,7 +226,7 @@ void ClientPlayer::testPoint(const ClientWorld &world, double x, double y, doubl
 void ClientPlayer::applyViewBobbing(float &viewAngleH, float &viewAngleV, float &viewAngleRoll) {
 	if (!m_velocity.isZero() && m_velocity.z == 0 && !Config::isFlyModeEnabled) {
 		if (!m_isMoving) {
-			m_movementStartTime = gk::GameClock::getInstance().getTicks();
+			m_movementStartTime = GameClock::getInstance().getTicks();
 			m_isMoving = true;
 		}
 	}
@@ -237,8 +235,8 @@ void ClientPlayer::applyViewBobbing(float &viewAngleH, float &viewAngleV, float 
 	}
 
 	if (m_isMoving) {
-		// float t = (float)(gk::GameClock::getInstance().getTicks());
-		float t = (float)(gk::GameClock::getInstance().getTicks() - m_movementStartTime);
+		// float t = (float)(GameClock::getInstance().getTicks());
+		float t = (float)(GameClock::getInstance().getTicks() - m_movementStartTime);
 		viewAngleH += 0.4f * sinf(t / 150.f);
 		viewAngleV += 0.4f * sinf(t / 75.f);
 		viewAngleRoll += 0.3f * -sinf(t / 150.f);

@@ -35,13 +35,13 @@ class BlockMesher {
 		                     const BlockState &blockState, u16 blockParam);
 
 		static void addBlock(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
-		                     const BlockState &blockState, const gk::FloatBox &boundingBox,
+		                     const BlockState &blockState, const FloatBox &boundingBox,
 		                     u8f orientation, const glm::mat3 &orientMatrix);
 
 		static void addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob &job,
 		                         const BlockState &blockState,
-		                         const gk::Vector3<s8f> &normal, const glm::vec3 *const vertexPos[4],
-		                         const gk::Vector3<s8f> *const neighbourOfs[4]);
+		                         const Vector3<s8f> &normal, const glm::vec3 *const vertexPos[4],
+		                         const Vector3<s8f> *const neighbourOfs[4]);
 };
 
 #endif // BLOCKMESHER_HPP_

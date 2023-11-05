@@ -37,7 +37,7 @@ namespace fs = ghc::filesystem;
 WorldDeletionState::WorldDeletionState(const std::string &worldName, TitleScreenState *titleScreen) : InterfaceState(titleScreen) {
 	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
-	m_filter.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 176));
+	m_filter.setFillColor(Color::fromRGBA32(0, 0, 0, 176));
 
 	m_text1.setString("Are you sure you want to delete this world?");
 	m_text1.updateVertexBuffer();

@@ -24,12 +24,11 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
 #include <filesystem.hpp>
 
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
+#include "Debug.hpp"
 #include "TitleScreenState.hpp"
 #include "WorldCreationState.hpp"
 #include "WorldDeletionState.hpp"
@@ -42,8 +41,8 @@ WorldSelectionState::WorldSelectionState(TitleScreenState *titleScreen)
 {
 	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
-	m_filter1.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
-	m_filter2.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 120));
+	m_filter1.setFillColor(Color::fromRGBA32(0, 0, 0, 192));
+	m_filter2.setFillColor(Color::fromRGBA32(0, 0, 0, 120));
 
 	m_title.setScale(Config::guiScale, Config::guiScale);
 	m_title.setString("Select World");

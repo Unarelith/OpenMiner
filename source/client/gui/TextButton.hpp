@@ -61,9 +61,9 @@ class TextButton : public Widget {
 	private:
 		void draw(RenderTarget &target, RenderStates states) const override;
 
-		const gk::Color m_defaultColor = gk::Color::fromRGBA32(224, 224, 224);
-		const gk::Color m_hoverColor = gk::Color::fromRGBA32(255, 255, 160);
-		const gk::Color m_disabledColor = gk::Color::fromRGBA32(160, 160, 160);
+		const Color m_defaultColor = Color::fromRGBA32(224, 224, 224);
+		const Color m_hoverColor = Color::fromRGBA32(255, 255, 160);
+		const Color m_disabledColor = Color::fromRGBA32(160, 160, 160);
 
 		Image m_background{"texture-widgets"};
 		Image m_hoverBackground{"texture-widgets"};

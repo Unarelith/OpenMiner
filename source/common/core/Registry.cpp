@@ -24,9 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Exception.hpp>
-
 #include "CraftingRecipe.hpp"
+#include "Exception.hpp"
 #include "GameKey.hpp"
 #include "SmeltingRecipe.hpp"
 #include "Registry.hpp"
@@ -126,7 +125,7 @@ entt::entity Registry::registerEntity(const std::string &stringID) {
 		return entity;
 	}
 	else
-		gkError() << "Registry Error: Redefinition of entity '" + stringID + "', keeping the first one";
+		logError() << "Registry Error: Redefinition of entity '" + stringID + "', keeping the first one";
 
 	return entt::null;
 }
@@ -186,13 +185,13 @@ const Biome &Registry::getBiomeFromStringID(const std::string &stringID) {
 
 entt::entity Registry::getEntityFromStringID(const std::string &stringID) {
 	if (stringID.empty()) {
-		gkError() << "Registry Error: Failed to get entity from empty string ID";
+		logError() << "Registry Error: Failed to get entity from empty string ID";
 		return entt::null;
 	}
 
 	auto it = m_entities.find(stringID);
 	if (it == m_entities.end()) {
-		gkError() << ("Registry Error: Failed to get entity '" + stringID + "': Not found").c_str();
+		logError() << ("Registry Error: Failed to get entity '" + stringID + "': Not found").c_str();
 		return entt::null;
 	}
 

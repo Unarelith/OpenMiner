@@ -76,7 +76,7 @@ HeightmapChunk &Heightmap::getOrCreateChunk(s32 chunkX, s32 chunkY) {
 
 	auto it = m_chunks.find({chunkX, chunkY});
 	if (it == m_chunks.end()) {
-		m_chunks.emplace(gk::Vector2i{chunkX, chunkY}, HeightmapChunk{*this, chunkX, chunkY});
+		m_chunks.emplace(Vector2i{chunkX, chunkY}, HeightmapChunk{*this, chunkX, chunkY});
 
 		chunk = &m_chunks.at({chunkX, chunkY});
 		chunk->generate();
@@ -92,8 +92,8 @@ int Heightmap::getHighestBlockAt(s32 blockX, s32 blockY) {
 	s32 chunkY = (blockY & -CHUNK_DEPTH) / CHUNK_DEPTH;
 
 	s32 blockZ = getOrCreateChunk(chunkX, chunkY).landHeightAt(
-		s8(gk::pmod(blockX, CHUNK_WIDTH)),
-		s8(gk::pmod(blockY, CHUNK_DEPTH))
+		s8(math::pmod(blockX, CHUNK_WIDTH)),
+		s8(math::pmod(blockY, CHUNK_DEPTH))
 	);
 
 	return blockZ;

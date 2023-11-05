@@ -26,14 +26,12 @@
  */
 #include <fstream>
 
-#include <gk/core/Debug.hpp>
-#include <gk/core/Filesystem.hpp>
-
 #include <sol/sol.hpp>
 
 #include <filesystem.hpp>
 
 #include "Config.hpp"
+#include "Debug.hpp"
 
 namespace fs = ghc::filesystem;
 
@@ -78,7 +76,7 @@ std::string Config::texturePack = "";
 
 void Config::loadConfigFromFile(const char *filename) {
 	if (!fs::exists("config") && !fs::create_directory("config")) {
-		gkError() << "Failed to create 'config' folder";
+		logError() << "Failed to create 'config' folder";
 		return;
 	}
 
@@ -121,10 +119,10 @@ void Config::loadConfigFromFile(const char *filename) {
 			defaultServerAddress = lua["defaultServerAddress"].get_or(defaultServerAddress);
 			texturePack = lua["texturePack"].get_or(texturePack);
 
-			gkInfo() << "Config file loaded successfully";
+			logInfo() << "Config file loaded successfully";
 		}
 		catch (sol::error &e) {
-			gkError() << e.what();
+			logError() << e.what();
 		}
 	}
 }

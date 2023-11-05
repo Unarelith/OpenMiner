@@ -27,27 +27,26 @@
 #ifndef CELESTIALOBJECT_HPP_
 #define CELESTIALOBJECT_HPP_
 
-#include <gk/gl/Transformable.hpp>
-#include <gk/graphics/Color.hpp>
-
+#include "Color.hpp"
 #include "Drawable.hpp"
+#include "Transformable.hpp"
 #include "VertexBuffer.hpp"
 
-class CelestialObject : public Drawable, public gk::Transformable  {
+class CelestialObject : public Drawable, public Transformable  {
 	public:
 		CelestialObject();
 
 		float width() const { return m_width; }
 		float height() const { return m_height; }
 
-		void setColor(const gk::Color &color) { m_color = color; m_isUpdateNeeded = true; }
+		void setColor(const Color &color) { m_color = color; m_isUpdateNeeded = true; }
 		void setSize(float width, float height) { m_width = width; m_height = height; m_isUpdateNeeded = true; }
 		void setTexture(const std::string &textureName);
 		void setPhaseCount(u16 phaseCount, u16 phaseSize) { m_phaseCount = phaseCount; m_phaseSize = phaseSize; m_isUpdateNeeded = true; }
 		void setCurrentPhase(u16 currentPhase) const { if (m_currentPhase != currentPhase) { m_currentPhase = currentPhase; m_isUpdateNeeded = true; } }
 		void setRotationOffset(u16 rotationOffset) { m_rotationOffset = rotationOffset; }
 		void setRotationSpeed(float rotationSpeed) { m_rotationSpeed = rotationSpeed; }
-		void setRotationAxis(const gk::Vector3f &rotationAxis) { m_rotationAxis = rotationAxis; m_axisXfNeedsUpdate = true; }
+		void setRotationAxis(const Vector3f &rotationAxis) { m_rotationAxis = rotationAxis; m_axisXfNeedsUpdate = true; }
 
 	private:
 		void updateVertexBuffer() const;
@@ -57,7 +56,7 @@ class CelestialObject : public Drawable, public gk::Transformable  {
 
 		mutable VertexBuffer m_vbo;
 
-		gk::Color m_color = gk::Color::White;
+		Color m_color = Color::White;
 
 		float m_width = 0.f;
 		float m_height = 0.f;
@@ -73,7 +72,7 @@ class CelestialObject : public Drawable, public gk::Transformable  {
 
 		u16 m_rotationOffset = 0;
 		float m_rotationSpeed = 1.f;
-		gk::Vector3f m_rotationAxis{0, 1, 0};
+		Vector3f m_rotationAxis{0, 1, 0};
 		mutable glm::mat4 m_rotAxisTransform;
 };
 

@@ -26,11 +26,10 @@
  */
 #include <fstream>
 
-#include <gk/core/Debug.hpp>
-
 #include <filesystem.hpp>
 
 #include "ComponentType.hpp"
+#include "Debug.hpp"
 #include "GameTime.hpp"
 #include "Network.hpp"
 #include "NetworkComponent.hpp"
@@ -44,7 +43,7 @@ namespace fs = ghc::filesystem;
 using namespace entt::literals;
 
 void WorldSaveBasicBackend::load(const std::string &name) {
-	gkInfo() << ("Loading '" + name + "'...").c_str();
+	logInfo() << ("Loading '" + name + "'...").c_str();
 
 	std::ifstream file("saves/" + name + ".dat", std::ofstream::binary);
 
@@ -71,7 +70,7 @@ void WorldSaveBasicBackend::load(const std::string &name) {
 
 			world.setSeed(seed);
 
-			// gkInfo() << "Loading dimension" << world.dimension().id() << "| Chunk count:" << chunkCount;
+			// logInfo() << "Loading dimension" << world.dimension().id() << "| Chunk count:" << chunkCount;
 
 			for (unsigned int i = 0 ; i < chunkCount ; ++i) {
 				int cx, cy, cz;
@@ -126,11 +125,11 @@ void WorldSaveBasicBackend::load(const std::string &name) {
 		GameTime::setTicks(ticks);
 	}
 
-	// gkInfo() << "Loading done.";
+	// logInfo() << "Loading done.";
 }
 
 void WorldSaveBasicBackend::save(const std::string &name) {
-	gkInfo() << ("Saving '" + name + "'...").c_str();
+	logInfo() << ("Saving '" + name + "'...").c_str();
 
 	fs::create_directory("saves");
 
@@ -143,7 +142,7 @@ void WorldSaveBasicBackend::save(const std::string &name) {
 		for (auto &it : world.chunks()) {
 			if (!it.second->isInitialized() || !it.second->hasBeenModified()) continue;
 
-			const gk::Vector3i &chunkpos = it.first;
+			const Vector3i &chunkpos = it.first;
 			const Chunk::DataArray &data = it.second->data();
 			chunks << chunkpos.x << chunkpos.y << chunkpos.z;
 
@@ -165,7 +164,7 @@ void WorldSaveBasicBackend::save(const std::string &name) {
 			++chunkCount;
 		}
 
-		// gkInfo() << "Saving dimension" << world.dimension().id() << "| Chunk count:" << chunkCount;
+		// logInfo() << "Saving dimension" << world.dimension().id() << "| Chunk count:" << chunkCount;
 
 		save << chunkCount << world.seed();
 		save.append(chunks.getData(), chunks.getDataSize());
@@ -184,7 +183,7 @@ void WorldSaveBasicBackend::save(const std::string &name) {
 
 	file.write((const char *)save.getData(), save.getDataSize());
 
-	// gkInfo() << "Saving done.";
+	// logInfo() << "Saving done.";
 }
 
 #include "AnimationComponent.hpp"
@@ -200,7 +199,7 @@ void WorldSaveBasicBackend::loadEntities(sf::Packet &save, ServerWorld &world) {
 	u32 entityCount;
 	save >> entityCount;
 
-	// gkDebug() << "Loading" << componentCount << "components in dimension" << world.dimension().id();
+	// logDebug() << "Loading" << componentCount << "components in dimension" << world.dimension().id();
 
 	for (u32 i = 0 ; i < entityCount ; ++i) {
 		entt::entity entityID;
@@ -210,7 +209,7 @@ void WorldSaveBasicBackend::loadEntities(sf::Packet &save, ServerWorld &world) {
 		m_entityMap.emplace(entityID, entity);
 		registry.emplace<NetworkComponent>(entity, entity);
 
-		// gkDebug() << "Creating entity" << std::underlying_type_t<entt::entity>(entityID);
+		// logDebug() << "Creating entity" << std::underlying_type_t<entt::entity>(entityID);
 
 		u32 componentCount;
 		save >> componentCount;
@@ -219,7 +218,7 @@ void WorldSaveBasicBackend::loadEntities(sf::Packet &save, ServerWorld &world) {
 			ComponentType type;
 			save >> type;
 
-			// gkDebug() << "Loading component" << (u16)type << "for entity" << std::underlying_type_t<entt::entity>(entityID);
+			// logDebug() << "Loading component" << (u16)type << "for entity" << std::underlying_type_t<entt::entity>(entityID);
 
 			if (type == ComponentType::Position) {
 				save >> registry.emplace<PositionComponent>(entity);
@@ -237,13 +236,13 @@ void WorldSaveBasicBackend::loadEntities(sf::Packet &save, ServerWorld &world) {
 				save >> registry.emplace<ItemStack>(entity);
 			}
 			else if (type == ComponentType::Hitbox) {
-				save >> registry.emplace<gk::DoubleBox>(entity);
+				save >> registry.emplace<DoubleBox>(entity);
 			}
 			else if (type == ComponentType::EntityID) {
 				save >> registry.emplace<std::string>(entity);
 			}
 			else
-				gkWarning() << "Unknown component with type" << (int)type;
+				logWarning() << "Unknown component with type" << (int)type;
 		}
 	}
 }
@@ -266,18 +265,18 @@ void WorldSaveBasicBackend::saveEntities(sf::Packet &save, ServerWorld &world) {
 				Network::Packet packet = type.func("save"_hs).invoke({}, component).template cast<Network::Packet>();
 				entityPacket.append(packet.getData(), packet.getDataSize());
 
-				// gkDebug() << "Serializing component" << type.prop("name"_hs).value().template cast<std::string>() << "for entity" << std::underlying_type_t<entt::entity>(entity) << "of size" << packet.getDataSize();
+				// logDebug() << "Serializing component" << type.prop("name"_hs).value().template cast<std::string>() << "for entity" << std::underlying_type_t<entt::entity>(entity) << "of size" << packet.getDataSize();
 
 				++componentCount;
 			}
 		});
 
-		// gkDebug() << "Saving" << componentCount << "components for entity" << std::underlying_type_t<entt::entity>(entity);
+		// logDebug() << "Saving" << componentCount << "components for entity" << std::underlying_type_t<entt::entity>(entity);
 
 		save << network.entityID << componentCount;
 		save.append(entityPacket.getData(), entityPacket.getDataSize());
 	});
 
-	// gkDebug() << "Saving" << view.size() << "entities in dimension" << world.dimension().id();
+	// logDebug() << "Saving" << view.size() << "entities in dimension" << world.dimension().id();
 }
 

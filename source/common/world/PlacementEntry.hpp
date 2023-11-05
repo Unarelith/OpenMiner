@@ -29,12 +29,12 @@
 
 #include <SFML/Network/Packet.hpp>
 
-#include <gk/core/IntTypes.hpp>
-#include <gk/core/ISerializable.hpp>
+#include "IntTypes.hpp"
+#include "ISerializable.hpp"
 
 namespace PlacementEntry {
 
-struct Flora : public gk::ISerializable {
+struct Flora : public ISerializable {
 	u16 blockID;
 	u16 spawnsOnBlockID;
 	double probability;
@@ -48,7 +48,7 @@ struct Flora : public gk::ISerializable {
 	}
 };
 
-struct Ore : public gk::ISerializable {
+struct Ore : public ISerializable {
 	enum Gen {
 		RandomWalk,
 		FloodFill
@@ -68,7 +68,7 @@ struct Ore : public gk::ISerializable {
 	}
 };
 
-struct Tree : public gk::ISerializable {
+struct Tree : public ISerializable {
 	u16 treeID;
 	double probability;
 

@@ -26,24 +26,22 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/input/GamePad.hpp>
-#include <gk/gl/Vertex.hpp>
-#include <gk/core/GameClock.hpp>
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "BlockCursor.hpp"
 #include "BlockCursorRaycast.hpp"
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "Config.hpp"
+#include "GameClock.hpp"
 #include "GameKey.hpp"
+#include "GamePad.hpp"
 #include "Hotbar.hpp"
 #include "Registry.hpp"
+#include "ResourceHandler.hpp"
 
 BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 	: m_player(player), m_world(world), m_client(client)
 {
-	m_blockDestroyTexture = &gk::ResourceHandler::getInstance().get<Texture>("texture-block_destroy");
+	m_blockDestroyTexture = &ResourceHandler::getInstance().get<Texture>("texture-block_destroy");
 
 	m_vbo.setupDefaultLayout();
 
@@ -68,7 +66,7 @@ void BlockCursor::onEvent(const SDL_Event &event, const Hotbar &hotbar) {
 
 	if (event.type == SDL_MOUSEBUTTONDOWN && m_selectedBlock.w != -1) {
 		if (event.button.button == SDL_BUTTON_LEFT) {
-			m_animationStart = gk::GameClock::getInstance().getTicks();
+			m_animationStart = GameClock::getInstance().getTicks();
 			m_currentTool = &m_player.inventory().getStack((u16)hotbar.cursorPos(), 0);
 		}
 		else if (event.button.button == SDL_BUTTON_RIGHT)
@@ -99,7 +97,7 @@ void BlockCursor::update(const Hotbar &hotbar) {
 
 	if (!m_currentBlock) return;
 
-	u32 ticks = gk::GameClock::getInstance().getTicks();
+	u32 ticks = GameClock::getInstance().getTicks();
 
 	if (selectedBlockChanged)
 		m_animationStart = (m_animationStart) ? ticks : 0;
@@ -147,7 +145,7 @@ void BlockCursor::update(const Hotbar &hotbar) {
 		m_currentBlock = nullptr;
 
 	// Repeat block activation when right click is held
-	u64 now = gk::GameClock::getInstance().getTicks();
+	u64 now = GameClock::getInstance().getTicks();
 	u64 last = m_lastActivationTime.value_or(now);
 	if (now - last > m_activationRepeatDelay)
 		activateBlock(hotbar);
@@ -157,7 +155,7 @@ void BlockCursor::activateBlock(const Hotbar &hotbar) {
 	if (m_animationStart != 0)
 		m_animationStart = 0;
 
-	m_lastActivationTime = gk::GameClock::getInstance().getTicks();
+	m_lastActivationTime = GameClock::getInstance().getTicks();
 
 	u16 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
 	const Block &block = Registry::getInstance().getBlock(blockId);
@@ -166,7 +164,7 @@ void BlockCursor::activateBlock(const Hotbar &hotbar) {
 	bool itemActivationSent = false;
 	bool sneakedItemActivation = false;
 	if (item.id() && item.canBeActivated()) {
-		if (!gk::GamePad::isKeyPressed(GameKey::Sneak)) {
+		if (!GamePad::isKeyPressed(GameKey::Sneak)) {
 			m_client.sendItemActivated(m_selectedBlock);
 			itemActivationSent = true;
 		}
@@ -176,7 +174,7 @@ void BlockCursor::activateBlock(const Hotbar &hotbar) {
 
 	bool blockActivationSent = false;
 	if (!itemActivationSent && block.id() && block.canBeActivated()
-	&& (!gk::GamePad::isKeyPressed(GameKey::Sneak) || sneakedItemActivation)) {
+	&& (!GamePad::isKeyPressed(GameKey::Sneak) || sneakedItemActivation)) {
 		m_client.sendBlockActivated(m_selectedBlock);
 		blockActivationSent = true;
 	}
@@ -207,8 +205,8 @@ void BlockCursor::activateBlock(const Hotbar &hotbar) {
 			// Second, we check if the new block is not inside the player
 			const Block &newBlock = Registry::getInstance().getBlock(hotbar.currentItem().id());
 			const BlockState &newBlockState = newBlock.getState(0); // FIXME: Get state from item stack
-			gk::FloatBox boundingBox = newBlockState.boundingBox() + gk::Vector3f(float(x - m_player.x()), float(y - m_player.y()), float(z - m_player.z()));
-			gk::FloatBox playerBoundingBox = m_player.hitbox();
+			FloatBox boundingBox = newBlockState.boundingBox() + Vector3f(float(x - m_player.x()), float(y - m_player.y()), float(z - m_player.z()));
+			FloatBox playerBoundingBox = m_player.hitbox();
 			if (!boundingBox.intersects(playerBoundingBox) && newBlock.placementConstraints().check(m_world, {x, y, z})) {
 				u32 block = hotbar.currentItem().id();
 				if (newBlock.isRotatable()) {
@@ -316,7 +314,7 @@ void BlockCursor::draw(RenderTarget &target, RenderStates states) const {
 	if (m_selectedBlock.w == -1) return;
 
 	// Subtract the camera position - see comment in ClientWorld::draw()
-	const gk::Vector3d &cameraPosition = m_player.camera().getDPosition();
+	const Vector3d &cameraPosition = m_player.camera().getDPosition();
 	states.transform.translate(
 		float(m_selectedBlock.x - cameraPosition.x),
 		float(m_selectedBlock.y - cameraPosition.y),

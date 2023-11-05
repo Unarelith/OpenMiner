@@ -1,6 +1,10 @@
 #------------------------------------------------------------------------------
 # Packages
 #------------------------------------------------------------------------------
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "")
+set(BUILD_STATIC_LIBS ON CACHE BOOL "")
+
+#------------------------------------------------------------------------------
 # - OpenGL
 #------------------------------------------------------------------------------
 set(OpenGL_GL_PREFERENCE "LEGACY")
@@ -31,7 +35,7 @@ if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
 	endif()
 endif()
 
-if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/gamekit/CMakeLists.txt")
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/zlib/CMakeLists.txt")
     message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif()
 
@@ -53,11 +57,6 @@ set(SFML_BUILD_NETWORK TRUE CACHE BOOL "")
 set(SFML_BUILD_WINDOW FALSE CACHE BOOL "")
 
 add_subdirectory(SFML)
-
-#------------------------------------------------------------------------------
-# - gamekit
-#------------------------------------------------------------------------------
-add_subdirectory(gamekit)
 
 #------------------------------------------------------------------------------
 # - zlib
@@ -88,3 +87,25 @@ set(BGFX_CUSTOM_TARGETS OFF CACHE BOOL "Include convenience custom targets." FOR
 
 add_subdirectory(bgfx.cmake)
 
+#------------------------------------------------------------------------------
+# - SDL
+#------------------------------------------------------------------------------
+set(MESSAGE_QUIET ON)
+
+add_subdirectory(SDL)
+
+set(SDL2IMAGE_INSTALL OFF CACHE BOOL "")
+
+add_subdirectory(SDL_image)
+
+unset(MESSAGE_QUIET)
+
+#------------------------------------------------------------------------------
+# - glm
+#------------------------------------------------------------------------------
+add_subdirectory(glm)
+
+#------------------------------------------------------------------------------
+# - tinyxml2
+#------------------------------------------------------------------------------
+add_subdirectory(tinyxml2)

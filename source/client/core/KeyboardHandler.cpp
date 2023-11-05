@@ -26,13 +26,15 @@
  */
 #include <fstream>
 
-#include <gk/core/Debug.hpp>
-#include <gk/core/Filesystem.hpp>
-
 #include <sol/sol.hpp>
 
+#include <filesystem.hpp>
+
+#include "Debug.hpp"
 #include "GameKey.hpp"
 #include "KeyboardHandler.hpp"
+
+namespace fs = ghc::filesystem;
 
 KeyboardHandler::KeyboardHandler() {
 	addKey(GameKey::Left,            "Left",              SDLK_a);
@@ -54,7 +56,7 @@ KeyboardHandler::KeyboardHandler() {
 }
 
 void KeyboardHandler::loadKeysFromFile(const std::string &filename) {
-	if (gk::Filesystem::fileExists(filename)) {
+	if (fs::exists(filename)) {
 		sol::state lua;
 
 		try {
@@ -71,22 +73,22 @@ void KeyboardHandler::loadKeysFromFile(const std::string &filename) {
 
 					auto keyit = m_keysID.find(keyID);
 					if (keyit != m_keysID.end()) {
-						gk::GameKey key = keyit->second;
+						GameKeyID key = keyit->second;
 						m_keys[key].setKeycode(keycode);
 						if (m_keys[key].keycode() == SDLK_UNKNOWN) {
-							gkWarning() << "Key name '" + keyValue + "' not recognized";
+							logWarning() << "Key name '" + keyValue + "' not recognized";
 						}
 					}
 					else {
-						addKey(gk::GameKey(m_keys.size()), keyName, keycode, keyID);
+						addKey(GameKeyID(m_keys.size()), keyName, keycode, keyID);
 					}
 				}
 			}
 
-			gkInfo() << "Key mapping loaded successfully";
+			logInfo() << "Key mapping loaded successfully";
 		}
 		catch (sol::error &e) {
-			gkError() << e.what();
+			logError() << e.what();
 		}
 	}
 }
@@ -103,7 +105,7 @@ void KeyboardHandler::saveKeysToFile(const std::string &filename) {
 	file << "}" << std::endl;
 }
 
-bool KeyboardHandler::isKeyPressed(gk::GameKey key) {
+bool KeyboardHandler::isKeyPressed(GameKeyID key) {
 	const u8 *keyboardState = SDL_GetKeyboardState(nullptr);
 	SDL_Keycode keyScancode = m_keys[key].keycode();
 
@@ -112,7 +114,7 @@ bool KeyboardHandler::isKeyPressed(gk::GameKey key) {
 	return m_keysPressed[key];
 }
 
-void KeyboardHandler::addKey(gk::GameKey id, const std::string &name, SDL_Keycode defaultKey, const std::string &stringID, Key *key) {
+void KeyboardHandler::addKey(GameKeyID id, const std::string &name, SDL_Keycode defaultKey, const std::string &stringID, Key *key) {
 	auto keyit = m_keysID.find(stringID);
 	if (keyit == m_keysID.end()) {
 		auto it = m_keys.emplace(id, Key((u16)id, (stringID.empty() ? "_" + name : stringID), name));

@@ -28,7 +28,7 @@
 #define NETWORKUTILS_HPP_
 
 #include <SFML/Network/Packet.hpp>
-//
+
 //======================================================================================
 // std::vector
 //======================================================================================
@@ -140,63 +140,63 @@ sf::Packet &operator>>(sf::Packet &packet, std::unordered_map<T, U> &map) {
 }
 
 //======================================================================================
-// gk::Rect
+// Rect
 //======================================================================================
-#include <gk/core/Rect.hpp>
+#include "Rect.hpp"
 
 template<typename T>
-sf::Packet &operator<<(sf::Packet &packet, const gk::Rect<T> &rect) {
+sf::Packet &operator<<(sf::Packet &packet, const Rect<T> &rect) {
 	packet << rect.x << rect.y << rect.sizeX << rect.sizeY;
 	return packet;
 }
 
 template<typename T>
-sf::Packet &operator>>(sf::Packet &packet, gk::Rect<T> &rect) {
+sf::Packet &operator>>(sf::Packet &packet, Rect<T> &rect) {
 	packet >> rect.x >> rect.y >> rect.sizeX >> rect.sizeY;
 	return packet;
 }
 
 //======================================================================================
-// gk::Box
+// Box
 //======================================================================================
-#include <gk/core/Box.hpp>
+#include "Box.hpp"
 
 template<typename T>
-sf::Packet &operator<<(sf::Packet &packet, const gk::Box<T> &box) {
+sf::Packet &operator<<(sf::Packet &packet, const Box<T> &box) {
 	packet << box.x << box.y << box.z << box.sizeX << box.sizeY << box.sizeZ;
 	return packet;
 }
 
 template<typename T>
-sf::Packet &operator>>(sf::Packet &packet, gk::Box<T> &box) {
+sf::Packet &operator>>(sf::Packet &packet, Box<T> &box) {
 	packet >> box.x >> box.y >> box.z >> box.sizeX >> box.sizeY >> box.sizeZ;
 	return packet;
 }
 
 //======================================================================================
-// gk::Vector3
+// Vector3
 //======================================================================================
-#include <gk/core/Vector3.hpp>
+#include "Vector3.hpp"
 
 template<typename T>
-sf::Packet &operator<<(sf::Packet &packet, const gk::Vector3<T> &vec) {
+sf::Packet &operator<<(sf::Packet &packet, const Vector3<T> &vec) {
 	packet << vec.x << vec.y << vec.z;
 	return packet;
 }
 
 template<typename T>
-sf::Packet &operator>>(sf::Packet &packet, gk::Vector3<T> &vec) {
+sf::Packet &operator>>(sf::Packet &packet, Vector3<T> &vec) {
 	packet >> vec.x >> vec.y >> vec.z;
 	return packet;
 }
 
 //======================================================================================
-// gk::Color
+// Color
 //======================================================================================
-#include <gk/graphics/Color.hpp>
+#include "Color.hpp"
 
-sf::Packet &operator<<(sf::Packet &packet, const gk::Color &color);
-sf::Packet &operator>>(sf::Packet &packet, gk::Color &color);
+sf::Packet &operator<<(sf::Packet &packet, const Color &color);
+sf::Packet &operator>>(sf::Packet &packet, Color &color);
 
 //======================================================================================
 // entt::entity

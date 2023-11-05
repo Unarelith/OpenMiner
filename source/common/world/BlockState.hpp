@@ -30,11 +30,9 @@
 #include <string>
 #include <unordered_map>
 
-#include <gk/core/Box.hpp>
-#include <gk/core/Debug.hpp> // FIXME
-#include <gk/core/IntTypes.hpp>
-
 #include "BlockParam.hpp"
+#include "Box.hpp"
+#include "IntTypes.hpp"
 #include "ItemStack.hpp"
 #include "TilesDef.hpp"
 
@@ -79,7 +77,7 @@ enum class BlockDrawType : u8 {
 		BLOCK_ATTR_SETTER(name)
 
 
-class BlockState : public gk::ISerializable {
+class BlockState : public ISerializable {
 	public:
 		BlockState() = default;
 		BlockState(u16 id, const Block *block, const BlockState *defaultState)
@@ -140,20 +138,20 @@ class BlockState : public gk::ISerializable {
 		BLOCK_ATTR_V(u8, harvestRequirements, 0);
 		BLOCK_ATTR_V(float, hardness, 1.0f);
 
-		BLOCK_ATTR_V(gk::FloatBox, boundingBox, (gk::FloatBox{0, 0, 0, 1, 1, 1}));
+		BLOCK_ATTR_V(FloatBox, boundingBox, (FloatBox{0, 0, 0, 1, 1, 1}));
 
 		BLOCK_ATTR_V(BlockDrawType, drawType, BlockDrawType::Solid);
 
-		BLOCK_ATTR_V(gk::Color, colorMultiplier, gk::Color::White);
+		BLOCK_ATTR_V(Color, colorMultiplier, Color::White);
 
 		BLOCK_ATTR_V(bool, isLightSource, false);
 
 		BLOCK_ATTR(std::string, inventoryImage);
 
 		BLOCK_ATTR_V(float, fogDepth, 0);
-		BLOCK_ATTR_V(gk::Color, fogColor, gk::Color::White);
+		BLOCK_ATTR_V(Color, fogColor, Color::White);
 
-		BLOCK_ATTR_V(gk::Vector3f, drawOffset, (gk::Vector3f{0, 0, 0}));
+		BLOCK_ATTR_V(Vector3f, drawOffset, (Vector3f{0, 0, 0}));
 
 		BLOCK_ATTR_V(bool, isCollidable, true);
 

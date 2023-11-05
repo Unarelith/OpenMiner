@@ -83,7 +83,7 @@ void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkM
 	// vertex coordinates passed to the renderer are all small, and single
 	// precision floats suffice for the drawing.
 
-	const gk::Vector3d cameraPos{camera.getDPosition()};
+	const Vector3d cameraPos{camera.getDPosition()};
 	camera.setDPosition(0, 0, 0);  // Temporarily move the camera to the origin
 
 	// Calculate the Z of the normalized device coordinate of the render distance plane
@@ -152,7 +152,7 @@ void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkM
 	}
 
 	// Prepare a list of chunks to draw
-	std::vector<std::tuple<ClientChunk*, gk::Transform, float>> chunksToDraw;
+	std::vector<std::tuple<ClientChunk*, Transform, float>> chunksToDraw;
 	for(auto &it : chunks) {
 		if (!it.second->isInitialized()) continue;
 
@@ -250,7 +250,7 @@ void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkM
 
 		// If this chunk is not initialized, skip it and request meshing
 		if(!it.second->isReadyForMeshing()) {
-			m_onMeshingRequested(dist, gk::Vector3i{it.second->x(), it.second->y(), it.second->z()});
+			m_onMeshingRequested(dist, Vector3i{it.second->x(), it.second->y(), it.second->z()});
 
 			continue;
 		}
@@ -271,7 +271,7 @@ void ChunkRenderer::draw(RenderTarget &target, RenderStates states, const ChunkM
 	camera.setDPosition(cameraPos);
 }
 
-void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const std::vector<std::tuple<ClientChunk*, gk::Transform, float>> &chunks, const Sky *currentSky) const {
+void ChunkRenderer::drawChunks(RenderTarget &target, RenderStates states, const std::vector<std::tuple<ClientChunk*, Transform, float>> &chunks, const Sky *currentSky) const {
 	++ClientChunk::frameCounter;
 
 	states.isDepthTestEnabled = true;

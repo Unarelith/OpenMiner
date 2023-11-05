@@ -24,9 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
 #include "CraftingWidgetDef.hpp"
+#include "Debug.hpp"
 
 void CraftingWidgetDef::serialize(sf::Packet &packet) const {
 	WidgetDef::serialize(packet);
@@ -67,7 +66,7 @@ void CraftingWidgetDef::loadInventory(const sol::table &table) {
 				m_blockPosition.z = blockTable.value()["z"];
 			}
 			else
-				gkError() << "For" << m_name << ": Block position must be defined";
+				logError() << "For" << m_name << ": Block position must be defined";
 
 			m_offset = inventoryTable["offset"].get_or<u16>(0);
 			m_size = inventoryTable["size"].get_or<u16>(3);
@@ -76,10 +75,10 @@ void CraftingWidgetDef::loadInventory(const sol::table &table) {
 			m_size = inventoryTable["size"].get_or<u16>(3);
 		}
 		else {
-			gkError() << "For" << m_name << ": Inventory source" << m_inventory + "is not valid";
+			logError() << "For" << m_name << ": Inventory source" << m_inventory + "is not valid";
 		}
 	}
 	else
-		gkError() << "For" << m_name << ": 'inventory' field must be a table";
+		logError() << "For" << m_name << ": 'inventory' field must be a table";
 }
 

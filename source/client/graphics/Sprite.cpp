@@ -24,8 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Exception.hpp>
-
+#include "Exception.hpp"
 #include "Sprite.hpp"
 
 Sprite::Sprite(const std::string &textureName, u16 frameWidth, u16 frameHeight, bool isAnimated) : Image() {

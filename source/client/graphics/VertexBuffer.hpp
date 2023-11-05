@@ -27,12 +27,12 @@
 #ifndef VERTEXBUFFER_HPP_
 #define VERTEXBUFFER_HPP_
 
-#include <gk/core/IntTypes.hpp>
-#include <gk/utils/NonCopyable.hpp>
-
 #include <bgfx/bgfx.h>
 
-class VertexBuffer : public gk::NonCopyable {
+#include "IntTypes.hpp"
+#include "NonCopyable.hpp"
+
+class VertexBuffer : public NonCopyable {
 	public:
 		VertexBuffer();
 		VertexBuffer(VertexBuffer &&);

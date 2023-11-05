@@ -26,13 +26,12 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/GameClock.hpp>
-
 #include "ClientCommandHandler.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientProfiler.hpp"
 #include "Config.hpp"
 #include "Events.hpp"
+#include "GameClock.hpp"
 #include "HUD.hpp"
 
 HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
@@ -104,7 +103,7 @@ void HUD::update() {
 		m_hotbar.update();
 
 	if (Config::isFpsCounterEnabled)
-		m_fpsText.setString(std::to_string(gk::GameClock::getInstance().getFpsAverage()) + " FPS");
+		m_fpsText.setString(std::to_string(GameClock::getInstance().getFpsAverage()) + " FPS");
 
 	m_blockCursor.update(m_hotbar);
 
@@ -158,7 +157,7 @@ void HUD::draw(RenderTarget &target, RenderStates states) const {
 
 	target.draw(m_chat, states);
 
-	states.transform = gk::Transform::Identity;
+	states.transform = Transform::Identity;
 
 	if (Config::isCrosshairVisible)
 		target.draw(m_crosshair, states);

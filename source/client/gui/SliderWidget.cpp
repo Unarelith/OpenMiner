@@ -32,7 +32,7 @@ SliderWidget::SliderWidget(Widget *parent) : SliderWidget(200, parent) {
 
 SliderWidget::SliderWidget(u16 width, Widget *parent) : Widget(width, 20, parent) {
 	m_text.setColor(m_defaultTextColor);
-	m_text.setShadowColor(gk::Color::fromRGBA32(56, 56, 56));
+	m_text.setShadowColor(Color::fromRGBA32(56, 56, 56));
 
 	m_slider.setClipRect(0, 66, 8, 20);
 	m_background.setClipRect(0, 46, width, 20);

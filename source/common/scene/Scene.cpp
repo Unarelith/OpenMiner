@@ -24,12 +24,11 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-#include <gk/core/ISerializable.hpp>
-
 #include <entt/entt.hpp>
 
 #include "ComponentType.hpp"
+#include "Debug.hpp"
+#include "ISerializable.hpp"
 #include "Network.hpp"
 #include "NetworkUtils.hpp"
 #include "Scene.hpp"
@@ -53,7 +52,7 @@ void Scene::update() {
 // Opaque entity stamper: https://github.com/skypjack/entt/issues/481#issuecomment-627614706
 entt::entity Scene::createEntityFromModel(entt::registry &modelRegistry, entt::entity modelEntity) {
 	if (!modelRegistry.valid(modelEntity)) {
-		gkError() << "Failed to create entity from model: Model entity with ID" << (u32)modelEntity << "doesn't exist";
+		logError() << "Failed to create entity from model: Model entity with ID" << (u32)modelEntity << "doesn't exist";
 		return entt::null;
 	}
 
@@ -79,7 +78,7 @@ T &set(entt::registry &registry, entt::entity entity, const T &instance) {
 template<typename T>
 Network::Packet serialize(entt::entity entity, T &component, bool useUpdateStatus) {
 	Network::Packet packet;
-	if constexpr(std::is_base_of_v<gk::ISerializable, std::decay_t<T>>) {
+	if constexpr(std::is_base_of_v<ISerializable, std::decay_t<T>>) {
 		if (!useUpdateStatus || component.isUpdated) {
 			packet << component.packetType << entity << component;
 			if (useUpdateStatus)
@@ -109,9 +108,8 @@ void extend_meta_type(const std::string &name, ComponentType type, bool isSerial
 		.template func<&save<Type>>("save"_hs);
 }
 
-#include <gk/core/Box.hpp>
-
 #include "AnimationComponent.hpp"
+#include "Box.hpp"
 #include "DrawableDef.hpp"
 #include "ItemStack.hpp"
 #include "NetworkComponent.hpp"
@@ -119,7 +117,7 @@ void extend_meta_type(const std::string &name, ComponentType type, bool isSerial
 #include "RotationComponent.hpp"
 
 void Scene::registerComponents() {
-	extend_meta_type<gk::DoubleBox>      ("gk::DoubleBox",      ComponentType::Hitbox,    false, true);
+	extend_meta_type<DoubleBox>          ("DoubleBox",          ComponentType::Hitbox,    false, true);
 	extend_meta_type<AnimationComponent> ("AnimationComponent", ComponentType::Animation, true,  true);
 	extend_meta_type<DrawableDef>        ("DrawableDef",        ComponentType::Drawable,  true,  true);
 	extend_meta_type<ItemStack>          ("ItemStack",          ComponentType::ItemStack, false, true);
@@ -128,4 +126,3 @@ void Scene::registerComponents() {
 	extend_meta_type<RotationComponent>  ("RotationComponent",  ComponentType::Rotation,  true,  true);
 	extend_meta_type<std::string>        ("EntityID",           ComponentType::EntityID,  false, true);
 }
-

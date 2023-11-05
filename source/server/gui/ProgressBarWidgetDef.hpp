@@ -48,7 +48,7 @@ class ProgressBarWidgetDef : public WidgetDef {
 
 		u8 m_type = 0;
 
-		gk::Vector3i m_blockPosition;
+		Vector3i m_blockPosition;
 
 		// NOTE: m_maxMeta and m_maxValue can't be used together
 		std::string m_meta;
@@ -56,7 +56,7 @@ class ProgressBarWidgetDef : public WidgetDef {
 		u32 m_maxValue = 0;
 
 		std::string m_texture;
-		gk::FloatRect m_clipRect;
+		FloatRect m_clipRect;
 };
 
 #endif // PROGRESSBARWIDGETDEF_HPP_

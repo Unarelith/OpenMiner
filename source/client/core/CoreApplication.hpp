@@ -27,13 +27,12 @@
 #ifndef COREAPPLICATION_HPP_
 #define COREAPPLICATION_HPP_
 
-#include <gk/core/ArgumentParser.hpp>
-#include <gk/core/EventHandler.hpp>
-#include <gk/core/GameClock.hpp>
-#include <gk/core/SDLLoader.hpp>
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "ApplicationStateStack.hpp"
+#include "ArgumentParser.hpp"
+#include "EventHandler.hpp"
+#include "GameClock.hpp"
+#include "ResourceHandler.hpp"
+#include "SDLLoader.hpp"
 #include "Window.hpp"
 
 class CoreApplication {
@@ -60,24 +59,24 @@ class CoreApplication {
 
 		virtual void mainLoop() = 0;
 
-		gk::SDLLoader m_sdlLoader;
+		SDLLoader m_sdlLoader;
 		bool m_loadSDL = true;
 
 		ApplicationStateStack m_stateStack;
 
-		gk::GameClock m_clock;
+		GameClock m_clock;
 
-		gk::ResourceHandler m_resourceHandler;
+		ResourceHandler m_resourceHandler;
 
 		Window m_window;
 
 		RenderStates m_renderStates = RenderStates::Default;
 
-		gk::ArgumentParser m_argumentParser;
+		ArgumentParser m_argumentParser;
 
-		gk::EventHandler m_eventHandler;
+		EventHandler m_eventHandler;
 
-		gk::LoggerHandler m_loggerHandler;
+		LoggerHandler m_loggerHandler;
 
 		ApplicationState *m_currentState = nullptr;
 };

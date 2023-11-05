@@ -24,14 +24,13 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-#include <gk/core/Utils.hpp>
-
 #include <filesystem.hpp>
 
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
+#include "Debug.hpp"
 #include "TitleScreenState.hpp"
+#include "Utils.hpp"
 #include "WorldCreationState.hpp"
 #include "WorldSelectionState.hpp"
 
@@ -47,7 +46,7 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 
 	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
 
-	m_filter.setFillColor(gk::Color::fromRGBA32(0, 0, 0, 192));
+	m_filter.setFillColor(Color::fromRGBA32(0, 0, 0, 192));
 
 	m_title.setScale(Config::guiScale, Config::guiScale);
 	m_title.setString(originalName.empty() ? "Create New World" : "Edit World");
@@ -56,7 +55,7 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 	m_nameInput.setString(originalName);
 	m_nameInput.setCharacterLimit(32);
 	m_nameInput.setBackgroundSize(150, 20);
-	m_nameInput.setBackgroundOutline(1, gk::Color::White);
+	m_nameInput.setBackgroundOutline(1, Color::White);
 	m_nameInput.setPadding(5, 6);
 	m_nameInput.setScale(Config::guiScale, Config::guiScale);
 	m_nameInput.setFocus(false);
@@ -66,7 +65,7 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 		m_seedInput.setString(originalName);
 		m_seedInput.setCharacterLimit(32);
 		m_seedInput.setBackgroundSize(150, 20);
-		m_seedInput.setBackgroundOutline(1, gk::Color::White);
+		m_seedInput.setBackgroundOutline(1, Color::White);
 		m_seedInput.setPadding(5, 6);
 		m_seedInput.setScale(Config::guiScale, Config::guiScale);
 		m_seedInput.setFocus(false);
@@ -79,7 +78,7 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 	m_menuWidget.addButton(originalName.empty() ? "Create New World" : "Save World", [this, titleScreen, originalName](TextButton &) {
 		std::string worldName = m_nameInput.string();
 		if (!fs::exists("saves/" + worldName + ".dat")) {
-			if (gk::regexMatch(worldName, "^[A-Za-z0-9_]+$") && worldName[0] != '_') {
+			if (utils::regexMatch(worldName, "^[A-Za-z0-9_]+$") && worldName[0] != '_') {
 				if (m_isEdition) {
 					fs::copy_file("saves/" + originalName + ".dat", "saves/" + worldName  + ".dat");
 					fs::remove("saves/" + originalName + ".dat");
@@ -101,7 +100,7 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 							seed = std::stoi(m_seedInput.string());
 						}
 						catch (...) {
-							gkError() << "Invalid seed, using random one:" << seed;
+							logError() << "Invalid seed, using random one:" << seed;
 						}
 					}
 
@@ -125,7 +124,7 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 		m_stateStack->pop();
 	}, 150);
 
-	m_errorText.setColor(gk::Color::Red);
+	m_errorText.setColor(Color::Red);
 	m_errorText.setScale(Config::guiScale, Config::guiScale);
 
 	updateWidgetPosition();

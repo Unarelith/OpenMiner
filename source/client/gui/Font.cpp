@@ -26,24 +26,23 @@
  */
 #include <fstream>
 
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "Font.hpp"
+#include "ResourceHandler.hpp"
 #include "Texture.hpp"
 
 Font::Font(const std::string &textureName, const std::string &configPath)
-	: m_texture(gk::ResourceHandler::getInstance().get<Texture>(textureName))
+	: m_texture(ResourceHandler::getInstance().get<Texture>(textureName))
 {
 	std::memset(m_charWidth, 0, sizeof(u8) * 256);
 
 	parseConfig(configPath);
 }
 
-gk::Vector2f Font::getTexCoords(u8 c, u8 x, u8 y) const {
+Vector2f Font::getTexCoords(u8 c, u8 x, u8 y) const {
 	u8 tileX = u8(c % (m_texture.getSize().x / m_width));
 	u8 tileY = u8(c / (m_texture.getSize().x / m_width));
 
-	gk::Vector2f texCoords{
+	Vector2f texCoords{
 		float(tileX + x) * m_width  / (float)m_texture.getSize().x,
 		float(tileY + y) * m_height / (float)m_texture.getSize().y
 	};

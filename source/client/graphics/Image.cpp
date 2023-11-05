@@ -24,9 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "Image.hpp"
+#include "ResourceHandler.hpp"
 #include "Vertex.hpp"
 
 Image::Image() {
@@ -34,7 +33,7 @@ Image::Image() {
 }
 
 Image::Image(const std::string &textureName) : Image() {
-	load(gk::ResourceHandler::getInstance().get<Texture>(textureName));
+	load(ResourceHandler::getInstance().get<Texture>(textureName));
 }
 
 Image::Image(const Texture &texture) : Image() {
@@ -56,7 +55,7 @@ void Image::load(const Image &image) {
 }
 
 void Image::load(const std::string &textureName) {
-	load(gk::ResourceHandler::getInstance().get<Texture>(textureName));
+	load(ResourceHandler::getInstance().get<Texture>(textureName));
 }
 
 void Image::load(const Texture &texture) {
@@ -70,11 +69,11 @@ void Image::load(const Texture &texture) {
 }
 
 void Image::setTexture(const std::string &textureName) {
-	m_texture = &gk::ResourceHandler::getInstance().get<Texture>(textureName);
+	m_texture = &ResourceHandler::getInstance().get<Texture>(textureName);
 }
 
 void Image::setClipRect(float x, float y, u16 width, u16 height) {
-	m_clipRect = gk::FloatRect(x, y, width, height);
+	m_clipRect = FloatRect(x, y, width, height);
 
 	m_posRect.sizeX = width;
 	m_posRect.sizeY = height;
@@ -83,7 +82,7 @@ void Image::setClipRect(float x, float y, u16 width, u16 height) {
 }
 
 void Image::setPosRect(float x, float y, u16 width, u16 height) {
-	m_posRect = gk::FloatRect(x, y, width, height);
+	m_posRect = FloatRect(x, y, width, height);
 
 	updateVertexBuffer();
 }
@@ -96,7 +95,7 @@ void Image::updateVertexBuffer() {
 		{{m_posRect.x + m_posRect.sizeX, m_posRect.y + m_posRect.sizeY, 0, -1}},
 	};
 
-	gk::FloatRect texRect{
+	FloatRect texRect{
 		m_clipRect.x / float(m_width),
 		m_clipRect.y / float(m_height),
 		m_clipRect.sizeX / float(m_width),

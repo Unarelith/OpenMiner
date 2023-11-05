@@ -27,20 +27,18 @@
 #ifndef RENDERSTATES_HPP_
 #define RENDERSTATES_HPP_
 
-#include <glm/matrix.hpp>
-
-#include <gk/core/IntTypes.hpp>
-#include <gk/gl/Transform.hpp>
-
 #include <bgfx/bgfx.h>
+
+#include "IntTypes.hpp"
+#include "Transform.hpp"
 
 class Shader;
 class Texture;
 
 struct RenderStates {
-	gk::Transform projectionMatrix;
-	gk::Transform viewMatrix;
-	gk::Transform transform;
+	Transform projectionMatrix;
+	Transform viewMatrix;
+	Transform transform;
 
 	const Texture *texture = nullptr;
 	const Shader *shader = nullptr;

@@ -27,13 +27,13 @@
 #ifndef WIDGET_HPP_
 #define WIDGET_HPP_
 
-#include <gk/core/Rect.hpp>
-#include <gk/core/SDLHeaders.hpp>
-#include <gk/gl/Transformable.hpp>
+#include <SDL.h>
 
 #include "Drawable.hpp"
+#include "Rect.hpp"
+#include "Transformable.hpp"
 
-class Widget : public Drawable, public gk::Transformable {
+class Widget : public Drawable, public Transformable {
 	public:
 		Widget(Widget *parent = nullptr) : m_parent(parent) {}
 		Widget(unsigned int width, unsigned int height, Widget *parent = nullptr)
@@ -44,7 +44,7 @@ class Widget : public Drawable, public gk::Transformable {
 
 		bool isPointInWidget(int x, int y);
 
-		gk::FloatRect getGlobalBounds() const;
+		FloatRect getGlobalBounds() const;
 
 		const Widget *parent() const { return m_parent; }
 		void setParent(Widget *parent) { m_parent = parent; }

@@ -29,13 +29,13 @@
 #include "MouseItemWidget.hpp"
 
 MouseItemWidget::MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0, parent) {
-	m_tooltipBackground.setColor(gk::Color::fromRGBA32(255, 255, 255, 240));
+	m_tooltipBackground.setColor(Color::fromRGBA32(255, 255, 255, 240));
 	m_tooltipBackground.setPosition(20, 17, 0);
 
 	m_tooltipText.setPosition(26, 24, 0);
 
 	m_tooltipInfoText.setPosition(26, 35, 0);
-	m_tooltipInfoText.setColor(gk::Color::fromRGBA32(180, 180, 180));
+	m_tooltipInfoText.setColor(Color::fromRGBA32(180, 180, 180));
 }
 
 void MouseItemWidget::onEvent(const SDL_Event &event) {

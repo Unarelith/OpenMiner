@@ -57,14 +57,14 @@ ServerApplication::ServerApplication(int argc, char **argv) : m_argumentParser(a
 	m_worldName = "_server";
 }
 
-ServerApplication::ServerApplication(gk::EventHandler &eventHandler) {
+ServerApplication::ServerApplication(EventHandler &eventHandler) {
 	m_eventHandler = &eventHandler;
 }
 
 bool ServerApplication::init() {
 	std::srand((unsigned int)std::time(nullptr));
 
-	gk::LoggerHandler::setInstance(m_loggerHandler);
+	LoggerHandler::setInstance(m_loggerHandler);
 	m_loggerHandler.setName("server");
 
 	fs::create_directory("logs");
@@ -87,7 +87,7 @@ bool ServerApplication::init() {
 			fs::current_path(m_argumentParser.getArgument("working-dir").parameter);
 		}
 		catch (fs::filesystem_error &e){
-			gkError() << "Failed to change working directory:" << e.what();
+			logError() << "Failed to change working directory:" << e.what();
 			return false;
 		}
 	}
@@ -99,18 +99,18 @@ bool ServerApplication::init() {
 		m_worldName = m_argumentParser.getArgument("world").parameter;
 
 	if (m_argumentParser.getArgument("log-level").isFound) {
-		std::unordered_map<std::string, gk::LogLevel> levels = {
-			{"debug",   gk::LogLevel::Debug},
-			{"info",    gk::LogLevel::Info},
-			{"warning", gk::LogLevel::Warning},
-			{"error",   gk::LogLevel::Error},
+		std::unordered_map<std::string, LogLevel> levels = {
+			{"debug",   LogLevel::Debug},
+			{"info",    LogLevel::Info},
+			{"warning", LogLevel::Warning},
+			{"error",   LogLevel::Error},
 		};
 
 		auto it = levels.find(m_argumentParser.getArgument("log-level").parameter);
 		if (it != levels.end())
 			m_loggerHandler.setMaxLevel(it->second);
 		else
-			gkWarning() << ("Failed to set log level to '" + m_argumentParser.getArgument("log-level").parameter + "': Invalid value").c_str();
+			logWarning() << ("Failed to set log level to '" + m_argumentParser.getArgument("log-level").parameter + "': Invalid value").c_str();
 	}
 
 	ServerConfig::loadConfigFromFile("config/server.lua");
@@ -135,7 +135,7 @@ bool ServerApplication::init() {
 
 	m_scriptEngine.luaCore().setRegistry(&m_registry);
 
-	gkInfo() << ("Server is running on localhost:" + std::to_string(m_server.port())).c_str();
+	logInfo() << ("Server is running on localhost:" + std::to_string(m_server.port())).c_str();
 
 	if (!m_worldName.empty())
 		m_worldController.load(m_worldName);
@@ -153,11 +153,11 @@ int ServerApplication::run(bool isProtected) {
 			if ((isInitSuccessful = init()))
 				mainLoop();
 		}
-		catch(const gk::Exception &e) {
+		catch(const Exception &e) {
 			if (m_eventHandler)
 				m_eventHandler->emplaceEvent<ServerOnlineEvent>(false, (u16)0);
 
-			gkError() << "Fatal error" << e.what();
+			logError() << "Fatal error" << e.what();
 
 			ServerConfig::saveConfigToFile("config/server.lua");
 			ServerConfig::options.clear();
@@ -178,7 +178,7 @@ int ServerApplication::run(bool isProtected) {
 	}
 
 	if (isInitSuccessful) {
-		gkInfo() << "Stopping server...";
+		logInfo() << "Stopping server...";
 
 		if (!m_worldName.empty()) {
 			m_worldController.save(m_worldName);

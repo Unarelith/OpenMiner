@@ -24,9 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/IntTypes.hpp>
-
 #include "ComponentType.hpp"
+#include "IntTypes.hpp"
 
 sf::Packet &operator<<(sf::Packet &packet, ComponentType type) {
 	return packet << static_cast<u16>(type);

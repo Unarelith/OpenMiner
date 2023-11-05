@@ -26,8 +26,10 @@
  */
 #include <cassert>
 
-#include <gk/core/Exception.hpp>
+#include <SDL.h>
+#include <SDL_image.h>
 
+#include "Exception.hpp"
 #include "Texture.hpp"
 
 const Texture *Texture::s_boundTexture = nullptr;
@@ -91,7 +93,7 @@ void Texture::loadFromSurface(SDL_Surface *surface) {
 		format = (surface->format->Rmask == 0x000000ff) ? bgfx::TextureFormat::RGB8 : bgfx::TextureFormat::BGRA8;
 	}
 	else {
-		gkError() << ("Unable to load '" + m_filename + "': The image file is not using true colors").c_str();
+		logError() << ("Unable to load '" + m_filename + "': The image file is not using true colors").c_str();
 		return;
 	}
 

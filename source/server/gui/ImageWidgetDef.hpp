@@ -27,8 +27,7 @@
 #ifndef IMAGEWIDGETDEF_HPP_
 #define IMAGEWIDGETDEF_HPP_
 
-#include <gk/core/Rect.hpp>
-
+#include "Rect.hpp"
 #include "WidgetDef.hpp"
 
 class ImageWidgetDef : public WidgetDef {
@@ -42,7 +41,7 @@ class ImageWidgetDef : public WidgetDef {
 	private:
 		std::string m_texture;
 
-		gk::FloatRect m_clipRect;
+		FloatRect m_clipRect;
 };
 
 #endif // IMAGEWIDGETDEF_HPP_

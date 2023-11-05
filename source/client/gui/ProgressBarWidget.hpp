@@ -41,8 +41,8 @@ class ProgressBarWidget : public Widget {
 	public:
 		ProgressBarWidget(const Texture &texture, BlockData &blockData, ProgressBarType type, Widget *parent = nullptr);
 
-		void init(const gk::FloatRect &clipRect, const gk::Vector2i &position, const std::string &meta, unsigned int maxMetaValue);
-		void init(const gk::FloatRect &clipRect, const gk::Vector2i &position, const std::string &meta, const std::string &maxMeta);
+		void init(const FloatRect &clipRect, const Vector2i &position, const std::string &meta, unsigned int maxMetaValue);
+		void init(const FloatRect &clipRect, const Vector2i &position, const std::string &meta, const std::string &maxMeta);
 
 		void update() override;
 
@@ -51,8 +51,8 @@ class ProgressBarWidget : public Widget {
 
 		BlockData &m_blockData;
 
-		gk::FloatRect m_clipRect;
-		gk::Vector2i m_position;
+		FloatRect m_clipRect;
+		Vector2i m_position;
 
 		std::string m_meta;
 		std::string m_maxMeta;

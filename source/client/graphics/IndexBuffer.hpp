@@ -27,12 +27,12 @@
 #ifndef INDEXBUFFER_HPP_
 #define INDEXBUFFER_HPP_
 
-#include <gk/core/IntTypes.hpp>
-#include <gk/utils/NonCopyable.hpp>
-
 #include <bgfx/bgfx.h>
 
-class IndexBuffer : public gk::NonCopyable {
+#include "IntTypes.hpp"
+#include "NonCopyable.hpp"
+
+class IndexBuffer : public NonCopyable {
 	public:
 		IndexBuffer();
 		IndexBuffer(IndexBuffer &&);

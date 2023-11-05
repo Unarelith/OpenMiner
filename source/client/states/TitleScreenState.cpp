@@ -120,7 +120,7 @@ void TitleScreenState::startSingleplayer(bool showLoadingState, const std::strin
 	if (m_thread.joinable())
 		m_thread.join();
 
-	gk::LogLevel logLevel = gk::LoggerHandler::getInstance().maxLevel();
+	LogLevel logLevel = LoggerHandler::getInstance().maxLevel();
 	m_thread = std::thread([this, worldName, logLevel, seed] () {
 		ServerApplication app{*m_eventHandler};
 

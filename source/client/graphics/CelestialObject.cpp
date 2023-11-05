@@ -24,11 +24,9 @@
  *
  * =====================================================================================
  */
-#include <gk/core/GameClock.hpp>
-#include <gk/resource/ResourceHandler.hpp>
-
 #include "CelestialObject.hpp"
 #include "GameTime.hpp"
+#include "ResourceHandler.hpp"
 #include "Texture.hpp"
 #include "Vertex.hpp"
 
@@ -39,14 +37,14 @@ CelestialObject::CelestialObject() {
 void CelestialObject::setTexture(const std::string &textureName) {
 	if (textureName.empty()) return;
 
-	m_texture = &gk::ResourceHandler::getInstance().get<Texture>(textureName);
+	m_texture = &ResourceHandler::getInstance().get<Texture>(textureName);
 
 	m_isUpdateNeeded = true;
 }
 
 void CelestialObject::updateVertexBuffer() const {
 	if (m_width <= 0.f || m_height <= 0.f) {
-		gkError() << "Trying to update vertex buffer for celestial object of invalid size";
+		logError() << "Trying to update vertex buffer for celestial object of invalid size";
 		return;
 	}
 
@@ -66,7 +64,7 @@ void CelestialObject::updateVertexBuffer() const {
 	}
 
 	if (m_texture) {
-		gk::FloatRect texRect{0, 0, 1, 1};
+		FloatRect texRect{0, 0, 1, 1};
 
 		if (m_phaseCount && m_phaseSize && m_currentPhase < m_phaseCount) {
 			u16 currentPhaseX = u16(m_currentPhase % (m_texture->getSize().x / m_phaseSize));

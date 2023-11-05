@@ -35,7 +35,7 @@ using namespace LightUtils;
 void BlockMesher::addBlock(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
                            const BlockState &blockState, u16 blockParam)
 {
-	const gk::FloatBox &boundingBox = blockState.boundingBox();
+	const FloatBox &boundingBox = blockState.boundingBox();
 
 	u8f orientation = blockState.block().isRotatable()
 		? (u8f)blockState.block().param().getParam(BlockParam::Rotation, blockParam) : 0;
@@ -45,7 +45,7 @@ void BlockMesher::addBlock(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
 }
 
 void BlockMesher::addBlock(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
-                           const BlockState &blockState, const gk::FloatBox &boundingBox,
+                           const BlockState &blockState, const FloatBox &boundingBox,
                            u8f orientation, const glm::mat3 &orientMatrix)
 {
 	glm::vec3 vertexPos[nVertsPerCube]{
@@ -88,7 +88,7 @@ void BlockMesher::addBlock(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
 	for (s8f f = 0; f < nFaces ; ++f) {
 		// Construct the normal vector to a face
 		const glm::vec3 glmNormal = orientMatrix * faceNormals[f];
-		const gk::Vector3<s8f> normal{s8f(glmNormal.x), s8f(glmNormal.y), s8f(glmNormal.z)};
+		const Vector3<s8f> normal{s8f(glmNormal.x), s8f(glmNormal.y), s8f(glmNormal.z)};
 
 		// Construct an array with the 4 vertex positions of this face
 		glm::vec3 *faceVerts[nVertsPerFace]{
@@ -97,13 +97,13 @@ void BlockMesher::addBlock(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
 		};
 
 		// Construct an array with the 4 vertex neighbours of this face
-		// (as GameKit integer vectors)
-		const gk::Vector3<s8f> corner0{s8f(vNeighbour[cubeVerts[f][0]].x), s8f(vNeighbour[cubeVerts[f][0]].y), s8f(vNeighbour[cubeVerts[f][0]].z)};
-		const gk::Vector3<s8f> corner1{s8f(vNeighbour[cubeVerts[f][1]].x), s8f(vNeighbour[cubeVerts[f][1]].y), s8f(vNeighbour[cubeVerts[f][1]].z)};
-		const gk::Vector3<s8f> corner2{s8f(vNeighbour[cubeVerts[f][2]].x), s8f(vNeighbour[cubeVerts[f][2]].y), s8f(vNeighbour[cubeVerts[f][2]].z)};
-		const gk::Vector3<s8f> corner3{s8f(vNeighbour[cubeVerts[f][3]].x), s8f(vNeighbour[cubeVerts[f][3]].y), s8f(vNeighbour[cubeVerts[f][3]].z)};
+		// (as integer vectors)
+		const Vector3<s8f> corner0{s8f(vNeighbour[cubeVerts[f][0]].x), s8f(vNeighbour[cubeVerts[f][0]].y), s8f(vNeighbour[cubeVerts[f][0]].z)};
+		const Vector3<s8f> corner1{s8f(vNeighbour[cubeVerts[f][1]].x), s8f(vNeighbour[cubeVerts[f][1]].y), s8f(vNeighbour[cubeVerts[f][1]].z)};
+		const Vector3<s8f> corner2{s8f(vNeighbour[cubeVerts[f][2]].x), s8f(vNeighbour[cubeVerts[f][2]].y), s8f(vNeighbour[cubeVerts[f][2]].z)};
+		const Vector3<s8f> corner3{s8f(vNeighbour[cubeVerts[f][3]].x), s8f(vNeighbour[cubeVerts[f][3]].y), s8f(vNeighbour[cubeVerts[f][3]].z)};
 
-		const gk::Vector3<s8f> *vFaceNeighbours[nVertsPerFace]{&corner0, &corner1, &corner2, &corner3};
+		const Vector3<s8f> *vFaceNeighbours[nVertsPerFace]{&corner0, &corner1, &corner2, &corner3};
 
 		addBlockFace(x, y, z, f, job, blockState, normal, faceVerts, vFaceNeighbours);
 	}
@@ -111,9 +111,9 @@ void BlockMesher::addBlock(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
 
 void BlockMesher::addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob &job,
                               const BlockState &blockState,
-                              const gk::Vector3<s8f> &normal,
+                              const Vector3<s8f> &normal,
                               const glm::vec3 *const vertexPos[nVertsPerFace],
-                              const gk::Vector3<s8f> *const neighbourOfs[nVertsPerFace])
+                              const Vector3<s8f> *const neighbourOfs[nVertsPerFace])
 {
 	// Get surrounding block for the face
 	s8f sx = x + normal.x;
@@ -130,10 +130,10 @@ void BlockMesher::addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob 
 	 || (blockState.drawType() == BlockDrawType::Cactus && surroundingBlockState->block().id() == blockState.block().id() && f > 3)))
 		return;
 
-	const gk::FloatBox &boundingBox = blockState.boundingBox();
+	const FloatBox &boundingBox = blockState.boundingBox();
 
 	const std::string &texture = blockState.tiles().getTextureForFace(f);
-	const gk::FloatRect &blockTexCoords = job.textureAtlas->getTexCoords(texture);
+	const FloatRect &blockTexCoords = job.textureAtlas->getTexCoords(texture);
 
 	// Calculate UV's
 	// These are tough to obtain. Note that texture Y grows in the up-down direction, and so does V.
@@ -188,7 +188,7 @@ void BlockMesher::addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob 
 		vertices[v].normal[1] = (float)normal.y;
 		vertices[v].normal[2] = (float)normal.z;
 
-		const gk::Color colorMultiplier = blockState.colorMultiplier();
+		const Color colorMultiplier = blockState.colorMultiplier();
 		vertices[v].color[0] = colorMultiplier.r;
 		vertices[v].color[1] = colorMultiplier.g;
 		vertices[v].color[2] = colorMultiplier.b;
@@ -196,8 +196,8 @@ void BlockMesher::addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob 
 
 		float U = (v == 0 || v == 3) ? U0 : U1;
 		float V = (v >= 2) ? V0 : V1;
-		vertices[v].texCoord[0] = gk::qlerpf(blockTexCoords.x, blockTexCoords.x + blockTexCoords.sizeX, U);
-		vertices[v].texCoord[1] = gk::qlerpf(blockTexCoords.y, blockTexCoords.y + blockTexCoords.sizeY, V);
+		vertices[v].texCoord[0] = math::qlerpf(blockTexCoords.x, blockTexCoords.x + blockTexCoords.sizeX, U);
+		vertices[v].texCoord[1] = math::qlerpf(blockTexCoords.y, blockTexCoords.y + blockTexCoords.sizeY, V);
 
 		if (Config::isSmoothLightingEnabled)
 			vertices[v].lightValue[0] = getLightForVertex(LightType::Sun, x, y, z, *neighbourOfs[v], normal, job.chunkData);
@@ -224,7 +224,7 @@ void BlockMesher::addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob 
 			job.vertices[ChunkMeshLayer::Liquid].emplace_back(vertices[v]);
 		else if (blockState.drawType() == BlockDrawType::Glass)
 			job.vertices[ChunkMeshLayer::Glass].emplace_back(vertices[v]);
-		else if (blockState.colorMultiplier() != gk::Color::White)
+		else if (blockState.colorMultiplier() != Color::White)
 			job.vertices[ChunkMeshLayer::NoMipMap].emplace_back(vertices[v]);
 		else
 			job.vertices[ChunkMeshLayer::Solid].emplace_back(vertices[v]);

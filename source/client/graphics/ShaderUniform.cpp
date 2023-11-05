@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Exception.hpp>
-
+#include "Color.hpp"
+#include "Exception.hpp"
 #include "ShaderUniform.hpp"
 
 ShaderUniform::ShaderUniform(ShaderUniform &&shaderUniform) {
@@ -62,7 +62,7 @@ void ShaderUniform::setValue(float x, float y, float z, float w) const {
 	bgfx::setUniform(m_handle, value);
 }
 
-void ShaderUniform::setValue(const gk::Color &color, bool needsRounding) const {
+void ShaderUniform::setValue(const Color &color, bool needsRounding) const {
 	if (!needsRounding) {
 		float value[4] = {color.r, color.g, color.b, color.a};
 		bgfx::setUniform(m_handle, value);

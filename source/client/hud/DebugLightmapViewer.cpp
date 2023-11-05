@@ -31,8 +31,8 @@
 DebugLightmapViewer::DebugLightmapViewer(const ClientPlayer &player) : m_player(player) {
 	m_playerRect.setSize(7, 7);
 	m_playerRect.setOutlineThickness(1);
-	m_playerRect.setFillColor(gk::Color::White);
-	m_playerRect.setOutlineColor(gk::Color::Black);
+	m_playerRect.setFillColor(Color::White);
+	m_playerRect.setOutlineColor(Color::Black);
 
 	for (u32 x = 0 ; x < CHUNK_WIDTH ; ++x) {
 		for (u32 y = 0 ; y < CHUNK_DEPTH ; ++y) {
@@ -44,11 +44,11 @@ DebugLightmapViewer::DebugLightmapViewer(const ClientPlayer &player) : m_player(
 }
 
 void DebugLightmapViewer::update(const ClientWorld &world) {
-	gk::Vector3i playerChunkPos = m_player.getCurrentChunk();
+	Vector3i playerChunkPos = m_player.getCurrentChunk();
 
-	u32 rx = gk::pmod((s32)std::floor(m_player.x()), CHUNK_WIDTH);
-	u32 ry = gk::pmod((s32)std::floor(m_player.y()), CHUNK_DEPTH);
-	u32 rz = gk::pmod((s32)std::floor(m_player.z()), CHUNK_HEIGHT);
+	u32 rx = math::pmod((s32)std::floor(m_player.x()), CHUNK_WIDTH);
+	u32 ry = math::pmod((s32)std::floor(m_player.y()), CHUNK_DEPTH);
+	u32 rz = math::pmod((s32)std::floor(m_player.z()), CHUNK_HEIGHT);
 
 	// If this is the first time or if player moved, update the texts
 	if (!m_playerChunkPos.has_value()

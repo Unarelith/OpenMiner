@@ -52,7 +52,7 @@ void LuaCore::initUsertype(sol::state &lua) {
 		"get_config", [&](const std::string &option) {
 			auto it = ServerConfig::options.find(option);
 			if (it == ServerConfig::options.end()) {
-				gkWarning() << "Option" << option << "doesn't exist";
+				logWarning() << "Option" << option << "doesn't exist";
 				return sol::object{};
 			}
 
