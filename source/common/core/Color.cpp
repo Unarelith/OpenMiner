@@ -26,9 +26,8 @@
  */
 #include <cassert>
 
-#include <gk/core/Debug.hpp>
-
 #include "Color.hpp"
+#include "Debug.hpp"
 #include "Math.hpp"
 
 const Color Color::Black       = Color::fromRGBA32(0, 0, 0);

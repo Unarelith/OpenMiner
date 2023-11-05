@@ -24,40 +24,41 @@
  *
  * =====================================================================================
  */
-#include "LuaCore.hpp"
-#include "Registry.hpp"
-#include "ServerConfig.hpp"
-#include "ServerModLoader.hpp"
+#ifndef LOGGERHANDLER_HPP_
+#define LOGGERHANDLER_HPP_
 
-void LuaCore::addListener(LuaEventType eventType, const sol::function &listener) {
-	m_listeners.emplace(eventType, listener);
-}
+#include <thread>
+#include <unordered_map>
 
-void LuaCore::initUsertype(sol::state &lua) {
-	lua["Event"] = lua.create_table_with(
-		"BlockPlaced", LuaEventType::BlockPlaced,
-		"BlockDigged", LuaEventType::BlockDigged,
-		"BlockActivated", LuaEventType::BlockActivated,
+#include "Logger.hpp"
+#include "LogStream.hpp"
 
-		"ItemActivated", LuaEventType::ItemActivated,
+class LoggerHandler {
+	using InstanceMap = std::unordered_map<std::thread::id, LoggerHandler *>;
 
-		"PlayerConnected", LuaEventType::PlayerConnected
-	);
+	public:
+		LoggerHandler() = default;
 
-	lua.new_usertype<LuaCore>("LuaCore",
-		"registry", &LuaCore::m_registry,
-		"mod_loader", &LuaCore::m_modLoader,
+		Logger print(LogLevel level, const char *file, int line);
 
-		"add_listener", &LuaCore::addListener,
-		"get_config", [&](const std::string &option) {
-			auto it = ServerConfig::options.find(option);
-			if (it == ServerConfig::options.end()) {
-				logWarning() << "Option" << option << "doesn't exist";
-				return sol::object{};
-			}
+		LogLevel maxLevel() const { return m_maxLevel; }
+		void setMaxLevel(LogLevel maxLevel) { m_maxLevel = maxLevel; }
 
-			return it->second;
-		}
-	);
-}
+		void setName(const std::string &name) { m_name = name; }
 
+		void openLogFile(const std::string &filename) { m_stream.openFile(filename); }
+
+		static LoggerHandler &getInstance();
+		static void setInstance(LoggerHandler &instance);
+
+	private:
+		static InstanceMap s_instanceMap;
+
+		std::string m_name;
+
+		LogLevel m_maxLevel = LogLevel::Debug;
+
+		LogStream m_stream;
+};
+
+#endif // LOGGERHANDLER_HPP_

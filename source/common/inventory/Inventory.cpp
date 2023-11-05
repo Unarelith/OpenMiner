@@ -24,8 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
+#include "Debug.hpp"
 #include "EngineConfig.hpp"
 #include "Inventory.hpp"
 #include "Network.hpp"
@@ -127,7 +126,7 @@ void Inventory::deserialize(sf::Packet &packet) {
 		if (Registry::getInstance().hasItem(name))
 			setStack(x, y, name, amount);
 		else
-			gkError() << "Inventory::deserialize: Failed to find item in registry:" << name;
+			logError() << "Inventory::deserialize: Failed to find item in registry:" << name;
 
 		++i;
 	}

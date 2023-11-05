@@ -24,8 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
+#include "Debug.hpp"
 #include "LuaItemLoader.hpp"
 #include "LuaMod.hpp"
 #include "Registry.hpp"
@@ -54,7 +53,7 @@ void LuaItemLoader::loadItem(const sol::table &table) const {
 			}
 		}
 		else
-			gkError() << "For item" << stringID << ": 'groups' should be a table";
+			logError() << "For item" << stringID << ": 'groups' should be a table";
 	}
 
 	sol::object effectiveOnObject = table["effective_on"].get<sol::object>();
@@ -66,7 +65,7 @@ void LuaItemLoader::loadItem(const sol::table &table) const {
 			}
 		}
 		else
-			gkError() << "For item" << stringID << ": 'effective_on' should be a table";
+			logError() << "For item" << stringID << ": 'effective_on' should be a table";
 	}
 }
 

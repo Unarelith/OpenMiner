@@ -24,8 +24,6 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
 #include <entt/entt.hpp>
 
 #include "AnimationComponent.hpp"
@@ -36,6 +34,7 @@
 #include "ClientWorld.hpp"
 #include "ClientCommandHandler.hpp"
 #include "ConnectionErrorState.hpp"
+#include "Debug.hpp"
 #include "DrawableComponent.hpp"
 #include "DrawableDef.hpp"
 #include "GameConfig.hpp"
@@ -156,12 +155,12 @@ static void addComponentCommandCallback(Network::Command command, Client &client
 
 		auto it = entityMap.find(entityID);
 		if (it != entityMap.end()) {
-			// gkDebug() << "Received component" << Network::commandToString(command);
+			// logDebug() << "Received component" << Network::commandToString(command);
 			auto &component = world.scene().registry().get_or_emplace<ComponentType>(it->second);
 			component.deserialize(packet);
 		}
 		else
-			gkError() << Network::commandToString(command) + ": Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
+			logError() << Network::commandToString(command) + ": Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
 	});
 }
 
@@ -356,10 +355,10 @@ void ClientCommandHandler::setupCallbacks() {
 			entt::entity entity = registry.create();
 			m_entityMap.emplace(entityID, entity);
 			registry.emplace<NetworkComponent>(entity, entityID);
-			// gkDebug() << "Entity spawned:" << std::underlying_type_t<entt::entity>(entityID);
+			// logDebug() << "Entity spawned:" << std::underlying_type_t<entt::entity>(entityID);
 		}
 		else if (registry.get<NetworkComponent>(it->second).entityID != entityID) {
-			gkError() << "EntitySpawn: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
+			logError() << "EntitySpawn: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
 		}
 	});
 
@@ -372,7 +371,7 @@ void ClientCommandHandler::setupCallbacks() {
 			m_world.scene().registry().destroy(it->second);
 		}
 		else
-			gkError() << "EntityDespawn: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
+			logError() << "EntityDespawn: Entity ID" << std::underlying_type_t<entt::entity>(entityID) << "is invalid";
 	});
 
 	addComponentCommandCallback<PositionComponent>(Network::Command::EntityPosition, m_client, m_entityMap, m_world);

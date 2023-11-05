@@ -80,7 +80,7 @@ void ServerWorld::updatePlayerChunks(ServerPlayer &player, s32 cx, s32 cy, s32 c
 			m_server->sendChunkUnload(chunkPos.x, chunkPos.y, chunkPos.z, player.client());
 			chunksToRemove.emplace_back(chunkPos);
 
-			// gkDebug() << "Chunk at" << chunkPos.x << chunkPos.y << chunkPos.z << "unloaded for player" << player.name();
+			// logDebug() << "Chunk at" << chunkPos.x << chunkPos.y << chunkPos.z << "unloaded for player" << player.name();
 		}
 	}
 
@@ -172,7 +172,7 @@ void ServerWorld::processSendRequests() {
 	// u64 chunksTooOld = 0;
 
 	// if (!m_chunkSendRequestQueue.empty())
-	// 	gkDebug() << "Processing send requests...";
+	// 	logDebug() << "Processing send requests...";
 
 	u64 start = GameClock::getInstance().getTicks(true);
 	u64 now = start;
@@ -208,7 +208,7 @@ void ServerWorld::processSendRequests() {
 					generateChunk((ServerChunk &)*chunk.getSurroundingChunk(Chunk::Top));
 
 					if (!chunk.areAllNeighboursInitialized())
-						gkWarning() << "All neighbours of chunk" << chunkPos << "aren't initialized when they should be";
+						logWarning() << "All neighbours of chunk" << chunkPos << "aren't initialized when they should be";
 					else {
 						chunk.lightmap().updateLights();
 						chunk.setReadyToSend();
@@ -220,7 +220,7 @@ void ServerWorld::processSendRequests() {
 					}
 				}
 
-				// gkDebug() << "OK for chunk" << chunkPos.x << chunkPos.y << chunkPos.z << ":" << glm::length(playerPos - chunkWorldPos) << "<" << (int)ServerConfig::renderDistance * CHUNK_WIDTH;
+				// logDebug() << "OK for chunk" << chunkPos.x << chunkPos.y << chunkPos.z << ":" << glm::length(playerPos - chunkWorldPos) << "<" << (int)ServerConfig::renderDistance * CHUNK_WIDTH;
 
 				auto addChunkToQueue = [this](Vector3i pos, s8 dx, s8 dy, s8 dz, ServerPlayer &player) {
 					pos.x += dx; pos.y += dy; pos.z += dz;
@@ -250,7 +250,7 @@ void ServerWorld::processSendRequests() {
 	}
 
 	// if (now - start > 0) {
-	// 	gkDebug() << "Done in" << now - start << "ms for dim" << m_dimension.id()
+	// 	logDebug() << "Done in" << now - start << "ms for dim" << m_dimension.id()
 	// 		<< "| Gen:" << chunksGenerated
 	// 		<< "| Sent:" << chunksSent
 	// 		// << "| BTQ:" << chunksBackToQueue

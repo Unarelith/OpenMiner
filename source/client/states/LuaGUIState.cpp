@@ -26,13 +26,12 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/Debug.hpp>
-
 #include "ApplicationStateStack.hpp"
 #include "ClientPlayer.hpp"
 #include "ClientWorld.hpp"
 #include "Color.hpp"
 #include "Config.hpp"
+#include "Debug.hpp"
 #include "GameKey.hpp"
 #include "GamePad.hpp"
 #include "InventoryWidget.hpp"
@@ -118,7 +117,7 @@ void LuaGUIState::onEvent(const SDL_Event &event) {
 			}
 
 			if (!dest) {
-				gkWarning() << "Destination not found:" << shiftDestination;
+				logWarning() << "Destination not found:" << shiftDestination;
 				return;
 			}
 
@@ -149,7 +148,7 @@ void LuaGUIState::update() {
 			inv->second.applySearch(m_textInputs.at(it.first).string());
 		}
 		else
-			gkError() << "Can't find linked inventory" << it.second << "for text input" << it.first;
+			logError() << "Can't find linked inventory" << it.second << "for text input" << it.first;
 	}
 
 	for (auto &it : m_widgets)
@@ -279,7 +278,7 @@ void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf:
 
 		BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
 		if (!data) {
-			gkError() << "No inventory found at" << block.x << block.y << block.z;
+			logError() << "No inventory found at" << block.x << block.y << block.z;
 			return;
 		}
 
@@ -296,7 +295,7 @@ void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf:
 		else {
 			auto it = m_inventories.find(inventoryName);
 			if (it == m_inventories.end())
-				gkError() << "Unable to find inventory" << inventoryName << "for widget" << name;
+				logError() << "Unable to find inventory" << inventoryName << "for widget" << name;
 
 			widgetInventory = &it->second;
 		}
@@ -312,7 +311,7 @@ void LuaGUIState::loadInventoryWidget(const std::string &name, s32 x, s32 y, sf:
 		inventoryWidget.setFilter(filter);
 	}
 	else {
-		gkError() << "Inventory widget" << name << " is invalid";
+		logError() << "Inventory widget" << name << " is invalid";
 	}
 }
 
@@ -329,7 +328,7 @@ void LuaGUIState::loadCraftingWidget(const std::string &name, s32 x, s32 y, sf::
 
 		BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
 		if (!data) {
-			gkError() << "No inventory found at" << block.x << block.y << block.z;
+			logError() << "No inventory found at" << block.x << block.y << block.z;
 		}
 		else {
 			craftingInventory = &data->inventory;
@@ -352,7 +351,7 @@ void LuaGUIState::loadCraftingWidget(const std::string &name, s32 x, s32 y, sf::
 		craftingWidget.craftingResultInventoryWidget().setPosition((float)resultX, (float)resultY);
 	}
 	else {
-		gkError() << "Crafting inventory is invalid";
+		logError() << "Crafting inventory is invalid";
 	}
 }
 
@@ -368,7 +367,7 @@ void LuaGUIState::loadProgressBarWidget(const std::string &, s32 x, s32 y, sf::P
 
 	BlockData *data = m_world.getBlockData(block.x, block.y, block.z);
 	if (!data) {
-		gkError() << "No inventory found at" << block.x << block.y << block.z;
+		logError() << "No inventory found at" << block.x << block.y << block.z;
 		return;
 	}
 

@@ -100,7 +100,7 @@ void ServerLoadingState::update() {
 			try {
 				m_game.textureAtlas().loadFromRegistry(Config::texturePack);
 			}
-			catch (gk::Exception &e) {
+			catch (Exception &e) {
 				m_game.client().disconnect();
 				throw e;
 			}

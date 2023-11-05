@@ -24,9 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
 #include "Config.hpp"
+#include "Debug.hpp"
 #include "ScrollBarWidget.hpp"
 
 void ScrollBarWidget::init(const Texture &texture, const FloatRect &clipRect, u16 minY, u16 maxY, InventoryWidget &widget) {

@@ -24,9 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
 #include "BlockPlacementConstraints.hpp"
+#include "Debug.hpp"
 #include "LuaBlockLoader.hpp"
 #include "LuaMod.hpp"
 #include "Registry.hpp"
@@ -162,10 +161,10 @@ inline void LuaBlockLoader::loadDrawType(BlockState &state, const sol::table &ta
 				state.drawType(it->second);
 			}
 			else
-				gkError() << "In" << block.stringID() << " definition: Block draw type invalid";
+				logError() << "In" << block.stringID() << " definition: Block draw type invalid";
 		}
 		else
-			gkError() << "In" << block.stringID() << " definition: Block draw type must be a string";
+			logError() << "In" << block.stringID() << " definition: Block draw type must be a string";
 	}
 
 	if (state.drawType() == BlockDrawType::Liquid || state.drawType() == BlockDrawType::XShape) {
@@ -205,13 +204,13 @@ inline void LuaBlockLoader::loadStates(ServerBlock &block, BlockState &state, co
 					loadBlockState(state, statesObject.second.as<sol::table>(), block);
 				}
 				else {
-					gkError() << ("For block '" + block.stringID() + "':").c_str() << "States must be defined in a correct order starting from 1";
-					gkError() << "StateID:" << stateID << "| States registered:" << block.states().size();
+					logError() << ("For block '" + block.stringID() + "':").c_str() << "States must be defined in a correct order starting from 1";
+					logError() << "StateID:" << stateID << "| States registered:" << block.states().size();
 				}
 			}
 		}
 		else
-			gkError() << "For block" << state.block().stringID() << ": 'states' must be a table";
+			logError() << "For block" << state.block().stringID() << ": 'states' must be a table";
 	}
 }
 
@@ -230,7 +229,7 @@ inline void LuaBlockLoader::loadPlacementConstraints(ServerBlock &block, const s
 					constraint.blockOffset.z = blockOffset.value().get<u32>(3);
 				}
 				else
-					gkError() << "For block" << block.stringID() << ": 'placement_constraints' offset is wrong";
+					logError() << "For block" << block.stringID() << ": 'placement_constraints' offset is wrong";
 
 				sol::optional<sol::table> constraintTable = constraintsObject.second.as<sol::table>();
 				if (constraintTable != sol::nullopt) {
@@ -238,13 +237,13 @@ inline void LuaBlockLoader::loadPlacementConstraints(ServerBlock &block, const s
 					constraint.isWhitelist = constraintTable.value()["is_whitelist"].get<bool>();
 				}
 				else
-					gkError() << "For block" << block.stringID() << ": 'placement_constraints' table is wrong";
+					logError() << "For block" << block.stringID() << ": 'placement_constraints' table is wrong";
 
 				block.placementConstraints().addConstraint(constraint);
 			}
 		}
 		else
-			gkError() << "For block" << block.stringID() << ": 'placement_constraints' must be a table";
+			logError() << "For block" << block.stringID() << ": 'placement_constraints' must be a table";
 	}
 }
 
@@ -263,7 +262,7 @@ inline void LuaBlockLoader::loadGroups(ServerBlock &block, const sol::table &tab
 			}
 		}
 		else
-			gkError() << "For block" << block.stringID() << ": 'groups' must be a table";
+			logError() << "For block" << block.stringID() << ": 'groups' must be a table";
 	}
 }
 

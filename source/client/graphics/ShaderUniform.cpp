@@ -24,9 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Exception.hpp>
-
 #include "Color.hpp"
+#include "Exception.hpp"
 #include "ShaderUniform.hpp"
 
 ShaderUniform::ShaderUniform(ShaderUniform &&shaderUniform) {

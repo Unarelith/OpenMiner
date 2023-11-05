@@ -26,12 +26,11 @@
  */
 #include <fstream>
 
-#include <gk/core/Debug.hpp>
-
 #include <sol/sol.hpp>
 
 #include <filesystem.hpp>
 
+#include "Debug.hpp"
 #include "GameKey.hpp"
 #include "KeyboardHandler.hpp"
 
@@ -77,7 +76,7 @@ void KeyboardHandler::loadKeysFromFile(const std::string &filename) {
 						GameKeyID key = keyit->second;
 						m_keys[key].setKeycode(keycode);
 						if (m_keys[key].keycode() == SDLK_UNKNOWN) {
-							gkWarning() << "Key name '" + keyValue + "' not recognized";
+							logWarning() << "Key name '" + keyValue + "' not recognized";
 						}
 					}
 					else {
@@ -86,10 +85,10 @@ void KeyboardHandler::loadKeysFromFile(const std::string &filename) {
 				}
 			}
 
-			gkInfo() << "Key mapping loaded successfully";
+			logInfo() << "Key mapping loaded successfully";
 		}
 		catch (sol::error &e) {
-			gkError() << e.what();
+			logError() << e.what();
 		}
 	}
 }

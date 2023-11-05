@@ -53,7 +53,7 @@ void NetworkController::sendEntities(entt::registry &registry, const ClientInfo 
 	registry.view<NetworkComponent>().each([&] (auto entity, auto &network) {
 		m_server->sendEntitySpawn(network.entityID, &client);
 
-		// gkDebug() << "sendEntitySpawn" << std::underlying_type_t<entt::entity>(network.entityID);
+		// logDebug() << "sendEntitySpawn" << std::underlying_type_t<entt::entity>(network.entityID);
 
 		registry.visit(entity, [&] (const auto &component_type) {
 			const auto &type = entt::resolve(component_type);
@@ -61,7 +61,7 @@ void NetworkController::sendEntities(entt::registry &registry, const ClientInfo 
 				const auto &component = type.func("get"_hs).invoke({}, std::ref(registry), entity);
 				Network::Packet packet = type.func("serialize"_hs).invoke({}, entity, component, false).template cast<Network::Packet>();
 				if (packet.getDataSize()) {
-					// gkDebug() << "sendEntities: Serializing component" << type.prop("name"_hs).value().template cast<std::string>() << "for entity" << std::underlying_type_t<entt::entity>(entity) << "of size" << packet.getDataSize();
+					// logDebug() << "sendEntities: Serializing component" << type.prop("name"_hs).value().template cast<std::string>() << "for entity" << std::underlying_type_t<entt::entity>(entity) << "of size" << packet.getDataSize();
 					client.tcpSocket->send(packet);
 				}
 			}

@@ -26,9 +26,8 @@
  */
 #include <cassert>
 
-#include <gk/core/Debug.hpp>
-
 #include "CompressedPacket.hpp"
+#include "Debug.hpp"
 
 // Note: This class was implemented thanks to this SFML forum topic:
 // https://en.sfml-dev.org/forums/index.php?topic=14344.0
@@ -61,7 +60,7 @@ const void* CompressedPacket::onSend(std::size_t& size) {
 	// Compress the data into the rest of the buffer
 	int result = compress(m_compressionBuffer.data() + 2, &dstSize, srcData, srcSize);
 	if (result != Z_OK)
-		gkError() << "Failed to compress packet";
+		logError() << "Failed to compress packet";
 
 	// Set the size to the compressed size plus
 	// two bytes for the size marker
@@ -88,7 +87,7 @@ void CompressedPacket::onReceive(const void* data, std::size_t size) {
 	// Uncompress the data (remove the first two bytes)
 	int result = uncompress(m_compressionBuffer.data(), &dstSize, (srcData + 2), (uLong)(size - 2));
 	if (result != Z_OK)
-		gkError() << "Failed to uncompress packet";
+		logError() << "Failed to uncompress packet";
 
 	// Assert that the uncompressed size is the same as the
 	// size we were sent for the buffer

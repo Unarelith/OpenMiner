@@ -24,10 +24,9 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Exception.hpp>
-
 #include <filesystem.hpp>
 
+#include "Exception.hpp"
 #include "LuaMod.hpp"
 #include "ScriptEngine.hpp"
 #include "ServerModLoader.hpp"
@@ -71,7 +70,7 @@ void ServerModLoader::loadMods() {
 
 				if (!mod.id.empty()) {
 					if (mod.id != entry.path().filename().string())
-						gkWarning() << ("Mod ID '" + mod.id + "' is different from folder name '" + entry.path().filename().string() + "'").c_str();
+						logWarning() << ("Mod ID '" + mod.id + "' is different from folder name '" + entry.path().filename().string() + "'").c_str();
 
 					auto it = mods.find(mod.id);
 					if (it == mods.end()) {
@@ -80,7 +79,7 @@ void ServerModLoader::loadMods() {
 							for (auto &it : dependencies.as<sol::table>()) {
 								std::string dependencyID = it.second.as<std::string>();
 								if (dependencyID.empty()) {
-									gkWarning() << "Mod '" + mod.id + "' contain an empty dependency";
+									logWarning() << "Mod '" + mod.id + "' contain an empty dependency";
 									continue;
 								}
 
@@ -91,26 +90,26 @@ void ServerModLoader::loadMods() {
 							}
 						}
 						else
-							gkWarning() << ("Failed to load dependencies for mod '" + mod.id + "'").c_str();
+							logWarning() << ("Failed to load dependencies for mod '" + mod.id + "'").c_str();
 
 						mods.emplace(mod.id, mod);
 					}
 					else {
-						gkError() << ("Trying to load mod '" + mod.id + "' twice").c_str();
-						gkError() << "Loaded path: " << it->second.path.string();
-						gkError() << "Current path:" << mod.path.string();
+						logError() << ("Trying to load mod '" + mod.id + "' twice").c_str();
+						logError() << "Loaded path: " << it->second.path.string();
+						logError() << "Current path:" << mod.path.string();
 					}
 				}
 				else
-					gkError() << ("Failed to load mod '" + mod.path.filename().string() + "': Mod ID required in 'config.lua'").c_str();
+					logError() << ("Failed to load mod '" + mod.path.filename().string() + "': Mod ID required in 'config.lua'").c_str();
 			}
 			catch (sol::error &e) {
-				gkError() << e.what();
+				logError() << e.what();
 			}
 
 		}
 		else
-			gkError() << ("The mod at '" + entry.path().string() + "' doesn't contain a 'config.lua' file.").c_str();
+			logError() << ("The mod at '" + entry.path().string() + "' doesn't contain a 'config.lua' file.").c_str();
 	}
 
 	std::queue<ModEntry *> dependencyTree;
@@ -126,7 +125,7 @@ void ServerModLoader::loadMods() {
 			bool hasDependency = false;
 			for (const ModDependency &dependency : mod->dependencies) {
 				if (dependency.id == modit.second.id) {
-					gkError() << ("Cyclic dependency detected for mod '" + modit.second.id + "' in mod '" + mod->id + "'").c_str();
+					logError() << ("Cyclic dependency detected for mod '" + modit.second.id + "' in mod '" + mod->id + "'").c_str();
 					mod->isValid = false;
 					break;
 				}
@@ -138,7 +137,7 @@ void ServerModLoader::loadMods() {
 					hasDependency = true;
 				}
 				else if (dependency.isRequired) {
-					gkError() << ("Mod '" + mod->id + "' cannot be loaded: Missing dependency '" + dependency.id + "'").c_str();
+					logError() << ("Mod '" + mod->id + "' cannot be loaded: Missing dependency '" + dependency.id + "'").c_str();
 					mod->isValid = false;
 				}
 			}
@@ -165,16 +164,16 @@ void ServerModLoader::loadMods() {
 				m_scriptEngine.lua().safe_script_file("init.lua");
 			}
 			catch (const sol::error &e) {
-				gkError() << "Error: Failed to load mod at" << mod->path.string();
-				gkError() << e.what();
+				logError() << "Error: Failed to load mod at" << mod->path.string();
+				logError() << e.what();
 			}
 
 			fs::current_path(basePath);
 
-			gkInfo() << "Mod" << mod->id << "loaded";
+			logInfo() << "Mod" << mod->id << "loaded";
 		}
 		else
-			gkError() << ("The mod at '" + mod->path.string() + "' doesn't contain an 'init.lua' file.").c_str();
+			logError() << ("The mod at '" + mod->path.string() + "' doesn't contain an 'init.lua' file.").c_str();
 
 		mod->isLoaded = true;
 
@@ -184,13 +183,13 @@ void ServerModLoader::loadMods() {
 	}
 
 	for (auto &it : m_mods) {
-		// gkDebug() << "Applying mod" << it.second.id() << "...";
+		// logDebug() << "Applying mod" << it.second.id() << "...";
 		it.second.commit();
 	}
 }
 
 LuaMod &ServerModLoader::registerMod(const std::string &name) {
-	// gkDebug("Registering mod" << mod.id() << "...";
+	// logDebug("Registering mod" << mod.id() << "...";
 
 	if (!utils::regexMatch(name, "^[A-Za-z0-9_]+$") || name == "group")
 		throw std::runtime_error("Mod name '" + name + "' is invalid.");

@@ -24,40 +24,13 @@
  *
  * =====================================================================================
  */
-#include "LuaCore.hpp"
-#include "Registry.hpp"
-#include "ServerConfig.hpp"
-#include "ServerModLoader.hpp"
+#include "Logger.hpp"
+#include "LoggerUtils.hpp"
 
-void LuaCore::addListener(LuaEventType eventType, const sol::function &listener) {
-	m_listeners.emplace(eventType, listener);
+std::ostream &operator<<(std::ostream &stream, LoggerColor color) {
+	return stream << Logger::textColor(color);
 }
 
-void LuaCore::initUsertype(sol::state &lua) {
-	lua["Event"] = lua.create_table_with(
-		"BlockPlaced", LuaEventType::BlockPlaced,
-		"BlockDigged", LuaEventType::BlockDigged,
-		"BlockActivated", LuaEventType::BlockActivated,
-
-		"ItemActivated", LuaEventType::ItemActivated,
-
-		"PlayerConnected", LuaEventType::PlayerConnected
-	);
-
-	lua.new_usertype<LuaCore>("LuaCore",
-		"registry", &LuaCore::m_registry,
-		"mod_loader", &LuaCore::m_modLoader,
-
-		"add_listener", &LuaCore::addListener,
-		"get_config", [&](const std::string &option) {
-			auto it = ServerConfig::options.find(option);
-			if (it == ServerConfig::options.end()) {
-				logWarning() << "Option" << option << "doesn't exist";
-				return sol::object{};
-			}
-
-			return it->second;
-		}
-	);
+std::ostream &operator<<(std::ostream &stream, const Color &color) {
+	return stream << "Color(" << color.r * 255 << ", " << color.g * 255 << ", " << color.b * 255 << ", " << color.a * 255 << ")";
 }
-

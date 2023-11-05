@@ -26,9 +26,8 @@
  */
 #include <ctime>
 
-#include <gk/core/Exception.hpp>
-
 #include "CoreApplication.hpp"
+#include "Exception.hpp"
 #include "Mouse.hpp"
 #include "Platform.hpp"
 
@@ -60,7 +59,7 @@ bool CoreApplication::init() {
 	ApplicationStateStack::setInstance(m_stateStack);
 	GameClock::setInstance(m_clock);
 	ResourceHandler::setInstance(m_resourceHandler);
-	gk::LoggerHandler::setInstance(m_loggerHandler);
+	LoggerHandler::setInstance(m_loggerHandler);
 
 	m_stateStack.setEventHandler(m_eventHandler);
 
@@ -87,8 +86,8 @@ int CoreApplication::run(bool isProtected) {
 		try {
 			runGame();
 		}
-		catch(const gk::Exception &e) {
-			gkError() << "Fatal error" << e.what();
+		catch(const Exception &e) {
+			logError() << "Fatal error" << e.what();
 			exit();
 			return 1;
 		}

@@ -30,7 +30,6 @@
 #include <string>
 #include <unordered_map>
 
-#include <gk/core/Debug.hpp> // FIXME
 #include <gk/core/IntTypes.hpp>
 
 #include "BlockParam.hpp"

@@ -24,8 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Exception.hpp>
-
+#include "Exception.hpp"
 #include "XMLFile.hpp"
 
 XMLFile::XMLFile(const std::string &filename) {

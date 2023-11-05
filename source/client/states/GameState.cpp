@@ -26,12 +26,11 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <gk/core/Exception.hpp>
-
 #include "ApplicationStateStack.hpp"
 #include "BgfxView.hpp"
 #include "ChatState.hpp"
 #include "Events.hpp"
+#include "Exception.hpp"
 #include "GameClock.hpp"
 #include "GameKey.hpp"
 #include "GamePad.hpp"

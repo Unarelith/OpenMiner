@@ -24,40 +24,31 @@
  *
  * =====================================================================================
  */
-#include "LuaCore.hpp"
-#include "Registry.hpp"
-#include "ServerConfig.hpp"
-#include "ServerModLoader.hpp"
+#include "Logger.hpp"
+#include "LogStream.hpp"
 
-void LuaCore::addListener(LuaEventType eventType, const sol::function &listener) {
-	m_listeners.emplace(eventType, listener);
+bool Logger::isEnabled = true;
+bool Logger::printFileAndLine = false;
+bool Logger::printWithColor = false;
+
+std::string Logger::textColor(LoggerColor color, bool bold) {
+	return (!printWithColor) ? ""
+		: std::string("\33[0;") + ((u8(color) < 10) ? "0" : "") + std::to_string(u8(color)) + ";0" + ((bold) ? "1" : "0") + "m";
 }
 
-void LuaCore::initUsertype(sol::state &lua) {
-	lua["Event"] = lua.create_table_with(
-		"BlockPlaced", LuaEventType::BlockPlaced,
-		"BlockDigged", LuaEventType::BlockDigged,
-		"BlockActivated", LuaEventType::BlockActivated,
+void Logger::print() {
+	if (!isEnabled || m_level == LogLevel::None) return;
 
-		"ItemActivated", LuaEventType::ItemActivated,
+	m_outStream << textColor(m_color, m_isBold);
 
-		"PlayerConnected", LuaEventType::PlayerConnected
-	);
+	char levels[4] = {'D', 'I', 'W', 'E'};
+	m_outStream << "[" + utils::getCurrentTime("%H:%M:%S") + "] [" << levels[m_level] << "] ";
 
-	lua.new_usertype<LuaCore>("LuaCore",
-		"registry", &LuaCore::m_registry,
-		"mod_loader", &LuaCore::m_modLoader,
+	if (printFileAndLine)
+		m_outStream << m_file << ":" << m_line << ": ";
 
-		"add_listener", &LuaCore::addListener,
-		"get_config", [&](const std::string &option) {
-			auto it = ServerConfig::options.find(option);
-			if (it == ServerConfig::options.end()) {
-				logWarning() << "Option" << option << "doesn't exist";
-				return sol::object{};
-			}
+	if (!m_sourceName.empty())
+		m_outStream << "[" + m_sourceName + "] ";
 
-			return it->second;
-		}
-	);
+	m_outStream << m_stream.str() << std::endl;
 }
-

@@ -24,40 +24,22 @@
  *
  * =====================================================================================
  */
-#include "LuaCore.hpp"
-#include "Registry.hpp"
-#include "ServerConfig.hpp"
-#include "ServerModLoader.hpp"
+#include "Exception.hpp"
+#include "LoggerHandler.hpp"
 
-void LuaCore::addListener(LuaEventType eventType, const sol::function &listener) {
-	m_listeners.emplace(eventType, listener);
+LoggerHandler::InstanceMap LoggerHandler::s_instanceMap;
+
+Logger LoggerHandler::print(LogLevel level, const char *file, int line) {
+	return {m_stream, level >= m_maxLevel ? level : LogLevel::None, file, line, m_name};
 }
 
-void LuaCore::initUsertype(sol::state &lua) {
-	lua["Event"] = lua.create_table_with(
-		"BlockPlaced", LuaEventType::BlockPlaced,
-		"BlockDigged", LuaEventType::BlockDigged,
-		"BlockActivated", LuaEventType::BlockActivated,
+LoggerHandler &LoggerHandler::getInstance() {
+	if (s_instanceMap.empty())
+		throw EXCEPTION("LoggerHandler is not initialized");
 
-		"ItemActivated", LuaEventType::ItemActivated,
-
-		"PlayerConnected", LuaEventType::PlayerConnected
-	);
-
-	lua.new_usertype<LuaCore>("LuaCore",
-		"registry", &LuaCore::m_registry,
-		"mod_loader", &LuaCore::m_modLoader,
-
-		"add_listener", &LuaCore::addListener,
-		"get_config", [&](const std::string &option) {
-			auto it = ServerConfig::options.find(option);
-			if (it == ServerConfig::options.end()) {
-				logWarning() << "Option" << option << "doesn't exist";
-				return sol::object{};
-			}
-
-			return it->second;
-		}
-	);
+	return *s_instanceMap.at(std::this_thread::get_id());
 }
 
+void LoggerHandler::setInstance(LoggerHandler &instance) {
+	s_instanceMap.emplace(std::this_thread::get_id(), &instance);
+}

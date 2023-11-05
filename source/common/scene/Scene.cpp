@@ -24,11 +24,10 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
 #include <entt/entt.hpp>
 
 #include "ComponentType.hpp"
+#include "Debug.hpp"
 #include "ISerializable.hpp"
 #include "Network.hpp"
 #include "NetworkUtils.hpp"
@@ -53,7 +52,7 @@ void Scene::update() {
 // Opaque entity stamper: https://github.com/skypjack/entt/issues/481#issuecomment-627614706
 entt::entity Scene::createEntityFromModel(entt::registry &modelRegistry, entt::entity modelEntity) {
 	if (!modelRegistry.valid(modelEntity)) {
-		gkError() << "Failed to create entity from model: Model entity with ID" << (u32)modelEntity << "doesn't exist";
+		logError() << "Failed to create entity from model: Model entity with ID" << (u32)modelEntity << "doesn't exist";
 		return entt::null;
 	}
 

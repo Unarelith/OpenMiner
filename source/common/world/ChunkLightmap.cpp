@@ -26,10 +26,9 @@
  */
 #include <cstring>
 
-#include <gk/core/Debug.hpp>
-
 #include "Chunk.hpp"
 #include "ChunkLightmap.hpp"
+#include "Debug.hpp"
 #include "Registry.hpp"
 #include "World.hpp"
 

@@ -24,40 +24,20 @@
  *
  * =====================================================================================
  */
-#include "LuaCore.hpp"
-#include "Registry.hpp"
-#include "ServerConfig.hpp"
-#include "ServerModLoader.hpp"
+#ifndef DEBUG_HPP_
+#define DEBUG_HPP_
 
-void LuaCore::addListener(LuaEventType eventType, const sol::function &listener) {
-	m_listeners.emplace(eventType, listener);
-}
+#include <cstring>
 
-void LuaCore::initUsertype(sol::state &lua) {
-	lua["Event"] = lua.create_table_with(
-		"BlockPlaced", LuaEventType::BlockPlaced,
-		"BlockDigged", LuaEventType::BlockDigged,
-		"BlockActivated", LuaEventType::BlockActivated,
+#include "LoggerHandler.hpp"
 
-		"ItemActivated", LuaEventType::ItemActivated,
+#define _FILE (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
 
-		"PlayerConnected", LuaEventType::PlayerConnected
-	);
+#define logDebug()    (LoggerHandler::getInstance().print(Debug,   _FILE, __LINE__))
+#define logInfo()     (LoggerHandler::getInstance().print(Info,    _FILE, __LINE__))
+#define logWarning()  (LoggerHandler::getInstance().print(Warning, _FILE, __LINE__))
+#define logError()    (LoggerHandler::getInstance().print(Error,   _FILE, __LINE__))
 
-	lua.new_usertype<LuaCore>("LuaCore",
-		"registry", &LuaCore::m_registry,
-		"mod_loader", &LuaCore::m_modLoader,
+#define logTrace(s) do { logInfo() << "Function called: " #s; s } while (false);
 
-		"add_listener", &LuaCore::addListener,
-		"get_config", [&](const std::string &option) {
-			auto it = ServerConfig::options.find(option);
-			if (it == ServerConfig::options.end()) {
-				logWarning() << "Option" << option << "doesn't exist";
-				return sol::object{};
-			}
-
-			return it->second;
-		}
-	);
-}
-
+#endif // DEBUG_HPP_

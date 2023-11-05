@@ -31,8 +31,7 @@
 #include <memory>
 #include <string>
 
-#include <gk/core/Exception.hpp>
-
+#include "Exception.hpp"
 #include "IResourceLoader.hpp"
 #include "XMLFile.hpp"
 

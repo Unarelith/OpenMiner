@@ -28,10 +28,9 @@
 
 #include <algorithm>
 
-#include <gk/core/Debug.hpp>
-
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
+#include "Debug.hpp"
 #include "EventHandler.hpp"
 #include "Events.hpp"
 #include "GamePad.hpp"

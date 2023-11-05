@@ -40,7 +40,7 @@ Block::Block(u16 id, const std::string &stringID) {
 
 const TilesDef &Block::tiles(u16 stateID) const {
 	if (stateID >= m_states.size()) {
-		gkError() << ("Failed to get tiles for block '" + m_stringID + "': State").c_str() << stateID << "doesn't exist";
+		logError() << ("Failed to get tiles for block '" + m_stringID + "': State").c_str() << stateID << "doesn't exist";
 		return m_states[0].tiles();
 	}
 
@@ -75,7 +75,7 @@ BlockState &Block::addState() {
 
 BlockState &Block::getState(u16 id) {
 	if (id >= m_states.size()) {
-		gkError() << "Failed to get state" << id << "in block" << m_stringID;
+		logError() << "Failed to get state" << id << "in block" << m_stringID;
 		return m_states.at(0);
 	}
 
@@ -84,7 +84,7 @@ BlockState &Block::getState(u16 id) {
 
 const BlockState &Block::getState(u16 id) const {
 	if (id >= m_states.size()) {
-		gkError() << "Failed to get state" << id << "in block" << m_stringID;
+		logError() << "Failed to get state" << id << "in block" << m_stringID;
 		return m_states.at(0);
 	}
 

@@ -24,40 +24,35 @@
  *
  * =====================================================================================
  */
-#include "LuaCore.hpp"
-#include "Registry.hpp"
-#include "ServerConfig.hpp"
-#include "ServerModLoader.hpp"
+#ifndef EXCEPTION_HPP_
+#define EXCEPTION_HPP_
 
-void LuaCore::addListener(LuaEventType eventType, const sol::function &listener) {
-	m_listeners.emplace(eventType, listener);
-}
+#include <exception>
+#include <string>
 
-void LuaCore::initUsertype(sol::state &lua) {
-	lua["Event"] = lua.create_table_with(
-		"BlockPlaced", LuaEventType::BlockPlaced,
-		"BlockDigged", LuaEventType::BlockDigged,
-		"BlockActivated", LuaEventType::BlockActivated,
+#include "Debug.hpp"
+#include "Utils.hpp"
 
-		"ItemActivated", LuaEventType::ItemActivated,
+#define EXCEPTION(...) (Exception(__LINE__, _FILE, __VA_ARGS__))
 
-		"PlayerConnected", LuaEventType::PlayerConnected
-	);
-
-	lua.new_usertype<LuaCore>("LuaCore",
-		"registry", &LuaCore::m_registry,
-		"mod_loader", &LuaCore::m_modLoader,
-
-		"add_listener", &LuaCore::addListener,
-		"get_config", [&](const std::string &option) {
-			auto it = ServerConfig::options.find(option);
-			if (it == ServerConfig::options.end()) {
-				logWarning() << "Option" << option << "doesn't exist";
-				return sol::object{};
-			}
-
-			return it->second;
+class Exception {
+	public:
+		template<typename... Args>
+		Exception(u16 line, const std::string &filename, Args... args) noexcept {
+			m_errorMsg = Logger::textColor(LoggerColor::Red, true);
+			m_errorMsg += "at " + filename + ":" + std::to_string(line) + ": ";
+			m_errorMsg += utils::makeString(std::forward<Args>(args)...);
+			m_errorMsg += Logger::textColor();
 		}
-	);
-}
 
+		virtual ~Exception() = default;
+
+		virtual const char *what() const noexcept {
+			return m_errorMsg.c_str();
+		}
+
+	private:
+		std::string m_errorMsg;
+};
+
+#endif // EXCEPTION_HPP_

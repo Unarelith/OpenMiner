@@ -102,7 +102,7 @@ void ClientWorld::requestChunkMeshing() {
 			chunk->setChanged();
 			addChunkToUpdate(chunk);
 
-			// gkDebug() << "Chunk at" << ux << uy << uz << "is ready for meshing";
+			// logDebug() << "Chunk at" << ux << uy << uz << "is ready for meshing";
 		}
 
 		it = m_chunksToMesh.erase(it);
@@ -177,7 +177,7 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 	addChunkToUpdate(chunk);
 
 	// if (!hasUpdatedChunk)
-	// 	gkWarning() << "Received chunk at" << cx << cy << cz << "without any updates";
+	// 	logWarning() << "Received chunk at" << cx << cy << cz << "without any updates";
 
 	++chunk->debugTimesReceived;
 
@@ -203,7 +203,7 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 	if (m_eventHandler)
 		m_eventHandler->emplaceEvent<ChunkCreatedEvent>(Vector3i{cx, cy, cz}, true);
 
-	// gkDebug() << "Chunk at" << cx << cy << cz << "received";
+	// logDebug() << "Chunk at" << cx << cy << cz << "received";
 
 	OM_PROFILE_END("ClientWorld::receiveChunkData");
 }
@@ -211,7 +211,7 @@ void ClientWorld::receiveChunkData(Network::Packet &packet) {
 void ClientWorld::removeChunk(const Vector3i &chunkPos) {
 	auto it = m_chunks.find(chunkPos);
 	if (it == m_chunks.end()) {
-		gkWarning() << "Tried to remove unloaded chunk at" << chunkPos.x << chunkPos.y << chunkPos.z;
+		logWarning() << "Tried to remove unloaded chunk at" << chunkPos.x << chunkPos.y << chunkPos.z;
 		return;
 	}
 
@@ -233,7 +233,7 @@ void ClientWorld::removeChunk(const Vector3i &chunkPos) {
 		if (surroundingChunks[i])
 			surroundingChunks[i]->setSurroundingChunk((i % 2 == 0) ? i + 1 : i - 1, nullptr);
 
-	// gkDebug() << "Chunk at" << chunkPos.x << chunkPos.y << chunkPos.z << "removed";
+	// logDebug() << "Chunk at" << chunkPos.x << chunkPos.y << chunkPos.z << "removed";
 }
 
 Chunk *ClientWorld::getChunk(int cx, int cy, int cz) const {
@@ -270,7 +270,7 @@ void ClientWorld::linkChunkNeighbours(ClientChunk *chunk) {
 
 void ClientWorld::draw(RenderTarget &target, RenderStates states) const {
 	if (!target.getView() || !m_camera) {
-		gkError() << "Trying to draw world without a camera";
+		logError() << "Trying to draw world without a camera";
 		return;
 	}
 

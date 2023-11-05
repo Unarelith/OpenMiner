@@ -24,40 +24,51 @@
  *
  * =====================================================================================
  */
-#include "LuaCore.hpp"
-#include "Registry.hpp"
-#include "ServerConfig.hpp"
-#include "ServerModLoader.hpp"
+#ifndef LOGSTREAM_HPP_
+#define LOGSTREAM_HPP_
 
-void LuaCore::addListener(LuaEventType eventType, const sol::function &listener) {
-	m_listeners.emplace(eventType, listener);
-}
+#include <fstream>
+#include <iostream>
+#include <string>
 
-void LuaCore::initUsertype(sol::state &lua) {
-	lua["Event"] = lua.create_table_with(
-		"BlockPlaced", LuaEventType::BlockPlaced,
-		"BlockDigged", LuaEventType::BlockDigged,
-		"BlockActivated", LuaEventType::BlockActivated,
-
-		"ItemActivated", LuaEventType::ItemActivated,
-
-		"PlayerConnected", LuaEventType::PlayerConnected
-	);
-
-	lua.new_usertype<LuaCore>("LuaCore",
-		"registry", &LuaCore::m_registry,
-		"mod_loader", &LuaCore::m_modLoader,
-
-		"add_listener", &LuaCore::addListener,
-		"get_config", [&](const std::string &option) {
-			auto it = ServerConfig::options.find(option);
-			if (it == ServerConfig::options.end()) {
-				logWarning() << "Option" << option << "doesn't exist";
-				return sol::object{};
-			}
-
-			return it->second;
+class LogStream {
+	public:
+		void openFile(const std::string &filename) {
+			m_file.open(filename, std::ofstream::out | std::ofstream::trunc);
+			if (!m_file.is_open())
+				std::cerr << "Can't open log file: '" << filename << "'" << std::endl;
 		}
-	);
-}
 
+		LogStream &operator<<(const std::string &str) {
+			std::cout << str;
+			if (m_file.is_open())
+				m_file << str;
+			return *this;
+		}
+
+		LogStream &operator<<(int i) {
+			std::cout << i;
+			if (m_file.is_open())
+				m_file << i;
+			return *this;
+		}
+
+		LogStream &operator<<(char c) {
+			std::cout << c;
+			if (m_file.is_open())
+				m_file << c;
+			return *this;
+		}
+
+		LogStream &operator<<(std::ostream &(*f)(std::ostream &)) {
+			f(std::cout);
+			if (m_file.is_open())
+				f(m_file);
+			return *this;
+		}
+
+	private:
+		std::ofstream m_file;
+};
+
+#endif // LOGSTREAM_HPP_

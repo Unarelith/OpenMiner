@@ -30,9 +30,9 @@
 #include <functional>
 #include <iostream>
 
-#include <gk/core/Debug.hpp>
-
 #include <sol/sol.hpp>
+
+#include "Debug.hpp"
 
 class Registry;
 class ServerModLoader;
@@ -59,7 +59,7 @@ class LuaCore {
 						it.second(std::forward<Args>(args)...);
 					}
 					catch (const sol::error &e) {
-						gkError() << e.what();
+						logError() << e.what();
 					}
 				}
 			}

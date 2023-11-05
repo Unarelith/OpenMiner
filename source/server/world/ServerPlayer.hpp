@@ -29,9 +29,8 @@
 
 #include <unordered_set>
 
-#include <gk/core/Debug.hpp>
-
 #include "ClientInfo.hpp"
+#include "Debug.hpp"
 #include "Player.hpp"
 
 class ServerPlayer : public Player {

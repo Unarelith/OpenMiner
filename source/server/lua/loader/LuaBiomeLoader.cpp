@@ -24,8 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
+#include "Debug.hpp"
 #include "LuaBiomeLoader.hpp"
 #include "LuaMod.hpp"
 #include "Registry.hpp"
@@ -43,7 +42,7 @@ void LuaBiomeLoader::loadTree(const sol::table &table) const {
 			tree.setTrunkHeight(trunkHeight["min"], trunkHeight["max"]);
 		}
 		else
-			gkError() << "For tree" << stringID << ": 'trunk_height' must be a table";
+			logError() << "For tree" << stringID << ": 'trunk_height' must be a table";
 	}
 
 	sol::object hasLeavesObject = table["has_leaves"].get<sol::object>();
@@ -52,7 +51,7 @@ void LuaBiomeLoader::loadTree(const sol::table &table) const {
 			tree.setHasLeaves(hasLeavesObject.as<bool>());
 		}
 		else
-			gkError() << "For tree" << stringID << ": 'has_leaves' must be a boolean";
+			logError() << "For tree" << stringID << ": 'has_leaves' must be a boolean";
 	}
 
 	sol::object leavesBlockObject = table["leaves_block"].get<sol::object>();
@@ -62,10 +61,10 @@ void LuaBiomeLoader::loadTree(const sol::table &table) const {
 			tree.setLeavesBlockID(Registry::getInstance().getBlockFromStringID(leavesBlock).id());
 		}
 		else
-			gkError() << "For tree" << stringID << ": 'leaves_block must be a string";
+			logError() << "For tree" << stringID << ": 'leaves_block must be a string";
 	}
 	else if (tree.hasLeaves())
-		gkError() << "For tree" << stringID << ": 'leaves_block' must be defined if has_leaves == true";
+		logError() << "For tree" << stringID << ": 'leaves_block' must be defined if has_leaves == true";
 }
 
 void LuaBiomeLoader::loadBiome(const sol::table &table) const {
@@ -103,7 +102,7 @@ inline void LuaBiomeLoader::loadBiomeBlocks(Biome &biome, const sol::table &tabl
 		biome.setPortalFrameBlockID(Registry::getInstance().getBlockFromStringID(table["portal_frame"]).id());
 	}
 	else
-		gkError() << "For" << biome.stringID() << ": 'blocks' field must be a table";
+		logError() << "For" << biome.stringID() << ": 'blocks' field must be a table";
 }
 
 inline void LuaBiomeLoader::loadTreePlacementEntries(Biome &biome, const sol::table &table) const {

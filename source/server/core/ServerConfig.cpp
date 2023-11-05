@@ -26,10 +26,9 @@
  */
 #include <fstream>
 
-#include <gk/core/Debug.hpp>
-
 #include <filesystem.hpp>
 
+#include "Debug.hpp"
 #include "ServerConfig.hpp"
 
 namespace fs = ghc::filesystem;
@@ -62,10 +61,10 @@ void ServerConfig::loadConfigFromFile(const char *file) {
 				}
 			}
 
-			gkInfo() << "Config file loaded successfully";
+			logInfo() << "Config file loaded successfully";
 		}
 		catch (sol::error &e) {
-			gkError() << e.what();
+			logError() << e.what();
 		}
 	}
 }
@@ -114,11 +113,11 @@ bool ServerConfig::assignOption(const std::string &name, const std::string &valu
 			}
 		}
 		catch (sol::error &e) {
-			gkWarning() << e.what();
+			logWarning() << e.what();
 		}
 	}
 	else {
-		gkWarning() << "Can't assign option: '" + name + "' doesn't exist";
+		logWarning() << "Can't assign option: '" + name + "' doesn't exist";
 	}
 
 	return false;

@@ -24,8 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
+#include "Debug.hpp"
 #include "ProgressBarWidgetDef.hpp"
 
 void ProgressBarWidgetDef::serialize(sf::Packet &packet) const {
@@ -48,7 +47,7 @@ void ProgressBarWidgetDef::loadFromLuaTable(const sol::table &table) {
 		m_blockPosition.z = blockTable.value()["z"];
 	}
 	else {
-		gkError() << "Attribute 'block' not defined for bar" << m_name;
+		logError() << "Attribute 'block' not defined for bar" << m_name;
 		return;
 	}
 
@@ -82,10 +81,10 @@ inline void ProgressBarWidgetDef::loadType(const sol::table &table) {
 			if (it != types.end())
 				m_type = u8(it->second);
 			else
-				gkError() << "In" << m_name << "definition: Type invalid";
+				logError() << "In" << m_name << "definition: Type invalid";
 		}
 		else
-			gkError() << "In" << m_name << "definition: Type must be a string";
+			logError() << "In" << m_name << "definition: Type must be a string";
 	}
 }
 

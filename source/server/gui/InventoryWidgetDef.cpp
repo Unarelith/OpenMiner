@@ -24,8 +24,7 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
+#include "Debug.hpp"
 #include "InventoryWidgetDef.hpp"
 
 void InventoryWidgetDef::serialize(sf::Packet &packet) const {
@@ -57,7 +56,7 @@ void InventoryWidgetDef::loadFromLuaTable(const sol::table &table) {
 		m_height = size.value()["y"];
 	}
 	else
-		gkError() << "For" << m_name << ": Inventory size must be defined";
+		logError() << "For" << m_name << ": Inventory size must be defined";
 }
 
 void InventoryWidgetDef::loadInventory(const sol::table &table) {
@@ -84,12 +83,12 @@ void InventoryWidgetDef::loadInventory(const sol::table &table) {
 				m_blockPosition.z = blockTable.value()["z"];
 			}
 			else
-				gkError() << "For" << m_name << ": Block position must be defined";
+				logError() << "For" << m_name << ": Block position must be defined";
 		}
 		else
-			gkError() << "For" << m_name << ": Inventory source" << m_inventory << "is not valid";
+			logError() << "For" << m_name << ": Inventory source" << m_inventory << "is not valid";
 	}
 	else
-		gkError() << "For" << m_name << ": 'inventory' field must be a table";
+		logError() << "For" << m_name << ": 'inventory' field must be a table";
 }
 

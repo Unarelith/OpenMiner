@@ -65,18 +65,18 @@ bool ClientApplication::init() {
 		return true;
 
 	if (m_argumentParser.getArgument("log-level").isFound) {
-		std::unordered_map<std::string, gk::LogLevel> levels = {
-			{"debug",   gk::LogLevel::Debug},
-			{"info",    gk::LogLevel::Info},
-			{"warning", gk::LogLevel::Warning},
-			{"error",   gk::LogLevel::Error},
+		std::unordered_map<std::string, LogLevel> levels = {
+			{"debug",   LogLevel::Debug},
+			{"info",    LogLevel::Info},
+			{"warning", LogLevel::Warning},
+			{"error",   LogLevel::Error},
 		};
 
 		auto it = levels.find(m_argumentParser.getArgument("log-level").parameter);
 		if (it != levels.end())
 			m_loggerHandler.setMaxLevel(it->second);
 		else
-			gkWarning() << ("Failed to set log level to '" + m_argumentParser.getArgument("log-level").parameter + "': Invalid value").c_str();
+			logWarning() << ("Failed to set log level to '" + m_argumentParser.getArgument("log-level").parameter + "': Invalid value").c_str();
 	}
 
 	if (m_argumentParser.getArgument("working-dir").isFound)

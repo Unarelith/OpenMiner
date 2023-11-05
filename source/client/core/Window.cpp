@@ -26,11 +26,10 @@
  */
 #include <bgfx/bgfx.h>
 
-#include <gk/core/Exception.hpp>
-
-#include "Config.hpp"
 #include "BgfxView.hpp"
+#include "Config.hpp"
 #include "CoreApplication.hpp"
+#include "Exception.hpp"
 #include "Window.hpp"
 
 void Window::open(const std::string &caption, u16 width, u16 height) {
@@ -118,7 +117,7 @@ void Window::setWindowMode(Mode mode) {
 				SDL_SetWindowSize(m_window.get(), desktopMode.w, desktopMode.h);
 			}
 			else
-				gkError() << "Failed to set fullscreen mode";
+				logError() << "Failed to set fullscreen mode";
 		}
 
 		m_windowMode = mode;

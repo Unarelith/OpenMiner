@@ -45,7 +45,7 @@ void ServerChunk::update() {
 		m_lightmap.updateLights();
 
 	if (m_hasChanged || m_lightmap.hasChanged()) {
-		// gkDebug() << "Chunk update at" << m_x << m_y << m_z << "| D:" << m_hasChanged << "| L:" << m_lightmap.hasChanged();
+		// logDebug() << "Chunk update at" << m_x << m_y << m_z << "| D:" << m_hasChanged << "| L:" << m_lightmap.hasChanged();
 
 		m_hasChanged = false;
 		m_lightmap.resetChangedFlag();
@@ -128,6 +128,6 @@ void ServerChunk::sendData(const ClientInfo &client) {
 
 	client.tcpSocket->send(packet);
 
-	// gkDebug() << "Chunk at" << chunk.x() << chunk.y() << chunk.z() << "sent to client";
+	// logDebug() << "Chunk at" << chunk.x() << chunk.y() << chunk.z() << "sent to client";
 }
 

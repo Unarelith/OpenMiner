@@ -24,9 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Exception.hpp>
-
 #include "BgfxView.hpp"
+#include "Exception.hpp"
 #include "Framebuffer.hpp"
 #include "GameConfig.hpp"
 

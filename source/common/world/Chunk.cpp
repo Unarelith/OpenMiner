@@ -185,7 +185,7 @@ void Chunk::setBlockState(int x, int y, int z, u16 stateID) {
 		m_lightmap.addTorchlight(x, y, z, 14);
 	}
 	else if (blockState.isLightSource() && !newBlockState.isLightSource()) {
-		gkDebug() << block.stringID();
+		logDebug() << block.stringID();
 
 		m_lightmap.removeTorchlight(x, y, z);
 		m_lightmap.removeSunlight(x, y, z);

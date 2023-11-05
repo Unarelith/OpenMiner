@@ -108,7 +108,7 @@ void ServerCommandHandler::sendPlayerPosUpdate(u16 clientID, bool isTeleportatio
 			client->tcpSocket->send(packet);
 	}
 	else
-		gkError() << ("Failed to send position update for player " + std::to_string(clientID) + ": Player not found").c_str();
+		logError() << ("Failed to send position update for player " + std::to_string(clientID) + ": Player not found").c_str();
 }
 
 void ServerCommandHandler::sendPlayerRotUpdate(u16 clientID, const ClientInfo *client) const {
@@ -125,7 +125,7 @@ void ServerCommandHandler::sendPlayerRotUpdate(u16 clientID, const ClientInfo *c
 			client->tcpSocket->send(packet);
 	}
 	else
-		gkError() << ("Failed to send rotation update for player " + std::to_string(clientID) + ": Player not found").c_str();
+		logError() << ("Failed to send rotation update for player " + std::to_string(clientID) + ": Player not found").c_str();
 }
 
 void ServerCommandHandler::sendPlayerInvUpdate(u16 clientID, const ClientInfo *client) const {
@@ -141,7 +141,7 @@ void ServerCommandHandler::sendPlayerInvUpdate(u16 clientID, const ClientInfo *c
 			client->tcpSocket->send(packet);
 	}
 	else
-		gkError() << ("Failed to send inventory update for player " + std::to_string(clientID) + ": Player not found").c_str();
+		logError() << ("Failed to send inventory update for player " + std::to_string(clientID) + ": Player not found").c_str();
 }
 
 void ServerCommandHandler::sendPlayerChangeDimension(u16 clientID, s32 x, s32 y, s32 z, u16 dimension, const ClientInfo *client) const {
@@ -168,7 +168,7 @@ void ServerCommandHandler::sendPlayerChangeDimension(u16 clientID, s32 x, s32 y,
 			m_server.sendToAllClients(packet);
 	}
 	else
-		gkError() << ("Failed to send dimension change for player " + std::to_string(clientID) + ": Player not found").c_str();
+		logError() << ("Failed to send dimension change for player " + std::to_string(clientID) + ": Player not found").c_str();
 }
 
 void ServerCommandHandler::sendChatMessage(u16 clientID, const std::string &message, const ClientInfo *client) const {
@@ -260,7 +260,7 @@ void ServerCommandHandler::setupCallbacks() {
 			}
 
 			if (!hasFoundPosition)
-				gkError() << "Can't find a good position for the player";
+				logError() << "Can't find a good position for the player";
 
 			player->setHeldItemSlot(0);
 		}
@@ -315,7 +315,7 @@ void ServerCommandHandler::setupCallbacks() {
 			player->removeLoadedChunk(Vector3i{cx, cy, cz});
 		}
 		else
-			gkError() << ("Failed to unload chunk for player " + std::to_string(client.id) + ": Player not found").c_str();
+			logError() << ("Failed to unload chunk for player " + std::to_string(client.id) + ": Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerInvUpdate, [this](ClientInfo &client, Network::Packet &packet) {
@@ -324,7 +324,7 @@ void ServerCommandHandler::setupCallbacks() {
 			packet >> player->inventory();
 		}
 		else
-			gkError() << ("Failed to update inventory of player " + std::to_string(client.id) + ": Player not found").c_str();
+			logError() << ("Failed to update inventory of player " + std::to_string(client.id) + ": Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerPosUpdate, [this](ClientInfo &client, Network::Packet &packet) {
@@ -336,7 +336,7 @@ void ServerCommandHandler::setupCallbacks() {
 			player->setPosition(x, y, z);
 		}
 		else
-			gkError() << ("Failed to update position of player " + std::to_string(client.id) + ": Player not found").c_str();
+			logError() << ("Failed to update position of player " + std::to_string(client.id) + ": Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerRotUpdate, [this](ClientInfo &client, Network::Packet &packet) {
@@ -348,7 +348,7 @@ void ServerCommandHandler::setupCallbacks() {
 			player->setRotation(yaw, pitch);
 		}
 		else
-			gkError() << ("Failed to update rotation of player " + std::to_string(client.id) + ": Player not found").c_str();
+			logError() << ("Failed to update rotation of player " + std::to_string(client.id) + ": Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerPlaceBlock, [this](ClientInfo &client, Network::Packet &packet) {
@@ -372,7 +372,7 @@ void ServerCommandHandler::setupCallbacks() {
 			m_server.sendToAllClients(answer);
 		}
 		else
-			gkError() << ("Failed to place block using player " + std::to_string(client.id) + ": Player not found").c_str();
+			logError() << ("Failed to place block using player " + std::to_string(client.id) + ": Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerDigBlock, [this](ClientInfo &client, Network::Packet &packet) {
@@ -393,7 +393,7 @@ void ServerCommandHandler::setupCallbacks() {
 			m_server.sendToAllClients(answer);
 		}
 		else
-			gkError() << ("Failed to dig block using player " + std::to_string(client.id) + ": Player not found").c_str();
+			logError() << ("Failed to dig block using player " + std::to_string(client.id) + ": Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerHeldItemChanged, [this](ClientInfo &client, Network::Packet &packet) {
@@ -403,12 +403,12 @@ void ServerCommandHandler::setupCallbacks() {
 			u16 itemID;
 			packet >> hotbarSlot >> itemID;
 			if (player->inventory().getStack(hotbarSlot, 0).item().id() != itemID)
-				gkWarning() << "PlayerHeldItemChanged:" << "Desync of item ID between client and server";
+				logWarning() << "PlayerHeldItemChanged:" << "Desync of item ID between client and server";
 
 			player->setHeldItemSlot(hotbarSlot);
 		}
 		else
-			gkError() << ("Failed to change held item of player " + std::to_string(client.id) + ": Player not found").c_str();
+			logError() << ("Failed to change held item of player " + std::to_string(client.id) + ": Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerReady, [this](ClientInfo &client, Network::Packet &) {
@@ -417,7 +417,7 @@ void ServerCommandHandler::setupCallbacks() {
 			player->setReady(true);
 		}
 		else
-			gkError() << ("Failed to change held item of player " + std::to_string(client.id) + ": Player not found").c_str();
+			logError() << ("Failed to change held item of player " + std::to_string(client.id) + ": Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::PlayerChunkPosUpdate, [this](ClientInfo &client, Network::Packet &packet) {
@@ -430,7 +430,7 @@ void ServerCommandHandler::setupCallbacks() {
 			world.updatePlayerChunks(*player, chunkX, chunkY, chunkZ);
 		}
 		else
-			gkError() << ("Failed to update chunk position of player " + std::to_string(client.id) + ": Player not found").c_str();
+			logError() << ("Failed to update chunk position of player " + std::to_string(client.id) + ": Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::BlockActivated, [this](ClientInfo &client, Network::Packet &packet) {
@@ -449,7 +449,7 @@ void ServerCommandHandler::setupCallbacks() {
 				m_scriptEngine.luaCore().onEvent(LuaEventType::BlockActivated, glm::ivec3{x, y, z}, block, *player, world, client, *this);
 		}
 		else
-			gkError() << ("Failed to activate block using player '" + client.playerName + "': Player not found").c_str();
+			logError() << ("Failed to activate block using player '" + client.playerName + "': Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::BlockInvUpdate, [this](ClientInfo &client, Network::Packet &packet) {
@@ -460,7 +460,7 @@ void ServerCommandHandler::setupCallbacks() {
 		if (data)
 			packet >> data->inventory;
 		else
-			gkError() << "BlockInvUpdate: No block data found at" << pos.x << pos.y << pos.z;
+			logError() << "BlockInvUpdate: No block data found at" << pos.x << pos.y << pos.z;
 	});
 
 	m_server.setCommandCallback(Network::Command::BlockDataUpdate, [this](ClientInfo &client, Network::Packet &packet) {
@@ -472,7 +472,7 @@ void ServerCommandHandler::setupCallbacks() {
 			packet >> data->meta;
 		}
 		else
-			gkError() << "BlockDataUpdate: No block data found at" << pos.x << pos.y << pos.z;
+			logError() << "BlockDataUpdate: No block data found at" << pos.x << pos.y << pos.z;
 	});
 
 	m_server.setCommandCallback(Network::Command::ItemActivated, [this](ClientInfo &client, Network::Packet &packet) {
@@ -495,7 +495,7 @@ void ServerCommandHandler::setupCallbacks() {
 			}
 		}
 		else
-			gkError() << ("Failed to activate item using player '" + client.playerName + "': Player not found").c_str();
+			logError() << ("Failed to activate item using player '" + client.playerName + "': Player not found").c_str();
 	});
 
 	m_server.setCommandCallback(Network::Command::ChatMessage, [this](ClientInfo &client, Network::Packet &packet) {
@@ -526,7 +526,7 @@ void ServerCommandHandler::setPlayerPosition(u16 clientID, s32 x, s32 y, s32 z) 
 	if (player)
 		player->setPosition(x, y, z);
 	else
-		gkError() << ("Failed to set position for player " + std::to_string(clientID) + ": Player not found").c_str();
+		logError() << ("Failed to set position for player " + std::to_string(clientID) + ": Player not found").c_str();
 }
 
 inline ServerWorld &ServerCommandHandler::getWorldForClient(u16 clientID) {

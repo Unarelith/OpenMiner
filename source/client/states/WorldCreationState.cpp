@@ -24,12 +24,11 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
 #include <filesystem.hpp>
 
 #include "ApplicationStateStack.hpp"
 #include "Config.hpp"
+#include "Debug.hpp"
 #include "TitleScreenState.hpp"
 #include "Utils.hpp"
 #include "WorldCreationState.hpp"
@@ -101,7 +100,7 @@ WorldCreationState::WorldCreationState(TitleScreenState *titleScreen, const std:
 							seed = std::stoi(m_seedInput.string());
 						}
 						catch (...) {
-							gkError() << "Invalid seed, using random one:" << seed;
+							logError() << "Invalid seed, using random one:" << seed;
 						}
 					}
 

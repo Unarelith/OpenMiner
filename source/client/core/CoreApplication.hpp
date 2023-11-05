@@ -76,7 +76,7 @@ class CoreApplication {
 
 		EventHandler m_eventHandler;
 
-		gk::LoggerHandler m_loggerHandler;
+		LoggerHandler m_loggerHandler;
 
 		ApplicationState *m_currentState = nullptr;
 };

@@ -24,9 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
 #include "CollisionController.hpp"
+#include "Debug.hpp"
 #include "EntityWrapper.hpp"
 #include "ItemStack.hpp"
 #include "NetworkComponent.hpp"

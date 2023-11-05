@@ -27,8 +27,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-#include <gk/core/Exception.hpp>
-
+#include "Exception.hpp"
 #include "SDLLoader.hpp"
 
 SDLLoader::~SDLLoader() {

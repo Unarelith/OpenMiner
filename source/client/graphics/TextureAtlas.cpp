@@ -26,8 +26,7 @@
  */
 #include <SDL_image.h>
 
-#include <gk/core/Exception.hpp>
-
+#include "Exception.hpp"
 #include "Registry.hpp"
 #include "TextureAtlas.hpp"
 
@@ -117,7 +116,7 @@ void TextureAtlas::addFile(const std::string &path, const std::string &filename)
 
 	SurfacePtr surface{IMG_Load((path + filename).c_str()), &SDL_FreeSurface};
 	if(!surface) {
-		gkError() << "Failed to load texture:" << path + filename;
+		logError() << "Failed to load texture:" << path + filename;
 		return;
 	}
 
@@ -242,7 +241,7 @@ void TextureAtlas::packTextures() {
 	m_isReady = true;
 
 	if (IMG_SavePNG(atlas[2].get(), "test_atlas.png") < 0)
-		gkError() << "Failed to save texture to: test_atlas.png. Reason:" << IMG_GetError();
+		logError() << "Failed to save texture to: test_atlas.png. Reason:" << IMG_GetError();
 
 	m_texture.free();
 	m_texture.loadFromMemory(mem, atlas[0]->w, atlas[0]->h);

@@ -24,9 +24,8 @@
  *
  * =====================================================================================
  */
-#include <gk/core/Debug.hpp>
-
 #include "AnimationComponent.hpp"
+#include "Debug.hpp"
 #include "DrawableDef.hpp"
 #include "LuaEntityLoader.hpp"
 #include "LuaMod.hpp"
@@ -64,7 +63,7 @@ void LuaEntityLoader::spawnEntity(const std::string &entityID, const sol::table 
 		dim = dimension.value();
 	}
 	else {
-		gkError() << ("In mod '" + m_mod.id() + "': Cannot spawn entity '" + entityID + "' without a position and a dimension").c_str();
+		logError() << ("In mod '" + m_mod.id() + "': Cannot spawn entity '" + entityID + "' without a position and a dimension").c_str();
 		return;
 	}
 
@@ -89,7 +88,7 @@ void LuaEntityLoader::spawnEntity(const std::string &entityID, const sol::table 
 		}
 	}
 	else
-		gkError() << ("In mod '" + m_mod.id() + "': Cannot find entity with id '" + entityID + "'").c_str();
+		logError() << ("In mod '" + m_mod.id() + "': Cannot find entity with id '" + entityID + "'").c_str();
 }
 
 void LuaEntityLoader::tryLoadCallbacks(const sol::table &table) const {
@@ -122,7 +121,7 @@ void LuaEntityLoader::tryLoadVisual(const sol::table &table, entt::registry &reg
 			}
 		}
 		else
-			gkError() << ("For entity '" + m_stringID + "': Visual type '" + type + "' unknown").c_str();
+			logError() << ("For entity '" + m_stringID + "': Visual type '" + type + "' unknown").c_str();
 	}
 }
 
@@ -149,7 +148,7 @@ void LuaEntityLoader::tryLoadAnimation(const sol::table &table, entt::registry &
 				animationComponent.addTranslation(delta[1], delta[2], delta[3], anim["min"], anim["max"], anim["loop"].get_or(true));
 			}
 			else
-				gkError() << ("For entity '" + m_stringID + "': Animation type '" + type + "' unknown").c_str();
+				logError() << ("For entity '" + m_stringID + "': Animation type '" + type + "' unknown").c_str();
 		}
 	}
 }
