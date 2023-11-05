@@ -140,18 +140,18 @@ sf::Packet &operator>>(sf::Packet &packet, std::unordered_map<T, U> &map) {
 }
 
 //======================================================================================
-// gk::Rect
+// Rect
 //======================================================================================
-#include <gk/core/Rect.hpp>
+#include "Rect.hpp"
 
 template<typename T>
-sf::Packet &operator<<(sf::Packet &packet, const gk::Rect<T> &rect) {
+sf::Packet &operator<<(sf::Packet &packet, const Rect<T> &rect) {
 	packet << rect.x << rect.y << rect.sizeX << rect.sizeY;
 	return packet;
 }
 
 template<typename T>
-sf::Packet &operator>>(sf::Packet &packet, gk::Rect<T> &rect) {
+sf::Packet &operator>>(sf::Packet &packet, Rect<T> &rect) {
 	packet >> rect.x >> rect.y >> rect.sizeX >> rect.sizeY;
 	return packet;
 }

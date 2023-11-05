@@ -56,7 +56,7 @@ class ProgressBarWidgetDef : public WidgetDef {
 		u32 m_maxValue = 0;
 
 		std::string m_texture;
-		gk::FloatRect m_clipRect;
+		FloatRect m_clipRect;
 };
 
 #endif // PROGRESSBARWIDGETDEF_HPP_

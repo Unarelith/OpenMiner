@@ -29,9 +29,8 @@
 
 #include <SDL.h>
 
-#include <gk/core/Rect.hpp>
-
 #include "Drawable.hpp"
+#include "Rect.hpp"
 #include "Transformable.hpp"
 
 class Widget : public Drawable, public Transformable {
@@ -45,7 +44,7 @@ class Widget : public Drawable, public Transformable {
 
 		bool isPointInWidget(int x, int y);
 
-		gk::FloatRect getGlobalBounds() const;
+		FloatRect getGlobalBounds() const;
 
 		const Widget *parent() const { return m_parent; }
 		void setParent(Widget *parent) { m_parent = parent; }

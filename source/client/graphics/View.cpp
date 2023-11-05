@@ -30,14 +30,14 @@
 #include "View.hpp"
 
 View::View() {
-	reset(gk::FloatRect(0, 0, 1000, 1000));
+	reset(FloatRect(0, 0, 1000, 1000));
 }
 
 View::View(const gk::Vector3f &center, const gk::Vector2f &size) {
-	reset(gk::FloatRect(center.xy(), size));
+	reset(FloatRect(center.xy(), size));
 }
 
-View::View(const gk::FloatRect &rectangle) {
+View::View(const FloatRect &rectangle) {
 	reset(rectangle);
 }
 
@@ -65,7 +65,7 @@ void View::setRotation(float angle) {
 	m_viewTransformUpdated = false;
 }
 
-void View::reset(const gk::FloatRect &rectangle) {
+void View::reset(const FloatRect &rectangle) {
 	m_position.x = rectangle.x + rectangle.sizeX / 2.f;
 	m_position.y = rectangle.y + rectangle.sizeY / 2.f;
 

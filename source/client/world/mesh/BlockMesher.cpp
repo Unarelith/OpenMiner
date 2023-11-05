@@ -133,7 +133,7 @@ void BlockMesher::addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob 
 	const FloatBox &boundingBox = blockState.boundingBox();
 
 	const std::string &texture = blockState.tiles().getTextureForFace(f);
-	const gk::FloatRect &blockTexCoords = job.textureAtlas->getTexCoords(texture);
+	const FloatRect &blockTexCoords = job.textureAtlas->getTexCoords(texture);
 
 	// Calculate UV's
 	// These are tough to obtain. Note that texture Y grows in the up-down direction, and so does V.

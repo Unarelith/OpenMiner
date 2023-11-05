@@ -236,7 +236,7 @@ void LuaGUIState::loadGUI(sf::Packet &packet) {
 
 void LuaGUIState::loadImage(const std::string &, s32 x, s32 y, sf::Packet &packet) {
 	std::string textureFilename;
-	gk::FloatRect clipRect;
+	FloatRect clipRect;
 	packet >> textureFilename >> clipRect.x >> clipRect.y >> clipRect.sizeX >> clipRect.sizeY;
 
 	Texture &texture = loadTexture(textureFilename);
@@ -362,7 +362,7 @@ void LuaGUIState::loadProgressBarWidget(const std::string &, s32 x, s32 y, sf::P
 	std::string meta, maxMeta;
 	u32 maxValue;
 	std::string textureFilename;
-	gk::FloatRect clipRect;
+	FloatRect clipRect;
 	packet >> type >> block.x >> block.y >> block.z >> meta >> maxMeta >> maxValue >> textureFilename
 		>> clipRect.x >> clipRect.y >> clipRect.sizeX >> clipRect.sizeY;
 
@@ -385,7 +385,7 @@ void LuaGUIState::loadProgressBarWidget(const std::string &, s32 x, s32 y, sf::P
 
 void LuaGUIState::loadScrollBarWidget(const std::string &, s32 x, s32 y, sf::Packet &packet) {
 	std::string textureFilename;
-	gk::FloatRect clipRect;
+	FloatRect clipRect;
 	u16 minY, maxY;
 	std::string widget;
 	packet >> textureFilename >> clipRect >> minY >> maxY >> widget;

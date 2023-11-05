@@ -85,8 +85,8 @@ void TextureAtlas::loadFromRegistry(const std::string &texturePack) {
 	packTextures();
 }
 
-gk::FloatRect TextureAtlas::getTexCoords(const std::string &filename, bool normalized) const {
-	if (filename.empty()) return gk::FloatRect{0, 0, 0, 0};
+FloatRect TextureAtlas::getTexCoords(const std::string &filename, bool normalized) const {
+	if (filename.empty()) return FloatRect{0, 0, 0, 0};
 
 	if (!m_isReady)
 		throw EXCEPTION("Can't get texture coordinates from empty atlas");
@@ -97,12 +97,12 @@ gk::FloatRect TextureAtlas::getTexCoords(const std::string &filename, bool norma
 	float textureY = float((textureID / (m_texture.getSize().x / m_tileSize)) * m_tileSize);
 
 	if (normalized)
-		return gk::FloatRect{textureX / (float)m_texture.getSize().x,
+		return FloatRect{textureX / (float)m_texture.getSize().x,
 							 textureY / (float)m_texture.getSize().y,
 							 m_tileSize / (float)m_texture.getSize().x,
 							 m_tileSize / (float)m_texture.getSize().y};
 	else
-		return gk::FloatRect{textureX,
+		return FloatRect{textureX,
 							 textureY,
 							 (float)m_tileSize,
 							 (float)m_tileSize};

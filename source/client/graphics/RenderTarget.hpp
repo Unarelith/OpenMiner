@@ -27,9 +27,8 @@
 #ifndef RENDERTARGET_HPP_
 #define RENDERTARGET_HPP_
 
-#include <gk/core/Rect.hpp>
-
 #include "IndexBuffer.hpp"
+#include "Rect.hpp"
 #include "RenderStates.hpp"
 #include "View.hpp"
 
@@ -68,7 +67,7 @@ class RenderTarget {
 		void initDefaultIndexBuffer();
 		void initCubeIndexBuffer();
 
-		gk::IntRect getViewport(const View &view) const;
+		IntRect getViewport(const View &view) const;
 
 		void applyCurrentView(const RenderStates &states);
 

@@ -48,7 +48,7 @@ gk::Vector2i Mouse::getPosition() {
 	return pos;
 }
 
-bool Mouse::isInRect(const gk::IntRect &rect) {
+bool Mouse::isInRect(const IntRect &rect) {
 	return rect.contains(getPosition());
 }
 

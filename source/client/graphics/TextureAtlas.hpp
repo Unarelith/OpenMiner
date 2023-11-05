@@ -35,8 +35,8 @@
 #include <SDL.h>
 
 #include <gk/core/IntTypes.hpp>
-#include <gk/core/Rect.hpp>
 
+#include "Rect.hpp"
 #include "Texture.hpp"
 
 class TextureAtlas {
@@ -47,7 +47,7 @@ class TextureAtlas {
 
 		void loadFromRegistry(const std::string &texturePack = "");
 
-		gk::FloatRect getTexCoords(const std::string &filename, bool normalized = true) const;
+		FloatRect getTexCoords(const std::string &filename, bool normalized = true) const;
 
 		const Texture &texture() const { return m_texture; }
 

@@ -27,16 +27,16 @@
 #ifndef VIEW_HPP_
 #define VIEW_HPP_
 
-#include <gk/core/Rect.hpp>
 #include <gk/core/Vector3.hpp>
 
+#include "Rect.hpp"
 #include "Transform.hpp"
 
 class View {
 	public:
 		View();
 		View(const gk::Vector3f &center, const gk::Vector2f &size);
-		explicit View(const gk::FloatRect &rectangle);
+		explicit View(const FloatRect &rectangle);
 		virtual ~View() = default;
 
 		void setCenter(float x, float y, float z = 0);
@@ -47,16 +47,16 @@ class View {
 
 		void setRotation(float angle);
 
-		void setViewport(const gk::FloatRect &viewport) { m_viewport = viewport; }
+		void setViewport(const FloatRect &viewport) { m_viewport = viewport; }
 
-		void reset(const gk::FloatRect &rectangle);
+		void reset(const FloatRect &rectangle);
 
 		const gk::Vector3f &getCenter() const { return m_position; }
 		const gk::Vector2f &getSize() const { return m_size; }
 
 		float getRotation() const { return m_rotation; }
 
-		const gk::FloatRect &getViewport() const { return m_viewport; }
+		const FloatRect &getViewport() const { return m_viewport; }
 
 		void move(float offsetX, float offsetY, float offsetZ = 0);
 		void move(const gk::Vector3f &offset) { setCenter(m_position + offset); }
@@ -84,7 +84,7 @@ class View {
 
 		float m_rotation = 0.0f;
 
-		gk::FloatRect m_viewport{0, 0, 1, 1};
+		FloatRect m_viewport{0, 0, 1, 1};
 };
 
 #endif // VIEW_HPP_

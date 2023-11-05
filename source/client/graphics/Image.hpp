@@ -27,10 +27,9 @@
 #ifndef IMAGE_HPP_
 #define IMAGE_HPP_
 
-#include <gk/core/Rect.hpp>
-
 #include "Color.hpp"
 #include "Drawable.hpp"
+#include "Rect.hpp"
 #include "Texture.hpp"
 #include "Transformable.hpp"
 #include "VertexBuffer.hpp"
@@ -48,10 +47,10 @@ class Image : public Drawable, public Transformable {
 		const Texture *texture() const { return m_texture; }
 		void setTexture(const std::string &textureName);
 
-		const gk::FloatRect &clipRect() const { return m_clipRect; }
+		const FloatRect &clipRect() const { return m_clipRect; }
 		void setClipRect(float x, float y, u16 width, u16 height);
 
-		const gk::FloatRect &posRect() const { return m_posRect; }
+		const FloatRect &posRect() const { return m_posRect; }
 		void setPosRect(float x, float y, u16 width, u16 height);
 
 		u16 width() const { return u16(m_width * getScale().x); }
@@ -74,8 +73,8 @@ class Image : public Drawable, public Transformable {
 		u16 m_width = 0;
 		u16 m_height = 0;
 
-		gk::FloatRect m_clipRect;
-		gk::FloatRect m_posRect;
+		FloatRect m_clipRect;
+		FloatRect m_posRect;
 
 		Color m_color;
 

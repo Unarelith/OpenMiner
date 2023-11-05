@@ -106,7 +106,7 @@ void InventoryCube::updateVertexBuffer(const Block &block, u8 state) {
 			V1 = (f <= 3) ? 1.f - boundingBox.z : (f == 4) ? boundingBox.y + boundingBox.sizeY : 1.f - boundingBox.y;
 		}
 
-		const gk::FloatRect &blockTexCoords = m_textureAtlas->getTexCoords(blockState.tiles().getTextureForFace(f));
+		const FloatRect &blockTexCoords = m_textureAtlas->getTexCoords(blockState.tiles().getTextureForFace(f));
 
 		for (u8f v = 0; v < nVertsPerFace; ++v) {
 			if (blockState.drawType() == BlockDrawType::Cactus) {

@@ -52,7 +52,7 @@ void XShapeMesher::addCross(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
 	};
 
 	const std::string &texture = blockState.tiles().getTextureForFace(0);
-	const gk::FloatRect &blockTexCoords = job.textureAtlas->getTexCoords(texture);
+	const FloatRect &blockTexCoords = job.textureAtlas->getTexCoords(texture);
 
 	float faceTexCoords[nVertsPerFace][nCoordsPerUV] = {
 		{blockTexCoords.x,                        blockTexCoords.y + blockTexCoords.sizeY},

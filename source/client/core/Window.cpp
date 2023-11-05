@@ -46,7 +46,7 @@ void Window::open(const std::string &caption, u16 width, u16 height) {
 
 	RenderTarget::init();
 
-	m_defaultView.reset(gk::FloatRect{0, 0, (float)width, (float)height});
+	m_defaultView.reset(FloatRect{0, 0, (float)width, (float)height});
 	setView(m_defaultView);
 
 	m_isOpen = true;
