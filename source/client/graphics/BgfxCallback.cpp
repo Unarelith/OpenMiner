@@ -31,6 +31,7 @@
 #include <bimg/bimg.h>
 
 #include "BgfxCallback.hpp"
+#include "Config.hpp"
 
 void BgfxCallback::fatal(const char* _filePath, uint16_t _line, bgfx::Fatal::Enum _code, const char* _str) {
 	trace(_filePath, _line, "BGFX FATAL 0x%08x: %s\n", _code, _str);
@@ -57,7 +58,8 @@ void BgfxCallback::traceVargs(const char* _filePath, uint16_t _line, const char*
 		bx::vsnprintf(out + len, total-len, _format, _argList);
 	}
 	out[total] = '\0';
-	bx::debugOutput(out);
+	if (Config::isBgfxDebugLogEnabled)
+		bx::debugOutput(out);
 }
 
 void BgfxCallback::profilerBegin(const char* /*_name*/, uint32_t /*_abgr*/, const char* /*_filePath*/, uint16_t /*_line*/) {

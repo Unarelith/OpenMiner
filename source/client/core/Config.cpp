@@ -68,6 +68,7 @@ bool Config::isChunkMinimapEnabled = false;
 bool Config::isLightmapViewerEnabled = false;
 bool Config::isProfilerWindowEnabled = false;
 bool Config::isWireframeModeEnabled = false;
+bool Config::isBgfxDebugLogEnabled = false;
 
 // Other
 std::string Config::defaultUsername = "";

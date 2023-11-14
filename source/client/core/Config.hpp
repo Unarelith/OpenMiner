@@ -65,6 +65,7 @@ namespace Config {
 	extern bool isLightmapViewerEnabled;
 	extern bool isProfilerWindowEnabled;
 	extern bool isWireframeModeEnabled;
+	extern bool isBgfxDebugLogEnabled;
 
 	// Other
 	extern std::string defaultUsername;
