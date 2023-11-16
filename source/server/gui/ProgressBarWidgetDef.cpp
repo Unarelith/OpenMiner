@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "Debug.hpp"
-#include "ProgressBarWidgetDef.hpp"
+#include "common/core/Debug.hpp"
+#include "server/gui/ProgressBarWidgetDef.hpp"
 
 void ProgressBarWidgetDef::serialize(sf::Packet &packet) const {
 	WidgetDef::serialize(packet);
@@ -87,4 +87,3 @@ inline void ProgressBarWidgetDef::loadType(const sol::table &table) {
 			logError() << "In" << m_name << "definition: Type must be a string";
 	}
 }
-

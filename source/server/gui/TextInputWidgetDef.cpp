@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "TextInputWidgetDef.hpp"
+#include "server/gui/TextInputWidgetDef.hpp"
 
 void TextInputWidgetDef::serialize(sf::Packet &packet) const {
 	WidgetDef::serialize(packet);
@@ -52,4 +52,3 @@ void TextInputWidgetDef::loadFromLuaTable(const sol::table &table) {
 
 	m_inventory = table["inventory"].get<std::string>();
 }
-

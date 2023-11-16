@@ -24,16 +24,16 @@
  *
  * =====================================================================================
  */
-#include "Biome.hpp"
-#include "EntityWrapper.hpp"
-#include "LuaMod.hpp"
-#include "PlacementEntry.hpp"
-#include "Registry.hpp"
-#include "ServerCommandHandler.hpp"
-#include "ServerConfig.hpp"
-#include "ServerPlayer.hpp"
-#include "Tree.hpp"
-#include "WorldController.hpp"
+#include "common/core/Registry.hpp"
+#include "common/world/Biome.hpp"
+#include "common/world/PlacementEntry.hpp"
+#include "common/world/Tree.hpp"
+#include "server/core/ServerConfig.hpp"
+#include "server/lua/LuaMod.hpp"
+#include "server/network/ServerCommandHandler.hpp"
+#include "server/scene/EntityWrapper.hpp"
+#include "server/world/ServerPlayer.hpp"
+#include "server/world/WorldController.hpp"
 
 void LuaMod::commit() {
 	while (!m_defs.empty()) {

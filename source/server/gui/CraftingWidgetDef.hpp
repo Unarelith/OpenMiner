@@ -27,7 +27,7 @@
 #ifndef CRAFTINGWIDGETDEF_HPP_
 #define CRAFTINGWIDGETDEF_HPP_
 
-#include "WidgetDef.hpp"
+#include "server/gui/WidgetDef.hpp"
 
 class CraftingWidgetDef : public WidgetDef {
 	public:

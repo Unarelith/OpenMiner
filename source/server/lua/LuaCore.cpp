@@ -24,10 +24,10 @@
  *
  * =====================================================================================
  */
-#include "LuaCore.hpp"
-#include "Registry.hpp"
-#include "ServerConfig.hpp"
-#include "ServerModLoader.hpp"
+#include "common/core/Registry.hpp"
+#include "server/core/ServerConfig.hpp"
+#include "server/lua/LuaCore.hpp"
+#include "server/lua/ServerModLoader.hpp"
 
 void LuaCore::addListener(LuaEventType eventType, const sol::function &listener) {
 	m_listeners.emplace(eventType, listener);
@@ -60,4 +60,3 @@ void LuaCore::initUsertype(sol::state &lua) {
 		}
 	);
 }
-

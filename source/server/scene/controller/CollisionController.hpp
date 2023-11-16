@@ -27,7 +27,7 @@
 #ifndef COLLISIONCONTROLLER_HPP_
 #define COLLISIONCONTROLLER_HPP_
 
-#include "AbstractController.hpp"
+#include "common/scene/controller/AbstractController.hpp"
 
 class PlayerList;
 class ServerCommandHandler;

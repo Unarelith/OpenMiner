@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "EntityWrapper.hpp"
+#include "server/scene/EntityWrapper.hpp"
 
 // Please update 'docs/lua-api-cpp.md' if you change this
 void EntityWrapper::initUsertype(sol::state &lua) {
@@ -36,4 +36,3 @@ void EntityWrapper::initUsertype(sol::state &lua) {
 		"item_stack", &EntityWrapper::getItemStack
 	);
 }
-

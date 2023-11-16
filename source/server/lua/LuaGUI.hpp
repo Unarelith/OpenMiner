@@ -29,8 +29,8 @@
 
 #include <list>
 
-#include "Inventory.hpp"
-#include "WidgetDef.hpp"
+#include "common/inventory/Inventory.hpp"
+#include "server/gui/WidgetDef.hpp"
 
 class ClientInfo;
 

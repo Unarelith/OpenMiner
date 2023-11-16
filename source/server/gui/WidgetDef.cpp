@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "WidgetDef.hpp"
+#include "server/gui/WidgetDef.hpp"
 
 void WidgetDef::serialize(sf::Packet &packet) const {
 	packet << m_type << m_name << m_x << m_y;
@@ -39,4 +39,3 @@ void WidgetDef::loadFromLuaTable(const sol::table &table) {
 		m_y = pos.value()["y"];
 	}
 }
-

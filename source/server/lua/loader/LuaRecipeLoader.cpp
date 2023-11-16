@@ -26,10 +26,10 @@
  */
 #include <map>
 
-#include "CraftingRecipe.hpp"
-#include "LuaRecipeLoader.hpp"
-#include "Registry.hpp"
-#include "SmeltingRecipe.hpp"
+#include "common/core/Registry.hpp"
+#include "common/inventory/CraftingRecipe.hpp"
+#include "common/inventory/SmeltingRecipe.hpp"
+#include "server/lua/loader/LuaRecipeLoader.hpp"
 
 void LuaRecipeLoader::loadCraftingRecipe(const sol::table &table) const {
 	sol::table resultTable = table["result"];
@@ -67,4 +67,3 @@ void LuaRecipeLoader::loadSmeltingRecipe(const sol::table &table) const {
 
 	Registry::getInstance().registerRecipe<SmeltingRecipe>(inputID, inputAmount, output);
 }
-

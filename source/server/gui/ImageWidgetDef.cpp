@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "ImageWidgetDef.hpp"
+#include "server/gui/ImageWidgetDef.hpp"
 
 void ImageWidgetDef::serialize(sf::Packet &packet) const {
 	WidgetDef::serialize(packet);
@@ -45,4 +45,3 @@ void ImageWidgetDef::loadFromLuaTable(const sol::table &table) {
 		m_clipRect.sizeY = clipRectTable.value()["height"];
 	}
 }
-

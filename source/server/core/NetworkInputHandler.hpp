@@ -27,7 +27,7 @@
 #ifndef NETWORKINPUTHANDLER_HPP_
 #define NETWORKINPUTHANDLER_HPP_
 
-#include "InputHandler.hpp"
+#include "common/core/input/InputHandler.hpp"
 
 class NetworkInputHandler : public InputHandler {
 	public:

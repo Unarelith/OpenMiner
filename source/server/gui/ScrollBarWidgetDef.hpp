@@ -27,7 +27,7 @@
 #ifndef SCROLLBARWIDGETDEF_HPP_
 #define SCROLLBARWIDGETDEF_HPP_
 
-#include "WidgetDef.hpp"
+#include "server/gui/WidgetDef.hpp"
 
 class ScrollBarWidgetDef : public WidgetDef {
 	public:

@@ -26,12 +26,13 @@
  */
 #include <filesystem.hpp>
 
-#include "BlockGeometry.hpp"
-#include "Events.hpp"
-#include "GameTime.hpp"
-#include "ServerApplication.hpp"
-#include "ServerBlock.hpp"
-#include "ServerConfig.hpp"
+#include "common/core/BlockGeometry.hpp"
+#include "common/core/GameTime.hpp"
+#include "common/event/Events.hpp"
+
+#include "server/core/ServerApplication.hpp"
+#include "server/core/ServerConfig.hpp"
+#include "server/world/ServerBlock.hpp"
 
 namespace fs = ghc::filesystem;
 
@@ -235,4 +236,3 @@ void ServerApplication::mainLoop() {
 		m_clock.waitForNextFrame();
 	}
 }
-

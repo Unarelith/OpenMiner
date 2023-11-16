@@ -31,7 +31,7 @@
 
 #include <entt/entt.hpp>
 
-#include "ItemStack.hpp"
+#include "common/inventory/ItemStack.hpp"
 
 class LuaMod;
 class WorldController;

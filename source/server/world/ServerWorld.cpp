@@ -24,14 +24,14 @@
  *
  * =====================================================================================
  */
-#include "Dimension.hpp"
-#include "EngineConfig.hpp"
-#include "GameClock.hpp"
-#include "PlayerList.hpp"
-#include "ServerCommandHandler.hpp"
-#include "ServerConfig.hpp"
-#include "ServerPlayer.hpp"
-#include "ServerWorld.hpp"
+#include "common/core/EngineConfig.hpp"
+#include "common/core/GameClock.hpp"
+#include "common/world/Dimension.hpp"
+#include "server/core/PlayerList.hpp"
+#include "server/core/ServerConfig.hpp"
+#include "server/network/ServerCommandHandler.hpp"
+#include "server/world/ServerPlayer.hpp"
+#include "server/world/ServerWorld.hpp"
 
 ServerWorld::ServerWorld(PlayerList &players, const Dimension &dimension, s32 seed)
 	: m_players(players),
@@ -267,4 +267,3 @@ void ServerWorld::initUsertype(sol::state &lua) {
 		"dimension", &ServerWorld::dimension
 	);
 }
-

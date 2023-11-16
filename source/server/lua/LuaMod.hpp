@@ -31,15 +31,15 @@
 
 #include <entt/entt.hpp>
 
-#include "IntTypes.hpp"
-#include "LuaBiomeLoader.hpp"
-#include "LuaBlockLoader.hpp"
-#include "LuaDimensionLoader.hpp"
-#include "LuaEntityLoader.hpp"
-#include "LuaItemLoader.hpp"
-#include "LuaKeyLoader.hpp"
-#include "LuaRecipeLoader.hpp"
-#include "LuaSkyLoader.hpp"
+#include "common/core/IntTypes.hpp"
+#include "server/lua/loader/LuaBiomeLoader.hpp"
+#include "server/lua/loader/LuaBlockLoader.hpp"
+#include "server/lua/loader/LuaDimensionLoader.hpp"
+#include "server/lua/loader/LuaEntityLoader.hpp"
+#include "server/lua/loader/LuaItemLoader.hpp"
+#include "server/lua/loader/LuaKeyLoader.hpp"
+#include "server/lua/loader/LuaRecipeLoader.hpp"
+#include "server/lua/loader/LuaSkyLoader.hpp"
 
 class EntityWrapper;
 class ItemStack;

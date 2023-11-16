@@ -24,12 +24,10 @@ add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_lib)
 #------------------------------------------------------------------------------
 # Setup include directories
 #------------------------------------------------------------------------------
-target_include_directories(${PROJECT_NAME}_lib PUBLIC ../../external ../../external/entt/single_include)
-
-foreach(HEADER_FILE ${HEADER_FILES})
-	get_filename_component(HEADER_DIRECTORY ${HEADER_FILE} DIRECTORY)
-	target_include_directories(${PROJECT_NAME}_lib PUBLIC ${HEADER_DIRECTORY})
-endforeach(HEADER_FILE)
+target_include_directories(${PROJECT_NAME}_lib PUBLIC
+	../../external
+	../../external/entt/single_include
+)
 
 #------------------------------------------------------------------------------
 # Compiler flags

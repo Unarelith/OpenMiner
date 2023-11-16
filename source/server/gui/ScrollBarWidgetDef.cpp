@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "ScrollBarWidgetDef.hpp"
+#include "server/gui/ScrollBarWidgetDef.hpp"
 
 void ScrollBarWidgetDef::serialize(sf::Packet &packet) const {
 	WidgetDef::serialize(packet);
@@ -50,4 +50,3 @@ void ScrollBarWidgetDef::loadFromLuaTable(const sol::table &table) {
 
 	m_widget = table["widget"].get<std::string>();
 }
-

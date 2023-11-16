@@ -29,8 +29,8 @@
 
 #include <deque>
 
-#include "ServerWorld.hpp"
-#include "WorldSaveBackend.hpp"
+#include "server/world/ServerWorld.hpp"
+#include "server/world/save/WorldSaveBackend.hpp"
 
 class Registry;
 

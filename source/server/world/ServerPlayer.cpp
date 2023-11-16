@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "ServerPlayer.hpp"
+#include "server/world/ServerPlayer.hpp"
 
 // Please update 'docs/lua-api-cpp.md' if you change this
 void ServerPlayer::initUsertype(sol::state &lua) {
@@ -34,4 +34,3 @@ void ServerPlayer::initUsertype(sol::state &lua) {
 		"is_online", &ServerPlayer::isOnline
 	);
 }
-

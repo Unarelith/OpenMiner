@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "CraftingWidgetDef.hpp"
-#include "Debug.hpp"
+#include "common/core/Debug.hpp"
+#include "server/gui/CraftingWidgetDef.hpp"
 
 void CraftingWidgetDef::serialize(sf::Packet &packet) const {
 	WidgetDef::serialize(packet);
@@ -81,4 +81,3 @@ void CraftingWidgetDef::loadInventory(const sol::table &table) {
 	else
 		logError() << "For" << m_name << ": 'inventory' field must be a table";
 }
-

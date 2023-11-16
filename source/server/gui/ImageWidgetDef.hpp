@@ -27,8 +27,8 @@
 #ifndef IMAGEWIDGETDEF_HPP_
 #define IMAGEWIDGETDEF_HPP_
 
-#include "Rect.hpp"
-#include "WidgetDef.hpp"
+#include "common/core/Rect.hpp"
+#include "server/gui/WidgetDef.hpp"
 
 class ImageWidgetDef : public WidgetDef {
 	public:

@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "PlayerList.hpp"
+#include "server/core/PlayerList.hpp"
 
 ServerPlayer &PlayerList::addPlayer(const std::string &name, bool isNewPlayer) {
 	m_players.emplace(name, ServerPlayer{name, isNewPlayer});
@@ -115,4 +115,3 @@ ServerPlayer *PlayerList::getPlayerFromClientID(u16 clientID) {
 
 	return nullptr;
 }
-

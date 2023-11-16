@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "ServerInfo.hpp"
+#include "server/network/ServerInfo.hpp"
 
 ClientInfo &ServerInfo::addClient(const std::shared_ptr<sf::TcpSocket> &socket) {
 	m_clients.emplace_back(u16(m_clients.size() + 1), socket);
@@ -44,4 +44,3 @@ void ServerInfo::removeClient(u16 id) {
 	if (it != m_clients.end())
 		m_clients.erase(it);
 }
-

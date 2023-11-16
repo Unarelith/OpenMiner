@@ -29,10 +29,10 @@
 
 #include <unordered_map>
 
-#include "ServerChunk.hpp"
-#include "ServerScene.hpp"
-#include "TerrainGenerator.hpp"
-#include "World.hpp"
+#include "common/world/World.hpp"
+#include "server/scene/ServerScene.hpp"
+#include "server/world/ServerChunk.hpp"
+#include "server/world/TerrainGenerator.hpp"
 
 class Dimension;
 class PlayerList;

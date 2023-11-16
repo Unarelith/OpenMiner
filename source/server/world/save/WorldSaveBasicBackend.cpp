@@ -28,15 +28,15 @@
 
 #include <filesystem.hpp>
 
-#include "ComponentType.hpp"
-#include "Debug.hpp"
-#include "GameTime.hpp"
-#include "Network.hpp"
-#include "NetworkComponent.hpp"
-#include "Registry.hpp"
-#include "ServerBlock.hpp"
-#include "ServerWorld.hpp"
-#include "WorldSaveBasicBackend.hpp"
+#include "common/core/Debug.hpp"
+#include "common/core/GameTime.hpp"
+#include "common/core/Registry.hpp"
+#include "common/network/Network.hpp"
+#include "common/scene/component/ComponentType.hpp"
+#include "common/scene/component/NetworkComponent.hpp"
+#include "server/world/ServerBlock.hpp"
+#include "server/world/ServerWorld.hpp"
+#include "server/world/save/WorldSaveBasicBackend.hpp"
 
 namespace fs = ghc::filesystem;
 
@@ -186,11 +186,11 @@ void WorldSaveBasicBackend::save(const std::string &name) {
 	// logInfo() << "Saving done.";
 }
 
-#include "AnimationComponent.hpp"
-#include "ComponentType.hpp"
-#include "DrawableDef.hpp"
-#include "PositionComponent.hpp"
-#include "RotationComponent.hpp"
+#include "common/scene/component/AnimationComponent.hpp"
+#include "common/scene/component/ComponentType.hpp"
+#include "common/scene/component/DrawableDef.hpp"
+#include "common/scene/component/PositionComponent.hpp"
+#include "common/scene/component/RotationComponent.hpp"
 
 void WorldSaveBasicBackend::loadEntities(sf::Packet &save, ServerWorld &world) {
 	entt::registry &registry = world.scene().registry();
@@ -279,4 +279,3 @@ void WorldSaveBasicBackend::saveEntities(sf::Packet &save, ServerWorld &world) {
 
 	// logDebug() << "Saving" << view.size() << "entities in dimension" << world.dimension().id();
 }
-

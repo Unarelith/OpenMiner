@@ -24,9 +24,9 @@
  *
  * =====================================================================================
  */
-#include "LuaKeyLoader.hpp"
-#include "LuaMod.hpp"
-#include "Registry.hpp"
+#include "common/core/Registry.hpp"
+#include "server/lua/LuaMod.hpp"
+#include "server/lua/loader/LuaKeyLoader.hpp"
 
 void LuaKeyLoader::loadKey(const sol::table &table) const {
 	std::string stringID = m_mod.id() + ":" + table["id"].get<std::string>();
@@ -37,4 +37,3 @@ void LuaKeyLoader::loadKey(const sol::table &table) const {
 	key.setDefaultKey(defaultKey);
 	key.setCallback(table["callback"]);
 }
-

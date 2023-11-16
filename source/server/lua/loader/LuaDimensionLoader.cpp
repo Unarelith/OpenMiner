@@ -24,10 +24,10 @@
  *
  * =====================================================================================
  */
-#include "Debug.hpp"
-#include "LuaDimensionLoader.hpp"
-#include "LuaMod.hpp"
-#include "Registry.hpp"
+#include "common/core/Debug.hpp"
+#include "common/core/Registry.hpp"
+#include "server/lua/LuaMod.hpp"
+#include "server/lua/loader/LuaDimensionLoader.hpp"
 
 void LuaDimensionLoader::loadDimension(const sol::table &table) const {
 	std::string id = m_mod.id() + ":" + table["id"].get<std::string>();
@@ -50,4 +50,3 @@ void LuaDimensionLoader::loadDimension(const sol::table &table) const {
 	else
 		logError() << "For dimension" << id << ": Invalid biome table";
 }
-

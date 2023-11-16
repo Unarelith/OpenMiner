@@ -24,13 +24,13 @@
  *
  * =====================================================================================
  */
-#include "BlockPlacementConstraints.hpp"
-#include "Debug.hpp"
-#include "LuaBlockLoader.hpp"
-#include "LuaMod.hpp"
-#include "Registry.hpp"
-#include "ServerBlock.hpp"
-#include "ServerConfig.hpp"
+#include "common/core/Debug.hpp"
+#include "common/core/Registry.hpp"
+#include "common/world/BlockPlacementConstraints.hpp"
+#include "server/core/ServerConfig.hpp"
+#include "server/lua/LuaMod.hpp"
+#include "server/lua/loader/LuaBlockLoader.hpp"
+#include "server/world/ServerBlock.hpp"
 
 void LuaBlockLoader::loadBlock(const sol::table &table) const {
 	std::string stringID = m_mod.id() + ":" + table["id"].get<std::string>();
@@ -282,4 +282,3 @@ inline void LuaBlockLoader::loadParams(ServerBlock &block) const {
 		block.param().allocateBits(BlockParam::Type::Custom, block.customParamBits());
 	}
 }
-

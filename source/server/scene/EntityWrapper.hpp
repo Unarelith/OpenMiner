@@ -29,9 +29,9 @@
 
 #include <entt/entt.hpp>
 
-#include "ItemStack.hpp"
-#include "NetworkComponent.hpp"
-#include "PositionComponent.hpp"
+#include "common/inventory/ItemStack.hpp"
+#include "common/scene/component/NetworkComponent.hpp"
+#include "common/scene/component/PositionComponent.hpp"
 
 // This class is meant to be used ONLY in Lua or Lua-related C++ classes
 class EntityWrapper {

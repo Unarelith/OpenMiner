@@ -27,7 +27,7 @@
 #ifndef NETWORKCONTROLLER_HPP_
 #define NETWORKCONTROLLER_HPP_
 
-#include "AbstractController.hpp"
+#include "common/scene/controller/AbstractController.hpp"
 
 class ClientInfo;
 class ServerCommandHandler;

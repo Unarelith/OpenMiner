@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "Debug.hpp"
-#include "InventoryWidgetDef.hpp"
+#include "common/core/Debug.hpp"
+#include "server/gui/InventoryWidgetDef.hpp"
 
 void InventoryWidgetDef::serialize(sf::Packet &packet) const {
 	WidgetDef::serialize(packet);
@@ -91,4 +91,3 @@ void InventoryWidgetDef::loadInventory(const sol::table &table) {
 	else
 		logError() << "For" << m_name << ": 'inventory' field must be a table";
 }
-

@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "Server.hpp"
-#include "ServerConfig.hpp"
+#include "server/core/ServerConfig.hpp"
+#include "server/network/Server.hpp"
 
 void Server::init(u16 port) {
 	if (m_tcpListener.listen(port) != sf::Socket::Done)
@@ -147,4 +147,3 @@ void Server::sendToAllClients(Network::Packet &packet) const {
 		client.tcpSocket->send(packet);
 	}
 }
-

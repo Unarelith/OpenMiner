@@ -29,7 +29,7 @@
 
 #include <glm/vec3.hpp>
 
-#include "Item.hpp"
+#include "common/inventory/Item.hpp"
 
 class Block;
 class ClientInfo;

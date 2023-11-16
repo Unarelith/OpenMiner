@@ -30,7 +30,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "LuaMod.hpp"
+#include "server/lua/LuaMod.hpp"
 
 class PlayerList;
 class Registry;
