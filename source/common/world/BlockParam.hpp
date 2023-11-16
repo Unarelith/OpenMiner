@@ -30,9 +30,9 @@
 #include <map>
 #include <string>
 
-#include "IntTypes.hpp"
-#include "ISerializable.hpp"
-#include "NetworkUtils.hpp"
+#include "core/IntTypes.hpp"
+#include "core/ISerializable.hpp"
+#include "network/NetworkUtils.hpp"
 
 namespace sol { class state; }
 

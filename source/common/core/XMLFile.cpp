@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "Exception.hpp"
-#include "XMLFile.hpp"
+#include "core/Exception.hpp"
+#include "core/XMLFile.hpp"
 
 XMLFile::XMLFile(const std::string &filename) {
 	load(filename);

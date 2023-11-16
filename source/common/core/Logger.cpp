@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "Logger.hpp"
-#include "LogStream.hpp"
+#include "core/Logger.hpp"
+#include "core/LogStream.hpp"
 
 bool Logger::isEnabled = true;
 bool Logger::printFileAndLine = false;

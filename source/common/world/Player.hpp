@@ -27,9 +27,9 @@
 #ifndef PLAYER_HPP_
 #define PLAYER_HPP_
 
-#include "Box.hpp"
-#include "ISerializable.hpp"
-#include "Inventory.hpp"
+#include "core/Box.hpp"
+#include "core/ISerializable.hpp"
+#include "inventory/Inventory.hpp"
 
 class Player : public ISerializable {
 	public:

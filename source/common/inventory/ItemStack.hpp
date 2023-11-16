@@ -27,8 +27,8 @@
 #ifndef ITEMSTACK_HPP_
 #define ITEMSTACK_HPP_
 
-#include "EngineConfig.hpp"
-#include "Item.hpp"
+#include "core/EngineConfig.hpp"
+#include "inventory/Item.hpp"
 
 namespace sf { class Packet; }
 

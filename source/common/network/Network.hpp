@@ -27,7 +27,7 @@
 #ifndef NETWORK_HPP_
 #define NETWORK_HPP_
 
-#include "CompressedPacket.hpp"
+#include "network/CompressedPacket.hpp"
 
 // Please update 'docs/network-protocol.md' if you change this
 namespace Network {

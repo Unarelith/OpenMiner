@@ -30,10 +30,11 @@
 #include <cstring>
 #include <unordered_map>
 
-#include "EngineConfig.hpp"
-#include "FastNoiseLite.hpp"
-#include "IntTypes.hpp"
-#include "Vector2.hpp"
+#include <FastNoiseLite.hpp>
+
+#include "core/EngineConfig.hpp"
+#include "core/IntTypes.hpp"
+#include "core/Vector2.hpp"
 
 class Heightmap;
 

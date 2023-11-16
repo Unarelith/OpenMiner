@@ -26,9 +26,9 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "EngineConfig.hpp"
-#include "Registry.hpp"
-#include "World.hpp"
+#include "core/EngineConfig.hpp"
+#include "core/Registry.hpp"
+#include "world/World.hpp"
 
 bool World::isReloadRequested = false;
 

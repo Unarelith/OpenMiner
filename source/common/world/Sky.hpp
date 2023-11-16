@@ -29,9 +29,9 @@
 
 #include <string>
 
-#include "Color.hpp"
-#include "IntTypes.hpp"
-#include "ISerializable.hpp"
+#include "core/Color.hpp"
+#include "core/ISerializable.hpp"
+#include "core/IntTypes.hpp"
 
 class Sky : public ISerializable {
 	public:

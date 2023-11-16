@@ -142,7 +142,7 @@ sf::Packet &operator>>(sf::Packet &packet, std::unordered_map<T, U> &map) {
 //======================================================================================
 // Rect
 //======================================================================================
-#include "Rect.hpp"
+#include "core/Rect.hpp"
 
 template<typename T>
 sf::Packet &operator<<(sf::Packet &packet, const Rect<T> &rect) {
@@ -159,7 +159,7 @@ sf::Packet &operator>>(sf::Packet &packet, Rect<T> &rect) {
 //======================================================================================
 // Box
 //======================================================================================
-#include "Box.hpp"
+#include "core/Box.hpp"
 
 template<typename T>
 sf::Packet &operator<<(sf::Packet &packet, const Box<T> &box) {
@@ -176,7 +176,7 @@ sf::Packet &operator>>(sf::Packet &packet, Box<T> &box) {
 //======================================================================================
 // Vector3
 //======================================================================================
-#include "Vector3.hpp"
+#include "core/Vector3.hpp"
 
 template<typename T>
 sf::Packet &operator<<(sf::Packet &packet, const Vector3<T> &vec) {
@@ -193,7 +193,7 @@ sf::Packet &operator>>(sf::Packet &packet, Vector3<T> &vec) {
 //======================================================================================
 // Color
 //======================================================================================
-#include "Color.hpp"
+#include "core/Color.hpp"
 
 sf::Packet &operator<<(sf::Packet &packet, const Color &color);
 sf::Packet &operator>>(sf::Packet &packet, Color &color);

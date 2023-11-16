@@ -29,8 +29,8 @@
 
 #include <entt/entt.hpp>
 
-#include "ISerializable.hpp"
-#include "Network.hpp"
+#include "core/ISerializable.hpp"
+#include "network/Network.hpp"
 
 struct NetworkComponent : public ISerializable {
 	entt::entity entityID = entt::null;

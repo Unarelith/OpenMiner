@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "Heightmap.hpp"
-#include "World.hpp"
+#include "world/Heightmap.hpp"
+#include "world/World.hpp"
 
 void HeightmapChunk::generate() {
 	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {
@@ -109,4 +109,3 @@ void Heightmap::setSeed(s32 seed) {
 	noise3.SetSeed(seed);
 	noise4.SetSeed(seed);
 }
-

@@ -27,9 +27,9 @@
 #ifndef POSITIONCOMPONENT_HPP_
 #define POSITIONCOMPONENT_HPP_
 
-#include "IntTypes.hpp"
-#include "ISerializable.hpp"
-#include "Network.hpp"
+#include "core/IntTypes.hpp"
+#include "core/ISerializable.hpp"
+#include "network/Network.hpp"
 
 struct PositionComponent : public ISerializable {
 	PositionComponent() = default;

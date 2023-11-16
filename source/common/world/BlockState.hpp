@@ -30,11 +30,11 @@
 #include <string>
 #include <unordered_map>
 
-#include "BlockParam.hpp"
-#include "Box.hpp"
-#include "IntTypes.hpp"
-#include "ItemStack.hpp"
-#include "TilesDef.hpp"
+#include "core/Box.hpp"
+#include "core/IntTypes.hpp"
+#include "core/TilesDef.hpp"
+#include "inventory/ItemStack.hpp"
+#include "world/BlockParam.hpp"
 
 enum class BlockDrawType : u8 {
 	Solid   = 0,

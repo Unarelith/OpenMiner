@@ -26,8 +26,8 @@
  */
 #include <algorithm>
 
-#include "ArgumentParser.hpp"
-#include "Debug.hpp"
+#include "core/ArgumentParser.hpp"
+#include "core/Debug.hpp"
 
 ArgumentParser::ArgumentParser() {
 	addArgument("help", {"", "--help", "Display help on commandline options."});

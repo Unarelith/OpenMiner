@@ -29,7 +29,7 @@
 
 #include <algorithm>
 
-#include "Vector2.hpp"
+#include "core/Vector2.hpp"
 
 template<typename T>
 class Rect {

@@ -33,9 +33,9 @@
 
 #include <sol/sol.hpp>
 
-#include "Exception.hpp"
-#include "IntTypes.hpp"
-#include "ISerializable.hpp"
+#include "core/Exception.hpp"
+#include "core/IntTypes.hpp"
+#include "core/ISerializable.hpp"
 
 class BlockMetadataValue {
 	public:

@@ -29,10 +29,10 @@
 
 #include <string>
 
-#include "EngineConfig.hpp"
-#include "ISerializable.hpp"
-#include "NetworkUtils.hpp"
-#include "Vector3.hpp"
+#include "core/EngineConfig.hpp"
+#include "core/ISerializable.hpp"
+#include "core/Vector3.hpp"
+#include "network/NetworkUtils.hpp"
 
 struct InventoryCubeDef : public ISerializable {
 	float size = 1.f;

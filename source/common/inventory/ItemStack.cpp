@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "ItemStack.hpp"
-#include "Registry.hpp"
+#include "core/Registry.hpp"
+#include "inventory/ItemStack.hpp"
 
 const ItemStack ItemStack::Empty{BLOCK_AIR, 0};
 

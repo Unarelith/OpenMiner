@@ -27,8 +27,8 @@
 #ifndef EVENTS_HPP_
 #define EVENTS_HPP_
 
-#include "IntTypes.hpp"
-#include "Vector3.hpp"
+#include "core/IntTypes.hpp"
+#include "core/Vector3.hpp"
 
 struct ServerOnlineEvent {
 	bool isOnline;

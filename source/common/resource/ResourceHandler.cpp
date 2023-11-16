@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "ResourceHandler.hpp"
+#include "resource/ResourceHandler.hpp"
 
 ResourceHandler *ResourceHandler::instance = nullptr;
 

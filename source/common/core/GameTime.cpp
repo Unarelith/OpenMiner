@@ -27,9 +27,9 @@
 #include <algorithm>
 #include <cmath>
 
-#include "GameClock.hpp"
-#include "GameTime.hpp"
-#include "Sky.hpp"
+#include "core/GameClock.hpp"
+#include "core/GameTime.hpp"
+#include "world/Sky.hpp"
 
 u64 GameTime::s_ticks = 0;
 u16 GameTime::s_ticksPerSecond = 0;

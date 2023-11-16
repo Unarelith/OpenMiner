@@ -33,9 +33,9 @@
 
 #include <sol/sol.hpp>
 
-#include "IntTypes.hpp"
-#include "ISerializable.hpp"
-#include "NetworkUtils.hpp"
+#include "core/IntTypes.hpp"
+#include "core/ISerializable.hpp"
+#include "network/NetworkUtils.hpp"
 
 class Key : public ISerializable {
 	public:

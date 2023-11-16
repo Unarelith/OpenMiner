@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "NetworkUtils.hpp"
-#include "Sky.hpp"
+#include "network/NetworkUtils.hpp"
+#include "world/Sky.hpp"
 
 Sky::Sky(u16 id, const std::string &stringID) {
 	m_id = id;
@@ -49,4 +49,3 @@ void Sky::deserialize(sf::Packet &packet) {
 		>> m_starsDefinition.count >> m_starsDefinition.size
 		>> m_daylightCycleSpeed;
 }
-

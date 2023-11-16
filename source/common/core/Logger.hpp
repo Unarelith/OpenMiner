@@ -31,8 +31,8 @@
 #include <string>
 #include <sstream>
 
-#include "LoggerUtils.hpp"
-#include "Utils.hpp"
+#include "core/LoggerUtils.hpp"
+#include "core/Utils.hpp"
 
 enum LogLevel : u8 {
 	Debug   = 0,

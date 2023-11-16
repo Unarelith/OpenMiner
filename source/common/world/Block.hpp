@@ -33,14 +33,14 @@
 
 #include <sol/sol.hpp>
 
-#include "BlockParam.hpp"
-#include "BlockPlacementConstraints.hpp"
-#include "BlockState.hpp"
-#include "Color.hpp"
-#include "ISerializable.hpp"
-#include "IntTypes.hpp"
-#include "ItemStack.hpp"
-#include "TilesDef.hpp"
+#include "core/Color.hpp"
+#include "core/ISerializable.hpp"
+#include "core/IntTypes.hpp"
+#include "core/TilesDef.hpp"
+#include "inventory/ItemStack.hpp"
+#include "world/BlockParam.hpp"
+#include "world/BlockPlacementConstraints.hpp"
+#include "world/BlockState.hpp"
 
 class Chunk;
 class Player;

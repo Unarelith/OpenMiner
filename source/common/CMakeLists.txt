@@ -20,10 +20,7 @@ add_library(${PROJECT_NAME} STATIC ${HEADER_FILES} ${SOURCE_FILES})
 #------------------------------------------------------------------------------
 # Setup include directories
 #------------------------------------------------------------------------------
-foreach(HEADER_FILE ${HEADER_FILES})
-	get_filename_component(HEADER_DIRECTORY ${HEADER_FILE} DIRECTORY)
-	target_include_directories(${PROJECT_NAME} PUBLIC ${HEADER_DIRECTORY})
-endforeach(HEADER_FILE)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # FIXME: Use target_include_directories(PUBLIC ...) in zlib/lua
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${PROJECT_SOURCE_DIR}/external/entt/src)

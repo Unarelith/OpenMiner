@@ -24,9 +24,9 @@
  *
  * =====================================================================================
  */
-#include "BlockPlacementConstraints.hpp"
-#include "Registry.hpp"
-#include "World.hpp"
+#include "core/Registry.hpp"
+#include "world/BlockPlacementConstraints.hpp"
+#include "world/World.hpp"
 
 bool BlockPlacementConstraints::check(const World &world, const Vector3i &pos) const {
 	bool isValid = true;

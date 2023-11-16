@@ -26,12 +26,12 @@
  */
 #include <entt/entt.hpp>
 
-#include "ComponentType.hpp"
-#include "Debug.hpp"
-#include "ISerializable.hpp"
-#include "Network.hpp"
-#include "NetworkUtils.hpp"
-#include "Scene.hpp"
+#include "core/Debug.hpp"
+#include "core/ISerializable.hpp"
+#include "network/Network.hpp"
+#include "network/NetworkUtils.hpp"
+#include "scene/Scene.hpp"
+#include "scene/component/ComponentType.hpp"
 
 static bool areComponentsRegistered = false;
 
@@ -108,13 +108,13 @@ void extend_meta_type(const std::string &name, ComponentType type, bool isSerial
 		.template func<&save<Type>>("save"_hs);
 }
 
-#include "AnimationComponent.hpp"
-#include "Box.hpp"
-#include "DrawableDef.hpp"
-#include "ItemStack.hpp"
-#include "NetworkComponent.hpp"
-#include "PositionComponent.hpp"
-#include "RotationComponent.hpp"
+#include "core/Box.hpp"
+#include "inventory/ItemStack.hpp"
+#include "scene/component/AnimationComponent.hpp"
+#include "scene/component/DrawableDef.hpp"
+#include "scene/component/NetworkComponent.hpp"
+#include "scene/component/PositionComponent.hpp"
+#include "scene/component/RotationComponent.hpp"
 
 void Scene::registerComponents() {
 	extend_meta_type<DoubleBox>          ("DoubleBox",          ComponentType::Hitbox,    false, true);

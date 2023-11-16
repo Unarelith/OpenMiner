@@ -27,8 +27,8 @@
 #ifndef BLOCKDATA_HPP_
 #define BLOCKDATA_HPP_
 
-#include "BlockMetadata.hpp"
-#include "Inventory.hpp"
+#include "inventory/Inventory.hpp"
+#include "world/BlockMetadata.hpp"
 
 struct BlockData {
 	BlockData(const Vector3i &pos, u16 width, u16 height) : inventory(width, height) {

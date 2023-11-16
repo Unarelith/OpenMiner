@@ -33,16 +33,16 @@
 
 #include <entt/entt.hpp>
 
-#include "Biome.hpp"
-#include "Block.hpp"
-#include "Dimension.hpp"
-#include "EntityCallbackContainer.hpp"
-#include "Item.hpp"
-#include "Key.hpp"
-#include "Network.hpp"
-#include "Recipe.hpp"
-#include "Tree.hpp"
-#include "Sky.hpp"
+#include "inventory/Item.hpp"
+#include "inventory/Recipe.hpp"
+#include "network/Network.hpp"
+#include "scene/EntityCallbackContainer.hpp"
+#include "world/Biome.hpp"
+#include "world/Block.hpp"
+#include "world/Dimension.hpp"
+#include "world/Key.hpp"
+#include "world/Sky.hpp"
+#include "world/Tree.hpp"
 
 class Registry : public ISerializable {
 	public:

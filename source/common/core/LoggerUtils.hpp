@@ -29,7 +29,7 @@
 
 #include <ostream>
 
-#include "IntTypes.hpp"
+#include "core/IntTypes.hpp"
 
 enum class LoggerColor : u8 {
 	White = 0,
@@ -45,7 +45,7 @@ std::ostream &operator<<(std::ostream &stream, LoggerColor color);
 //======================================================================================
 // Vector2
 //======================================================================================
-#include "Vector2.hpp"
+#include "core/Vector2.hpp"
 
 template<typename T>
 std::ostream &operator<<(std::ostream &stream, const Vector2<T> &vec) {
@@ -55,7 +55,7 @@ std::ostream &operator<<(std::ostream &stream, const Vector2<T> &vec) {
 //======================================================================================
 // Vector3
 //======================================================================================
-#include "Vector3.hpp"
+#include "core/Vector3.hpp"
 
 template<typename T>
 std::ostream &operator<<(std::ostream &stream, const Vector3<T> &vec) {
@@ -65,14 +65,14 @@ std::ostream &operator<<(std::ostream &stream, const Vector3<T> &vec) {
 //======================================================================================
 // Color
 //======================================================================================
-#include "Color.hpp"
+#include "core/Color.hpp"
 
 std::ostream &operator<<(std::ostream &stream, const Color &color);
 
 //======================================================================================
 // Rect
 //======================================================================================
-#include "Rect.hpp"
+#include "core/Rect.hpp"
 
 template<typename T>
 std::ostream &operator<<(std::ostream &stream, const Rect<T> &rect) {
@@ -82,7 +82,7 @@ std::ostream &operator<<(std::ostream &stream, const Rect<T> &rect) {
 //======================================================================================
 // Box
 //======================================================================================
-#include "Box.hpp"
+#include "core/Box.hpp"
 
 template<typename T>
 std::ostream &operator<<(std::ostream &stream, const Box<T> &box) {

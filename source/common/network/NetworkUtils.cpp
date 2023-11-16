@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "NetworkUtils.hpp"
+#include "network/NetworkUtils.hpp"
 
 sf::Packet &operator<<(sf::Packet &packet, const Color &color) {
 	packet << color.r << color.g << color.b << color.a;
@@ -47,4 +47,3 @@ sf::Packet &operator>>(sf::Packet &packet, entt::entity &entity) {
 	entity = static_cast<entt::entity>(id);
 	return packet;
 }
-

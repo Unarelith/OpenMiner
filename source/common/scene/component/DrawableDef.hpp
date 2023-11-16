@@ -27,10 +27,10 @@
 #ifndef DRAWABLEDEF_HPP_
 #define DRAWABLEDEF_HPP_
 
-#include "ISerializable.hpp"
-#include "IntTypes.hpp"
-#include "InventoryCubeDef.hpp"
-#include "Network.hpp"
+#include "core/ISerializable.hpp"
+#include "core/IntTypes.hpp"
+#include "network/Network.hpp"
+#include "scene/component/InventoryCubeDef.hpp"
 
 namespace DrawableType {
 	enum : u8 {
