@@ -29,7 +29,7 @@
 
 #include <algorithm>
 
-#include "core/Vector3.hpp"
+#include "common/core/Vector3.hpp"
 
 template<typename T>
 class Box {

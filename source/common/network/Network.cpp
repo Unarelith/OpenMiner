@@ -26,8 +26,8 @@
  */
 #include <map>
 
-#include "core/IntTypes.hpp"
-#include "network/Network.hpp"
+#include "common/core/IntTypes.hpp"
+#include "common/network/Network.hpp"
 
 std::string Network::commandToString(Network::Command command) {
 	std::map<Network::Command, std::string> commandNames = {

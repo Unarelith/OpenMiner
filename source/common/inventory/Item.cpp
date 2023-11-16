@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "inventory/Item.hpp"
-#include "network/NetworkUtils.hpp"
+#include "common/inventory/Item.hpp"
+#include "common/network/NetworkUtils.hpp"
 
 Item::Item(u16 id, const TilesDef &tiles, const std::string &stringID, const std::string &label) {
 	m_id = id;

@@ -27,7 +27,7 @@
 #ifndef TIMER_HPP_
 #define TIMER_HPP_
 
-#include "core/IntTypes.hpp"
+#include "common/core/IntTypes.hpp"
 
 class Timer {
 	public:

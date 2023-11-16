@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "network/NetworkUtils.hpp"
-#include "world/Tree.hpp"
+#include "common/network/NetworkUtils.hpp"
+#include "common/world/Tree.hpp"
 
 Tree::Tree(u16 id, const std::string &stringID) {
 	m_id = id;

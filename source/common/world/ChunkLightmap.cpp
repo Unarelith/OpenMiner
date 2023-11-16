@@ -26,11 +26,11 @@
  */
 #include <cstring>
 
-#include "core/Debug.hpp"
-#include "core/Registry.hpp"
-#include "world/Chunk.hpp"
-#include "world/ChunkLightmap.hpp"
-#include "world/World.hpp"
+#include "common/core/Debug.hpp"
+#include "common/core/Registry.hpp"
+#include "common/world/Chunk.hpp"
+#include "common/world/ChunkLightmap.hpp"
+#include "common/world/World.hpp"
 
 ChunkLightmap::ChunkLightmap(Chunk *chunk) : m_chunk(chunk) {
 	std::memset(m_lightMap, 0, sizeof(m_lightMap));

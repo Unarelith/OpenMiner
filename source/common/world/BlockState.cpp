@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "core/Registry.hpp"
-#include "world/BlockState.hpp"
+#include "common/core/Registry.hpp"
+#include "common/world/BlockState.hpp"
 
 void BlockState::serialize(sf::Packet &packet) const {
 	packet << m_id << m_label << m_tiles

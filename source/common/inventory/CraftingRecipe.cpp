@@ -26,10 +26,10 @@
  */
 #include <algorithm>
 
-#include "core/EngineConfig.hpp"
-#include "core/Exception.hpp"
-#include "inventory/CraftingRecipe.hpp"
-#include "network/Network.hpp"
+#include "common/core/EngineConfig.hpp"
+#include "common/core/Exception.hpp"
+#include "common/inventory/CraftingRecipe.hpp"
+#include "common/network/Network.hpp"
 
 CraftingRecipe::CraftingRecipe(const std::vector<std::string> &pattern, const std::map<char, std::vector<std::string>> &keys, const ItemStack &result) : Recipe("craft", result) {
 	m_pattern = pattern;

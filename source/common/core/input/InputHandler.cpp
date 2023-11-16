@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "core/GameClock.hpp"
-#include "core/input/InputHandler.hpp"
+#include "common/core/GameClock.hpp"
+#include "common/core/input/InputHandler.hpp"
 
 bool InputHandler::isKeyPressedOnce(GameKeyID key) {
 	if(isKeyPressed(key)) {

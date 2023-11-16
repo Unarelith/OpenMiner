@@ -28,7 +28,7 @@
 
 #include <SDL.h>
 
-#include "core/GameClock.hpp"
+#include "common/core/GameClock.hpp"
 
 GameClock *GameClock::s_instance = nullptr;
 

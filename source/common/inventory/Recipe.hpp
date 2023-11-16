@@ -27,8 +27,8 @@
 #ifndef RECIPE_HPP_
 #define RECIPE_HPP_
 
-#include "core/ISerializable.hpp"
-#include "inventory/Inventory.hpp"
+#include "common/core/ISerializable.hpp"
+#include "common/inventory/Inventory.hpp"
 
 class Recipe : public ISerializable {
 	public:

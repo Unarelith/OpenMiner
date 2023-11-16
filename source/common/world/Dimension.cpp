@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "network/NetworkUtils.hpp"
-#include "world/Dimension.hpp"
+#include "common/network/NetworkUtils.hpp"
+#include "common/world/Dimension.hpp"
 
 void Dimension::serialize(sf::Packet &packet) const {
 	packet << m_id << m_stringID << m_name << m_biomes << m_sky << m_gravity;

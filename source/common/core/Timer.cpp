@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "core/GameClock.hpp"
-#include "core/Timer.hpp"
+#include "common/core/GameClock.hpp"
+#include "common/core/Timer.hpp"
 
 Timer::Timer(bool useRealTime) {
 	m_useRealTime = useRealTime;

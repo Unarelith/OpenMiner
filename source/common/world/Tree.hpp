@@ -29,8 +29,8 @@
 
 #include <string>
 
-#include "core/IntTypes.hpp"
-#include "core/ISerializable.hpp"
+#include "common/core/IntTypes.hpp"
+#include "common/core/ISerializable.hpp"
 
 class Tree : public ISerializable {
 	public:

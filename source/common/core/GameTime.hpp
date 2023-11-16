@@ -27,7 +27,7 @@
 #ifndef GAMETIME_HPP_
 #define GAMETIME_HPP_
 
-#include "core/Color.hpp"
+#include "common/core/Color.hpp"
 
 class Sky;
 

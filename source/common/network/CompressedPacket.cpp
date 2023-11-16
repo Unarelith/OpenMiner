@@ -26,8 +26,8 @@
  */
 #include <cassert>
 
-#include "core/Debug.hpp"
-#include "network/CompressedPacket.hpp"
+#include "common/core/Debug.hpp"
+#include "common/network/CompressedPacket.hpp"
 
 // Note: This class was implemented thanks to this SFML forum topic:
 // https://en.sfml-dev.org/forums/index.php?topic=14344.0

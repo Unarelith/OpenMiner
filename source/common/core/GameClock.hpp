@@ -30,7 +30,7 @@
 #include <functional>
 #include <mutex>
 
-#include "core/IntTypes.hpp"
+#include "common/core/IntTypes.hpp"
 
 class GameClock {
 	public:

@@ -29,8 +29,8 @@
 
 #include <SDL.h>
 
-#include "core/EventHandler.hpp"
-#include "utils/NonCopyable.hpp"
+#include "common/core/EventHandler.hpp"
+#include "common/utils/NonCopyable.hpp"
 
 class ApplicationStateStack;
 

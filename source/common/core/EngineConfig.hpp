@@ -27,7 +27,7 @@
 #ifndef ENGINECONFIG_HPP_
 #define ENGINECONFIG_HPP_
 
-#include "math/Math.hpp"
+#include "common/math/Math.hpp"
 
 namespace {
 	// Only used in Client

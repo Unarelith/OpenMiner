@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "world/Heightmap.hpp"
-#include "world/World.hpp"
+#include "common/world/Heightmap.hpp"
+#include "common/world/World.hpp"
 
 void HeightmapChunk::generate() {
 	for(int y = 0 ; y < CHUNK_DEPTH ; y++) {

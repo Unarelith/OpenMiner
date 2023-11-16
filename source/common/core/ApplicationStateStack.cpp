@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "core/ApplicationStateStack.hpp"
+#include "common/core/ApplicationStateStack.hpp"
 
 ApplicationStateStack *ApplicationStateStack::s_instance = nullptr;
 

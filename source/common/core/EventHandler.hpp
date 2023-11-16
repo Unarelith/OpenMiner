@@ -32,7 +32,7 @@
 #include <unordered_map>
 #include <typeindex>
 
-#include "core/EventListenerList.hpp"
+#include "common/core/EventListenerList.hpp"
 
 class EventHandler {
 	public:

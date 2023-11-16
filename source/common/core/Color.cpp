@@ -26,9 +26,9 @@
  */
 #include <cassert>
 
-#include "core/Color.hpp"
-#include "core/Debug.hpp"
-#include "math/Math.hpp"
+#include "common/core/Color.hpp"
+#include "common/core/Debug.hpp"
+#include "common/math/Math.hpp"
 
 const Color Color::Black       = Color::fromRGBA32(0, 0, 0);
 const Color Color::White       = Color::fromRGBA32(255, 255, 255);

@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "network/NetworkUtils.hpp"
+#include "common/network/NetworkUtils.hpp"
 
 sf::Packet &operator<<(sf::Packet &packet, const Color &color) {
 	packet << color.r << color.g << color.b << color.a;

@@ -31,7 +31,7 @@
 
 #include <zlib.h>
 
-#include "core/IntTypes.hpp"
+#include "common/core/IntTypes.hpp"
 
 class CompressedPacket : public sf::Packet {
 	private:

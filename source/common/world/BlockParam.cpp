@@ -26,9 +26,9 @@
  */
 #include <sol/sol.hpp>
 
-#include "core/Debug.hpp"
-#include "world/Block.hpp"
-#include "world/BlockParam.hpp"
+#include "common/core/Debug.hpp"
+#include "common/world/Block.hpp"
+#include "common/world/BlockParam.hpp"
 
 void BlockParam::serialize(sf::Packet &packet) const {
 	packet << m_totalSize << m_allocatedBits;

@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "network/NetworkUtils.hpp"
-#include "world/Sky.hpp"
+#include "common/network/NetworkUtils.hpp"
+#include "common/world/Sky.hpp"
 
 Sky::Sky(u16 id, const std::string &stringID) {
 	m_id = id;

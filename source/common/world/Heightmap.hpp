@@ -32,9 +32,9 @@
 
 #include <FastNoiseLite.hpp>
 
-#include "core/EngineConfig.hpp"
-#include "core/IntTypes.hpp"
-#include "core/Vector2.hpp"
+#include "common/core/EngineConfig.hpp"
+#include "common/core/IntTypes.hpp"
+#include "common/core/Vector2.hpp"
 
 class Heightmap;
 

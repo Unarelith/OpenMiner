@@ -30,8 +30,8 @@
 #include <stdexcept>
 #include <utility>
 
-#include "core/IntTypes.hpp"
-#include "core/Vector2.hpp"
+#include "common/core/IntTypes.hpp"
+#include "common/core/Vector2.hpp"
 
 template<typename T>
 class Vector3 {

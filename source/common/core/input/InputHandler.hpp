@@ -29,7 +29,7 @@
 
 #include <map>
 
-#include "core/IntTypes.hpp"
+#include "common/core/IntTypes.hpp"
 
 using GameKeyID = u32;
 

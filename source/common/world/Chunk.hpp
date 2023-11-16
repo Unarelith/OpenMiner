@@ -32,11 +32,11 @@
 #include <unordered_map>
 #include <vector>
 
-#include "core/Vector3.hpp"
-#include "utils/NonCopyable.hpp"
-#include "world/Block.hpp"
-#include "world/BlockData.hpp"
-#include "world/ChunkLightmap.hpp"
+#include "common/core/Vector3.hpp"
+#include "common/utils/NonCopyable.hpp"
+#include "common/world/Block.hpp"
+#include "common/world/BlockData.hpp"
+#include "common/world/ChunkLightmap.hpp"
 
 class World;
 

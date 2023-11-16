@@ -31,7 +31,7 @@
 #include <stack>
 #include <queue>
 
-#include "core/ApplicationState.hpp"
+#include "common/core/ApplicationState.hpp"
 
 class ApplicationStateStack {
 	public:

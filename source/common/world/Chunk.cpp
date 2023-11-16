@@ -26,11 +26,11 @@
  */
 #include <cstring>
 
-#include "core/EngineConfig.hpp"
-#include "core/GameClock.hpp"
-#include "core/Registry.hpp"
-#include "world/Chunk.hpp"
-#include "world/World.hpp"
+#include "common/core/EngineConfig.hpp"
+#include "common/core/GameClock.hpp"
+#include "common/core/Registry.hpp"
+#include "common/world/Chunk.hpp"
+#include "common/world/World.hpp"
 
 Chunk::Chunk(s32 x, s32 y, s32 z, World &world) : m_world(world) {
 	m_x = x;

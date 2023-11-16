@@ -26,7 +26,7 @@
  */
 #include <SFML/Network/Packet.hpp>
 
-#include "world/BlockMetadata.hpp"
+#include "common/world/BlockMetadata.hpp"
 
 void BlockMetadata::setString(const std::string &name, const std::string &value) {
 	m_data[name].set(value, BlockMetadataValue::Type::String);

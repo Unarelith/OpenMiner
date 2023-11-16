@@ -29,10 +29,10 @@
 
 #include <string>
 
-#include "core/IntTypes.hpp"
-#include "core/ISerializable.hpp"
-#include "core/TilesDef.hpp"
-#include "inventory/ItemType.hpp"
+#include "common/core/IntTypes.hpp"
+#include "common/core/ISerializable.hpp"
+#include "common/core/TilesDef.hpp"
+#include "common/inventory/ItemType.hpp"
 
 class Item : public ISerializable {
 	public:

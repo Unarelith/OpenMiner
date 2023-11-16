@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "core/Logger.hpp"
-#include "core/LoggerUtils.hpp"
+#include "common/core/Logger.hpp"
+#include "common/core/LoggerUtils.hpp"
 
 std::ostream &operator<<(std::ostream &stream, LoggerColor color) {
 	return stream << Logger::textColor(color);

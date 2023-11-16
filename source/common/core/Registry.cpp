@@ -24,11 +24,11 @@
  *
  * =====================================================================================
  */
-#include "core/Exception.hpp"
-#include "core/Registry.hpp"
-#include "core/input/GameKey.hpp"
-#include "inventory/CraftingRecipe.hpp"
-#include "inventory/SmeltingRecipe.hpp"
+#include "common/core/Exception.hpp"
+#include "common/core/Registry.hpp"
+#include "common/core/input/GameKey.hpp"
+#include "common/inventory/CraftingRecipe.hpp"
+#include "common/inventory/SmeltingRecipe.hpp"
 
 Registry *Registry::s_instance = nullptr;
 

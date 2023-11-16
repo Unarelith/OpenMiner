@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "core/Exception.hpp"
-#include "core/LoggerHandler.hpp"
+#include "common/core/Exception.hpp"
+#include "common/core/LoggerHandler.hpp"
 
 LoggerHandler::InstanceMap LoggerHandler::s_instanceMap;
 

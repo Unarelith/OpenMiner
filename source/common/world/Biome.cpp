@@ -26,8 +26,8 @@
  */
 #include <SFML/Network/Packet.hpp>
 
-#include "network/NetworkUtils.hpp"
-#include "world/Biome.hpp"
+#include "common/network/NetworkUtils.hpp"
+#include "common/world/Biome.hpp"
 
 Biome::Biome(u16 id, const std::string &stringID, const std::string &label) {
 	m_id = id;

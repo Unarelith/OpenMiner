@@ -24,10 +24,10 @@
  *
  * =====================================================================================
  */
-#include "network/NetworkUtils.hpp"
-#include "world/Block.hpp"
-#include "world/Player.hpp"
-#include "world/World.hpp"
+#include "common/network/NetworkUtils.hpp"
+#include "common/world/Block.hpp"
+#include "common/world/Player.hpp"
+#include "common/world/World.hpp"
 
 Block::Block(u16 id, const std::string &stringID) {
 	m_id = id;

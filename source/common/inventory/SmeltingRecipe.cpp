@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "inventory/SmeltingRecipe.hpp"
+#include "common/inventory/SmeltingRecipe.hpp"
 
 SmeltingRecipe::SmeltingRecipe(const std::string &inputID, u16 inputAmount, const ItemStack &output) : Recipe("smelt", output) {
 	m_inputID = inputID;

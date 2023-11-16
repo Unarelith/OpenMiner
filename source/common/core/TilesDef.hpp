@@ -34,8 +34,8 @@
 
 #include <sol/sol.hpp>
 
-#include "core/IntTypes.hpp"
-#include "core/ISerializable.hpp"
+#include "common/core/IntTypes.hpp"
+#include "common/core/ISerializable.hpp"
 
 enum BlockFace : u8 {
 	West   = 0,

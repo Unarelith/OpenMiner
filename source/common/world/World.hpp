@@ -30,7 +30,7 @@
 #include <memory>
 #include <set>
 
-#include "world/Chunk.hpp"
+#include "common/world/Chunk.hpp"
 
 class World {
 	public:
