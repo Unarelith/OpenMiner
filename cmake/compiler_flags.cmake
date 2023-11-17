@@ -5,7 +5,6 @@ set(DEBUG_GCC_FLAGS
 	-g -Og
 	-Wall -Wextra -Wconversion -Wno-unused-parameter
 	-Wfatal-errors
-	-DGK_DEBUG
 	-DOM_DEBUG
 	-DOM_PROFILER_ENABLED
 )
