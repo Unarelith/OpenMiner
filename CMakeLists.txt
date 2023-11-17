@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------
 # CMakeLists.txt
 #------------------------------------------------------------------------------
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.6)
 
 project(openminer)
 
@@ -18,6 +18,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(OM_BUILD_TESTS ON CACHE BOOL "Enable building tests if CxxTest is available")
 
 include_directories(external)
+
+include(om_target)
 
 #------------------------------------------------------------------------------
 # Compiler flags
