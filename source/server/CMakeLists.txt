@@ -118,8 +118,7 @@ add_executable(${PROJECT_NAME} main.cpp)
 # Setup include directories
 #------------------------------------------------------------------------------
 target_include_directories(${PROJECT_NAME}_lib PUBLIC
-	../../external
-	../../external/entt/single_include
+	${CMAKE_SOURCE_DIR}/external/entt/single_include
 )
 
 #------------------------------------------------------------------------------
