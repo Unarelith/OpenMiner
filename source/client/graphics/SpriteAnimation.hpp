@@ -29,7 +29,7 @@
 
 #include <vector>
 
-#include "Timer.hpp"
+#include "common/core/Timer.hpp"
 
 class SpriteAnimation {
 	public:

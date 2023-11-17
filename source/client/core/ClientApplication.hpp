@@ -27,9 +27,9 @@
 #ifndef CLIENTAPPLICATION_HPP_
 #define CLIENTAPPLICATION_HPP_
 
-#include "ClientProfiler.hpp"
-#include "CoreApplication.hpp"
-#include "KeyboardHandler.hpp"
+#include "client/core/ClientProfiler.hpp"
+#include "client/core/CoreApplication.hpp"
+#include "client/core/KeyboardHandler.hpp"
 
 class ClientApplication : public CoreApplication {
 	public:

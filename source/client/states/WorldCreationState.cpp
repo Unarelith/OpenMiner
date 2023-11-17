@@ -25,16 +25,16 @@
  * =====================================================================================
  */
 #include <filesystem.hpp>
-
-#include "ApplicationStateStack.hpp"
-#include "Config.hpp"
-#include "Debug.hpp"
-#include "TitleScreenState.hpp"
-#include "Utils.hpp"
-#include "WorldCreationState.hpp"
-#include "WorldSelectionState.hpp"
-
 #include <random.hpp>
+
+#include "common/core/ApplicationStateStack.hpp"
+#include "common/core/Debug.hpp"
+#include "common/core/Utils.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/states/TitleScreenState.hpp"
+#include "client/states/WorldCreationState.hpp"
+#include "client/states/WorldSelectionState.hpp"
 
 using Random = effolkronium::random_static;
 
@@ -213,4 +213,3 @@ void WorldCreationState::draw(RenderTarget &target, RenderStates states) const {
 			target.draw(m_errorText, states);
 	}
 }
-

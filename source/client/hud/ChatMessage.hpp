@@ -27,8 +27,8 @@
 #ifndef CHATMESSAGE_HPP_
 #define CHATMESSAGE_HPP_
 
-#include "Text.hpp"
-#include "Timer.hpp"
+#include "common/core/Timer.hpp"
+#include "client/gui/Text.hpp"
 
 class Player;
 

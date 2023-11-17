@@ -27,7 +27,7 @@
 #ifndef CRAFTINGWIDGET_HPP_
 #define CRAFTINGWIDGET_HPP_
 
-#include "InventoryWidget.hpp"
+#include "client/gui/InventoryWidget.hpp"
 
 class Recipe;
 

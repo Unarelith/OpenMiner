@@ -24,9 +24,9 @@
  *
  * =====================================================================================
  */
-#include "EngineConfig.hpp"
-#include "InventoryWidget.hpp"
-#include "MouseItemWidget.hpp"
+#include "common/core/EngineConfig.hpp"
+#include "client/gui/InventoryWidget.hpp"
+#include "client/gui/MouseItemWidget.hpp"
 
 MouseItemWidget::MouseItemWidget(Widget *parent) : ItemWidget(m_inventory, 0, 0, parent) {
 	m_tooltipBackground.setColor(Color::fromRGBA32(255, 255, 255, 240));
@@ -260,4 +260,3 @@ void MouseItemWidget::updatePosition(s32 x, s32 y) {
 
 	setPosition(posX / m_parent->getScale().x, posY / m_parent->getScale().y, -20.f);
 }
-

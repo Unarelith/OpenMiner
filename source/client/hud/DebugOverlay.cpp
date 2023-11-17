@@ -26,13 +26,14 @@
  */
 #include <sstream>
 
-#include "ClientPlayer.hpp"
-#include "ClientScene.hpp"
-#include "ClientWorld.hpp"
-#include "Config.hpp"
-#include "DebugOverlay.hpp"
-#include "GameTime.hpp"
-#include "Math.hpp"
+#include "common/core/GameTime.hpp"
+#include "common/math/Math.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/hud/DebugOverlay.hpp"
+#include "client/scene/ClientScene.hpp"
+#include "client/world/ClientPlayer.hpp"
+#include "client/world/ClientWorld.hpp"
 
 DebugOverlay::DebugOverlay(const ClientPlayer &player, const ClientWorld &world)
 	: m_player(player), m_world(world)
@@ -130,4 +131,3 @@ void DebugOverlay::draw(RenderTarget &target, RenderStates states) const {
 	target.draw(m_versionText, states);
 	target.draw(m_positionText, states);
 }
-

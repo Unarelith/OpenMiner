@@ -26,24 +26,25 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "ApplicationStateStack.hpp"
-#include "BgfxView.hpp"
-#include "ChatState.hpp"
-#include "Events.hpp"
-#include "Exception.hpp"
-#include "GameClock.hpp"
-#include "GameKey.hpp"
-#include "GamePad.hpp"
-#include "GameState.hpp"
-#include "GameTime.hpp"
-#include "KeyboardHandler.hpp"
-#include "LuaGUIState.hpp"
-#include "Mouse.hpp"
-#include "PauseMenuState.hpp"
-#include "Registry.hpp"
-#include "RenderTarget.hpp"
-#include "ResourceHandler.hpp"
-#include "TextureAtlas.hpp"
+#include "common/core/ApplicationStateStack.hpp"
+#include "common/core/Exception.hpp"
+#include "common/core/GameClock.hpp"
+#include "common/core/GameTime.hpp"
+#include "common/core/Registry.hpp"
+#include "common/core/input/GameKey.hpp"
+#include "common/event/Events.hpp"
+#include "common/resource/ResourceHandler.hpp"
+
+#include "client/core/KeyboardHandler.hpp"
+#include "client/core/Mouse.hpp"
+#include "client/core/input/GamePad.hpp"
+#include "client/graphics/BgfxView.hpp"
+#include "client/graphics/RenderTarget.hpp"
+#include "client/graphics/TextureAtlas.hpp"
+#include "client/states/ChatState.hpp"
+#include "client/states/GameState.hpp"
+#include "client/states/LuaGUIState.hpp"
+#include "client/states/PauseMenuState.hpp"
 
 GameState::GameState()
 	: m_textureAtlas(ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))

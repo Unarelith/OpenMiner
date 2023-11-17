@@ -28,8 +28,7 @@
 
 #include <bx/bx.h>
 
-#include "Debug.hpp"
-#include "VertexBuffer.hpp"
+#include "client/graphics/VertexBuffer.hpp"
 
 VertexBuffer::VertexBuffer() {
 }

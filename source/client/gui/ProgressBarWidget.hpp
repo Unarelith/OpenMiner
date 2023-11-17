@@ -27,9 +27,10 @@
 #ifndef PROGRESSBARWIDGET_HPP_
 #define PROGRESSBARWIDGET_HPP_
 
-#include "BlockData.hpp"
-#include "Image.hpp"
-#include "Widget.hpp"
+#include "common/world/BlockData.hpp"
+
+#include "client/graphics/Image.hpp"
+#include "client/gui/Widget.hpp"
 
 // Duplicated in ProgressBarWidgetDef
 enum class ProgressBarType : u8 {

@@ -29,7 +29,7 @@
 
 #include <string>
 
-#include "Vector2.hpp"
+#include "common/core/Vector2.hpp"
 
 class Texture;
 

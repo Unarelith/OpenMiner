@@ -28,7 +28,7 @@
 
 #include <bx/bx.h>
 
-#include "IndexBuffer.hpp"
+#include "client/graphics/IndexBuffer.hpp"
 
 IndexBuffer::IndexBuffer() {
 }

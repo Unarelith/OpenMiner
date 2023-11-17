@@ -24,11 +24,12 @@
  *
  * =====================================================================================
  */
-#include "ApplicationStateStack.hpp"
-#include "GameState.hpp"
-#include "ServerConnectState.hpp"
-#include "ServerLoadingState.hpp"
-#include "Utils.hpp"
+#include "common/core/ApplicationStateStack.hpp"
+#include "common/core/Utils.hpp"
+
+#include "client/states/GameState.hpp"
+#include "client/states/ServerConnectState.hpp"
+#include "client/states/ServerLoadingState.hpp"
 
 ServerConnectState::ServerConnectState(DrawableState *parent) : InterfaceState(parent) {
 	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
@@ -175,4 +176,3 @@ void ServerConnectState::draw(RenderTarget &target, RenderStates states) const {
 			target.draw(m_errorText, states);
 	}
 }
-

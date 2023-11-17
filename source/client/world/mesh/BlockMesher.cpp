@@ -24,10 +24,11 @@
  *
  * =====================================================================================
  */
-#include "BlockGeometry.hpp"
-#include "BlockMesher.hpp"
-#include "Config.hpp"
-#include "LightUtils.hpp"
+#include "common/core/BlockGeometry.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/world/mesh/BlockMesher.hpp"
+#include "client/world/mesh/LightUtils.hpp"
 
 using namespace BlockGeometry;
 using namespace LightUtils;
@@ -250,4 +251,3 @@ void BlockMesher::addBlockFace(s8f x, s8f y, s8f z, s8f f, ChunkMeshBuildingJob 
 
 	job.totalVertexCount += 6;
 }
-

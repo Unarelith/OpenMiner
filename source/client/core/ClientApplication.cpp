@@ -24,19 +24,20 @@
  *
  * =====================================================================================
  */
-#include "filesystem.hpp"
+#include <filesystem.hpp>
 
-#include "BlockGeometry.hpp"
-#include "ClientApplication.hpp"
-#include "Config.hpp"
-#include "EngineConfig.hpp"
-#include "Font.hpp"
-#include "GamePad.hpp"
-#include "TextureAtlas.hpp"
-#include "TextureLoader.hpp"
-#include "Vertex.hpp"
+#include "common/core/BlockGeometry.hpp"
+#include "common/core/EngineConfig.hpp"
 
-#include "TitleScreenState.hpp"
+#include "client/core/ClientApplication.hpp"
+#include "client/core/Config.hpp"
+#include "client/core/input/GamePad.hpp"
+#include "client/graphics/TextureAtlas.hpp"
+#include "client/graphics/Vertex.hpp"
+#include "client/gui/Font.hpp"
+#include "client/resource/TextureLoader.hpp"
+
+#include "client/states/TitleScreenState.hpp"
 
 namespace fs = ghc::filesystem;
 
@@ -193,4 +194,3 @@ void ClientApplication::mainLoop() {
 		OM_PROFILE_END_TICK();
 	}
 }
-

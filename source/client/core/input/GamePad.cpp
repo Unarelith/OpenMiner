@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "GamePad.hpp"
+#include "client/core/input/GamePad.hpp"
 
 InputHandler *GamePad::inputHandler = nullptr;
 

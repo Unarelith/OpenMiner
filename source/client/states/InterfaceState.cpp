@@ -26,11 +26,12 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "ApplicationStateStack.hpp"
-#include "BgfxView.hpp"
-#include "Config.hpp"
-#include "EngineConfig.hpp"
-#include "InterfaceState.hpp"
+#include "common/core/ApplicationStateStack.hpp"
+#include "common/core/EngineConfig.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/graphics/BgfxView.hpp"
+#include "client/states/InterfaceState.hpp"
 
 InterfaceState::InterfaceState(ApplicationState *parent) : DrawableState(parent) {
 	m_shader.loadFromFile("basic");

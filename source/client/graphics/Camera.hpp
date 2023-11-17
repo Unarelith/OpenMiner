@@ -27,7 +27,7 @@
 #ifndef CAMERA_HPP_
 #define CAMERA_HPP_
 
-#include "View.hpp"
+#include "client/graphics/View.hpp"
 
 class Camera : public View {
 	public:

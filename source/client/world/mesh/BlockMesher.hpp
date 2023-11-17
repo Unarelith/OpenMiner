@@ -27,7 +27,7 @@
 #ifndef BLOCKMESHER_HPP_
 #define BLOCKMESHER_HPP_
 
-#include "ChunkMeshBuildingJob.hpp"
+#include "client/world/mesh/ChunkMeshBuildingJob.hpp"
 
 class BlockMesher {
 	public:

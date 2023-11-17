@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "Config.hpp"
-#include "Crosshair.hpp"
+#include "client/core/Config.hpp"
+#include "client/hud/Crosshair.hpp"
 
 Crosshair::Crosshair() {
 	setup();
@@ -50,4 +50,3 @@ void Crosshair::draw(RenderTarget &target, RenderStates states) const {
 	target.draw(m_vShape1, states);
 	target.draw(m_vShape2, states);
 }
-

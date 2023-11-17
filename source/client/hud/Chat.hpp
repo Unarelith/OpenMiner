@@ -29,7 +29,7 @@
 
 #include <deque>
 
-#include "ChatMessage.hpp"
+#include "client/hud/ChatMessage.hpp"
 
 class Client;
 

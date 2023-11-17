@@ -26,17 +26,18 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "BlockCursor.hpp"
-#include "BlockCursorRaycast.hpp"
-#include "ClientCommandHandler.hpp"
-#include "ClientPlayer.hpp"
-#include "Config.hpp"
-#include "GameClock.hpp"
-#include "GameKey.hpp"
-#include "GamePad.hpp"
-#include "Hotbar.hpp"
-#include "Registry.hpp"
-#include "ResourceHandler.hpp"
+#include "common/core/GameClock.hpp"
+#include "common/core/Registry.hpp"
+#include "common/core/input/GameKey.hpp"
+#include "common/resource/ResourceHandler.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/core/input/GamePad.hpp"
+#include "client/hud/BlockCursor.hpp"
+#include "client/hud/Hotbar.hpp"
+#include "client/math/BlockCursorRaycast.hpp"
+#include "client/network/ClientCommandHandler.hpp"
+#include "client/world/ClientPlayer.hpp"
 
 BlockCursor::BlockCursor(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 	: m_player(player), m_world(world), m_client(client)

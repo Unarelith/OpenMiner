@@ -24,13 +24,13 @@
  *
  * =====================================================================================
  */
-#include "ChunkMeshBuilder.hpp"
-#include "ClientProfiler.hpp"
-#include "ClientWorld.hpp"
-#include "TextureAtlas.hpp"
+#include "client/core/ClientProfiler.hpp"
+#include "client/graphics/TextureAtlas.hpp"
+#include "client/world/ChunkMeshBuilder.hpp"
+#include "client/world/ClientWorld.hpp"
 
-#include "BlockMesher.hpp"
-#include "XShapeMesher.hpp"
+#include "client/world/mesh/BlockMesher.hpp"
+#include "client/world/mesh/XShapeMesher.hpp"
 
 // NOTE: TextureAtlas and Registry are accessed from different threads.
 //
@@ -111,4 +111,3 @@ ChunkMeshBuildingJob *ChunkMeshBuilder::buildChunkMesh(ChunkMeshBuildingJob *job
 
 	return job;
 }
-

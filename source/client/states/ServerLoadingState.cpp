@@ -26,15 +26,16 @@
  */
 #include <thread>
 
-#include "ApplicationStateStack.hpp"
-#include "Config.hpp"
-#include "ConnectionErrorState.hpp"
-#include "GameConfig.hpp"
-#include "GameState.hpp"
-#include "Events.hpp"
-#include "Mouse.hpp"
-#include "ServerLoadingState.hpp"
-#include "TextureAtlas.hpp"
+#include "common/core/ApplicationStateStack.hpp"
+#include "common/event/Events.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/core/GameConfig.hpp"
+#include "client/core/Mouse.hpp"
+#include "client/graphics/TextureAtlas.hpp"
+#include "client/states/ConnectionErrorState.hpp"
+#include "client/states/GameState.hpp"
+#include "client/states/ServerLoadingState.hpp"
 
 ServerLoadingState::ServerLoadingState(GameState &game, bool showLoadingState, const std::string &host, u16 port, ApplicationState *parent)
 	: InterfaceState(parent), m_game(game), m_showLoadingState(showLoadingState)
@@ -142,4 +143,3 @@ void ServerLoadingState::draw(RenderTarget &target, RenderStates states) const {
 		m_hasBeenRendered = true;
 	}
 }
-

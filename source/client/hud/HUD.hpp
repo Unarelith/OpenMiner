@@ -27,17 +27,17 @@
 #ifndef HUD_HPP_
 #define HUD_HPP_
 
-#include "BlockCursor.hpp"
-#include "BlockInfoWidget.hpp"
-#include "Chat.hpp"
-#include "Crosshair.hpp"
-#include "DebugLightmapViewer.hpp"
-#include "DebugOverlay.hpp"
-#include "DebugProfilerWindow.hpp"
-#include "Hotbar.hpp"
-#include "Minimap.hpp"
-#include "Shader.hpp"
-#include "View.hpp"
+#include "client/hud/BlockCursor.hpp"
+#include "client/hud/BlockInfoWidget.hpp"
+#include "client/hud/Chat.hpp"
+#include "client/hud/Crosshair.hpp"
+#include "client/hud/DebugLightmapViewer.hpp"
+#include "client/hud/DebugOverlay.hpp"
+#include "client/hud/DebugProfilerWindow.hpp"
+#include "client/hud/Hotbar.hpp"
+#include "client/hud/Minimap.hpp"
+#include "client/graphics/Shader.hpp"
+#include "client/graphics/View.hpp"
 
 struct GuiScaleChangedEvent;
 

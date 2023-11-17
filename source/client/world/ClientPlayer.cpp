@@ -26,15 +26,16 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Camera.hpp"
-#include "ClientCommandHandler.hpp"
-#include "ClientPlayer.hpp"
-#include "ClientWorld.hpp"
-#include "GameClock.hpp"
-#include "GameConfig.hpp"
-#include "GameKey.hpp"
-#include "GamePad.hpp"
-#include "Registry.hpp"
+#include "common/core/GameClock.hpp"
+#include "common/core/Registry.hpp"
+#include "common/core/input/GameKey.hpp"
+
+#include "client/core/GameConfig.hpp"
+#include "client/core/input/GamePad.hpp"
+#include "client/graphics/Camera.hpp"
+#include "client/network/ClientCommandHandler.hpp"
+#include "client/world/ClientPlayer.hpp"
+#include "client/world/ClientWorld.hpp"
 
 ClientPlayer *ClientPlayer::s_instance = nullptr;
 
@@ -242,4 +243,3 @@ void ClientPlayer::applyViewBobbing(float &viewAngleH, float &viewAngleV, float 
 		viewAngleRoll += 0.3f * -sinf(t / 150.f);
 	}
 }
-

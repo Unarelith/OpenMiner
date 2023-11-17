@@ -27,12 +27,13 @@
 #ifndef IMAGE_HPP_
 #define IMAGE_HPP_
 
-#include "Color.hpp"
-#include "Drawable.hpp"
-#include "Rect.hpp"
-#include "Texture.hpp"
-#include "Transformable.hpp"
-#include "VertexBuffer.hpp"
+#include "common/core/Color.hpp"
+#include "common/core/Rect.hpp"
+
+#include "client/graphics/Drawable.hpp"
+#include "client/graphics/Texture.hpp"
+#include "client/graphics/Transformable.hpp"
+#include "client/graphics/VertexBuffer.hpp"
 
 class Image : public Drawable, public Transformable {
 	public:

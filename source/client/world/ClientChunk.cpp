@@ -24,10 +24,11 @@
  *
  * =====================================================================================
  */
-#include "ClientChunk.hpp"
-#include "ClientWorld.hpp"
-#include "TextureAtlas.hpp"
-#include "World.hpp"
+#include "common/world/World.hpp"
+
+#include "client/graphics/TextureAtlas.hpp"
+#include "client/world/ClientChunk.hpp"
+#include "client/world/ClientWorld.hpp"
 
 // Debug values only used in DebugOverlay
 u32 ClientChunk::chunkUpdatesPerSec = 0;
@@ -92,4 +93,3 @@ bool ClientChunk::areAllNeighboursTooFar() const {
 		&& (!m_surroundingChunks[Chunk::Bottom] || ((ClientChunk *)m_surroundingChunks[Chunk::Bottom])->isTooFar())
 		&& (!m_surroundingChunks[Chunk::Top]    || ((ClientChunk *)m_surroundingChunks[Chunk::Top])->isTooFar());
 }
-

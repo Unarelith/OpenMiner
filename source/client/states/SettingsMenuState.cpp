@@ -28,17 +28,18 @@
 
 #include <algorithm>
 
-#include "ApplicationStateStack.hpp"
-#include "Config.hpp"
-#include "Debug.hpp"
-#include "EventHandler.hpp"
-#include "Events.hpp"
-#include "GamePad.hpp"
-#include "KeyboardHandler.hpp"
-#include "Registry.hpp"
-#include "SettingsMenuState.hpp"
-#include "TexturePackSelectionState.hpp"
-#include "World.hpp"
+#include "common/core/ApplicationStateStack.hpp"
+#include "common/core/Debug.hpp"
+#include "common/core/EventHandler.hpp"
+#include "common/core/Registry.hpp"
+#include "common/event/Events.hpp"
+#include "common/world/World.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/core/KeyboardHandler.hpp"
+#include "client/core/input/GamePad.hpp"
+#include "client/states/SettingsMenuState.hpp"
+#include "client/states/TexturePackSelectionState.hpp"
 
 SettingsMenuState::SettingsMenuState(DrawableState *parent) : InterfaceState(parent) {
 	m_background.setScale(Config::guiScale * 2.f, Config::guiScale * 2.f);
@@ -368,4 +369,3 @@ void SettingsMenuState::draw(RenderTarget &target, RenderStates states) const {
 
 	target.disableView();
 }
-

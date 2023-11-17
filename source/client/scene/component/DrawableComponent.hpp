@@ -29,7 +29,7 @@
 
 #include <memory>
 
-#include "common/graphics/Drawable.hpp"
+#include "client/graphics/Drawable.hpp"
 
 class DrawableComponent {
 	public:

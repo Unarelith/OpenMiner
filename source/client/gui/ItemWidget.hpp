@@ -27,11 +27,12 @@
 #ifndef ITEMWIDGET_HPP_
 #define ITEMWIDGET_HPP_
 
-#include "Image.hpp"
-#include "Inventory.hpp"
-#include "InventoryCube.hpp"
-#include "Text.hpp"
-#include "Widget.hpp"
+#include "common/inventory/Inventory.hpp"
+
+#include "client/graphics/Image.hpp"
+#include "client/gui/InventoryCube.hpp"
+#include "client/gui/Text.hpp"
+#include "client/gui/Widget.hpp"
 
 class BlockState;
 

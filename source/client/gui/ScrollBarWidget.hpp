@@ -27,8 +27,8 @@
 #ifndef SCROLLBARWIDGET_HPP_
 #define SCROLLBARWIDGET_HPP_
 
-#include "Image.hpp"
-#include "InventoryWidget.hpp"
+#include "client/graphics/Image.hpp"
+#include "client/gui/InventoryWidget.hpp"
 
 class ScrollBarWidget : public Widget {
 	public:

@@ -26,14 +26,14 @@
  */
 #include <glm/gtx/quaternion.hpp>
 
-#include "DrawableDef.hpp"
-#include "DrawableComponent.hpp"
-#include "InventoryCube.hpp"
-#include "PositionComponent.hpp"
-#include "RenderingController.hpp"
-#include "RotationComponent.hpp"
+#include "common/core/Registry.hpp"
+#include "common/scene/component/DrawableDef.hpp"
+#include "common/scene/component/PositionComponent.hpp"
+#include "common/scene/component/RotationComponent.hpp"
 
-#include "Registry.hpp"
+#include "client/gui/InventoryCube.hpp"
+#include "client/scene/component/DrawableComponent.hpp"
+#include "client/scene/controller/RenderingController.hpp"
 
 void RenderingController::update(entt::registry &registry) {
 	registry.view<DrawableDef>(entt::exclude<DrawableComponent>).each([&](auto entity, auto &drawableDef) {

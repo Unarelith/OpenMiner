@@ -26,11 +26,12 @@
  */
 #include <bgfx/bgfx.h>
 
-#include "BgfxView.hpp"
-#include "Config.hpp"
-#include "CoreApplication.hpp"
-#include "Exception.hpp"
-#include "Window.hpp"
+#include "common/core/Exception.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/core/CoreApplication.hpp"
+#include "client/core/Window.hpp"
+#include "client/graphics/BgfxView.hpp"
 
 void Window::open(const std::string &caption, u16 width, u16 height) {
 	m_window.reset(SDL_CreateWindow(caption.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN));

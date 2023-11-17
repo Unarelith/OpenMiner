@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "Exception.hpp"
-#include "Sprite.hpp"
+#include "common/core/Exception.hpp"
+#include "client/graphics/Sprite.hpp"
 
 Sprite::Sprite(const std::string &textureName, u16 frameWidth, u16 frameHeight, bool isAnimated) : Image() {
 	load(textureName, frameWidth, frameHeight, isAnimated);

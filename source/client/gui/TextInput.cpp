@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "TextInput.hpp"
+#include "client/gui/TextInput.hpp"
 
 TextInput::TextInput(Widget *parent) : Widget(parent) {
 	m_cursor.setString("_");

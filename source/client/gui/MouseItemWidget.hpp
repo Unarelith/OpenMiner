@@ -27,9 +27,9 @@
 #ifndef MOUSEITEMWIDGET_HPP_
 #define MOUSEITEMWIDGET_HPP_
 
-#include "ItemWidget.hpp"
-#include "Sprite.hpp"
-#include "Text.hpp"
+#include "client/graphics/Sprite.hpp"
+#include "client/gui/ItemWidget.hpp"
+#include "client/gui/Text.hpp"
 
 class InventoryWidget;
 

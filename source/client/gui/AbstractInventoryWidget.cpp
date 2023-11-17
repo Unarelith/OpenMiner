@@ -26,7 +26,7 @@
  */
 #include <sstream>
 
-#include "AbstractInventoryWidget.hpp"
+#include "client/gui/AbstractInventoryWidget.hpp"
 
 void AbstractInventoryWidget::setShiftDestination(const std::string &shiftDestination) {
 	m_shiftDestination.clear();
@@ -44,4 +44,3 @@ bool AbstractInventoryWidget::doItemMatchFilter(const Item &item) {
 
 	return true;
 }
-

@@ -24,18 +24,19 @@
  *
  * =====================================================================================
  */
-#include "ApplicationStateStack.hpp"
-#include "Config.hpp"
-#include "Events.hpp"
-#include "GameConfig.hpp"
-#include "GameState.hpp"
-#include "ServerConnectState.hpp"
-#include "ServerLoadingState.hpp"
-#include "SettingsMenuState.hpp"
-#include "TitleScreenState.hpp"
-#include "WorldSelectionState.hpp"
+#include "common/core/ApplicationStateStack.hpp"
+#include "common/event/Events.hpp"
 
-#include "ServerApplication.hpp" // For ServerOnlineEvent
+#include "server/core/ServerApplication.hpp" // For ServerOnlineEvent
+
+#include "client/core/Config.hpp"
+#include "client/core/GameConfig.hpp"
+#include "client/states/GameState.hpp"
+#include "client/states/ServerConnectState.hpp"
+#include "client/states/ServerLoadingState.hpp"
+#include "client/states/SettingsMenuState.hpp"
+#include "client/states/TitleScreenState.hpp"
+#include "client/states/WorldSelectionState.hpp"
 
 TitleScreenState::TitleScreenState(u16 port) : m_port(port) {
 	m_menuWidget.setScale(Config::guiScale, Config::guiScale);
@@ -191,4 +192,3 @@ void TitleScreenState::draw(RenderTarget &target, RenderStates states) const {
 
 	target.draw(m_menuWidget, states);
 }
-

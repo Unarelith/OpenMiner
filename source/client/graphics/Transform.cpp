@@ -27,7 +27,7 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Transform.hpp"
+#include "client/graphics/Transform.hpp"
 
 const Transform Transform::Identity;
 

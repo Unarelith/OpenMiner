@@ -27,8 +27,8 @@
 #ifndef CONNECTIONERRORSTATE_HPP_
 #define CONNECTIONERRORSTATE_HPP_
 
-#include "InterfaceState.hpp"
-#include "MenuWidget.hpp"
+#include "client/gui/MenuWidget.hpp"
+#include "client/states/InterfaceState.hpp"
 
 class ConnectionErrorState : public InterfaceState {
 	public:

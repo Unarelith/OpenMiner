@@ -29,8 +29,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-#include "Exception.hpp"
-#include "Texture.hpp"
+#include "common/core/Exception.hpp"
+#include "client/graphics/Texture.hpp"
 
 const Texture *Texture::s_boundTexture = nullptr;
 

@@ -24,15 +24,16 @@
  *
  * =====================================================================================
  */
-#include "Block.hpp"
-#include "BlockGeometry.hpp"
-#include "Config.hpp"
-#include "EngineConfig.hpp"
-#include "InventoryCube.hpp"
-#include "Math.hpp"
-#include "ResourceHandler.hpp"
-#include "TextureAtlas.hpp"
-#include "Vertex.hpp"
+#include "common/core/BlockGeometry.hpp"
+#include "common/core/EngineConfig.hpp"
+#include "common/math/Math.hpp"
+#include "common/resource/ResourceHandler.hpp"
+#include "common/world/Block.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/graphics/TextureAtlas.hpp"
+#include "client/graphics/Vertex.hpp"
+#include "client/gui/InventoryCube.hpp"
 
 InventoryCube::InventoryCube(float size, bool isEntity)
 	: m_textureAtlas(&ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks"))

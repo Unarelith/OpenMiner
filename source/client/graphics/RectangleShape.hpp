@@ -29,10 +29,10 @@
 
 #include <array>
 
-#include "Color.hpp"
-#include "Drawable.hpp"
-#include "Transformable.hpp"
-#include "VertexBuffer.hpp"
+#include "common/core/Color.hpp"
+#include "client/graphics/Drawable.hpp"
+#include "client/graphics/Transformable.hpp"
+#include "client/graphics/VertexBuffer.hpp"
 
 class RectangleShape : public Drawable, public Transformable {
 	public:

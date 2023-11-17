@@ -26,8 +26,8 @@
  */
 #include <bx/math.h>
 
-#include "EngineConfig.hpp"
-#include "View.hpp"
+#include "common/core/EngineConfig.hpp"
+#include "client/graphics/View.hpp"
 
 View::View() {
 	reset(FloatRect(0, 0, 1000, 1000));

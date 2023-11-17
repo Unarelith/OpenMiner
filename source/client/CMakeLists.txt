@@ -18,14 +18,6 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Source Files" FILES ${SOUR
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})
 
 #------------------------------------------------------------------------------
-# Setup include directories
-#------------------------------------------------------------------------------
-foreach(HEADER_FILE ${HEADER_FILES})
-	get_filename_component(HEADER_DIRECTORY ${HEADER_FILE} DIRECTORY)
-	target_include_directories(${PROJECT_NAME} PUBLIC ${HEADER_DIRECTORY})
-endforeach(HEADER_FILE)
-
-#------------------------------------------------------------------------------
 # Compiler flags
 #------------------------------------------------------------------------------
 if (NOT MSVC)

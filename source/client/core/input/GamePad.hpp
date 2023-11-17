@@ -27,7 +27,7 @@
 #ifndef GAMEPAD_HPP_
 #define GAMEPAD_HPP_
 
-#include "InputHandler.hpp"
+#include "common/core/input/InputHandler.hpp"
 
 class GamePad {
 	public:

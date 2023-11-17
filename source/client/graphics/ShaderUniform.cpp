@@ -24,9 +24,9 @@
  *
  * =====================================================================================
  */
-#include "Color.hpp"
-#include "Exception.hpp"
-#include "ShaderUniform.hpp"
+#include "common/core/Color.hpp"
+#include "common/core/Exception.hpp"
+#include "client/graphics/ShaderUniform.hpp"
 
 ShaderUniform::ShaderUniform(ShaderUniform &&shaderUniform) {
 	m_handle = shaderUniform.m_handle;

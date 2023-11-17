@@ -27,12 +27,13 @@
 #ifndef PLAYERBOX_HPP_
 #define PLAYERBOX_HPP_
 
-#include "Camera.hpp"
-#include "Drawable.hpp"
-#include "IndexBuffer.hpp"
-#include "Player.hpp"
-#include "Transformable.hpp"
-#include "VertexBuffer.hpp"
+#include "common/world/Player.hpp"
+
+#include "client/graphics/Camera.hpp"
+#include "client/graphics/Drawable.hpp"
+#include "client/graphics/IndexBuffer.hpp"
+#include "client/graphics/Transformable.hpp"
+#include "client/graphics/VertexBuffer.hpp"
 
 class PlayerBox : public Drawable, public Transformable, public Player {
 	public:

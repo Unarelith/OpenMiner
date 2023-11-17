@@ -26,13 +26,14 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "ClientCommandHandler.hpp"
-#include "ClientPlayer.hpp"
-#include "ClientProfiler.hpp"
-#include "Config.hpp"
-#include "Events.hpp"
-#include "GameClock.hpp"
-#include "HUD.hpp"
+#include "common/core/GameClock.hpp"
+#include "common/event/Events.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/core/ClientProfiler.hpp"
+#include "client/hud/HUD.hpp"
+#include "client/network/ClientCommandHandler.hpp"
+#include "client/world/ClientPlayer.hpp"
 
 HUD::HUD(ClientPlayer &player, ClientWorld &world, ClientCommandHandler &client)
 	: m_player(player), m_world(world),
@@ -164,4 +165,3 @@ void HUD::draw(RenderTarget &target, RenderStates states) const {
 
 	OM_PROFILE_END("HUD::draw");
 }
-

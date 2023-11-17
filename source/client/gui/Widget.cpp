@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "Widget.hpp"
+#include "client/gui/Widget.hpp"
 
 bool Widget::isPointInWidget(int x, int y) {
 	return getGlobalBounds().intersects(FloatRect{(float)x, (float)y, 1, 1});
@@ -49,4 +49,3 @@ FloatRect Widget::getGlobalBounds() const {
 
 	return aabb;
 }
-

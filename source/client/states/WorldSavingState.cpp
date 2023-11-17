@@ -24,11 +24,12 @@
  *
  * =====================================================================================
  */
-#include "ApplicationStateStack.hpp"
-#include "Client.hpp"
-#include "Config.hpp"
-#include "TitleScreenState.hpp"
-#include "WorldSavingState.hpp"
+#include "common/core/ApplicationStateStack.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/network/Client.hpp"
+#include "client/states/TitleScreenState.hpp"
+#include "client/states/WorldSavingState.hpp"
 
 WorldSavingState::WorldSavingState(Client &client, bool closeClient, DrawableState *parent)
 	: InterfaceState(parent), m_client(client)
@@ -96,4 +97,3 @@ void WorldSavingState::draw(RenderTarget &target, RenderStates states) const {
 		m_hasBeenRendered = true;
 	}
 }
-

@@ -24,11 +24,12 @@
  *
  * =====================================================================================
  */
-#include "Camera.hpp"
-#include "PlayerBox.hpp"
-#include "ResourceHandler.hpp"
-#include "Vertex.hpp"
-#include "Texture.hpp"
+#include "common/resource/ResourceHandler.hpp"
+
+#include "client/graphics/Camera.hpp"
+#include "client/graphics/PlayerBox.hpp"
+#include "client/graphics/Texture.hpp"
+#include "client/graphics/Vertex.hpp"
 
 constexpr int NUM_QUADS = 34;
 constexpr int NUM_INDICES_PER_QUAD = 6;

@@ -27,7 +27,7 @@
 #ifndef LIGHTUTILS_HPP_
 #define LIGHTUTILS_HPP_
 
-#include "BlockMesher.hpp"
+#include "client/world/mesh/BlockMesher.hpp"
 
 namespace LightUtils {
 	enum LightType {

@@ -24,12 +24,12 @@
  *
  * =====================================================================================
  */
-#include "Drawable.hpp"
-#include "IndexBuffer.hpp"
-#include "RenderTarget.hpp"
-#include "Shader.hpp"
-#include "Texture.hpp"
-#include "VertexBuffer.hpp"
+#include "client/graphics/Drawable.hpp"
+#include "client/graphics/IndexBuffer.hpp"
+#include "client/graphics/RenderTarget.hpp"
+#include "client/graphics/Shader.hpp"
+#include "client/graphics/Texture.hpp"
+#include "client/graphics/VertexBuffer.hpp"
 
 const RenderStates RenderStates::Default{};
 

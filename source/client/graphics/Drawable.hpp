@@ -27,7 +27,7 @@
 #ifndef DRAWABLE_HPP_
 #define DRAWABLE_HPP_
 
-#include "RenderTarget.hpp"
+#include "client/graphics/RenderTarget.hpp"
 
 class Drawable {
 	public:

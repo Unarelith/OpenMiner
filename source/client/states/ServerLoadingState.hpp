@@ -27,9 +27,9 @@
 #ifndef SERVERLOADINGSTATE_HPP_
 #define SERVERLOADINGSTATE_HPP_
 
-#include "Image.hpp"
-#include "InterfaceState.hpp"
-#include "Text.hpp"
+#include "client/graphics/Image.hpp"
+#include "client/gui/Text.hpp"
+#include "client/states/InterfaceState.hpp"
 
 class GameState;
 struct ServerOnlineEvent;

@@ -29,9 +29,10 @@
 
 #include <SDL.h>
 
-#include "Drawable.hpp"
-#include "Rect.hpp"
-#include "Transformable.hpp"
+#include "common/core/Rect.hpp"
+
+#include "client/graphics/Drawable.hpp"
+#include "client/graphics/Transformable.hpp"
 
 class Widget : public Drawable, public Transformable {
 	public:

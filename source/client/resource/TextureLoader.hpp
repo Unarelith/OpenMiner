@@ -27,7 +27,7 @@
 #ifndef TEXTURELOADER_HPP_
 #define TEXTURELOADER_HPP_
 
-#include "IResourceLoader.hpp"
+#include "common/resource/IResourceLoader.hpp"
 
 class TextureLoader : public IResourceLoader {
 	public:

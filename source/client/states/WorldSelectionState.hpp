@@ -27,9 +27,9 @@
 #ifndef WORLDSELECTIONSTATE_HPP_
 #define WORLDSELECTIONSTATE_HPP_
 
-#include "InterfaceState.hpp"
-#include "MenuWidget.hpp"
-#include "ScrollableList.hpp"
+#include "client/gui/MenuWidget.hpp"
+#include "client/gui/ScrollableList.hpp"
+#include "client/states/InterfaceState.hpp"
 
 class TitleScreenState;
 

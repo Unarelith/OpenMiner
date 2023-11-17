@@ -26,25 +26,26 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "ApplicationStateStack.hpp"
-#include "ClientPlayer.hpp"
-#include "ClientWorld.hpp"
-#include "Color.hpp"
-#include "Config.hpp"
-#include "Debug.hpp"
-#include "GameKey.hpp"
-#include "GamePad.hpp"
-#include "InventoryWidget.hpp"
-#include "LuaGUIState.hpp"
-#include "LuaWidget.hpp"
-#include "Mouse.hpp"
-#include "Network.hpp"
-#include "NetworkUtils.hpp"
-#include "Player.hpp"
-#include "ProgressBarWidget.hpp"
-#include "Registry.hpp"
-#include "ScrollBarWidget.hpp"
-#include "TextButton.hpp"
+#include "common/core/ApplicationStateStack.hpp"
+#include "common/core/Color.hpp"
+#include "common/core/Debug.hpp"
+#include "common/core/LuaWidget.hpp"
+#include "common/core/Registry.hpp"
+#include "common/core/input/GameKey.hpp"
+#include "common/network/Network.hpp"
+#include "common/network/NetworkUtils.hpp"
+#include "common/world/Player.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/core/Mouse.hpp"
+#include "client/core/input/GamePad.hpp"
+#include "client/gui/InventoryWidget.hpp"
+#include "client/gui/ProgressBarWidget.hpp"
+#include "client/gui/ScrollBarWidget.hpp"
+#include "client/gui/TextButton.hpp"
+#include "client/states/LuaGUIState.hpp"
+#include "client/world/ClientPlayer.hpp"
+#include "client/world/ClientWorld.hpp"
 
 bool LuaGUIState::isActive = false;
 
@@ -437,4 +438,3 @@ void LuaGUIState::centerMainWidget() {
 	float y = floorf(Config::screenHeight / 2.0f - m_height * Config::guiScale / 2.0f + 0.5f);
 	m_mainWidget.setPosition(x, y);
 }
-

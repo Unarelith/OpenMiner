@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "Config.hpp"
-#include "LightUtils.hpp"
+#include "client/core/Config.hpp"
+#include "client/world/mesh/LightUtils.hpp"
 
 // Based on this article: https://0fps.net/2013/07/03/ambient-occlusion-for-minecraft-like-worlds/
 u8 LightUtils::getAmbientOcclusion(s8f x, s8f y, s8f z,
@@ -111,4 +111,3 @@ u8 LightUtils::getLightForVertex(LightType lightType, s8f x, s8f y, s8f z,
 	else
 		return 0;
 }
-

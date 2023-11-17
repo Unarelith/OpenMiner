@@ -29,8 +29,8 @@
 
 #include <bgfx/bgfx.h>
 
-#include "IntTypes.hpp"
-#include "NonCopyable.hpp"
+#include "common/core/IntTypes.hpp"
+#include "common/utils/NonCopyable.hpp"
 
 class VertexBuffer : public NonCopyable {
 	public:

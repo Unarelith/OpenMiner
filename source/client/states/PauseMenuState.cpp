@@ -26,17 +26,18 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "ApplicationStateStack.hpp"
-#include "Client.hpp"
-#include "Config.hpp"
-#include "EventHandler.hpp"
-#include "Events.hpp"
-#include "GameConfig.hpp"
-#include "Mouse.hpp"
-#include "PauseMenuState.hpp"
-#include "SettingsMenuState.hpp"
-#include "TitleScreenState.hpp"
-#include "WorldSavingState.hpp"
+#include "common/core/ApplicationStateStack.hpp"
+#include "common/core/EventHandler.hpp"
+#include "common/event/Events.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/core/GameConfig.hpp"
+#include "client/core/Mouse.hpp"
+#include "client/network/Client.hpp"
+#include "client/states/PauseMenuState.hpp"
+#include "client/states/SettingsMenuState.hpp"
+#include "client/states/TitleScreenState.hpp"
+#include "client/states/WorldSavingState.hpp"
 
 PauseMenuState::PauseMenuState(Client &client, DrawableState *parent)
 	: InterfaceState(parent), m_client(client)
@@ -132,4 +133,3 @@ void PauseMenuState::draw(RenderTarget &target, RenderStates states) const {
 		target.draw(m_menuWidget, states);
 	}
 }
-

@@ -27,7 +27,7 @@
 #ifndef TRANSFORMABLE_HPP_
 #define TRANSFORMABLE_HPP_
 
-#include "Transform.hpp"
+#include "client/graphics/Transform.hpp"
 
 class Transformable {
 	public:

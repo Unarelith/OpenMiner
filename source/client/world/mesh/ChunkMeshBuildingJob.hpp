@@ -27,11 +27,12 @@
 #ifndef CHUNKMESHBUILDINGJOB_HPP_
 #define CHUNKMESHBUILDINGJOB_HPP_
 
-#include "Chunk.hpp"
-#include "ChunkMeshLayer.hpp"
-#include "Registry.hpp"
-#include "TextureAtlas.hpp"
-#include "Vertex.hpp"
+#include "common/core/Registry.hpp"
+#include "common/world/Chunk.hpp"
+
+#include "client/graphics/TextureAtlas.hpp"
+#include "client/graphics/Vertex.hpp"
+#include "client/world/ChunkMeshLayer.hpp"
 
 struct ChunkData {
 	s32 x, y, z;

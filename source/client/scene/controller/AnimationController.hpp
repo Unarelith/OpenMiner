@@ -27,7 +27,7 @@
 #ifndef ANIMATIONCONTROLLER_HPP_
 #define ANIMATIONCONTROLLER_HPP_
 
-#include "AbstractController.hpp"
+#include "common/scene/controller/AbstractController.hpp"
 
 class AnimationController : public AbstractController {
 	public:

@@ -26,10 +26,11 @@
  */
 #include <glm/gtx/quaternion.hpp>
 
-#include "AnimationComponent.hpp"
-#include "AnimationController.hpp"
-#include "PositionComponent.hpp"
-#include "RotationComponent.hpp"
+#include "common/scene/component/AnimationComponent.hpp"
+#include "common/scene/component/PositionComponent.hpp"
+#include "common/scene/component/RotationComponent.hpp"
+
+#include "client/scene/controller/AnimationController.hpp"
 
 void AnimationController::update(entt::registry &registry) {
 	registry.view<PositionComponent, AnimationComponent>().each([](auto, auto &position, auto &animation) {
@@ -74,4 +75,3 @@ void AnimationController::update(entt::registry &registry) {
 		}
 	});
 }
-

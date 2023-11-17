@@ -29,8 +29,8 @@
 
 #include <deque>
 
-#include "SliderWidget.hpp"
-#include "TextButton.hpp"
+#include "client/gui/SliderWidget.hpp"
+#include "client/gui/TextButton.hpp"
 
 struct GuiScaleChangedEvent;
 

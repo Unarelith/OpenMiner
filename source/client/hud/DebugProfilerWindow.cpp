@@ -27,7 +27,7 @@
 #include <map>
 #include <sstream>
 
-#include "DebugProfilerWindow.hpp"
+#include "client/hud/DebugProfilerWindow.hpp"
 
 DebugProfilerWindow::DebugProfilerWindow() {
 #ifndef OM_PROFILER_ENABLED
@@ -114,4 +114,3 @@ void DebugProfilerWindow::draw(RenderTarget &target, RenderStates states) const 
 
 	target.draw(m_text, states);
 }
-

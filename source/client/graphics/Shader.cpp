@@ -26,8 +26,8 @@
  */
 #include <fstream>
 
-#include "Exception.hpp"
-#include "Shader.hpp"
+#include "common/core/Exception.hpp"
+#include "client/graphics/Shader.hpp"
 
 Shader::Shader(const std::string &name) {
 	loadFromFile(name);

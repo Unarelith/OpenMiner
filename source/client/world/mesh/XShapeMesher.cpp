@@ -24,9 +24,10 @@
  *
  * =====================================================================================
  */
-#include "BlockGeometry.hpp"
-#include "ChunkMeshBuildingJob.hpp"
-#include "XShapeMesher.hpp"
+#include "common/core/BlockGeometry.hpp"
+
+#include "client/world/mesh/ChunkMeshBuildingJob.hpp"
+#include "client/world/mesh/XShapeMesher.hpp"
 
 using namespace BlockGeometry;
 
@@ -98,4 +99,3 @@ void XShapeMesher::addCross(s8f x, s8f y, s8f z, ChunkMeshBuildingJob &job,
 		job.totalVertexCount += 6;
 	}
 }
-
