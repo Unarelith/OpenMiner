@@ -21,7 +21,6 @@ function(om_setup_target PROJECT_NAME)
 endfunction()
 
 function(om_add_library PROJECT_NAME HEADER_FILES SOURCE_FILES)
-	message(${SOURCE_FILES})
 	source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Header Files" FILES ${HEADER_FILES})
 	source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Source Files" FILES ${SOURCE_FILES})
 
