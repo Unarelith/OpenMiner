@@ -17,12 +17,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 #------------------------------------------------------------------------------
 # Options
 #------------------------------------------------------------------------------
-set(OM_BUILD_TESTS ON CACHE BOOL "Enable building tests if CxxTest is available")
+option(OM_BUILD_TESTS "Enable building tests if CxxTest is available" ON)
+option(GIT_SUBMODULE  "Check git submodules during build"             ON)
 
 #------------------------------------------------------------------------------
 # Additional cmake files
 #------------------------------------------------------------------------------
 include(compiler_flags)
+include(git_submodules)
 include(om_target)
 include(utils)
 
