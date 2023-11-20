@@ -17,9 +17,5 @@ if(OM_BUILD_TESTS)
 		file(GLOB_RECURSE TEST_FILES "${PROJECT_SOURCE_DIR}/tests/*.hpp")
 		CXXTEST_ADD_TEST(${CMAKE_PROJECT_NAME}_tests unit-test.cpp ${TEST_FILES})
 		target_link_libraries(${CMAKE_PROJECT_NAME}_tests ${CMAKE_PROJECT_NAME}_common ${CMAKE_PROJECT_NAME}_server_lib)
-	else()
-		message(WARNING "CxxTest not found!")
 	endif()
 endif()
-
-
