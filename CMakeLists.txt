@@ -24,6 +24,7 @@ set(OM_BUILD_TESTS ON CACHE BOOL "Enable building tests if CxxTest is available"
 #------------------------------------------------------------------------------
 include(compiler_flags)
 include(om_target)
+include(utils)
 
 #------------------------------------------------------------------------------
 # Subdirectories
