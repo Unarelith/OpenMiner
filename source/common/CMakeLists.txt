@@ -159,7 +159,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 	tinyxml2
 	glm_static
 	libluajit
-	zlib
+	zlibstatic
 	EnTT
 	${UNIX_LIBS}
 )
