@@ -27,9 +27,9 @@
 #ifndef SERVERCONNECTSTATE_HPP_
 #define SERVERCONNECTSTATE_HPP_
 
-#include "InterfaceState.hpp"
-#include "MenuWidget.hpp"
-#include "TextInput.hpp"
+#include "client/gui/MenuWidget.hpp"
+#include "client/gui/TextInput.hpp"
+#include "client/states/InterfaceState.hpp"
 
 class ServerConnectState : public InterfaceState {
 	public:

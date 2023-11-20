@@ -28,8 +28,8 @@
 
 #include <filesystem.hpp>
 
-#include "Debug.hpp"
-#include "ServerConfig.hpp"
+#include "common/core/Debug.hpp"
+#include "server/core/ServerConfig.hpp"
 
 namespace fs = ghc::filesystem;
 
@@ -122,4 +122,3 @@ bool ServerConfig::assignOption(const std::string &name, const std::string &valu
 
 	return false;
 }
-

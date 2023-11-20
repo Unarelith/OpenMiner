@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "ScrollableList.hpp"
+#include "client/gui/ScrollableList.hpp"
 
 u16 ScrollableListElement::widgetWidth = 200;
 
@@ -111,4 +111,3 @@ void ScrollableList::draw(RenderTarget &target, RenderStates states) const {
 	if (m_selectedElement)
 		target.draw(m_cursor, states);
 }
-

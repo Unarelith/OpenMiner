@@ -31,9 +31,9 @@
 
 #include <SDL.h>
 
-#include "Events.hpp"
-#include "RectangleShape.hpp"
-#include "Text.hpp"
+#include "common/event/Events.hpp"
+#include "client/graphics/RectangleShape.hpp"
+#include "client/gui/Text.hpp"
 
 class ClientPlayer;
 

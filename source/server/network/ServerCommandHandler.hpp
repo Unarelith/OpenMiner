@@ -32,8 +32,8 @@
 #include <entt/entt.hpp>
 #include <sol/sol.hpp>
 
-#include "ChatCommandHandler.hpp"
-#include "Vector3.hpp"
+#include "common/core/Vector3.hpp"
+#include "server/network/ChatCommandHandler.hpp"
 
 struct BlockData;
 

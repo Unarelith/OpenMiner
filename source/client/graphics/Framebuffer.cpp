@@ -24,10 +24,10 @@
  *
  * =====================================================================================
  */
-#include "BgfxView.hpp"
-#include "Exception.hpp"
-#include "Framebuffer.hpp"
-#include "GameConfig.hpp"
+#include "common/core/Exception.hpp"
+#include "client/core/GameConfig.hpp"
+#include "client/graphics/BgfxView.hpp"
+#include "client/graphics/Framebuffer.hpp"
 
 Framebuffer::Framebuffer() {
 	const float minv = (bgfx::getCaps()->originBottomLeft) ? 0.0f : 1.0f;

@@ -27,8 +27,8 @@
 #ifndef DRAWABLESTATE_HPP_
 #define DRAWABLESTATE_HPP_
 
-#include "ApplicationState.hpp"
-#include "Drawable.hpp"
+#include "common/core/ApplicationState.hpp"
+#include "client/graphics/Drawable.hpp"
 
 class DrawableState : public ApplicationState, public Drawable {
 	public:

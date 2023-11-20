@@ -27,7 +27,7 @@
 #ifndef INVENTORYWIDGETDEF_HPP_
 #define INVENTORYWIDGETDEF_HPP_
 
-#include "WidgetDef.hpp"
+#include "server/gui/WidgetDef.hpp"
 
 class InventoryWidgetDef : public WidgetDef {
 	public:

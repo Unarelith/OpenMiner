@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "ClientProfiler.hpp"
-#include "Debug.hpp"
+#include "common/core/Debug.hpp"
+#include "client/core/ClientProfiler.hpp"
 
 u64 ClientProfiler::tickCount = 0;
 
@@ -85,4 +85,3 @@ void ClientProfiler::dump(u64 tickDurationMin) {
 		logDebug() << "Max duration for action" << actionName << ":" << pair.first << "ms (" << pair.second << ")";
 	}
 }
-

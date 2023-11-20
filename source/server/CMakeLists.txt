@@ -6,66 +6,123 @@ set(PROJECT_NAME ${PROJECT_NAME}_server)
 #------------------------------------------------------------------------------
 # Get source files
 #------------------------------------------------------------------------------
-file(GLOB_RECURSE SOURCE_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} */*.cpp)
-file(GLOB_RECURSE HEADER_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.hpp)
+set(SOURCE_FILES
+	core/PlayerList.cpp
+	core/ServerApplication.cpp
+	core/ServerConfig.cpp
 
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Header Files" FILES ${HEADER_FILES})
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Source Files" FILES ${SOURCE_FILES} main.cpp)
+	gui/CraftingWidgetDef.cpp
+	gui/ImageWidgetDef.cpp
+	gui/InventoryWidgetDef.cpp
+	gui/ProgressBarWidgetDef.cpp
+	gui/ScrollBarWidgetDef.cpp
+	gui/TextButtonWidgetDef.cpp
+	gui/TextInputWidgetDef.cpp
+	gui/WidgetDef.cpp
+
+	lua/LuaCore.cpp
+	lua/LuaGUI.cpp
+	lua/LuaMod.cpp
+	lua/ScriptEngine.cpp
+	lua/ServerModLoader.cpp
+	lua/loader/LuaBiomeLoader.cpp
+	lua/loader/LuaBlockLoader.cpp
+	lua/loader/LuaDimensionLoader.cpp
+	lua/loader/LuaEntityLoader.cpp
+	lua/loader/LuaItemLoader.cpp
+	lua/loader/LuaKeyLoader.cpp
+	lua/loader/LuaRecipeLoader.cpp
+	lua/loader/LuaSkyLoader.cpp
+
+	network/ChatCommandHandler.cpp
+	network/Server.cpp
+	network/ServerCommandHandler.cpp
+	network/ServerInfo.cpp
+
+	scene/EntityWrapper.cpp
+	scene/ServerScene.cpp
+	scene/controller/CollisionController.cpp
+	scene/controller/NetworkController.cpp
+
+	world/ServerBlock.cpp
+	world/ServerChunk.cpp
+	world/ServerItem.cpp
+	world/ServerPlayer.cpp
+	world/ServerWorld.cpp
+	world/TerrainBiomeSampler.cpp
+	world/TerrainGenerator.cpp
+	world/WorldController.cpp
+	world/save/WorldSaveBasicBackend.cpp
+)
+
+set(HEADER_FILES
+	core/NetworkInputHandler.hpp
+	core/PlayerList.hpp
+	core/ServerApplication.hpp
+	core/ServerConfig.hpp
+
+	gui/CraftingWidgetDef.hpp
+	gui/ImageWidgetDef.hpp
+	gui/InventoryWidgetDef.hpp
+	gui/ProgressBarWidgetDef.hpp
+	gui/ScrollBarWidgetDef.hpp
+	gui/TextButtonWidgetDef.hpp
+	gui/TextInputWidgetDef.hpp
+	gui/WidgetDef.hpp
+
+	lua/LuaCore.hpp
+	lua/LuaGUI.hpp
+	lua/LuaMod.hpp
+	lua/ScriptEngine.hpp
+	lua/ServerModLoader.hpp
+	lua/loader/LuaBiomeLoader.hpp
+	lua/loader/LuaBlockLoader.hpp
+	lua/loader/LuaDimensionLoader.hpp
+	lua/loader/LuaEntityLoader.hpp
+	lua/loader/LuaItemLoader.hpp
+	lua/loader/LuaKeyLoader.hpp
+	lua/loader/LuaRecipeLoader.hpp
+	lua/loader/LuaSkyLoader.hpp
+
+	network/ChatCommandHandler.hpp
+	network/ClientInfo.hpp
+	network/Server.hpp
+	network/ServerCommandHandler.hpp
+	network/ServerInfo.hpp
+
+	scene/EntityWrapper.hpp
+	scene/ServerScene.hpp
+	scene/controller/CollisionController.hpp
+	scene/controller/NetworkController.hpp
+
+	world/ServerBlock.hpp
+	world/ServerChunk.hpp
+	world/ServerItem.hpp
+	world/ServerPlayer.hpp
+	world/ServerWorld.hpp
+	world/TerrainBiomeSampler.hpp
+	world/TerrainGenerator.hpp
+	world/WorldController.hpp
+	world/save/WorldSaveBackend.hpp
+	world/save/WorldSaveBasicBackend.hpp
+)
 
 #------------------------------------------------------------------------------
 # Add executables
 #------------------------------------------------------------------------------
-add_library(${PROJECT_NAME}_lib STATIC ${HEADER_FILES} ${SOURCE_FILES})
-add_executable(${PROJECT_NAME} main.cpp)
+om_add_library(${PROJECT_NAME}_lib "${HEADER_FILES}" "${SOURCE_FILES}")
 
-add_dependencies(${PROJECT_NAME}_lib ${CMAKE_PROJECT_NAME}_common)
-add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_lib)
+add_executable(${PROJECT_NAME} main.cpp)
 
 #------------------------------------------------------------------------------
 # Setup include directories
 #------------------------------------------------------------------------------
-target_include_directories(${PROJECT_NAME}_lib PUBLIC ../../external ../../external/entt/single_include)
-
-foreach(HEADER_FILE ${HEADER_FILES})
-	get_filename_component(HEADER_DIRECTORY ${HEADER_FILE} DIRECTORY)
-	target_include_directories(${PROJECT_NAME}_lib PUBLIC ${HEADER_DIRECTORY})
-endforeach(HEADER_FILE)
-
-#------------------------------------------------------------------------------
-# Compiler flags
-#------------------------------------------------------------------------------
-if (NOT MSVC)
-	target_compile_options(${PROJECT_NAME}_lib PRIVATE "$<$<CONFIG:DEBUG>:${DEBUG_GCC_FLAGS}>")
-	target_compile_options(${PROJECT_NAME}_lib PRIVATE "$<$<CONFIG:RELEASE>:${RELEASE_GCC_FLAGS}>")
-	target_compile_options(${PROJECT_NAME}_lib PRIVATE "$<$<CONFIG:RELWITHDEBINFO>:${RELWITHDEB_GCC_FLAGS}>")
-	target_compile_options(${PROJECT_NAME}_lib PRIVATE ${CLANG_FLAGS})
-
-	target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CONFIG:DEBUG>:${DEBUG_GCC_FLAGS}>")
-	target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CONFIG:RELEASE>:${RELEASE_GCC_FLAGS}>")
-	target_compile_options(${PROJECT_NAME} PRIVATE "$<$<CONFIG:RELWITHDEBINFO>:${RELWITHDEB_GCC_FLAGS}>")
-	target_compile_options(${PROJECT_NAME} PRIVATE ${CLANG_FLAGS})
-endif ()
-
-target_compile_options(${PROJECT_NAME}_lib PRIVATE -D_USE_MATH_DEFINES)
-target_compile_options(${PROJECT_NAME}_lib PRIVATE -DSOL_CHECK_ARGUMENTS -DSOL_PRINT_ERRORS=0)
-
-target_compile_options(${PROJECT_NAME} PRIVATE -D_USE_MATH_DEFINES)
-target_compile_options(${PROJECT_NAME} PRIVATE -DSOL_CHECK_ARGUMENTS -DSOL_PRINT_ERRORS=0)
-
-if(MINGW)
-	target_link_options(${PROJECT_NAME}_lib PRIVATE -static-libstdc++ -static-libgcc -mconsole)
-
-	target_link_options(${PROJECT_NAME} PRIVATE -static-libstdc++ -static-libgcc -mconsole)
-endif()
-
-# target_compile_options(${PROJECT_NAME}_lib PRIVATE -pg)
-# target_compile_options(${PROJECT_NAME} PRIVATE -pg)
-# target_link_options(${PROJECT_NAME}_lib PRIVATE -pg)
-# target_link_options(${PROJECT_NAME} PRIVATE -pg)
+target_include_directories(${PROJECT_NAME}_lib PUBLIC
+	${CMAKE_SOURCE_DIR}/external/entt/single_include
+)
 
 #------------------------------------------------------------------------------
 # Link options
 #------------------------------------------------------------------------------
 target_link_libraries(${PROJECT_NAME}_lib PUBLIC ${CMAKE_PROJECT_NAME}_common)
 target_link_libraries(${PROJECT_NAME}     PRIVATE ${PROJECT_NAME}_lib)
-

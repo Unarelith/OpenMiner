@@ -30,8 +30,8 @@
 #include <exception>
 #include <string>
 
-#include "Debug.hpp"
-#include "Utils.hpp"
+#include "common/core/Debug.hpp"
+#include "common/core/Utils.hpp"
 
 #define EXCEPTION(...) (Exception(__LINE__, _FILE, __VA_ARGS__))
 

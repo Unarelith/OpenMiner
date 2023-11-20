@@ -24,9 +24,9 @@
  *
  * =====================================================================================
  */
-#include "Exception.hpp"
-#include "NetworkUtils.hpp"
-#include "TilesDef.hpp"
+#include "common/core/Exception.hpp"
+#include "common/core/TilesDef.hpp"
+#include "common/network/NetworkUtils.hpp"
 
 const std::string &TilesDef::getTextureForFace(u8 face) const {
 	u8 size = (u8)m_textureFilenames.size();

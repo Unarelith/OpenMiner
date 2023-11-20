@@ -27,7 +27,7 @@
 #ifndef SERVERSCENE_HPP_
 #define SERVERSCENE_HPP_
 
-#include "Scene.hpp"
+#include "common/scene/Scene.hpp"
 
 class ClientInfo;
 class CollisionController;

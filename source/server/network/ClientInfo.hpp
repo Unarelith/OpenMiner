@@ -31,7 +31,7 @@
 
 #include <SFML/Network.hpp>
 
-#include "NetworkInputHandler.hpp"
+#include "server/core/NetworkInputHandler.hpp"
 
 class ClientInfo {
 	public:

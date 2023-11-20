@@ -29,8 +29,9 @@
 
 #include <vector>
 
-#include "FastNoiseLite.hpp"
-#include "IntTypes.hpp"
+#include <FastNoiseLite.hpp>
+
+#include "common/core/IntTypes.hpp"
 
 class Dimension;
 

@@ -27,10 +27,10 @@
 #ifndef FRAMEBUFFER_HPP_
 #define FRAMEBUFFER_HPP_
 
-#include "Shader.hpp"
-#include "ShaderUniform.hpp"
-#include "Texture.hpp"
-#include "VertexBuffer.hpp"
+#include "client/graphics/Shader.hpp"
+#include "client/graphics/ShaderUniform.hpp"
+#include "client/graphics/Texture.hpp"
+#include "client/graphics/VertexBuffer.hpp"
 
 class Framebuffer : public NonCopyable {
 	public:

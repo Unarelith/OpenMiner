@@ -24,12 +24,13 @@
  *
  * =====================================================================================
  */
-#include "ApplicationStateStack.hpp"
-#include "Chat.hpp"
-#include "ChatState.hpp"
-#include "ClientCommandHandler.hpp"
-#include "Config.hpp"
-#include "Mouse.hpp"
+#include "common/core/ApplicationStateStack.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/core/Mouse.hpp"
+#include "client/hud/Chat.hpp"
+#include "client/network/ClientCommandHandler.hpp"
+#include "client/states/ChatState.hpp"
 
 ChatState::ChatState(ClientCommandHandler &clientCommandHandler, Chat &chat, bool addSlash, DrawableState *parent)
 	: InterfaceState(parent), m_clientCommandHandler(clientCommandHandler), m_chat(chat)
@@ -115,4 +116,3 @@ void ChatState::draw(RenderTarget &target, RenderStates states) const {
 		target.draw(m_textInput, states);
 	}
 }
-

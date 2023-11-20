@@ -31,7 +31,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Player.hpp"
+#include "common/world/Player.hpp"
 
 class Camera;
 class ClientWorld;

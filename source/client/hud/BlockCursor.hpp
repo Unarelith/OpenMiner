@@ -29,10 +29,11 @@
 
 #include <SDL.h>
 
-#include "BlockGeometry.hpp"
-#include "ClientWorld.hpp"
-#include "IndexBuffer.hpp"
-#include "Inventory.hpp"
+#include "common/core/BlockGeometry.hpp"
+#include "common/inventory/Inventory.hpp"
+
+#include "client/graphics/IndexBuffer.hpp"
+#include "client/world/ClientWorld.hpp"
 
 class ClientCommandHandler;
 class ClientPlayer;

@@ -27,7 +27,7 @@
 #ifndef RENDERINGCONTROLLER_HPP_
 #define RENDERINGCONTROLLER_HPP_
 
-#include "AbstractClientController.hpp"
+#include "client/scene/controller/AbstractClientController.hpp"
 
 class RenderingController : public AbstractClientController {
 	public:

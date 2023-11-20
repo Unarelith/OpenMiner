@@ -24,9 +24,10 @@
  *
  * =====================================================================================
  */
-#include "Config.hpp"
-#include "Debug.hpp"
-#include "ScrollBarWidget.hpp"
+#include "common/core/Debug.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/gui/ScrollBarWidget.hpp"
 
 void ScrollBarWidget::init(const Texture &texture, const FloatRect &clipRect, u16 minY, u16 maxY, InventoryWidget &widget) {
 	m_clipRect = clipRect;
@@ -73,4 +74,3 @@ void ScrollBarWidget::updateScrolling(u16 y) {
 
 	m_widget->scroll(m_scrolling);
 }
-

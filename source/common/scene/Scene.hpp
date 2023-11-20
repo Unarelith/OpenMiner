@@ -29,7 +29,7 @@
 
 #include <deque>
 
-#include "AbstractController.hpp"
+#include "common/scene/controller/AbstractController.hpp"
 
 class Scene {
 	public:

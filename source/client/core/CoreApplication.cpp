@@ -26,10 +26,11 @@
  */
 #include <ctime>
 
-#include "CoreApplication.hpp"
-#include "Exception.hpp"
-#include "Mouse.hpp"
-#include "Platform.hpp"
+#include "common/core/Exception.hpp"
+#include "common/core/Platform.hpp"
+
+#include "client/core/CoreApplication.hpp"
+#include "client/core/Mouse.hpp"
 
 bool CoreApplication::hasBeenInterrupted = false;
 
@@ -141,4 +142,3 @@ void CoreApplication::onEvent(const SDL_Event &event) {
 	if (m_currentState && !m_stateStack.empty())
 		m_currentState->onEvent(event);
 }
-

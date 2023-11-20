@@ -29,8 +29,8 @@
 
 #include <thread>
 
-#include "InterfaceState.hpp"
-#include "MenuWidget.hpp"
+#include "client/gui/MenuWidget.hpp"
+#include "client/states/InterfaceState.hpp"
 
 struct GuiScaleChangedEvent;
 struct ServerOnlineEvent;

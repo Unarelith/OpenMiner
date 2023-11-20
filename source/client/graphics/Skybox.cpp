@@ -24,11 +24,12 @@
  *
  * =====================================================================================
  */
-#include "Camera.hpp"
-#include "ClientWorld.hpp"
-#include "GameTime.hpp"
-#include "Sky.hpp"
-#include "Skybox.hpp"
+#include "common/core/GameTime.hpp"
+#include "common/world/Sky.hpp"
+
+#include "client/graphics/Camera.hpp"
+#include "client/graphics/Skybox.hpp"
+#include "client/world/ClientWorld.hpp"
 
 #ifndef M_PI
 # define M_PI 3.14159265358979323846
@@ -150,4 +151,3 @@ void Skybox::draw(RenderTarget &target, RenderStates states) const {
 
 	m_camera.setDPosition(cameraPos);  // Restore the camera to its original position
 }
-

@@ -24,10 +24,11 @@
  *
  * =====================================================================================
  */
-#include "ResourceHandler.hpp"
-#include "Texture.hpp"
-#include "TextureLoader.hpp"
-#include "XMLFile.hpp"
+#include "common/core/XMLFile.hpp"
+#include "common/resource/ResourceHandler.hpp"
+
+#include "client/graphics/Texture.hpp"
+#include "client/resource//TextureLoader.hpp"
 
 void TextureLoader::load(const char *xmlFilename, ResourceHandler &handler) {
 	XMLFile doc(xmlFilename);

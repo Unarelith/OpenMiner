@@ -24,9 +24,9 @@
  *
  * =====================================================================================
  */
-#include "Chat.hpp"
-#include "Client.hpp"
-#include "Config.hpp"
+#include "client/core/Config.hpp"
+#include "client/hud/Chat.hpp"
+#include "client/network/Client.hpp"
 
 Chat::Chat(Client &client) : m_client(client) {
 	client.setCommandCallback(Network::Command::ChatMessage, [&](sf::Packet &packet) {
@@ -60,4 +60,3 @@ void Chat::draw(RenderTarget &target, RenderStates states) const {
 	for (auto &it : m_chatMessages)
 		target.draw(it, states);
 }
-

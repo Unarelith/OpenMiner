@@ -29,8 +29,8 @@
 
 #include <bgfx/bgfx.h>
 
-#include "IntTypes.hpp"
-#include "Transform.hpp"
+#include "common/core/IntTypes.hpp"
+#include "client/graphics/Transform.hpp"
 
 class Shader;
 class Texture;

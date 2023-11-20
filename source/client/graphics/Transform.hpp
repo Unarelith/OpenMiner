@@ -29,7 +29,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Vector3.hpp"
+#include "common/core/Vector3.hpp"
 
 class Transform {
 	public:

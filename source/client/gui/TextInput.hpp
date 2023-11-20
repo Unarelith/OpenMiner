@@ -29,8 +29,8 @@
 
 #include <SDL.h>
 
-#include "Text.hpp"
-#include "Widget.hpp"
+#include "client/gui/Text.hpp"
+#include "client/gui/Widget.hpp"
 
 class TextInput : public Widget {
 	public:

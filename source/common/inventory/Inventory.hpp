@@ -29,9 +29,9 @@
 
 #include <vector>
 
-#include "ISerializable.hpp"
-#include "ItemStack.hpp"
-#include "Vector3.hpp"
+#include "common/core/ISerializable.hpp"
+#include "common/core/Vector3.hpp"
+#include "common/inventory/ItemStack.hpp"
 
 class Inventory : public ISerializable {
 	public:

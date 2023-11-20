@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "RectangleShape.hpp"
-#include "Vertex.hpp"
+#include "client/graphics/RectangleShape.hpp"
+#include "client/graphics/Vertex.hpp"
 
 RectangleShape::RectangleShape() {
 	m_vbo.setupDefaultLayout();

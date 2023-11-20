@@ -27,10 +27,11 @@
 #ifndef SETTINGSMENUSTATE_HPP_
 #define SETTINGSMENUSTATE_HPP_
 
-#include "GameKey.hpp"
-#include "InterfaceState.hpp"
-#include "MenuWidget.hpp"
-#include "RectangleShape.hpp"
+#include "common/core/input/GameKey.hpp"
+
+#include "client/graphics/RectangleShape.hpp"
+#include "client/gui/MenuWidget.hpp"
+#include "client/states/InterfaceState.hpp"
 
 struct GuiScaleChangedEvent;
 class Key;

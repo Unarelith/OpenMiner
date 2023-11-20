@@ -24,13 +24,13 @@
  *
  * =====================================================================================
  */
-#include "Chunk.hpp"
-#include "Debug.hpp"
-#include "Player.hpp"
-#include "ServerCommandHandler.hpp"
-#include "ServerItem.hpp"
-#include "ServerPlayer.hpp"
-#include "World.hpp"
+#include "common/core/Debug.hpp"
+#include "common/world/Chunk.hpp"
+#include "common/world/Player.hpp"
+#include "common/world/World.hpp"
+#include "server/network/ServerCommandHandler.hpp"
+#include "server/world/ServerItem.hpp"
+#include "server/world/ServerPlayer.hpp"
 
 bool ServerItem::onItemActivated(const glm::ivec3 &pos, Block &block, Player &player, World &world, ClientInfo &client, ServerCommandHandler &server) const {
 	try {

@@ -29,7 +29,7 @@
 
 #include <string>
 
-#include "IntTypes.hpp"
+#include "common/core/IntTypes.hpp"
 
 namespace Config {
 	// Gameplay

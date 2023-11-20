@@ -27,7 +27,7 @@
 #ifndef SERVERBLOCK_HPP_
 #define SERVERBLOCK_HPP_
 
-#include "Block.hpp"
+#include "common/world/Block.hpp"
 
 class ClientInfo;
 class ServerChunk;

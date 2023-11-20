@@ -26,9 +26,10 @@
  */
 #include <fstream>
 
-#include "Font.hpp"
-#include "ResourceHandler.hpp"
-#include "Texture.hpp"
+#include "common/resource/ResourceHandler.hpp"
+
+#include "client/graphics/Texture.hpp"
+#include "client/gui/Font.hpp"
 
 Font::Font(const std::string &textureName, const std::string &configPath)
 	: m_texture(ResourceHandler::getInstance().get<Texture>(textureName))
@@ -70,4 +71,3 @@ void Font::parseConfig(const std::string &configPath) {
 		m_charWidth[propertyKey] = (u8)propertyValue;
 	}
 }
-

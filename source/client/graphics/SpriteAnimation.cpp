@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "SpriteAnimation.hpp"
+#include "client/graphics/SpriteAnimation.hpp"
 
 void SpriteAnimation::reset(u16 frameID) {
 	m_timer.reset();

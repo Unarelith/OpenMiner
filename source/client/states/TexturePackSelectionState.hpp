@@ -27,11 +27,11 @@
 #ifndef TEXTUREPACKSELECTIONSTATE_HPP_
 #define TEXTUREPACKSELECTIONSTATE_HPP_
 
-#include "Image.hpp"
-#include "InterfaceState.hpp"
-#include "MenuWidget.hpp"
-#include "ScrollableList.hpp"
-#include "Text.hpp"
+#include "client/graphics/Image.hpp"
+#include "client/gui/MenuWidget.hpp"
+#include "client/gui/ScrollableList.hpp"
+#include "client/gui/Text.hpp"
+#include "client/states/InterfaceState.hpp"
 
 class TexturePackSelectionState : public InterfaceState {
 	public:

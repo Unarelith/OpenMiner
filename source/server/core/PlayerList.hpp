@@ -29,7 +29,7 @@
 
 #include <unordered_map>
 
-#include "ServerPlayer.hpp"
+#include "server/world/ServerPlayer.hpp"
 
 class PlayerList {
 	using PlayerMap = std::unordered_map<std::string, ServerPlayer>;

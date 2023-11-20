@@ -24,10 +24,10 @@
  *
  * =====================================================================================
  */
-#include "AnimationController.hpp"
-#include "Camera.hpp"
-#include "ClientScene.hpp"
-#include "RenderingController.hpp"
+#include "client/graphics/Camera.hpp"
+#include "client/scene/ClientScene.hpp"
+#include "client/scene/controller/AnimationController.hpp"
+#include "client/scene/controller/RenderingController.hpp"
 
 ClientScene::ClientScene() {
 	m_controllers.emplace_back(new AnimationController);
@@ -51,4 +51,3 @@ void ClientScene::draw(RenderTarget &target, RenderStates states) const {
 	for (auto &controller : m_clientControllers)
 		controller->draw(m_registry, target, states);
 }
-

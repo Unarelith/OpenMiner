@@ -26,7 +26,7 @@
  */
 #include <cmath>
 
-#include "Transformable.hpp"
+#include "client/graphics/Transformable.hpp"
 
 void Transformable::setPosition(float x, float y, float z) {
 	m_position.x = x;

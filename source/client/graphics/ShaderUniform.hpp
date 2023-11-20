@@ -29,7 +29,7 @@
 
 #include <bgfx/bgfx.h>
 
-#include "NonCopyable.hpp"
+#include "common/utils/NonCopyable.hpp"
 
 class Color;
 

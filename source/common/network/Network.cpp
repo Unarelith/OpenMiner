@@ -26,8 +26,8 @@
  */
 #include <map>
 
-#include "IntTypes.hpp"
-#include "Network.hpp"
+#include "common/core/IntTypes.hpp"
+#include "common/network/Network.hpp"
 
 std::string Network::commandToString(Network::Command command) {
 	std::map<Network::Command, std::string> commandNames = {
@@ -88,4 +88,3 @@ sf::Packet &operator>>(sf::Packet &packet, Network::Command &command) {
 	command = static_cast<Network::Command>(tmp);
 	return packet;
 }
-

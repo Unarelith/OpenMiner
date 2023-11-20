@@ -30,8 +30,9 @@
 
 #include <filesystem.hpp>
 
-#include "Config.hpp"
-#include "Debug.hpp"
+#include "common/core/Debug.hpp"
+
+#include "client/core/Config.hpp"
 
 namespace fs = ghc::filesystem;
 
@@ -163,4 +164,3 @@ void Config::saveConfigToFile(const char *filename) {
 	file << "defaultServerAddress = \"" << defaultServerAddress << "\"" << std::endl;
 	file << "texturePack = \"" << texturePack  << "\"" << std::endl;
 }
-

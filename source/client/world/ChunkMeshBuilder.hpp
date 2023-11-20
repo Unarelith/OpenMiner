@@ -29,7 +29,7 @@
 
 #include <thread/ThreadPool.hpp>
 
-#include "ChunkMeshBuildingJob.hpp"
+#include "client/world/mesh/ChunkMeshBuildingJob.hpp"
 
 class ClientWorld;
 

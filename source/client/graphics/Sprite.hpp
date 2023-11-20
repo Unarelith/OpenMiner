@@ -27,8 +27,8 @@
 #ifndef SPRITE_HPP_
 #define SPRITE_HPP_
 
-#include "Image.hpp"
-#include "SpriteAnimation.hpp"
+#include "client/graphics/Image.hpp"
+#include "client/graphics/SpriteAnimation.hpp"
 
 class Sprite : public Image {
 	public:

@@ -27,17 +27,18 @@
 #ifndef SERVERAPPLICATION_HPP_
 #define SERVERAPPLICATION_HPP_
 
-#include "ArgumentParser.hpp"
-#include "EventHandler.hpp"
-#include "GameClock.hpp"
-#include "LuaCore.hpp"
-#include "Registry.hpp"
-#include "ScriptEngine.hpp"
-#include "Server.hpp"
-#include "ServerCommandHandler.hpp"
-#include "ServerModLoader.hpp"
-#include "PlayerList.hpp"
-#include "WorldController.hpp"
+#include "common/core/ArgumentParser.hpp"
+#include "common/core/EventHandler.hpp"
+#include "common/core/GameClock.hpp"
+#include "common/core/Registry.hpp"
+
+#include "server/core/PlayerList.hpp"
+#include "server/lua/LuaCore.hpp"
+#include "server/lua/ScriptEngine.hpp"
+#include "server/lua/ServerModLoader.hpp"
+#include "server/network/Server.hpp"
+#include "server/network/ServerCommandHandler.hpp"
+#include "server/world/WorldController.hpp"
 
 class ServerApplication {
 	public:

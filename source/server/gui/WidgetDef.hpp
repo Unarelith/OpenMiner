@@ -31,10 +31,10 @@
 
 #include <sol/sol.hpp>
 
-#include "IntTypes.hpp"
-#include "ISerializable.hpp"
-#include "LuaWidget.hpp"
-#include "NetworkUtils.hpp"
+#include "common/core/IntTypes.hpp"
+#include "common/core/ISerializable.hpp"
+#include "common/core/LuaWidget.hpp"
+#include "common/network/NetworkUtils.hpp"
 
 class WidgetDef : public ISerializable {
 	public:

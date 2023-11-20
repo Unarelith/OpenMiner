@@ -26,13 +26,14 @@
  */
 #include <filesystem.hpp>
 
-#include "ApplicationStateStack.hpp"
-#include "Config.hpp"
-#include "Debug.hpp"
-#include "TitleScreenState.hpp"
-#include "WorldCreationState.hpp"
-#include "WorldDeletionState.hpp"
-#include "WorldSelectionState.hpp"
+#include "common/core/ApplicationStateStack.hpp"
+#include "common/core/Debug.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/states/TitleScreenState.hpp"
+#include "client/states/WorldCreationState.hpp"
+#include "client/states/WorldDeletionState.hpp"
+#include "client/states/WorldSelectionState.hpp"
 
 namespace fs = ghc::filesystem;
 
@@ -198,4 +199,3 @@ void WorldSelectionState::draw(RenderTarget &target, RenderStates states) const 
 		target.draw(m_menuWidget3, states);
 	}
 }
-

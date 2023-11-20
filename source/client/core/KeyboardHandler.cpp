@@ -30,9 +30,9 @@
 
 #include <filesystem.hpp>
 
-#include "Debug.hpp"
-#include "GameKey.hpp"
-#include "KeyboardHandler.hpp"
+#include "common/core/Debug.hpp"
+#include "common/core/input/GameKey.hpp"
+#include "client/core/KeyboardHandler.hpp"
 
 namespace fs = ghc::filesystem;
 
@@ -139,4 +139,3 @@ void KeyboardHandler::addKey(GameKeyID id, const std::string &name, SDL_Keycode 
 
 	InputHandler::addKey(id);
 }
-

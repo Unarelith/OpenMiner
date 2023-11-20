@@ -29,8 +29,8 @@
 
 #include <string>
 
-#include "Color.hpp"
-#include "IntTypes.hpp"
+#include "common/core/Color.hpp"
+#include "common/core/IntTypes.hpp"
 
 namespace GameConfig {
 	// Pre-game configuration

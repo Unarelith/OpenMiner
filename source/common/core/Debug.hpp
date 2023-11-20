@@ -29,7 +29,7 @@
 
 #include <cstring>
 
-#include "LoggerHandler.hpp"
+#include "common/core/LoggerHandler.hpp"
 
 #define _FILE (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
 

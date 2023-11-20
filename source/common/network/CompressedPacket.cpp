@@ -26,8 +26,8 @@
  */
 #include <cassert>
 
-#include "CompressedPacket.hpp"
-#include "Debug.hpp"
+#include "common/core/Debug.hpp"
+#include "common/network/CompressedPacket.hpp"
 
 // Note: This class was implemented thanks to this SFML forum topic:
 // https://en.sfml-dev.org/forums/index.php?topic=14344.0
@@ -96,4 +96,3 @@ void CompressedPacket::onReceive(const void* data, std::size_t size) {
 	// Append it to the packet
 	append(m_compressionBuffer.data(), dstSize);
 }
-

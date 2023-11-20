@@ -27,7 +27,7 @@
 #ifndef CROSSHAIR_HPP_
 #define CROSSHAIR_HPP_
 
-#include "RectangleShape.hpp"
+#include "client/graphics/RectangleShape.hpp"
 
 class Crosshair : public Drawable {
 	public:

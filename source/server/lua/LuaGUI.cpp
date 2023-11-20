@@ -24,19 +24,19 @@
  *
  * =====================================================================================
  */
-#include "ClientInfo.hpp"
-#include "LuaGUI.hpp"
-#include "LuaWidget.hpp"
-#include "Network.hpp"
-#include "Registry.hpp"
+#include "common/core/LuaWidget.hpp"
+#include "common/core/Registry.hpp"
+#include "common/network/Network.hpp"
+#include "server/lua/LuaGUI.hpp"
+#include "server/network/ClientInfo.hpp"
 
-#include "CraftingWidgetDef.hpp"
-#include "ImageWidgetDef.hpp"
-#include "InventoryWidgetDef.hpp"
-#include "ProgressBarWidgetDef.hpp"
-#include "ScrollBarWidgetDef.hpp"
-#include "TextButtonWidgetDef.hpp"
-#include "TextInputWidgetDef.hpp"
+#include "server/gui/CraftingWidgetDef.hpp"
+#include "server/gui/ImageWidgetDef.hpp"
+#include "server/gui/InventoryWidgetDef.hpp"
+#include "server/gui/ProgressBarWidgetDef.hpp"
+#include "server/gui/ScrollBarWidgetDef.hpp"
+#include "server/gui/TextButtonWidgetDef.hpp"
+#include "server/gui/TextInputWidgetDef.hpp"
 
 void LuaGUI::addImage(const sol::table &table) {
 	m_widgetDefinitions.emplace_back(new ImageWidgetDef);
@@ -129,4 +129,3 @@ void LuaGUI::initUsertype(sol::state &lua) {
 		"show",           &LuaGUI::show
 	);
 }
-

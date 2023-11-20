@@ -27,9 +27,9 @@
 #ifndef VIEW_HPP_
 #define VIEW_HPP_
 
-#include "Rect.hpp"
-#include "Transform.hpp"
-#include "Vector3.hpp"
+#include "common/core/Rect.hpp"
+#include "common/core/Vector3.hpp"
+#include "client/graphics/Transform.hpp"
 
 class View {
 	public:

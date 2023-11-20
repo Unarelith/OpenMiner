@@ -24,13 +24,13 @@
  *
  * =====================================================================================
  */
-#include "Chunk.hpp"
-#include "Player.hpp"
-#include "ServerBlock.hpp"
-#include "ServerCommandHandler.hpp"
-#include "ServerPlayer.hpp"
-#include "ServerWorld.hpp"
-#include "World.hpp"
+#include "common/world/Chunk.hpp"
+#include "common/world/Player.hpp"
+#include "common/world/World.hpp"
+#include "server/network/ServerCommandHandler.hpp"
+#include "server/world/ServerBlock.hpp"
+#include "server/world/ServerPlayer.hpp"
+#include "server/world/ServerWorld.hpp"
 
 void ServerBlock::onTick(const glm::ivec3 &pos, ServerChunk &chunk, ServerWorld &world, ServerCommandHandler &server) const {
 	if (m_onTickEnabled && m_onTick) {
@@ -104,4 +104,3 @@ void ServerBlock::initUsertype(sol::state &lua) {
 		sol::base_classes, sol::bases<Block>()
 	);
 }
-

@@ -26,7 +26,7 @@
  */
 #include <SFML/Network/Packet.hpp>
 
-#include "BlockMetadata.hpp"
+#include "common/world/BlockMetadata.hpp"
 
 void BlockMetadata::setString(const std::string &name, const std::string &value) {
 	m_data[name].set(value, BlockMetadataValue::Type::String);
@@ -96,4 +96,3 @@ void BlockMetadata::initUsertype(sol::state &lua) {
 		"set_bool", &BlockMetadata::setBool
 	);
 }
-

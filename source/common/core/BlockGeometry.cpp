@@ -26,7 +26,7 @@
  */
 #include <mutex>
 
-#include "BlockGeometry.hpp"
+#include "common/core/BlockGeometry.hpp"
 
 namespace BlockGeometry {
 

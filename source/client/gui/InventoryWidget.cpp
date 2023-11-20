@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "ClientCommandHandler.hpp"
-#include "InventoryWidget.hpp"
+#include "client/gui/InventoryWidget.hpp"
+#include "client/network/ClientCommandHandler.hpp"
 
 void InventoryWidget::init(Inventory &inventory, u16 offset, u16 size) {
 	m_inventory = &inventory;

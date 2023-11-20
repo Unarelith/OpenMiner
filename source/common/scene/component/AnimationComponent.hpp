@@ -29,10 +29,10 @@
 
 #include <vector>
 
-#include "IntTypes.hpp"
-#include "ISerializable.hpp"
-#include "Network.hpp"
-#include "NetworkUtils.hpp"
+#include "common/core/IntTypes.hpp"
+#include "common/core/ISerializable.hpp"
+#include "common/network/Network.hpp"
+#include "common/network/NetworkUtils.hpp"
 
 enum class AnimationType {
 	Rotation,

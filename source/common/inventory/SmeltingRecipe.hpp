@@ -27,7 +27,7 @@
 #ifndef SMELTINGRECIPE_HPP_
 #define SMELTINGRECIPE_HPP_
 
-#include "Recipe.hpp"
+#include "common/inventory/Recipe.hpp"
 
 class SmeltingRecipe : public Recipe {
 	public:

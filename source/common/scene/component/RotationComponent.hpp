@@ -29,8 +29,8 @@
 
 #include <glm/gtc/quaternion.hpp>
 
-#include "ISerializable.hpp"
-#include "Network.hpp"
+#include "common/core/ISerializable.hpp"
+#include "common/network/Network.hpp"
 
 struct RotationComponent : public ISerializable {
 	glm::quat quat{1, 0, 0, 0};

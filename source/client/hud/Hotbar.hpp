@@ -29,8 +29,8 @@
 
 #include <vector>
 
-#include "Inventory.hpp"
-#include "ItemWidget.hpp"
+#include "common/inventory/Inventory.hpp"
+#include "client/gui/ItemWidget.hpp"
 
 class ClientCommandHandler;
 class ClientPlayer;

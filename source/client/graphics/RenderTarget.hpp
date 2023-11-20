@@ -27,10 +27,11 @@
 #ifndef RENDERTARGET_HPP_
 #define RENDERTARGET_HPP_
 
-#include "IndexBuffer.hpp"
-#include "Rect.hpp"
-#include "RenderStates.hpp"
-#include "View.hpp"
+#include "common/core/Rect.hpp"
+
+#include "client/graphics/IndexBuffer.hpp"
+#include "client/graphics/RenderStates.hpp"
+#include "client/graphics/View.hpp"
 
 class Drawable;
 class IndexBuffer;

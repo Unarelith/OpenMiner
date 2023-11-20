@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "ProgressBarWidget.hpp"
+#include "client/gui/ProgressBarWidget.hpp"
 
 ProgressBarWidget::ProgressBarWidget(const Texture &texture, BlockData &blockData, ProgressBarType type, Widget *parent)
 	: Widget(parent), m_blockData(blockData), m_image(texture)
@@ -77,4 +77,3 @@ void ProgressBarWidget::draw(RenderTarget &target, RenderStates states) const {
 
 	target.draw(m_image, states);
 }
-

@@ -24,18 +24,18 @@
  *
  * =====================================================================================
  */
-#include "BlockMetadata.hpp"
-#include "EntityWrapper.hpp"
-#include "LuaCore.hpp"
-#include "LuaGUI.hpp"
-#include "LuaMod.hpp"
-#include "Registry.hpp"
-#include "ScriptEngine.hpp"
-#include "ServerBlock.hpp"
-#include "ServerCommandHandler.hpp"
-#include "ServerModLoader.hpp"
-#include "ServerPlayer.hpp"
-#include "ServerWorld.hpp"
+#include "common/core/Registry.hpp"
+#include "common/world/BlockMetadata.hpp"
+#include "server/lua/LuaCore.hpp"
+#include "server/lua/LuaGUI.hpp"
+#include "server/lua/LuaMod.hpp"
+#include "server/lua/ScriptEngine.hpp"
+#include "server/lua/ServerModLoader.hpp"
+#include "server/network/ServerCommandHandler.hpp"
+#include "server/scene/EntityWrapper.hpp"
+#include "server/world/ServerBlock.hpp"
+#include "server/world/ServerPlayer.hpp"
+#include "server/world/ServerWorld.hpp"
 
 void ScriptEngine::init() {
 	initUsertypes();
@@ -99,4 +99,3 @@ void ScriptEngine::initUsertypes() {
 	LuaMod::initUsertype(m_lua);
 	LuaGUI::initUsertype(m_lua);
 }
-

@@ -26,11 +26,11 @@
  */
 #include <cstring>
 
-#include "Chunk.hpp"
-#include "ChunkLightmap.hpp"
-#include "Debug.hpp"
-#include "Registry.hpp"
-#include "World.hpp"
+#include "common/core/Debug.hpp"
+#include "common/core/Registry.hpp"
+#include "common/world/Chunk.hpp"
+#include "common/world/ChunkLightmap.hpp"
+#include "common/world/World.hpp"
 
 ChunkLightmap::ChunkLightmap(Chunk *chunk) : m_chunk(chunk) {
 	std::memset(m_lightMap, 0, sizeof(m_lightMap));
@@ -313,4 +313,3 @@ bool ChunkLightmap::setTorchlight(int x, int y, int z, u8 val) {
 
 	return true;
 }
-

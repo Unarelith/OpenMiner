@@ -24,9 +24,9 @@
  *
  * =====================================================================================
  */
-#include "ClientPlayer.hpp"
-#include "ClientWorld.hpp"
-#include "DebugLightmapViewer.hpp"
+#include "client/hud/DebugLightmapViewer.hpp"
+#include "client/world/ClientPlayer.hpp"
+#include "client/world/ClientWorld.hpp"
 
 DebugLightmapViewer::DebugLightmapViewer(const ClientPlayer &player) : m_player(player) {
 	m_playerRect.setSize(7, 7);
@@ -81,4 +81,3 @@ void DebugLightmapViewer::draw(RenderTarget &target, RenderStates states) const 
 		for (u32 y = 0 ; y < CHUNK_DEPTH ; ++y)
 			target.draw(m_chunkLightmapValues[x][y], states);
 }
-

@@ -26,9 +26,9 @@
  */
 #include <SDL_image.h>
 
-#include "Exception.hpp"
-#include "Registry.hpp"
-#include "TextureAtlas.hpp"
+#include "common/core/Exception.hpp"
+#include "common/core/Registry.hpp"
+#include "client/graphics/TextureAtlas.hpp"
 
 #include <filesystem.hpp>
 

@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "ClientApplication.hpp"
+#include "client/core/ClientApplication.hpp"
 
 // Fix the scaling problem encountered with Windows
 // From: https://discourse.libsdl.org/t/sdl-getdesktopdisplaymode-resolution-reported-in-windows-10-when-using-app-scaling/22389/4
@@ -79,4 +79,3 @@ int main(int argc, char **argv) {
 
 	return exitCode;
 }
-

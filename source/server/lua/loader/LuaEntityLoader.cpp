@@ -24,16 +24,16 @@
  *
  * =====================================================================================
  */
-#include "AnimationComponent.hpp"
-#include "Debug.hpp"
-#include "DrawableDef.hpp"
-#include "LuaEntityLoader.hpp"
-#include "LuaMod.hpp"
-#include "NetworkComponent.hpp"
-#include "PositionComponent.hpp"
-#include "Registry.hpp"
-#include "RotationComponent.hpp"
-#include "WorldController.hpp"
+#include "common/core/Debug.hpp"
+#include "common/core/Registry.hpp"
+#include "common/scene/component/AnimationComponent.hpp"
+#include "common/scene/component/DrawableDef.hpp"
+#include "common/scene/component/NetworkComponent.hpp"
+#include "common/scene/component/PositionComponent.hpp"
+#include "common/scene/component/RotationComponent.hpp"
+#include "server/lua/LuaMod.hpp"
+#include "server/lua/loader/LuaEntityLoader.hpp"
+#include "server/world/WorldController.hpp"
 
 void LuaEntityLoader::loadEntity(const sol::table &table) const {
 	m_stringID = m_mod.id() + ":" + table["id"].get<std::string>();
@@ -171,4 +171,3 @@ ItemStack *LuaEntityLoader::tryLoadItemStack(const sol::table &table, entt::regi
 
 	return nullptr;
 }
-

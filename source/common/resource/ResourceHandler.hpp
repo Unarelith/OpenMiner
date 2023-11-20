@@ -31,9 +31,9 @@
 #include <memory>
 #include <string>
 
-#include "Exception.hpp"
-#include "IResourceLoader.hpp"
-#include "XMLFile.hpp"
+#include "common/core/Exception.hpp"
+#include "common/core/XMLFile.hpp"
+#include "common/resource/IResourceLoader.hpp"
 
 class ResourceHandler {
 	public:

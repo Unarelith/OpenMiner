@@ -24,9 +24,9 @@
  *
  * =====================================================================================
  */
-#include "CollisionController.hpp"
-#include "NetworkController.hpp"
-#include "ServerScene.hpp"
+#include "server/scene/ServerScene.hpp"
+#include "server/scene/controller/CollisionController.hpp"
+#include "server/scene/controller/NetworkController.hpp"
 
 ServerScene::ServerScene(PlayerList &players) {
 	m_collisionController = static_cast<CollisionController *>(m_controllers.emplace_back(new CollisionController(players)).get());
@@ -41,4 +41,3 @@ void ServerScene::setServer(ServerCommandHandler *server) {
 	m_collisionController->setServer(server);
 	m_networkController->setServer(server);
 }
-

@@ -24,10 +24,10 @@
  *
  * =====================================================================================
  */
-#include "Biome.hpp"
-#include "Registry.hpp"
-#include "ServerWorld.hpp"
-#include "TerrainBiomeSampler.hpp"
+#include "common/core/Registry.hpp"
+#include "common/world/Biome.hpp"
+#include "server/world/ServerWorld.hpp"
+#include "server/world/TerrainBiomeSampler.hpp"
 
 TerrainBiomeSampler::TerrainBiomeSampler(const Dimension &dimension, s32 seed) : m_dimension(dimension) {
 	for (u8 i = 0; i < biomeParamCount; i++) {
@@ -67,4 +67,3 @@ u16 TerrainBiomeSampler::getBiomeIndexAt(s32 x, s32 y) {
 
 	return decidedBiomeIndex;
 }
-

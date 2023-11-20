@@ -26,7 +26,7 @@
  */
 #include <SDL.h>
 
-#include "Mouse.hpp"
+#include "client/core/Mouse.hpp"
 
 Window *Mouse::s_window = nullptr;
 
@@ -51,4 +51,3 @@ Vector2i Mouse::getPosition() {
 bool Mouse::isInRect(const IntRect &rect) {
 	return rect.contains(getPosition());
 }
-

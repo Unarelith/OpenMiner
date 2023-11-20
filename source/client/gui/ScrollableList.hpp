@@ -27,9 +27,9 @@
 #ifndef SCROLLABLELIST_HPP_
 #define SCROLLABLELIST_HPP_
 
-#include "Image.hpp"
-#include "Text.hpp"
-#include "Widget.hpp"
+#include "client/graphics/Image.hpp"
+#include "client/gui/Text.hpp"
+#include "client/gui/Widget.hpp"
 
 class ScrollableListElement : public Widget {
 	public:

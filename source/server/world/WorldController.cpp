@@ -24,9 +24,9 @@
  *
  * =====================================================================================
  */
-#include "Registry.hpp"
-#include "WorldController.hpp"
-#include "WorldSaveBasicBackend.hpp"
+#include "common/core/Registry.hpp"
+#include "server/world/WorldController.hpp"
+#include "server/world/save/WorldSaveBasicBackend.hpp"
 
 void WorldController::init(PlayerList &players, s32 seed) {
 	for (const Dimension &dimension : m_registry.dimensions()) {
@@ -53,4 +53,3 @@ ServerWorld &WorldController::getWorld(u16 dimension) {
 
 	return m_worldList.at(dimension);
 }
-

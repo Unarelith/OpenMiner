@@ -31,7 +31,7 @@
 
 #include <sol/sol.hpp>
 
-#include "LuaCore.hpp"
+#include "server/lua/LuaCore.hpp"
 
 class ScriptEngine {
 	public:

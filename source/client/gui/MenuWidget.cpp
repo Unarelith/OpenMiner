@@ -24,9 +24,10 @@
  *
  * =====================================================================================
  */
-#include "Config.hpp"
-#include "Events.hpp"
-#include "MenuWidget.hpp"
+#include "common/event/Events.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/gui/MenuWidget.hpp"
 
 MenuWidget::MenuWidget(u16 width, u16 height, Widget *parent) : Widget(parent) {
 	reset(width, height);
@@ -147,4 +148,3 @@ void MenuWidget::draw(RenderTarget &target, RenderStates states) const {
 		target.draw(it.first, states);
 	}
 }
-

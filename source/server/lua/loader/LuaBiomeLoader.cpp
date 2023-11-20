@@ -24,10 +24,10 @@
  *
  * =====================================================================================
  */
-#include "Debug.hpp"
-#include "LuaBiomeLoader.hpp"
-#include "LuaMod.hpp"
-#include "Registry.hpp"
+#include "common/core/Debug.hpp"
+#include "common/core/Registry.hpp"
+#include "server/lua/LuaMod.hpp"
+#include "server/lua/loader/LuaBiomeLoader.hpp"
 
 void LuaBiomeLoader::loadTree(const sol::table &table) const {
 	std::string stringID = m_mod.id() + ":" + table["id"].get<std::string>();
@@ -152,4 +152,3 @@ inline void LuaBiomeLoader::loadOrePlacementEntries(Biome &biome, const sol::tab
 		}
 	}
 }
-

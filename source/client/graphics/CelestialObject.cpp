@@ -24,11 +24,11 @@
  *
  * =====================================================================================
  */
-#include "CelestialObject.hpp"
-#include "GameTime.hpp"
-#include "ResourceHandler.hpp"
-#include "Texture.hpp"
-#include "Vertex.hpp"
+#include "common/core/GameTime.hpp"
+#include "common/resource/ResourceHandler.hpp"
+#include "client/graphics/CelestialObject.hpp"
+#include "client/graphics/Texture.hpp"
+#include "client/graphics/Vertex.hpp"
 
 CelestialObject::CelestialObject() {
 	m_vbo.setupDefaultLayout();

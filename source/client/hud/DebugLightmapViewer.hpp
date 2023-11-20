@@ -29,9 +29,9 @@
 
 #include <optional>
 
-#include "EngineConfig.hpp"
-#include "RectangleShape.hpp"
-#include "Text.hpp"
+#include "common/core/EngineConfig.hpp"
+#include "client/graphics/RectangleShape.hpp"
+#include "client/gui/Text.hpp"
 
 class ClientPlayer;
 class ClientWorld;

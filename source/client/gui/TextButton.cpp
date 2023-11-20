@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "TextButton.hpp"
+#include "client/gui/TextButton.hpp"
 
 TextButton::TextButton(Widget *parent) : TextButton(200, parent) {
 }
@@ -92,4 +92,3 @@ void TextButton::draw(RenderTarget &target, RenderStates states) const {
 
 	target.draw(m_text, states);
 }
-

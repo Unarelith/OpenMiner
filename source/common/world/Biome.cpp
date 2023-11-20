@@ -26,8 +26,8 @@
  */
 #include <SFML/Network/Packet.hpp>
 
-#include "Biome.hpp"
-#include "NetworkUtils.hpp"
+#include "common/network/NetworkUtils.hpp"
+#include "common/world/Biome.hpp"
 
 Biome::Biome(u16 id, const std::string &stringID, const std::string &label) {
 	m_id = id;
@@ -48,4 +48,3 @@ void Biome::deserialize(sf::Packet &packet) {
 		>> m_portalBlockID >> m_portalFrameBlockID
 		>> m_flora >> m_ores >> m_trees;
 }
-

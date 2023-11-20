@@ -27,7 +27,7 @@
 #ifndef ABSTRACTINVENTORYWIDGET_HPP_
 #define ABSTRACTINVENTORYWIDGET_HPP_
 
-#include "ItemWidget.hpp"
+#include "client/gui/ItemWidget.hpp"
 
 class AbstractInventoryWidget : public Widget {
 	public:

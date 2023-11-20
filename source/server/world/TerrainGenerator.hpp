@@ -31,9 +31,9 @@
 
 #include <sol/sol.hpp>
 
-#include "Heightmap.hpp"
-#include "IntTypes.hpp"
-#include "TerrainBiomeSampler.hpp"
+#include "common/core/IntTypes.hpp"
+#include "common/world/Heightmap.hpp"
+#include "server/world/TerrainBiomeSampler.hpp"
 
 using Random_t = effolkronium::random_local;
 

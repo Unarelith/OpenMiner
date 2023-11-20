@@ -24,15 +24,15 @@
  *
  * =====================================================================================
  */
-#include "CollisionController.hpp"
-#include "Debug.hpp"
-#include "EntityWrapper.hpp"
-#include "ItemStack.hpp"
-#include "NetworkComponent.hpp"
-#include "PlayerList.hpp"
-#include "PositionComponent.hpp"
-#include "Registry.hpp"
-#include "ServerCommandHandler.hpp"
+#include "common/core/Debug.hpp"
+#include "common/core/Registry.hpp"
+#include "common/inventory/ItemStack.hpp"
+#include "common/scene/component/NetworkComponent.hpp"
+#include "common/scene/component/PositionComponent.hpp"
+#include "server/core/PlayerList.hpp"
+#include "server/network/ServerCommandHandler.hpp"
+#include "server/scene/EntityWrapper.hpp"
+#include "server/scene/controller/CollisionController.hpp"
 
 void CollisionController::update(entt::registry &registry) {
 	registry.view<PositionComponent, DoubleBox, std::string>().each([&](auto entity, auto &position, auto &box, auto &id) {

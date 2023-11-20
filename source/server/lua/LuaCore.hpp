@@ -32,7 +32,7 @@
 
 #include <sol/sol.hpp>
 
-#include "Debug.hpp"
+#include "common/core/Debug.hpp"
 
 class Registry;
 class ServerModLoader;

@@ -27,7 +27,7 @@
 #ifndef LUAWIDGET_HPP_
 #define LUAWIDGET_HPP_
 
-#include "IntTypes.hpp"
+#include "common/core/IntTypes.hpp"
 
 namespace LuaWidget {
 	enum : u8 {

@@ -24,9 +24,9 @@
  *
  * =====================================================================================
  */
-#include "LuaMod.hpp"
-#include "LuaSkyLoader.hpp"
-#include "Registry.hpp"
+#include "common/core/Registry.hpp"
+#include "server/lua/LuaMod.hpp"
+#include "server/lua/loader/LuaSkyLoader.hpp"
 
 void LuaSkyLoader::loadSky(const sol::table &table) const {
 	std::string stringID = m_mod.id() + ":" + table["id"].get<std::string>();
@@ -103,4 +103,3 @@ void LuaSkyLoader::loadObjects(Sky &sky, const sol::table &table) const {
 		}
 	}
 }
-

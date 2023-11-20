@@ -30,9 +30,10 @@
 #include <deque>
 #include <memory>
 
-#include "AbstractClientController.hpp"
-#include "Drawable.hpp"
-#include "Scene.hpp"
+#include "common/scene/Scene.hpp"
+
+#include "client/graphics/Drawable.hpp"
+#include "client/scene/controller/AbstractClientController.hpp"
 
 class Camera;
 class ClientPlayer;

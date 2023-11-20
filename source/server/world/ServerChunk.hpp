@@ -29,8 +29,8 @@
 
 #include <random.hpp>
 
-#include "Chunk.hpp"
-#include "IntTypes.hpp"
+#include "common/core/IntTypes.hpp"
+#include "common/world/Chunk.hpp"
 
 using Random_t = effolkronium::random_local;
 

@@ -26,9 +26,9 @@
  */
 #include <sol/sol.hpp>
 
-#include "Block.hpp"
-#include "BlockParam.hpp"
-#include "Debug.hpp"
+#include "common/core/Debug.hpp"
+#include "common/world/Block.hpp"
+#include "common/world/BlockParam.hpp"
 
 void BlockParam::serialize(sf::Packet &packet) const {
 	packet << m_totalSize << m_allocatedBits;
@@ -110,4 +110,3 @@ void BlockParam::initUsertype(sol::state &lua) {
 		"Count", Type::Count
 	);
 }
-

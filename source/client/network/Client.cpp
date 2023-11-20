@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "Client.hpp"
-#include "Exception.hpp"
+#include "common/core/Exception.hpp"
+#include "client/network/Client.hpp"
 
 void Client::connect(sf::IpAddress serverAddress, u16 serverPort, Player &player) {
 	m_serverAddress = serverAddress;
@@ -88,4 +88,3 @@ void Client::update() {
 			it->second(packet);
 	}
 }
-

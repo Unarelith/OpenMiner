@@ -24,10 +24,10 @@
  *
  * =====================================================================================
  */
-#include "ClientCommandHandler.hpp"
-#include "ClientPlayer.hpp"
-#include "Config.hpp"
-#include "Hotbar.hpp"
+#include "client/core/Config.hpp"
+#include "client/hud/Hotbar.hpp"
+#include "client/network/ClientCommandHandler.hpp"
+#include "client/world/ClientPlayer.hpp"
 
 Hotbar::Hotbar(ClientPlayer &player, ClientCommandHandler &client, Widget *parent)
 	: Widget(182, 22, parent), m_player(player), m_client(client)
@@ -98,4 +98,3 @@ void Hotbar::draw(RenderTarget &target, RenderStates states) const {
 
 	target.draw(m_cursor, states);
 }
-

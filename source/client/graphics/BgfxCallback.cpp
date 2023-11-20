@@ -30,8 +30,8 @@
 
 #include <bimg/bimg.h>
 
-#include "BgfxCallback.hpp"
-#include "Config.hpp"
+#include "client/core/Config.hpp"
+#include "client/graphics/BgfxCallback.hpp"
 
 void BgfxCallback::fatal(const char* _filePath, uint16_t _line, bgfx::Fatal::Enum _code, const char* _str) {
 	trace(_filePath, _line, "BGFX FATAL 0x%08x: %s\n", _code, _str);

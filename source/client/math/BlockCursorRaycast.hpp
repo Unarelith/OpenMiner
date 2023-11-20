@@ -29,7 +29,7 @@
 
 #include <glm/vec3.hpp>
 
-#include "IntTypes.hpp"
+#include "common/core/IntTypes.hpp"
 
 enum Axis {
 	AXIS_X,

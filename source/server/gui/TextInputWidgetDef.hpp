@@ -27,7 +27,7 @@
 #ifndef TEXTINPUTWIDGETDEF_HPP_
 #define TEXTINPUTWIDGETDEF_HPP_
 
-#include "WidgetDef.hpp"
+#include "server/gui/WidgetDef.hpp"
 
 class TextInputWidgetDef : public WidgetDef {
 	public:

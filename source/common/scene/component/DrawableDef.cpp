@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "DrawableDef.hpp"
-#include "NetworkUtils.hpp"
+#include "common/network/NetworkUtils.hpp"
+#include "common/scene/component/DrawableDef.hpp"
 
 InventoryCubeDef &DrawableDef::addInventoryCube() {
 	m_cubes.emplace_back();
@@ -45,4 +45,3 @@ void DrawableDef::deserialize(sf::Packet &packet) {
 		packet >> m_cubes.back();
 	}
 }
-

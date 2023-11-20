@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "TextButtonWidgetDef.hpp"
+#include "server/gui/TextButtonWidgetDef.hpp"
 
 void TextButtonWidgetDef::serialize(sf::Packet &packet) const {
 	WidgetDef::serialize(packet);
@@ -38,4 +38,3 @@ void TextButtonWidgetDef::loadFromLuaTable(const sol::table &table) {
 	m_text = table["text"].get<std::string>();
 	m_onClick = table["on_click"].get<sol::function>();
 }
-

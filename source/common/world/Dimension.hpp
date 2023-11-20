@@ -32,8 +32,8 @@
 
 #include <sol/sol.hpp>
 
-#include "IntTypes.hpp"
-#include "ISerializable.hpp"
+#include "common/core/IntTypes.hpp"
+#include "common/core/ISerializable.hpp"
 
 class Dimension : public ISerializable {
 	public:

@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "ServerApplication.hpp"
+#include "server/core/ServerApplication.hpp"
 
 int main(int argc, char **argv) {
 	ServerApplication app(argc, argv);
@@ -38,4 +38,3 @@ int main(int argc, char **argv) {
 
 	return exitCode;
 }
-

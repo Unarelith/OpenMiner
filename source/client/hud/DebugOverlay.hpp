@@ -27,7 +27,7 @@
 #ifndef DEBUGOVERLAY_HPP_
 #define DEBUGOVERLAY_HPP_
 
-#include "Text.hpp"
+#include "client/gui/Text.hpp"
 
 class ClientPlayer;
 class ClientWorld;

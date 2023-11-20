@@ -24,11 +24,12 @@
  *
  * =====================================================================================
  */
-#include "Config.hpp"
-#include "ItemWidget.hpp"
-#include "Registry.hpp"
-#include "ResourceHandler.hpp"
-#include "TextureAtlas.hpp"
+#include "common/core/Registry.hpp"
+#include "common/resource/ResourceHandler.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/graphics/TextureAtlas.hpp"
+#include "client/gui/ItemWidget.hpp"
 
 ItemWidget::ItemWidget(Inventory &inventory, u16 x, u16 y, Widget *parent)
 	: Widget(18, 18, parent), m_inventory(inventory), m_x(x), m_y(y),
@@ -119,4 +120,3 @@ void ItemWidget::draw(RenderTarget &target, RenderStates states) const {
 	if (stack().amount() != 1)
 		target.draw(m_text, states);
 }
-

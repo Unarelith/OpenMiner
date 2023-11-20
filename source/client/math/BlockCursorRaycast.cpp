@@ -24,10 +24,11 @@
  *
  * =====================================================================================
  */
-#include "BlockCursorRaycast.hpp"
-#include "BlockGeometry.hpp"
-#include "ClientWorld.hpp"
-#include "Registry.hpp"
+#include "common/core/BlockGeometry.hpp"
+#include "common/core/Registry.hpp"
+
+#include "client/math/BlockCursorRaycast.hpp"
+#include "client/world/ClientWorld.hpp"
 
 static inline glm::dvec3 intersectAxisPlane(const Axis axis, const double coord,
                                             const glm::dvec3 &position,

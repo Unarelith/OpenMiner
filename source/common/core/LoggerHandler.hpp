@@ -30,8 +30,8 @@
 #include <thread>
 #include <unordered_map>
 
-#include "Logger.hpp"
-#include "LogStream.hpp"
+#include "common/core/Logger.hpp"
+#include "common/core/LogStream.hpp"
 
 class LoggerHandler {
 	using InstanceMap = std::unordered_map<std::thread::id, LoggerHandler *>;

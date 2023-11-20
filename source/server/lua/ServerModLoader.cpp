@@ -26,11 +26,11 @@
  */
 #include <filesystem.hpp>
 
-#include "Exception.hpp"
-#include "LuaMod.hpp"
-#include "ScriptEngine.hpp"
-#include "ServerModLoader.hpp"
-#include "Utils.hpp"
+#include "common/core/Exception.hpp"
+#include "common/core/Utils.hpp"
+#include "server/lua/LuaMod.hpp"
+#include "server/lua/ScriptEngine.hpp"
+#include "server/lua/ServerModLoader.hpp"
 
 namespace fs = ghc::filesystem;
 
@@ -213,4 +213,3 @@ void ServerModLoader::initUsertype(sol::state &lua) {
 		"register_mod", &ServerModLoader::registerMod
 	);
 }
-

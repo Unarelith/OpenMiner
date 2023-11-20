@@ -29,9 +29,9 @@
 
 #include <vector>
 
-#include "ISerializable.hpp"
-#include "NetworkUtils.hpp"
-#include "Vector3.hpp"
+#include "common/core/ISerializable.hpp"
+#include "common/core/Vector3.hpp"
+#include "common/network/NetworkUtils.hpp"
 
 struct BlockPlacementConstraint : public ISerializable {
 	Vector3i blockOffset{0, 0, 0};

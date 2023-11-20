@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "NetworkUtils.hpp"
-#include "Tree.hpp"
+#include "common/network/NetworkUtils.hpp"
+#include "common/world/Tree.hpp"
 
 Tree::Tree(u16 id, const std::string &stringID) {
 	m_id = id;
@@ -41,4 +41,3 @@ void Tree::deserialize(sf::Packet &packet) {
 	packet >> m_id >> m_stringID >> m_logBlockID >> m_leavesBlockID
 		>> m_trunkMinHeight >> m_trunkMaxHeight >> m_hasLeaves;
 }
-

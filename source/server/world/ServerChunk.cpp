@@ -24,17 +24,17 @@
  *
  * =====================================================================================
  */
-#include "ClientInfo.hpp"
-#include "Dimension.hpp"
-#include "Network.hpp"
-#include "Player.hpp"
-#include "PlayerList.hpp"
-#include "Server.hpp"
-#include "ServerBlock.hpp"
-#include "ServerChunk.hpp"
-#include "ServerCommandHandler.hpp"
-#include "ServerWorld.hpp"
-#include "World.hpp"
+#include "common/network/Network.hpp"
+#include "common/world/Dimension.hpp"
+#include "common/world/Player.hpp"
+#include "common/world/World.hpp"
+#include "server/core/PlayerList.hpp"
+#include "server/network/ClientInfo.hpp"
+#include "server/network/Server.hpp"
+#include "server/network/ServerCommandHandler.hpp"
+#include "server/world/ServerBlock.hpp"
+#include "server/world/ServerChunk.hpp"
+#include "server/world/ServerWorld.hpp"
 
 ServerChunk::ServerChunk(s32 x, s32 y, s32 z, ServerWorld &world) : Chunk(x, y, z, world), m_world(world) {
 	m_random.seed((unsigned int)std::time(nullptr));
@@ -130,4 +130,3 @@ void ServerChunk::sendData(const ClientInfo &client) {
 
 	// logDebug() << "Chunk at" << chunk.x() << chunk.y() << chunk.z() << "sent to client";
 }
-

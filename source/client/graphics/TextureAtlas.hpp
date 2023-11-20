@@ -34,9 +34,9 @@
 
 #include <SDL.h>
 
-#include "IntTypes.hpp"
-#include "Rect.hpp"
-#include "Texture.hpp"
+#include "common/core/IntTypes.hpp"
+#include "common/core/Rect.hpp"
+#include "client/graphics/Texture.hpp"
 
 class TextureAtlas {
 	public:

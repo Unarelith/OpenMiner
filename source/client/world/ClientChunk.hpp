@@ -29,11 +29,12 @@
 
 #include <numeric>
 
-#include "Chunk.hpp"
-#include "ChunkMeshLayer.hpp"
-#include "Config.hpp"
-#include "Dimension.hpp"
-#include "VertexBuffer.hpp"
+#include "common/world/Chunk.hpp"
+#include "common/world/Dimension.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/graphics/VertexBuffer.hpp"
+#include "client/world/ChunkMeshLayer.hpp"
 
 class ClientWorld;
 class TextureAtlas;

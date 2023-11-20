@@ -32,8 +32,8 @@
 
 #include <entt/entt.hpp>
 
-#include "PlayerList.hpp"
-#include "WorldSaveBackend.hpp"
+#include "server/core/PlayerList.hpp"
+#include "server/world/save/WorldSaveBackend.hpp"
 
 namespace sf { class Packet; }
 

@@ -26,7 +26,7 @@
  */
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Camera.hpp"
+#include "client/graphics/Camera.hpp"
 
 Camera::Camera(float fov, float near, float far) {
 	m_fieldOfView = fov;

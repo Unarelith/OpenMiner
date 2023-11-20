@@ -30,11 +30,11 @@
 #include <deque>
 #include <memory>
 
-#include "CraftingWidget.hpp"
-#include "InterfaceState.hpp"
-#include "InventoryWidget.hpp"
-#include "MouseItemWidget.hpp"
-#include "TextInput.hpp"
+#include "client/gui/CraftingWidget.hpp"
+#include "client/gui/InventoryWidget.hpp"
+#include "client/gui/MouseItemWidget.hpp"
+#include "client/gui/TextInput.hpp"
+#include "client/states/InterfaceState.hpp"
 
 class ClientPlayer;
 class ClientWorld;

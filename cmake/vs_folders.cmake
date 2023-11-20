@@ -63,4 +63,3 @@ set_target_properties(showanim                         PROPERTIES FOLDER "extern
 set_target_properties(showimage                        PROPERTIES FOLDER "external/misc")
 set_target_properties(uninstall                        PROPERTIES FOLDER "external/misc")
 set_target_properties(xmltest                          PROPERTIES FOLDER "external/misc")
-

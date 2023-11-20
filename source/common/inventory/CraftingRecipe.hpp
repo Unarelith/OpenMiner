@@ -30,7 +30,7 @@
 #include <array>
 #include <map>
 
-#include "Recipe.hpp"
+#include "common/inventory/Recipe.hpp"
 
 class CraftingRecipe : public Recipe {
 	public:

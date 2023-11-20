@@ -24,10 +24,10 @@
  *
  * =====================================================================================
  */
-#include "Block.hpp"
-#include "NetworkUtils.hpp"
-#include "Player.hpp"
-#include "World.hpp"
+#include "common/network/NetworkUtils.hpp"
+#include "common/world/Block.hpp"
+#include "common/world/Player.hpp"
+#include "common/world/World.hpp"
 
 Block::Block(u16 id, const std::string &stringID) {
 	m_id = id;
@@ -101,4 +101,3 @@ void Block::initUsertype(sol::state &lua) {
 		"get_state", (const BlockState &(Block::*)(u16) const)&Block::getState
 	);
 }
-

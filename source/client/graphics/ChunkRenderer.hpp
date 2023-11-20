@@ -29,10 +29,11 @@
 
 #include <functional>
 
-#include "RenderStates.hpp"
-#include "ShaderUniform.hpp"
-#include "Sky.hpp"
-#include "TextureAtlas.hpp"
+#include "common/world/Sky.hpp"
+
+#include "client/graphics/RenderStates.hpp"
+#include "client/graphics/ShaderUniform.hpp"
+#include "client/graphics/TextureAtlas.hpp"
 
 class Camera;
 class ClientChunk;

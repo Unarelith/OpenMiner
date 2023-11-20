@@ -27,9 +27,9 @@
 #ifndef INTERFACESTATE_HPP_
 #define INTERFACESTATE_HPP_
 
-#include "DrawableState.hpp"
-#include "RectangleShape.hpp"
-#include "Shader.hpp"
+#include "client/graphics/RectangleShape.hpp"
+#include "client/graphics/Shader.hpp"
+#include "client/states/DrawableState.hpp"
 
 class InterfaceState : public DrawableState {
 	public:

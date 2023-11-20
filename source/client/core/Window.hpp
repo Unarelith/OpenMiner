@@ -32,9 +32,10 @@
 
 #include <SDL.h>
 
-#include "BgfxCallback.hpp"
-#include "IntTypes.hpp"
-#include "RenderTarget.hpp"
+#include "common/core/IntTypes.hpp"
+
+#include "client/graphics/BgfxCallback.hpp"
+#include "client/graphics/RenderTarget.hpp"
 
 class Window : public RenderTarget {
 	public:

@@ -24,8 +24,9 @@
  *
  * =====================================================================================
  */
-#include "Block.hpp"
-#include "BlockInfoWidget.hpp"
+#include "common/world/Block.hpp"
+
+#include "client/hud/BlockInfoWidget.hpp"
 
 BlockInfoWidget::BlockInfoWidget(Widget *parent) : Widget(160, 32, parent) {
 	m_itemWidget.setPosition(5, float(m_height / 2 - m_itemWidget.height() / 2), 0);
@@ -62,4 +63,3 @@ void BlockInfoWidget::draw(RenderTarget &target, RenderStates states) const {
 		target.draw(m_text, states);
 	}
 }
-

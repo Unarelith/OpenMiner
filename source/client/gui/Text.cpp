@@ -24,11 +24,12 @@
  *
  * =====================================================================================
  */
-#include "Color.hpp"
-#include "Font.hpp"
-#include "ResourceHandler.hpp"
-#include "Text.hpp"
-#include "Vertex.hpp"
+#include "common/core/Color.hpp"
+#include "common/resource/ResourceHandler.hpp"
+
+#include "client/graphics/Vertex.hpp"
+#include "client/gui/Font.hpp"
+#include "client/gui/Text.hpp"
 
 Text::Text() : m_font(ResourceHandler::getInstance().get<Font>("font-ascii")) {
 	m_vbo.setupDefaultLayout();
@@ -178,4 +179,3 @@ void Text::addCharacter(u32 x, u32 y, const Color &color, u8 c, std::vector<Vert
 		vertex.texCoord[1] = texCoords.y;
 	}
 }
-

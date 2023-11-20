@@ -33,9 +33,9 @@
 #include <SFML/Network/IpAddress.hpp>
 #include <SFML/Network/TcpSocket.hpp>
 
-#include "Network.hpp"
-#include "Player.hpp"
-#include "Timer.hpp"
+#include "common/core/Timer.hpp"
+#include "common/network/Network.hpp"
+#include "common/world/Player.hpp"
 
 class ClientConnectException {
 	public:

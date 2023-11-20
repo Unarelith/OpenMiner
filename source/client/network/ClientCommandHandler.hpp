@@ -31,7 +31,7 @@
 
 #include <entt/entt.hpp>
 
-#include "PlayerBox.hpp"
+#include "client/graphics/PlayerBox.hpp"
 
 class Camera;
 class Client;

@@ -24,20 +24,20 @@
  *
  * =====================================================================================
  */
-#include "AnimationComponent.hpp"
-#include "BlockData.hpp"
-#include "DrawableDef.hpp"
-#include "GameTime.hpp"
-#include "NetworkComponent.hpp"
-#include "PlayerList.hpp"
-#include "Registry.hpp"
-#include "ScriptEngine.hpp"
-#include "Server.hpp"
-#include "ServerBlock.hpp"
-#include "ServerCommandHandler.hpp"
-#include "ServerItem.hpp"
-#include "Utils.hpp"
-#include "WorldController.hpp"
+#include "common/core/GameTime.hpp"
+#include "common/core/Registry.hpp"
+#include "common/core/Utils.hpp"
+#include "common/scene/component/AnimationComponent.hpp"
+#include "common/scene/component/DrawableDef.hpp"
+#include "common/scene/component/NetworkComponent.hpp"
+#include "common/world/BlockData.hpp"
+#include "server/core/PlayerList.hpp"
+#include "server/lua/ScriptEngine.hpp"
+#include "server/network/Server.hpp"
+#include "server/network/ServerCommandHandler.hpp"
+#include "server/world/ServerBlock.hpp"
+#include "server/world/ServerItem.hpp"
+#include "server/world/WorldController.hpp"
 
 void ServerCommandHandler::sendServerTick(const ClientInfo *client) const {
 	Network::Packet packet;
@@ -548,4 +548,3 @@ void ServerCommandHandler::initUsertype(sol::state &lua) {
 		"send_chat_message", &ServerCommandHandler::sendChatMessage
 	);
 }
-

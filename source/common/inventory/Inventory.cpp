@@ -24,11 +24,11 @@
  *
  * =====================================================================================
  */
-#include "Debug.hpp"
-#include "EngineConfig.hpp"
-#include "Inventory.hpp"
-#include "Network.hpp"
-#include "Registry.hpp"
+#include "common/core/Debug.hpp"
+#include "common/core/EngineConfig.hpp"
+#include "common/core/Registry.hpp"
+#include "common/inventory/Inventory.hpp"
+#include "common/network/Network.hpp"
 
 void Inventory::setStack(u16 x, u16 y, const std::string &stringID, u16 amount) {
 	m_items.at(x + y * m_width) = ItemStack(stringID, amount);

@@ -24,11 +24,11 @@
  *
  * =====================================================================================
  */
-#include "Network.hpp"
-#include "NetworkComponent.hpp"
-#include "NetworkController.hpp"
-#include "Server.hpp"
-#include "ServerCommandHandler.hpp"
+#include "common/network/Network.hpp"
+#include "common/scene/component/NetworkComponent.hpp"
+#include "server/network/Server.hpp"
+#include "server/network/ServerCommandHandler.hpp"
+#include "server/scene/controller/NetworkController.hpp"
 
 using namespace entt::literals;
 
@@ -68,4 +68,3 @@ void NetworkController::sendEntities(entt::registry &registry, const ClientInfo 
 		});
 	});
 }
-

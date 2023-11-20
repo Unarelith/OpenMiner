@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "ApplicationStateStack.hpp"
+#include "common/core/ApplicationStateStack.hpp"
 
 ApplicationStateStack *ApplicationStateStack::s_instance = nullptr;
 
@@ -37,4 +37,3 @@ void ApplicationStateStack::clearDeletedStates() {
 	while (!m_trash.empty())
 		m_trash.pop();
 }
-

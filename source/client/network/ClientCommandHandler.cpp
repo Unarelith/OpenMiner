@@ -26,24 +26,25 @@
  */
 #include <entt/entt.hpp>
 
-#include "AnimationComponent.hpp"
-#include "ApplicationStateStack.hpp"
-#include "Camera.hpp"
-#include "Client.hpp"
-#include "ClientPlayer.hpp"
-#include "ClientWorld.hpp"
-#include "ClientCommandHandler.hpp"
-#include "ConnectionErrorState.hpp"
-#include "Debug.hpp"
-#include "DrawableComponent.hpp"
-#include "DrawableDef.hpp"
-#include "GameConfig.hpp"
-#include "GameTime.hpp"
-#include "LuaGUIState.hpp"
-#include "NetworkComponent.hpp"
-#include "PositionComponent.hpp"
-#include "RotationComponent.hpp"
-#include "Registry.hpp"
+#include "common/core/ApplicationStateStack.hpp"
+#include "common/core/Debug.hpp"
+#include "common/core/GameTime.hpp"
+#include "common/core/Registry.hpp"
+#include "common/scene/component/AnimationComponent.hpp"
+#include "common/scene/component/DrawableDef.hpp"
+#include "common/scene/component/NetworkComponent.hpp"
+#include "common/scene/component/PositionComponent.hpp"
+#include "common/scene/component/RotationComponent.hpp"
+
+#include "client/core/GameConfig.hpp"
+#include "client/graphics/Camera.hpp"
+#include "client/network/Client.hpp"
+#include "client/network/ClientCommandHandler.hpp"
+#include "client/scene/component/DrawableComponent.hpp"
+#include "client/states/ConnectionErrorState.hpp"
+#include "client/states/LuaGUIState.hpp"
+#include "client/world/ClientPlayer.hpp"
+#include "client/world/ClientWorld.hpp"
 
 void ClientCommandHandler::sendPlayerInvUpdate() {
 	Network::Packet invPacket;
@@ -379,4 +380,3 @@ void ClientCommandHandler::setupCallbacks() {
 	addComponentCommandCallback<AnimationComponent>(Network::Command::EntityAnimation, m_client, m_entityMap, m_world);
 	addComponentCommandCallback<DrawableDef>(Network::Command::EntityDrawableDef, m_client, m_entityMap, m_world);
 }
-

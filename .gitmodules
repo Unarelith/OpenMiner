@@ -4,7 +4,7 @@
 	ignore = dirty
 [submodule "external/zlib"]
 	path = external/zlib
-	url = https://github.com/Unarelith/zlib.git
+	url = https://github.com/madler/zlib
 	ignore = dirty
 [submodule "external/sol2"]
 	path = external/sol2
@@ -12,7 +12,7 @@
 	ignore = dirty
 [submodule "external/lua"]
 	path = external/lua
-	url = https://github.com/Unarelith/LuaJIT
+	url = https://github.com/WohlSoft/LuaJIT
 	ignore = dirty
 [submodule "external/SFML"]
 	path = external/SFML
@@ -22,7 +22,7 @@
 	url = https://github.com/bkaradzic/bgfx.cmake
 [submodule "external/tinyxml2"]
 	path = external/tinyxml2
-	url = https://github.com/Unarelith/tinyxml2
+	url = https://github.com/leethomason/tinyxml2
 [submodule "external/glm"]
 	path = external/glm
 	url = https://github.com/g-truc/glm

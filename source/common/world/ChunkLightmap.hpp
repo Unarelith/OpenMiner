@@ -30,8 +30,8 @@
 #include <optional>
 #include <queue>
 
-#include "EngineConfig.hpp"
-#include "IntTypes.hpp"
+#include "common/core/EngineConfig.hpp"
+#include "common/core/IntTypes.hpp"
 
 struct LightNode {
 	LightNode(int _x, int _y, int _z) : x(_x), y(_y), z(_z) {}

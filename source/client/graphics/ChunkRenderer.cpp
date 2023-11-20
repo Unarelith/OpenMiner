@@ -26,12 +26,12 @@
  */
 #include <glm/gtx/norm.hpp>
 
-#include "Camera.hpp"
-#include "ChunkRenderer.hpp"
-#include "ClientChunk.hpp"
-#include "RenderTarget.hpp"
-#include "Shader.hpp"
-#include "Texture.hpp"
+#include "client/graphics/Camera.hpp"
+#include "client/graphics/ChunkRenderer.hpp"
+#include "client/graphics/RenderTarget.hpp"
+#include "client/graphics/Shader.hpp"
+#include "client/graphics/Texture.hpp"
+#include "client/world/ClientChunk.hpp"
 
 ChunkRenderer::ChunkRenderer(const TextureAtlas &textureAtlas) : m_textureAtlas(textureAtlas) {
 	m_renderDistance.init("u_renderDistance", bgfx::UniformType::Vec4);

@@ -27,8 +27,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-#include "Exception.hpp"
-#include "SDLLoader.hpp"
+#include "common/core/Exception.hpp"
+#include "client/core/SDLLoader.hpp"
 
 SDLLoader::~SDLLoader() {
 	if(m_imgInitialized) IMG_Quit();

@@ -33,8 +33,8 @@
 #include <SFML/Network/SocketSelector.hpp>
 #include <SFML/Network/TcpListener.hpp>
 
-#include "Network.hpp"
-#include "ServerInfo.hpp"
+#include "common/network/Network.hpp"
+#include "server/network/ServerInfo.hpp"
 
 class Server {
 	using ConnectionCallback = std::function<void(ClientInfo &, Network::Packet &packet)>;

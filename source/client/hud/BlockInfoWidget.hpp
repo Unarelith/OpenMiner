@@ -27,8 +27,8 @@
 #ifndef BLOCKINFOWIDGET_HPP_
 #define BLOCKINFOWIDGET_HPP_
 
-#include "ItemWidget.hpp"
-#include "Sprite.hpp"
+#include "client/graphics/Sprite.hpp"
+#include "client/gui/ItemWidget.hpp"
 
 class BlockInfoWidget : public Widget {
 	public:

@@ -24,9 +24,9 @@
  *
  * =====================================================================================
  */
-#include "ClientPlayer.hpp"
-#include "ClientWorld.hpp"
-#include "Minimap.hpp"
+#include "client/hud/Minimap.hpp"
+#include "client/world/ClientPlayer.hpp"
+#include "client/world/ClientWorld.hpp"
 
 Minimap::Minimap() {
 	m_vbo.setupDefaultLayout();
@@ -168,4 +168,3 @@ void Minimap::draw(RenderTarget &target, RenderStates states) const {
 
 	target.draw(m_playerChunk, states);
 }
-

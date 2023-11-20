@@ -29,19 +29,20 @@
 
 #include <glm/glm.hpp>
 
-#include "Client.hpp"
-#include "ClientChunk.hpp"
-#include "ClientCommandHandler.hpp"
-#include "ClientPlayer.hpp"
-#include "ClientWorld.hpp"
-#include "DrawableState.hpp"
-#include "Framebuffer.hpp"
-#include "HUD.hpp"
-#include "KeyboardHandler.hpp"
-#include "PlayerBox.hpp"
-#include "Registry.hpp"
-#include "ShaderUniform.hpp"
-#include "Skybox.hpp"
+#include "common/core/Registry.hpp"
+
+#include "client/core/KeyboardHandler.hpp"
+#include "client/graphics/Framebuffer.hpp"
+#include "client/graphics/PlayerBox.hpp"
+#include "client/graphics/ShaderUniform.hpp"
+#include "client/graphics/Skybox.hpp"
+#include "client/hud/HUD.hpp"
+#include "client/network/Client.hpp"
+#include "client/network/ClientCommandHandler.hpp"
+#include "client/states/DrawableState.hpp"
+#include "client/world/ClientChunk.hpp"
+#include "client/world/ClientPlayer.hpp"
+#include "client/world/ClientWorld.hpp"
 
 class RenderTarget;
 class TextureAtlas;

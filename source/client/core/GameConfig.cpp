@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "GameConfig.hpp"
+#include "client/core/GameConfig.hpp"
 
 // Pre-game configuration
 std::string GameConfig::worldName = "";
@@ -36,4 +36,3 @@ bool GameConfig::isGameRunning = false;
 u16 GameConfig::currentScreenEffect = 0;
 float GameConfig::fogDepth = 0;
 Color GameConfig::fogColor = Color::White;
-

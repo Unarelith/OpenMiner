@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "Network.hpp"
-#include "Player.hpp"
+#include "common/network/Network.hpp"
+#include "common/world/Player.hpp"
 
 Player::Player() {
 	m_hitbox = FloatBox{-0.3125, -0.3125, 0, 0.625, 0.625, 1.75};

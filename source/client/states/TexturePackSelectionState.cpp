@@ -26,13 +26,14 @@
  */
 #include <filesystem.hpp>
 
-#include "ApplicationStateStack.hpp"
-#include "Config.hpp"
-#include "GameConfig.hpp"
-#include "ResourceHandler.hpp"
-#include "TextureAtlas.hpp"
-#include "TexturePackSelectionState.hpp"
-#include "World.hpp"
+#include "common/core/ApplicationStateStack.hpp"
+#include "common/resource/ResourceHandler.hpp"
+#include "common/world/World.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/core/GameConfig.hpp"
+#include "client/graphics/TextureAtlas.hpp"
+#include "client/states/TexturePackSelectionState.hpp"
 
 namespace fs = ghc::filesystem;
 
@@ -178,4 +179,3 @@ void TexturePackSelectionState::draw(RenderTarget &target, RenderStates states) 
 		target.draw(m_menuWidget, states);
 	}
 }
-

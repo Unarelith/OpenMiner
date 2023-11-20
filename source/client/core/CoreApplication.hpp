@@ -27,13 +27,14 @@
 #ifndef COREAPPLICATION_HPP_
 #define COREAPPLICATION_HPP_
 
-#include "ApplicationStateStack.hpp"
-#include "ArgumentParser.hpp"
-#include "EventHandler.hpp"
-#include "GameClock.hpp"
-#include "ResourceHandler.hpp"
-#include "SDLLoader.hpp"
-#include "Window.hpp"
+#include "common/core/ApplicationStateStack.hpp"
+#include "common/core/ArgumentParser.hpp"
+#include "common/core/EventHandler.hpp"
+#include "common/core/GameClock.hpp"
+#include "common/resource/ResourceHandler.hpp"
+
+#include "client/core/SDLLoader.hpp"
+#include "client/core/Window.hpp"
 
 class CoreApplication {
 	public:

@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "ChatMessage.hpp"
-#include "Player.hpp"
+#include "common/world/Player.hpp"
+#include "client/hud/ChatMessage.hpp"
 
 ChatMessage::ChatMessage(const std::string &message, u32 posY, const Player *player) {
 	if (player)
@@ -48,4 +48,3 @@ void ChatMessage::draw(RenderTarget &target, RenderStates states) const {
 	if (m_timer.time() <= 10000 || m_isVisible)
 		target.draw(m_text, states);
 }
-

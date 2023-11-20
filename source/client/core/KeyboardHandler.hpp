@@ -30,9 +30,8 @@
 #include <map>
 #include <string>
 
-#include "InputHandler.hpp"
-
-#include "Key.hpp"
+#include "common/core/input/InputHandler.hpp"
+#include "common/world/Key.hpp"
 
 class KeyboardHandler : public InputHandler {
 	public:

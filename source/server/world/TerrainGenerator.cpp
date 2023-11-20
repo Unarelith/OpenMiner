@@ -24,14 +24,14 @@
  *
  * =====================================================================================
  */
-#include "EngineConfig.hpp"
-#include "Registry.hpp"
-#include "ServerChunk.hpp"
-#include "TerrainGenerator.hpp"
-#include "World.hpp"
+#include "common/core/EngineConfig.hpp"
+#include "common/core/Registry.hpp"
+#include "common/world/World.hpp"
+#include "server/world/ServerChunk.hpp"
+#include "server/world/TerrainGenerator.hpp"
 
 #include <glm/gtc/noise.hpp>
-#include "FastNoiseLite.hpp"
+#include <FastNoiseLite.hpp>
 
 TerrainGenerator::TerrainGenerator(Heightmap &heightmap, const Dimension &dimension, s32 seed)
 	: m_biomeSampler(dimension, seed), m_heightmap(heightmap)

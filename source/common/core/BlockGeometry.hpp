@@ -29,7 +29,7 @@
 
 #include <glm/matrix.hpp>
 
-#include "IntTypes.hpp"
+#include "common/core/IntTypes.hpp"
 
 namespace BlockGeometry {
 

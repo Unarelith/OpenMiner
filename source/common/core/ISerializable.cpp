@@ -24,7 +24,7 @@
  *
  * =====================================================================================
  */
-#include "ISerializable.hpp"
+#include "common/core/ISerializable.hpp"
 
 sf::Packet &operator<<(sf::Packet &packet, const ISerializable &s) {
 	s.serialize(packet);

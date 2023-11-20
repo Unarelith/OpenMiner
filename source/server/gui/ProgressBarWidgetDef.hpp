@@ -27,7 +27,7 @@
 #ifndef PROGRESSBARWIDGETDEF_HPP_
 #define PROGRESSBARWIDGETDEF_HPP_
 
-#include "WidgetDef.hpp"
+#include "server/gui/WidgetDef.hpp"
 
 // Duplicated in ProgressBarWidget
 enum class ProgressBarType : u8 {

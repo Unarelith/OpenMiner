@@ -24,9 +24,10 @@
  *
  * =====================================================================================
  */
-#include "CraftingWidget.hpp"
-#include "EngineConfig.hpp"
-#include "Registry.hpp"
+#include "common/core/EngineConfig.hpp"
+#include "common/core/Registry.hpp"
+
+#include "client/gui/CraftingWidget.hpp"
 
 CraftingWidget::CraftingWidget(ClientCommandHandler &client, Inventory &craftingInventory, Widget *parent)
 	: AbstractInventoryWidget(parent), m_client(client), m_craftingInventory(craftingInventory)
@@ -109,4 +110,3 @@ void CraftingWidget::draw(RenderTarget &target, RenderStates states) const {
 	target.draw(m_craftingInventoryWidget, states);
 	target.draw(m_craftingResultInventoryWidget, states);
 }
-

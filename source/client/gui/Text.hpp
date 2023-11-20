@@ -30,7 +30,7 @@
 #include <string>
 #include <vector>
 
-#include "RectangleShape.hpp"
+#include "client/graphics/RectangleShape.hpp"
 
 class Font;
 class Vertex;

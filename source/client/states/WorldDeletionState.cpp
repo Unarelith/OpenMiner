@@ -26,11 +26,12 @@
  */
 #include <filesystem.hpp>
 
-#include "ApplicationStateStack.hpp"
-#include "Config.hpp"
-#include "TitleScreenState.hpp"
-#include "WorldDeletionState.hpp"
-#include "WorldSelectionState.hpp"
+#include "common/core/ApplicationStateStack.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/states/TitleScreenState.hpp"
+#include "client/states/WorldDeletionState.hpp"
+#include "client/states/WorldSelectionState.hpp"
 
 namespace fs = ghc::filesystem;
 
@@ -115,4 +116,3 @@ void WorldDeletionState::draw(RenderTarget &target, RenderStates states) const {
 		target.draw(m_menuWidget, states);
 	}
 }
-

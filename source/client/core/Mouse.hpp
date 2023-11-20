@@ -27,8 +27,8 @@
 #ifndef MOUSE_HPP_
 #define MOUSE_HPP_
 
-#include "Rect.hpp"
-#include "Window.hpp"
+#include "common/core/Rect.hpp"
+#include "client/core/Window.hpp"
 
 class Mouse {
 	public:

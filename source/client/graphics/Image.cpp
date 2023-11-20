@@ -24,9 +24,9 @@
  *
  * =====================================================================================
  */
-#include "Image.hpp"
-#include "ResourceHandler.hpp"
-#include "Vertex.hpp"
+#include "common/resource/ResourceHandler.hpp"
+#include "client/graphics/Image.hpp"
+#include "client/graphics/Vertex.hpp"
 
 Image::Image() {
 	m_vbo.setupDefaultLayout();

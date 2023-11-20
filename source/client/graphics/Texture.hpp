@@ -31,9 +31,9 @@
 
 #include <bgfx/bgfx.h>
 
-#include "IntTypes.hpp"
-#include "NonCopyable.hpp"
-#include "Vector2.hpp"
+#include "common/core/IntTypes.hpp"
+#include "common/core/Vector2.hpp"
+#include "common/utils/NonCopyable.hpp"
 
 struct SDL_Surface;
 

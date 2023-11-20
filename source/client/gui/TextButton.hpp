@@ -31,9 +31,9 @@
 
 #include <sol/sol.hpp>
 
-#include "Image.hpp"
-#include "Text.hpp"
-#include "Widget.hpp"
+#include "client/graphics/Image.hpp"
+#include "client/gui/Text.hpp"
+#include "client/gui/Widget.hpp"
 
 class TextButton : public Widget {
 	public:

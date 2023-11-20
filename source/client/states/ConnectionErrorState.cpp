@@ -24,13 +24,14 @@
  *
  * =====================================================================================
  */
-#include "ApplicationStateStack.hpp"
-#include "Config.hpp"
-#include "ConnectionErrorState.hpp"
-#include "GameState.hpp"
-#include "Mouse.hpp"
-#include "ServerLoadingState.hpp"
-#include "TitleScreenState.hpp"
+#include "common/core/ApplicationStateStack.hpp"
+
+#include "client/core/Config.hpp"
+#include "client/core/Mouse.hpp"
+#include "client/states/ConnectionErrorState.hpp"
+#include "client/states/GameState.hpp"
+#include "client/states/ServerLoadingState.hpp"
+#include "client/states/TitleScreenState.hpp"
 
 ConnectionErrorState::ConnectionErrorState(const std::string &error, const std::string &host, u16 port, ApplicationState *parent) : InterfaceState(parent) {
 	Mouse::setCursorGrabbed(false);
@@ -106,4 +107,3 @@ void ConnectionErrorState::draw(RenderTarget &target, RenderStates states) const
 		target.draw(m_menuWidget, states);
 	}
 }
-

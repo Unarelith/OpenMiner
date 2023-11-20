@@ -27,12 +27,12 @@
 #include <functional>
 #include <sstream>
 
-#include "ChatCommandHandler.hpp"
-#include "ClientInfo.hpp"
-#include "GameTime.hpp"
-#include "ServerCommandHandler.hpp"
-#include "ServerConfig.hpp"
-#include "WorldController.hpp"
+#include "common/core/GameTime.hpp"
+#include "server/core/ServerConfig.hpp"
+#include "server/network/ChatCommandHandler.hpp"
+#include "server/network/ClientInfo.hpp"
+#include "server/network/ServerCommandHandler.hpp"
+#include "server/world/WorldController.hpp"
 
 void ChatCommandHandler::parseCommand(const std::string &str, ClientInfo &client) const {
 	std::stringstream sstream;
@@ -243,4 +243,3 @@ void ChatCommandHandler::tpsCommand(const std::vector<std::string> &command, Cli
 	else
 		m_server.sendChatMessage(0, "TPS: " + std::to_string(GameTime::getTicksPerSecond()), &client);
 }
-

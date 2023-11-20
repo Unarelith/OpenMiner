@@ -24,8 +24,8 @@
  *
  * =====================================================================================
  */
-#include "Config.hpp"
-#include "SliderWidget.hpp"
+#include "client/core/Config.hpp"
+#include "client/gui/SliderWidget.hpp"
 
 SliderWidget::SliderWidget(Widget *parent) : SliderWidget(200, parent) {
 }
@@ -111,4 +111,3 @@ void SliderWidget::draw(RenderTarget &target, RenderStates states) const {
 
 	target.draw(m_text, states);
 }
-

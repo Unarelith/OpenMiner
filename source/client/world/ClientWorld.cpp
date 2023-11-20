@@ -26,18 +26,19 @@
  */
 #include <algorithm> // std::max
 
-#include "Camera.hpp"
-#include "ClientCommandHandler.hpp"
-#include "ClientPlayer.hpp"
-#include "ClientProfiler.hpp"
-#include "ClientWorld.hpp"
-#include "EventHandler.hpp"
-#include "Events.hpp"
-#include "Registry.hpp"
-#include "ResourceHandler.hpp"
-#include "Sky.hpp"
-#include "TextureAtlas.hpp"
-#include "World.hpp"
+#include "common/core/EventHandler.hpp"
+#include "common/core/Registry.hpp"
+#include "common/event/Events.hpp"
+#include "common/resource/ResourceHandler.hpp"
+#include "common/world/Sky.hpp"
+#include "common/world/World.hpp"
+
+#include "client/core/ClientProfiler.hpp"
+#include "client/graphics/Camera.hpp"
+#include "client/graphics/TextureAtlas.hpp"
+#include "client/network/ClientCommandHandler.hpp"
+#include "client/world/ClientPlayer.hpp"
+#include "client/world/ClientWorld.hpp"
 
 ClientWorld::ClientWorld()
 	: m_textureAtlas(ResourceHandler::getInstance().get<TextureAtlas>("atlas-blocks")),

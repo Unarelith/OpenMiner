@@ -27,9 +27,9 @@
 #ifndef INVENTORYWIDGET_HPP_
 #define INVENTORYWIDGET_HPP_
 
-#include "AbstractInventoryWidget.hpp"
-#include "MouseItemWidget.hpp"
-#include "RectangleShape.hpp"
+#include "client/graphics/RectangleShape.hpp"
+#include "client/gui/AbstractInventoryWidget.hpp"
+#include "client/gui/MouseItemWidget.hpp"
 
 class ClientCommandHandler;
 

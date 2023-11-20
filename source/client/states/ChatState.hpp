@@ -27,8 +27,8 @@
 #ifndef CHATSTATE_HPP_
 #define CHATSTATE_HPP_
 
-#include "InterfaceState.hpp"
-#include "TextInput.hpp"
+#include "client/gui/TextInput.hpp"
+#include "client/states/InterfaceState.hpp"
 
 class ClientCommandHandler;
 class Chat;

@@ -27,8 +27,10 @@
 #ifndef SKYBOX_HPP_
 #define SKYBOX_HPP_
 
-#include "CelestialObject.hpp"
-#include "Shader.hpp"
+#include <vector>
+
+#include "client/graphics/CelestialObject.hpp"
+#include "client/graphics/Shader.hpp"
 
 class Camera;
 class ClientWorld;

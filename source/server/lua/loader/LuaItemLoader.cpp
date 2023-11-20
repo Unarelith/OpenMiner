@@ -24,12 +24,12 @@
  *
  * =====================================================================================
  */
-#include "Debug.hpp"
-#include "LuaItemLoader.hpp"
-#include "LuaMod.hpp"
-#include "Registry.hpp"
-#include "ServerConfig.hpp"
-#include "ServerItem.hpp"
+#include "common/core/Debug.hpp"
+#include "common/core/Registry.hpp"
+#include "server/core/ServerConfig.hpp"
+#include "server/lua/LuaMod.hpp"
+#include "server/lua/loader/LuaItemLoader.hpp"
+#include "server/world/ServerItem.hpp"
 
 void LuaItemLoader::loadItem(const sol::table &table) const {
 	std::string stringID = m_mod.id() + ":" + table["id"].get<std::string>();
@@ -68,4 +68,3 @@ void LuaItemLoader::loadItem(const sol::table &table) const {
 			logError() << "For item" << stringID << ": 'effective_on' should be a table";
 	}
 }
-

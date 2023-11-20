@@ -32,8 +32,8 @@
 
 #include <SDL.h>
 
-#include "ClientProfiler.hpp"
-#include "Text.hpp"
+#include "client/core/ClientProfiler.hpp"
+#include "client/gui/Text.hpp"
 
 enum class DebugProfilerWindowMode {
 	Total,

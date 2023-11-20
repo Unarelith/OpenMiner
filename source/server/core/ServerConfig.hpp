@@ -32,7 +32,7 @@
 
 #include <sol/sol.hpp>
 
-#include "IntTypes.hpp"
+#include "common/core/IntTypes.hpp"
 
 namespace ServerConfig {
 	// Server

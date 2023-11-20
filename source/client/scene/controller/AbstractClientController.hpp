@@ -27,9 +27,10 @@
 #ifndef ABSTRACTCLIENTCONTROLLER_HPP_
 #define ABSTRACTCLIENTCONTROLLER_HPP_
 
-#include "AbstractController.hpp"
-#include "RenderStates.hpp"
-#include "RenderTarget.hpp"
+#include "common/scene/controller/AbstractController.hpp"
+
+#include "client/graphics/RenderStates.hpp"
+#include "client/graphics/RenderTarget.hpp"
 
 class AbstractClientController : public AbstractController {
 	public:
@@ -37,6 +38,5 @@ class AbstractClientController : public AbstractController {
 
 		virtual void draw(entt::registry &, RenderTarget &, RenderStates) {}
 };
-
 
 #endif // ABSTRACTCLIENTCONTROLLER_HPP_

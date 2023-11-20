@@ -30,9 +30,9 @@
 #include <string>
 #include <vector>
 
-#include "IntTypes.hpp"
-#include "ISerializable.hpp"
-#include "PlacementEntry.hpp"
+#include "common/core/IntTypes.hpp"
+#include "common/core/ISerializable.hpp"
+#include "common/world/PlacementEntry.hpp"
 
 class Biome : public ISerializable {
 	public:

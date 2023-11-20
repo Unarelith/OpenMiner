@@ -29,12 +29,13 @@
 
 #include <unordered_map>
 
-#include "ChunkMeshBuilder.hpp"
-#include "ChunkRenderer.hpp"
-#include "ClientChunk.hpp"
-#include "ClientScene.hpp"
-#include "Network.hpp"
-#include "World.hpp"
+#include "common/network/Network.hpp"
+#include "common/world/World.hpp"
+
+#include "client/graphics/ChunkRenderer.hpp"
+#include "client/scene/ClientScene.hpp"
+#include "client/world/ChunkMeshBuilder.hpp"
+#include "client/world/ClientChunk.hpp"
 
 class Camera;
 class ClientCommandHandler;

@@ -27,7 +27,7 @@
 #ifndef TEXTBUTTONWIDGETDEF_HPP_
 #define TEXTBUTTONWIDGETDEF_HPP_
 
-#include "WidgetDef.hpp"
+#include "server/gui/WidgetDef.hpp"
 
 class TextButtonWidgetDef : public WidgetDef {
 	public:
