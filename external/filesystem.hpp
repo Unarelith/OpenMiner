@@ -144,6 +144,11 @@
 #endif
 #endif  // GHC_EXPAND_IMPL
 
+#ifdef GHC_OS_WINDOWS
+#undef min
+#undef max
+#endif
+
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Behaviour Switches (see README.md, should match the config in test/filesystem_test.cpp):
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

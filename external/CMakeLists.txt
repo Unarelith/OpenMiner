@@ -11,7 +11,6 @@ add_subdirectory(glm)
 add_subdirectory(lua)
 add_subdirectory(sol2)
 add_subdirectory(tinyxml2)
-add_subdirectory(zlib)
 
 #------------------------------------------------------------------------------
 # - BGFX
@@ -45,3 +44,10 @@ set(SFML_BUILD_NETWORK  TRUE  CACHE BOOL "" FORCE)
 set(SFML_BUILD_WINDOW   FALSE CACHE BOOL "" FORCE)
 
 add_subdirectory(SFML)
+
+#------------------------------------------------------------------------------
+# - zlib
+#------------------------------------------------------------------------------
+add_subdirectory(zlib)
+
+target_include_directories(zlibstatic PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/zlib)
